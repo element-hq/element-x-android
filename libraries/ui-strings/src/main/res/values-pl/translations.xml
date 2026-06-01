@@ -308,6 +308,7 @@ Powód: %1$s."</string>
   <string name="common_please_wait">"Proszę czekać…"</string>
   <string name="common_poll_end_confirmation">"Jesteś pewien, że chcesz zakończyć tę ankietę?"</string>
   <string name="common_poll_summary">"Ankieta: %1$s"</string>
+  <string name="common_poll_summary_prefix">"Ankieta"</string>
   <string name="common_poll_total_votes">"Łączna liczba głosów: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Wyniki zostaną wyświetlone po zakończeniu ankiety"</string>
   <plurals name="common_poll_votes_count">
@@ -424,7 +425,7 @@ Powód: %1$s."</string>
   <string name="common_video_quality_standard_description">"Balans między jakością a szybkością przesyłania"</string>
   <string name="common_voice_message">"Wiadomość głosowa"</string>
   <string name="common_waiting">"Oczekiwanie…"</string>
-  <string name="common_waiting_for_decryption_key">"Oczekiwanie na tę wiadomość"</string>
+  <string name="common_waiting_for_decryption_key">"Oczekiwanie wiadomości"</string>
   <string name="common_waiting_live_location">"Czekam na lokalizację na żywo…"</string>
   <string name="common_world_readable_history">"Każdy może zobaczyć historię"</string>
   <string name="common_you">"Ty"</string>

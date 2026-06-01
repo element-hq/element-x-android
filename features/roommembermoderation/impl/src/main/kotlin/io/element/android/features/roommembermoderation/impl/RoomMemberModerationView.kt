@@ -278,7 +278,6 @@ private fun RoomMemberActionsBottomSheet(
                 when (val action = actionState.action) {
                     is ModerationAction.DisplayProfile -> {
                         ListItem(
-                            style = ListItemStyle.Primary,
                             headlineContent = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_member_user_info)) },
                             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.UserProfile())),
                             onClick = {

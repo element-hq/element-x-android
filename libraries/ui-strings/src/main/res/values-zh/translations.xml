@@ -96,6 +96,7 @@
   <string name="action_decline_and_block">"拒绝并屏蔽"</string>
   <string name="action_delete">"删除"</string>
   <string name="action_delete_account">"删除账户"</string>
+  <string name="action_delete_file">"删除文件"</string>
   <string name="action_delete_poll">"删除投票"</string>
   <string name="action_deselect_all">"取消全选"</string>
   <string name="action_disable">"禁用"</string>
@@ -218,7 +219,7 @@
   <string name="common_creating_room">"正在创建房间…"</string>
   <string name="common_creating_space">"正在创建空间…"</string>
   <string name="common_current_user_canceled_knock">"申请已取消"</string>
-  <string name="common_current_user_left_room">"离开房间"</string>
+  <string name="common_current_user_left_room">"已离开房间"</string>
   <string name="common_current_user_left_space">"离开空间"</string>
   <string name="common_current_user_rejected_invite">"邀请已拒绝"</string>
   <string name="common_decryption_error">"解密错误"</string>
@@ -299,6 +300,7 @@
   <string name="common_please_wait">"请稍候…"</string>
   <string name="common_poll_end_confirmation">"确定要结束这个投票吗？"</string>
   <string name="common_poll_summary">"投票：%1$s"</string>
+  <string name="common_poll_summary_prefix">"投票"</string>
   <string name="common_poll_total_votes">"总票数：%1$s"</string>
   <string name="common_poll_undisclosed_text">"结果将在投票结束后显示"</string>
   <plurals name="common_poll_votes_count">

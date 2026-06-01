@@ -181,7 +181,6 @@ private fun ChangeOwnRoleBottomSheet(
         ListItem(
             headlineContent = { Text(stringResource(CommonStrings.action_cancel)) },
             onClick = ::dismiss,
-            style = ListItemStyle.Primary,
         )
     }
 }
