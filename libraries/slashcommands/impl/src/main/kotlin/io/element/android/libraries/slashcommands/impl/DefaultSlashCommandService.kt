@@ -99,14 +99,6 @@ class DefaultSlashCommandService(
     override suspend fun proceedAdmin(
         slashCommand: SlashCommand.SlashCommandAdmin,
     ): Result<Unit> {
-        if (slashCommand is SlashCommand.ChangeDisplayNameForRoom) {
-            val canUserChangeDisplayName = withTimeoutOrNull(5.seconds) {
-                capabilitiesProvider.canChangeDisplayName().getOrNull()
-            } ?: false
-            if (!canUserChangeDisplayName) {
-                return Result.failure(Exception("Changing display name is not allowed"))
-            }
-        }
         return commandExecutor.proceedAdmin(
             slashCommand = slashCommand,
         )
