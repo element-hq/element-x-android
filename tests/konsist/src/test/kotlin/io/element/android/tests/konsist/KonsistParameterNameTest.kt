@@ -19,7 +19,7 @@ class KonsistParameterNameTest {
         Konsist.scopeFromProject()
             .functions()
             .withParameter { parameter ->
-                parameter.name.endsWith("Press")
+                parameter.name.endsWith("Press") && !parameter.name.endsWith("LongPress")
             }
             .assertEmpty(additionalMessage = "Please rename the parameter, for instance from 'onBackPress' to 'onBackClick'.")
     }
