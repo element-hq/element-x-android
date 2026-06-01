@@ -103,6 +103,18 @@ fun TimelineItemEventContent.isEdited(): Boolean = when (this) {
  */
 fun TimelineItemEventContent.isRedacted(): Boolean = this is TimelineItemRedactedContent
 
+/**
+ * Returns the caption text for content types that support captions.
+ * Gallery and attachments content types have captions but don't implement
+ * [TimelineItemEventContentWithAttachment].
+ */
+fun TimelineItemEventContent.captionOrNull(): String? = when (this) {
+    is TimelineItemEventContentWithAttachment -> caption
+    is TimelineItemGalleryContent -> caption
+    is TimelineItemAttachmentsContent -> caption
+    else -> null
+}
+
 fun TimelineItemEventContentWithAttachment.duration(): Duration? {
     return when (this) {
         is TimelineItemAudioContent -> duration
