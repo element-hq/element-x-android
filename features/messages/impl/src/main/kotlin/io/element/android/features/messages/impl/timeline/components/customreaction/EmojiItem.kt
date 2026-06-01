@@ -30,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Fill
@@ -48,7 +49,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.emojibasebindings.Emoji
 import io.element.android.features.messages.impl.timeline.a11y.a11yReactionAction
 import io.element.android.features.messages.impl.timeline.components.customreaction.picker.SkinTonePadding
-import io.element.android.features.messages.impl.timeline.components.customreaction.picker.SkinTonePickerContent
+import io.element.android.features.messages.impl.timeline.components.customreaction.picker.SkinTonePicker
 import io.element.android.features.messages.impl.timeline.components.customreaction.picker.SkinToneSlotSize
 import io.element.android.features.messages.impl.timeline.components.customreaction.picker.SkinToneSlotSpacing
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -83,6 +84,7 @@ fun EmojiItem(
         emoji = item.unicode,
         userAlreadyReacted = isSelected,
     )
+    val hasSkinTones = !item.skins.isNullOrEmpty()
     Box(
         modifier = modifier
             .sizeIn(minWidth = 40.dp, minHeight = 40.dp)
@@ -90,82 +92,93 @@ fun EmojiItem(
             .background(backgroundColor, CircleShape)
             .indication(interactionSource, ripple())
             .pointerInput(item) {
+                // Only detect drag after long press for those items which have a skin tone picker
+                if (hasSkinTones) {
+                    var startOffset = Offset.Zero
+                    detectDragGesturesAfterLongPress(
+                        onDragStart = { position ->
+                            if (onLongPress != null) {
+                                startOffset = position
+                                dismissed = false
+                                onLongPress(item)
+                                hoveredIndex = -1
+                            }
+                        },
+                        onDrag = { change, _ ->
+                            if (!dismissed) {
+                                change.consume()
+                                // It's a valid drag event if it's within ~2 items height above, so, on top of the current one or the skin tone selector,
+                                // or 1 item below, which should be far enough to not be triggered by mistake
+                                val isValidDrag = if (change.position.y < startOffset.y) {
+                                    startOffset.y - change.position.y <= itemSize.height * 2f
+                                } else {
+                                    change.position.y - startOffset.y <= itemSize.height
+                                }
+                                if (!isValidDrag) {
+                                    dismissed = true
+                                    hoveredIndex = -1
+                                    onDismissSkinPicker?.invoke()
+                                } else {
+                                    val skinCount = item.skins!!.size
+                                    val slotWidthPx = with(density) { SkinToneSlotSize.toPx() }
+                                    val spacingPx = with(density) { SkinToneSlotSpacing.toPx() }
+                                    val paddingPx = with(density) { SkinTonePadding.toPx() }
+                                    val totalSlots = 1 + skinCount
+                                    val pickerWidthPx = 2 * paddingPx + totalSlots * slotWidthPx + (totalSlots - 1) * spacingPx
+                                    val pickerHalfWidthPx = pickerWidthPx / 2f
+                                    val centerXPx = itemSize.width / 2f
+                                    val pickerLeftPx = centerXPx - pickerHalfWidthPx
+                                    val xInPicker = change.position.x - pickerLeftPx
+                                    val index = if (xInPicker in 0f..pickerWidthPx) {
+                                        (xInPicker / slotWidthPx).toInt().coerceIn(0, totalSlots - 1)
+                                    } else {
+                                        -1
+                                    }
+                                    hoveredIndex = index
+                                }
+                            }
+                        },
+                        onDragEnd = {
+                            if (!dismissed) {
+                                val idx = hoveredIndex
+                                val skinCount = item.skins?.size ?: 0
+                                if (idx in 0..skinCount) {
+                                    if (idx == 0) {
+                                        onSelectEmoji(item)
+                                    } else {
+                                        val skin = item.skins?.getOrNull(idx - 1)
+                                        if (skin != null) {
+                                            onSelectEmoji(item.copy(unicode = skin.unicode))
+                                        }
+                                    }
+                                } else if (idx < 0) {
+                                    onSelectEmoji(item)
+                                }
+                            }
+                            dismissed = false
+                            hoveredIndex = -1
+                            onDismissSkinPicker?.invoke()
+                        },
+                        onDragCancel = {
+                            dismissed = false
+                            hoveredIndex = -1
+                        },
+                    )
+                }
+
+                // Always detect long press and tap gestures
                 detectTapGestures(
                     onPress = { pressOffset ->
                         val press = PressInteraction.Press(pressOffset)
                         interactionSource.emit(press)
                         if (tryAwaitRelease()) {
                             interactionSource.emit(PressInteraction.Release(press))
+                            onSelectEmoji(item)
                         } else {
                             interactionSource.emit(PressInteraction.Cancel(press))
                         }
                     },
                     onTap = { onSelectEmoji(item) },
-                )
-            }
-            .pointerInput(item) {
-                detectDragGesturesAfterLongPress(
-                    onDragStart = { _ ->
-                        if (item.skins != null && onLongPress != null) {
-                            dismissed = false
-                            onLongPress(item)
-                            hoveredIndex = -1
-                        }
-                    },
-                    onDrag = { change, _ ->
-                        if (item.skins != null && !dismissed) {
-                            change.consume()
-                            val yThresholdPx = with(density) { 100.dp.toPx() }
-                            if (change.position.y > yThresholdPx) {
-                                dismissed = true
-                                hoveredIndex = -1
-                                onDismissSkinPicker?.invoke()
-                            } else {
-                                val skinCount = item.skins!!.size
-                                val slotWidthPx = with(density) { SkinToneSlotSize.toPx() }
-                                val spacingPx = with(density) { SkinToneSlotSpacing.toPx() }
-                                val paddingPx = with(density) { SkinTonePadding.toPx() }
-                                val totalSlots = 1 + skinCount
-                                val pickerWidthPx = 2 * paddingPx + totalSlots * slotWidthPx + (totalSlots - 1) * spacingPx
-                                val pickerHalfWidthPx = pickerWidthPx / 2f
-                                val centerXPx = itemSize.width / 2f
-                                val pickerLeftPx = centerXPx - pickerHalfWidthPx
-                                val xInPicker = change.position.x - pickerLeftPx
-                                val index = if (xInPicker >= 0f && xInPicker <= pickerWidthPx) {
-                                    (xInPicker / slotWidthPx).toInt().coerceIn(0, totalSlots - 1)
-                                } else {
-                                    -1
-                                }
-                                hoveredIndex = index
-                            }
-                        }
-                    },
-                    onDragEnd = {
-                        if (!dismissed) {
-                            val idx = hoveredIndex
-                            val skinCount = item.skins?.size ?: 0
-                            if (idx in 0..skinCount) {
-                                if (idx == 0) {
-                                    onSelectEmoji(item)
-                                } else {
-                                    val skin = item.skins?.getOrNull(idx - 1)
-                                    if (skin != null) {
-                                        onSelectEmoji(item.copy(unicode = skin.unicode))
-                                    }
-                                }
-                            } else if (idx < 0) {
-                                onSelectEmoji(item)
-                            }
-                        }
-                        dismissed = false
-                        hoveredIndex = -1
-                        onDismissSkinPicker?.invoke()
-                    },
-                    onDragCancel = {
-                        dismissed = false
-                        hoveredIndex = -1
-                        onDismissSkinPicker?.invoke()
-                    },
                 )
             }
             .clearAndSetSemantics {
@@ -177,7 +190,7 @@ fun EmojiItem(
             text = item.unicode,
             style = LocalTextStyle.current.copy(fontSize = emojiSize),
         )
-        if (item.skins != null) {
+        if (hasSkinTones) {
             Canvas(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
@@ -201,7 +214,7 @@ fun EmojiItem(
                 alignment = Alignment.BottomCenter,
                 offset = IntOffset(0, popupOffsetPx),
             ) {
-                SkinTonePickerContent(
+                SkinTonePicker(
                     emoji = item,
                     onSelect = { selectedEmoji ->
                         onSelectEmoji(selectedEmoji)
