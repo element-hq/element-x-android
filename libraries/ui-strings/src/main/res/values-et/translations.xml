@@ -18,6 +18,7 @@
   <string name="a11y_info">"Teave"</string>
   <string name="a11y_join_call">"Liitu kõnega"</string>
   <string name="a11y_jump_to_bottom">"Mine lõppu"</string>
+  <string name="a11y_jump_to_unread">"Mine lugemata sõnumite juurde"</string>
   <string name="a11y_move_the_map_to_my_location">"Nihuta kaart minu asukohta"</string>
   <string name="a11y_notifications_mentions_only">"Ainult mainimised"</string>
   <string name="a11y_notifications_muted">"Summutatud"</string>
@@ -98,6 +99,7 @@
   <string name="action_decline_and_block">"Keeldu ja blokeeri"</string>
   <string name="action_delete">"Kustuta"</string>
   <string name="action_delete_account">"Kustuta kasutajakonto"</string>
+  <string name="action_delete_file">"Kustuta fail"</string>
   <string name="action_delete_poll">"Kustuta küsitlus"</string>
   <string name="action_deselect_all">"Eemalda kõik valikud"</string>
   <string name="action_disable">"Lülita välja"</string>
@@ -303,6 +305,7 @@ Põhjus: %1$s."</string>
   <string name="common_please_wait">"Palun oota…"</string>
   <string name="common_poll_end_confirmation">"Kas oled kindel, et soovid selle küsitluse lõpetada?"</string>
   <string name="common_poll_summary">"Küsitlus: %1$s"</string>
+  <string name="common_poll_summary_prefix">"Küsitlus"</string>
   <string name="common_poll_total_votes">"Hääli kokku: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Tulemused on näha peale küsitluse lõppemist"</string>
   <plurals name="common_poll_votes_count">
