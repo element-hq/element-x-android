@@ -8,6 +8,7 @@
   <string name="screen_bug_report_editor_placeholder">"描述问题…"</string>
   <string name="screen_bug_report_editor_supporting">"请尽可能用英文描述。"</string>
   <string name="screen_bug_report_error_description_too_short">"描述太短，请提供详细情况。谢谢！"</string>
+  <string name="screen_bug_report_github_issue_description">"你可以输入与之相关的 GitHub issue 编号（如果有）。"</string>
   <string name="screen_bug_report_include_crash_logs">"发送崩溃日志"</string>
   <string name="screen_bug_report_include_logs">"允许日志"</string>
   <string name="screen_bug_report_include_logs_error">"日志文件过大，无法包含在本次报告中，请通过其它方式发送给我们。"</string>
