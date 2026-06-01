@@ -619,29 +619,6 @@ fun VideoCompressionPreset.subtitle(): String {
 }
 
 @Composable
-private fun GalleryBadge(count: Int, modifier: Modifier = Modifier) {
-    val contentDescription = pluralStringResource(R.plurals.common_attachments_count, count, count)
-    Box(
-        modifier = modifier
-            .padding(12.dp)
-            .background(
-                color = ElementTheme.colors.bgCanvasDefault.copy(alpha = 0.8f),
-                shape = RoundedCornerShape(8.dp),
-            )
-            .padding(horizontal = 8.dp, vertical = 4.dp)
-            .semantics {
-                this.contentDescription = contentDescription
-            },
-    ) {
-        Text(
-            text = "$count",
-            style = ElementTheme.typography.fontBodySmMedium,
-            color = ElementTheme.colors.textPrimary,
-        )
-    }
-}
-
-@Composable
 internal fun GalleryCarouselPill(
     currentIndex: Int,
     totalCount: Int,
