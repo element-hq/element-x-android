@@ -330,6 +330,7 @@
         "screen\\.advanced_settings\\..*",
         "screen_edit_profile_.*",
         "screen_notification_settings_.*",
+        "screen\\.notification_settings\\..*",
         "screen_blocked_users_.*",
         "full_screen_intent_banner_.*",
         "troubleshoot_notifications_entry_point_.*",

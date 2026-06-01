@@ -59,6 +59,7 @@
   <string name="screen_labs_header_title">"Chcesz poeksperymentować?"</string>
   <string name="screen_labs_title">"Laboratoria"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Dodatkowe ustawienia"</string>
+  <string name="screen_notification_settings_call_ringtone_label">"Dzwonek połączenia"</string>
   <string name="screen_notification_settings_calls_label">"Połączenia audio i wideo"</string>
   <string name="screen_notification_settings_configuration_mismatch">"Niezgodność konfiguracji"</string>
   <string name="screen_notification_settings_configuration_mismatch_description">"Uprościliśmy Ustawienia powiadomień, aby ułatwić nawigowanie między opcjami. Niektóre ustawienia, które wybrałeś mogły zniknąć, lecz są wciąż aktywne.
@@ -77,10 +78,15 @@ Niektóre ustawienia mogą ulec zmianie, jeśli kontynuujesz."</string>
   <string name="screen_notification_settings_invite_for_me_label">"Zaproszenia"</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Twój serwer domowy nie wspiera tej opcji w pokojach szyfrowanych, możesz nie otrzymać powiadomień z niektórych pokoi."</string>
   <string name="screen_notification_settings_mentions_section_title">"Wzmianki"</string>
+  <string name="screen_notification_settings_message_sound_dialog_choose_other">"Wybierz inny dźwięk…"</string>
+  <string name="screen_notification_settings_message_sound_dialog_current_subtitle">"Aktualnie używany %1$s"</string>
+  <string name="screen_notification_settings_message_sound_dialog_title">"Dźwięk wiadomości"</string>
+  <string name="screen_notification_settings_message_sound_label">"Dźwięk wiadomości"</string>
   <string name="screen_notification_settings_mode_all">"Wszystkie"</string>
   <string name="screen_notification_settings_mode_mentions">"Wzmianki"</string>
   <string name="screen_notification_settings_notification_section_title">"Powiadamiaj mnie przez"</string>
   <string name="screen_notification_settings_room_mention_label">"Powiadom mnie na @pokój"</string>
+  <string name="screen_notification_settings_sound_custom_fallback">"Własny"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"Własny dźwięk…"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"Błąd usuwania pliku"</string>
   <string name="screen_notification_settings_sound_element_default">"Domyślny Element"</string>
@@ -88,7 +94,9 @@ Niektóre ustawienia mogą ulec zmianie, jeśli kontynuujesz."</string>
   <string name="screen_notification_settings_sound_import_sound_error_title">"Błąd importowania pliku"</string>
   <string name="screen_notification_settings_sound_preview_sound_error_title">"Wystąpił błąd podczas podglądania dźwięku powiadomień"</string>
   <string name="screen_notification_settings_sound_section_title">"Dźwięk"</string>
+  <string name="screen_notification_settings_sound_set_sound_error_dismiss_a11y">"Pomiń dźwięk błędu"</string>
   <string name="screen_notification_settings_sound_set_sound_error_title">"Nie udało się ustawić dźwięku powiadomień"</string>
+  <string name="screen_notification_settings_sound_silent">"Cichy"</string>
   <string name="screen_notification_settings_sound_system_alert">"Alert"</string>
   <string name="screen_notification_settings_sound_system_anticipate">"Oczekiwanie"</string>
   <string name="screen_notification_settings_sound_system_bell">"Dzwonek"</string>
@@ -96,6 +104,7 @@ Niektóre ustawienia mogą ulec zmianie, jeśli kontynuujesz."</string>
   <string name="screen_notification_settings_sound_system_calypso">"Kalipso"</string>
   <string name="screen_notification_settings_sound_system_chime">"Gong"</string>
   <string name="screen_notification_settings_sound_system_choo_choo">"Ciuchcia"</string>
+  <string name="screen_notification_settings_sound_system_default">"Ustawienie domyślne"</string>
   <string name="screen_notification_settings_sound_system_descent">"Opadający"</string>
   <string name="screen_notification_settings_sound_system_electronic">"Elektroniczna"</string>
   <string name="screen_notification_settings_sound_system_fanfare">"Fanfary"</string>

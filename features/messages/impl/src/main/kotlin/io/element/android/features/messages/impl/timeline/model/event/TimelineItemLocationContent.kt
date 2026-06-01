@@ -9,7 +9,9 @@
 package io.element.android.features.messages.impl.timeline.model.event
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.rememberUpdatedState
 import io.element.android.features.location.api.Location
 import io.element.android.libraries.designsystem.components.PinVariant
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -103,8 +105,9 @@ private fun rememberIsLiveLocationActive(
     mode: TimelineItemLocationContent.Mode.Live,
     currentTimeMillis: () -> Long,
 ): Boolean {
+    val updatedCurrentTimeMillis by rememberUpdatedState(currentTimeMillis)
     fun TimelineItemLocationContent.Mode.Live.isActive(): Boolean {
-        return isActive && endTimestamp > currentTimeMillis()
+        return isActive && endTimestamp > updatedCurrentTimeMillis()
     }
     return produceState(
         initialValue = mode.isActive(),
@@ -112,7 +115,7 @@ private fun rememberIsLiveLocationActive(
         key2 = mode.isActive,
     ) {
         if (mode.isActive) {
-            val remainingMillis = mode.endTimestamp - currentTimeMillis()
+            val remainingMillis = mode.endTimestamp - updatedCurrentTimeMillis()
             delay(remainingMillis)
         }
         value = false

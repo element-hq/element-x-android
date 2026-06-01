@@ -16,6 +16,13 @@
   <string name="emoji_picker_category_places">"Podróż i miejsca"</string>
   <string name="emoji_picker_category_recent">"Ostatnie emoji"</string>
   <string name="emoji_picker_category_symbols">"Symbole"</string>
+  <string name="screen_image_edition_a11y_rotate_to_the_left">"Obróć obraz w lewo"</string>
+  <plurals name="screen_image_edition_a11y_rotation_state">
+    <item quantity="one">"%1$d stopień"</item>
+    <item quantity="few">"%1$d stopnie"</item>
+    <item quantity="many">"%1$d stopni"</item>
+  </plurals>
+  <string name="screen_image_edition_title">"Edytuj zdjęcie"</string>
   <string name="screen_media_upload_preview_caption_warning">"Opis może być niedostępny dla osób korzystających ze starszej wersji aplikacji."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Dotknij, aby zmienić jakość przesyłania wideo."</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Nie udało się przesłać pliku."</string>

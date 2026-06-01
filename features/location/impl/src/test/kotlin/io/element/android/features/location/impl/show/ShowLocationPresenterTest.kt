@@ -22,10 +22,13 @@ import io.element.android.features.location.impl.common.permissions.PermissionsS
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.features.location.test.FakeActiveLiveLocationShareManager
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.location.LiveLocationShare
+import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.location.aLiveLocationShare
@@ -61,6 +64,7 @@ class ShowLocationPresenterTest {
         ),
         locationActions: FakeLocationActions = fakeLocationActions,
         joinedRoom: JoinedRoom = FakeJoinedRoom(),
+        client: MatrixClient = FakeMatrixClient(),
         liveLocationShareManager: FakeActiveLiveLocationShareManager = FakeActiveLiveLocationShareManager(),
     ) = ShowLocationPresenter(
         mode = mode,
@@ -70,6 +74,7 @@ class ShowLocationPresenterTest {
         dateFormatter = fakeDateFormatter,
         stringProvider = FakeStringProvider(),
         joinedRoom = joinedRoom,
+        client = client,
         liveLocationShareManager = liveLocationShareManager,
     )
 
@@ -85,8 +90,25 @@ class ShowLocationPresenterTest {
         val presenter = createShowLocationPresenter()
         presenter.test {
             val initialState = awaitItem()
+            assertThat(initialState.customMapStyleUrl.isLoading()).isTrue()
             assertThat(initialState.hasLocationPermission).isFalse()
             assertThat(initialState.isTrackMyLocation).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - non-null customMapStyleUrl`() = runTest {
+        val shareLocationPresenter = createShowLocationPresenter(
+            client = FakeMatrixClient(
+                sessionId = A_USER_ID,
+                getMapStyleUrlResult = { Result.success("aUrl") },
+            )
+        )
+        shareLocationPresenter.test {
+            val state = awaitItem()
+            assertThat(state.customMapStyleUrl.isLoading()).isTrue()
+            val finalState = awaitItem()
+            assertThat(finalState.customMapStyleUrl.dataOrNull()).isEqualTo("aUrl")
         }
     }
 
@@ -146,8 +168,13 @@ class ShowLocationPresenterTest {
     fun `centers on user location`() = runTest {
         fakePermissionsPresenter.givenState(aPermissionsState(permissions = PermissionsState.Permissions.AllGranted))
 
-        val presenter = createShowLocationPresenter()
+        val presenter = createShowLocationPresenter(
+            client = FakeMatrixClient(
+                getMapStyleUrlResult = { Result.success(null) }
+            )
+        )
         presenter.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.hasLocationPermission).isTrue()
             assertThat(initialState.isTrackMyLocation).isFalse()

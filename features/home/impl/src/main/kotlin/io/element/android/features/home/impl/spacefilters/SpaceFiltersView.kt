@@ -48,6 +48,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.spaces.SpaceServiceFilter
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -93,7 +94,7 @@ fun SpaceFiltersView(
                     SpaceFiltersBottomSheetContent(
                         filters = state.visibleFilters,
                         searchQuery = state.searchQuery,
-                        onFilterSelected = { filter ->
+                        onSelectFilter = { filter ->
                             state.eventSink(SpaceFiltersEvent.Selecting.SelectFilter(filter))
                         }
                     )
@@ -105,9 +106,9 @@ fun SpaceFiltersView(
 
 @Composable
 private fun SpaceFiltersBottomSheetContent(
-    filters: List<SpaceServiceFilter>,
+    filters: ImmutableList<SpaceServiceFilter>,
     searchQuery: TextFieldState,
-    onFilterSelected: (SpaceServiceFilter) -> Unit,
+    onSelectFilter: (SpaceServiceFilter) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -133,7 +134,7 @@ private fun SpaceFiltersBottomSheetContent(
             items(filters) { filter ->
                 SpaceFilterItem(
                     filter = filter,
-                    onClick = { onFilterSelected(filter) }
+                    onClick = { onSelectFilter(filter) }
                 )
             }
         }
