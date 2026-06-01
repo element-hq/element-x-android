@@ -105,7 +105,6 @@ fun MediaDetailsBottomSheet(
                 ListItem(
                     leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.VisibilityOn())),
                     headlineContent = { Text(stringResource(CommonStrings.action_view_in_timeline)) },
-                    style = ListItemStyle.Primary,
                     onClick = {
                         onViewInTimeline(state.eventId)
                     }
@@ -113,7 +112,6 @@ fun MediaDetailsBottomSheet(
                 ListItem(
                     leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ShareAndroid())),
                     headlineContent = { Text(stringResource(CommonStrings.action_share)) },
-                    style = ListItemStyle.Primary,
                     onClick = {
                         onShare(state.eventId)
                     }
@@ -121,7 +119,6 @@ fun MediaDetailsBottomSheet(
                 ListItem(
                     leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Forward())),
                     headlineContent = { Text(stringResource(CommonStrings.action_forward)) },
-                    style = ListItemStyle.Primary,
                     onClick = {
                         onForward(state.eventId)
                     }
@@ -129,7 +126,6 @@ fun MediaDetailsBottomSheet(
                 ListItem(
                     leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Download())),
                     headlineContent = { Text(stringResource(CommonStrings.action_download)) },
-                    style = ListItemStyle.Primary,
                     onClick = {
                         onDownload(state.eventId)
                     }
@@ -148,7 +144,6 @@ fun MediaDetailsBottomSheet(
                 ListItem(
                     leadingContent = icon,
                     headlineContent = { Text(wording) },
-                    style = ListItemStyle.Primary,
                     onClick = {
                         onOpenWith(state.eventId)
                     }
