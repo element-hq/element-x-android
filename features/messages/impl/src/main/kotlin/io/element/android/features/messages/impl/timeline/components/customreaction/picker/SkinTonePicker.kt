@@ -39,7 +39,7 @@ val SkinToneSlotSpacing = 2.dp
 val SkinTonePadding = 4.dp
 
 @Composable
-fun SkinTonePickerContent(
+fun SkinTonePicker(
     emoji: Emoji,
     onSelect: (Emoji) -> Unit,
     modifier: Modifier = Modifier,
@@ -110,8 +110,8 @@ private fun SkinToneSlot(
 
 @PreviewsDayNight
 @Composable
-internal fun SkinTonePickerContentPreview() = ElementPreview {
-    SkinTonePickerContent(
+internal fun SkinTonePickerPreview() = ElementPreview {
+    SkinTonePicker(
         emoji = Emoji(
             hexcode = "1F44D",
             label = "thumbs up",
