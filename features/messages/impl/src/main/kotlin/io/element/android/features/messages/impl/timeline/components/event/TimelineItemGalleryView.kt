@@ -78,8 +78,8 @@ fun TimelineItemGalleryView(
     if (content.items.isEmpty()) return
 
     val totalItems = content.items.size
-    val showOverflow = totalItems > MAX_TILES - 1
-    val overflowCount = totalItems - (MAX_TILES - 1)
+    val showOverflow = totalItems > MAX_TILES
+    val overflowCount = totalItems - MAX_TILES
 
     Column(modifier = modifier) {
         val containerModifier = Modifier.clip(RoundedCornerShape(GROUP_CORNER_RADIUS))
