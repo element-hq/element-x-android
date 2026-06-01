@@ -32,36 +32,36 @@ class FilterEmptyDayPostProcessorTest {
     @Test
     fun `filterEmptyDaySeparators keeps day separator with events after it`() {
         val items = listOf(
-            anEvent,
             aDaySeparator(TODAY),
+            anEvent,
         )
         val result = FilterEmptyDayPostProcessor().process(items)
         assertThat(result).hasSize(2)
-        assertThat(result[0]).isEqualTo(anEvent)
-        assertThat(result[1]).isEqualTo(aDaySeparator(TODAY))
+        assertThat(result[0]).isEqualTo(aDaySeparator(TODAY))
+        assertThat(result[1]).isEqualTo(anEvent)
     }
 
     @Test
     fun `filterEmptyDaySeparators removes day separator with no events after it`() {
         val items = listOf(
-            aDaySeparator(TODAY),
             aDaySeparator(YESTERDAY),
+            aDaySeparator(TODAY),
         )
         val result = FilterEmptyDayPostProcessor().process(items)
         assertThat(result).isEmpty()
     }
 
     @Test
-    fun `filterEmptyDaySeparators removes first day separator and keeps second when only second has events`() {
+    fun `filterEmptyDaySeparators removes second day separator and keeps first when only first has events`() {
         val items = listOf(
-            aDaySeparator(TODAY),
-            anEvent,
             aDaySeparator(YESTERDAY),
+            anEvent,
+            aDaySeparator(TODAY),
         )
         val result = FilterEmptyDayPostProcessor().process(items)
         assertThat(result).hasSize(2)
-        assertThat(result[0]).isEqualTo(anEvent)
-        assertThat(result[1]).isEqualTo(aDaySeparator(YESTERDAY))
+        assertThat(result[0]).isEqualTo(aDaySeparator(YESTERDAY))
+        assertThat(result[1]).isEqualTo(anEvent)
     }
 
     @Test
@@ -78,15 +78,15 @@ class FilterEmptyDayPostProcessorTest {
     @Test
     fun `filterEmptyDaySeparators keeps all items when no day separators`() {
         val items = listOf(
-            anEvent,
             anEvent.copy(uniqueId = UniqueId("event2")),
+            anEvent,
         )
         val result = FilterEmptyDayPostProcessor().process(items)
         assertThat(result).hasSize(2)
     }
 
     @Test
-    fun `filterEmptyDaySeparators removes day separator followed by non-event virtual item`() {
+    fun `filterEmptyDaySeparators removes day separator preceded by non-event virtual item`() {
         val readMarker = MatrixTimelineItem.Virtual(
             uniqueId = UniqueId("readMarker"),
             virtual = VirtualTimelineItem.ReadMarker
@@ -107,12 +107,12 @@ class FilterEmptyDayPostProcessorTest {
             virtual = VirtualTimelineItem.ReadMarker
         )
         val items = listOf(
-            anEvent,
-            readMarker,
             aDaySeparator(TODAY),
+            readMarker,
+            anEvent,
         )
         val result = FilterEmptyDayPostProcessor().process(items)
         assertThat(result).hasSize(3)
-        assertThat(result[2]).isEqualTo(aDaySeparator(TODAY))
+        assertThat(result[0]).isEqualTo(aDaySeparator(TODAY))
     }
 }
