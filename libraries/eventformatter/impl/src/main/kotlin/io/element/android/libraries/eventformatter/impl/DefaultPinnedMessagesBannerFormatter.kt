@@ -106,7 +106,7 @@ class DefaultPinnedMessagesBannerFormatter(
                 messageType.body
             }
             is GalleryMessageType -> {
-                messageType.body.prefixWith(CommonStrings.common_image)
+                messageType.body.prefixWith(CommonStrings.common_gallery)
             }
             is NoticeMessageType -> {
                 messageType.body
