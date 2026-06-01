@@ -302,6 +302,21 @@ fun RoomDetailsView(
                     )
                 }
             }
+            if (state.isEncrypted) {
+                PreferenceCategory(
+                    title = stringResource(R.string.screen_room_details_security_title)
+                ) {
+                    ListItem(
+                        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Lock())),
+                        headlineContent = {
+                            Text(stringResource(id = R.string.screen_room_details_encryption_enabled_title))
+                        },
+                        supportingContent = {
+                            Text(stringResource(id = R.string.screen_room_details_encryption_enabled_subtitle))
+                        },
+                    )
+                }
+            }
             OtherActionsSection(
                 dmOtherMemberDetailsState = state.dmOtherMemberDetailsState,
                 canReportRoom = state.canReportRoom,
