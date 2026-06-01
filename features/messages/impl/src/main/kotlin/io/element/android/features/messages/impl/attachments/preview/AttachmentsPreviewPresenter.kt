@@ -126,7 +126,7 @@ class AttachmentsPreviewPresenter(
 
         val observableSendState = snapshotFlow { sendActionState.value }
 
-var displayFileTooLargeError by remember { mutableStateOf(false) }
+        var displayFileTooLargeError by remember { mutableStateOf(false) }
 
         LaunchedEffect(attachments) {
             currentIndex = 0
