@@ -174,7 +174,7 @@ class RoomDetailsPresenter(
             }
         }
 
-        val roomMemberDetailsState = roomMemberDetailsPresenter?.present()
+        val dmOtherMemberDetailsState = roomMemberDetailsPresenter?.present()
 
         val hasMemberVerificationViolations by produceState(false) {
             room.roomMemberIdentityStateChange(waitForEncryption = true)
@@ -196,7 +196,7 @@ class RoomDetailsPresenter(
             canEdit = roomType == RoomDetailsType.Room && permissions.editDetailsPermissions.hasAny,
             roomCallState = roomCallState,
             roomType = roomType,
-            roomMemberDetailsState = roomMemberDetailsState,
+            dmOtherMemberDetailsState = dmOtherMemberDetailsState,
             leaveRoomState = leaveRoomState,
             roomNotificationSettings = roomNotificationSettingsState.roomNotificationSettings(),
             isFavorite = isFavorite,

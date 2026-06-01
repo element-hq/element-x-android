@@ -43,6 +43,7 @@ import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.roomcall.api.hasPermissionToJoin
+import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.api.UserProfileVerificationState
 import io.element.android.features.userprofile.shared.blockuser.BlockUserDialogs
 import io.element.android.features.userprofile.shared.blockuser.BlockUserSection
@@ -64,7 +65,7 @@ import io.element.android.libraries.designsystem.modifiers.niceClickable
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
+import io.element.android.libraries.designsystem.preview.PreviewWithExtraLargeHeight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
@@ -229,66 +230,11 @@ fun RoomDetailsView(
                     )
                 }
             }
+            // Room content
             PreferenceCategory {
-                if (state.roomNotificationSettings != null) {
-                    NotificationItem(
-                        isDefaultMode = state.roomNotificationSettings.isDefault,
-                        openRoomNotificationSettings = openRoomNotificationSettings
-                    )
-                }
-
-                FavoriteItem(
-                    isFavorite = state.isFavorite,
-                    onFavoriteChanges = {
-                        state.eventSink(RoomDetailsEvent.SetFavorite(it))
-                    }
+                MediaGalleryItem(
+                    onClick = openMediaGallery
                 )
-
-                if (state.canShowSecurityAndPrivacy) {
-                    SecurityAndPrivacyItem(
-                        onClick = onSecurityAndPrivacyClick
-                    )
-                }
-            }
-
-            state.roomMemberDetailsState?.let { dmMemberDetails ->
-                if (state.canInvite) {
-                    PreferenceCategory {
-                        InviteItem(onClick = invitePeople)
-                    }
-                }
-                PreferenceCategory {
-                    ProfileItem(
-                        verificationState = dmMemberDetails.verificationState,
-                        onClick = { onProfileClick(dmMemberDetails.userId) }
-                    )
-                }
-            }
-
-            if (state.roomType is RoomDetailsType.Room) {
-                PreferenceCategory {
-                    MembersItem(
-                        memberCount = state.memberCount,
-                        hasVerificationViolations = state.hasMemberVerificationViolations,
-                        openRoomMemberList = openRoomMemberList,
-                    )
-                    if (state.canShowKnockRequests) {
-                        KnockRequestsItem(
-                            knockRequestsCount = state.knockRequestsCount,
-                            onKnockRequestsClick = onKnockRequestsClick
-                        )
-                    }
-                    if (state.displayRolesAndPermissionsSettings) {
-                        ListItem(
-                            headlineContent = { Text(stringResource(R.string.screen_room_details_roles_and_permissions)) },
-                            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Admin())),
-                            onClick = openAdminSettings,
-                        )
-                    }
-                }
-            }
-
-            PreferenceCategory {
                 PinnedMessagesItem(
                     pinnedMessagesCount = state.pinnedMessagesCount,
                     onPinnedMessagesClick = onPinnedMessagesClick
@@ -296,23 +242,72 @@ fun RoomDetailsView(
                 PollsItem(
                     openPollHistory = openPollHistory
                 )
-                MediaGalleryItem(
-                    onClick = openMediaGallery
+            }
+            when (state.roomType) {
+                is RoomDetailsType.Room -> {
+                    PreferenceCategory {
+                        MembersItem(
+                            memberCount = state.memberCount,
+                            hasVerificationViolations = state.hasMemberVerificationViolations,
+                            openRoomMemberList = openRoomMemberList,
+                        )
+                        if (state.canShowKnockRequests) {
+                            KnockRequestsItem(
+                                knockRequestsCount = state.knockRequestsCount,
+                                onKnockRequestsClick = onKnockRequestsClick
+                            )
+                        }
+                        if (state.displayRolesAndPermissionsSettings) {
+                            ListItem(
+                                headlineContent = { Text(stringResource(R.string.screen_room_details_roles_and_permissions)) },
+                                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Admin())),
+                                onClick = openAdminSettings,
+                            )
+                        }
+                    }
+                }
+                is RoomDetailsType.Dm -> {
+                    if (state.canInvite) {
+                        // Note: for rooms the invite action is a Main action
+                        PreferenceCategory {
+                            InviteItem(onClick = invitePeople)
+                        }
+                    }
+                    state.dmOtherMemberDetailsState?.let { dmMemberDetails ->
+                        PreferenceCategory {
+                            ProfileItem(
+                                verificationState = dmMemberDetails.verificationState,
+                                onClick = { onProfileClick(dmMemberDetails.userId) }
+                            )
+                        }
+                    }
+                }
+            }
+            PreferenceCategory {
+                if (state.roomNotificationSettings != null) {
+                    NotificationItem(
+                        isDefaultMode = state.roomNotificationSettings.isDefault,
+                        openRoomNotificationSettings = openRoomNotificationSettings
+                    )
+                }
+                FavoriteItem(
+                    isFavorite = state.isFavorite,
+                    onFavoriteChanges = {
+                        state.eventSink(RoomDetailsEvent.SetFavorite(it))
+                    }
                 )
+                if (state.canShowSecurityAndPrivacy && state.roomType is RoomDetailsType.Room) {
+                    SecurityAndPrivacyItem(
+                        onClick = onSecurityAndPrivacyClick
+                    )
+                }
             }
-
-            if (state.roomType is RoomDetailsType.Dm && state.roomMemberDetailsState != null) {
-                val roomMemberState = state.roomMemberDetailsState
-                BlockUserSection(roomMemberState)
-                BlockUserDialogs(roomMemberState)
-            }
-
             OtherActionsSection(
+                dmOtherMemberDetailsState = state.dmOtherMemberDetailsState,
                 canReportRoom = state.canReportRoom,
                 onReportRoomClick = onReportRoomClick,
                 onLeaveRoomClick = { state.eventSink(RoomDetailsEvent.LeaveRoom(needsConfirmation = true)) }
             )
-
             if (state.showDebugInfo) {
                 DebugInfoSection(
                     roomId = state.roomId,
@@ -803,9 +798,13 @@ private fun OtherActionsSection(
     canReportRoom: Boolean,
     onReportRoomClick: () -> Unit,
     onLeaveRoomClick: () -> Unit,
+    dmOtherMemberDetailsState: UserProfileState?,
 ) {
-    PreferenceCategory(showTopDivider = true) {
-        if (canReportRoom) {
+    PreferenceCategory {
+        if (dmOtherMemberDetailsState != null) {
+            BlockUserSection(dmOtherMemberDetailsState)
+            BlockUserDialogs(dmOtherMemberDetailsState)
+        } else if (canReportRoom) {
             ListItem(
                 headlineContent = {
                     Text(stringResource(CommonStrings.action_report_room))
@@ -832,7 +831,7 @@ private fun DebugInfoSection(
     roomVersion: String?,
 ) {
     val context = LocalContext.current
-    PreferenceCategory(showTopDivider = true) {
+    PreferenceCategory {
         val toastMessage = stringResource(CommonStrings.common_copied_to_clipboard)
         ListItem(
             headlineContent = {
@@ -870,17 +869,17 @@ private fun DebugInfoSection(
     }
 }
 
-@PreviewWithLargeHeight
+@PreviewWithExtraLargeHeight
 @Composable
 internal fun RoomDetailsPreview(@PreviewParameter(RoomDetailsStateProvider::class) state: RoomDetailsState) =
     ElementPreviewLight { ContentToPreview(state) }
 
-@PreviewWithLargeHeight
+@PreviewWithExtraLargeHeight
 @Composable
 internal fun RoomDetailsDarkPreview(@PreviewParameter(RoomDetailsStateProvider::class) state: RoomDetailsState) =
     ElementPreviewDark { ContentToPreview(state) }
 
-@PreviewWithLargeHeight
+@PreviewWithExtraLargeHeight
 @Composable
 internal fun RoomDetailsA11yPreview() = ElementPreview {
     ContentToPreview(

@@ -334,7 +334,7 @@ class RoomDetailsViewTest {
             setRoomDetailView(
                 state = aRoomDetailsState(
                     eventSink = EventsRecorder(expectEvents = false),
-                    roomMemberDetailsState = aUserProfileState(userId = A_USER_ID),
+                    dmOtherMemberDetailsState = aUserProfileState(userId = A_USER_ID),
                 ),
                 onProfileClick = callback,
             )
@@ -352,7 +352,7 @@ class RoomDetailsViewTest {
                     roomType = RoomDetailsType.Dm(
                         aDmRoomMember(userId = UserId("@other:local.org")),
                     ),
-                    roomMemberDetailsState = aUserProfileState(userId = A_USER_ID),
+                    dmOtherMemberDetailsState = aUserProfileState(userId = A_USER_ID),
                     canInvite = true,
                 ),
                 invitePeople = callback,
