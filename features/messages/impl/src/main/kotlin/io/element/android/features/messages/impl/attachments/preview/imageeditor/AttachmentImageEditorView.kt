@@ -316,11 +316,13 @@ private fun BoxScope.CropEditorCanvas(
                     ) { change, dragAmount ->
                         val activeTarget = dragTarget ?: return@detectDragGestures
                         change.consume()
+                        val gestureAreaWidth = imageRect.width.takeIf { it > 0f } ?: size.width.toFloat()
+                        val gestureAreaHeight = imageRect.height.takeIf { it > 0f } ?: size.height.toFloat()
                         onCropRectChange(
                             latestCropRect.applyChange(
                                 dragTarget = activeTarget,
-                                deltaX = dragAmount.x / size.width.toFloat(),
-                                deltaY = dragAmount.y / size.height.toFloat(),
+                                deltaX = dragAmount.x / gestureAreaWidth,
+                                deltaY = dragAmount.y / gestureAreaHeight,
                             )
                         )
                     }
