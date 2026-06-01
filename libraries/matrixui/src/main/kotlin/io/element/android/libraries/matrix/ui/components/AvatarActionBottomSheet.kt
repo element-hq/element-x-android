@@ -104,7 +104,7 @@ private fun AvatarActionBottomSheetContent(
                 leadingContent = ListItemContent.Icon(IconSource.Resource(action.iconResourceId)),
                 style = when {
                     action.destructive -> ListItemStyle.Destructive
-                    else -> ListItemStyle.Primary
+                    else -> ListItemStyle.Default
                 }
             )
         }
