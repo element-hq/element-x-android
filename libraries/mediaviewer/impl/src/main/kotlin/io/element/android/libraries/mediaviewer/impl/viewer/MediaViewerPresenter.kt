@@ -70,17 +70,17 @@ class MediaViewerPresenter(
     @Composable
     override fun present(): MediaViewerState {
         val coroutineScope = rememberCoroutineScope()
-        val currentIndex = remember { mutableIntStateOf(dataSource.findEventIndex(inputs.eventId) ?: 0) }
+        val currentIndex = remember { mutableIntStateOf(dataSource.findEventIndex(inputs.eventId, inputs.mediaSource) ?: 0) }
         val data = dataSource.produceState { flow ->
             flow.collectLatest { new ->
                 val existingItem = value.getOrNull(currentIndex.intValue)
                 val newItem = new.getOrNull(currentIndex.intValue)
                 if (existingItem is MediaViewerPageData.MediaViewerData && existingItem.eventId == inputs.eventId && newItem != existingItem) {
-                    currentIndex.intValue = dataSource.findEventIndex(inputs.eventId) ?: 0
+                    currentIndex.intValue = dataSource.findEventIndex(inputs.eventId, inputs.mediaSource) ?: 0
                 } else if (currentIndex.intValue > 0 && value.firstOrNull() is MediaViewerPageData.Loading &&
                     new.firstOrNull() !is MediaViewerPageData.Loading) {
                     // Restore index based on the eventId after the initial items have been loaded
-                    currentIndex.intValue = dataSource.findEventIndex(inputs.eventId) ?: 0
+                    currentIndex.intValue = dataSource.findEventIndex(inputs.eventId, inputs.mediaSource) ?: 0
                 }
                 value = new
             }
