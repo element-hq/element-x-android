@@ -334,6 +334,7 @@ class RoomDetailsViewTest {
             setRoomDetailView(
                 state = aRoomDetailsState(
                     eventSink = EventsRecorder(expectEvents = false),
+                    roomType = RoomDetailsType.Dm(aDmRoomMember(userId = A_USER_ID)),
                     dmOtherMemberDetailsState = aUserProfileState(userId = A_USER_ID),
                 ),
                 onProfileClick = callback,
