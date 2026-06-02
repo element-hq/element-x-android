@@ -145,6 +145,7 @@ class MediaViewerPresenter(
                 }
                 is MediaViewerEvent.OpenInfo -> coroutineScope.launch {
                     mediaBottomSheetState = MediaBottomSheetState.Details(
+                        fromGallery = false,
                         eventId = event.data.eventId,
                         canDelete = when (event.data.mediaInfo.senderId) {
                             null -> false
