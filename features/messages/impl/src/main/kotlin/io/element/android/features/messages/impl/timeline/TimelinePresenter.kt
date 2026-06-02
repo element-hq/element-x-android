@@ -33,6 +33,7 @@ import io.element.android.features.messages.impl.timeline.factories.TimelineItem
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactoryConfig
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemReadMarkerModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemTypingNotificationModel
 import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.features.messages.impl.userEventPermissions
@@ -96,6 +97,7 @@ class TimelinePresenter(
     private val featureFlagService: FeatureFlagService,
     private val analyticsService: AnalyticsService,
     private val liveLocationShareManager: ActiveLiveLocationShareManager,
+    private val markAsFullyRead: MarkAsFullyRead,
 ) : Presenter<TimelineState> {
     private val tag = "TimelinePresenter"
 
@@ -134,8 +136,14 @@ class TimelinePresenter(
 
         val prevMostRecentItemId = rememberSaveable { mutableStateOf<UniqueId?>(null) }
 
-        val newEventState = remember { mutableStateOf(NewEventState.None) }
+        val newEventState = remember { mutableStateOf<NewEventState>(NewEventState.None) }
         val messageShieldDialogData: MutableState<MessageShieldData?> = remember { mutableStateOf(null) }
+
+        // Forces [JumpToUnreadState.Hidden] until the next RoomInfo push. Set after a
+        // [TimelineEvent.MarkAllAsRead] await completes so the FAB hides without waiting for
+        // the SDK to push a refreshed fully-read marker; the after-await ordering means any
+        // RoomInfo update racing the mark-as-read call has already landed and can't undo this.
+        val suppressJumpToUnread = remember { mutableStateOf(false) }
 
         val resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailurePresenter.present()
         val renderReadReceipts by remember {
@@ -150,6 +158,9 @@ class TimelinePresenter(
         }
         val displayFloatingDateBadge by produceState(false) {
             value = featureFlagService.isFeatureEnabled(FeatureFlags.FloatingDateBadge)
+        }
+        val displayJumpToUnread by produceState(false) {
+            value = featureFlagService.isFeatureEnabled(FeatureFlags.JumpToUnread)
         }
 
         fun handleEvent(event: TimelineEvent) {
@@ -224,6 +235,14 @@ class TimelinePresenter(
                     timelineController.focusOnLive()
                 }
                 TimelineEvent.HideShieldDialog -> messageShieldDialogData.value = null
+                TimelineEvent.MarkAllAsRead -> sessionCoroutineScope.launch {
+                    val latestEventId = room.liveTimeline.getLatestEventId().getOrElse {
+                        Timber.tag(tag).w(it, "Failed to get latest event id to mark as fully read")
+                        null
+                    } ?: return@launch
+                    markAsFullyRead(room.roomId, latestEventId)
+                    suppressJumpToUnread.value = true
+                }
                 is TimelineEvent.ShowShieldDialog -> messageShieldDialogData.value = event.messageShieldData
                 is TimelineEvent.ComputeVerifiedUserSendFailure -> {
                     resolveVerifiedUserSendFailureState.eventSink(ResolveVerifiedUserSendFailureEvent.ComputeForMessage(event.event))
@@ -275,6 +294,45 @@ class TimelinePresenter(
             computeNewItemState(timelineItems, prevMostRecentItemId, newEventState)
         }
 
+        // Keyed on the full [timelineItems] reference (not just .size) so we re-scan when the
+        // read marker advances in place — the SDK swaps the marker virtual item to a new position
+        // without changing the list length, e.g. when [markRoomAsFullyRead] is sent while at the
+        // bottom of the room.
+        //
+        // The state has three shapes:
+        //  - InWindow: the SDK has materialised a virtual ReadMarker item in the loaded window;
+        //    tapping the FAB smoothly scrolls to its index.
+        //  - OutOfWindow: the marker event is older than the loaded window, so the SDK gives us
+        //    only the event id via RoomInfo.fullyReadEventId; tapping triggers a focused-event
+        //    load via the existing TimelineEvent.FocusOnEvent path.
+        //  - Hidden: feature flag off, no marker, caught-up (marker loaded but no virtual item),
+        //    or initial load (no items yet).
+        val jumpToUnread = remember { mutableStateOf<JumpToUnreadState>(JumpToUnreadState.Hidden) }
+        // The SDK is authoritative again once it pushes a new fully-read marker, so drop the
+        // post-mark-as-read suppression and let the recompute below pick up the new value.
+        LaunchedEffect(roomInfo.fullyReadEventId) {
+            suppressJumpToUnread.value = false
+        }
+        LaunchedEffect(timelineItems, displayJumpToUnread, roomInfo.fullyReadEventId, suppressJumpToUnread.value) {
+            if (!displayJumpToUnread || suppressJumpToUnread.value) {
+                jumpToUnread.value = JumpToUnreadState.Hidden
+                return@LaunchedEffect
+            }
+            val items = timelineItems
+            val fullyReadEventId = roomInfo.fullyReadEventId
+            jumpToUnread.value = withContext(dispatchers.computation) {
+                val markerIndex = items.indexOfFirst {
+                    (it as? TimelineItem.Virtual)?.model is TimelineItemReadMarkerModel
+                }
+                when {
+                    markerIndex >= 0 -> JumpToUnreadState.InWindow(markerIndex)
+                    fullyReadEventId != null && items.isNotEmpty() && !timelineItemIndexer.isKnown(fullyReadEventId) ->
+                        JumpToUnreadState.OutOfWindow(fullyReadEventId)
+                    else -> JumpToUnreadState.Hidden
+                }
+            }
+        }
+
         LaunchedEffect(timelineItems.size, focusRequestState.value) {
             val currentFocusRequestState = focusRequestState.value
             if (currentFocusRequestState is FocusRequestState.Success && !currentFocusRequestState.rendered) {
@@ -324,6 +382,8 @@ class TimelinePresenter(
             resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailureState,
             displayThreadSummaries = displayThreadSummaries,
             displayFloatingDateBadge = displayFloatingDateBadge,
+            displayJumpToUnread = displayJumpToUnread,
+            jumpToUnread = jumpToUnread.value,
             eventSink = ::handleEvent,
         )
     }
@@ -385,7 +445,7 @@ class TimelinePresenter(
     private suspend fun computeNewItemState(
         timelineItems: ImmutableList<TimelineItem>,
         prevMostRecentItemId: MutableState<UniqueId?>,
-        newEventState: MutableState<NewEventState>
+        newEventState: MutableState<NewEventState>,
     ) = withContext(dispatchers.computation) {
         // FromMe is prioritized over FromOther, so skip if we already have a FromMe
         if (newEventState.value == NewEventState.FromMe) {
@@ -404,12 +464,7 @@ class TimelinePresenter(
 
         if (hasNewEvent) {
             // Scroll to bottom if the new event is from me, even if sent from another device
-            val fromMe = newMostRecentItem.isMine
-            newEventState.value = if (fromMe) {
-                NewEventState.FromMe
-            } else {
-                NewEventState.FromOther
-            }
+            newEventState.value = if (newMostRecentItem.isMine) NewEventState.FromMe else NewEventState.FromOther
         }
         prevMostRecentItemId.value = newMostRecentItemId
     }

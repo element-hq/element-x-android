@@ -28,6 +28,7 @@ import io.element.android.features.poll.api.actions.SendPollResponseAction
 import io.element.android.features.poll.test.actions.FakeEndPollAction
 import io.element.android.features.poll.test.actions.FakeSendPollResponseAction
 import io.element.android.features.roomcall.api.aStandByCallState
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -43,6 +44,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
 import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
 import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
+import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
@@ -54,17 +56,20 @@ import io.element.android.libraries.matrix.test.A_UNIQUE_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
+import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
+import io.element.android.libraries.matrix.test.timeline.item.event.aRoomMembershipContent
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
+import io.element.android.tests.testutils.consumeItemsUntilTimeout
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaError
@@ -362,6 +367,427 @@ class TimelinePresenterTest {
             awaitLastSequentialItem().also { state ->
                 assertThat(state.newEventState).isEqualTo(NewEventState.FromOther)
             }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - jumpToUnread is InWindow at the read marker virtual item index`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val presenter = createTimelinePresenter(
+            timeline = timeline,
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.JumpToUnread.key to true)),
+        )
+        presenter.test {
+            awaitFirstItem()
+            // SDK delivers items oldest-first; the factory reverses so output index 0 is the newest.
+            // After processing: [msg-newest, membership, msg-2, read-marker, msg-old]
+            timelineItems.emit(
+                listOf(
+                    MatrixTimelineItem.Event(UniqueId("msg-old"), anEventTimelineItem(content = aMessageContent())),
+                    MatrixTimelineItem.Virtual(UniqueId("read-marker"), VirtualTimelineItem.ReadMarker),
+                    MatrixTimelineItem.Event(UniqueId("msg-2"), anEventTimelineItem(content = aMessageContent())),
+                    MatrixTimelineItem.Event(UniqueId("membership"), anEventTimelineItem(content = aRoomMembershipContent())),
+                    MatrixTimelineItem.Event(UniqueId("msg-newest"), anEventTimelineItem(content = aMessageContent())),
+                )
+            )
+            consumeItemsUntilPredicate { it.jumpToUnread is JumpToUnreadState.InWindow }.last().also { state ->
+                assertThat(state.jumpToUnread).isEqualTo(JumpToUnreadState.InWindow(index = 3))
+                assertThat(state.displayJumpToUnread).isTrue()
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - jumpToUnread is Hidden when no read marker and no fullyReadEventId`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val presenter = createTimelinePresenter(
+            timeline = timeline,
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.JumpToUnread.key to true)),
+        )
+        presenter.test {
+            awaitFirstItem()
+            timelineItems.emit(
+                listOf(
+                    MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(content = aMessageContent())),
+                    MatrixTimelineItem.Event(UniqueId("2"), anEventTimelineItem(content = aMessageContent())),
+                )
+            )
+            consumeItemsUntilPredicate {
+                it.timelineItems.size == 2 && it.jumpToUnread == JumpToUnreadState.Hidden
+            }.last().also { state ->
+                assertThat(state.jumpToUnread).isEqualTo(JumpToUnreadState.Hidden)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - jumpToUnread is Hidden when JumpToUnread feature flag is disabled`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val presenter = createTimelinePresenter(
+            timeline = timeline,
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.JumpToUnread.key to false)),
+        )
+        presenter.test {
+            awaitFirstItem()
+            timelineItems.emit(
+                listOf(
+                    MatrixTimelineItem.Event(UniqueId("msg-old"), anEventTimelineItem(content = aMessageContent())),
+                    MatrixTimelineItem.Virtual(UniqueId("read-marker"), VirtualTimelineItem.ReadMarker),
+                    MatrixTimelineItem.Event(UniqueId("msg-newest"), anEventTimelineItem(content = aMessageContent())),
+                )
+            )
+            consumeItemsUntilPredicate { it.timelineItems.size == 3 }.last().also { state ->
+                assertThat(state.displayJumpToUnread).isFalse()
+                assertThat(state.jumpToUnread).isEqualTo(JumpToUnreadState.Hidden)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - newEventState becomes FromOther when an event from another user arrives`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val presenter = createTimelinePresenter(timeline)
+        presenter.test {
+            val initialState = awaitFirstItem()
+            assertThat(initialState.newEventState).isEqualTo(NewEventState.None)
+            // Seed prevMostRecentItemId so subsequent emissions count as new events.
+            timelineItems.emit(
+                listOf(MatrixTimelineItem.Event(UniqueId("seed"), anEventTimelineItem(content = aMessageContent())))
+            )
+            consumeItemsUntilPredicate { it.timelineItems.size == 1 }
+            timelineItems.getAndUpdate { items ->
+                items + listOf(MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(content = aMessageContent())))
+            }
+            consumeItemsUntilPredicate { it.newEventState == NewEventState.FromOther }.last().also { state ->
+                assertThat(state.newEventState).isEqualTo(NewEventState.FromOther)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - newEventState resets to None on OnScrollFinished firstIndex 0`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(
+            timelineItems = timelineItems,
+            markAsReadResult = { Result.success(Unit) },
+        )
+        val presenter = createTimelinePresenter(timeline)
+        presenter.test {
+            val initialState = awaitFirstItem()
+            timelineItems.emit(
+                listOf(MatrixTimelineItem.Event(UniqueId("seed"), anEventTimelineItem(content = aMessageContent())))
+            )
+            consumeItemsUntilPredicate { it.timelineItems.size == 1 }
+            timelineItems.getAndUpdate { items ->
+                items + listOf(MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(content = aMessageContent())))
+            }
+            consumeItemsUntilPredicate { it.newEventState == NewEventState.FromOther }
+            initialState.eventSink.invoke(TimelineEvent.OnScrollFinished(0))
+            consumeItemsUntilPredicate { it.newEventState == NewEventState.None }.last().also { state ->
+                assertThat(state.newEventState).isEqualTo(NewEventState.None)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - newEventState transitions to FromMe when latest event is from me`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val presenter = createTimelinePresenter(timeline)
+        presenter.test {
+            awaitFirstItem()
+            timelineItems.emit(
+                listOf(MatrixTimelineItem.Event(UniqueId("seed"), anEventTimelineItem(content = aMessageContent())))
+            )
+            consumeItemsUntilPredicate { it.timelineItems.size == 1 }
+            // First, an event from another user moves us to FromOther.
+            timelineItems.getAndUpdate { items ->
+                items + listOf(MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(content = aMessageContent())))
+            }
+            consumeItemsUntilPredicate { it.newEventState == NewEventState.FromOther }
+            // Then the local user sends a message: state moves to FromMe.
+            timelineItems.getAndUpdate { items ->
+                items + listOf(
+                    MatrixTimelineItem.Event(UniqueId("2"), anEventTimelineItem(content = aMessageContent(), isOwn = true)),
+                )
+            }
+            consumeItemsUntilPredicate { it.newEventState == NewEventState.FromMe }.last().also { state ->
+                assertThat(state.newEventState).isEqualTo(NewEventState.FromMe)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - newEventState does not reset on OnScrollFinished firstIndex other than 0`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val presenter = createTimelinePresenter(timeline)
+        presenter.test {
+            val initialState = awaitFirstItem()
+            timelineItems.emit(
+                listOf(MatrixTimelineItem.Event(UniqueId("seed"), anEventTimelineItem(content = aMessageContent())))
+            )
+            consumeItemsUntilPredicate { it.timelineItems.size == 1 }
+            timelineItems.getAndUpdate { items ->
+                items + listOf(MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(content = aMessageContent())))
+            }
+            consumeItemsUntilPredicate { it.newEventState == NewEventState.FromOther }
+            // Scrolling stops above the bottom: state must NOT reset.
+            initialState.eventSink.invoke(TimelineEvent.OnScrollFinished(5))
+            advanceUntilIdle()
+            val drained = consumeItemsUntilTimeout()
+            assertThat(drained.any { it.newEventState == NewEventState.None }).isFalse()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - newEventState stays None for events with PAGINATION origin`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val presenter = createTimelinePresenter(timeline)
+        presenter.test {
+            awaitFirstItem()
+            timelineItems.emit(
+                listOf(MatrixTimelineItem.Event(UniqueId("seed"), anEventTimelineItem(content = aMessageContent())))
+            )
+            consumeItemsUntilPredicate { it.timelineItems.size == 1 }
+            // A back-paginated event arrives. It should not flip newEventState.
+            timelineItems.getAndUpdate { items ->
+                items + listOf(
+                    MatrixTimelineItem.Event(
+                        UniqueId("paginated"),
+                        anEventTimelineItem(content = aMessageContent()).copy(origin = TimelineItemEventOrigin.PAGINATION),
+                    )
+                )
+            }
+            consumeItemsUntilPredicate { it.timelineItems.size == 2 }.last().also { state ->
+                assertThat(state.newEventState).isEqualTo(NewEventState.None)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - jumpToUnread is InWindow at index 0 when the read marker is the only item`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val presenter = createTimelinePresenter(
+            timeline = timeline,
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.JumpToUnread.key to true)),
+        )
+        presenter.test {
+            awaitFirstItem()
+            timelineItems.emit(
+                listOf(MatrixTimelineItem.Virtual(UniqueId("read-marker"), VirtualTimelineItem.ReadMarker))
+            )
+            consumeItemsUntilPredicate { it.jumpToUnread is JumpToUnreadState.InWindow }.last().also { state ->
+                assertThat(state.jumpToUnread).isEqualTo(JumpToUnreadState.InWindow(index = 0))
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - jumpToUnread is OutOfWindow when fullyReadEventId is set but not in the loaded window`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val fullyReadEventId = EventId("\$older-than-loaded-window")
+        val room = FakeJoinedRoom(
+            liveTimeline = timeline,
+            baseRoom = FakeBaseRoom(
+                roomPermissions = roomPermissions(),
+                initialRoomInfo = aRoomInfo(fullyReadEventId = fullyReadEventId),
+            ),
+        )
+        val presenter = createTimelinePresenter(
+            timeline = timeline,
+            room = room,
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.JumpToUnread.key to true)),
+        )
+        presenter.test {
+            awaitFirstItem()
+            // Loaded items don't include the fullyReadEventId and the SDK didn't materialise a ReadMarker.
+            timelineItems.emit(
+                listOf(
+                    MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(eventId = AN_EVENT_ID, content = aMessageContent())),
+                    MatrixTimelineItem.Event(UniqueId("2"), anEventTimelineItem(eventId = AN_EVENT_ID_2, content = aMessageContent())),
+                )
+            )
+            consumeItemsUntilPredicate { it.jumpToUnread is JumpToUnreadState.OutOfWindow }.last().also { state ->
+                assertThat(state.jumpToUnread).isEqualTo(JumpToUnreadState.OutOfWindow(eventId = fullyReadEventId))
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - jumpToUnread is Hidden when fullyReadEventId IS in the loaded window`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val room = FakeJoinedRoom(
+            liveTimeline = timeline,
+            baseRoom = FakeBaseRoom(
+                roomPermissions = roomPermissions(),
+                // The user is caught up: the marker event is loaded, but the SDK didn't insert a
+                // virtual ReadMarker because there are no items newer than it.
+                initialRoomInfo = aRoomInfo(fullyReadEventId = AN_EVENT_ID),
+            ),
+        )
+        val presenter = createTimelinePresenter(
+            timeline = timeline,
+            room = room,
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.JumpToUnread.key to true)),
+        )
+        presenter.test {
+            awaitFirstItem()
+            // A loaded item has eventId == AN_EVENT_ID (default of anEventTimelineItem).
+            timelineItems.emit(
+                listOf(
+                    MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(content = aMessageContent())),
+                )
+            )
+            consumeItemsUntilPredicate { it.timelineItems.size == 1 }.last().also { state ->
+                assertThat(state.jumpToUnread).isEqualTo(JumpToUnreadState.Hidden)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - jumpToUnread is Hidden when fullyReadEventId is set but the timeline is empty`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val room = FakeJoinedRoom(
+            liveTimeline = timeline,
+            baseRoom = FakeBaseRoom(
+                roomPermissions = roomPermissions(),
+                initialRoomInfo = aRoomInfo(fullyReadEventId = AN_EVENT_ID),
+            ),
+        )
+        val presenter = createTimelinePresenter(
+            timeline = timeline,
+            room = room,
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.JumpToUnread.key to true)),
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            // Without any timeline items, the FAB must stay hidden — the user is mid-load.
+            assertThat(initialState.jumpToUnread).isEqualTo(JumpToUnreadState.Hidden)
+            advanceUntilIdle()
+            val drained = consumeItemsUntilTimeout()
+            assertThat(drained.any { it.jumpToUnread != JumpToUnreadState.Hidden }).isFalse()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - jumpToUnread is Hidden when fullyReadEventId is set but the feature flag is off`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val room = FakeJoinedRoom(
+            liveTimeline = timeline,
+            baseRoom = FakeBaseRoom(
+                roomPermissions = roomPermissions(),
+                initialRoomInfo = aRoomInfo(fullyReadEventId = AN_EVENT_ID),
+            ),
+        )
+        val presenter = createTimelinePresenter(
+            timeline = timeline,
+            room = room,
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.JumpToUnread.key to false)),
+        )
+        presenter.test {
+            awaitFirstItem()
+            timelineItems.emit(
+                listOf(
+                    MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(content = aMessageContent())),
+                )
+            )
+            consumeItemsUntilPredicate { it.timelineItems.size == 1 }.last().also { state ->
+                assertThat(state.jumpToUnread).isEqualTo(JumpToUnreadState.Hidden)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - jumpToUnread prefers InWindow when both a virtual marker and fullyReadEventId are present`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val room = FakeJoinedRoom(
+            liveTimeline = timeline,
+            baseRoom = FakeBaseRoom(
+                roomPermissions = roomPermissions(),
+                initialRoomInfo = aRoomInfo(fullyReadEventId = AN_EVENT_ID),
+            ),
+        )
+        val presenter = createTimelinePresenter(
+            timeline = timeline,
+            room = room,
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.JumpToUnread.key to true)),
+        )
+        presenter.test {
+            awaitFirstItem()
+            timelineItems.emit(
+                listOf(
+                    MatrixTimelineItem.Event(UniqueId("msg-old"), anEventTimelineItem(content = aMessageContent())),
+                    MatrixTimelineItem.Virtual(UniqueId("read-marker"), VirtualTimelineItem.ReadMarker),
+                    MatrixTimelineItem.Event(UniqueId("msg-newest"), anEventTimelineItem(content = aMessageContent())),
+                )
+            )
+            consumeItemsUntilPredicate { it.jumpToUnread is JumpToUnreadState.InWindow }.last().also { state ->
+                assertThat(state.jumpToUnread).isInstanceOf(JumpToUnreadState.InWindow::class.java)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - jumpToUnread hides eagerly after MarkAllAsRead even before a new RoomInfo arrives`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(
+            timelineItems = timelineItems,
+            getLatestEventIdResult = { Result.success(AN_EVENT_ID_2) },
+        )
+        val fullyReadEventId = EventId("\$older-than-loaded-window")
+        val room = FakeJoinedRoom(
+            liveTimeline = timeline,
+            baseRoom = FakeBaseRoom(
+                roomPermissions = roomPermissions(),
+                initialRoomInfo = aRoomInfo(fullyReadEventId = fullyReadEventId),
+            ),
+        )
+        val presenter = createTimelinePresenter(
+            timeline = timeline,
+            room = room,
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.JumpToUnread.key to true)),
+        )
+        presenter.test {
+            awaitFirstItem()
+            timelineItems.emit(
+                listOf(
+                    MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(eventId = AN_EVENT_ID, content = aMessageContent())),
+                )
+            )
+            val outOfWindow = consumeItemsUntilPredicate { it.jumpToUnread is JumpToUnreadState.OutOfWindow }.last()
+            assertThat(outOfWindow.jumpToUnread).isEqualTo(JumpToUnreadState.OutOfWindow(eventId = fullyReadEventId))
+
+            outOfWindow.eventSink(TimelineEvent.MarkAllAsRead)
+            // RoomInfo is intentionally NOT updated — eager hide must fire on the await alone.
+            val afterMark = consumeItemsUntilPredicate { it.jumpToUnread == JumpToUnreadState.Hidden }.last()
+            assertThat(afterMark.jumpToUnread).isEqualTo(JumpToUnreadState.Hidden)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -975,6 +1401,54 @@ class TimelinePresenterTest {
         }
     }
 
+    @Test
+    fun `present - MarkAllAsRead invokes markAsFullyRead with latest event id`() = runTest {
+        val markAsFullyReadRecorder = lambdaRecorder<RoomId, EventId, Unit> { _, _ -> }
+        val presenter = createTimelinePresenter(
+            timeline = FakeTimeline(getLatestEventIdResult = { Result.success(AN_EVENT_ID) }),
+            markAsFullyRead = FakeMarkAsFullyRead(markAsFullyReadRecorder),
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink(TimelineEvent.MarkAllAsRead)
+            advanceUntilIdle()
+            markAsFullyReadRecorder.assertions().isCalledOnce().with(value(A_ROOM_ID), value(AN_EVENT_ID))
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - MarkAllAsRead does not invoke markAsFullyRead when latest event id lookup fails`() = runTest {
+        val markAsFullyReadRecorder = lambdaRecorder<RoomId, EventId, Unit> { _, _ -> }
+        val presenter = createTimelinePresenter(
+            timeline = FakeTimeline(getLatestEventIdResult = { Result.failure(RuntimeException("boom")) }),
+            markAsFullyRead = FakeMarkAsFullyRead(markAsFullyReadRecorder),
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink(TimelineEvent.MarkAllAsRead)
+            advanceUntilIdle()
+            markAsFullyReadRecorder.assertions().isNeverCalled()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - MarkAllAsRead does not invoke markAsFullyRead when there is no latest event`() = runTest {
+        val markAsFullyReadRecorder = lambdaRecorder<RoomId, EventId, Unit> { _, _ -> }
+        val presenter = createTimelinePresenter(
+            timeline = FakeTimeline(getLatestEventIdResult = { Result.success(null) }),
+            markAsFullyRead = FakeMarkAsFullyRead(markAsFullyReadRecorder),
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink(TimelineEvent.MarkAllAsRead)
+            advanceUntilIdle()
+            markAsFullyReadRecorder.assertions().isNeverCalled()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
     private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
         return awaitItem()
     }
@@ -1014,6 +1488,7 @@ class TimelinePresenterTest {
         timelineItemIndexer: TimelineItemIndexer = TimelineItemIndexer(),
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
         liveLocationShareManager: FakeActiveLiveLocationShareManager = FakeActiveLiveLocationShareManager(),
+        markAsFullyRead: MarkAsFullyRead = FakeMarkAsFullyRead { _, _ -> },
     ): TimelinePresenter {
         return TimelinePresenter(
             timelineItemsFactoryCreator = aTimelineItemsFactoryCreator(),
@@ -1033,6 +1508,7 @@ class TimelinePresenterTest {
             featureFlagService = featureFlagService,
             analyticsService = FakeAnalyticsService(),
             liveLocationShareManager = liveLocationShareManager,
+            markAsFullyRead = markAsFullyRead,
         )
     }
 }
