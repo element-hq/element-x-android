@@ -11,5 +11,5 @@ import io.element.android.features.location.api.Location
 
 interface LiveLocationReceiver {
     suspend fun onLocationUpdate(location: Location)
-    suspend fun onUnrecoverableError() {}
+    suspend fun onUnrecoverableError()
 }
