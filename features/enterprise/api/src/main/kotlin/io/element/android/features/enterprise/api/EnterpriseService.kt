@@ -41,6 +41,22 @@ interface EnterpriseService {
      */
     fun getNoisyNotificationChannelId(sessionId: SessionId): String?
 
+    /**
+     * Whether the user is allowed to set a custom recovery passphrase.
+     * Enterprise builds gate this in addition to the homeserver's .well-known `customRecoveryPassphraseRequirements`;
+     * when false the setup flow falls back to the auto-generated key path even if the homeserver
+     * advertises a spec.
+     */
+    fun isCustomRecoveryPassphraseEnabled(): Boolean
+
+    /**
+     * Estimate the strength of a user-typed custom recovery [passphrase].
+     * The estimation algorithm is an enterprise capability: FOSS builds return null, so callers
+     * should treat null as "no indicator to show". Callers are responsible for not calling this with
+     * an empty passphrase if they want the indicator hidden while the field is empty.
+     */
+    fun estimateCustomRecoveryPassphraseStrength(passphrase: String): CustomRecoveryPassphraseStrengthResult?
+
     companion object {
         const val ANY_ACCOUNT_PROVIDER = "*"
     }
