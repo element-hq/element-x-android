@@ -16,7 +16,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalInspectionMode
 import org.maplibre.compose.location.DesiredAccuracy
 import org.maplibre.compose.location.Location
-import org.maplibre.compose.location.rememberAndroidLocationProvider
 import org.maplibre.compose.location.rememberNullLocationProvider
 import org.maplibre.spatialk.units.extensions.meters
 import kotlin.time.Duration.Companion.seconds
@@ -32,7 +31,7 @@ fun rememberUserLocationState(hasLocationPermission: Boolean): UserLocationState
     val locationProvider = if (isPreview || !hasLocationPermission) {
         rememberNullLocationProvider()
     } else {
-        rememberAndroidLocationProvider(
+        rememberPlatformLocationProvider(
             updateInterval = 5.seconds,
             desiredAccuracy = DesiredAccuracy.High,
             minDistance = 5.meters,
