@@ -60,24 +60,6 @@ fun EmojiPicker(
     val pagerState = rememberPagerState(pageCount = { state.categories.size })
     var skinPickerEmoji by remember { mutableStateOf<Emoji?>(null) }
 
-    val selectedSkinUnicodes = remember(skinPickerEmoji, selectedEmojis) {
-        if (skinPickerEmoji != null) {
-            val emoji = skinPickerEmoji!!
-            val variants = emoji.skins.orEmpty()
-                .map { it.unicode }
-                .filter { it in selectedEmojis }
-            if (variants.isNotEmpty()) {
-                variants.toSet()
-            } else if (emoji.unicode in selectedEmojis) {
-                setOf(emoji.unicode)
-            } else {
-                emptySet()
-            }
-        } else {
-            emptySet()
-        }
-    }
-
     Column(modifier) {
         SearchBar(
             modifier = Modifier.padding(bottom = 10.dp),
@@ -96,7 +78,6 @@ fun EmojiPicker(
                 skinPickerEmoji = skinPickerEmoji,
                 onDismissSkinPicker = { skinPickerEmoji = null },
                 selectedEmojis = selectedEmojis,
-                selectedSkinUnicodes = selectedSkinUnicodes,
             )
         }
 
@@ -139,7 +120,6 @@ fun EmojiPicker(
                     skinPickerEmoji = skinPickerEmoji,
                     onDismissSkinPicker = { skinPickerEmoji = null },
                     selectedEmojis = selectedEmojis,
-                    selectedSkinUnicodes = selectedSkinUnicodes,
                 )
             }
         }
@@ -155,7 +135,6 @@ private fun EmojiResults(
     skinPickerEmoji: Emoji? = null,
     onDismissSkinPicker: (() -> Unit)? = null,
     selectedEmojis: ImmutableSet<String> = persistentSetOf(),
-    selectedSkinUnicodes: Set<String> = emptySet(),
 ) {
     LazyVerticalGrid(
         modifier = Modifier.fillMaxSize(),
@@ -174,7 +153,7 @@ private fun EmojiResults(
                 skinPickerEmoji = skinPickerEmoji,
                 onDismissSkinPicker = onDismissSkinPicker,
                 emojiSize = 32.dp.toSp(),
-                selectedSkinUnicodes = selectedSkinUnicodes,
+                selectedSkinUnicodes = selectedEmojis,
                 hasSelectedSkin = item.skins?.any { skin -> skin.unicode in selectedEmojis } == true,
             )
         }
