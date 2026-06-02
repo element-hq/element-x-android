@@ -103,6 +103,30 @@ fun aPdfMediaInfo(
     duration = null,
 )
 
+fun aZipMediaInfo(
+    filename: String = "a zip file.zip",
+    caption: String? = null,
+    formattedCaption: CharSequence? = null,
+    senderName: String? = null,
+    dateSent: String? = null,
+    dateSentFull: String? = null,
+): MediaInfo = MediaInfo(
+    filename = filename,
+    fileSize = 12 * 1024 * 1024,
+    caption = caption,
+    formattedCaption = formattedCaption,
+    mimeType = MimeTypes.Pdf,
+    formattedFileSize = "45MB",
+    fileExtension = "zip",
+    senderId = UserId("@alice:server.org"),
+    senderName = senderName,
+    senderAvatar = null,
+    dateSent = dateSent,
+    dateSentFull = dateSentFull,
+    waveform = null,
+    duration = null,
+)
+
 fun anApkMediaInfo(
     senderId: UserId? = UserId("@alice:server.org"),
     senderName: String? = null,

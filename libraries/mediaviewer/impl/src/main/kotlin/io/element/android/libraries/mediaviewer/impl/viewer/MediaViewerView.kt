@@ -106,7 +106,7 @@ import me.saket.telephoto.zoomable.OverzoomEffect
 import me.saket.telephoto.zoomable.ZoomSpec
 import me.saket.telephoto.zoomable.rememberZoomableState
 
-val topAppBarHeight = 88.dp
+val topAppBarHeight = 112.dp
 
 /**
  * Ref: https://www.figma.com/design/pDlJZGBsri47FNTXMnEdXB/Compound-Android-Templates?node-id=3361-16623
@@ -239,6 +239,9 @@ fun MediaViewerView(
                             onRetry = {
                                 state.eventSink(MediaViewerEvent.LoadMedia(dataForPage))
                             },
+                            onOpenWith = {
+                                state.eventSink(MediaViewerEvent.OpenWith(dataForPage))
+                            },
                             onDismissError = {
                                 state.eventSink(MediaViewerEvent.ClearLoadingError(dataForPage))
                             },
@@ -333,6 +336,7 @@ private fun MediaViewerPage(
     isUserSelected: Boolean,
     onDismiss: () -> Unit,
     onRetry: () -> Unit,
+    onOpenWith: () -> Unit,
     onDismissError: () -> Unit,
     onShowOverlayChange: (Boolean) -> Unit,
     audioFocus: AudioFocus?,
@@ -387,6 +391,7 @@ private fun MediaViewerPage(
                             currentOnShowOverlayChange(!currentShowOverlay)
                         }
                     },
+                    onOpenWith = onOpenWith,
                     isUserSelected = isUserSelected,
                     audioFocus = audioFocus,
                 )
