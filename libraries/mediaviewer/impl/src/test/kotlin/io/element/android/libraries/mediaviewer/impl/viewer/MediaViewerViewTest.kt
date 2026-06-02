@@ -135,28 +135,6 @@ class MediaViewerViewTest {
         )
     }
 
-    @Test
-    @Config(qualifiers = "h1024dp")
-    fun `clicking on download emits expected Event`() {
-        val data = aMediaViewerPageData()
-        testBottomSheetAction(
-            data,
-            CommonStrings.action_download,
-            MediaViewerEvent.SaveOnDisk(data),
-        )
-    }
-
-    @Test
-    @Config(qualifiers = "h1024dp")
-    fun `clicking on share emits expected Event`() {
-        val data = aMediaViewerPageData()
-        testBottomSheetAction(
-            data,
-            CommonStrings.action_share,
-            MediaViewerEvent.Share(data),
-        )
-    }
-
     @Config(qualifiers = "h1024dp")
     @Test
     fun `clicking on open in emits expected Event`() {

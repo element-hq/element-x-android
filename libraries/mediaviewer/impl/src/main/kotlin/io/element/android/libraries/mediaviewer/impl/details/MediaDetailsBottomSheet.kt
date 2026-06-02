@@ -10,7 +10,6 @@ package io.element.android.libraries.mediaviewer.impl.details
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,7 +26,6 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -102,34 +100,6 @@ fun MediaDetailsBottomSheet(
             Spacer(modifier = Modifier.height(16.dp))
             if (state.eventId != null) {
                 HorizontalDivider()
-                ListItem(
-                    leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.VisibilityOn())),
-                    headlineContent = { Text(stringResource(CommonStrings.action_view_in_timeline)) },
-                    onClick = {
-                        onViewInTimeline(state.eventId)
-                    }
-                )
-                ListItem(
-                    leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ShareAndroid())),
-                    headlineContent = { Text(stringResource(CommonStrings.action_share)) },
-                    onClick = {
-                        onShare(state.eventId)
-                    }
-                )
-                ListItem(
-                    leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Forward())),
-                    headlineContent = { Text(stringResource(CommonStrings.action_forward)) },
-                    onClick = {
-                        onForward(state.eventId)
-                    }
-                )
-                ListItem(
-                    leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Download())),
-                    headlineContent = { Text(stringResource(CommonStrings.action_download)) },
-                    onClick = {
-                        onDownload(state.eventId)
-                    }
-                )
                 val mimeType = state.mediaInfo.mimeType
                 val icon = when (mimeType) {
                     MimeTypes.Apk ->
@@ -148,11 +118,41 @@ fun MediaDetailsBottomSheet(
                         onOpenWith(state.eventId)
                     }
                 )
+                ListItem(
+                    leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.VisibilityOn())),
+                    headlineContent = { Text(stringResource(CommonStrings.action_view_in_timeline)) },
+                    onClick = {
+                        onViewInTimeline(state.eventId)
+                    }
+                )
+                if (state.fromGallery) {
+                    ListItem(
+                        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ShareAndroid())),
+                        headlineContent = { Text(stringResource(CommonStrings.action_share)) },
+                        onClick = {
+                            onShare(state.eventId)
+                        }
+                    )
+                    ListItem(
+                        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Download())),
+                        headlineContent = { Text(stringResource(CommonStrings.action_download)) },
+                        onClick = {
+                            onDownload(state.eventId)
+                        }
+                    )
+                }
+                ListItem(
+                    leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Forward())),
+                    headlineContent = { Text(stringResource(CommonStrings.action_forward)) },
+                    onClick = {
+                        onForward(state.eventId)
+                    }
+                )
                 if (state.canDelete) {
                     HorizontalDivider()
                     ListItem(
                         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Delete())),
-                        headlineContent = { Text(stringResource(CommonStrings.action_delete)) },
+                        headlineContent = { Text(stringResource(CommonStrings.action_delete_file)) },
                         style = ListItemStyle.Destructive,
                         onClick = {
                             onDelete(state.eventId)
@@ -216,16 +216,14 @@ private fun SenderRow(
 }
 
 @Composable
-private fun ColumnScope.Title() {
+private fun Title() {
     Text(
         modifier = Modifier
-            .align(Alignment.CenterHorizontally)
             .padding(top = 16.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)
             .semantics {
                 heading()
             },
         text = stringResource(R.string.screen_media_details_title),
-        textAlign = TextAlign.Center,
         style = ElementTheme.typography.fontBodyLgMedium,
         color = ElementTheme.colors.textPrimary,
     )

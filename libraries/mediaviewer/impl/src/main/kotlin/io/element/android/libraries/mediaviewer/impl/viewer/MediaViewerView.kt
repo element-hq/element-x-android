@@ -277,6 +277,7 @@ fun MediaViewerView(
                     state.eventSink(MediaViewerEvent.ViewInTimeline(it))
                 },
                 onShare = {
+                    // Note: share action is not rendered when the bottom sheet is opened from the media viewer
                     (currentData as? MediaViewerPageData.MediaViewerData)?.let {
                         state.eventSink(MediaViewerEvent.Share(currentData))
                     }
@@ -285,6 +286,7 @@ fun MediaViewerView(
                     state.eventSink(MediaViewerEvent.Forward(it))
                 },
                 onDownload = {
+                    // Note: download action is not rendered when the bottom sheet is opened from the media viewer
                     (currentData as? MediaViewerPageData.MediaViewerData)?.let {
                         state.eventSink(MediaViewerEvent.SaveOnDisk(currentData))
                     }
