@@ -7,7 +7,7 @@ android_gradle_plugin = "8.13.2"
 # When updating this, please also update the version in the file ./idea/kotlinc.xml
 kotlin = "2.3.21"
 kotlinpoet = "2.3.0"
-ksp = "2.3.8"
+ksp = "2.3.9"
 firebaseAppDistribution = "5.2.1"
 
 # AndroidX
