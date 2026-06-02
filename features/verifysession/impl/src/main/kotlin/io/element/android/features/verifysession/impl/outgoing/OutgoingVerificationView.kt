@@ -247,15 +247,9 @@ private fun OutgoingVerificationBottomMenu(
         is Step.Initial -> {
             VerificationBottomMenu {
                 val isWaiting = step is Step.AwaitingOtherDeviceResponse
-                val text = if (state.request is VerificationRequest.Outgoing.CurrentSession) {
-                    // TODO: AJB hard-coded string
-                    "Start automatic verification"
-                } else {
-                    stringResource(CommonStrings.action_start_verification)
-                }
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    text = text,
+                    text = stringResource(CommonStrings.action_start_verification),
                     enabled = !isWaiting,
                     showProgress = isWaiting,
                     onClick = { eventSink(OutgoingVerificationViewEvents.RequestVerification) },

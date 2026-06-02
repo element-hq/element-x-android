@@ -118,8 +118,7 @@ private fun ChooseSelfVerificationModeButtons(
                 if (state.buttonsState.data.canUseAnotherDevice) {
                     Button(
                         modifier = Modifier.fillMaxWidth(),
-                        // TODO: AJB: Hard-coded string
-                        text = "Confirm automatically (X.509)",
+                        text = stringResource(R.string.screen_identity_use_another_device),
                         onClick = onUseAnotherDevice,
                     )
                 }
