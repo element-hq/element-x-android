@@ -30,12 +30,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.maplibre.compose.location.DesiredAccuracy
+import org.maplibre.compose.location.PermissionException
 import org.maplibre.spatialk.units.extensions.inMeters
 import org.maplibre.spatialk.units.extensions.meters
 import timber.log.Timber
@@ -48,7 +51,6 @@ class LiveLocationSharingService : Service() {
     @Inject lateinit var coordinator: LiveLocationSharingCoordinator
     @Inject lateinit var notificationCreator: LiveLocationSharingNotificationCreator
     @Inject lateinit var appPreferencesStore: AppPreferencesStore
-
     @Inject lateinit var appForegroundStateService: AppForegroundStateService
 
     @AppCoroutineScope
@@ -62,8 +64,8 @@ class LiveLocationSharingService : Service() {
     override fun onCreate() {
         super.onCreate()
         Timber.d("LiveLocationSharingService onCreate")
+        bindings<LocationBindings>().inject(this)
         runCatchingExceptions {
-            bindings<LocationBindings>().inject(this)
             appForegroundStateService.updateIsSharingLiveLocation(true)
             coroutineScope = appCoroutineScope.childScope(Dispatchers.Default, "LiveLocationSharingService")
             val notificationId = NotificationIdProvider.getForegroundServiceNotificationId(ForegroundServiceType.LIVE_LOCATION)
@@ -81,6 +83,7 @@ class LiveLocationSharingService : Service() {
             startLocationUpdatesListener()
         }.onFailure {
             Timber.e(it, "Failed to start live location sharing service")
+            appCoroutineScope.launch { coordinator.dispatchUnrecoverableError() }
             stopSelf()
         }
     }
@@ -90,14 +93,19 @@ class LiveLocationSharingService : Service() {
         Timber.d("LiveLocationSharingService listening to location updates")
         appPreferencesStore.getLiveLocationMinimumDistanceInMetersUpdateFlow()
             .flatMapLatest { minDistanceMeters ->
-                val locationProvider = PlatformLocationProvider(
-                    context = applicationContext,
-                    updateInterval = UPDATE_INTERVAL_IN_SECOND.seconds,
-                    minDistance = minDistanceMeters.meters,
-                    desiredAccuracy = DesiredAccuracy.Balanced,
-                    coroutineScope = coroutineScope
-                )
-                locationProvider.location
+                try {
+                    PlatformLocationProvider(
+                        context = applicationContext,
+                        updateInterval = UPDATE_INTERVAL_IN_SECOND.seconds,
+                        minDistance = minDistanceMeters.meters,
+                        desiredAccuracy = DesiredAccuracy.Balanced,
+                        coroutineScope = coroutineScope
+                    ).location
+                } catch (exception: PermissionException) {
+                    Timber.e(exception, "Failed to create PlatformLocationProvider")
+                    coordinator.dispatchUnrecoverableError()
+                    emptyFlow()
+                }
             }
             .filterNotNull()
             .map { location ->

@@ -77,6 +77,17 @@ class LiveLocationSharingCoordinator internal constructor(
         }
     }
 
+    suspend fun dispatchUnrecoverableError() {
+        Timber.d("LiveLocationSharingCoordinator dispatching unrecoverable error")
+        receivers.forEach { (sessionId, receiver) ->
+            runCatchingExceptions {
+                receiver.onUnrecoverableError()
+            }.onFailure {
+                Timber.e(it, "Failed to dispatch unrecoverable error for session $sessionId")
+            }
+        }
+    }
+
     suspend fun dispatch(location: Location) {
         val currentTimeMillis = nowMillis()
         val millisSincePrevious = currentTimeMillis - lastDispatchMillis.load()

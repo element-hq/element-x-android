@@ -58,7 +58,6 @@ class PlatformLocationProvider(
         ) {
             throw PermissionException()
         }
-
         val locationManager = context.getSystemService(LocationManager::class.java)
         val provider = PROVIDERS_BY_PRIORITY.firstOrNull { LocationManagerCompat.hasProvider(locationManager, it) }
         val locationFlow = if (provider != null) {
