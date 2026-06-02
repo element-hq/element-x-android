@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2026 Element Creations Ltd.
+  ~
+  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+  ~ Please see LICENSE files in the repository root for full details.
+  -->
+<resources>
+    <string name="screen_recovery_key_custom_title">Enter a custom recovery key</string>
+    <string name="screen_recovery_key_custom_description">Choose a recovery key that you can memorize.</string>
+    <string name="screen_recovery_key_custom_confirm_title">Confirm your recovery key</string>
+    <string name="screen_recovery_key_custom_confirm_description">Enter your recovery key again.</string>
+    <string name="screen_recovery_key_custom_mismatch">The recovery key you entered doesn\'t match</string>
+    <plurals name="screen_recovery_key_custom_requirement_length">
+        <item quantity="one">Minimum %1$d character</item>
+        <item quantity="other">Minimum %1$d characters</item>
+    </plurals>
+    <string name="screen_recovery_key_custom_finish_action">Finish setup</string>
+    <string name="screen_recovery_key_custom_strength_base">Strength</string>
+    <string name="screen_recovery_key_custom_strength_garbage">Garbage</string>
+    <string name="screen_recovery_key_custom_strength_weak">Weak</string>
+    <string name="screen_recovery_key_custom_strength_moderate">Moderate</string>
+    <string name="screen_recovery_key_custom_strength_okay">Okay</string>
+    <string name="screen_recovery_key_custom_strength_strong">Strong</string>
+    <string name="screen_recovery_key_custom_strength_very_strong">Very strong</string>
+    <string name="screen_recovery_key_custom_strength_ultra_strong">Super strong</string>
+    <string name="screen_recovery_key_custom_strength_mega">Ideal</string>
+    <string name="screen_recovery_key_custom_strength_hint_garbage">Cracking would take roughly milliseconds.</string>
+    <string name="screen_recovery_key_custom_strength_hint_weak">Cracking would take roughly minutes to months.</string>
+    <string name="screen_recovery_key_custom_strength_hint_moderate">Cracking would take roughly years.</string>
+    <string name="screen_recovery_key_custom_strength_hint_okay">Cracking would take roughly hundreds of years.</string>
+    <string name="screen_recovery_key_custom_strength_hint_strong">Cracking would take roughly billions of years.</string>
+    <string name="screen_recovery_key_custom_strength_hint_very_strong">Cracking would take roughly trillions of years.</string>
+    <string name="screen_recovery_key_custom_strength_hint_ultra_strong">Cracking would take roughly quadrillions of years.</string>
+    <string name="screen_recovery_key_custom_strength_hint_mega">Cracking would take roughly quintillions of years.</string>
+    <string name="a11y_recovery_key_loading_specs">Loading recovery key requirements</string>
+    <string name="a11y_recovery_key_custom_strength_announcement">Passphrase strength: %1$s</string>
+</resources>
