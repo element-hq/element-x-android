@@ -25,6 +25,8 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -35,7 +37,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -77,7 +81,8 @@ fun EmojiItem(
     }
     val density = LocalDensity.current
     var itemSize by remember { mutableStateOf(IntSize.Zero) }
-    var hoveredIndex by remember { mutableStateOf(-1) }
+    var itemOffsetPercent by remember { mutableFloatStateOf(0f) }
+    var hoveredIndex by remember { mutableIntStateOf(-1) }
     var dismissed by remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
     val description = a11yReactionAction(
@@ -87,6 +92,17 @@ fun EmojiItem(
     val hasSkinTones = !item.skins.isNullOrEmpty()
     Box(
         modifier = modifier
+            .onPlaced { coordinates ->
+                val position = coordinates.positionInParent()
+                val parentBounds = coordinates.parentLayoutCoordinates?.size ?: return@onPlaced
+                // Calculate the offset of the item inside its parent as a percentage, to be able to set the initial offset
+                // for the selection inside the skin tone picker relative to its size.
+                itemOffsetPercent = if (parentBounds.width > 0) {
+                    position.x / parentBounds.width
+                } else {
+                    0f
+                }
+            }
             .sizeIn(minWidth = 40.dp, minHeight = 40.dp)
             .onSizeChanged { itemSize = it }
             .background(backgroundColor, CircleShape)
@@ -94,6 +110,9 @@ fun EmojiItem(
             .pointerInput(item) {
                 // Only detect drag after long press for those items which have a skin tone picker
                 if (hasSkinTones) {
+                    val slotWidthPx = with(density) { SkinToneSlotSize.toPx() }
+                    val spacingPx = with(density) { SkinToneSlotSpacing.toPx() }
+                    val paddingPx = with(density) { SkinTonePadding.toPx() }
                     var startOffset = Offset.Zero
                     detectDragGesturesAfterLongPress(
                         onDragStart = { position ->
@@ -119,16 +138,16 @@ fun EmojiItem(
                                     hoveredIndex = -1
                                     onDismissSkinPicker?.invoke()
                                 } else {
-                                    val skinCount = item.skins!!.size
-                                    val slotWidthPx = with(density) { SkinToneSlotSize.toPx() }
-                                    val spacingPx = with(density) { SkinToneSlotSpacing.toPx() }
-                                    val paddingPx = with(density) { SkinTonePadding.toPx() }
-                                    val totalSlots = 1 + skinCount
+                                    val skinItemsCount = item.skins!!.size
+                                    // Original + variants
+                                    val totalSlots = 1 + skinItemsCount
+                                    // Calculate the whole size of the skin tone picker
                                     val pickerWidthPx = 2 * paddingPx + totalSlots * slotWidthPx + (totalSlots - 1) * spacingPx
-                                    val pickerHalfWidthPx = pickerWidthPx / 2f
-                                    val centerXPx = itemSize.width / 2f
-                                    val pickerLeftPx = centerXPx - pickerHalfWidthPx
-                                    val xInPicker = change.position.x - pickerLeftPx
+                                    // Calculate the initial offset inside the picker, given the relative position of the item inside its parent
+                                    val initialOffset = pickerWidthPx * itemOffsetPercent
+                                    val xInPicker = initialOffset + change.position.x
+
+                                    // If it's a valid offset, calculate the hovered index, otherwise, set it to -1 to indicate that no item is hovered
                                     val index = if (xInPicker in 0f..pickerWidthPx) {
                                         (xInPicker / slotWidthPx).toInt().coerceIn(0, totalSlots - 1)
                                     } else {
