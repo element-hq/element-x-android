@@ -8,6 +8,7 @@
 
 package io.element.android.features.location.api
 
+import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -24,13 +25,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.createBitmap
 import coil3.Extras
+import coil3.asImage
 import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
 import coil3.request.ImageRequest
+import coil3.request.SuccessResult
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.location.api.internal.StaticMapPlaceholder
 import io.element.android.features.location.api.internal.StaticMapUrlBuilder
@@ -128,32 +133,46 @@ private fun BoxWithConstraintsScope.LoadableMapContent(
     var retryHash by remember { mutableIntStateOf(0) }
     val builder = remember { StaticMapUrlBuilder() }
 
-    val painter = rememberAsyncImagePainter(
-        model = if (constraints.isZero) {
-            // Avoid building a URL if any of the size constraints is zero
-            null
-        } else {
-            ImageRequest.Builder(context)
-                .data(
-                    builder.build(
-                        lat = location.lat,
-                        lon = location.lon,
-                        zoom = zoom,
-                        darkMode = darkMode,
-                        width = constraints.maxWidth,
-                        height = constraints.maxHeight,
-                        density = LocalDensity.current.density,
+    val (painter, state) = if (LocalInspectionMode.current) {
+        val painter = painterResource(R.drawable.blurred_map)
+        val state = AsyncImagePainter.State.Success(
+            painter = painter,
+            result = SuccessResult(
+                image = createBitmap(1, 1, Bitmap.Config.ALPHA_8).asImage(),
+                request = ImageRequest.Builder(context).build()
+            )
+        )
+        painter to state
+    } else {
+        val painter = rememberAsyncImagePainter(
+            model = if (constraints.isZero) {
+                // Avoid building a URL if any of the size constraints is zero
+                null
+            } else {
+                ImageRequest.Builder(context)
+                    .data(
+                        builder.build(
+                            lat = location.lat,
+                            lon = location.lon,
+                            zoom = zoom,
+                            darkMode = darkMode,
+                            width = constraints.maxWidth,
+                            height = constraints.maxHeight,
+                            density = LocalDensity.current.density,
+                        )
                     )
-                )
-                .size(width = constraints.maxWidth, height = constraints.maxHeight)
-                .apply {
-                    extras.set(Extras.Key("retry_hash"), retryHash).build()
-                }
-                .build()
-        }
-    )
+                    .size(width = constraints.maxWidth, height = constraints.maxHeight)
+                    .apply {
+                        extras.set(Extras.Key("retry_hash"), retryHash).build()
+                    }
+                    .build()
+            }
+        )
 
-    val state by painter.state.collectAsState()
+        val state by painter.state.collectAsState()
+        painter to state
+    }
+
     when (state) {
         is AsyncImagePainter.State.Success -> {
             Image(
