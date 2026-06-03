@@ -130,7 +130,12 @@ internal fun CallScreenView(
                     onInvalidAudioDeviceAdded = { invalidAudioDeviceReason = it },
                 )
                 state.eventSink(CallScreenEvent.SetupMessageChannels(interceptor))
-                val pipController = WebViewPipController(webView)
+                val pipController = WebViewPipController(
+                    webView = webView,
+                    updatePipOrientation = { orientation ->
+                        pipState.eventSink(PictureInPictureEvent.SetPipOrientation(orientation))
+                    }
+                )
                 pipState.eventSink(PictureInPictureEvent.SetPipController(pipController))
             },
             onDestroyWebView = {
