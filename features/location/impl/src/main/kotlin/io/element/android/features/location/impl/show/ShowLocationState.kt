@@ -11,6 +11,7 @@ package io.element.android.features.location.impl.show
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.features.location.impl.common.ui.LocationMarkerData
+import io.element.android.features.location.impl.common.userlocation.UserLocationState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.PinVariant
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -24,9 +25,10 @@ data class ShowLocationState(
     val dialogState: LocationConstraintsDialogState,
     val locationShares: ImmutableList<LocationShareItem>,
     val focusedLocation: LocationShareItem?,
-    val hasLocationPermission: Boolean,
     val isTrackMyLocation: Boolean,
+    val userLocationState: UserLocationState,
     val appName: String,
+    val hideUserLocationPuck: Boolean,
     val eventSink: (ShowLocationEvent) -> Unit,
 ) {
     val isSheetDraggable = isLive && locationShares.isNotEmpty()
