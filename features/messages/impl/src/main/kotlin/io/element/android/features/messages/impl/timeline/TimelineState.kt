@@ -34,7 +34,6 @@ data class TimelineState(
     val messageShieldDialogData: MessageShieldData?,
     val resolveVerifiedUserSendFailureState: ResolveVerifiedUserSendFailureState,
     val displayThreadSummaries: Boolean,
-    val displayFloatingDateBadge: Boolean,
     val eventSink: (TimelineEvent) -> Unit,
 ) {
     private val lastTimelineEvent = timelineItems.firstOrNull { it is TimelineItem.Event } as? TimelineItem.Event

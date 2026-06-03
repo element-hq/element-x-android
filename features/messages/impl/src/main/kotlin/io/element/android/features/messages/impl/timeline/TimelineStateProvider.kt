@@ -58,7 +58,6 @@ fun aTimelineState(
     messageShield: MessageShield? = null,
     resolveVerifiedUserSendFailureState: ResolveVerifiedUserSendFailureState = aResolveVerifiedUserSendFailureState(),
     displayThreadSummaries: Boolean = false,
-    displayFloatingDateBadge: Boolean = false,
     eventSink: (TimelineEvent) -> Unit = {},
 ): TimelineState {
     val focusedEventId = timelineItems.filterIsInstance<TimelineItem.Event>().getOrNull(focusedEventIndex)?.eventId
@@ -78,7 +77,6 @@ fun aTimelineState(
         messageShieldDialogData = messageShield?.let { MessageShieldData(it) },
         resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailureState,
         displayThreadSummaries = displayThreadSummaries,
-        displayFloatingDateBadge = displayFloatingDateBadge,
         eventSink = eventSink,
     )
 }
