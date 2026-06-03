@@ -200,7 +200,15 @@ import kotlinx.coroutines.launch
                 }
             }
         }
-        val userLocationState = userLocationStateFactory.create(hasLocationPermission = permissionsState.isAnyGranted)
+        val isCurrentlySharing by liveLocationShareManager.isCurrentlySharing(roomId = joinedRoom.roomId).collectAsState()
+        val hideUserLocationPuck = mode is ShowLocationMode.Live && isCurrentlySharing
+        val userLocationState = if (hideUserLocationPuck) {
+            // When sharing with this device, use the user LocationShareItem as source of data instead of the device.
+            val ownLocationShare by remember { derivedStateOf { updatedLocationShares.find { it.isOwnUser }?.location?.asMapLibreLocation() } }
+            UserLocationState(ownLocationShare)
+        } else {
+            userLocationStateFactory.create(hasLocationPermission = permissionsState.isAnyGranted)
+        }
         return ShowLocationState(
             customMapStyleUrl = customMapStyleUrl,
             dialogState = dialogState,
@@ -210,7 +218,7 @@ import kotlinx.coroutines.launch
             userLocationState = userLocationState,
             isLive = mode is ShowLocationMode.Live,
             appName = appName,
-            hideUserLocationPuck = false,
+            hideUserLocationPuck = hideUserLocationPuck,
             eventSink = ::handleEvent,
         )
     }

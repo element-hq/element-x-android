@@ -460,4 +460,30 @@ class ShowLocationPresenterTest {
         }
     }
 
+    @Test
+    fun `live mode user location state uses own share position when sharing`() = runTest {
+        val ownLiveLocationShare = aLiveLocationShare()
+        val fakeRoom = FakeJoinedRoom(
+            liveLocationSharesFlow = MutableStateFlow(listOf(ownLiveLocationShare))
+        )
+        val manager = FakeActiveLiveLocationShareManager(
+            startShareLambda = { _, _ -> Result.success(Unit) }
+        )
+        manager.startShare(fakeRoom.roomId, 1.hours)
+
+        val presenter = createShowLocationPresenter(
+            mode = ShowLocationMode.Live(senderId = A_USER_ID),
+            joinedRoom = fakeRoom,
+            liveLocationShareManager = manager,
+        )
+        val ownLocation = ownLiveLocationShare.lastLocation?.geoUri?.let(Location::fromGeoUri)
+        presenter.test {
+            skipItems(1)
+            val state = awaitItem()
+            assertThat(state.hideUserLocationPuck).isTrue()
+            val location = requireNotNull(state.userLocationState.location)
+            assertThat(location.position.value.latitude).isEqualTo(ownLocation?.lat)
+            assertThat(location.position.value.longitude).isEqualTo(ownLocation?.lon)
+        }
+    }
 }
