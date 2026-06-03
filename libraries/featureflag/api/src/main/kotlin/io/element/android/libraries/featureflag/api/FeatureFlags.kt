@@ -108,13 +108,6 @@ enum class FeatureFlags(
         defaultValue = { true },
         isFinished = false,
     ),
-    FloatingDateBadge(
-        key = "feature.floating_date_badge",
-        title = "Display sticky date headers in the timeline",
-        description = "When scrolling, a sticky date badge will be displayed so you can easily know on which date the messages you're seeing were sent.",
-        defaultValue = { false },
-        isFinished = false,
-    ),
     SlashCommand(
         key = "feature.slash_command",
         title = "Parse slash commands in the message composer",
