@@ -68,6 +68,7 @@ class SpaceFiltersPresenter(
 
         return when (val mode = selectionMode) {
             SelectionMode.Unselected -> SpaceFiltersState.Unselected(
+                availableFilters = availableFilters,
                 eventSink = ::handleUnselectedEvent,
             )
             SelectionMode.Selecting -> {
@@ -91,6 +92,7 @@ class SpaceFiltersPresenter(
                     }
                 }
                 SpaceFiltersState.Selected(
+                    availableFilters = availableFilters,
                     selectedFilter = selectedFilter,
                     eventSink = ::handleSelectedEvent,
                 )

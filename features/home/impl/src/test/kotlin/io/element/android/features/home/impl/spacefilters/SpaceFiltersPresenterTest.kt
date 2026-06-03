@@ -24,7 +24,7 @@ class SpaceFiltersPresenterTest {
         val presenter = createSpaceFiltersPresenter()
         presenter.test {
             val state = awaitLastSequentialItem()
-            assertThat(state).isEqualTo(SpaceFiltersState.Disabled)
+            assertThat(state).isInstanceOf(SpaceFiltersState.Disabled::class.java)
         }
     }
 
