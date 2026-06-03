@@ -12,5 +12,4 @@
   <string name="screen_identity_waiting_on_other_device">"Wachten op ander apparaat…"</string>
   <string name="screen_notification_optin_subtitle">"Je kunt je instellingen later wijzigen."</string>
   <string name="screen_notification_optin_title">"Sta meldingen toe en mis nooit meer een bericht"</string>
-  <string name="screen_session_verification_enter_recovery_key">"Voer herstelsleutel in"</string>
 </resources>

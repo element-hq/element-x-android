@@ -2,8 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"Can\'t confirm?"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"Create a new recovery key"</string>
-  <string name="screen_identity_confirmation_subtitle">"Verify this device to set up secure messaging."</string>
-  <string name="screen_identity_confirmation_title">"Confirm your identity"</string>
+  <string name="screen_identity_confirmation_subtitle">"Choose how to verify to set up secure messaging."</string>
+  <string name="screen_identity_confirmation_title">"Confirm your digital identity"</string>
   <string name="screen_identity_confirmation_use_another_device">"Use another device"</string>
   <string name="screen_identity_confirmation_use_recovery_key">"Use recovery key"</string>
   <string name="screen_identity_confirmed_subtitle">"Now you can read or send messages securely, and anyone you chat with can also trust this device."</string>
@@ -17,7 +17,7 @@
   <string name="screen_session_verification_compare_numbers_subtitle">"Confirm that the numbers below match those shown on your other session."</string>
   <string name="screen_session_verification_compare_numbers_title">"Compare numbers"</string>
   <string name="screen_session_verification_complete_subtitle">"Now you can read or send messages securely on your other device."</string>
-  <string name="screen_session_verification_complete_user_subtitle">"Now you can trust the identity of this user when sending or receiving messages."</string>
+  <string name="screen_session_verification_complete_user_subtitle">"Now you can trust the digital identity of this user when sending or receiving messages."</string>
   <string name="screen_session_verification_device_verified">"Device verified"</string>
   <string name="screen_session_verification_enter_recovery_key">"Enter recovery key"</string>
   <string name="screen_session_verification_failed_subtitle">"Either the request timed out, the request was denied, or there was a verification mismatch."</string>
@@ -42,7 +42,7 @@
   <string name="screen_session_verification_use_another_device_title">"Open the app on another verified device"</string>
   <string name="screen_session_verification_user_initiator_subtitle">"For extra security, verify this user by comparing a set of emojis on your devices. Do this by using a trusted way to communicate."</string>
   <string name="screen_session_verification_user_initiator_title">"Verify this user?"</string>
-  <string name="screen_session_verification_user_responder_subtitle">"For extra security, another user wants to verify your identity. You’ll be shown a set of emojis to compare."</string>
+  <string name="screen_session_verification_user_responder_subtitle">"For extra security, another user wants to verify your digital identity. You’ll be shown a set of emojis to compare."</string>
   <string name="screen_session_verification_waiting_another_device_subtitle">"You should see a popup on the other device. Start the verification from there now."</string>
   <string name="screen_session_verification_waiting_another_device_title">"Start verification on the other device"</string>
   <string name="screen_session_verification_waiting_other_device_title">"Start verification on the other device"</string>
@@ -50,5 +50,5 @@
   <string name="screen_session_verification_waiting_subtitle">"Once accepted you’ll be able to continue with the verification."</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Accept the request to start the verification process in your other session to continue."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Waiting to accept request"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Signing out…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Removing device…"</string>
 </resources>

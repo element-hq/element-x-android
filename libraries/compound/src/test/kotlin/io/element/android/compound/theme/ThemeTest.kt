@@ -15,6 +15,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -71,5 +72,15 @@ class ThemeTest {
         }.test {
             assertThat(awaitItem()).isTrue()
         }
+    }
+
+    @Test
+    fun `mapToTheme falls back to dark when black theme is disabled`() = runTest {
+        flowOf(Theme.Black.name)
+            .mapToTheme(allowBlackTheme = false)
+            .test {
+                assertThat(awaitItem()).isEqualTo(Theme.Dark)
+                awaitComplete()
+            }
     }
 }

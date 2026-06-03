@@ -10,21 +10,60 @@ package io.element.android.features.messages.impl.timeline.model.event
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.location.api.Location
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
+import io.element.android.libraries.matrix.ui.messages.reply.aProfileDetailsReady
 
 open class TimelineItemLocationContentProvider : PreviewParameterProvider<TimelineItemLocationContent> {
     override val values: Sequence<TimelineItemLocationContent>
         get() = sequenceOf(
-            aTimelineItemLocationContent(),
-            aTimelineItemLocationContent("This is a description!"),
+            aTimelineItemLocationContent(
+                mode = aStaticLocationMode()
+            ),
+            aTimelineItemLocationContent(
+                mode = aLiveLocationMode(isActive = true)
+            ),
+            aTimelineItemLocationContent(
+                mode = aLiveLocationMode(isActive = true, lastKnownLocation = null)
+            ),
+            aTimelineItemLocationContent(
+                mode = aLiveLocationMode(isActive = true, isOwnUser = false)
+            ),
+            aTimelineItemLocationContent(
+                mode = aLiveLocationMode(isActive = false)
+            ),
         )
 }
+fun aLiveLocationMode(
+    isActive: Boolean,
+    isOwnUser: Boolean = true,
+    lastKnownLocation: Location? = aLocation(),
+    endsAt: String = "Ends at 12:34",
+    endTimestamp: Long = 0L,
+): TimelineItemLocationContent.Mode = TimelineItemLocationContent.Mode.Live(
+    isActive = isActive,
+    endsAt = endsAt,
+    endTimestamp = endTimestamp,
+    isOwnUser = isOwnUser,
+    lastKnownLocation = lastKnownLocation
+)
 
-fun aTimelineItemLocationContent(description: String? = null) = TimelineItemLocationContent(
-    body = "User location geo:52.2445,0.7186;u=5000",
-    location = Location(
-        lat = 52.2445,
-        lon = 0.7186,
-        accuracy = 5000f,
-    ),
+fun aStaticLocationMode(location: Location = aLocation()) = TimelineItemLocationContent.Mode.Static(location)
+
+fun aTimelineItemLocationContent(
+    senderId: UserId = UserId("@sender:matrix.org"),
+    senderProfile: ProfileDetails = aProfileDetailsReady(),
+    description: String? = null,
+    mode: TimelineItemLocationContent.Mode,
+) = TimelineItemLocationContent(
+    senderId = senderId,
+    senderProfile = senderProfile,
     description = description,
+    mode = mode,
+)
+
+fun aLocation() = Location(
+    lat = 52.2445,
+    lon = 0.7186,
+    accuracy = 5000f,
 )

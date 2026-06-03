@@ -13,6 +13,7 @@
   <string name="state_event_room_avatar_changed_by_you">"Вие променихте снимката на стаята"</string>
   <string name="state_event_room_avatar_removed">"%1$s премахна снимката на стаята"</string>
   <string name="state_event_room_avatar_removed_by_you">"Вие премахнахте снимката на стаята"</string>
+  <string name="state_event_room_ban_by_you">"Вие забранихте %1$s"</string>
   <string name="state_event_room_created">"%1$s създаде стаята"</string>
   <string name="state_event_room_created_by_you">"Вие създадохте стаята"</string>
   <string name="state_event_room_invite">"%1$s покани %2$s"</string>
@@ -58,5 +59,6 @@
   <string name="state_event_room_topic_removed">"%1$s премахна темата на стаята"</string>
   <string name="state_event_room_topic_removed_by_you">"Вие премахнахте темата на стаята"</string>
   <string name="state_event_room_unban">"%1$s премахна забраната на %2$s"</string>
+  <string name="state_event_room_unban_by_you">"Вие отблокирахте %1$s"</string>
   <string name="state_event_room_unknown_membership_change">"%1$s направи неизвестна промяна в членството си"</string>
 </resources>

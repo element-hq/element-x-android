@@ -115,7 +115,7 @@ private fun ViolationAlert(
         },
         submitText = stringResource(submitTextId),
         onSubmitClick = onSubmitClick,
-        level = if (isCritical) ComposerAlertLevel.Critical else ComposerAlertLevel.Default,
+        level = if (isCritical) ComposerAlertLevel.Critical else ComposerAlertLevel.Info,
     )
 }
 

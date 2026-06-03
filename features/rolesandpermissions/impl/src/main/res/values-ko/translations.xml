@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_room_change_permissions_administrators">"관리자 전용"</string>
+  <string name="screen_room_change_permissions_administrators">"관리자"</string>
   <string name="screen_room_change_permissions_ban_people">"사용자 차단"</string>
+  <string name="screen_room_change_permissions_change_settings">"설정 변경"</string>
   <string name="screen_room_change_permissions_delete_messages">"메시지 삭제"</string>
-  <string name="screen_room_change_permissions_invite_people">"사람들을 초대하고 가입 요청을 수락합니다"</string>
+  <string name="screen_room_change_permissions_everyone">"멤버"</string>
+  <string name="screen_room_change_permissions_invite_people">"사람 초대하기"</string>
+  <string name="screen_room_change_permissions_manage_space">"스페이스 관리"</string>
+  <string name="screen_room_change_permissions_manage_space_rooms">"방 관리"</string>
+  <string name="screen_room_change_permissions_member_moderation">"멤버 관리"</string>
   <string name="screen_room_change_permissions_messages_and_content">"메시지 및 콘텐츠"</string>
-  <string name="screen_room_change_permissions_moderators">"관리자 및 중재자"</string>
-  <string name="screen_room_change_permissions_remove_people">"사람들을 제거하고 가입 요청을 거부합니다"</string>
+  <string name="screen_room_change_permissions_moderators">"중재자"</string>
+  <string name="screen_room_change_permissions_remove_people">"사용자 내보내기"</string>
   <string name="screen_room_change_permissions_room_avatar">"방 아바타 변경"</string>
-  <string name="screen_room_change_permissions_room_details">"방 편집"</string>
+  <string name="screen_room_change_permissions_room_details">"세부 정보 수정"</string>
   <string name="screen_room_change_permissions_room_name">"방 이름 변경"</string>
   <string name="screen_room_change_permissions_room_topic">"방 화제 변경"</string>
   <string name="screen_room_change_permissions_send_messages">"메시지 보내기"</string>
+  <string name="screen_room_change_permissions_title">"권한"</string>
   <string name="screen_room_change_role_administrators_title">"관리자 편집"</string>
   <string name="screen_room_change_role_confirm_add_admin_description">"이 작업은 실행 취소할 수 없습니다. 해당 사용자에게 당신과 동일한 권한 레벨을 부여하는 것입니다."</string>
   <string name="screen_room_change_role_confirm_add_admin_title">"관리자를 추가하시겠습니까?"</string>
@@ -31,7 +37,12 @@
   <string name="screen_room_change_role_section_users">"회원들"</string>
   <string name="screen_room_change_role_unsaved_changes_description">"저장되지 않은 변경 사항이 있습니다."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"변경 사항을 저장하시겠습니까?"</string>
-  <string name="screen_room_member_list_banned_empty">"이 방에는 차단된 사용자가 없습니다."</string>
+  <string name="screen_room_member_list_banned_empty">"차단된 사용자가 없습니다."</string>
+  <plurals name="screen_room_member_list_banned_header_title">
+    <item quantity="other">"%1$d명 차단됨"</item>
+  </plurals>
+  <string name="screen_room_member_list_empty_search_subtitle">"맞춤법을 확인하거나 새로운 검색어로 시도해 보세요."</string>
+  <string name="screen_room_member_list_empty_search_title">"“%1$s”에 대한 검색 결과가 없습니다."</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="other">"%1$d 사람"</item>
   </plurals>
@@ -42,8 +53,12 @@
   <string name="screen_room_member_list_manage_member_unban_title">"방에서 차단 해제"</string>
   <string name="screen_room_member_list_mode_banned">"차단됨"</string>
   <string name="screen_room_member_list_mode_members">"회원들"</string>
-  <string name="screen_room_member_list_role_administrator">"관리자 전용"</string>
-  <string name="screen_room_member_list_role_moderator">"관리자 및 중재자"</string>
+  <plurals name="screen_room_member_list_pending_header_title">
+    <item quantity="other">"%1$d명 초대됨"</item>
+  </plurals>
+  <string name="screen_room_member_list_pending_status">"보류 중"</string>
+  <string name="screen_room_member_list_role_administrator">"관리자"</string>
+  <string name="screen_room_member_list_role_moderator">"중재자"</string>
   <string name="screen_room_member_list_role_owner">"소유자"</string>
   <string name="screen_room_member_list_room_members_header_title">"방 회원들"</string>
   <string name="screen_room_member_list_unbanning_user">"차단 해제 %1$s"</string>
@@ -56,10 +71,12 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"메시지 및 콘텐츠"</string>
   <string name="screen_room_roles_and_permissions_moderators">"중재자"</string>
   <string name="screen_room_roles_and_permissions_owners">"소유자"</string>
+  <string name="screen_room_roles_and_permissions_permissions_header">"권한"</string>
   <string name="screen_room_roles_and_permissions_reset">"권한 재설정"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"권한을 재설정하면 현재 설정이 모두 삭제됩니다."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"권한을 재설정하시겠습니까?"</string>
   <string name="screen_room_roles_and_permissions_roles_header">"역할"</string>
   <string name="screen_room_roles_and_permissions_room_details">"방 세부 정보"</string>
+  <string name="screen_room_roles_and_permissions_space_details">"스페이스 상세 정보"</string>
   <string name="screen_room_roles_and_permissions_title">"역할 및 권한"</string>
 </resources>

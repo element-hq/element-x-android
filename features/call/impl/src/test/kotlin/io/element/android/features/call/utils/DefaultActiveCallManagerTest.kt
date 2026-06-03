@@ -13,13 +13,13 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.getSystemService
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.call.api.CallType
+import io.element.android.features.call.api.CallData
 import io.element.android.features.call.impl.notifications.RingingCallNotificationCreator
+import io.element.android.features.call.impl.notifications.aCallNotificationData
 import io.element.android.features.call.impl.utils.ActiveCall
 import io.element.android.features.call.impl.utils.CallState
 import io.element.android.features.call.impl.utils.DefaultActiveCallManager
 import io.element.android.features.call.impl.utils.DefaultCurrentCallService
-import io.element.android.features.call.test.aCallNotificationData
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -77,9 +77,10 @@ class DefaultActiveCallManagerTest {
 
         assertThat(manager.activeCall.value).isEqualTo(
             ActiveCall(
-                callType = CallType.RoomCall(
+                callData = CallData(
                     sessionId = callNotificationData.sessionId,
                     roomId = callNotificationData.roomId,
+                    isAudioCall = false,
                 ),
                 callState = CallState.Ringing(callNotificationData)
             )
@@ -89,6 +90,28 @@ class DefaultActiveCallManagerTest {
 
         assertThat(manager.activeWakeLock?.isHeld).isTrue()
         verify { notificationManagerCompat.notify(notificationId, any()) }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `registerIncomingCall - sets the incoming audio call as active`() = runTest {
+        setupShadowPowerManager()
+        val notificationManagerCompat = mockk<NotificationManagerCompat>(relaxed = true)
+        val manager = createActiveCallManager(notificationManagerCompat = notificationManagerCompat)
+
+        val callNotificationData = aCallNotificationData(audioOnly = true)
+        manager.registerIncomingCall(callNotificationData)
+
+        assertThat(manager.activeCall.value).isEqualTo(
+            ActiveCall(
+                callData = CallData(
+                    sessionId = callNotificationData.sessionId,
+                    roomId = callNotificationData.roomId,
+                    isAudioCall = true,
+                ),
+                callState = CallState.Ringing(callNotificationData)
+            )
+        )
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -109,7 +132,7 @@ class DefaultActiveCallManagerTest {
         manager.registerIncomingCall(aCallNotificationData(roomId = A_ROOM_ID_2))
 
         assertThat(manager.activeCall.value).isEqualTo(activeCall)
-        assertThat((manager.activeCall.value?.callType as? CallType.RoomCall)?.roomId).isNotEqualTo(A_ROOM_ID_2)
+        assertThat(manager.activeCall.value?.callData?.roomId).isNotEqualTo(A_ROOM_ID_2)
 
         advanceTimeBy(1)
 
@@ -155,7 +178,7 @@ class DefaultActiveCallManagerTest {
     }
 
     @Test
-    fun `hangUpCall - removes existing call if the CallType matches`() = runTest {
+    fun `hangUpCall - removes existing call if the CallData matches`() = runTest {
         setupShadowPowerManager()
         val notificationManagerCompat = mockk<NotificationManagerCompat>(relaxed = true)
         val manager = createActiveCallManager(notificationManagerCompat = notificationManagerCompat)
@@ -165,7 +188,7 @@ class DefaultActiveCallManagerTest {
         assertThat(manager.activeCall.value).isNotNull()
         assertThat(manager.activeWakeLock?.isHeld).isTrue()
 
-        manager.hangUpCall(CallType.RoomCall(notificationData.sessionId, notificationData.roomId))
+        manager.hangUpCall(CallData(notificationData.sessionId, notificationData.roomId, false))
         assertThat(manager.activeCall.value).isNull()
         assertThat(manager.activeWakeLock?.isHeld).isFalse()
 
@@ -192,7 +215,7 @@ class DefaultActiveCallManagerTest {
         val notificationData = aCallNotificationData(roomId = A_ROOM_ID)
         manager.registerIncomingCall(notificationData)
 
-        manager.hangUpCall(CallType.RoomCall(notificationData.sessionId, notificationData.roomId))
+        manager.hangUpCall(CallData(notificationData.sessionId, notificationData.roomId, false))
 
         coVerify {
             room.declineCall(notificationEventId = notificationData.eventId)
@@ -219,7 +242,7 @@ class DefaultActiveCallManagerTest {
         val notificationData = aCallNotificationData(roomId = A_ROOM_ID)
         // Do not register the incoming call, so the manager doesn't know about it
         manager.hangUpCall(
-            callType = CallType.RoomCall(notificationData.sessionId, notificationData.roomId),
+            callData = CallData(notificationData.sessionId, notificationData.roomId, false),
             notificationData = notificationData,
         )
         coVerify {
@@ -297,7 +320,7 @@ class DefaultActiveCallManagerTest {
     }
 
     @Test
-    fun `hangUpCall - does nothing if the CallType doesn't match`() = runTest {
+    fun `hangUpCall - does nothing if the CallData doesn't match`() = runTest {
         setupShadowPowerManager()
         val notificationManagerCompat = mockk<NotificationManagerCompat>(relaxed = true)
         val manager = createActiveCallManager(notificationManagerCompat = notificationManagerCompat)
@@ -306,7 +329,13 @@ class DefaultActiveCallManagerTest {
         assertThat(manager.activeCall.value).isNotNull()
         assertThat(manager.activeWakeLock?.isHeld).isTrue()
 
-        manager.hangUpCall(CallType.ExternalUrl("https://example.com"))
+        manager.hangUpCall(
+            CallData(
+                sessionId = A_SESSION_ID,
+                roomId = A_ROOM_ID_2,
+                isAudioCall = true,
+            )
+        )
         assertThat(manager.activeCall.value).isNotNull()
         assertThat(manager.activeWakeLock?.isHeld).isTrue()
 
@@ -321,12 +350,13 @@ class DefaultActiveCallManagerTest {
         val manager = createActiveCallManager(notificationManagerCompat = notificationManagerCompat)
         assertThat(manager.activeCall.value).isNull()
 
-        manager.joinedCall(CallType.RoomCall(A_SESSION_ID, A_ROOM_ID))
+        manager.joinedCall(CallData(A_SESSION_ID, A_ROOM_ID, true))
         assertThat(manager.activeCall.value).isEqualTo(
             ActiveCall(
-                callType = CallType.RoomCall(
+                callData = CallData(
                     sessionId = A_SESSION_ID,
                     roomId = A_ROOM_ID,
+                    isAudioCall = true,
                 ),
                 callState = CallState.InCall,
             )
@@ -426,9 +456,10 @@ class DefaultActiveCallManagerTest {
 
         assertThat(manager.activeCall.value).isEqualTo(
             ActiveCall(
-                callType = CallType.RoomCall(
+                callData = CallData(
                     sessionId = callNotificationData.sessionId,
                     roomId = callNotificationData.roomId,
+                    isAudioCall = false,
                 ),
                 callState = CallState.Ringing(callNotificationData)
             )

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Legg til reaksjon: %1$s"</string>
+  <string name="a11y_address">"Adresse"</string>
   <string name="a11y_avatar">"Profilbilde"</string>
   <string name="a11y_collapse_message_text_field">"Minimer meldingstekstfeltet"</string>
   <string name="a11y_delete">"Slett"</string>
@@ -15,7 +16,7 @@
   <string name="a11y_hide_password">"Skjul passord"</string>
   <string name="a11y_join_call">"Bli med i samtale"</string>
   <string name="a11y_jump_to_bottom">"Hopp til bunnen"</string>
-  <string name="a11y_move_the_map_to_my_location">"Flytt kartet til min lokasjon"</string>
+  <string name="a11y_move_the_map_to_my_location">"Flytt kartet til min posisjon"</string>
   <string name="a11y_notifications_mentions_only">"Bare omtaler"</string>
   <string name="a11y_notifications_muted">"Dempet"</string>
   <string name="a11y_notifications_new_mentions">"Nye omtaler"</string>
@@ -26,9 +27,12 @@
   <string name="a11y_pause">"Setter på pause"</string>
   <string name="a11y_paused_voice_message">"Talemelding, lengde: %1$s, nåværende posisjon: %2$s"</string>
   <string name="a11y_pin_field">"PIN-felt"</string>
+  <string name="a11y_pinned_location">"Festet lokasjon"</string>
   <string name="a11y_play">"Spill av"</string>
+  <string name="a11y_playback_speed">"Avspillingshastighet"</string>
   <string name="a11y_poll">"Avstemning"</string>
   <string name="a11y_poll_end">"Avsluttet avstemning"</string>
+  <string name="a11y_qr_code">"QR-kode"</string>
   <string name="a11y_react_with">"Reager med %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Reager med andre emojier"</string>
   <string name="a11y_read_receipts_multiple">"Lest av %1$s og %2$s"</string>
@@ -42,9 +46,11 @@
   <string name="a11y_remove_reaction_with">"Fjern reaksjonen med %1$s"</string>
   <string name="a11y_room_avatar">"Romavatar"</string>
   <string name="a11y_send_files">"Sende filer"</string>
+  <string name="a11y_sender_location">"Avsenderens lokasjon"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Tidsbegrenset handling kreves, du har ett minutt på deg til å verifisere"</string>
   <string name="a11y_show_password">"Vis passord"</string>
   <string name="a11y_start_call">"Start en samtale"</string>
+  <string name="a11y_start_voice_call">"Start et taleanrop"</string>
   <string name="a11y_tombstoned_room">"Deaktivert rom"</string>
   <string name="a11y_user_avatar">"Brukeravatar"</string>
   <string name="a11y_user_menu">"Brukermeny"</string>
@@ -93,6 +99,7 @@
   <string name="action_enable">"Aktiver"</string>
   <string name="action_end_poll">"Avslutt avstemning"</string>
   <string name="action_enter_pin">"Skriv inn PIN-koden"</string>
+  <string name="action_explore_public_spaces">"Utforsk offentlige områder"</string>
   <string name="action_finish">"Fullfør"</string>
   <string name="action_forgot_password">"Glemt passordet?"</string>
   <string name="action_forward">"Videresend"</string>
@@ -152,10 +159,11 @@
   <string name="action_send_voice_message">"Send talemelding"</string>
   <string name="action_share">"Dele"</string>
   <string name="action_share_link">"Dele lenke"</string>
+  <string name="action_share_live_location">"Del posisjon i sanntid"</string>
   <string name="action_show">"Vis"</string>
   <string name="action_sign_in_again">"Logg på igjen"</string>
-  <string name="action_signout">"Logg ut"</string>
-  <string name="action_signout_anyway">"Logg ut likevel"</string>
+  <string name="action_signout">"Fjern denne enheten"</string>
+  <string name="action_signout_anyway">"Fjern denne enheten likevel"</string>
   <string name="action_skip">"Hopp over"</string>
   <string name="action_start">"Start"</string>
   <string name="action_start_chat">"Start chat"</string>
@@ -199,7 +207,6 @@
   <string name="common_current_user_left_room">"Forlot rommet"</string>
   <string name="common_current_user_left_space">"Forlot område"</string>
   <string name="common_current_user_rejected_invite">"Invitasjon avslått"</string>
-  <string name="common_dark">"Mørk"</string>
   <string name="common_decryption_error">"Dekrypteringsfeil"</string>
   <string name="common_description">"Beskrivelse"</string>
   <string name="common_developer_options">"Alternativer for utviklere"</string>
@@ -237,7 +244,6 @@
   <string name="common_invite_unknown_profile">"Finner ikke denne Matrix-IDen, så invitasjonen blir kanskje ikke mottatt."</string>
   <string name="common_leaving_room">"Forlater rommet"</string>
   <string name="common_leaving_space">"Forlater området"</string>
-  <string name="common_light">"Lys"</string>
   <string name="common_line_copied_to_clipboard">"Linje kopiert til utklippstavlen"</string>
   <string name="common_link_copied_to_clipboard">"Lenke kopiert til utklippstavlen"</string>
   <string name="common_link_new_device">"Koble til ny enhet"</string>
@@ -267,6 +273,7 @@
   <string name="common_offline">"Frakoblet"</string>
   <string name="common_open_source_licenses">"Åpen kildekode-lisenser"</string>
   <string name="common_or">"eller"</string>
+  <string name="common_other_options">"Andre alternativer"</string>
   <string name="common_password">"Passord"</string>
   <string name="common_people">"Personer"</string>
   <string name="common_permalink">"Permalenke"</string>
@@ -284,8 +291,10 @@
   </plurals>
   <string name="common_preparing">"Forbereder…"</string>
   <string name="common_privacy_policy">"Retningslinjer for personvern"</string>
+  <string name="common_private">"Privat"</string>
   <string name="common_private_room">"Privat rom"</string>
   <string name="common_private_space">"Privat område"</string>
+  <string name="common_public">"Offentlig"</string>
   <string name="common_public_room">"Offentlig rom"</string>
   <string name="common_public_space">"Offentlig område"</string>
   <string name="common_reaction">"Reaksjon"</string>
@@ -293,14 +302,15 @@
   <string name="common_reason">"Årsak"</string>
   <string name="common_recovery_key">"Gjenopprettingsnøkkel"</string>
   <string name="common_refreshing">"Oppdaterer…"</string>
+  <string name="common_removing">"Fjerner…"</string>
   <plurals name="common_replies">
     <item quantity="other">"%1$d svar"</item>
   </plurals>
   <string name="common_replying_to">"Svar til %1$s"</string>
-  <string name="common_report_a_bug">"Rapporter en feil"</string>
   <string name="common_report_a_problem">"Rapporter et problem"</string>
   <string name="common_report_submitted">"Rapport sendt inn"</string>
   <string name="common_rich_text_editor">"Redigeringsprogram for rik tekst"</string>
+  <string name="common_role">"Rolle"</string>
   <string name="common_room">"Rom"</string>
   <string name="common_room_name">"Romnavn"</string>
   <string name="common_room_name_placeholder">"f.eks. prosjektnavnet ditt"</string>
@@ -316,6 +326,10 @@
   <string name="common_security">"Sikkerhet"</string>
   <string name="common_seen_by">"Sett av"</string>
   <string name="common_select_account">"Velg en konto"</string>
+  <plurals name="common_selected_count">
+    <item quantity="one">"%1$d valgt"</item>
+    <item quantity="other">"%1$d valgt"</item>
+  </plurals>
   <string name="common_send_to">"Sendt til"</string>
   <string name="common_sending">"Sender…"</string>
   <string name="common_sending_failed">"Kunne ikke sende"</string>
@@ -325,12 +339,14 @@
   <string name="common_server_url">"URL-adresse til server"</string>
   <string name="common_settings">"Innstillinger"</string>
   <string name="common_share_space">"Del område"</string>
+  <string name="common_shared_history">"Nye medlemmer ser historikk"</string>
   <string name="common_shared_location">"Delt posisjon"</string>
   <string name="common_shared_space">"Delt område"</string>
-  <string name="common_signing_out">"Logger av"</string>
+  <string name="common_signing_out">"Fjerner enheten"</string>
   <string name="common_something_went_wrong">"Noe gikk galt"</string>
   <string name="common_something_went_wrong_message">"Vi har støtt på et problem. Vennligst prøv igjen."</string>
   <string name="common_space">"Område"</string>
+  <string name="common_space_members">"Medlemmer av område"</string>
   <string name="common_space_topic_placeholder">"Hva handler dette området om?"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d Område"</item>
@@ -342,7 +358,6 @@
   <string name="common_suggested">"Foreslått"</string>
   <string name="common_suggestions">"Forslag"</string>
   <string name="common_syncing">"Synkroniserer"</string>
-  <string name="common_system">"System"</string>
   <string name="common_text">"Tekst"</string>
   <string name="common_third_party_notices">"Varsler fra tredjeparter"</string>
   <string name="common_thread">"Tråd"</string>
@@ -376,7 +391,10 @@
   <string name="common_voice_message">"Talemelding"</string>
   <string name="common_waiting">"Venter…"</string>
   <string name="common_waiting_for_decryption_key">"Venter på denne meldingen"</string>
+  <string name="common_world_readable_history">"Alle kan se historikk"</string>
   <string name="common_you">"Du"</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) delte denne meldingen siden du ikke var i rommet da den ble sendt."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s delte denne meldingen siden du ikke var i rommet da den ble sendt."</string>
   <string name="crypto_history_visible">"Dette rommet er konfigurert slik at nye medlemmer kan lese historikken.%1$s"</string>
   <string name="crypto_identity_change_pin_violation">"%1$s\'s identitet ble tilbakestilt. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"%1$ss %2$s-identitet ble tilbakestilt. %3$s"</string>
@@ -384,6 +402,7 @@
   <string name="crypto_identity_change_profile_pin_violation">"%1$ss identitet ble tilbakestilt."</string>
   <string name="crypto_identity_change_verification_violation_new">"%1$ss %2$s identitet ble tilbakestilt. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Trekk tilbake verifisering"</string>
+  <string name="dialog_allow_access">"Tillat tilgang"</string>
   <string name="dialog_confirm_link_message">"Lenken %1$s tar deg til et annet nettsted %2$s
 
 Er du sikker på at du vil fortsette?"</string>
@@ -410,12 +429,12 @@ Er du sikker på at du vil fortsette?"</string>
   <string name="error_failed_creating_the_permalink">"Opprettelse av permalenken mislyktes"</string>
   <string name="error_failed_loading_map">"%1$s kunne ikke laste inn kartet. Prøv igjen senere."</string>
   <string name="error_failed_loading_messages">"Kunne ikke laste inn meldinger"</string>
-  <string name="error_failed_locating_user">"%1$s fikk ikke tilgang til lokasjonen din. Vennligst prøv igjen senere."</string>
+  <string name="error_failed_locating_user">"%1$s fikk ikke tilgang til posisjonen din. Vennligst prøv igjen senere."</string>
   <string name="error_failed_uploading_voice_message">"Kunne ikke laste opp talemeldingen din."</string>
   <string name="error_invalid_invite">"Rommet eksisterer ikke lenger, eller invitasjonen er ikke lenger gyldig."</string>
   <string name="error_message_not_found">"Melding ikke funnet"</string>
-  <string name="error_missing_location_auth_android">"%1$s har ikke tilgang til lokasjonen din. Du kan aktivere tilgang i Innstillinger."</string>
-  <string name="error_missing_location_rationale_android">"%1$s har ikke tilgang til lokasjonen din. Aktiver tilgang nedenfor."</string>
+  <string name="error_missing_location_auth_android">"%1$s har ikke tilgang til posisjonen din. Du kan aktivere tilgang i Innstillinger."</string>
+  <string name="error_missing_location_rationale_android">"%1$s har ikke tilgang til posisjonen din. Aktiver tilgang nedenfor."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s har ikke tilgang til mikrofonen din. Aktiver tilgang til å ta opp en talemelding."</string>
   <string name="error_network_or_server_issue">"Dette kan skyldes nettverks- eller serverproblemer."</string>
   <string name="error_room_address_already_exists">"Denne romadressen finnes allerede. Prøv å redigere romadressefeltet eller endre romnavnet"</string>
@@ -461,21 +480,23 @@ Er du sikker på at du vil fortsette?"</string>
   <string name="screen_room_pinned_banner_loading_description">"Laster inn melding…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Vis alle"</string>
   <string name="screen_room_title">"Chat"</string>
-  <string name="screen_share_location_title">"Del lokasjon"</string>
-  <string name="screen_share_my_location_action">"Del min lokasjon"</string>
+  <string name="screen_share_location_title">"Del posisjon"</string>
+  <string name="screen_share_my_location_action">"Del min posisjon"</string>
   <string name="screen_share_open_apple_maps">"Åpne i Apple Maps"</string>
   <string name="screen_share_open_google_maps">"Åpne i Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Åpne i OpenStreetMap"</string>
-  <string name="screen_share_this_location_action">"Del denne lokasjonen"</string>
+  <string name="screen_share_this_location_action">"Del valgt lokasjon"</string>
   <string name="screen_space_list_description">"Områder du har opprettet eller blitt med i."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_empty_state_title">"Opprett område for å organisere rom"</string>
   <string name="screen_space_list_parent_space">"%1$s område"</string>
   <string name="screen_space_list_title">"Områder"</string>
+  <string name="screen_static_location_sheet_timestamp_description">"Delt %1$s"</string>
+  <string name="screen_static_location_sheet_title">"På kartet"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Meldingen ble ikke sendt fordi %1$ss verifiserte identitet er tilbakestilt."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Meldingen ble ikke sendt fordi %1$s ikke har verifisert alle enheter."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Meldingen ble ikke sendt fordi du ikke har verifisert en eller flere av enhetene dine."</string>
-  <string name="screen_view_location_title">"Lokasjon"</string>
+  <string name="screen_view_location_title">"Posisjon"</string>
   <string name="settings_version_number">"Versjon: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"en"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"Historiske meldinger er ikke tilgjengelige på denne enheten"</string>

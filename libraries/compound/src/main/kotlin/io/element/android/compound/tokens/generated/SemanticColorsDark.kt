@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright (c) 2026 Element Creations Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
@@ -37,9 +37,12 @@ val compoundColorsDark = SemanticColors(
     bgActionTertiaryHovered = DarkColorTokens.colorGray300,
     bgActionTertiaryRest = DarkColorTokens.colorThemeBg,
     bgActionTertiarySelected = DarkColorTokens.colorGray400,
-    bgBadgeAccent = DarkColorTokens.colorAlphaGreen500,
-    bgBadgeDefault = DarkColorTokens.colorAlphaGray500,
-    bgBadgeInfo = DarkColorTokens.colorAlphaBlue500,
+    bgBadgeAccent = DarkColorTokens.colorGreen400,
+    bgBadgeCritical = DarkColorTokens.colorRed300,
+    bgBadgeDefault = DarkColorTokens.colorThemeBg,
+    bgBadgeInfo = DarkColorTokens.colorBlue400,
+    bgBadgePrimary = DarkColorTokens.colorGray1400,
+    bgBadgeSecondary = DarkColorTokens.colorGray400,
     bgCanvasDefault = DarkColorTokens.colorThemeBg,
     bgCanvasDefaultLevel1 = DarkColorTokens.colorGray300,
     bgCanvasDisabled = DarkColorTokens.colorGray200,
@@ -58,6 +61,7 @@ val compoundColorsDark = SemanticColors(
     bgSubtleSecondary = DarkColorTokens.colorGray300,
     bgSubtleSecondaryLevel0 = DarkColorTokens.colorThemeBg,
     bgSuccessSubtle = DarkColorTokens.colorGreen200,
+    borderAccentPrimary = DarkColorTokens.colorGreen900,
     borderAccentSubtle = DarkColorTokens.colorGreen700,
     borderCriticalHovered = DarkColorTokens.colorRed1000,
     borderCriticalPrimary = DarkColorTokens.colorRed900,
@@ -73,12 +77,10 @@ val compoundColorsDark = SemanticColors(
     gradientActionStop2 = DarkColorTokens.colorGreen900,
     gradientActionStop3 = DarkColorTokens.colorGreen700,
     gradientActionStop4 = DarkColorTokens.colorGreen500,
-    gradientInfoStop1 = DarkColorTokens.colorAlphaBlue500,
-    gradientInfoStop2 = DarkColorTokens.colorAlphaBlue400,
-    gradientInfoStop3 = DarkColorTokens.colorAlphaBlue300,
-    gradientInfoStop4 = DarkColorTokens.colorAlphaBlue200,
-    gradientInfoStop5 = DarkColorTokens.colorAlphaBlue100,
-    gradientInfoStop6 = DarkColorTokens.colorTransparent,
+    gradientCriticalStop1 = DarkColorTokens.colorRed200,
+    gradientCriticalStop2 = DarkColorTokens.colorThemeBg,
+    gradientInfoStop1 = DarkColorTokens.colorBlue200,
+    gradientInfoStop2 = DarkColorTokens.colorThemeBg,
     gradientSubtleStop1 = DarkColorTokens.colorAlphaGreen500,
     gradientSubtleStop2 = DarkColorTokens.colorAlphaGreen400,
     gradientSubtleStop3 = DarkColorTokens.colorAlphaGreen300,
@@ -100,6 +102,8 @@ val compoundColorsDark = SemanticColors(
     iconSuccessPrimary = DarkColorTokens.colorGreen900,
     iconTertiary = DarkColorTokens.colorGray800,
     iconTertiaryAlpha = DarkColorTokens.colorAlphaGray800,
+    separatorPrimary = DarkColorTokens.colorGray400,
+    separatorSecondary = DarkColorTokens.colorGray300,
     textActionAccent = DarkColorTokens.colorGreen900,
     textActionPrimary = DarkColorTokens.colorGray1400,
     textBadgeAccent = DarkColorTokens.colorGreen1100,

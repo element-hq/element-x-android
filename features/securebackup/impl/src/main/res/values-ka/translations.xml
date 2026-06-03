@@ -8,7 +8,6 @@
   <string name="screen_chat_backup_recovery_action_confirm">"შეიყვანეთ აღდგენის გასაღები"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"თქვენი ჩატის სარეზერვო ასლი ამჟამად არ არის სინქრონიზებული."</string>
   <string name="screen_chat_backup_recovery_action_setup">"აღდგენის დაყენება"</string>
-  <string name="screen_chat_backup_recovery_action_setup_description">"მიიღეთ წვდომა თქვენს დაშიფრულ შეტყობინებებზე, თუ დაკარგავთ თქვენს ყველა მოწყობილობას ან გამოხვალთ სისტემიდან %1$s-დან ყველგან."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"გახსენით %1$s კომპიუტერზე"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"შედით თქვენს ანგარიშში კიდევ ერთხელ"</string>
   <string name="screen_create_new_recovery_key_title">"გაანულეთ თქვენი ანგარიშის დაშიფვრა სხვა მოწყობილობის დახმარებით"</string>

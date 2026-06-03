@@ -2,11 +2,11 @@
 
 <!--- TOC -->
 
-  * [Installing from GitHub](#installing-from-github)
-    * [Create a GitHub token](#create-a-github-token)
-  * [Provide artifact URL](#provide-artifact-url)
-  * [Next steps](#next-steps)
-  * [Future improvement](#future-improvement)
+* [Installing from GitHub](#installing-from-github)
+  * [Create a GitHub token](#create-a-github-token)
+* [Provide artifact URL](#provide-artifact-url)
+* [Next steps](#next-steps)
+* [Future improvement](#future-improvement)
 
 <!--- END -->
 

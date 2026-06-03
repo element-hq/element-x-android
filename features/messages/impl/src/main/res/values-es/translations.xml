@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crypto_event_authenticity_mismatched_sender">"El remitente del evento no coincide con el propietario del dispositivo que lo envió."</string>
   <string name="crypto_event_authenticity_not_guaranteed">"La autenticidad de este mensaje cifrado no puede ser garantizada en este dispositivo."</string>
   <string name="crypto_event_authenticity_previously_verified">"Cifrado por un usuario verificado anteriormente."</string>
   <string name="crypto_event_authenticity_sent_in_clear">"No cifrado."</string>
@@ -46,11 +47,16 @@
   <string name="screen_room_timeline_no_permission_to_post">"No tienes permiso para publicar en esta sala"</string>
   <string name="screen_room_timeline_reactions_show_less">"Mostrar menos"</string>
   <string name="screen_room_timeline_reactions_show_more">"Mostrar más"</string>
+  <string name="screen_room_timeline_reactions_show_reactions_summary">"Mostrar todas las reacciones"</string>
   <string name="screen_room_timeline_read_marker_title">"Nuevos"</string>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d cambio en la sala"</item>
     <item quantity="other">"%1$d cambios en la sala"</item>
   </plurals>
+  <string name="screen_room_timeline_tombstoned_room_action">"Ir a la nueva sala"</string>
+  <string name="screen_room_timeline_tombstoned_room_message">"Esta sala ha sido reemplazada y ya no está activa."</string>
+  <string name="screen_room_timeline_upgraded_room_action">"Ver mensajes antiguos"</string>
+  <string name="screen_room_timeline_upgraded_room_message">"Esta sala es la sucesora de otra sala."</string>
   <plurals name="screen_room_typing_many_members">
     <item quantity="one">"%1$s, %2$s y %3$d otro"</item>
     <item quantity="other">"%1$s, %2$s y %3$d otros"</item>

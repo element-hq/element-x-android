@@ -4,5 +4,6 @@
     <item quantity="one">"%1$d τοις εκατό των συνολικών ψήφων"</item>
     <item quantity="other">"%1$d τοις εκατό του συνόλου των ψήφων"</item>
   </plurals>
+  <string name="a11y_polls_will_remove_selection">"Θα καταργήσει την προηγούμενη επιλογή"</string>
   <string name="a11y_polls_winning_answer">"Αυτή είναι η νικητήρια απάντηση"</string>
 </resources>

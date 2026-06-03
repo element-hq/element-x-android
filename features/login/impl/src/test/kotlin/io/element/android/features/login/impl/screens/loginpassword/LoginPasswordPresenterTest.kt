@@ -18,6 +18,7 @@ import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_PASSWORD
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
+import io.element.android.libraries.matrix.test.A_USER_NAME_2
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.auth.aMatrixHomeServerDetails
 import io.element.android.tests.testutils.WarmUpRule
@@ -38,6 +39,20 @@ class LoginPasswordPresenterTest {
             assertThat(initialState.formState).isEqualTo(LoginFormState.Default)
             assertThat(initialState.loginAction).isEqualTo(AsyncData.Uninitialized)
             assertThat(initialState.submitEnabled).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - initial login is in the first state and can be modified`() = runTest {
+        createLoginPasswordPresenter(
+            initialLogin = A_USER_NAME,
+        ).test {
+            val initialState = awaitItem()
+            assertThat(initialState.formState.login).isEqualTo(A_USER_NAME)
+            // Login can be changed
+            initialState.eventSink.invoke(LoginPasswordEvents.SetLogin(A_USER_NAME_2))
+            val loginChangedState = awaitItem()
+            assertThat(loginChangedState.formState.login).isEqualTo(A_USER_NAME_2)
         }
     }
 
@@ -140,9 +155,11 @@ class LoginPasswordPresenterTest {
     }
 
     private fun createLoginPasswordPresenter(
+        initialLogin: String = "",
         authenticationService: FakeMatrixAuthenticationService = FakeMatrixAuthenticationService(),
         accountProviderDataSource: AccountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
     ): LoginPasswordPresenter = LoginPasswordPresenter(
+        initialLogin = initialLogin,
         authenticationService = authenticationService,
         accountProviderDataSource = accountProviderDataSource,
     )

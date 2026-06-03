@@ -13,6 +13,7 @@
     <item quantity="one">"%d notificación"</item>
     <item quantity="other">"%d notificaciones"</item>
   </plurals>
+  <string name="notification_fallback_content">"Tienes nuevos mensajes."</string>
   <string name="notification_incoming_call">"📹 Llamada entrante"</string>
   <string name="notification_inline_reply_failed">"** No se ha podido enviar - por favor, abre la sala"</string>
   <string name="notification_invitation_action_join">"Unirse"</string>

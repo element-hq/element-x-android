@@ -31,7 +31,7 @@
   <string name="screen_room_change_role_moderators_admin_section_footer">"Les administrateurs ont automatiquement les privilèges des modérateurs"</string>
   <string name="screen_room_change_role_moderators_owner_section_footer">"Les propriétaires disposent automatiquement des privilèges des administrateurs."</string>
   <string name="screen_room_change_role_moderators_title">"Modifier les modérateurs"</string>
-  <string name="screen_room_change_role_owners_title">"Choisissez les propriétaires"</string>
+  <string name="screen_room_change_role_owners_title">"Choisir les propriétaires"</string>
   <string name="screen_room_change_role_section_administrators">"Administrateurs"</string>
   <string name="screen_room_change_role_section_moderators">"Modérateurs"</string>
   <string name="screen_room_change_role_section_users">"Membres"</string>

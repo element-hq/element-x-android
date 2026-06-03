@@ -15,6 +15,11 @@
   </plurals>
   <string name="notification_error_unified_push_unregistered_android">"UnifiedPush ilmoitusten jakelijaa ei voitu rekisteröidä, joten et enää vastaanota ilmoituksia. Tarkista sovelluksen ilmoitusasetukset ja push-jakelijan tila."</string>
   <string name="notification_fallback_content">"Sinulle on uusia viestejä."</string>
+  <plurals name="notification_fallback_n_content">
+    <item quantity="one">"Sinulla on %d uusi viesti."</item>
+    <item quantity="other">"Sinulla on %d uutta viestiä."</item>
+  </plurals>
+  <string name="notification_incoming_audio_call">"📞 Saapuva puhelu"</string>
   <string name="notification_incoming_call">"📹 Saapuva puhelu"</string>
   <string name="notification_inline_reply_failed">"** Lähetys epäonnistui - avaa huone"</string>
   <string name="notification_invitation_action_join">"Liity"</string>
@@ -38,7 +43,10 @@
   <string name="notification_room_invite_body_with_sender">"%1$s kutsui sinut liittymään huoneeseen"</string>
   <string name="notification_sender_me">"Minä"</string>
   <string name="notification_sender_mention_reply">"%1$s mainitsi tai vastasi"</string>
+  <string name="notification_space_invite_body">"Kutsui sinut liittymään tilaan"</string>
+  <string name="notification_space_invite_body_with_sender">"%1$s kutsui sinut liittymään tilaan"</string>
   <string name="notification_test_push_notification_content">"Katselet ilmoitusta! Klikkaa minua!"</string>
+  <string name="notification_thread_in_room">"Viestiketju huoneessa %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2026 Element Creations Ltd.
+  ~
+  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+  ~ Please see LICENSE files in the repository root for full details.
+  -->
+<resources>
+    <string name="slash_command_error">Command error</string>
+    <string name="slash_command_unrecognized">Unrecognized command: %1$s</string>
+    <string name="slash_command_parameters_error">The command \"%1$s\" needs more parameters, or some parameters are incorrect.The syntax is\n\n%2$s</string>
+    <string name="slash_command_not_supported_in_threads">The command \"%1$s\" is recognized but not supported in threads.</string>
+    <string name="slash_command_description_emote">Displays action</string>
+    <string name="slash_command_description_crash_application">Crash the application.</string>
+    <string name="slash_command_description_ban_user">Bans user with given id</string>
+    <string name="slash_command_description_unban_user">Unbans user with given id</string>
+    <string name="slash_command_description_ignore_user">Ignores a user, hiding their messages from you</string>
+    <string name="slash_command_description_unignore_user">Stops ignoring a user, showing their messages going forward</string>
+    <string name="slash_command_description_op_user">Define the power level of a user</string>
+    <string name="slash_command_description_deop_user">Deops user with given id</string>
+    <string name="slash_command_description_room_name">Sets the room name</string>
+    <string name="slash_command_description_rainbow">Sends the given message colored as a rainbow</string>
+    <string name="slash_command_description_rainbow_emote">Sends the given emote colored as a rainbow</string>
+    <string name="slash_command_description_invite_user">Invites user with given id to current room</string>
+    <string name="slash_command_description_join_room">Joins room with given address</string>
+    <string name="slash_command_description_spoiler">Sends the given message as a spoiler</string>
+    <string name="slash_command_description_topic">Set the room topic</string>
+    <string name="slash_command_description_remove_user">Removes user with given id from this room</string>
+    <string name="slash_command_description_nick">Changes your display nickname</string>
+    <string name="slash_command_description_avatar">Changes your profile picture in all rooms</string>
+    <string name="slash_command_confetti">Sends the given message with confetti</string>
+    <string name="slash_command_snow">Sends the given message with snowfall</string>
+    <string name="slash_command_description_plain">Sends a message as plain text, without interpreting it as markdown</string>
+    <string name="slash_command_description_nick_for_room">Changes your display nickname in the current room only</string>
+    <string name="slash_command_description_room_avatar">Changes the avatar of the current room</string>
+    <string name="slash_command_description_avatar_for_room">Changes your avatar in this current room only</string>
+    <string name="slash_command_description_devtools">Open the developer tools screen</string>
+    <string name="slash_command_description_whois">Displays information about a user</string>
+    <string name="slash_command_description_shrug">Prepends ¯\\_(ツ)_/¯ to a plain-text message</string>
+    <string name="slash_command_description_lenny">Prepends ( ͡° ͜ʖ ͡°) to a plain-text message</string>
+    <string name="slash_command_description_table_flip">Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message</string>
+    <string name="slash_command_description_unflip">Prepends ┬──┬ ノ( ゜-゜ノ) to a plain-text message</string>
+    <string name="slash_command_description_discard_session">Forces the current outbound group session in an encrypted room to be discarded</string>
+    <string name="slash_command_description_discard_session_not_handled">Only supported in encrypted rooms</string>
+    <string name="slash_command_description_leave_room">Leave the current room</string>
+    <string name="slash_command_description_upgrade_room">Upgrades a room to a new version</string>
+
+    <string name="common_spoiler">Spoiler</string>
+</resources>

@@ -13,6 +13,13 @@
   <string name="screen_advanced_settings_media_compression_description">"Unggah foto dan video lebih cepat dan kurangi penggunaan data"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimalkan kualitas media"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderasi dan Keamanan"</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Optimalkan gambar secara otomatis untuk unggahan lebih cepat dan ukuran file lebih kecil."</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Optimalkan kualitas unggahan gambar"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. Ketuk di sini untuk mengubah."</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_high">"Tinggi (1080p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_low">"Rendah (480p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Standar (720p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Kualitas unggahan video"</string>
   <string name="screen_advanced_settings_push_provider_android">"Penyedia notifikasi dorongan"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Nonaktifkan penyunting teks kaya untuk mengetik Markdown secara manual."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Laporan dibaca"</string>
@@ -65,6 +72,9 @@ Jika Anda melanjutkan, beberapa pengaturan Anda dapat berubah."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"pengaturan sistem"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Pemberitahuan sistem dimatikan"</string>
   <string name="screen_notification_settings_title">"Notifikasi"</string>
+  <string name="theme_dark">"Gelap"</string>
+  <string name="theme_light">"Terang"</string>
+  <string name="theme_system">"Sistem"</string>
   <string name="troubleshoot_notifications_entry_point_push_history_title">"Riwayat dorongan"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Pemecahan masalah"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Pecahkan masalah notifikasi"</string>

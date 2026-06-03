@@ -6,7 +6,7 @@
   <string name="screen_room_change_permissions_delete_messages">"Fjern beskeder"</string>
   <string name="screen_room_change_permissions_everyone">"Medlem"</string>
   <string name="screen_room_change_permissions_invite_people">"Invitér andre"</string>
-  <string name="screen_room_change_permissions_manage_space">"Administrér gruppe"</string>
+  <string name="screen_room_change_permissions_manage_space">"Administrér klynge"</string>
   <string name="screen_room_change_permissions_manage_space_rooms">"Administrer rum"</string>
   <string name="screen_room_change_permissions_member_moderation">"Administrer medlemmer"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Beskeder og indhold"</string>
@@ -80,6 +80,6 @@
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Nulstil tilladelser?"</string>
   <string name="screen_room_roles_and_permissions_roles_header">"Roller"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Detaljer om rummet"</string>
-  <string name="screen_room_roles_and_permissions_space_details">"Detaljer om gruppe"</string>
+  <string name="screen_room_roles_and_permissions_space_details">"Detaljer om klynge"</string>
   <string name="screen_room_roles_and_permissions_title">"Roller og tilladelser"</string>
 </resources>

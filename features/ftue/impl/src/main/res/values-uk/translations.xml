@@ -12,5 +12,4 @@
   <string name="screen_identity_waiting_on_other_device">"Чекає на інше пристрій…"</string>
   <string name="screen_notification_optin_subtitle">"Ви можете змінити свої налаштування пізніше."</string>
   <string name="screen_notification_optin_title">"Дозволити сповіщення і ніколи не пропускати повідомлення"</string>
-  <string name="screen_session_verification_enter_recovery_key">"Введіть ключ відновлення"</string>
 </resources>

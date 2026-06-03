@@ -1,0 +1,248 @@
+#!/usr/bin/env bash
+
+# Copyright (c) 2025-2026 Element Creations Ltd.
+# Copyright 2024 New Vector Ltd.
+#
+# SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+# Please see LICENSE files in the repository root for full details.
+
+set -e
+set -u
+
+# Usage:
+#
+# ./tools/sdk/build-rust-sdk --help
+#
+
+# Notes:
+#
+# * matrix-rust-components-kotlin will be cloned into
+#   ../matrix-rust-components-kotlin and any changes in there will be
+#   overwritten (without prompting!)
+#
+# * If you opt to build a remote repo, it will be cloned into
+#   ../matrix-rust-sdk-<<DATE>>
+
+## Defaults
+
+buildLocal=0
+rustSdkPath="../matrix-rust-sdk/"
+rustSdkUrl="https://github.com/matrix-org/matrix-rust-sdk.git"
+rustSdkBranch="main"
+buildApp=1
+
+default_arch="$(uname -m)-linux-android"
+# On ARM MacOS, `uname -m` returns arm64, but the toolchain is called aarch64
+default_arch="${default_arch/arm64/aarch64}"
+
+target_arch="${default_arch}"
+
+sdkArg=""
+
+## Argument parsing
+
+# Use GNU getopt (required for --long support on macOS)
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    GNU_GETOPT="$(brew --prefix gnu-getopt)/bin/getopt"
+else
+    GNU_GETOPT="getopt"
+fi
+
+TEMP=$("$GNU_GETOPT" -o 'rs:b:at:h' --long 'remote,sdk:,branch:,build-app,target-arch:,help' -- "$@")
+
+if [ $? -ne 0 ]; then
+    echo 'Terminating...' >&2
+    exit 1
+fi
+
+eval set -- "$TEMP"
+unset TEMP
+
+while true; do
+    case "$1" in
+        '-r'|'--remote')
+            buildLocal=1
+            shift
+            continue
+        ;;
+        '-s'|'--sdk')
+            sdkArg="$2"
+            shift 2
+            continue
+        ;;
+        '-b'|'--branch')
+            rustSdkBranch="$2"
+            shift 2
+            continue
+        ;;
+        '-a'|'--build-app')
+            buildApp=0
+            shift
+            continue
+        ;;
+        '-t'|'--target-arch')
+            target_arch="$2"
+            shift 2
+            continue
+        ;;
+        '-h'|'--help')
+            cat << END
+SYNOPSIS
+
+    $0 [-s|--sdk=PATH] [-a|--build-app] [-t|--target-arch=TARGET]"
+
+    $0 --remote [-s|--sdk=URL] [-b|--branch=BRANCH] [-a|--build-app] [-t|--target-arch=TARGET]"
+
+ARGUMENTS
+
+    -a --build-app
+        Build the Android app after the SDK is built.
+
+    -b --branch
+        If --remote is supplied, the branch of the remote repo to build.
+
+    -r --remote
+        Fetch the SDK code from a remote repo instead of building a local version.
+
+    -s --sdk
+        The local path of the SDK to build, or the URL of the remote repo if --remote is provided.
+
+    -t --target-arch
+        The architecture for which to build the app. Defaults to the architecture of this machine (${default_arch}).
+
+EXAMPLES
+
+    $0
+        Build the default local rust SDK (../matrix-rust-sdk)
+
+    $0 --sdk=/home/andy/code/matrix-rust-sdk
+        Build the supplied local rust SDK
+
+    $0 --remote
+        Build the default remote SDK
+
+    $0 --remote --branch=featureA
+        Build the "featureA" branch of the remote SDK
+
+    $0 --remote --sdk=https://github.com/andybalaam/matrix-rust-sdk.git
+        Build an alternative remote SDK
+
+    $0 --build-app
+        Build the app after building the SDK
+
+    $0 --build-app --target-arch=x86_64-linux-android
+        Build the app after building the SDK, for the x86_64 target architecture
+
+END
+            exit 0
+        ;;
+        '--')
+            shift
+            break
+        ;;
+        *)
+            echo 'Unrecognised argument!' >&2
+            exit 2
+        ;;
+    esac
+done
+
+if [ -n "${sdkArg}" ]; then
+    if [ "${buildLocal}" == "0" ]; then
+        rustSdkPath="${sdkArg}"
+    else
+        rustSdkUrl="${sdkArg}"
+    fi
+fi
+
+#echo "buildLocal=${buildLocal}"
+#echo "rustSdkPath=${rustSdkPath}"
+#echo "rustSdkUrl=${rustSdkUrl}"
+#echo "rustSdkBranch=${rustSdkBranch}"
+#echo "buildApp=${buildApp}"
+
+## Find the date
+
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    date=$(date +%Y%m%d%H%M%S)
+else
+    date=$(gdate +%Y%m%d%H%M%S)
+fi
+
+elementPwd=$(pwd)
+
+## Check the local build dir is valid, or clone the remote repo
+
+if [ "${buildLocal}" == "0" ]; then
+    if [ ! -d "${rustSdkPath}" ]; then
+        printf "\nFolder ${rustSdkPath} does not exist. Please clone the\n" >&2
+        printf "matrix-rust-sdk repository into ../matrix-rust-sdk\n" >&2
+        printf "or supply the --sdk argument.\n\n" >&2
+        exit 3
+    fi
+else
+    printf "\n## Cloning the SDK repo...\n\n"
+
+    cd ..
+    git clone "${rustSdkUrl}" matrix-rust-sdk-"$date"
+    cd matrix-rust-sdk-"$date"
+    git checkout "${rustSdkBranch}"
+    rustSdkPath=$(pwd)
+fi
+
+cd "${elementPwd}"
+
+## Clone matrix-rust-components-kotlin if needed
+
+if [ ! -d "../matrix-rust-components-kotlin" ]; then
+    printf "\nFolder ../matrix-rust-components-kotlin does not exist."
+    printf "Cloning the repository into ../matrix-rust-components-kotlin.\n\n"
+    git clone \
+        https://github.com/matrix-org/matrix-rust-components-kotlin.git \
+        ../matrix-rust-components-kotlin
+fi
+
+printf "\n## Resetting matrix-rust-components-kotlin to the latest main...\n\n"
+
+cd ../matrix-rust-components-kotlin
+git reset --hard
+git checkout main
+git pull
+
+## Build the SDK
+
+printf "\n## Building the SDK for ${target_arch}...\n\n"
+
+./scripts/build.sh \
+    -p "${rustSdkPath}" \
+    -m sdk \
+    -t "${target_arch}" \
+    -o "${elementPwd}/libraries/rustsdk"
+
+cd "${elementPwd}"
+
+mv \
+    ./libraries/rustsdk/sdk-android-debug.aar \
+    ./libraries/rustsdk/matrix-rust-sdk.aar
+
+mkdir -p ./libraries/rustsdk/sdks
+
+cp \
+    "./libraries/rustsdk/matrix-rust-sdk.aar" \
+    "./libraries/rustsdk/sdks/matrix-rust-sdk-${date}.aar"
+
+## Build the app
+
+if [ "${buildApp}" == "0" ]; then
+    printf "\n## Building the application...\n\n"
+    ./gradlew :app:assembleGplayDebug
+fi
+
+## Clean remote checkout of SDK repo
+
+if [ "${buildLocal}" != "0" ]; then
+    printf "\n## Cleaning up...\n\n"
+    rm -rf "../matrix-rust-sdk-$date"
+fi
+
+printf "\n## Done!\n"

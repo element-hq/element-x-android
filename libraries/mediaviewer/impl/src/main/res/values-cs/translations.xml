@@ -16,6 +16,7 @@
   <string name="screen_media_details_filename">"Název souboru"</string>
   <string name="screen_media_details_no_more_files_to_show">"Žádné další soubory k zobrazení"</string>
   <string name="screen_media_details_no_more_media_to_show">"Žádná další média k zobrazení"</string>
+  <string name="screen_media_details_title">"Informace o souboru"</string>
   <string name="screen_media_details_uploaded_by">"Nahrál(a)"</string>
   <string name="screen_media_details_uploaded_on">"Nahráno"</string>
 </resources>

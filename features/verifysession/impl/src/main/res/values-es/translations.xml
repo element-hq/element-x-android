@@ -11,12 +11,12 @@
   <string name="screen_identity_use_another_device">"Usar otro dispositivo"</string>
   <string name="screen_identity_waiting_on_other_device">"Esperando en otro dispositivo…"</string>
   <string name="screen_session_verification_cancelled_subtitle">"Algo no fue bien. Se agotó el tiempo de espera de la solicitud o se rechazó."</string>
-  <string name="screen_session_verification_compare_emojis_subtitle">"Confirma que los emojis que aparecen a continuación coinciden con los que aparecen en tu otra sesión."</string>
+  <string name="screen_session_verification_compare_emojis_subtitle">"Confirma que los emojis coinciden con los que se muestran en tu otro dispositivo."</string>
   <string name="screen_session_verification_compare_emojis_title">"Comparar emojis"</string>
   <string name="screen_session_verification_compare_emojis_user_subtitle">"Confirma que los emojis que aparecen a continuación coinciden con los mostrados en el dispositivo del otro usuario."</string>
   <string name="screen_session_verification_compare_numbers_subtitle">"Confirma que los números que aparecen a continuación coinciden con los mostrados en tu otra sesión."</string>
   <string name="screen_session_verification_compare_numbers_title">"Comparar números"</string>
-  <string name="screen_session_verification_complete_subtitle">"Tu nueva sesión ya está verificada. Tienes acceso a tus mensajes cifrados y otros usuarios lo considerarán de confianza."</string>
+  <string name="screen_session_verification_complete_subtitle">"Ahora puedes leer o enviar mensajes de forma segura en tu otro dispositivo."</string>
   <string name="screen_session_verification_complete_user_subtitle">"Ahora puedes confiar en la identidad de este usuario al enviar o recibir mensajes."</string>
   <string name="screen_session_verification_device_verified">"Dispositivo verificado"</string>
   <string name="screen_session_verification_enter_recovery_key">"Introduce la clave de recuperación"</string>
@@ -33,7 +33,7 @@
   <string name="screen_session_verification_request_failure_title">"Verificación fallida"</string>
   <string name="screen_session_verification_request_footer">"Continúa solo si has iniciado esta verificación."</string>
   <string name="screen_session_verification_request_subtitle">"Verifica el otro dispositivo para mantener seguro tu historial de mensajes."</string>
-  <string name="screen_session_verification_request_success_subtitle">"Tu nueva sesión ya está verificada. Tienes acceso a tus mensajes cifrados y otros usuarios lo considerarán de confianza."</string>
+  <string name="screen_session_verification_request_success_subtitle">"Ahora puedes leer o enviar mensajes de forma segura en tu otro dispositivo."</string>
   <string name="screen_session_verification_request_success_title">"Dispositivo verificado"</string>
   <string name="screen_session_verification_request_title">"Verificación solicitada"</string>
   <string name="screen_session_verification_they_dont_match">"No coinciden"</string>

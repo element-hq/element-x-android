@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_join_room_ban_by_message">"Du bannades från det här rummet av %1$s."</string>
-  <string name="screen_join_room_ban_message">"Du bannades från det här rummet"</string>
+  <string name="screen_join_room_ban_by_message">"Du bannades av %1$s."</string>
+  <string name="screen_join_room_ban_message">"Du bannades"</string>
   <string name="screen_join_room_ban_reason">"Anledning: %1$s."</string>
   <string name="screen_join_room_cancel_knock_action">"Avbryt begäran"</string>
   <string name="screen_join_room_cancel_knock_alert_confirmation">"Ja, avbryt"</string>
@@ -11,10 +11,10 @@
   <string name="screen_join_room_decline_and_block_alert_message">"Är du säker på att du vill avvisa inbjudan att gå med i det här rummet? Detta kommer också att hindra %1$s från att kontakta dig eller bjuda in dig till rum."</string>
   <string name="screen_join_room_decline_and_block_alert_title">"Avvisa inbjudan och blockera"</string>
   <string name="screen_join_room_decline_and_block_button_title">"Avvisa och blockera"</string>
-  <string name="screen_join_room_fail_message">"Misslyckades att gå med i rummet."</string>
-  <string name="screen_join_room_fail_reason">"Detta rum är antingen endast för inbjudna eller så kan det finnas begränsningar för åtkomst på utrymmesnivå."</string>
-  <string name="screen_join_room_forget_action">"Glöm det här rummet"</string>
-  <string name="screen_join_room_invite_required_message">"Du behöver en inbjudan för att gå med i detta rum"</string>
+  <string name="screen_join_room_fail_message">"Misslyckades att gå med."</string>
+  <string name="screen_join_room_fail_reason">"Du måste antingen bli inbjuden att gå med eller så kan det finnas åtkomstbegränsningar."</string>
+  <string name="screen_join_room_forget_action">"Glöm"</string>
+  <string name="screen_join_room_invite_required_message">"Du behöver en inbjudan för att gå med"</string>
   <string name="screen_join_room_join_action">"Gå med"</string>
   <string name="screen_join_room_join_restricted_message">"Du kan behöva bli inbjuden eller vara medlem i ett utrymme för att gå med."</string>
   <string name="screen_join_room_knock_action">"Knacka för att gå med"</string>

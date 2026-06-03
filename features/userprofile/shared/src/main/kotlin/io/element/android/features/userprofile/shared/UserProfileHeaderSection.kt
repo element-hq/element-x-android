@@ -37,6 +37,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.modifiers.niceClickable
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -140,7 +141,7 @@ internal fun UserProfileHeaderSectionPreview() = ElementPreview {
     UserProfileHeaderSection(
         avatarUrl = null,
         userId = UserId("@alice:example.com"),
-        userName = "Alice",
+        userName = USER_NAME_ALICE,
         verificationState = UserProfileVerificationState.VERIFIED,
         openAvatarPreview = {},
         onUserIdClick = {},
@@ -154,7 +155,7 @@ internal fun UserProfileHeaderSectionWithVerificationViolationPreview() = Elemen
     UserProfileHeaderSection(
         avatarUrl = null,
         userId = UserId("@alice:example.com"),
-        userName = "Alice",
+        userName = USER_NAME_ALICE,
         verificationState = UserProfileVerificationState.VERIFICATION_VIOLATION,
         openAvatarPreview = {},
         onUserIdClick = {},

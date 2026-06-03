@@ -11,13 +11,16 @@ package io.element.android.libraries.push.impl.history
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.push.impl.db.PushRequest
+import io.element.android.libraries.push.impl.push.PushRequestStatus
+import kotlin.time.Instant
 
 interface PushHistoryService {
     /**
      * Create a new push history entry.
      * Do not use directly, prefer using the extension functions.
      */
-    fun onPushReceived(
+    fun onPushResult(
         providerInfo: String,
         eventId: EventId?,
         roomId: RoomId?,
@@ -26,12 +29,33 @@ interface PushHistoryService {
         includeDeviceState: Boolean,
         comment: String?,
     )
+
+    /**
+     * Adds or replaces an existing [PushRequest] in the local database.
+     */
+    suspend fun insertOrUpdatePushRequest(pushRequest: PushRequest): Result<Unit>
+
+    /**
+     * Replace a list of [PushRequest] in the database.
+     */
+    suspend fun insertOrUpdatePushRequests(pushRequests: List<PushRequest>): Result<Unit>
+
+    /**
+     * Gets [PushRequestStatus.PENDING] push requests from the local database for a [SessionId].
+     * A [since] param can optionally be provided to only return those received after that date.
+     */
+    suspend fun getPendingPushRequests(sessionId: SessionId, since: Instant?): Result<List<PushRequest>>
+
+    /**
+     * Removes the oldest push requests for a [SessionId].
+     */
+    suspend fun removeOldPushRequests(sessionId: SessionId): Result<Unit>
 }
 
 fun PushHistoryService.onInvalidPushReceived(
     providerInfo: String,
     data: String,
-) = onPushReceived(
+) = onPushResult(
     providerInfo = providerInfo,
     eventId = null,
     roomId = null,
@@ -46,7 +70,7 @@ fun PushHistoryService.onUnableToRetrieveSession(
     eventId: EventId,
     roomId: RoomId,
     reason: String,
-) = onPushReceived(
+) = onPushResult(
     providerInfo = providerInfo,
     eventId = eventId,
     roomId = roomId,
@@ -62,7 +86,7 @@ fun PushHistoryService.onUnableToResolveEvent(
     roomId: RoomId,
     sessionId: SessionId,
     reason: String,
-) = onPushReceived(
+) = onPushResult(
     providerInfo = providerInfo,
     eventId = eventId,
     roomId = roomId,
@@ -78,7 +102,7 @@ fun PushHistoryService.onSuccess(
     roomId: RoomId,
     sessionId: SessionId,
     comment: String?,
-) = onPushReceived(
+) = onPushResult(
     providerInfo = providerInfo,
     eventId = eventId,
     roomId = roomId,
@@ -95,7 +119,7 @@ fun PushHistoryService.onSuccess(
 
 fun PushHistoryService.onDiagnosticPush(
     providerInfo: String,
-) = onPushReceived(
+) = onPushResult(
     providerInfo = providerInfo,
     eventId = null,
     roomId = null,

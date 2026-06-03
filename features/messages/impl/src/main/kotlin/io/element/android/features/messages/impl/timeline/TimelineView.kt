@@ -47,10 +47,12 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureView
+import io.element.android.features.messages.impl.timeline.components.FloatingDateBadgeOverlay
 import io.element.android.features.messages.impl.timeline.components.TimelineItemRow
 import io.element.android.features.messages.impl.timeline.components.toText
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
@@ -75,13 +77,14 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.libraries.ui.utils.time.isTalkbackActive
+import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -100,11 +103,11 @@ fun TimelineView(
     onReactionLongClick: (emoji: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
-    onJoinCallClick: () -> Unit,
     modifier: Modifier = Modifier,
     lazyListState: LazyListState = rememberLazyListState(),
     forceJumpToBottomVisibility: Boolean = false,
     nestedScrollConnection: NestedScrollConnection = rememberNestedScrollInteropConnection(),
+    floatingDateTopOffset: Dp = 0.dp,
 ) {
     fun clearFocusRequestState() {
         state.eventSink(TimelineEvent.ClearFocusRequestState)
@@ -183,7 +186,6 @@ fun TimelineView(
                         onMoreReactionsClick = onMoreReactionsClick,
                         onReadReceiptClick = onReadReceiptClick,
                         onSwipeToReply = onSwipeToReply,
-                        onJoinCallClick = onJoinCallClick,
                         eventSink = state.eventSink,
                     )
                 }
@@ -210,6 +212,15 @@ fun TimelineView(
                 onJumpToLive = ::onJumpToLive,
                 onFocusEventRender = ::onFocusEventRender,
             )
+
+            if (useReverseLayout) {
+                FloatingDateBadgeOverlay(
+                    lazyListState = lazyListState,
+                    timelineItems = state.timelineItems,
+                    isLive = state.isLive,
+                    topOffset = floatingDateTopOffset,
+                )
+            }
         }
     }
 
@@ -250,11 +261,16 @@ private fun TimelinePrefetchingHelper(
             firstVisibleItemIndex + layoutInfo.visibleItemsInfo.size >= layoutInfo.totalItemsCount - 40
         }
 
+        // If we have no timeline items, we need to back paginate to load some messages. This usually happens on all timelines except for live ones.
+        // This automatic pagination was previously done by the SDK, and we received a `Reset` update, but now we need to do it ourselves.
+        val isEmptyTimelineFlow = layoutInfoFlow.map { it.totalItemsCount == 0 }
+
         combine(
             isCloseToStartOfLoadedTimelineFlow.distinctUntilChanged(),
             isScrollingFlow.distinctUntilChanged(),
-        ) { needsPrefetch, isScrolling ->
-            needsPrefetch && isScrolling
+            isEmptyTimelineFlow,
+        ) { needsPrefetch, isScrolling, isEmptyAndNeedsBackPagination ->
+            isEmptyAndNeedsBackPagination || needsPrefetch && isScrolling
         }
             .distinctUntilChanged()
             .collectLatest { needsPrefetch ->
@@ -413,7 +429,6 @@ internal fun TimelineViewPreview(
             onReactionLongClick = { _, _ -> },
             onMoreReactionsClick = {},
             onReadReceiptClick = {},
-            onJoinCallClick = {},
             forceJumpToBottomVisibility = true,
         )
     }

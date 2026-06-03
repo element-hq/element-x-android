@@ -23,7 +23,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FabPosition
-import androidx.compose.material3.FloatingToolbarDefaults.ScreenOffset
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -200,51 +199,44 @@ private fun HomeScaffold(
             )
         },
         floatingActionButton = {
-            if (state.showNavigationBar) {
-                val coroutineScope = rememberCoroutineScope()
-                HomeBottomBar(
-                    currentHomeNavigationBarItem = state.currentHomeNavigationBarItem,
-                    onItemClick = { item ->
-                        // scroll to top if selecting the same item
-                        if (item == state.currentHomeNavigationBarItem) {
-                            val lazyListStateTarget = when (item) {
-                                HomeNavigationBarItem.Chats -> roomsLazyListState
-                                HomeNavigationBarItem.Spaces -> spacesLazyListState
-                            }
-                            coroutineScope.launch {
-                                if (lazyListStateTarget.firstVisibleItemIndex > 10) {
-                                    lazyListStateTarget.scrollToItem(10)
-                                }
-                                // Also reset the scrollBehavior height offset as it's not triggered by programmatic scrolls
-                                scrollBehavior.state.heightOffset = 0f
-                                lazyListStateTarget.animateScrollToItem(0)
-                            }
-                        } else {
-                            state.eventSink(HomeEvent.SelectHomeNavigationBarItem(item))
+            val coroutineScope = rememberCoroutineScope()
+            HomeBottomBar(
+                currentHomeNavigationBarItem = state.currentHomeNavigationBarItem,
+                onItemClick = { item ->
+                    // scroll to top if selecting the same item
+                    if (item == state.currentHomeNavigationBarItem) {
+                        val lazyListStateTarget = when (item) {
+                            HomeNavigationBarItem.Chats -> roomsLazyListState
+                            HomeNavigationBarItem.Spaces -> spacesLazyListState
                         }
-                    },
-                    floatingActionButton = when (state.currentHomeNavigationBarItem) {
+                        coroutineScope.launch {
+                            if (lazyListStateTarget.firstVisibleItemIndex > 10) {
+                                lazyListStateTarget.scrollToItem(10)
+                            }
+                            // Also reset the scrollBehavior height offset as it's not triggered by programmatic scrolls
+                            scrollBehavior.state.heightOffset = 0f
+                            lazyListStateTarget.animateScrollToItem(0)
+                        }
+                    } else {
+                        state.eventSink(HomeEvent.SelectHomeNavigationBarItem(item))
+                    }
+                },
+                floatingActionButton = {
+                    when (state.currentHomeNavigationBarItem) {
                         HomeNavigationBarItem.Chats -> {
-                            {
-                                HomeFloatingActionButton(onStartChatClick, CommonStrings.action_create_room)
-                            }
+                            HomeFloatingActionButton(onStartChatClick, CommonStrings.action_create_room)
                         }
-                        HomeNavigationBarItem.Spaces -> if (state.homeSpacesState.canCreateSpaces) {
-                            {
-                                HomeFloatingActionButton(onCreateSpaceClick, CommonStrings.action_create_space)
-                            }
-                        } else {
-                            // No FAB for spaces if we cannot create spaces
-                            null
+                        HomeNavigationBarItem.Spaces -> {
+                            HomeFloatingActionButton(onCreateSpaceClick, CommonStrings.action_create_space)
                         }
-                    },
-                )
-            }
+                    }
+                },
+            )
         },
         floatingActionButtonPosition = FabPosition.Center,
         content = { padding ->
             val contentPadding = PaddingValues(
-                bottom = 112.dp,
+                bottom = 96.dp,
             )
             when (state.currentHomeNavigationBarItem) {
                 HomeNavigationBarItem.Chats -> {
@@ -324,7 +316,6 @@ private fun HomeBottomBar(
     HorizontalFloatingToolbar(
         floatingActionButton = floatingActionButton,
         modifier = modifier
-            .padding(bottom = ScreenOffset)
             .zIndex(1f),
     ) {
         HomeNavigationBarItem.entries.forEachIndexed { index, item ->

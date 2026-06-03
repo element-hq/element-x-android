@@ -8,8 +8,12 @@
 package io.element.android.libraries.matrix.test.mxc
 
 import io.element.android.libraries.matrix.api.mxc.MxcTools
-import io.element.android.libraries.matrix.impl.mxc.DefaultMxcTools
+import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeMxcTools(
-    private val delegate: MxcTools = DefaultMxcTools()
-) : MxcTools by delegate
+    private val mxcUri2FilePathResult: (String) -> String? = { lambdaError() }
+) : MxcTools {
+    override fun mxcUri2FilePath(mxcUri: String): String? {
+        return mxcUri2FilePathResult(mxcUri)
+    }
+}

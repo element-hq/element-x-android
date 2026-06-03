@@ -21,7 +21,6 @@ internal data class ComposerAlertMoleculeParams(
 
 internal class ComposerAlertMoleculeParamsProvider : PreviewParameterProvider<ComposerAlertMoleculeParams> {
     private val allLevels = sequenceOf(
-        ComposerAlertLevel.Default,
         ComposerAlertLevel.Info,
         ComposerAlertLevel.Critical
     )

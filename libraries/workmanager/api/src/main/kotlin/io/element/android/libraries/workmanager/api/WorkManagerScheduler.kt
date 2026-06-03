@@ -11,9 +11,21 @@ package io.element.android.libraries.workmanager.api
 import io.element.android.libraries.matrix.api.core.SessionId
 
 interface WorkManagerScheduler {
-    fun submit(workManagerRequest: WorkManagerRequest)
+    /**
+     * Submits a new work request built from [workManagerRequestBuilder] to run in `WorkManager`.
+     */
+    suspend fun submit(workManagerRequestBuilder: WorkManagerRequestBuilder)
+
+    /**
+     * Checks if there are any pending requests scheduled for the provided [sessionId] and [requestType].
+     */
     fun hasPendingWork(sessionId: SessionId, requestType: WorkManagerRequestType): Boolean
-    fun cancel(sessionId: SessionId)
+
+    /**
+     * Cancel pending work requests for the session [SessionId].
+     * If [requestType] is provided, it will only cancel requests for that type, otherwise it will cancel all requests.
+     */
+    fun cancel(sessionId: SessionId, requestType: WorkManagerRequestType? = null)
 }
 
 fun workManagerTag(sessionId: SessionId, requestType: WorkManagerRequestType): String {

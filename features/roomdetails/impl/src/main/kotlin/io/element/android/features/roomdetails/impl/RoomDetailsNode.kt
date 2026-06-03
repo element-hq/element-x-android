@@ -29,6 +29,7 @@ import io.element.android.libraries.architecture.appyx.launchMolecule
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
@@ -41,12 +42,13 @@ import io.element.android.libraries.androidutils.R as AndroidUtilsR
 class RoomDetailsNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: RoomDetailsPresenter,
+    presenterFactory: RoomDetailsPresenter.Factory,
     private val room: BaseRoom,
     private val analyticsService: AnalyticsService,
     private val leaveRoomRenderer: LeaveRoomRenderer,
-) : Node(buildContext, plugins = plugins) {
+) : Node(buildContext, plugins = plugins), RoomDetailsNavigator {
     interface Callback : Plugin {
+        fun navigateBack()
         fun navigateToRoomMemberList()
         fun navigateToInviteMembers()
         fun navigateToRoomDetailsEdit()
@@ -59,11 +61,12 @@ class RoomDetailsNode(
         fun navigateToKnockRequestsList()
         fun navigateToSecurityAndPrivacy()
         fun navigateToRoomMemberDetails(userId: UserId)
-        fun navigateToRoomCall()
+        fun navigateToRoomCall(callIntent: CallIntent)
         fun navigateToReportRoom()
         fun navigateToSelectNewOwnersWhenLeaving()
     }
 
+    private val presenter = presenterFactory.create(this)
     private val callback: Callback = callback()
 
     init {
@@ -142,5 +145,9 @@ class RoomDetailsNode(
                 )
             }
         )
+    }
+
+    override fun onDone() {
+        callback.navigateBack()
     }
 }

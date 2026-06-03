@@ -15,6 +15,11 @@
   </plurals>
   <string name="notification_error_unified_push_unregistered_android">"Le distributeur de notifications UnifiedPush n’a pas pu être enregistré, vous ne recevrez donc plus de notifications. Veuillez vérifier les paramètres de notification de l’application et l’état du distributeur."</string>
   <string name="notification_fallback_content">"Vous avez de nouveau(x) message(s)."</string>
+  <plurals name="notification_fallback_n_content">
+    <item quantity="one">"Vous avez %d nouveau message."</item>
+    <item quantity="other">"Vous avez %d nouveaux messages."</item>
+  </plurals>
+  <string name="notification_incoming_audio_call">"📞 Appel entrant"</string>
   <string name="notification_incoming_call">"📹 Appel entrant"</string>
   <string name="notification_inline_reply_failed">"** Échec de l’envoi - veuillez ouvrir le salon"</string>
   <string name="notification_invitation_action_join">"Rejoindre"</string>

@@ -8,10 +8,20 @@
   </plurals>
   <string name="screen_leave_space_subtitle">"Tämä poistaa sinut myös kaikista tämän tilan huoneista."</string>
   <string name="screen_leave_space_subtitle_last_admin">"Sinun on valittava tälle tilalle toinen ylläpitäjä ennen kuin voit poistua."</string>
+  <string name="screen_leave_space_subtitle_last_owner">"Olet tilan %1$s ainoa omistaja. Sinun on siirrettävä omistajuus jollekin toiselle ennen lähtöäsi."</string>
   <string name="screen_leave_space_subtitle_only_last_admin">"Sinua ei poisteta seuraavista huoneista, koska olet ainoa ylläpitäjä:"</string>
   <string name="screen_leave_space_title">"Haluatko poistua tilasta %1$s?"</string>
   <string name="screen_leave_space_title_last_admin">"Olet ainoa ylläpitäjä tilassa %1$s"</string>
+  <string name="screen_leave_space_title_last_owner">"Siirrä omistajuus"</string>
+  <string name="screen_space_add_room_action">"Huone"</string>
+  <string name="screen_space_add_rooms_room_access_description">"Huoneen lisääminen ei vaikuta huoneen käyttöoikeuksiin. Voit muuttaa käyttöoikeuksia kohdassa Huoneen asetukset &gt; Turvallisuus ja yksityisyys."</string>
+  <string name="screen_space_empty_state_title">"Lisää ensimmäinen huoneesi"</string>
   <string name="screen_space_menu_action_members">"Näytä jäsenet"</string>
+  <string name="screen_space_remove_rooms_confirmation_content">"Huoneen poistaminen ei vaikuta huoneen käyttöoikeuksiin. Voit muuttaa käyttöoikeuksia kohdassa Huoneen asetukset &gt; Turvallisuus ja yksityisyys."</string>
+  <plurals name="screen_space_remove_rooms_confirmation_title">
+    <item quantity="one">"Poista %1$d huone tilasta %2$s"</item>
+    <item quantity="other">"Poista %1$d huonetta tilasta %2$s"</item>
+  </plurals>
   <string name="screen_space_settings_leave_space">"Poistu tilasta"</string>
   <string name="screen_space_settings_roles_and_permissions">"Roolit ja oikeudet"</string>
   <string name="screen_space_settings_security_and_privacy">"Turvallisuus ja yksityisyys"</string>

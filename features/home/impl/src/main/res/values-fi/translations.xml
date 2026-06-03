@@ -5,11 +5,11 @@
   <string name="banner_battery_optimization_title_android">"Eikö ilmoitukset tule perille?"</string>
   <string name="banner_new_sound_message">"Ilmoitusääni on päivitetty — selkeämpi, nopeampi ja vähemmän häiritsevä."</string>
   <string name="banner_new_sound_title">"Olemme päivittäneet äänesi"</string>
-  <string name="banner_set_up_recovery_content">"Palauta kryptografinen identiteettisi ja viestihistoriasi palautusavaimella, mikäli menetät pääsyn kaikkiin laitteisiisi."</string>
-  <string name="banner_set_up_recovery_submit">"Ota palautus käyttöön"</string>
-  <string name="banner_set_up_recovery_title">"Ota palautus käyttöön tilisi suojaamiseksi"</string>
+  <string name="banner_set_up_recovery_content">"Keskustelusi varmuuskopioidaan automaattisesti päästä päähän -salauksella. Jotta voit palauttaa tämän varmuuskopion ja säilyttää digitaalisen identiteettisi, kun menetät pääsyn kaikkiin laitteisiisi, tarvitset palautusavaimesi."</string>
+  <string name="banner_set_up_recovery_submit">"Hanki palautusavain"</string>
+  <string name="banner_set_up_recovery_title">"Varmuuskopioi keskustelusi"</string>
   <string name="confirm_recovery_key_banner_message">"Vahvista palautusavaimesi, jotta pääset edelleen käyttämään avainten säilytystä ja viestihistoriaa."</string>
-  <string name="confirm_recovery_key_banner_primary_button_title">"Syötä palautusavaimesi"</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"Anna palautusavaimesi"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Unohditko palautusavaimesi?"</string>
   <string name="confirm_recovery_key_banner_title">"Avainten säilytys ei ole synkronoitu"</string>
   <string name="full_screen_intent_banner_message">"Salli koko näytön ilmoitukset, kun laite on lukittu, jos et halua koskaan missata tärkeää puhelua."</string>
@@ -50,6 +50,7 @@ Sinulla ei ole lukemattomia viestejä!"</string>
   <string name="screen_roomlist_mark_as_read">"Merkitse luetuksi"</string>
   <string name="screen_roomlist_mark_as_unread">"Merkitse lukemattomaksi"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Tämä huone on päivitetty"</string>
+  <string name="screen_roomlist_your_spaces">"Tilasi"</string>
   <string name="session_verification_banner_message">"Vaikuttaisi siltä, että käytät uutta laitetta. Vahvista toisella laitteella nähdäksesi salatut viestit."</string>
   <string name="session_verification_banner_title">"Vahvista, että se olet sinä"</string>
 </resources>

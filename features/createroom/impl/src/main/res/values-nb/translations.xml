@@ -3,21 +3,34 @@
   <string name="screen_create_room_action_create_room">"Nytt rom"</string>
   <string name="screen_create_room_add_people_title">"Inviter folk"</string>
   <string name="screen_create_room_error_creating_room">"Det oppsto en feil under opprettelsen av rommet"</string>
+  <string name="screen_create_room_error_creating_space">"Området kunne ikke opprettes på grunn av en ukjent feil. Prøv på nytt senere."</string>
   <string name="screen_create_room_name_placeholder">"Legg til navn…"</string>
   <string name="screen_create_room_new_room_title">"Nytt rom"</string>
   <string name="screen_create_room_new_space_title">"Nytt område"</string>
   <string name="screen_create_room_private_option_description">"Bare inviterte personer kan bli med."</string>
+  <string name="screen_create_room_private_option_title">"Privat"</string>
   <string name="screen_create_room_public_option_description">"Alle kan finne dette rommet.
 Du kan endre dette når som helst i rominnstillingene."</string>
   <string name="screen_create_room_public_option_short_description">"Alle kan bli med."</string>
+  <string name="screen_create_room_public_option_title">"Offentlig"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Alle kan be om å få bli med, men en administrator eller moderator må godta forespørselen."</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Be om å bli med"</string>
+  <string name="screen_create_room_room_access_section_knocking_restricted_option_description">"Alle i %1$s kan bli med, mens alle andre må be om tilgang."</string>
+  <string name="screen_create_room_room_access_section_knocking_restricted_option_title">"Be om å få bli med"</string>
   <string name="screen_create_room_room_access_section_private_option_description">"Bare inviterte personer kan bli med."</string>
+  <string name="screen_create_room_room_access_section_private_option_title">"Privat"</string>
   <string name="screen_create_room_room_access_section_public_option_description">"Alle kan bli med."</string>
+  <string name="screen_create_room_room_access_section_public_option_title">"Offentlig"</string>
+  <string name="screen_create_room_room_access_section_restricted_option_description">"Alle i %1$s kan bli med."</string>
+  <string name="screen_create_room_room_access_section_restricted_option_title">"Standard"</string>
   <string name="screen_create_room_room_access_section_title">"Hvem har tilgang"</string>
   <string name="screen_create_room_room_address_section_footer">"Du trenger en adresse for å gjøre den synlig i den offentlige katalogen."</string>
   <string name="screen_create_room_room_address_section_title">"Adresse"</string>
   <string name="screen_create_room_room_visibility_section_title">"Romsynlighet"</string>
+  <string name="screen_create_room_space_selection_no_space_description">"(ingen område)"</string>
+  <string name="screen_create_room_space_selection_no_space_option">"Skal ikke legges til et område"</string>
+  <string name="screen_create_room_space_selection_no_space_title">"Ingen områder valgt"</string>
+  <string name="screen_create_room_space_selection_sheet_title">"Legg til området"</string>
   <string name="screen_create_room_topic_label">"Emne (valgfritt)"</string>
   <string name="screen_create_room_topic_placeholder">"Legg til beskrivelse…"</string>
 </resources>

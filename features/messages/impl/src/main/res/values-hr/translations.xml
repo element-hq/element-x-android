@@ -35,7 +35,7 @@
   <string name="screen_room_attachment_source_camera_video">"Snimi videozapis"</string>
   <string name="screen_room_attachment_source_files">"Privitak"</string>
   <string name="screen_room_attachment_source_gallery">"Biblioteka fotografija i videozapisa"</string>
-  <string name="screen_room_attachment_source_location">"Lokacija"</string>
+  <string name="screen_room_attachment_source_location">"Dijeli lokaciju"</string>
   <string name="screen_room_attachment_source_poll">"Anketa"</string>
   <string name="screen_room_attachment_text_formatting">"Oblikovanje teksta"</string>
   <string name="screen_room_encrypted_history_banner">"Povijest poruka trenutačno nije dostupna."</string>

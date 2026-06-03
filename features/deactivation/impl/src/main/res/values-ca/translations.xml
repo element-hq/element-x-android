@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_deactivate_account_confirmation_dialog_content">"Si us plau, confirma que vols desactivar el teu compte. Aquesta acció no es pot desfer."</string>
+  <string name="screen_deactivate_account_delete_all_messages">"Elimina tots els meus missatges"</string>
+  <string name="screen_deactivate_account_delete_all_messages_notice">"Avís: els futurs usuaris podrien veure converses incompletes."</string>
+  <string name="screen_deactivate_account_description">"La desactivació del compte és %1$s, implica:"</string>
+  <string name="screen_deactivate_account_description_bold_part">"irreversible"</string>
+  <string name="screen_deactivate_account_list_item_1">"%1$s el compte (no podràs tornar a iniciar sessió i el teu ID no es podrà reutilitzar)."</string>
+  <string name="screen_deactivate_account_list_item_1_bold_part">"Desactiva permanentment"</string>
+  <string name="screen_deactivate_account_list_item_2">"Se t\'eliminarà de totes les sales o xats."</string>
+  <string name="screen_deactivate_account_list_item_3">"S\'eliminarà la informació del compte del nostre servidor d\'identitat."</string>
+  <string name="screen_deactivate_account_list_item_4">"Els teus missatges continuaran sent visibles per als usuaris registrats, però no estaran disponibles per a usuaris nous o no registrats si decideixes eliminar-los."</string>
+</resources>

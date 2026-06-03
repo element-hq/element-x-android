@@ -36,6 +36,11 @@ interface RoomListService {
     }
 
     /**
+     * Indicates whether the initial sliding sync request is done or not.
+     */
+    val isInitialSyncDone: Boolean
+
+    /**
      * Creates a room list that can be used to load more rooms and filter them dynamically.
      * @param pageSize the number of rooms to load at once.
      * @param source the source of the rooms, either all rooms or invites.

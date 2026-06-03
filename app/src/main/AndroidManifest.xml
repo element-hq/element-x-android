@@ -75,7 +75,7 @@
                     android:scheme="elementx" />
             </intent-filter>
             <!--
-              Oidc redirection
+              OAuth redirection
             -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -117,20 +117,6 @@
                 <!-- Matching asset file: https://mobile.element.io/.well-known/assetlinks.json -->
                 <data android:host="mobile.element.io" />
                 <data android:path="/element/" />
-            </intent-filter>
-            <!--
-              matrix.to links
-              Note: On Android 12 and higher clicking a web link (that is not an Android App Link) always shows content in a web browser
-              https://developer.android.com/training/app-links#web-links
-            -->
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="https" />
-                <data android:host="matrix.to" />
             </intent-filter>
             <!--
               matrix: links

@@ -9,5 +9,4 @@
   <string name="screen_identity_use_another_device">"Използване на друго устройство"</string>
   <string name="screen_notification_optin_subtitle">"Можете да промените настройките си по-късно."</string>
   <string name="screen_notification_optin_title">"Разрешете известията и никога не пропускайте съобщение"</string>
-  <string name="screen_session_verification_enter_recovery_key">"Въвеждане на ключ за възстановяване"</string>
 </resources>

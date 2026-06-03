@@ -23,7 +23,6 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
-import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 @Composable
 internal fun VoiceMessageRecorderButtonIcon(
@@ -43,7 +42,7 @@ private fun StartButton(
 ) {
     Icon(
         modifier = modifier.size(24.dp),
-        imageVector = CompoundIcons.MicOn(),
+        imageVector = CompoundIcons.MicOnSolid(),
         // Note: accessibility is managed in TextComposer.
         contentDescription = null,
         tint = ElementTheme.colors.iconSecondary,
@@ -65,7 +64,7 @@ private fun StopButton(
     ) {
         Icon(
             modifier = Modifier.size(24.dp),
-            resourceId = CommonDrawables.ic_stop,
+            imageVector = CompoundIcons.StopSolid(),
             // Note: accessibility is managed in TextComposer.
             contentDescription = null,
             tint = ElementTheme.colors.iconOnSolidPrimary,

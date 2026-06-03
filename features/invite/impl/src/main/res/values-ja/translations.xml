@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_decline_and_block_block_user_option_description">"このユーザーからのメッセージと招待を非表示します"</string>
+  <string name="screen_decline_and_block_block_user_option_title">"ユーザーをブロック"</string>
+  <string name="screen_decline_and_block_report_user_option_description">"アカウント提供元にこのルームを報告"</string>
+  <string name="screen_decline_and_block_report_user_reason_placeholder">"報告の理由を説明してください…"</string>
+  <string name="screen_decline_and_block_title">"拒否してブロック"</string>
+  <string name="screen_invites_decline_chat_message">"%1$sへの招待を本当に破棄しますか？"</string>
+  <string name="screen_invites_decline_chat_title">"招待を破棄"</string>
+  <string name="screen_invites_decline_direct_chat_message">"%1$sとのチャットを本当に拒否しますか？"</string>
+  <string name="screen_invites_decline_direct_chat_title">"チャットを拒否"</string>
+  <string name="screen_invites_empty_list">"招待はありません"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) があなたを招待しました"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"拒否してブロックする"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"本当にこのルームへの参加の招待を拒否しますか？%1$s は、あなたと会話することやルームに招待することができなくなります。"</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"招待を拒否してブロック"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"拒否してブロック"</string>
+</resources>

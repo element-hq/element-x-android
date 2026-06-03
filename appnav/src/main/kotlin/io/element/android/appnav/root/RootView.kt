@@ -22,7 +22,7 @@ import io.element.android.features.rageshake.api.detection.RageshakeDetectionVie
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.services.apperror.impl.AppErrorView
+import io.element.android.services.apperror.api.AppErrorView
 
 @Composable
 fun RootView(

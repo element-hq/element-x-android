@@ -198,7 +198,6 @@
   <string name="common_current_user_left_room">"Wedi gadael yr ystafell"</string>
   <string name="common_current_user_left_space">"Gofod chwith"</string>
   <string name="common_current_user_rejected_invite">"Wedi gwrthod y gwahoddiad"</string>
-  <string name="common_dark">"Tywyll"</string>
   <string name="common_decryption_error">"Gwall dadgryptio"</string>
   <string name="common_description">"Disgrifiad"</string>
   <string name="common_developer_options">"Dewisiadau datblygwr"</string>
@@ -235,7 +234,6 @@ Rheswm: %1$s."</string>
   <string name="common_install_apk_android">"Gosod APK"</string>
   <string name="common_invite_unknown_profile">"Nid oes modd dod o hyd i\'r ID Matrics hwn, felly mae\'n bosibl na fydd y gwahoddiad yn cael ei dderbyn."</string>
   <string name="common_leaving_room">"Gadael ystafell"</string>
-  <string name="common_light">"Golau"</string>
   <string name="common_line_copied_to_clipboard">"Llinell wedi\'i chopïo i\'r clipfwrdd"</string>
   <string name="common_link_copied_to_clipboard">"Dolen wedi\'i chopïo i\'r clipfwrdd"</string>
   <string name="common_loading">"Yn Llwytho…"</string>
@@ -309,7 +307,6 @@ Rheswm: %1$s."</string>
     <item quantity="other">"%1$d ateb"</item>
   </plurals>
   <string name="common_replying_to">"Yn ymateb i %1$s"</string>
-  <string name="common_report_a_bug">"Adrodd ar wall"</string>
   <string name="common_report_a_problem">"Adrodd am broblem"</string>
   <string name="common_report_submitted">"Adroddiad wedi ei gyflwyno"</string>
   <string name="common_rich_text_editor">"Golygydd testun cyfoethog"</string>
@@ -360,7 +357,6 @@ Rheswm: %1$s."</string>
   <string name="common_success">"Llwyddiant"</string>
   <string name="common_suggestions">"Awgrymiadau"</string>
   <string name="common_syncing">"Cydweddu"</string>
-  <string name="common_system">"System"</string>
   <string name="common_text">"Testun"</string>
   <string name="common_third_party_notices">"Hysbysiadau trydydd parti"</string>
   <string name="common_thread">"Edefyn"</string>

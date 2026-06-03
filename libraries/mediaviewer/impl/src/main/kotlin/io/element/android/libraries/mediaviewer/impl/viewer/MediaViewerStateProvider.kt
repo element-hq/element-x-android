@@ -13,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.media.WaveFormSamples
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -25,9 +26,17 @@ import io.element.android.libraries.mediaviewer.api.anAudioMediaInfo
 import io.element.android.libraries.mediaviewer.api.anImageMediaInfo
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
-import io.element.android.libraries.mediaviewer.impl.details.aMediaDeleteConfirmationState
-import io.element.android.libraries.mediaviewer.impl.details.aMediaDetailsBottomSheetState
+import io.element.android.libraries.mediaviewer.impl.details.aMediaBottomSheetStateDeleteConfirmation
+import io.element.android.libraries.mediaviewer.impl.details.aMediaBottomSheetStateDetails
 import kotlinx.collections.immutable.toImmutableList
+
+private const val LONG_CAPTION = "This is a very long caption that should be scrollable in the media viewer. " +
+    "It contains multiple lines of text to demonstrate the scrolling behavior. " +
+    "Line 1: Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
+    "Line 2: Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +
+    "Line 3: Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris. " +
+    "Line 4: Duis aute irure dolor in reprehenderit in voluptate velit esse cillum. " +
+    "Line 5: Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia."
 
 open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState> {
     override val values: Sequence<MediaViewerState>
@@ -133,10 +142,10 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
                 )
             },
             aMediaViewerState(
-                mediaBottomSheetState = aMediaDetailsBottomSheetState(),
+                mediaBottomSheetState = aMediaBottomSheetStateDetails(),
             ),
             aMediaViewerState(
-                mediaBottomSheetState = aMediaDeleteConfirmationState(),
+                mediaBottomSheetState = aMediaBottomSheetStateDeleteConfirmation(),
             ),
             anAudioMediaInfo(
                 waveForm = WaveFormSamples.realisticWaveForm,
@@ -170,6 +179,102 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
                     )
                 )
             ),
+            anImageMediaInfo(
+                senderName = USER_NAME_ALICE,
+                dateSent = "21 NOV, 2024",
+                caption = LONG_CAPTION,
+            ).let {
+                aMediaViewerState(
+                    listOf(
+                        aMediaViewerPageData(
+                            downloadedMedia = AsyncData.Success(
+                                LocalMedia(Uri.EMPTY, it)
+                            ),
+                            mediaInfo = it,
+                        )
+                    )
+                )
+            },
+            anImageMediaInfo(
+                senderName = "Bob",
+                dateSent = "22 NOV, 2024",
+                formattedCaption = "This is a <strong>bold</strong> caption",
+            ).let {
+                aMediaViewerState(
+                    listOf(
+                        aMediaViewerPageData(
+                            downloadedMedia = AsyncData.Success(
+                                LocalMedia(Uri.EMPTY, it)
+                            ),
+                            mediaInfo = it,
+                        )
+                    )
+                )
+            },
+            anImageMediaInfo(
+                senderName = "Charlie",
+                dateSent = "23 NOV, 2024",
+                formattedCaption = "This is an <em>italic</em> caption",
+            ).let {
+                aMediaViewerState(
+                    listOf(
+                        aMediaViewerPageData(
+                            downloadedMedia = AsyncData.Success(
+                                LocalMedia(Uri.EMPTY, it)
+                            ),
+                            mediaInfo = it,
+                        )
+                    )
+                )
+            },
+            anImageMediaInfo(
+                senderName = "Diana",
+                dateSent = "24 NOV, 2024",
+                formattedCaption = "This is a <code>code</code> caption",
+            ).let {
+                aMediaViewerState(
+                    listOf(
+                        aMediaViewerPageData(
+                            downloadedMedia = AsyncData.Success(
+                                LocalMedia(Uri.EMPTY, it)
+                            ),
+                            mediaInfo = it,
+                        )
+                    )
+                )
+            },
+            anImageMediaInfo(
+                senderName = "Eve",
+                dateSent = "25 NOV, 2024",
+                formattedCaption = "<blockquote>This is a quote caption</blockquote>",
+            ).let {
+                aMediaViewerState(
+                    listOf(
+                        aMediaViewerPageData(
+                            downloadedMedia = AsyncData.Success(
+                                LocalMedia(Uri.EMPTY, it)
+                            ),
+                            mediaInfo = it,
+                        )
+                    )
+                )
+            },
+            anImageMediaInfo(
+                senderName = "Frank",
+                dateSent = "26 NOV, 2024",
+                formattedCaption = "This caption has <strong>bold</strong>, <em>italic</em>, and <code>code</code> formatting.",
+            ).let {
+                aMediaViewerState(
+                    listOf(
+                        aMediaViewerPageData(
+                            downloadedMedia = AsyncData.Success(
+                                LocalMedia(Uri.EMPTY, it)
+                            ),
+                            mediaInfo = it,
+                        )
+                    )
+                )
+            },
         )
 }
 
@@ -202,7 +307,7 @@ fun aMediaViewerState(
     currentIndex: Int = 0,
     canShowInfo: Boolean = true,
     mediaBottomSheetState: MediaBottomSheetState = MediaBottomSheetState.Hidden,
-    eventSink: (MediaViewerEvents) -> Unit = {},
+    eventSink: (MediaViewerEvent) -> Unit = {},
 ) = MediaViewerState(
     initiallySelectedEventId = EventId("\$a:b"),
     listData = listData.toImmutableList(),

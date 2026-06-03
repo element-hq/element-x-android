@@ -6,7 +6,7 @@
   <string name="screen_start_chat_join_room_by_address_action">"Присоединиться к комнате по адресу"</string>
   <string name="screen_start_chat_join_room_by_address_invalid_address">"Недействительный адрес"</string>
   <string name="screen_start_chat_join_room_by_address_placeholder">"Ввести…"</string>
-  <string name="screen_start_chat_join_room_by_address_room_found">"Соответствующая комната найдена"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"Комната найдена"</string>
   <string name="screen_start_chat_join_room_by_address_room_not_found">"Комната не найдена"</string>
   <string name="screen_start_chat_join_room_by_address_supporting_text">"прим. #room-name:matrix.org"</string>
 </resources>

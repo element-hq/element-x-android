@@ -9,7 +9,6 @@
 package io.element.android.libraries.voicerecorder.impl.audio
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Provider
 import io.element.android.libraries.di.RoomScope
 import io.element.android.opusencoder.OggOpusEncoder
 import timber.log.Timber
@@ -20,7 +19,7 @@ import java.io.File
  */
 @ContributesBinding(RoomScope::class)
 class DefaultEncoder(
-    private val encoderProvider: Provider<OggOpusEncoder>,
+    private val encoderProvider: () -> OggOpusEncoder,
     config: AudioConfig,
 ) : Encoder {
     private val bitRate = config.bitRate

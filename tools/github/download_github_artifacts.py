@@ -142,9 +142,14 @@ if not args.simulate:
     # open file to write in binary mode
     with open(target, "wb") as file:
         # get request
-        response = requests.get(url, headers=headers)
-        # write to file
-        file.write(response.content)
+        with requests.get(url, headers=headers, stream=True) as response:
+            total = int(response.headers.get('Content-Length', 0))
+            totalStr = "{0:.2f}".format(total / 1024 / 1024)
+            for chunk in response.iter_content(chunk_size=65536):
+                if chunk:  # filter out keep-alive new chunks
+                    file.write(chunk)
+                    current = "{0:.2f}".format(file.tell() / 1024 / 1024)
+                    print(f"Downloaded {current}/{totalStr} MB", end="\r")
     print("Verifying file size...")
     # get the file size
     size = os.path.getsize(target)

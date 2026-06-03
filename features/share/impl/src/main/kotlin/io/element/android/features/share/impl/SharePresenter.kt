@@ -8,13 +8,14 @@
 
 package io.element.android.features.share.impl
 
-import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import io.element.android.features.share.api.OnSharedData
+import io.element.android.features.share.api.ShareIntentData
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
@@ -32,24 +33,24 @@ import kotlin.coroutines.cancellation.CancellationException
 
 @AssistedInject
 class SharePresenter(
-    @Assisted private val intent: Intent,
+    @Assisted private val shareIntentData: ShareIntentData,
     @SessionCoroutineScope
     private val sessionCoroutineScope: CoroutineScope,
-    private val shareIntentHandler: ShareIntentHandler,
     private val matrixClient: MatrixClient,
     private val mediaSenderRoomFactory: MediaSenderRoomFactory,
     private val activeRoomsHolder: ActiveRoomsHolder,
     private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
+    private val onSharedData: OnSharedData,
 ) : Presenter<ShareState> {
     @AssistedFactory
     fun interface Factory {
-        fun create(intent: Intent): SharePresenter
+        fun create(shareIntentData: ShareIntentData): SharePresenter
     }
 
     private val shareActionState: MutableState<AsyncAction<List<RoomId>>> = mutableStateOf(AsyncAction.Uninitialized)
 
     fun onRoomSelected(roomIds: List<RoomId>) {
-        sessionCoroutineScope.share(intent, roomIds)
+        sessionCoroutineScope.share(shareIntentData, roomIds)
     }
 
     @Composable
@@ -73,13 +74,24 @@ class SharePresenter(
     }
 
     private fun CoroutineScope.share(
-        intent: Intent,
+        shareIntentData: ShareIntentData,
         roomIds: List<RoomId>,
     ) = launch {
         suspend {
-            val result = shareIntentHandler.handleIncomingShareIntent(
-                intent,
-                onUris = { filesToShare ->
+            val result = when (shareIntentData) {
+                is ShareIntentData.PlainText -> {
+                    roomIds
+                        .map { roomId ->
+                            getJoinedRoom(roomId)?.liveTimeline?.sendMessage(
+                                body = shareIntentData.content,
+                                htmlBody = null,
+                                intentionalMentions = emptyList(),
+                            )?.isSuccess.orFalse()
+                        }
+                        .all { it }
+                }
+                is ShareIntentData.Uris -> {
+                    val filesToShare = shareIntentData.uris
                     if (filesToShare.isEmpty()) {
                         false
                     } else {
@@ -90,6 +102,7 @@ class SharePresenter(
                                 filesToShare
                                     .map { fileToShare ->
                                         val result = mediaSender.sendMedia(
+                                            caption = shareIntentData.text,
                                             uri = fileToShare.uri,
                                             mimeType = fileToShare.mimeType,
                                             mediaOptimizationConfig = mediaOptimizationConfigProvider.get(),
@@ -113,19 +126,12 @@ class SharePresenter(
                             }
                             .all { it }
                     }
-                },
-                onPlainText = { text ->
-                    roomIds
-                        .map { roomId ->
-                            getJoinedRoom(roomId)?.liveTimeline?.sendMessage(
-                                body = text,
-                                htmlBody = null,
-                                intentionalMentions = emptyList(),
-                            )?.isSuccess.orFalse()
-                        }
-                        .all { it }
                 }
-            )
+            }
+
+            // Handle post-processing of shared data
+            onSharedData(shareIntentData)
+
             if (!result) {
                 error("Failed to handle incoming share intent")
             }

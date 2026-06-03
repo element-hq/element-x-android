@@ -17,6 +17,7 @@ import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.matrix.api.HomeserverCapabilitiesProvider
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.analytics.SdkStoreSizes
 import io.element.android.libraries.matrix.api.core.DeviceId
@@ -30,7 +31,7 @@ import io.element.android.libraries.matrix.api.createroom.RoomPreset
 import io.element.android.libraries.matrix.api.linknewdevice.LinkDesktopHandler
 import io.element.android.libraries.matrix.api.linknewdevice.LinkMobileHandler
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
-import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
+import io.element.android.libraries.matrix.api.oauth.AccountManagementAction
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -58,7 +59,7 @@ import io.element.android.libraries.matrix.impl.media.RustMediaLoader
 import io.element.android.libraries.matrix.impl.media.RustMediaPreviewService
 import io.element.android.libraries.matrix.impl.notification.RustNotificationService
 import io.element.android.libraries.matrix.impl.notificationsettings.RustNotificationSettingsService
-import io.element.android.libraries.matrix.impl.oidc.toRustAction
+import io.element.android.libraries.matrix.impl.oauth.toRustAction
 import io.element.android.libraries.matrix.impl.pushers.RustPushersService
 import io.element.android.libraries.matrix.impl.room.GetRoomResult
 import io.element.android.libraries.matrix.impl.room.NotJoinedRustRoom
@@ -69,6 +70,7 @@ import io.element.android.libraries.matrix.impl.room.RustRoomFactory
 import io.element.android.libraries.matrix.impl.room.TimelineEventFilterFactory
 import io.element.android.libraries.matrix.impl.room.history.map
 import io.element.android.libraries.matrix.impl.room.join.map
+import io.element.android.libraries.matrix.impl.room.location.map
 import io.element.android.libraries.matrix.impl.room.preview.RoomPreviewInfoMapper
 import io.element.android.libraries.matrix.impl.roomdirectory.RustRoomDirectoryService
 import io.element.android.libraries.matrix.impl.roomdirectory.map
@@ -83,7 +85,7 @@ import io.element.android.libraries.matrix.impl.util.SessionPathsProvider
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
-import io.element.android.libraries.matrix.impl.workmanager.PerformDatabaseVacuumWorkManagerRequest
+import io.element.android.libraries.matrix.impl.workmanager.PerformDatabaseVacuumRequestBuilder
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.WorkManagerScheduler
@@ -112,6 +114,8 @@ import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.AuthData
 import org.matrix.rustcomponents.sdk.AuthDataPasswordDetails
+import org.matrix.rustcomponents.sdk.BeaconInfoListener
+import org.matrix.rustcomponents.sdk.BeaconInfoUpdate
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientException
 import org.matrix.rustcomponents.sdk.IgnoredUsersListener
@@ -205,6 +209,15 @@ class RustMatrixClient(
         sessionDispatcher = sessionDispatcher,
         analyticsService = analyticsService,
     )
+
+    override val ownBeaconInfoUpdates = mxCallbackFlow {
+        val listener = object : BeaconInfoListener {
+            override fun onUpdate(update: BeaconInfoUpdate) {
+                trySend(update.map())
+            }
+        }
+        innerClient.subscribeToOwnBeaconInfoUpdates(listener)
+    }
 
     override val sessionVerificationService = RustSessionVerificationService(
         client = innerClient,
@@ -795,6 +808,12 @@ class RustMatrixClient(
         }
     }
 
+    override suspend fun getMapStyleUrl(): Result<String?> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.tileServer()?.mapStyleUrl
+        }
+    }
+
     override suspend fun resetWellKnownConfig(): Result<Unit> {
         return runCatchingExceptions {
             Timber.d("Resetting well-known config for session $sessionId")
@@ -832,8 +851,12 @@ class RustMatrixClient(
         if (workManagerScheduler.hasPendingWork(sessionId, WorkManagerRequestType.DB_VACUUM)) return
 
         Timber.i("Scheduling periodic database vacuuming for session $sessionId")
-        val request = PerformDatabaseVacuumWorkManagerRequest(sessionId)
-        workManagerScheduler.submit(request)
+        val request = PerformDatabaseVacuumRequestBuilder(sessionId)
+        sessionCoroutineScope.launch { workManagerScheduler.submit(request) }
+    }
+
+    override fun homeserverCapabilities(): HomeserverCapabilitiesProvider {
+        return RustHomeserverCapabilitiesProvider(innerClient.homeserverCapabilities())
     }
 }
 

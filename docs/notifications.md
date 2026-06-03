@@ -5,11 +5,11 @@ This document aims to describe how Element android displays notifications to the
 <!--- TOC -->
 
 * [Prerequisites Knowledge](#prerequisites-knowledge)
-  * [How does a matrix client get a message from a homeserver?](#how-does-a-matrix-client-get-a-message-from-a-homeserver?)
+  * [How does a matrix client get a message from a homeserver?](#how-does-a-matrix-client-get-a-message-from-a-homeserver)
   * [How does a mobile app receives push notification](#how-does-a-mobile-app-receives-push-notification)
   * [Push VS Notification](#push-vs-notification)
   * [Push in the matrix federated world](#push-in-the-matrix-federated-world)
-  * [How does the homeserver know when to notify a client?](#how-does-the-homeserver-know-when-to-notify-a-client?)
+  * [How does the homeserver know when to notify a client?](#how-does-the-homeserver-know-when-to-notify-a-client)
   * [Push vs privacy, and mitigation](#push-vs-privacy-and-mitigation)
   * [Background processing limitations](#background-processing-limitations)
 * [Element Notification implementations](#element-notification-implementations)

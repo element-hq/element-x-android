@@ -26,6 +26,7 @@
   <string name="screen_edit_profile_error_title">"Kan profiel niet bijwerken"</string>
   <string name="screen_edit_profile_title">"Profiel bewerken"</string>
   <string name="screen_edit_profile_updating_details">"Profiel bijwerken…"</string>
+  <string name="screen_labs_enable_threads">"Gesprek antwoorden inschakelen"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Aanvullende instellingen"</string>
   <string name="screen_notification_settings_calls_label">"Audio- en videogesprekken"</string>
   <string name="screen_notification_settings_configuration_mismatch">"Configuratie komt niet overeen"</string>
@@ -53,6 +54,9 @@ Als je doorgaat, kunnen sommige van je instellingen veranderen."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"systeeminstellingen"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Systeemmeldingen uitgeschakeld"</string>
   <string name="screen_notification_settings_title">"Meldingen"</string>
+  <string name="theme_dark">"Donker"</string>
+  <string name="theme_light">"Licht"</string>
+  <string name="theme_system">"Systeem"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Problemen oplossen"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Problemen met meldingen oplossen"</string>
 </resources>

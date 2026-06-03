@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -45,10 +46,6 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.ui.strings.CommonStrings
 
 /**
@@ -103,7 +100,7 @@ internal fun IncomingCallScreen(
             ActionButton(
                 size = 64.dp,
                 onClick = { onAnswer(notificationData) },
-                icon = CompoundIcons.VoiceCallSolid(),
+                icon = if (notificationData.audioOnly) CompoundIcons.VoiceCallSolid() else CompoundIcons.VideoCallSolid(),
                 title = stringResource(CommonStrings.action_accept),
                 backgroundColor = ElementTheme.colors.iconSuccessPrimary,
                 borderColor = ElementTheme.colors.borderSuccessSubtle
@@ -163,21 +160,11 @@ private fun ActionButton(
 
 @PreviewsDayNight
 @Composable
-internal fun IncomingCallScreenPreview() = ElementPreview {
+internal fun IncomingCallScreenPreview(
+    @PreviewParameter(CallNotificationDataProvider::class) state: CallNotificationData,
+) = ElementPreview {
     IncomingCallScreen(
-        notificationData = CallNotificationData(
-            sessionId = SessionId("@alice:matrix.org"),
-            roomId = RoomId("!1234:matrix.org"),
-            eventId = EventId("\$asdadadsad:matrix.org"),
-            senderId = UserId("@bob:matrix.org"),
-            roomName = "A room",
-            senderName = "Bob",
-            avatarUrl = null,
-            notificationChannelId = "incoming_call",
-            timestamp = 0L,
-            textContent = null,
-            expirationTimestamp = 1000L,
-        ),
+        notificationData = state,
         onAnswer = {},
         onCancel = {},
     )

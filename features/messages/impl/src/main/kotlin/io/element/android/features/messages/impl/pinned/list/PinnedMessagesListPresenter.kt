@@ -44,7 +44,6 @@ import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.room.JoinedRoom
-import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -137,6 +136,7 @@ class PinnedMessagesListPresenter(
         fun handleEvent(event: PinnedMessagesListEvent) {
             when (event) {
                 is PinnedMessagesListEvent.HandleAction -> sessionCoroutineScope.handleTimelineAction(event.action, event.event)
+                is PinnedMessagesListEvent.OpenThread -> navigator.navigateToThread(event.threadRootId)
             }
         }
 

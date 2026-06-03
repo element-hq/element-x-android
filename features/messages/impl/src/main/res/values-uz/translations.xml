@@ -14,6 +14,7 @@
   <string name="emoji_picker_category_objects">"Ob\'ektlar"</string>
   <string name="emoji_picker_category_people">"Smayllar va odamlar"</string>
   <string name="emoji_picker_category_places">"Sayohat va Joylar"</string>
+  <string name="emoji_picker_category_recent">"Oxirgi kulgichlar"</string>
   <string name="emoji_picker_category_symbols">"Belgilar"</string>
   <string name="screen_media_upload_preview_caption_warning">"Taglavhalar eski ilovalardan foydalanuvchilarga ko‘rinmasligi mumkin."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Video yuklash sifatini oʻzgartirish uchun bosing"</string>
@@ -22,6 +23,7 @@
   <string name="screen_media_upload_preview_error_failed_sending">"Media yuklanmadi, qayta urinib ko‘ring."</string>
   <string name="screen_media_upload_preview_error_too_large_message">"Ruxsat etilgan maksimal fayl hajmi %1$s ."</string>
   <string name="screen_media_upload_preview_error_too_large_title">"Fayl yuklash uchun juda katta"</string>
+  <string name="screen_media_upload_preview_item_count">"Element%1$d ning %2$d"</string>
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Tasvir sifatini optimallashtirish"</string>
   <string name="screen_media_upload_preview_processing">"Qayta ishlanmoqda…"</string>
   <string name="screen_report_content_block_user">"Foydalanuvchini bloklash"</string>

@@ -131,7 +131,15 @@ git flow release start "${version}"
 # Note: in case the release is already started and the script is started again, checkout the release branch again.
 ret=$?
 if [[ $ret -ne 0 ]]; then
-  printf "Mmh, it seems that the release is already started. Checking out the release branch...\n"
+  printf "Mmh, it seems that the release is already started. I'm displaying the changes now:\n"
+  git diff --stat "release/${version}" origin/main
+  printf "Do you want to continue the release using its contents?\n\n"
+  read -r -p "Continue (yes/no) default to yes? " doContinue
+  doContinue=${doContinue:-yes}
+  if [ "${doContinue}" == "no" ]; then
+    printf "OK, exiting, you can start the release again with the command 'git flow release start %s'\n" "${version}"
+    exit 1
+  fi
   git checkout "release/${version}"
 fi
 

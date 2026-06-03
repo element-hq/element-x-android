@@ -27,6 +27,16 @@ sealed interface RoomIdOrAlias : Parcelable {
             is Id -> roomId.value
             is Alias -> roomAlias.value
         }
+
+    companion object {
+        fun from(id: String): RoomIdOrAlias? {
+            return when {
+                MatrixPatterns.isRoomId(id) -> Id(RoomId(id))
+                MatrixPatterns.isRoomAlias(id) -> Alias(RoomAlias(id))
+                else -> null
+            }
+        }
+    }
 }
 
 fun RoomId.toRoomIdOrAlias() = RoomIdOrAlias.Id(this)

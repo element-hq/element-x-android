@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_leave_space_choose_owners_action">"Sahipleri seçin"</string>
+  <string name="screen_leave_space_subtitle">"Ayrılmak istediğiniz odaları seçin (yalnızca yöneticisi olmadığınız alanlardaki odalar):"</string>
+  <string name="screen_leave_space_subtitle_last_admin">"Bu alandan ayrılmadan önce başka bir yönetici atamalısınız."</string>
+  <string name="screen_leave_space_subtitle_only_last_admin">"Tek yönetici olduğunuz için aşağıdaki oda(lar)dan çıkarılmayacaksınız:"</string>
+  <string name="screen_leave_space_title">"%1$s alanından ayrılmak istiyor musunuz?"</string>
+  <string name="screen_leave_space_title_last_admin">"%1$s alanının tek yöneticisisiniz"</string>
+  <string name="screen_space_menu_action_members">"Üyeleri görüntüle"</string>
   <string name="screen_space_settings_roles_and_permissions">"Roller ve izinler"</string>
   <string name="screen_space_settings_security_and_privacy">"Güvenlik ve gizlilik"</string>
 </resources>

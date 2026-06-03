@@ -20,6 +20,8 @@ import io.element.android.features.call.api.CurrentCallService
 import io.element.android.features.enterprise.api.SessionEnterpriseService
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.matrix.api.notification.CallIntent
+import io.element.android.libraries.matrix.api.room.CallIntentConsensus
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.powerlevels.canCall
 import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
@@ -56,11 +58,24 @@ class RoomCallStatePresenter(
                         canJoinCall = canJoinCall,
                         isUserInTheCall = isUserInTheCall,
                         isUserLocallyInTheCall = isUserLocallyInTheCall,
+                        isAudioCall = roomInfo.activeCallIntentConsensus.isAudio(),
                     )
-                    else -> RoomCallState.StandBy(canStartCall = canJoinCall)
+                    else -> RoomCallState.StandBy(
+                        canStartCall = canJoinCall,
+                        isDM = roomInfo.isDm
+                    )
                 }
             }
         }
         return callState
     }
+}
+
+fun CallIntentConsensus.isAudio(): Boolean {
+    val intent = when (this) {
+        is CallIntentConsensus.Full -> callIntent
+        is CallIntentConsensus.Partial -> callIntent
+        is CallIntentConsensus.None -> return false
+    }
+    return intent == CallIntent.AUDIO
 }

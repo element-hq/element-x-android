@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crypto_history_sharing_room_info_hidden_badge_content">"Az új tagok nem látják az előzményeket"</string>
+  <string name="crypto_history_sharing_room_info_shared_badge_content">"Az új tagok látják az előzményeket"</string>
+  <string name="crypto_history_sharing_room_info_world_readable_badge_content">"Bárki láthatja az előzményeket"</string>
   <string name="screen_edit_room_address_room_address_section_footer">"Szüksége lesz egy szobacímre, hogy láthatóvá tegye a szobakatalógusban."</string>
   <string name="screen_edit_room_address_title">"Cím szerkesztése"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Hiba történt az értesítési beállítás frissítésekor."</string>
@@ -53,6 +56,7 @@
   <string name="screen_room_details_invite_people_dont_close">"Ne zárja be az alkalmazást, amíg nem végzett."</string>
   <string name="screen_room_details_invite_people_preparing">"Meghívók előkészítése…"</string>
   <string name="screen_room_details_invite_people_title">"Ismerősök meghívása"</string>
+  <string name="screen_room_details_invite_title">"Meghívás"</string>
   <string name="screen_room_details_leave_conversation_title">"Beszélgetés elhagyása"</string>
   <string name="screen_room_details_leave_room_title">"Szoba elhagyása"</string>
   <string name="screen_room_details_media_gallery_title">"Média és fájlok"</string>
@@ -128,6 +132,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Szerepkörök"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Szoba részletei"</string>
   <string name="screen_room_roles_and_permissions_title">"Szerepkörök és jogosultságok"</string>
+  <string name="screen_roomlist_mark_as_read">"Megjelölés olvasottként"</string>
+  <string name="screen_roomlist_mark_as_unread">"Megjelölés olvasatlanként"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Cím hozzáadása"</string>
   <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Bárki csatlakozhat, az engedélyezett terekből, és mindenki másnak hozzáférést kell kérnie."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Mindenkinek hozzáférést kell kérnie."</string>
@@ -150,6 +156,7 @@ Nem javasoljuk a titkosítás engedélyezését az olyan szobákban, amelyeket b
   <string name="screen_security_and_privacy_room_access_section_header">"Hozzáférés"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_multiple_parents_description">"Bárki csatlakozhat, az engedélyezett terekből."</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_single_parent_description">"Bárki csatlakozhatnak innen: %1$s."</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_title">"A tér tagjai"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"A terek jelenleg nem támogatottak"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Szüksége lesz egy szobacímre, hogy láthatóvá tegye a szobakatalógusban."</string>
   <string name="screen_security_and_privacy_room_address_section_header">"Cím"</string>

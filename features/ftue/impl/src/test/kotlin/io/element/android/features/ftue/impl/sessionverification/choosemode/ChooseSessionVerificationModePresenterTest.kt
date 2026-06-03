@@ -47,7 +47,7 @@ class ChooseSessionVerificationModePresenterTest {
             assertThat(awaitItem().buttonsState.dataOrNull()).isEqualTo(
                 ChooseSelfVerificationModeState.ButtonsState(
                     canUseAnotherDevice = false,
-                    canEnterRecoveryKey = false,
+                    canUseRecoveryKey = false,
                 )
             )
         }
@@ -66,7 +66,7 @@ class ChooseSessionVerificationModePresenterTest {
             assertThat(awaitItem().buttonsState.dataOrNull()).isEqualTo(
                 ChooseSelfVerificationModeState.ButtonsState(
                     canUseAnotherDevice = false,
-                    canEnterRecoveryKey = false,
+                    canUseRecoveryKey = false,
                 )
             )
         }
@@ -85,7 +85,7 @@ class ChooseSessionVerificationModePresenterTest {
             assertThat(awaitItem().buttonsState.dataOrNull()).isEqualTo(
                 ChooseSelfVerificationModeState.ButtonsState(
                     canUseAnotherDevice = true,
-                    canEnterRecoveryKey = false,
+                    canUseRecoveryKey = false,
                 )
             )
         }
@@ -104,7 +104,7 @@ class ChooseSessionVerificationModePresenterTest {
             assertThat(awaitItem().buttonsState.dataOrNull()).isEqualTo(
                 ChooseSelfVerificationModeState.ButtonsState(
                     canUseAnotherDevice = false,
-                    canEnterRecoveryKey = true,
+                    canUseRecoveryKey = true,
                 )
             )
         }

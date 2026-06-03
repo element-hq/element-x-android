@@ -8,7 +8,6 @@
 
 package io.element.android.features.share.impl
 
-import android.content.Intent
 import android.os.Parcelable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
@@ -23,6 +22,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.share.api.ShareEntryPoint
+import io.element.android.features.share.api.ShareIntentData
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.inputs
@@ -50,10 +50,10 @@ class ShareNode(
     @Parcelize
     object NavTarget : Parcelable
 
-    data class Inputs(val intent: Intent) : NodeInputs
+    data class Inputs(val shareIntentData: ShareIntentData) : NodeInputs
 
     private val inputs = inputs<Inputs>()
-    private val presenter = presenterFactory.create(inputs.intent)
+    private val presenter = presenterFactory.create(inputs.shareIntentData)
     private val callback: ShareEntryPoint.Callback = callback()
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {

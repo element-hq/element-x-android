@@ -26,7 +26,6 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.bumble.appyx.core.integration.NodeHost
 import com.bumble.appyx.core.integrationpoint.NodeActivity
 import com.bumble.appyx.core.plugin.NodeReadyObserver
 import io.element.android.compound.colors.SemanticColorsLightDark
@@ -35,6 +34,7 @@ import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.features.lockscreen.api.LockScreenLockState
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.features.lockscreen.api.handleSecureFlag
+import io.element.android.libraries.architecture.appyx.DebugNavStateNodeHost
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.designsystem.theme.ElementThemeApp
@@ -52,7 +52,7 @@ class MainActivity : NodeActivity() {
     private lateinit var appBindings: AppBindings
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Timber.tag(loggerTag.value).w("onCreate, with savedInstanceState: ${savedInstanceState != null}")
+        Timber.tag(loggerTag.value).d("onCreate, with savedInstanceState: ${savedInstanceState != null}")
         installSplashScreen()
         super.onCreate(savedInstanceState)
         appBindings = bindings()
@@ -71,6 +71,7 @@ class MainActivity : NodeActivity() {
         }.collectAsState(SemanticColorsLightDark.default)
         ElementThemeApp(
             appPreferencesStore = appBindings.preferencesStore(),
+            featureFlagService = appBindings.featureFlagService(),
             compoundLight = colors.light,
             compoundDark = colors.dark,
             buildMeta = appBindings.buildMeta()
@@ -100,17 +101,19 @@ class MainActivity : NodeActivity() {
 
     @Composable
     private fun MainNodeHost() {
-        NodeHost(integrationPoint = appyxV1IntegrationPoint) {
+        // TODO this is a temporary helper to capture the nav state in a more readable format for crash reports
+        // Revert to `NodeHost` once this is fixed
+        DebugNavStateNodeHost(integrationPoint = appyxV1IntegrationPoint) {
             MainNode(
                 it,
                 plugins = listOf(
                     object : NodeReadyObserver<MainNode> {
                         override fun init(node: MainNode) {
-                            Timber.tag(loggerTag.value).w("onMainNodeInit")
+                            Timber.tag(loggerTag.value).d("onMainNodeInit")
                             mainNode = node
                             mainNode.handleIntent(intent)
                         }
-                    }
+                    },
                 ),
                 context = applicationContext
             )
@@ -142,7 +145,7 @@ class MainActivity : NodeActivity() {
      */
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        Timber.tag(loggerTag.value).w("onNewIntent")
+        Timber.tag(loggerTag.value).d("onNewIntent")
         // If the mainNode is not init yet, keep the intent for later.
         // It can happen when the activity is killed by the system. The methods are called in this order :
         // onCreate(savedInstanceState=true) -> onNewIntent -> onResume -> onMainNodeInit
@@ -155,16 +158,16 @@ class MainActivity : NodeActivity() {
 
     override fun onPause() {
         super.onPause()
-        Timber.tag(loggerTag.value).w("onPause")
+        Timber.tag(loggerTag.value).d("onPause")
     }
 
     override fun onResume() {
         super.onResume()
-        Timber.tag(loggerTag.value).w("onResume")
+        Timber.tag(loggerTag.value).d("onResume")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Timber.tag(loggerTag.value).w("onDestroy")
+        Timber.tag(loggerTag.value).d("onDestroy")
     }
 }

@@ -12,5 +12,4 @@
   <string name="screen_identity_waiting_on_other_device">"Menunggu di perangkat lain…"</string>
   <string name="screen_notification_optin_subtitle">"Anda dapat mengubah pengaturan Anda nanti."</string>
   <string name="screen_notification_optin_title">"Izinkan pemberitahuan dan jangan pernah melewatkan pesan"</string>
-  <string name="screen_session_verification_enter_recovery_key">"Masukkan kunci pemulihan"</string>
 </resources>

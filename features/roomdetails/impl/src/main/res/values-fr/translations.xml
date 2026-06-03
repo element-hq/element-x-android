@@ -35,7 +35,7 @@
   <string name="screen_room_change_role_moderators_admin_section_footer">"Les administrateurs ont automatiquement les privilèges des modérateurs"</string>
   <string name="screen_room_change_role_moderators_owner_section_footer">"Les propriétaires disposent automatiquement des privilèges des administrateurs."</string>
   <string name="screen_room_change_role_moderators_title">"Modifier les modérateurs"</string>
-  <string name="screen_room_change_role_owners_title">"Choisissez les propriétaires"</string>
+  <string name="screen_room_change_role_owners_title">"Choisir les propriétaires"</string>
   <string name="screen_room_change_role_section_administrators">"Administrateurs"</string>
   <string name="screen_room_change_role_section_moderators">"Modérateurs"</string>
   <string name="screen_room_change_role_section_users">"Membres"</string>
@@ -56,6 +56,7 @@
   <string name="screen_room_details_invite_people_dont_close">"Ne fermez pas l’application avant que l’opération soit terminée."</string>
   <string name="screen_room_details_invite_people_preparing">"Préparation des invitations…"</string>
   <string name="screen_room_details_invite_people_title">"Inviter des amis"</string>
+  <string name="screen_room_details_invite_title">"Inviter"</string>
   <string name="screen_room_details_leave_conversation_title">"Quitter la discussion"</string>
   <string name="screen_room_details_leave_room_title">"Quitter le salon"</string>
   <string name="screen_room_details_media_gallery_title">"Médias et fichiers"</string>
@@ -131,6 +132,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Rôles"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Détails du salon"</string>
   <string name="screen_room_roles_and_permissions_title">"Rôles &amp; autorisations"</string>
+  <string name="screen_roomlist_mark_as_read">"Marquer comme lu"</string>
+  <string name="screen_roomlist_mark_as_unread">"Marquer comme non lu"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Ajouter une adresse"</string>
   <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Toute personne se trouvant dans un espace autorisé peut participer, mais toutes les autres doivent demander l’accès."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Tout le monde doit demander un accès."</string>

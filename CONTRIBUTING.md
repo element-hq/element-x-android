@@ -2,21 +2,23 @@
 
 <!--- TOC -->
 
-* [Developer onboarding](#developer-onboarding)
-* [Contributing code to Matrix](#contributing-code-to-matrix)
-* [Android Studio settings](#android-studio-settings)
-* [Compilation](#compilation)
-* [Strings](#strings)
-  * [I want to add new strings to the project](#i-want-to-add-new-strings-to-the-project)
+* [Contributing to Element](#contributing-to-element)
   * [I want to help translating Element](#i-want-to-help-translating-element)
+  * [I want to fix a bug](#i-want-to-fix-a-bug)
+  * [I want to add a new feature or enhancement](#i-want-to-add-a-new-feature-or-enhancement)
+  * [Etiquette](#etiquette)
+  * [Developer onboarding](#developer-onboarding)
+  * [Submitting the PRs](#submitting-the-prs)
+  * [Android Studio settings](#android-studio-settings)
+  * [Compilation](#compilation)
+  * [Strings](#strings)
   * [Element X Android Gallery](#element-x-android-gallery)
-* [I want to submit a PR to fix an issue](#i-want-to-submit-a-pr-to-fix-an-issue)
   * [Kotlin](#kotlin)
   * [Changelog](#changelog)
   * [Code quality](#code-quality)
     * [detekt](#detekt)
     * [ktlint](#ktlint)
-    * [knit](#knit)
+    * [checkDocs](#checkdocs)
     * [lint](#lint)
   * [Unit tests](#unit-tests)
     * [konsist](#konsist)
@@ -28,60 +30,86 @@
 
 <!--- END -->
 
-## Developer onboarding
-
-For a detailed overview of the project, see [Developer Onboarding](./docs/_developer_onboarding.md).
-
-## Contributing code to Matrix
-
-If instead of contributing to the Element X Android project, you want to contribute to Synapse, the homeserver implementation, please read the [Synapse contribution guide](https://element-hq.github.io/synapse/latest/development/contributing_guide.html).
+## Contributing to Element
 
 Element X Android support can be found in this room: [![Element X Android Matrix room #element-x-android:matrix.org](https://img.shields.io/matrix/element-x-android:matrix.org.svg?label=%23element-x-android:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#element-x-android:matrix.org).
 
 The rest of the document contains specific rules for Matrix Android projects.
 
-## Android Studio settings
-
-Please set the "hard wrap" setting of Android Studio to 160 chars, this is the setting we use internally to format the source code (Menu `Settings/Editor/Code Style` then `Hard wrap at`).
-Please ensure that you're using the project formatting rules (which are in the project at .idea/codeStyles/), and format the file before committing them.
-
-## Compilation
-
-This project should compile without any special action. Just clone it and open it with Android Studio, or compile from command line using `gradlew`.
-
-## Strings
-
-The strings of the project are managed externally using [https://localazy.com](https://localazy.com) and shared with Element X iOS.
-
-### I want to add new strings to the project
-
-Only the core team can modify or add English strings to Localazy. As an external contributor, if you want to add new strings, feel free to add an Android resource file to the project (for instance a file named `temporary.xml`), with a note in the description of the PR for the reviewer to integrate the String into `Localazy`. If accepted, the reviewer will add the String(s) for you, and then you can download them on your branch (following these [instructions](./tools/localazy/README.md#download-translations)) and remove the temporary file.
-
-Please follow the naming rules for the key. More details in [the dedicated section in this README.md](./tools/localazy/README.md#key-naming-rules)
-
 ### I want to help translating Element
 
 To help translating, please go to [https://localazy.com/p/element](https://localazy.com/p/element).
 
-- If you want to fix an issue with an English string, please open an issue on the github project of Element X (Android or iOS). Only the core team can modify or add English strings.
 - If you want to fix an issue in other languages, or add a missing translation, or even add a new language, please go to [https://localazy.com/p/element](https://localazy.com/p/element).
-
-More information can be found [in this README.md](./tools/localazy/README.md).
+- If you want to fix an issue with an English string, please open an issue on the github project of Element X (Android or iOS). Only the core team can modify or add English strings. As an external contributor, if you want to add new strings, feel free to add an Android resource file to the project (for instance a file named `temporary.xml`), with a note in the description of the PR for the reviewer to integrate the String into `Localazy`. If accepted, the reviewer will add the String(s) for you, and then you can download them on your branch (following these [instructions](./tools/localazy/README.md#download-translations)) and remove the temporary file. Please follow the naming rules for the key. More details in [the dedicated section in this README.md](./tools/localazy/README.md#key-naming-rules) More information can be found [in this README.md](./tools/localazy/README.md).
 
 Once a language is sufficiently translated, it will be added to the app. The core team will decide when a language is sufficiently translated.
+
+### I want to fix a bug
+
+Please check if a corresponding issue exists, if not please create one. In both cases, let us know in the comment that you've started working on it.
+
+### I want to add a new feature or enhancement
+
+To make a great product with a great user experience, all the small efforts need to go in the same direction and be aligned and consistent with each other.
+
+Before making your contribution, please consider the following:
+
+* One product can’t do everything well. Element is focusing on private end-to-end encrypted messaging and voice - this can either be for consumers (e.g. friends and family) or for professional teams and organizations. Public forums and other types of chats without E2EE remain supported but are not the primary use case in case UX compromises need to be made.
+* There are 3 platforms - Android, [iOS](https://github.com/element-hq/element-x-ios) and [Web/Desktop](https://github.com/element-hq/element-web). These platforms need to have feature parity and design consistency. For some features, supporting all platforms is a must have, in some cases exceptions can be made to have it on one platform only.
+* To make sure your idea fits both from a design/solution and use case perspective, please open a new issue (or find an existing issue) in [element-meta](https://github.com/element-hq/element-meta/issues) repository describing the use case and how you plan to tackle it. Do not just describe what feature is missing, explain why the users need it with a couple of real life examples from the field.
+  * In case of an existing issue, please comment that you're planning to contribute. If you create a new issue, please specify that in the issue. In such a case we will try to review the issue ASAP and provide you with initial feedback so you can be confident if and at which conditions your contributions will be accepted.
+
+Once we know that you want to contribute and have confirmed that the new feature is overall aligned with the product direction, the designers of the core team will help you with the designs and any other type of guidance when it comes to the user experience. We will try to unblock you as quickly as we can, but it may not be instant. Having a clear understanding of the use case and the impact of the feature will help us with the prioritization and faster responses.
+
+Only once all of the above is met should you open a PR with your proposed changes.
+
+### Etiquette
+
+* As stated above all significant changes should be communicated through an issue before opening a PR
+* We are happy to receive contributions but features always require maintenance, so depending on the change we might not be willing to accept it
+* We are also fine with AI led contributions within reasonable bounds
+    * You are completely responsible for the quality of the PR
+    * If the PR doesn't show minimal effort (code does not compile, code does not work as expected, etc.) on your part it will be closed
+    * Please write the description yourself, we don't have the bandwidth to read LLM essays. The code needs to speak for itself.
+* We use git for version control and GitHub for reviews, so in order to make everybody's life easier please:
+    * Keep the existing pull request template
+    * Don't submit large PRs, especially if not previously talked about. Anything above 200 lines is large (excluding generated code e.g. tests, translations, mocks)
+    * Please don't open unfinished PRs and expect us to fill in the details
+    * If you would like our opinion/direction on unfinished code please link your branch or idea in the ticket
+    * Please limit the number of commits in a single PR. We are perfectly happy with splitting work across multiple sessions as long as they're logically independant and show promise of progress (ideally expressed through a ticket)
+    * Each and every commit should stand on its own, clearly explaining what it does and why
+* Once a PR goes into review please don't rewrite the history unless agreed so with the reviewer.
+    * Tweaks and fixes following review can be directly committed (to be interactively rebased later) or as fixups
+
+*The reviewer's response time will generally match yours. Switching contexts is very hard so please act accordingly. You are responsible for making the reviewers job enjoyable!*
+
+### Developer onboarding
+
+For a detailed overview of the project, see [Developer Onboarding](./docs/_developer_onboarding.md).
+
+### Submitting the PRs
+
+Please have a look in the [dedicated documentation](./docs/pull_request.md) about pull request.
+
+### Android Studio settings
+
+Please set the "hard wrap" setting of Android Studio to 160 chars, this is the setting we use internally to format the source code (Menu `Settings/Editor/Code Style` then `Hard wrap at`).
+Please ensure that you're using the project formatting rules (which are in the project at .idea/codeStyles/), and format the file before committing them.
+
+### Compilation
+
+This project should compile without any special action. Just clone it and open it with Android Studio, or compile from command line using `gradlew`.
+
+### Strings
+
+The strings of the project are managed externally using [https://localazy.com](https://localazy.com) and shared with Element X iOS.
 
 ### Element X Android Gallery
 
 Once added to Localazy, translations can be checked screen per screen using our tool Element X Android Gallery, available at https://element-hq.github.io/element-x-android/.
 
 Localazy syncs occur every Monday and the screenshots on this page are generated every Tuesday, so you'll have to wait to see your change appearing on Element X Android Gallery.
-
-## I want to submit a PR to fix an issue
-
-Please have a look in the [dedicated documentation](./docs/pull_request.md) about pull request.
-
-Please check if a corresponding issue exists. If yes, please let us know in a comment that you're working on it.
-If an issue does not exist yet, it may be relevant to open a new issue and let us know that you're implementing it.
 
 ### Kotlin
 
@@ -123,13 +151,13 @@ Note that you can run
 
 For ktlint to fix some detected errors for you (you still have to check and commit the fix of course)
 
-#### knit
+#### checkDocs
 
-[knit](https://github.com/Kotlin/kotlinx-knit) is a tool which checks markdown files on the project. Also it generates/updates the table of content (toc) of the markdown files.
+`checkDocs` is a Gradle task which checks markdown files on the project to ensure their table of contents is up to date. It uses `tools/docs/generate_toc.py --verify` under the hood, and has a counterpart `generateDocsToc` task which runs `tools/docs/generate_toc.py` to update the table of contents of markdown files.
 
 So everytime the toc should be updated, just run
 <pre>
-./gradlew knit
+./gradlew generateDocsToc
 </pre>
 
 and commit the changes.
@@ -137,7 +165,7 @@ and commit the changes.
 The CI will check that markdown files are up to date by running
 
 <pre>
-./gradlew knitCheck
+./gradlew checkDocs
 </pre>
 
 #### lint
@@ -184,7 +212,7 @@ internal fun PinIconPreview() = ElementPreview {
 }
 ```
 
-This will allow to preview the composable in both light and dark mode in Android Studio. This will also automatically add UI tests. The GitHub action [Record screenshots](https://github.com/element-hq/element-x-android/actions/workflows/recordScreenshots.yml) has to be run to record the new screenshots. The PR reviewer can trigger this for you if you're not part of the core team. 
+This will allow to preview the composable in both light and dark mode in Android Studio. This will also automatically add UI tests. The GitHub action [Record screenshots](https://github.com/element-hq/element-x-android/actions/workflows/recordScreenshots.yml) has to be run to record the new screenshots. The PR reviewer can trigger this for you if you're not part of the core team.
 
 ### Authors
 

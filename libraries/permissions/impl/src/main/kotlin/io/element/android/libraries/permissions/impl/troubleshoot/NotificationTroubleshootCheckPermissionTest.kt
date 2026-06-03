@@ -10,8 +10,8 @@ package io.element.android.libraries.permissions.impl.troubleshoot
 
 import android.Manifest
 import android.os.Build
-import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
+import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.permissions.api.PermissionStateProvider
 import io.element.android.libraries.permissions.impl.R
 import io.element.android.libraries.permissions.impl.action.PermissionActions
@@ -24,7 +24,7 @@ import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
-@ContributesIntoSet(AppScope::class)
+@ContributesIntoSet(SessionScope::class)
 class NotificationTroubleshootCheckPermissionTest(
     private val permissionStateProvider: PermissionStateProvider,
     private val sdkVersionProvider: BuildVersionSdkIntProvider,

@@ -153,6 +153,7 @@ private fun ChangeOwnRoleBottomSheet(
             .navigationBarsPadding(),
         sheetState = sheetState,
         onDismissRequest = ::dismiss,
+        scrollable = true,
     ) {
         Text(
             modifier = Modifier.padding(14.dp),
@@ -180,7 +181,6 @@ private fun ChangeOwnRoleBottomSheet(
         ListItem(
             headlineContent = { Text(stringResource(CommonStrings.action_cancel)) },
             onClick = ::dismiss,
-            style = ListItemStyle.Primary,
         )
     }
 }

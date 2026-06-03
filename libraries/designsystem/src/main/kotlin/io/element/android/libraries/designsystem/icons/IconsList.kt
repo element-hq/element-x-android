@@ -14,7 +14,6 @@ import io.element.android.libraries.designsystem.R
 // All the icons should be defined in Compound.
 internal val iconsOther = listOf(
     R.drawable.ic_notification,
-    R.drawable.ic_stop,
     R.drawable.pin,
     R.drawable.ic_winner,
 )

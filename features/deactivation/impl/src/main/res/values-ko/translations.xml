@@ -10,5 +10,4 @@
   <string name="screen_deactivate_account_list_item_2">"모든 채팅방에서 자신을 제거하세요."</string>
   <string name="screen_deactivate_account_list_item_3">"당사의 신원 서버에서 귀하의 계정 정보를 삭제하세요."</string>
   <string name="screen_deactivate_account_list_item_4">"메시지는 등록된 사용자에게는 계속 표시되지만, 삭제하면 신규 또는 미등록 사용자는 볼 수 없게 됩니다."</string>
-  <string name="screen_deactivate_account_title">"계정 비활성화"</string>
 </resources>

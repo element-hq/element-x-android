@@ -25,7 +25,7 @@ import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.annotations.ContributesNode
 import io.element.android.appconfig.LearnMoreConfig
-import io.element.android.features.call.api.CallType
+import io.element.android.features.call.api.CallData
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.knockrequests.api.list.KnockRequestsListEntryPoint
 import io.element.android.features.messages.api.MessagesEntryPoint
@@ -55,6 +55,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
+import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.verification.VerificationRequest
@@ -175,6 +176,10 @@ class RoomDetailsFlowNode(
         return when (navTarget) {
             NavTarget.RoomDetails -> {
                 val roomDetailsCallback = object : RoomDetailsNode.Callback {
+                    override fun navigateBack() {
+                        callback.onDone()
+                    }
+
                     override fun navigateToRoomMemberList() {
                         backstack.push(NavTarget.RoomMemberList)
                     }
@@ -223,13 +228,14 @@ class RoomDetailsFlowNode(
                         backstack.push(NavTarget.RoomMemberDetails(userId))
                     }
 
-                    override fun navigateToRoomCall() {
-                        val inputs = CallType.RoomCall(
+                    override fun navigateToRoomCall(callIntent: CallIntent) {
+                        val callData = CallData(
                             sessionId = room.sessionId,
                             roomId = room.roomId,
+                            isAudioCall = callIntent == CallIntent.AUDIO
                         )
                         analyticsService.captureInteraction(Interaction.Name.MobileRoomCallButton)
-                        elementCallEntryPoint.startCall(inputs)
+                        elementCallEntryPoint.startCall(callData)
                     }
 
                     override fun navigateToReportRoom() {
@@ -261,7 +267,20 @@ class RoomDetailsFlowNode(
             }
 
             NavTarget.InviteMembers -> {
-                createNode<RoomInviteMembersNode>(buildContext)
+                val callback = object : RoomInviteMembersNode.Callback {
+                    override fun openCreatedRoom(roomId: RoomId) {
+                        navigateUp()
+                        room.roomCoroutineScope.launch {
+                            callback.navigateToRoom(
+                                roomId = roomId,
+                                serverNames = emptyList(),
+                                // Remove the invite screen from the backstack to avoid navigating back to it after the new room has been created
+                                clearBackStack = true,
+                            )
+                        }
+                    }
+                }
+                createNode<RoomInviteMembersNode>(buildContext, plugins = listOf(callback))
             }
 
             is NavTarget.RoomNotificationSettings -> {
@@ -284,8 +303,14 @@ class RoomDetailsFlowNode(
                         callback.navigateToRoom(roomId, emptyList())
                     }
 
-                    override fun startCall(dmRoomId: RoomId) {
-                        elementCallEntryPoint.startCall(CallType.RoomCall(roomId = dmRoomId, sessionId = room.sessionId))
+                    override fun startCall(dmRoomId: RoomId, callIntent: CallIntent) {
+                        elementCallEntryPoint.startCall(
+                            CallData(
+                                roomId = dmRoomId,
+                                sessionId = room.sessionId,
+                                isAudioCall = callIntent == CallIntent.AUDIO
+                            )
+                        )
                     }
 
                     override fun startVerifyUserFlow(userId: UserId) {
@@ -379,6 +404,10 @@ class RoomDetailsFlowNode(
 
                     override fun navigateToRoom(roomId: RoomId) {
                         callback.navigateToRoom(roomId, emptyList())
+                    }
+
+                    override fun navigateToDeveloperSettings() {
+                        callback.navigateToDeveloperSettings()
                     }
                 }
                 return messagesEntryPoint.createNode(

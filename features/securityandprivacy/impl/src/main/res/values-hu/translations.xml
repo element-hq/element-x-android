@@ -29,6 +29,7 @@ Nem javasoljuk a titkosítás engedélyezését az olyan szobákban, amelyeket b
   <string name="screen_security_and_privacy_room_access_section_header">"Hozzáférés"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_multiple_parents_description">"Bárki csatlakozhat, az engedélyezett terekből."</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_single_parent_description">"Bárki csatlakozhatnak innen: %1$s."</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_title">"A tér tagjai"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"A terek jelenleg nem támogatottak"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Szüksége lesz egy szobacímre, hogy láthatóvá tegye a szobakatalógusban."</string>
   <string name="screen_security_and_privacy_room_address_section_header">"Cím"</string>

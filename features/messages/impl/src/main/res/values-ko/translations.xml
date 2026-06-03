@@ -14,6 +14,7 @@
   <string name="emoji_picker_category_objects">"사물"</string>
   <string name="emoji_picker_category_people">"표정 &amp; 사람"</string>
   <string name="emoji_picker_category_places">"여행 &amp; 장소"</string>
+  <string name="emoji_picker_category_recent">"최근 이모지"</string>
   <string name="emoji_picker_category_symbols">"상징"</string>
   <string name="screen_media_upload_preview_caption_warning">"캡션은 오래된 앱을 사용하는 사용자에게 표시되지 않을 수 있습니다."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"비디오 업로드 품질을 변경하려면 탭하세요"</string>
@@ -22,6 +23,7 @@
   <string name="screen_media_upload_preview_error_failed_sending">"미디어 파일 업로드에 실패했습니다. 다시 시도해 주세요."</string>
   <string name="screen_media_upload_preview_error_too_large_message">"허용되는 최대 파일 크기는 %1$s 입니다."</string>
   <string name="screen_media_upload_preview_error_too_large_title">"파일 크기가 너무 커서 업로드할 수 없습니다."</string>
+  <string name="screen_media_upload_preview_item_count">"전체 %2$d개 중 %1$d번째 파일"</string>
   <string name="screen_media_upload_preview_optimize_image_quality_title">"이미지 품질 최적화"</string>
   <string name="screen_media_upload_preview_processing">"처리 중…"</string>
   <string name="screen_report_content_block_user">"사용자 차단하기"</string>
@@ -33,7 +35,7 @@
   <string name="screen_room_attachment_source_camera_video">"동영상 녹화"</string>
   <string name="screen_room_attachment_source_files">"첨부 파일"</string>
   <string name="screen_room_attachment_source_gallery">"사진 &amp; 동영상 라이브러리"</string>
-  <string name="screen_room_attachment_source_location">"위치"</string>
+  <string name="screen_room_attachment_source_location">"위치 공유"</string>
   <string name="screen_room_attachment_source_poll">"투표"</string>
   <string name="screen_room_attachment_text_formatting">"텍스트 서식"</string>
   <string name="screen_room_encrypted_history_banner">"메시지 기록은 현재 사용할 수 없습니다."</string>

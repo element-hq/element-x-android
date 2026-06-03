@@ -8,7 +8,6 @@
 
 package io.element.android.appnav
 
-import android.content.Intent
 import android.os.Parcelable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
@@ -55,6 +54,7 @@ import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.home.api.HomeEntryPoint
 import io.element.android.features.linknewdevice.api.LinkNewDeviceEntryPoint
+import io.element.android.features.location.api.live.ActiveLiveLocationShareManager
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorContainer
@@ -63,6 +63,7 @@ import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.features.roomdirectory.api.RoomDirectoryEntryPoint
 import io.element.android.features.securebackup.api.SecureBackupEntryPoint
 import io.element.android.features.share.api.ShareEntryPoint
+import io.element.android.features.share.api.ShareIntentData
 import io.element.android.features.startchat.api.StartChatEntryPoint
 import io.element.android.features.userprofile.api.UserProfileEntryPoint
 import io.element.android.features.verifysession.api.IncomingVerificationEntryPoint
@@ -77,6 +78,7 @@ import io.element.android.libraries.designsystem.theme.ElementThemeApp
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
+import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -144,11 +146,13 @@ class LoggedInFlowNode(
     private val syncService: SyncService,
     private val enterpriseService: EnterpriseService,
     private val appPreferencesStore: AppPreferencesStore,
+    private val featureFlagService: FeatureFlagService,
     private val buildMeta: BuildMeta,
     snackbarDispatcher: SnackbarDispatcher,
     private val analyticsService: AnalyticsService,
     private val analyticsRoomListStateWatcher: AnalyticsRoomListStateWatcher,
     private val createRoomEntryPoint: CreateRoomEntryPoint,
+    private val activeLiveLocationShareManager: ActiveLiveLocationShareManager,
 ) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Placeholder,
@@ -209,6 +213,7 @@ class LoggedInFlowNode(
         super.onBuilt()
         lifecycleScope.launch {
             sessionEnterpriseService.init()
+            activeLiveLocationShareManager.setup()
         }
         lifecycle.subscribe(
             onCreate = {
@@ -217,7 +222,6 @@ class LoggedInFlowNode(
                 loggedInFlowProcessor.observeEvents(sessionCoroutineScope)
                 matrixClient.sessionVerificationService.setListener(verificationListener)
                 mediaPreviewConfigMigration()
-
                 sessionCoroutineScope.launch {
                     // Wait for the network to be connected before pre-fetching the max file upload size
                     networkMonitor.connectivity.first { networkStatus -> networkStatus == NetworkStatus.Connected }
@@ -307,7 +311,7 @@ class LoggedInFlowNode(
         data object RoomDirectory : NavTarget
 
         @Parcelize
-        data class IncomingShare(val intent: Intent) : NavTarget
+        data class IncomingShare(val shareIntentData: ShareIntentData) : NavTarget
 
         @Parcelize
         data class IncomingVerificationRequest(val data: VerificationRequest.Incoming) : NavTarget
@@ -378,9 +382,13 @@ class LoggedInFlowNode(
             }
             is NavTarget.Room -> {
                 val joinedRoomCallback = object : JoinedRoomLoadedFlowNode.Callback {
-                    override fun navigateToRoom(roomId: RoomId, serverNames: List<String>) {
+                    override fun onDone() {
+                        backstack.pop()
+                    }
+
+                    override fun navigateToRoom(roomId: RoomId, serverNames: List<String>, clearBackStack: Boolean) {
                         lifecycleScope.launch {
-                            attachRoom(roomIdOrAlias = roomId.toRoomIdOrAlias(), serverNames = serverNames, clearBackstack = false)
+                            attachRoom(roomIdOrAlias = roomId.toRoomIdOrAlias(), serverNames = serverNames, clearBackstack = clearBackStack)
                         }
                     }
 
@@ -421,6 +429,10 @@ class LoggedInFlowNode(
 
                     override fun navigateToGlobalNotificationSettings() {
                         backstack.push(NavTarget.Settings(PreferencesEntryPoint.InitialTarget.NotificationSettings))
+                    }
+
+                    override fun navigateToDeveloperSettings() {
+                        backstack.push(NavTarget.Settings(PreferencesEntryPoint.InitialTarget.DeveloperSettings))
                     }
                 }
                 val inputs = RoomFlowNode.Inputs(
@@ -570,7 +582,7 @@ class LoggedInFlowNode(
                 shareEntryPoint.createNode(
                     parentNode = this,
                     buildContext = buildContext,
-                    params = ShareEntryPoint.Params(intent = navTarget.intent),
+                    params = ShareEntryPoint.Params(shareIntentData = navTarget.shareIntentData),
                     callback = object : ShareEntryPoint.Callback {
                         override fun onDone(roomIds: List<RoomId>) {
                             // Remove the incoming share screen
@@ -649,13 +661,13 @@ class LoggedInFlowNode(
         }
     }
 
-    internal suspend fun attachIncomingShare(intent: Intent) {
+    internal suspend fun attachIncomingShare(shareIntentData: ShareIntentData) {
         waitForNavTargetAttached { navTarget ->
             navTarget is NavTarget.Home
         }
         attachChild<Node> {
             backstack.push(
-                NavTarget.IncomingShare(intent)
+                NavTarget.IncomingShare(shareIntentData)
             )
         }
     }
@@ -667,6 +679,7 @@ class LoggedInFlowNode(
         }.collectAsState(SemanticColorsLightDark.default)
         ElementThemeApp(
             appPreferencesStore = appPreferencesStore,
+            featureFlagService = featureFlagService,
             compoundLight = colors.light,
             compoundDark = colors.dark,
             buildMeta = buildMeta,
@@ -744,11 +757,11 @@ private class AttachRoomOperation(
                     }
                 } + // Always create a new element, otherwise we wouldn't be navigating to the target event id or child node
                     BackStackElement(
-                    key = NavKey(roomTarget),
-                    fromState = CREATED,
-                    targetState = ACTIVE,
-                    operation = this
-                )
+                        key = NavKey(roomTarget),
+                        fromState = CREATED,
+                        targetState = ACTIVE,
+                        operation = this
+                    )
             } else {
                 // Otherwise, just push the new node to the end of the backstack
                 Push<LoggedInFlowNode.NavTarget>(roomTarget).invoke(currentElements)

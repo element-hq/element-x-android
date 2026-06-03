@@ -95,7 +95,7 @@ class DefaultVoiceMessageMediaRepo(
         }
     }
 
-    private val cachedFile: File? = mxcTools.mxcUri2FilePath(mediaSource.url)?.let {
+    private val cachedFile: File? = mxcTools.mxcUri2FilePath(mediaSource.safeUrl)?.let {
         File("${cacheDir.path}/$CACHE_VOICE_SUBDIR/$it")
     }
 }

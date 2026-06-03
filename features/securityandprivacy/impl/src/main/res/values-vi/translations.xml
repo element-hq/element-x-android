@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_edit_room_address_room_address_section_footer">"Bạn cần một địa chỉ để hiển thị trong danh bạ công khai."</string>
+  <string name="screen_edit_room_address_title">"Chỉnh sửa địa chỉ"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_description">"Sau khi được kích hoạt, mã hóa cho một phòng chat không thể tắt được. Lịch sử tin nhắn chỉ hiển thị cho các thành viên phòng chat kể từ khi họ được mời hoặc kể từ khi họ tham gia phòng chat.
+Không ai ngoài các thành viên phòng chat có thể đọc tin nhắn. Điều này có thể ngăn chặn bot và các thiết bị kết nối hoạt động đúng cách.
+Chúng tôi không khuyến khích bật mã hóa cho các phòng chat mà bất kỳ ai cũng có thể tìm thấy và tham gia."</string>
+  <string name="screen_security_and_privacy_encryption_section_header">"Mã hóa"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_title">"Thành viên không gian"</string>
+  <string name="screen_security_and_privacy_room_address_section_footer">"Bạn cần một địa chỉ để hiển thị trong danh bạ công khai."</string>
+</resources>

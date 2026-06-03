@@ -1,7 +1,7 @@
-import extension.applyKoverPluginToAllSubProjects
+import extension.setupKover
 
 plugins {
     id("org.jetbrains.kotlinx.kover") apply false
 }
 
-applyKoverPluginToAllSubProjects()
+setupKover()

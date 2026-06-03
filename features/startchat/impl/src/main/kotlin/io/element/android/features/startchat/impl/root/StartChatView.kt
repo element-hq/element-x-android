@@ -21,8 +21,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -31,6 +33,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.startchat.api.ConfirmingStartDmWithMatrixUser
 import io.element.android.features.startchat.impl.R
 import io.element.android.features.startchat.impl.components.UserListView
+import io.element.android.libraries.androidutils.ui.hideKeyboardAndAwaitAnimation
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.async.AsyncActionViewDefaults
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -47,6 +50,7 @@ import io.element.android.libraries.matrix.ui.components.CreateDmConfirmationBot
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.launch
 
 @Composable
 fun StartChatView(
@@ -59,6 +63,8 @@ fun StartChatView(
     onRoomDirectorySearchClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
     Scaffold(
         modifier = modifier.fillMaxWidth(),
         topBar = {
@@ -73,6 +79,8 @@ fun StartChatView(
                 .consumeWindowInsets(paddingValues),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
+            val view = LocalView.current
+
             UserListView(
                 modifier = Modifier.fillMaxWidth(),
                 // Do not render suggestions in this case, the suggestion will be rendered
@@ -81,7 +89,10 @@ fun StartChatView(
                     recentDirectRooms = persistentListOf(),
                 ),
                 onSelectUser = {
-                    state.eventSink(StartChatEvents.StartDM(it))
+                    coroutineScope.launch {
+                        view.hideKeyboardAndAwaitAnimation()
+                        state.eventSink(StartChatEvents.StartDM(it))
+                    }
                 },
                 onDeselectUser = { },
             )
@@ -119,6 +130,7 @@ fun StartChatView(
             if (data is ConfirmingStartDmWithMatrixUser) {
                 CreateDmConfirmationBottomSheet(
                     matrixUser = data.matrixUser,
+                    isUserIdentityUnknown = data.isUserIdentityUnknown,
                     onSendInvite = {
                         state.eventSink(StartChatEvents.StartDM(data.matrixUser))
                     },
@@ -164,14 +176,12 @@ private fun CreateRoomActionButtonsList(
                 onClick = onNewRoomClick,
             )
         }
-        if (state.isRoomDirectorySearchEnabled) {
-            item {
-                CreateRoomActionButton(
-                    iconRes = CompoundDrawables.ic_compound_list_bulleted,
-                    text = stringResource(id = R.string.screen_room_directory_search_title),
-                    onClick = onRoomDirectorySearchClick,
-                )
-            }
+        item {
+            CreateRoomActionButton(
+                iconRes = CompoundDrawables.ic_compound_list_bulleted,
+                text = stringResource(id = R.string.screen_room_directory_search_title),
+                onClick = onRoomDirectorySearchClick,
+            )
         }
         item {
             CreateRoomActionButton(

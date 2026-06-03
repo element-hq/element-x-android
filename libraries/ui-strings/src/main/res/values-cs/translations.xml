@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Přidat reakci: %1$s"</string>
+  <string name="a11y_address">"Adresa"</string>
   <string name="a11y_avatar">"Profilový obrázek"</string>
   <string name="a11y_collapse_message_text_field">"Minimalizovat textové pole zprávy"</string>
   <string name="a11y_delete">"Smazat"</string>
@@ -14,6 +15,7 @@
   <string name="a11y_encryption_details">"Podrobnosti o šifrování"</string>
   <string name="a11y_expand_message_text_field">"Rozbalit textové pole zprávy"</string>
   <string name="a11y_hide_password">"Skrýt heslo"</string>
+  <string name="a11y_info">"Informace"</string>
   <string name="a11y_join_call">"Připojit se k hovoru"</string>
   <string name="a11y_jump_to_bottom">"Přejít dolů"</string>
   <string name="a11y_move_the_map_to_my_location">"Přesunout mapu na mou polohu"</string>
@@ -27,9 +29,12 @@
   <string name="a11y_pause">"Pozastavit"</string>
   <string name="a11y_paused_voice_message">"Hlasová zpráva, délka: %1$s, aktuální pozice: %2$s"</string>
   <string name="a11y_pin_field">"Pole pro PIN"</string>
+  <string name="a11y_pinned_location">"Připnutá poloha"</string>
   <string name="a11y_play">"Přehrát"</string>
+  <string name="a11y_playback_speed">"Rychlost přehrávání"</string>
   <string name="a11y_poll">"Hlasování"</string>
   <string name="a11y_poll_end">"Hlasování ukončeno"</string>
+  <string name="a11y_qr_code">"QR kód"</string>
   <string name="a11y_react_with">"Reagovat s %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Reagovat s dalšími emoji"</string>
   <string name="a11y_read_receipts_multiple">"%1$s a %2$s přečetli"</string>
@@ -44,9 +49,13 @@
   <string name="a11y_remove_reaction_with">"Odstranit reakci pomocí %1$s"</string>
   <string name="a11y_room_avatar">"Avatar místnosti"</string>
   <string name="a11y_send_files">"Odeslat soubory"</string>
+  <string name="a11y_sender_location">"Poloha odesílatele"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Vyžaduje se časově omezená akce, na ověření máte jednu minutu"</string>
+  <string name="a11y_settings_with_required_action">"Nastavení, vyžaduje akci"</string>
   <string name="a11y_show_password">"Zobrazit heslo"</string>
   <string name="a11y_start_call">"Zahájit hovor"</string>
+  <string name="a11y_start_video_call">"Zahájit videohovor"</string>
+  <string name="a11y_start_voice_call">"Zahájit hlasový hovor"</string>
   <string name="a11y_tombstoned_room">"Místnost s náhrobkem"</string>
   <string name="a11y_user_avatar">"Avatar uživatele"</string>
   <string name="a11y_user_menu">"Uživatelské menu"</string>
@@ -64,6 +73,7 @@
   <string name="action_call">"Hovor"</string>
   <string name="action_cancel">"Zrušit"</string>
   <string name="action_cancel_for_now">"Prozatím zrušit"</string>
+  <string name="action_choose_file">"Vyberte soubor"</string>
   <string name="action_choose_photo">"Vybrat fotku"</string>
   <string name="action_clear">"Vymazat"</string>
   <string name="action_close">"Zavřít"</string>
@@ -83,12 +93,15 @@
   <string name="action_deactivate_account">"Deaktivovat účet"</string>
   <string name="action_decline">"Odmítnout"</string>
   <string name="action_decline_and_block">"Odmítnout a zablokovat"</string>
+  <string name="action_delete">"Smazat"</string>
+  <string name="action_delete_account">"Smazat účet"</string>
   <string name="action_delete_poll">"Odstranit hlasování"</string>
   <string name="action_deselect_all">"Odznačit vše"</string>
   <string name="action_disable">"Zakázat"</string>
   <string name="action_discard">"Vyřadit"</string>
   <string name="action_dismiss">"Zavřít"</string>
   <string name="action_done">"Hotovo"</string>
+  <string name="action_download">"Stáhnout"</string>
   <string name="action_edit">"Upravit"</string>
   <string name="action_edit_caption">"Upravit titulek"</string>
   <string name="action_edit_poll">"Upravit hlasování"</string>
@@ -116,6 +129,7 @@
   <string name="action_leave_space">"Opustit prostor"</string>
   <string name="action_load_more">"Načíst více"</string>
   <string name="action_manage_account">"Spravovat účet"</string>
+  <string name="action_manage_account_and_devices">"Správa účtu a zařízení"</string>
   <string name="action_manage_devices">"Spravovat zařízení"</string>
   <string name="action_manage_rooms">"Spravovat místnosti"</string>
   <string name="action_message">"Zpráva"</string>
@@ -155,16 +169,18 @@
   <string name="action_send_voice_message">"Odeslat hlasovou zprávu"</string>
   <string name="action_share">"Sdílet"</string>
   <string name="action_share_link">"Sdílet odkaz"</string>
+  <string name="action_share_live_location">"Sdílet aktuální polohu"</string>
   <string name="action_show">"Zobrazit"</string>
   <string name="action_sign_in_again">"Přihlásit se znovu"</string>
-  <string name="action_signout">"Odhlásit se"</string>
-  <string name="action_signout_anyway">"Přesto se odhlásit"</string>
+  <string name="action_signout">"Odebrat toto zařízení"</string>
+  <string name="action_signout_anyway">"Přesto toto zařízení odebrat"</string>
   <string name="action_skip">"Přeskočit"</string>
   <string name="action_start">"Začít"</string>
   <string name="action_start_chat">"Zahájit chat"</string>
   <string name="action_start_over">"Začít znovu"</string>
   <string name="action_start_verification">"Zahájit ověření"</string>
   <string name="action_static_map_load">"Klepnutím načtete mapu"</string>
+  <string name="action_stop">"Zastavit"</string>
   <string name="action_take_photo">"Vyfotit"</string>
   <string name="action_tap_for_options">"Klepnutím zobrazíte možnosti"</string>
   <string name="action_translate">"Přeložit"</string>
@@ -192,7 +208,9 @@
   <string name="common_beta">"Beta"</string>
   <string name="common_blocked_users">"Blokovaní uživatelé"</string>
   <string name="common_bubbles">"Bubliny"</string>
+  <string name="common_call_declined">"Hovor odmítnut"</string>
   <string name="common_call_started">"Hovor zahájen"</string>
+  <string name="common_call_you_declined">"Odmítli jste hovor"</string>
   <string name="common_chat_backup">"Záloha chatu"</string>
   <string name="common_copied_to_clipboard">"Zkopírováno do schránky"</string>
   <string name="common_copyright">"Autorská práva"</string>
@@ -202,7 +220,6 @@
   <string name="common_current_user_left_room">"Místnost opuštěna"</string>
   <string name="common_current_user_left_space">"Opustit prostor"</string>
   <string name="common_current_user_rejected_invite">"Pozvánka odmítnuta"</string>
-  <string name="common_dark">"Tmavé"</string>
   <string name="common_decryption_error">"Chyba dešifrování"</string>
   <string name="common_description">"Popis"</string>
   <string name="common_developer_options">"Možnosti pro vývojáře"</string>
@@ -218,6 +235,7 @@
   <string name="common_empty_file">"Prázdný soubor"</string>
   <string name="common_encryption">"Šifrování"</string>
   <string name="common_encryption_enabled">"Šifrování povoleno"</string>
+  <string name="common_ends_at">"Končí v %1$s"</string>
   <string name="common_enter_your_pin">"Zadejte svůj PIN"</string>
   <string name="common_error">"Chyba"</string>
   <string name="common_error_registering_pusher_android">"Došlo k chybě, nemusíte dostávat oznámení o nových zprávách. Vyřešte prosím problémy s oznámeními z nastavení.
@@ -227,6 +245,7 @@ Důvod: %1$s."</string>
   <string name="common_failed">"Selhalo"</string>
   <string name="common_favourite">"Oblíbené"</string>
   <string name="common_favourited">"Oblíbené"</string>
+  <string name="common_fetching_notifications_title_android">"Synchronizace oznámení…"</string>
   <string name="common_file">"Soubor"</string>
   <string name="common_file_deleted">"Soubor smazán"</string>
   <string name="common_file_saved">"Soubor uložen"</string>
@@ -240,10 +259,11 @@ Důvod: %1$s."</string>
   <string name="common_invite_unknown_profile">"Tento Matrix identifikátor nelze najít, takže pozvánka nemusí být přijata."</string>
   <string name="common_leaving_room">"Opuštění místnosti"</string>
   <string name="common_leaving_space">"Opuštění prostoru"</string>
-  <string name="common_light">"Světlý"</string>
   <string name="common_line_copied_to_clipboard">"Řádek zkopírován do schránky"</string>
   <string name="common_link_copied_to_clipboard">"Odkaz zkopírován do schránky"</string>
   <string name="common_link_new_device">"Připojit nové zařízení"</string>
+  <string name="common_live_location">"Aktuální poloha"</string>
+  <string name="common_live_location_ended">"Sdílení aktuální polohy skončilo"</string>
   <string name="common_loading">"Načítání…"</string>
   <string name="common_loading_more">"Načítání dalších…"</string>
   <plurals name="common_many_members">
@@ -272,6 +292,7 @@ Důvod: %1$s."</string>
   <string name="common_offline">"Offline"</string>
   <string name="common_open_source_licenses">"Licence s otevřeným zdrojovým kódem"</string>
   <string name="common_or">"nebo"</string>
+  <string name="common_other_options">"Další možnosti"</string>
   <string name="common_password">"Heslo"</string>
   <string name="common_people">"Lidé"</string>
   <string name="common_permalink">"Trvalý odkaz"</string>
@@ -306,7 +327,6 @@ Důvod: %1$s."</string>
     <item quantity="other">"%1$d odpovědí"</item>
   </plurals>
   <string name="common_replying_to">"Odpověď na %1$s"</string>
-  <string name="common_report_a_bug">"Nahlásit chybu"</string>
   <string name="common_report_a_problem">"Nahlásit problém"</string>
   <string name="common_report_submitted">"Zpráva odeslána"</string>
   <string name="common_rich_text_editor">"Editor formátovaného textu"</string>
@@ -343,9 +363,10 @@ Důvod: %1$s."</string>
   <string name="common_settings">"Nastavení"</string>
   <string name="common_share_space">"Sdílet prostor"</string>
   <string name="common_shared_history">"Noví členové vidí historii"</string>
+  <string name="common_shared_live_location">"Sdílená aktuální poloha"</string>
   <string name="common_shared_location">"Sdílená poloha"</string>
   <string name="common_shared_space">"Sdílený prostor"</string>
-  <string name="common_signing_out">"Odhlašování"</string>
+  <string name="common_signing_out">"Odebrání zařízení"</string>
   <string name="common_something_went_wrong">"Něco se nepovedlo"</string>
   <string name="common_something_went_wrong_message">"Narazili jsme na problém. Zkuste to prosím znovu."</string>
   <string name="common_space">"Prostor"</string>
@@ -362,16 +383,16 @@ Důvod: %1$s."</string>
   <string name="common_suggested">"Doporučeno"</string>
   <string name="common_suggestions">"Návrhy"</string>
   <string name="common_syncing">"Synchronizace"</string>
-  <string name="common_system">"Systém"</string>
   <string name="common_text">"Text"</string>
   <string name="common_third_party_notices">"Oznámení třetích stran"</string>
   <string name="common_thread">"Vlákno"</string>
+  <string name="common_threads">"Vlákna"</string>
   <string name="common_topic">"Téma"</string>
   <string name="common_topic_placeholder">"O čem je tato místnost?"</string>
   <string name="common_unable_to_decrypt">"Nelze dešifrovat"</string>
   <string name="common_unable_to_decrypt_insecure_device">"Šifrováno nezabezpečeným zařízením"</string>
   <string name="common_unable_to_decrypt_no_access">"Nemáte přístup k této zprávě"</string>
-  <string name="common_unable_to_decrypt_verification_violation">"Ověřená identita odesílatele se změnila"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Ověřená digitální identita odesílatele byla resetována"</string>
   <string name="common_unable_to_invite_message">"Pozvánky nebylo možné odeslat jednomu nebo více uživatelům."</string>
   <string name="common_unable_to_invite_title">"Nelze odeslat pozvánky"</string>
   <string name="common_unlock">"Odemknout"</string>
@@ -396,17 +417,19 @@ Důvod: %1$s."</string>
   <string name="common_voice_message">"Hlasová zpráva"</string>
   <string name="common_waiting">"Čekání…"</string>
   <string name="common_waiting_for_decryption_key">"Čekání na dešifrovací klíč"</string>
+  <string name="common_waiting_live_location">"Čekání na aktuální polohu…"</string>
   <string name="common_world_readable_history">"Kdokoli může vidět historii"</string>
   <string name="common_you">"Vy"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) sdílel(a) tuto zprávu v době, kdy jste nebyli v místnosti."</string>
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s sdílel(a) tuto zprávu v době, kdy jste nebyli v místnosti."</string>
   <string name="crypto_history_visible">"Tato místnost byla nastavena tak, aby noví členové mohli číst historii. %1$s"</string>
-  <string name="crypto_identity_change_pin_violation">"Identita uživatele %1$s se změnila. %2$s"</string>
-  <string name="crypto_identity_change_pin_violation_new">"Identita uživatele %1$s %2$s se změnila. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation">"Identita uživatele %1$s byla resetována. %2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"Identita uživatele %1$s %2$s byla resetována. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
-  <string name="crypto_identity_change_profile_pin_violation">"Identita uživatele %1$s se změnila."</string>
-  <string name="crypto_identity_change_verification_violation_new">"Identita uživatele %1$s %2$s se změnila. %3$s"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"Identita uživatele %1$s byla resetována."</string>
+  <string name="crypto_identity_change_verification_violation_new">"Identita uživatele %1$s %2$s byla resetována. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Zrušit ověření"</string>
+  <string name="dialog_allow_access">"Povolit přístup"</string>
   <string name="dialog_confirm_link_message">"Odkaz %1$s vás přesměruje na jinou stránku %2$s
 
 Opravdu chcete pokračovat?"</string>
@@ -436,6 +459,7 @@ Opravdu chcete pokračovat?"</string>
   <string name="error_failed_locating_user">"%1$s nemá přístup k vaší poloze. Zkuste to prosím později."</string>
   <string name="error_failed_uploading_voice_message">"Nepodařilo se nahrát hlasovou zprávu."</string>
   <string name="error_invalid_invite">"Místnost již neexistuje nebo pozvánka již není platná."</string>
+  <string name="error_location_service_disabled_android">"Pro přístup k funkcím založeným na poloze prosím povolte GPS."</string>
   <string name="error_message_not_found">"Zpráva nebyla nalezena"</string>
   <string name="error_missing_location_auth_android">"%1$s nemá oprávnění k přístupu k vaší poloze. Přístup můžete povolit v Nastavení."</string>
   <string name="error_missing_location_rationale_android">"%1$s nemá oprávnění k přístupu k vaší poloze. Povolit přístup níže."</string>
@@ -447,6 +471,9 @@ Opravdu chcete pokračovat?"</string>
   <string name="error_unknown">"Omlouváme se, došlo k chybě"</string>
   <string name="invite_friends_rich_title">"🔐️ Připojte se ke mně na %1$s"</string>
   <string name="invite_friends_text">"Ahoj, ozvi se mi na %1$s: %2$s"</string>
+  <string name="live_location_sharing_foreground_service_channel_title_android">"Sdílení polohy v reálném čase"</string>
+  <string name="live_location_sharing_foreground_service_message_android">"Probíhá sdílení polohy"</string>
+  <string name="live_location_sharing_foreground_service_title_android">"%1$s Aktuální poloha"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Zatřeste zařízením pro nahlášení chyby"</string>
   <string name="screen_bug_report_a11y_screenshot">"Snímek obrazovky"</string>
@@ -454,6 +481,14 @@ Opravdu chcete pokračovat?"</string>
   <string name="screen_create_poll_options_section_title">"Možnosti"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Odstranit %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Nastavení"</string>
+  <string name="screen_live_location_sheet_nobody_sharing">"Nikdo nesdílí svou polohu"</string>
+  <string name="screen_live_location_sheet_sharing_live_location">"Sdílení aktuální polohy"</string>
+  <plurals name="screen_live_location_sheet_subtitle">
+    <item quantity="one">"%1$d osoba"</item>
+    <item quantity="few">"%1$d osoby"</item>
+    <item quantity="other">"%1$d lidí"</item>
+  </plurals>
+  <string name="screen_live_location_sheet_title">"Na mapě"</string>
   <string name="screen_media_picker_error_failed_selection">"Výběr média se nezdařil, zkuste to prosím znovu."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Přidržte zprávu a vyberte „%1$s“, kterou chcete zahrnout sem."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Připněte důležité zprávy, aby je bylo možné snadno najít"</string>
@@ -463,11 +498,11 @@ Opravdu chcete pokračovat?"</string>
     <item quantity="other">"%1$d Připnutých zpráv"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Připnuté zprávy"</string>
-  <string name="screen_reset_identity_confirmation_subtitle">"Chystáte se přejít na svůj %1$s účet a obnovit svou identitu. Poté budete přesměrováni zpět do aplikace."</string>
-  <string name="screen_reset_identity_confirmation_title">"Nemůžete to potvrdit? Přejděte na svůj účet a resetujte svou identitu."</string>
+  <string name="screen_reset_identity_confirmation_subtitle">"Chystáte se přejít na svůj účet %1$s, abyste resetovali svou digitální identitu. Poté budete přesměrováni zpět do aplikace."</string>
+  <string name="screen_reset_identity_confirmation_title">"Nemůžete to potvrdit? Přejděte do svého účtu a resetujte svou digitální identitu."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Zrušit ověření a odeslat"</string>
   <string name="screen_resolve_send_failure_changed_identity_subtitle">"Ověření můžete zrušit a přesto odeslat tuto zprávu, nebo můžete prozatím zrušit a zkusit to znovu později po opětovném ověření %1$s."</string>
-  <string name="screen_resolve_send_failure_changed_identity_title">"Vaše zpráva nebyla odeslána, protože ověřená identita uživatele %1$s se změnila"</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Vaše zpráva nebyla odeslána, protože byla resetována ověřená digitální identita %1$s"</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Přesto odeslat zprávu"</string>
   <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s používá jedno nebo více neověřených zařízení. Zprávu můžete přesto odeslat, nebo můžete prozatím zrušit a zkusit to znovu později poté, co %2$s ověří všechna svá zařízení."</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Vaše zpráva nebyla odeslána, protože%1$s neověřil(a) všechna zařízení"</string>
@@ -479,6 +514,7 @@ Opravdu chcete pokračovat?"</string>
   <string name="screen_room_event_pill">"Zpráva v %1$s"</string>
   <string name="screen_room_grouped_state_events_expand">"Rozbalit"</string>
   <string name="screen_room_grouped_state_events_reduce">"Zmenšit"</string>
+  <string name="screen_room_live_location_banner">"Sdílení aktuální polohy"</string>
   <string name="screen_room_permalink_same_room_android">"Již si prohlížíte tuto místnost!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s z %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Připnuté zprávy"</string>
@@ -490,13 +526,16 @@ Opravdu chcete pokračovat?"</string>
   <string name="screen_share_open_apple_maps">"Otevřít v Mapách Apple"</string>
   <string name="screen_share_open_google_maps">"Otevřít v Mapách Google"</string>
   <string name="screen_share_open_osm_maps">"Otevřít v OpenStreetMap"</string>
-  <string name="screen_share_this_location_action">"Sdílet tuto polohu"</string>
+  <string name="screen_share_this_location_action">"Sdílejte vybranou polohu"</string>
+  <string name="screen_sharing_location_option_sheet_title">"Možnosti sdílení"</string>
   <string name="screen_space_list_description">"Prostory, které jste vytvořili nebo se k nim připojili."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_empty_state_title">"Vytvořte prostory pro uspořádání místností"</string>
   <string name="screen_space_list_parent_space">"%1$s prostor"</string>
   <string name="screen_space_list_title">"Prostory"</string>
-  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Zpráva nebyla odeslána, protože ověřená identita uživatele %1$s se změnila."</string>
+  <string name="screen_static_location_sheet_timestamp_description">"Sdíleno %1$s"</string>
+  <string name="screen_static_location_sheet_title">"Na mapě"</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Zpráva nebyla odeslána, protože byla resetována ověřená digitální identita %1$s."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Zpráva nebyla odeslána, protože%1$s neověřil(a) všechna zařízení."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Zpráva nebyla odeslána, protože jste neověřili jedno nebo více zařízení."</string>
   <string name="screen_view_location_title">"Poloha"</string>
@@ -506,5 +545,5 @@ Opravdu chcete pokračovat?"</string>
   <string name="timeline_decryption_failure_historical_event_unverified_device">"Pro přístup k historickým zprávám musíte toto zařízení ověřit"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Nemáte přístup k této zprávě"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Nelze dešifrovat zprávu"</string>
-  <string name="timeline_decryption_failure_withheld_unverified">"Tato zpráva byla zablokována buď proto, že jste neověřili své zařízení, nebo proto, že odesílatel potřebuje ověřit vaši identitu."</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Tato zpráva byla zablokována buď proto, že jste neověřili své zařízení, nebo proto, že odesílatel musí ověřit vaši digitální identitu."</string>
 </resources>

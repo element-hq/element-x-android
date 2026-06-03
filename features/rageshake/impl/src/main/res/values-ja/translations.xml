@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_attach_screenshot">"スクリーンショットを添付"</string>
+  <string name="screen_bug_report_contact_me">"追加の質問がある場合は、ご連絡ください。"</string>
+  <string name="screen_bug_report_contact_me_title">"返信を受け取る"</string>
+  <string name="screen_bug_report_edit_screenshot">"スクリーンショットを編集"</string>
+  <string name="screen_bug_report_editor_description">"問題を教えてください。行った操作、想定した挙動、実際の挙動などについて、可能な限り詳細に記述してください。"</string>
+  <string name="screen_bug_report_editor_placeholder">"問題の説明…"</string>
+  <string name="screen_bug_report_editor_supporting">"可能であれば英語で記入してください。"</string>
+  <string name="screen_bug_report_error_description_too_short">"説明が過度に短いです。問題についてより詳細にご記入ください。"</string>
+  <string name="screen_bug_report_include_crash_logs">"クラッシュログを送信"</string>
+  <string name="screen_bug_report_include_logs">"ログの記録を許可"</string>
+  <string name="screen_bug_report_include_logs_error">"ログのサイズが大きく、報告に添付することができません。ログは別の方法で送信してください。"</string>
+  <string name="screen_bug_report_include_screenshot">"スクリーンを送信"</string>
+  <string name="screen_bug_report_logs_description">"メッセージには、正常に動作していることを確認するため、ログが含まれています。ログを含めたくない場合は、オフにしてください。"</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"%1$s は前回の利用時にクラッシュしました。クラッシュレポートを開発者に共有しますか？"</string>
+  <string name="screen_bug_report_send_notification_settings_description">"通知について問題がある場合は、プッシュ通知の設定を添付することで、原因究明の手がかりになります。この設定には、ユーザーネームや通知のキーワードなどの個人情報が含まれる場合があります。ご注意ください。"</string>
+  <string name="screen_bug_report_send_notification_settings_title">"通知設定を送信"</string>
+  <string name="screen_bug_report_view_logs">"ログを表示"</string>
+</resources>

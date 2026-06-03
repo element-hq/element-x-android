@@ -8,10 +8,20 @@
   </plurals>
   <string name="screen_leave_space_subtitle">"Velg rommene du vil forlate, som du ikke er den eneste administratoren for:"</string>
   <string name="screen_leave_space_subtitle_last_admin">"Du må tildele en annen administrator for dette området før du kan forlate det."</string>
+  <string name="screen_leave_space_subtitle_last_owner">"Du er den eneste eieren av%1$s. Du må overføre eierskapet til noen andre før du drar."</string>
   <string name="screen_leave_space_subtitle_only_last_admin">"Du vil ikke bli fjernet fra følgende rom fordi du er den eneste administratoren:"</string>
   <string name="screen_leave_space_title">"Forlat %1$s?"</string>
   <string name="screen_leave_space_title_last_admin">"Du er den eneste administratoren for %1$s"</string>
+  <string name="screen_leave_space_title_last_owner">"Overfør eierskap"</string>
+  <string name="screen_space_add_room_action">"Rom"</string>
+  <string name="screen_space_add_rooms_room_access_description">"Hvis du legger til et rom, vil det ikke påvirke tilgangen til rommet. For å endre tilgangen, gå til Rominnstillinger &gt; Sikkerhet og personvern."</string>
+  <string name="screen_space_empty_state_title">"Legg til ditt første rom"</string>
   <string name="screen_space_menu_action_members">"Vis medlemmer"</string>
+  <string name="screen_space_remove_rooms_confirmation_content">"Fjerning av et rom vil ikke påvirke tilgangen til rommet. For å endre tilgangen, gå til Rominformasjon &gt; Personvern og sikkerhet."</string>
+  <plurals name="screen_space_remove_rooms_confirmation_title">
+    <item quantity="one">"Fjern %1$d rom fra %2$s"</item>
+    <item quantity="other">"Fjern %1$d rommene fra %2$s"</item>
+  </plurals>
   <string name="screen_space_settings_leave_space">"Forlat område"</string>
   <string name="screen_space_settings_roles_and_permissions">"Roller og tillatelser"</string>
   <string name="screen_space_settings_security_and_privacy">"Sikkerhet og personvern"</string>

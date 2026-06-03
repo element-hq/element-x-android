@@ -47,7 +47,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.libraries.ui.utils.time.isTalkbackActive
+import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
 import kotlin.time.DurationUnit
 
@@ -72,14 +72,13 @@ internal fun TimelineItemRow(
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
-    onJoinCallClick: () -> Unit,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
     eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit =
         { event, contentModifier, onContentLayoutChange ->
             TimelineItemEventContentView(
                 content = event.content,
-                hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId),
+                hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId, event.isMine),
                 onShowContentClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
                 onContentClick = { onContentClick(event) },
                 onLongClick = { onLongClick(event) },
@@ -125,11 +124,13 @@ internal fun TimelineItemRow(
                     }
                     is TimelineItemRtcNotificationContent -> {
                         TimelineItemCallNotifyView(
-                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                            timelineRoomInfo = timelineRoomInfo,
                             event = timelineItem,
-                            roomCallState = timelineRoomInfo.roomCallState,
+                            content = timelineItem.content,
+                            renderReadReceipts = renderReadReceipts,
+                            isLastOutgoingMessage = isLastOutgoingMessage,
                             onLongClick = onLongClick,
-                            onJoinCallClick = onJoinCallClick,
+                            onReadReceiptsClick = onReadReceiptClick,
                         )
                     }
                     else -> {

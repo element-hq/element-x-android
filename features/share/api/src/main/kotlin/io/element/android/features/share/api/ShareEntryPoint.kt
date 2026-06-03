@@ -8,7 +8,6 @@
 
 package io.element.android.features.share.api
 
-import android.content.Intent
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -16,7 +15,7 @@ import io.element.android.libraries.architecture.FeatureEntryPoint
 import io.element.android.libraries.matrix.api.core.RoomId
 
 interface ShareEntryPoint : FeatureEntryPoint {
-    data class Params(val intent: Intent)
+    data class Params(val shareIntentData: ShareIntentData)
 
     fun createNode(
         parentNode: Node,

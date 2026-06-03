@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.matrix.test
 
+import io.element.android.libraries.matrix.api.HomeserverCapabilitiesProvider
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.analytics.SdkStoreSizes
 import io.element.android.libraries.matrix.api.core.DeviceId
@@ -25,7 +26,7 @@ import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaPreviewService
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
-import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
+import io.element.android.libraries.matrix.api.oauth.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -33,6 +34,7 @@ import io.element.android.libraries.matrix.api.room.NotJoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
+import io.element.android.libraries.matrix.api.room.location.BeaconInfoUpdate
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.spaces.SpaceService
@@ -84,6 +86,7 @@ class FakeMatrixClient(
     override val roomDirectoryService: RoomDirectoryService = FakeRoomDirectoryService(),
     override val mediaPreviewService: MediaPreviewService = FakeMediaPreviewService(),
     override val roomMembershipObserver: RoomMembershipObserver = RoomMembershipObserver(),
+    private val homeserverCapabilitiesProvider: FakeHomeserverCapabilitiesProvider = FakeHomeserverCapabilitiesProvider(),
     private val accountManagementUrlResult: (AccountManagementAction?) -> Result<String?> = { lambdaError() },
     private val resolveRoomAliasResult: (RoomAlias) -> Result<Optional<ResolvedRoomAlias>> = {
         Result.success(
@@ -105,12 +108,14 @@ class FakeMatrixClient(
     private val canReportRoomLambda: () -> Boolean = { false },
     private val isLivekitRtcSupportedLambda: () -> Boolean = { false },
     override val ignoredUsersFlow: StateFlow<ImmutableList<UserId>> = MutableStateFlow(persistentListOf()),
+    override val ownBeaconInfoUpdates: Flow<BeaconInfoUpdate> = emptyFlow(),
     private val getMaxUploadSizeResult: () -> Result<Long> = { lambdaError() },
     private val getJoinedRoomIdsResult: () -> Result<Set<RoomId>> = { Result.success(emptySet()) },
     private val getRecentEmojisLambda: () -> Result<List<String>> = { Result.success(emptyList()) },
     private val addRecentEmojiLambda: (String) -> Result<Unit> = { Result.success(Unit) },
     private val markRoomAsFullyReadResult: (RoomId, EventId) -> Result<Unit> = { _, _ -> lambdaError() },
     private val performDatabaseVacuumLambda: () -> Result<Unit> = { lambdaError() },
+    private val getMapStyleUrlResult: () -> Result<String?> = { lambdaError() },
     private val getDatabaseSizesLambda: () -> Result<SdkStoreSizes> = { lambdaError() },
     private val resetWellKnownConfigLambda: () -> Result<Unit> = { lambdaError() },
 ) : MatrixClient {
@@ -369,6 +374,10 @@ class FakeMatrixClient(
         return performDatabaseVacuumLambda()
     }
 
+    override suspend fun getMapStyleUrl(): Result<String?> = simulateLongTask {
+        getMapStyleUrlResult()
+    }
+
     override suspend fun canLinkNewDevice(): Result<Boolean> = simulateLongTask {
         return canLinkNewDeviceResult()
     }
@@ -383,5 +392,9 @@ class FakeMatrixClient(
 
     override suspend fun resetWellKnownConfig(): Result<Unit> {
         return resetWellKnownConfigLambda()
+    }
+
+    override fun homeserverCapabilities(): HomeserverCapabilitiesProvider {
+        return homeserverCapabilitiesProvider
     }
 }

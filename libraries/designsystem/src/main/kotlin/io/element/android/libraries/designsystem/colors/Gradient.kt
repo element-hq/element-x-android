@@ -38,8 +38,11 @@ fun gradientSubtleColors(): List<Color> = listOf(
 fun gradientInfoColors(): List<Color> = listOf(
     ElementTheme.colors.gradientInfoStop1,
     ElementTheme.colors.gradientInfoStop2,
-    ElementTheme.colors.gradientInfoStop3,
-    ElementTheme.colors.gradientInfoStop4,
-    ElementTheme.colors.gradientInfoStop5,
-    ElementTheme.colors.gradientInfoStop6,
+)
+
+@Composable
+@ReadOnlyComposable
+fun gradientCriticalColors(): List<Color> = listOf(
+    ElementTheme.colors.gradientCriticalStop1,
+    ElementTheme.colors.gradientCriticalStop2,
 )

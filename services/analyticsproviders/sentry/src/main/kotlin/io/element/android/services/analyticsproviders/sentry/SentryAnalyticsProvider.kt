@@ -63,6 +63,7 @@ class SentryAnalyticsProvider(
             options.tracesSampleRate = 1.0
             options.isEnableUserInteractionTracing = true
             options.environment = buildMeta.buildType.toSentryEnv()
+            options.anrProfilingSampleRate = 0.75
         }
         Timber.tag(analyticsTag.value).d("Sentry was initialized correctly")
     }

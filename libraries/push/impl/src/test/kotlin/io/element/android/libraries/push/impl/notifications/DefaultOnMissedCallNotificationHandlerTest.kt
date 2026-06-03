@@ -18,7 +18,6 @@ import io.element.android.libraries.matrix.test.notification.FakeNotificationSer
 import io.element.android.libraries.matrix.test.notification.aNotificationData
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationDataFactory
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
-import io.element.android.libraries.push.test.notifications.FakeCallNotificationEventResolver
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runCurrent

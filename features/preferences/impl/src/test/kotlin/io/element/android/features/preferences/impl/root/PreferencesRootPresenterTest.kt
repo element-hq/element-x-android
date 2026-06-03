@@ -12,6 +12,8 @@ package io.element.android.features.preferences.impl.root
 
 import app.cash.turbine.ReceiveTurbine
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.enterprise.api.SessionEnterpriseService
+import io.element.android.features.enterprise.test.FakeSessionEnterpriseService
 import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.features.preferences.impl.utils.ShowDeveloperSettingsProvider
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
@@ -23,11 +25,13 @@ import io.element.android.libraries.featureflag.test.FakeFeature
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.indicator.test.FakeIndicatorService
-import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
+import io.element.android.libraries.matrix.api.oauth.AccountManagementAction
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
+import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.core.aBuildMeta
@@ -40,7 +44,9 @@ import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -61,6 +67,9 @@ class PreferencesRootPresenterTest {
         )
         createPresenter(
             matrixClient = matrixClient,
+            sessionEnterpriseService = FakeSessionEnterpriseService(
+                tweakMasUrlResult = { "tweaked $it" },
+            ),
         ).test {
             val initialState = awaitItem()
             assertThat(initialState.myUser).isEqualTo(
@@ -73,6 +82,7 @@ class PreferencesRootPresenterTest {
             assertThat(initialState.version).isEqualTo("A Version")
             assertThat(initialState.isMultiAccountEnabled).isFalse()
             assertThat(initialState.otherSessions).isEmpty()
+            assertThat(initialState.version).isEqualTo("A Version")
             val loadedState = awaitItem()
             assertThat(loadedState.myUser).isEqualTo(
                 MatrixUser(
@@ -81,27 +91,21 @@ class PreferencesRootPresenterTest {
                     avatarUrl = AN_AVATAR_URL
                 )
             )
-            assertThat(initialState.version).isEqualTo("A Version")
             assertThat(loadedState.showSecureBackup).isFalse()
             assertThat(loadedState.showSecureBackupBadge).isFalse()
             assertThat(loadedState.accountManagementUrl).isNull()
-            assertThat(loadedState.devicesManagementUrl).isNull()
             assertThat(loadedState.showAnalyticsSettings).isFalse()
             assertThat(loadedState.showLinkNewDevice).isFalse()
             assertThat(loadedState.showDeveloperSettings).isTrue()
             assertThat(loadedState.canDeactivateAccount).isTrue()
             assertThat(loadedState.canReportBug).isTrue()
+            assertThat(loadedState.nbOfBlockedUsers).isEqualTo(0)
             assertThat(loadedState.directLogoutState).isEqualTo(aDirectLogoutState())
             assertThat(loadedState.snackbarMessage).isNull()
-            skipItems(1)
             val finalState = awaitItem()
-            accountManagementUrlResult.assertions().isCalledExactly(2)
-                .withSequence(
-                    listOf(value(AccountManagementAction.Profile)),
-                    listOf(value(AccountManagementAction.SessionsList)),
-                )
-            assertThat(finalState.accountManagementUrl).isEqualTo("Profile url")
-            assertThat(finalState.devicesManagementUrl).isEqualTo("SessionsList url")
+            accountManagementUrlResult.assertions().isCalledOnce()
+                .with(value(null))
+            assertThat(finalState.accountManagementUrl).isEqualTo("tweaked null url")
         }
     }
 
@@ -118,6 +122,22 @@ class PreferencesRootPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.canReportBug).isFalse()
             skipItems(1)
+        }
+    }
+
+    @Test
+    fun `present - number of blocked users`() = runTest {
+        val matrixClient = FakeMatrixClient(
+            canDeactivateAccountResult = { true },
+            accountManagementUrlResult = { Result.success("") },
+            ignoredUsersFlow = MutableStateFlow(persistentListOf(A_USER_ID, A_USER_ID_2)),
+        )
+        createPresenter(
+            matrixClient = matrixClient,
+        ).test {
+            skipItems(1)
+            val initialState = awaitItem()
+            assertThat(initialState.nbOfBlockedUsers).isEqualTo(2)
         }
     }
 
@@ -181,9 +201,33 @@ class PreferencesRootPresenterTest {
             val loadedState = awaitFirstItem()
             repeat(times = ShowDeveloperSettingsProvider.DEVELOPER_SETTINGS_COUNTER) {
                 assertThat(loadedState.showDeveloperSettings).isFalse()
-                loadedState.eventSink(PreferencesRootEvents.OnVersionInfoClick)
+                loadedState.eventSink(PreferencesRootEvent.OnVersionInfoClick)
             }
             assertThat(awaitItem().showDeveloperSettings).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - switch session invoke method on the session store`() = runTest {
+        val setLatestSessionResult = lambdaRecorder<String, Unit> { }
+        val sessionStore = InMemorySessionStore(
+            initialList = listOf(
+                aSessionData(sessionId = A_SESSION_ID.value),
+                aSessionData(sessionId = A_SESSION_ID_2.value),
+            ),
+            setLatestSessionResult = setLatestSessionResult,
+        )
+        createPresenter(
+            matrixClient = FakeMatrixClient(
+                canDeactivateAccountResult = { true },
+                accountManagementUrlResult = { Result.success(null) },
+            ),
+            sessionStore = sessionStore,
+        ).test {
+            val loadedState = awaitFirstItem()
+            loadedState.eventSink(PreferencesRootEvent.SwitchToSession(A_SESSION_ID_2))
+            setLatestSessionResult.assertions().isCalledOnce()
+                .with(value(A_SESSION_ID_2.value))
         }
     }
 
@@ -288,6 +332,7 @@ class PreferencesRootPresenterTest {
         indicatorService: IndicatorService = FakeIndicatorService(),
         featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
         sessionStore: SessionStore = InMemorySessionStore(),
+        sessionEnterpriseService: SessionEnterpriseService = FakeSessionEnterpriseService(),
     ) = PreferencesRootPresenter(
         matrixClient = matrixClient,
         sessionVerificationService = sessionVerificationService,
@@ -300,5 +345,6 @@ class PreferencesRootPresenterTest {
         rageshakeFeatureAvailability = rageshakeFeatureAvailability,
         featureFlagService = featureFlagService,
         sessionStore = sessionStore,
+        sessionEnterpriseService = sessionEnterpriseService,
     )
 }

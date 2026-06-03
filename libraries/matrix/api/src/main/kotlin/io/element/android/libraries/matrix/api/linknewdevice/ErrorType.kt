@@ -24,6 +24,11 @@ sealed class ErrorType(message: String) : Exception(message) {
     class UnsupportedProtocol(message: String) : ErrorType(message)
 
     /**
+     * The QR code type is not supported by the client.
+     */
+    class UnsupportedQrCodeType(message: String) : ErrorType(message)
+
+    /**
      * Secrets backup not set up properly.
      */
     class MissingSecretsBackup(message: String) : ErrorType(message)
@@ -34,12 +39,32 @@ sealed class ErrorType(message: String) : Exception(message) {
     class NotFound(message: String) : ErrorType(message)
 
     /**
-     * The device could not be created.
-     */
-    class UnableToCreateDevice(message: String) : ErrorType(message)
-
-    /**
      * An unknown error has happened.
      */
     class Unknown(message: String) : ErrorType(message)
+
+    /**
+     * The requested device was not returned by the homeserver.
+     */
+    class DeviceNotFound(message: String) : ErrorType(message)
+
+    /**
+     * The other device is already signed in and so does not need to sign in.
+     */
+    class OtherDeviceAlreadySignedIn(message: String) : ErrorType(message)
+
+    /**
+     * The sign in was cancelled.
+     */
+    class Cancelled(message: String) : ErrorType(message)
+
+    /**
+     * The sign in was not completed in the required time.
+     */
+    class Expired(message: String) : ErrorType(message)
+
+    /**
+     * A secure connection could not have been established between the two devices.
+     */
+    class ConnectionInsecure(message: String) : ErrorType(message)
 }

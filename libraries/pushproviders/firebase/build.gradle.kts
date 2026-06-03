@@ -56,6 +56,8 @@ dependencies {
     implementation(projects.libraries.core)
     implementation(projects.libraries.di)
     implementation(projects.libraries.matrix.api)
+    implementation(projects.libraries.push.api)
+    implementation(projects.libraries.sessionStorage.api)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.troubleshoot.api)
     implementation(projects.services.toolbox.api)

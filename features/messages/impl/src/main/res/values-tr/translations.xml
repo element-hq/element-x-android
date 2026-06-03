@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crypto_event_authenticity_mismatched_sender">"Etkinliği gönderen kişi, onu gönderen cihazın sahibiyle eşleşmiyor."</string>
   <string name="crypto_event_authenticity_not_guaranteed">"Bu şifrelenmiş mesajın doğruluğu bu cihazda garanti edilemez."</string>
   <string name="crypto_event_authenticity_previously_verified">"Daha önce doğrulanmış bir kullanıcı tarafından şifrelenmiştir."</string>
   <string name="crypto_event_authenticity_sent_in_clear">"Şifrelenmemiş."</string>
@@ -46,11 +47,15 @@
   <string name="screen_room_timeline_no_permission_to_post">"Bu odada gönderi yapma izniniz yok"</string>
   <string name="screen_room_timeline_reactions_show_less">"Daha az göster"</string>
   <string name="screen_room_timeline_reactions_show_more">"Daha fazla göster"</string>
+  <string name="screen_room_timeline_reactions_show_reactions_summary">"Tepki özetini göster"</string>
   <string name="screen_room_timeline_read_marker_title">"Yeni"</string>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d oda değişikliği"</item>
     <item quantity="other">"%1$d oda değişikliği"</item>
   </plurals>
+  <string name="screen_room_timeline_tombstoned_room_action">"Yeni odaya git"</string>
+  <string name="screen_room_timeline_tombstoned_room_message">"Bu odanın yerini başka bir oda aldı ve artık aktif değil"</string>
+  <string name="screen_room_timeline_upgraded_room_message">"Bu oda, başka bir odanın devamıdır"</string>
   <plurals name="screen_room_typing_many_members">
     <item quantity="one">"%1$s, %2$s ve %3$d diğer"</item>
     <item quantity="other">"%1$s, %2$s ve %3$d diğer"</item>
