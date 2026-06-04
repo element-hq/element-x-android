@@ -56,8 +56,6 @@ class UserPushStoreDataStore(
     private val currentPushKey = stringPreferencesKey("currentPushKey")
     private val notificationEnabled = booleanPreferencesKey("notificationEnabled")
     private val ignoreRegistrationError = booleanPreferencesKey("ignoreRegistrationError")
-    private val hideNotificationContentWhenLocked = booleanPreferencesKey("hideNotificationContentWhenLocked")
-
     override suspend fun getPushProviderName(): String? {
         return store.data.first()[pushProviderName]
     }
@@ -94,16 +92,6 @@ class UserPushStoreDataStore(
 
     override fun useCompleteNotificationFormat(): Boolean {
         return true
-    }
-
-    override fun isHideNotificationContentWhenLocked(): Flow<Boolean> {
-        return store.data.map { it[hideNotificationContentWhenLocked].orTrue() }
-    }
-
-    override suspend fun setHideNotificationContentWhenLocked(enabled: Boolean) {
-        store.edit {
-            it[hideNotificationContentWhenLocked] = enabled
-        }
     }
 
     override fun ignoreRegistrationError(): Flow<Boolean> {

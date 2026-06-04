@@ -84,7 +84,6 @@ fun aValidNotificationSettingsState(
     inviteForMeNotificationsEnabled: Boolean = true,
     systemNotificationsEnabled: Boolean = true,
     appNotificationEnabled: Boolean = true,
-    isPinSetup: Boolean = true,
     currentPushDistributor: AsyncData<Distributor> = AsyncData.Success(aDistributor("Firebase")),
     availablePushDistributors: List<Distributor> = listOf(
         aDistributor("Firebase"),
@@ -114,8 +113,6 @@ fun aValidNotificationSettingsState(
     appSettings = NotificationSettingsState.AppSettings(
         systemNotificationsEnabled = systemNotificationsEnabled,
         appNotificationsEnabled = appNotificationEnabled,
-        isHideNotificationContentWhenLocked = true,
-        isPinSetup = isPinSetup,
     ),
     changeNotificationSettingAction = changeNotificationSettingAction,
     currentPushDistributor = currentPushDistributor,
@@ -149,8 +146,6 @@ fun aInvalidNotificationSettingsState(
     appSettings = NotificationSettingsState.AppSettings(
         systemNotificationsEnabled = false,
         appNotificationsEnabled = true,
-        isHideNotificationContentWhenLocked = true,
-        isPinSetup = false,
     ),
     changeNotificationSettingAction = AsyncAction.Uninitialized,
     currentPushDistributor = AsyncData.Uninitialized,

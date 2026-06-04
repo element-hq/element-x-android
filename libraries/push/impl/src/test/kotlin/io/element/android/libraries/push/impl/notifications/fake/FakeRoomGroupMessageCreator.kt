@@ -33,7 +33,6 @@ class FakeRoomGroupMessageCreator(
         threadId: ThreadId?,
         imageLoader: ImageLoader,
         existingNotification: Notification?,
-        hideContent: Boolean,
     ): Notification {
         return createRoomMessageResult(notificationAccountParams, events, roomId, threadId, imageLoader, existingNotification)
     }

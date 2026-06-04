@@ -55,7 +55,6 @@ class FakeNotificationCreator(
         existingNotification: Notification?,
         imageLoader: ImageLoader,
         events: List<NotifiableMessageEvent>,
-        hideContent: Boolean,
     ): Notification {
         return createMessagesListNotificationResult(
             listOf(
@@ -68,7 +67,6 @@ class FakeNotificationCreator(
                 existingNotification,
                 imageLoader,
                 events,
-                hideContent
             )
         )
     }

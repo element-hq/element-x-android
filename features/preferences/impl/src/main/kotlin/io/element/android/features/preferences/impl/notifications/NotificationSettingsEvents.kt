@@ -22,7 +22,6 @@ sealed interface NotificationSettingsEvents {
     data object ChangePushProvider : NotificationSettingsEvents
     data object CancelChangePushProvider : NotificationSettingsEvents
     data class SetPushProvider(val index: Int) : NotificationSettingsEvents
-    data class SetHideNotificationContentWhenLocked(val enabled: Boolean) : NotificationSettingsEvents
     data class SetMessageSound(val sound: NotificationSound) : NotificationSettingsEvents
     data class SetCallRingtone(val sound: NotificationSound) : NotificationSettingsEvents
     data object DismissMessageSoundCopyError : NotificationSettingsEvents

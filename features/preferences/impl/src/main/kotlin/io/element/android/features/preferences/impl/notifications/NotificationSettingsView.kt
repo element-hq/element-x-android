@@ -60,7 +60,6 @@ import io.element.android.libraries.preferences.api.store.NotificationSound
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import io.element.android.features.preferences.impl.R as PrefR
 
 /**
  * A view that allows a user edit their global notification settings.
@@ -101,7 +100,6 @@ fun NotificationSettingsView(
                 // TODO We are removing the call notification toggle until support for call notifications has been added
 //                onCallsNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetCallNotificationsEnabled(it)) },
                 onInviteForMeNotificationsChange = { state.eventSink(NotificationSettingsEvents.SetInviteForMeNotificationsEnabled(it)) },
-                onHideNotificationContentWhenLockedChange = { state.eventSink(NotificationSettingsEvents.SetHideNotificationContentWhenLocked(it)) },
                 onTroubleshootNotificationsClick = onTroubleshootNotificationsClick,
             )
         }
@@ -125,7 +123,6 @@ private fun NotificationSettingsContentView(
     // TODO We are removing the call notification toggle until support for call notifications has been added
 //    onCallsNotificationsChanged: (Boolean) -> Unit,
     onInviteForMeNotificationsChange: (Boolean) -> Unit,
-    onHideNotificationContentWhenLockedChange: (Boolean) -> Unit,
     onTroubleshootNotificationsClick: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -218,14 +215,6 @@ private fun NotificationSettingsContentView(
                 isChecked = matrixSettings.inviteForMeNotificationsEnabled,
                 onCheckedChange = onInviteForMeNotificationsChange
             )
-            if (state.appSettings.isPinSetup) {
-                PreferenceSwitch(
-                    modifier = Modifier,
-                    title = stringResource(id = PrefR.string.screen_notification_settings_hide_content_when_locked),
-                    isChecked = state.appSettings.isHideNotificationContentWhenLocked,
-                    onCheckedChange = onHideNotificationContentWhenLockedChange
-                )
-            }
         }
         PreferenceCategory(title = stringResource(id = R.string.troubleshoot_notifications_entry_point_section)) {
             ListItem(

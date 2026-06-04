@@ -62,8 +62,6 @@ data class NotificationSettingsState(
     data class AppSettings(
         val systemNotificationsEnabled: Boolean,
         val appNotificationsEnabled: Boolean,
-        val isHideNotificationContentWhenLocked: Boolean,
-        val isPinSetup: Boolean,
     )
 
     /**

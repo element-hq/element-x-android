@@ -62,7 +62,6 @@ interface NotificationCreator {
         existingNotification: Notification?,
         imageLoader: ImageLoader,
         events: List<NotifiableMessageEvent>,
-        hideContent: Boolean = false,
     ): Notification
 
     fun createRoomInvitationNotification(
@@ -137,7 +136,6 @@ class DefaultNotificationCreator(
         existingNotification: Notification?,
         imageLoader: ImageLoader,
         events: List<NotifiableMessageEvent>,
-        hideContent: Boolean,
     ): Notification {
         // Build the pending intent for when the notification is clicked
         val eventId = events.firstOrNull()?.eventId
@@ -189,39 +187,6 @@ class DefaultNotificationCreator(
                 // Remove notification after opening it or using an action
                 .setAutoCancel(true)
         }
-        if (hideContent) {
-            val contentText = stringProvider.getQuantityString(
-                R.plurals.notification_new_messages_for_room,
-                events.size,
-                events.size,
-            )
-            val summaryTicker = stringProvider.getString(
-                R.string.notification_new_messages,
-            )
-            return builder
-                .setCategory(category)
-                .setContentTitle(roomInfo.roomDisplayName)
-                .setContentText(contentText)
-                .setNumber(events.size)
-                .setOnlyAlertOnce(roomInfo.isUpdated)
-                .setWhen(lastMessageTimestamp)
-                .configureWith(notificationAccountParams)
-                .addAction(markAsReadActionFactory.create(roomInfo, threadId))
-                .setContentIntent(openIntent)
-                .setLargeIcon(largeIcon)
-                .setDeleteIntent(pendingIntentFactory.createDismissRoomPendingIntent(roomInfo.sessionId, roomInfo.roomId))
-                .apply {
-                    if (roomInfo.shouldBing) {
-                        priority = NotificationCompat.PRIORITY_DEFAULT
-                        setLights(notificationAccountParams.color, 500, 500)
-                    } else {
-                        priority = NotificationCompat.PRIORITY_LOW
-                    }
-                }
-                .setTicker(summaryTicker)
-                .build()
-        }
-
         val messagingStyle = existingNotification?.let {
             MessagingStyle.extractMessagingStyleFromNotification(it)
         } ?: createMessagingStyleFromCurrentUser(

@@ -30,7 +30,6 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableEven
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableRingingCallEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
-import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import io.element.android.libraries.sessionstorage.api.observer.SessionListener
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
 import io.element.android.services.appnavstate.api.AppNavigationState
@@ -40,7 +39,6 @@ import io.element.android.services.appnavstate.api.currentRoomId
 import io.element.android.services.appnavstate.api.currentSessionId
 import io.element.android.services.appnavstate.api.currentThreadId
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 /**
@@ -60,7 +58,6 @@ class DefaultNotificationDrawerManager(
     private val imageLoaderHolder: ImageLoaderHolder,
     private val activeNotificationsProvider: ActiveNotificationsProvider,
     private val lockScreenService: LockScreenService,
-    private val userPushStoreFactory: UserPushStoreFactory,
     sessionObserver: SessionObserver,
 ) : NotificationCleaner {
     // TODO EAx add a setting per user for this
@@ -215,13 +212,9 @@ class DefaultNotificationDrawerManager(
             } else {
                 client.getUserProfile().getOrNull() ?: MatrixUser(sessionId)
             }
-            val hideContent = isAppLocked &&
-                userPushStoreFactory.getOrCreate(sessionId).isHideNotificationContentWhenLocked().first()
-
-            if (hideContent) {
-                // When the app is locked and the user has opted to hide content,
-                // show a single fallback notification with event count instead of
-                // per-room notifications with message content/sender info.
+            if (isAppLocked) {
+                // When the app is locked, show a single fallback notification with event count
+                // instead of per-room notifications with message content/sender info.
                 clearAllMessagesEvents(sessionId)
                 val fallbackEvents = notifiableEvents.mapNotNull { it.toFallbackNotifiableEvent() }
                 notificationRenderer.render(
