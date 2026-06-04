@@ -24,6 +24,7 @@ data class AdvancedSettingsState(
     val availableThemeOptions: ImmutableList<ThemeOption>,
     val mediaPreviewConfigState: MediaPreviewConfigState,
     val liveLocationMinimumDistanceUpdate: Int?,
+    val isHideSpaceRoomMembersEnabled: Boolean,
     val eventSink: (AdvancedSettingsEvents) -> Unit
 )
 

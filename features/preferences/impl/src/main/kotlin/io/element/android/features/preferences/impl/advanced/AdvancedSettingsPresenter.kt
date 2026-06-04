@@ -57,6 +57,10 @@ class AdvancedSettingsPresenter(
             appPreferencesStore.getLiveLocationMinimumDistanceInMetersUpdateFlow().collect { value = it }
         }
 
+        val isHideSpaceRoomMembersEnabled by remember {
+            sessionPreferencesStore.isHideSpaceRoomMembersEnabled()
+        }.collectAsState(initial = false)
+
         val mediaPreviewConfigState = mediaPreviewConfigStateStore.state()
 
         val themeOption by remember {
@@ -130,6 +134,9 @@ class AdvancedSettingsPresenter(
                 is AdvancedSettingsEvents.SetVideoUploadQuality -> sessionCoroutineScope.launch {
                     sessionPreferencesStore.setVideoCompressionPreset(event.videoPreset)
                 }
+                is AdvancedSettingsEvents.SetHideSpaceRoomMembers -> sessionCoroutineScope.launch {
+                    sessionPreferencesStore.setHideSpaceRoomMembers(event.enabled)
+                }
             }
         }
 
@@ -141,6 +148,7 @@ class AdvancedSettingsPresenter(
             availableThemeOptions = availableThemeOptions,
             mediaPreviewConfigState = mediaPreviewConfigState,
             liveLocationMinimumDistanceUpdate = liveLocationMinimumDistanceUpdate,
+            isHideSpaceRoomMembersEnabled = isHideSpaceRoomMembersEnabled,
             eventSink = ::handleEvent,
         )
     }
