@@ -30,7 +30,6 @@ import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.contentType
@@ -149,8 +148,8 @@ private fun title(state: SecureBackupSetupState): String {
     // Custom flow has no "save your key" step — use per-step custom titles throughout.
     if (state.isCustomEntry()) {
         return when (state.customEntryStep) {
-            CustomEntryStep.Entry -> stringResource(id = R.string.screen_recovery_key_custom_title)
-            CustomEntryStep.Confirm -> stringResource(id = R.string.screen_recovery_key_custom_confirm_title)
+            CustomEntryStep.Entry -> stringResource(id = R.string.pro_screen_recovery_key_mode_input_title)
+            CustomEntryStep.Confirm -> stringResource(id = R.string.pro_screen_recovery_key_mode_confirm_title)
         }
     }
     return when (state.setupState) {
@@ -171,8 +170,8 @@ private fun subtitle(state: SecureBackupSetupState): String? {
     if (!state.wellknownLoaded) return null
     if (state.isCustomEntry()) {
         return when (state.customEntryStep) {
-            CustomEntryStep.Entry -> stringResource(id = R.string.screen_recovery_key_custom_description)
-            CustomEntryStep.Confirm -> stringResource(id = R.string.screen_recovery_key_custom_confirm_description)
+            CustomEntryStep.Entry -> stringResource(id = R.string.pro_screen_recovery_key_mode_input_description)
+            CustomEntryStep.Confirm -> stringResource(id = R.string.pro_screen_recovery_key_mode_confirm_description)
         }
     }
     return when (state.setupState) {
@@ -295,9 +294,8 @@ private fun CustomPassphraseEntry(state: SecureBackupSetupState) {
                     }
                 },
             ),
-            supportingText = pluralStringResource(
-                id = R.plurals.screen_recovery_key_custom_requirement_length,
-                count = specs.minCharacterCount,
+            supportingText = stringResource(
+                id = R.string.pro_screen_recovery_key_mode_input_passphrase_field_footer,
                 specs.minCharacterCount,
             ),
         )
@@ -317,7 +315,7 @@ private fun PassphraseStrengthIndicator(
     modifier: Modifier = Modifier,
 ) {
     val label = stringResource(
-        id = result?.strength?.labelRes() ?: R.string.screen_recovery_key_custom_strength_base,
+        id = result?.strength?.labelRes() ?: R.string.pro_screen_recovery_key_mode_input_passphrase_strength_label_base,
     )
     val hint = result?.strength?.hintRes()?.let { stringResource(id = it) }
     val score = result?.score ?: 0f
@@ -354,25 +352,25 @@ private fun PassphraseStrengthIndicator(
 }
 
 private fun CustomRecoveryPassphraseStrength.labelRes(): Int = when (this) {
-    CustomRecoveryPassphraseStrength.Garbage -> R.string.screen_recovery_key_custom_strength_garbage
-    CustomRecoveryPassphraseStrength.Weak -> R.string.screen_recovery_key_custom_strength_weak
-    CustomRecoveryPassphraseStrength.Moderate -> R.string.screen_recovery_key_custom_strength_moderate
-    CustomRecoveryPassphraseStrength.Okay -> R.string.screen_recovery_key_custom_strength_okay
-    CustomRecoveryPassphraseStrength.Strong -> R.string.screen_recovery_key_custom_strength_strong
-    CustomRecoveryPassphraseStrength.VeryStrong -> R.string.screen_recovery_key_custom_strength_very_strong
-    CustomRecoveryPassphraseStrength.UltraStrong -> R.string.screen_recovery_key_custom_strength_ultra_strong
-    CustomRecoveryPassphraseStrength.Mega -> R.string.screen_recovery_key_custom_strength_mega
+    CustomRecoveryPassphraseStrength.Garbage -> R.string.pro_screen_recovery_key_mode_input_passphrase_strength_label_garbage
+    CustomRecoveryPassphraseStrength.Weak -> R.string.pro_screen_recovery_key_mode_input_passphrase_strength_label_weak
+    CustomRecoveryPassphraseStrength.Moderate -> R.string.pro_screen_recovery_key_mode_input_passphrase_strength_label_moderate
+    CustomRecoveryPassphraseStrength.Okay -> R.string.pro_screen_recovery_key_mode_input_passphrase_strength_label_okay
+    CustomRecoveryPassphraseStrength.Strong -> R.string.pro_screen_recovery_key_mode_input_passphrase_strength_label_strong
+    CustomRecoveryPassphraseStrength.VeryStrong -> R.string.pro_screen_recovery_key_mode_input_passphrase_strength_label_very_strong
+    CustomRecoveryPassphraseStrength.UltraStrong -> R.string.pro_screen_recovery_key_mode_input_passphrase_strength_label_ultra_strong
+    CustomRecoveryPassphraseStrength.Mega -> R.string.pro_screen_recovery_key_mode_input_passphrase_strength_label_mega
 }
 
 private fun CustomRecoveryPassphraseStrength.hintRes(): Int = when (this) {
-    CustomRecoveryPassphraseStrength.Garbage -> R.string.screen_recovery_key_custom_strength_hint_garbage
-    CustomRecoveryPassphraseStrength.Weak -> R.string.screen_recovery_key_custom_strength_hint_weak
-    CustomRecoveryPassphraseStrength.Moderate -> R.string.screen_recovery_key_custom_strength_hint_moderate
-    CustomRecoveryPassphraseStrength.Okay -> R.string.screen_recovery_key_custom_strength_hint_okay
-    CustomRecoveryPassphraseStrength.Strong -> R.string.screen_recovery_key_custom_strength_hint_strong
-    CustomRecoveryPassphraseStrength.VeryStrong -> R.string.screen_recovery_key_custom_strength_hint_very_strong
-    CustomRecoveryPassphraseStrength.UltraStrong -> R.string.screen_recovery_key_custom_strength_hint_ultra_strong
-    CustomRecoveryPassphraseStrength.Mega -> R.string.screen_recovery_key_custom_strength_hint_mega
+    CustomRecoveryPassphraseStrength.Garbage -> R.string.pro_screen_recovery_key_mode_input_passphrase_strength_label_hint_garbage
+    CustomRecoveryPassphraseStrength.Weak -> R.string.pro_screen_recovery_key_mode_input_passphrase_strength_label_hint_weak
+    CustomRecoveryPassphraseStrength.Moderate -> R.string.pro_screen_recovery_key_mode_input_passphrase_strength_label_hint_moderate
+    CustomRecoveryPassphraseStrength.Okay -> R.string.pro_screen_recovery_key_mode_input_passphrase_strength_label_hint_okay
+    CustomRecoveryPassphraseStrength.Strong -> R.string.pro_screen_recovery_key_mode_input_passphrase_strength_label_hint_strong
+    CustomRecoveryPassphraseStrength.VeryStrong -> R.string.pro_screen_recovery_key_mode_input_passphrase_strength_label_hint_very_strong
+    CustomRecoveryPassphraseStrength.UltraStrong -> R.string.pro_screen_recovery_key_mode_input_passphrase_strength_label_hint_ultra_strong
+    CustomRecoveryPassphraseStrength.Mega -> R.string.pro_screen_recovery_key_mode_input_passphrase_strength_label_hint_mega
 }
 
 // Stops mirror iOS PasswordStrengthBar.gradient: Compound red900 / lime700 with the same vivid
@@ -439,7 +437,7 @@ private fun CustomPassphraseConfirm(state: SecureBackupSetupState) {
             ),
             validity = if (state.customPassphraseMismatch) TextFieldValidity.Invalid else TextFieldValidity.None,
             supportingText = if (state.customPassphraseMismatch) {
-                stringResource(id = R.string.screen_recovery_key_custom_mismatch)
+                stringResource(id = R.string.pro_screen_recovery_key_mode_custom_mismatch)
             } else {
                 null
             },
@@ -491,7 +489,7 @@ private fun ColumnScope.CustomButtons(
         }
         CustomEntryStep.Confirm -> {
             Button(
-                text = stringResource(id = R.string.screen_recovery_key_custom_finish_action),
+                text = stringResource(id = R.string.pro_screen_recovery_key_mode_confirm_finish_button),
                 enabled = state.canSubmitCustomPassphrase,
                 modifier = Modifier.fillMaxWidth(),
                 onClick = { state.eventSink.invoke(SecureBackupSetupEvents.SubmitCustomPassphrase) },
