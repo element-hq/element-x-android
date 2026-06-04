@@ -258,6 +258,10 @@ class RoomDetailsFlowNode(
                     override fun navigateToInviteMembers() {
                         backstack.push(NavTarget.InviteMembers)
                     }
+
+                    override fun navigateToAvatarPreview(username: String, avatarUrl: String) {
+                        overlay.show(NavTarget.AvatarPreview(username, avatarUrl))
+                    }
                 }
                 createNode<RoomMemberListNode>(buildContext, listOf(roomMemberListCallback))
             }

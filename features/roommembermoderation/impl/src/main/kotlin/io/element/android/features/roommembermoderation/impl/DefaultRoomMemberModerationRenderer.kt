@@ -25,10 +25,11 @@ class DefaultRoomMemberModerationRenderer : RoomMemberModerationRenderer {
     override fun Render(
         state: RoomMemberModerationState,
         onSelectAction: (ModerationAction, MatrixUser) -> Unit,
+        onAvatarClick: ((MatrixUser) -> Unit)?,
         modifier: Modifier
     ) {
         if (state is InternalRoomMemberModerationState) {
-            RoomMemberModerationView(state, onSelectAction, modifier)
+            RoomMemberModerationView(state, onSelectAction, onAvatarClick, modifier)
         } else {
             SideEffect {
                 Timber.d("RoomMemberModerationRenderer: Render called with unsupported state: $state")
