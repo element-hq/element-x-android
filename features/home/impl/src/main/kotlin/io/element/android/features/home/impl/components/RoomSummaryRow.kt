@@ -75,10 +75,10 @@ internal fun RoomSummaryRow(
     room: RoomListRoomSummary,
     hideInviteAvatars: Boolean,
     isInviteSeen: Boolean,
-    showUnreadCount: Boolean = false,
     onClick: (RoomListRoomSummary) -> Unit,
-    eventSink: (RoomListEvent) -> Unit,
     modifier: Modifier = Modifier,
+    showUnreadCount: Boolean = false,
+    eventSink: (RoomListEvent) -> Unit,
 ) {
     Box(modifier = modifier) {
         when (room.displayType) {
