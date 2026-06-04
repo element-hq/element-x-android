@@ -338,7 +338,7 @@ class TimelinePresenter(
         // jumping to an out-of-window read marker in a busy room, where both windows fill to the
         // same page size. With .size as the key the effect wouldn't re-run, the focused event's
         // index would stay unresolved, and the scroll would never fire until a second tap.
-        LaunchedEffect(timelineItems, focusRequestState.value) {
+        LaunchedEffect(timelineItems.map { it.identifier() }, focusRequestState.value) {
             val currentFocusRequestState = focusRequestState.value
             if (currentFocusRequestState is FocusRequestState.Success && !currentFocusRequestState.rendered) {
                 val eventId = currentFocusRequestState.eventId
