@@ -1,3 +1,42 @@
+Changes in Element X v26.05.2
+=============================
+
+<!-- Release notes generated using configuration in .github/release.yml at v26.05.2 -->
+
+## What's Changed
+### ✨ Features
+* Remove SignInWithClassic FeatureFlag to enable the feature. by @bmarty in https://github.com/element-hq/element-x-android/pull/6698
+* Create a new room when inviting people in a DM by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6756
+* Remove LiveLocationSharing feature flag by @ganfra in https://github.com/element-hq/element-x-android/pull/6811
+### 🙌 Improvements
+* Disable biometric unlock when we disable pin code unlock by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6781
+### 🐛 Bugfixes
+* Fix room list duplicate-detection telemetry crashing before it can report by @jennaharris7 in https://github.com/element-hq/element-x-android/pull/6791
+* Only load full media on media viewer when it's the visible item by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6794
+* Attempt to fix room list item duplicates at midnight by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6793
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/6798
+### 🧱 Build
+* Fix Maestro again after changes to the invite flow by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6796
+* Renovate: Keep Guava on the Android variant and ignore jre-only upgrades by @bmarty in https://github.com/element-hq/element-x-android/pull/6776
+### Dependency upgrades
+* Update dependency androidx.compose:compose-bom to v2026.05.00 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6784
+* Update dependency io.sentry:sentry-android to v8.41.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6787
+* Update kotlin by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6790
+* Update camera to v1.6.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6783
+* Update dependency androidx.webkit:webkit to v1.16.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6786
+* Update dependency com.google.firebase:firebase-bom to v34.13.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6789
+* Update dependency org.matrix.rustcomponents:sdk-android to v26.05.18 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6805
+### Others
+* Add MIDI playback by @cizra in https://github.com/element-hq/element-x-android/pull/6770
+* Show error message when using "Sign in with QR code" with a QR from a device that is also not signed in by @hughns in https://github.com/element-hq/element-x-android/pull/6802
+
+## New Contributors
+* @jennaharris7 made their first contribution in https://github.com/element-hq/element-x-android/pull/6791
+* @cizra made their first contribution in https://github.com/element-hq/element-x-android/pull/6770
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v26.05.1...v26.05.2
+
 Changes in Element X v26.05.1
 =============================
 

@@ -45,7 +45,9 @@ class MediaDetailsBottomSheetTest {
     @Test
     @Config(qualifiers = "h1024dp")
     fun `clicking on Share invokes expected callback`() = runAndroidComposeUiTest {
-        val state = aMediaBottomSheetStateDetails()
+        val state = aMediaBottomSheetStateDetails(
+            fromGallery = true,
+        )
         ensureCalledOnceWithParam(state.eventId) { callback ->
             setMediaDetailsBottomSheet(
                 state = state,
@@ -53,6 +55,15 @@ class MediaDetailsBottomSheetTest {
             )
             clickOn(CommonStrings.action_share)
         }
+    }
+
+    @Test
+    @Config(qualifiers = "h1024dp")
+    fun `item Share is not displayed when opened from the media viewer`() = runAndroidComposeUiTest {
+        setMediaDetailsBottomSheet(
+            state = aMediaBottomSheetStateDetails(),
+        )
+        onNodeWithText(activity!!.getString(CommonStrings.action_share)).assertDoesNotExist()
     }
 
     @Test
@@ -71,7 +82,9 @@ class MediaDetailsBottomSheetTest {
     @Test
     @Config(qualifiers = "h1024dp")
     fun `clicking on Download invokes expected callback`() = runAndroidComposeUiTest {
-        val state = aMediaBottomSheetStateDetails()
+        val state = aMediaBottomSheetStateDetails(
+            fromGallery = true,
+        )
         ensureCalledOnceWithParam(state.eventId) { callback ->
             setMediaDetailsBottomSheet(
                 state = state,
@@ -79,6 +92,15 @@ class MediaDetailsBottomSheetTest {
             )
             clickOn(CommonStrings.action_download)
         }
+    }
+
+    @Test
+    @Config(qualifiers = "h1024dp")
+    fun `item Download is not displayed when opened from the media viewer`() = runAndroidComposeUiTest {
+        setMediaDetailsBottomSheet(
+            state = aMediaBottomSheetStateDetails(),
+        )
+        onNodeWithText(activity!!.getString(CommonStrings.action_download)).assertDoesNotExist()
     }
 
     @Config(qualifiers = "h1024dp")
@@ -90,8 +112,8 @@ class MediaDetailsBottomSheetTest {
                 state = state,
                 onDelete = callback,
             )
-            onNodeWithText(activity!!.getString(CommonStrings.action_delete)).assertExists()
-            clickOn(CommonStrings.action_delete)
+            onNodeWithText(activity!!.getString(CommonStrings.action_delete_file)).assertExists()
+            clickOn(CommonStrings.action_delete_file)
         }
     }
 

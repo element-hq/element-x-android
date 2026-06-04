@@ -79,6 +79,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Роли"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Подробности за стаята"</string>
   <string name="screen_room_roles_and_permissions_title">"Роли и разрешения"</string>
+  <string name="screen_roomlist_mark_as_read">"Отбелязване като прочетено"</string>
+  <string name="screen_roomlist_mark_as_unread">"Отбелязване като непрочетено"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Добавяне на адрес"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Да, включване на шифроването"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_title">"Да се включи ли шифроването?"</string>

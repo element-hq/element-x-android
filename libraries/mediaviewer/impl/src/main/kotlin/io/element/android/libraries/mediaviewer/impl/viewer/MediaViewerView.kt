@@ -44,7 +44,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -56,6 +55,8 @@ import androidx.compose.ui.layout.onVisibilityChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
@@ -105,7 +106,7 @@ import me.saket.telephoto.zoomable.OverzoomEffect
 import me.saket.telephoto.zoomable.ZoomSpec
 import me.saket.telephoto.zoomable.rememberZoomableState
 
-val topAppBarHeight = 88.dp
+val topAppBarHeight = 112.dp
 
 /**
  * Ref: https://www.figma.com/design/pDlJZGBsri47FNTXMnEdXB/Compound-Android-Templates?node-id=3361-16623
@@ -179,9 +180,11 @@ fun MediaViewerView(
         val pagerState = rememberPagerState(state.currentIndex, 0f) {
             state.listData.size
         }
-        LaunchedEffect(pagerState) {
-            snapshotFlow { pagerState.currentPage }.collect { page ->
-                state.eventSink(MediaViewerEvent.OnNavigateTo(page))
+
+        LaunchedEffect(pagerState.targetPage, state.currentIndex) {
+            // Only emit an index navigation change when it's triggered by the user scrolling
+            if (pagerState.targetPage != state.currentIndex && pagerState.isScrollInProgress) {
+                state.eventSink(MediaViewerEvent.OnNavigateTo(pagerState.targetPage))
             }
         }
         HorizontalPager(
@@ -236,6 +239,9 @@ fun MediaViewerView(
                             onRetry = {
                                 state.eventSink(MediaViewerEvent.LoadMedia(dataForPage))
                             },
+                            onOpenWith = {
+                                state.eventSink(MediaViewerEvent.OpenWith(dataForPage))
+                            },
                             onDismissError = {
                                 state.eventSink(MediaViewerEvent.ClearLoadingError(dataForPage))
                             },
@@ -274,6 +280,7 @@ fun MediaViewerView(
                     state.eventSink(MediaViewerEvent.ViewInTimeline(it))
                 },
                 onShare = {
+                    // Note: share action is not rendered when the bottom sheet is opened from the media viewer
                     (currentData as? MediaViewerPageData.MediaViewerData)?.let {
                         state.eventSink(MediaViewerEvent.Share(currentData))
                     }
@@ -282,6 +289,7 @@ fun MediaViewerView(
                     state.eventSink(MediaViewerEvent.Forward(it))
                 },
                 onDownload = {
+                    // Note: download action is not rendered when the bottom sheet is opened from the media viewer
                     (currentData as? MediaViewerPageData.MediaViewerData)?.let {
                         state.eventSink(MediaViewerEvent.SaveOnDisk(currentData))
                     }
@@ -330,6 +338,7 @@ private fun MediaViewerPage(
     isUserSelected: Boolean,
     onDismiss: () -> Unit,
     onRetry: () -> Unit,
+    onOpenWith: () -> Unit,
     onDismissError: () -> Unit,
     onShowOverlayChange: (Boolean) -> Unit,
     audioFocus: AudioFocus?,
@@ -384,6 +393,7 @@ private fun MediaViewerPage(
                             currentOnShowOverlayChange(!currentShowOverlay)
                         }
                     },
+                    onOpenWith = onOpenWith,
                     isUserSelected = isUserSelected,
                     audioFocus = audioFocus,
                 )
@@ -494,14 +504,20 @@ private fun MediaViewerTopBar(
     TopAppBar(
         title = {
             if (senderName != null && dateSent != null) {
+                val description = stringResource(
+                    CommonStrings.a11y_sent_by_sender_at_date,
+                    senderName,
+                    dateSent,
+                )
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .clearAndSetSemantics {
+                            heading()
+                            contentDescription = description
+                        },
                 ) {
                     Text(
-                        modifier = Modifier.semantics {
-                            heading()
-                        },
                         text = senderName,
                         style = ElementTheme.typography.fontBodyMdMedium,
                         color = ElementTheme.colors.textPrimary,

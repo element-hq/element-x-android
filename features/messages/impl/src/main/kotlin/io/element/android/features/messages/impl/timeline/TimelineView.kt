@@ -213,7 +213,7 @@ fun TimelineView(
                 onFocusEventRender = ::onFocusEventRender,
             )
 
-            if (state.displayFloatingDateBadge && useReverseLayout) {
+            if (useReverseLayout) {
                 FloatingDateBadgeOverlay(
                     lazyListState = lazyListState,
                     timelineItems = state.timelineItems,

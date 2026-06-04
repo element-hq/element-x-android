@@ -30,6 +30,8 @@ class SingleMediaGalleryDataSource(
     override fun groupedMediaItemsFlow() = flowOf(AsyncData.Success(data))
     override fun getLastData(): AsyncData<GroupedMediaItems> = AsyncData.Success(data)
 
+    override val isReady: Boolean = true
+
     override suspend fun loadMore(direction: Timeline.PaginationDirection) = Unit
     override suspend fun deleteItem(eventId: EventId) = Unit
 

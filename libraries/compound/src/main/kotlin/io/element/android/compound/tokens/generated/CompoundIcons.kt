@@ -130,6 +130,9 @@ object CompoundIcons {
     @Composable fun Collapse(): ImageVector {
         return ImageVector.vectorResource(R.drawable.ic_compound_collapse)
     }
+    @Composable fun CollapseAll(): ImageVector {
+        return ImageVector.vectorResource(R.drawable.ic_compound_collapse_all)
+    }
     @Composable fun Company(): ImageVector {
         return ImageVector.vectorResource(R.drawable.ic_compound_company)
     }
@@ -141,6 +144,9 @@ object CompoundIcons {
     }
     @Composable fun Copy(): ImageVector {
         return ImageVector.vectorResource(R.drawable.ic_compound_copy)
+    }
+    @Composable fun Crop(): ImageVector {
+        return ImageVector.vectorResource(R.drawable.ic_compound_crop)
     }
     @Composable fun DarkMode(): ImageVector {
         return ImageVector.vectorResource(R.drawable.ic_compound_dark_mode)
@@ -202,6 +208,9 @@ object CompoundIcons {
     @Composable fun Expand(): ImageVector {
         return ImageVector.vectorResource(R.drawable.ic_compound_expand)
     }
+    @Composable fun ExpandAll(): ImageVector {
+        return ImageVector.vectorResource(R.drawable.ic_compound_expand_all)
+    }
     @Composable fun Explore(): ImageVector {
         return ImageVector.vectorResource(R.drawable.ic_compound_explore)
     }
@@ -228,6 +237,15 @@ object CompoundIcons {
     }
     @Composable fun Filter(): ImageVector {
         return ImageVector.vectorResource(R.drawable.ic_compound_filter)
+    }
+    @Composable fun FlipHorizontal(): ImageVector {
+        return ImageVector.vectorResource(R.drawable.ic_compound_flip_horizontal)
+    }
+    @Composable fun FlipVertical(): ImageVector {
+        return ImageVector.vectorResource(R.drawable.ic_compound_flip_vertical)
+    }
+    @Composable fun Folder(): ImageVector {
+        return ImageVector.vectorResource(R.drawable.ic_compound_folder)
     }
     @Composable fun Forward(): ImageVector {
         return ImageVector.vectorResource(R.drawable.ic_compound_forward)
@@ -496,6 +514,12 @@ object CompoundIcons {
     @Composable fun RotateRight(): ImageVector {
         return ImageVector.vectorResource(R.drawable.ic_compound_rotate_right)
     }
+    @Composable fun Save(): ImageVector {
+        return ImageVector.vectorResource(R.drawable.ic_compound_save)
+    }
+    @Composable fun SaveSolid(): ImageVector {
+        return ImageVector.vectorResource(R.drawable.ic_compound_save_solid)
+    }
     @Composable fun Search(): ImageVector {
         return ImageVector.vectorResource(R.drawable.ic_compound_search)
     }
@@ -606,6 +630,9 @@ object CompoundIcons {
     }
     @Composable fun Unpin(): ImageVector {
         return ImageVector.vectorResource(R.drawable.ic_compound_unpin)
+    }
+    @Composable fun Unsave(): ImageVector {
+        return ImageVector.vectorResource(R.drawable.ic_compound_unsave)
     }
     @Composable fun User(): ImageVector {
         return ImageVector.vectorResource(R.drawable.ic_compound_user)
@@ -735,10 +762,12 @@ object CompoundIcons {
         CloudSolid(),
         Code(),
         Collapse(),
+        CollapseAll(),
         Company(),
         Compose(),
         Computer(),
         Copy(),
+        Crop(),
         DarkMode(),
         Delete(),
         DevicePasskey(),
@@ -759,6 +788,7 @@ object CompoundIcons {
         ErrorSolid(),
         ExitFullScreen(),
         Expand(),
+        ExpandAll(),
         Explore(),
         ExportArchive(),
         Extensions(),
@@ -768,6 +798,9 @@ object CompoundIcons {
         FileError(),
         Files(),
         Filter(),
+        FlipHorizontal(),
+        FlipVertical(),
+        Folder(),
         Forward(),
         FullScreen(),
         Grid(),
@@ -857,6 +890,8 @@ object CompoundIcons {
         Room(),
         RotateLeft(),
         RotateRight(),
+        Save(),
+        SaveSolid(),
         Search(),
         Section(),
         Send(),
@@ -894,6 +929,7 @@ object CompoundIcons {
         Unknown(),
         UnknownSolid(),
         Unpin(),
+        Unsave(),
         User(),
         UserAdd(),
         UserAddSolid(),
@@ -963,10 +999,12 @@ object CompoundIcons {
         R.drawable.ic_compound_cloud_solid,
         R.drawable.ic_compound_code,
         R.drawable.ic_compound_collapse,
+        R.drawable.ic_compound_collapse_all,
         R.drawable.ic_compound_company,
         R.drawable.ic_compound_compose,
         R.drawable.ic_compound_computer,
         R.drawable.ic_compound_copy,
+        R.drawable.ic_compound_crop,
         R.drawable.ic_compound_dark_mode,
         R.drawable.ic_compound_delete,
         R.drawable.ic_compound_device_passkey,
@@ -987,6 +1025,7 @@ object CompoundIcons {
         R.drawable.ic_compound_error_solid,
         R.drawable.ic_compound_exit_full_screen,
         R.drawable.ic_compound_expand,
+        R.drawable.ic_compound_expand_all,
         R.drawable.ic_compound_explore,
         R.drawable.ic_compound_export_archive,
         R.drawable.ic_compound_extensions,
@@ -996,6 +1035,9 @@ object CompoundIcons {
         R.drawable.ic_compound_file_error,
         R.drawable.ic_compound_files,
         R.drawable.ic_compound_filter,
+        R.drawable.ic_compound_flip_horizontal,
+        R.drawable.ic_compound_flip_vertical,
+        R.drawable.ic_compound_folder,
         R.drawable.ic_compound_forward,
         R.drawable.ic_compound_full_screen,
         R.drawable.ic_compound_grid,
@@ -1085,6 +1127,8 @@ object CompoundIcons {
         R.drawable.ic_compound_room,
         R.drawable.ic_compound_rotate_left,
         R.drawable.ic_compound_rotate_right,
+        R.drawable.ic_compound_save,
+        R.drawable.ic_compound_save_solid,
         R.drawable.ic_compound_search,
         R.drawable.ic_compound_section,
         R.drawable.ic_compound_send,
@@ -1122,6 +1166,7 @@ object CompoundIcons {
         R.drawable.ic_compound_unknown,
         R.drawable.ic_compound_unknown_solid,
         R.drawable.ic_compound_unpin,
+        R.drawable.ic_compound_unsave,
         R.drawable.ic_compound_user,
         R.drawable.ic_compound_user_add,
         R.drawable.ic_compound_user_add_solid,

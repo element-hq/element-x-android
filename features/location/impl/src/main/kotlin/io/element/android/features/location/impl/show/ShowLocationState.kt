@@ -11,6 +11,7 @@ package io.element.android.features.location.impl.show
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.features.location.impl.common.ui.LocationMarkerData
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.PinVariant
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.UserId
@@ -18,6 +19,7 @@ import io.element.android.libraries.matrix.api.room.location.AssetType
 import kotlinx.collections.immutable.ImmutableList
 
 data class ShowLocationState(
+    val customMapStyleUrl: AsyncData<String?>,
     val isLive: Boolean,
     val dialogState: LocationConstraintsDialogState,
     val locationShares: ImmutableList<LocationShareItem>,

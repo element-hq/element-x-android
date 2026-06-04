@@ -7,23 +7,15 @@
 
 package io.element.android.features.location.impl.common.ui
 
-import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.location.impl.common.MapDefaults
+import io.element.android.features.location.impl.common.UserLocationState
 import org.maplibre.compose.camera.CameraState
-import org.maplibre.compose.location.DesiredAccuracy
 import org.maplibre.compose.location.LocationPuck
 import org.maplibre.compose.location.LocationPuckColors
 import org.maplibre.compose.location.LocationPuckSizes
-import org.maplibre.compose.location.LocationTrackingEffect
-import org.maplibre.compose.location.UserLocationState
-import org.maplibre.compose.location.rememberAndroidLocationProvider
-import org.maplibre.compose.location.rememberNullLocationProvider
-import org.maplibre.compose.location.rememberUserLocationState
-import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun UserLocationPuck(
@@ -31,22 +23,24 @@ fun UserLocationPuck(
     locationState: UserLocationState,
     trackUserLocation: Boolean,
 ) {
-    LocationTrackingEffect(
+    SimpleLocationTrackingEffect(
         locationState = locationState,
         enabled = trackUserLocation,
-    ) {
-        val finalPosition = cameraState.position.copy(
-            target = currentLocation.position,
-            bearing = currentLocation.bearing ?: cameraState.position.bearing,
+    ) { currentLocation ->
+        val target = currentLocation?.position?.value ?: cameraState.position.target
+        val newPosition = cameraState.position.copy(
+            target = target,
+            // Force pointing to NORTH
+            bearing = 0.0,
             zoom = cameraState.position.zoom.coerceAtLeast(MapDefaults.DEFAULT_ZOOM)
         )
-        cameraState.animateTo(finalPosition)
+        cameraState.animateTo(newPosition)
     }
     val location = locationState.location
     if (location != null) {
         LocationPuck(
             idPrefix = "user-location",
-            locationState = locationState,
+            location = location,
             cameraState = cameraState,
             accuracyThreshold = Float.POSITIVE_INFINITY,
             showBearingAccuracy = false,
@@ -62,20 +56,4 @@ fun UserLocationPuck(
             )
         )
     }
-}
-
-@SuppressLint("MissingPermission")
-@Composable
-fun rememberUserLocationState(hasLocationPermission: Boolean): UserLocationState {
-    val isPreview = LocalInspectionMode.current
-    val locationProvider = if (isPreview || !hasLocationPermission) {
-        rememberNullLocationProvider()
-    } else {
-        rememberAndroidLocationProvider(
-            updateInterval = 5.seconds,
-            desiredAccuracy = DesiredAccuracy.High,
-            minDistanceMeters = 5f,
-        )
-    }
-    return rememberUserLocationState(locationProvider)
 }

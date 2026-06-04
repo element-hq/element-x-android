@@ -8,6 +8,7 @@
 
 package io.element.android.features.roommembermoderation.impl
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -239,6 +240,12 @@ private fun RoomMemberActionsBottomSheet(
                 modifier = Modifier
                     .padding(bottom = 24.dp)
                     .align(Alignment.CenterHorizontally)
+                    .clickable {
+                        coroutineScope.launch {
+                            onSelectAction(ModerationAction.DisplayProfile, user)
+                            bottomSheetState.hide()
+                        }
+                    }
             )
             val bestName = user.getBestName()
             Text(
@@ -271,7 +278,6 @@ private fun RoomMemberActionsBottomSheet(
                 when (val action = actionState.action) {
                     is ModerationAction.DisplayProfile -> {
                         ListItem(
-                            style = ListItemStyle.Primary,
                             headlineContent = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_member_user_info)) },
                             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.UserProfile())),
                             onClick = {

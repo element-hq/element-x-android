@@ -12,6 +12,7 @@ import io.element.android.libraries.androidutils.hash.hash
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -20,6 +21,7 @@ import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.MsgType
@@ -36,6 +38,8 @@ import io.element.android.libraries.matrix.impl.room.location.into
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
 import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTimelineItemMapper
+import io.element.android.libraries.matrix.impl.timeline.postprocessor.FilterEmptyDayPostProcessor
+import io.element.android.libraries.matrix.impl.timeline.postprocessor.FilterPublicMembershipChangesPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.LastForwardIndicatorsPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.LoadingIndicatorsPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.RoomBeginningPostProcessor
@@ -43,6 +47,7 @@ import io.element.android.libraries.matrix.impl.timeline.postprocessor.TypingNot
 import io.element.android.libraries.matrix.impl.timeline.reply.InReplyToMapper
 import io.element.android.libraries.matrix.impl.util.MessageEventContent
 import io.element.android.services.toolbox.api.systemclock.SystemClock
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -81,7 +86,7 @@ private const val PAGINATION_SIZE = 50
 class RustTimeline(
     private val inner: InnerTimeline,
     override val mode: Timeline.Mode,
-    private val systemClock: SystemClock,
+    systemClock: SystemClock,
     private val joinedRoom: JoinedRoom,
     private val coroutineScope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
@@ -120,6 +125,15 @@ class RustTimeline(
     private val loadingIndicatorsPostProcessor = LoadingIndicatorsPostProcessor(systemClock)
     private val lastForwardIndicatorsPostProcessor = LastForwardIndicatorsPostProcessor(mode)
     private val typingNotificationPostProcessor = TypingNotificationPostProcessor(mode)
+    private val publicMembershipChangesPostProcessor = FilterPublicMembershipChangesPostProcessor()
+    private val emptyDayPostProcessor = FilterEmptyDayPostProcessor()
+
+    private data class RoomTimelineInfo(
+        val roomCreators: ImmutableList<UserId>,
+        val isDm: Boolean,
+        val joinRule: JoinRule?,
+        val isEncrypted: Boolean?,
+    )
 
     override val backwardPaginationStatus = MutableStateFlow(
         Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = mode != Timeline.Mode.PinnedEvents)
@@ -220,14 +234,15 @@ class RustTimeline(
         _timelineItems,
         backwardPaginationStatus,
         forwardPaginationStatus,
-        joinedRoom.roomInfoFlow.map { it.creators to it.isDm }.distinctUntilChanged(),
+        joinedRoom.roomInfoFlow.map { RoomTimelineInfo(it.creators, it.isDm, it.joinRule, it.isEncrypted) }.distinctUntilChanged(),
     ) {
         timelineItems,
         backwardPaginationStatus,
         forwardPaginationStatus,
-        (roomCreators, isDm),
+        roomInfo,
         ->
         withContext(dispatcher) {
+            val (roomCreators, isDm, joinRule, isEncrypted) = roomInfo
             timelineItems
                 .let { items ->
                     roomBeginningPostProcessor.process(
@@ -236,6 +251,18 @@ class RustTimeline(
                         roomCreator = roomCreators.firstOrNull(),
                         hasMoreToLoadBackwards = backwardPaginationStatus.hasMoreToLoad,
                     )
+                }
+                // This should be the first post processor after room beginning.
+                .let { items ->
+                    publicMembershipChangesPostProcessor.process(
+                        items = items,
+                        joinRule = joinRule,
+                        isEncrypted = isEncrypted,
+                    )
+                }
+                // After removing public membership changes, we might end up with empty days, so we need to filter them out.
+                .let { items ->
+                    emptyDayPostProcessor.process(items)
                 }
                 .let { items ->
                     loadingIndicatorsPostProcessor.process(

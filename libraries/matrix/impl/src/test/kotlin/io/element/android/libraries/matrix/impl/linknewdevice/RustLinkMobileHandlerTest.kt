@@ -118,6 +118,35 @@ class RustLinkMobileHandlerTest {
         }
     }
 
+    @Test
+    fun `when start throws HumanQrGrantLoginException_NotFound when in state QrReady, the handler emits QrRotating step`() = runTest {
+        val completable = CompletableDeferred<Unit>()
+        val handler = FakeFfiGrantLoginWithQrCodeHandler(
+            generateResult = {
+                completable.await()
+                throw HumanQrGrantLoginException.NotFound("Timeout")
+            }
+        )
+        val sut = createRustLinkMobileHandler(
+            handler,
+        )
+        sut.linkMobileStep.test {
+            val initialItem = awaitItem()
+            assertThat(initialItem).isEqualTo(LinkMobileStep.Uninitialized)
+            backgroundScope.launch {
+                sut.start()
+            }
+            runCurrent()
+            handler.emitGenerateProgress(GrantGeneratedQrLoginProgress.QrReady(FakeFfiQrCodeData(toBytesResult = { QR_CODE_DATA_RECIPROCATE })))
+            val readyState = awaitItem()
+            assertThat(readyState).isInstanceOf(LinkMobileStep.QrReady::class.java)
+            // generate returns, error is emitted
+            completable.complete(Unit)
+            val qrRotatingState = awaitItem()
+            assertThat(qrRotatingState).isEqualTo(LinkMobileStep.QrRotating)
+        }
+    }
+
     private fun TestScope.createRustLinkMobileHandler(
         handler: FakeFfiGrantLoginWithQrCodeHandler = FakeFfiGrantLoginWithQrCodeHandler(),
     ) = RustLinkMobileHandler(

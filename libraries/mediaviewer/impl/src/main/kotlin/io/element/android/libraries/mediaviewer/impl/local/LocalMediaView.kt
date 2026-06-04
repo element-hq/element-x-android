@@ -31,6 +31,7 @@ fun LocalMediaView(
     bottomPaddingInPixels: Int,
     audioFocus: AudioFocus?,
     onClick: () -> Unit,
+    onOpenWith: (() -> Unit)?,
     textFileViewer: TextFileViewer,
     modifier: Modifier = Modifier,
     isDisplayed: Boolean = true,
@@ -80,7 +81,7 @@ fun LocalMediaView(
             uri = localMedia?.uri,
             info = mediaInfo,
             modifier = modifier,
-            onClick = onClick,
+            onOpenWith = onOpenWith,
         )
     }
 }

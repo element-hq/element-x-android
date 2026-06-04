@@ -50,6 +50,7 @@ dependencies {
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixmedia.api)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.uiUtils)
     implementation(projects.libraries.voiceplayer.api)
     implementation(projects.services.toolbox.api)
 

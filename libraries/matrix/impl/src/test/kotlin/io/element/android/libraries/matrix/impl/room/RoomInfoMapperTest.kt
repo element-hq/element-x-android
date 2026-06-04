@@ -87,6 +87,7 @@ class RoomInfoMapperTest {
                     isLowPriority = true,
                     activeRoomCallConsensusIntent = RtcCallIntentConsensus.Full(RtcCallIntent.AUDIO),
                     isDm = true,
+                    fullyReadEventId = AN_EVENT_ID.value,
                 )
             )
         ).isEqualTo(
@@ -138,6 +139,7 @@ class RoomInfoMapperTest {
                 isLowPriority = true,
                 activeCallIntentConsensus = CallIntentConsensus.Full(CallIntent.AUDIO),
                 isDm = true,
+                fullyReadEventId = AN_EVENT_ID,
             )
         )
     }
@@ -184,6 +186,7 @@ class RoomInfoMapperTest {
                     isLowPriority = true,
                     activeRoomCallConsensusIntent = RtcCallIntentConsensus.None,
                     isDm = false,
+                    fullyReadEventId = AN_EVENT_ID.value,
                 )
             )
         ).isEqualTo(
@@ -229,6 +232,7 @@ class RoomInfoMapperTest {
                 isLowPriority = true,
                 activeCallIntentConsensus = CallIntentConsensus.None,
                 isDm = false,
+                fullyReadEventId = AN_EVENT_ID,
             )
         )
     }

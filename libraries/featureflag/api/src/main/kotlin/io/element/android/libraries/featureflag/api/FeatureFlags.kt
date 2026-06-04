@@ -108,13 +108,6 @@ enum class FeatureFlags(
         defaultValue = { true },
         isFinished = false,
     ),
-    FloatingDateBadge(
-        key = "feature.floating_date_badge",
-        title = "Display sticky date headers in the timeline",
-        description = "When scrolling, a sticky date badge will be displayed so you can easily know on which date the messages you're seeing were sent.",
-        defaultValue = { false },
-        isFinished = false,
-    ),
     SlashCommand(
         key = "feature.slash_command",
         title = "Parse slash commands in the message composer",
@@ -134,6 +127,13 @@ enum class FeatureFlags(
         title = "Automatic back pagination of rooms",
         description = "Allow the app to automatically back paginate in rooms to pre-fetch older messages in background." +
             "\nRequires an app restart to take effect.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    UnreadIndicatorCount(
+        key = "feature.unread_indicator_count",
+        title = "Unread indicator count",
+        description = "Show the number of unread messages on the unread indicator in the room list.",
         defaultValue = { false },
         isFinished = false,
     ),
