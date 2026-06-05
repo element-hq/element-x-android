@@ -19,6 +19,35 @@ import java.security.cert.X509Certificate
 
 /** An implementation of X509Sign using key and cert chain from the Android KeyStore */
 class X509KeyPair(private val key: PrivateKey, private val certificateChain: Array<out X509Certificate?>) : X509Sign {
+    private val keyId: String;
+
+    init {
+        val lastCert = this.certificateChain[this.certificateChain.size - 1] ?: error("X509: empty certificate chain")
+
+        val aki = lastCert.getExtensionValue("2.5.29.35") // AuthorityKeyIdentifier
+
+        // TODO: consider using BouncyCastle or something to parse this properly
+        // First six bytes should be:
+        //   04 - OCTET STRING
+        //     18 - Length (24 bytes)
+        //     30 - SEQUENCE tag
+        //       16 - Length (22 bytes)
+        //       80 - keyIdentifier tag
+        //         14 - Length (20 bytes)
+        if (aki.size < 6
+            || aki[0] != 0x04.toByte()
+            || aki[1] != (aki.size - 2).toByte()
+            || aki[2] != 0x30.toByte()
+            || aki[3] != (aki.size - 4).toByte()
+            || aki[4] != 0x80.toByte()
+            || aki[5] != (aki.size - 6).toByte()
+        ) {
+            error("X509: unable to read AuthorityKeyIdentifier from certificate chain")
+        }
+
+        this.keyId = "io.element.x509:" + Base64.encodeToString(aki.sliceArray(6..aki.size - 1), Base64.NO_WRAP + Base64.NO_PADDING)
+    }
+
     override fun sign(message: ByteArray): X509SignatureAndKeyId {
         val certificateChainBuilder = StringBuilder()
         for (cert in this.certificateChain) {
@@ -42,7 +71,7 @@ class X509KeyPair(private val key: PrivateKey, private val certificateChain: Arr
                 signature = Base64.encodeToString(signature.sign(), Base64.NO_PADDING)
             )
 
-            return X509SignatureAndKeyId(keyId = "x509:hardcoded-key-id", signature = x509Signature)
+            return X509SignatureAndKeyId(keyId = keyId, signature = x509Signature)
         } else {
             error("X509: Unable to sign object: unsupported key algorithm "+ key.algorithm)
         }
