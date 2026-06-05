@@ -1,2 +1,5 @@
-Main changes in this version: fixed an issue with devices not supporting Vulkan, added image editing before sending and an option for custom notification sounds, improved start times, several other bug fixes and improvements.
+Main changes in this version:
+
+- Fixed an issue with OIDC callback URLs that could cause the app to crash (GHSA-r4f9-46vw-v7g3).
+
 Full changelog: https://github.com/element-hq/element-x-android/releases
