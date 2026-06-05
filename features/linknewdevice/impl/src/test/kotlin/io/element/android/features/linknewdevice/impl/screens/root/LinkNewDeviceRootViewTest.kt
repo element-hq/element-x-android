@@ -18,9 +18,11 @@ import io.element.android.features.linknewdevice.impl.R
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
+import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
+import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBackKey
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -44,29 +46,31 @@ class LinkNewDeviceRootViewTest {
     @Test
     fun `link desktop button clicked - calls the expected callback`() = runAndroidComposeUiTest {
         val eventRecorder = EventsRecorder<LinkNewDeviceRootEvent>(expectEvents = false)
-        ensureCalledOnce { callback ->
+        ensureCalledOnceWithParam(LinkDeviceType.Desktop) { callback ->
             setLinkNewDeviceRootView(
                 state = aLinkNewDeviceRootState(
                     isSupported = AsyncData.Success(true),
                     eventSink = eventRecorder,
                 ),
-                onLinkDesktopDeviceClick = callback,
+                onUnlockDevice = callback,
             )
             clickOn(R.string.screen_link_new_device_root_desktop_computer)
         }
     }
 
     @Test
-    fun `link mobile button clicked - emits the expected event`() = runAndroidComposeUiTest {
-        val eventRecorder = EventsRecorder<LinkNewDeviceRootEvent>()
-        setLinkNewDeviceRootView(
-            state = aLinkNewDeviceRootState(
-                isSupported = AsyncData.Success(true),
-                eventSink = eventRecorder,
+    fun `link mobile button clicked - calls the expected callback`() = runAndroidComposeUiTest {
+        val eventRecorder = EventsRecorder<LinkNewDeviceRootEvent>(expectEvents = false)
+        ensureCalledOnceWithParam(LinkDeviceType.Mobile) { callback ->
+            setLinkNewDeviceRootView(
+                state = aLinkNewDeviceRootState(
+                    isSupported = AsyncData.Success(true),
+                    eventSink = eventRecorder,
+                ),
+                onUnlockDevice = callback,
             )
-        )
-        clickOn(R.string.screen_link_new_device_root_mobile_device)
-        eventRecorder.assertSingle(LinkNewDeviceRootEvent.LinkMobileDevice)
+            clickOn(R.string.screen_link_new_device_root_mobile_device)
+        }
     }
 
     @Test
@@ -87,13 +91,13 @@ class LinkNewDeviceRootViewTest {
     private fun AndroidComposeUiTest<ComponentActivity>.setLinkNewDeviceRootView(
         state: LinkNewDeviceRootState = aLinkNewDeviceRootState(),
         onBackClick: () -> Unit = EnsureNeverCalled(),
-        onLinkDesktopDeviceClick: () -> Unit = EnsureNeverCalled(),
+        onUnlockDevice: (type: LinkDeviceType) -> Unit = EnsureNeverCalledWithParam(),
     ) {
         setContent {
             LinkNewDeviceRootView(
                 state = state,
                 onBackClick = onBackClick,
-                onLinkDesktopDeviceClick = onLinkDesktopDeviceClick,
+                onUnlockDevice = onUnlockDevice,
             )
         }
     }

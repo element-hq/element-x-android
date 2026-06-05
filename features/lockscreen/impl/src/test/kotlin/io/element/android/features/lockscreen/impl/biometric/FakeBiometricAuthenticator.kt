@@ -8,10 +8,18 @@
 
 package io.element.android.features.lockscreen.impl.biometric
 
+import io.element.android.tests.testutils.simulateLongTask
+
 class FakeBiometricAuthenticator(
     override val isActive: Boolean = false,
-    private val authenticateLambda: suspend () -> BiometricAuthenticator.AuthenticationResult = { BiometricAuthenticator.AuthenticationResult.Success },
+    private val setupLambda: () -> Unit = { },
+    private val authenticateLambda: () -> BiometricAuthenticator.AuthenticationResult = { BiometricAuthenticator.AuthenticationResult.Success },
 ) : BiometricAuthenticator {
-    override suspend fun setup() = Unit
-    override suspend fun authenticate() = authenticateLambda()
+    override suspend fun setup() = simulateLongTask {
+        setupLambda()
+    }
+
+    override suspend fun authenticate() = simulateLongTask {
+        authenticateLambda()
+    }
 }
