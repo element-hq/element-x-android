@@ -30,5 +30,73 @@
         <domain includeSubdomains="true">home</domain>
         <domain includeSubdomains="true">lan</domain>
         <domain includeSubdomains="true">localdomain</domain>
+
+
+        <!-- ####################################################### -->
+        <!-- CRL domains, these need to be accessible over cleartext -->
+        <!-- ####################################################### -->
+
+        <!-- Let's Encrypt disabled OCSP for certificate revocation and switched to CRL, which needs clear-text access. -->
+        <domain includeSubdomains="true">lencr.org</domain>
+
+        <!-- Other CRL domains, which aren't mandatory since they have an OCSP alternative. -->
+
+        <!-- Digicert https://knowledge.digicert.com/alerts/digicert-certificate-status-ip-address -->
+        <domain includeSubdomains="false">crl3.digicert.com</domain>
+        <domain includeSubdomains="false">crl4.digicert.com</domain>
+        <domain includeSubdomains="false">cdp.thawte.com</domain>
+        <domain includeSubdomains="false">cdp.geotrust.com</domain>
+        <domain includeSubdomains="false">cdp.rapidssl.com</domain>
+        <domain includeSubdomains="false">cdp1.digicert.com</domain>
+        <domain includeSubdomains="false">cdp2.digicert.com</domain>
+        <domain includeSubdomains="false">cdp1.public-trust.com</domain>
+        <domain includeSubdomains="false">cdph.digitalcertvalidation.com</domain>
+        <domain includeSubdomains="false">crl.digicert-cn.com</domain>
+        <domain includeSubdomains="false">crl.edge.digicert.com</domain>
+        <domain includeSubdomains="false">crl.pki.abb.com</domain>
+        <domain includeSubdomains="false">www.public-trust.com</domain>
+        <!-- More Digicert https://knowledge.digicert.com/alerts/new-crl-and-ocsp-cdn-ip-addresses-pki-platform-7-and-8 -->
+        <domain includeSubdomains="false">onsitecrl.verisign.com</domain>
+        <domain includeSubdomains="false">onsite-crl.pki.digicert.com</domain>
+        <domain includeSubdomains="false">pki-crl.symauth.com</domain>
+
+        <!-- Sectigo https://www.sectigo.com/knowledge-base/detail/Sectigo-SSL-Certificate-Revocation-List-CRL-FQDN-and-IP-Addresses -->
+        <domain includeSubdomains="true">crl.sectigo.com</domain>
+        <domain includeSubdomains="true">crl.comodoca.com</domain>
+        <domain includeSubdomains="true">usertrust.com</domain>
+
+        <!-- Globalsign  -->
+        <domain includeSubdomains="true">crl.globalsign.com</domain>
+
+        <!-- Google Trust Services https://pki.goog/repository/ -->
+        <domain includeSubdomains="false">crls.pki.goog</domain>
+        <domain includeSubdomains="false">c.pki.goog</domain>
+
+        <!-- https://www.amazontrust.com/repository/crl-and-ocsp-endpoints -->
+        <domain includeSubdomains="true">amazontrust.com</domain>
+        <domain includeSubdomains="true">amznts.eu</domain>
+
+        <!-- GoDaddy https://certs.godaddy.com/repository -->
+        <domain includeSubdomains="false">certificates.godaddy.com</domain>
+        <domain includeSubdomains="false">crl.godaddy.com</domain>
+        <domain includeSubdomains="false">crl.starfieldtech.com</domain>
+
+        <!-- Entrust -->
+        <domain includeSubdomains="true">crl.entrust.net</domain>
+
+        <!-- Microsoft -->
+        <domain includeSubdomains="false">crl.microsoft.com</domain>
+        <domain includeSubdomains="false">mscrl.microsoft.com</domain>
+
+        <!-- Apple https://www.apple.com/certificateauthority/ -->
+        <domain includeSubdomains="false">apple.com</domain>
+        <domain includeSubdomains="false">crl.apple.com</domain>
+
+        <!-- Identrust -->
+        <domain includeSubdomains="true">crl.identrust.com</domain>
+        <domain includeSubdomains="true">validation.identrust.com</domain>
+
+        <!-- Certum https://www.certum.eu/en/cert_expertise_crl_list/ -->
+        <domain includeSubdomains="true">crl.certum.pl</domain>
     </domain-config>
 </network-security-config>
