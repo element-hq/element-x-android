@@ -136,11 +136,11 @@ class DefaultBiometricAuthenticatorManager(
                     canUseWeakBiometricAuth -> BiometricManager.Authenticators.BIOMETRIC_WEAK
                     else -> 0
                 }
-                val promptInfo = BiometricPrompt.PromptInfo.Builder().apply {
-                    setTitle(promptTitle)
-                    setNegativeButtonText(promptNegative)
-                    setAllowedAuthenticators(authenticators)
-                }.build()
+                val promptInfo = BiometricPrompt.PromptInfo.Builder()
+                    .setTitle(promptTitle)
+                    .setNegativeButtonText(promptNegative)
+                    .setAllowedAuthenticators(authenticators)
+                    .build()
                 DefaultBiometricAuthentication(
                     activity = activity,
                     promptInfo = promptInfo,
