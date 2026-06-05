@@ -42,6 +42,8 @@ fun LinkNewDeviceRootView(
     state: LinkNewDeviceRootState,
     onBackClick: () -> Unit,
     onLinkDesktopDeviceClick: () -> Unit,
+    onLinkMobileDeviceClick: () -> Unit,
+    onUnlockApplication: (isToLinkMobileDevice: Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val (title, subtitle, iconStyle) = if (state.isSupported.dataOrNull() == false) {
@@ -84,32 +86,45 @@ fun LinkNewDeviceRootView(
                 is AsyncData.Success -> {
                     if (state.isSupported.data) {
                         when (state.qrCodeData) {
-                            AsyncData.Uninitialized,
-                            is AsyncData.Failure -> {
+                            AsyncData.Uninitialized -> {
                                 Button(
-                                    onClick = { state.eventSink(LinkNewDeviceRootEvent.LinkMobileDevice) },
+                                    onClick = {
+                                        if (state.isPinConfigured) {
+                                            onUnlockApplication(true)
+                                        } else {
+                                            state.eventSink(LinkNewDeviceRootEvent.LinkMobileDevice)
+                                            onLinkMobileDeviceClick()
+                                        }
+                                    },
                                     text = stringResource(id = R.string.screen_link_new_device_root_mobile_device),
                                     modifier = Modifier.fillMaxWidth(),
                                     leadingIcon = IconSource.Vector(CompoundIcons.Mobile()),
                                 )
                                 Button(
-                                    onClick = onLinkDesktopDeviceClick,
+                                    onClick = {
+                                        if (state.isPinConfigured) {
+                                            onUnlockApplication(false)
+                                        } else {
+                                            onLinkDesktopDeviceClick()
+                                        }
+                                    },
                                     text = stringResource(id = R.string.screen_link_new_device_root_desktop_computer),
                                     modifier = Modifier.fillMaxWidth(),
                                     leadingIcon = IconSource.Vector(CompoundIcons.Computer()),
                                 )
                             }
                             is AsyncData.Loading,
-                            is AsyncData.Success -> {
+                            is AsyncData.Success,
+                            is AsyncData.Failure -> {
                                 Button(
-                                    onClick = { state.eventSink(LinkNewDeviceRootEvent.LinkMobileDevice) },
+                                    onClick = { },
                                     text = stringResource(id = R.string.screen_link_new_device_root_loading_qr_code),
                                     showProgress = true,
                                     enabled = false,
                                     modifier = Modifier.fillMaxWidth(),
                                 )
                                 Button(
-                                    onClick = onLinkDesktopDeviceClick,
+                                    onClick = {},
                                     text = stringResource(id = R.string.screen_link_new_device_root_desktop_computer),
                                     modifier = Modifier.fillMaxWidth(),
                                     enabled = false,
@@ -148,5 +163,7 @@ internal fun LinkNewDeviceRootViewPreview(
         state = state,
         onBackClick = { },
         onLinkDesktopDeviceClick = { },
+        onLinkMobileDeviceClick = { },
+        onUnlockApplication = { },
     )
 }

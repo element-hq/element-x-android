@@ -28,6 +28,8 @@ class LinkNewDeviceRootNode(
     interface Callback : Plugin {
         fun onDone()
         fun linkDesktopDevice()
+        fun linkMobileDevice()
+        fun onUnlockApplication(isToLinkMobileDevice: Boolean)
     }
 
     private val callback: Callback = callback()
@@ -40,6 +42,8 @@ class LinkNewDeviceRootNode(
             modifier = modifier,
             onBackClick = callback::onDone,
             onLinkDesktopDeviceClick = callback::linkDesktopDevice,
+            onLinkMobileDeviceClick = callback::linkMobileDevice,
+            onUnlockApplication = callback::onUnlockApplication,
         )
     }
 }
