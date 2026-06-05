@@ -39,12 +39,11 @@ import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.internal.centerBottomEdge
 import io.element.android.features.location.impl.R
 import io.element.android.features.location.impl.common.MapDefaults
-import io.element.android.features.location.impl.common.UserLocationState
-import io.element.android.features.location.impl.common.rememberUserLocationState
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialog
 import io.element.android.features.location.impl.common.ui.LocationFloatingActionButton
 import io.element.android.features.location.impl.common.ui.MapBottomSheetScaffold
 import io.element.android.features.location.impl.common.ui.UserLocationPuck
+import io.element.android.features.location.impl.common.userlocation.UserLocationTrackingEffect
 import io.element.android.features.location.impl.share.ShareLocationEvent.StartLiveLocationShare
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.LocationPin
@@ -109,7 +108,6 @@ fun ShareLocationView(
         bottomSheetState = rememberStandardBottomSheetState(initialValue = SheetValue.Expanded)
     )
     val cameraState = rememberCameraState(firstPosition = MapDefaults.defaultCameraPosition)
-    val userLocationState = rememberUserLocationState(state.hasLocationPermission)
 
     LaunchedEffect(cameraState.isCameraMoving) {
         if (cameraState.moveReason == CameraMoveReason.GESTURE) {
@@ -136,15 +134,18 @@ fun ShareLocationView(
             BottomSheetContent(
                 cameraState = cameraState,
                 state = state,
-                userLocationState = userLocationState,
                 navigateUp = navigateUp
             )
         },
         mapContent = {
+            UserLocationTrackingEffect(
+                cameraState = cameraState,
+                locationState = state.userLocationState,
+                enabled = state.trackUserLocation,
+            )
             UserLocationPuck(
                 cameraState = cameraState,
-                locationState = userLocationState,
-                trackUserLocation = state.trackUserLocation
+                location = state.userLocationState.location,
             )
         },
         overlayContent = { sheetPadding ->
@@ -215,11 +216,10 @@ private fun StartLiveLocationActionView(
 private fun BottomSheetContent(
     cameraState: CameraState,
     state: ShareLocationState,
-    userLocationState: UserLocationState,
     navigateUp: () -> Unit,
 ) {
     Spacer(Modifier.height(20.dp))
-    val userLocation = userLocationState.location
+    val userLocation = state.userLocationState.location
     if (state.trackUserLocation && userLocation != null) {
         ShareCurrentLocationItem {
             state.eventSink(
