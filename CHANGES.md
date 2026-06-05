@@ -1,3 +1,10 @@
+Changes in Element X v26.06.2
+=============================
+
+Security fixes 🔐
+-----------------
+- Fixed an issue with OIDC callback URLs that could cause the app to crash [(GHSA-r4f9-46vw-v7g3)](https://github.com/element-hq/element-x-android/security/advisories/GHSA-r4f9-46vw-v7g3).
+
 Changes in Element X v26.06.1
 =============================
 
