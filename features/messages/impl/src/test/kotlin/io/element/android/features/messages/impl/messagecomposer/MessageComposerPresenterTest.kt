@@ -1535,11 +1535,13 @@ class MessageComposerPresenterTest {
         draftService: ComposerDraftService = FakeComposerDraftService(),
         mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
         isInThread: Boolean = false,
+        threadRoot: ThreadId? = null,
         slashCommandService: SlashCommandService = FakeSlashCommandService(),
     ) = MessageComposerPresenter(
         navigator = navigator,
         sessionCoroutineScope = this,
         isInThread = isInThread,
+        threadRoot = threadRoot,
         room = room,
         mediaPickerProvider = pickerProvider,
         sessionPreferencesStore = sessionPreferencesStore,
