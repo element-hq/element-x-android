@@ -52,7 +52,6 @@ internal fun TimelineItemCallNotifyView(
     timelineRoomInfo: TimelineRoomInfo,
     event: TimelineItem.Event,
     content: TimelineItemRtcNotificationContent,
-    renderReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
     onLongClick: (TimelineItem.Event) -> Unit,
     onReadReceiptsClick: (TimelineItem.Event) -> Unit,
@@ -106,7 +105,6 @@ internal fun TimelineItemCallNotifyView(
                 isLastOutgoingMessage = isLastOutgoingMessage,
                 receipts = event.readReceiptState.receipts,
             ),
-            renderReadReceipts = renderReadReceipts,
             onReadReceiptsClick = { onReadReceiptsClick(event) },
             modifier = Modifier.padding(top = 4.dp),
         )
@@ -165,10 +163,6 @@ internal fun TimelineItemCallNotifyViewPreview() = ElementPreview {
                             readReceiptState = readReceiptState,
                         ),
                         content = content,
-                        // Render read receipts for the first item only
-                        renderReadReceipts = !isDm &&
-                            callIntent == CallIntent.AUDIO &&
-                            state == RtcNotificationState.Started,
                         isLastOutgoingMessage = false,
                         onLongClick = {},
                         onReadReceiptsClick = {},
