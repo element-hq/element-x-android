@@ -131,6 +131,14 @@ Changes in Element X v26.05.1
 
 <!-- Release notes generated using configuration in .github/release.yml at v26.05.1 -->
 
+Security fixes 🔐
+-----------------
+
+This release contains some important security fixes:
+
+- Check the user ID in the `sender_device_keys` property of Olm-encrypted to-device events to prevent sender spoofing by homeserver owners. ([#6553](https://github.com/matrix-org/matrix-rust-sdk/pull/6553), High, [CVE-2026-45056](https://www.cve.org/CVERecord?id=CVE-2026-45056), [GHSA-wfq4-36m3-9g42](https://github.com/matrix-org/matrix-rust-sdk/security/advisories/GHSA-wfq4-36m3-9g42))
+- Reject invalid edits as candidates for timeline updates. ([#6454](https://github.com/matrix-org/matrix-rust-sdk/pull/6454), Moderate, [CVE-2026-45057](https://www.cve.org/CVERecord?id=CVE-2026-45057), [GHSA-h97m-27fx-42rx](https://github.com/matrix-org/matrix-rust-sdk/security/advisories/GHSA-h97m-27fx-42rx))
+
 ## What's Changed
 ### ✨ Features
 * Make Element Call screen work edge-to-edge by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6634
