@@ -144,8 +144,10 @@ private fun getIcon(
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemCallNotifyViewPreview() = ElementPreview {
-    val readReceiptState = aTimelineItemReadReceipts(
-        receipts = List(3) { aReadReceiptData(it) },
+    val readReceiptState = mutableListOf(
+        aTimelineItemReadReceipts(
+            receipts = List(3) { aReadReceiptData(it) },
+        )
     )
     Column(modifier = Modifier.padding(bottom = 16.dp)) {
         listOf(false, true).forEach { isDm ->
@@ -160,7 +162,8 @@ internal fun TimelineItemCallNotifyViewPreview() = ElementPreview {
                         timelineRoomInfo = aTimelineRoomInfo(isDm = isDm),
                         event = aTimelineItemEvent(
                             content = content,
-                            readReceiptState = readReceiptState,
+                            // Only display read receipts for the first item
+                            readReceiptState = readReceiptState.removeFirstOrNull() ?: aTimelineItemReadReceipts(),
                         ),
                         content = content,
                         isLastOutgoingMessage = false,
