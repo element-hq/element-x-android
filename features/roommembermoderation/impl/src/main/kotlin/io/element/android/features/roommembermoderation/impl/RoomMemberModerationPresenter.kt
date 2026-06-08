@@ -24,6 +24,7 @@ import io.element.android.features.roommembermoderation.api.RoomMemberModeration
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationPermissions
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.features.roommembermoderation.api.roomMemberModerationPermissions
+import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
@@ -53,6 +54,7 @@ class RoomMemberModerationPresenter(
     private val room: JoinedRoom,
     private val dispatchers: CoroutineDispatchers,
     private val analyticsService: AnalyticsService,
+    private val clipboardHelper: ClipboardHelper,
 ) : Presenter<RoomMemberModerationState> {
     @Composable
     override fun present(): RoomMemberModerationState {
@@ -134,6 +136,9 @@ class RoomMemberModerationPresenter(
                     kickUserAsyncAction.value = AsyncAction.Uninitialized
                     banUserAsyncAction.value = AsyncAction.Uninitialized
                     unbanUserAsyncAction.value = AsyncAction.Uninitialized
+                }
+                is InternalRoomMemberModerationEvents.CopyToClipboard -> {
+                    clipboardHelper.copyPlainText(event.text)
                 }
             }
         }
