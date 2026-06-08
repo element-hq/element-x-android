@@ -110,7 +110,6 @@ import io.element.android.libraries.core.mimetype.MimeTypes.Any as AnyMimeTypes
 class MessageComposerPresenter(
     @Assisted private val navigator: MessagesNavigator,
     @Assisted private val timelineController: TimelineController,
-    @Assisted private val isInThread: Boolean,
     @Assisted private val threadRoot: ThreadId?,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
     private val room: JoinedRoom,
@@ -140,11 +139,11 @@ class MessageComposerPresenter(
         fun create(
             timelineController: TimelineController,
             navigator: MessagesNavigator,
-            isInThread: Boolean,
             threadRoot: ThreadId?,
         ): MessageComposerPresenter
     }
 
+    private val isInThread: Boolean get() = threadRoot != null
     private val mediaSender = mediaSenderFactory.create(timelineMode = timelineController.mainTimelineMode())
 
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)

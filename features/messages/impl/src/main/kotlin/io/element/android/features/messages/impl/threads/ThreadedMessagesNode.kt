@@ -112,7 +112,7 @@ class ThreadedMessagesNode(
         this.timelineController = timelineController
         return presenterFactory.create(
             navigator = this,
-            composerPresenter = messageComposerPresenterFactory.create(timelineController, this, isInThread = true, threadRoot = inputs.threadRootEventId),
+            composerPresenter = messageComposerPresenterFactory.create(timelineController, this, threadRoot = inputs.threadRootEventId),
             timelinePresenter = timelinePresenterFactory.create(timelineController = timelineController, this),
             // TODO add special processor for threaded timeline
             actionListPresenter = actionListPresenterFactory.create(
