@@ -23,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -45,7 +44,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun TimelineEventTimestampView(
     event: TimelineItem.Event,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
-    layoutDirection: LayoutDirection = LocalLayoutDirection.current,
+    textLayoutDirection: LayoutDirection = LocalLayoutDirection.current,
     modifier: Modifier = Modifier,
 ) {
     val formattedTime = event.sentTime
@@ -81,15 +80,17 @@ fun TimelineEventTimestampView(
             else -> Modifier
         }
     }
+
+    val initialPadding = if (textLayoutDirection != LocalLayoutDirection.current && textLayoutDirection == LayoutDirection.Rtl) {
+        // Used for padding when the text direction doesn't match the layout direction, e.g. for RTL text in an LTR layout, or vice versa.
+        // This ensures the timestamp is not too close to the message content.
+        PaddingValues(start = 4.dp, end = TimelineEventTimestampViewDefaults.spacing)
+    } else {
+        PaddingValues(start = TimelineEventTimestampViewDefaults.spacing)
+    }
     Row(
         modifier = Modifier
-            .padding(
-                if (layoutDirection == LayoutDirection.Ltr) {
-                    PaddingValues(start = TimelineEventTimestampViewDefaults.spacing)
-                } else {
-                    PaddingValues(start = 4.dp, end = TimelineEventTimestampViewDefaults.spacing)
-                }
-            )
+            .padding(initialPadding)
             // For a better click target, make the corners rounded
             .clip(RoundedCornerShape(8.dp))
             .then(clickableModifier)

@@ -17,11 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.style.ResolvedTextDirection
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.designsystem.text.roundToPx
 import io.element.android.wysiwyg.compose.EditorStyledText
 import kotlin.math.max
@@ -51,6 +53,8 @@ fun ContentAvoidingLayout(
     content: @Composable ContentAvoidingLayoutScope.() -> Unit,
 ) {
     val scope = remember { ContentAvoidingLayoutScopeInstance() }
+
+    val layoutDirection = LocalLayoutDirection.current
 
     Layout(
         modifier = modifier,
@@ -94,14 +98,16 @@ fun ContentAvoidingLayout(
             else -> Unit
         }
 
-        val x = if (data.layoutDirection == LayoutDirection.Ltr) {
-            layoutWidth - overlayPlaceable.width
-        } else {
-            0
-        }
-
         layoutWidth = max(layoutWidth, constraints.minWidth)
         layoutHeight = max(layoutHeight, constraints.minHeight)
+
+        // Special case when the layout direction of the content is different from the layout direction of the parent (text vs general layout),
+        // we need to place the overlay on the opposite side.
+        val x = if (layoutDirection != data.layoutDirection && data.layoutDirection == LayoutDirection.Rtl) {
+            0
+        } else {
+            layoutWidth - overlayPlaceable.width
+        }
 
         layout(layoutWidth, layoutHeight) {
             contentPlaceable.placeRelative(0, 0)
@@ -157,13 +163,18 @@ object ContentAvoidingLayout {
         onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
         extraWidth: Dp = 0.dp,
     ): ((TextLayoutResult) -> Unit) {
-        val layoutDirection = LocalLayoutDirection.current
         val extraWidthPx = extraWidth.roundToPx()
         return { textLayout: TextLayoutResult ->
             // We need to add the external extra width so it's not taken into account as 'free space'
-            val lastLineWidth = when (layoutDirection) {
-                LayoutDirection.Ltr -> textLayout.getLineRight(textLayout.lineCount - 1).roundToInt()
-                LayoutDirection.Rtl -> textLayout.getLineLeft(textLayout.lineCount - 1).roundToInt()
+            val textDirection = tryOrNull { textLayout.getParagraphDirection(0) }
+            val lastLineWidth = when (textDirection) {
+                ResolvedTextDirection.Rtl -> textLayout.getLineLeft(textLayout.lineCount - 1).roundToInt()
+                else -> textLayout.getLineRight(textLayout.lineCount - 1).roundToInt()
+            }
+            val layoutDirection = when (textDirection) {
+                ResolvedTextDirection.Ltr -> LayoutDirection.Ltr
+                ResolvedTextDirection.Rtl -> LayoutDirection.Rtl
+                null -> null
             }
             val lastLineHeight = textLayout.getLineBottom(textLayout.lineCount - 1).roundToInt()
             onContentLayoutChange(
@@ -172,6 +183,7 @@ object ContentAvoidingLayout {
                     contentHeight = textLayout.size.height,
                     nonOverlappingContentWidth = lastLineWidth + extraWidthPx,
                     nonOverlappingContentHeight = lastLineHeight,
+                    layoutDirection = layoutDirection,
                 )
             )
         }

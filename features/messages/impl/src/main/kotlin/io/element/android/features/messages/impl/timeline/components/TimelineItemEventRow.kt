@@ -53,6 +53,7 @@ import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstrainScope
@@ -662,7 +663,7 @@ private fun MessageEventBubbleContent(
                         TimelineEventTimestampView(
                             event = event,
                             eventSink = eventSink,
-                            layoutDirection = data.layoutDirection ?: LocalLayoutDirection.current,
+                            textLayoutDirection = data.layoutDirection ?: LocalLayoutDirection.current,
                             modifier = Modifier
                                 .padding(horizontal = 8.dp, vertical = 4.dp)
                         )
@@ -891,12 +892,39 @@ internal fun TimelineItemEventRowRtlContentPreview() = ElementPreview {
                     senderDisplayName = "Sender with a super long name that should ellipsize",
                     isMine = isMine,
                     content = aTimelineItemTextContent(
-                        body = "ظَة وَدَاع يَسْتَغْرِب فِيهَا اَلشَّاعِر أَنْ لَا يَبْكِي مِنْ أَلَم اَلْفِرَاق، وَيَصِف حَالَة اَلْمُودِعِينَ وَبَعْضهمْ يَتَكَلَّم فِي حِين يَكْتَفِي اَلْمُحِبُّونَ بِالصَّمْتِ، لِأَنَّ حَالهمْ تَظْهَر عِشْقهمْ أَكْثَر مِمَّا يَسْتَطِيعُونَ اَلتَّعْبِير عَنْهُ بِالْكَلَامِ. وَيُقَسِّم فِي آخَر اَلْأَبْيَات عَلَى أَنَّ تَوَقُّف دَمْ"
+                        body = "ظَة وَدَاع يَسْتَغْرِب فِيهَا اَلشَّاعِر أَنْ لَا يَبْكِي مِنْ أَلَم اَلْفِرَاق، وَيَصِف حَالَة اَلْمُودِعِينَ وَبَعْضهمْ يَتَكَلَّم فِي حِين يَكْتَفِي اَلْمُحِبُّونَ بِالصَّمْتِ، لِأَنَّ حَالهمْ تَْْ"
                     ),
                     groupPosition = TimelineItemGroupPosition.First,
                     threadInfo = null,
                 )
             )
+        }
+
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+            sequenceOf(false, true).forEach { isMine ->
+                ATimelineItemEventRow(
+                    event = aTimelineItemEvent(
+                        senderDisplayName = "Sender with a super long name that should ellipsize",
+                        isMine = isMine,
+                        content = aTimelineItemTextContent(
+                            body = "ظَة وَدَاع يَسْتَغْرِب فِيهَا اَلشَّاعِر أَنْ لَا يَبْكِي مِنْ أَلَم اَلْفِرَاق، وَيَصِف حَالَة اَلْمُودِعِينَ وَبَعْضهمْ يَتَكَلَّم فِي حِين يَكْتَفِي اَلْمُحِبُّونَ بِالصَّمْتِ، لِأَنَّ حَالهمْ تَْْ"
+                        ),
+                        groupPosition = TimelineItemGroupPosition.First,
+                        threadInfo = null,
+                    )
+                )
+                ATimelineItemEventRow(
+                    event = aTimelineItemEvent(
+                        senderDisplayName = "Sender with a super long name that should ellipsize",
+                        isMine = isMine,
+                        content = aTimelineItemTextContent(
+                            body = "Testing LTR in RTL layout."
+                        ),
+                        groupPosition = TimelineItemGroupPosition.First,
+                        threadInfo = null,
+                    )
+                )
+            }
         }
     }
 }
