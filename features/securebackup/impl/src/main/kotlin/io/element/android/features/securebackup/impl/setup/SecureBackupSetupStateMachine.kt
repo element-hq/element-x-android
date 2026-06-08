@@ -34,9 +34,6 @@ class SecureBackupSetupStateMachine : FlowReduxStateMachine<SecureBackupSetupSta
                 on { event: Event.SdkHasCreatedKey, state: MachineState<State.CreatingKey> ->
                     state.override { State.KeyCreated(event.key) }
                 }
-                on { _: Event.UserCancelledCreate, state: MachineState<State.CreatingKey> ->
-                    state.override { State.Initial }
-                }
             }
             inState<State.KeyCreated> {
                 on { _: Event.UserSavedKey, state: MachineState<State.KeyCreated> ->
@@ -67,8 +64,5 @@ class SecureBackupSetupStateMachine : FlowReduxStateMachine<SecureBackupSetupSta
         data class SdkError(val exception: Exception) : Event
         data object UserSavedKey : Event
         data object ClearError : Event
-
-        /** User backed out while the SDK call was still in flight; abort and return to Initial. */
-        data object UserCancelledCreate : Event
     }
 }

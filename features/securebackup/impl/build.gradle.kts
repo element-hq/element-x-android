@@ -38,12 +38,9 @@ dependencies {
     implementation(projects.libraries.oauth.api)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.testtags)
-    implementation(projects.libraries.wellknown.api)
     api(libs.statemachine)
     api(projects.features.securebackup.api)
 
     testCommonDependencies(libs, true)
-    testImplementation(projects.features.enterprise.test)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.libraries.wellknown.test)
 }
