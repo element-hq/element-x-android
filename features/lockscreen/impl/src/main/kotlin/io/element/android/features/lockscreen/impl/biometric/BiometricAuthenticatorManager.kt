@@ -33,7 +33,7 @@ interface BiometricAuthenticatorManager {
      * Remember a biometric authenticator ready for unlocking the app.
      */
     @Composable
-    fun rememberUnlockBiometricAuthenticator(): BiometricAuthenticator
+    fun rememberUnlockBiometricAuthenticator(forFeatureUnlock: Boolean): BiometricAuthenticator
 
     /**
      * Remember a biometric authenticator ready for confirmation.

@@ -35,6 +35,8 @@ import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import java.util.concurrent.CopyOnWriteArrayList
 
@@ -85,16 +87,21 @@ class DefaultBiometricAuthenticatorManager(
     }
 
     @Composable
-    override fun rememberUnlockBiometricAuthenticator(): BiometricAuthenticator {
+    override fun rememberUnlockBiometricAuthenticator(forFeatureUnlock: Boolean): BiometricAuthenticator {
         val isBiometricAllowed by remember {
-            lockScreenStore.isBiometricUnlockAllowed()
-        }.collectAsState(initial = false)
+            combine(
+                flowOf(forFeatureUnlock),
+                lockScreenStore.isBiometricUnlockAllowed(),
+            ) { forFeatureUnlock, isAllowed ->
+                forFeatureUnlock || isAllowed
+            }
+        }.collectAsState(initial = forFeatureUnlock)
         val lifecycleState by LocalLifecycleOwner.current.lifecycle.currentStateFlow.collectAsState()
         val isAvailable by remember(lifecycleState) {
             derivedStateOf { isBiometricAllowed && hasAvailableAuthenticator }
         }
         val promptTitle = stringResource(id = R.string.screen_app_lock_biometric_unlock_title_android)
-        val promptNegative = stringResource(id = R.string.screen_app_lock_use_pin_android)
+        val promptNegative = if (forFeatureUnlock) null else stringResource(id = R.string.screen_app_lock_use_pin_android)
         return rememberBiometricAuthenticator(
             isAvailable = isAvailable,
             promptTitle = promptTitle,
@@ -126,7 +133,7 @@ class DefaultBiometricAuthenticatorManager(
     private fun rememberBiometricAuthenticator(
         isAvailable: Boolean,
         promptTitle: String,
-        promptNegative: String,
+        promptNegative: String?,
     ): BiometricAuthenticator {
         val activity = LocalContext.current.findFragmentActivity()
         return remember(isAvailable) {
@@ -138,8 +145,16 @@ class DefaultBiometricAuthenticatorManager(
                 }
                 val promptInfo = BiometricPrompt.PromptInfo.Builder()
                     .setTitle(promptTitle)
-                    .setNegativeButtonText(promptNegative)
-                    .setAllowedAuthenticators(authenticators)
+                    .apply {
+                        if (promptNegative != null) {
+                            setNegativeButtonText(promptNegative)
+                            setAllowedAuthenticators(authenticators)
+                        } else {
+                            setAllowedAuthenticators(
+                                authenticators or BiometricManager.Authenticators.DEVICE_CREDENTIAL
+                            )
+                        }
+                    }
                     .build()
                 DefaultBiometricAuthentication(
                     activity = activity,

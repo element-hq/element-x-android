@@ -73,7 +73,8 @@ class PinUnlockPresenter(
         val isUnlocked = remember {
             mutableStateOf(false)
         }
-        val biometricUnlock = biometricAuthenticatorManager.rememberUnlockBiometricAuthenticator()
+        // Set forFeatureUnlock to false here, to keep the normal behavior.
+        val biometricUnlock = biometricAuthenticatorManager.rememberUnlockBiometricAuthenticator(forFeatureUnlock = false)
         LaunchedEffect(Unit) {
             suspend {
                 val pinCodeSize = pinCodeManager.getPinCodeSize()
@@ -106,7 +107,7 @@ class PinUnlockPresenter(
             }
         }
         pinUnlockHelper.OnUnlockEffect {
-            isUnlocked.value = true
+            isUnlocked.value = it
         }
 
         fun handleEvent(event: PinUnlockEvent) {

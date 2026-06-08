@@ -43,7 +43,8 @@ fun LinkNewDeviceRootView(
     onBackClick: () -> Unit,
     onLinkDesktopDeviceClick: () -> Unit,
     onLinkMobileDeviceClick: () -> Unit,
-    onUnlockApplication: (isToLinkMobileDevice: Boolean) -> Unit,
+    onUnlockApplication: (type: LinkDeviceType) -> Unit,
+    onUnlockDevice: (type: LinkDeviceType) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val (title, subtitle, iconStyle) = if (state.isSupported.dataOrNull() == false) {
@@ -59,6 +60,7 @@ fun LinkNewDeviceRootView(
             BigIcon.Style.Default(CompoundIcons.Devices())
         )
     }
+
     FlowStepPage(
         onBackClick = onBackClick,
         title = title,
@@ -89,8 +91,11 @@ fun LinkNewDeviceRootView(
                             AsyncData.Uninitialized -> {
                                 Button(
                                     onClick = {
+                                        // TODO Maybe use isDeviceSecured first?
                                         if (state.isPinConfigured) {
-                                            onUnlockApplication(true)
+                                            onUnlockApplication(LinkDeviceType.Mobile)
+                                        } else if (state.isDeviceSecured) {
+                                            onUnlockDevice(LinkDeviceType.Mobile)
                                         } else {
                                             state.eventSink(LinkNewDeviceRootEvent.LinkMobileDevice)
                                             onLinkMobileDeviceClick()
@@ -102,8 +107,11 @@ fun LinkNewDeviceRootView(
                                 )
                                 Button(
                                     onClick = {
+                                        // TODO Maybe use isDeviceSecured first?
                                         if (state.isPinConfigured) {
-                                            onUnlockApplication(false)
+                                            onUnlockApplication(LinkDeviceType.Desktop)
+                                        } else if (state.isDeviceSecured) {
+                                            onUnlockDevice(LinkDeviceType.Desktop)
                                         } else {
                                             onLinkDesktopDeviceClick()
                                         }
@@ -165,5 +173,6 @@ internal fun LinkNewDeviceRootViewPreview(
         onLinkDesktopDeviceClick = { },
         onLinkMobileDeviceClick = { },
         onUnlockApplication = { },
+        onUnlockDevice = { },
     )
 }

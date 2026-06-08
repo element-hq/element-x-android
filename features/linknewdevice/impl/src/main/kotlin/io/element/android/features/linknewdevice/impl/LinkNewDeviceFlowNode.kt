@@ -34,6 +34,7 @@ import io.element.android.features.linknewdevice.impl.screens.error.ErrorNode
 import io.element.android.features.linknewdevice.impl.screens.error.ErrorScreenType
 import io.element.android.features.linknewdevice.impl.screens.number.EnterNumberNode
 import io.element.android.features.linknewdevice.impl.screens.qrcode.ShowQrCodeNode
+import io.element.android.features.linknewdevice.impl.screens.root.LinkDeviceType
 import io.element.android.features.linknewdevice.impl.screens.root.LinkNewDeviceRootNode
 import io.element.android.features.linknewdevice.impl.screens.scan.ScanQrCodeNode
 import io.element.android.features.lockscreen.api.LockScreenOneShotEntryPoint
@@ -125,8 +126,7 @@ class LinkNewDeviceFlowNode(
 
         @Parcelize
         data class UnlockApplication(
-            // True for mobile, false for desktop
-            val isToLinkMobileDevice: Boolean,
+            val type: LinkDeviceType,
         ) : NavTarget
 
         @Parcelize
@@ -242,8 +242,8 @@ class LinkNewDeviceFlowNode(
                         linkNewMobileHandler.createAndStartNewHandler()
                     }
 
-                    override fun onUnlockApplication(isToLinkMobileDevice: Boolean) {
-                        backstack.push(NavTarget.UnlockApplication(isToLinkMobileDevice))
+                    override fun onUnlockApplication(type: LinkDeviceType) {
+                        backstack.push(NavTarget.UnlockApplication(type))
                     }
                 }
                 createNode<LinkNewDeviceRootNode>(buildContext, listOf(callback))
@@ -255,13 +255,16 @@ class LinkNewDeviceFlowNode(
                     }
 
                     override fun onUnlocked() {
-                        if (navTarget.isToLinkMobileDevice) {
-                            backstack.pop()
-                            linkNewMobileHandler.reset()
-                            linkNewMobileHandler.createAndStartNewHandler()
-                        } else {
-                            linkNewDesktopHandler.reset()
-                            backstack.replace(NavTarget.DesktopNotice)
+                        when (navTarget.type) {
+                            LinkDeviceType.Mobile -> {
+                                backstack.pop()
+                                linkNewMobileHandler.reset()
+                                linkNewMobileHandler.createAndStartNewHandler()
+                            }
+                            LinkDeviceType.Desktop -> {
+                                linkNewDesktopHandler.reset()
+                                backstack.replace(NavTarget.DesktopNotice)
+                            }
                         }
                     }
                 }

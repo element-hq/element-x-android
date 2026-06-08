@@ -48,6 +48,7 @@ class LinkNewDeviceRootPresenter(
         }
 
         val isPinConfigured by lockScreenService.isPinSetup().collectAsState(false)
+        val isDeviceSecured by lockScreenService.isDeviceSecured().collectAsState(false)
         val step by linkNewMobileHandler.stepFlow.collectAsState()
 
         LaunchedEffect(step) {
@@ -80,6 +81,7 @@ class LinkNewDeviceRootPresenter(
         return LinkNewDeviceRootState(
             isSupported = isSupported,
             isPinConfigured = isPinConfigured,
+            isDeviceSecured = isDeviceSecured,
             qrCodeData = qrCodeData,
             eventSink = ::handleEvent,
         )
