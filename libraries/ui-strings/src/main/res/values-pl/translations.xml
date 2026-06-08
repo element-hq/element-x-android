@@ -101,6 +101,7 @@
   <string name="action_decline_and_block">"Odrzuć i zablokuj"</string>
   <string name="action_delete">"Usuń"</string>
   <string name="action_delete_account">"Usuń konto"</string>
+  <string name="action_delete_file">"Usuń plik"</string>
   <string name="action_delete_poll">"Usuń ankietę"</string>
   <string name="action_deselect_all">"Odznacz wszystko"</string>
   <string name="action_disable">"Wyłącz"</string>
@@ -555,4 +556,6 @@ Czy na pewno chcesz kontynuować?"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Nie masz uprawnień do tej wiadomości"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Nie można odszyfrować wiadomości"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Ta wiadomość została zablokowana, ponieważ urządzenie nie zostało zweryfikowane lub nadawca musi zweryfikować Twoją tożsamość."</string>
+  <string name="vulkan_not_supported_dialog_content_android">"Twoje urządzenie jest przestarzałe, wymagany system Android 8 lub nowszy."</string>
+  <string name="vulkan_not_supported_dialog_title_android">"Renderowanie map nie jest obsługiwane"</string>
 </resources>
