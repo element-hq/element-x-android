@@ -54,9 +54,10 @@
   <string name="screen_labs_enable_threads">"スレッドへの返信を有効化"</string>
   <string name="screen_labs_enable_threads_description">"変更を適用するためにアプリケーションは再起動します。"</string>
   <string name="screen_labs_header_description">"開発段階の最新機能を試すことができます。未完成のため、変更や不安定な挙動が生じる可能性があります。"</string>
-  <string name="screen_labs_header_title">"探究したいですか？"</string>
+  <string name="screen_labs_header_title">"探究的な気分ですか？"</string>
   <string name="screen_labs_title">"ラボ"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"追加設定"</string>
+  <string name="screen_notification_settings_call_ringtone_label">"発信音"</string>
   <string name="screen_notification_settings_calls_label">"音声・ビデオ通話"</string>
   <string name="screen_notification_settings_configuration_mismatch">"設定の不一致"</string>
   <string name="screen_notification_settings_configuration_mismatch_description">"通知設定を簡素化し、見つけやすくしました。以前のカスタム設定の一部はここに表示されませんが、引き続き有効です。
@@ -75,10 +76,15 @@
   <string name="screen_notification_settings_invite_for_me_label">"招待"</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"暗号化されたルームでは、この機能にホームサーバーが対応しないため、一部のルームから通知が届かない可能性があります。"</string>
   <string name="screen_notification_settings_mentions_section_title">"メンション"</string>
+  <string name="screen_notification_settings_message_sound_dialog_choose_other">"他の音を選択…"</string>
+  <string name="screen_notification_settings_message_sound_dialog_current_subtitle">"%1$s を使用中"</string>
+  <string name="screen_notification_settings_message_sound_dialog_title">"メッセージの音"</string>
+  <string name="screen_notification_settings_message_sound_label">"メッセージの音"</string>
   <string name="screen_notification_settings_mode_all">"すべて"</string>
   <string name="screen_notification_settings_mode_mentions">"メンション"</string>
   <string name="screen_notification_settings_notification_section_title">"以下を通知"</string>
   <string name="screen_notification_settings_room_mention_label">@ルームで通知を受け取る</string>
+  <string name="screen_notification_settings_sound_custom_fallback">"カスタム"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"カスタム着信音"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"ファイルの削除に失敗"</string>
   <string name="screen_notification_settings_sound_element_default">"Element の既定"</string>
@@ -86,7 +92,9 @@
   <string name="screen_notification_settings_sound_import_sound_error_title">"ファイルの取り込みに失敗"</string>
   <string name="screen_notification_settings_sound_preview_sound_error_title">"通知音のプレビューで問題が発生しました"</string>
   <string name="screen_notification_settings_sound_section_title">"音"</string>
+  <string name="screen_notification_settings_sound_set_sound_error_dismiss_a11y">"通知音のエラーを無視"</string>
   <string name="screen_notification_settings_sound_set_sound_error_title">"通知音の設定に問題が発生しました"</string>
+  <string name="screen_notification_settings_sound_silent">"サイレント"</string>
   <string name="screen_notification_settings_sound_system_alert">"アラート"</string>
   <string name="screen_notification_settings_sound_system_anticipate">"予感"</string>
   <string name="screen_notification_settings_sound_system_bell">"ベル"</string>
@@ -94,6 +102,7 @@
   <string name="screen_notification_settings_sound_system_calypso">"カリプソ"</string>
   <string name="screen_notification_settings_sound_system_chime">"チャイム"</string>
   <string name="screen_notification_settings_sound_system_choo_choo">"汽車ポッポ"</string>
+  <string name="screen_notification_settings_sound_system_default">"システムのデフォルト"</string>
   <string name="screen_notification_settings_sound_system_descent">"下降"</string>
   <string name="screen_notification_settings_sound_system_electronic">"エレクトロニック"</string>
   <string name="screen_notification_settings_sound_system_fanfare">"ファンファーレ"</string>

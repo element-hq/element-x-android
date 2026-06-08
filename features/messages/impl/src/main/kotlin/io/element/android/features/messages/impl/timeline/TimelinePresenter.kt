@@ -146,18 +146,12 @@ class TimelinePresenter(
         val suppressJumpToUnread = remember { mutableStateOf(false) }
 
         val resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailurePresenter.present()
-        val renderReadReceipts by remember {
-            sessionPreferencesStore.isRenderReadReceiptsEnabled()
-        }.collectAsState(initial = true)
         val isLive by remember {
             timelineController.isLive()
         }.collectAsState(initial = true)
 
         val displayThreadSummaries by produceState(false) {
             value = featureFlagService.isFeatureEnabled(FeatureFlags.Threads)
-        }
-        val displayFloatingDateBadge by produceState(false) {
-            value = featureFlagService.isFeatureEnabled(FeatureFlags.FloatingDateBadge)
         }
         val displayJumpToUnread by produceState(false) {
             value = featureFlagService.isFeatureEnabled(FeatureFlags.JumpToUnread)
@@ -274,13 +268,18 @@ class TimelinePresenter(
                 }
                 .launchIn(this)
 
-            combine(timelineController.timelineItems(), room.membersStateFlow) { items, membersState ->
+            combine(
+                timelineController.timelineItems(),
+                room.membersStateFlow,
+                sessionPreferencesStore.isRenderReadReceiptsEnabled(),
+            ) { items, membersState, renderReadReceipts ->
                 val parent = analyticsService.getLongRunningTransaction(DisplayFirstTimelineItems)
                 val transaction = parent?.startChild("timelineItemsFactory.replaceWith", "Processing timeline items")
                 transaction?.putExtraData(AnalyticsUserData.TIMELINE_ITEM_COUNT, items.count().toString())
                 timelineItemsFactory.replaceWith(
                     timelineItems = items,
-                    roomMembers = membersState.roomMembers().orEmpty()
+                    roomMembers = membersState.roomMembers().orEmpty(),
+                    renderReadReceipts = renderReadReceipts,
                 )
                 transaction?.finish()
                 items
@@ -379,14 +378,12 @@ class TimelinePresenter(
             timelineItems = timelineItems,
             timelineMode = timelineMode,
             timelineRoomInfo = timelineRoomInfo,
-            renderReadReceipts = renderReadReceipts,
             newEventState = newEventState.value,
             isLive = isLive,
             focusRequestState = focusRequestState.value,
             messageShieldDialogData = messageShieldDialogData.value,
             resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailureState,
             displayThreadSummaries = displayThreadSummaries,
-            displayFloatingDateBadge = displayFloatingDateBadge,
             displayJumpToUnread = displayJumpToUnread,
             jumpToUnread = jumpToUnread.value,
             eventSink = ::handleEvent,

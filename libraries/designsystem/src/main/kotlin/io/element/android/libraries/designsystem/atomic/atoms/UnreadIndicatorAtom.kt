@@ -12,6 +12,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
@@ -31,21 +32,36 @@ import io.element.android.libraries.designsystem.theme.unreadIndicator
 fun UnreadIndicatorAtom(
     modifier: Modifier = Modifier,
     size: Dp = 12.dp,
+    count: Long? = null,
     color: Color = ElementTheme.colors.unreadIndicator,
     isVisible: Boolean = true,
     contentDescription: String? = null,
     border: BorderStroke? = null,
 ) {
-    Box(
-        modifier = modifier
-            .semantics {
-                contentDescription?.let { this.contentDescription = it }
-            }
-            .size(size)
-            .clip(CircleShape)
-            .background(if (isVisible) color else Color.Transparent)
-            .then(if (border != null) Modifier.border(border, CircleShape) else Modifier)
-    )
+    when {
+        !isVisible -> Spacer(modifier = modifier.size(size))
+        count != null && count >= 1 -> CounterAtom(
+            count = count.toInt(),
+            modifier = modifier
+                .semantics {
+                    contentDescription?.let { this.contentDescription = it }
+                }
+                .then(if (border != null) Modifier.border(border, CircleShape) else Modifier),
+            containerColor = color,
+            contentColor = ElementTheme.colors.bgCanvasDefault,
+            textStyle = ElementTheme.typography.fontBodySmMedium,
+        )
+        else -> Box(
+            modifier = modifier
+                .semantics {
+                    contentDescription?.let { this.contentDescription = it }
+                }
+                .size(size)
+                .clip(CircleShape)
+                .background(color)
+                .then(if (border != null) Modifier.border(border, CircleShape) else Modifier),
+        )
+    }
 }
 
 @PreviewsDayNight

@@ -33,6 +33,7 @@ import io.element.android.features.location.impl.common.permissions.PermissionsP
 import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.features.location.impl.common.sendLiveLocationPermissions
 import io.element.android.features.location.impl.common.toDialogState
+import io.element.android.features.location.impl.common.userlocation.UserLocationState
 import io.element.android.features.location.impl.live.LiveLocationStore
 import io.element.android.features.messages.api.MessageComposerContext
 import io.element.android.libraries.architecture.AsyncAction
@@ -70,6 +71,7 @@ class ShareLocationPresenter(
     private val durationFormatter: DurationFormatter,
     private val liveLocationShareManager: ActiveLiveLocationShareManager,
     private val liveLocationStore: LiveLocationStore,
+    private val userLocationStateFactory: UserLocationState.Factory,
 ) : Presenter<ShareLocationState> {
     @AssistedFactory
     fun interface Factory {
@@ -123,6 +125,8 @@ class ShareLocationPresenter(
             }
         }
 
+        val userLocationState = userLocationStateFactory.create(permissionsState.isAnyGranted)
+
         LaunchedEffect(permissionsState.permissions) { checkLocationConstraints() }
 
         fun handleEvent(event: ShareLocationEvent) {
@@ -171,7 +175,7 @@ class ShareLocationPresenter(
             currentUser = currentUser,
             dialogState = dialogState,
             trackUserLocation = trackUserPosition,
-            hasLocationPermission = permissionsState.isAnyGranted,
+            userLocationState = userLocationState,
             canShareLiveLocation = timelineMode.canShareLiveLocation(),
             appName = appName,
             startLiveLocationAction = startLiveLocationAction.value,
