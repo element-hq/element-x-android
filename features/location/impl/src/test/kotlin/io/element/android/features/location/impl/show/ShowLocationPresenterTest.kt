@@ -37,7 +37,6 @@ import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -103,8 +102,8 @@ class ShowLocationPresenterTest {
 
         val presenter = createShowLocationPresenter()
         presenter.test {
-            val initialState = awaitItem()
-            assertThat(initialState.isTrackMyLocation).isFalse()
+            assertThat(awaitItem().isTrackMyLocation).isFalse()
+            assertThat(awaitItem().isTrackMyLocation).isTrue()
         }
     }
 
@@ -129,14 +128,11 @@ class ShowLocationPresenterTest {
             )
         )
         presenter.test {
-            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.isTrackMyLocation).isFalse()
 
             initialState.eventSink(ShowLocationEvent.TrackMyLocation(true))
             val trackMyLocationState = awaitItem()
-
-            delay(1)
 
             assertThat(trackMyLocationState.isTrackMyLocation).isTrue()
 
@@ -202,11 +198,33 @@ class ShowLocationPresenterTest {
     }
 
     @Test
+    fun `TrackMyLocation with permissions not yet requested triggers permission request`() = runTest {
+        fakePermissionsPresenter.givenState(
+            aPermissionsState(
+                permissions = PermissionsState.Permissions.NoneGranted,
+                shouldShowRationale = false,
+                permissionsRequested = false,
+            )
+        )
+
+        val presenter = createShowLocationPresenter()
+        presenter.test {
+            val initialState = awaitItem()
+
+            initialState.eventSink(ShowLocationEvent.TrackMyLocation(true))
+
+            assertThat(fakePermissionsPresenter.events).contains(PermissionsEvents.RequestPermissions)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
     fun `permission denied dialog dismiss`() = runTest {
         fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = false,
+                permissionsRequested = true,
             )
         )
 
@@ -235,6 +253,7 @@ class ShowLocationPresenterTest {
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = false,
+                permissionsRequested = true,
             )
         )
 
