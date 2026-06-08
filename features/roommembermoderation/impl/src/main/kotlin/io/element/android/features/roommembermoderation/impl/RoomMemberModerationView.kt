@@ -12,6 +12,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -247,6 +248,7 @@ private fun RoomMemberActionsBottomSheet(
                         coroutineScope.launch {
                             bottomSheetState.hide()
                             onAvatarClick?.invoke(user)
+                            onDismiss()
                         }
                     }
             )
@@ -286,8 +288,8 @@ private fun RoomMemberActionsBottomSheet(
                             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.UserProfile())),
                             onClick = {
                                 coroutineScope.launch {
-                                    onSelectAction(action, user)
                                     bottomSheetState.hide()
+                                    onSelectAction(action, user)
                                 }
                             },
                             enabled = actionState.isEnabled
@@ -344,16 +346,17 @@ private fun RoomMemberActionsBottomSheet(
 @PreviewsDayNight
 @Composable
 internal fun RoomMemberModerationViewPreview(@PreviewParameter(InternalRoomMemberModerationStateProvider::class) state: InternalRoomMemberModerationState) {
+    val isDoingAction = listOf(state.kickUserAsyncAction, state.banUserAsyncAction, state.unbanUserAsyncAction).any { it is AsyncAction.Loading }
+    val modifier = if (isDoingAction) {
+        Modifier.fillMaxWidth().heightIn(min = 64.dp)
+    } else {
+        Modifier.fillMaxSize()
+    }
     ElementPreview {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(min = 64.dp)
-        ) {
+        Box(modifier) {
             RoomMemberModerationView(
                 state = state,
-                onSelectAction = { _, _ ->
-                },
+                onSelectAction = { _, _ -> },
             )
         }
     }
