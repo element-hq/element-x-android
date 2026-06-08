@@ -21,8 +21,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -42,6 +45,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun TimelineEventTimestampView(
     event: TimelineItem.Event,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
+    layoutDirection: LayoutDirection = LocalLayoutDirection.current,
     modifier: Modifier = Modifier,
 ) {
     val formattedTime = event.sentTime
@@ -79,7 +83,13 @@ fun TimelineEventTimestampView(
     }
     Row(
         modifier = Modifier
-            .padding(PaddingValues(start = TimelineEventTimestampViewDefaults.spacing))
+            .padding(
+                if (layoutDirection == LayoutDirection.Ltr) {
+                    PaddingValues(start = TimelineEventTimestampViewDefaults.spacing)
+                } else {
+                    PaddingValues(start = 4.dp, end = TimelineEventTimestampViewDefaults.spacing)
+                }
+            )
             // For a better click target, make the corners rounded
             .clip(RoundedCornerShape(8.dp))
             .then(clickableModifier)

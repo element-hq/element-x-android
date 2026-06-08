@@ -40,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.platform.ViewConfiguration
 import androidx.compose.ui.res.pluralStringResource
@@ -657,10 +658,11 @@ private fun MessageEventBubbleContent(
                     overlayOffset = DpOffset(0.dp, -1.dp),
                     shrinkContent = canShrinkContent,
                     content = { content(this::onContentLayoutChange) },
-                    overlay = {
+                    overlay = { data ->
                         TimelineEventTimestampView(
                             event = event,
                             eventSink = eventSink,
+                            layoutDirection = data.layoutDirection ?: LocalLayoutDirection.current,
                             modifier = Modifier
                                 .padding(horizontal = 8.dp, vertical = 4.dp)
                         )
@@ -874,6 +876,26 @@ internal fun TimelineItemEventRowWithThreadSummaryPreview() = ElementPreview {
                     )
                 ),
                 displayThreadSummaries = true,
+            )
+        }
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineItemEventRowRtlContentPreview() = ElementPreview {
+    Column {
+        sequenceOf(false, true).forEach { isMine ->
+            ATimelineItemEventRow(
+                event = aTimelineItemEvent(
+                    senderDisplayName = "Sender with a super long name that should ellipsize",
+                    isMine = isMine,
+                    content = aTimelineItemTextContent(
+                        body = "ظَة وَدَاع يَسْتَغْرِب فِيهَا اَلشَّاعِر أَنْ لَا يَبْكِي مِنْ أَلَم اَلْفِرَاق، وَيَصِف حَالَة اَلْمُودِعِينَ وَبَعْضهمْ يَتَكَلَّم فِي حِين يَكْتَفِي اَلْمُحِبُّونَ بِالصَّمْتِ، لِأَنَّ حَالهمْ تَظْهَر عِشْقهمْ أَكْثَر مِمَّا يَسْتَطِيعُونَ اَلتَّعْبِير عَنْهُ بِالْكَلَامِ. وَيُقَسِّم فِي آخَر اَلْأَبْيَات عَلَى أَنَّ تَوَقُّف دَمْ"
+                    ),
+                    groupPosition = TimelineItemGroupPosition.First,
+                    threadInfo = null,
+                )
             )
         }
     }

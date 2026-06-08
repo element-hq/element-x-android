@@ -43,7 +43,7 @@ import kotlin.math.roundToInt
  */
 @Composable
 fun ContentAvoidingLayout(
-    overlay: @Composable () -> Unit,
+    overlay: @Composable (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
     spacing: Dp = 0.dp,
     overlayOffset: DpOffset = DpOffset.Zero,
@@ -56,7 +56,7 @@ fun ContentAvoidingLayout(
         modifier = modifier,
         content = {
             scope.content()
-            overlay()
+            overlay(scope.data.value)
         }
     ) { measurables, constraints ->
 
@@ -94,12 +94,18 @@ fun ContentAvoidingLayout(
             else -> Unit
         }
 
+        val x = if (data.layoutDirection == LayoutDirection.Ltr) {
+            layoutWidth - overlayPlaceable.width
+        } else {
+            0
+        }
+
         layoutWidth = max(layoutWidth, constraints.minWidth)
         layoutHeight = max(layoutHeight, constraints.minHeight)
 
         layout(layoutWidth, layoutHeight) {
             contentPlaceable.placeRelative(0, 0)
-            overlayPlaceable.placeRelative(layoutWidth - overlayPlaceable.width, layoutHeight - overlayPlaceable.height + overlayOffset.y.roundToPx())
+            overlayPlaceable.placeRelative(x, layoutHeight - overlayPlaceable.height + overlayOffset.y.roundToPx())
         }
     }
 }
@@ -112,12 +118,14 @@ fun ContentAvoidingLayout(
  * @param contentHeight The full height of the content in pixels.
  * @param nonOverlappingContentWidth The width of the part of the content that can't overlap with the timestamp.
  * @param nonOverlappingContentHeight The height of the part of the content that can't overlap with the timestamp.
+ * @param layoutDirection The layout direction of the content, if applicable.
  */
 data class ContentAvoidingLayoutData(
     val contentWidth: Int = 0,
     val contentHeight: Int = 0,
     val nonOverlappingContentWidth: Int = contentWidth,
     val nonOverlappingContentHeight: Int = contentHeight,
+    val layoutDirection: LayoutDirection? = null,
 )
 
 /**
@@ -184,12 +192,18 @@ object ContentAvoidingLayout {
             // We need to add the external extra width so it's not taken into account as 'free space'
             val lastLineWidth = textLayout.getLineWidth(textLayout.lineCount - 1).roundToInt()
             val lastLineHeight = textLayout.getLineBottom(textLayout.lineCount - 1)
+            val direction = when (textLayout.getParagraphDirection(textLayout.lineCount - 1)) {
+                Layout.DIR_LEFT_TO_RIGHT -> LayoutDirection.Ltr
+                Layout.DIR_RIGHT_TO_LEFT -> LayoutDirection.Rtl
+                else -> null
+            }
             onContentLayoutChange(
                 ContentAvoidingLayoutData(
                     contentWidth = textLayout.width + extraWidthPx,
                     contentHeight = textLayout.height,
                     nonOverlappingContentWidth = lastLineWidth + extraWidthPx,
                     nonOverlappingContentHeight = lastLineHeight,
+                    layoutDirection = direction,
                 )
             )
         }

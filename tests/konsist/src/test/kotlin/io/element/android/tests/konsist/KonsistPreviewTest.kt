@@ -149,6 +149,7 @@ class KonsistPreviewTest {
         "TimelineItemEventRowShieldPreview",
         "TimelineItemEventRowTimestampPreview",
         "TimelineItemEventRowUtdPreview",
+        "TimelineItemEventRowRtlContentPreview",
         "TimelineItemEventRowWithManyReactionsPreview",
         "TimelineItemEventRowWithRRPreview",
         "TimelineItemEventRowWithReplyPreview",
