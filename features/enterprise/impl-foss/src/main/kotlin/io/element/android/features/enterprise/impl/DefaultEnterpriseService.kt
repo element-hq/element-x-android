@@ -13,7 +13,6 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.compound.colors.SemanticColorsLightDark
 import io.element.android.features.enterprise.api.BugReportUrl
-import io.element.android.features.enterprise.api.CustomRecoveryPassphraseStrengthResult
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.flow.Flow
@@ -46,8 +45,4 @@ class DefaultEnterpriseService : EnterpriseService {
     }
 
     override fun getNoisyNotificationChannelId(sessionId: SessionId): String? = null
-
-    override fun isCustomRecoveryPassphraseEnabled(): Boolean = false
-
-    override fun estimateCustomRecoveryPassphraseStrength(passphrase: String): CustomRecoveryPassphraseStrengthResult? = null
 }
