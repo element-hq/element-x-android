@@ -26,7 +26,7 @@ class FakeBiometricAuthenticatorManager(
     }
 
     @Composable
-    override fun rememberUnlockBiometricAuthenticator(): BiometricAuthenticator {
+    override fun rememberUnlockBiometricAuthenticator(forFeatureUnlock: Boolean): BiometricAuthenticator {
         return remember {
            createBiometricAuthenticator()
         }

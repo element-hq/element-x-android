@@ -77,6 +77,17 @@ class DefaultLockScreenServiceTest {
             assertThat(awaitItem()).isFalse()
         }
     }
+
+    @Test
+    fun `isDeviceSecured returns the biometric manager state`() = runTest {
+        val sut = createDefaultLockScreenService(
+            biometricAuthenticatorManager = FakeBiometricAuthenticatorManager(isDeviceSecured = true)
+        )
+        sut.isDeviceSecured().test {
+            assertThat(awaitItem()).isTrue()
+            awaitComplete()
+        }
+    }
 }
 
 private fun TestScope.createDefaultLockScreenService(
