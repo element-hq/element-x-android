@@ -119,7 +119,6 @@ private fun RoomListModalBottomSheetContent(
                 leadingContent = ListItemContent.Icon(
                     iconSource = IconSource.Vector(CompoundIcons.MarkAsRead())
                 ),
-                style = ListItemStyle.Primary,
             )
         } else {
             ListItem(
@@ -133,7 +132,6 @@ private fun RoomListModalBottomSheetContent(
                 leadingContent = ListItemContent.Icon(
                     iconSource = IconSource.Vector(CompoundIcons.MarkAsUnread())
                 ),
-                style = ListItemStyle.Primary,
             )
         }
         val (textResId, icon) = if (contextMenu.isFavorite) {
@@ -159,7 +157,6 @@ private fun RoomListModalBottomSheetContent(
             onClick = {
                 onFavoriteChange(!contextMenu.isFavorite)
             },
-            style = ListItemStyle.Primary,
         )
         ListItem(
             headlineContent = {
@@ -174,7 +171,6 @@ private fun RoomListModalBottomSheetContent(
                     CompoundIcons.Settings(),
                 )
             ),
-            style = ListItemStyle.Primary,
         )
         if (canReportRoom) {
             ListItem(
@@ -211,7 +207,6 @@ private fun RoomListModalBottomSheetContent(
                 leadingContent = ListItemContent.Icon(
                     iconSource = IconSource.Vector(CompoundIcons.Delete())
                 ),
-                style = ListItemStyle.Primary,
             )
         }
     }

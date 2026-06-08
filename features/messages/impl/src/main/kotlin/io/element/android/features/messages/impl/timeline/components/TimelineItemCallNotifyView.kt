@@ -52,7 +52,6 @@ internal fun TimelineItemCallNotifyView(
     timelineRoomInfo: TimelineRoomInfo,
     event: TimelineItem.Event,
     content: TimelineItemRtcNotificationContent,
-    renderReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
     onLongClick: (TimelineItem.Event) -> Unit,
     onReadReceiptsClick: (TimelineItem.Event) -> Unit,
@@ -106,7 +105,6 @@ internal fun TimelineItemCallNotifyView(
                 isLastOutgoingMessage = isLastOutgoingMessage,
                 receipts = event.readReceiptState.receipts,
             ),
-            renderReadReceipts = renderReadReceipts,
             onReadReceiptsClick = { onReadReceiptsClick(event) },
             modifier = Modifier.padding(top = 4.dp),
         )
@@ -146,8 +144,10 @@ private fun getIcon(
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemCallNotifyViewPreview() = ElementPreview {
-    val readReceiptState = aTimelineItemReadReceipts(
-        receipts = List(3) { aReadReceiptData(it) },
+    val readReceiptState = mutableListOf(
+        aTimelineItemReadReceipts(
+            receipts = List(3) { aReadReceiptData(it) },
+        )
     )
     Column(modifier = Modifier.padding(bottom = 16.dp)) {
         listOf(false, true).forEach { isDm ->
@@ -162,13 +162,10 @@ internal fun TimelineItemCallNotifyViewPreview() = ElementPreview {
                         timelineRoomInfo = aTimelineRoomInfo(isDm = isDm),
                         event = aTimelineItemEvent(
                             content = content,
-                            readReceiptState = readReceiptState,
+                            // Only display read receipts for the first item
+                            readReceiptState = readReceiptState.removeFirstOrNull() ?: aTimelineItemReadReceipts(),
                         ),
                         content = content,
-                        // Render read receipts for the first item only
-                        renderReadReceipts = !isDm &&
-                            callIntent == CallIntent.AUDIO &&
-                            state == RtcNotificationState.Started,
                         isLastOutgoingMessage = false,
                         onLongClick = {},
                         onReadReceiptsClick = {},

@@ -31,7 +31,7 @@ data class RoomDetailsState(
     val memberCount: Long,
     val isEncrypted: Boolean,
     val roomType: RoomDetailsType,
-    val roomMemberDetailsState: UserProfileState?,
+    val dmOtherMemberDetailsState: UserProfileState?,
     val canEdit: Boolean,
     val canInvite: Boolean,
     val roomCallState: RoomCallState,

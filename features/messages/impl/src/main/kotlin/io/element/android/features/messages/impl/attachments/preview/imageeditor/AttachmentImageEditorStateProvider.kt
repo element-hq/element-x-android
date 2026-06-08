@@ -75,6 +75,16 @@ open class AttachmentImageEditorStateProvider : PreviewParameterProvider<Attachm
                 ),
                 previewDebug = true,
             ),
+            anAttachmentImageEditorState(
+                edits = AttachmentImageEdits(
+                    cropRect = caterpillarCrop,
+                ).flipHorizontally(),
+            ),
+            anAttachmentImageEditorState(
+                edits = AttachmentImageEdits(
+                    cropRect = caterpillarCrop,
+                ).flipVertically(),
+            ),
         )
 }
 

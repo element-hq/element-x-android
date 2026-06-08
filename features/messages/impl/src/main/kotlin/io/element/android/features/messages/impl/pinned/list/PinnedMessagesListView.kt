@@ -217,7 +217,6 @@ private fun PinnedMessagesListLoaded(
                 timelineItem = timelineItem,
                 timelineMode = Timeline.Mode.PinnedEvents,
                 timelineRoomInfo = state.timelineRoomInfo,
-                renderReadReceipts = false,
                 timelineProtectionState = state.timelineProtectionState,
                 isLastOutgoingMessage = false,
                 focusedEventId = null,
