@@ -65,7 +65,7 @@ import timber.log.Timber
 fun RoomMemberModerationView(
     state: InternalRoomMemberModerationState,
     onSelectAction: (ModerationAction, MatrixUser) -> Unit,
-    onAvatarClick: ((MatrixUser) -> Unit)? = null,
+    onAvatarClick: ((MatrixUser) -> Unit)?,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier) {
@@ -356,6 +356,7 @@ internal fun RoomMemberModerationViewPreview(@PreviewParameter(InternalRoomMembe
             RoomMemberModerationView(
                 state = state,
                 onSelectAction = { _, _ -> },
+                onAvatarClick = {},
             )
         }
     }

@@ -17,7 +17,7 @@ interface RoomMemberModerationRenderer {
     fun Render(
         state: RoomMemberModerationState,
         onSelectAction: (ModerationAction, MatrixUser) -> Unit,
-        onAvatarClick: ((MatrixUser) -> Unit)? = null,
+        onAvatarClick: ((MatrixUser) -> Unit)?,
         modifier: Modifier,
     )
 }
