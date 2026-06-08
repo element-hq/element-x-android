@@ -16,6 +16,12 @@
   <string name="emoji_picker_category_places">"Reisimine ja kohad"</string>
   <string name="emoji_picker_category_recent">"Hiljutised emojid"</string>
   <string name="emoji_picker_category_symbols">"Sümbolid"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally">"Pööra pilti ümber rõhttelje"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Pilt on pööratud ümber rõhttelje"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Pildi algne variant"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically">"Pööra pilti ümber püsttelje"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_flipped">"Pilt on pööratud ümber püsttelje"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_original">"Pildi algne variant"</string>
   <string name="screen_image_edition_a11y_rotate_to_the_left">"Pööra pilti vasakule"</string>
   <plurals name="screen_image_edition_a11y_rotation_state">
     <item quantity="one">"%1$d kraad"</item>

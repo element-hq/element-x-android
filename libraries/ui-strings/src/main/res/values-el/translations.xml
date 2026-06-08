@@ -50,6 +50,7 @@
   <string name="a11y_session_verification_time_limited_action_required">"Απαιτείται ενέργεια περιορισμένης χρονικής διάρκειας, έχετε ένα λεπτό για επαλήθευση."</string>
   <string name="a11y_show_password">"Εμφάνιση κωδικού πρόσβασης"</string>
   <string name="a11y_start_call">"Ξεκίνησε μια κλήση"</string>
+  <string name="a11y_start_video_call">"Ξεκινήστε μια βιντεοκλήση"</string>
   <string name="a11y_start_voice_call">"Έναρξη φωνητικής κλήσης"</string>
   <string name="a11y_tombstoned_room">"Θαμένη αίθουσα"</string>
   <string name="a11y_user_avatar">"Άβαταρ χρήστη"</string>
