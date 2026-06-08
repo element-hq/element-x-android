@@ -892,7 +892,8 @@ internal fun TimelineItemEventRowRtlContentPreview() = ElementPreview {
                     senderDisplayName = "Sender with a super long name that should ellipsize",
                     isMine = isMine,
                     content = aTimelineItemTextContent(
-                        body = "ظَة وَدَاع يَسْتَغْرِب فِيهَا اَلشَّاعِر أَنْ لَا يَبْكِي مِنْ أَلَم اَلْفِرَاق، وَيَصِف حَالَة اَلْمُودِعِينَ وَبَعْضهمْ يَتَكَلَّم فِي حِين يَكْتَفِي اَلْمُحِبُّونَ بِالصَّمْتِ، لِأَنَّ حَالهمْ تَْْ"
+                        body = "ظَة وَدَاع يَسْتَغْرِب فِيهَا اَلشَّاعِر أَنْ لَا يَبْكِي مِنْ أَلَم اَلْفِرَاق،" +
+                            " وَيَصِف حَالَة اَلْمُودِعِينَ وَبَعْضهمْ يَتَكَلَّم فِي حِين يَكْتَفِي اَلْمُحِبُّونَ بِالصَّمْتِ، لِأَنَّ حَالهمْ تَْ"
                     ),
                     groupPosition = TimelineItemGroupPosition.First,
                     threadInfo = null,
@@ -907,7 +908,8 @@ internal fun TimelineItemEventRowRtlContentPreview() = ElementPreview {
                         senderDisplayName = "Sender with a super long name that should ellipsize",
                         isMine = isMine,
                         content = aTimelineItemTextContent(
-                            body = "ظَة وَدَاع يَسْتَغْرِب فِيهَا اَلشَّاعِر أَنْ لَا يَبْكِي مِنْ أَلَم اَلْفِرَاق، وَيَصِف حَالَة اَلْمُودِعِينَ وَبَعْضهمْ يَتَكَلَّم فِي حِين يَكْتَفِي اَلْمُحِبُّونَ بِالصَّمْتِ، لِأَنَّ حَالهمْ تَْْ"
+                            body = "ظَة وَدَاع يَسْتَغْرِب فِيهَا اَلشَّاعِر أَنْ لَا يَبْكِي مِنْ أَلَم اَلْفِرَاق،" +
+                                " وَيَصِف حَالَة اَلْمُودِعِينَ وَبَعْضهمْ يَتَكَلَّم فِي حِين يَكْتَفِي اَلْمُحِبُّونَ بِالصَّمْتِ، لِأَنَّ حَالهمْ تَْ"
                         ),
                         groupPosition = TimelineItemGroupPosition.First,
                         threadInfo = null,

@@ -44,8 +44,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun TimelineEventTimestampView(
     event: TimelineItem.Event,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
-    textLayoutDirection: LayoutDirection = LocalLayoutDirection.current,
     modifier: Modifier = Modifier,
+    textLayoutDirection: LayoutDirection = LocalLayoutDirection.current,
 ) {
     val formattedTime = event.sentTime
     val hasError = event.failedToSend
