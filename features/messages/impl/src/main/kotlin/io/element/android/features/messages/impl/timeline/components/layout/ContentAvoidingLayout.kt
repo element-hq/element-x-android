@@ -103,15 +103,21 @@ fun ContentAvoidingLayout(
 
         // Special case when the layout direction of the content is different from the layout direction of the parent (text vs general layout),
         // we need to place the overlay on the opposite side.
-        val x = if (layoutDirection != data.layoutDirection && data.layoutDirection == LayoutDirection.Rtl) {
+        val overlayX = if (layoutDirection != data.layoutDirection && data.layoutDirection == LayoutDirection.Rtl) {
             0
         } else {
             layoutWidth - overlayPlaceable.width
         }
 
+        val contentX = if (layoutDirection != data.layoutDirection && data.layoutDirection == LayoutDirection.Rtl) {
+            layoutWidth - contentPlaceable.width
+        } else {
+            0
+        }
+
         layout(layoutWidth, layoutHeight) {
-            contentPlaceable.placeRelative(0, 0)
-            overlayPlaceable.placeRelative(x, layoutHeight - overlayPlaceable.height + overlayOffset.y.roundToPx())
+            contentPlaceable.placeRelative(contentX, 0)
+            overlayPlaceable.placeRelative(overlayX, layoutHeight - overlayPlaceable.height + overlayOffset.y.roundToPx())
         }
     }
 }
