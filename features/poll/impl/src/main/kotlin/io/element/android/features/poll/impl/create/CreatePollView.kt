@@ -180,7 +180,6 @@ fun CreatePollView(
                     HorizontalDivider()
                     ListItem(
                         headlineContent = { Text(text = stringResource(id = R.string.screen_create_poll_max_selections_headline)) },
-                        supportingContent = { Text(text = stringResource(id = R.string.screen_create_poll_max_selections_desc)) },
                         trailingContent = ListItemContent.Custom {
                             MaxSelectionsStepper(
                                 current = state.maxSelections,
