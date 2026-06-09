@@ -143,7 +143,7 @@ class MessageComposerPresenter(
         ): MessageComposerPresenter
     }
 
-    private val isInThread: Boolean get() = threadRoot != null
+    private val isInThread = threadRoot != null
     private val mediaSender = mediaSenderFactory.create(timelineMode = timelineController.mainTimelineMode())
 
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)
