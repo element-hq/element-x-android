@@ -51,7 +51,7 @@ telephoto = "0.19.0"
 haze = "1.7.2"
 
 # Dependency analysis
-dependencyAnalysis = "3.12.0"
+dependencyAnalysis = "3.14.0"
 
 # DI
 metro = "1.1.1"
@@ -84,7 +84,7 @@ kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlin
 kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 ksp_gradle_plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:34.13.0"
+google_firebase_bom = "com.google.firebase:firebase-bom:34.14.0"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 ksp_plugin = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
@@ -102,7 +102,7 @@ androidx_constraintlayout_compose = { module = "androidx.constraintlayout:constr
 androidx_camera_lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "camera" }
 androidx_camera_view = { module = "androidx.camera:camera-view", version.ref = "camera" }
 androidx_camera_camera2 = { module = "androidx.camera:camera-camera2", version.ref = "camera" }
-androidx_javascriptengine = "androidx.javascriptengine:javascriptengine:1.0.0"
+androidx_javascriptengine = "androidx.javascriptengine:javascriptengine:1.1.0"
 androidx_workmanager_runtime = { module = "androidx.work:work-runtime-ktx", version.ref = "work" }
 
 androidx_recyclerview = "androidx.recyclerview:recyclerview:1.4.0"
@@ -166,7 +166,7 @@ test_corektx = { module = "androidx.test:core-ktx", version.ref = "test_core" }
 test_arch_core = "androidx.arch.core:core-testing:2.2.0"
 test_junit = "junit:junit:4.13.2"
 test_runner = "androidx.test:runner:1.7.0"
-test_mockk = "io.mockk:mockk:1.14.9"
+test_mockk = "io.mockk:mockk:1.14.11"
 test_konsist = "com.lemonappdev:konsist:0.17.3"
 test_turbine = "app.cash.turbine:turbine:1.2.1"
 test_truth = "com.google.truth:truth:1.4.5"
@@ -229,7 +229,7 @@ color_picker = "io.mhssn:colorpicker:1.0.0"
 posthog = "com.posthog:posthog-android:3.47.0"
 sentry = "io.sentry:sentry-android:8.41.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
-matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.36.0"
+matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.36.1"
 
 # Emojibase
 matrix_emojibase_bindings = "io.element.android:emojibase-bindings:1.5.3"
@@ -239,7 +239,7 @@ sigpwned_emoji4j = "com.sigpwned:emoji4j-core:16.0.0"
 metro_runtime = { module = "dev.zacsweers.metro:runtime", version.ref = "metro" }
 
 # Element Call
-element_call_embedded = "io.element.android:element-call-embedded:0.20.0"
+element_call_embedded = "io.element.android:element-call-embedded:0.20.1"
 
 # Auto services
 google_autoservice = { module = "com.google.auto.service:auto-service", version.ref = "autoservice" }

@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.location.impl.common
+package io.element.android.features.location.impl.common.userlocation
 
 import android.Manifest
 import android.annotation.SuppressLint

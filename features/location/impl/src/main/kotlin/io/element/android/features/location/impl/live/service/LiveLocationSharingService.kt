@@ -14,7 +14,7 @@ import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
 import android.os.IBinder
 import androidx.core.app.ServiceCompat
 import dev.zacsweers.metro.Inject
-import io.element.android.features.location.impl.common.PlatformLocationProvider
+import io.element.android.features.location.impl.common.userlocation.PlatformLocationProvider
 import io.element.android.features.location.impl.di.LocationBindings
 import io.element.android.features.location.impl.live.notification.LiveLocationSharingNotificationCreator
 import io.element.android.libraries.architecture.bindings
