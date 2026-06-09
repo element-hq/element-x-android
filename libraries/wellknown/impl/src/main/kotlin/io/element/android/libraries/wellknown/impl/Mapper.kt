@@ -15,6 +15,13 @@ import timber.log.Timber
 
 private val loggerTag = LoggerTag("Wellknown")
 
+/**
+ * Floor for the recovery passphrase minimum length. A value of 1 guarantees the derived passphrase is
+ * never empty (an empty passphrase derives a recoverable but effectively unprotected secret-storage
+ * key). Anything stronger than non-empty is left to the homeserver operator's configuration.
+ */
+private const val MINIMUM_PASSPHRASE_CHARACTER_COUNT = 1
+
 internal fun InternalElementWellKnown.map() = ElementWellKnown(
     registrationHelperUrl = registrationHelperUrl,
     enforceElementPro = enforceElementPro,
@@ -25,14 +32,17 @@ internal fun InternalElementWellKnown.map() = ElementWellKnown(
     customRecoveryPassphraseRequirements = customRecoveryPassphraseRequirements?.toPublic(),
 )
 
-private fun InternalCustomRecoveryPassphraseRequirements.toPublic(): CustomRecoveryPassphraseRequirements? {
-    val min = minCharacterCount ?: run {
-        Timber.tag(loggerTag.value).w("custom_recovery_passphrase_settings missing min_character_count; ignoring spec")
-        return null
-    }
-    if (min <= 0) {
-        Timber.tag(loggerTag.value).w("custom_recovery_passphrase_settings.min_character_count must be > 0; ignoring spec")
-        return null
+private fun InternalCustomRecoveryPassphraseRequirements.toPublic(): CustomRecoveryPassphraseRequirements {
+    // Whenever the homeserver advertises the settings block we run the custom passphrase flow, flooring
+    // the minimum at 1 so the passphrase can never be empty even if the server omits min_character_count
+    // or advertises a non-positive value. The operator owns any stronger minimum.
+    val min = (minCharacterCount ?: MINIMUM_PASSPHRASE_CHARACTER_COUNT).coerceAtLeast(MINIMUM_PASSPHRASE_CHARACTER_COUNT)
+    if (min != minCharacterCount) {
+        Timber.tag(loggerTag.value).w(
+            "custom_recovery_passphrase_settings.min_character_count was %s; flooring to %d",
+            minCharacterCount,
+            min,
+        )
     }
     return CustomRecoveryPassphraseRequirements(minCharacterCount = min)
 }

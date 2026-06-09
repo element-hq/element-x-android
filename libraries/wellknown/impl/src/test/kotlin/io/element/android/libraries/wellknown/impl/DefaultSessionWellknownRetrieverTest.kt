@@ -137,7 +137,7 @@ class DefaultSessionWellknownRetrieverTest {
     }
 
     @Test
-    fun `get element wellknown with custom recovery passphrase requirements missing min character count maps to null`() = runTest {
+    fun `get element wellknown with custom recovery passphrase requirements missing min character count floors to 1`() = runTest {
         val sut = createDefaultSessionWellknownRetriever(
             getUrlLambda = {
                 Result.success(
@@ -148,12 +148,16 @@ class DefaultSessionWellknownRetrieverTest {
             },
         )
         assertThat(sut.getElementWellKnown()).isEqualTo(
-            WellknownRetrieverResult.Success(anElementWellKnown())
+            WellknownRetrieverResult.Success(
+                anElementWellKnown(
+                    customRecoveryPassphraseRequirements = CustomRecoveryPassphraseRequirements(minCharacterCount = 1)
+                )
+            )
         )
     }
 
     @Test
-    fun `get element wellknown with non-positive min character count maps to null`() = runTest {
+    fun `get element wellknown with zero min character count floors to 1`() = runTest {
         val sut = createDefaultSessionWellknownRetriever(
             getUrlLambda = {
                 Result.success(
@@ -166,12 +170,16 @@ class DefaultSessionWellknownRetrieverTest {
             },
         )
         assertThat(sut.getElementWellKnown()).isEqualTo(
-            WellknownRetrieverResult.Success(anElementWellKnown())
+            WellknownRetrieverResult.Success(
+                anElementWellKnown(
+                    customRecoveryPassphraseRequirements = CustomRecoveryPassphraseRequirements(minCharacterCount = 1)
+                )
+            )
         )
     }
 
     @Test
-    fun `get element wellknown with negative min character count maps to null`() = runTest {
+    fun `get element wellknown with negative min character count floors to 1`() = runTest {
         val sut = createDefaultSessionWellknownRetriever(
             getUrlLambda = {
                 Result.success(
@@ -184,7 +192,11 @@ class DefaultSessionWellknownRetrieverTest {
             },
         )
         assertThat(sut.getElementWellKnown()).isEqualTo(
-            WellknownRetrieverResult.Success(anElementWellKnown())
+            WellknownRetrieverResult.Success(
+                anElementWellKnown(
+                    customRecoveryPassphraseRequirements = CustomRecoveryPassphraseRequirements(minCharacterCount = 1)
+                )
+            )
         )
     }
 
