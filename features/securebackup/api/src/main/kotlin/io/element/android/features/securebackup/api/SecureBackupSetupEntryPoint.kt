@@ -12,12 +12,6 @@ import com.bumble.appyx.core.node.Node
 import io.element.android.libraries.architecture.FeatureEntryPoint
 import io.element.android.libraries.architecture.NodeInputs
 
-/**
- * Entry point for the recovery-key setup screen.
- *
- * The default implementation builds the standard auto-generated-key setup node. The binding can be
- * replaced to provide an alternative setup node.
- */
 interface SecureBackupSetupEntryPoint : FeatureEntryPoint {
     data class Inputs(val isChangeRecoveryKeyUserStory: Boolean) : NodeInputs
 
