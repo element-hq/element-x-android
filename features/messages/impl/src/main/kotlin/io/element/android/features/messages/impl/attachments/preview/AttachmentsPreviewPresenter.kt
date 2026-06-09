@@ -301,6 +301,18 @@ class AttachmentsPreviewPresenter(
                         edits = pendingState.edits.rotateAntiClockwise()
                     )
                 }
+                AttachmentsPreviewEvent.FlipImageHorizontally -> {
+                    val pendingState = imageEditorState ?: return
+                    imageEditorState = pendingState.copy(
+                        edits = pendingState.edits.flipHorizontally()
+                    )
+                }
+                AttachmentsPreviewEvent.FlipImageVertically -> {
+                    val pendingState = imageEditorState ?: return
+                    imageEditorState = pendingState.copy(
+                        edits = pendingState.edits.flipVertically()
+                    )
+                }
                 AttachmentsPreviewEvent.ResetImageEdits -> {
                     imageEditorState = imageEditorState?.copy(
                         edits = AttachmentImageEdits()

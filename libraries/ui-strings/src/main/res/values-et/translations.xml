@@ -545,4 +545,6 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Sul pole ligipääsu antud sõnumile"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Sõnumi dekrüptimine ei õnnestu"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Kuna seade on verifitseerimata või saatja pole sinu digitaalset identiteeti verifitseerinud, siis sõnumi näitamine on blokeeritud."</string>
+  <string name="vulkan_not_supported_dialog_content_android">"Sinu nutiseadme tarkvara on liiga vana, vajalik on Android 8 või uuem."</string>
+  <string name="vulkan_not_supported_dialog_title_android">"Kaartide joonistamine pole toetatud"</string>
 </resources>

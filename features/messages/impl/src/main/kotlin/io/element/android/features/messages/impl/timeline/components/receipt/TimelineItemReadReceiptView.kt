@@ -53,27 +53,24 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 fun TimelineItemReadReceiptView(
     state: ReadReceiptViewState,
-    renderReadReceipts: Boolean,
     onReadReceiptsClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (state.receipts.isNotEmpty()) {
-        if (renderReadReceipts) {
-            ReadReceiptsRow(
-                modifier = modifier.clearAndSetSemantics {
-                    hideFromAccessibility()
-                }
-            ) {
-                ReadReceiptsAvatars(
-                    receipts = state.receipts,
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(4.dp))
-                        .clickable {
-                            onReadReceiptsClick()
-                        }
-                        .padding(2.dp)
-                )
+        ReadReceiptsRow(
+            modifier = modifier.clearAndSetSemantics {
+                hideFromAccessibility()
             }
+        ) {
+            ReadReceiptsAvatars(
+                receipts = state.receipts,
+                modifier = Modifier
+                    .clip(RoundedCornerShape(4.dp))
+                    .clickable {
+                        onReadReceiptsClick()
+                    }
+                    .padding(2.dp)
+            )
         }
     } else {
         when (state.sendState) {
@@ -209,7 +206,6 @@ internal fun TimelineItemReadReceiptViewPreview(
 ) = ElementPreview {
     TimelineItemReadReceiptView(
         state = state,
-        renderReadReceipts = true,
         onReadReceiptsClick = {},
     )
 }

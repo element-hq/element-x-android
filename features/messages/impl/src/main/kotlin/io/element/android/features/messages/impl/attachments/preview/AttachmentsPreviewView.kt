@@ -50,6 +50,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
@@ -70,12 +71,13 @@ import io.element.android.libraries.designsystem.modifiers.niceClickable
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Switch
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.theme.floatingDateBadgeBackground
 import io.element.android.libraries.designsystem.utils.CommonDrawables
@@ -164,6 +166,8 @@ fun AttachmentsPreviewView(
                 state.eventSink(AttachmentsPreviewEvent.UpdateImageCropRect(cropRect))
             },
             onRotateClick = { state.eventSink(AttachmentsPreviewEvent.RotateImageToTheLeft) },
+            onFlipHorizontallyClick = { state.eventSink(AttachmentsPreviewEvent.FlipImageHorizontally) },
+            onFlipVerticallyClick = { state.eventSink(AttachmentsPreviewEvent.FlipImageVertically) },
             onCancelClick = ::postCloseImageEditor,
             onResetClick = ::postResetImageEditor,
             onDoneClick = ::postApplyImageEdits,
@@ -189,10 +193,14 @@ fun AttachmentsPreviewView(
                     },
                     actions = {
                         if (state.canEditImage && canShowEditAction) {
-                            TextButton(
-                                stringResource(CommonStrings.action_edit),
-                                onClick = ::postOpenImageEditor
-                            )
+                            IconButton(
+                                onClick = ::postOpenImageEditor,
+                            ) {
+                                Icon(
+                                    imageVector = CompoundIcons.Crop(),
+                                    contentDescription = stringResource(CommonStrings.action_edit),
+                                )
+                            }
                         }
                     }
                 )

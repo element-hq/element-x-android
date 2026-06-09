@@ -5,12 +5,20 @@
   ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
   ~ Please see LICENSE files in the repository root for full details.
   -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" >
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+
+    <!-- Declare Vulkan as an optional feature to prevent installation issues on devices that do not support it. -->
+    <uses-feature
+        android:name="android.hardware.vulkan.version"
+        android:required="false"
+        tools:replace="android:required" />
 
     <application>
         <service

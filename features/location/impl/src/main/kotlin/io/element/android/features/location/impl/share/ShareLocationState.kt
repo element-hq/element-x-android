@@ -9,6 +9,7 @@
 package io.element.android.features.location.impl.share
 
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
+import io.element.android.features.location.impl.common.userlocation.UserLocationState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -19,7 +20,7 @@ data class ShareLocationState(
     val currentUser: MatrixUser,
     val dialogState: Dialog,
     val trackUserLocation: Boolean,
-    val hasLocationPermission: Boolean,
+    val userLocationState: UserLocationState,
     val appName: String,
     val canShareLiveLocation: Boolean,
     val startLiveLocationAction: AsyncAction<Unit>,

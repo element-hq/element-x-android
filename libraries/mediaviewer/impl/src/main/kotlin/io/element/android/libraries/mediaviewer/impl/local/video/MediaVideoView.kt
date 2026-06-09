@@ -33,10 +33,13 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.media3.common.MediaItem
+import androidx.media3.common.ParserException
+import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.Player.STATE_READY
 import androidx.media3.common.Timeline
 import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.ExoPlaybackException
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
@@ -157,6 +160,19 @@ private fun ExoPlayerMediaVideoView(
                 mediaPlayerControllerState = mediaPlayerControllerState.copy(
                     isReady = playbackState == STATE_READY,
                 )
+            }
+
+            override fun onPlayerError(error: PlaybackException) {
+                super.onPlayerError(error)
+                Timber.w(error, "Player error")
+                if (error is ExoPlaybackException && error.cause is ParserException) {
+                    // The cause can be:
+                    // androidx.media3.common.ParserException: Invalid NAL length {contentIsMalformed=true, dataType=1}
+                    // This has been observed when the user wants to play a second time a recorded video.
+                    // Workaround the issue #6956, start the playback again
+                    exoPlayer.prepare()
+                    exoPlayer.play()
+                }
             }
         }
     }

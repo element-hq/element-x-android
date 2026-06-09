@@ -238,7 +238,6 @@ class MessagesViewTest {
         val eventsRecorder = EventsRecorder<ReadReceiptBottomSheetEvent>()
         val state = aMessagesState(
             timelineState = aTimelineState(
-                renderReadReceipts = true,
                 timelineItems = persistentListOf(
                     aTimelineItemEvent(
                         readReceiptState = aTimelineItemReadReceipts(

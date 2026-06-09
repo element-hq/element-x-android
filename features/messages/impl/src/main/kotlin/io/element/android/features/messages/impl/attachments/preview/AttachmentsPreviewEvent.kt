@@ -17,6 +17,8 @@ sealed interface AttachmentsPreviewEvent {
     data object OpenImageEditor : AttachmentsPreviewEvent
     data object CloseImageEditor : AttachmentsPreviewEvent
     data object RotateImageToTheLeft : AttachmentsPreviewEvent
+    data object FlipImageHorizontally : AttachmentsPreviewEvent
+    data object FlipImageVertically : AttachmentsPreviewEvent
     data object ApplyImageEdits : AttachmentsPreviewEvent
     data object ResetImageEdits : AttachmentsPreviewEvent
     data class UpdateImageCropRect(val cropRect: NormalizedCropRect) : AttachmentsPreviewEvent

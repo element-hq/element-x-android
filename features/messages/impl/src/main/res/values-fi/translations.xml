@@ -16,10 +16,18 @@
   <string name="emoji_picker_category_places">"Matkustaminen ja paikat"</string>
   <string name="emoji_picker_category_recent">"Viimeaikaiset emojit"</string>
   <string name="emoji_picker_category_symbols">"Symbolit"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally">"Käännä kuva vaakasuunnassa"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Käännetty vaakasuunnassa"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Alkuperäinen"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically">"Käännä kuva pystysuunnassa"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_flipped">"Käännetty pystysuunnassa"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_original">"Alkuperäinen"</string>
+  <string name="screen_image_edition_a11y_rotate_to_the_left">"Kierrä kuvaa vasemmalle"</string>
   <plurals name="screen_image_edition_a11y_rotation_state">
     <item quantity="one">"%1$d aste"</item>
     <item quantity="other">"%1$d astetta"</item>
   </plurals>
+  <string name="screen_image_edition_title">"Muokkaa kuvaa"</string>
   <string name="screen_media_upload_preview_caption_warning">"Kuvatekstit eivät välttämättä näy ihmisille, jotka käyttävät vanhempia sovelluksia."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Napauta muuttaaksesi videon lähetyslaatua"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Tiedostoa ei voitu lähettää."</string>
@@ -30,6 +38,7 @@
   <string name="screen_media_upload_preview_item_count">"Kohde %1$d / %2$d"</string>
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Optimoi kuvanlaatu"</string>
   <string name="screen_media_upload_preview_processing">"Käsitellään…"</string>
+  <string name="screen_media_upload_preview_title">"Lisää mediaa"</string>
   <string name="screen_report_content_block_user">"Estä käyttäjä"</string>
   <string name="screen_report_content_block_user_hint">"Valitse tämä, jos haluat piilottaa kaikki nykyiset ja tulevat viestit tältä käyttäjältä"</string>
   <string name="screen_report_content_explanation">"Tämä viesti ilmoitetaan kotipalvelimesi ylläpitäjälle. Ylläpitäjä ei pysty lukemaan salattuja viestejä."</string>

@@ -532,4 +532,6 @@
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"无权访问此消息"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"无法解密消息"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"此消息已被阻止，因为你未验证你的设备，或发送者需要验证你的数字身份。"</string>
+  <string name="vulkan_not_supported_dialog_content_android">"你的设备过旧，需要 Android 8 或更高版本的设备。"</string>
+  <string name="vulkan_not_supported_dialog_title_android">"地图渲染不受支持。"</string>
 </resources>
