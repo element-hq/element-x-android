@@ -19,7 +19,7 @@ import java.security.cert.X509Certificate
 
 /** An implementation of X509Sign using key and cert chain from the Android KeyStore */
 class X509KeyPair(private val key: PrivateKey, private val certificateChain: Array<out X509Certificate?>) : X509Sign {
-    private val keyId: String;
+    private val deviceId: String;
 
     init {
         val lastCert = this.certificateChain[this.certificateChain.size - 1] ?: error("X509: empty certificate chain")
@@ -45,7 +45,7 @@ class X509KeyPair(private val key: PrivateKey, private val certificateChain: Arr
             error("X509: unable to read AuthorityKeyIdentifier from certificate chain")
         }
 
-        this.keyId = "io.element.x509:" + Base64.encodeToString(aki.sliceArray(6..aki.size - 1), Base64.NO_WRAP + Base64.NO_PADDING)
+        this.deviceId = Base64.encodeToString(aki.sliceArray(6..aki.size - 1), Base64.NO_WRAP + Base64.NO_PADDING)
     }
 
     override fun sign(message: ByteArray): X509SignatureAndKeyId {
@@ -71,7 +71,7 @@ class X509KeyPair(private val key: PrivateKey, private val certificateChain: Arr
                 signature = Base64.encodeToString(signature.sign(), Base64.NO_PADDING)
             )
 
-            return X509SignatureAndKeyId(keyId = keyId, signature = x509Signature)
+            return X509SignatureAndKeyId(deviceId = deviceId, signature = x509Signature)
         } else {
             error("X509: Unable to sign object: unsupported key algorithm "+ key.algorithm)
         }
