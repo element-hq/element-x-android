@@ -44,6 +44,7 @@ import io.element.android.libraries.designsystem.components.LocationPin
 import io.element.android.libraries.designsystem.components.PinVariant
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 /**
  * Shows a static map image downloaded via a third party service's static maps API.
@@ -133,8 +134,8 @@ private fun BoxWithConstraintsScope.LoadableMapContent(
     var retryHash by remember { mutableIntStateOf(0) }
     val builder = remember { StaticMapUrlBuilder() }
 
-    val (painter, state) = if (LocalInspectionMode.current) {
-        val painter = painterResource(R.drawable.blurred_map)
+    val (painter, state, contentScale) = if (LocalInspectionMode.current) {
+        val painter = painterResource(CommonDrawables.sample_map)
         val state = AsyncImagePainter.State.Success(
             painter = painter,
             result = SuccessResult(
@@ -142,7 +143,7 @@ private fun BoxWithConstraintsScope.LoadableMapContent(
                 request = ImageRequest.Builder(context).build()
             )
         )
-        painter to state
+        Triple(painter, state, ContentScale.Crop)
     } else {
         val painter = rememberAsyncImagePainter(
             model = if (constraints.isZero) {
@@ -170,7 +171,7 @@ private fun BoxWithConstraintsScope.LoadableMapContent(
         )
 
         val state by painter.state.collectAsState()
-        painter to state
+        Triple(painter, state, ContentScale.Fit)
     }
 
     when (state) {
@@ -181,7 +182,7 @@ private fun BoxWithConstraintsScope.LoadableMapContent(
                 modifier = Modifier.size(width = maxWidth, height = maxHeight),
                 // The returned image can be smaller than the requested size due to the static maps API having
                 // a max width and height of 2048 px. We apply ContentScale.Fit to handle this.
-                contentScale = ContentScale.Fit,
+                contentScale = contentScale,
             )
             LocationPin(variant = pinVariant, modifier = Modifier.centerBottomEdge(this))
         }
