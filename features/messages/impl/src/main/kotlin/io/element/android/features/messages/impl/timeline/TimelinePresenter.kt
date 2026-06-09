@@ -312,7 +312,7 @@ class TimelinePresenter(
         LaunchedEffect(roomInfo.fullyReadEventId) {
             suppressJumpToUnread.value = false
         }
-        LaunchedEffect(timelineItems, displayJumpToUnread, roomInfo.fullyReadEventId, suppressJumpToUnread.value) {
+        LaunchedEffect(timelineItems.map { it.identifier() }, displayJumpToUnread, roomInfo.fullyReadEventId, suppressJumpToUnread.value) {
             if (!displayJumpToUnread || suppressJumpToUnread.value) {
                 jumpToUnread.value = JumpToUnreadState.Hidden
                 return@LaunchedEffect
