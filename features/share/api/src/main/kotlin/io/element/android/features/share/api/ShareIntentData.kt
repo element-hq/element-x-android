@@ -10,6 +10,7 @@ package io.element.android.features.share.api
 import android.content.Intent
 import android.net.Uri
 import android.os.Parcelable
+import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -30,6 +31,12 @@ sealed interface ShareIntentData : Parcelable {
     @Parcelize
     data class PlainText(override val intent: Intent, val content: String) : ShareIntentData
 }
+
+/**
+ * The room id to share to directly, bypassing room selection, if the originating intent targets one.
+ */
+val ShareIntentData.targetRoomId: RoomId?
+    get() = intent.getStringExtra(ShareEntryPoint.EXTRA_SHARE_TARGET_ROOM_ID)?.let(::RoomId)
 
 /**
  * A [Uri] coming from an external share intent, with its associated [mimeType].

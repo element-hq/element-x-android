@@ -16,8 +16,8 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.share.api.OnSharedData
-import io.element.android.features.share.api.ShareEntryPoint
 import io.element.android.features.share.api.ShareIntentData
+import io.element.android.features.share.api.targetRoomId
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
@@ -57,13 +57,13 @@ class SharePresenter(
 
     @Composable
     override fun present(): ShareState {
-        val targetRoomId = shareIntentData.intent.getStringExtra(ShareEntryPoint.EXTRA_SHARE_TARGET_ROOM_ID)
+        val targetRoomId = shareIntentData.targetRoomId
         val isDirectShare = targetRoomId != null
 
         LaunchedEffect(Unit) {
             if (shareActionState.value is AsyncAction.Uninitialized) {
                 if (targetRoomId != null) {
-                    onRoomSelected(listOf(RoomId(targetRoomId)))
+                    onRoomSelected(listOf(targetRoomId))
                 }
             }
         }
