@@ -914,7 +914,7 @@ internal fun TimelineItemEventRowRtlContentPreview() = ElementPreview {
                     isMine = isMine,
                     content = aTimelineItemTextContent(
                         body = "ظَة وَدَاع يَسْتَغْرِب فِيهَا اَلشَّاعِر أَنْ لَا يَبْكِي مِنْ أَلَم اَلْفِرَاق،" +
-                            " وَيَصِف حَالَة اَلْمُودِعِينَ وَبَعْضهمْ يَتَكَلَّم فِي حِين يَكْتَفِي اَلْمُحِبُّونَ بِالصَّمْتِ، لِأَنَّ حَالهمْ تَْ"
+                            " وَيَصِف حَالَة اَلْمُودِعِينَ وَبَعْضهم"
                     ),
                     groupPosition = TimelineItemGroupPosition.First,
                     threadInfo = null,
@@ -930,7 +930,7 @@ internal fun TimelineItemEventRowRtlContentPreview() = ElementPreview {
                         isMine = isMine,
                         content = aTimelineItemTextContent(
                             body = "ظَة وَدَاع يَسْتَغْرِب فِيهَا اَلشَّاعِر أَنْ لَا يَبْكِي مِنْ أَلَم اَلْفِرَاق،" +
-                                " وَيَصِف حَالَة اَلْمُودِعِينَ وَبَعْضهمْ يَتَكَلَّم فِي حِين يَكْتَفِي اَلْمُحِبُّونَ بِالصَّمْتِ، لِأَنَّ حَالهمْ تَْ"
+                                " وَيَصِف حَالَة اَلْمُودِعِينَ وَبَعْضهم"
                         ),
                         groupPosition = TimelineItemGroupPosition.First,
                         threadInfo = null,
