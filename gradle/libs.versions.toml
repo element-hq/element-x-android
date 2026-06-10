@@ -269,7 +269,7 @@ ktlint = "org.jlleitschuh.gradle.ktlint:14.2.0"
 dependencygraph = "com.savvasdalkitsis.module-dependency-graph:0.12"
 dependencycheck = "org.owasp.dependencycheck:12.2.2"
 dependencyanalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }
-paparazzi = "app.cash.paparazzi:2.0.0-alpha04"
+paparazzi = "app.cash.paparazzi:2.0.0-alpha05"
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 firebaseAppDistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebaseAppDistribution" }
