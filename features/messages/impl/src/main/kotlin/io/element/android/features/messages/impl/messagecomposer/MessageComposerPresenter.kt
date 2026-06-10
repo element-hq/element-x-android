@@ -49,6 +49,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatch
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
@@ -109,7 +110,7 @@ import io.element.android.libraries.core.mimetype.MimeTypes.Any as AnyMimeTypes
 class MessageComposerPresenter(
     @Assisted private val navigator: MessagesNavigator,
     @Assisted private val timelineController: TimelineController,
-    @Assisted private val isInThread: Boolean,
+    @Assisted private val threadRoot: ThreadId?,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
     private val room: JoinedRoom,
     private val mediaPickerProvider: PickerProvider,
@@ -138,10 +139,11 @@ class MessageComposerPresenter(
         fun create(
             timelineController: TimelineController,
             navigator: MessagesNavigator,
-            isInThread: Boolean,
+            threadRoot: ThreadId?,
         ): MessageComposerPresenter
     }
 
+    private val isInThread = threadRoot != null
     private val mediaSender = mediaSenderFactory.create(timelineMode = timelineController.mainTimelineMode())
 
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)
@@ -234,8 +236,7 @@ class MessageComposerPresenter(
         LaunchedEffect(Unit) {
             val draft = draftService.loadDraft(
                 roomId = room.roomId,
-                // TODO support threads in composer
-                threadRoot = null,
+                threadRoot = threadRoot,
                 isVolatile = false
             )
             if (draft != null) {
@@ -652,8 +653,7 @@ class MessageComposerPresenter(
             roomId = room.roomId,
             draft = draft,
             isVolatile = isVolatile,
-            // TODO support threads in composer
-            threadRoot = null,
+            threadRoot = threadRoot,
         )
     }
 
@@ -816,8 +816,7 @@ class MessageComposerPresenter(
         // Use the volatile draft only when coming from edit mode otherwise.
         val draft = draftService.loadDraft(
             roomId = room.roomId,
-            // TODO support threads in composer
-            threadRoot = null,
+            threadRoot = threadRoot,
             isVolatile = true
         ).takeIf { fromEdit }
         if (draft != null) {
