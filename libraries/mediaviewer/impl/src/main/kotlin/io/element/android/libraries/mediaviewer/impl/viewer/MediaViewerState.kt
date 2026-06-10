@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.mediaviewer.impl.viewer
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.State
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
@@ -26,9 +27,10 @@ data class MediaViewerState(
     val snackbarMessage: SnackbarMessage?,
     val canShowInfo: Boolean,
     val mediaBottomSheetState: MediaBottomSheetState,
-    val eventSink: (MediaViewerEvents) -> Unit,
+    val eventSink: (MediaViewerEvent) -> Unit,
 )
 
+@Immutable
 sealed interface MediaViewerPageData {
     val pagerKey: Long
 

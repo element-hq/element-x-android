@@ -12,10 +12,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -30,8 +30,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.messages.impl.MessagesMenuActions
 import io.element.android.features.messages.impl.SharedHistoryIcon
-import io.element.android.features.messages.impl.timeline.components.CallMenuItem
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.features.roomcall.api.anOngoingCallState
@@ -43,6 +43,7 @@ import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.ROOM_NAME
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -62,13 +63,12 @@ internal fun MessagesViewTopBar(
     roomAvatar: AvatarData,
     isTombstoned: Boolean,
     heroes: ImmutableList<AvatarData>,
-    roomCallState: RoomCallState,
     dmUserIdentityState: IdentityState?,
     sharedHistoryIcon: SharedHistoryIcon,
     onRoomDetailsClick: () -> Unit,
-    onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
+    menuActions: @Composable RowScope.() -> Unit,
 ) {
     TopAppBar(
         modifier = modifier,
@@ -80,7 +80,8 @@ internal fun MessagesViewTopBar(
             Row(
                 modifier = Modifier
                     .clip(roundedCornerShape)
-                    .clickable { onRoomDetailsClick() },
+                    .clickable { onRoomDetailsClick() }
+                    .semantics { heading() },
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -93,9 +94,12 @@ internal fun MessagesViewTopBar(
                     modifier = titleModifier
                 )
 
+                val iconModifier = Modifier.size(16.dp)
+
                 when (dmUserIdentityState) {
                     IdentityState.Verified -> {
                         Icon(
+                            modifier = iconModifier,
                             imageVector = CompoundIcons.Verified(),
                             tint = ElementTheme.colors.iconSuccessPrimary,
                             contentDescription = null,
@@ -103,6 +107,7 @@ internal fun MessagesViewTopBar(
                     }
                     IdentityState.VerificationViolation -> {
                         Icon(
+                            modifier = iconModifier,
                             imageVector = CompoundIcons.ErrorSolid(),
                             tint = ElementTheme.colors.iconCriticalPrimary,
                             contentDescription = null,
@@ -114,11 +119,13 @@ internal fun MessagesViewTopBar(
                 when (sharedHistoryIcon) {
                     SharedHistoryIcon.NONE -> Unit
                     SharedHistoryIcon.SHARED -> Icon(
+                        modifier = iconModifier,
                         imageVector = CompoundIcons.History(),
                         tint = ElementTheme.colors.iconInfoPrimary,
                         contentDescription = stringResource(CommonStrings.common_shared_history),
                     )
                     SharedHistoryIcon.WORLD_READABLE -> Icon(
+                        modifier = iconModifier,
                         imageVector = CompoundIcons.UserProfileSolid(),
                         tint = ElementTheme.colors.iconInfoPrimary,
                         contentDescription = stringResource(CommonStrings.common_world_readable_history),
@@ -126,13 +133,7 @@ internal fun MessagesViewTopBar(
                 }
             }
         },
-        actions = {
-            CallMenuItem(
-                roomCallState = roomCallState,
-                onJoinCallClick = onJoinCallClick,
-            )
-            Spacer(Modifier.width(8.dp))
-        },
+        actions = menuActions,
         windowInsets = WindowInsets(0.dp)
     )
 }
@@ -158,10 +159,7 @@ private fun RoomAvatarAndNameRow(
         )
         Text(
             modifier = Modifier
-                .padding(horizontal = 8.dp)
-                .semantics {
-                    heading()
-                },
+                .padding(start = 8.dp),
             text = roomName ?: stringResource(CommonStrings.common_no_room_name),
             style = ElementTheme.typography.fontBodyLgMedium,
             fontStyle = FontStyle.Italic.takeIf { roomName == null },
@@ -176,9 +174,9 @@ private fun RoomAvatarAndNameRow(
 internal fun MessagesViewTopBarPreview() = ElementPreview {
     @Composable
     fun AMessagesViewTopBar(
-        roomName: String? = "Room name",
+        roomName: String? = ROOM_NAME,
         roomAvatar: AvatarData = anAvatarData(
-            name = "Room name",
+            name = ROOM_NAME,
             size = AvatarSize.TimelineRoom,
         ),
         isTombstoned: Boolean = false,
@@ -186,17 +184,24 @@ internal fun MessagesViewTopBarPreview() = ElementPreview {
         roomCallState: RoomCallState = RoomCallState.Unavailable,
         dmUserIdentityState: IdentityState? = null,
         sharedHistoryIcon: SharedHistoryIcon = SharedHistoryIcon.NONE,
+        displayThreads: Boolean = false,
     ) = MessagesViewTopBar(
         roomName = roomName,
         roomAvatar = roomAvatar,
         isTombstoned = isTombstoned,
         heroes = heroes,
-        roomCallState = roomCallState,
         dmUserIdentityState = dmUserIdentityState,
         sharedHistoryIcon = sharedHistoryIcon,
         onRoomDetailsClick = {},
-        onJoinCallClick = {},
         onBackClick = {},
+        menuActions = {
+            MessagesMenuActions(
+                roomCallState = roomCallState,
+                displayThreads = displayThreads,
+                onJoinCallClick = {},
+                onThreadsListClick = {},
+            )
+        }
     )
     Column {
         AMessagesViewTopBar()
@@ -236,6 +241,10 @@ internal fun MessagesViewTopBarPreview() = ElementPreview {
         AMessagesViewTopBar(
             roomName = "A room with world_readable history",
             sharedHistoryIcon = SharedHistoryIcon.WORLD_READABLE,
+        )
+        HorizontalDivider()
+        AMessagesViewTopBar(
+            displayThreads = true,
         )
     }
 }

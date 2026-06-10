@@ -18,6 +18,7 @@ sealed interface LinkMobileStep {
     data object Uninitialized : LinkMobileStep
     data object Starting : LinkMobileStep
     data class QrReady(val data: String) : LinkMobileStep
+    data object QrRotating : LinkMobileStep
     data class WaitingForAuth(val verificationUri: String) : LinkMobileStep
     data class QrScanned(val checkCodeSender: CheckCodeSender) : LinkMobileStep
     data class Error(val errorType: ErrorType) : LinkMobileStep

@@ -16,9 +16,11 @@ import android.view.ViewTreeObserver
 import android.view.WindowInsets
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.getSystemService
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.coroutines.resume
+import kotlin.time.Duration.Companion.seconds
 
 fun View.hideKeyboard() {
     val imm = context?.getSystemService<InputMethodManager>()
@@ -26,29 +28,39 @@ fun View.hideKeyboard() {
 }
 
 suspend fun View.hideKeyboardAndAwaitAnimation() {
-    val imm = context?.getSystemService<InputMethodManager>()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !rootWindowInsets.isVisible(WindowInsets.Type.ime())) {
+        // Keyboard is already hidden, no need to do anything
+        return
+    }
 
-    val mutex = Mutex()
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+    val imm = context?.getSystemService<InputMethodManager>() ?: return
+    val future = CompletableDeferred<Unit>()
+
+    val requested = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         setOnApplyWindowInsetsListener { view, insets ->
             if (!insets.isVisible(WindowInsets.Type.ime())) {
-                mutex.unlock()
+                future.complete(Unit)
+                // Remove the listener now, it's a single use operation
+                setOnApplyWindowInsetsListener(null)
             }
             insets
         }
-        imm?.hideSoftInputFromWindow(windowToken, 0)
+        imm.hideSoftInputFromWindow(windowToken, 0)
     } else {
         @Suppress("DEPRECATION")
-        imm?.hideSoftInputFromWindow(windowToken, 0, object : ResultReceiver(null) {
+        imm.hideSoftInputFromWindow(windowToken, 0, object : ResultReceiver(null) {
             override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
-                if (resultCode == InputMethodManager.RESULT_UNCHANGED_HIDDEN ||
-                    resultCode == InputMethodManager.RESULT_HIDDEN) {
-                    mutex.unlock()
+                if (resultCode == InputMethodManager.RESULT_UNCHANGED_HIDDEN || resultCode == InputMethodManager.RESULT_HIDDEN) {
+                    future.complete(Unit)
                 }
             }
         })
     }
-    mutex.lock()
+
+    if (requested) {
+        // Await the future to ensure the keyboard hide animation has completed before proceeding
+        withTimeoutOrNull(1.seconds) { future.await() }
+    }
 }
 
 fun View.showKeyboard(andRequestFocus: Boolean = false) {

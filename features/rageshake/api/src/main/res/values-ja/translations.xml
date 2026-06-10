@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crash_detection_dialog_content">"%1$s は前回の利用時にクラッシュしました。クラッシュレポートを開発者に共有しますか？"</string>
+  <string name="rageshake_detection_dialog_content">"怒り狂って端末を振っていますね。バグの報告をしますか？"</string>
+  <string name="settings_rageshake">"怒り狂う"</string>
+  <string name="settings_rageshake_detection_threshold">"検出感度"</string>
+</resources>

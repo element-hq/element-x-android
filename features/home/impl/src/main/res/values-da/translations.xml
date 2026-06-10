@@ -5,9 +5,9 @@
   <string name="banner_battery_optimization_title_android">"Modtager du ikke notifikationer?"</string>
   <string name="banner_new_sound_message">"Dit notifikationsping er blevet opdateret – tydeligere, hurtigere og mindre forstyrrende."</string>
   <string name="banner_new_sound_title">"Vi har opdateret dine lyde"</string>
-  <string name="banner_set_up_recovery_content">"Gendan din kryptografiske identitet og meddelelseshistorik med en gendannelsesnøgle, hvis du har mistet alle dine eksisterende enheder."</string>
-  <string name="banner_set_up_recovery_submit">"Opsæt gendannelse"</string>
-  <string name="banner_set_up_recovery_title">"Konfigurer gendannelse for at beskytte din konto"</string>
+  <string name="banner_set_up_recovery_content">"Dine chats sikkerhedskopieres automatisk med end-to-end-kryptering. For at kunne gendanne denne sikkerhedskopi og bevare din digitale identitet, hvis du mister adgang til alle dine enheder, får du brug for din gendannelsesnøgle."</string>
+  <string name="banner_set_up_recovery_submit">"Hent gendannelsesnøgle"</string>
+  <string name="banner_set_up_recovery_title">"Sikkerhedskopier dine samtaler"</string>
   <string name="confirm_recovery_key_banner_message">"Bekræft din gendannelsesnøgle for at bevare adgangen til nøglelager og meddelelseshistorik."</string>
   <string name="confirm_recovery_key_banner_primary_button_title">"Indtast din gendannelsesnøgle"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Har du glemt din gendannelsesnøgle?"</string>

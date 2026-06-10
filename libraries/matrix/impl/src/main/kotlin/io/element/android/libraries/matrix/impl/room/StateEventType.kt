@@ -16,7 +16,6 @@ fun StateEventType.map(): RustStateEventType = when (this) {
     StateEventType.PolicyRuleServer -> RustStateEventType.PolicyRuleServer
     StateEventType.PolicyRuleUser -> RustStateEventType.PolicyRuleUser
     StateEventType.CallMember -> RustStateEventType.CallMember
-    StateEventType.RoomAliases -> RustStateEventType.RoomAliases
     StateEventType.RoomAvatar -> RustStateEventType.RoomAvatar
     StateEventType.RoomCanonicalAlias -> RustStateEventType.RoomCanonicalAlias
     StateEventType.RoomCreate -> RustStateEventType.RoomCreate
@@ -46,7 +45,6 @@ fun RustStateEventType.map(): StateEventType = when (this) {
     RustStateEventType.PolicyRuleServer -> StateEventType.PolicyRuleServer
     RustStateEventType.PolicyRuleUser -> StateEventType.PolicyRuleUser
     RustStateEventType.CallMember -> StateEventType.CallMember
-    RustStateEventType.RoomAliases -> StateEventType.RoomAliases
     RustStateEventType.RoomAvatar -> StateEventType.RoomAvatar
     RustStateEventType.RoomCanonicalAlias -> StateEventType.RoomCanonicalAlias
     RustStateEventType.RoomCreate -> StateEventType.RoomCreate

@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"Не можете подтвердить?"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"Создайте новый ключ восстановления"</string>
-  <string name="screen_identity_confirmation_subtitle">"Подтвердите это устройство, чтобы настроить безопасный обмен сообщениями."</string>
+  <string name="screen_identity_confirmation_subtitle">"Выберите способ подтверждения для настройки защищенного обмена сообщениями."</string>
   <string name="screen_identity_confirmation_title">"Подтвердите личность"</string>
   <string name="screen_identity_confirmation_use_another_device">"Использовать другое устройство"</string>
   <string name="screen_identity_confirmation_use_recovery_key">"Использовать ключ восстановления"</string>
@@ -17,7 +17,7 @@
   <string name="screen_session_verification_compare_numbers_subtitle">"Убедитесь, что приведенные ниже числа совпадают с цифрами, показанными в другом сеансе."</string>
   <string name="screen_session_verification_compare_numbers_title">"Сравните числа"</string>
   <string name="screen_session_verification_complete_subtitle">"Теперь вы можете безопасно читать или отправлять сообщения на новом устройстве."</string>
-  <string name="screen_session_verification_complete_user_subtitle">"Теперь вы можете доверять сообщениям этого пользователя."</string>
+  <string name="screen_session_verification_complete_user_subtitle">"Теперь ты можешь доверять цифровой идентичности этого пользователя при отправке или получении сообщений."</string>
   <string name="screen_session_verification_device_verified">"Устройство проверено"</string>
   <string name="screen_session_verification_enter_recovery_key">"Введите ключ восстановления"</string>
   <string name="screen_session_verification_failed_subtitle">"Время ожидания подтверждения истекло, запрос был отклонён, или произошла ошибка."</string>
@@ -50,5 +50,5 @@
   <string name="screen_session_verification_waiting_subtitle">"После принятия запроса вы сможете продолжить проверку."</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Чтобы продолжить, примите запрос на запуск процесса подтверждения в другом сеансе."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Ожидание принятия запроса"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Выполняется выход…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Удаление устройства…"</string>
 </resources>

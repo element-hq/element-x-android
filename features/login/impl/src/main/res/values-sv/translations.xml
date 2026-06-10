@@ -32,7 +32,7 @@
   <string name="screen_login_error_invalid_credentials">"Felaktigt användarnamn och/eller lösenord"</string>
   <string name="screen_login_error_invalid_user_id">"Detta är inte en giltig användaridentifierare. Förväntat format: \'@användare:hemserver.org\'"</string>
   <string name="screen_login_error_refresh_tokens">"Den här servern är konfigurerad för att använda uppdateringstokens. Dessa stöds inte när du använder lösenordsbaserad inloggning."</string>
-  <string name="screen_login_error_unsupported_authentication">"Den valda hemservern stöder inte lösenord eller OIDC-inloggning. Kontakta administratören eller välj en annan hemserver."</string>
+  <string name="screen_login_error_unsupported_authentication">"Den valda hemservern stöder inte lösenord eller OAuth-inloggning. Kontakta administratören eller välj en annan hemserver."</string>
   <string name="screen_login_form_header">"Ange dina uppgifter"</string>
   <string name="screen_login_subtitle">"Matrix är ett öppet nätverk för säker, decentraliserad kommunikation."</string>
   <string name="screen_login_title">"Välkommen tillbaka!"</string>

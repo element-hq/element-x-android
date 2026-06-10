@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.room.knock.KnockRequest
 import io.element.android.libraries.matrix.api.room.location.LiveLocationShare
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsValues
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
+import io.element.android.libraries.matrix.api.room.threads.ThreadsListService
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
@@ -43,6 +44,8 @@ interface JoinedRoom : BaseRoom {
      * The live timeline of the room. Must be used to send Event to a room.
      */
     val liveTimeline: Timeline
+
+    val threadsListService: ThreadsListService
 
     /**
      * Create a new timeline.
@@ -193,9 +196,9 @@ interface JoinedRoom : BaseRoom {
     /**
      * Start sharing live location in this room.
      * @param durationMillis How long to share location (in milliseconds).
-     * @return Result indicating success or failure.
+     * @return Result containing the [EventId] of the beacon state event on success or an error on failure.
      */
-    suspend fun startLiveLocationShare(durationMillis: Long): Result<Unit>
+    suspend fun startLiveLocationShare(durationMillis: Long): Result<EventId>
 
     /**
      * Stop sharing live location in this room.
@@ -209,4 +212,11 @@ interface JoinedRoom : BaseRoom {
      * @return Result indicating success or failure.
      */
     suspend fun sendLiveLocation(geoUri: String): Result<Unit>
+
+    /**
+     * Sets the display name of the current user within this room.
+     * This is different from the global setDisplayName which updates
+     * the user's display name across all of their rooms.
+     */
+    suspend fun setOwnMemberDisplayName(displayName: String): Result<Unit>
 }

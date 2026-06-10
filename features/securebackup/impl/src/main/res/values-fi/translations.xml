@@ -12,6 +12,7 @@
   <string name="screen_chat_backup_recovery_action_confirm">"Anna palautusavain"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Avainten säilytys ei ole tällä hetkellä synkronoitu."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Hanki palautusavain"</string>
+  <string name="screen_chat_backup_recovery_action_setup_description">"Keskustelusi varmuuskopioidaan automaattisesti päästä päähän -salauksella. Jotta voit palauttaa tämän varmuuskopion ja säilyttää digitaalisen identiteettisi, kun menetät pääsyn kaikkiin laitteisiisi, tarvitset palautusavaimesi."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Avaa %1$s tietokoneella"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Kirjaudu tilillesi uudelleen"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Kun sinua pyydetään vahvistamaan laitteesi, valitse %1$s"</string>

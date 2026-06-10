@@ -51,7 +51,7 @@
   <string name="notification_space_invite_body">"Пригласил(а) вас в пространство"</string>
   <string name="notification_space_invite_body_with_sender">"%1$s пригласил(а) вас в пространство"</string>
   <string name="notification_test_push_notification_content">"Вы просматриваете уведомление! Нажмите на меня!"</string>
-  <string name="notification_thread_in_room">"Ветка в %1$s"</string>
+  <string name="notification_thread_in_room">"Обсуждение в %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">

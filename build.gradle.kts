@@ -30,7 +30,7 @@ tasks.register<Delete>("clean").configure {
     delete(rootProject.layout.buildDirectory)
 }
 
-private val ktLintVersion = the<LibrariesForLibs>().versions.ktlint.get()
+private val catalog = the<LibrariesForLibs>()
 
 allprojects {
     // Detekt
@@ -46,12 +46,15 @@ allprojects {
         config.from(files("$rootDir/tools/detekt/detekt.yml"))
     }
     dependencies {
-        detektPlugins("io.nlopez.compose.rules:detekt:0.5.6")
+        detektPlugins(catalog.detekt.compose.rules)
         detektPlugins(project(":tests:detekt-rules"))
     }
 
     tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
         exclude("io/element/android/tests/konsist/failures/**")
+
+        // This file comes from another project and we want to keep it as close to the original as possible
+        exclude("org/rustls/platformverifier/**")
     }
 
     // KtLint
@@ -61,7 +64,7 @@ allprojects {
 
     // See https://github.com/JLLeitschuh/ktlint-gradle#configuration
     configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
-        version = ktLintVersion
+        version = catalog.versions.ktlint.get()
         android = true
         ignoreFailures = false
         enableExperimentalRules = true
@@ -79,6 +82,9 @@ allprojects {
 
             // This file comes from another project and we want to keep it as close to the original as possible
             exclude("**/SafeChildrenTransitionScope.kt")
+
+            // This file comes from another project and we want to keep it as close to the original as possible
+            exclude("org/rustls/platformverifier/**")
         }
     }
     // Dependency check

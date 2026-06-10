@@ -8,6 +8,20 @@
 
 package io.element.android.features.messages.impl.timeline.model.event
 
-class TimelineItemRtcNotificationContent : TimelineItemEventContent {
-    override val type: String = "org.matrix.msc4075.rtc.notification"
+import io.element.android.libraries.matrix.api.notification.CallIntent
+import io.element.android.libraries.matrix.api.timeline.item.event.EventType
+
+// State of the call, for now only isDeclined but in the future could be missed, active.
+sealed interface RtcNotificationState {
+    /** Some users have declined, byMe indicates if the current user is one of them. */
+    data class Declined(val byMe: Boolean) : RtcNotificationState
+
+    object Started : RtcNotificationState
+}
+
+class TimelineItemRtcNotificationContent(
+    val callIntent: CallIntent,
+    val state: RtcNotificationState,
+) : TimelineItemEventContent {
+    override val type: String = EventType.RTC_NOTIFICATION
 }

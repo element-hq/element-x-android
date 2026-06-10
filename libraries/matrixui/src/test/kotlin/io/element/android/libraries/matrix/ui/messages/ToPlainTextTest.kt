@@ -136,4 +136,19 @@ class ToPlainTextTest {
         )
         assertThat(messageType.toPlainText(permalinkParser = FakePermalinkParser())).isEqualTo("This is the fallback text")
     }
+
+    @Test
+    fun `TextMessageType toPlainText - ignores mx-reply element`() {
+        val messageType = TextMessageType(
+            body = "This is the fallback text",
+            formatted = FormattedBody(
+                format = MessageFormat.HTML,
+                body = """
+                    <mx-reply>In reply to...</mx-reply>
+                    This is the message content.
+                """.trimIndent()
+            )
+        )
+        assertThat(messageType.toPlainText(permalinkParser = FakePermalinkParser())).isEqualTo("This is the message content.")
+    }
 }

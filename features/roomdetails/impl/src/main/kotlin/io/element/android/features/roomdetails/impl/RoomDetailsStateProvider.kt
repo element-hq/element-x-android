@@ -13,7 +13,6 @@ import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roomcall.api.aStandByCallState
-import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.api.UserProfileVerificationState
 import io.element.android.features.userprofile.shared.aUserProfileState
@@ -35,7 +34,7 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
     override val values: Sequence<RoomDetailsState>
         get() = sequenceOf(
             aRoomDetailsState(displayAdminSettings = true),
-            aRoomDetailsState(roomTopic = RoomTopicState.Hidden, showDebugInfo = true),
+            aRoomDetailsState(roomTopic = RoomTopicState.Hidden, showDebugInfo = true, hasNewContent = true),
             aRoomDetailsState(roomTopic = RoomTopicState.CanAddTopic),
             aRoomDetailsState(isEncrypted = false),
             aRoomDetailsState(roomAlias = null),
@@ -75,6 +74,7 @@ fun aDmRoomMember(
     isIgnored: Boolean = false,
     role: RoomMember.Role = RoomMember.Role.User,
     membershipChangeReason: String? = null,
+    isServiceMember: Boolean = false,
 ) = RoomMember(
     userId = userId,
     displayName = displayName,
@@ -84,7 +84,8 @@ fun aDmRoomMember(
     powerLevel = powerLevel,
     isIgnored = isIgnored,
     role = role,
-    membershipChangeReason = membershipChangeReason
+    membershipChangeReason = membershipChangeReason,
+    isServiceMember = isServiceMember,
 )
 
 fun aRoomDetailsState(
@@ -105,7 +106,7 @@ fun aRoomDetailsState(
     canEdit: Boolean = false,
     roomCallState: RoomCallState = aStandByCallState(),
     roomType: RoomDetailsType = RoomDetailsType.Room,
-    roomMemberDetailsState: UserProfileState? = null,
+    dmOtherMemberDetailsState: UserProfileState? = null,
     leaveRoomState: LeaveRoomState = aLeaveRoomState(),
     roomNotificationSettings: RoomNotificationSettings = aRoomNotificationSettings(),
     isFavorite: Boolean = false,
@@ -121,8 +122,8 @@ fun aRoomDetailsState(
     canReportRoom: Boolean = true,
     isTombstoned: Boolean = false,
     showDebugInfo: Boolean = false,
-    enableKeyShareOnInvite: Boolean = false,
     roomHistoryVisibility: RoomHistoryVisibility = RoomHistoryVisibility.Shared,
+    hasNewContent: Boolean = false,
     eventSink: (RoomDetailsEvent) -> Unit = {},
 ) = RoomDetailsState(
     roomId = roomId,
@@ -136,7 +137,7 @@ fun aRoomDetailsState(
     canEdit = canEdit,
     roomCallState = roomCallState,
     roomType = roomType,
-    roomMemberDetailsState = roomMemberDetailsState,
+    dmOtherMemberDetailsState = dmOtherMemberDetailsState,
     leaveRoomState = leaveRoomState,
     roomNotificationSettings = roomNotificationSettings,
     isFavorite = isFavorite,
@@ -153,8 +154,8 @@ fun aRoomDetailsState(
     isTombstoned = isTombstoned,
     showDebugInfo = showDebugInfo,
     roomVersion = "12",
-    enableKeyShareOnInvite = enableKeyShareOnInvite,
     roomHistoryVisibility = roomHistoryVisibility,
+    hasNewContent = hasNewContent,
     eventSink = eventSink,
 )
 
@@ -181,11 +182,9 @@ fun aDmRoomDetailsState(
     roomName = roomName,
     isPublic = false,
     isEncrypted = isEncrypted,
-    roomType = RoomDetailsType.Dm(
-        me = aRoomMember(),
-        otherMember = aDmRoomMember(isIgnored = isDmMemberIgnored),
-    ),
-    roomMemberDetailsState = aUserProfileState(
+    canInvite = true,
+    roomType = RoomDetailsType.Dm(otherMember = aDmRoomMember(isIgnored = isDmMemberIgnored)),
+    dmOtherMemberDetailsState = aUserProfileState(
         isBlocked = AsyncData.Success(isDmMemberIgnored),
         verificationState = dmRoomMemberVerificationState,
     )
@@ -195,6 +194,5 @@ fun aSharedHistoryRoomDetailsState(
     roomHistoryVisibility: RoomHistoryVisibility
 ) = aRoomDetailsState(
     isEncrypted = true,
-    enableKeyShareOnInvite = true,
     roomHistoryVisibility = roomHistoryVisibility,
 )

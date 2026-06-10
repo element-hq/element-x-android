@@ -15,12 +15,16 @@ import io.element.android.features.startchat.api.ConfirmingStartDmWithMatrixUser
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -67,7 +71,12 @@ class DefaultStartDMActionTest {
 
     @Test
     fun `when dm is not found, and createIfDmDoesNotExist is false, assert dm is not created and state is updated to confirmation state`() = runTest {
-        val matrixClient = FakeMatrixClient().apply {
+        val encryptionService = FakeEncryptionService(
+            getUserIdentityResult = { Result.success(null) }
+        )
+        val matrixClient = FakeMatrixClient(
+            encryptionService = encryptionService
+        ).apply {
             givenFindDmResult(Result.success(null))
             givenCreateDmResult(Result.success(A_ROOM_ID))
         }
@@ -76,7 +85,7 @@ class DefaultStartDMActionTest {
         val state = mutableStateOf<AsyncAction<RoomId>>(AsyncAction.Uninitialized)
         val matrixUser = aMatrixUser()
         action.execute(matrixUser, false, state)
-        assertThat(state.value).isEqualTo(ConfirmingStartDmWithMatrixUser(matrixUser))
+        assertThat(state.value).isEqualTo(ConfirmingStartDmWithMatrixUser(matrixUser, isUserIdentityUnknown = true))
         assertThat(analyticsService.capturedEvents).isEmpty()
     }
 
@@ -92,6 +101,25 @@ class DefaultStartDMActionTest {
         action.execute(aMatrixUser(), true, state)
         assertThat(state.value).isEqualTo(AsyncAction.Failure(AN_EXCEPTION))
         assertThat(analyticsService.capturedEvents).isEmpty()
+    }
+
+    @Test
+    fun `when user identity fetched and identity unknown`() = runTest {
+        val getUserIdentityResult = lambdaRecorder<UserId, Result<IdentityState?>> { _ -> Result.success(null) }
+        val encryptionService = FakeEncryptionService(getUserIdentityResult = getUserIdentityResult)
+        val matrixClient = FakeMatrixClient(encryptionService = encryptionService).apply {
+            givenFindDmResult(Result.success(null))
+        }
+
+        val action = createStartDMAction(
+            matrixClient = matrixClient,
+        )
+        val state = mutableStateOf<AsyncAction<RoomId>>(AsyncAction.Uninitialized)
+
+        action.execute(aMatrixUser(), false, state)
+
+        getUserIdentityResult.assertions().isCalledOnce()
+        assertThat(state.value).isEqualTo(ConfirmingStartDmWithMatrixUser(aMatrixUser(), isUserIdentityUnknown = true))
     }
 
     private fun createStartDMAction(

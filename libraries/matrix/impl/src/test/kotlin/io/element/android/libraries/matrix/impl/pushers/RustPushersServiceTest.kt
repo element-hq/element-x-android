@@ -48,6 +48,7 @@ private fun aSetHttpPusherData(
     deviceDisplayName: String = "deviceDisplayName",
     profileTag: String = "profileTag",
     lang: String = "lang",
+    append: Boolean = false,
 ) = SetHttpPusherData(
     pushKey = pushKey,
     appId = appId,
@@ -56,7 +57,8 @@ private fun aSetHttpPusherData(
     appDisplayName = appDisplayName,
     deviceDisplayName = deviceDisplayName,
     profileTag = profileTag,
-    lang = lang
+    lang = lang,
+    append = append,
 )
 
 private fun aUnsetHttpPusherData(

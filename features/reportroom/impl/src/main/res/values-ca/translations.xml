@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_report_room_reason_footer">"Denuncia aquesta sala al teu administrador. Si els missatges estan xifrats, l\'administrador no els podrà llegir."</string>
+  <string name="screen_report_room_reason_placeholder">"Descriu el motiu de la denúncia…"</string>
+  <string name="screen_report_room_title">"Denuncia sala"</string>
+</resources>

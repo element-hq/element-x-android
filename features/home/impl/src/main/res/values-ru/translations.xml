@@ -5,7 +5,7 @@
   <string name="banner_battery_optimization_title_android">"Уведомления не приходят?"</string>
   <string name="banner_new_sound_message">"Ваши уведомления были обновлены — теперь они понятнее, быстрее и менее отвлекающие."</string>
   <string name="banner_new_sound_title">"Мы обновили ваши звуки"</string>
-  <string name="banner_set_up_recovery_content">"Создайте новый ключ восстановления, который можно использовать для восстановления зашифрованной истории сообщений в случае потери доступа к своим устройствам."</string>
+  <string name="banner_set_up_recovery_content">"Ваши чаты автоматически резервируются с использованием сквозного шифрования. Для восстановления этой резервной копии и сохранения вашей цифровой личности в случае потери доступа ко всем вашим устройствам вам потребуется ключ восстановления."</string>
   <string name="banner_set_up_recovery_submit">"Получить ключ восстановления"</string>
   <string name="banner_set_up_recovery_title">"Сделайте резервную копию своих чатов."</string>
   <string name="confirm_recovery_key_banner_message">"Подтвердите ключ восстановления, чтобы сохранить доступ к хранилищу ключей и истории сообщений."</string>

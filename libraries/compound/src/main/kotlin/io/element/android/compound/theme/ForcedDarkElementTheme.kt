@@ -51,7 +51,7 @@ fun ForcedDarkElementTheme(
         }
     }
     ElementTheme(
-        darkTheme = true,
+        theme = Theme.Dark,
         compoundLight = colors.light,
         compoundDark = colors.dark,
         lightStatusBar = lightStatusBar,

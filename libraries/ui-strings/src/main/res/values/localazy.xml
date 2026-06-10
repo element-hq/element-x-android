@@ -9,13 +9,16 @@
     <item quantity="one">"%1$d digit entered"</item>
     <item quantity="other">"%1$d digits entered"</item>
   </plurals>
+  <string name="a11y_duration">"Duration: %1$s"</string>
   <string name="a11y_edit_avatar">"Edit avatar"</string>
   <string name="a11y_edit_room_address_hint">"The full address will be %1$s"</string>
   <string name="a11y_encryption_details">"Encryption details"</string>
   <string name="a11y_expand_message_text_field">"Expand message text field"</string>
   <string name="a11y_hide_password">"Hide password"</string>
+  <string name="a11y_info">"Info"</string>
   <string name="a11y_join_call">"Join call"</string>
   <string name="a11y_jump_to_bottom">"Jump to bottom"</string>
+  <string name="a11y_jump_to_unread">"Jump to unread"</string>
   <string name="a11y_move_the_map_to_my_location">"Move the map to my location"</string>
   <string name="a11y_notifications_mentions_only">"Mentions only"</string>
   <string name="a11y_notifications_muted">"Muted"</string>
@@ -32,6 +35,7 @@
   <string name="a11y_playback_speed">"Playback speed"</string>
   <string name="a11y_poll">"Poll"</string>
   <string name="a11y_poll_end">"Ended poll"</string>
+  <string name="a11y_position">"Position: %1$s"</string>
   <string name="a11y_qr_code">"QR Code"</string>
   <string name="a11y_react_with">"React with %1$s"</string>
   <string name="a11y_react_with_other_emojis">"React with other emojis"</string>
@@ -47,10 +51,15 @@
   <string name="a11y_room_avatar">"Room avatar"</string>
   <string name="a11y_send_files">"Send files"</string>
   <string name="a11y_sender_location">"Sender location"</string>
+  <string name="a11y_sent_by_sender_at_date">"Sent by %1$s at %2$s"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Time limited action required, you have one minute to verify"</string>
+  <string name="a11y_settings_with_required_action">"Settings, action required"</string>
   <string name="a11y_show_password">"Show password"</string>
   <string name="a11y_start_call">"Start a call"</string>
+  <string name="a11y_start_video_call">"Start a video call"</string>
   <string name="a11y_start_voice_call">"Start a voice call"</string>
+  <string name="a11y_thread_in_room">"Thread in %1$s"</string>
+  <string name="a11y_threads_in_room">"Threads in %1$s"</string>
   <string name="a11y_tombstoned_room">"Tombstoned room"</string>
   <string name="a11y_user_avatar">"User avatar"</string>
   <string name="a11y_user_menu">"User menu"</string>
@@ -68,6 +77,7 @@
   <string name="action_call">"Call"</string>
   <string name="action_cancel">"Cancel"</string>
   <string name="action_cancel_for_now">"Cancel for now"</string>
+  <string name="action_choose_file">"Choose file"</string>
   <string name="action_choose_photo">"Choose photo"</string>
   <string name="action_clear">"Clear"</string>
   <string name="action_close">"Close"</string>
@@ -87,12 +97,16 @@
   <string name="action_deactivate_account">"Deactivate account"</string>
   <string name="action_decline">"Decline"</string>
   <string name="action_decline_and_block">"Decline and block"</string>
+  <string name="action_delete">"Delete"</string>
+  <string name="action_delete_account">"Delete account"</string>
+  <string name="action_delete_file">"Delete file"</string>
   <string name="action_delete_poll">"Delete Poll"</string>
   <string name="action_deselect_all">"Deselect all"</string>
   <string name="action_disable">"Disable"</string>
   <string name="action_discard">"Discard"</string>
   <string name="action_dismiss">"Dismiss"</string>
   <string name="action_done">"Done"</string>
+  <string name="action_download">"Download"</string>
   <string name="action_edit">"Edit"</string>
   <string name="action_edit_caption">"Edit caption"</string>
   <string name="action_edit_poll">"Edit poll"</string>
@@ -187,12 +201,11 @@
   <string name="common_about">"About"</string>
   <string name="common_acceptable_use_policy">"Acceptable use policy"</string>
   <string name="common_add_account">"Add an account"</string>
-  <string name="common_add_another_account">"Add another account"</string>
+  <string name="common_add_another_account">"Add account"</string>
   <string name="common_adding_caption">"Adding caption"</string>
   <string name="common_advanced_settings">"Advanced settings"</string>
   <string name="common_an_image">"an image"</string>
   <string name="common_analytics">"Analytics"</string>
-  <string name="common_android_fetching_notifications_title">"Syncing notifications…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"You left the room"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"You were logged out of the session"</string>
   <string name="common_appearance">"Appearance"</string>
@@ -200,7 +213,9 @@
   <string name="common_beta">"Beta"</string>
   <string name="common_blocked_users">"Blocked users"</string>
   <string name="common_bubbles">"Bubbles"</string>
+  <string name="common_call_declined">"Call declined"</string>
   <string name="common_call_started">"Call started"</string>
+  <string name="common_call_you_declined">"You declined a call"</string>
   <string name="common_chat_backup">"Chat backup"</string>
   <string name="common_copied_to_clipboard">"Copied to clipboard"</string>
   <string name="common_copyright">"Copyright"</string>
@@ -210,7 +225,6 @@
   <string name="common_current_user_left_room">"Left room"</string>
   <string name="common_current_user_left_space">"Left space"</string>
   <string name="common_current_user_rejected_invite">"Invite declined"</string>
-  <string name="common_dark">"Dark"</string>
   <string name="common_decryption_error">"Decryption error"</string>
   <string name="common_description">"Description"</string>
   <string name="common_developer_options">"Developer options"</string>
@@ -236,6 +250,7 @@ Reason: %1$s."</string>
   <string name="common_failed">"Failed"</string>
   <string name="common_favourite">"Favourite"</string>
   <string name="common_favourited">"Favourited"</string>
+  <string name="common_fetching_notifications_title_android">"Syncing notifications…"</string>
   <string name="common_file">"File"</string>
   <string name="common_file_deleted">"File deleted"</string>
   <string name="common_file_saved">"File saved"</string>
@@ -249,7 +264,6 @@ Reason: %1$s."</string>
   <string name="common_invite_unknown_profile">"This Matrix ID can\'t be found, so the invite might not be received."</string>
   <string name="common_leaving_room">"Leaving room"</string>
   <string name="common_leaving_space">"Leaving space"</string>
-  <string name="common_light">"Light"</string>
   <string name="common_line_copied_to_clipboard">"Line copied to clipboard"</string>
   <string name="common_link_copied_to_clipboard">"Link copied to clipboard"</string>
   <string name="common_link_new_device">"Link new device"</string>
@@ -291,6 +305,7 @@ Reason: %1$s."</string>
   <string name="common_please_wait">"Please wait…"</string>
   <string name="common_poll_end_confirmation">"Are you sure you want to end this poll?"</string>
   <string name="common_poll_summary">"Poll: %1$s"</string>
+  <string name="common_poll_summary_prefix">"Poll"</string>
   <string name="common_poll_total_votes">"Total votes: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Results will show after the poll has ended"</string>
   <plurals name="common_poll_votes_count">
@@ -316,7 +331,6 @@ Reason: %1$s."</string>
     <item quantity="other">"%1$d replies"</item>
   </plurals>
   <string name="common_replying_to">"Replying to %1$s"</string>
-  <string name="common_report_a_bug">"Report a bug"</string>
   <string name="common_report_a_problem">"Report a problem"</string>
   <string name="common_report_submitted">"Report submitted"</string>
   <string name="common_rich_text_editor">"Rich text editor"</string>
@@ -370,10 +384,10 @@ Reason: %1$s."</string>
   <string name="common_suggested">"Suggested"</string>
   <string name="common_suggestions">"Suggestions"</string>
   <string name="common_syncing">"Syncing"</string>
-  <string name="common_system">"System"</string>
   <string name="common_text">"Text"</string>
   <string name="common_third_party_notices">"Third-party notices"</string>
   <string name="common_thread">"Thread"</string>
+  <string name="common_threads">"Threads"</string>
   <string name="common_topic">"Topic"</string>
   <string name="common_topic_placeholder">"What is this room about?"</string>
   <string name="common_unable_to_decrypt">"Unable to decrypt"</string>
@@ -458,6 +472,9 @@ Are you sure you want to continue?"</string>
   <string name="error_unknown">"Sorry, an error occurred"</string>
   <string name="invite_friends_rich_title">"🔐️ Join me on %1$s"</string>
   <string name="invite_friends_text">"Hey, talk to me on %1$s: %2$s"</string>
+  <string name="live_location_sharing_foreground_service_channel_title_android">"Live Location Sharing"</string>
+  <string name="live_location_sharing_foreground_service_message_android">"Location sharing in progress"</string>
+  <string name="live_location_sharing_foreground_service_title_android">"%1$s Live Location"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake to report bug"</string>
   <string name="screen_bug_report_a11y_screenshot">"Screenshot"</string>
@@ -465,8 +482,14 @@ Are you sure you want to continue?"</string>
   <string name="screen_create_poll_options_section_title">"Options"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Remove %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Settings"</string>
+  <string name="screen_live_location_sheet_nobody_sharing">"Nobody is sharing their location"</string>
+  <string name="screen_live_location_sheet_sharing_live_location">"Sharing live location"</string>
+  <plurals name="screen_live_location_sheet_subtitle">
+    <item quantity="one">"%1$d person"</item>
+    <item quantity="other">"%1$d people"</item>
+  </plurals>
+  <string name="screen_live_location_sheet_title">"On the map"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
-  <string name="screen_onboarding_welcome_back">"Welcome back"</string>
   <string name="screen_pinned_timeline_empty_state_description">"Press on a message and choose “%1$s” to include here."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Pin important messages so that they can be easily discovered"</string>
   <plurals name="screen_pinned_timeline_screen_title">
@@ -490,6 +513,7 @@ Are you sure you want to continue?"</string>
   <string name="screen_room_event_pill">"Message in %1$s"</string>
   <string name="screen_room_grouped_state_events_expand">"Expand"</string>
   <string name="screen_room_grouped_state_events_reduce">"Reduce"</string>
+  <string name="screen_room_live_location_banner">"Sharing live location"</string>
   <string name="screen_room_permalink_same_room_android">"Already viewing this room!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s of %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Pinned messages"</string>
@@ -522,4 +546,6 @@ Are you sure you want to continue?"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"You don\'t have access to this message"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Unable to decrypt message"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"This message was blocked either because you did not verify your device or because the sender needs to verify your digital identity."</string>
+  <string name="vulkan_not_supported_dialog_content_android">"Your device is too old, a device with Android 8 or newer is required."</string>
+  <string name="vulkan_not_supported_dialog_title_android">"Rendering maps is not supported"</string>
 </resources>

@@ -16,4 +16,5 @@ android {
 
 dependencies {
     api(projects.libraries.cryptography.api)
+    implementation(libs.coroutines.core)
 }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_invite_users_already_a_member">"既に参加しています"</string>
+  <string name="screen_invite_users_already_invited">"既に招待しています"</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_multiple_users">"これらの人物とのチャットがありません。はじめに、招待の状況を確認してください。"</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_one_user">"この連絡先とのチャットがありません。はじめに、招待の状況を確認してください。"</string>
+  <string name="screen_invite_users_confirm_dialog_title_mutiple_users">"このルームに新しい連絡先を招待しますか？"</string>
+  <string name="screen_invite_users_confirm_dialog_title_one_user">"このルームに新しい連絡先を招待しますか？"</string>
+</resources>

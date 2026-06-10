@@ -57,6 +57,7 @@ class TimelineItemEventFactory(
         index: Int,
         timelineItems: List<MatrixTimelineItem>,
         roomMembers: List<RoomMember>,
+        renderReadReceipts: Boolean,
     ): TimelineItem.Event {
         val currentSender = currentTimelineItem.event.sender
         val groupPosition =
@@ -65,6 +66,11 @@ class TimelineItemEventFactory(
         val sentTime = dateFormatter.format(
             timestamp = currentTimelineItem.event.timestamp,
             mode = DateFormatterMode.TimeOnly,
+        )
+        val sentDate = dateFormatter.format(
+            timestamp = currentTimelineItem.event.timestamp,
+            mode = DateFormatterMode.Day,
+            useRelative = true,
         )
         val senderAvatarData = AvatarData(
             id = currentSender.value,
@@ -108,9 +114,10 @@ class TimelineItemEventFactory(
             canBeRepliedTo = currentTimelineItem.event.canBeRepliedTo,
             sentTimeMillis = currentTimelineItem.event.timestamp,
             sentTime = sentTime,
+            sentDate = sentDate,
             groupPosition = groupPosition,
             reactionsState = currentTimelineItem.computeReactionsState(),
-            readReceiptState = currentTimelineItem.computeReadReceiptState(roomMembers),
+            readReceiptState = currentTimelineItem.computeReadReceiptState(roomMembers, renderReadReceipts),
             localSendState = currentTimelineItem.event.localSendState,
             inReplyTo = currentTimelineItem.event.inReplyTo()?.map(permalinkParser = permalinkParser),
             threadInfo = mappedThreadInfo,
@@ -127,9 +134,10 @@ class TimelineItemEventFactory(
         timelineItem: TimelineItem.Event,
         receivedMatrixTimelineItem: MatrixTimelineItem.Event,
         roomMembers: List<RoomMember>,
+        renderReadReceipts: Boolean,
     ): TimelineItem.Event {
         return timelineItem.copy(
-            readReceiptState = receivedMatrixTimelineItem.computeReadReceiptState(roomMembers)
+            readReceiptState = receivedMatrixTimelineItem.computeReadReceiptState(roomMembers, renderReadReceipts)
         )
     }
 
@@ -174,8 +182,9 @@ class TimelineItemEventFactory(
 
     private fun MatrixTimelineItem.Event.computeReadReceiptState(
         roomMembers: List<RoomMember>,
+        renderReadReceipts: Boolean,
     ): TimelineItemReadReceipts {
-        if (!config.computeReadReceipts) {
+        if (!config.computeReadReceipts || !renderReadReceipts) {
             return TimelineItemReadReceipts(receipts = persistentListOf())
         }
         return TimelineItemReadReceipts(

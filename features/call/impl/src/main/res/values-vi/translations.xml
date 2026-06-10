@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="call_foreground_service_channel_title_android">"Cuộc gọi đang diễn ra"</string>
+  <string name="call_foreground_service_message_android">"Nhấn để quay lại cuộc gọi."</string>
+  <string name="call_foreground_service_title_android">"☎️ Cuộc gọi đang diễn ra"</string>
+  <string name="call_invalid_audio_device_bluetooth_devices_disabled">"Ứng dụng Element Call không hỗ trợ sử dụng thiết bị âm thanh Bluetooth trên phiên bản Android này. Vui lòng chọn thiết bị âm thanh khác."</string>
+  <string name="screen_incoming_call_subtitle_android">"Cuộc gọi Element đến"</string>
+</resources>

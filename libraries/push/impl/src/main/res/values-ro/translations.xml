@@ -15,10 +15,16 @@
   </plurals>
   <string name="notification_error_unified_push_unregistered_android">"Distribuitorul de notificări UnifiedPush nu a putut fi înregistrat, așadar nu veți mai primi notificări. Verificați setările de notificări ale aplicației și starea distribuitorului push."</string>
   <string name="notification_fallback_content">"Aveți mesaje noi"</string>
+  <plurals name="notification_fallback_n_content">
+    <item quantity="one">"Aveți %d mesaj nou."</item>
+    <item quantity="few">"Aveți %d mesaje noi."</item>
+    <item quantity="other">"Aveți %d mesaje noi."</item>
+  </plurals>
+  <string name="notification_incoming_audio_call">"📞 Apel primit"</string>
   <string name="notification_incoming_call">"Apel primit"</string>
   <string name="notification_inline_reply_failed">"** Trimiterea eșuată - vă rugăm să deschideți camera"</string>
   <string name="notification_invitation_action_join">"Alăturați-vă"</string>
-  <string name="notification_invitation_action_reject">"Respinge"</string>
+  <string name="notification_invitation_action_reject">"Respingeți"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d invitație"</item>
     <item quantity="other">"%d invitații"</item>

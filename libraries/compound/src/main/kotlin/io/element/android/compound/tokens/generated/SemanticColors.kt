@@ -91,6 +91,8 @@ data class SemanticColors(
     val bgSubtleSecondaryLevel0: Color,
     /** Subtle background colour for success state elements. State: Rest. */
     val bgSuccessSubtle: Color,
+    /** Accent borders for containers */
+    val borderAccentPrimary: Color,
     /** accent border intended for keylines on message highlights */
     val borderAccentSubtle: Color,
     /** High-contrast border for critical state. State: Hover. */
@@ -171,6 +173,10 @@ data class SemanticColors(
     val iconTertiary: Color,
     /** Translucent version of tertiary icon. Refer to it for intended use. */
     val iconTertiaryAlpha: Color,
+    /** Used to separate core sections of the UI as well as containers */
+    val separatorPrimary: Color,
+    /** Secondary shade for separating sections of components or list items */
+    val separatorSecondary: Color,
     /** Accent text colour for plain actions. */
     val textActionAccent: Color,
     /** Default text colour for plain actions. */

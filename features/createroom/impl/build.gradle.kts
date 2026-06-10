@@ -39,7 +39,6 @@ dependencies {
     implementation(projects.libraries.mediaupload.api)
     implementation(projects.libraries.permissions.api)
     implementation(projects.libraries.previewutils)
-    implementation(projects.libraries.usersearch.impl)
     implementation(projects.services.analytics.api)
     implementation(libs.coil.compose)
     implementation(projects.libraries.featureflag.api)
@@ -52,7 +51,6 @@ dependencies {
     testImplementation(projects.libraries.mediapickers.test)
     testImplementation(projects.libraries.mediaupload.test)
     testImplementation(projects.libraries.permissions.test)
-    testImplementation(projects.libraries.usersearch.test)
     testImplementation(projects.features.startchat.test)
     testImplementation(projects.libraries.featureflag.test)
 }

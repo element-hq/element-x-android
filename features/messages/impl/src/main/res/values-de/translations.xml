@@ -35,7 +35,7 @@
   <string name="screen_room_attachment_source_camera_video">"Video aufnehmen"</string>
   <string name="screen_room_attachment_source_files">"Anhang"</string>
   <string name="screen_room_attachment_source_gallery">"Foto- und Videogalerie"</string>
-  <string name="screen_room_attachment_source_location">"Standort"</string>
+  <string name="screen_room_attachment_source_location">"Standort teilen"</string>
   <string name="screen_room_attachment_source_poll">"Umfrage"</string>
   <string name="screen_room_attachment_text_formatting">"Textformatierung"</string>
   <string name="screen_room_encrypted_history_banner">"Der Nachrichtenverlauf ist derzeit nicht verfügbar"</string>

@@ -163,13 +163,17 @@
         "screen_qr_code_login_connection_note_secure_state.*",
         "screen_qr_code_login_unknown_error_description",
         "screen_qr_code_login_invalid_scan_state_.*",
-        "screen_qr_code_login_no_camera_permission_state_.*"
+        "screen_qr_code_login_no_camera_permission_state_.*",
+        "screen_qr_code_login_device_code_.*",
+        "screen_qr_code_login_verify_code_loading"
       ]
     },
     {
       "name" : ":features:login:impl",
       "includeRegex" : [
         "screen_onboarding_.*",
+        "screen\\.onboarding\\..*",
+        "screen\\.missing_key_backup\\..*",
         "screen_login_.*",
         "screen_server_confirmation_.*",
         "screen_change_server_.*",
@@ -217,6 +221,7 @@
         "screen_notification_settings_mentions_only_disclaimer",
         "screen_room_change_.*",
         "screen_room_roles_.*",
+        "screen_roomlist_mark_as_.*",
         "screen\\.edit_room_address\\..*",
         "screen\\.security_and_privacy\\..*"
       ]
@@ -268,6 +273,7 @@
         "screen_room_timeline.*",
         "screen\\.room_timeline.*",
         "screen_room_typing.*",
+        "screen\\.image_edition\\..*",
         "screen\\.media_upload.*"
       ]
     },
@@ -324,9 +330,11 @@
         "screen\\.advanced_settings\\..*",
         "screen_edit_profile_.*",
         "screen_notification_settings_.*",
+        "screen\\.notification_settings\\..*",
         "screen_blocked_users_.*",
         "full_screen_intent_banner_.*",
         "troubleshoot_notifications_entry_point_.*",
+        "theme\\..*",
         "screen\\.labs\\..*"
       ]
     },

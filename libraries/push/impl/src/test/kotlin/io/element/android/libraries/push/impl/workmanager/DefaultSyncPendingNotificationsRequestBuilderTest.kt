@@ -80,6 +80,9 @@ class DefaultSyncPendingNotificationsRequestBuilderTest {
             sessionId = A_SESSION_ID,
             sdkVersion = 33,
             isInAirGapEnvironment = false,
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(
+                FeatureFlags.ValidateNetworkWhenSchedulingNotificationFetching.key to true
+            )),
         )
 
         val results = request.build()
@@ -100,6 +103,9 @@ class DefaultSyncPendingNotificationsRequestBuilderTest {
             sessionId = A_SESSION_ID,
             sdkVersion = 33,
             isInAirGapEnvironment = true,
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(
+                FeatureFlags.ValidateNetworkWhenSchedulingNotificationFetching.key to true
+            )),
         )
 
         val results = request.build()

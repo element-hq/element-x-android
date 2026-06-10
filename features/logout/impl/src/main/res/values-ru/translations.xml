@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_signout_confirmation_dialog_content">"Вы уверены, что вы хотите выйти?"</string>
+  <string name="screen_signout_confirmation_dialog_content">"Вы уверены, что хотите удалить это устройство?"</string>
   <string name="screen_signout_confirmation_dialog_submit">"Удалить это устройство"</string>
   <string name="screen_signout_confirmation_dialog_title">"Удалить это устройство"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Выполняется выход…"</string>
-  <string name="screen_signout_key_backup_disabled_subtitle">"Вы собираетесь выйти из последнего сеанса. Если вы выйдете из системы сейчас, вы потеряете доступ к зашифрованным сообщениям."</string>
-  <string name="screen_signout_key_backup_disabled_title">"Вы отключили резервное копирование"</string>
-  <string name="screen_signout_key_backup_offline_subtitle">"Когда вы перешли в автономный режим, резервное копирование ваших ключей продолжалось. Повторно подключитесь, чтобы перед выходом из системы можно было создать резервную копию ключей."</string>
+  <string name="screen_signout_in_progress_dialog_content">"Удаление устройства…"</string>
+  <string name="screen_signout_key_backup_disabled_subtitle">"Это ваше единственное устройство. Если вы его удалите, вам потребуется ключ восстановления, чтобы подтвердить свою цифровую личность и восстановить зашифрованные чаты при следующем входе в систему."</string>
+  <string name="screen_signout_key_backup_disabled_title">"Вы потеряете доступ к своим зашифрованным чатам"</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"Когда вы отключились от сети, резервное копирование ваших ключей продолжалось. Подключитесь снова, чтобы резервная копия ваших ключей была создана, прежде чем вы отключите это устройство."</string>
   <string name="screen_signout_key_backup_offline_title">"Резервное копирование ключей все еще продолжается"</string>
   <string name="screen_signout_key_backup_ongoing_subtitle">"Пожалуйста, дождитесь завершения процесса, прежде чем выходить из системы."</string>
   <string name="screen_signout_key_backup_ongoing_title">"Резервное копирование ключей все еще продолжается"</string>
   <string name="screen_signout_preference_item">"Удалить это устройство"</string>
-  <string name="screen_signout_recovery_disabled_subtitle">"Вы собираетесь выйти из последнего сеанса. Если вы выйдете из системы сейчас, вы потеряете доступ к зашифрованным сообщениям."</string>
-  <string name="screen_signout_recovery_disabled_title">"Восстановление не настроено"</string>
-  <string name="screen_signout_save_recovery_key_subtitle">"Вы собираетесь выйти из последнего сеанса. Если вы выйдете из системы сейчас, вы можете потерять доступ к зашифрованным сообщениям."</string>
-  <string name="screen_signout_save_recovery_key_title">"Вы сохранили свой ключ восстановления?"</string>
+  <string name="screen_signout_recovery_disabled_subtitle">"Это ваше единственное устройство. Если вы его удалите, вам потребуется ключ восстановления, чтобы подтвердить свою цифровую личность и восстановить зашифрованные чаты при следующем входе в систему."</string>
+  <string name="screen_signout_recovery_disabled_title">"Вы потеряете доступ к своим зашифрованным чатам"</string>
+  <string name="screen_signout_save_recovery_key_subtitle">"Это ваше единственное устройство. Если вы его удалите, вам потребуется ключ восстановления, чтобы подтвердить свою цифровую личность и восстановить зашифрованные чаты при следующем входе в систему."</string>
+  <string name="screen_signout_save_recovery_key_title">"Перед тем как отключить это устройство, убедись, что у тебя есть доступ к ключу восстановления"</string>
 </resources>

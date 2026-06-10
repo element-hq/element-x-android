@@ -12,6 +12,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import androidx.core.net.toUri
+import androidx.exifinterface.media.ExifInterface
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
@@ -42,6 +43,30 @@ import kotlin.time.Duration
 
 @RunWith(RobolectricTestRunner::class)
 class AndroidMediaPreProcessorTest {
+    @Test
+    fun `orientedImageDimensions swaps width and height for 90 degree exif orientation`() {
+        val (width, height) = orientedImageDimensions(
+            rawWidth = 4032,
+            rawHeight = 2268,
+            orientation = ExifInterface.ORIENTATION_ROTATE_90,
+        )
+
+        assertThat(width).isEqualTo(2268)
+        assertThat(height).isEqualTo(4032)
+    }
+
+    @Test
+    fun `orientedImageDimensions keeps width and height for upright exif orientation`() {
+        val (width, height) = orientedImageDimensions(
+            rawWidth = 4032,
+            rawHeight = 2268,
+            orientation = ExifInterface.ORIENTATION_NORMAL,
+        )
+
+        assertThat(width).isEqualTo(4032)
+        assertThat(height).isEqualTo(2268)
+    }
+
     private suspend fun TestScope.process(
         asset: Asset,
         mediaOptimizationConfig: MediaOptimizationConfig,

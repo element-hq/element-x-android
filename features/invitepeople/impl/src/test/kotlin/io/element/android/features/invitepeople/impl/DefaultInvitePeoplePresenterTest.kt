@@ -18,6 +18,7 @@ import io.element.android.libraries.designsystem.theme.components.SearchBarResul
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMembersState
@@ -28,6 +29,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
@@ -43,6 +45,7 @@ import io.element.android.libraries.usersearch.test.FakeUserRepository
 import io.element.android.services.apperror.api.AppErrorStateService
 import io.element.android.services.apperror.test.FakeAppErrorStateService
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -56,6 +59,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
+@Suppress("LargeClass")
 internal class DefaultInvitePeoplePresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
@@ -316,7 +320,7 @@ internal class DefaultInvitePeoplePresenterTest {
             val initialState = awaitItemAsDefault()
             skipItems(1)
 
-            val selectedUser = aMatrixUser()
+            val selectedUser = aMatrixUser(displayName = "John Doe")
 
             initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(selectedUser))
 
@@ -354,7 +358,7 @@ internal class DefaultInvitePeoplePresenterTest {
             val initialState = awaitItemAsDefault()
             skipItems(1)
 
-            val selectedUser = aMatrixUser()
+            val selectedUser = aMatrixUser(displayName = "John Doe")
 
             // Given a query is made
             initialState.searchQuery.setTextAndPlaceCursorAtEnd("some query")
@@ -398,10 +402,14 @@ internal class DefaultInvitePeoplePresenterTest {
         val inviteUserResult = lambdaRecorder<UserId, Result<Unit>> { userId: UserId ->
             Result.success(Unit)
         }
+        val encryptionService = FakeEncryptionService(
+            getUserIdentityResult = { _ -> Result.success(null) },
+        )
         val presenter = createDefaultInvitePeoplePresenter(
             userRepository = repository,
             inviteUserResult = inviteUserResult,
-            coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
+            coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
+            matrixClient = FakeMatrixClient(encryptionService = encryptionService),
         )
         presenter.test {
             val initialState = awaitItem()
@@ -444,13 +452,18 @@ internal class DefaultInvitePeoplePresenterTest {
             Result.failure(AN_EXCEPTION)
         }
         val showErrorResResult = lambdaRecorder<Int, Int, Unit> { _, _ -> }
+
+        val encryptionService = FakeEncryptionService(
+            getUserIdentityResult = { _ -> Result.success(null) },
+        )
         val presenter = createDefaultInvitePeoplePresenter(
             userRepository = repository,
             inviteUserResult = inviteUserResult,
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
             appErrorStateService = FakeAppErrorStateService(
                 showErrorResResult = showErrorResResult,
-            )
+            ),
+            matrixClient = FakeMatrixClient(encryptionService = encryptionService),
         )
         presenter.test {
             val initialState = awaitItem()
@@ -527,7 +540,7 @@ internal class DefaultInvitePeoplePresenterTest {
     }
 
     @Test
-    fun `present - suggestions are loaded from recent direct rooms`() = runTest {
+    fun `present - suggestions are loaded from recent DM rooms`() = runTest {
         val dmRoomId = RoomId("!dm_room:server.org")
         val otherUserId = UserId("@frank:server.org")
         val matrixClient = FakeMatrixClient(sessionId = A_USER_ID).apply {
@@ -541,7 +554,7 @@ internal class DefaultInvitePeoplePresenterTest {
                     roomId = dmRoomId,
                     initialRoomInfo = aRoomInfo(
                         id = dmRoomId,
-                        isDirect = true,
+                        isDm = true,
                         activeMembersCount = 2,
                         currentUserMembership = CurrentUserMembership.JOINED,
                     ),
@@ -578,7 +591,7 @@ internal class DefaultInvitePeoplePresenterTest {
                     roomId = dmRoomId,
                     initialRoomInfo = aRoomInfo(
                         id = dmRoomId,
-                        isDirect = true,
+                        isDm = true,
                         activeMembersCount = 2,
                         currentUserMembership = CurrentUserMembership.JOINED,
                     ),
@@ -602,6 +615,267 @@ internal class DefaultInvitePeoplePresenterTest {
             val state = awaitItemAsDefault()
             assertThat(state.suggestions).isEmpty()
             cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - users are prompted for confirmation if they attempt to invite unknown users`() = runTest {
+        val alice = aMatrixUser("@alice:example.com")
+        val bob = aMatrixUser("@bob:example.com")
+        val charlie = aMatrixUser("@charlie:example.com")
+
+        val getUserIdentityResult = lambdaRecorder<UserId, Result<IdentityState?>> { userId ->
+            when (userId.value) {
+                alice.userId.value -> Result.success(IdentityState.Pinned)
+                bob.userId.value -> Result.success(null)
+                else -> Result.failure(AN_EXCEPTION)
+            }
+        }
+
+        val inviteUserResult = lambdaRecorder<UserId, Result<Unit>> { userId: UserId ->
+            Result.success(Unit)
+        }
+        val encryptionService = FakeEncryptionService(
+            getUserIdentityResult = getUserIdentityResult
+        )
+
+        val presenter = createDefaultInvitePeoplePresenter(
+            coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
+            inviteUserResult = inviteUserResult,
+            matrixClient = FakeMatrixClient(encryptionService = encryptionService),
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            skipItems(1)
+
+            // When we toggle a user not in the list, they are added, and we fetch their identity.
+            initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(alice))
+            delay(100)
+            awaitItemAsDefault().eventSink(DefaultInvitePeopleEvents.ToggleUser(bob))
+            delay(100)
+            awaitItemAsDefault().eventSink(DefaultInvitePeopleEvents.ToggleUser(charlie))
+            delay(100)
+
+            // If we do not have their identity cached, or fail to fetch it, we should mark them as unknown.
+            awaitItemAsDefault().run {
+                assertThat(selectedUsers).containsExactly(alice, bob, charlie)
+                eventSink(InvitePeopleEvents.SendInvites)
+            }
+
+            getUserIdentityResult.assertions().isCalledExactly(3).withSequence(
+                listOf(value(alice.userId)),
+                listOf(value(bob.userId)),
+                listOf(value(charlie.userId))
+            )
+
+            // When we then try to invite these users, we should prompt for confirmation first.
+            awaitItemAsDefault().run {
+                assertThat(sendInvitesAction).isInstanceOf(ConfirmingUnknownUserInvitation::class.java)
+                assertThat(canInvite).isTrue()
+                eventSink(InvitePeopleEvents.SendInvites)
+            }
+
+            delay(1_000)
+            inviteUserResult.assertions().isCalledExactly(3).withSequence(
+                listOf(value(alice.userId)),
+                listOf(value(bob.userId)),
+                listOf(value(charlie.userId))
+            )
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - selecting remove on confirmation prompt unselects unknown users`() = runTest {
+        val alice = aMatrixUser("@alice:example.com")
+        val bob = aMatrixUser("@bob:example.com")
+        val charlie = aMatrixUser("@charlie:example.com")
+
+        val repository = FakeUserRepository()
+
+        val getUserIdentityResult = lambdaRecorder<UserId, Result<IdentityState?>> { userId ->
+            when (userId.value) {
+                alice.userId.value -> Result.success(IdentityState.Pinned)
+                bob.userId.value -> Result.success(null)
+                else -> Result.failure(AN_EXCEPTION)
+            }
+        }
+
+        val encryptionService = FakeEncryptionService(
+            getUserIdentityResult = getUserIdentityResult
+        )
+
+        val presenter = createDefaultInvitePeoplePresenter(
+            userRepository = repository,
+            coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
+            matrixClient = FakeMatrixClient(encryptionService = encryptionService),
+        )
+        presenter.test {
+            val initialState = awaitItemAsDefault()
+            skipItems(1)
+
+            // When we toggle a user not in the list, they are added, and we fetch their identity.
+            initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(alice))
+            delay(100)
+            awaitItemAsDefault().eventSink(DefaultInvitePeopleEvents.ToggleUser(bob))
+            delay(100)
+            awaitItemAsDefault().eventSink(DefaultInvitePeopleEvents.ToggleUser(charlie))
+            delay(100)
+
+            // And the search is matching Alice and Bob
+            initialState.searchQuery.setTextAndPlaceCursorAtEnd("some query")
+            assertThat(repository.providedQuery).isEqualTo("some query")
+            repository.emitState(
+                UserSearchResultState(
+                    results = listOf(UserSearchResult(alice), UserSearchResult(bob)),
+                    isSearching = true
+                )
+            )
+            skipItems(3)
+
+            awaitItemAsDefault().run {
+                assertThat(selectedUsers).containsExactly(alice, bob, charlie)
+
+                // Both Alice and Bob are selected in searchResults
+                assertThat(
+                    searchResults.users().map { Pair(it.matrixUser, it.isSelected) }
+                ).containsExactly(Pair(alice, true), Pair(bob, true))
+
+                eventSink(InvitePeopleEvents.SendInvites)
+            }
+
+            getUserIdentityResult.assertions().isCalledExactly(3).withSequence(
+                listOf(value(alice.userId)),
+                listOf(value(bob.userId)),
+                listOf(value(charlie.userId))
+            )
+
+            // When we then try to invite these user, we should prompt for confirmation first.
+            awaitItemAsDefault().run {
+                assertThat(sendInvitesAction).isInstanceOf(ConfirmingUnknownUserInvitation::class.java)
+                assertThat(canInvite).isTrue()
+                eventSink(DefaultInvitePeopleEvents.RemoveUnknownUsers)
+            }
+
+            // Selecting "remove" should remove all unknown users, but keeps those who are known.
+            (awaitLastSequentialItem() as DefaultInvitePeopleState).run {
+                assertThat(sendInvitesAction.isUninitialized()).isTrue()
+                assertThat(selectedUsers).containsExactly(alice)
+
+                // Bob is no longer selected in searchResults
+                assertThat(
+                    searchResults.users().map { Pair(it.matrixUser, it.isSelected) }
+                ).containsExactly(Pair(alice, true), Pair(bob, false))
+            }
+        }
+    }
+
+    @Test
+    fun `present - dismissing confirmation prompt does not affect selection`() = runTest {
+        val alice = aMatrixUser("@alice:example.com")
+        val bob = aMatrixUser("@bob:example.com")
+        val charlie = aMatrixUser("@charlie:example.com")
+
+        val getUserIdentityResult = lambdaRecorder<UserId, Result<IdentityState?>> { userId ->
+            when (userId.value) {
+                alice.userId.value -> Result.success(IdentityState.Pinned)
+                bob.userId.value -> Result.success(null)
+                else -> Result.failure(AN_EXCEPTION)
+            }
+        }
+
+        val encryptionService = FakeEncryptionService(
+            getUserIdentityResult = getUserIdentityResult
+        )
+
+        val presenter = createDefaultInvitePeoplePresenter(
+            coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
+            matrixClient = FakeMatrixClient(encryptionService = encryptionService),
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            skipItems(1)
+
+            // When we toggle a user not in the list, they are added, and we fetch their identity.
+            initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(alice))
+            delay(100)
+            awaitItemAsDefault().eventSink(DefaultInvitePeopleEvents.ToggleUser(bob))
+            delay(100)
+            awaitItemAsDefault().eventSink(DefaultInvitePeopleEvents.ToggleUser(charlie))
+            delay(100)
+
+            awaitItemAsDefault().run {
+                assertThat(selectedUsers).containsExactly(alice, bob, charlie)
+                eventSink(InvitePeopleEvents.SendInvites)
+            }
+
+            getUserIdentityResult.assertions().isCalledExactly(3).withSequence(
+                listOf(value(alice.userId)),
+                listOf(value(bob.userId)),
+                listOf(value(charlie.userId))
+            )
+
+            // When we then try to invite these user, we should prompt for confirmation first.
+            awaitItemAsDefault().run {
+                assertThat(sendInvitesAction).isInstanceOf(ConfirmingUnknownUserInvitation::class.java)
+                assertThat(canInvite).isTrue()
+                eventSink(DefaultInvitePeopleEvents.DismissUnknownUsersModal)
+            }
+
+            // Dismissing should not modify the selection at all
+            (awaitLastSequentialItem() as DefaultInvitePeopleState).run {
+                assertThat(sendInvitesAction.isUninitialized()).isTrue()
+                assertThat(selectedUsers).containsExactly(alice, bob, charlie)
+            }
+        }
+    }
+
+    @Test
+    fun `present - inviting someone to a DM creates a new room`() = runTest {
+        val alice = aMatrixUser("@alice:example.com")
+
+        val matrixClient = FakeMatrixClient(
+            encryptionService = FakeEncryptionService(
+                getUserIdentityResult = lambdaRecorder { userId: UserId ->
+                    Result.success(IdentityState.Pinned)
+                }
+            )
+        )
+        val presenter = createDefaultInvitePeoplePresenter(
+            coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
+            matrixClient = matrixClient,
+            joinedRoom = FakeJoinedRoom(
+                baseRoom = FakeBaseRoom(
+                    initialRoomInfo = aRoomInfo(isDm = true),
+                    getMembersResult = { Result.success(listOf(aRoomMember(userId = alice.userId, membership = RoomMembershipState.JOIN))) },
+                )
+            )
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            skipItems(1)
+
+            // We want to add a new user to a DM
+            initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(alice))
+
+            // And we send the invites
+            initialState.eventSink(InvitePeopleEvents.SendInvites)
+
+            skipItems(1)
+
+            awaitItemAsDefault().run {
+                assertThat(canInvite).isTrue()
+                assertThat(sendInvitesAction.isUninitialized()).isTrue()
+                // Inviting to a DM should trigger the creation of a new room
+                assertThat(createRoomFromDmAction.isLoading()).isTrue()
+            }
+
+            awaitItemAsDefault().run {
+                assertThat(sendInvitesAction.isUninitialized()).isTrue()
+                // Once the room is created, the action should be successful
+                assertThat(createRoomFromDmAction.isSuccess()).isTrue()
+            }
         }
     }
 

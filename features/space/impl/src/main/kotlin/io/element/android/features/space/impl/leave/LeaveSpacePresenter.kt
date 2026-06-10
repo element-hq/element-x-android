@@ -67,7 +67,7 @@ class LeaveSpacePresenter(
                 .orEmpty()
                 .partition { it.spaceRoom.roomId == leaveSpaceHandle.id }
             // By default select all rooms that can be left
-            val otherRoomsExcludingDm = otherRooms.filter { it.spaceRoom.isDirect != true }
+            val otherRoomsExcludingDm = otherRooms.filter { it.spaceRoom.isDm != true }
             selectedRoomIds = otherRoomsExcludingDm
                 .filter { it.isLastOwner.not() }
                 .map { it.spaceRoom.roomId }

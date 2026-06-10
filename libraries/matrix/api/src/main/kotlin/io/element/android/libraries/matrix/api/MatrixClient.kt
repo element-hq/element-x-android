@@ -26,7 +26,7 @@ import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaPreviewService
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
-import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
+import io.element.android.libraries.matrix.api.oauth.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -34,6 +34,7 @@ import io.element.android.libraries.matrix.api.room.NotJoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
+import io.element.android.libraries.matrix.api.room.location.BeaconInfoUpdate
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.spaces.SpaceService
@@ -67,6 +68,7 @@ interface MatrixClient {
     val sessionCoroutineScope: CoroutineScope
     val ignoredUsersFlow: StateFlow<ImmutableList<UserId>>
     val roomMembershipObserver: RoomMembershipObserver
+    val ownBeaconInfoUpdates: Flow<BeaconInfoUpdate>
     suspend fun getJoinedRoom(roomId: RoomId): JoinedRoom?
     suspend fun getRoom(roomId: RoomId): BaseRoom?
     suspend fun findDM(userId: UserId): Result<RoomId?>
@@ -220,9 +222,16 @@ interface MatrixClient {
     suspend fun performDatabaseVacuum(): Result<Unit>
 
     /**
+     * Returns the URL of the map style configured on the server, if any.
+     */
+    suspend fun getMapStyleUrl(): Result<String?>
+
+    /**
      * Resets the cached client `well-known` config by the SDK.
      */
     suspend fun resetWellKnownConfig(): Result<Unit>
+
+    fun homeserverCapabilities(): HomeserverCapabilitiesProvider
 }
 
 /**

@@ -67,7 +67,9 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
-import io.element.android.libraries.mediaplayer.api.MediaPlayer
+import io.element.android.libraries.matrix.ui.model.getBestName
+import io.element.android.libraries.ui.utils.a11y.hasExternalKeyboard
+import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.collections.immutable.ImmutableList
@@ -86,7 +88,6 @@ class ThreadedMessagesNode(
     private val presenterFactory: MessagesPresenter.Factory,
     private val actionListPresenterFactory: ActionListPresenter.Factory,
     private val timelineItemPresenterFactories: TimelineItemPresenterFactories,
-    private val mediaPlayer: MediaPlayer,
     private val permalinkParser: PermalinkParser,
     private val appNavigationStateService: AppNavigationStateService,
     private val roomMemberModerationRenderer: RoomMemberModerationRenderer,
@@ -112,7 +113,7 @@ class ThreadedMessagesNode(
         this.timelineController = timelineController
         return presenterFactory.create(
             navigator = this,
-            composerPresenter = messageComposerPresenterFactory.create(timelineController, this),
+            composerPresenter = messageComposerPresenterFactory.create(timelineController, this, threadRoot = inputs.threadRootEventId),
             timelinePresenter = timelinePresenterFactory.create(timelineController = timelineController, this),
             // TODO add special processor for threaded timeline
             actionListPresenter = actionListPresenterFactory.create(
@@ -124,7 +125,7 @@ class ThreadedMessagesNode(
     }
 
     interface Callback : Plugin {
-        fun handleEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event): Boolean
+        fun handleEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event, canUseOverlay: Boolean): Boolean
         fun navigateToPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?)
         fun navigateToRoomMemberDetails(userId: UserId)
         fun handlePermalinkClick(data: PermalinkData)
@@ -134,8 +135,12 @@ class ThreadedMessagesNode(
         fun navigateToSendLocation()
         fun navigateToCreatePoll()
         fun navigateToEditPoll(eventId: EventId)
+        fun navigateToCurrentLiveLocation()
         fun navigateToRoomCall(roomId: RoomId, isAudioCall: Boolean)
         fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?)
+        fun navigateToDeveloperSettings()
+
+        fun navigateToAvatarPreview(username: String, avatarUrl: String)
     }
 
     override fun onBuilt() {
@@ -153,9 +158,6 @@ class ThreadedMessagesNode(
             onStop = {
                 appNavigationStateService.onLeavingThread(id)
             },
-            onDestroy = {
-                mediaPlayer.close()
-            }
         )
     }
 
@@ -233,8 +235,21 @@ class ThreadedMessagesNode(
         callback.handlePermalinkClick(permalinkData)
     }
 
+    override fun navigateToMember(userId: UserId) {
+        callback.navigateToRoomMemberDetails(userId)
+    }
+
     override fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?) {
         callback.navigateToThread(threadRootId, focusedEventId)
+    }
+
+    override fun navigateToDeveloperSettings() {
+        callback.navigateToDeveloperSettings()
+    }
+
+    override fun navigateToCurrentLiveLocation() {
+        // Shouldn't happen because LiveLocationSharingBanner is not shown in threads.
+        callback.navigateToCurrentLiveLocation()
     }
 
     override fun close() = navigateUp()
@@ -243,6 +258,7 @@ class ThreadedMessagesNode(
     override fun View(modifier: Modifier) {
         val activity = requireNotNull(LocalActivity.current)
         val isDark = ElementTheme.isLightTheme.not()
+        val canUseOverlay = !isTalkbackActive() && !hasExternalKeyboard()
         CompositionLocalProvider(
             LocalTimelineItemPresenterFactories provides timelineItemPresenterFactories,
         ) {
@@ -262,11 +278,11 @@ class ThreadedMessagesNode(
                     onEventContentClick = { isLive, event ->
                         timelineController?.let { controller ->
                             if (isLive) {
-                                callback.handleEventClick(controller.mainTimelineMode(), event)
+                                callback.handleEventClick(controller.mainTimelineMode(), event, canUseOverlay)
                             } else {
                                 val detachedTimelineMode = controller.detachedTimelineMode()
                                 if (detachedTimelineMode != null) {
-                                    callback.handleEventClick(detachedTimelineMode, event)
+                                    callback.handleEventClick(detachedTimelineMode, event, canUseOverlay)
                                 } else {
                                     false
                                 }
@@ -291,6 +307,7 @@ class ThreadedMessagesNode(
                     onViewAllPinnedMessagesClick = {},
                     modifier = modifier,
                     knockRequestsBannerView = {},
+                    onThreadsListClick = {},
                 )
 
                 roomMemberModerationRenderer.Render(
@@ -299,6 +316,11 @@ class ThreadedMessagesNode(
                         when (action) {
                             is ModerationAction.DisplayProfile -> callback.navigateToRoomMemberDetails(target.userId)
                             else -> state.roomMemberModerationState.eventSink(RoomMemberModerationEvents.ProcessAction(action, target))
+                        }
+                    },
+                    onAvatarClick = { user ->
+                        user.avatarUrl?.let { url ->
+                            callback.navigateToAvatarPreview(user.getBestName(), url)
                         }
                     },
                     modifier = Modifier,

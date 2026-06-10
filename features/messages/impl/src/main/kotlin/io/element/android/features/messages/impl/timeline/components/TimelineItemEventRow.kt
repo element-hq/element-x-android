@@ -10,6 +10,7 @@ package io.element.android.features.messages.impl.timeline.components
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
@@ -77,6 +78,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.features.messages.impl.timeline.model.event.ensureActiveLiveLocation
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.timeline.protection.mustBeProtected
@@ -90,6 +92,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.modifiers.niceClickable
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.designsystem.swipe.SwipeableActionsState
 import io.element.android.libraries.designsystem.swipe.rememberSwipeableActionsState
 import io.element.android.libraries.designsystem.text.toPx
@@ -118,7 +121,7 @@ import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonPlurals
 import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.libraries.ui.utils.time.isTalkbackActive
+import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -139,7 +142,6 @@ fun TimelineItemEventRow(
     timelineMode: Timeline.Mode,
     timelineRoomInfo: TimelineRoomInfo,
     timelineProtectionState: TimelineProtectionState,
-    renderReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
     displayThreadSummaries: Boolean,
     onEventClick: () -> Unit,
@@ -269,7 +271,9 @@ fun TimelineItemEventRow(
         if (displayThreadSummaries && timelineMode !is Timeline.Mode.Thread && event.threadInfo is TimelineItemThreadInfo.ThreadRoot) {
             ThreadSummaryView(
                 modifier = if (event.isMine) {
-                    Modifier.align(Alignment.End).padding(end = 16.dp)
+                    Modifier
+                        .align(Alignment.End)
+                        .padding(end = 16.dp)
                 } else {
                     if (timelineRoomInfo.isDm) Modifier else Modifier.padding(start = 16.dp)
                 }.padding(top = 2.dp),
@@ -291,7 +295,6 @@ fun TimelineItemEventRow(
                 isLastOutgoingMessage = isLastOutgoingMessage,
                 receipts = event.readReceiptState.receipts,
             ),
-            renderReadReceipts = renderReadReceipts,
             onReadReceiptsClick = { onReadReceiptClick(event) },
             modifier = Modifier.padding(top = 4.dp)
         )
@@ -674,6 +677,7 @@ private fun MessageEventBubbleContent(
                             .padding(horizontal = 8.dp, vertical = 4.dp)
                     )
                 }
+            TimestampPosition.Hidden -> Box(modifier) { content {} }
         }
     }
 
@@ -742,11 +746,17 @@ private fun MessageEventBubbleContent(
             } else {
                 inReplyToModifier.clickable(onClick = inReplyToClick)
             }
-            InReplyToView(
-                inReplyTo = inReplyTo,
-                hideImage = timelineProtectionState.hideMediaContent(inReplyTo.eventId()),
-                modifier = talkbackCompatModifier,
-            )
+            Box(
+                modifier = talkbackCompatModifier
+                    .border(1.dp, ElementTheme.colors.separatorPrimary, RoundedCornerShape(6.dp))
+                    .background(ElementTheme.colors.bgCanvasDefault, RoundedCornerShape(6.dp))
+                    .padding(4.dp)
+            ) {
+                InReplyToView(
+                    inReplyTo = inReplyTo,
+                    hideImage = timelineProtectionState.hideMediaContent(inReplyTo.eventId()),
+                )
+            }
         }
         if (inReplyToDetails != null) {
             // Use SubComposeLayout only if necessary as it can have consequences on the performance.
@@ -763,11 +773,17 @@ private fun MessageEventBubbleContent(
         }
     }
 
-    val timestampPosition = when (event.content) {
-        is TimelineItemImageContent -> if (event.content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
-        is TimelineItemVideoContent -> if (event.content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
-        is TimelineItemStickerContent,
-        is TimelineItemLocationContent -> TimestampPosition.Overlay
+    val timestampPosition = when (val content = event.content) {
+        is TimelineItemImageContent -> if (content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
+        is TimelineItemVideoContent -> if (content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
+        is TimelineItemStickerContent -> TimestampPosition.Overlay
+        is TimelineItemLocationContent -> {
+            val content = content.ensureActiveLiveLocation()
+            val shouldHide = content.mode is TimelineItemLocationContent.Mode.Live &&
+                content.mode.isActive &&
+                content.mode.isOwnUser
+            if (shouldHide) TimestampPosition.Hidden else TimestampPosition.Overlay
+        }
         is TimelineItemPollContent -> TimestampPosition.Below
         else -> TimestampPosition.Default
     }
@@ -833,25 +849,28 @@ internal fun TimelineItemEventRowWithThreadSummaryPreview() = ElementPreview {
                     groupPosition = TimelineItemGroupPosition.First,
                     threadInfo = TimelineItemThreadInfo.ThreadRoot(
                         latestEventText = "This is the latest message in the thread",
-                        summary = ThreadSummary(AsyncData.Success(
-                            EmbeddedEventInfo(
-                                eventOrTransactionId = EventOrTransactionId.Event(EventId("\$event-id")),
-                                content = MessageContent(
-                                    body = "This is the latest message in the thread",
-                                    inReplyTo = null,
-                                    isEdited = false,
-                                    threadInfo = null,
-                                    type = TextMessageType("This is the latest message in the thread", null)
-                                ),
-                                senderId = UserId("@user:id"),
-                                senderProfile = ProfileDetails.Ready(
-                                    displayName = "Alice",
-                                    avatarUrl = null,
-                                    displayNameAmbiguous = false,
-                                ),
-                                timestamp = 0L,
-                            )
-                        ), numberOfReplies = 20L)
+                        summary = ThreadSummary(
+                            latestEvent = AsyncData.Success(
+                                EmbeddedEventInfo(
+                                    eventOrTransactionId = EventOrTransactionId.Event(EventId("\$event-id")),
+                                    content = MessageContent(
+                                        body = "This is the latest message in the thread",
+                                        inReplyTo = null,
+                                        isEdited = false,
+                                        threadInfo = null,
+                                        type = TextMessageType("This is the latest message in the thread", null)
+                                    ),
+                                    senderId = UserId("@user:id"),
+                                    senderProfile = ProfileDetails.Ready(
+                                        displayName = USER_NAME_ALICE,
+                                        avatarUrl = null,
+                                        displayNameAmbiguous = false,
+                                    ),
+                                    timestamp = 0L,
+                                )
+                            ),
+                            numberOfReplies = 20L,
+                        )
                     )
                 ),
                 displayThreadSummaries = true,
@@ -878,7 +897,7 @@ internal fun ThreadSummaryViewPreview() {
                     ),
                     senderId = UserId("@user:id"),
                     senderProfile = ProfileDetails.Ready(
-                        displayName = "Alice",
+                        displayName = USER_NAME_ALICE,
                         avatarUrl = null,
                         displayNameAmbiguous = true,
                     ),

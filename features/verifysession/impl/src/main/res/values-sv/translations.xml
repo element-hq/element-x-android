@@ -50,5 +50,5 @@
   <string name="screen_session_verification_waiting_subtitle">"När det har accepterats kommer du kunna fortsätta verifieringen."</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Godkänn begäran om att starta verifieringsprocessen på din andra session för att fortsätta."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Väntar på att acceptera begäran"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Loggar ut …"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Tar bort enhet …"</string>
 </resources>

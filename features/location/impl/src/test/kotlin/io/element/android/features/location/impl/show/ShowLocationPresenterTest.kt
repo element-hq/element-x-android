@@ -15,22 +15,35 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.ShowLocationMode
 import io.element.android.features.location.impl.aPermissionsState
+import io.element.android.features.location.impl.common.FakeUserLocationStateFactory
 import io.element.android.features.location.impl.common.actions.FakeLocationActions
 import io.element.android.features.location.impl.common.permissions.FakePermissionsPresenter
 import io.element.android.features.location.impl.common.permissions.PermissionsEvents
 import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
+import io.element.android.features.location.test.FakeActiveLiveLocationShareManager
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.room.location.AssetType
+import io.element.android.libraries.matrix.api.room.location.LiveLocationShare
+import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.core.aBuildMeta
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
+import io.element.android.libraries.matrix.test.room.location.aLiveLocationShare
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.test
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import kotlin.time.Duration.Companion.hours
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class ShowLocationPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
@@ -51,58 +64,35 @@ class ShowLocationPresenterTest {
             assetType = null,
         ),
         locationActions: FakeLocationActions = fakeLocationActions,
+        joinedRoom: JoinedRoom = FakeJoinedRoom(),
+        client: MatrixClient = FakeMatrixClient(),
+        liveLocationShareManager: FakeActiveLiveLocationShareManager = FakeActiveLiveLocationShareManager(),
     ) = ShowLocationPresenter(
         mode = mode,
         permissionsPresenterFactory = { fakePermissionsPresenter },
         locationActions = locationActions,
         buildMeta = fakeBuildMeta,
         dateFormatter = fakeDateFormatter,
-        stringProvider = FakeStringProvider()
+        stringProvider = FakeStringProvider(),
+        joinedRoom = joinedRoom,
+        client = client,
+        liveLocationShareManager = liveLocationShareManager,
+        userLocationStateFactory = FakeUserLocationStateFactory(),
     )
 
     @Test
-    fun `emits initial state with no location permission`() = runTest {
-        fakePermissionsPresenter.givenState(
-            aPermissionsState(
-                permissions = PermissionsState.Permissions.NoneGranted,
-                shouldShowRationale = false,
+    fun `present - non-null customMapStyleUrl`() = runTest {
+        val shareLocationPresenter = createShowLocationPresenter(
+            client = FakeMatrixClient(
+                sessionId = A_USER_ID,
+                getMapStyleUrlResult = { Result.success("aUrl") },
             )
         )
-
-        val presenter = createShowLocationPresenter()
-        presenter.test {
-            val initialState = awaitItem()
-            assertThat(initialState.hasLocationPermission).isFalse()
-            assertThat(initialState.isTrackMyLocation).isFalse()
-        }
-    }
-
-    @Test
-    fun `emits initial state location permission denied once`() = runTest {
-        fakePermissionsPresenter.givenState(
-            aPermissionsState(
-                permissions = PermissionsState.Permissions.NoneGranted,
-                shouldShowRationale = true,
-            )
-        )
-
-        val presenter = createShowLocationPresenter()
-        presenter.test {
-            val initialState = awaitItem()
-            assertThat(initialState.hasLocationPermission).isFalse()
-            assertThat(initialState.isTrackMyLocation).isFalse()
-        }
-    }
-
-    @Test
-    fun `emits initial state with location permission`() = runTest {
-        fakePermissionsPresenter.givenState(aPermissionsState(permissions = PermissionsState.Permissions.AllGranted))
-
-        val presenter = createShowLocationPresenter()
-        presenter.test {
-            val initialState = awaitItem()
-            assertThat(initialState.hasLocationPermission).isTrue()
-            assertThat(initialState.isTrackMyLocation).isFalse()
+        shareLocationPresenter.test {
+            val state = awaitItem()
+            assertThat(state.customMapStyleUrl.isLoading()).isTrue()
+            val finalState = awaitItem()
+            assertThat(finalState.customMapStyleUrl.dataOrNull()).isEqualTo("aUrl")
         }
     }
 
@@ -112,9 +102,8 @@ class ShowLocationPresenterTest {
 
         val presenter = createShowLocationPresenter()
         presenter.test {
-            val initialState = awaitItem()
-            assertThat(initialState.hasLocationPermission).isTrue()
-            assertThat(initialState.isTrackMyLocation).isFalse()
+            assertThat(awaitItem().isTrackMyLocation).isFalse()
+            assertThat(awaitItem().isTrackMyLocation).isTrue()
         }
     }
 
@@ -133,18 +122,18 @@ class ShowLocationPresenterTest {
     fun `centers on user location`() = runTest {
         fakePermissionsPresenter.givenState(aPermissionsState(permissions = PermissionsState.Permissions.AllGranted))
 
-        val presenter = createShowLocationPresenter()
+        val presenter = createShowLocationPresenter(
+            client = FakeMatrixClient(
+                getMapStyleUrlResult = { Result.success(null) }
+            )
+        )
         presenter.test {
             val initialState = awaitItem()
-            assertThat(initialState.hasLocationPermission).isTrue()
             assertThat(initialState.isTrackMyLocation).isFalse()
 
             initialState.eventSink(ShowLocationEvent.TrackMyLocation(true))
             val trackMyLocationState = awaitItem()
 
-            delay(1)
-
-            assertThat(trackMyLocationState.hasLocationPermission).isTrue()
             assertThat(trackMyLocationState.isTrackMyLocation).isTrue()
 
             // Swipe the map to switch mode
@@ -152,7 +141,6 @@ class ShowLocationPresenterTest {
             val trackLocationDisabledState = awaitItem()
             assertThat(trackLocationDisabledState.dialogState).isEqualTo(LocationConstraintsDialogState.None)
             assertThat(trackLocationDisabledState.isTrackMyLocation).isFalse()
-            assertThat(trackLocationDisabledState.hasLocationPermission).isTrue()
         }
     }
 
@@ -175,14 +163,12 @@ class ShowLocationPresenterTest {
             val trackLocationState = awaitItem()
             assertThat(trackLocationState.dialogState).isEqualTo(LocationConstraintsDialogState.PermissionRationale)
             assertThat(trackLocationState.isTrackMyLocation).isFalse()
-            assertThat(trackLocationState.hasLocationPermission).isFalse()
 
             // Dismiss the dialog
             initialState.eventSink(ShowLocationEvent.DismissDialog)
             val dialogDismissedState = awaitItem()
             assertThat(dialogDismissedState.dialogState).isEqualTo(LocationConstraintsDialogState.None)
             assertThat(dialogDismissedState.isTrackMyLocation).isFalse()
-            assertThat(dialogDismissedState.hasLocationPermission).isFalse()
         }
     }
 
@@ -195,7 +181,7 @@ class ShowLocationPresenterTest {
             )
         )
         val presenter = createShowLocationPresenter()
-       presenter.test {
+        presenter.test {
             // Skip initial state
             val initialState = awaitItem()
 
@@ -204,11 +190,31 @@ class ShowLocationPresenterTest {
             val trackLocationState = awaitItem()
             assertThat(trackLocationState.dialogState).isEqualTo(LocationConstraintsDialogState.PermissionRationale)
             assertThat(trackLocationState.isTrackMyLocation).isFalse()
-            assertThat(trackLocationState.hasLocationPermission).isFalse()
 
             // Continue the dialog sends permission request to the permissions presenter
             trackLocationState.eventSink(ShowLocationEvent.RequestPermissions)
             assertThat(fakePermissionsPresenter.events.last()).isEqualTo(PermissionsEvents.RequestPermissions)
+        }
+    }
+
+    @Test
+    fun `TrackMyLocation with permissions not yet requested triggers permission request`() = runTest {
+        fakePermissionsPresenter.givenState(
+            aPermissionsState(
+                permissions = PermissionsState.Permissions.NoneGranted,
+                shouldShowRationale = false,
+                permissionsRequested = false,
+            )
+        )
+
+        val presenter = createShowLocationPresenter()
+        presenter.test {
+            val initialState = awaitItem()
+
+            initialState.eventSink(ShowLocationEvent.TrackMyLocation(true))
+
+            assertThat(fakePermissionsPresenter.events).contains(PermissionsEvents.RequestPermissions)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -218,6 +224,7 @@ class ShowLocationPresenterTest {
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = false,
+                permissionsRequested = true,
             )
         )
 
@@ -231,14 +238,12 @@ class ShowLocationPresenterTest {
             val trackLocationState = awaitItem()
             assertThat(trackLocationState.dialogState).isEqualTo(LocationConstraintsDialogState.PermissionDenied)
             assertThat(trackLocationState.isTrackMyLocation).isFalse()
-            assertThat(trackLocationState.hasLocationPermission).isFalse()
 
             // Dismiss the dialog
             initialState.eventSink(ShowLocationEvent.DismissDialog)
             val dialogDismissedState = awaitItem()
             assertThat(dialogDismissedState.dialogState).isEqualTo(LocationConstraintsDialogState.None)
             assertThat(dialogDismissedState.isTrackMyLocation).isFalse()
-            assertThat(dialogDismissedState.hasLocationPermission).isFalse()
         }
     }
 
@@ -248,6 +253,7 @@ class ShowLocationPresenterTest {
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = false,
+                permissionsRequested = true,
             )
         )
 
@@ -286,7 +292,6 @@ class ShowLocationPresenterTest {
         val presenter = createShowLocationPresenter()
         presenter.test {
             val initialState = awaitItem()
-            assertThat(initialState.hasLocationPermission).isTrue()
 
             // Try to track location when location services are disabled
             initialState.eventSink(ShowLocationEvent.TrackMyLocation(true))
@@ -316,6 +321,188 @@ class ShowLocationPresenterTest {
 
             assertThat(settingsOpenedState.dialogState).isEqualTo(LocationConstraintsDialogState.None)
             assertThat(fakeLocationActions.openLocationSettingsInvocationsCount).isEqualTo(1)
+        }
+    }
+
+    @Test
+    fun `live mode emits empty location shares initially`() = runTest {
+        val presenter = createShowLocationPresenter(
+            mode = ShowLocationMode.Live(senderId = UserId("@alice:matrix.org")),
+            joinedRoom = FakeJoinedRoom(),
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            assertThat(initialState.locationShares).isEmpty()
+            assertThat(initialState.isSheetDraggable).isFalse()
+        }
+    }
+
+    @Test
+    fun `live mode collects live shares from room`() = runTest {
+        val userId = UserId("@bob:matrix.org")
+        val liveSharesFlow = MutableStateFlow(
+            listOf(
+                aLiveLocationShare(userId = userId)
+            )
+        )
+        val fakeRoom = FakeJoinedRoom(liveLocationSharesFlow = liveSharesFlow)
+
+        val presenter = createShowLocationPresenter(
+            mode = ShowLocationMode.Live(senderId = userId),
+            joinedRoom = fakeRoom,
+        )
+        presenter.test {
+            // Skip initial empty state from collectAsState(initial = emptyList())
+            skipItems(1)
+            val state = awaitItem()
+
+            assertThat(state.locationShares).hasSize(1)
+            val item = state.locationShares.first()
+            assertThat(item.userId).isEqualTo(userId)
+            assertThat(item.location.lat).isEqualTo(48.8584)
+            assertThat(item.location.lon).isEqualTo(2.2945)
+            assertThat(item.isLive).isTrue()
+            assertThat(state.isSheetDraggable).isTrue()
+        }
+    }
+
+    @Test
+    fun `live mode handles invalid geo uri gracefully`() = runTest {
+        val validUserId = UserId("@alice:matrix.org")
+        val invalidUserId = UserId("@bob:matrix.org")
+        val liveSharesFlow = MutableStateFlow(
+            listOf(
+                aLiveLocationShare(userId = validUserId),
+                aLiveLocationShare(userId = invalidUserId, geoUri = "invalid-geo-uri"),
+            )
+        )
+        val fakeRoom = FakeJoinedRoom(liveLocationSharesFlow = liveSharesFlow)
+
+        val presenter = createShowLocationPresenter(
+            mode = ShowLocationMode.Live(senderId = validUserId),
+            joinedRoom = fakeRoom,
+        )
+        presenter.test {
+            // Skip initial empty state from collectAsState(initial = emptyList())
+            skipItems(1)
+            val state = awaitItem()
+
+            // Only the valid location share should be present
+            assertThat(state.locationShares).hasSize(1)
+            assertThat(state.locationShares.first().userId).isEqualTo(validUserId)
+        }
+    }
+
+    @Test
+    fun `live mode updates when shares change`() = runTest {
+        val userId = UserId("@bob:matrix.org")
+        val liveSharesFlow = MutableStateFlow(emptyList<LiveLocationShare>())
+        val fakeRoom = FakeJoinedRoom(liveLocationSharesFlow = liveSharesFlow)
+
+        val presenter = createShowLocationPresenter(
+            mode = ShowLocationMode.Live(senderId = userId),
+            joinedRoom = fakeRoom,
+        )
+        presenter.test {
+            // Initial state is empty
+            val initialState = awaitItem()
+            assertThat(initialState.locationShares).isEmpty()
+
+            // Emit a new live share
+            liveSharesFlow.value = listOf(
+                aLiveLocationShare(userId = userId)
+            )
+
+            val updatedState = awaitItem()
+            assertThat(updatedState.locationShares).hasSize(1)
+            assertThat(updatedState.locationShares.first().userId).isEqualTo(userId)
+        }
+    }
+
+    @Test
+    fun `static mode emits location share with correct data`() = runTest {
+        val senderId = UserId("@alice:matrix.org")
+        val senderName = "Alice"
+        val avatarUrl = "https://example.com/avatar.png"
+        val mode = ShowLocationMode.Static(
+            location = location,
+            senderName = senderName,
+            senderId = senderId,
+            senderAvatarUrl = avatarUrl,
+            timestamp = 0L,
+            assetType = AssetType.SENDER,
+        )
+
+        val presenter = createShowLocationPresenter(mode = mode)
+        presenter.test {
+            val state = awaitItem()
+            assertThat(state.locationShares).hasSize(1)
+
+            val item = state.locationShares.first()
+            assertThat(item.userId).isEqualTo(senderId)
+            assertThat(item.displayName).isEqualTo(senderName)
+            assertThat(item.location).isEqualTo(location)
+            assertThat(item.isLive).isFalse()
+            assertThat(item.assetType).isEqualTo(AssetType.SENDER)
+            assertThat(item.avatarData.id).isEqualTo(senderId.value)
+            assertThat(item.avatarData.name).isEqualTo(senderName)
+            assertThat(item.avatarData.url).isEqualTo(avatarUrl)
+        }
+    }
+
+    @Test
+    fun `static mode has non-draggable sheet`() = runTest {
+        val presenter = createShowLocationPresenter()
+        presenter.test {
+            val state = awaitItem()
+            assertThat(state.isSheetDraggable).isFalse()
+        }
+    }
+
+    @Test
+    fun `static mode never hides user location puck`() = runTest {
+        val presenter = createShowLocationPresenter()
+        presenter.test {
+            val state = awaitItem()
+            assertThat(state.hideUserLocationPuck).isFalse()
+        }
+    }
+
+    @Test
+    fun `live mode does not hide user location puck when not sharing`() = runTest {
+        val presenter = createShowLocationPresenter(
+            mode = ShowLocationMode.Live(senderId = A_USER_ID),
+        )
+        presenter.test {
+            val state = awaitItem()
+            assertThat(state.hideUserLocationPuck).isFalse()
+        }
+    }
+
+    @Test
+    fun `live mode user location state uses own share position when sharing`() = runTest {
+        val ownLiveLocationShare = aLiveLocationShare()
+        val fakeRoom = FakeJoinedRoom(
+            liveLocationSharesFlow = MutableStateFlow(listOf(ownLiveLocationShare))
+        )
+        val manager = FakeActiveLiveLocationShareManager(
+            startShareLambda = { _, _ -> Result.success(Unit) }
+        )
+        manager.startShare(fakeRoom.roomId, 1.hours)
+
+        val presenter = createShowLocationPresenter(
+            mode = ShowLocationMode.Live(senderId = A_USER_ID),
+            joinedRoom = fakeRoom,
+            liveLocationShareManager = manager,
+        )
+        val ownLocation = ownLiveLocationShare.lastLocation?.geoUri?.let(Location::fromGeoUri)
+        presenter.test {
+            skipItems(1)
+            val state = awaitItem()
+            assertThat(state.hideUserLocationPuck).isTrue()
+            val location = requireNotNull(state.userLocationState.location)
+            assertThat(location.position.value.latitude).isEqualTo(ownLocation?.lat)
+            assertThat(location.position.value.longitude).isEqualTo(ownLocation?.lon)
         }
     }
 }

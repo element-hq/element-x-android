@@ -95,7 +95,6 @@ sealed interface NotificationContent {
         data object PolicyRuleRoom : StateEvent
         data object PolicyRuleServer : StateEvent
         data object PolicyRuleUser : StateEvent
-        data object RoomAliases : StateEvent
         data object RoomAvatar : StateEvent
         data object RoomCanonicalAlias : StateEvent
         data object RoomCreate : StateEvent

@@ -78,9 +78,7 @@ import org.robolectric.RobolectricTestRunner
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 
-@Suppress("LargeClass")
-@RunWith(RobolectricTestRunner::class)
-class TimelineItemContentMessageFactoryTest {
+@Suppress("LargeClass") @RunWith(RobolectricTestRunner::class) class TimelineItemContentMessageFactoryTest {
     @Test
     fun `test create OtherMessageType`() = runTest {
         val sut = createTimelineItemContentMessageFactory()
@@ -110,11 +108,9 @@ class TimelineItemContentMessageFactoryTest {
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemLocationContent(
-            body = "body",
-            location = Location(lat = 1.0, lon = 2.0, accuracy = null),
             description = "description",
             assetType = assetType,
-            mode = TimelineItemLocationContent.Mode.Static,
+            mode = TimelineItemLocationContent.Mode.Static(location = Location(lat = 1.0, lon = 2.0, accuracy = null)),
             senderId = A_USER_ID,
             senderProfile = aProfileDetails(),
         )
@@ -166,16 +162,11 @@ class TimelineItemContentMessageFactoryTest {
             senderProfile = aProfileDetails(),
             eventId = AN_EVENT_ID,
         ) as TimelineItemTextContent
-        val expected = TimelineItemTextContent(
-            body = "https://www.example.org",
-            htmlDocument = null,
-            isEdited = false,
-            formattedBody = buildSpannedString {
-                inSpans(URLSpan("https://www.example.org")) {
-                    append("https://www.example.org")
-                }
+        val expected = TimelineItemTextContent(body = "https://www.example.org", htmlDocument = null, isEdited = false, formattedBody = buildSpannedString {
+            inSpans(URLSpan("https://www.example.org")) {
+                append("https://www.example.org")
             }
-        )
+        })
         assertThat(result.body).isEqualTo(expected.body)
         assertThat(result.htmlDocument).isEqualTo(expected.htmlDocument)
         assertThat(result.plainText).isEqualTo(expected.plainText)
@@ -200,9 +191,7 @@ class TimelineItemContentMessageFactoryTest {
                 append("and manually added link")
             }
         }.toSpannable()
-        val sut = createTimelineItemContentMessageFactory(
-            domConverterTransform = { expected }
-        )
+        val sut = createTimelineItemContentMessageFactory(domConverterTransform = { expected })
         val result = sut.create(
             content = createMessageContent(
                 type = TextMessageType(
@@ -219,9 +208,7 @@ class TimelineItemContentMessageFactoryTest {
 
     @Test
     fun `test create TextMessageType with unknown formatted body does nothing`() = runTest {
-        val sut = createTimelineItemContentMessageFactory(
-            htmlConverterTransform = { it }
-        )
+        val sut = createTimelineItemContentMessageFactory(htmlConverterTransform = { it })
         val result = sut.create(
             content = createMessageContent(
                 type = TextMessageType(
@@ -356,10 +343,10 @@ class TimelineItemContentMessageFactoryTest {
                     formattedCaption = null,
                     source = MediaSource("url"),
                     info = AudioInfo(
-                        duration = 1.minutes,
-                        size = 123L,
-                        mimetype = MimeTypes.Mp3,
-                    )
+                    duration = 1.minutes,
+                    size = 123L,
+                    mimetype = MimeTypes.Mp3,
+                )
                 ),
                 isEdited = true,
             ),
@@ -597,16 +584,16 @@ class TimelineItemContentMessageFactoryTest {
                     formattedCaption = null,
                     source = MediaSource("url"),
                     info = FileInfo(
-                        mimetype = MimeTypes.Pdf,
-                        size = 123L,
-                        thumbnailInfo = ThumbnailInfo(
-                            height = 10L,
-                            width = 5L,
-                            mimetype = MimeTypes.Jpeg,
-                            size = 111L,
-                        ),
-                        thumbnailSource = MediaSource("url_thumbnail"),
-                    )
+                    mimetype = MimeTypes.Pdf,
+                    size = 123L,
+                    thumbnailInfo = ThumbnailInfo(
+                        height = 10L,
+                        width = 5L,
+                        mimetype = MimeTypes.Jpeg,
+                        size = 111L,
+                    ),
+                    thumbnailSource = MediaSource("url_thumbnail"),
+                )
                 ),
                 isEdited = true,
             ),

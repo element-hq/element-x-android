@@ -76,7 +76,7 @@ class SharePresenterTest {
     fun `present - on room selected ok`() = runTest {
         val joinedRoom = FakeJoinedRoom(
             liveTimeline = FakeTimeline().apply {
-                sendMessageLambda = { _, _, _ -> Result.success(Unit) }
+                sendMessageLambda = { _, _, _, _, _ -> Result.success(Unit) }
             },
         )
         val matrixClient = FakeMatrixClient().apply {
@@ -103,7 +103,7 @@ class SharePresenterTest {
     fun `present - send text ok`() = runTest {
         val joinedRoom = FakeJoinedRoom(
             liveTimeline = FakeTimeline().apply {
-                sendMessageLambda = { _, _, _ -> Result.success(Unit) }
+                sendMessageLambda = { _, _, _, _, _ -> Result.success(Unit) }
             },
         )
         val matrixClient = FakeMatrixClient().apply {

@@ -16,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -26,7 +27,10 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.PinUnpinAction
 import io.element.android.appconfig.MessageComposerConfig
+import io.element.android.features.location.api.live.ActiveLiveLocationShareManager
+import io.element.android.features.location.api.live.isCurrentlySharing
 import io.element.android.features.messages.api.timeline.HtmlConverterProvider
+import io.element.android.features.messages.impl.MessagesState.Threads
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeState
@@ -75,8 +79,8 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
-import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.matrix.ui.model.getAvatarData
@@ -85,8 +89,11 @@ import io.element.android.libraries.recentemojis.api.AddRecentEmoji
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -121,6 +128,7 @@ class MessagesPresenter(
     private val featureFlagService: FeatureFlagService,
     private val addRecentEmoji: AddRecentEmoji,
     private val markAsFullyRead: MarkAsFullyRead,
+    private val liveLocationShareManager: ActiveLiveLocationShareManager,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
 ) : Presenter<MessagesState> {
     @AssistedFactory
@@ -160,6 +168,14 @@ class MessagesPresenter(
         val pinnedMessagesBannerState = pinnedMessagesBannerPresenter.present()
         val roomCallState = roomCallStatePresenter.present()
         val roomMemberModerationState = roomMemberModerationPresenter.present()
+        val threadsList by produceState(persistentListOf()) {
+            room.threadsListService.subscribeToItemUpdates()
+                .onStart { room.threadsListService.paginate() }
+                .collectLatest { value = it.toImmutableList() }
+        }
+
+        val canOpenThreadList by featureFlagService.isFeatureEnabledFlow(FeatureFlags.RoomThreadList).collectAsState(initial = false)
+        val isCurrentlySharingLiveLocationInRoom by remember { liveLocationShareManager.isCurrentlySharing(room.roomId) }.collectAsState()
 
         val userEventPermissions by room.permissionsAsState(UserEventPermissions.DEFAULT) { perms ->
             perms.userEventPermissions()
@@ -205,12 +221,10 @@ class MessagesPresenter(
         val dmRoomMember by room.getDirectRoomMember(membersState)
         val roomMemberIdentityStateChanges = identityChangeState.roomMemberIdentityStateChanges
 
-        val isKeyShareOnInviteEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.EnableKeyShareOnInvite).collectAsState(initial = false)
         // The top bar should show a "history" icon if:
-        //   * History sharing is enabled,
         //   * The room is encrypted, and:
         //   * The room's history_visibility allows future users to see content.
-        val topBarSharedHistoryIcon = if (isKeyShareOnInviteEnabled) roomInfo.sharedHistoryIcon() else SharedHistoryIcon.NONE
+        val topBarSharedHistoryIcon = roomInfo.sharedHistoryIcon()
 
         LifecycleResumeEffect(dmRoomMember, roomInfo.isEncrypted) {
             if (roomInfo.isEncrypted == true) {
@@ -250,12 +264,23 @@ class MessagesPresenter(
                 is MessagesEvent.OnUserClicked -> {
                     roomMemberModerationState.eventSink(RoomMemberModerationEvents.ShowActionsForUser(event.user))
                 }
-                is MessagesEvent.MarkAsFullyReadAndExit -> coroutineScope.launch {
-                    if (!markingAsReadAndExiting.getAndSet(true)) {
+                MessagesEvent.StopLiveLocationShare -> {
+                    localCoroutineScope.launch {
+                        liveLocationShareManager.stopShare(room.roomId)
+                            .onFailure {
+                                Timber.e(it, "Failed to stop live location share for roomId=${room.roomId}")
+                                snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_error))
+                            }
+                    }
+                }
+                MessagesEvent.ShowLiveLocationShare -> {
+                    navigator.navigateToCurrentLiveLocation()
+                }
+                is MessagesEvent.MarkAsFullyReadAndExit -> if (!markingAsReadAndExiting.getAndSet(true)) {
+                    coroutineScope.launch {
                         val latestEventId = room.liveTimeline.getLatestEventId().getOrElse {
                             Timber.w(it, "Failed to get latest event id to mark as fully read")
-                            navigator.close()
-                            return@launch
+                            null
                         }
                         latestEventId?.let { eventId ->
                             sessionCoroutineScope.launch {
@@ -263,6 +288,7 @@ class MessagesPresenter(
                             }
                         }
                         navigator.close()
+                    }.invokeOnCompletion {
                         markingAsReadAndExiting.set(false)
                     }
                 }
@@ -296,6 +322,12 @@ class MessagesPresenter(
             roomMemberModerationState = roomMemberModerationState,
             topBarSharedHistoryIcon = topBarSharedHistoryIcon,
             successorRoom = roomInfo.successorRoom,
+            threads = Threads(
+                hasThreads = canOpenThreadList && threadsList.isNotEmpty(),
+                // TODO calculate this properly based on the thread list and the read state of each thread
+                hasUnreadThreads = false,
+            ),
+            showLiveLocationShareBanner = isCurrentlySharingLiveLocationInRoom && timelineState.timelineMode !is Timeline.Mode.Thread,
             eventSink = ::handleEvent,
         )
     }
@@ -518,7 +550,7 @@ class MessagesPresenter(
             val replyToDetails = loadReplyDetails(targetEvent.eventId).map(permalinkParser)
             val composerMode = MessageComposerMode.Reply(
                 replyToDetails = replyToDetails,
-                hideImage = timelineProtectionState.hideMediaContent(targetEvent.eventId),
+                hideImage = timelineProtectionState.hideMediaContent(targetEvent.eventId, targetEvent.isMine),
             )
             composerState.eventSink(
                 MessageComposerEvent.SetMode(composerMode)

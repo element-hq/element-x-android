@@ -6,13 +6,16 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.features.userprofile
 
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasTestTag
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.userprofile.api.UserProfileEvents
 import io.element.android.features.userprofile.api.UserProfileState
@@ -39,193 +42,188 @@ import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.ensureCalledOnceWithTwoParams
 import io.element.android.tests.testutils.pressBack
-import kotlinx.coroutines.test.runTest
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 class UserProfileViewTest {
-    @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
-
     @Test
-    fun `on back button click - the expected callback is called`() = runTest {
+    fun `on back button click - the expected callback is called`() = runAndroidComposeUiTest {
         ensureCalledOnce { callback ->
-            rule.setUserProfileView(
+            setUserProfileView(
                 goBack = callback,
             )
-            rule.pressBack()
+            pressBack()
         }
     }
 
     @Test
-    fun `on avatar clicked - the expected callback is called`() = runTest {
+    fun `on avatar clicked - the expected callback is called`() = runAndroidComposeUiTest {
         ensureCalledOnceWithTwoParams(A_USER_NAME, AN_AVATAR_URL) { callback ->
-            rule.setUserProfileView(
+            setUserProfileView(
                 state = aUserProfileState(userName = A_USER_NAME, avatarUrl = AN_AVATAR_URL),
                 openAvatarPreview = callback,
             )
-            rule.onNode(hasTestTag(TestTags.memberDetailAvatar.value)).performClick()
+            onNode(hasTestTag(TestTags.memberDetailAvatar.value)).performClick()
         }
     }
 
     @Test
-    fun `on avatar clicked with no avatar - nothing happens`() = runTest {
+    fun `on avatar clicked with no avatar - nothing happens`() = runAndroidComposeUiTest {
         val callback = EnsureNeverCalledWithTwoParams<String, String>()
-        rule.setUserProfileView(
+        setUserProfileView(
             state = aUserProfileState(userName = A_USER_NAME, avatarUrl = null),
             openAvatarPreview = callback,
         )
-        rule.onNode(hasTestTag(TestTags.memberDetailAvatar.value)).performClick()
+        onNode(hasTestTag(TestTags.memberDetailAvatar.value)).performClick()
     }
 
     @Test
-    fun `on Share clicked - the expected callback is called`() = runTest {
+    fun `on Share clicked - the expected callback is called`() = runAndroidComposeUiTest {
         ensureCalledOnce { callback ->
-            rule.setUserProfileView(
+            setUserProfileView(
                 onShareUser = callback,
             )
-            rule.clickOn(CommonStrings.action_share)
+            clickOn(CommonStrings.action_share)
         }
     }
 
     @Test
-    fun `on Message clicked - the StartDm event is emitted`() = runTest {
+    fun `on Message clicked - the StartDm event is emitted`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<UserProfileEvents>()
-        rule.setUserProfileView(
+        setUserProfileView(
             state = aUserProfileState(
                 dmRoomId = A_ROOM_ID,
                 eventSink = eventsRecorder,
             ),
         )
-        rule.clickOn(CommonStrings.action_message)
+        clickOn(CommonStrings.action_message)
         eventsRecorder.assertSingle(UserProfileEvents.StartDM)
     }
 
     @Test
-    fun `on Call clicked - the expected callback is called`() = runTest {
+    fun `on Call clicked - the expected callback is called`() = runAndroidComposeUiTest {
         ensureCalledOnceWithTwoParams(A_ROOM_ID, CallIntent.AUDIO) { callback ->
-            rule.setUserProfileView(
+            setUserProfileView(
                 state = aUserProfileState(
                     dmRoomId = A_ROOM_ID,
                     canCall = true,
                 ),
                 onStartCall = callback,
             )
-            rule.clickOn(CommonStrings.action_call)
+            clickOn(CommonStrings.action_call)
         }
     }
 
     @Test
-    fun `on Video Call clicked - the expected callback is called`() = runTest {
+    fun `on Video Call clicked - the expected callback is called`() = runAndroidComposeUiTest {
         ensureCalledOnceWithTwoParams(A_ROOM_ID, CallIntent.VIDEO) { callback ->
-            rule.setUserProfileView(
+            setUserProfileView(
                 state = aUserProfileState(
                     dmRoomId = A_ROOM_ID,
                     canCall = true,
                 ),
                 onStartCall = callback,
             )
-            rule.clickOn(CommonStrings.common_video)
+            clickOn(CommonStrings.common_video)
         }
     }
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `on Block user clicked - a BlockUser event is emitted with needsConfirmation`() = runTest {
+    fun `on Block user clicked - a BlockUser event is emitted with needsConfirmation`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<UserProfileEvents>()
-        rule.setUserProfileView(
+        setUserProfileView(
             state = aUserProfileState(
                 eventSink = eventsRecorder,
             ),
         )
-        rule.clickOn(R.string.screen_dm_details_block_user)
+        clickOn(R.string.screen_dm_details_block_user)
         eventsRecorder.assertSingle(UserProfileEvents.BlockUser(needsConfirmation = true))
     }
 
     @Test
-    fun `on confirming block user - a BlockUser event is emitted without needsConfirmation`() = runTest {
+    fun `on confirming block user - a BlockUser event is emitted without needsConfirmation`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<UserProfileEvents>()
-        rule.setUserProfileView(
+        setUserProfileView(
             state = aUserProfileState(
                 displayConfirmationDialog = UserProfileState.ConfirmationDialog.Block,
                 eventSink = eventsRecorder,
             ),
         )
-        rule.clickOn(R.string.screen_dm_details_block_alert_action)
+        clickOn(R.string.screen_dm_details_block_alert_action)
         eventsRecorder.assertSingle(UserProfileEvents.BlockUser(needsConfirmation = false))
     }
 
     @Test
-    fun `on canceling blocking a user - a ClearConfirmationDialog event is emitted`() = runTest {
+    fun `on canceling blocking a user - a ClearConfirmationDialog event is emitted`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<UserProfileEvents>()
-        rule.setUserProfileView(
+        setUserProfileView(
             state = aUserProfileState(
                 displayConfirmationDialog = UserProfileState.ConfirmationDialog.Block,
                 eventSink = eventsRecorder,
             ),
         )
-        rule.clickOn(CommonStrings.action_cancel)
+        clickOn(CommonStrings.action_cancel)
         eventsRecorder.assertSingle(UserProfileEvents.ClearConfirmationDialog)
     }
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `on Unblock user clicked - an UnblockUser event is emitted with needsConfirmation`() = runTest {
+    fun `on Unblock user clicked - an UnblockUser event is emitted with needsConfirmation`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<UserProfileEvents>()
-        rule.setUserProfileView(
+        setUserProfileView(
             state = aUserProfileState(
                 isBlocked = AsyncData.Success(true),
                 eventSink = eventsRecorder,
             ),
         )
-        rule.clickOn(R.string.screen_dm_details_unblock_user)
+        clickOn(R.string.screen_dm_details_unblock_user)
         eventsRecorder.assertSingle(UserProfileEvents.UnblockUser(needsConfirmation = true))
     }
 
     @Test
-    fun `on confirming Unblock user - an UnblockUser event is emitted without needsConfirmation`() = runTest {
+    fun `on confirming Unblock user - an UnblockUser event is emitted without needsConfirmation`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<UserProfileEvents>()
-        rule.setUserProfileView(
+        setUserProfileView(
             state = aUserProfileState(
                 isBlocked = AsyncData.Success(true),
                 displayConfirmationDialog = UserProfileState.ConfirmationDialog.Unblock,
                 eventSink = eventsRecorder,
             ),
         )
-        rule.clickOn(R.string.screen_dm_details_unblock_alert_action)
+        clickOn(R.string.screen_dm_details_unblock_alert_action)
         eventsRecorder.assertSingle(UserProfileEvents.UnblockUser(needsConfirmation = false))
     }
 
     @Test
-    fun `on canceling unblocking a user - a ClearConfirmationDialog event is emitted`() = runTest {
+    fun `on canceling unblocking a user - a ClearConfirmationDialog event is emitted`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<UserProfileEvents>()
-        rule.setUserProfileView(
+        setUserProfileView(
             state = aUserProfileState(
                 isBlocked = AsyncData.Success(true),
                 displayConfirmationDialog = UserProfileState.ConfirmationDialog.Unblock,
                 eventSink = eventsRecorder,
             ),
         )
-        rule.clickOn(CommonStrings.action_cancel)
+        clickOn(CommonStrings.action_cancel)
         eventsRecorder.assertSingle(UserProfileEvents.ClearConfirmationDialog)
     }
 
     @Test
-    fun `on verify user clicked - the right callback is called`() = runTest {
+    fun `on verify user clicked - the right callback is called`() = runAndroidComposeUiTest {
         ensureCalledOnceWithParam(A_USER_ID) { callback ->
-            rule.setUserProfileView(
+            setUserProfileView(
                 state = aUserProfileState(userId = A_USER_ID, verificationState = UserProfileVerificationState.UNVERIFIED),
                 onVerifyClick = callback,
             )
-            rule.clickOn(CommonStrings.common_verify_user)
+            clickOn(CommonStrings.common_verify_user)
         }
     }
 }
 
-private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setUserProfileView(
+private fun AndroidComposeUiTest<ComponentActivity>.setUserProfileView(
     state: UserProfileState = aUserProfileState(
         eventSink = EventsRecorder(expectEvents = false),
     ),

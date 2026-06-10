@@ -5,9 +5,9 @@
   <string name="banner_battery_optimization_title_android">"Bildirishnoma kelmayaptimi?"</string>
   <string name="banner_new_sound_message">"Xabarnoma signali yangilandi — endi u aniqroq, tezroq va kamroq halal beradigan bo‘ldi."</string>
   <string name="banner_new_sound_title">"Tovushlaringiz yangilandi"</string>
-  <string name="banner_set_up_recovery_content">"Mavjud barcha qurilmalarni yoʻqotgan boʻlsangiz, kriptografik kimligingizni va xabarlar tarixini qayta tiklovchi kalit bilan saqlab qoʻying."</string>
+  <string name="banner_set_up_recovery_content">"Chatlaringiz avtomatik ravishda boshidan oxirigacha shifrlash bilan zaxiralanadi. Bu zaxirani tiklash va barcha qurilmalaringizdan foydalana olmay qolganingizda raqamli identifikatoringizni saqlab qolish uchun sizga tiklash kaliti kerak bo‘ladi."</string>
   <string name="banner_set_up_recovery_submit">"Qayta tiklashni sozlang"</string>
-  <string name="banner_set_up_recovery_title">"Hisobingizni himoya qilish uchun tiklashni sozlang"</string>
+  <string name="banner_set_up_recovery_title">"Chatlaringizni zaxiralang"</string>
   <string name="confirm_recovery_key_banner_message">"Kalit saqlash joyingiz va xabarlar tarixingizga kirishni saqlab qolish uchun tiklash kalitingizni tasdiqlang."</string>
   <string name="confirm_recovery_key_banner_primary_button_title">"Qayta tiklash kalitingizni kiriting"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Tiklash kalitini unutdingizmi?"</string>
@@ -50,6 +50,7 @@ Sizda oʻqilmagan xabarlar yoʻq!"</string>
   <string name="screen_roomlist_mark_as_read">"Oʻqilgan deb belgilash"</string>
   <string name="screen_roomlist_mark_as_unread">"Oʻqilmagan deb belgilash"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Bu xona yangilandi"</string>
+  <string name="screen_roomlist_your_spaces">"Maydonlaringiz"</string>
   <string name="session_verification_banner_message">"Siz yangi qurilmadan foydalanayotganga o‘xshaysiz. Shifrlangan xabarlaringizga kirish uchun boshqa qurilma bilan tasdiqlang."</string>
   <string name="session_verification_banner_title">"Siz ekanligingizni tasdiqlang"</string>
 </resources>

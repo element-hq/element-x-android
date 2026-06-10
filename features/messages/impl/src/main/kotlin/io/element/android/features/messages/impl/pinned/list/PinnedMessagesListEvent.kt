@@ -10,7 +10,9 @@ package io.element.android.features.messages.impl.pinned.list
 
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.libraries.matrix.api.core.ThreadId
 
 sealed interface PinnedMessagesListEvent {
     data class HandleAction(val action: TimelineItemAction, val event: TimelineItem.Event) : PinnedMessagesListEvent
+    data class OpenThread(val threadRootId: ThreadId) : PinnedMessagesListEvent
 }

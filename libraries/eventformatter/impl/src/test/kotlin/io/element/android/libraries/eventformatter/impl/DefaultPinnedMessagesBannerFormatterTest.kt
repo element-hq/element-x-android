@@ -601,7 +601,6 @@ class DefaultPinnedMessagesBannerFormatterTest {
             OtherState.PolicyRuleRoom,
             OtherState.PolicyRuleServer,
             OtherState.PolicyRuleUser,
-            OtherState.RoomAliases,
             OtherState.RoomCanonicalAlias,
             OtherState.RoomGuestAccess,
             OtherState.RoomHistoryVisibility,
