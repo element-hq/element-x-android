@@ -50,6 +50,7 @@ import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.traversalIndex
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
@@ -76,6 +77,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
@@ -124,6 +126,7 @@ import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonPlurals
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
+import io.element.android.libraries.ui.utils.text.detect
 import io.element.android.wysiwyg.link.Link
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -651,24 +654,42 @@ private fun MessageEventBubbleContent(
                             .padding(horizontal = 4.dp, vertical = 2.dp)
                     )
                 }
-            TimestampPosition.Aligned ->
-                ContentAvoidingLayout(
-                    modifier = modifier,
-                    // The spacing is negative to make the content overlap the empty space at the start of the timestamp
-                    spacing = (-4).dp,
-                    overlayOffset = DpOffset(0.dp, -1.dp),
-                    shrinkContent = canShrinkContent,
-                    content = { content(this::onContentLayoutChange) },
-                    overlay = { data ->
-                        TimelineEventTimestampView(
-                            event = event,
-                            eventSink = eventSink,
-                            textLayoutDirection = data.layoutDirection ?: LocalLayoutDirection.current,
-                            modifier = Modifier
-                                .padding(horizontal = 8.dp, vertical = 4.dp)
-                        )
+            TimestampPosition.Aligned -> @Composable {
+                val layoutDirection = LocalLayoutDirection.current
+                // Detect if the direction of the text content (if any) does not match the layout direction, to place the content and timestamp correctly
+                val contentDirection = if (event.content is TimelineItemTextContent) {
+                    remember(event.content.body) {
+                        when (TextDirection.detect(event.content.body)) {
+                            TextDirection.Ltr, TextDirection.ContentOrLtr -> LayoutDirection.Ltr
+                            TextDirection.Rtl, TextDirection.ContentOrRtl -> LayoutDirection.Rtl
+                            else -> layoutDirection
+                        }
                     }
-                )
+                } else {
+                    layoutDirection
+                }
+
+                CompositionLocalProvider(LocalLayoutDirection provides contentDirection) {
+                    ContentAvoidingLayout(
+                        modifier = modifier,
+                        // The spacing is negative to make the content overlap the empty space at the start of the timestamp
+                        spacing = (-4).dp,
+                        overlayOffset = DpOffset(0.dp, -1.dp),
+                        shrinkContent = canShrinkContent,
+                        content = {
+                            content(this::onContentLayoutChange)
+                        },
+                        overlay = { data ->
+                            TimelineEventTimestampView(
+                                event = event,
+                                eventSink = eventSink,
+                                modifier = Modifier
+                                    .padding(horizontal = 8.dp, vertical = 4.dp)
+                            )
+                        }
+                    )
+                }
+            }
             TimestampPosition.Below ->
                 Column(modifier) {
                     content {}
