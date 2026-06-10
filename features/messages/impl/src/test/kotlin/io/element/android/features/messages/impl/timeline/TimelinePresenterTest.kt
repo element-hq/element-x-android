@@ -608,7 +608,9 @@ class TimelinePresenterTest {
             liveTimeline = timeline,
             baseRoom = FakeBaseRoom(
                 roomPermissions = roomPermissions(),
-                initialRoomInfo = aRoomInfo(fullyReadEventId = fullyReadEventId),
+                // There is genuinely unread *displayable* content, and the marker event isn't loaded
+                // (isEventLoaded defaults to false), so the FAB targets the out-of-window marker.
+                initialRoomInfo = aRoomInfo(fullyReadEventId = fullyReadEventId, numUnreadMessages = 1),
             ),
         )
         val presenter = createTimelinePresenter(
@@ -628,6 +630,77 @@ class TimelinePresenterTest {
             consumeItemsUntilPredicate { it.jumpToUnread is JumpToUnreadState.OutOfWindow }.last().also { state ->
                 assertThat(state.jumpToUnread).isEqualTo(JumpToUnreadState.OutOfWindow(eventId = fullyReadEventId))
             }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - jumpToUnread is Hidden when the marker event is loaded in the window but not displayed`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        // The marker event is in the loaded window (e.g. a state/filtered event) but never rendered.
+        val fullyReadEventId = EventId("\$loaded-but-not-displayed")
+        val timeline = FakeTimeline(timelineItems = timelineItems).apply {
+            isEventLoadedLambda = { it == fullyReadEventId }
+        }
+        val room = FakeJoinedRoom(
+            liveTimeline = timeline,
+            baseRoom = FakeBaseRoom(
+                roomPermissions = roomPermissions(),
+                initialRoomInfo = aRoomInfo(fullyReadEventId = fullyReadEventId, numUnreadMessages = 1),
+            ),
+        )
+        val presenter = createTimelinePresenter(
+            timeline = timeline,
+            room = room,
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.JumpToUnread.key to true)),
+        )
+        presenter.test {
+            awaitFirstItem()
+            // Displayed items don't contain the marker event, but the SDK reports it as loaded.
+            timelineItems.emit(
+                listOf(
+                    MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(eventId = AN_EVENT_ID, content = aMessageContent())),
+                    MatrixTimelineItem.Event(UniqueId("2"), anEventTimelineItem(eventId = AN_EVENT_ID_2, content = aMessageContent())),
+                )
+            )
+            advanceUntilIdle()
+            // It must never be OutOfWindow — there is nothing displayable to jump to.
+            val drained = consumeItemsUntilTimeout()
+            assertThat(drained.any { it.jumpToUnread is JumpToUnreadState.OutOfWindow }).isFalse()
+            assertThat(drained.last().jumpToUnread).isEqualTo(JumpToUnreadState.Hidden)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - jumpToUnread is Hidden when out of window but there are no unread messages`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val fullyReadEventId = EventId("\$older-than-loaded-window")
+        // isEventLoaded defaults to false (genuinely out of window), but numUnreadMessages is 0.
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val room = FakeJoinedRoom(
+            liveTimeline = timeline,
+            baseRoom = FakeBaseRoom(
+                roomPermissions = roomPermissions(),
+                initialRoomInfo = aRoomInfo(fullyReadEventId = fullyReadEventId, numUnreadMessages = 0),
+            ),
+        )
+        val presenter = createTimelinePresenter(
+            timeline = timeline,
+            room = room,
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.JumpToUnread.key to true)),
+        )
+        presenter.test {
+            awaitFirstItem()
+            timelineItems.emit(
+                listOf(
+                    MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(eventId = AN_EVENT_ID, content = aMessageContent())),
+                    MatrixTimelineItem.Event(UniqueId("2"), anEventTimelineItem(eventId = AN_EVENT_ID_2, content = aMessageContent())),
+                )
+            )
+            advanceUntilIdle()
+            val drained = consumeItemsUntilTimeout()
+            assertThat(drained.any { it.jumpToUnread != JumpToUnreadState.Hidden }).isFalse()
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -766,7 +839,7 @@ class TimelinePresenterTest {
             liveTimeline = timeline,
             baseRoom = FakeBaseRoom(
                 roomPermissions = roomPermissions(),
-                initialRoomInfo = aRoomInfo(fullyReadEventId = fullyReadEventId),
+                initialRoomInfo = aRoomInfo(fullyReadEventId = fullyReadEventId, numUnreadMessages = 1),
             ),
         )
         val presenter = createTimelinePresenter(

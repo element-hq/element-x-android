@@ -637,6 +637,24 @@ class RustTimeline(
         }
     }
 
+    override suspend fun isEventLoaded(eventId: EventId): Boolean = withContext(dispatcher) {
+        val isInLoadedItems = _timelineItems.replayCache.firstOrNull().orEmpty().any { timelineItem ->
+            timelineItem is MatrixTimelineItem.Event && timelineItem.eventId == eventId
+        }
+        if (isInLoadedItems) {
+            // Displayed events are caught above. The SDK-level list still holds events the display
+            // layer later drops, so this avoids the FFI call for in-window-but-not-rendered events.
+            true
+        } else {
+            // getEventTimelineItemByEventId throws when the event isn't in the loaded window.
+            // EventTimelineItem is a Disposable wrapping a native handle, so release it once we've
+            // confirmed presence — otherwise the handle lingers until the GC cleaner runs.
+            runCatchingExceptions {
+                inner.getEventTimelineItemByEventId(eventId.value).use { /* presence is all we need */ }
+            }.isSuccess
+        }
+    }
+
     override suspend fun pinEvent(eventId: EventId): Result<Boolean> = withContext(dispatcher) {
         runCatchingExceptions {
             inner.pinEvent(eventId = eventId.value)

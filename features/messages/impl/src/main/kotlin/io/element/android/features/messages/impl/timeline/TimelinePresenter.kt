@@ -312,23 +312,39 @@ class TimelinePresenter(
         LaunchedEffect(roomInfo.fullyReadEventId) {
             suppressJumpToUnread.value = false
         }
-        LaunchedEffect(timelineItems.map { it.identifier() }, displayJumpToUnread, roomInfo.fullyReadEventId, suppressJumpToUnread.value) {
+        LaunchedEffect(
+            timelineItems.map { it.identifier() },
+            displayJumpToUnread,
+            roomInfo.fullyReadEventId,
+            roomInfo.numUnreadMessages,
+            suppressJumpToUnread.value,
+        ) {
             if (!displayJumpToUnread || suppressJumpToUnread.value) {
                 jumpToUnread.value = JumpToUnreadState.Hidden
                 return@LaunchedEffect
             }
             val items = timelineItems
             val fullyReadEventId = roomInfo.fullyReadEventId
-            jumpToUnread.value = withContext(dispatchers.computation) {
-                val markerIndex = items.indexOfFirst {
+            val hasUnreadMessages = roomInfo.numUnreadMessages > 0
+            val markerIndex = withContext(dispatchers.computation) {
+                items.indexOfFirst {
                     (it as? TimelineItem.Virtual)?.model is TimelineItemReadMarkerModel
                 }
-                when {
-                    markerIndex >= 0 -> JumpToUnreadState.InWindow(markerIndex)
-                    fullyReadEventId != null && items.isNotEmpty() && !timelineItemIndexer.isKnown(fullyReadEventId) ->
-                        JumpToUnreadState.OutOfWindow(fullyReadEventId)
-                    else -> JumpToUnreadState.Hidden
-                }
+            }
+            jumpToUnread.value = when {
+                markerIndex >= 0 -> JumpToUnreadState.InWindow(markerIndex)
+                // Out-of-window only when there is genuinely unread *displayable* content
+                // (numUnreadMessages counts "interesting" messages, never state/hidden events) AND
+                // the marker event isn't merely an in-window item we don't render. isKnown is the
+                // cheap display-index check; isEventLoaded falls back to the SDK to tell
+                // "in window but not displayed" apart from "genuinely out of window".
+                fullyReadEventId != null &&
+                    hasUnreadMessages &&
+                    items.isNotEmpty() &&
+                    !timelineItemIndexer.isKnown(fullyReadEventId) &&
+                    !timelineController.activeTimelineFlow().value.isEventLoaded(fullyReadEventId) ->
+                    JumpToUnreadState.OutOfWindow(fullyReadEventId)
+                else -> JumpToUnreadState.Hidden
             }
         }
 
