@@ -161,12 +161,31 @@ class ShareLocationPresenterTest {
     }
 
     @Test
+    fun `initial state with permissions not yet requested triggers permission request`() = runTest {
+        val shareLocationPresenter = createShareLocationPresenter()
+        fakePermissionsPresenter.givenState(
+            aPermissionsState(
+                permissions = PermissionsState.Permissions.NoneGranted,
+                shouldShowRationale = false,
+                permissionsRequested = false,
+            )
+        )
+
+        shareLocationPresenter.test {
+            skipItems(2)
+            cancelAndIgnoreRemainingEvents()
+            assertThat(fakePermissionsPresenter.events).contains(PermissionsEvents.RequestPermissions)
+        }
+    }
+
+    @Test
     fun `initial state with permissions denied`() = runTest {
         val shareLocationPresenter = createShareLocationPresenter()
         fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = false,
+                permissionsRequested = true,
             )
         )
 
@@ -291,6 +310,7 @@ class ShareLocationPresenterTest {
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = false,
+                permissionsRequested = true,
             )
         )
 
@@ -359,7 +379,12 @@ class ShareLocationPresenterTest {
 
     @Test
     fun `ShowLiveLocationDurationPicker shows disclaimer when acceptance is missing`() = runTest {
-        val presenter = createShareLocationPresenter()
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
+                roomPermissions = grantedSendLiveLocationPermissions()
+            )
+        )
+        val presenter = createShareLocationPresenter(joinedRoom = room)
         fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.AllGranted,
@@ -462,7 +487,12 @@ class ShareLocationPresenterTest {
 
     @Test
     fun `ShowLiveLocationDurationPicker uses the active session disclaimer state`() = runTest {
-        val joinedRoom = FakeJoinedRoom(baseRoom = FakeBaseRoom(sessionId = SessionId("@alice:server")))
+        val joinedRoom = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
+                sessionId = SessionId("@alice:server"),
+                roomPermissions = grantedSendLiveLocationPermissions()
+            ),
+        )
         createLiveLocationStore(sessionId = SessionId("@bob:server"))
             .setAcceptedLiveLocationDisclaimer()
             .getOrThrow()
@@ -505,12 +535,13 @@ class ShareLocationPresenterTest {
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = false,
+                permissionsRequested = true,
             )
         )
 
         shareLocationPresenter.test {
             val initialState = awaitFirstItem()
-            // Dismiss initial dialog
+            // Dismiss initial dialog to allow re-triggering it
             initialState.eventSink(ShareLocationEvent.DismissDialog)
             val dismissedState = awaitItem()
 
