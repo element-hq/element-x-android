@@ -87,59 +87,46 @@ fun LinkNewDeviceRootView(
                 }
                 is AsyncData.Success -> {
                     if (state.isSupported.data) {
-                        when (state.qrCodeData) {
-                            AsyncData.Uninitialized -> {
-                                Button(
-                                    onClick = {
-                                        // TODO Maybe use isDeviceSecured first?
-                                        if (state.isPinConfigured) {
-                                            onUnlockApplication(LinkDeviceType.Mobile)
-                                        } else if (state.isDeviceSecured) {
-                                            onUnlockDevice(LinkDeviceType.Mobile)
-                                        } else {
-                                            state.eventSink(LinkNewDeviceRootEvent.LinkMobileDevice)
-                                            onLinkMobileDeviceClick()
-                                        }
-                                    },
-                                    text = stringResource(id = R.string.screen_link_new_device_root_mobile_device),
-                                    modifier = Modifier.fillMaxWidth(),
-                                    leadingIcon = IconSource.Vector(CompoundIcons.Mobile()),
-                                )
-                                Button(
-                                    onClick = {
-                                        // TODO Maybe use isDeviceSecured first?
-                                        if (state.isPinConfigured) {
-                                            onUnlockApplication(LinkDeviceType.Desktop)
-                                        } else if (state.isDeviceSecured) {
-                                            onUnlockDevice(LinkDeviceType.Desktop)
-                                        } else {
-                                            onLinkDesktopDeviceClick()
-                                        }
-                                    },
-                                    text = stringResource(id = R.string.screen_link_new_device_root_desktop_computer),
-                                    modifier = Modifier.fillMaxWidth(),
-                                    leadingIcon = IconSource.Vector(CompoundIcons.Computer()),
-                                )
-                            }
-                            is AsyncData.Loading,
-                            is AsyncData.Success,
-                            is AsyncData.Failure -> {
-                                Button(
-                                    onClick = { },
-                                    text = stringResource(id = R.string.screen_link_new_device_root_loading_qr_code),
-                                    showProgress = true,
-                                    enabled = false,
-                                    modifier = Modifier.fillMaxWidth(),
-                                )
-                                Button(
-                                    onClick = {},
-                                    text = stringResource(id = R.string.screen_link_new_device_root_desktop_computer),
-                                    modifier = Modifier.fillMaxWidth(),
-                                    enabled = false,
-                                    leadingIcon = IconSource.Vector(CompoundIcons.Computer()),
-                                )
-                            }
-                        }
+                        val canClick = state.qrCodeData is AsyncData.Uninitialized
+                        val isLoading = state.qrCodeData is AsyncData.Loading || state.qrCodeData is AsyncData.Success
+                        Button(
+                            onClick = {
+                                if (canClick) {
+                                    // TODO Maybe use isDeviceSecured first?
+                                    if (state.isPinConfigured) {
+                                        onUnlockApplication(LinkDeviceType.Mobile)
+                                    } else if (state.isDeviceSecured) {
+                                        onUnlockDevice(LinkDeviceType.Mobile)
+                                    } else {
+                                        state.eventSink(LinkNewDeviceRootEvent.LinkMobileDevice)
+                                        onLinkMobileDeviceClick()
+                                    }
+                                }
+                            },
+                            text = stringResource(id = R.string.screen_link_new_device_root_mobile_device),
+                            showProgress = isLoading,
+                            enabled = !isLoading,
+                            modifier = Modifier.fillMaxWidth(),
+                            leadingIcon = IconSource.Vector(CompoundIcons.Mobile()),
+                        )
+                        Button(
+                            onClick = {
+                                if (canClick) {
+                                    // TODO Maybe use isDeviceSecured first?
+                                    if (state.isPinConfigured) {
+                                        onUnlockApplication(LinkDeviceType.Desktop)
+                                    } else if (state.isDeviceSecured) {
+                                        onUnlockDevice(LinkDeviceType.Desktop)
+                                    } else {
+                                        onLinkDesktopDeviceClick()
+                                    }
+                                }
+                            },
+                            text = stringResource(id = R.string.screen_link_new_device_root_desktop_computer),
+                            enabled = !isLoading,
+                            modifier = Modifier.fillMaxWidth(),
+                            leadingIcon = IconSource.Vector(CompoundIcons.Computer()),
+                        )
                     } else {
                         Button(
                             onClick = onBackClick,
