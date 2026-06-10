@@ -90,10 +90,22 @@ import kotlinx.coroutines.launch
             value = AsyncData.Success(client.getMapStyleUrl().getOrNull())
         }
 
-        LaunchedEffect(permissionsState.permissions) {
-            if (permissionsState.isAnyGranted) {
-                dialogState = LocationConstraintsDialogState.None
+        fun checkLocationConstraints() {
+            val locationConstraints = checkLocationConstraints(
+                permissionsState = permissionsState,
+                locationActions = locationActions,
+                // No need to check SendLiveLocationPermissions here
+                sendLiveLocationPermissions = SendLiveLocationPermissions.GRANTED
+            )
+            if (locationConstraints is LocationConstraintsCheck.PermissionShouldBeRequested) {
+                permissionsState.eventSink(PermissionsEvents.RequestPermissions)
             }
+            isTrackMyLocation = locationConstraints is LocationConstraintsCheck.Success
+            dialogState = locationConstraints.toDialogState()
+        }
+
+        LaunchedEffect(permissionsState) {
+            checkLocationConstraints()
         }
 
         fun handleEvent(event: ShowLocationEvent) {
@@ -103,9 +115,7 @@ import kotlinx.coroutines.launch
                 }
                 is ShowLocationEvent.TrackMyLocation -> {
                     if (event.enabled) {
-                        val locationConstraints = checkLocationConstraints(permissionsState, locationActions, SendLiveLocationPermissions.GRANTED)
-                        isTrackMyLocation = locationConstraints is LocationConstraintsCheck.Success
-                        dialogState = locationConstraints.toDialogState()
+                        checkLocationConstraints()
                     } else {
                         isTrackMyLocation = false
                     }
