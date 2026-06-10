@@ -92,11 +92,10 @@ fun LinkNewDeviceRootView(
                         Button(
                             onClick = {
                                 if (canClick) {
-                                    // TODO Maybe use isDeviceSecured first?
-                                    if (state.isPinConfigured) {
-                                        onUnlockApplication(LinkDeviceType.Mobile)
-                                    } else if (state.isDeviceSecured) {
+                                    if (state.isDeviceSecured) {
                                         onUnlockDevice(LinkDeviceType.Mobile)
+                                    } else if (state.isPinConfigured) {
+                                        onUnlockApplication(LinkDeviceType.Mobile)
                                     } else {
                                         state.eventSink(LinkNewDeviceRootEvent.LinkMobileDevice)
                                         onLinkMobileDeviceClick()
@@ -118,11 +117,10 @@ fun LinkNewDeviceRootView(
                         Button(
                             onClick = {
                                 if (canClick) {
-                                    // TODO Maybe use isDeviceSecured first?
-                                    if (state.isPinConfigured) {
-                                        onUnlockApplication(LinkDeviceType.Desktop)
-                                    } else if (state.isDeviceSecured) {
+                                    if (state.isDeviceSecured) {
                                         onUnlockDevice(LinkDeviceType.Desktop)
+                                    } else if (state.isPinConfigured) {
+                                        onUnlockApplication(LinkDeviceType.Desktop)
                                     } else {
                                         onLinkDesktopDeviceClick()
                                     }
