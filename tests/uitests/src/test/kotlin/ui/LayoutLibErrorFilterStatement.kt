@@ -30,6 +30,9 @@ class LayoutLibErrorFilterStatement : TestRule {
                     base.evaluate()
                 } catch (e: NoSuchMethodError) {
                     if (e.message?.contains("setPosixNicenessInternal") != true) throw e
+                } catch (npe: NullPointerException) {
+                    // Also catch this error on `HorizontalFloatingToolbarPreview` and `HorizontalFloatingToolbarNoFabPreview`
+                    if (npe.message?.contains("""Cannot invoke "java.util.ArrayList.size()" because "childrenList" is null""") != true) throw npe
                 }
             }
         }
