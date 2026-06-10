@@ -45,9 +45,7 @@ class DefaultOAuthUrlParserTest {
     fun `test unknown url`() {
         val sut = createDefaultOAuthUrlParser()
         val anUnknownUrl = "$FAKE_REDIRECT_URL?state=IFF1UETGye2ZA8pO&goat=y6X1GZeqA3xxOWcTeShgv8nkgFJXyzWB"
-        Assert.assertThrows(IllegalStateException::class.java) {
-            assertThat(sut.parse(anUnknownUrl))
-        }
+        assertThat(sut.parse(anUnknownUrl)).isNull()
     }
 
     private fun createDefaultOAuthUrlParser(): DefaultOAuthUrlParser {
