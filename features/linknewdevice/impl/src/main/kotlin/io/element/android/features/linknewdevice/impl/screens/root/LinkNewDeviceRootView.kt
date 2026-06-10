@@ -103,7 +103,13 @@ fun LinkNewDeviceRootView(
                                     }
                                 }
                             },
-                            text = stringResource(id = R.string.screen_link_new_device_root_mobile_device),
+                            text = stringResource(
+                                id = if (isLoading) {
+                                    R.string.screen_link_new_device_root_loading_qr_code
+                                } else {
+                                    R.string.screen_link_new_device_root_mobile_device
+                                }
+                            ),
                             showProgress = isLoading,
                             enabled = !isLoading,
                             modifier = Modifier.fillMaxWidth(),
