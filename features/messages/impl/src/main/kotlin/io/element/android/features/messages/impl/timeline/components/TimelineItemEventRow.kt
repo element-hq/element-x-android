@@ -913,8 +913,7 @@ internal fun TimelineItemEventRowRtlContentPreview() = ElementPreview {
                     senderDisplayName = "Sender with a super long name that should ellipsize",
                     isMine = isMine,
                     content = aTimelineItemTextContent(
-                        body = "ظَة وَدَاع يَسْتَغْرِب فِيهَا اَلشَّاعِر أَنْ لَا يَبْكِي مِنْ أَلَم اَلْفِرَاق،" +
-                            " وَيَصِف حَالَة اَلْمُودِعِينَ وَبَعْضهم"
+                        body = "ظَة وَدَاع يَسْتَغْرِب فِيهَ"
                     ),
                     groupPosition = TimelineItemGroupPosition.First,
                     threadInfo = null,
@@ -930,7 +929,7 @@ internal fun TimelineItemEventRowRtlContentPreview() = ElementPreview {
                         isMine = isMine,
                         content = aTimelineItemTextContent(
                             body = "ظَة وَدَاع يَسْتَغْرِب فِيهَا اَلشَّاعِر أَنْ لَا يَبْكِي مِنْ أَلَم اَلْفِرَاق،" +
-                                " وَيَصِف حَالَة اَلْمُودِعِينَ وَبَعْضهم"
+                                " وَيَصِف حَالَة اَلْمُودِعِينَ"
                         ),
                         groupPosition = TimelineItemGroupPosition.First,
                         threadInfo = null,
