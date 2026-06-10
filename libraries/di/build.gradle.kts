@@ -12,5 +12,4 @@ plugins {
 
 dependencies {
     api(libs.metro.runtime)
-    api("javax.inject:javax.inject:1")
 }

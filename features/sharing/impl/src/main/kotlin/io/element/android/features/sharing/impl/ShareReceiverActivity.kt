@@ -18,12 +18,6 @@ import io.element.android.features.sharing.api.SharingConstants
 
 
 class ShareReceiverActivity : ComponentActivity() {
-    companion object {
-        const val EXTRA_TARGET_ROOM_ID = "io.element.android.features.sharing.extra.TARGET_ROOM_ID"
-        const val EXTRA_SHARED_TEXT = "io.element.android.features.sharing.extra.SHARED_TEXT"
-        const val EXTRA_SHARED_URIS = "io.element.android.features.sharing.extra.SHARED_URIS"
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -129,8 +123,9 @@ class ShareReceiverActivity : ComponentActivity() {
     }
 
     private fun launchMainActivity(roomId: String?, sessionId: String?, text: String?, uris: ArrayList<Uri>?, type: String?) {
-        val out = Intent(this, Class.forName("io.element.android.x.MainActivity")).apply {
-            action = Intent.ACTION_SEND
+        val mainActivityComponent = packageManager.getLaunchIntentForPackage(packageName)?.component ?: return
+        val out = Intent(Intent.ACTION_SEND).apply {
+            component = mainActivityComponent
             this.type = type
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             if (roomId != null) {
