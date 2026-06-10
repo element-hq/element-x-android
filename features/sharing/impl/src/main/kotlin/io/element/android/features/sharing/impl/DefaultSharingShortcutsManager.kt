@@ -22,7 +22,6 @@ import coil3.toBitmap
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
-import dev.zacsweers.metro.Inject
 import io.element.android.features.sharing.api.SharingConstants
 import io.element.android.features.sharing.api.SharingRoomInfo
 import io.element.android.features.sharing.api.SharingShortcutsManager
@@ -36,7 +35,7 @@ import kotlinx.coroutines.withContext
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class DefaultSharingShortcutsManager @Inject constructor(
+class DefaultSharingShortcutsManager(
     @ApplicationContext private val context: Context,
 ) : SharingShortcutsManager {
     private val imageLoader: ImageLoader get() = context.imageLoader
