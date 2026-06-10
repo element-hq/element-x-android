@@ -18,7 +18,7 @@ android {
 setupDependencyInjection()
 
 dependencies {
-    api(project(":features:sharing:api"))
+    api(projects.features.sharing.api)
     implementation(projects.features.share.api)
 
     implementation(projects.libraries.architecture)

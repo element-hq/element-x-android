@@ -60,8 +60,7 @@ dependencies {
     implementation(projects.features.reportroom.api)
     implementation(projects.features.rolesandpermissions.api)
     implementation(projects.libraries.previewutils)
-    implementation(project(":features:sharing:api"))
-    implementation(libs.kotlinx.collections.immutable)
+    implementation(projects.features.sharing.api)
     api(projects.features.home.api)
 
     testCommonDependencies(libs, true)

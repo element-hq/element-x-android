@@ -31,7 +31,6 @@ import io.element.android.features.invite.test.InMemorySeenInvitesStore
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.rageshake.test.logs.FakeAnnouncementService
-import io.element.android.features.sharing.api.SharingRoomInfo
 import io.element.android.features.sharing.api.SharingShortcutsManager
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.dateformatter.api.DateFormatter
@@ -706,9 +705,4 @@ class RoomListPresenterTest {
         featureFlagService = featureFlagService,
         sharingShortcutsManager = sharingShortcutsManager,
     )
-}
-
-class FakeSharingShortcutsManager : SharingShortcutsManager {
-    override suspend fun publishShortcutsForRooms(rooms: List<SharingRoomInfo>) {}
-
 }
