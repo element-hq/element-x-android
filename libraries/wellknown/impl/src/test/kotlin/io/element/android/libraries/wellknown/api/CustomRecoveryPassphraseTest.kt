@@ -10,24 +10,24 @@ package io.element.android.libraries.wellknown.api
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
-class CustomRecoveryPassphraseRequirementsTest {
+class CustomRecoveryPassphraseTest {
     @Test
     fun `empty input never satisfies a positive minimum`() {
-        assertThat(CustomRecoveryPassphraseRequirements(minCharacterCount = 1).isSatisfiedBy("")).isFalse()
+        assertThat(CustomRecoveryPassphrase(minCharacterCount = 1).isSatisfiedBy("")).isFalse()
     }
 
     @Test
     fun `input shorter than minimum is not satisfied`() {
-        assertThat(CustomRecoveryPassphraseRequirements(minCharacterCount = 8).isSatisfiedBy("abc")).isFalse()
+        assertThat(CustomRecoveryPassphrase(minCharacterCount = 8).isSatisfiedBy("abc")).isFalse()
     }
 
     @Test
     fun `input exactly at minimum is satisfied`() {
-        assertThat(CustomRecoveryPassphraseRequirements(minCharacterCount = 8).isSatisfiedBy("abcdefgh")).isTrue()
+        assertThat(CustomRecoveryPassphrase(minCharacterCount = 8).isSatisfiedBy("abcdefgh")).isTrue()
     }
 
     @Test
     fun `input longer than minimum is satisfied`() {
-        assertThat(CustomRecoveryPassphraseRequirements(minCharacterCount = 4).isSatisfiedBy("abcdefgh")).isTrue()
+        assertThat(CustomRecoveryPassphrase(minCharacterCount = 4).isSatisfiedBy("abcdefgh")).isTrue()
     }
 }

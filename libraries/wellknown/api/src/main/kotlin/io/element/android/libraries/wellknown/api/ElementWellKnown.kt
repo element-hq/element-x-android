@@ -15,5 +15,5 @@ data class ElementWellKnown(
     val brandColor: String?,
     val notificationSound: String?,
     val identityProviderAppScheme: String?,
-    val customRecoveryPassphraseRequirements: CustomRecoveryPassphraseRequirements?,
+    val customRecoveryPassphrase: CustomRecoveryPassphrase?,
 )

@@ -8,11 +8,11 @@
 package io.element.android.libraries.wellknown.api
 
 /**
- * Server-driven requirements for a user-chosen recovery passphrase. Today the only rule
- * is a minimum character count; additional rules can be added here as the well-known
- * schema (`custom_recovery_passphrase_settings`) grows.
+ * Server-driven settings for a user-chosen recovery passphrase, advertised under the well-known
+ * `custom_recovery_passphrase` key. Today the only rule is a minimum character count; additional
+ * settings can be added here as the schema grows.
  */
-data class CustomRecoveryPassphraseRequirements(
+data class CustomRecoveryPassphrase(
     val minCharacterCount: Int,
 ) {
     /** True when [input] meets every active rule. */

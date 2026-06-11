@@ -9,7 +9,7 @@
 package io.element.android.libraries.wellknown.impl
 
 import io.element.android.libraries.core.log.logger.LoggerTag
-import io.element.android.libraries.wellknown.api.CustomRecoveryPassphraseRequirements
+import io.element.android.libraries.wellknown.api.CustomRecoveryPassphrase
 import io.element.android.libraries.wellknown.api.ElementWellKnown
 import timber.log.Timber
 
@@ -29,20 +29,20 @@ internal fun InternalElementWellKnown.map() = ElementWellKnown(
     brandColor = brandColor,
     notificationSound = notificationSound,
     identityProviderAppScheme = identityProviderAppScheme,
-    customRecoveryPassphraseRequirements = customRecoveryPassphraseRequirements?.toPublic(),
+    customRecoveryPassphrase = customRecoveryPassphrase?.toPublic(),
 )
 
-private fun InternalCustomRecoveryPassphraseRequirements.toPublic(): CustomRecoveryPassphraseRequirements {
+private fun InternalCustomRecoveryPassphrase.toPublic(): CustomRecoveryPassphrase {
     // Whenever the homeserver advertises the settings block we run the custom passphrase flow, flooring
     // the minimum at 1 so the passphrase can never be empty even if the server omits min_character_count
     // or advertises a non-positive value. The operator owns any stronger minimum.
     val min = (minCharacterCount ?: MINIMUM_PASSPHRASE_CHARACTER_COUNT).coerceAtLeast(MINIMUM_PASSPHRASE_CHARACTER_COUNT)
     if (min != minCharacterCount) {
         Timber.tag(loggerTag.value).w(
-            "custom_recovery_passphrase_settings.min_character_count was %s; flooring to %d",
+            "custom_recovery_passphrase.min_character_count was %s; flooring to %d",
             minCharacterCount,
             min,
         )
     }
-    return CustomRecoveryPassphraseRequirements(minCharacterCount = min)
+    return CustomRecoveryPassphrase(minCharacterCount = min)
 }

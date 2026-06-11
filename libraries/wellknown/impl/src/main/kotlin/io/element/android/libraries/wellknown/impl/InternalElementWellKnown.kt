@@ -21,7 +21,7 @@ import kotlinx.serialization.Serializable
  *     "brand_color": "#FF0000",
  *     "notification_sound": "ring.flac",
  *     "idp_app_scheme": "io.element.app",
- *     "custom_recovery_passphrase_settings": {
+ *     "custom_recovery_passphrase": {
  *         "min_character_count": 8
  *     }
  * }
@@ -42,12 +42,12 @@ data class InternalElementWellKnown(
     val notificationSound: String? = null,
     @SerialName("idp_app_scheme")
     val identityProviderAppScheme: String? = null,
-    @SerialName("custom_recovery_passphrase_settings")
-    val customRecoveryPassphraseRequirements: InternalCustomRecoveryPassphraseRequirements? = null,
+    @SerialName("custom_recovery_passphrase")
+    val customRecoveryPassphrase: InternalCustomRecoveryPassphrase? = null,
 )
 
 @Serializable
-data class InternalCustomRecoveryPassphraseRequirements(
+data class InternalCustomRecoveryPassphrase(
     @SerialName("min_character_count")
     val minCharacterCount: Int? = null,
 )
