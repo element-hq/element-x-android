@@ -67,9 +67,9 @@ class RoomSelectPresenter(
             }
         }
 
-        fun handleEvent(event: RoomSelectEvents) {
+        fun handleEvent(event: RoomSelectEvent) {
             when (event) {
-                is RoomSelectEvents.ToggleSelectedRoom -> {
+                is RoomSelectEvent.ToggleSelectedRoom -> {
                     val index = selectedRooms.indexOfFirst { it.roomId == event.room.roomId }
                     selectedRooms = if (index >= 0) {
                         selectedRooms.removeAt(index)
@@ -77,8 +77,8 @@ class RoomSelectPresenter(
                         selectedRooms.add(event.room)
                     }
                 }
-                RoomSelectEvents.ToggleSearchActive -> isSearchActive = !isSearchActive
-                is RoomSelectEvents.UpdateVisibleRange -> coroutineScope.launch {
+                RoomSelectEvent.ToggleSearchActive -> isSearchActive = !isSearchActive
+                is RoomSelectEvent.UpdateVisibleRange -> coroutineScope.launch {
                     dataSource.updateVisibleRange(event.range)
                 }
             }

@@ -57,9 +57,9 @@ class RoomSelectPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink(RoomSelectEvents.ToggleSearchActive)
+            initialState.eventSink(RoomSelectEvent.ToggleSearchActive)
             assertThat(awaitItem().isSearchActive).isTrue()
-            initialState.eventSink(RoomSelectEvents.ToggleSearchActive)
+            initialState.eventSink(RoomSelectEvent.ToggleSearchActive)
             assertThat(awaitItem().isSearchActive).isFalse()
         }
     }
@@ -84,7 +84,7 @@ class RoomSelectPresenterTest {
             // Do not compare the lambda because they will be different. So copy the lambda from expectedRoomSummary to result
             val result = (awaitItem().resultState as SearchBarResultState.Results).results
             assertThat(result).isEqualTo(listOf(expectedRoomInfo))
-            initialState.eventSink(RoomSelectEvents.ToggleSearchActive)
+            initialState.eventSink(RoomSelectEvent.ToggleSearchActive)
             skipItems(1)
             initialState.searchQuery.setTextAndPlaceCursorAtEnd("string not contained")
             assertThat(
@@ -117,9 +117,9 @@ class RoomSelectPresenterTest {
         }.test {
             val initialState = awaitItem()
             val roomInfo = roomSummary.toSelectRoomInfo()
-            initialState.eventSink(RoomSelectEvents.ToggleSelectedRoom(roomInfo))
+            initialState.eventSink(RoomSelectEvent.ToggleSelectedRoom(roomInfo))
             assertThat(awaitItem().selectedRooms).isEqualTo(persistentListOf(roomInfo))
-            initialState.eventSink(RoomSelectEvents.ToggleSelectedRoom(roomInfo))
+            initialState.eventSink(RoomSelectEvent.ToggleSelectedRoom(roomInfo))
             assertThat(awaitItem().selectedRooms).isEmpty()
             cancel()
         }
@@ -146,7 +146,7 @@ class RoomSelectPresenterTest {
             skipItems(1)
 
             // UpdateVisibleRange near end should trigger loadMore
-            initialState.eventSink(RoomSelectEvents.UpdateVisibleRange(IntRange(0, 9)))
+            initialState.eventSink(RoomSelectEvent.UpdateVisibleRange(IntRange(0, 9)))
             // Give time for the coroutine to complete
             testScheduler.advanceUntilIdle()
 

@@ -49,7 +49,7 @@ internal fun aRoomSelectState(
     searchQuery: String = "",
     isSearchActive: Boolean = false,
     selectedRooms: ImmutableList<SelectRoomInfo> = persistentListOf(),
-    eventSink: (RoomSelectEvents) -> Unit = {},
+    eventSink: (RoomSelectEvent) -> Unit = {},
 ) = RoomSelectState(
     mode = mode,
     resultState = resultState,

@@ -72,7 +72,7 @@ fun RoomSelectView(
     modifier: Modifier = Modifier,
 ) {
     fun onRoomRemoved(roomInfo: SelectRoomInfo) {
-        state.eventSink(RoomSelectEvents.ToggleSelectedRoom(roomInfo))
+        state.eventSink(RoomSelectEvent.ToggleSelectedRoom(roomInfo))
     }
 
     @Composable
@@ -87,7 +87,7 @@ fun RoomSelectView(
     var canHandleBack by remember { mutableStateOf(true) }
     fun onBackButton(state: RoomSelectState) {
         if (state.isSearchActive) {
-            state.eventSink(RoomSelectEvents.ToggleSearchActive)
+            state.eventSink(RoomSelectEvent.ToggleSearchActive)
         } else if (canHandleBack) {
             canHandleBack = false
             onDismiss()
@@ -101,7 +101,7 @@ fun RoomSelectView(
 
     val lazyListState = rememberLazyListState()
     OnVisibleRangeChangeEffect(lazyListState) { visibleRange ->
-        state.eventSink(RoomSelectEvents.UpdateVisibleRange(visibleRange))
+        state.eventSink(RoomSelectEvent.UpdateVisibleRange(visibleRange))
     }
 
     Scaffold(
@@ -138,7 +138,7 @@ fun RoomSelectView(
                 placeHolderTitle = stringResource(CommonStrings.action_search),
                 queryState = state.searchQuery,
                 active = state.isSearchActive,
-                onActiveChange = { state.eventSink(RoomSelectEvents.ToggleSearchActive) },
+                onActiveChange = { state.eventSink(RoomSelectEvent.ToggleSearchActive) },
                 resultState = state.resultState,
                 showBackButton = false,
             ) { summaries ->
@@ -154,7 +154,7 @@ fun RoomSelectView(
                                 roomSummary,
                                 isSelected = state.selectedRooms.any { it.roomId == roomSummary.roomId },
                                 onSelection = { roomSummary ->
-                                    state.eventSink(RoomSelectEvents.ToggleSelectedRoom(roomSummary))
+                                    state.eventSink(RoomSelectEvent.ToggleSelectedRoom(roomSummary))
                                 }
                             )
                             HorizontalDivider(modifier = Modifier.fillMaxWidth())
@@ -177,7 +177,7 @@ fun RoomSelectView(
                                     roomSummary,
                                     isSelected = state.selectedRooms.any { it.roomId == roomSummary.roomId },
                                     onSelection = { roomSummary ->
-                                        state.eventSink(RoomSelectEvents.ToggleSelectedRoom(roomSummary))
+                                        state.eventSink(RoomSelectEvent.ToggleSelectedRoom(roomSummary))
                                     }
                                 )
                                 HorizontalDivider(modifier = Modifier.fillMaxWidth())
