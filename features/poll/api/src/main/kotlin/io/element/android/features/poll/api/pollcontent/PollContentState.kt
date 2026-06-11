@@ -33,5 +33,5 @@ data class PollContentState(
     val isPollEnded: Boolean,
     val isMine: Boolean,
 ) {
-    val isMultipleSelection: Boolean get() = maxSelections > 1u
+    val isMultipleSelection = maxSelections > 1u
 }
