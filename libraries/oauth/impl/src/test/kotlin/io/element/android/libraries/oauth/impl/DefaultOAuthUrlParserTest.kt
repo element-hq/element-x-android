@@ -11,7 +11,6 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.test.auth.FAKE_REDIRECT_URL
 import io.element.android.libraries.matrix.test.auth.FakeOAuthRedirectUrlProvider
 import io.element.android.libraries.oauth.api.OAuthAction
-import org.junit.Assert
 import org.junit.Test
 
 class DefaultOAuthUrlParserTest {
