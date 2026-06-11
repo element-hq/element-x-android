@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2026 Element Creations Ltd.
+  ~
+  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+  ~ Please see LICENSE files in the repository root for full details.
+  -->
+<resources>
+    <string name="pro_screen_recovery_key_mode_input_title">Enter a recovery key</string>
+    <string name="pro_screen_recovery_key_mode_input_description">Choose a recovery key that you can memorize.</string>
+    <string name="pro_screen_recovery_key_mode_confirm_title">Confirm your recovery key</string>
+    <string name="pro_screen_recovery_key_mode_confirm_description">Enter your recovery key again.</string>
+    <string name="pro_screen_recovery_key_mode_input_passphrase_field_footer">Minimum %1$s characters. Do not use your account password</string>
+    <string name="pro_screen_recovery_key_mode_confirm_finish_button">Finish setup</string>
+    <string name="pro_screen_recovery_key_mode_success_title">Your backup is now fully set up</string>
+    <string name="pro_screen_recovery_key_mode_success_description">You can use your recovery key to confirm new devices or restore your encrypted chats if you lose access to all your devices.</string>
+    <string name="pro_screen_recovery_key_mode_success_settings_hint">To change your recovery key, go to Settings → Encryption → Backup</string>
+    <string name="pro_screen_recovery_key_mode_input_passphrase_strength_label_base">Strength</string>
+    <string name="pro_screen_recovery_key_mode_input_passphrase_strength_label_very_weak">Very weak</string>
+    <string name="pro_screen_recovery_key_mode_input_passphrase_strength_label_weak">Weak</string>
+    <string name="pro_screen_recovery_key_mode_input_passphrase_strength_label_moderate">Moderate</string>
+    <string name="pro_screen_recovery_key_mode_input_passphrase_strength_label_strong">Strong</string>
+    <string name="pro_screen_recovery_key_mode_input_passphrase_strength_label_very_strong">Very strong</string>
+    <string name="pro_screen_recovery_key_mode_custom_mismatch">The recovery key you entered doesn\'t match</string>
+    <string name="a11y_recovery_key_custom_strength_announcement">Passphrase strength: %1$s</string>
+    <string name="a11y_recovery_key_loading_specs">Loading recovery key requirements</string>
+</resources>
