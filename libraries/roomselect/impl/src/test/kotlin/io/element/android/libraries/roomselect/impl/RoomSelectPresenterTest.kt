@@ -9,9 +9,6 @@
 package io.element.android.libraries.roomselect.impl
 
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
@@ -24,6 +21,7 @@ import io.element.android.libraries.roomselect.api.RoomSelectMode
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
@@ -40,9 +38,7 @@ class RoomSelectPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val presenter = createRoomSelectPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.selectedRooms).isEmpty()
             assertThat(initialState.resultState).isInstanceOf(SearchBarResultState.Initial::class.java)
@@ -53,9 +49,7 @@ class RoomSelectPresenterTest {
     @Test
     fun `present - toggle search active`() = runTest {
         val presenter = createRoomSelectPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             initialState.eventSink(RoomSelectEvent.ToggleSearchActive)
             assertThat(awaitItem().isSearchActive).isTrue()
@@ -76,9 +70,7 @@ class RoomSelectPresenterTest {
         val presenter = createRoomSelectPresenter(
             roomListService = roomListService
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             val expectedRoomInfo = roomSummary.toSelectRoomInfo()
             // Do not compare the lambda because they will be different. So copy the lambda from expectedRoomSummary to result
@@ -112,9 +104,7 @@ class RoomSelectPresenterTest {
         val presenter = createRoomSelectPresenter(
             roomListService = roomListService,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             val roomInfo = roomSummary.toSelectRoomInfo()
             initialState.eventSink(RoomSelectEvent.ToggleSelectedRoom(roomInfo))
@@ -136,9 +126,7 @@ class RoomSelectPresenterTest {
             createRoomListLambda = { roomList }
         )
         val presenter = createRoomSelectPresenter(roomListService = roomListService)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             // Post some rooms to simulate loaded content
             val rooms = (1..10).map { aRoomSummary() }
