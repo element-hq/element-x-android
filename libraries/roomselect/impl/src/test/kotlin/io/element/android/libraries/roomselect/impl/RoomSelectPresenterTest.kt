@@ -117,9 +117,9 @@ class RoomSelectPresenterTest {
         }.test {
             val initialState = awaitItem()
             val roomInfo = roomSummary.toSelectRoomInfo()
-            initialState.eventSink(RoomSelectEvents.SetSelectedRoom(roomInfo))
+            initialState.eventSink(RoomSelectEvents.ToggleSelectedRoom(roomInfo))
             assertThat(awaitItem().selectedRooms).isEqualTo(persistentListOf(roomInfo))
-            initialState.eventSink(RoomSelectEvents.RemoveSelectedRoom)
+            initialState.eventSink(RoomSelectEvents.ToggleSelectedRoom(roomInfo))
             assertThat(awaitItem().selectedRooms).isEmpty()
             cancel()
         }

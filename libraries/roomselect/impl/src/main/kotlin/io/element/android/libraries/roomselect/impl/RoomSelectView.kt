@@ -71,15 +71,12 @@ fun RoomSelectView(
     onSubmit: (List<RoomId>) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    @Suppress("UNUSED_PARAMETER")
     fun onRoomRemoved(roomInfo: SelectRoomInfo) {
-        // TODO toggle selection when multi-selection is enabled
-        state.eventSink(RoomSelectEvents.RemoveSelectedRoom)
+        state.eventSink(RoomSelectEvents.ToggleSelectedRoom(roomInfo))
     }
 
     @Composable
-    fun SelectedRoomsHelper(isForwarding: Boolean, selectedRooms: ImmutableList<SelectRoomInfo>) {
-        if (isForwarding) return
+    fun SelectedRoomsHelper(selectedRooms: ImmutableList<SelectRoomInfo>) {
         SelectedRooms(
             selectedRooms = selectedRooms,
             onRemoveRoom = ::onRoomRemoved,
@@ -148,8 +145,6 @@ fun RoomSelectView(
                 LazyColumn(state = lazyListState) {
                     item {
                         SelectedRoomsHelper(
-                            // TODO state.isForwarding
-                            isForwarding = false,
                             selectedRooms = state.selectedRooms
                         )
                     }
@@ -159,7 +154,7 @@ fun RoomSelectView(
                                 roomSummary,
                                 isSelected = state.selectedRooms.any { it.roomId == roomSummary.roomId },
                                 onSelection = { roomSummary ->
-                                    state.eventSink(RoomSelectEvents.SetSelectedRoom(roomSummary))
+                                    state.eventSink(RoomSelectEvents.ToggleSelectedRoom(roomSummary))
                                 }
                             )
                             HorizontalDivider(modifier = Modifier.fillMaxWidth())
@@ -169,11 +164,9 @@ fun RoomSelectView(
             }
 
             if (!state.isSearchActive) {
-                // TODO restore for multi-selection
-//                SelectedRoomsHelper(
-//                    isForwarding = state.isForwarding,
-//                    selectedRooms = state.selectedRooms
-//                )
+                SelectedRoomsHelper(
+                    selectedRooms = state.selectedRooms
+                )
                 Spacer(modifier = Modifier.height(20.dp))
 
                 if (state.resultState is SearchBarResultState.Results) {
@@ -184,7 +177,7 @@ fun RoomSelectView(
                                     roomSummary,
                                     isSelected = state.selectedRooms.any { it.roomId == roomSummary.roomId },
                                     onSelection = { roomSummary ->
-                                        state.eventSink(RoomSelectEvents.SetSelectedRoom(roomSummary))
+                                        state.eventSink(RoomSelectEvents.ToggleSelectedRoom(roomSummary))
                                     }
                                 )
                                 HorizontalDivider(modifier = Modifier.fillMaxWidth())
