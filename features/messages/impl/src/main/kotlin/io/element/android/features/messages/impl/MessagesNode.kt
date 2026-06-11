@@ -108,7 +108,7 @@ class MessagesNode(
     private val timelineController = TimelineController(room, room.liveTimeline)
     private val presenter = presenterFactory.create(
         navigator = this,
-        composerPresenter = messageComposerPresenterFactory.create(timelineController, this, isInThread = false),
+        composerPresenter = messageComposerPresenterFactory.create(timelineController, this, threadRoot = null),
         timelinePresenter = timelinePresenterFactory.create(timelineController = timelineController, this),
         actionListPresenter = actionListPresenterFactory.create(
             postProcessor = TimelineItemActionPostProcessor.Default,

@@ -3,9 +3,9 @@
 
 [versions]
 # Project
-android_gradle_plugin = "8.13.2"
+android_gradle_plugin = "9.2.1"
 # When updating this, please also update the version in the file ./idea/kotlinc.xml
-kotlin = "2.3.21"
+kotlin = "2.4.0"
 kotlinpoet = "2.3.0"
 ksp = "2.3.9"
 firebaseAppDistribution = "5.2.1"
@@ -46,12 +46,12 @@ showkase = "1.0.5"
 # When upgrading this version, check state restoration still works fine.
 appyx = "1.7.1"
 sqldelight = "2.3.2"
-wysiwyg = "2.41.3"
+wysiwyg = "2.42.0"
 telephoto = "0.19.0"
 haze = "1.7.2"
 
 # Dependency analysis
-dependencyAnalysis = "3.14.0"
+dependencyAnalysis = "3.14.1"
 
 # DI
 metro = "1.1.1"
@@ -227,7 +227,7 @@ color_picker = "io.mhssn:colorpicker:1.0.0"
 
 # Analytics
 posthog = "com.posthog:posthog-android:3.47.0"
-sentry = "io.sentry:sentry-android:8.41.0"
+sentry = "io.sentry:sentry-android:8.43.1"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.36.1"
 
@@ -269,11 +269,11 @@ ktlint = "org.jlleitschuh.gradle.ktlint:14.2.0"
 dependencygraph = "com.savvasdalkitsis.module-dependency-graph:0.12"
 dependencycheck = "org.owasp.dependencycheck:12.2.2"
 dependencyanalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }
-paparazzi = "app.cash.paparazzi:2.0.0-alpha04"
+paparazzi = "app.cash.paparazzi:2.0.0-alpha05"
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 firebaseAppDistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebaseAppDistribution" }
-sonarqube = "org.sonarqube:7.3.0.8198"
+sonarqube = "org.sonarqube:7.3.1.8318"
 licensee = "app.cash.licensee:1.14.1"
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 gms_google_services = { id = "com.google.gms.google-services", version = "4.4.4" }

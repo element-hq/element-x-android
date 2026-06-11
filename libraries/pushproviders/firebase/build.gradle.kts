@@ -19,6 +19,10 @@ plugins {
 android {
     namespace = "io.element.android.libraries.pushproviders.firebase"
 
+    buildFeatures {
+        resValues = true
+    }
+
     buildTypes {
         getByName("release") {
             consumerProguardFiles("consumer-proguard-rules.pro")
