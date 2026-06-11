@@ -73,7 +73,7 @@ object Versions {
     /**
      * Target SDK version. Should be kept up to date with COMPILE_SDK.
      */
-    const val TARGET_SDK = 36
+    const val TARGET_SDK = 37
 
     /**
      * Minimum SDK version for FOSS builds.
