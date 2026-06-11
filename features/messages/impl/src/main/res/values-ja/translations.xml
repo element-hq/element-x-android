@@ -16,6 +16,11 @@
   <string name="emoji_picker_category_places">"旅・場所"</string>
   <string name="emoji_picker_category_recent">"最近使用"</string>
   <string name="emoji_picker_category_symbols">"記号"</string>
+  <string name="screen_image_edition_a11y_rotate_to_the_left">"画像を左に回転"</string>
+  <plurals name="screen_image_edition_a11y_rotation_state">
+    <item quantity="other">"%1$d°"</item>
+  </plurals>
+  <string name="screen_image_edition_title">"写真を編集"</string>
   <string name="screen_media_upload_preview_caption_warning">"古いアプリケーションを使用しているユーザーはキャプションを見られない可能性があります。"</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"動画のアップロード画質を変更するにはタップしてください"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"ファイルをアップロードに失敗しました。"</string>
@@ -26,6 +31,7 @@
   <string name="screen_media_upload_preview_item_count">"個数 %1$d / %2$d"</string>
   <string name="screen_media_upload_preview_optimize_image_quality_title">"画像の品質を最適化"</string>
   <string name="screen_media_upload_preview_processing">"処理中…"</string>
+  <string name="screen_media_upload_preview_title">"メディアを追加"</string>
   <string name="screen_report_content_block_user">"ユーザーをブロック"</string>
   <string name="screen_report_content_block_user_hint">"このユーザーからのメッセージをすべて非表示にする場合はチェックしてください。"</string>
   <string name="screen_report_content_explanation">"このメッセージはホームサーバーの管理者に報告されます。暗号化されたメッセージを確認することはできません。"</string>
@@ -33,8 +39,8 @@
   <string name="screen_room_attachment_source_camera">"カメラ"</string>
   <string name="screen_room_attachment_source_camera_photo">"写真を撮影"</string>
   <string name="screen_room_attachment_source_camera_video">"動画を撮影"</string>
-  <string name="screen_room_attachment_source_files">"添付ファイル"</string>
-  <string name="screen_room_attachment_source_gallery">"アルバムの写真・動画"</string>
+  <string name="screen_room_attachment_source_files">"ファイルを添付"</string>
+  <string name="screen_room_attachment_source_gallery">"アルバムの写真と動画"</string>
   <string name="screen_room_attachment_source_location">"場所を共有"</string>
   <string name="screen_room_attachment_source_poll">"投票"</string>
   <string name="screen_room_attachment_text_formatting">"書式設定"</string>

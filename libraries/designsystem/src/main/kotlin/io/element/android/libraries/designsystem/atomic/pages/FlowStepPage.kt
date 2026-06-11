@@ -71,7 +71,7 @@ fun FlowStepPage(
         },
         header = {
             IconTitleSubtitleMolecule(
-                modifier = Modifier.padding(bottom = 16.dp),
+                modifier = Modifier.padding(bottom = 16.dp, start = 8.dp, end = 8.dp),
                 title = title,
                 subTitle = subTitle,
                 iconStyle = iconStyle,

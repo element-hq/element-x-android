@@ -5,11 +5,14 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.features.linknewdevice.impl.screens.desktop
 
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.linknewdevice.impl.R
 import io.element.android.tests.testutils.EnsureNeverCalled
@@ -18,42 +21,37 @@ import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBack
 import io.element.android.tests.testutils.pressBackKey
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class DesktopNoticeViewTest {
-    @get:Rule
-    val rule = createAndroidComposeRule<ComponentActivity>()
-
     @Test
-    fun `on back pressed - calls the expected callback`() {
+    fun `on back pressed - calls the expected callback`() = runAndroidComposeUiTest {
         ensureCalledOnce { callback ->
-            rule.setView(
+            setView(
                 state = aDesktopNoticeState(),
                 onBackClicked = callback,
             )
-            rule.pressBackKey()
+            pressBackKey()
         }
     }
 
     @Test
-    fun `on back button clicked - calls the expected callback`() {
+    fun `on back button clicked - calls the expected callback`() = runAndroidComposeUiTest {
         ensureCalledOnce { callback ->
-            rule.setView(
+            setView(
                 state = aDesktopNoticeState(),
                 onBackClicked = callback,
             )
-            rule.pressBack()
+            pressBack()
         }
     }
 
     @Test
-    fun `when can continue - calls the expected callback`() {
+    fun `when can continue - calls the expected callback`() = runAndroidComposeUiTest {
         ensureCalledOnce { callback ->
-            rule.setView(
+            setView(
                 state = aDesktopNoticeState(canContinue = true),
                 onReadyToScanClick = callback,
             )
@@ -61,16 +59,16 @@ class DesktopNoticeViewTest {
     }
 
     @Test
-    fun `on submit button clicked - emits the Continue event`() {
+    fun `on submit button clicked - emits the Continue event`() = runAndroidComposeUiTest {
         val eventRecorder = EventsRecorder<DesktopNoticeEvent>()
-        rule.setView(
+        setView(
             state = aDesktopNoticeState(eventSink = eventRecorder),
         )
-        rule.clickOn(R.string.screen_link_new_device_desktop_submit)
+        clickOn(R.string.screen_link_new_device_desktop_submit)
         eventRecorder.assertSingle(DesktopNoticeEvent.Continue)
     }
 
-    private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setView(
+    private fun AndroidComposeUiTest<ComponentActivity>.setView(
         state: DesktopNoticeState,
         onBackClicked: () -> Unit = EnsureNeverCalled(),
         onReadyToScanClick: () -> Unit = EnsureNeverCalled(),

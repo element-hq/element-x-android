@@ -51,19 +51,20 @@ class LockScreenSettingsPresenter(
 
         val biometricUnlock = biometricAuthenticatorManager.rememberConfirmBiometricAuthenticator()
 
-        fun handleEvent(event: LockScreenSettingsEvents) {
+        fun handleEvent(event: LockScreenSettingsEvent) {
             when (event) {
-                LockScreenSettingsEvents.CancelRemovePin -> showRemovePinConfirmation = false
-                LockScreenSettingsEvents.ConfirmRemovePin -> {
+                LockScreenSettingsEvent.CancelRemovePin -> showRemovePinConfirmation = false
+                LockScreenSettingsEvent.ConfirmRemovePin -> {
                     coroutineScope.launch {
                         if (showRemovePinConfirmation) {
                             showRemovePinConfirmation = false
                             pinCodeManager.deletePinCode()
+                            biometricAuthenticatorManager.disable()
                         }
                     }
                 }
-                LockScreenSettingsEvents.OnRemovePin -> showRemovePinConfirmation = true
-                LockScreenSettingsEvents.ToggleBiometricAllowed -> {
+                LockScreenSettingsEvent.OnRemovePin -> showRemovePinConfirmation = true
+                LockScreenSettingsEvent.ToggleBiometricAllowed -> {
                     coroutineScope.launch {
                         if (!isBiometricEnabled) {
                             biometricUnlock.setup()

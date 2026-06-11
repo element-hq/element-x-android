@@ -5,18 +5,21 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.features.roomdetailsedit.impl
 
 import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
+import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.isEditable
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.ui.media.AvatarAction
@@ -28,58 +31,54 @@ import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBack
 import org.junit.Ignore
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class RoomDetailsEditViewTest {
-    @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
-
     @Test
-    fun `clicking on back emits the expected Event`() {
+    fun `clicking on back emits the expected Event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<RoomDetailsEditEvent>()
-        rule.setRoomDetailsEditView(
+        setRoomDetailsEditView(
             aRoomDetailsEditState(
                 eventSink = eventsRecorder
             ),
         )
-        rule.pressBack()
+        pressBack()
         eventsRecorder.assertSingle(RoomDetailsEditEvent.OnBackPress)
     }
 
     @Test
-    fun `clicking on discard when confirming exit emits the expected Event`() {
+    fun `clicking on discard when confirming exit emits the expected Event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<RoomDetailsEditEvent>()
-        rule.setRoomDetailsEditView(
+        setRoomDetailsEditView(
             aRoomDetailsEditState(
                 saveAction = AsyncAction.ConfirmingCancellation,
                 eventSink = eventsRecorder,
             ),
         )
-        rule.clickOn(CommonStrings.action_discard)
+        clickOn(CommonStrings.action_discard)
         eventsRecorder.assertSingle(RoomDetailsEditEvent.OnBackPress)
     }
 
     @Test
-    fun `clicking on save when confirming exit emits the expected Event`() {
+    fun `clicking on save when confirming exit emits the expected Event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<RoomDetailsEditEvent>()
-        rule.setRoomDetailsEditView(
+        setRoomDetailsEditView(
             aRoomDetailsEditState(
                 saveAction = AsyncAction.ConfirmingCancellation,
                 eventSink = eventsRecorder,
             ),
         )
-        rule.clickOn(CommonStrings.action_save, inDialog = true)
+        clickOn(CommonStrings.action_save, inDialog = true)
         eventsRecorder.assertSingle(RoomDetailsEditEvent.Save)
     }
 
     @Test
-    fun `when edition is successful, the expected callback is invoked`() {
+    fun `when edition is successful, the expected callback is invoked`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<RoomDetailsEditEvent>(expectEvents = false)
         ensureCalledOnce { callback ->
-            rule.setRoomDetailsEditView(
+            setRoomDetailsEditView(
                 aRoomDetailsEditState(
                     eventSink = eventsRecorder,
                     saveAction = AsyncAction.Success(Unit)
@@ -90,55 +89,55 @@ class RoomDetailsEditViewTest {
     }
 
     @Test
-    fun `when name is changed, the expected Event is emitted`() {
+    fun `when name is changed, the expected Event is emitted`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<RoomDetailsEditEvent>()
-        rule.setRoomDetailsEditView(
+        setRoomDetailsEditView(
             aRoomDetailsEditState(
                 eventSink = eventsRecorder,
                 roomRawName = "Marketing",
             ),
         )
-        rule.onNodeWithText("Marketing").performTextInput("A")
+        onNodeWithText("Marketing").performTextInput("A")
         eventsRecorder.assertSingle(RoomDetailsEditEvent.UpdateRoomName("AMarketing"))
     }
 
     @Test
-    fun `when user cannot change name, nothing happen`() {
+    fun `when user cannot change name, nothing happen`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<RoomDetailsEditEvent>(expectEvents = false)
-        rule.setRoomDetailsEditView(
+        setRoomDetailsEditView(
             aRoomDetailsEditState(
                 eventSink = eventsRecorder,
                 roomRawName = "Marketing",
                 canChangeName = false,
             ),
         )
-        rule.onNodeWithText("Marketing").assert(!isEditable())
+        onNodeWithText("Marketing").assert(!isEditable())
     }
 
     @Test
-    fun `when topic is changed, the expected Event is emitted`() {
+    fun `when topic is changed, the expected Event is emitted`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<RoomDetailsEditEvent>()
-        rule.setRoomDetailsEditView(
+        setRoomDetailsEditView(
             aRoomDetailsEditState(
                 eventSink = eventsRecorder,
                 roomTopic = "My Topic",
             ),
         )
-        rule.onNodeWithText("My Topic").performTextInput("A")
+        onNodeWithText("My Topic").performTextInput("A")
         eventsRecorder.assertSingle(RoomDetailsEditEvent.UpdateRoomTopic("AMy Topic"))
     }
 
     @Test
-    fun `when user cannot change topic, nothing happen`() {
+    fun `when user cannot change topic, nothing happen`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<RoomDetailsEditEvent>(expectEvents = false)
-        rule.setRoomDetailsEditView(
+        setRoomDetailsEditView(
             aRoomDetailsEditState(
                 eventSink = eventsRecorder,
                 roomTopic = "My Topic",
                 canChangeTopic = false,
             ),
         )
-        rule.onNodeWithText("My Topic").assert(!isEditable())
+        onNodeWithText("My Topic").assert(!isEditable())
     }
 
     @Ignore("This test is failing because the bottom sheet does not open")
@@ -171,73 +170,73 @@ class RoomDetailsEditViewTest {
     private fun testAvatarChange(
         @StringRes stringActionRes: Int,
         expectedEvent: RoomDetailsEditEvent.HandleAvatarAction,
-    ) {
+    ) = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<RoomDetailsEditEvent>()
-        rule.setRoomDetailsEditView(
+        setRoomDetailsEditView(
             aRoomDetailsEditState(
                 eventSink = eventsRecorder,
             ),
         )
         // Open the bottom sheet
-        rule.onNode(hasTestTag(TestTags.editAvatar.value)).performClick()
-        rule.onNodeWithText(rule.activity.getString(stringActionRes)).assertExists()
-        rule.clickOn(stringActionRes)
+        onNode(hasTestTag(TestTags.editAvatar.value)).performClick()
+        onNodeWithText(activity!!.getString(stringActionRes)).assertExists()
+        clickOn(stringActionRes)
         eventsRecorder.assertSingle(expectedEvent)
     }
 
     @Test
-    fun `when user cannot change avatar, nothing happen`() {
+    fun `when user cannot change avatar, nothing happen`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<RoomDetailsEditEvent>(expectEvents = false)
-        rule.setRoomDetailsEditView(
+        setRoomDetailsEditView(
             aRoomDetailsEditState(
                 eventSink = eventsRecorder,
                 canChangeAvatar = false,
             ),
         )
-        rule.onNode(hasTestTag(TestTags.editAvatar.value)).performClick()
-        rule.onNodeWithText(rule.activity.getString(CommonStrings.action_take_photo)).assertDoesNotExist()
+        onNode(hasTestTag(TestTags.editAvatar.value)).performClick()
+        onNodeWithText(activity!!.getString(CommonStrings.action_take_photo)).assertDoesNotExist()
     }
 
     @Test
-    fun `when save is clicked, the expected Event is emitted`() {
+    fun `when save is clicked, the expected Event is emitted`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<RoomDetailsEditEvent>()
-        rule.setRoomDetailsEditView(
+        setRoomDetailsEditView(
             aRoomDetailsEditState(
                 eventSink = eventsRecorder,
                 saveButtonEnabled = true,
             ),
         )
-        rule.clickOn(CommonStrings.action_save)
+        clickOn(CommonStrings.action_save)
         eventsRecorder.assertSingle(RoomDetailsEditEvent.Save)
     }
 
     @Test
-    fun `when save is clicked, but nothing need to be saved, nothing happens`() {
+    fun `when save is clicked, but nothing need to be saved, nothing happens`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<RoomDetailsEditEvent>(expectEvents = false)
-        rule.setRoomDetailsEditView(
+        setRoomDetailsEditView(
             aRoomDetailsEditState(
                 eventSink = eventsRecorder,
                 saveButtonEnabled = false,
             ),
         )
-        rule.clickOn(CommonStrings.action_save)
+        clickOn(CommonStrings.action_save)
     }
 
     @Test
-    fun `when error is shown, closing the dialog emit the expected Event`() {
+    fun `when error is shown, closing the dialog emit the expected Event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<RoomDetailsEditEvent>()
-        rule.setRoomDetailsEditView(
+        setRoomDetailsEditView(
             aRoomDetailsEditState(
                 eventSink = eventsRecorder,
                 saveAction = AsyncAction.Failure(RuntimeException("Whelp")),
             ),
         )
-        rule.clickOn(CommonStrings.action_ok)
+        clickOn(CommonStrings.action_ok)
         eventsRecorder.assertSingle(RoomDetailsEditEvent.CloseDialog)
     }
 }
 
-private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomDetailsEditView(
+private fun AndroidComposeUiTest<ComponentActivity>.setRoomDetailsEditView(
     state: RoomDetailsEditState,
     onDone: () -> Unit = EnsureNeverCalled(),
 ) {

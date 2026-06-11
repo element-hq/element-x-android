@@ -11,6 +11,7 @@ package io.element.android.libraries.mediaviewer.impl.gallery
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.media.WaveFormSamples
+import io.element.android.libraries.designsystem.preview.ROOM_NAME
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.details.aMediaBottomSheetStateDetails
@@ -112,7 +113,7 @@ open class MediaGalleryStateProvider : PreviewParameterProvider<MediaGalleryStat
 }
 
 private fun aMediaGalleryState(
-    roomName: String = "Room name",
+    roomName: String = ROOM_NAME,
     mode: MediaGalleryMode = MediaGalleryMode.Images,
     groupedMediaItems: AsyncData<GroupedMediaItems> = AsyncData.Uninitialized,
     mediaBottomSheetState: MediaBottomSheetState = MediaBottomSheetState.Hidden,

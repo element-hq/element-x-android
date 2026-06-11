@@ -6,10 +6,14 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.tests.testutils
 
 import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
+import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.SemanticsNodeInteractionsProvider
 import androidx.compose.ui.test.assertIsDisplayed
@@ -27,15 +31,23 @@ import org.junit.rules.TestRule
 
 val trueMatcher = SemanticsMatcher("true matcher") { true }
 
-fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.clickOn(
+fun AndroidComposeUiTest<ComponentActivity>.clickOn(
     @StringRes res: Int,
     inDialog: Boolean = false,
 ) {
-    val text = activity.getString(res)
+    val text = activity!!.getString(res)
     onNode(
         hasText(text) and hasClickAction() and if (inDialog) hasAnyAncestor(isDialog()) else trueMatcher
     )
         .performClick()
+}
+
+/**
+ * Press the back button in the app bar.
+ */
+fun AndroidComposeUiTest<ComponentActivity>.pressBack() {
+    val text = activity!!.getString(CommonStrings.action_back)
+    onNode(hasContentDescription(text)).performClick()
 }
 
 /**
@@ -49,6 +61,13 @@ fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.pressBack() {
 /**
  * Press the back key.
  */
+fun AndroidComposeUiTest<ComponentActivity>.pressBackKey() {
+    activity!!.onBackPressedDispatcher.onBackPressed()
+}
+
+/**
+ * Press the back key.
+ */
 fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.pressBackKey() {
     activity.onBackPressedDispatcher.onBackPressed()
 }
@@ -57,12 +76,12 @@ fun SemanticsNodeInteractionsProvider.pressTag(tag: String) {
     onNode(hasTestTag(tag)).performClick()
 }
 
-fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.assertNoNodeWithText(@StringRes res: Int) {
-    val text = activity.getString(res)
+fun AndroidComposeUiTest<ComponentActivity>.assertNoNodeWithText(@StringRes res: Int) {
+    val text = activity!!.getString(res)
     onNodeWithText(text).assertDoesNotExist()
 }
 
-fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.assertNodeWithTextIsDisplayed(@StringRes res: Int) {
-    val text = activity.getString(res)
+fun AndroidComposeUiTest<ComponentActivity>.assertNodeWithTextIsDisplayed(@StringRes res: Int) {
+    val text = activity!!.getString(res)
     onNodeWithText(text).assertIsDisplayed()
 }

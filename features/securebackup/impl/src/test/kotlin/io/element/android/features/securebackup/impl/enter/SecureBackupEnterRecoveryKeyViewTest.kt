@@ -6,16 +6,19 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.features.securebackup.impl.enter
 
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.securebackup.impl.setup.views.aFormattedRecoveryKey
 import io.element.android.libraries.architecture.AsyncAction
@@ -26,58 +29,54 @@ import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBack
 import io.element.android.tests.testutils.pressBackKey
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 class SecureBackupEnterRecoveryKeyViewTest {
-    @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
-
     @Test
-    fun `back key pressed - calls onBackClick`() {
+    fun `back key pressed - calls onBackClick`() = runAndroidComposeUiTest {
         ensureCalledOnce { callback ->
-            rule.setSecureBackupEnterRecoveryKeyView(
+            setSecureBackupEnterRecoveryKeyView(
                 aSecureBackupEnterRecoveryKeyState(),
                 onBackClick = callback,
             )
-            rule.pressBackKey()
+            pressBackKey()
         }
     }
 
     @Test
-    fun `back button clicked - calls onBackClick`() {
+    fun `back button clicked - calls onBackClick`() = runAndroidComposeUiTest {
         ensureCalledOnce { callback ->
-            rule.setSecureBackupEnterRecoveryKeyView(
+            setSecureBackupEnterRecoveryKeyView(
                 aSecureBackupEnterRecoveryKeyState(),
                 onBackClick = callback,
             )
-            rule.pressBack()
+            pressBack()
         }
     }
 
     @Test
     @Config(qualifiers = "h1024dp")
-    fun `tapping on Continue when key is valid - calls expected action`() {
+    fun `tapping on Continue when key is valid - calls expected action`() = runAndroidComposeUiTest {
         val recorder = EventsRecorder<SecureBackupEnterRecoveryKeyEvents>()
-        rule.setSecureBackupEnterRecoveryKeyView(
+        setSecureBackupEnterRecoveryKeyView(
             aSecureBackupEnterRecoveryKeyState(isSubmitEnabled = true, eventSink = recorder),
         )
-        rule.clickOn(CommonStrings.action_continue)
+        clickOn(CommonStrings.action_continue)
 
         recorder.assertSingle(SecureBackupEnterRecoveryKeyEvents.Submit)
     }
 
     @Test
-    fun `entering a char emits the expected event`() {
+    fun `entering a char emits the expected event`() = runAndroidComposeUiTest {
         val recorder = EventsRecorder<SecureBackupEnterRecoveryKeyEvents>()
         val keyValue = aFormattedRecoveryKey()
-        rule.setSecureBackupEnterRecoveryKeyView(
+        setSecureBackupEnterRecoveryKeyView(
             aSecureBackupEnterRecoveryKeyState(isSubmitEnabled = true, eventSink = recorder),
         )
-        rule.onNodeWithText(keyValue).performTextInput("X")
+        onNodeWithText(keyValue).performTextInput("X")
         recorder.assertSingle(
             SecureBackupEnterRecoveryKeyEvents.OnRecoveryKeyChange("X$keyValue")
         )
@@ -85,43 +84,43 @@ class SecureBackupEnterRecoveryKeyViewTest {
 
     @Test
     @Config(qualifiers = "h1024dp")
-    fun `toggling the visibility of the textfield changes it`() {
+    fun `toggling the visibility of the textfield changes it`() = runAndroidComposeUiTest {
         val recorder = EventsRecorder<SecureBackupEnterRecoveryKeyEvents>()
         val keyValue = aFormattedRecoveryKey()
-        rule.setSecureBackupEnterRecoveryKeyView(aSecureBackupEnterRecoveryKeyState(isSubmitEnabled = true, eventSink = recorder))
+        setSecureBackupEnterRecoveryKeyView(aSecureBackupEnterRecoveryKeyState(isSubmitEnabled = true, eventSink = recorder))
 
         // Initially, the text field should be visible
-        rule.onNodeWithText(keyValue).assertExists()
+        onNodeWithText(keyValue).assertExists()
 
-        rule.onNodeWithContentDescription(rule.activity.getString(CommonStrings.a11y_hide_password)).performClick()
+        onNodeWithContentDescription(activity!!.getString(CommonStrings.a11y_hide_password)).performClick()
 
-        rule.waitForIdle()
+        waitForIdle()
 
         recorder.assertSingle(SecureBackupEnterRecoveryKeyEvents.ChangeRecoveryKeyFieldContentsVisibility(false))
     }
 
     @Test
-    fun `validating from keyboard emits the expected event`() {
+    fun `validating from keyboard emits the expected event`() = runAndroidComposeUiTest {
         val recorder = EventsRecorder<SecureBackupEnterRecoveryKeyEvents>()
         val keyValue = aFormattedRecoveryKey()
-        rule.setSecureBackupEnterRecoveryKeyView(
+        setSecureBackupEnterRecoveryKeyView(
             aSecureBackupEnterRecoveryKeyState(isSubmitEnabled = true, eventSink = recorder),
         )
-        rule.onNodeWithText(keyValue).performImeAction()
+        onNodeWithText(keyValue).performImeAction()
         recorder.assertSingle(SecureBackupEnterRecoveryKeyEvents.Submit)
     }
 
     @Test
-    fun `when submit action succeeds - calls onDone`() {
+    fun `when submit action succeeds - calls onDone`() = runAndroidComposeUiTest {
         ensureCalledOnce { callback ->
-            rule.setSecureBackupEnterRecoveryKeyView(
+            setSecureBackupEnterRecoveryKeyView(
                 aSecureBackupEnterRecoveryKeyState(submitAction = AsyncAction.Success(Unit)),
                 onDone = callback,
             )
         }
     }
 
-    private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setSecureBackupEnterRecoveryKeyView(
+    private fun AndroidComposeUiTest<ComponentActivity>.setSecureBackupEnterRecoveryKeyView(
         state: SecureBackupEnterRecoveryKeyState,
         onDone: () -> Unit = EnsureNeverCalled(),
         onBackClick: () -> Unit = EnsureNeverCalled(),

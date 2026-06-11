@@ -26,7 +26,7 @@ class FakeMediaOptimizationSelectorPresenterFactory(
         )
     }
 ) : MediaOptimizationSelectorPresenter.Factory {
-    override fun create(localMedia: LocalMedia): MediaOptimizationSelectorPresenter {
+    override fun create(localMedia: LocalMedia, sendAsFile: Boolean): MediaOptimizationSelectorPresenter {
         return fakePresenter
     }
 }

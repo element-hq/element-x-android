@@ -11,6 +11,10 @@ package io.element.android.features.rolesandpermissions.impl.roles
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
+import io.element.android.libraries.designsystem.preview.USER_NAME_BOB
+import io.element.android.libraries.designsystem.preview.USER_NAME_CAROL
+import io.element.android.libraries.designsystem.preview.USER_NAME_DAVID
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
@@ -103,9 +107,9 @@ internal fun aChangeRolesStateWithSelectedUsers() = aChangeRolesState(
 internal fun aChangeRolesStateWithOwners(
     role: RoomMember.Role = RoomMember.Role.Admin,
     selectedUsers: List<MatrixUser> = listOf(
-        aMatrixUser(id = "@alice:server.org", displayName = "Alice"),
-        aMatrixUser(id = "@bob:server.org", displayName = "Bob"),
-        aMatrixUser(id = "@carol:server.org", displayName = "Carol"),
+        aMatrixUser(displayName = USER_NAME_ALICE),
+        aMatrixUser(displayName = USER_NAME_BOB),
+        aMatrixUser(displayName = USER_NAME_CAROL),
     ),
 ) = aChangeRolesState(
     role = role,
@@ -114,22 +118,22 @@ internal fun aChangeRolesStateWithOwners(
             members = persistentListOf(
                 aRoomMember(
                     userId = UserId("@alice:server.org"),
-                    displayName = "Alice",
+                    displayName = USER_NAME_ALICE,
                     role = RoomMember.Role.Owner(isCreator = true),
                 ),
                 aRoomMember(
                     userId = UserId("@bob:server.org"),
-                    displayName = "Bob",
+                    displayName = USER_NAME_BOB,
                     role = RoomMember.Role.Owner(isCreator = false),
                 ),
                 aRoomMember(
                     userId = UserId("@carol:server.org"),
-                    displayName = "Carol",
+                    displayName = USER_NAME_CAROL,
                     role = RoomMember.Role.Admin,
                 ),
                 aRoomMember(
                     userId = UserId("@david:server.org"),
-                    displayName = "David",
+                    displayName = USER_NAME_DAVID,
                     role = RoomMember.Role.User,
                 ),
             ),

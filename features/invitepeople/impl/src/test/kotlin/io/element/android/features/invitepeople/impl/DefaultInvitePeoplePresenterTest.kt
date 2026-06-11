@@ -320,7 +320,7 @@ internal class DefaultInvitePeoplePresenterTest {
             val initialState = awaitItemAsDefault()
             skipItems(1)
 
-            val selectedUser = aMatrixUser()
+            val selectedUser = aMatrixUser(displayName = "John Doe")
 
             initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(selectedUser))
 
@@ -358,7 +358,7 @@ internal class DefaultInvitePeoplePresenterTest {
             val initialState = awaitItemAsDefault()
             skipItems(1)
 
-            val selectedUser = aMatrixUser()
+            val selectedUser = aMatrixUser(displayName = "John Doe")
 
             // Given a query is made
             initialState.searchQuery.setTextAndPlaceCursorAtEnd("some query")
@@ -540,7 +540,7 @@ internal class DefaultInvitePeoplePresenterTest {
     }
 
     @Test
-    fun `present - suggestions are loaded from recent direct rooms`() = runTest {
+    fun `present - suggestions are loaded from recent DM rooms`() = runTest {
         val dmRoomId = RoomId("!dm_room:server.org")
         val otherUserId = UserId("@frank:server.org")
         val matrixClient = FakeMatrixClient(sessionId = A_USER_ID).apply {
@@ -554,7 +554,7 @@ internal class DefaultInvitePeoplePresenterTest {
                     roomId = dmRoomId,
                     initialRoomInfo = aRoomInfo(
                         id = dmRoomId,
-                        isDirect = true,
+                        isDm = true,
                         activeMembersCount = 2,
                         currentUserMembership = CurrentUserMembership.JOINED,
                     ),
@@ -591,7 +591,7 @@ internal class DefaultInvitePeoplePresenterTest {
                     roomId = dmRoomId,
                     initialRoomInfo = aRoomInfo(
                         id = dmRoomId,
-                        isDirect = true,
+                        isDm = true,
                         activeMembersCount = 2,
                         currentUserMembership = CurrentUserMembership.JOINED,
                     ),
@@ -827,6 +827,54 @@ internal class DefaultInvitePeoplePresenterTest {
             (awaitLastSequentialItem() as DefaultInvitePeopleState).run {
                 assertThat(sendInvitesAction.isUninitialized()).isTrue()
                 assertThat(selectedUsers).containsExactly(alice, bob, charlie)
+            }
+        }
+    }
+
+    @Test
+    fun `present - inviting someone to a DM creates a new room`() = runTest {
+        val alice = aMatrixUser("@alice:example.com")
+
+        val matrixClient = FakeMatrixClient(
+            encryptionService = FakeEncryptionService(
+                getUserIdentityResult = lambdaRecorder { userId: UserId ->
+                    Result.success(IdentityState.Pinned)
+                }
+            )
+        )
+        val presenter = createDefaultInvitePeoplePresenter(
+            coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
+            matrixClient = matrixClient,
+            joinedRoom = FakeJoinedRoom(
+                baseRoom = FakeBaseRoom(
+                    initialRoomInfo = aRoomInfo(isDm = true),
+                    getMembersResult = { Result.success(listOf(aRoomMember(userId = alice.userId, membership = RoomMembershipState.JOIN))) },
+                )
+            )
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            skipItems(1)
+
+            // We want to add a new user to a DM
+            initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(alice))
+
+            // And we send the invites
+            initialState.eventSink(InvitePeopleEvents.SendInvites)
+
+            skipItems(1)
+
+            awaitItemAsDefault().run {
+                assertThat(canInvite).isTrue()
+                assertThat(sendInvitesAction.isUninitialized()).isTrue()
+                // Inviting to a DM should trigger the creation of a new room
+                assertThat(createRoomFromDmAction.isLoading()).isTrue()
+            }
+
+            awaitItemAsDefault().run {
+                assertThat(sendInvitesAction.isUninitialized()).isTrue()
+                // Once the room is created, the action should be successful
+                assertThat(createRoomFromDmAction.isSuccess()).isTrue()
             }
         }
     }

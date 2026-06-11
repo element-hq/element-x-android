@@ -2,4 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_invite_users_already_a_member">"On jo jäsen"</string>
   <string name="screen_invite_users_already_invited">"On jo kutsuttu"</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_multiple_users">"Sinulla ei ole tällä hetkellä keskusteluja näiden yhteystietojen kanssa. Vahvista kutsusi heille tähän huoneeseen ennen kuin jatkat."</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_one_user">"Sinulla ei ole tällä hetkellä keskusteluja tämän yhteystiedon kanssa. Vahvista kutsusi hänelle tähän huoneeseen ennen kuin jatkat."</string>
+  <string name="screen_invite_users_confirm_dialog_title_mutiple_users">"Kutsutaanko uusia yhteystietoja tähän huoneeseen?"</string>
+  <string name="screen_invite_users_confirm_dialog_title_one_user">"Kutsutaanko uusi yhteystieto tähän huoneeseen?"</string>
 </resources>

@@ -11,6 +11,9 @@ package io.element.android.features.messages.impl
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.lifecycle.subscribe
@@ -24,11 +27,12 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.annotations.ContributesNode
-import io.element.android.features.call.api.CallType
+import io.element.android.features.call.api.CallData
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.forward.api.ForwardEntryPoint
 import io.element.android.features.knockrequests.api.list.KnockRequestsListEntryPoint
 import io.element.android.features.location.api.LocationService
+import io.element.android.features.location.api.RenderingMapsNotSupportedDialog
 import io.element.android.features.location.api.ShareLocationEntryPoint
 import io.element.android.features.location.api.ShowLocationEntryPoint
 import io.element.android.features.location.api.ShowLocationMode
@@ -53,6 +57,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.duration
 import io.element.android.features.poll.api.create.CreatePollEntryPoint
 import io.element.android.features.poll.api.create.CreatePollMode
+import io.element.android.libraries.androidutils.system.DeviceHasVulkanSupport
 import io.element.android.libraries.architecture.BackstackWithOverlayBox
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.callback
@@ -121,6 +126,7 @@ class MessagesFlowNode(
     private val knockRequestsListEntryPoint: KnockRequestsListEntryPoint,
     private val dateFormatter: DateFormatter,
     private val coroutineDispatchers: CoroutineDispatchers,
+    private val hasVulkanSupport: DeviceHasVulkanSupport,
 ) : BaseFlowNode<MessagesFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = plugins.filterIsInstance<MessagesEntryPoint.Params>().first().initialTarget.toNavTarget(),
@@ -143,6 +149,7 @@ class MessagesFlowNode(
             val mediaInfo: MediaInfo,
             val mediaSource: MediaSource,
             val thumbnailSource: MediaSource?,
+            val canUseOverlay: Boolean,
         ) : NavTarget
 
         @Parcelize
@@ -183,9 +190,14 @@ class MessagesFlowNode(
 
         @Parcelize
         data object ThreadsList : NavTarget
+
+        @Parcelize
+        data class AvatarPreview(val name: String, val avatarUrl: String) : NavTarget
     }
 
     private val callback: MessagesEntryPoint.Callback = callback()
+
+    private var displayVulkanNotSupportedError by mutableStateOf(false)
 
     override fun onBuilt() {
         super.onBuilt()
@@ -227,10 +239,11 @@ class MessagesFlowNode(
                         callback.navigateToRoomDetails()
                     }
 
-                    override fun handleEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event): Boolean {
+                    override fun handleEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event, canUseOverlay: Boolean): Boolean {
                         return processEventClick(
                             timelineMode = timelineMode,
                             event = event,
+                            canUseOverlay = canUseOverlay,
                         )
                     }
 
@@ -265,7 +278,11 @@ class MessagesFlowNode(
                     }
 
                     override fun navigateToSendLocation() {
-                        backstack.push(NavTarget.SendLocation(Timeline.Mode.Live))
+                        if (hasVulkanSupport()) {
+                            backstack.push(NavTarget.SendLocation(Timeline.Mode.Live))
+                        } else {
+                            displayVulkanNotSupportedError = true
+                        }
                     }
 
                     override fun navigateToCreatePoll() {
@@ -276,14 +293,22 @@ class MessagesFlowNode(
                         backstack.push(NavTarget.EditPoll(Timeline.Mode.Live, eventId))
                     }
 
+                    override fun navigateToCurrentLiveLocation() {
+                        if (hasVulkanSupport()) {
+                            backstack.push(NavTarget.LocationViewer(ShowLocationMode.Live(senderId = sessionId)))
+                        } else {
+                            displayVulkanNotSupportedError = true
+                        }
+                    }
+
                     override fun navigateToRoomCall(roomId: RoomId, isAudioCall: Boolean) {
-                        val callType = CallType.RoomCall(
+                        val callData = CallData(
                             sessionId = sessionId,
                             roomId = roomId,
-                            isAudioCall = isAudioCall
+                            isAudioCall = isAudioCall,
                         )
                         analyticsService.captureInteraction(Interaction.Name.MobileRoomCallButton)
-                        elementCallEntryPoint.startCall(callType)
+                        elementCallEntryPoint.startCall(callData)
                     }
 
                     override fun navigateToPinnedMessagesList() {
@@ -305,6 +330,10 @@ class MessagesFlowNode(
                     override fun navigateToDeveloperSettings() {
                         callback.navigateToDeveloperSettings()
                     }
+
+                    override fun navigateToAvatarPreview(username: String, avatarUrl: String) {
+                        overlay.show(NavTarget.AvatarPreview(username, avatarUrl))
+                    }
                 }
                 val inputs = MessagesNode.Inputs(focusedEventId = navTarget.focusedEventId)
                 createNode<MessagesNode>(buildContext, listOf(callback, inputs))
@@ -320,7 +349,11 @@ class MessagesFlowNode(
                 )
                 val callback = object : MediaViewerEntryPoint.Callback {
                     override fun onDone() {
-                        overlay.hide()
+                        if (navTarget.canUseOverlay) {
+                            overlay.hide()
+                        } else {
+                            backstack.pop()
+                        }
                     }
 
                     override fun viewInTimeline(eventId: EventId) {
@@ -414,10 +447,11 @@ class MessagesFlowNode(
             }
             NavTarget.PinnedMessagesList -> {
                 val callback = object : PinnedMessagesListNode.Callback {
-                    override fun handleEventClick(event: TimelineItem.Event) {
+                    override fun handleEventClick(event: TimelineItem.Event, canUseOverlay: Boolean) {
                         processEventClick(
                             timelineMode = Timeline.Mode.PinnedEvents,
                             event = event,
+                            canUseOverlay = canUseOverlay,
                         )
                     }
 
@@ -456,10 +490,11 @@ class MessagesFlowNode(
                     focusedEventId = navTarget.focusedEventId,
                 )
                 val callback = object : ThreadedMessagesNode.Callback {
-                    override fun handleEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event): Boolean {
+                    override fun handleEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event, canUseOverlay: Boolean): Boolean {
                         return processEventClick(
                             timelineMode = timelineMode,
                             event = event,
+                            canUseOverlay = canUseOverlay,
                         )
                     }
 
@@ -494,7 +529,11 @@ class MessagesFlowNode(
                     }
 
                     override fun navigateToSendLocation() {
-                        backstack.push(NavTarget.SendLocation(Timeline.Mode.Thread(navTarget.threadRootId)))
+                        if (hasVulkanSupport()) {
+                            backstack.push(NavTarget.SendLocation(Timeline.Mode.Thread(navTarget.threadRootId)))
+                        } else {
+                            displayVulkanNotSupportedError = true
+                        }
                     }
 
                     override fun navigateToCreatePoll() {
@@ -505,14 +544,22 @@ class MessagesFlowNode(
                         backstack.push(NavTarget.EditPoll(Timeline.Mode.Thread(navTarget.threadRootId), eventId))
                     }
 
+                    override fun navigateToCurrentLiveLocation() {
+                        if (hasVulkanSupport()) {
+                            backstack.push(NavTarget.LocationViewer(ShowLocationMode.Live(senderId = sessionId)))
+                        } else {
+                            displayVulkanNotSupportedError = true
+                        }
+                    }
+
                     override fun navigateToRoomCall(roomId: RoomId, isAudioCall: Boolean) {
-                        val callType = CallType.RoomCall(
+                        val callData = CallData(
                             sessionId = sessionId,
                             roomId = roomId,
                             isAudioCall = isAudioCall
                         )
                         analyticsService.captureInteraction(Interaction.Name.MobileRoomCallButton)
-                        elementCallEntryPoint.startCall(callType)
+                        elementCallEntryPoint.startCall(callData)
                     }
 
                     override fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?) {
@@ -521,6 +568,10 @@ class MessagesFlowNode(
 
                     override fun navigateToDeveloperSettings() {
                         callback.navigateToDeveloperSettings()
+                    }
+
+                    override fun navigateToAvatarPreview(username: String, avatarUrl: String) {
+                        overlay.show(NavTarget.AvatarPreview(username, avatarUrl))
                     }
                 }
                 createNode<ThreadedMessagesNode>(buildContext, listOf(inputs, callback))
@@ -532,6 +583,31 @@ class MessagesFlowNode(
                     }
                 }
                 createNode<ThreadsListNode>(buildContext, listOf(callback))
+            }
+            is NavTarget.AvatarPreview -> {
+                val callback = object : MediaViewerEntryPoint.Callback {
+                    override fun onDone() {
+                        overlay.hide()
+                    }
+
+                    override fun viewInTimeline(eventId: EventId) {
+                        // Cannot happen
+                    }
+
+                    override fun forwardEvent(eventId: EventId, fromPinnedEvents: Boolean) {
+                        // Cannot happen
+                    }
+                }
+                val params = mediaViewerEntryPoint.createParamsForAvatar(
+                    filename = navTarget.name,
+                    avatarUrl = navTarget.avatarUrl,
+                )
+                mediaViewerEntryPoint.createNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    params = params,
+                    callback = callback,
+                )
             }
         }
     }
@@ -547,6 +623,7 @@ class MessagesFlowNode(
     private fun processEventClick(
         timelineMode: Timeline.Mode,
         event: TimelineItem.Event,
+        canUseOverlay: Boolean,
     ): Boolean {
         val navTarget = when (event.content) {
             is TimelineItemImageContent -> {
@@ -556,6 +633,7 @@ class MessagesFlowNode(
                     content = event.content,
                     mediaSource = event.content.mediaSource,
                     thumbnailSource = event.content.thumbnailSource,
+                    canUseOverlay = canUseOverlay,
                 )
             }
             is TimelineItemVideoContent -> {
@@ -565,6 +643,7 @@ class MessagesFlowNode(
                     content = event.content,
                     mediaSource = event.content.mediaSource,
                     thumbnailSource = event.content.thumbnailSource,
+                    canUseOverlay = canUseOverlay,
                 )
             }
             is TimelineItemFileContent -> {
@@ -574,6 +653,7 @@ class MessagesFlowNode(
                     content = event.content,
                     mediaSource = event.content.mediaSource,
                     thumbnailSource = event.content.thumbnailSource,
+                    canUseOverlay = canUseOverlay,
                 )
             }
             is TimelineItemAudioContent -> {
@@ -583,27 +663,37 @@ class MessagesFlowNode(
                     content = event.content,
                     mediaSource = event.content.mediaSource,
                     thumbnailSource = null,
+                    canUseOverlay = canUseOverlay,
                 )
             }
             is TimelineItemLocationContent -> {
-                val mode = when (event.content.mode) {
-                    is TimelineItemLocationContent.Mode.Live -> ShowLocationMode.Live(event.senderId)
-                    is TimelineItemLocationContent.Mode.Static -> ShowLocationMode.Static(
-                        location = event.content.mode.location,
-                        senderName = event.safeSenderName,
-                        senderId = event.senderId,
-                        senderAvatarUrl = event.senderAvatar.url,
-                        timestamp = event.sentTimeMillis,
-                        assetType = event.content.assetType,
-                    )
+                if (hasVulkanSupport()) {
+                    val mode = when (event.content.mode) {
+                        is TimelineItemLocationContent.Mode.Live -> ShowLocationMode.Live(event.senderId)
+                        is TimelineItemLocationContent.Mode.Static -> ShowLocationMode.Static(
+                            location = event.content.mode.location,
+                            senderName = event.safeSenderName,
+                            senderId = event.senderId,
+                            senderAvatarUrl = event.senderAvatar.url,
+                            timestamp = event.sentTimeMillis,
+                            assetType = event.content.assetType,
+                        )
+                    }
+                    NavTarget.LocationViewer(mode = mode).takeIf { locationService.isServiceAvailable() }
+                } else {
+                    displayVulkanNotSupportedError = true
+                    null
                 }
-                NavTarget.LocationViewer(mode = mode).takeIf { locationService.isServiceAvailable() }
             }
             else -> null
         }
         return when (navTarget) {
             is NavTarget.MediaViewer -> {
-                overlay.show(navTarget)
+                if (canUseOverlay) {
+                    overlay.show(navTarget)
+                } else {
+                    backstack.push(navTarget)
+                }
                 true
             }
             is NavTarget.LocationViewer -> {
@@ -620,6 +710,7 @@ class MessagesFlowNode(
         content: TimelineItemEventContentWithAttachment,
         mediaSource: MediaSource,
         thumbnailSource: MediaSource?,
+        canUseOverlay: Boolean,
     ): NavTarget {
         return NavTarget.MediaViewer(
             mode = mode,
@@ -628,6 +719,7 @@ class MessagesFlowNode(
                 filename = content.filename,
                 fileSize = content.fileSize,
                 caption = content.caption,
+                formattedCaption = content.formattedCaption,
                 mimeType = content.mimeType,
                 formattedFileSize = content.formattedFileSize,
                 fileExtension = content.fileExtension,
@@ -647,6 +739,7 @@ class MessagesFlowNode(
             ),
             mediaSource = mediaSource,
             thumbnailSource = thumbnailSource,
+            canUseOverlay = canUseOverlay,
         )
     }
 
@@ -663,6 +756,11 @@ class MessagesFlowNode(
     @Composable
     override fun View(modifier: Modifier) {
         mentionSpanTheme.updateStyles()
+
+        if (displayVulkanNotSupportedError) {
+            RenderingMapsNotSupportedDialog { displayVulkanNotSupportedError = false }
+        }
+
         CompositionLocalProvider(
             LocalMentionSpanUpdater provides mentionSpanUpdater
         ) {

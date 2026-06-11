@@ -124,4 +124,6 @@ object TestTags {
      *
      */
     val roomAddressField = TestTag("room_address_field")
+
+    val confirmInviteUnknown = TestTag("confirm_invite_unknown")
 }

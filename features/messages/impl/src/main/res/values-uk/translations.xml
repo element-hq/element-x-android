@@ -35,7 +35,7 @@
   <string name="screen_room_attachment_source_camera_video">"Записати відео"</string>
   <string name="screen_room_attachment_source_files">"Вкладення"</string>
   <string name="screen_room_attachment_source_gallery">"Бібліотека фото та відео"</string>
-  <string name="screen_room_attachment_source_location">"Розташування"</string>
+  <string name="screen_room_attachment_source_location">"Поділитися місцеперебуванням"</string>
   <string name="screen_room_attachment_source_poll">"Опитування"</string>
   <string name="screen_room_attachment_text_formatting">"Форматування тексту"</string>
   <string name="screen_room_encrypted_history_banner">"Історія повідомлень наразі недоступна."</string>

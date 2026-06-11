@@ -56,6 +56,7 @@
   <string name="screen_room_details_invite_people_dont_close">"Tugallanmaguncha ilovani yopmang."</string>
   <string name="screen_room_details_invite_people_preparing">"Taklifnomalar tayyorlanmoqda…"</string>
   <string name="screen_room_details_invite_people_title">"Odamlarni taklif qiling"</string>
+  <string name="screen_room_details_invite_title">"Taklif qilish"</string>
   <string name="screen_room_details_leave_conversation_title">"Suhbatni tark etish"</string>
   <string name="screen_room_details_leave_room_title">"Xonani tark etish"</string>
   <string name="screen_room_details_media_gallery_title">"Media va fayllar"</string>
@@ -131,6 +132,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Rollar"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Xona tafsilotlari"</string>
   <string name="screen_room_roles_and_permissions_title">"Rollar va ruxsatlar"</string>
+  <string name="screen_roomlist_mark_as_read">"Oʻqilgan deb belgilash"</string>
+  <string name="screen_roomlist_mark_as_unread">"Oʻqilmagan deb belgilash"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Xona manzilini kiritish"</string>
   <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Vakolatli guruhlardagi har kim qo‘shilishi mumkin, lekin qolganlar ruxsat so‘rashi kerak. Tarjima eslatmasi yo‘q"</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Xonaga qo‘shilishni istalgan kishi so‘rashi mumkin, lekin administrator yoki moderator so‘rovni qabul qilishi kerak"</string>

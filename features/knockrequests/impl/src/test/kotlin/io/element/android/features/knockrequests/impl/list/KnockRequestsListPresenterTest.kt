@@ -298,7 +298,6 @@ internal fun TestScope.createKnockRequestsListPresenter(
     val knockRequestsService = KnockRequestsService(
         knockRequestsFlow = knockRequestsFlow,
         coroutineScope = backgroundScope,
-        isKnockFeatureEnabledFlow = flowOf(true),
         permissionsFlow = flowOf(KnockRequestPermissions(canAccept, canDecline, canBan)),
     )
     return KnockRequestsListPresenter(knockRequestsService = knockRequestsService)
