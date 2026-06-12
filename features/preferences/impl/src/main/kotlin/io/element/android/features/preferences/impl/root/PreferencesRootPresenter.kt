@@ -21,6 +21,7 @@ import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
 import io.element.android.features.enterprise.api.SessionEnterpriseService
 import io.element.android.features.logout.api.direct.DirectLogoutState
+import io.element.android.features.preferences.impl.userstatus.UserStatusState
 import io.element.android.features.preferences.impl.utils.ShowDeveloperSettingsProvider
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.libraries.architecture.Presenter
@@ -57,9 +58,11 @@ class PreferencesRootPresenter(
     private val featureFlagService: FeatureFlagService,
     private val sessionStore: SessionStore,
     private val sessionEnterpriseService: SessionEnterpriseService,
+    private val userStatusPresenter: Presenter<UserStatusState>,
 ) : Presenter<PreferencesRootState> {
     @Composable
     override fun present(): PreferencesRootState {
+        val userStatusState = userStatusPresenter.present()
         val coroutineScope = rememberCoroutineScope()
         val matrixUser = matrixClient.userProfile.collectAsState()
         LaunchedEffect(Unit) {
@@ -137,6 +140,7 @@ class PreferencesRootPresenter(
 
         return PreferencesRootState(
             myUser = matrixUser.value,
+            userStatusState = userStatusState,
             version = remember { versionFormatter.get() },
             deviceId = matrixClient.deviceId,
             isMultiAccountEnabled = isMultiAccountEnabled,

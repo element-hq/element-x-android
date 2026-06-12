@@ -10,6 +10,7 @@ package io.element.android.features.preferences.impl.root
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -23,6 +24,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.preferences.impl.R
 import io.element.android.features.preferences.impl.user.UserPreferences
+import io.element.android.features.preferences.impl.userstatus.UserStatusRow
 import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.list.ListItemContent
@@ -80,15 +82,18 @@ fun PreferencesRootView(
             },
             matrixUser = state.myUser,
         )
+        HorizontalDivider()
+        UserStatusRow(
+            state = state.userStatusState,
+            modifier = Modifier.fillMaxWidth(),
+        )
+        HorizontalDivider()
         if (state.isMultiAccountEnabled) {
             MultiAccountSection(
                 state = state,
                 onAddAccountClick = onAddAccountClick,
             )
-        } else {
-            HorizontalDivider()
         }
-        // User status will be added here
         // 'Account' section
         ManageAccountSection(
             state = state,
