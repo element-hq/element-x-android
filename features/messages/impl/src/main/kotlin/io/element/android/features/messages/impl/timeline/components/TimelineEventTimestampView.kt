@@ -77,6 +77,7 @@ fun TimelineEventTimestampView(
             else -> Modifier
         }
     }
+
     Row(
         modifier = Modifier
             .padding(PaddingValues(start = TimelineEventTimestampViewDefaults.spacing))
