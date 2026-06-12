@@ -76,12 +76,19 @@ fun RoomSelectView(
     }
 
     @Composable
-    fun SelectedRoomsHelper(selectedRooms: ImmutableList<SelectRoomInfo>) {
-        SelectedRooms(
-            selectedRooms = selectedRooms,
-            onRemoveRoom = ::onRoomRemoved,
-            modifier = Modifier.padding(vertical = 16.dp)
-        )
+    fun SelectedRoomsHelper(
+        selectedRooms: ImmutableList<SelectRoomInfo>,
+        showVerticalSpace: Boolean,
+    ) {
+        if (selectedRooms.isNotEmpty()) {
+            SelectedRooms(
+                selectedRooms = selectedRooms,
+                onRemoveRoom = ::onRoomRemoved,
+                modifier = Modifier.padding(vertical = 16.dp)
+            )
+        } else if (showVerticalSpace) {
+            Spacer(modifier = Modifier.height(20.dp))
+        }
     }
 
     var canHandleBack by remember { mutableStateOf(true) }
@@ -145,7 +152,8 @@ fun RoomSelectView(
                 LazyColumn(state = lazyListState) {
                     item {
                         SelectedRoomsHelper(
-                            selectedRooms = state.selectedRooms
+                            selectedRooms = state.selectedRooms,
+                            showVerticalSpace = false,
                         )
                     }
                     items(summaries, key = { it.roomId.value }) { roomSummary ->
@@ -166,10 +174,9 @@ fun RoomSelectView(
 
             if (!state.isSearchActive) {
                 SelectedRoomsHelper(
-                    selectedRooms = state.selectedRooms
+                    selectedRooms = state.selectedRooms,
+                    showVerticalSpace = true,
                 )
-                Spacer(modifier = Modifier.height(20.dp))
-
                 if (state.resultState is SearchBarResultState.Results) {
                     LazyColumn(state = lazyListState) {
                         items(state.resultState.results, key = { it.roomId.value }) { roomSummary ->
