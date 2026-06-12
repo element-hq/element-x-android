@@ -11,6 +11,7 @@ package io.element.android.libraries.eventformatter.impl
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.extensions.DEFAULT_SAFE_LENGTH
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.eventformatter.api.RoomLatestEventFormatter
 import io.element.android.libraries.eventformatter.impl.mode.RenderingMode
 import io.element.android.libraries.matrix.api.core.UserId
@@ -31,6 +32,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MessageConten
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
@@ -45,8 +47,11 @@ import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.matrix.ui.messages.toPlainText
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @ContributesBinding(SessionScope::class)
 class DefaultRoomLatestEventFormatter(
@@ -56,7 +61,18 @@ class DefaultRoomLatestEventFormatter(
     private val stateContentFormatter: StateContentFormatter,
     private val rtcNotificationContentFormatter: RtcNotificationContentFormatter,
     private val permalinkParser: PermalinkParser,
+    appPreferencesStore: AppPreferencesStore,
+    @SessionCoroutineScope sessionCoroutineScope: CoroutineScope,
 ) : RoomLatestEventFormatter {
+    private var isDeveloperModeEnabled = false
+
+    init {
+        sessionCoroutineScope.launch {
+            appPreferencesStore.isDeveloperModeEnabledFlow().collect { enabled ->
+                isDeveloperModeEnabled = enabled
+            }
+        }
+    }
     override fun format(
         latestEvent: LatestEventValue.Local,
         isDmRoom: Boolean,
@@ -101,13 +117,13 @@ class DefaultRoomLatestEventFormatter(
                 message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is RoomMembershipContent -> {
-                roomMembershipContentFormatter.format(content, senderDisambiguatedDisplayName, isOutgoing)
+                roomMembershipContentFormatter.format(content, senderDisambiguatedDisplayName, isOutgoing, isDeveloperModeEnabled)
             }
             is ProfileChangeContent -> {
                 profileChangeContentFormatter.format(content, senderId, senderDisambiguatedDisplayName, isOutgoing)
             }
             is StateContent -> {
-                stateContentFormatter.format(content, senderDisambiguatedDisplayName, isOutgoing, RenderingMode.RoomList)
+                stateContentFormatter.format(content, senderDisambiguatedDisplayName, isOutgoing, RenderingMode.RoomList, isDeveloperModeEnabled)
             }
             is PollContent -> {
                 content.question.prefixWith(sp.getString(CommonStrings.common_poll_summary_prefix))
