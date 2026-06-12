@@ -9,6 +9,7 @@
 package io.element.android.libraries.matrix.impl.exception
 
 import io.element.android.libraries.matrix.api.exception.ClientException
+import io.element.android.libraries.matrix.api.exception.ContentScannerErrorReason
 import org.matrix.rustcomponents.sdk.ClientException as RustClientException
 
 fun Throwable.mapClientException(): ClientException {
@@ -22,6 +23,10 @@ fun Throwable.mapClientException(): ClientException {
                     message = msg,
                     details = details,
                     cause = this,
+                )
+                is RustClientException.ContentScanner -> ClientException.ContentScanner(
+                    message = message,
+                    reason = ContentScannerErrorReason.fromRust(reason),
                 )
             }
         }
