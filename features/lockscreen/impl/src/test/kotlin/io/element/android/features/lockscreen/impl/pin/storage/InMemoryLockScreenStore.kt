@@ -18,6 +18,7 @@ class InMemoryLockScreenStore : LockScreenStore {
     private var pinCode: String? = null
     private var remainingAttempts: Int = DEFAULT_REMAINING_ATTEMPTS
     private var isBiometricUnlockAllowed = MutableStateFlow(false)
+    private var isAllowScreenshotsAllowed = MutableStateFlow(false)
 
     override suspend fun getRemainingPinCodeAttemptsNumber(): Int {
         return remainingAttempts
@@ -49,5 +50,13 @@ class InMemoryLockScreenStore : LockScreenStore {
 
     override suspend fun setIsBiometricUnlockAllowed(isAllowed: Boolean) {
         isBiometricUnlockAllowed.value = isAllowed
+    }
+
+    override fun isAllowScreenshotsAllowed(): Flow<Boolean> {
+        return isAllowScreenshotsAllowed
+    }
+
+    override suspend fun setIsAllowScreenshotsAllowed(isAllowed: Boolean) {
+        isAllowScreenshotsAllowed.value = isAllowed
     }
 }

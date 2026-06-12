@@ -35,4 +35,14 @@ interface LockScreenStore : EncryptedPinCodeStorage {
      * Sets whether the biometric unlock is allowed or not.
      */
     suspend fun setIsBiometricUnlockAllowed(isAllowed: Boolean)
+
+    /**
+     * Returns whether screenshots are allowed when the lock screen is enabled.
+     */
+    fun isAllowScreenshotsAllowed(): Flow<Boolean>
+
+    /**
+     * Sets whether screenshots are allowed when the lock screen is enabled.
+     */
+    suspend fun setIsAllowScreenshotsAllowed(isAllowed: Boolean)
 }

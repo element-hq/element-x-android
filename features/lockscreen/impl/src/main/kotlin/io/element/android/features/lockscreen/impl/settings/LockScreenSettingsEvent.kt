@@ -13,4 +13,5 @@ sealed interface LockScreenSettingsEvent {
     data object ConfirmRemovePin : LockScreenSettingsEvent
     data object CancelRemovePin : LockScreenSettingsEvent
     data object ToggleBiometricAllowed : LockScreenSettingsEvent
+    data object ToggleAllowScreenshots : LockScreenSettingsEvent
 }

@@ -65,6 +65,16 @@ fun LockScreenSettingsView(
                     }
                 )
             }
+            if (state.showAllowScreenshots) {
+                PreferenceDivider()
+                PreferenceSwitch(
+                    title = stringResource(id = R.string.screen_app_lock_settings_allow_screenshots),
+                    isChecked = state.isAllowScreenshotsEnabled,
+                    onCheckedChange = {
+                        state.eventSink(LockScreenSettingsEvent.ToggleAllowScreenshots)
+                    }
+                )
+            }
         }
     }
     if (state.showRemovePinConfirmation) {
