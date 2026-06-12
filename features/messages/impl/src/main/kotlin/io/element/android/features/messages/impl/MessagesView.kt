@@ -137,6 +137,8 @@ fun MessagesView(
     onRoomDetailsClick: () -> Unit,
     onEventContentClick: (isLive: Boolean, event: TimelineItem.Event) -> Boolean,
     onUserDataClick: (UserId) -> Unit,
+    @Suppress("UNUSED_PARAMETER") onMemberClick: (UserId) -> Unit,
+    onRoomStateClick: () -> Unit,
     onLinkClick: (String, Boolean) -> Unit,
     onSendLocationClick: () -> Unit,
     onCreatePollClick: () -> Unit,
@@ -285,6 +287,13 @@ fun MessagesView(
                             },
                             forceJumpToBottomVisibility = forceJumpToBottomVisibility,
                             onViewAllPinnedMessagesClick = onViewAllPinnedMessagesClick,
+                            onMemberClick = { userId ->
+                                hidingKeyboard {
+                                    state.eventSink(MessagesEvent.OnMemberClicked(userId))
+                                }
+                            },
+                            onRoomStateClick = onRoomStateClick,
+                            onJoinCallClick = onJoinCallClick,
                             knockRequestsBannerView = knockRequestsBannerView,
                         )
 
@@ -464,6 +473,9 @@ private fun MessagesViewContent(
     onViewAllPinnedMessagesClick: () -> Unit,
     forceJumpToBottomVisibility: Boolean,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
+    onMemberClick: (UserId) -> Unit,
+    onRoomStateClick: () -> Unit,
+    onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     modifier: Modifier = Modifier,
     knockRequestsBannerView: @Composable () -> Unit,
 ) {
@@ -517,6 +529,9 @@ private fun MessagesViewContent(
                 onMoreReactionsClick = onMoreReactionsClick,
                 onReadReceiptClick = onReadReceiptClick,
                 forceJumpToBottomVisibility = forceJumpToBottomVisibility,
+                onJoinCallClick = onJoinCallClick,
+                onMemberClick = onMemberClick,
+                onRoomStateClick = onRoomStateClick,
                 nestedScrollConnection = scrollBehavior.nestedScrollConnection,
                 floatingDateTopOffset = pinnedBannerHeightDp,
             )
@@ -638,6 +653,8 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class)
         onRoomDetailsClick = {},
         onEventContentClick = { _, _ -> false },
         onUserDataClick = {},
+        onMemberClick = {},
+        onRoomStateClick = {},
         onLinkClick = { _, _ -> },
         onSendLocationClick = {},
         onCreatePollClick = {},
@@ -693,6 +710,8 @@ internal fun MessagesViewA11yPreview() = ElementPreview {
         onRoomDetailsClick = {},
         onEventContentClick = { _, _ -> false },
         onUserDataClick = {},
+        onMemberClick = {},
+        onRoomStateClick = {},
         onLinkClick = { _, _ -> },
         onSendLocationClick = {},
         onCreatePollClick = {},

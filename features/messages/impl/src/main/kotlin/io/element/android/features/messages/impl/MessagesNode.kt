@@ -290,6 +290,10 @@ class MessagesNode(
                     }
                 },
                 onUserDataClick = callback::navigateToRoomMemberDetails,
+                onMemberClick = { userId ->
+                    state.eventSink(MessagesEvent.OnMemberClicked(userId))
+                },
+                onRoomStateClick = callback::navigateToRoomDetails,
                 onLinkClick = { url, customTab ->
                     onLinkClick(
                         activity = activity,

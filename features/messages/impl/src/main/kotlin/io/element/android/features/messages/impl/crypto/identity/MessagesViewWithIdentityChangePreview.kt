@@ -43,5 +43,7 @@ internal fun MessagesViewWithIdentityChangePreview(
         onViewAllPinnedMessagesClick = {},
         knockRequestsBannerView = {},
         onThreadsListClick = {},
+        onMemberClick = {},
+        onRoomStateClick = {},
     )
 }
