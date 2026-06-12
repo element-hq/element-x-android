@@ -86,6 +86,7 @@ interface MatrixClient {
     suspend fun uploadAvatar(mimeType: String, data: ByteArray): Result<Unit>
     suspend fun removeAvatar(): Result<Unit>
     suspend fun setUserStatus(status: UserStatus): Result<Unit>
+    /** Clears both m.status and m.call profile fields (maps to DELETE on the profile endpoint per MSC4426). */
     suspend fun clearUserStatus(): Result<Unit>
     suspend fun joinRoom(roomId: RoomId): Result<RoomInfo?>
     suspend fun joinRoomByIdOrAlias(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomInfo?>

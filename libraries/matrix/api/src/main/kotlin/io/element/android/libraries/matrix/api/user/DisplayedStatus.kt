@@ -17,5 +17,8 @@ sealed interface DisplayedStatus : Parcelable {
 
     /** Status set automatically when the user is in a call via m.call. */
     @Parcelize
-    data class InCall(val callJoinedTs: Long) : DisplayedStatus
+    data class InCall(
+        /** Unix timestamp in seconds when the call was joined (from m.call.call_joined_ts). */
+        val callJoinedTs: Long,
+    ) : DisplayedStatus
 }
