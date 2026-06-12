@@ -15,6 +15,7 @@ sealed class ClientException(message: String, val details: String?, cause: Throw
         details = details,
         cause = cause
     )
+    class ContentScanner(message: String, val reason: ContentScannerErrorReason) : ClientException(message, null, null)
     class Other(message: String, cause: Throwable? = null) : ClientException(message, null, cause)
 }
 
