@@ -146,7 +146,6 @@ class KonsistPreviewTest {
         "TextFieldDialogWithErrorPreview",
         "TimelineImageWithCaptionRowPreview",
         "TimelineItemEventRowForDirectRoomPreview",
-        "TimelineItemEventRowRtlContentPreview",
         "TimelineItemEventRowShieldPreview",
         "TimelineItemEventRowTimestampPreview",
         "TimelineItemEventRowUtdPreview",
