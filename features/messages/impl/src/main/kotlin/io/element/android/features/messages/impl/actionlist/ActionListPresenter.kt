@@ -28,13 +28,16 @@ import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUser
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentWithAttachment
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemGalleryContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRtcNotificationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.canBeCopied
+import io.element.android.features.messages.impl.timeline.model.event.captionOrNull
 import io.element.android.features.messages.impl.timeline.model.event.canBeForwarded
 import io.element.android.features.messages.impl.timeline.model.event.canReact
 import io.element.android.libraries.architecture.Presenter
@@ -198,9 +201,12 @@ class DefaultActionListPresenter(
                 add(TimelineItemAction.Forward)
             }
             if (timelineItem.isEditable && usersEventPermissions.canSendMessage) {
-                if (timelineItem.content is TimelineItemEventContentWithAttachment) {
+                if (timelineItem.content is TimelineItemEventContentWithAttachment ||
+                    timelineItem.content is TimelineItemGalleryContent ||
+                    timelineItem.content is TimelineItemAttachmentsContent) {
                     // Caption
-                    if (timelineItem.content.caption == null) {
+                    val caption = timelineItem.content.captionOrNull()
+                    if (caption == null) {
                         add(TimelineItemAction.AddCaption)
                     } else {
                         add(TimelineItemAction.EditCaption)
@@ -225,7 +231,7 @@ class DefaultActionListPresenter(
             }
             if (timelineItem.content.canBeCopied()) {
                 add(TimelineItemAction.CopyText)
-            } else if ((timelineItem.content as? TimelineItemEventContentWithAttachment)?.caption.isNullOrBlank().not()) {
+            } else if (timelineItem.content.captionOrNull().isNullOrBlank().not()) {
                 add(TimelineItemAction.CopyCaption)
             }
             if (timelineItem.isRemote) {

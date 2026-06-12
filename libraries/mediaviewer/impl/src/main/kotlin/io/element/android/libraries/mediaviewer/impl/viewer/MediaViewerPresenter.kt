@@ -70,17 +70,17 @@ class MediaViewerPresenter(
     @Composable
     override fun present(): MediaViewerState {
         val coroutineScope = rememberCoroutineScope()
-        val currentIndex = remember { mutableIntStateOf(dataSource.findEventIndex(inputs.eventId) ?: 0) }
+        val currentIndex = remember { mutableIntStateOf(dataSource.findEventIndex(inputs.eventId, inputs.mediaSource) ?: 0) }
         val data = dataSource.produceState { flow ->
             flow.collectLatest { new ->
                 val existingItem = value.getOrNull(currentIndex.intValue)
                 val newItem = new.getOrNull(currentIndex.intValue)
                 if (existingItem is MediaViewerPageData.MediaViewerData && existingItem.eventId == inputs.eventId && newItem != existingItem) {
-                    currentIndex.intValue = dataSource.findEventIndex(inputs.eventId) ?: 0
+                    currentIndex.intValue = dataSource.findEventIndex(inputs.eventId, inputs.mediaSource) ?: 0
                 } else if (currentIndex.intValue > 0 && value.firstOrNull() is MediaViewerPageData.Loading &&
                     new.firstOrNull() !is MediaViewerPageData.Loading) {
                     // Restore index based on the eventId after the initial items have been loaded
-                    currentIndex.intValue = dataSource.findEventIndex(inputs.eventId) ?: 0
+                    currentIndex.intValue = dataSource.findEventIndex(inputs.eventId, inputs.mediaSource) ?: 0
                 }
                 value = new
             }
@@ -290,5 +290,22 @@ class MediaViewerPresenter(
         } else {
             CommonStrings.error_unknown
         }
+    }
+
+    private fun searchIndex(data: List<MediaViewerPageData>, eventId: EventId?): Int {
+        if (eventId == null) {
+            return 0
+        }
+        val mediaSource = inputs.mediaSource
+        val exactMatch = data.indexOfFirst {
+            val pageData = it as? MediaViewerPageData.MediaViewerData
+            pageData?.eventId == eventId && pageData.mediaSource == mediaSource
+        }
+        if (exactMatch >= 0) {
+            return exactMatch
+        }
+        return data.indexOfFirst {
+            (it as? MediaViewerPageData.MediaViewerData)?.eventId == eventId
+        }.coerceAtLeast(0)
     }
 }

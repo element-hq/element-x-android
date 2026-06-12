@@ -98,9 +98,12 @@ class MediaViewerDataSource(
     /**
      * Find the index of the page corresponding to the given eventId, or null if not found.
      */
-    fun findEventIndex(eventId: EventId?): Int? {
+    fun findEventIndex(eventId: EventId?, mediaSource: MediaSource? = null): Int? {
         if (eventId == null) return null
-        return dataFlow.value.indexOfFirst { (it as? MediaViewerPageData.MediaViewerData)?.eventId == eventId }.takeIf { it >= 0 }
+        return dataFlow.value.indexOfFirst {
+            val pageData = it as? MediaViewerPageData.MediaViewerData
+            pageData?.eventId == eventId && (mediaSource == null || pageData.mediaSource == mediaSource)
+        }.takeIf { it >= 0 }
     }
 
     @VisibleForTesting

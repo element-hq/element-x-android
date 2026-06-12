@@ -136,6 +136,7 @@ fun MessagesView(
     onBackClick: () -> Unit,
     onRoomDetailsClick: () -> Unit,
     onEventContentClick: (isLive: Boolean, event: TimelineItem.Event) -> Boolean,
+    onGalleryItemClick: ((isLive: Boolean, event: TimelineItem.Event, index: Int) -> Boolean)? = null,
     onUserDataClick: (UserId) -> Unit,
     onLinkClick: (String, Boolean) -> Unit,
     onSendLocationClick: () -> Unit,
@@ -258,6 +259,15 @@ fun MessagesView(
                         MessagesViewContent(
                             state = state,
                             onContentClick = ::onContentClick,
+                            onGalleryItemClick = { evt, idx ->
+                                Timber.v("onGalleryItemClick= ${evt.id} index=$idx")
+                                val isLive = state.timelineState.isLive
+                                val handledByGallery = onGalleryItemClick?.invoke(isLive, evt, idx)
+                                val hideKeyboard = handledByGallery ?: onEventContentClick(isLive, evt)
+                                if (hideKeyboard) {
+                                    localView.hideKeyboard()
+                                }
+                            },
                             onMessageLongClick = ::onMessageLongClick,
                             onUserDataClick = {
                                 hidingKeyboard {
@@ -452,6 +462,7 @@ private fun ReinviteDialog(state: MessagesState) {
 private fun MessagesViewContent(
     state: MessagesState,
     onContentClick: (TimelineItem.Event) -> Unit,
+    onGalleryItemClick: ((TimelineItem.Event, Int) -> Unit)? = null,
     onUserDataClick: (MatrixUser) -> Unit,
     onLinkClick: (Link, Boolean) -> Unit,
     onReactionClick: (key: String, TimelineItem.Event) -> Unit,
@@ -510,6 +521,7 @@ private fun MessagesViewContent(
                 onUserDataClick = onUserDataClick,
                 onLinkClick = { link -> onLinkClick(link, false) },
                 onContentClick = onContentClick,
+                onGalleryItemClick = onGalleryItemClick,
                 onMessageLongClick = onMessageLongClick,
                 onSwipeToReply = onSwipeToReply,
                 onReactionClick = onReactionClick,

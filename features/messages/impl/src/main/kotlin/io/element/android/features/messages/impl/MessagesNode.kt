@@ -118,7 +118,7 @@ class MessagesNode(
     )
 
     interface Callback : Plugin {
-        fun handleEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event, canUseOverlay: Boolean): Boolean
+        fun handleEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event, canUseOverlay: Boolean, galleryItemIndex: Int? = null): Boolean
         fun navigateToPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?)
         fun navigateToRoomMemberDetails(userId: UserId)
         fun handlePermalinkClick(data: PermalinkData)
@@ -284,6 +284,18 @@ class MessagesNode(
                         val detachedTimelineMode = timelineController.detachedTimelineMode()
                         if (detachedTimelineMode != null) {
                             callback.handleEventClick(detachedTimelineMode, event, canUseOverlay)
+                        } else {
+                            false
+                        }
+                    }
+                },
+                onGalleryItemClick = { isLive, event, index ->
+                    if (isLive) {
+                        callback.handleEventClick(timelineController.mainTimelineMode(), event, canUseOverlay, index)
+                    } else {
+                        val detachedTimelineMode = timelineController.detachedTimelineMode()
+                        if (detachedTimelineMode != null) {
+                            callback.handleEventClick(detachedTimelineMode, event, canUseOverlay, index)
                         } else {
                             false
                         }

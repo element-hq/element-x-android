@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="common_attachments_count">
+        <item quantity="one">"%1$d item selected"</item>
+        <item quantity="other">"%1$d items selected"</item>
+    </plurals>
+    <string name="screen_media_upload_preview_count">"%1$d of %2$d"</string>
+    <string name="common_attachments">Attachments</string>
+</resources>
