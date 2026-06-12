@@ -55,6 +55,10 @@ class PictureInPicturePresenter(
                         pipController?.exitPip()
                     }
                 }
+                is PictureInPictureEvent.SetPipOrientation -> {
+                    Timber.tag(loggerTag.value).d("onOrientationChange: ${event.orientation}")
+                    pipView?.setPipOrientation(event.orientation)
+                }
             }
         }
 

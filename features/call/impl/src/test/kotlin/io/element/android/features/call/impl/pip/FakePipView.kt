@@ -13,9 +13,11 @@ import io.element.android.tests.testutils.lambda.lambdaError
 class FakePipView(
     private val setPipParamsResult: () -> Unit = { lambdaError() },
     private val enterPipModeResult: () -> Boolean = { lambdaError() },
-    private val handUpResult: () -> Unit = { lambdaError() }
+    private val handUpResult: () -> Unit = { lambdaError() },
+    private val onOrientationChangeResult: (orientation: Int?) -> Unit = { lambdaError() },
 ) : PipView {
     override fun setPipParams() = setPipParamsResult()
     override fun enterPipMode(): Boolean = enterPipModeResult()
     override fun hangUp() = handUpResult()
+    override fun setPipOrientation(orientation: Int?) = onOrientationChangeResult(orientation)
 }
