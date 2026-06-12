@@ -258,7 +258,7 @@ class FakeMatrixClient(
         return removeAvatarResult
     }
 
-    override suspend fun setUserStatus(status: UserStatus): Result<Unit> = simulateLongTask {
+    override suspend fun setUserStatus(status: UserStatus): Result<Unit> {
         setUserStatusCalled = true
         if (setUserStatusResult.isSuccess) {
             _userProfile.emit(_userProfile.value.copy(
@@ -269,7 +269,7 @@ class FakeMatrixClient(
         return setUserStatusResult
     }
 
-    override suspend fun clearUserStatus(): Result<Unit> = simulateLongTask {
+    override suspend fun clearUserStatus(): Result<Unit> {
         clearUserStatusCalled = true
         if (clearUserStatusResult.isSuccess) {
             _userProfile.emit(_userProfile.value.copy(
