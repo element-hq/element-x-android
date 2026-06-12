@@ -25,7 +25,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -54,6 +58,26 @@ fun EmojiPicker(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = { state.categories.size })
+    var skinPickerEmoji by remember { mutableStateOf<Emoji?>(null) }
+
+    val selectedSkinUnicodes = remember(skinPickerEmoji, selectedEmojis) {
+        if (skinPickerEmoji != null) {
+            val emoji = skinPickerEmoji!!
+            val variants = emoji.skins.orEmpty()
+                .map { it.unicode }
+                .filter { it in selectedEmojis }
+            if (variants.isNotEmpty()) {
+                variants.toSet()
+            } else if (emoji.unicode in selectedEmojis) {
+                setOf(emoji.unicode)
+            } else {
+                emptySet()
+            }
+        } else {
+            emptySet()
+        }
+    }
+
     Column(modifier) {
         SearchBar(
             modifier = Modifier.padding(bottom = 10.dp),
@@ -68,6 +92,11 @@ fun EmojiPicker(
                 emojis = emojis,
                 isEmojiSelected = { selectedEmojis.contains(it.unicode) },
                 onSelectEmoji = onSelectEmoji,
+                onLongPress = { skinPickerEmoji = it },
+                skinPickerEmoji = skinPickerEmoji,
+                onDismissSkinPicker = { skinPickerEmoji = null },
+                selectedEmojis = selectedEmojis,
+                selectedSkinUnicodes = selectedSkinUnicodes,
             )
         }
 
@@ -106,6 +135,11 @@ fun EmojiPicker(
                     emojis = emojis,
                     isEmojiSelected = { selectedEmojis.contains(it.unicode) },
                     onSelectEmoji = onSelectEmoji,
+                    onLongPress = { skinPickerEmoji = it },
+                    skinPickerEmoji = skinPickerEmoji,
+                    onDismissSkinPicker = { skinPickerEmoji = null },
+                    selectedEmojis = selectedEmojis,
+                    selectedSkinUnicodes = selectedSkinUnicodes,
                 )
             }
         }
@@ -117,6 +151,11 @@ private fun EmojiResults(
     emojis: ImmutableList<Emoji>,
     isEmojiSelected: (Emoji) -> Boolean,
     onSelectEmoji: (Emoji) -> Unit,
+    onLongPress: ((Emoji) -> Unit)? = null,
+    skinPickerEmoji: Emoji? = null,
+    onDismissSkinPicker: (() -> Unit)? = null,
+    selectedEmojis: ImmutableSet<String> = persistentSetOf(),
+    selectedSkinUnicodes: Set<String> = emptySet(),
 ) {
     LazyVerticalGrid(
         modifier = Modifier.fillMaxSize(),
@@ -131,7 +170,12 @@ private fun EmojiResults(
                 item = item,
                 isSelected = isEmojiSelected(item),
                 onSelectEmoji = onSelectEmoji,
+                onLongPress = onLongPress,
+                skinPickerEmoji = skinPickerEmoji,
+                onDismissSkinPicker = onDismissSkinPicker,
                 emojiSize = 32.dp.toSp(),
+                selectedSkinUnicodes = selectedSkinUnicodes,
+                hasSelectedSkin = item.skins?.any { skin -> skin.unicode in selectedEmojis } == true,
             )
         }
     }
