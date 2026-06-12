@@ -52,7 +52,7 @@ class TimelineItemPollViewTest {
             matcher = hasText(answer.text),
             useUnmergedTree = true,
         ).performClick()
-        eventsRecorder.assertSingle(TimelineEvent.SelectPollAnswer(content.eventId!!, answer.id))
+        eventsRecorder.assertSingle(TimelineEvent.SelectPollAnswer(content.eventId!!, listOf(answer.id)))
     }
 
     @Test

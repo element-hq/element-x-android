@@ -22,6 +22,7 @@ class FakePollContentStateFactory : PollContentStateFactory {
             question = content.question,
             answerItems = emptyList<PollAnswerItem>().toImmutableList(),
             pollKind = content.kind,
+            maxSelections = content.maxSelections,
             isPollEditable = isEditable,
             isPollEnded = content.endTime != null,
             isMine = isOwn,

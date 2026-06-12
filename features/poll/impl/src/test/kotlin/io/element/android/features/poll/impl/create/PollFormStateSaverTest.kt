@@ -24,6 +24,7 @@ class PollFormStateSaverTest {
             question = "question",
             answers = persistentListOf("answer1", "answer2"),
             isDisclosed = true,
+            maxSelections = 2,
         )
 
         val saved = with(CanSaveScope) {

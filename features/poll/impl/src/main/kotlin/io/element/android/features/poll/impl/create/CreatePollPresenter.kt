@@ -24,7 +24,6 @@ import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.PollCreation
 import io.element.android.features.messages.api.MessageComposerContext
 import io.element.android.features.poll.api.create.CreatePollMode
-import io.element.android.features.poll.impl.PollConstants.MAX_SELECTIONS
 import io.element.android.features.poll.impl.data.PollRepository
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.poll.PollAnswer
@@ -81,6 +80,7 @@ class CreatePollPresenter(
                         question = it.question,
                         answers = it.answers.map(PollAnswer::text).toImmutableList(),
                         isDisclosed = it.kind.isDisclosed,
+                        maxSelections = it.maxSelections.toInt(),
                     )
                     initialPoll = loadedPoll
                     poll = loadedPoll
@@ -109,7 +109,7 @@ class CreatePollPresenter(
                             question = poll.question,
                             answers = poll.answers,
                             pollKind = poll.pollKind,
-                            maxSelections = MAX_SELECTIONS,
+                            maxSelections = poll.effectiveMaxSelections,
                         ).onSuccess {
                             analyticsService.capturePollSaved(
                                 isUndisclosed = poll.pollKind == PollKind.Undisclosed,
@@ -151,6 +151,9 @@ class CreatePollPresenter(
                 is CreatePollEvent.SetPollKind -> {
                     poll = poll.copy(isDisclosed = event.pollKind.isDisclosed)
                 }
+                is CreatePollEvent.SetMaxSelections -> {
+                    poll = poll.copy(maxSelections = event.maxSelections)
+                }
                 is CreatePollEvent.SetQuestion -> {
                     poll = poll.copy(question = event.question)
                 }
@@ -182,6 +185,8 @@ class CreatePollPresenter(
             question = poll.question,
             answers = immutableAnswers,
             pollKind = poll.pollKind,
+            maxSelections = poll.effectiveMaxSelections,
+            maxAllowedSelections = poll.answers.size,
             showBackConfirmation = showBackConfirmation,
             showDeleteConfirmation = showDeleteConfirmation,
             eventSink = ::handleEvent,
