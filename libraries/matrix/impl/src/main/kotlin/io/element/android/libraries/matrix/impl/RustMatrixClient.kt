@@ -841,7 +841,7 @@ class RustMatrixClient(
 
     private suspend fun deleteSessionDirectory() = withContext(sessionDispatcher) {
         // Delete all the files for this session
-        sessionPaths?.deleteRecursively()
+        sessionPaths.deleteRecursively()
     }
 
     private fun scheduleDatabaseVacuum() {
