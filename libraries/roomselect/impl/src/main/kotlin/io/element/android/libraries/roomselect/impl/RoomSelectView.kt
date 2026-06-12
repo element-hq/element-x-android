@@ -155,7 +155,8 @@ fun RoomSelectView(
                                 isSelected = state.selectedRooms.any { it.roomId == roomSummary.roomId },
                                 onSelection = { roomSummary ->
                                     state.eventSink(RoomSelectEvent.ToggleSelectedRoom(roomSummary))
-                                }
+                                },
+                                canBeSelected = state.canSelectMoreRooms,
                             )
                             HorizontalDivider(modifier = Modifier.fillMaxWidth())
                         }
@@ -178,7 +179,8 @@ fun RoomSelectView(
                                     isSelected = state.selectedRooms.any { it.roomId == roomSummary.roomId },
                                     onSelection = { roomSummary ->
                                         state.eventSink(RoomSelectEvent.ToggleSelectedRoom(roomSummary))
-                                    }
+                                    },
+                                    canBeSelected = state.canSelectMoreRooms,
                                 )
                                 HorizontalDivider(modifier = Modifier.fillMaxWidth())
                             }
@@ -211,6 +213,7 @@ private fun SelectedRooms(
 private fun RoomSummaryView(
     roomInfo: SelectRoomInfo,
     isSelected: Boolean,
+    canBeSelected: Boolean,
     onSelection: (SelectRoomInfo) -> Unit,
 ) {
     Row(
@@ -255,7 +258,11 @@ private fun RoomSummaryView(
                 )
             }
         }
-        RadioButton(selected = isSelected, onClick = { onSelection(roomInfo) })
+        RadioButton(
+            selected = isSelected,
+            enabled = isSelected || canBeSelected,
+            onClick = { onSelection(roomInfo) },
+        )
     }
 }
 

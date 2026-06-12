@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.roomlist.FakeDynamicRoomList
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.ui.model.toSelectRoomInfo
+import io.element.android.libraries.roomselect.api.RoomSelectEntryPoint
 import io.element.android.libraries.roomselect.api.RoomSelectMode
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.assert
@@ -43,6 +44,8 @@ class RoomSelectPresenterTest {
             assertThat(initialState.selectedRooms).isEmpty()
             assertThat(initialState.resultState).isInstanceOf(SearchBarResultState.Initial::class.java)
             assertThat(initialState.isSearchActive).isFalse()
+            assertThat(initialState.maxNumberOfRooms).isEqualTo(10)
+            assertThat(initialState.canSelectMoreRooms).isTrue()
         }
     }
 
@@ -102,15 +105,22 @@ class RoomSelectPresenterTest {
             createRoomListLambda = { roomList }
         )
         val presenter = createRoomSelectPresenter(
+            maxNumberOfRooms = 1,
             roomListService = roomListService,
         )
         presenter.test {
             val initialState = awaitItem()
             val roomInfo = roomSummary.toSelectRoomInfo()
             initialState.eventSink(RoomSelectEvent.ToggleSelectedRoom(roomInfo))
-            assertThat(awaitItem().selectedRooms).isEqualTo(persistentListOf(roomInfo))
-            initialState.eventSink(RoomSelectEvent.ToggleSelectedRoom(roomInfo))
-            assertThat(awaitItem().selectedRooms).isEmpty()
+            awaitItem().let {
+                assertThat(it.selectedRooms).isEqualTo(persistentListOf(roomInfo))
+                assertThat(it.canSelectMoreRooms).isFalse()
+                it.eventSink(RoomSelectEvent.ToggleSelectedRoom(roomInfo))
+            }
+            awaitItem().let {
+                assertThat(it.selectedRooms).isEmpty()
+                assertThat(it.canSelectMoreRooms).isTrue()
+            }
             cancel()
         }
     }
@@ -145,9 +155,11 @@ class RoomSelectPresenterTest {
 
 internal fun TestScope.createRoomSelectPresenter(
     mode: RoomSelectMode = RoomSelectMode.Forward,
+    maxNumberOfRooms: Int = RoomSelectEntryPoint.DEFAULT_MAX_NUMBER_OF_ROOMS,
     roomListService: RoomListService = FakeRoomListService(),
 ) = RoomSelectPresenter(
     mode = mode,
+    maxNumberOfRooms = maxNumberOfRooms,
     dataSourceFactory = object : RoomSelectSearchDataSource.Factory {
         override fun create(coroutineScope: CoroutineScope): RoomSelectSearchDataSource {
             return RoomSelectSearchDataSource(
