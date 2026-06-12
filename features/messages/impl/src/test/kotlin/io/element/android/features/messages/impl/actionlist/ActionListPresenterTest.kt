@@ -144,6 +144,67 @@ class ActionListPresenterTest {
     }
 
     @Test
+    fun `present - Select action is added for a remote message when MessageMultiSelect is enabled`() = runTest {
+        val presenter = createActionListPresenter(
+            isDeveloperModeEnabled = false,
+            featureFlagService = FakeFeatureFlagService(
+                initialState = mapOf(FeatureFlags.MessageMultiSelect.key to true),
+            ),
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            val messageEvent = aMessageEvent(
+                isMine = false,
+                isEditable = false,
+                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false, formattedBody = A_MESSAGE)
+            )
+            initialState.eventSink.invoke(
+                ActionListEvent.ComputeForMessage(
+                    event = messageEvent,
+                    userEventPermissions = aUserEventPermissions(
+                        canRedactOwn = false,
+                        canRedactOther = false,
+                        canSendMessage = true,
+                        canSendReaction = true,
+                        canPinUnpin = false,
+                    )
+                )
+            )
+            val successState = awaitItem()
+            val actions = (successState.target as ActionListState.Target.Success).actions
+            assertThat(actions).contains(TimelineItemAction.Select)
+        }
+    }
+
+    @Test
+    fun `present - Select action is absent when MessageMultiSelect is disabled`() = runTest {
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = false)
+        presenter.test {
+            val initialState = awaitItem()
+            val messageEvent = aMessageEvent(
+                isMine = false,
+                isEditable = false,
+                content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false, formattedBody = A_MESSAGE)
+            )
+            initialState.eventSink.invoke(
+                ActionListEvent.ComputeForMessage(
+                    event = messageEvent,
+                    userEventPermissions = aUserEventPermissions(
+                        canRedactOwn = false,
+                        canRedactOther = false,
+                        canSendMessage = true,
+                        canSendReaction = true,
+                        canPinUnpin = false,
+                    )
+                )
+            )
+            val successState = awaitItem()
+            val actions = (successState.target as ActionListState.Target.Success).actions
+            assertThat(actions).doesNotContain(TimelineItemAction.Select)
+        }
+    }
+
+    @Test
     fun `present - compute for others message`() = runTest {
         val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         presenter.test {

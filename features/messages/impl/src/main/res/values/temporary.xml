@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2026 Element Creations Ltd.
+  ~
+  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+  ~ Please see LICENSE files in the repository root for full details.
+  -->
+
+<resources>
+    <string name="action_select_messages">Select</string>
+    <plurals name="screen_messages_selection_count_short">
+        <item quantity="one">%1$d message selected</item>
+        <item quantity="other">%1$d messages selected</item>
+    </plurals>
+    <plurals name="screen_messages_selection_delete_confirm">
+        <item quantity="one">Delete %1$d message?</item>
+        <item quantity="other">Delete %1$d messages?</item>
+    </plurals>
+    <string name="screen_messages_selection_cap_reached">Maximum messages selected</string>
+</resources>
