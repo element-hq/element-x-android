@@ -9,7 +9,16 @@ package io.element.android.libraries.matrix.impl.exception
 
 import io.element.android.libraries.matrix.api.exception.ContentScannerErrorReason
 import uniffi.matrix_sdk_contentscanner.ErrorReason
-import uniffi.matrix_sdk_contentscanner.ErrorReason.*
+import uniffi.matrix_sdk_contentscanner.ErrorReason.MCS_BAD_DECRYPTION
+import uniffi.matrix_sdk_contentscanner.ErrorReason.MCS_MALFORMED_JSON
+import uniffi.matrix_sdk_contentscanner.ErrorReason.MCS_MEDIA_FAILED_TO_DECRYPT
+import uniffi.matrix_sdk_contentscanner.ErrorReason.MCS_MEDIA_NOT_CLEAN
+import uniffi.matrix_sdk_contentscanner.ErrorReason.MCS_MEDIA_REQUEST_FAILED
+import uniffi.matrix_sdk_contentscanner.ErrorReason.MCS_MIME_TYPE_FORBIDDEN
+import uniffi.matrix_sdk_contentscanner.ErrorReason.M_MISSING_TOKEN
+import uniffi.matrix_sdk_contentscanner.ErrorReason.M_NOT_FOUND
+import uniffi.matrix_sdk_contentscanner.ErrorReason.M_UNKNOWN
+import uniffi.matrix_sdk_contentscanner.ErrorReason.M_UNKNOWN_TOKEN
 
 fun ContentScannerErrorReason.Companion.fromRust(reason: ErrorReason) = when (reason) {
     M_UNKNOWN -> ContentScannerErrorReason.M_UNKNOWN
