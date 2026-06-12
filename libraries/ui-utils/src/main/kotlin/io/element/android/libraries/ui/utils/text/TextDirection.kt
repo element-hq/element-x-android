@@ -10,10 +10,10 @@ package io.element.android.libraries.ui.utils.text
 import androidx.compose.ui.text.style.TextDirection
 
 /**
- * Detect if a text is RTL or not, based on its content.
+ * Detect a text direction based on the first strong directional character in the text.
  */
 fun TextDirection.Companion.detect(text: String): TextDirection {
-    return if (text.any(::isRtlChar)) TextDirection.Rtl else TextDirection.Content
+    return if (text.any(::isRtlChar)) TextDirection.Rtl else TextDirection.Ltr
 }
 
 /**

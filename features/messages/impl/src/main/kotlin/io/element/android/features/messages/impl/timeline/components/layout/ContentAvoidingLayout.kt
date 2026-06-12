@@ -15,11 +15,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.style.ResolvedTextDirection
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.designsystem.text.roundToPx
@@ -39,6 +41,7 @@ import kotlin.math.roundToInt
  * @param spacing The spacing between the [content] and the [overlay]. Defaults to `0.dp`.
  * @param overlayOffset The offset of the [overlay] from the bottom right corner of the [content].
  * @param shrinkContent Whether the content should be shrunk to fit the available width or not. Defaults to `false`.
+ * @param contentDirection The direction of the content, which may be different from the current layout direction.
  * @param content The 'content' component of the layout.
  */
 @Composable
@@ -48,9 +51,11 @@ fun ContentAvoidingLayout(
     spacing: Dp = 0.dp,
     overlayOffset: DpOffset = DpOffset.Zero,
     shrinkContent: Boolean = false,
+    contentDirection: LayoutDirection = LocalLayoutDirection.current,
     content: @Composable ContentAvoidingLayoutScope.() -> Unit,
 ) {
     val scope = remember { ContentAvoidingLayoutScopeInstance() }
+    val layoutDirection = LocalLayoutDirection.current
 
     Layout(
         modifier = modifier,
@@ -59,6 +64,7 @@ fun ContentAvoidingLayout(
             overlay(scope.data.value)
         }
     ) { measurables, constraints ->
+        val mismatchedDirection = contentDirection != layoutDirection
 
         // Measure the `overlay` view first, in case we need to shrink the `content`
         val overlayPlaceable = measurables.last().measure(Constraints(minWidth = 0, maxWidth = constraints.maxWidth))
@@ -77,9 +83,16 @@ fun ContentAvoidingLayout(
         // Free space = width of the whole component - width of its non overlapping contents
         val freeSpace = max(contentPlaceable.width - data.nonOverlappingContentWidth, 0)
 
+        // Whether the overlay needs to be placed in a new row
+        val needsNewLine =
+            // If the current layout direction doesn't match the content's and the content spans several lines, we need to place the overlay in a new line
+            mismatchedDirection && data.multiline ||
+            // If the overlay doesn't fit in the free space on the right of the content, we need to place it in a new line
+                data.nonOverlappingContentWidth + overlayPlaceable.width > constraints.maxWidth
+
         when {
             // When the content + the overlay don't fit in the available max width, we need to move the overlay to a new row
-            !shrinkContent && data.nonOverlappingContentWidth + overlayPlaceable.width > constraints.maxWidth -> {
+            !shrinkContent && needsNewLine -> {
                 layoutHeight += overlayPlaceable.height + overlayOffset.y.roundToPx()
             }
             // If the content is smaller than the available max width, we can move the overlay to the right of the content
@@ -112,12 +125,14 @@ fun ContentAvoidingLayout(
  * @param contentHeight The full height of the content in pixels.
  * @param nonOverlappingContentWidth The width of the part of the content that can't overlap with the timestamp.
  * @param nonOverlappingContentHeight The height of the part of the content that can't overlap with the timestamp.
+ * @param multiline Whether the content is multiline or not.
  */
 data class ContentAvoidingLayoutData(
     val contentWidth: Int = 0,
     val contentHeight: Int = 0,
     val nonOverlappingContentWidth: Int = contentWidth,
     val nonOverlappingContentHeight: Int = contentHeight,
+    val multiline: Boolean = false,
 )
 
 /**
@@ -164,6 +179,7 @@ object ContentAvoidingLayout {
                     contentHeight = textLayout.size.height,
                     nonOverlappingContentWidth = lastLineWidth + extraWidthPx,
                     nonOverlappingContentHeight = lastLineHeight,
+                    multiline = textLayout.lineCount > 1,
                 )
             )
         }
@@ -190,6 +206,7 @@ object ContentAvoidingLayout {
                     contentHeight = textLayout.height,
                     nonOverlappingContentWidth = lastLineWidth + extraWidthPx,
                     nonOverlappingContentHeight = lastLineHeight,
+                    multiline = textLayout.lineCount > 1,
                 )
             )
         }
