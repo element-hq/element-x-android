@@ -31,6 +31,7 @@ class InMemorySessionPreferencesStore(
     private val isSessionVerificationSkipped = MutableStateFlow(isSessionVerificationSkipped)
     private val doesCompressMedia = MutableStateFlow(doesCompressMedia)
     private val videoCompressionPreset = MutableStateFlow(videoCompressionPreset)
+    private val hideSpaceRoomMembers = MutableStateFlow(false)
     var clearCallCount = 0
         private set
 
@@ -82,6 +83,14 @@ class InMemorySessionPreferencesStore(
 
     override fun getVideoCompressionPreset(): Flow<VideoCompressionPreset> {
         return videoCompressionPreset
+    }
+
+    override suspend fun setHideSpaceRoomMembers(enabled: Boolean) {
+        hideSpaceRoomMembers.value = enabled
+    }
+
+    override fun isHideSpaceRoomMembersEnabled(): Flow<Boolean> {
+        return hideSpaceRoomMembers
     }
 
     override suspend fun clear() {

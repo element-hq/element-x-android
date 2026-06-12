@@ -172,11 +172,13 @@ class RoomListPresenter(
         val showUnreadCount by produceState(false) {
             value = featureFlagService.isFeatureEnabled(FeatureFlags.UnreadIndicatorCount)
         }
+        val isSpaceSelected = spaceFiltersState.selectedFilter() != null
 
         val contentState = roomListContentState(
             securityBannerDismissed,
             showNewNotificationSoundBanner,
             showUnreadCount,
+            hasSelectedSpace = isSpaceSelected,
         )
 
         return RoomListState(
@@ -234,10 +236,19 @@ class RoomListPresenter(
         securityBannerDismissed: Boolean,
         showNewNotificationSoundBanner: Boolean,
         showUnreadCount: Boolean,
+        hasSelectedSpace: Boolean,
     ): RoomListContentState {
         val roomSummaries by produceState(initialValue = AsyncData.Loading()) {
             roomListDataSource.roomSummariesFlow.collect { value = AsyncData.Success(it) }
         }
+        val spaceMemberRoomIds by produceState<Set<RoomId>>(initialValue = emptySet()) {
+            client.spaceService.spaceFiltersFlow.collect { filters ->
+                value = filters.flatMap { it.descendants }.toSet()
+            }
+        }
+        val hideSpaceRooms by remember {
+            sessionPreferencesStore.isHideSpaceRoomMembersEnabled()
+        }.collectAsState(initial = false)
         val loadingState by roomListDataSource.loadingState.collectAsState()
         val showEmpty by remember {
             derivedStateOf {
@@ -259,13 +270,19 @@ class RoomListPresenter(
             else -> {
                 coldStartWatcher.onRoomListVisible()
 
+                val filteredSummaries = if (hideSpaceRooms && !hasSelectedSpace) {
+                    roomSummaries.dataOrNull().orEmpty().filter { it.roomId !in spaceMemberRoomIds }
+                } else {
+                    roomSummaries.dataOrNull().orEmpty()
+                }
+
                 RoomListContentState.Rooms(
                     securityBannerState = securityBannerState,
                     showNewNotificationSoundBanner = showNewNotificationSoundBanner,
                     showUnreadCount = showUnreadCount,
                     fullScreenIntentPermissionsState = fullScreenIntentPermissionsPresenter.present(),
                     batteryOptimizationState = batteryOptimizationPresenter.present(),
-                    summaries = roomSummaries.dataOrNull().orEmpty().toImmutableList(),
+                    summaries = filteredSummaries.toImmutableList(),
                     seenRoomInvites = seenRoomInvites.toImmutableSet(),
                 )
             }
