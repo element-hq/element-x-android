@@ -260,7 +260,7 @@ class RustMatrixClient(
 
     private var clientDelegateTaskHandle: TaskHandle? = innerClient.setDelegate(sessionDelegate)
 
-    private var localUserStatus: UserStatus? = null
+    @Volatile private var localUserStatus: UserStatus? = null
 
     private val _userProfile: MutableStateFlow<MatrixUser> = MutableStateFlow(
         MatrixUser(
@@ -482,7 +482,7 @@ class RustMatrixClient(
             runCatchingExceptions { innerClient.removeAvatar() }
         }
 
-    override suspend fun setUserStatus(status: UserStatus): Result<Unit> {
+    override suspend fun setUserStatus(status: UserStatus): Result<Unit> = withContext(sessionDispatcher) {
         localUserStatus = status
         _userProfile.emit(
             _userProfile.value.copy(
@@ -490,10 +490,10 @@ class RustMatrixClient(
                 displayedStatus = DisplayedStatus.UserSet(status),
             )
         )
-        return Result.success(Unit)
+        Result.success(Unit)
     }
 
-    override suspend fun clearUserStatus(): Result<Unit> {
+    override suspend fun clearUserStatus(): Result<Unit> = withContext(sessionDispatcher) {
         localUserStatus = null
         _userProfile.emit(
             _userProfile.value.copy(
@@ -501,7 +501,7 @@ class RustMatrixClient(
                 displayedStatus = null,
             )
         )
-        return Result.success(Unit)
+        Result.success(Unit)
     }
 
     override suspend fun joinRoom(roomId: RoomId): Result<RoomInfo?> = withContext(sessionDispatcher) {
