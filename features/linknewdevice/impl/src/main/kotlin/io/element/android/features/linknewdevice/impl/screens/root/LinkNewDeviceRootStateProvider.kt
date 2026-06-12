@@ -31,10 +31,14 @@ open class LinkNewDeviceRootStateProvider : PreviewParameterProvider<LinkNewDevi
 
 fun aLinkNewDeviceRootState(
     isSupported: AsyncData<Boolean> = AsyncData.Uninitialized,
+    isPinConfigured: Boolean = false,
+    isDeviceSecured: Boolean = false,
     qrCodeData: AsyncData<Unit> = AsyncData.Uninitialized,
     eventSink: (LinkNewDeviceRootEvent) -> Unit = { },
 ) = LinkNewDeviceRootState(
     isSupported = isSupported,
+    isPinConfigured = isPinConfigured,
+    isDeviceSecured = isDeviceSecured,
     qrCodeData = qrCodeData,
     eventSink = eventSink,
 )

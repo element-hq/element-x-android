@@ -29,6 +29,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlin.time.Duration
@@ -105,6 +106,10 @@ class DefaultLockScreenService(
 
     override fun isPinSetup(): Flow<Boolean> {
         return pinCodeManager.hasPinCode()
+    }
+
+    override fun isDeviceSecured(): Flow<Boolean> {
+        return flowOf(biometricAuthenticatorManager.isDeviceSecured)
     }
 
     override fun isSetupRequired(): Flow<Boolean> {

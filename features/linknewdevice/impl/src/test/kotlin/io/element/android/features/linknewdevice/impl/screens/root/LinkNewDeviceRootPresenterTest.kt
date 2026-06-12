@@ -9,6 +9,8 @@ package io.element.android.features.linknewdevice.impl.screens.root
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.linknewdevice.impl.LinkNewMobileHandler
+import io.element.android.features.lockscreen.api.LockScreenService
+import io.element.android.features.lockscreen.test.FakeLockScreenService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -87,11 +89,65 @@ class LinkNewDeviceRootPresenterTest {
         }
     }
 
+    @Test
+    fun `present - exposes lock screen setup and device secured state`() = runTest {
+        val lockScreenService = FakeLockScreenService().apply {
+            setIsPinSetup(true)
+            setIsDeviceSecured(true)
+        }
+        val matrixClient = FakeMatrixClient(
+            canLinkNewDeviceResult = { Result.success(true) },
+        )
+        createPresenter(
+            matrixClient = matrixClient,
+            lockScreenService = lockScreenService,
+        ).test {
+            var state = awaitItem()
+            while (state.isSupported.isUninitialized()) {
+                state = awaitItem()
+            }
+            assertThat(state.isSupported.dataOrNull()).isTrue()
+            assertThat(state.isPinConfigured).isTrue()
+            assertThat(state.isDeviceSecured).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - close dialog resets qrCodeData`() = runTest {
+        val fakeLinkMobileHandler = FakeLinkMobileHandler(startResult = {})
+        val matrixClient = FakeMatrixClient(
+            canLinkNewDeviceResult = { Result.success(true) },
+            sessionCoroutineScope = backgroundScope,
+            createLinkMobileHandlerResult = { Result.success(fakeLinkMobileHandler) }
+        )
+        val linkNewMobileHandler = LinkNewMobileHandler(matrixClient)
+        createPresenter(
+            matrixClient = matrixClient,
+            linkNewMobileHandler = linkNewMobileHandler,
+        ).test {
+            skipItems(1)
+            linkNewMobileHandler.onTooManyRotation()
+            var errorState = awaitItem()
+            while (!errorState.qrCodeData.isFailure()) {
+                errorState = awaitItem()
+            }
+            assertThat(errorState.qrCodeData.isFailure()).isTrue()
+            errorState.eventSink(LinkNewDeviceRootEvent.CloseDialog)
+            var resetState = awaitItem()
+            while (!resetState.qrCodeData.isUninitialized()) {
+                resetState = awaitItem()
+            }
+            assertThat(resetState.qrCodeData.isUninitialized()).isTrue()
+        }
+    }
+
     private fun createPresenter(
         matrixClient: MatrixClient = FakeMatrixClient(),
         linkNewMobileHandler: LinkNewMobileHandler = LinkNewMobileHandler(matrixClient),
+        lockScreenService: LockScreenService = FakeLockScreenService(),
     ) = LinkNewDeviceRootPresenter(
         matrixClient = matrixClient,
         linkNewMobileHandler = linkNewMobileHandler,
+        lockScreenService = lockScreenService,
     )
 }

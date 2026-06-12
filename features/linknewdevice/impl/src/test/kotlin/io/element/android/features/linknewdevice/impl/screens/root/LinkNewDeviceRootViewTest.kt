@@ -21,6 +21,7 @@ import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
+import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBackKey
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -57,16 +58,81 @@ class LinkNewDeviceRootViewTest {
     }
 
     @Test
+    fun `link desktop button clicked - when pin is configured calls unlock application`() = runAndroidComposeUiTest {
+        val eventRecorder = EventsRecorder<LinkNewDeviceRootEvent>(expectEvents = false)
+        ensureCalledOnceWithParam(LinkDeviceType.Desktop) { callback ->
+            setLinkNewDeviceRootView(
+                state = aLinkNewDeviceRootState(
+                    isSupported = AsyncData.Success(true),
+                    isPinConfigured = true,
+                    eventSink = eventRecorder,
+                ),
+                onUnlockApplication = callback,
+            )
+            clickOn(R.string.screen_link_new_device_root_desktop_computer)
+        }
+    }
+
+    @Test
+    fun `link desktop button clicked - when device is secured calls unlock device`() = runAndroidComposeUiTest {
+        val eventRecorder = EventsRecorder<LinkNewDeviceRootEvent>(expectEvents = false)
+        ensureCalledOnceWithParam(LinkDeviceType.Desktop) { callback ->
+            setLinkNewDeviceRootView(
+                state = aLinkNewDeviceRootState(
+                    isSupported = AsyncData.Success(true),
+                    isDeviceSecured = true,
+                    eventSink = eventRecorder,
+                ),
+                onUnlockDevice = callback,
+            )
+            clickOn(R.string.screen_link_new_device_root_desktop_computer)
+        }
+    }
+
+    @Test
     fun `link mobile button clicked - emits the expected event`() = runAndroidComposeUiTest {
         val eventRecorder = EventsRecorder<LinkNewDeviceRootEvent>()
         setLinkNewDeviceRootView(
             state = aLinkNewDeviceRootState(
                 isSupported = AsyncData.Success(true),
                 eventSink = eventRecorder,
-            )
+            ),
+            onLinkMobileDeviceClick = {},
         )
         clickOn(R.string.screen_link_new_device_root_mobile_device)
         eventRecorder.assertSingle(LinkNewDeviceRootEvent.LinkMobileDevice)
+    }
+
+    @Test
+    fun `link mobile button clicked - when pin is configured calls unlock application`() = runAndroidComposeUiTest {
+        val eventRecorder = EventsRecorder<LinkNewDeviceRootEvent>(expectEvents = false)
+        ensureCalledOnceWithParam(LinkDeviceType.Mobile) { callback ->
+            setLinkNewDeviceRootView(
+                state = aLinkNewDeviceRootState(
+                    isSupported = AsyncData.Success(true),
+                    isPinConfigured = true,
+                    eventSink = eventRecorder,
+                ),
+                onUnlockApplication = callback,
+            )
+            clickOn(R.string.screen_link_new_device_root_mobile_device)
+        }
+    }
+
+    @Test
+    fun `link mobile button clicked - when device is secured calls unlock device`() = runAndroidComposeUiTest {
+        val eventRecorder = EventsRecorder<LinkNewDeviceRootEvent>(expectEvents = false)
+        ensureCalledOnceWithParam(LinkDeviceType.Mobile) { callback ->
+            setLinkNewDeviceRootView(
+                state = aLinkNewDeviceRootState(
+                    isSupported = AsyncData.Success(true),
+                    isDeviceSecured = true,
+                    eventSink = eventRecorder,
+                ),
+                onUnlockDevice = callback,
+            )
+            clickOn(R.string.screen_link_new_device_root_mobile_device)
+        }
     }
 
     @Test
@@ -88,12 +154,18 @@ class LinkNewDeviceRootViewTest {
         state: LinkNewDeviceRootState = aLinkNewDeviceRootState(),
         onBackClick: () -> Unit = EnsureNeverCalled(),
         onLinkDesktopDeviceClick: () -> Unit = EnsureNeverCalled(),
+        onLinkMobileDeviceClick: () -> Unit = EnsureNeverCalled(),
+        onUnlockApplication: (type: LinkDeviceType) -> Unit = { EnsureNeverCalled()() },
+        onUnlockDevice: (type: LinkDeviceType) -> Unit = { EnsureNeverCalled() },
     ) {
         setContent {
             LinkNewDeviceRootView(
                 state = state,
                 onBackClick = onBackClick,
                 onLinkDesktopDeviceClick = onLinkDesktopDeviceClick,
+                onLinkMobileDeviceClick = onLinkMobileDeviceClick,
+                onUnlockApplication = onUnlockApplication,
+                onUnlockDevice = onUnlockDevice,
             )
         }
     }

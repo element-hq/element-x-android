@@ -34,6 +34,12 @@ interface LockScreenService {
      * @return true if the pin is setup, false otherwise.
      */
     fun isPinSetup(): Flow<Boolean>
+
+    /**
+     * Check if the device is secured with a biometric or a system lock.
+     * @return Flow of Boolean, if the device is secured, false otherwise.
+     */
+    fun isDeviceSecured(): Flow<Boolean>
 }
 
 /**

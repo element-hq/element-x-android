@@ -17,6 +17,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
 import io.element.android.features.linknewdevice.impl.LinkNewMobileHandler
+import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -27,6 +28,7 @@ import kotlinx.coroutines.launch
 class LinkNewDeviceRootPresenter(
     private val matrixClient: MatrixClient,
     private val linkNewMobileHandler: LinkNewMobileHandler,
+    private val lockScreenService: LockScreenService,
 ) : Presenter<LinkNewDeviceRootState> {
     @Composable
     override fun present(): LinkNewDeviceRootState {
@@ -45,6 +47,8 @@ class LinkNewDeviceRootPresenter(
             )
         }
 
+        val isPinConfigured by lockScreenService.isPinSetup().collectAsState(false)
+        val isDeviceSecured by lockScreenService.isDeviceSecured().collectAsState(false)
         val step by linkNewMobileHandler.stepFlow.collectAsState()
 
         LaunchedEffect(step) {
@@ -65,10 +69,8 @@ class LinkNewDeviceRootPresenter(
         fun handleEvent(event: LinkNewDeviceRootEvent) {
             when (event) {
                 LinkNewDeviceRootEvent.LinkMobileDevice -> coroutineScope.launch {
-                    qrCodeData = AsyncData.Loading()
                     // Wait for the QrCode to be ready
-                    linkNewMobileHandler.reset()
-                    linkNewMobileHandler.createAndStartNewHandler()
+                    qrCodeData = AsyncData.Loading()
                 }
                 LinkNewDeviceRootEvent.CloseDialog -> coroutineScope.launch {
                     linkNewMobileHandler.reset()
@@ -78,6 +80,8 @@ class LinkNewDeviceRootPresenter(
 
         return LinkNewDeviceRootState(
             isSupported = isSupported,
+            isPinConfigured = isPinConfigured,
+            isDeviceSecured = isDeviceSecured,
             qrCodeData = qrCodeData,
             eventSink = ::handleEvent,
         )

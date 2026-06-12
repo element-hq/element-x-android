@@ -34,8 +34,10 @@ import io.element.android.features.linknewdevice.impl.screens.error.ErrorNode
 import io.element.android.features.linknewdevice.impl.screens.error.ErrorScreenType
 import io.element.android.features.linknewdevice.impl.screens.number.EnterNumberNode
 import io.element.android.features.linknewdevice.impl.screens.qrcode.ShowQrCodeNode
+import io.element.android.features.linknewdevice.impl.screens.root.LinkDeviceType
 import io.element.android.features.linknewdevice.impl.screens.root.LinkNewDeviceRootNode
 import io.element.android.features.linknewdevice.impl.screens.scan.ScanQrCodeNode
+import io.element.android.features.lockscreen.api.LockScreenOneShotEntryPoint
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
@@ -67,6 +69,7 @@ class LinkNewDeviceFlowNode(
     private val linkNewMobileHandler: LinkNewMobileHandler,
     private val linkNewDesktopHandler: LinkNewDesktopHandler,
     private val sessionEnterpriseService: SessionEnterpriseService,
+    private val lockScreenOneShotEntryPoint: LockScreenOneShotEntryPoint,
 ) : BaseFlowNode<LinkNewDeviceFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
@@ -120,6 +123,11 @@ class LinkNewDeviceFlowNode(
 
         @Parcelize
         data object DesktopNotice : NavTarget
+
+        @Parcelize
+        data class UnlockApplication(
+            val type: LinkDeviceType,
+        ) : NavTarget
 
         @Parcelize
         data object DesktopScanQrCode : NavTarget
@@ -228,8 +236,39 @@ class LinkNewDeviceFlowNode(
                         linkNewDesktopHandler.reset()
                         backstack.push(NavTarget.DesktopNotice)
                     }
+
+                    override fun linkMobileDevice() {
+                        linkNewMobileHandler.reset()
+                        linkNewMobileHandler.createAndStartNewHandler()
+                    }
+
+                    override fun onUnlockApplication(type: LinkDeviceType) {
+                        backstack.push(NavTarget.UnlockApplication(type))
+                    }
                 }
                 createNode<LinkNewDeviceRootNode>(buildContext, listOf(callback))
+            }
+            is NavTarget.UnlockApplication -> {
+                val callback = object : LockScreenOneShotEntryPoint.Callback {
+                    override fun onCancel() {
+                        backstack.pop()
+                    }
+
+                    override fun onUnlocked() {
+                        when (navTarget.type) {
+                            LinkDeviceType.Mobile -> {
+                                backstack.pop()
+                                linkNewMobileHandler.reset()
+                                linkNewMobileHandler.createAndStartNewHandler()
+                            }
+                            LinkDeviceType.Desktop -> {
+                                linkNewDesktopHandler.reset()
+                                backstack.replace(NavTarget.DesktopNotice)
+                            }
+                        }
+                    }
+                }
+                lockScreenOneShotEntryPoint.createNode(this, buildContext, callback)
             }
             NavTarget.DesktopNotice -> {
                 val callback = object : DesktopNoticeNode.Callback {

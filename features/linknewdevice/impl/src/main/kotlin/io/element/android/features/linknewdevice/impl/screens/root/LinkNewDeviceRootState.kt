@@ -11,6 +11,8 @@ import io.element.android.libraries.architecture.AsyncData
 
 data class LinkNewDeviceRootState(
     val isSupported: AsyncData<Boolean>,
+    val isPinConfigured: Boolean,
+    val isDeviceSecured: Boolean,
     val qrCodeData: AsyncData<Unit>,
     val eventSink: (LinkNewDeviceRootEvent) -> Unit,
 )
