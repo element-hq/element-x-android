@@ -13,6 +13,7 @@ import coil3.decode.ImageSource
 import coil3.fetch.FetchResult
 import coil3.fetch.Fetcher
 import coil3.fetch.SourceFetchResult
+import io.element.android.libraries.matrix.api.exception.isNetworkError
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.media.toFile
@@ -34,7 +35,19 @@ internal class CoilMediaFetcher(
         }
         return when (val kind = mediaData.kind) {
             is MediaRequestData.Kind.Content -> fetchContent(mediaSource)
-            is MediaRequestData.Kind.Thumbnail -> fetchThumbnail(mediaSource, kind)
+            is MediaRequestData.Kind.Thumbnail -> {
+                val thumbnailResult = fetchThumbnail(mediaSource, kind)
+                if (thumbnailResult.isSuccess) {
+                    thumbnailResult.getOrThrow()
+                } else {
+                    val error = thumbnailResult.exceptionOrNull()
+                    if (error?.isNetworkError() == true) {
+                        null
+                    } else {
+                        fetchContent(mediaSource)
+                    }
+                }
+            }
             is MediaRequestData.Kind.File -> fetchFile(mediaSource, kind)
         }
     }
@@ -74,7 +87,7 @@ internal class CoilMediaFetcher(
         }.getOrNull()
     }
 
-    private suspend fun fetchThumbnail(mediaSource: MediaSource, kind: MediaRequestData.Kind.Thumbnail): FetchResult? {
+    private suspend fun fetchThumbnail(mediaSource: MediaSource, kind: MediaRequestData.Kind.Thumbnail): Result<FetchResult> {
         return mediaLoader.loadMediaThumbnail(
             source = mediaSource,
             width = kind.width,
@@ -83,7 +96,7 @@ internal class CoilMediaFetcher(
             byteArray.asSourceResult()
         }.onFailure {
             Timber.e(it)
-        }.getOrNull()
+        }
     }
 
     private fun ByteArray.asSourceResult(): SourceFetchResult {

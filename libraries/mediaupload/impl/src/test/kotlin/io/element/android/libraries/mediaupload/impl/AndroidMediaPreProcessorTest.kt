@@ -402,6 +402,54 @@ class AndroidMediaPreProcessorTest {
     }
 
     @Test
+    fun `test processing svg`() = runTest {
+        val mediaUploadInfo = process(
+            asset = assetImageSvg,
+            mediaOptimizationConfig = MediaOptimizationConfig(
+                compressImages = true,
+                videoCompressionPreset = VideoCompressionPreset.STANDARD,
+            ),
+        )
+        val info = mediaUploadInfo as MediaUploadInfo.Image
+        assertThat(info.imageInfo).isEqualTo(
+            ImageInfo(
+                width = 800,
+                height = 600,
+                mimetype = MimeTypes.Svg,
+                size = 210,
+                thumbnailInfo = null,
+                thumbnailSource = null,
+                blurhash = null,
+            )
+        )
+        assertThat(info.thumbnailFile).isNull()
+    }
+
+    @Test
+    fun `test processing svg without compression`() = runTest {
+        val mediaUploadInfo = process(
+            asset = assetImageSvg,
+            mediaOptimizationConfig = MediaOptimizationConfig(
+                compressImages = false,
+                videoCompressionPreset = VideoCompressionPreset.STANDARD,
+            ),
+        )
+        val info = mediaUploadInfo as MediaUploadInfo.Image
+        assertThat(info.imageInfo).isEqualTo(
+            ImageInfo(
+                width = 800,
+                height = 600,
+                mimetype = MimeTypes.Svg,
+                size = 210,
+                thumbnailInfo = null,
+                thumbnailSource = null,
+                blurhash = null,
+            )
+        )
+        assertThat(info.thumbnailFile).isNull()
+    }
+
+    @Test
     fun `test processing audio`() = runTest {
         val mediaUploadInfo = process(
             asset = assetAudio,
