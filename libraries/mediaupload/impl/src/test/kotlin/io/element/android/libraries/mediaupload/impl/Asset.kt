@@ -83,3 +83,14 @@ val assetAnimatedGif = Asset(
     width = 800,
     height = 600,
 )
+
+/**
+ * "image.svg" is an 800 x 600 SVG image with a size of 210 bytes.
+ */
+val assetImageSvg = Asset(
+    filename = "image.svg",
+    mimeType = MimeTypes.Svg,
+    size = 210,
+    width = 800,
+    height = 600,
+)

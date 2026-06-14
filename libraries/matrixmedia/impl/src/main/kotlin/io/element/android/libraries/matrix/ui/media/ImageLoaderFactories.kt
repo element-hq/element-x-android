@@ -14,6 +14,7 @@ import coil3.ImageLoader
 import coil3.gif.AnimatedImageDecoder
 import coil3.gif.GifDecoder
 import coil3.network.okhttp.OkHttpNetworkFetcherFactory
+import coil3.svg.SvgDecoder
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.di.annotations.ApplicationContext
@@ -41,6 +42,7 @@ class DefaultImageLoaderFactory(
         return ImageLoader.Builder(context)
             .components {
                 add(okHttpNetworkFetcherFactory)
+                add(SvgDecoder.Factory())
             }
             .build()
     }
@@ -49,6 +51,8 @@ class DefaultImageLoaderFactory(
         return ImageLoader.Builder(context)
             .components {
                 add(okHttpNetworkFetcherFactory)
+                // Add svg support
+                add(SvgDecoder.Factory())
                 // Add gif support
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     add(AnimatedImageDecoder.Factory())
