@@ -19,9 +19,14 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.InputTransformation
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
+import androidx.compose.foundation.text.input.maxLength
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -102,6 +107,9 @@ private fun EmptyStatusRow(
         headlineContent = {
             Text(text = stringResource(R.string.screen_preferences_user_status_placeholder))
         },
+        trailingContent = ListItemContent.Custom({
+            Box(modifier = Modifier.minimumInteractiveComponentSize())
+        }),
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Reaction())),
         modifier = modifier.clickable(onClick = onClick),
     )
@@ -169,19 +177,31 @@ private fun CustomStatusInputRow(
     onCancel: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val hasText by remember { derivedStateOf { textFieldState.text.isNotEmpty() } }
     ListItem(
         headlineContent = {
             TextField(
                 state = textFieldState,
                 placeholder = stringResource(R.string.screen_preferences_user_status_custom_hint),
-                inputTransformation = InputTransformation { if (length > 30) revertAllChanges() },
+                inputTransformation = InputTransformation.maxLength(maxLength = 30),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                onKeyboardAction = { if (textFieldState.text.isNotBlank()) onConfirm() },
+                onKeyboardAction = { if (hasText) onConfirm() },
                 lineLimits = TextFieldLineLimits.SingleLine,
+                trailingIcon = if (hasText) {
+                    {
+                        IconButton(onClick = { textFieldState.clearText() }) {
+                            Icon(imageVector = CompoundIcons.Close(), contentDescription = null)
+                        }
+                    }
+                } else null,
             )
         },
         trailingContent = ListItemContent.Custom({
-            TextButton(onClick = onCancel, text = stringResource(CommonStrings.action_cancel))
+            if (hasText) {
+                TextButton(onClick = onConfirm, text = stringResource(CommonStrings.action_save))
+            } else {
+                TextButton(onClick = onCancel, text = stringResource(CommonStrings.action_cancel))
+            }
         }),
         leadingContent = ListItemContent.Custom( {
             Surface(
@@ -198,40 +218,6 @@ private fun CustomStatusInputRow(
         }),
         modifier = modifier,
     )
-
-    /*
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 4.dp),
-    ) {
-        Surface(
-            shape = CircleShape,
-            color = ElementTheme.colors.bgSubtleSecondary,
-            modifier = Modifier
-                .size(40.dp)
-                .clickable { },
-        ) {
-            Box(contentAlignment = Alignment.Center) {
-                Text(text = emoji, style = ElementTheme.typography.fontBodyLgRegular)
-            }
-        }
-        TextField(
-            value = text,
-            onValueChange = { if (it.length <= 30) text = it },
-            placeholder = stringResource(R.string.screen_preferences_user_status_custom_hint),
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions(
-                onDone = { if (text.isNotBlank()) onConfirm(emoji, text) }
-            ),
-            singleLine = true,
-            modifier = Modifier.weight(1f).padding(horizontal = 8.dp),
-        )
-        TextButton(onClick = onCancel, text = stringResource(CommonStrings.action_cancel))
-    }
-
-     */
 }
 
 @PreviewsDayNight
