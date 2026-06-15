@@ -684,12 +684,21 @@ private fun MessageEventBubbleContent(
                     content = {
                         content(this::onContentLayoutChange)
                     },
-                    overlay = { data ->
+                    overlay = {
+                        val needsStartPadding = contentDirection == layoutDirection
                         TimelineEventTimestampView(
                             event = event,
                             eventSink = eventSink,
+                            needsStartPadding = needsStartPadding,
                             modifier = Modifier
-                                .padding(horizontal = 8.dp, vertical = 4.dp)
+                                .then(
+                                    // Adjust the padding a bit to avoid having too much padding when the layout and content directions don't match
+                                    if (needsStartPadding) {
+                                        Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                                    } else {
+                                        Modifier.padding(end = 8.dp, top = 4.dp, bottom = 4.dp)
+                                    }
+                                )
                         )
                     }
                 )
@@ -983,6 +992,17 @@ internal fun TimelineItemEventRowRtlContentPreview() = ElementPreview {
                         ),
                         timelineItemReactions = TimelineItemReactions(persistentListOf()),
                         groupPosition = TimelineItemGroupPosition.First,
+                    )
+                )
+                ATimelineItemEventRow(
+                    event = aTimelineItemEvent(
+                        senderDisplayName = "Sender with a super long name that should ellipsize",
+                        isMine = isMine,
+                        content = aTimelineItemTextContent(
+                            body = "Testing\nLTR Line\nBreaks."
+                        ),
+                        timelineItemReactions = TimelineItemReactions(persistentListOf()),
+                        groupPosition = TimelineItemGroupPosition.Middle,
                     )
                 )
                 ATimelineItemEventRow(

@@ -101,8 +101,10 @@ fun ContentAvoidingLayout(
             }
             // If the content is smaller than the available max width, we can move the overlay to the right of the content
             contentPlaceable.width < constraints.maxWidth -> {
-                // If both the content and the overlay plus the padding can fit inside the current layoutWidth, there is no need to increase it
-                if (freeSpaceWithOverlap < overlayPlaceable.width + spacing.roundToPx()) {
+                if (mismatchedDirection && !needsNewLine) {
+                    layoutWidth = min(contentPlaceable.width + overlayPlaceable.width + overlayOffset.x.roundToPx(), constraints.maxWidth)
+                } else if (freeSpaceWithOverlap < overlayPlaceable.width + spacing.roundToPx()) {
+                    // If both the content and the overlay plus the padding can fit inside the current layoutWidth, there is no need to increase it
                     // Otherwise, we need to increase it by the width of the overlay + some padding adjustments
                     val calculatedWidth = max(data.nonOverlappingContentWidth + overlayPlaceable.width + spacing.roundToPx(), contentPlaceable.width)
                     layoutWidth = min(calculatedWidth, constraints.maxWidth)
