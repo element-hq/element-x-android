@@ -18,4 +18,5 @@ sealed interface BugReportEvents {
     data class SetCanContact(val canContact: Boolean) : BugReportEvents
     data class SetSendScreenshot(val sendScreenshot: Boolean) : BugReportEvents
     data class SetSendPushRules(val sendPushRules: Boolean) : BugReportEvents
+    data class SetGhIssueNumber(val ghIssueNumber: Int?) : BugReportEvents
 }

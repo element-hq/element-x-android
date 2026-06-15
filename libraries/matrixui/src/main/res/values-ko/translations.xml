@@ -3,5 +3,7 @@
   <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"초대장 보내기"</string>
   <string name="screen_bottom_sheet_create_dm_message">"%1$s 와 채팅을 시작하시겠습니까?"</string>
   <string name="screen_bottom_sheet_create_dm_title">"초대장을 보내시겠습니까?"</string>
+  <string name="screen_bottom_sheet_create_dm_unknown_user_content">"이 사용자와의 대화 내역이 없습니다. 계속하려면 먼저 초대를 확인해 주세요."</string>
+  <string name="screen_bottom_sheet_create_dm_unknown_user_title">"이 사용자와 대화를 시작하시겠습니까?"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) 당신을 초대했습니다"</string>
 </resources>

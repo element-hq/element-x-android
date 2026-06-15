@@ -548,6 +548,12 @@ class JoinedRustRoom(
         }
     }
 
+    override suspend fun setOwnMemberDisplayName(displayName: String): Result<Unit> = withContext(roomDispatcher) {
+        runCatchingExceptions {
+            innerRoom.setOwnMemberDisplayName(displayName)
+        }
+    }
+
     override fun close() = destroy()
 
     override fun destroy() {

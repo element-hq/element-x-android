@@ -6,7 +6,7 @@
   <string name="screen_chat_backup_key_backup_title">"鍵の保管庫"</string>
   <string name="screen_chat_backup_key_storage_disabled_error">"チャットをバックアップするには、鍵の保管庫を使用する必要があります。"</string>
   <string name="screen_chat_backup_key_storage_toggle_description">"この端末上の鍵をアップロードします"</string>
-  <string name="screen_chat_backup_key_storage_toggle_title">"鍵の保管庫を使用します"</string>
+  <string name="screen_chat_backup_key_storage_toggle_title">"鍵の保管庫を使用"</string>
   <string name="screen_chat_backup_recovery_action_change">"回復鍵を変更"</string>
   <string name="screen_chat_backup_recovery_action_change_description">"あなたのチャットはエンドツーエンド暗号化を使用して自動的にバックアップされています。すべての端末を使用できない状況で、このバックアップからデジタルIDを復元するには、回復鍵が必要となります。"</string>
   <string name="screen_chat_backup_recovery_action_confirm">"回復鍵を入力"</string>

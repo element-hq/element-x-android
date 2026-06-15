@@ -133,6 +133,11 @@ class DefaultActiveLiveLocationShareManager(
             }
     }
 
+    override suspend fun onUnrecoverableError() {
+        Timber.d("ActiveLiveLocationShareManager unrecoverable error, stopping all shares")
+        localSharingRoomIds.value.toList().forEach { stopShare(it) }
+    }
+
     override suspend fun onLocationUpdate(location: Location) {
         val activeSharesCount = localSharingRoomIds.value.size
         Timber.d("ActiveLiveLocationShareManager received location update for $activeSharesCount active share(s)")
