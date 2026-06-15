@@ -34,7 +34,7 @@ import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.FilledTextField
+import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.IconSource
@@ -171,12 +171,12 @@ private fun CustomStatusInputRow(
 ) {
     ListItem(
         headlineContent = {
-            FilledTextField(
+            TextField(
                 state = textFieldState,
-                placeholder = { Text(stringResource(R.string.screen_preferences_user_status_custom_hint)) },
+                placeholder = stringResource(R.string.screen_preferences_user_status_custom_hint),
                 inputTransformation = InputTransformation { if (length > 30) revertAllChanges() },
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                keyboardActions = { if (textFieldState.text.isNotBlank()) onConfirm() },
+                onKeyboardAction = { if (textFieldState.text.isNotBlank()) onConfirm() },
                 lineLimits = TextFieldLineLimits.SingleLine,
             )
         },
@@ -195,7 +195,8 @@ private fun CustomStatusInputRow(
                     Text(text = emoji, style = ElementTheme.typography.fontBodyLgRegular)
                 }
             }
-        })
+        }),
+        modifier = modifier,
     )
 
     /*

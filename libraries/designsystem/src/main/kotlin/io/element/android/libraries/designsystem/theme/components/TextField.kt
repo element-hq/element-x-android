@@ -24,6 +24,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.InputTransformation
+import androidx.compose.foundation.text.input.KeyboardActionHandler
+import androidx.compose.foundation.text.input.TextFieldDecorator
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -159,6 +164,55 @@ fun TextField(
             supportingText = supportingText
         )
     }
+}
+
+@Composable
+fun TextField(
+    state: TextFieldState,
+    modifier: Modifier = Modifier,
+    label: String? = null,
+    supportingText: String? = null,
+    placeholder: String? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    validity: TextFieldValidity = TextFieldValidity.None,
+    enabled: Boolean = true,
+    readOnly: Boolean = false,
+    inputTransformation: InputTransformation? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    onKeyboardAction: KeyboardActionHandler? = null,
+    lineLimits: TextFieldLineLimits = TextFieldLineLimits.Default,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+) {
+    val isFocused by interactionSource.collectIsFocusedAsState()
+    BasicTextField(
+        state = state,
+        modifier = modifier,
+        textStyle = textFieldStyle(enabled),
+        interactionSource = interactionSource,
+        enabled = enabled,
+        readOnly = readOnly,
+        inputTransformation = inputTransformation,
+        cursorBrush = SolidColor(ElementTheme.colors.textPrimary),
+        keyboardOptions = keyboardOptions,
+        onKeyboardAction = onKeyboardAction,
+        lineLimits = lineLimits,
+        decorator = TextFieldDecorator { innerTextField ->
+            DecorationBox(
+                label = label,
+                readOnly = readOnly,
+                enabled = enabled,
+                isFocused = isFocused,
+                validity = validity,
+                leadingIcon = leadingIcon,
+                placeholder = placeholder,
+                isTextEmpty = state.text.isEmpty(),
+                innerTextField = innerTextField,
+                trailingIcon = trailingIcon,
+                supportingText = supportingText,
+            )
+        }
+    )
 }
 
 @Composable
