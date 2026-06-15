@@ -7,6 +7,7 @@
 
 package io.element.android.features.preferences.impl.userstatus
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -17,26 +18,29 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.preferences.impl.R
+import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconButton
+import io.element.android.libraries.designsystem.theme.components.IconSource
+import io.element.android.libraries.designsystem.theme.components.ListItem
+import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
+import io.element.android.libraries.designsystem.theme.components.Surface
+import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.UserStatus
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -72,11 +76,11 @@ fun UserStatusRow(
         }
         is UserStatusPickerState.CustomInput -> {
             CustomStatusInputRow(
-                initialEmoji = pickerState.initialEmoji,
-                initialText = pickerState.initialText,
-                onConfirm = { emoji, text ->
-                    state.eventSink(UserStatusEvent.Set(UserStatus(emoji, text)))
-                },
+                emoji = pickerState.emoji,
+                text = pickerState.text,
+                onEmojiChange = { state.eventSink(UserStatusEvent.UpdateCustomEmoji(it)) },
+                onTextChange = { state.eventSink(UserStatusEvent.UpdateCustomText(it)) },
+                onConfirm = { state.eventSink(UserStatusEvent.Set(UserStatus(pickerState.emoji, pickerState.text))) },
                 onCancel = { state.eventSink(UserStatusEvent.CancelCustomInput) },
                 modifier = modifier,
             )
@@ -91,14 +95,9 @@ private fun EmptyStatusRow(
 ) {
     ListItem(
         headlineContent = {
-            Text(
-                text = stringResource(R.string.screen_preferences_user_status_placeholder),
-                color = ElementTheme.colors.textSecondary,
-            )
+            Text(text = stringResource(R.string.screen_preferences_user_status_placeholder))
         },
-        leadingContent = {
-            Text(text = "🙂", style = ElementTheme.typography.fontBodyLgRegular)
-        },
+        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Reaction())),
         modifier = modifier.clickable(onClick = onClick),
     )
 }
@@ -116,15 +115,14 @@ private fun CurrentStatusRow(
     }
     ListItem(
         headlineContent = { Text(text = text) },
-        leadingContent = {
-            Text(text = emoji, style = ElementTheme.typography.fontBodyLgRegular)
-        },
-        trailingContent = {
-            TextButton(onClick = onClear) {
-                Text(text = stringResource(CommonStrings.action_clear))
+        leadingContent = ListItemContent.Text(emoji),
+        trailingContent = ListItemContent.Custom({
+            IconButton(onClick = onClear) {
+                Icon(imageVector = CompoundIcons.Close(), contentDescription = null)
             }
-        },
-        modifier = modifier.clickable(onClick = onClick),
+        }),
+        onClick = onClick,
+        modifier = modifier,
     )
 }
 
@@ -134,16 +132,15 @@ private fun UserStatusPickerBottomSheet(
     onDismiss: () -> Unit,
     onSelectPredefined: (UserStatus) -> Unit,
     onSelectCustom: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    ModalBottomSheet(onDismissRequest = onDismiss) {
+    ModalBottomSheet(onDismissRequest = onDismiss, scrollable = true, modifier = modifier) {
         PredefinedUserStatus.entries.forEach { predefined ->
             val label = stringResource(predefined.labelRes)
             ListItem(
                 headlineContent = { Text(text = label) },
-                leadingContent = {
-                    Text(text = predefined.emoji, style = ElementTheme.typography.fontBodyLgRegular)
-                },
-                modifier = Modifier.clickable {
+                leadingContent = ListItemContent.Text(text = predefined.emoji),
+                onClick = {
                     onSelectPredefined(UserStatus(emoji = predefined.emoji, text = label))
                 },
             )
@@ -152,25 +149,54 @@ private fun UserStatusPickerBottomSheet(
             headlineContent = {
                 Text(text = stringResource(R.string.common_user_status_custom))
             },
-            leadingContent = {
-                Text(text = "✏️", style = ElementTheme.typography.fontBodyLgRegular)
-            },
-            modifier = Modifier.clickable(onClick = onSelectCustom),
+            leadingContent = ListItemContent.Text(text = "✏️"),
+            onClick = onSelectCustom,
         )
     }
 }
 
 @Composable
 private fun CustomStatusInputRow(
-    initialEmoji: String,
-    initialText: String,
-    onConfirm: (emoji: String, text: String) -> Unit,
+    emoji: String,
+    text: String,
+    onEmojiChange: (String) -> Unit,
+    onTextChange: (String) -> Unit,
+    onConfirm: () -> Unit,
     onCancel: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var emoji by remember { mutableStateOf(initialEmoji) }
-    var text by remember { mutableStateOf(initialText) }
+    ListItem(
+        headlineContent = {
+            TextField(
+                value = text,
+                onValueChange = { if (it.length <= 30) onTextChange(it) },
+                placeholder = stringResource(R.string.screen_preferences_user_status_custom_hint),
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(
+                    onDone = { if (text.isNotBlank()) onConfirm() }
+                ),
+                singleLine = true,
+            )
+        },
+        trailingContent = ListItemContent.Custom({
+            TextButton(onClick = onCancel, text = stringResource(CommonStrings.action_cancel))
+        }),
+        leadingContent = ListItemContent.Custom( {
+            Surface(
+                shape = CircleShape,
+                border = BorderStroke(1.dp, ElementTheme.colors.bgSubtleSecondary),
+                modifier = Modifier
+                    .size(50.dp)
+                    .clickable { },
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Text(text = emoji, style = ElementTheme.typography.fontBodyLgRegular)
+                }
+            }
+        })
+    )
 
+    /*
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
@@ -188,25 +214,21 @@ private fun CustomStatusInputRow(
                 Text(text = emoji, style = ElementTheme.typography.fontBodyLgRegular)
             }
         }
-        OutlinedTextField(
+        TextField(
             value = text,
             onValueChange = { if (it.length <= 30) text = it },
-            placeholder = {
-                Text(text = stringResource(R.string.screen_preferences_user_status_custom_hint))
-            },
+            placeholder = stringResource(R.string.screen_preferences_user_status_custom_hint),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(
                 onDone = { if (text.isNotBlank()) onConfirm(emoji, text) }
             ),
             singleLine = true,
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 8.dp),
+            modifier = Modifier.weight(1f).padding(horizontal = 8.dp),
         )
-        TextButton(onClick = onCancel) {
-            Text(text = stringResource(CommonStrings.action_cancel))
-        }
+        TextButton(onClick = onCancel, text = stringResource(CommonStrings.action_cancel))
     }
+
+     */
 }
 
 @PreviewsDayNight
@@ -239,7 +261,7 @@ internal fun UserStatusRowCustomInputPreview() = ElementPreview {
     UserStatusRow(
         state = UserStatusState(
             displayedStatus = null,
-            pickerState = UserStatusPickerState.CustomInput(initialEmoji = "😀", initialText = ""),
+            pickerState = UserStatusPickerState.CustomInput(emoji = "😀", text = ""),
             eventSink = {},
         )
     )

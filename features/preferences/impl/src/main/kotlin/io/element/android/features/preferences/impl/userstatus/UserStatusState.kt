@@ -7,6 +7,8 @@
 
 package io.element.android.features.preferences.impl.userstatus
 
+import androidx.annotation.StringRes
+import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.matrix.api.user.DisplayedStatus
 
 data class UserStatusState(
@@ -19,7 +21,15 @@ sealed interface UserStatusPickerState {
     data object Hidden : UserStatusPickerState
     data object ShowingPicker : UserStatusPickerState
     data class CustomInput(
-        val initialEmoji: String = "😀",
-        val initialText: String = "",
+        val emoji: String = "😀",
+        val text: String = "",
     ) : UserStatusPickerState
+}
+
+enum class PredefinedUserStatus(val emoji: String, @param:StringRes val labelRes: Int) {
+    IN_A_MEETING("💬", R.string.common_user_status_in_a_meeting),
+    FOCUS_TIME("💡", R.string.common_user_status_focus_time),
+    ON_THE_ROAD("🚙", R.string.common_user_status_on_the_road),
+    BE_RIGHT_BACK("☕", R.string.common_user_status_be_right_back),
+    AWAY("🌴", R.string.common_user_status_away),
 }

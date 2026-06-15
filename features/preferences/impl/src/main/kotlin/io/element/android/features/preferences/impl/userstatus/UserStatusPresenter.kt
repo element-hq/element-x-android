@@ -14,13 +14,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.user.UserStatus
 import kotlinx.coroutines.launch
 
-@Inject
+@ContributesBinding(SessionScope::class)
 class UserStatusPresenter(
     private val matrixClient: MatrixClient,
 ) : Presenter<UserStatusState> {
@@ -38,8 +40,8 @@ class UserStatusPresenter(
                 UserStatusEvent.OpenCustomInput -> {
                     val raw = userProfile.rawStatus
                     pickerState = UserStatusPickerState.CustomInput(
-                        initialEmoji = raw?.emoji ?: "😀",
-                        initialText = raw?.text ?: "",
+                        emoji = raw?.emoji ?: "😀",
+                        text = raw?.text ?: "",
                     )
                 }
                 is UserStatusEvent.Set -> {
@@ -51,6 +53,14 @@ class UserStatusPresenter(
                     coroutineScope.launch { matrixClient.clearUserStatus() }
                 }
                 UserStatusEvent.CancelCustomInput -> pickerState = UserStatusPickerState.Hidden
+                is UserStatusEvent.UpdateCustomEmoji -> {
+                    val current = pickerState as? UserStatusPickerState.CustomInput ?: return
+                    pickerState = current.copy(emoji = event.emoji)
+                }
+                is UserStatusEvent.UpdateCustomText -> {
+                    val current = pickerState as? UserStatusPickerState.CustomInput ?: return
+                    pickerState = current.copy(text = event.text)
+                }
             }
         }
 

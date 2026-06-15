@@ -80,8 +80,8 @@ class UserStatusPresenterTest {
             awaitItem().eventSink(UserStatusEvent.OpenCustomInput)
             val state = awaitItem()
             val pickerState = state.pickerState as UserStatusPickerState.CustomInput
-            assertThat(pickerState.initialEmoji).isEqualTo("😀")
-            assertThat(pickerState.initialText).isEqualTo("")
+            assertThat(pickerState.emoji).isEqualTo("😀")
+            assertThat(pickerState.text).isEqualTo("")
         }
     }
 
@@ -97,8 +97,32 @@ class UserStatusPresenterTest {
             awaitItem().eventSink(UserStatusEvent.OpenCustomInput)
             val state = awaitItem()
             val pickerState = state.pickerState as UserStatusPickerState.CustomInput
-            assertThat(pickerState.initialEmoji).isEqualTo("🌴")
-            assertThat(pickerState.initialText).isEqualTo("Away")
+            assertThat(pickerState.emoji).isEqualTo("🌴")
+            assertThat(pickerState.text).isEqualTo("Away")
+        }
+    }
+
+    @Test
+    fun `UpdateCustomText updates text in CustomInput state`() = runTest {
+        moleculeFlow(RecompositionMode.Immediate) {
+            createPresenter().present()
+        }.test {
+            awaitItem().eventSink(UserStatusEvent.OpenCustomInput)
+            awaitItem().eventSink(UserStatusEvent.UpdateCustomText("Focusing"))
+            val state = awaitItem()
+            assertThat((state.pickerState as UserStatusPickerState.CustomInput).text).isEqualTo("Focusing")
+        }
+    }
+
+    @Test
+    fun `UpdateCustomEmoji updates emoji in CustomInput state`() = runTest {
+        moleculeFlow(RecompositionMode.Immediate) {
+            createPresenter().present()
+        }.test {
+            awaitItem().eventSink(UserStatusEvent.OpenCustomInput)
+            awaitItem().eventSink(UserStatusEvent.UpdateCustomEmoji("🚀"))
+            val state = awaitItem()
+            assertThat((state.pickerState as UserStatusPickerState.CustomInput).emoji).isEqualTo("🚀")
         }
     }
 

@@ -20,6 +20,10 @@ sealed interface UserStatusEvent {
     data object OpenCustomInput : UserStatusEvent
     /** User tapped Cancel in the inline custom input row. */
     data object CancelCustomInput : UserStatusEvent
+    /** User changed the emoji in the custom input row. */
+    data class UpdateCustomEmoji(val emoji: String) : UserStatusEvent
+    /** User changed the text in the custom input row. */
+    data class UpdateCustomText(val text: String) : UserStatusEvent
     /** User tapped the clear action on an existing status. */
     data object Clear : UserStatusEvent
 }
