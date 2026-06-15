@@ -104,6 +104,7 @@ import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.link.Link
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -136,6 +137,7 @@ fun TimelineView(
     forceJumpToReadMarkerVisibility: Boolean = false,
     nestedScrollConnection: NestedScrollConnection = rememberNestedScrollInteropConnection(),
     floatingDateTopOffset: Dp = 0.dp,
+    selectedEventIds: ImmutableSet<EventId>? = null,
 ) {
     fun clearFocusRequestState() {
         state.eventSink(TimelineEvent.ClearFocusRequestState)
@@ -220,6 +222,7 @@ fun TimelineView(
                         onReadReceiptClick = onReadReceiptClick,
                         onSwipeToReply = onSwipeToReply,
                         eventSink = state.eventSink,
+                        selectedEventIds = selectedEventIds,
                     )
                 }
             }

@@ -177,7 +177,7 @@ class MessagesFlowNode(
 
         @Parcelize
         data class ForwardEvent(
-            val eventId: EventId,
+            val eventIds: List<EventId>,
             val fromPinnedEvents: Boolean,
         ) : NavTarget
 
@@ -302,7 +302,12 @@ class MessagesFlowNode(
                     }
 
                     override fun forwardEvent(eventId: EventId) {
-                        backstack.push(NavTarget.ForwardEvent(eventId, fromPinnedEvents = false))
+                        backstack.push(NavTarget.ForwardEvent(listOf(eventId), fromPinnedEvents = false))
+                    }
+
+                    override fun forwardEvents(eventIds: List<EventId>) {
+                        if (eventIds.isEmpty()) return
+                        backstack.push(NavTarget.ForwardEvent(eventIds, fromPinnedEvents = false))
                     }
 
                     override fun navigateToReportMessage(eventId: EventId, senderId: UserId) {
@@ -461,7 +466,7 @@ class MessagesFlowNode(
                 } else {
                     timelineController
                 }
-                val params = ForwardEntryPoint.Params(navTarget.eventId, timelineProvider)
+                val params = ForwardEntryPoint.Params(navTarget.eventIds, timelineProvider)
                 val callback = object : ForwardEntryPoint.Callback {
                     override fun onDone(roomIds: List<RoomId>) {
                         backstack.pop()
@@ -548,7 +553,7 @@ class MessagesFlowNode(
                     }
 
                     override fun handleForwardEventClick(eventId: EventId) {
-                        backstack.push(NavTarget.ForwardEvent(eventId = eventId, fromPinnedEvents = true))
+                        backstack.push(NavTarget.ForwardEvent(eventIds = listOf(eventId), fromPinnedEvents = true))
                     }
 
                     override fun navigateToThread(threadRootId: ThreadId) {
@@ -615,7 +620,11 @@ class MessagesFlowNode(
                     }
 
                     override fun handleForwardEventClick(eventId: EventId) {
-                        backstack.push(NavTarget.ForwardEvent(eventId, fromPinnedEvents = false))
+                        backstack.push(NavTarget.ForwardEvent(listOf(eventId), fromPinnedEvents = false))
+                    }
+
+                    override fun handleForwardEventsClick(eventIds: List<EventId>) {
+                        if (eventIds.isNotEmpty()) backstack.push(NavTarget.ForwardEvent(eventIds, fromPinnedEvents = false))
                     }
 
                     override fun navigateToReportMessage(eventId: EventId, senderId: UserId) {
