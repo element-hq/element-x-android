@@ -21,6 +21,24 @@ sealed interface MessagesEvent {
     data object StopLiveLocationShare : MessagesEvent
     data object ShowLiveLocationShare : MessagesEvent
     data object MarkAsFullyReadAndExit : MessagesEvent
+
+    /** Enter selection mode anchored on a single event (the user long-pressed or hit "Select"). */
+    data class EnterSelection(val anchor: TimelineItem.Event) : MessagesEvent
+
+    /** Add or remove an event from the active selection. No-op outside selection mode. */
+    data class ToggleSelection(val event: TimelineItem.Event) : MessagesEvent
+
+    /** Exit selection mode and clear the set. */
+    data object ClearSelection : MessagesEvent
+
+    /** Redact every event in the selection sequentially. */
+    data object BulkRedactSelected : MessagesEvent
+
+    /** Join selected message bodies and write to clipboard. */
+    data object BulkCopySelected : MessagesEvent
+
+    /** Open the forward picker pre-loaded with every selected event. */
+    data object BulkForwardSelected : MessagesEvent
 }
 
 enum class InviteDialogAction {

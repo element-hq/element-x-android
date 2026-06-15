@@ -137,4 +137,12 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
+    MessageMultiSelect(
+        key = "feature.message_multi_select",
+        title = "Multi-select messages",
+        description = "Select several messages at once to copy, forward or delete them in bulk.",
+        defaultValue = { false },
+        isFinished = false,
+        isInLabs = true,
+    ),
 }
