@@ -5,5 +5,5 @@
   <string name="screen_bottom_sheet_create_dm_title">"Отправить приглашение?"</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_content">"У Вас нет других чатов с этим пользователем. Подтвердите, что это действительно кого Вы хотите пригласить, прежде чем продолжить."</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_title">"Начать чат с этим новым контактом?"</string>
-  <string name="screen_invites_invited_you">"%1$s (%2$s) пригласил(а) вас"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) пригласил(а) Вас"</string>
 </resources>
