@@ -16,6 +16,7 @@ import io.element.android.libraries.matrix.api.user.UserStatus
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import androidx.compose.foundation.text.input.TextFieldState
 
 class UserStatusPresenterTest {
 
@@ -81,7 +82,7 @@ class UserStatusPresenterTest {
             val state = awaitItem()
             val pickerState = state.pickerState as UserStatusPickerState.CustomInput
             assertThat(pickerState.emoji).isEqualTo("😀")
-            assertThat(pickerState.text).isEqualTo("")
+            assertThat(pickerState.textFieldState.text.toString()).isEqualTo("")
         }
     }
 
@@ -98,19 +99,7 @@ class UserStatusPresenterTest {
             val state = awaitItem()
             val pickerState = state.pickerState as UserStatusPickerState.CustomInput
             assertThat(pickerState.emoji).isEqualTo("🌴")
-            assertThat(pickerState.text).isEqualTo("Away")
-        }
-    }
-
-    @Test
-    fun `UpdateCustomText updates text in CustomInput state`() = runTest {
-        moleculeFlow(RecompositionMode.Immediate) {
-            createPresenter().present()
-        }.test {
-            awaitItem().eventSink(UserStatusEvent.OpenCustomInput)
-            awaitItem().eventSink(UserStatusEvent.UpdateCustomText("Focusing"))
-            val state = awaitItem()
-            assertThat((state.pickerState as UserStatusPickerState.CustomInput).text).isEqualTo("Focusing")
+            assertThat(pickerState.textFieldState.text.toString()).isEqualTo("Away")
         }
     }
 

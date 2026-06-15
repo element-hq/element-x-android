@@ -15,8 +15,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.InputTransformation
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,6 +34,7 @@ import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.FilledTextField
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.IconSource
@@ -40,7 +43,6 @@ import io.element.android.libraries.designsystem.theme.components.ModalBottomShe
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
-import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.UserStatus
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -77,10 +79,13 @@ fun UserStatusRow(
         is UserStatusPickerState.CustomInput -> {
             CustomStatusInputRow(
                 emoji = pickerState.emoji,
-                text = pickerState.text,
+                textFieldState = pickerState.textFieldState,
                 onEmojiChange = { state.eventSink(UserStatusEvent.UpdateCustomEmoji(it)) },
-                onTextChange = { state.eventSink(UserStatusEvent.UpdateCustomText(it)) },
-                onConfirm = { state.eventSink(UserStatusEvent.Set(UserStatus(pickerState.emoji, pickerState.text))) },
+                onConfirm = {
+                    state.eventSink(
+                        UserStatusEvent.Set(UserStatus(pickerState.emoji, pickerState.textFieldState.text.toString()))
+                    )
+                },
                 onCancel = { state.eventSink(UserStatusEvent.CancelCustomInput) },
                 modifier = modifier,
             )
@@ -158,24 +163,21 @@ private fun UserStatusPickerBottomSheet(
 @Composable
 private fun CustomStatusInputRow(
     emoji: String,
-    text: String,
+    textFieldState: TextFieldState,
     onEmojiChange: (String) -> Unit,
-    onTextChange: (String) -> Unit,
     onConfirm: () -> Unit,
     onCancel: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ListItem(
         headlineContent = {
-            TextField(
-                value = text,
-                onValueChange = { if (it.length <= 30) onTextChange(it) },
-                placeholder = stringResource(R.string.screen_preferences_user_status_custom_hint),
+            FilledTextField(
+                state = textFieldState,
+                placeholder = { Text(stringResource(R.string.screen_preferences_user_status_custom_hint)) },
+                inputTransformation = InputTransformation { if (length > 30) revertAllChanges() },
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                keyboardActions = KeyboardActions(
-                    onDone = { if (text.isNotBlank()) onConfirm() }
-                ),
-                singleLine = true,
+                keyboardActions = { if (textFieldState.text.isNotBlank()) onConfirm() },
+                lineLimits = TextFieldLineLimits.SingleLine,
             )
         },
         trailingContent = ListItemContent.Custom({
@@ -261,7 +263,7 @@ internal fun UserStatusRowCustomInputPreview() = ElementPreview {
     UserStatusRow(
         state = UserStatusState(
             displayedStatus = null,
-            pickerState = UserStatusPickerState.CustomInput(emoji = "😀", text = ""),
+            pickerState = UserStatusPickerState.CustomInput(emoji = "😀", textFieldState = TextFieldState()),
             eventSink = {},
         )
     )

@@ -8,6 +8,7 @@
 package io.element.android.features.preferences.impl.userstatus
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.text.input.TextFieldState
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.matrix.api.user.DisplayedStatus
 
@@ -22,7 +23,7 @@ sealed interface UserStatusPickerState {
     data object ShowingPicker : UserStatusPickerState
     data class CustomInput(
         val emoji: String = "😀",
-        val text: String = "",
+        val textFieldState: TextFieldState,
     ) : UserStatusPickerState
 }
 
