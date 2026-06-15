@@ -14,7 +14,6 @@ import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaviewer.api.GalleryItemData
 import io.element.android.libraries.mediaviewer.api.MediaInfo
-import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.impl.datasource.MediaGalleryDataSource
 import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
@@ -37,7 +36,6 @@ class GalleryMediaGalleryDataSource(
             eventId: EventId?,
             galleryItems: List<GalleryItemData>,
             mediaInfo: MediaInfo,
-            mode: MediaViewerEntryPoint.MediaViewerMode,
         ): GalleryMediaGalleryDataSource {
             val imageAndVideoItems = mutableListOf<MediaItem.Event>()
             val fileItems = mutableListOf<MediaItem.Event>()

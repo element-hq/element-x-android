@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -26,7 +27,6 @@ import io.element.android.features.messages.impl.attachments.preview.imageeditor
 import io.element.android.features.messages.impl.attachments.preview.imageeditor.AttachmentImageEditorState
 import io.element.android.features.messages.impl.attachments.preview.imageeditor.AttachmentImageEdits
 import io.element.android.features.messages.impl.attachments.video.MediaOptimizationSelectorPresenter
-import io.element.android.features.messages.impl.attachments.video.VideoCompressionPresetSelector
 import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.androidutils.hash.hash
@@ -68,7 +68,6 @@ class AttachmentsPreviewPresenter(
     private val temporaryUriDeleter: TemporaryUriDeleter,
     private val attachmentImageEditor: AttachmentImageEditor,
     private val mediaOptimizationSelectorPresenterFactory: MediaOptimizationSelectorPresenter.Factory,
-    private val videoCompressionPresetSelector: VideoCompressionPresetSelector,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
     private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
@@ -84,7 +83,6 @@ class AttachmentsPreviewPresenter(
     }
 
     private val mediaSender = mediaSenderFactory.create(timelineMode)
-    private val isGallery = attachments.size > 1
 
     @Composable
     override fun present(): AttachmentsPreviewState {
@@ -109,7 +107,7 @@ class AttachmentsPreviewPresenter(
 
         val ongoingSendAttachmentJob = remember { mutableStateOf<Job?>(null) }
 
-        var currentIndex by remember { mutableStateOf(0) }
+        var currentIndex by remember { mutableIntStateOf(0) }
 
         var currentAttachments by remember { mutableStateOf(attachments) }
 

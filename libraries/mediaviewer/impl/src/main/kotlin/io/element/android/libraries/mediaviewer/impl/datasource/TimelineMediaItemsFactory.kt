@@ -44,7 +44,7 @@ class TimelineMediaItemsFactory(
                 when (val currentTimelineItem = timelineItems[index]) {
                     is MatrixTimelineItem.Event -> {
                         val cachedItems = cache[currentTimelineItem.uniqueId]
-                        val items = if (cachedItems != null && isItemUnchanged(currentTimelineItem, previousTimelineItems, index)) {
+                        val items = if (cachedItems != null && isItemUnchanged(currentTimelineItem, previousTimelineItems)) {
                             cachedItems
                         } else {
                             eventItemFactory.create(currentTimelineItem).also { newItems ->
@@ -69,7 +69,6 @@ class TimelineMediaItemsFactory(
     private fun isItemUnchanged(
         currentTimelineItem: MatrixTimelineItem.Event,
         previousItems: List<MatrixTimelineItem>,
-        currentIndex: Int,
     ): Boolean {
         if (previousItems.isEmpty()) return false
         val previousIndex = previousItems.indexOfFirst { it is MatrixTimelineItem.Event && it.uniqueId == currentTimelineItem.uniqueId }

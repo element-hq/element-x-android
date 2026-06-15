@@ -740,7 +740,7 @@ class MessagesFlowNode(
                         isFile = galleryItem.isFile,
                     )
                 }.reversed()
-                val mode = if (event.content.items.any { it.isVideo || (!it.isAudio && !it.isFile) }) {
+                val mode = if (event.content.items.any { it.isVideo || !it.isAudio && !it.isFile }) {
                     MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(timelineMode)
                 } else {
                     MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios(timelineMode)

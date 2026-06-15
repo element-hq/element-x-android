@@ -46,6 +46,8 @@ import io.element.android.features.messages.impl.timeline.components.layout.Cont
 import io.element.android.features.messages.impl.timeline.model.event.GalleryItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemGalleryContent
 import io.element.android.libraries.designsystem.components.blurhash.blurHashBackground
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.bgSubtleTertiary
@@ -98,21 +100,21 @@ fun TimelineItemGalleryView(
                 }
                 totalItems == 2 -> {
                     TwoItemLayout(
-                        items = content.items,
+                        items = content.items.toImmutableList(),
                         onContentClick = onContentClick,
                         onLongClick = onLongClick,
                     )
                 }
                 totalItems == 3 -> {
                     ThreeItemLayout(
-                        items = content.items,
+                        items = content.items.toImmutableList(),
                         onContentClick = onContentClick,
                         onLongClick = onLongClick,
                     )
                 }
                 totalItems >= 4 -> {
                     FourPlusItemLayout(
-                        items = content.items,
+                        items = content.items.toImmutableList(),
                         showOverflow = showOverflow,
                         overflowCount = overflowCount,
                         onContentClick = onContentClick,
@@ -169,7 +171,7 @@ private fun SingleItemLayout(
 
 @Composable
 private fun TwoItemLayout(
-    items: List<GalleryItem>,
+    items: ImmutableList<GalleryItem>,
     onContentClick: ((Int) -> Unit)?,
     onLongClick: (() -> Unit)?,
 ) {
@@ -194,7 +196,7 @@ private fun TwoItemLayout(
 
 @Composable
 private fun ThreeItemLayout(
-    items: List<GalleryItem>,
+    items: ImmutableList<GalleryItem>,
     onContentClick: ((Int) -> Unit)?,
     onLongClick: (() -> Unit)?,
 ) {
@@ -242,7 +244,7 @@ private fun ThreeItemLayout(
 
 @Composable
 private fun FourPlusItemLayout(
-    items: List<GalleryItem>,
+    items: ImmutableList<GalleryItem>,
     showOverflow: Boolean,
     overflowCount: Int,
     onContentClick: ((Int) -> Unit)?,

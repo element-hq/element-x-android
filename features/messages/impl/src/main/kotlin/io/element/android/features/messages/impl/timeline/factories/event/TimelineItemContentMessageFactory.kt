@@ -345,7 +345,7 @@ class TimelineItemContentMessageFactory(
                 }
                 val hasPreviews = galleryItems.any { it.thumbnailSource != null }
                 val isMediaGallery = galleryItems.all { item ->
-                    item.isVideo || (!item.isAudio && !item.isFile)
+                    item.isVideo || !item.isAudio && !item.isFile
                 }
                 if (isMediaGallery && hasPreviews) {
                     TimelineItemGalleryContent(

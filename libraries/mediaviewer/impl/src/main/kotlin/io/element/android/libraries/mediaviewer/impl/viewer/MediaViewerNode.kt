@@ -81,7 +81,6 @@ class MediaViewerNode(
             eventId = inputs.eventId,
             galleryItems = inputs.galleryItems,
             mediaInfo = inputs.mediaInfo,
-            mode = inputs.mode,
         )
     } else {
         val eventId = inputs.eventId
