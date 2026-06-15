@@ -10,6 +10,8 @@
 package io.element.android.features.linknewdevice.impl.screens.scan
 
 import androidx.activity.ComponentActivity
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
@@ -59,10 +61,12 @@ class ScanQrCodeViewTest {
         onBackClick: () -> Unit = EnsureNeverCalled(),
     ) {
         setContent {
-            ScanQrCodeView(
-                state = state,
-                onBackClick = onBackClick,
-            )
+            CompositionLocalProvider(LocalInspectionMode provides true) {
+                ScanQrCodeView(
+                    state = state,
+                    onBackClick = onBackClick,
+                )
+            }
         }
     }
 }
