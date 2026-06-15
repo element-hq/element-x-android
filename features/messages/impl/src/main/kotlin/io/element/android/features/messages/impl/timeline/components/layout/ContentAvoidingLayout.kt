@@ -81,14 +81,18 @@ fun ContentAvoidingLayout(
         val data = scope.data.value
 
         // Free space = width of the whole component - width of its non overlapping contents
-        val freeSpace = max(contentPlaceable.width - data.nonOverlappingContentWidth, 0)
+        val freeSpaceWithOverlap = max(contentPlaceable.width - data.nonOverlappingContentWidth, 0)
 
         // Whether the overlay needs to be placed in a new row
-        val needsNewLine =
-            // If the current layout direction doesn't match the content's and the content spans several lines, we need to place the overlay in a new line
-            mismatchedDirection && data.multiline ||
+        val needsNewLine = if (mismatchedDirection) {
+            // If the current layout direction doesn't match the content's and there is no space available next to the full content (no overlapping),
+            // we need to place the overlay in a new line
+            val freeSpaceWithoutOverlap = constraints.maxWidth - contentPlaceable.width - overlayPlaceable.width
+            freeSpaceWithoutOverlap <= 0
+        } else {
             // If the overlay doesn't fit in the free space on the right of the content, we need to place it in a new line
-                data.nonOverlappingContentWidth + overlayPlaceable.width > constraints.maxWidth
+            data.nonOverlappingContentWidth + overlayPlaceable.width > constraints.maxWidth
+        }
 
         when {
             // When the content + the overlay don't fit in the available max width, we need to move the overlay to a new row
@@ -98,7 +102,7 @@ fun ContentAvoidingLayout(
             // If the content is smaller than the available max width, we can move the overlay to the right of the content
             contentPlaceable.width < constraints.maxWidth -> {
                 // If both the content and the overlay plus the padding can fit inside the current layoutWidth, there is no need to increase it
-                if (freeSpace < overlayPlaceable.width + spacing.roundToPx()) {
+                if (freeSpaceWithOverlap < overlayPlaceable.width + spacing.roundToPx()) {
                     // Otherwise, we need to increase it by the width of the overlay + some padding adjustments
                     val calculatedWidth = max(data.nonOverlappingContentWidth + overlayPlaceable.width + spacing.roundToPx(), contentPlaceable.width)
                     layoutWidth = min(calculatedWidth, constraints.maxWidth)
@@ -125,14 +129,12 @@ fun ContentAvoidingLayout(
  * @param contentHeight The full height of the content in pixels.
  * @param nonOverlappingContentWidth The width of the part of the content that can't overlap with the timestamp.
  * @param nonOverlappingContentHeight The height of the part of the content that can't overlap with the timestamp.
- * @param multiline Whether the content is multiline or not.
  */
 data class ContentAvoidingLayoutData(
     val contentWidth: Int = 0,
     val contentHeight: Int = 0,
     val nonOverlappingContentWidth: Int = contentWidth,
     val nonOverlappingContentHeight: Int = contentHeight,
-    val multiline: Boolean = false,
 )
 
 /**
@@ -179,7 +181,6 @@ object ContentAvoidingLayout {
                     contentHeight = textLayout.size.height,
                     nonOverlappingContentWidth = lastLineWidth + extraWidthPx,
                     nonOverlappingContentHeight = lastLineHeight,
-                    multiline = textLayout.lineCount > 1,
                 )
             )
         }
@@ -206,7 +207,6 @@ object ContentAvoidingLayout {
                     contentHeight = textLayout.height,
                     nonOverlappingContentWidth = lastLineWidth + extraWidthPx,
                     nonOverlappingContentHeight = lastLineHeight,
-                    multiline = textLayout.lineCount > 1,
                 )
             )
         }

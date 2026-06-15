@@ -98,7 +98,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.modifiers.niceClickable
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
+import io.element.android.libraries.designsystem.preview.PreviewWithExtraLargeHeight
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.designsystem.swipe.SwipeableActionsState
@@ -907,7 +907,7 @@ internal fun TimelineItemEventRowWithThreadSummaryPreview() = ElementPreview {
     }
 }
 
-@PreviewWithLargeHeight
+@PreviewWithExtraLargeHeight
 @Composable
 internal fun TimelineItemEventRowRtlContentPreview() = ElementPreview {
     Column {
@@ -931,6 +931,17 @@ internal fun TimelineItemEventRowRtlContentPreview() = ElementPreview {
                         ),
                         timelineItemReactions = TimelineItemReactions(persistentListOf()),
                         groupPosition = TimelineItemGroupPosition.First,
+                    )
+                )
+                ATimelineItemEventRow(
+                    event = aTimelineItemEvent(
+                        senderDisplayName = "Sender with a super long name that should ellipsize",
+                        isMine = isMine,
+                        content = aTimelineItemTextContent(
+                            body = "ظَة وَدَاع \nيَسْتَغْرِب فِيهَ"
+                        ),
+                        timelineItemReactions = TimelineItemReactions(persistentListOf()),
+                        groupPosition = TimelineItemGroupPosition.Middle,
                     )
                 )
                 ATimelineItemEventRow(
