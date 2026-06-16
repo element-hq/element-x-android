@@ -164,7 +164,8 @@ private fun ScrollHelper(
     }
     val shouldPaginate by remember {
         derivedStateOf {
-            lastVisibleItemIndex >= listState.layoutInfo.totalItemsCount - 1
+            val canLoadNewItems = listState.isScrollInProgress || listState.layoutInfo.totalItemsCount == 0
+            canLoadNewItems && lastVisibleItemIndex >= listState.layoutInfo.totalItemsCount - 1
         }
     }
     LaunchedEffect(shouldPaginate, lastVisibleItemIndex) {
