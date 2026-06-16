@@ -7,7 +7,21 @@
 
 package io.element.android.features.preferences.impl.userstatus
 
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.matrix.api.user.DisplayedStatus
+import io.element.android.libraries.matrix.api.user.UserStatus
+
+internal class UserStatusStateProvider : PreviewParameterProvider<UserStatusState> {
+    override val values get() = sequenceOf(
+        aUserStatusState(),
+        aUserStatusState(displayedStatus = DisplayedStatus.UserSet(UserStatus("🌴", "Away"))),
+        aUserStatusState(displayedStatus = DisplayedStatus.InCall(callJoinedTs = 0L)),
+        aUserStatusState(pickerState = UserStatusPickerState.ShowingPicker),
+        aUserStatusState(pickerState = UserStatusPickerState.CustomInput(emoji = "😀", textFieldState = TextFieldState())),
+        aUserStatusState(pickerState = UserStatusPickerState.CustomInput(emoji = "🚀", textFieldState = TextFieldState("Working on something"))),
+    )
+}
 
 fun aUserStatusState(
     displayedStatus: DisplayedStatus? = null,

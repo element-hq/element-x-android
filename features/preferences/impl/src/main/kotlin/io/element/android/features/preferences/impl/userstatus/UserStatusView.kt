@@ -37,6 +37,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.designsystem.components.list.ListItemContent
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -239,36 +240,6 @@ private fun CustomStatusInputRow(
 
 @PreviewsDayNight
 @Composable
-internal fun UserStatusRowEmptyPreview() = ElementPreview {
-    UserStatusRow(
-        state = UserStatusState(
-            displayedStatus = null,
-            pickerState = UserStatusPickerState.Hidden,
-            eventSink = {},
-        )
-    )
-}
-
-@PreviewsDayNight
-@Composable
-internal fun UserStatusRowSetPreview() = ElementPreview {
-    UserStatusRow(
-        state = UserStatusState(
-            displayedStatus = DisplayedStatus.UserSet(UserStatus("🌴", "Away")),
-            pickerState = UserStatusPickerState.Hidden,
-            eventSink = {},
-        )
-    )
-}
-
-@PreviewsDayNight
-@Composable
-internal fun UserStatusRowCustomInputPreview() = ElementPreview {
-    UserStatusRow(
-        state = UserStatusState(
-            displayedStatus = null,
-            pickerState = UserStatusPickerState.CustomInput(emoji = "😀", textFieldState = TextFieldState()),
-            eventSink = {},
-        )
-    )
+internal fun UserStatusRowPreview(@PreviewParameter(UserStatusStateProvider::class) state: UserStatusState) = ElementPreview {
+    UserStatusRow(state = state)
 }
