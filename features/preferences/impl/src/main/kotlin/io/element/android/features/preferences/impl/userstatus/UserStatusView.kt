@@ -10,10 +10,9 @@ package io.element.android.features.preferences.impl.userstatus
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.InputTransformation
@@ -29,8 +28,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -38,8 +39,6 @@ import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.IconSource
@@ -48,6 +47,7 @@ import io.element.android.libraries.designsystem.theme.components.ModalBottomShe
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.UserStatus
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -128,7 +128,9 @@ private fun CurrentStatusRow(
     }
     ListItem(
         headlineContent = { Text(text = text) },
-        leadingContent = ListItemContent.Text(emoji),
+        leadingContent = ListItemContent.Custom({
+            Text(text = emoji, modifier = Modifier.size(24.dp))
+        }),
         trailingContent = ListItemContent.Custom({
             IconButton(onClick = onClear) {
                 Icon(imageVector = CompoundIcons.Close(), contentDescription = null)
@@ -178,32 +180,47 @@ private fun CustomStatusInputRow(
     modifier: Modifier = Modifier,
 ) {
     val hasText by remember { derivedStateOf { textFieldState.text.isNotEmpty() } }
+    val saveLabel = stringResource(CommonStrings.action_save)
+    val cancelLabel = stringResource(CommonStrings.action_cancel)
+    val textStyle = ElementTheme.typography.fontBodyLgMedium
+    val density = LocalDensity.current
+    val textMeasurer = rememberTextMeasurer()
+    // Measure both labels and derive a stable min-width so the button never resizes.
+    // 24.dp = 12.dp start + 12.dp end padding of TextButton (Large, no icon).
+    val minButtonWidth = remember(textMeasurer, textStyle, saveLabel, cancelLabel) {
+        val saveWidth = textMeasurer.measure(saveLabel, textStyle).size.width
+        val cancelWidth = textMeasurer.measure(cancelLabel, textStyle).size.width
+        with(density) { maxOf(saveWidth, cancelWidth).toDp() } + 24.dp
+    }
     ListItem(
         headlineContent = {
             TextField(
+                modifier = Modifier.fillMaxWidth(),
                 state = textFieldState,
                 placeholder = stringResource(R.string.screen_preferences_user_status_custom_hint),
                 inputTransformation = InputTransformation.maxLength(maxLength = 30),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 onKeyboardAction = { if (hasText) onConfirm() },
                 lineLimits = TextFieldLineLimits.SingleLine,
-                trailingIcon = if (hasText) {
-                    {
-                        IconButton(onClick = { textFieldState.clearText() }) {
-                            Icon(imageVector = CompoundIcons.Close(), contentDescription = null)
+                trailingIcon = {
+                    if (hasText) {
+                        Box(modifier = Modifier.clickable {
+                            textFieldState.clearText()
+                        }) {
+                            Icon(imageVector = CompoundIcons.Close(), contentDescription = stringResource(CommonStrings.action_cancel))
                         }
                     }
-                } else null,
+                }
             )
         },
         trailingContent = ListItemContent.Custom({
-            if (hasText) {
-                TextButton(onClick = onConfirm, text = stringResource(CommonStrings.action_save))
-            } else {
-                TextButton(onClick = onCancel, text = stringResource(CommonStrings.action_cancel))
-            }
+            TextButton(
+                onClick = if (hasText) onConfirm else onCancel,
+                text = if (hasText) saveLabel else cancelLabel,
+                modifier = Modifier.widthIn(min = minButtonWidth),
+            )
         }),
-        leadingContent = ListItemContent.Custom( {
+        leadingContent = ListItemContent.Custom({
             Surface(
                 shape = CircleShape,
                 border = BorderStroke(1.dp, ElementTheme.colors.bgSubtleSecondary),
