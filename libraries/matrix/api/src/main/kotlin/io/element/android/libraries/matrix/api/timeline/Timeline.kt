@@ -217,6 +217,13 @@ interface Timeline : AutoCloseable {
     suspend fun loadReplyDetails(eventId: EventId): InReplyTo
 
     /**
+     * Returns true if [eventId] is currently loaded in this timeline's window, even if the display
+     * layer does not render it (e.g. filtered or state events). This distinguishes "in the window
+     * but not displayed" from "genuinely outside the loaded window".
+     */
+    suspend fun isEventLoaded(eventId: EventId): Boolean
+
+    /**
      * Adds a new pinned event by sending an updated `m.room.pinned_events`
      * event containing the new event id.
      *
