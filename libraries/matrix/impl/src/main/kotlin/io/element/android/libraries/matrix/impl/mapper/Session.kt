@@ -9,7 +9,7 @@
 package io.element.android.libraries.matrix.impl.mapper
 
 import io.element.android.libraries.matrix.api.auth.external.ExternalSession
-import io.element.android.libraries.matrix.impl.paths.SessionPaths
+import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.sessionstorage.api.LoginType
 import io.element.android.libraries.sessionstorage.api.SessionData
 import org.matrix.rustcomponents.sdk.Session
