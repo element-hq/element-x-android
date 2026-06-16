@@ -10,7 +10,7 @@ package io.element.android.features.lockscreen.test
 import io.element.android.features.lockscreen.api.DeviceUnlockEntryPoint
 import io.element.android.tests.testutils.EnsureNeverCalled
 
-class FakeDeviceUnlockCallback(
+class FakeDeviceUnlockEntryPointCallback(
     private val onCancelLambda: () -> Unit = EnsureNeverCalled(),
     private val onUnlockedLambda: () -> Unit = EnsureNeverCalled(),
 ) : DeviceUnlockEntryPoint.Callback {

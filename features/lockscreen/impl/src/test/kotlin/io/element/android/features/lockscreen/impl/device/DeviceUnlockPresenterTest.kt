@@ -16,7 +16,7 @@ import io.element.android.features.lockscreen.impl.biometric.FakeBiometricAuthen
 import io.element.android.features.lockscreen.impl.fixtures.aPinCodeManager
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.unlock.PinUnlockHelper
-import io.element.android.features.lockscreen.test.FakeDeviceUnlockCallback
+import io.element.android.features.lockscreen.test.FakeDeviceUnlockEntryPointCallback
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -40,9 +40,9 @@ class DeviceUnlockPresenterTest {
             createBiometricAuthenticator = { fakeBiometricAuthenticator },
         )
         val callbackHolder = DeviceUnlockCallbackHolder()
-        val callback = FakeDeviceUnlockCallback()
+        val callback = FakeDeviceUnlockEntryPointCallback()
 
-        createPresenter(
+        createDeviceUnlockPresenter(
             biometricAuthenticatorManager = biometricAuthenticatorManager,
             callbackHolder = callbackHolder,
         ).test {
@@ -60,11 +60,11 @@ class DeviceUnlockPresenterTest {
     @Test
     fun `present - when unlock requested and device unlock unavailable and app pin is configured, show app pin`() = runTest {
         val callbackHolder = DeviceUnlockCallbackHolder()
-        val callback = FakeDeviceUnlockCallback()
+        val callback = FakeDeviceUnlockEntryPointCallback()
         val pinCodeManager = aPinCodeManager().apply {
             createPinCode("1234")
         }
-        createPresenter(
+        createDeviceUnlockPresenter(
             biometricAuthenticatorManager = FakeBiometricAuthenticatorManager(canUseDeviceUnlock = false),
             callbackHolder = callbackHolder,
             pinCodeManager = pinCodeManager,
@@ -85,10 +85,10 @@ class DeviceUnlockPresenterTest {
     fun `present - when unlock requested and no security, unlock immediately`() = runTest {
         val callbackHolder = DeviceUnlockCallbackHolder()
         val onUnlockedLambda = lambdaRecorder<Unit> { }
-        val callback = FakeDeviceUnlockCallback(
+        val callback = FakeDeviceUnlockEntryPointCallback(
             onUnlockedLambda = onUnlockedLambda,
         )
-        createPresenter(
+        createDeviceUnlockPresenter(
             biometricAuthenticatorManager = FakeBiometricAuthenticatorManager(canUseDeviceUnlock = false),
             callbackHolder = callbackHolder,
         ).test {
@@ -106,13 +106,13 @@ class DeviceUnlockPresenterTest {
     fun `present - CancelPinCode event cancels unlock request`() = runTest {
         val callbackHolder = DeviceUnlockCallbackHolder()
         val onCancelLambda = lambdaRecorder<Unit> { }
-        val callback = FakeDeviceUnlockCallback(
+        val callback = FakeDeviceUnlockEntryPointCallback(
             onCancelLambda = onCancelLambda,
         )
         val pinCodeManager = aPinCodeManager().apply {
             createPinCode("1234")
         }
-        createPresenter(
+        createDeviceUnlockPresenter(
             biometricAuthenticatorManager = FakeBiometricAuthenticatorManager(canUseDeviceUnlock = false),
             callbackHolder = callbackHolder,
             pinCodeManager = pinCodeManager,
@@ -133,7 +133,7 @@ class DeviceUnlockPresenterTest {
         }
     }
 
-    private fun createPresenter(
+    private fun createDeviceUnlockPresenter(
         biometricAuthenticatorManager: FakeBiometricAuthenticatorManager = FakeBiometricAuthenticatorManager(),
         callbackHolder: DeviceUnlockCallbackHolder = DeviceUnlockCallbackHolder(),
         pinCodeManager: PinCodeManager = aPinCodeManager(),
