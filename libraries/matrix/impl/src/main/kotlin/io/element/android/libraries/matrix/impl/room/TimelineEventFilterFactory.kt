@@ -36,7 +36,7 @@ class RustTimelineEventFilterFactory : TimelineEventFilterFactory {
             FilterTimelineEventCondition.EventType(FilterTimelineEventType.State(it.map()))
         }
         // If the room is publicly joinable and not encrypted, we also want to exclude membership changes and profile changes,
-        // as they will pollute the timelines since they're quite command and not add much value.
+        // as they will pollute the timelines since they're quite common and not add much value.
         val excludedMembershipChanges = if (joinRule !is JoinRule.Invite && isEncrypted == false) {
             listOf(
                 FilterTimelineEventCondition.MembershipChange(MembershipChangeFilter.JOIN),
