@@ -10,8 +10,9 @@ package io.element.android.features.preferences.impl.userstatus
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.visible
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -32,12 +33,12 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.designsystem.components.list.ListItemContent
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -106,7 +107,10 @@ private fun EmptyStatusRow(
 ) {
     ListItem(
         headlineContent = {
-            Text(text = stringResource(R.string.screen_preferences_user_status_placeholder))
+            Text(
+                text = stringResource(R.string.screen_preferences_user_status_placeholder),
+                modifier = Modifier.padding(vertical = 16.dp),
+            )
         },
         trailingContent = ListItemContent.Custom({
             Box(modifier = Modifier.minimumInteractiveComponentSize())
@@ -128,7 +132,7 @@ private fun CurrentStatusRow(
         is DisplayedStatus.InCall -> "🎧" to stringResource(R.string.common_user_status_on_a_call)
     }
     ListItem(
-        headlineContent = { Text(text = text) },
+        headlineContent = { Text(text = text, modifier = Modifier.padding(vertical = 16.dp)) },
         leadingContent = ListItemContent.Custom({
             Text(text = emoji, modifier = Modifier.size(24.dp))
         }),
@@ -187,16 +191,15 @@ private fun CustomStatusInputRow(
     val density = LocalDensity.current
     val textMeasurer = rememberTextMeasurer()
     // Measure both labels and derive a stable min-width so the button never resizes.
-    // 24.dp = 12.dp start + 12.dp end padding of TextButton (Large, no icon).
-    val minButtonWidth = remember(textMeasurer, textStyle, saveLabel, cancelLabel) {
+    // 32.dp = 16.dp start + 16.dp end padding of TextButton (Large, no icon).
+    val actionButtonWidth = remember(textMeasurer, textStyle, saveLabel, cancelLabel) {
         val saveWidth = textMeasurer.measure(saveLabel, textStyle).size.width
         val cancelWidth = textMeasurer.measure(cancelLabel, textStyle).size.width
-        with(density) { maxOf(saveWidth, cancelWidth).toDp() } + 24.dp
+        with(density) { maxOf(saveWidth, cancelWidth).toDp() } + 32.dp
     }
     ListItem(
         headlineContent = {
             TextField(
-                modifier = Modifier.fillMaxWidth(),
                 state = textFieldState,
                 placeholder = stringResource(R.string.screen_preferences_user_status_custom_hint),
                 inputTransformation = InputTransformation.maxLength(maxLength = 30),
@@ -204,12 +207,14 @@ private fun CustomStatusInputRow(
                 onKeyboardAction = { if (hasText) onConfirm() },
                 lineLimits = TextFieldLineLimits.SingleLine,
                 trailingIcon = {
-                    if (hasText) {
-                        Box(modifier = Modifier.clickable {
-                            textFieldState.clearText()
-                        }) {
-                            Icon(imageVector = CompoundIcons.Close(), contentDescription = stringResource(CommonStrings.action_cancel))
-                        }
+                    Box(modifier = Modifier.clickable(enabled = hasText) {
+                        textFieldState.clearText()
+                    }) {
+                        Icon(
+                            imageVector = CompoundIcons.Close(),
+                            contentDescription = stringResource(CommonStrings.action_cancel),
+                            modifier = Modifier.visible(hasText)
+                        )
                     }
                 }
             )
@@ -218,7 +223,7 @@ private fun CustomStatusInputRow(
             TextButton(
                 onClick = if (hasText) onConfirm else onCancel,
                 text = if (hasText) saveLabel else cancelLabel,
-                modifier = Modifier.widthIn(min = minButtonWidth),
+                modifier = Modifier.widthIn(min = actionButtonWidth),
             )
         }),
         leadingContent = ListItemContent.Custom({
