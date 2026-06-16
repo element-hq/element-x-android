@@ -18,6 +18,7 @@
   <string name="a11y_info">"Információ"</string>
   <string name="a11y_join_call">"Csatlakozás a híváshoz"</string>
   <string name="a11y_jump_to_bottom">"Ugrás az aljára"</string>
+  <string name="a11y_jump_to_unread">"Ugrás az olvasatlanhoz"</string>
   <string name="a11y_move_the_map_to_my_location">"Térkép áthelyezése a jelenlegi helyre"</string>
   <string name="a11y_notifications_mentions_only">"Csak megemlítések"</string>
   <string name="a11y_notifications_muted">"Némítva"</string>
@@ -98,6 +99,7 @@
   <string name="action_decline_and_block">"Elutasítás és letiltás"</string>
   <string name="action_delete">"Törlés"</string>
   <string name="action_delete_account">"Fiók törlése"</string>
+  <string name="action_delete_file">"Fájl törlése"</string>
   <string name="action_delete_poll">"Szavazás törlése"</string>
   <string name="action_deselect_all">"Kijelölés megszüntetése"</string>
   <string name="action_disable">"Letiltás"</string>
@@ -303,6 +305,7 @@ Ok: %1$s."</string>
   <string name="common_please_wait">"Kis türelmet…"</string>
   <string name="common_poll_end_confirmation">"Biztos, hogy befejezi ezt a szavazást?"</string>
   <string name="common_poll_summary">"Szavazás: %1$s"</string>
+  <string name="common_poll_summary_prefix">"Szavazás"</string>
   <string name="common_poll_total_votes">"Összes szavazat: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Az eredmények a szavazás befejezése után jelennek meg"</string>
   <plurals name="common_poll_votes_count">
@@ -541,4 +544,6 @@ Biztos, hogy folytatja?"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Nincs hozzáférése ehhez az üzenethez"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Nem sikerült visszafejteni az üzenetet"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Ez az üzenet azért lett blokkolva, mert vagy nem ellenőrizte az eszközt, vagy a feladónak ellenőriznie kell az Ön digitális személyazonosságát."</string>
+  <string name="vulkan_not_supported_dialog_content_android">"Az Ön eszköze túl régi, Android 8 vagy újabb verziójú eszközre van szükség."</string>
+  <string name="vulkan_not_supported_dialog_title_android">"A térképek megjelenítése nem támogatott"</string>
 </resources>

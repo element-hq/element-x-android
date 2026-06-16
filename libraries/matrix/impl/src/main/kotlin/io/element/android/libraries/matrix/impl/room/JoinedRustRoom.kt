@@ -421,6 +421,8 @@ class JoinedRustRoom(
                 roomAvatar = roomPowerLevelsValues.roomAvatar,
                 roomTopic = roomPowerLevelsValues.roomTopic,
                 spaceChild = roomPowerLevelsValues.spaceChild,
+                beacon = roomPowerLevelsValues.beacon,
+                beaconInfo = roomPowerLevelsValues.beaconInfo,
             )
             innerRoom.applyPowerLevelChanges(changes)
         }
@@ -543,6 +545,12 @@ class JoinedRustRoom(
                 is LiveLocationException -> throwable.map()
                 else -> throwable
             }
+        }
+    }
+
+    override suspend fun setOwnMemberDisplayName(displayName: String): Result<Unit> = withContext(roomDispatcher) {
+        runCatchingExceptions {
+            innerRoom.setOwnMemberDisplayName(displayName)
         }
     }
 

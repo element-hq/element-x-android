@@ -129,6 +129,7 @@ class MediaGalleryPresenter(
                 }
                 is MediaGalleryEvent.OpenInfo -> coroutineScope.launch {
                     mediaBottomSheetState = MediaBottomSheetState.Details(
+                        fromGallery = true,
                         eventId = event.mediaItem.eventId(),
                         canDelete = when (event.mediaItem.mediaInfo().senderId) {
                             null -> false

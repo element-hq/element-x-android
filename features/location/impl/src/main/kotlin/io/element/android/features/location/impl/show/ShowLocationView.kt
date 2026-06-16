@@ -43,13 +43,14 @@ import io.element.android.features.location.impl.common.ui.LocationPinMarkers
 import io.element.android.features.location.impl.common.ui.LocationShareRow
 import io.element.android.features.location.impl.common.ui.MapBottomSheetScaffold
 import io.element.android.features.location.impl.common.ui.UserLocationPuck
-import io.element.android.features.location.impl.common.ui.rememberUserLocationState
+import io.element.android.features.location.impl.common.userlocation.UserLocationTrackingEffect
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import org.maplibre.compose.camera.CameraMoveReason
 import org.maplibre.compose.camera.CameraPosition
@@ -90,7 +91,6 @@ fun ShowLocationView(
         }
     }
 
-    val userLocationState = rememberUserLocationState(state.hasLocationPermission)
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberStandardBottomSheetState(SheetValue.Expanded)
     )
@@ -100,6 +100,7 @@ fun ShowLocationView(
         }
     }
     MapBottomSheetScaffold(
+        customMapStyleUrl = state.customMapStyleUrl,
         sheetDragHandle = if (state.isSheetDraggable) {
             { BottomSheetDefaults.DragHandle() }
         } else {
@@ -153,7 +154,9 @@ fun ShowLocationView(
                                 val position = CameraPosition(
                                     padding = sheetPaddings,
                                     target = Position(locationShare.location.lon, locationShare.location.lat),
-                                    zoom = MapDefaults.DEFAULT_ZOOM
+                                    // Force pointing to NORTH
+                                    bearing = 0.0,
+                                    zoom = cameraState.position.zoom.coerceAtLeast(MapDefaults.DEFAULT_ZOOM),
                                 )
                                 coroutineScope.launch {
                                     cameraState.animateTo(finalPosition = position)
@@ -165,13 +168,19 @@ fun ShowLocationView(
             }
         },
         mapContent = {
-            UserLocationPuck(
+            UserLocationTrackingEffect(
                 cameraState = cameraState,
-                locationState = userLocationState,
-                trackUserLocation = state.isTrackMyLocation
+                locationState = state.userLocationState,
+                enabled = state.isTrackMyLocation,
             )
+            if (!state.hideUserLocationPuck) {
+                UserLocationPuck(
+                    cameraState = cameraState,
+                    location = state.userLocationState.location,
+                )
+            }
             val markers = remember(state.locationShares) {
-                state.locationShares.map { it.toMarkerData() }
+                state.locationShares.map { it.toMarkerData() }.toImmutableList()
             }
             LocationPinMarkers(markers)
         },

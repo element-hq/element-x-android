@@ -8,6 +8,8 @@
   <string name="screen_bug_report_editor_placeholder">"문제를 설명해 주세요…"</string>
   <string name="screen_bug_report_editor_supporting">"가능하다면 영어로 설명을 작성해 주십시오."</string>
   <string name="screen_bug_report_error_description_too_short">"설명 내용이 너무 짧습니다. 발생한 상황에 대해 더 자세한 내용을 제공해 주시기 바랍니다. 감사합니다!"</string>
+  <string name="screen_bug_report_github_issue_description">"연관된 GitHub 이슈 번호가 있다면 입력할 수 있습니다."</string>
+  <string name="screen_bug_report_github_issue_label">"GitHub 이슈"</string>
   <string name="screen_bug_report_include_crash_logs">"충돌 로그 보내기"</string>
   <string name="screen_bug_report_include_logs">"로그 허용"</string>
   <string name="screen_bug_report_include_logs_error">"귀하의 로그가 너무 커서 이 보고서에 포함할 수 없습니다. 다른 방법으로 보내주시기 바랍니다."</string>

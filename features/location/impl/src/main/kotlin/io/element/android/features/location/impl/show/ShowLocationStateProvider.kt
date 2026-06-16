@@ -11,6 +11,8 @@ package io.element.android.features.location.impl.show
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
+import io.element.android.features.location.impl.common.userlocation.UserLocationState
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
@@ -32,36 +34,34 @@ class ShowLocationStateProvider : PreviewParameterProvider<ShowLocationState> {
             ),
             aShowLocationState(
                 constraintsDialogState = LocationConstraintsDialogState.LocationServiceDisabled,
-                hasLocationPermission = true,
             ),
-            aShowLocationState(
-                hasLocationPermission = true,
-            ),
-            aShowLocationState(
-                hasLocationPermission = true,
-                isTrackMyLocation = true,
-            ),
+            aShowLocationState(isTrackMyLocation = true),
+            aShowLocationState(customMapStyleUrl = AsyncData.Loading()),
         )
 }
 
 private const val APP_NAME = "ApplicationName"
 
 fun aShowLocationState(
+    customMapStyleUrl: AsyncData<String?> = AsyncData.Success(null),
     isLive: Boolean = false,
     constraintsDialogState: LocationConstraintsDialogState = LocationConstraintsDialogState.None,
     locationShares: List<LocationShareItem> = listOf(aLocationShareItem(isLive = isLive)),
     focusedLocation: LocationShareItem? = locationShares.firstOrNull(),
-    hasLocationPermission: Boolean = false,
     isTrackMyLocation: Boolean = false,
+    userLocationState: UserLocationState = UserLocationState(null),
     appName: String = APP_NAME,
+    hideUserLocationPuck: Boolean = false,
     eventSink: (ShowLocationEvent) -> Unit = {},
 ): ShowLocationState {
     return ShowLocationState(
+        customMapStyleUrl = customMapStyleUrl,
         dialogState = constraintsDialogState,
         locationShares = locationShares.toImmutableList(),
         focusedLocation = focusedLocation,
-        hasLocationPermission = hasLocationPermission,
         isTrackMyLocation = isTrackMyLocation,
+        userLocationState = userLocationState,
+        hideUserLocationPuck = hideUserLocationPuck,
         appName = appName,
         isLive = isLive,
         eventSink = eventSink,

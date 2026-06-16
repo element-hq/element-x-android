@@ -480,10 +480,6 @@ Raison : %1$s."</string>
   <string name="screen_create_poll_options_section_title">"Options"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Supprimer %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Paramètres"</string>
-  <plurals name="screen_image_edition_a11y_rotation_state">
-    <item quantity="one">"%1$d degré"</item>
-    <item quantity="other">"%1$d degrés"</item>
-  </plurals>
   <string name="screen_live_location_sheet_nobody_sharing">"Personne ne partage sa position"</string>
   <string name="screen_live_location_sheet_sharing_live_location">"Partage de la position en direct"</string>
   <plurals name="screen_live_location_sheet_subtitle">

@@ -101,6 +101,7 @@
   <string name="action_decline_and_block">"Odrzuć i zablokuj"</string>
   <string name="action_delete">"Usuń"</string>
   <string name="action_delete_account">"Usuń konto"</string>
+  <string name="action_delete_file">"Usuń plik"</string>
   <string name="action_delete_poll">"Usuń ankietę"</string>
   <string name="action_deselect_all">"Odznacz wszystko"</string>
   <string name="action_disable">"Wyłącz"</string>
@@ -308,6 +309,7 @@ Powód: %1$s."</string>
   <string name="common_please_wait">"Proszę czekać…"</string>
   <string name="common_poll_end_confirmation">"Jesteś pewien, że chcesz zakończyć tę ankietę?"</string>
   <string name="common_poll_summary">"Ankieta: %1$s"</string>
+  <string name="common_poll_summary_prefix">"Ankieta"</string>
   <string name="common_poll_total_votes">"Łączna liczba głosów: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Wyniki zostaną wyświetlone po zakończeniu ankiety"</string>
   <plurals name="common_poll_votes_count">
@@ -424,7 +426,7 @@ Powód: %1$s."</string>
   <string name="common_video_quality_standard_description">"Balans między jakością a szybkością przesyłania"</string>
   <string name="common_voice_message">"Wiadomość głosowa"</string>
   <string name="common_waiting">"Oczekiwanie…"</string>
-  <string name="common_waiting_for_decryption_key">"Oczekiwanie na tę wiadomość"</string>
+  <string name="common_waiting_for_decryption_key">"Oczekiwanie wiadomości"</string>
   <string name="common_waiting_live_location">"Czekam na lokalizację na żywo…"</string>
   <string name="common_world_readable_history">"Każdy może zobaczyć historię"</string>
   <string name="common_you">"Ty"</string>
@@ -489,13 +491,6 @@ Czy na pewno chcesz kontynuować?"</string>
   <string name="screen_create_poll_options_section_title">"Opcje"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Usuń %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Ustawienia"</string>
-  <string name="screen_image_edition_a11y_rotate_to_the_left">"Obróć obraz w lewo"</string>
-  <plurals name="screen_image_edition_a11y_rotation_state">
-    <item quantity="one">"%1$d stopień"</item>
-    <item quantity="few">"%1$d stopnie"</item>
-    <item quantity="many">"%1$d stopni"</item>
-  </plurals>
-  <string name="screen_image_edition_title">"Edytuj zdjęcie"</string>
   <string name="screen_live_location_sheet_nobody_sharing">"Nikt nie udostępnia swojej lokalizacji"</string>
   <string name="screen_live_location_sheet_sharing_live_location">"Udostępnianie lokalizacji na żywo"</string>
   <plurals name="screen_live_location_sheet_subtitle">
@@ -561,4 +556,6 @@ Czy na pewno chcesz kontynuować?"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Nie masz uprawnień do tej wiadomości"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Nie można odszyfrować wiadomości"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Ta wiadomość została zablokowana, ponieważ urządzenie nie zostało zweryfikowane lub nadawca musi zweryfikować Twoją tożsamość."</string>
+  <string name="vulkan_not_supported_dialog_content_android">"Twoje urządzenie jest przestarzałe, wymagany system Android 8 lub nowszy."</string>
+  <string name="vulkan_not_supported_dialog_title_android">"Renderowanie map nie jest obsługiwane"</string>
 </resources>

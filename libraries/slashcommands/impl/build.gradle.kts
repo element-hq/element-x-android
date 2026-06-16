@@ -18,6 +18,7 @@ android {
 setupDependencyInjection()
 
 dependencies {
+    implementation(libs.coroutines.core)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.core)

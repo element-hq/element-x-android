@@ -97,6 +97,7 @@
   <string name="action_decline_and_block">"拒否してブロック"</string>
   <string name="action_delete">"削除"</string>
   <string name="action_delete_account">"アカウントを削除"</string>
+  <string name="action_delete_file">"ファイルを削除"</string>
   <string name="action_delete_poll">"投票を削除"</string>
   <string name="action_deselect_all">"全ての選択を解除"</string>
   <string name="action_disable">"無効化"</string>
@@ -292,7 +293,7 @@
   <string name="common_or">"または"</string>
   <string name="common_other_options">"他のオプション"</string>
   <string name="common_password">"パスワード"</string>
-  <string name="common_people">"人々"</string>
+  <string name="common_people">"ユーザー"</string>
   <string name="common_permalink">"固定リンク"</string>
   <string name="common_permission">"権限"</string>
   <string name="common_pinned">"ピン留め"</string>
@@ -300,6 +301,7 @@
   <string name="common_please_wait">"お待ちください…"</string>
   <string name="common_poll_end_confirmation">"本当に投票を終了しますか？"</string>
   <string name="common_poll_summary">"投票: %1$s"</string>
+  <string name="common_poll_summary_prefix">"投票"</string>
   <string name="common_poll_total_votes">"総投票数:%1$s"</string>
   <string name="common_poll_undisclosed_text">"結果は投票終了後に表示されます"</string>
   <plurals name="common_poll_votes_count">
@@ -471,11 +473,6 @@
   <string name="screen_create_poll_options_section_title">"選択肢"</string>
   <string name="screen_create_poll_remove_accessibility_label">"%1$s を削除"</string>
   <string name="screen_create_poll_settings_section_title">"設定"</string>
-  <string name="screen_image_edition_a11y_rotate_to_the_left">"画像を左に回転"</string>
-  <plurals name="screen_image_edition_a11y_rotation_state">
-    <item quantity="other">"%1$d°"</item>
-  </plurals>
-  <string name="screen_image_edition_title">"写真を編集"</string>
   <string name="screen_live_location_sheet_nobody_sharing">"誰も位置情報を共有していません"</string>
   <string name="screen_live_location_sheet_sharing_live_location">"ライブ位置情報を共有しています"</string>
   <plurals name="screen_live_location_sheet_subtitle">

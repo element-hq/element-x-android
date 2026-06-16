@@ -60,7 +60,7 @@ class DefaultUnifiedPushGatewayUrlResolverTest {
     }
 
     @Test
-    fun `resolve Error returns the url if no current url is available`() {
+    fun `resolve Error returns the default gateway url if no current url is available`() {
         val sut = createDefaultUnifiedPushGatewayUrlResolver(
             unifiedPushStore = FakeUnifiedPushStore(
                 getPushGatewayResult = { instance ->
@@ -73,7 +73,7 @@ class DefaultUnifiedPushGatewayUrlResolverTest {
             gatewayResult = UnifiedPushGatewayResolverResult.Error("aUrl"),
             instance = "instance",
         )
-        assertThat(result).isEqualTo("aUrl")
+        assertThat(result).isEqualTo(FakeDefaultPushGatewayHttpUrlProvider().provide())
     }
 
     private fun createDefaultUnifiedPushGatewayUrlResolver(

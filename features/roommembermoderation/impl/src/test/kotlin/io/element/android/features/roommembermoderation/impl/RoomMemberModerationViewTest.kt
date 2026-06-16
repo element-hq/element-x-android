@@ -21,6 +21,7 @@ import io.element.android.features.roommembermoderation.api.RoomMemberModeration
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.testtags.TestTags
+import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EnsureNeverCalledWithTwoParams
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
@@ -48,6 +49,8 @@ class RoomMemberModerationViewTest {
                 onSelectAction = callback
             )
             clickOn(R.string.screen_bottom_sheet_manage_room_member_member_user_info)
+            // Gives time for bottomsheet to hide
+            mainClock.advanceTimeBy(1_000)
         }
     }
 
@@ -217,11 +220,13 @@ class RoomMemberModerationViewTest {
 private fun AndroidComposeUiTest<ComponentActivity>.setRoomMemberModerationView(
     state: InternalRoomMemberModerationState,
     onSelectAction: (ModerationAction, MatrixUser) -> Unit = EnsureNeverCalledWithTwoParams(),
+    onAvatarClick: ((MatrixUser) -> Unit)? = EnsureNeverCalledWithParam(),
 ) {
     setSafeContent {
         RoomMemberModerationView(
             state = state,
             onSelectAction = onSelectAction,
+            onAvatarClick = onAvatarClick,
         )
     }
 }

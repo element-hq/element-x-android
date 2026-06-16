@@ -9,6 +9,7 @@ package io.element.android.features.location.impl.live.service
 
 import io.element.android.features.location.api.Location
 
-fun interface LiveLocationReceiver {
+interface LiveLocationReceiver {
     suspend fun onLocationUpdate(location: Location)
+    suspend fun onUnrecoverableError()
 }

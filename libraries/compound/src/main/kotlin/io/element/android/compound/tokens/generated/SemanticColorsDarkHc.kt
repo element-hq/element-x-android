@@ -103,6 +103,7 @@ val compoundColorsHcDark = SemanticColors(
     iconTertiary = DarkHcColorTokens.colorGray800,
     iconTertiaryAlpha = DarkHcColorTokens.colorAlphaGray800,
     separatorPrimary = DarkHcColorTokens.colorGray400,
+    separatorSecondary = DarkHcColorTokens.colorGray300,
     textActionAccent = DarkHcColorTokens.colorGreen900,
     textActionPrimary = DarkHcColorTokens.colorGray1400,
     textBadgeAccent = DarkHcColorTokens.colorGreen1100,

@@ -142,7 +142,6 @@ fun TimelineItemEventRow(
     timelineMode: Timeline.Mode,
     timelineRoomInfo: TimelineRoomInfo,
     timelineProtectionState: TimelineProtectionState,
-    renderReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
     displayThreadSummaries: Boolean,
     onEventClick: () -> Unit,
@@ -296,7 +295,6 @@ fun TimelineItemEventRow(
                 isLastOutgoingMessage = isLastOutgoingMessage,
                 receipts = event.readReceiptState.receipts,
             ),
-            renderReadReceipts = renderReadReceipts,
             onReadReceiptsClick = { onReadReceiptClick(event) },
             modifier = Modifier.padding(top = 4.dp)
         )
