@@ -100,6 +100,7 @@ internal fun MessagesSelectionTopBarPreview() = ElementPreview {
         state = TimelineSelectionState(
             isActive = true,
             selectedIds = persistentSetOf(EventId("\$1"), EventId("\$2"), EventId("\$3")),
+            maxSelection = TimelineSelectionState.MAX_SELECTION,
         ),
         canDeleteSelection = true,
         onCancelClick = {},

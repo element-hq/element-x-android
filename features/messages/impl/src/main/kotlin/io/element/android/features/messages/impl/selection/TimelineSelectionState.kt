@@ -13,7 +13,7 @@ import androidx.compose.runtime.saveable.listSaver
 import io.element.android.libraries.matrix.api.core.EventId
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
-import kotlinx.collections.immutable.toPersistentSet
+import kotlinx.collections.immutable.toImmutableSet
 
 /**
  * State of the optional bulk-message selection mode.
@@ -22,15 +22,22 @@ import kotlinx.collections.immutable.toPersistentSet
  */
 @Immutable
 data class TimelineSelectionState(
-    val isActive: Boolean = false,
-    val selectedIds: ImmutableSet<EventId> = persistentSetOf(),
-    val maxSelection: Int = MAX_SELECTION,
+    val isActive: Boolean,
+    val selectedIds: ImmutableSet<EventId>,
+    val maxSelection: Int,
 ) {
     val count: Int get() = selectedIds.size
     val isAtCap: Boolean get() = count >= maxSelection
 
     companion object {
         const val MAX_SELECTION = 30
+
+        /** Inactive selection with nothing selected. */
+        val Empty = TimelineSelectionState(
+            isActive = false,
+            selectedIds = persistentSetOf(),
+            maxSelection = MAX_SELECTION,
+        )
 
         /**
          * Persists isActive + maxSelection + the selected event-id strings so a large in-progress
@@ -47,12 +54,12 @@ data class TimelineSelectionState(
             restore = { stored ->
                 // Defensive: a malformed payload restores an empty selection rather than crashing.
                 if (stored.size < 2) {
-                    TimelineSelectionState()
+                    Empty
                 } else {
                     TimelineSelectionState(
                         isActive = stored[0].toBoolean(),
                         maxSelection = stored[1].toIntOrNull() ?: MAX_SELECTION,
-                        selectedIds = stored.drop(2).map(::EventId).toPersistentSet(),
+                        selectedIds = stored.drop(2).map(::EventId).toImmutableSet(),
                     )
                 }
             },

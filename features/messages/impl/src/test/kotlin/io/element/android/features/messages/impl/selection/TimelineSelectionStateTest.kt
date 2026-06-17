@@ -23,6 +23,7 @@ class TimelineSelectionStateTest {
         val state = TimelineSelectionState(
             isActive = true,
             selectedIds = persistentSetOf(EventId("\$event1"), EventId("\$event2")),
+            maxSelection = TimelineSelectionState.MAX_SELECTION,
         )
 
         val saved = with(CanSaveScope) {
@@ -39,6 +40,6 @@ class TimelineSelectionStateTest {
     fun `restoring a truncated payload yields an empty selection instead of crashing`() {
         val restored = TimelineSelectionState.Saver.restore(listOf("true"))
 
-        assertThat(restored).isEqualTo(TimelineSelectionState())
+        assertThat(restored).isEqualTo(TimelineSelectionState.Empty)
     }
 }
