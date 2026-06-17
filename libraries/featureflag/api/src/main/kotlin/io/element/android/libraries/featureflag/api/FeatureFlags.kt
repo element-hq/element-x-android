@@ -137,4 +137,11 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
+    UserStatus(
+        key = "feature.user_status",
+        title = "User status",
+        description = "Allow users to set a status (e.g. In a meeting, Away) visible to their contacts.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
 }

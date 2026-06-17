@@ -88,7 +88,7 @@ fun aPreferencesRootState(
     nbOfBlockedUsers: Int = 0,
     showLabsItem: Boolean = false,
     directLogoutState: DirectLogoutState = aDirectLogoutState(),
-    userStatusState: UserStatusState = aUserStatusState(),
+    userStatusState: UserStatusState? = aUserStatusState(),
     snackbarMessage: SnackbarMessage? = null,
     eventSink: (PreferencesRootEvent) -> Unit = {},
 ) = PreferencesRootState(

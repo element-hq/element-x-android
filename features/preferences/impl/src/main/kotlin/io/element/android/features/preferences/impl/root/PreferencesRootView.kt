@@ -25,6 +25,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.preferences.impl.R
 import io.element.android.features.preferences.impl.user.UserPreferences
 import io.element.android.features.preferences.impl.userstatus.UserStatusRow
+import io.element.android.features.preferences.impl.userstatus.UserStatusState
 import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.list.ListItemContent
@@ -82,15 +83,14 @@ fun PreferencesRootView(
             },
             matrixUser = state.myUser,
         )
-        HorizontalDivider()
-        UserStatusRow(
-            state = state.userStatusState,
-            modifier = Modifier.fillMaxWidth(),
-        )
-        HorizontalDivider()
+
+        if (state.userStatusState != null) {
+            UserStatusSection(state.userStatusState)
+        }
         if (state.isMultiAccountEnabled) {
             MultiAccountSection(
                 state = state,
+                showTopDivider = state.userStatusState == null,
                 onAddAccountClick = onAddAccountClick,
             )
         }
@@ -135,14 +135,33 @@ fun PreferencesRootView(
 }
 
 @Composable
-private fun ColumnScope.MultiAccountSection(
-    state: PreferencesRootState,
-    onAddAccountClick: () -> Unit,
-) {
+private fun ColumnScope.UserStatusSection(userStatusState: UserStatusState) {
     HorizontalDivider(
         thickness = 8.dp,
         color = ElementTheme.colors.bgSubtleSecondary,
     )
+    UserStatusRow(
+        state = userStatusState,
+        modifier = Modifier.fillMaxWidth(),
+    )
+    HorizontalDivider(
+        thickness = 8.dp,
+        color = ElementTheme.colors.bgSubtleSecondary,
+    )
+}
+
+@Composable
+private fun ColumnScope.MultiAccountSection(
+    state: PreferencesRootState,
+    showTopDivider: Boolean,
+    onAddAccountClick: () -> Unit,
+) {
+    if(showTopDivider) {
+        HorizontalDivider(
+            thickness = 8.dp,
+            color = ElementTheme.colors.bgSubtleSecondary,
+        )
+    }
     state.otherSessions.forEach { matrixUser ->
         MatrixUserRow(
             modifier = Modifier

@@ -62,20 +62,20 @@ class PreferencesRootPresenter(
 ) : Presenter<PreferencesRootState> {
     @Composable
     override fun present(): PreferencesRootState {
-        val userStatusState = userStatusPresenter.present()
         val coroutineScope = rememberCoroutineScope()
         val matrixUser = matrixClient.userProfile.collectAsState()
         LaunchedEffect(Unit) {
             // Force a refresh of the profile
             matrixClient.getUserProfile()
         }
-
         val isMultiAccountEnabled by remember {
             featureFlagService.isFeatureEnabledFlow(FeatureFlags.MultiAccount)
         }.collectAsState(initial = false)
         val showLinkNewDevice by remember {
             featureFlagService.isFeatureEnabledFlow(FeatureFlags.QrCodeLogin)
         }.collectAsState(initial = false)
+        val isUserStatusEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.UserStatus).collectAsState(initial = false)
+        val userStatusState = if (isUserStatusEnabled) userStatusPresenter.present() else null
 
         val otherSessions by remember {
             sessionStore.sessionsFlow().map { list ->

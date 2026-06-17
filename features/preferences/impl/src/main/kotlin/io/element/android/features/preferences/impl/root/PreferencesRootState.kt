@@ -17,7 +17,7 @@ import kotlinx.collections.immutable.ImmutableList
 
 data class PreferencesRootState(
     val myUser: MatrixUser,
-    val userStatusState: UserStatusState,
+    val userStatusState: UserStatusState?,
     val version: String,
     val deviceId: DeviceId?,
     val isMultiAccountEnabled: Boolean,
