@@ -76,9 +76,9 @@ class RoomSelectPresenter(
                 is RoomSelectEvent.ToggleSelectedRoom -> {
                     val index = selectedRooms.indexOfFirst { it.roomId == event.room.roomId }
                     selectedRooms = if (index >= 0) {
-                        selectedRooms.removeAt(index)
+                        selectedRooms.removingAt(index)
                     } else {
-                        selectedRooms.add(event.room)
+                        selectedRooms.adding(event.room)
                     }
                 }
                 RoomSelectEvent.ToggleSearchActive -> isSearchActive = !isSearchActive
