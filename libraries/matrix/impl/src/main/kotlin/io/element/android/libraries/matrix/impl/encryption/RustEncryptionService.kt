@@ -131,19 +131,28 @@ class RustEncryptionService(
 
     override suspend fun enableRecovery(
         waitForBackupsToUpload: Boolean,
-    ): Result<Unit> = withContext(dispatchers.io) {
+        passphrase: String?,
+    ): Result<String> = withContext(dispatchers.io) {
         runCatchingExceptions {
-            service.enableRecovery(
+            // The key arrives as the suspend return value (like resetRecoveryKey), avoiding a
+            // flow/return-value race; the listener only feeds sub-progress.
+            enableRecoveryProgressStateFlow.value = EnableRecoveryProgress.Starting
+            val key = service.enableRecovery(
                 waitForBackupsToUpload = waitForBackupsToUpload,
                 progressListener = object : EnableRecoveryProgressListener {
                     override fun onUpdate(status: RustEnableRecoveryProgress) {
                         enableRecoveryProgressStateFlow.value = enableRecoveryProgressMapper.map(status)
                     }
                 },
-                passphrase = null,
+                passphrase = passphrase,
             )
-                // enableRecovery returns the encryption key, but we read it from the state flow
-                .let { }
+            // Pin Done explicitly so observers get a coherent terminal value. For the passphrase
+            // path the user never sees the SDK base58 key, so keep it out of this session-scoped
+            // (in-memory) flow entirely; the caller still receives it as the return value and is
+            // responsible for scrubbing it. The auto-generated path must retain the key here since
+            // that is how it is surfaced to the user.
+            enableRecoveryProgressStateFlow.value = EnableRecoveryProgress.Done(if (passphrase != null) "" else key)
+            key
         }.mapFailure {
             it.mapRecoveryException()
         }
