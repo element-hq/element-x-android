@@ -13,7 +13,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
 import io.element.android.features.lockscreen.impl.biometric.BiometricAuthenticatorManager
@@ -21,36 +20,34 @@ import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.unlock.PinUnlockHelper
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 
 @Inject
 class DeviceUnlockPresenter(
     private val pinUnlockHelper: PinUnlockHelper,
     private val biometricAuthenticatorManager: BiometricAuthenticatorManager,
-    private val biometricRequester: DeviceUnlockCallbackHolder,
+    private val deviceUnlockCallbackHolder: DeviceUnlockCallbackHolder,
     private val pinCodeManager: PinCodeManager,
 ) : Presenter<DeviceUnlockState> {
     @Composable
     override fun present(): DeviceUnlockState {
-        val coroutineScope = rememberCoroutineScope()
         var showApplicationPinCode by remember {
             mutableStateOf(false)
         }
 
         val biometricUnlock = biometricAuthenticatorManager.rememberUnlockDeviceBiometricAuthenticator()
-        val deviceUnlockCallback by biometricRequester.deviceUnlockCallback.collectAsState()
+        val deviceUnlockCallback by deviceUnlockCallbackHolder.deviceUnlockCallback.collectAsState()
         val canUseDeviceUnlock = biometricAuthenticatorManager.canUseDeviceUnlock
 
-        fun setUnlock(isUnlock: Boolean) = coroutineScope.launch {
+        fun setUnlock(isUnlock: Boolean) {
             deviceUnlockCallback?.let {
                 if (isUnlock) {
-                    it.onUnlocked()
+                    it.onUnlock()
                 } else {
                     it.onCancel()
                 }
             }
             showApplicationPinCode = false
-            biometricRequester.onDone()
+            deviceUnlockCallbackHolder.onDone()
         }
 
         LaunchedEffect(biometricUnlock, canUseDeviceUnlock, deviceUnlockCallback) {

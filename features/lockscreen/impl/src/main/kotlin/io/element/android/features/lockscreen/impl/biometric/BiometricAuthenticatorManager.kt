@@ -22,7 +22,7 @@ interface BiometricAuthenticatorManager {
     val hasAvailableAuthenticator: Boolean
 
     /**
-     * If the device is secured for example with a pin, pattern or password, and the user has enrolled at least one biometric.
+     * If the device is secured for example with a pin, a pattern, a password, or biometric.
      */
     val canUseDeviceUnlock: Boolean
 

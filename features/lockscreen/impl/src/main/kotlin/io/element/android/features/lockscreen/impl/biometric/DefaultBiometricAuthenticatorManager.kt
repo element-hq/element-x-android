@@ -71,7 +71,7 @@ class DefaultBiometricAuthenticatorManager(
             biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS
 
     /**
-     * Returns true if a strong biometric method (i.e.: fingerprint, some face or iris unlock implementations) can be used.
+     * Returns true if a device credential method (i.e.: pattern, pin) can be used.
      */
     private val canUseDeviceCredentialAuth: Boolean
         get() = biometricManager.canAuthenticate(BiometricManager.Authenticators.DEVICE_CREDENTIAL) == BiometricManager.BIOMETRIC_SUCCESS

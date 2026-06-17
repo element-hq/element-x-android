@@ -145,7 +145,7 @@ class DeviceUnlockPresenterTest {
         return DeviceUnlockPresenter(
             pinUnlockHelper = pinUnlockHelper,
             biometricAuthenticatorManager = biometricAuthenticatorManager,
-            biometricRequester = callbackHolder,
+            deviceUnlockCallbackHolder = callbackHolder,
             pinCodeManager = pinCodeManager,
         )
     }

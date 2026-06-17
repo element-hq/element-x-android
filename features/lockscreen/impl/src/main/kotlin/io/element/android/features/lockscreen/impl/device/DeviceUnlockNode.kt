@@ -26,14 +26,14 @@ class DeviceUnlockNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: DeviceUnlockPresenter,
-    private val presenterFactory: PinUnlockPresenter.Factory,
+    private val pinUnlockPresenterFactory: PinUnlockPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
         if (state.showApplicationPinCode) {
             val pinUnlockPresenter = remember {
-                presenterFactory.create(forDeviceUnlock = true)
+                pinUnlockPresenterFactory.create(forDeviceUnlock = true)
             }
             val pinState = pinUnlockPresenter.present()
             PinUnlockView(

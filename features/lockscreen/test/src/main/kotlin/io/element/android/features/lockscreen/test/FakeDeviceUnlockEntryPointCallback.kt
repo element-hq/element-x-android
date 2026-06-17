@@ -15,5 +15,5 @@ class FakeDeviceUnlockEntryPointCallback(
     private val onUnlockedLambda: () -> Unit = EnsureNeverCalled(),
 ) : DeviceUnlockEntryPoint.Callback {
     override fun onCancel() = onCancelLambda()
-    override fun onUnlocked() = onUnlockedLambda()
+    override fun onUnlock() = onUnlockedLambda()
 }

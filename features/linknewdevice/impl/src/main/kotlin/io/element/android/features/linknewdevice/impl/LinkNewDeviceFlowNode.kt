@@ -242,7 +242,7 @@ class LinkNewDeviceFlowNode(
                     override fun onUnlockDevice(type: LinkDeviceType) {
                         val callback = object : DeviceUnlockEntryPoint.Callback {
                             override fun onCancel() = Unit
-                            override fun onUnlocked() = when (type) {
+                            override fun onUnlock() = when (type) {
                                 LinkDeviceType.Mobile -> {
                                     linkNewMobileHandler.reset()
                                     linkNewMobileHandler.createAndStartNewHandler()

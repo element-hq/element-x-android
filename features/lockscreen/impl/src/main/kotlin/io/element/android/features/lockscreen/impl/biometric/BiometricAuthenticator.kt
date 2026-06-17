@@ -59,6 +59,7 @@ class DefaultBiometricAuthentication(
     private var cryptoObject: CryptoObject? = null
 
     override suspend fun setup() {
+        if (cryptoObject != null) return
         try {
             val secretKey = ensureKey()
             val cipher = encryptionDecryptionService.createEncryptionCipher(secretKey)

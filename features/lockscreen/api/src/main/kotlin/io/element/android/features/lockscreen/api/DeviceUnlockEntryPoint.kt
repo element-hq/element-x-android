@@ -30,6 +30,6 @@ interface DeviceUnlockEntryPoint : FeatureEntryPoint {
 
     interface Callback {
         fun onCancel()
-        fun onUnlocked()
+        fun onUnlock()
     }
 }
