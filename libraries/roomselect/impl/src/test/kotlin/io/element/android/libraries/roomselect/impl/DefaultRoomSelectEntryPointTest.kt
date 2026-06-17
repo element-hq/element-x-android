@@ -33,13 +33,15 @@ class DefaultRoomSelectEntryPointTest {
     fun `test node builder`() = runTest {
         val entryPoint = DefaultRoomSelectEntryPoint()
         val testMode = RoomSelectMode.Share
+        val testMaxNumberOfRooms = 12
         val parentNode = TestParentNode.create { buildContext, plugins ->
             RoomSelectNode(
                 buildContext = buildContext,
                 plugins = plugins,
-                presenterFactory = { mode ->
+                presenterFactory = { mode, maxNumberOfRooms ->
                     assertThat(mode).isEqualTo(testMode)
-                    createRoomSelectPresenter(mode)
+                    assertThat(maxNumberOfRooms).isEqualTo(testMaxNumberOfRooms)
+                    createRoomSelectPresenter(mode, maxNumberOfRooms)
                 },
             )
         }
@@ -47,7 +49,10 @@ class DefaultRoomSelectEntryPointTest {
             override fun onRoomSelected(roomIds: List<RoomId>) = lambdaError()
             override fun onCancel() = lambdaError()
         }
-        val params = RoomSelectEntryPoint.Params(testMode)
+        val params = RoomSelectEntryPoint.Params(
+            mode = testMode,
+            maxNumberOfRooms = testMaxNumberOfRooms,
+        )
         val result = entryPoint.createNode(
             parentNode = parentNode,
             buildContext = BuildContext.root(null),
@@ -55,7 +60,7 @@ class DefaultRoomSelectEntryPointTest {
             callback = callback,
         )
         assertThat(result).isInstanceOf(RoomSelectNode::class.java)
-        assertThat(result.plugins).contains(RoomSelectNode.Inputs(params.mode))
+        assertThat(result.plugins).contains(RoomSelectNode.Inputs(params.mode, params.maxNumberOfRooms))
         assertThat(result.plugins).contains(callback)
     }
 }
