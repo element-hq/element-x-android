@@ -18,6 +18,8 @@ import io.element.android.features.home.impl.spaces.HomeSpacesState
 import io.element.android.features.home.impl.spaces.aHomeSpacesState
 import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.logout.api.direct.aDirectLogoutState
+import io.element.android.features.recentcalls.impl.recentcalls.RecentCallsState
+import io.element.android.features.recentcalls.impl.recentcalls.aRecentCallsState
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -43,6 +45,9 @@ open class HomeStateProvider : PreviewParameterProvider<HomeState> {
             aHomeState(
                 currentHomeNavigationBarItem = HomeNavigationBarItem.Spaces,
             ),
+            aHomeState(
+                currentHomeNavigationBarItem = HomeNavigationBarItem.Calls,
+            ),
         ) + RoomListStateProvider().values.map {
             aHomeState(roomListState = it)
         } + aHomeState(
@@ -62,6 +67,7 @@ internal fun aHomeState(
     currentHomeNavigationBarItem: HomeNavigationBarItem = HomeNavigationBarItem.Chats,
     roomListState: RoomListState = aRoomListState(),
     homeSpacesState: HomeSpacesState = aHomeSpacesState(),
+    recentCallsState: RecentCallsState = aRecentCallsState(),
     canReportBug: Boolean = true,
     directLogoutState: DirectLogoutState = aDirectLogoutState(),
     eventSink: (HomeEvent) -> Unit = {}
@@ -75,5 +81,6 @@ internal fun aHomeState(
     currentHomeNavigationBarItem = currentHomeNavigationBarItem,
     roomListState = roomListState,
     homeSpacesState = homeSpacesState,
+    recentCallsState = recentCallsState,
     eventSink = eventSink,
 )

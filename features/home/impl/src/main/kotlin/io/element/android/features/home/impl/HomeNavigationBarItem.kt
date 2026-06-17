@@ -19,6 +19,9 @@ enum class HomeNavigationBarItem(
     Chats(
         labelRes = R.string.screen_home_tab_chats
     ),
+    Calls(
+        labelRes = R.string.screen_home_tab_calls
+    ),
     Spaces(
         labelRes = R.string.screen_home_tab_spaces
     );
@@ -28,6 +31,7 @@ enum class HomeNavigationBarItem(
         isSelected: Boolean,
     ) = when (this) {
         Chats -> if (isSelected) CompoundIcons.ChatSolid() else CompoundIcons.Chat()
+        Calls -> if (isSelected) CompoundIcons.VideoCallSolid() else CompoundIcons.VideoCall()
         Spaces -> if (isSelected) CompoundIcons.SpaceSolid() else CompoundIcons.Space()
     }
 
