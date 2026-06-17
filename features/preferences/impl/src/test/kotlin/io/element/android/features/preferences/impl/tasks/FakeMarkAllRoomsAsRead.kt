@@ -7,19 +7,16 @@
 
 package io.element.android.features.preferences.impl.tasks
 
-import kotlinx.coroutines.delay
+import io.element.android.tests.testutils.simulateLongTask
 
 class FakeMarkAllRoomsAsRead(
-    private val invokeLambda: suspend () -> Result<MarkAllRoomsAsReadResult> = {
-        delay(20L)
-        Result.success(MarkAllRoomsAsReadResult(processedCount = 0, failedCount = 0))
-    },
+    private val invokeLambda: suspend () -> Result<Unit> = { Result.success(Unit) },
 ) : MarkAllRoomsAsRead {
     var invokeCallCount = 0
         private set
 
-    override suspend fun invoke(): Result<MarkAllRoomsAsReadResult> {
+    override suspend fun invoke(): Result<Unit> = simulateLongTask {
         invokeCallCount++
-        return invokeLambda()
+        invokeLambda()
     }
 }

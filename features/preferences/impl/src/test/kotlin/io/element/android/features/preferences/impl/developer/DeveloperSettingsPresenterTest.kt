@@ -136,8 +136,9 @@ class DeveloperSettingsPresenterTest {
             skipItems(2)
             val initialState = awaitItem()
             initialState.eventSink(DeveloperSettingsEvents.ShowMarkAllRoomsAsReadConfirmation)
-            assertThat(awaitItem().showMarkAllRoomsAsReadConfirmation).isTrue()
-            initialState.eventSink(DeveloperSettingsEvents.ConfirmMarkAllRoomsAsRead)
+            val stateWithConfirmation = awaitItem()
+            assertThat(stateWithConfirmation.showMarkAllRoomsAsReadConfirmation).isTrue()
+            stateWithConfirmation.eventSink(DeveloperSettingsEvents.ConfirmMarkAllRoomsAsRead)
             awaitItem().also { state ->
                 assertThat(state.showMarkAllRoomsAsReadConfirmation).isFalse()
                 assertThat(state.markAllRoomsAsReadAction).isInstanceOf(AsyncAction.Loading::class.java)
