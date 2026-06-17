@@ -17,9 +17,9 @@ import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.matrix.impl.analytics.UtdTracker
 import io.element.android.libraries.matrix.impl.certificates.UserCertificatesProvider
-import io.element.android.libraries.matrix.impl.paths.SessionPaths
 import io.element.android.libraries.matrix.impl.paths.getSessionPaths
 import io.element.android.libraries.matrix.impl.proxy.ProxyProvider
 import io.element.android.libraries.matrix.impl.room.TimelineEventFilterFactory
@@ -102,10 +102,10 @@ class RustMatrixClientFactory(
 
         client.restoreSession(sessionData.toSession())
 
-        create(client)
+        create(client, sessionData)
     }
 
-    suspend fun create(client: Client): RustMatrixClient {
+    suspend fun create(client: Client, sessionData: SessionData): RustMatrixClient {
         val (anonymizedAccessToken, anonymizedRefreshToken) = client.session().anonymizedTokens()
 
         // Must be called before creating the sync service, timelines etc.
@@ -121,6 +121,7 @@ class RustMatrixClientFactory(
             .finish()
 
         return RustMatrixClient(
+            sessionPaths = sessionData.getSessionPaths(),
             innerClient = client,
             sessionStore = sessionStore,
             appCoroutineScope = appCoroutineScope,

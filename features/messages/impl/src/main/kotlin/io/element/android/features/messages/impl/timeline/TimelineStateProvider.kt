@@ -51,7 +51,6 @@ import kotlin.random.Random
 fun aTimelineState(
     timelineItems: ImmutableList<TimelineItem> = persistentListOf(),
     timelineMode: Timeline.Mode = Timeline.Mode.Live,
-    renderReadReceipts: Boolean = false,
     timelineRoomInfo: TimelineRoomInfo = aTimelineRoomInfo(),
     focusedEventIndex: Int = -1,
     isLive: Boolean = true,
@@ -70,7 +69,6 @@ fun aTimelineState(
         timelineItems = timelineItems,
         timelineMode = timelineMode,
         timelineRoomInfo = timelineRoomInfo,
-        renderReadReceipts = renderReadReceipts,
         newEventState = NewEventState.None,
         isLive = isLive,
         focusRequestState = focusRequestState,

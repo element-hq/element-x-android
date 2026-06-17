@@ -14,6 +14,7 @@ import io.element.android.features.location.impl.common.ui.LocationConstraintsDi
 sealed interface LocationConstraintsCheck {
     data object Success : LocationConstraintsCheck
     data object PermissionRationale : LocationConstraintsCheck
+    data object PermissionShouldBeRequested : LocationConstraintsCheck
     data object PermissionDenied : LocationConstraintsCheck
     data object LocationServiceDisabled : LocationConstraintsCheck
     data object NotEnoughPowerLevel : LocationConstraintsCheck
@@ -34,6 +35,7 @@ fun checkLocationConstraints(
             }
         }
         permissionsState.shouldShowRationale -> LocationConstraintsCheck.PermissionRationale
+        !permissionsState.permissionsAlreadyRequested -> LocationConstraintsCheck.PermissionShouldBeRequested
         else -> LocationConstraintsCheck.PermissionDenied
     }
 }
@@ -41,6 +43,7 @@ fun checkLocationConstraints(
 fun LocationConstraintsCheck.toDialogState(): LocationConstraintsDialogState {
     return when (this) {
         LocationConstraintsCheck.Success -> LocationConstraintsDialogState.None
+        LocationConstraintsCheck.PermissionShouldBeRequested -> LocationConstraintsDialogState.None
         LocationConstraintsCheck.PermissionRationale -> LocationConstraintsDialogState.PermissionRationale
         LocationConstraintsCheck.PermissionDenied -> LocationConstraintsDialogState.PermissionDenied
         LocationConstraintsCheck.LocationServiceDisabled -> LocationConstraintsDialogState.LocationServiceDisabled

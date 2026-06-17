@@ -171,7 +171,6 @@ fun TimelineView(
                         timelineMode = state.timelineMode,
                         timelineRoomInfo = state.timelineRoomInfo,
                         timelineProtectionState = timelineProtectionState,
-                        renderReadReceipts = state.renderReadReceipts,
                         isLastOutgoingMessage = state.isLastOutgoingMessage(timelineItem.identifier()),
                         focusedEventId = state.focusedEventId,
                         displayThreadSummaries = state.displayThreadSummaries,

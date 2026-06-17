@@ -4,10 +4,10 @@
   <string name="screen_knock_requests_list_accept_all_alert_description">"Вы действительно хотите принять все заявки на присоединение?"</string>
   <string name="screen_knock_requests_list_accept_all_alert_title">"Принять все запросы"</string>
   <string name="screen_knock_requests_list_accept_all_button_title">"Принять все"</string>
-  <string name="screen_knock_requests_list_accept_all_failed_alert_description">"Мы не смогли принять все запросы. Попробовать еще раз?"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_description">"Мы не смогли принять все запросы. Попробовать ещё раз?"</string>
   <string name="screen_knock_requests_list_accept_all_failed_alert_title">"Не удалось принять все запросы"</string>
   <string name="screen_knock_requests_list_accept_all_loading_title">"Принять все заявки на присоединение"</string>
-  <string name="screen_knock_requests_list_accept_failed_alert_description">"Мы не смогли принять этот запрос. Хотите попробовать еще раз?"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_description">"Мы не смогли принять этот запрос. Хотите попробовать ещё раз?"</string>
   <string name="screen_knock_requests_list_accept_failed_alert_title">"Не удалось принять запрос"</string>
   <string name="screen_knock_requests_list_accept_loading_title">"Принятие заявки на присоединение"</string>
   <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Да, отклонить и запретить"</string>
@@ -18,7 +18,7 @@
   <string name="screen_knock_requests_list_decline_alert_description">"Вы уверены, что хотите отклонить запрос %1$s на присоединение к этой комнате?"</string>
   <string name="screen_knock_requests_list_decline_alert_title">"Отклонить доступ"</string>
   <string name="screen_knock_requests_list_decline_and_ban_action_title">"Отклонить и запретить"</string>
-  <string name="screen_knock_requests_list_decline_failed_alert_description">"Мы не смогли отклонить этот запрос. Попробовать еще раз?"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_description">"Мы не смогли отклонить этот запрос. Попробовать ещё раз?"</string>
   <string name="screen_knock_requests_list_decline_failed_alert_title">"Не удалось отклонить запрос"</string>
   <string name="screen_knock_requests_list_decline_loading_title">"Отклонение заявки на присоединение"</string>
   <string name="screen_knock_requests_list_empty_state_description">"Вы сможете увидеть запрос, когда кто-то попросит присоединиться к комнате."</string>
