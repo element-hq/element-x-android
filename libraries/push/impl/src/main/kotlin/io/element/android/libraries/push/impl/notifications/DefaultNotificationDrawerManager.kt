@@ -200,7 +200,7 @@ class DefaultNotificationDrawerManager(
             it.sessionId
         }
 
-        val isAppLocked = lockScreenService.lockState.value == LockScreenLockState.Locked
+        val isAppLocked = lockScreenService.isPinSetup()
 
         for ((sessionId, notifiableEvents) in eventsForSessions) {
             val client = matrixClientProvider.getOrRestore(sessionId).getOrThrow()
