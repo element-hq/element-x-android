@@ -7,8 +7,8 @@
 
 package io.element.android.features.preferences.impl.userstatus
 
-import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.clearText
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -18,11 +18,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.user.UserStatus
 import kotlinx.coroutines.launch
 
 @ContributesBinding(SessionScope::class)
@@ -34,13 +32,13 @@ class UserStatusPresenter(
     override fun present(): UserStatusState {
         val userProfile by matrixClient.userProfile.collectAsState()
         var pickerState by remember { mutableStateOf<UserStatusPickerState>(UserStatusPickerState.Hidden) }
-        val customTextFieldState = remember { TextFieldState() }
+        val customTextFieldState = rememberTextFieldState()
         val coroutineScope = rememberCoroutineScope()
 
         fun handleEvent(event: UserStatusEvent) {
             when (event) {
-                UserStatusEvent.Open -> pickerState = UserStatusPickerState.ShowingPicker
-                UserStatusEvent.Dismiss -> pickerState = UserStatusPickerState.Hidden
+                UserStatusEvent.OpenPicker -> pickerState = UserStatusPickerState.ShowingPicker
+                UserStatusEvent.DismissPicker -> pickerState = UserStatusPickerState.Hidden
                 UserStatusEvent.OpenCustomInput -> {
                     val raw = userProfile.rawStatus
                     if (raw != null) {
@@ -53,11 +51,11 @@ class UserStatusPresenter(
                         textFieldState = customTextFieldState,
                     )
                 }
-                is UserStatusEvent.Set -> {
+                is UserStatusEvent.SetStatus -> {
                     pickerState = UserStatusPickerState.Hidden
                     coroutineScope.launch { matrixClient.setUserStatus(event.status) }
                 }
-                UserStatusEvent.Clear -> {
+                UserStatusEvent.ClearStatus -> {
                     pickerState = UserStatusPickerState.Hidden
                     coroutineScope.launch { matrixClient.clearUserStatus() }
                 }

@@ -16,7 +16,6 @@ import io.element.android.libraries.matrix.api.user.UserStatus
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import androidx.compose.foundation.text.input.TextFieldState
 
 class UserStatusPresenterTest {
 
@@ -40,7 +39,7 @@ class UserStatusPresenterTest {
             createPresenter().present()
         }.test {
             val state = awaitItem()
-            state.eventSink(UserStatusEvent.Open)
+            state.eventSink(UserStatusEvent.OpenPicker)
             assertThat(awaitItem().pickerState).isEqualTo(UserStatusPickerState.ShowingPicker)
         }
     }
@@ -51,9 +50,9 @@ class UserStatusPresenterTest {
             createPresenter().present()
         }.test {
             val state = awaitItem()
-            state.eventSink(UserStatusEvent.Open)
+            state.eventSink(UserStatusEvent.OpenPicker)
             awaitItem() // ShowingPicker
-            state.eventSink(UserStatusEvent.Dismiss)
+            state.eventSink(UserStatusEvent.DismissPicker)
             assertThat(awaitItem().pickerState).isEqualTo(UserStatusPickerState.Hidden)
         }
     }
@@ -65,7 +64,7 @@ class UserStatusPresenterTest {
             createPresenter(client).present()
         }.test {
             val status = UserStatus(emoji = "💬", text = "In a meeting")
-            awaitItem().eventSink(UserStatusEvent.Set(status))
+            awaitItem().eventSink(UserStatusEvent.SetStatus(status))
             val newState = awaitItem()
             assertThat(newState.pickerState).isEqualTo(UserStatusPickerState.Hidden)
             assertThat(newState.displayedStatus).isEqualTo(DisplayedStatus.UserSet(status))
@@ -93,7 +92,7 @@ class UserStatusPresenterTest {
             createPresenter(client).present()
         }.test {
             val status = UserStatus(emoji = "🌴", text = "Away")
-            awaitItem().eventSink(UserStatusEvent.Set(status))
+            awaitItem().eventSink(UserStatusEvent.SetStatus(status))
             // Single emission: pickerState=Hidden and displayedStatus both set in one recomposition
             awaitItem().eventSink(UserStatusEvent.OpenCustomInput)
             val state = awaitItem()
@@ -133,9 +132,9 @@ class UserStatusPresenterTest {
             createPresenter(client).present()
         }.test {
             val status = UserStatus(emoji = "☕", text = "Be right back")
-            awaitItem().eventSink(UserStatusEvent.Set(status))
+            awaitItem().eventSink(UserStatusEvent.SetStatus(status))
             // Single emission: pickerState=Hidden and displayedStatus both set in one recomposition
-            awaitItem().eventSink(UserStatusEvent.Clear)
+            awaitItem().eventSink(UserStatusEvent.ClearStatus)
             val clearedState = awaitItem()
             assertThat(clearedState.pickerState).isEqualTo(UserStatusPickerState.Hidden)
             assertThat(clearedState.displayedStatus).isNull()

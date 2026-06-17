@@ -22,7 +22,7 @@ sealed interface UserStatusPickerState {
     data object Hidden : UserStatusPickerState
     data object ShowingPicker : UserStatusPickerState
     data class CustomInput(
-        val emoji: String = "😀",
+        val emoji: String,
         val textFieldState: TextFieldState,
     ) : UserStatusPickerState
 }

@@ -65,20 +65,20 @@ fun UserStatusRow(
             if (displayedStatus != null) {
                 CurrentStatusRow(
                     displayedStatus = displayedStatus,
-                    onClick = { state.eventSink(UserStatusEvent.Open) },
-                    onClear = { state.eventSink(UserStatusEvent.Clear) },
+                    onClick = { state.eventSink(UserStatusEvent.OpenPicker) },
+                    onClear = { state.eventSink(UserStatusEvent.ClearStatus) },
                     modifier = modifier,
                 )
             } else {
                 EmptyStatusRow(
-                    onClick = { state.eventSink(UserStatusEvent.Open) },
+                    onClick = { state.eventSink(UserStatusEvent.OpenPicker) },
                     modifier = modifier,
                 )
             }
             if (pickerState == UserStatusPickerState.ShowingPicker) {
                 UserStatusPickerBottomSheet(
-                    onDismiss = { state.eventSink(UserStatusEvent.Dismiss) },
-                    onSelectPredefined = { status -> state.eventSink(UserStatusEvent.Set(status)) },
+                    onDismiss = { state.eventSink(UserStatusEvent.DismissPicker) },
+                    onSelectPredefined = { status -> state.eventSink(UserStatusEvent.SetStatus(status)) },
                     onSelectCustom = { state.eventSink(UserStatusEvent.OpenCustomInput) },
                 )
             }
@@ -90,7 +90,7 @@ fun UserStatusRow(
                 onEmojiChange = { state.eventSink(UserStatusEvent.UpdateCustomEmoji(it)) },
                 onConfirm = {
                     state.eventSink(
-                        UserStatusEvent.Set(UserStatus(pickerState.emoji, pickerState.textFieldState.text.toString()))
+                        UserStatusEvent.SetStatus(UserStatus(pickerState.emoji, pickerState.textFieldState.text.toString()))
                     )
                 },
                 onCancel = { state.eventSink(UserStatusEvent.CancelCustomInput) },
