@@ -18,6 +18,11 @@ internal class UserStatusStateProvider : PreviewParameterProvider<UserStatusStat
         aUserStatusState(displayedStatus = DisplayedStatus.UserSet(UserStatus("🌴", "Away"))),
         aUserStatusState(displayedStatus = DisplayedStatus.InCall(callJoinedTs = 0L)),
         aUserStatusState(pickerState = UserStatusPickerState.ShowingPicker),
+        aUserStatusState(
+            displayedStatus = DisplayedStatus.UserSet(UserStatus("🌴", "Away")),
+            rawStatus = UserStatus("🌴", "Away"),
+            pickerState = UserStatusPickerState.ShowingPicker,
+        ),
         aUserStatusState(pickerState = UserStatusPickerState.CustomInput(emoji = "😀", textFieldState = TextFieldState())),
         aUserStatusState(pickerState = UserStatusPickerState.CustomInput(emoji = "🚀", textFieldState = TextFieldState("Working on something"))),
     )
@@ -25,10 +30,12 @@ internal class UserStatusStateProvider : PreviewParameterProvider<UserStatusStat
 
 fun aUserStatusState(
     displayedStatus: DisplayedStatus? = null,
+    rawStatus: UserStatus? = null,
     pickerState: UserStatusPickerState = UserStatusPickerState.Hidden,
     eventSink: (UserStatusEvent) -> Unit = {},
 ) = UserStatusState(
     displayedStatus = displayedStatus,
+    rawStatus = rawStatus,
     pickerState = pickerState,
     eventSink = eventSink,
 )

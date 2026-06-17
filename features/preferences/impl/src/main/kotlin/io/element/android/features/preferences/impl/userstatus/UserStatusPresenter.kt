@@ -69,6 +69,7 @@ class UserStatusPresenter(
 
         return UserStatusState(
             displayedStatus = userProfile.displayedStatus,
+            rawStatus = userProfile.rawStatus,
             pickerState = pickerState,
             eventSink = ::handleEvent,
         )
