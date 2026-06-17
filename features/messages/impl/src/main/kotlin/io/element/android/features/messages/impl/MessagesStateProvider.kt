@@ -113,6 +113,7 @@ private fun aSelectionMessagesState(): MessagesState {
         selectionState = TimelineSelectionState(
             isActive = true,
             selectedIds = selected.toImmutableSet(),
+            maxSelection = TimelineSelectionState.MAX_SELECTION,
         ),
     )
 }
@@ -151,7 +152,7 @@ fun aMessagesState(
         hasUnreadThreads = false,
     ),
     isCurrentlySharingLiveLocationInRoom: Boolean = false,
-    selectionState: TimelineSelectionState = TimelineSelectionState(),
+    selectionState: TimelineSelectionState = TimelineSelectionState.Empty,
     isMultiSelectEnabled: Boolean = false,
     eventSink: (MessagesEvent) -> Unit = {},
 ) = MessagesState(
