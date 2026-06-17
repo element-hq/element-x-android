@@ -205,6 +205,8 @@ private fun UserStatusPickerBottomSheet(
     }
 }
 
+private const val CUSTOM_STATUS_TEXT_MAX_LENGTH = 30
+
 @Composable
 private fun CustomStatusInputRow(
     emoji: String,
@@ -232,7 +234,7 @@ private fun CustomStatusInputRow(
                 modifier = Modifier.focusRequester(focusRequester),
                 state = textFieldState,
                 placeholder = stringResource(R.string.screen_preferences_user_status_custom_hint),
-                inputTransformation = InputTransformation.maxLength(maxLength = 30),
+                inputTransformation = InputTransformation.maxLength(CUSTOM_STATUS_TEXT_MAX_LENGTH),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 onKeyboardAction = { if (hasChanges) onConfirm() },
                 lineLimits = TextFieldLineLimits.SingleLine,
