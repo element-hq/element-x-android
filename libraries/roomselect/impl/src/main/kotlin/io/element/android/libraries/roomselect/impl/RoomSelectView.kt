@@ -44,8 +44,8 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.Checkbox
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
-import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
@@ -265,10 +265,10 @@ private fun RoomSummaryView(
                 )
             }
         }
-        RadioButton(
-            selected = isSelected,
+        Checkbox(
+            checked = isSelected,
             enabled = isSelected || canBeSelected,
-            onClick = { onSelection(roomInfo) },
+            onCheckedChange = { onSelection(roomInfo) },
         )
     }
 }
