@@ -9,6 +9,6 @@
   <string name="screen_deactivate_account_list_item_1_bold_part">"Отключить навсегда"</string>
   <string name="screen_deactivate_account_list_item_2">"Вы будете удалены из всех чатов."</string>
   <string name="screen_deactivate_account_list_item_3">"Данные Вашего аккаунта будут удалены с нашего сервера идентификации."</string>
-  <string name="screen_deactivate_account_list_item_4">"Ваши сообщения по-прежнему будут видны зарегистрированным пользователям, но не будут доступны новым или незарегистрированным пользователям, если вы решите удалить их."</string>
+  <string name="screen_deactivate_account_list_item_4">"Ваши сообщения по-прежнему будут видны зарегистрированным пользователям, но не будут доступны новым или незарегистрированным пользователям, если Вы решите удалить их."</string>
   <string name="screen_deactivate_account_title">"Удалить аккаунт"</string>
 </resources>

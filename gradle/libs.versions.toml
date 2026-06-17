@@ -84,7 +84,7 @@ kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlin
 kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 ksp_gradle_plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:34.14.0"
+google_firebase_bom = "com.google.firebase:firebase-bom:34.14.1"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 ksp_plugin = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
@@ -147,7 +147,7 @@ accompanist_permission = { module = "com.google.accompanist:accompanist-permissi
 squareup_seismic = "com.squareup:seismic:1.0.3"
 
 # network
-network_okhttp_bom = "com.squareup.okhttp3:okhttp-bom:5.3.2"
+network_okhttp_bom = "com.squareup.okhttp3:okhttp-bom:5.4.0"
 network_okhttp_logging = { module = "com.squareup.okhttp3:logging-interceptor" }
 network_okhttp_okhttp = { module = "com.squareup.okhttp3:okhttp" }
 network_okhttp = { module = "com.squareup.okhttp3:okhttp" }
@@ -183,7 +183,7 @@ test_detekt_test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version
 # https://github.com/matrix-org/matrix-rust-components-kotlin/commits/main/sdk/sdk-android/src/main/kotlin/org/matrix/rustcomponents/sdk/matrix_sdk_ffi.kt
 # All new features should not be implemented in the pull request that upgrades the version, developers should
 # only fix API breaks and may add some TODOs.
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.06.3"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.06.11"
 
 # Others
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
@@ -212,7 +212,7 @@ vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil3", version.ref = "telephoto" }
 telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "telephoto" }
 statemachine = "com.freeletics.flowredux:compose:1.2.2"
-maplibre = "org.maplibre.gl:android-sdk:13.2.0"
+maplibre = "org.maplibre.gl:android-sdk:13.3.0"
 maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:3.0.2"
 maplibre_compose = "org.maplibre.compose:maplibre-compose:0.13.0"
 maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:3.0.2"

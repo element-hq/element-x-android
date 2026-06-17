@@ -10,6 +10,7 @@
     <item quantity="few">"Введено %1$d цифри"</item>
     <item quantity="many">"Введено %1$d цифр"</item>
   </plurals>
+  <string name="a11y_duration">"Тривалість: %1$s"</string>
   <string name="a11y_edit_avatar">"Редагувати аватар"</string>
   <string name="a11y_edit_room_address_hint">"Повна адреса буде %1$s"</string>
   <string name="a11y_encryption_details">"Подробиці шифрування"</string>
@@ -18,6 +19,7 @@
   <string name="a11y_info">"Інформація"</string>
   <string name="a11y_join_call">"Приєднатися до виклику"</string>
   <string name="a11y_jump_to_bottom">"Перейти вниз"</string>
+  <string name="a11y_jump_to_unread">"Перейти до непрочитаних"</string>
   <string name="a11y_move_the_map_to_my_location">"Перемістити карту до мого місця перебування"</string>
   <string name="a11y_notifications_mentions_only">"Тільки згадки"</string>
   <string name="a11y_notifications_muted">"Звук вимкнено"</string>
@@ -34,6 +36,7 @@
   <string name="a11y_playback_speed">"Швидкість програвання"</string>
   <string name="a11y_poll">"Опитування"</string>
   <string name="a11y_poll_end">"Опитування завершено"</string>
+  <string name="a11y_position">"Позиція: %1$s"</string>
   <string name="a11y_qr_code">"QR-код"</string>
   <string name="a11y_react_with">"Реагувати з%1$s"</string>
   <string name="a11y_react_with_other_emojis">"Відреагувати іншими смайликами"</string>
@@ -50,12 +53,15 @@
   <string name="a11y_room_avatar">"Аватар кімнати"</string>
   <string name="a11y_send_files">"Надіслати файли"</string>
   <string name="a11y_sender_location">"Локація відправника"</string>
+  <string name="a11y_sent_by_sender_at_date">"Надіслано %1$s о %2$s"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Необхідно виконати дію, обмежену в часі, у вас є одна хвилина для верифікації"</string>
   <string name="a11y_settings_with_required_action">"Налаштування, потрібні дії"</string>
   <string name="a11y_show_password">"Показати пароль"</string>
   <string name="a11y_start_call">"Розпочати виклик"</string>
   <string name="a11y_start_video_call">"Розпочати відеодзвінок"</string>
   <string name="a11y_start_voice_call">"Розпочати голосовий дзвінок"</string>
+  <string name="a11y_thread_in_room">"Гілка в %1$s"</string>
+  <string name="a11y_threads_in_room">"Гілки в %1$s"</string>
   <string name="a11y_tombstoned_room">"Кімната більше не використовується"</string>
   <string name="a11y_user_avatar">"Аватар користувача"</string>
   <string name="a11y_user_menu">"Меню користувача"</string>
@@ -95,6 +101,7 @@
   <string name="action_decline_and_block">"Відхилити та заблокувати"</string>
   <string name="action_delete">"Видалити"</string>
   <string name="action_delete_account">"Видалити обліковий запис"</string>
+  <string name="action_delete_file">"Видалити файл"</string>
   <string name="action_delete_poll">"Видалити опитування"</string>
   <string name="action_deselect_all">"Скасувати вибір усіх"</string>
   <string name="action_disable">"Вимкнути"</string>
@@ -302,6 +309,7 @@
   <string name="common_please_wait">"Будь ласка, зачекайте…"</string>
   <string name="common_poll_end_confirmation">"Ви впевнені, що хочете закінчити це опитування?"</string>
   <string name="common_poll_summary">"Опитування: %1$s"</string>
+  <string name="common_poll_summary_prefix">"Опитування"</string>
   <string name="common_poll_total_votes">"Всього голосів: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Результати будуть показані після завершення опитування"</string>
   <plurals name="common_poll_votes_count">
@@ -473,6 +481,9 @@
   <string name="error_unknown">"Вибачте, сталася помилка"</string>
   <string name="invite_friends_rich_title">"🔐️ Приєднуйтеся до мене в %1$s"</string>
   <string name="invite_friends_text">"Вітаю, поспілкуйтеся зі мною в %1$s: %2$s"</string>
+  <string name="live_location_sharing_foreground_service_channel_title_android">"Обмін місцезнаходженням у реальному часі"</string>
+  <string name="live_location_sharing_foreground_service_message_android">"Триває обмін місцезнаходженням"</string>
+  <string name="live_location_sharing_foreground_service_title_android">"%1$s Місцезнаходження в реальному часі"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Повідомити про ваду за допомогою Rageshake"</string>
   <string name="screen_bug_report_a11y_screenshot">"Знімок екрана"</string>

@@ -6,7 +6,7 @@
   <string name="screen_edit_room_address_room_address_section_footer">"Необходимо задать адрес комнаты, чтобы опубликовать ее в каталоге комнат."</string>
   <string name="screen_edit_room_address_title">"Редактировать адрес комнаты"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Произошла ошибка при обновлении настройки уведомления."</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Ваш сервер не поддерживает эту опцию для зашифрованных комнат, вы можете не получать некоторые уведомления."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Ваш сервер не поддерживает эту опцию для зашифрованных комнат, Вы можете не получать некоторые уведомления."</string>
   <string name="screen_polls_history_title">"Опросы"</string>
   <string name="screen_room_change_permissions_administrators">"Администраторы"</string>
   <string name="screen_room_change_permissions_ban_people">"Блокировать пользователей"</string>
@@ -23,7 +23,7 @@
   <string name="screen_room_change_permissions_room_topic">"Менять тему комнаты"</string>
   <string name="screen_room_change_permissions_send_messages">"Отправлять сообщения"</string>
   <string name="screen_room_change_role_administrators_title">"Редактировать администраторов"</string>
-  <string name="screen_room_change_role_confirm_add_admin_description">"Вы не сможете отменить это действие. Вы даете пользователю такой же уровень прав, как и у вас"</string>
+  <string name="screen_room_change_role_confirm_add_admin_description">"Вы не сможете отменить это действие. Вы даете пользователю такой же уровень прав, как и у Вас"</string>
   <string name="screen_room_change_role_confirm_add_admin_title">"Добавить администратора?"</string>
   <string name="screen_room_change_role_confirm_change_owners_description">"Отменить данное действие будет невозможно. Права передадутся выбранным пользователям. После вашего выхода действие станет необратимым."</string>
   <string name="screen_room_change_role_confirm_change_owners_title">"Передать владение?"</string>
@@ -39,7 +39,7 @@
   <string name="screen_room_change_role_section_administrators">"Администраторы"</string>
   <string name="screen_room_change_role_section_moderators">"Модераторы"</string>
   <string name="screen_room_change_role_section_users">"Участники"</string>
-  <string name="screen_room_change_role_unsaved_changes_description">"У вас есть несохраненные изменения."</string>
+  <string name="screen_room_change_role_unsaved_changes_description">"У Вас есть несохраненные изменения."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Сохранить изменения?"</string>
   <string name="screen_room_details_add_topic_title">"Добавить тему"</string>
   <string name="screen_room_details_badge_encrypted">"Зашифровано"</string>
@@ -51,8 +51,8 @@
   <string name="screen_room_details_encryption_enabled_subtitle">"Сообщения зашифрованы. Только вы и ваши собеседники имеют доступ к сообщениям."</string>
   <string name="screen_room_details_encryption_enabled_title">"Шифрование сообщений включено"</string>
   <string name="screen_room_details_error_loading_notification_settings">"Произошла ошибка при загрузке настроек уведомлений."</string>
-  <string name="screen_room_details_error_muting">"Не удалось отключить звук в этой комнате, попробуйте еще раз."</string>
-  <string name="screen_room_details_error_unmuting">"Не удалось включить звук в эту комнату, попробуйте еще раз."</string>
+  <string name="screen_room_details_error_muting">"Не удалось отключить звук в этой комнате, попробуйте ещё раз."</string>
+  <string name="screen_room_details_error_unmuting">"Не удалось включить звук в этой комнате, попробуйте ещё раз."</string>
   <string name="screen_room_details_invite_people_dont_close">"Не закрывайте приложение, пока не закончите."</string>
   <string name="screen_room_details_invite_people_preparing">"Подготовка приглашений…"</string>
   <string name="screen_room_details_invite_people_title">"Пригласить в комнату"</string>
@@ -63,7 +63,7 @@
   <string name="screen_room_details_notification_mode_custom">"Пользовательские"</string>
   <string name="screen_room_details_notification_mode_default">"По умолчанию"</string>
   <string name="screen_room_details_notification_title">"Уведомления"</string>
-  <string name="screen_room_details_pinned_events_row_title">"Закрепленные сообщения"</string>
+  <string name="screen_room_details_pinned_events_row_title">"Закреплённые сообщения"</string>
   <string name="screen_room_details_profile_row_title">"Профиль"</string>
   <string name="screen_room_details_requests_to_join_title">"Запросы на вступление"</string>
   <string name="screen_room_details_roles_and_permissions">"Роли и разрешения"</string>
@@ -113,8 +113,8 @@
   <string name="screen_room_notification_settings_default_setting_title">"Настройка по умолчанию"</string>
   <string name="screen_room_notification_settings_edit_remove_setting">"Удалить пользовательскую настройку"</string>
   <string name="screen_room_notification_settings_error_loading_settings">"Произошла ошибка при загрузке настроек уведомлений."</string>
-  <string name="screen_room_notification_settings_error_restoring_default">"Не удалось восстановить режим по умолчанию, попробуйте еще раз."</string>
-  <string name="screen_room_notification_settings_error_setting_mode">"Не удалось настроить режим, попробуйте еще раз."</string>
+  <string name="screen_room_notification_settings_error_restoring_default">"Не удалось восстановить режим по умолчанию, попробуйте ещё раз."</string>
+  <string name="screen_room_notification_settings_error_setting_mode">"Не удалось настроить режим, попробуйте ещё раз."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Ваш домашний сервер не поддерживает эту опцию в зашифрованных комнатах, вы не будете получать уведомления в этой комнате."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"О всех сообщениях"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Только упоминания и ключевые слова"</string>
@@ -153,7 +153,7 @@
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Любой желающий может присоединиться"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Кто угодно"</string>
   <string name="screen_security_and_privacy_room_access_footer">"Выберите, участники каких пространств могут присоединиться к этой комнате без приглашения.%1$s"</string>
-  <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Управление пространством"</string>
+  <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Управление пространствами"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Присоединиться могут только приглашенные люди."</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Только по приглашению"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Доступ"</string>
