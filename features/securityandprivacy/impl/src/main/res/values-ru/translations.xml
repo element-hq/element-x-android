@@ -3,7 +3,7 @@
   <string name="screen_edit_room_address_room_address_section_footer">"Необходимо задать адрес комнаты, чтобы опубликовать ее в каталоге комнат."</string>
   <string name="screen_edit_room_address_title">"Редактировать адрес комнаты"</string>
   <string name="screen_manage_authorized_spaces_header">"Пространства, где участники могут присоединиться к комнате без приглашения."</string>
-  <string name="screen_manage_authorized_spaces_title">"Управление пространством"</string>
+  <string name="screen_manage_authorized_spaces_title">"Управление пространствами"</string>
   <string name="screen_manage_authorized_spaces_unknown_space">"(неизвестное пространство)"</string>
   <string name="screen_manage_authorized_spaces_unknown_spaces_section_title">"Другие пространства, в которых вы не состоите"</string>
   <string name="screen_manage_authorized_spaces_your_spaces_section_title">"Ваши пространства"</string>
@@ -23,7 +23,7 @@
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Любой желающий может присоединиться"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Кто угодно"</string>
   <string name="screen_security_and_privacy_room_access_footer">"Выберите, участники каких пространств могут присоединиться к этой комнате без приглашения.%1$s"</string>
-  <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Управление пространством"</string>
+  <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Управление пространствами"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Присоединиться могут только приглашенные люди."</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Только по приглашению"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Доступ"</string>
