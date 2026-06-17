@@ -8,7 +8,7 @@
 
 package io.element.android.libraries.matrix.impl.keys
 
-import io.element.android.libraries.matrix.impl.ClientSecret
+import io.element.android.libraries.androidutils.crypto.ClientSecret
 
 private const val PASSPHRASE_SIZE = 256
 private const val KEY_SIZE = 32

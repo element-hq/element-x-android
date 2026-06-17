@@ -8,7 +8,7 @@
 
 package io.element.android.libraries.matrix.impl.auth
 
-import io.element.android.libraries.matrix.impl.ClientSecret
+import io.element.android.libraries.androidutils.crypto.ClientSecret
 import io.element.android.libraries.matrix.impl.keys.SecretGenerator
 import io.element.android.libraries.matrix.test.A_PASSPHRASE
 

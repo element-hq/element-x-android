@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.api.media.MediaPreviewService
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.oauth.AccountManagementAction
+import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -53,6 +54,7 @@ import java.util.Optional
 interface MatrixClient {
     val sessionId: SessionId
     val deviceId: DeviceId
+    val sessionPaths: SessionPaths
     val userProfile: StateFlow<MatrixUser>
     val roomListService: RoomListService
     val spaceService: SpaceService
@@ -220,6 +222,11 @@ interface MatrixClient {
      * Performs a database optimization that should flush cached data and improve performance.
      */
     suspend fun performDatabaseVacuum(): Result<Unit>
+
+    /**
+     * Returns the URL of the map style configured on the server, if any.
+     */
+    suspend fun getMapStyleUrl(): Result<String?>
 
     /**
      * Resets the cached client `well-known` config by the SDK.

@@ -96,6 +96,7 @@
   <string name="action_decline_and_block">"拒绝并屏蔽"</string>
   <string name="action_delete">"删除"</string>
   <string name="action_delete_account">"删除账户"</string>
+  <string name="action_delete_file">"删除文件"</string>
   <string name="action_delete_poll">"删除投票"</string>
   <string name="action_deselect_all">"取消全选"</string>
   <string name="action_disable">"禁用"</string>
@@ -218,7 +219,7 @@
   <string name="common_creating_room">"正在创建房间…"</string>
   <string name="common_creating_space">"正在创建空间…"</string>
   <string name="common_current_user_canceled_knock">"申请已取消"</string>
-  <string name="common_current_user_left_room">"离开房间"</string>
+  <string name="common_current_user_left_room">"已离开房间"</string>
   <string name="common_current_user_left_space">"离开空间"</string>
   <string name="common_current_user_rejected_invite">"邀请已拒绝"</string>
   <string name="common_decryption_error">"解密错误"</string>
@@ -299,6 +300,7 @@
   <string name="common_please_wait">"请稍候…"</string>
   <string name="common_poll_end_confirmation">"确定要结束这个投票吗？"</string>
   <string name="common_poll_summary">"投票：%1$s"</string>
+  <string name="common_poll_summary_prefix">"投票"</string>
   <string name="common_poll_total_votes">"总票数：%1$s"</string>
   <string name="common_poll_undisclosed_text">"结果将在投票结束后显示"</string>
   <plurals name="common_poll_votes_count">
@@ -469,11 +471,6 @@
   <string name="screen_create_poll_options_section_title">"选项"</string>
   <string name="screen_create_poll_remove_accessibility_label">"移除 %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"设置"</string>
-  <string name="screen_image_edition_a11y_rotate_to_the_left">"向左旋转图像"</string>
-  <plurals name="screen_image_edition_a11y_rotation_state">
-    <item quantity="other">"%1$d 度"</item>
-  </plurals>
-  <string name="screen_image_edition_title">"编辑照片"</string>
   <string name="screen_live_location_sheet_nobody_sharing">"目前无人分享其位置"</string>
   <string name="screen_live_location_sheet_sharing_live_location">"共享实时位置"</string>
   <plurals name="screen_live_location_sheet_subtitle">
@@ -535,4 +532,6 @@
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"无权访问此消息"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"无法解密消息"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"此消息已被阻止，因为你未验证你的设备，或发送者需要验证你的数字身份。"</string>
+  <string name="vulkan_not_supported_dialog_content_android">"你的设备过旧，需要 Android 8 或更高版本的设备。"</string>
+  <string name="vulkan_not_supported_dialog_title_android">"地图渲染不受支持。"</string>
 </resources>

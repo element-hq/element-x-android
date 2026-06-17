@@ -125,7 +125,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setAddRoomToSpaceView(
         AddRoomToSpaceView(
             state = state,
             onBackClick = onBackClick,
-            onRoomsAdded = onRoomsAdded,
+            onAddRoom = onRoomsAdded,
         )
     }
 }

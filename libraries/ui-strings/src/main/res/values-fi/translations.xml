@@ -99,6 +99,7 @@
   <string name="action_decline_and_block">"Hylkää ja estä"</string>
   <string name="action_delete">"Poista"</string>
   <string name="action_delete_account">"Poista tili"</string>
+  <string name="action_delete_file">"Poista tiedosto"</string>
   <string name="action_delete_poll">"Poista kysely"</string>
   <string name="action_deselect_all">"Poista kaikki valinnat"</string>
   <string name="action_disable">"Poista käytöstä"</string>
@@ -304,6 +305,7 @@ Syy: %1$s."</string>
   <string name="common_please_wait">"Odota hetki…"</string>
   <string name="common_poll_end_confirmation">"Haluatko varmasti lopettaa tämän kyselyn?"</string>
   <string name="common_poll_summary">"Kysely: %1$s"</string>
+  <string name="common_poll_summary_prefix">"Kysely"</string>
   <string name="common_poll_total_votes">"Ääniä yhteensä: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Tulokset näkyvät kyselyn päätyttyä"</string>
   <plurals name="common_poll_votes_count">
@@ -480,10 +482,6 @@ Haluatko varmasti jatkaa?"</string>
   <string name="screen_create_poll_options_section_title">"Vaihtoehdot"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Poista %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Asetukset"</string>
-  <plurals name="screen_image_edition_a11y_rotation_state">
-    <item quantity="one">"%1$d aste"</item>
-    <item quantity="other">"%1$d astetta"</item>
-  </plurals>
   <string name="screen_live_location_sheet_nobody_sharing">"Kukaan ei jaa sijaintiaan"</string>
   <string name="screen_live_location_sheet_sharing_live_location">"Jaetaan reaaliaikaista sijaintia"</string>
   <plurals name="screen_live_location_sheet_subtitle">
@@ -547,4 +545,6 @@ Haluatko varmasti jatkaa?"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Sinulla ei ole oikeutta lukea tätä viestiä"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Viestin salauksen purkaminen ei onnistu"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Tämä viesti estettiin, koska et ole vahvistanut laitettasi tai koska lähettäjän on vahvistettava diigitaalinen identiteettisi."</string>
+  <string name="vulkan_not_supported_dialog_content_android">"Laitteesi on liian vanha, tarvitset laitteen, jossa on Android 8 tai uudempi."</string>
+  <string name="vulkan_not_supported_dialog_title_android">"Karttojen renderöintiä ei tueta"</string>
 </resources>

@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.api.media.MediaPreviewService
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.oauth.AccountManagementAction
+import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -66,10 +67,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
+import java.io.File
 import java.util.Optional
 
 class FakeMatrixClient(
     override val sessionId: SessionId = A_SESSION_ID,
+    override val sessionPaths: SessionPaths = SessionPaths(fileDirectory = File("files"), cacheDirectory = File("cache")),
     override val deviceId: DeviceId = A_DEVICE_ID,
     override val sessionCoroutineScope: CoroutineScope = TestScope(),
     private val userDisplayName: String? = A_USER_NAME,
@@ -115,6 +118,7 @@ class FakeMatrixClient(
     private val addRecentEmojiLambda: (String) -> Result<Unit> = { Result.success(Unit) },
     private val markRoomAsFullyReadResult: (RoomId, EventId) -> Result<Unit> = { _, _ -> lambdaError() },
     private val performDatabaseVacuumLambda: () -> Result<Unit> = { lambdaError() },
+    private val getMapStyleUrlResult: () -> Result<String?> = { lambdaError() },
     private val getDatabaseSizesLambda: () -> Result<SdkStoreSizes> = { lambdaError() },
     private val resetWellKnownConfigLambda: () -> Result<Unit> = { lambdaError() },
 ) : MatrixClient {
@@ -371,6 +375,10 @@ class FakeMatrixClient(
 
     override suspend fun performDatabaseVacuum(): Result<Unit> {
         return performDatabaseVacuumLambda()
+    }
+
+    override suspend fun getMapStyleUrl(): Result<String?> = simulateLongTask {
+        getMapStyleUrlResult()
     }
 
     override suspend fun canLinkNewDevice(): Result<Boolean> = simulateLongTask {

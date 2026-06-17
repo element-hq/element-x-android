@@ -19,6 +19,7 @@ import io.element.android.libraries.cachestore.api.CacheStore
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.sessionstorage.test.InMemoryCacheStore
+import io.element.android.libraries.wellknown.api.CustomRecoveryPassphrase
 import io.element.android.libraries.wellknown.api.ElementWellKnown
 import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
 import io.element.android.services.toolbox.api.systemclock.SystemClock
@@ -51,6 +52,7 @@ class DefaultSessionWellknownRetrieverTest {
                     brandColor = null,
                     notificationSound = null,
                     identityProviderAppScheme = null,
+                    customRecoveryPassphrase = null,
                 )
             )
         )
@@ -76,6 +78,7 @@ class DefaultSessionWellknownRetrieverTest {
                     brandColor = "#FF0000",
                     notificationSound = "a_notification_sound.flac",
                     identityProviderAppScheme = "an_app_scheme",
+                    customRecoveryPassphrase = null,
                 )
             )
         )
@@ -105,6 +108,93 @@ class DefaultSessionWellknownRetrieverTest {
                     brandColor = null,
                     notificationSound = null,
                     identityProviderAppScheme = null,
+                    customRecoveryPassphrase = null,
+                )
+            )
+        )
+    }
+
+    @Test
+    fun `get element wellknown with custom recovery passphrase settings`() = runTest {
+        val sut = createDefaultSessionWellknownRetriever(
+            getUrlLambda = {
+                Result.success(
+                    """{
+                    "custom_recovery_passphrase": {
+                        "min_character_count": 8
+                    }
+                }""".trimIndent().toByteArray()
+                )
+            },
+        )
+        assertThat(sut.getElementWellKnown()).isEqualTo(
+            WellknownRetrieverResult.Success(
+                anElementWellKnown(
+                    customRecoveryPassphrase = CustomRecoveryPassphrase(minCharacterCount = 8)
+                )
+            )
+        )
+    }
+
+    @Test
+    fun `get element wellknown with custom recovery passphrase settings missing min character count floors to 1`() = runTest {
+        val sut = createDefaultSessionWellknownRetriever(
+            getUrlLambda = {
+                Result.success(
+                    """{
+                    "custom_recovery_passphrase": {}
+                }""".trimIndent().toByteArray()
+                )
+            },
+        )
+        assertThat(sut.getElementWellKnown()).isEqualTo(
+            WellknownRetrieverResult.Success(
+                anElementWellKnown(
+                    customRecoveryPassphrase = CustomRecoveryPassphrase(minCharacterCount = 1)
+                )
+            )
+        )
+    }
+
+    @Test
+    fun `get element wellknown with zero min character count floors to 1`() = runTest {
+        val sut = createDefaultSessionWellknownRetriever(
+            getUrlLambda = {
+                Result.success(
+                    """{
+                    "custom_recovery_passphrase": {
+                        "min_character_count": 0
+                    }
+                }""".trimIndent().toByteArray()
+                )
+            },
+        )
+        assertThat(sut.getElementWellKnown()).isEqualTo(
+            WellknownRetrieverResult.Success(
+                anElementWellKnown(
+                    customRecoveryPassphrase = CustomRecoveryPassphrase(minCharacterCount = 1)
+                )
+            )
+        )
+    }
+
+    @Test
+    fun `get element wellknown with negative min character count floors to 1`() = runTest {
+        val sut = createDefaultSessionWellknownRetriever(
+            getUrlLambda = {
+                Result.success(
+                    """{
+                    "custom_recovery_passphrase": {
+                        "min_character_count": -5
+                    }
+                }""".trimIndent().toByteArray()
+                )
+            },
+        )
+        assertThat(sut.getElementWellKnown()).isEqualTo(
+            WellknownRetrieverResult.Success(
+                anElementWellKnown(
+                    customRecoveryPassphrase = CustomRecoveryPassphrase(minCharacterCount = 1)
                 )
             )
         )
@@ -157,6 +247,7 @@ class DefaultSessionWellknownRetrieverTest {
                     brandColor = "#FF0000",
                     notificationSound = "a_notification_sound.flac",
                     identityProviderAppScheme = "an_app_scheme",
+                    customRecoveryPassphrase = null,
                 )
             )
         )
@@ -210,6 +301,7 @@ class DefaultSessionWellknownRetrieverTest {
                     brandColor = "#FF0000",
                     notificationSound = "a_notification_sound.flac",
                     identityProviderAppScheme = "an_app_scheme",
+                    customRecoveryPassphrase = null,
                 )
             )
         )

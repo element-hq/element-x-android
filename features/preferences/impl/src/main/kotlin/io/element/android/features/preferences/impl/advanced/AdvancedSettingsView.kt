@@ -206,7 +206,7 @@ fun AdvancedSettingsView(
         if (state.liveLocationMinimumDistanceUpdate != null) {
             LiveLocationUpdatesSection(
                 value = state.liveLocationMinimumDistanceUpdate,
-                onValueSaved = { value ->
+                onSaveValue = { value ->
                     state.eventSink(AdvancedSettingsEvents.SetLiveLocationMinimumDistanceUpdate(value))
                 },
                 onOpenAppPermissionsClick = onOpenAppSettingsClick,
@@ -339,7 +339,7 @@ private fun ModerationAndSafety(
 @Composable
 private fun LiveLocationUpdatesSection(
     value: Int,
-    onValueSaved: (Int) -> Unit,
+    onSaveValue: (Int) -> Unit,
     onOpenAppPermissionsClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -382,7 +382,7 @@ private fun LiveLocationUpdatesSection(
                     value = sliderValue.toFloat(),
                     onValueChange = { sliderValue = it.roundToInt() },
                     onValueChangeFinish = {
-                        onValueSaved(sliderValue)
+                        onSaveValue(sliderValue)
                     },
                     valueRange = valueRange,
                     colors = SliderDefaults.colors(

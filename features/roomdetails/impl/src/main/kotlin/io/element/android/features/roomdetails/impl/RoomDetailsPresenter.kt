@@ -38,6 +38,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.LocalSnackbarDis
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -117,7 +118,7 @@ class RoomDetailsPresenter(
         val canonicalAlias by remember { derivedStateOf { roomInfo.canonicalAlias } }
         val isEncrypted by remember { derivedStateOf { roomInfo.isEncrypted == true } }
         val dmMember by room.getDirectRoomMember(membersState)
-        val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMember)
+        val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMember?.userId)
         val roomType = getRoomType(dmMember)
         val roomCallState = roomCallStatePresenter.present()
         val joinedMemberCount by remember { derivedStateOf { roomInfo.joinedMembersCount } }
@@ -174,7 +175,7 @@ class RoomDetailsPresenter(
             }
         }
 
-        val roomMemberDetailsState = roomMemberDetailsPresenter?.present()
+        val dmOtherMemberDetailsState = roomMemberDetailsPresenter?.present()
 
         val hasMemberVerificationViolations by produceState(false) {
             room.roomMemberIdentityStateChange(waitForEncryption = true)
@@ -196,7 +197,7 @@ class RoomDetailsPresenter(
             canEdit = roomType == RoomDetailsType.Room && permissions.editDetailsPermissions.hasAny,
             roomCallState = roomCallState,
             roomType = roomType,
-            roomMemberDetailsState = roomMemberDetailsState,
+            dmOtherMemberDetailsState = dmOtherMemberDetailsState,
             leaveRoomState = leaveRoomState,
             roomNotificationSettings = roomNotificationSettingsState.roomNotificationSettings(),
             isFavorite = isFavorite,
@@ -209,7 +210,7 @@ class RoomDetailsPresenter(
             knockRequestsCount = knockRequestsCount,
             canShowSecurityAndPrivacy = canShowSecurityAndPrivacy,
             hasMemberVerificationViolations = hasMemberVerificationViolations,
-            canReportRoom = canReportRoom,
+            canReportRoom = !isDm && canReportRoom,
             isTombstoned = roomInfo.successorRoom != null,
             showDebugInfo = isDeveloperModeEnabled,
             roomVersion = roomInfo.roomVersion,
@@ -220,9 +221,9 @@ class RoomDetailsPresenter(
     }
 
     @Composable
-    private fun roomMemberDetailsPresenter(dmMemberState: RoomMember?) = remember(dmMemberState) {
-        dmMemberState?.let { roomMember ->
-            roomMembersDetailsPresenterFactory.create(roomMember.userId)
+    private fun roomMemberDetailsPresenter(userId: UserId?) = remember(userId) {
+        userId?.let { userId ->
+            roomMembersDetailsPresenterFactory.create(userId)
         }
     }
 

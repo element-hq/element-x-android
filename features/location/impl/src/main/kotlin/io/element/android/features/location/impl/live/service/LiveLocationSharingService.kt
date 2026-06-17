@@ -14,6 +14,7 @@ import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
 import android.os.IBinder
 import androidx.core.app.ServiceCompat
 import dev.zacsweers.metro.Inject
+import io.element.android.features.location.impl.common.userlocation.PlatformLocationProvider
 import io.element.android.features.location.impl.di.LocationBindings
 import io.element.android.features.location.impl.live.notification.LiveLocationSharingNotificationCreator
 import io.element.android.libraries.architecture.bindings
@@ -29,13 +30,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import org.maplibre.compose.location.AndroidLocationProvider
+import kotlinx.coroutines.launch
 import org.maplibre.compose.location.DesiredAccuracy
+import org.maplibre.compose.location.PermissionException
+import org.maplibre.spatialk.units.extensions.inMeters
+import org.maplibre.spatialk.units.extensions.meters
 import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 import io.element.android.features.location.api.Location as ApiLocation
@@ -46,7 +51,6 @@ class LiveLocationSharingService : Service() {
     @Inject lateinit var coordinator: LiveLocationSharingCoordinator
     @Inject lateinit var notificationCreator: LiveLocationSharingNotificationCreator
     @Inject lateinit var appPreferencesStore: AppPreferencesStore
-
     @Inject lateinit var appForegroundStateService: AppForegroundStateService
 
     @AppCoroutineScope
@@ -60,8 +64,8 @@ class LiveLocationSharingService : Service() {
     override fun onCreate() {
         super.onCreate()
         Timber.d("LiveLocationSharingService onCreate")
+        bindings<LocationBindings>().inject(this)
         runCatchingExceptions {
-            bindings<LocationBindings>().inject(this)
             appForegroundStateService.updateIsSharingLiveLocation(true)
             coroutineScope = appCoroutineScope.childScope(Dispatchers.Default, "LiveLocationSharingService")
             val notificationId = NotificationIdProvider.getForegroundServiceNotificationId(ForegroundServiceType.LIVE_LOCATION)
@@ -79,6 +83,7 @@ class LiveLocationSharingService : Service() {
             startLocationUpdatesListener()
         }.onFailure {
             Timber.e(it, "Failed to start live location sharing service")
+            appCoroutineScope.launch { coordinator.dispatchUnrecoverableError() }
             stopSelf()
         }
     }
@@ -88,21 +93,26 @@ class LiveLocationSharingService : Service() {
         Timber.d("LiveLocationSharingService listening to location updates")
         appPreferencesStore.getLiveLocationMinimumDistanceInMetersUpdateFlow()
             .flatMapLatest { minDistanceMeters ->
-                val locationProvider = AndroidLocationProvider(
-                    context = applicationContext,
-                    updateInterval = UPDATE_INTERVAL_IN_SECOND.seconds,
-                    minDistanceMeters = minDistanceMeters.toFloat(),
-                    desiredAccuracy = DesiredAccuracy.Balanced,
-                    coroutineScope = coroutineScope
-                )
-                locationProvider.location
+                try {
+                    PlatformLocationProvider(
+                        context = applicationContext,
+                        updateInterval = UPDATE_INTERVAL_IN_SECOND.seconds,
+                        minDistance = minDistanceMeters.meters,
+                        desiredAccuracy = DesiredAccuracy.Balanced,
+                        coroutineScope = coroutineScope
+                    ).location
+                } catch (exception: PermissionException) {
+                    Timber.e(exception, "Failed to create PlatformLocationProvider")
+                    coordinator.dispatchUnrecoverableError()
+                    emptyFlow()
+                }
             }
             .filterNotNull()
             .map { location ->
                 ApiLocation(
-                    lat = location.position.latitude,
-                    lon = location.position.longitude,
-                    accuracy = location.accuracy.toFloat(),
+                    lat = location.position.value.latitude,
+                    lon = location.position.value.longitude,
+                    accuracy = location.position.accuracy?.inMeters?.toFloat(),
                 )
             }
             .onEach(coordinator::dispatch)

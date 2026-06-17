@@ -10,6 +10,7 @@
     <item quantity="few">"Введено %1$d цифры"</item>
     <item quantity="many">"Введено %1$d цифр"</item>
   </plurals>
+  <string name="a11y_duration">"Продолжительность: %1$s"</string>
   <string name="a11y_edit_avatar">"Изменить аватар"</string>
   <string name="a11y_edit_room_address_hint">"Полный адрес %1$s"</string>
   <string name="a11y_encryption_details">"Сведения о шифровании"</string>
@@ -18,6 +19,7 @@
   <string name="a11y_info">"Информация"</string>
   <string name="a11y_join_call">"Присоединиться к звонку"</string>
   <string name="a11y_jump_to_bottom">"Перейти вниз"</string>
+  <string name="a11y_jump_to_unread">"Перейти к непрочитанным"</string>
   <string name="a11y_move_the_map_to_my_location">"Переместить карту к моему местоположению"</string>
   <string name="a11y_notifications_mentions_only">"Только упоминания"</string>
   <string name="a11y_notifications_muted">"Без звука"</string>
@@ -34,6 +36,7 @@
   <string name="a11y_playback_speed">"Скорость воспроизведения"</string>
   <string name="a11y_poll">"Опрос"</string>
   <string name="a11y_poll_end">"Завершённый опрос"</string>
+  <string name="a11y_position">"Позиция: %1$s"</string>
   <string name="a11y_qr_code">"QR-код"</string>
   <string name="a11y_react_with">"Реагировать вместе с %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Реакция с помощью эмодзи"</string>
@@ -50,12 +53,15 @@
   <string name="a11y_room_avatar">"Аватар комнаты"</string>
   <string name="a11y_send_files">"Отправить файлы"</string>
   <string name="a11y_sender_location">"Местоположение отправителя"</string>
-  <string name="a11y_session_verification_time_limited_action_required">"Требуется действие, на которое есть ограничение по времени, у вас есть одна минута для проверки"</string>
+  <string name="a11y_sent_by_sender_at_date">"Отправлено пользователем %1$s в %2$s"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Требуется действие, на которое есть ограничение по времени, у Вас есть одна минута для проверки"</string>
   <string name="a11y_settings_with_required_action">"Настройки, требуется действие"</string>
   <string name="a11y_show_password">"Показать пароль"</string>
   <string name="a11y_start_call">"Начать звонок"</string>
   <string name="a11y_start_video_call">"Начать видеозвонок"</string>
   <string name="a11y_start_voice_call">"Начать голосовой вызов"</string>
+  <string name="a11y_thread_in_room">"Обсуждение в %1$s"</string>
+  <string name="a11y_threads_in_room">"Обсуждения в %1$s"</string>
   <string name="a11y_tombstoned_room">"Брошенная комната"</string>
   <string name="a11y_user_avatar">"Аватар пользователя"</string>
   <string name="a11y_user_menu">"Меню пользователя"</string>
@@ -95,6 +101,7 @@
   <string name="action_decline_and_block">"Отклонить и заблокировать"</string>
   <string name="action_delete">"Удалить"</string>
   <string name="action_delete_account">"Удалить аккаунт"</string>
+  <string name="action_delete_file">"Удалить файл"</string>
   <string name="action_delete_poll">"Удалить опрос"</string>
   <string name="action_deselect_all">"Отменить выбор"</string>
   <string name="action_disable">"Отключить"</string>
@@ -127,7 +134,7 @@
   <string name="action_leave_conversation">"Покинуть беседу"</string>
   <string name="action_leave_room">"Покинуть комнату"</string>
   <string name="action_leave_space">"Покинуть пространство"</string>
-  <string name="action_load_more">"Загрузить еще"</string>
+  <string name="action_load_more">"Загрузить ещё"</string>
   <string name="action_manage_account">"Настройки аккаунта"</string>
   <string name="action_manage_account_and_devices">"Управление учетной записью и устройствами"</string>
   <string name="action_manage_devices">"Управление устройствами"</string>
@@ -173,7 +180,7 @@
   <string name="action_show">"Показать"</string>
   <string name="action_sign_in_again">"Повторить вход"</string>
   <string name="action_signout">"Удалить это устройство"</string>
-  <string name="action_signout_anyway">"Все равно удалить это устройство"</string>
+  <string name="action_signout_anyway">"Всё равно удалить это устройство"</string>
   <string name="action_skip">"Пропустить"</string>
   <string name="action_start">"Начать"</string>
   <string name="action_start_chat">"Начать чат"</string>
@@ -190,8 +197,8 @@
   <string name="action_view_in_timeline">"Просмотреть в хронологии"</string>
   <string name="action_view_source">"Показать источник"</string>
   <string name="action_yes">"Да"</string>
-  <string name="action_yes_try_again">"Да, попробовать еще раз"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"Теперь ваш сервер поддерживает новый, более быстрый протокол. Чтобы обновить его прямо сейчас, выйдите и войдите в свою учётную запись снова. Сделав это сейчас, вы сможете избежать принудительного выхода из системы при последующем удалении старого протокола."</string>
+  <string name="action_yes_try_again">"Да, попробовать ещё раз"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Теперь Ваш сервер поддерживает новый, более быстрый протокол. Чтобы обновить его прямо сейчас, выйдите и войдите в свою учётную запись снова. Сделав это сейчас, Вы сможете избежать принудительного выхода из системы при последующем удалении старого протокола."</string>
   <string name="banner_migrate_to_native_sliding_sync_title">"Доступно обновление"</string>
   <string name="common_about">"О приложении"</string>
   <string name="common_acceptable_use_policy">"Политика допустимого использования"</string>
@@ -302,6 +309,7 @@
   <string name="common_please_wait">"Подождите…"</string>
   <string name="common_poll_end_confirmation">"Вы действительно хотите завершить данный опрос?"</string>
   <string name="common_poll_summary">"Опрос: %1$s"</string>
+  <string name="common_poll_summary_prefix">"Опрос"</string>
   <string name="common_poll_total_votes">"Всего голосов: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Результаты будут показаны после завершения опроса"</string>
   <plurals name="common_poll_votes_count">
@@ -370,7 +378,7 @@
   <string name="common_shared_space">"Общее пространство"</string>
   <string name="common_signing_out">"Удаление устройства"</string>
   <string name="common_something_went_wrong">"Что-то пошло не так"</string>
-  <string name="common_something_went_wrong_message">"Мы столкнулись с проблемой. Пожалуйста, попробуйте еще раз."</string>
+  <string name="common_something_went_wrong_message">"Мы столкнулись с проблемой. Пожалуйста, попробуйте ещё раз."</string>
   <string name="common_space">"Пространство"</string>
   <string name="common_space_members">"Участники пространства"</string>
   <string name="common_space_topic_placeholder">"О чём это пространство?"</string>
@@ -422,8 +430,8 @@
   <string name="common_waiting_live_location">"Ожидание трансляции местоположения…"</string>
   <string name="common_world_readable_history">"Любой может видеть историю"</string>
   <string name="common_you">"Вы"</string>
-  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) поделился этим сообщением, поскольку вас не было в комнате, когда оно было отправлено."</string>
-  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s поделился этим сообщением, поскольку вас не было в комнате, когда оно было отправлено."</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) поделился(ась) этим сообщением, поскольку Вас не было в комнате, когда оно было отправлено."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s поделился(ась) этим сообщением, поскольку Вас не было в комнате, когда оно было отправлено."</string>
   <string name="crypto_history_visible">"Эта комната настроена так, что новые участники могут видеть историю. %1$s"</string>
   <string name="crypto_identity_change_pin_violation">"Личность %1$s была сброшена. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Личность %1$s %2$s была сброшена. %3$s"</string>
@@ -446,11 +454,11 @@
   <string name="dialog_title_error">"Ошибка"</string>
   <string name="dialog_title_success">"Успешно"</string>
   <string name="dialog_title_warning">"Предупреждение"</string>
-  <string name="dialog_unsaved_changes_description">"У вас есть несохраненные изменения."</string>
+  <string name="dialog_unsaved_changes_description">"У Вас есть несохраненные изменения."</string>
   <string name="dialog_unsaved_changes_description_android">"Изменения не сохранены. Вы действительно хотите вернуться?"</string>
   <string name="dialog_unsaved_changes_title">"Сохранить изменения?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Максимально допустимый размер файла: %1$s"</string>
-  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Выберите качество для видео, которое вы хотите загрузить."</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Выберите качество видео, которое Вы хотите загрузить."</string>
   <string name="dialog_video_quality_selector_title">"Выберите качество загружаемого видео"</string>
   <string name="emoji_picker_search_placeholder">"Поиск эмодзи"</string>
   <string name="error_account_already_logged_in">"Вы уже вошли на данном устройстве как %1$s."</string>
@@ -491,7 +499,7 @@
     <item quantity="many">"%1$d людей"</item>
   </plurals>
   <string name="screen_live_location_sheet_title">"На карте"</string>
-  <string name="screen_media_picker_error_failed_selection">"Не удалось выбрать медиа, попробуйте еще раз."</string>
+  <string name="screen_media_picker_error_failed_selection">"Не удалось выбрать медиа, попробуйте ещё раз."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Нажмите на сообщение и выберите «%1$s», чтобы добавить его сюда."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Закрепите важные сообщения, чтобы их можно было легко найти"</string>
   <plurals name="screen_pinned_timeline_screen_title">
@@ -499,19 +507,19 @@
     <item quantity="few">"%1$d закреплённых сообщения"</item>
     <item quantity="many">"%1$d закреплённых сообщений"</item>
   </plurals>
-  <string name="screen_pinned_timeline_screen_title_empty">"Закрепленные сообщения"</string>
+  <string name="screen_pinned_timeline_screen_title_empty">"Закреплённые сообщения"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Вы собираетесь перейти в свой аккаунт %1$s, чтобы сбросить личность. После этого Вы вернётесь в приложение."</string>
   <string name="screen_reset_identity_confirmation_title">"Не можете подтвердить? Перейдите в свой аккаунт, чтобы сбросить свою личность."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Сбросить верификацию и отправить"</string>
   <string name="screen_resolve_send_failure_changed_identity_subtitle">"Вы можете либо сбросить подтверждение и всё равно отправить это сообщение, либо отменить его сейчас и повторить попытку после повторного подтверждения %1$s."</string>
   <string name="screen_resolve_send_failure_changed_identity_title">"Ваше сообщение не было отправлено, потому что подтвержденная идентификации %1$s была сброшена"</string>
-  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Все равно отправить сообщение"</string>
-  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"У %1$s есть одно или несколько неподтвержденных устройств. Вы все равно можете отправить сообщение или отменить его пока и повторить попытку позже, когда %2$s подтвердить все свои устройства."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Всё равно отправить сообщение"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"У %1$s есть одно или несколько неподтвержденных устройств. Вы всё равно можете отправить сообщение или отменить его и повторить попытку позже, когда %2$s подтвердит все свои устройства."</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Ваше сообщение не было отправлено, потому что %1$s имеет неподтвержденные устройства"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Одно или несколько ваших устройств не подтверждены. Вы можете отправить сообщение в любом случае или отменить его пока и повторить попытку позже, подтвердив все свои устройства."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Ваше сообщение не было отправлено, поскольку вы не подтвердили одно или несколько своих устройств."</string>
   <string name="screen_room_change_role_administrators_or_owners_title">"Редактировать владельцев и администраторов"</string>
-  <string name="screen_room_error_failed_processing_media">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
+  <string name="screen_room_error_failed_processing_media">"Не удалось обработать медиафайл для загрузки, попробуйте ещё раз."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не удалось получить данные о пользователе"</string>
   <string name="screen_room_event_pill">"Сообщение в %1$s"</string>
   <string name="screen_room_grouped_state_events_expand">"Развернуть"</string>
@@ -519,9 +527,9 @@
   <string name="screen_room_live_location_banner">"Поделиться текущим местоположением…"</string>
   <string name="screen_room_permalink_same_room_android">"Эта комната уже просматривается!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s из %2$s"</string>
-  <string name="screen_room_pinned_banner_indicator_description">"%1$s закрепленные сообщения"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s Закреплённые сообщения"</string>
   <string name="screen_room_pinned_banner_loading_description">"Загрузка сообщения…"</string>
-  <string name="screen_room_pinned_banner_view_all_button_title">"Посмотреть все"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Посмотреть Все"</string>
   <string name="screen_room_title">"Чат"</string>
   <string name="screen_share_location_title">"Поделиться местоположением"</string>
   <string name="screen_share_my_location_action">"Поделиться моим местоположением"</string>
@@ -548,4 +556,6 @@
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Вы не имеете доступа к этому сообщению"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Не удалось расшифровать сообщение"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Это сообщение было заблокировано либо потому, что вы не подтвердили свое устройство, либо потому, что отправителю необходимо подтвердить вашу цифровую личность."</string>
+  <string name="vulkan_not_supported_dialog_content_android">"Ваше устройство слишком старое, требуется устройство с Android 8 или более новой версией."</string>
+  <string name="vulkan_not_supported_dialog_title_android">"Отображение карт не поддерживается"</string>
 </resources>

@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
@@ -37,13 +38,18 @@ private const val MAX_COUNT_STRING = "+$MAX_COUNT"
  * @param count The number to display. If the number is greater than [MAX_COUNT], the counter will display [MAX_COUNT_STRING].
  * If the number is less than 1, the counter will not be displayed.
  * @param modifier The modifier to apply to this layout.
+ * @param containerColor The background color of the counter. When null, uses [isCritical] to pick a default.
+ * @param contentColor The text color inside the counter. When null, uses [textOnSolidPrimary].
  * @param textStyle The style to apply to the text inside the counter.
  * @param isCritical If true, the counter will use a critical color scheme, otherwise it will use an accent color scheme.
+ * Only used when [containerColor] is null.
  */
 @Composable
 fun CounterAtom(
     count: Int,
     modifier: Modifier = Modifier,
+    containerColor: Color? = null,
+    contentColor: Color? = null,
     textStyle: TextStyle = CounterAtomDefaults.textStyle,
     isCritical: Boolean = false,
 ) {
@@ -65,7 +71,7 @@ fun CounterAtom(
             .size(squareSize.toDp() + 1.dp)
             .clip(CircleShape)
             .background(
-                if (isCritical) {
+                containerColor ?: if (isCritical) {
                     ElementTheme.colors.iconCriticalPrimary
                 } else {
                     ElementTheme.colors.iconAccentPrimary
@@ -76,7 +82,7 @@ fun CounterAtom(
             modifier = Modifier.align(Alignment.Center),
             text = countAsText,
             style = textStyle,
-            color = ElementTheme.colors.textOnSolidPrimary,
+            color = contentColor ?: ElementTheme.colors.textOnSolidPrimary,
         )
     }
 }
