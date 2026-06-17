@@ -32,6 +32,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -275,6 +276,7 @@ private fun CustomStatusInputRow(
                 border = BorderStroke(1.dp, ElementTheme.colors.bgSubtleSecondary),
                 modifier = Modifier
                     .size(50.dp)
+                    .clip(CircleShape)
                     .clickable { },
             ) {
                 Box(contentAlignment = Alignment.Center) {
