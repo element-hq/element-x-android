@@ -137,7 +137,7 @@ private fun ColumnScope.UserStatusSection(
     userStatusState: UserStatusState,
     showTopDivider: Boolean,
 ) {
-    if(showTopDivider) {
+    if (showTopDivider) {
         HorizontalDivider(
             thickness = 8.dp,
             color = ElementTheme.colors.bgSubtleSecondary,

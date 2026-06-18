@@ -23,22 +23,22 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -51,11 +51,11 @@ import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
-import io.element.android.libraries.designsystem.theme.components.hide
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TextField
+import io.element.android.libraries.designsystem.theme.components.hide
 import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.UserStatus
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -178,13 +178,17 @@ private fun UserStatusPickerBottomSheet(
             ListItem(
                 headlineContent = { Text(text = label) },
                 leadingContent = ListItemContent.Text(text = predefined.emoji),
-                trailingContent = if (isSelected) ListItemContent.Custom({
+                trailingContent = if (isSelected) {
+                    ListItemContent.Custom({
                     Icon(
                         imageVector = CompoundIcons.Check(),
                         contentDescription = null,
                         tint = ElementTheme.colors.iconAccentPrimary,
                     )
-                }) else null,
+                })
+                } else {
+                    null
+                },
                 onClick = {
                     sheetState.hide(coroutineScope) {
                         onSelectPredefined(predefinedUserStatus)
@@ -249,7 +253,9 @@ private fun CustomStatusInputRow(
                             )
                         }
                     }
-                } else null
+                } else {
+                    null
+                }
             )
         },
         trailingContent = ListItemContent.Custom({
@@ -265,8 +271,11 @@ private fun CustomStatusInputRow(
                 val maxWidth = placeables.maxOf { it.width }
                 val maxHeight = placeables.maxOf { it.height }
                 layout(maxWidth, maxHeight) {
-                    if (hasChanges) placeables[0].placeRelative(0, 0)
-                    else placeables[1].placeRelative(0, 0)
+                    if (hasChanges) {
+                        placeables[0].placeRelative(0, 0)
+                    } else {
+                        placeables[1].placeRelative(0, 0)
+                    }
                 }
             }
         }),

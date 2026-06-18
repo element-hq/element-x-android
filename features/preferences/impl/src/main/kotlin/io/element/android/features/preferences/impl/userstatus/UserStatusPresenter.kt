@@ -27,7 +27,6 @@ import kotlinx.coroutines.launch
 class UserStatusPresenter(
     private val matrixClient: MatrixClient,
 ) : Presenter<UserStatusState> {
-
     @Composable
     override fun present(): UserStatusState {
         val userProfile by matrixClient.userProfile.collectAsState()

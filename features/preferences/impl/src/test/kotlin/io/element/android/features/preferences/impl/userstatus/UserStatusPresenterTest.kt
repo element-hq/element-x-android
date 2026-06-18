@@ -18,7 +18,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class UserStatusPresenterTest {
-
     private fun createPresenter(client: FakeMatrixClient = FakeMatrixClient()) =
         UserStatusPresenter(matrixClient = client)
 
