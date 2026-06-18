@@ -83,16 +83,14 @@ fun PreferencesRootView(
             },
             matrixUser = state.myUser,
         )
-
-        if (state.userStatusState != null) {
-            UserStatusSection(state.userStatusState)
-        }
         if (state.isMultiAccountEnabled) {
             MultiAccountSection(
                 state = state,
-                showTopDivider = state.userStatusState == null,
                 onAddAccountClick = onAddAccountClick,
             )
+        }
+        if (state.userStatusState != null) {
+            UserStatusSection(state.userStatusState, showTopDivider = !state.isMultiAccountEnabled)
         }
         // 'Account' section
         ManageAccountSection(
@@ -135,26 +133,9 @@ fun PreferencesRootView(
 }
 
 @Composable
-private fun ColumnScope.UserStatusSection(userStatusState: UserStatusState) {
-    HorizontalDivider(
-        thickness = 8.dp,
-        color = ElementTheme.colors.bgSubtleSecondary,
-    )
-    UserStatusRow(
-        state = userStatusState,
-        modifier = Modifier.fillMaxWidth(),
-    )
-    HorizontalDivider(
-        thickness = 8.dp,
-        color = ElementTheme.colors.bgSubtleSecondary,
-    )
-}
-
-@Composable
-private fun ColumnScope.MultiAccountSection(
-    state: PreferencesRootState,
+private fun ColumnScope.UserStatusSection(
+    userStatusState: UserStatusState,
     showTopDivider: Boolean,
-    onAddAccountClick: () -> Unit,
 ) {
     if(showTopDivider) {
         HorizontalDivider(
@@ -162,6 +143,25 @@ private fun ColumnScope.MultiAccountSection(
             color = ElementTheme.colors.bgSubtleSecondary,
         )
     }
+    UserStatusRow(
+        state = userStatusState,
+        modifier = Modifier.fillMaxWidth(),
+    )
+    HorizontalDivider(
+        thickness = 1.dp,
+        color = ElementTheme.colors.bgSubtleSecondary,
+    )
+}
+
+@Composable
+private fun ColumnScope.MultiAccountSection(
+    state: PreferencesRootState,
+    onAddAccountClick: () -> Unit,
+) {
+    HorizontalDivider(
+        thickness = 8.dp,
+        color = ElementTheme.colors.bgSubtleSecondary,
+    )
     state.otherSessions.forEach { matrixUser ->
         MatrixUserRow(
             modifier = Modifier
