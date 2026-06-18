@@ -20,7 +20,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetScaffoldState
-import androidx.compose.material3.rememberStandardBottomSheetState
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -105,7 +105,9 @@ fun ShareLocationView(
     }
 
     val scaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = rememberStandardBottomSheetState(initialValue = SheetValue.Expanded)
+        bottomSheetState = rememberBottomSheetState(
+            initialValue = SheetValue.Expanded,
+        )
     )
     val cameraState = rememberCameraState(firstPosition = MapDefaults.defaultCameraPosition)
 
