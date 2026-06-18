@@ -45,6 +45,7 @@ import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.plantTestTimber
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.verify
@@ -54,12 +55,9 @@ import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
 
-@RunWith(RobolectricTestRunner::class)
-class DefaultActiveCallManagerTest {
+class DefaultActiveCallManagerTest : RobolectricTest() {
     private val notificationId = NotificationIdProvider.getForegroundServiceNotificationId(ForegroundServiceType.INCOMING_CALL)
 
     @OptIn(ExperimentalCoroutinesApi::class)

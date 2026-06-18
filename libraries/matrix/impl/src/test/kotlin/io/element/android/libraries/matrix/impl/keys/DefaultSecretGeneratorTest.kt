@@ -10,12 +10,10 @@ package io.element.android.libraries.matrix.impl.keys
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.androidutils.crypto.ClientSecret
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class DefaultSecretGeneratorTest {
+class DefaultSecretGeneratorTest : RobolectricTest() {
     @Test
     fun `check that generated passphrase has the expected length`() {
         val secretGenerator = DefaultSecretGenerator()

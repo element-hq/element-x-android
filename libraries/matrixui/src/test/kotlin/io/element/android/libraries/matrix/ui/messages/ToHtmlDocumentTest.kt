@@ -16,12 +16,10 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class ToHtmlDocumentTest {
+class ToHtmlDocumentTest : RobolectricTest() {
     @Test
     fun `toHtmlDocument - returns null if format is not HTML`() {
         val body = FormattedBody(
