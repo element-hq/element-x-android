@@ -10,7 +10,8 @@ package io.element.android.features.messages.impl.timeline.components.customreac
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -30,7 +31,9 @@ fun CustomReactionBottomSheet(
     onSelectEmoji: (EventOrTransactionId, Emoji) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberBottomSheetState(
+        initialValue = SheetValue.Expanded,
+    )
     val coroutineScope = rememberCoroutineScope()
     val target = state.target as? CustomReactionState.Target.Success
 
