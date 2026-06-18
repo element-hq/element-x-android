@@ -151,9 +151,7 @@ class DeveloperSettingsPresenter(
     }
 
     private fun CoroutineScope.clearCache(clearCacheAction: MutableState<AsyncAction<Unit>>) = launch {
-        suspend {
-            clearCacheUseCase()
-        }.runCatchingUpdatingState(clearCacheAction)
+        suspend { clearCacheUseCase() }.runCatchingUpdatingState(state = clearCacheAction)
     }
 
     private fun CoroutineScope.markAllRoomsAsRead(
@@ -163,7 +161,6 @@ class DeveloperSettingsPresenter(
         dismissConfirmation()
         suspend {
             markAllRoomsAsRead().getOrThrow()
-            Unit
-        }.runCatchingUpdatingState(markAllRoomsAsReadAction)
+        }.runCatchingUpdatingState(state = markAllRoomsAsReadAction)
     }
 }
