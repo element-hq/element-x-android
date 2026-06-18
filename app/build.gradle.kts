@@ -246,13 +246,8 @@ androidComponents {
     configureLicensesTasks(reportingExtension)
 }
 
-// Provide the default Android variant for SonarQube analysis.
-sonar {
-    setAndroidVariant("gplayDebug")
-}
-
 // Configure the SonarQube plugin to wait for the resource generation tasks to complete before running the analysis.
-tasks.withType<SonarResolverTask> {
+tasks.withType<SonarResolverTask>().configureEach {
     dependsOn("generateGplayDebugResValues", "generateGplayDebugAndroidTestResValues")
 }
 

@@ -54,7 +54,7 @@ android {
 }
 
 // Configure the SonarQube plugin to wait for the resource generation tasks to complete before running the analysis.
-tasks.withType<SonarResolverTask> {
+tasks.withType<SonarResolverTask>().configureEach {
     dependsOn("generateDebugResValues", "generateDebugAndroidTestResValues")
 }
 
