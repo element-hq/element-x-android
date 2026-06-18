@@ -65,7 +65,8 @@ class DefaultMessageSummaryFormatter(
                         context.getString(CommonStrings.common_call_declined)
                     }
                 }
-                RtcNotificationState.Started -> context.getString(CommonStrings.common_call_started)
+                RtcNotificationState.Started, is RtcNotificationState.Active
+                    -> context.getString(CommonStrings.common_call_started)
             }
         }
             // Truncate the message to a safe length to avoid crashes in Compose

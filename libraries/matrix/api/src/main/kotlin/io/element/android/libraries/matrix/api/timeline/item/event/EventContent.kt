@@ -120,7 +120,10 @@ data object LegacyCallInviteContent : EventContent
 
 data class CallNotifyContent(
     val callIntent: CallIntent,
-    val declinedBy: List<UserId>
+    val declinedBy: List<UserId>,
+    val activeMembers: List<UserId>,
+    val isJoined: Boolean,
+    val callStartTsMillis: Long,
 ) : EventContent
 
 data object UnknownContent : EventContent

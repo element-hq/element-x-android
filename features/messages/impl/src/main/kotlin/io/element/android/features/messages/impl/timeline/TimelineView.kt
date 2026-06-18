@@ -103,6 +103,7 @@ fun TimelineView(
     onReactionLongClick: (emoji: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
+    onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     modifier: Modifier = Modifier,
     lazyListState: LazyListState = rememberLazyListState(),
     forceJumpToBottomVisibility: Boolean = false,
@@ -185,6 +186,7 @@ fun TimelineView(
                         onMoreReactionsClick = onMoreReactionsClick,
                         onReadReceiptClick = onReadReceiptClick,
                         onSwipeToReply = onSwipeToReply,
+                        onJoinCallClick = onJoinCallClick,
                         eventSink = state.eventSink,
                     )
                 }
@@ -426,6 +428,7 @@ internal fun TimelineViewPreview(
             onSwipeToReply = {},
             onReactionClick = { _, _ -> },
             onReactionLongClick = { _, _ -> },
+            onJoinCallClick = {},
             onMoreReactionsClick = {},
             onReadReceiptClick = {},
             forceJumpToBottomVisibility = true,

@@ -154,7 +154,10 @@ class TimelineEventContentMapper(
                     } else {
                         CallIntent.VIDEO
                     },
-                    declinedBy = it.declinedBy.map(::UserId)
+                    declinedBy = it.declinedBy.map(::UserId),
+                    activeMembers = it.activeMembers.map(::UserId),
+                    callStartTsMillis = it.callStartTsMillis?.toLong() ?: 0,
+                    isJoined = it.isJoined
                 )
             }
         }

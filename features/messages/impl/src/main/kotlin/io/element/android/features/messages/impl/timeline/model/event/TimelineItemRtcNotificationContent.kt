@@ -10,13 +10,27 @@ package io.element.android.features.messages.impl.timeline.model.event
 
 import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
+import io.element.android.libraries.matrix.api.user.MatrixUser
 
 // State of the call, for now only isDeclined but in the future could be missed, active.
 sealed interface RtcNotificationState {
-    /** Some users have declined, byMe indicates if the current user is one of them. */
-    data class Declined(val byMe: Boolean) : RtcNotificationState
+    /** Call is currently active **/
+    data class Active(
+        val joinedMembers: List<MatrixUser>,
+        val isJoined: Boolean,
+        val callStartTsMillis: Long,
+        val callIntent: CallIntent,
+    ) : RtcNotificationState
 
-    object Started : RtcNotificationState
+    /** Some users have declined, byMe indicates if the current user is one of them. */
+    data class Declined(val byMe: Boolean) : RtcNotificationState, Tombstoned
+
+    object Started : RtcNotificationState, Tombstoned
+
+    /**
+     * Tag for Tombstoned/Past calls.
+     */
+    interface Tombstoned
 }
 
 class TimelineItemRtcNotificationContent(
