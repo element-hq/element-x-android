@@ -11,7 +11,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -85,9 +86,9 @@ internal fun SelectParentSpaceOptions(
         )
 
         if (displaySelectSpaceBottomSheet) {
-            val sheetState = rememberModalBottomSheetState(
-                skipPartiallyExpanded = true,
-                confirmValueChange = { true },
+            val sheetState = rememberBottomSheetState(
+                initialValue = SheetValue.Expanded,
+                enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
             )
             ModalBottomSheet(
                 sheetState = sheetState,

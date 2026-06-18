@@ -16,7 +16,7 @@ import androidx.compose.runtime.Composable
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun sheetStateForPreview() = SheetState(
-    skipPartiallyExpanded = true,
+    enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
     positionalThreshold = { 0.5f },
     velocityThreshold = { 400f },
     initialValue = SheetValue.Expanded,
