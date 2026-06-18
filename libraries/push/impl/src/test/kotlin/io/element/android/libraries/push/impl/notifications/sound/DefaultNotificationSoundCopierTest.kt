@@ -10,14 +10,12 @@ package io.element.android.libraries.push.impl.notifications.sound
 import android.content.Context
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.push.api.notifications.sound.NotificationSoundCopier
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
-@RunWith(RobolectricTestRunner::class)
-class DefaultNotificationSoundCopierTest {
+class DefaultNotificationSoundCopierTest : RobolectricTest() {
     private val context: Context get() = RuntimeEnvironment.getApplication()
 
     @Test

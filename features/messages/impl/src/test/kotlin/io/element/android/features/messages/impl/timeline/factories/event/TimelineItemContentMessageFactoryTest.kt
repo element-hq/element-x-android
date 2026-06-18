@@ -67,18 +67,18 @@ import io.element.android.libraries.matrix.test.timeline.aProfileDetails
 import io.element.android.libraries.matrix.test.timeline.aStickerContent
 import io.element.android.libraries.matrix.ui.components.A_BLUR_HASH
 import io.element.android.libraries.mediaviewer.test.util.FileExtensionExtractorWithoutValidation
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.test.runTest
 import org.jsoup.nodes.Document
 import org.junit.Assert.fail
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 
-@Suppress("LargeClass") @RunWith(RobolectricTestRunner::class) class TimelineItemContentMessageFactoryTest {
+@Suppress("LargeClass")
+class TimelineItemContentMessageFactoryTest : RobolectricTest() {
     @Test
     fun `test create OtherMessageType`() = runTest {
         val sut = createTimelineItemContentMessageFactory()
@@ -343,10 +343,10 @@ import kotlin.time.Duration.Companion.minutes
                     formattedCaption = null,
                     source = MediaSource("url"),
                     info = AudioInfo(
-                    duration = 1.minutes,
-                    size = 123L,
-                    mimetype = MimeTypes.Mp3,
-                )
+                        duration = 1.minutes,
+                        size = 123L,
+                        mimetype = MimeTypes.Mp3,
+                    )
                 ),
                 isEdited = true,
             ),
@@ -584,16 +584,16 @@ import kotlin.time.Duration.Companion.minutes
                     formattedCaption = null,
                     source = MediaSource("url"),
                     info = FileInfo(
-                    mimetype = MimeTypes.Pdf,
-                    size = 123L,
-                    thumbnailInfo = ThumbnailInfo(
-                        height = 10L,
-                        width = 5L,
-                        mimetype = MimeTypes.Jpeg,
-                        size = 111L,
-                    ),
-                    thumbnailSource = MediaSource("url_thumbnail"),
-                )
+                        mimetype = MimeTypes.Pdf,
+                        size = 123L,
+                        thumbnailInfo = ThumbnailInfo(
+                            height = 10L,
+                            width = 5L,
+                            mimetype = MimeTypes.Jpeg,
+                            size = 111L,
+                        ),
+                        thumbnailSource = MediaSource("url_thumbnail"),
+                    )
                 ),
                 isEdited = true,
             ),
