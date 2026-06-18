@@ -39,7 +39,7 @@ datetime = "0.8.0"
 serialization_json = "1.11.0"
 
 #other
-coil = "3.4.0"
+coil = "3.5.0"
 # Rollback to 1.0.4, 1.0.5 has this issue: https://github.com/airbnb/Showkase/issues/420
 showkase = "1.0.5"
 # There is some custom logic in `RootFlowNode` that may break because it reuses some Appyx internal APIs.
@@ -51,10 +51,10 @@ telephoto = "0.19.0"
 haze = "1.7.2"
 
 # Dependency analysis
-dependencyAnalysis = "3.14.1"
+dependencyAnalysis = "3.15.0"
 
 # DI
-metro = "1.1.1"
+metro = "1.2.0"
 
 # Auto service
 autoservice = "1.1.1"
@@ -89,6 +89,7 @@ firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdi
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 ksp_plugin = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
 google_tink = "com.google.crypto.tink:tink-android:1.21.0"
+jna = "net.java.dev.jna:jna:5.19.1"
 
 # AndroidX
 androidx_core = { module = "androidx.core:core", version.ref = "core" }
@@ -193,7 +194,7 @@ coil_gif = { module = "io.coil-kt.coil3:coil-gif", version.ref = "coil" }
 coil_test = { module = "io.coil-kt.coil3:coil-test", version.ref = "coil" }
 datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
 serialization_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization_json" }
-kotlinx_collections_immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.4.0"
+kotlinx_collections_immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.5.0"
 showkase = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
 showkase_processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }
 jsoup = "org.jsoup:jsoup:1.22.2"
@@ -227,7 +228,7 @@ color_picker = "io.mhssn:colorpicker:1.0.0"
 
 # Analytics
 posthog = "com.posthog:posthog-android:3.47.0"
-sentry = "io.sentry:sentry-android:8.43.1"
+sentry = "io.sentry:sentry-android:8.43.2"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.36.1"
 

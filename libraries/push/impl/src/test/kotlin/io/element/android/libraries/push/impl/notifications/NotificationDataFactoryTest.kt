@@ -24,10 +24,9 @@ import io.element.android.libraries.push.impl.notifications.fixtures.aFallbackNo
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.aSimpleNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.anInviteNotifiableEvent
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
 private val MY_AVATAR_URL: String? = null
 
@@ -36,8 +35,7 @@ private val A_SIMPLE_EVENT = aSimpleNotifiableEvent(eventId = AN_EVENT_ID)
 private val A_MESSAGE_EVENT = aNotifiableMessageEvent(eventId = AN_EVENT_ID, roomId = A_ROOM_ID)
 private val A_FALLBACK_EVENT = aFallbackNotifiableEvent()
 
-@RunWith(RobolectricTestRunner::class)
-class NotificationDataFactoryTest {
+class NotificationDataFactoryTest : RobolectricTest() {
     private val notificationCreator = FakeNotificationCreator()
     private val fakeRoomGroupMessageCreator = FakeRoomGroupMessageCreator()
     private val fakeSummaryGroupMessageCreator = FakeSummaryGroupMessageCreator()
