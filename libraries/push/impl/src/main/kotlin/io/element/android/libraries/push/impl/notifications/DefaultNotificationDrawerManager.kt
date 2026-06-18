@@ -11,7 +11,6 @@ package io.element.android.libraries.push.impl.notifications
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
-import io.element.android.features.lockscreen.api.LockScreenLockState
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClientProvider
@@ -39,6 +38,7 @@ import io.element.android.services.appnavstate.api.currentRoomId
 import io.element.android.services.appnavstate.api.currentSessionId
 import io.element.android.services.appnavstate.api.currentThreadId
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 /**
@@ -200,7 +200,7 @@ class DefaultNotificationDrawerManager(
             it.sessionId
         }
 
-        val isAppLocked = lockScreenService.isPinSetup()
+        val isAppLocked = lockScreenService.isPinSetup().first()
 
         for ((sessionId, notifiableEvents) in eventsForSessions) {
             val client = matrixClientProvider.getOrRestore(sessionId).getOrThrow()
