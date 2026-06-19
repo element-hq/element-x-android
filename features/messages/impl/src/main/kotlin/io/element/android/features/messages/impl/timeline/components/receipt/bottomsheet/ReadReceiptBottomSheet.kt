@@ -9,7 +9,6 @@
 package io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
@@ -118,9 +117,9 @@ private fun ReadReceiptBottomSheetContent(
 
 @PreviewsDayNight
 @Composable
-internal fun ReadReceiptBottomSheetPreview(@PreviewParameter(ReadReceiptBottomSheetStateProvider::class) state: ReadReceiptBottomSheetState) = ElementPreview {
-    Column {
-        ReadReceiptBottomSheetContent(
+internal fun ReadReceiptBottomSheetPreview(@PreviewParameter(ReadReceiptBottomSheetStateProvider::class) state: ReadReceiptBottomSheetState) {
+    ElementPreview(fillMaxSize = true) {
+        ReadReceiptBottomSheet(
             state = state,
             onUserDataClick = {},
         )

@@ -160,7 +160,7 @@ internal fun CreateDmConfirmationBottomSheetPreview(
     @PreviewParameter(
         CreateDmConfirmationBottomSheetStateProvider::class
     ) state: CreateDmConfirmationBottomSheetState
-) = ElementPreview {
+) = ElementPreview(fillMaxSize = true) {
     CreateDmConfirmationBottomSheet(
         matrixUser = state.matrixUser,
         isUserIdentityUnknown = state.isUserIdentityUnknown,

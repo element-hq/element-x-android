@@ -169,7 +169,7 @@ private fun MediaRow(
 @Composable
 internal fun MediaDeleteConfirmationBottomSheetPreview(
     @PreviewParameter(provider = MediaBottomSheetStateDeleteConfirmationProvider::class) state: MediaBottomSheetState.DeleteConfirmation,
-) = ElementPreview {
+) = ElementPreview(fillMaxSize = true) {
     MediaDeleteConfirmationBottomSheet(
         state = state,
         onDelete = {},

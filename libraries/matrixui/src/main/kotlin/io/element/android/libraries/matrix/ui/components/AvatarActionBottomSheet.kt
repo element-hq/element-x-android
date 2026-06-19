@@ -115,7 +115,7 @@ private fun AvatarActionBottomSheetContent(
 
 @PreviewsDayNight
 @Composable
-internal fun AvatarActionBottomSheetPreview() = ElementPreview {
+internal fun AvatarActionBottomSheetPreview() = ElementPreview(fillMaxSize = true) {
     AvatarActionBottomSheet(
         actions = persistentListOf(AvatarAction.TakePhoto, AvatarAction.ChoosePhoto, AvatarAction.Remove),
         isVisible = true,

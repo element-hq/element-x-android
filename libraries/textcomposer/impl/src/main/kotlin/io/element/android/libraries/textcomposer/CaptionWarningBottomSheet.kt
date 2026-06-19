@@ -71,7 +71,7 @@ fun CaptionWarningBottomSheet(
 
 @PreviewsDayNight
 @Composable
-internal fun CaptionWarningBottomSheetPreview() = ElementPreview {
+internal fun CaptionWarningBottomSheetPreview() = ElementPreview(fillMaxSize = true) {
     CaptionWarningBottomSheet(
         onDismiss = {},
     )

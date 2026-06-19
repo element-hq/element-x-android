@@ -153,10 +153,11 @@ private fun AttachmentSourcePickerMenu(
 
 @PreviewsDayNight
 @Composable
-internal fun AttachmentSourcePickerMenuPreview() = ElementPreview {
-    AttachmentSourcePickerMenu(
+internal fun AttachmentSourcePickerMenuPreview() = ElementPreview(fillMaxSize = true) {
+    AttachmentsBottomSheet(
         state = aMessageComposerState(
             canShareLocation = true,
+            showAttachmentSourcePicker = true,
         ),
         onSendLocationClick = {},
         onCreatePollClick = {},

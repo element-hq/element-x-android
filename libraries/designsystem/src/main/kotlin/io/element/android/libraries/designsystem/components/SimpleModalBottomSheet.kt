@@ -65,7 +65,7 @@ fun SimpleModalBottomSheet(
 
 @PreviewsDayNight
 @Composable
-internal fun SimpleModalBottomSheetPreview() = ElementPreview {
+internal fun SimpleModalBottomSheetPreview() = ElementPreview(fillMaxSize = true) {
     SimpleModalBottomSheet(title = "A title", onDismiss = {}) {
         Text(
             text = LoremIpsum(20).values.first(),
