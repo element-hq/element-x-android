@@ -20,6 +20,7 @@ class FakePermissionsPresenter : PermissionsPresenter {
     private var state = PermissionsState(
         permissions = PermissionsState.Permissions.NoneGranted,
         shouldShowRationale = false,
+        permissionsAlreadyRequested = false,
         eventSink = ::handleEvent,
     )
         set(value) {

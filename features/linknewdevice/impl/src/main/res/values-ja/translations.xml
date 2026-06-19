@@ -18,7 +18,7 @@
   <string name="screen_link_new_device_error_request_timeout_subtitle">"サインインが無効です。もう一度試してください。"</string>
   <string name="screen_link_new_device_error_request_timeout_title">"サインインが時間内に完了しませんでした"</string>
   <string name="screen_link_new_device_mobile_step1">"%1$s を他の端末で開いてください"</string>
-  <string name="screen_link_new_device_mobile_step2">"%1$s を選択してください"</string>
+  <string name="screen_link_new_device_mobile_step2">"%1$s を選択"</string>
   <string name="screen_link_new_device_mobile_step2_action">"\"QRコードでサインイン\""</string>
   <string name="screen_link_new_device_mobile_step3">"表示されているQRコードを一方の端末で読み取ってください"</string>
   <string name="screen_link_new_device_mobile_title">"%1$s を他の端末で開いてください"</string>
@@ -34,6 +34,8 @@
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"同様の問題が発生する場合は、異なるWi-Fiやモバイルデータ通信を試してください"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"問題が解決しない場合は、手動でサインインしてください"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"接続が安全ではありません"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"この端末に表示される2つの数字の入力を要求されます"</string>
+  <string name="screen_qr_code_login_device_code_title">"もう一方に表示される数字を入力してください"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"もう一方の端末がサインインをキャンセルしました"</string>
   <string name="screen_qr_code_login_error_cancelled_title">"サインインのリクエストがキャンセルされました"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"もう一方の端末でサインインを拒否されました"</string>
@@ -54,4 +56,5 @@
   <string name="screen_qr_code_login_no_camera_permission_state_description">"続行するには、%1$s にカメラの使用を許可する必要があります。"</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"QRコードを読み取るため、カメラへのアクセスを許可"</string>
   <string name="screen_qr_code_login_unknown_error_description">"予期せぬ問題が発生しました。もう一度試してください。"</string>
+  <string name="screen_qr_code_login_verify_code_loading">"一方の端末を待機しています"</string>
 </resources>

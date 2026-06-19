@@ -22,13 +22,6 @@ enum class FeatureFlags(
     override val isFinished: Boolean,
     override val isInLabs: Boolean = false,
 ) : Feature {
-    RoomDirectorySearch(
-        key = "feature.roomdirectorysearch",
-        title = "Room directory search",
-        description = "Allow user to search for public rooms in their homeserver",
-        defaultValue = { false },
-        isFinished = false,
-    ),
     ShowBlockedUsersDetails(
         key = "feature.showBlockedUsersDetails",
         title = "Show blocked users details",
@@ -100,24 +93,10 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
-    SignInWithClassic(
-        key = "feature.signin_with_classic",
-        title = "Sign in with Element Classic",
-        description = "Allow the application to sign in to the current Element Classic account.",
-        defaultValue = { false },
-        isFinished = false,
-    ),
     AllowBlackTheme(
         key = "feature.allow_black_theme",
-        title = "Allow black theme",
+        title = "Black theme",
         description = "Allow selecting the black appearance theme for battery saving on OLED.",
-        defaultValue = { false },
-        isFinished = false,
-    ),
-    LiveLocationSharing(
-        key = "feature.liveLocationSharing",
-        title = "Live location sharing",
-        description = "Allow sharing live location in rooms.",
         defaultValue = { false },
         isFinished = false,
     ),
@@ -127,13 +106,6 @@ enum class FeatureFlags(
         description = "Only fetch events for push notifications when the device has internet connectivity. " +
             "Enabling this can be problematic in air-gapped environments.",
         defaultValue = { true },
-        isFinished = false,
-    ),
-    FloatingDateBadge(
-        key = "feature.floating_date_badge",
-        title = "Display sticky date headers in the timeline",
-        description = "When scrolling, a sticky date badge will be displayed so you can easily know on which date the messages you're seeing were sent.",
-        defaultValue = { false },
         isFinished = false,
     ),
     SlashCommand(
@@ -155,6 +127,13 @@ enum class FeatureFlags(
         title = "Automatic back pagination of rooms",
         description = "Allow the app to automatically back paginate in rooms to pre-fetch older messages in background." +
             "\nRequires an app restart to take effect.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    UnreadIndicatorCount(
+        key = "feature.unread_indicator_count",
+        title = "Unread indicator count",
+        description = "Show the number of unread messages on the unread indicator in the room list.",
         defaultValue = { false },
         isFinished = false,
     ),

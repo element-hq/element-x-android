@@ -18,13 +18,11 @@ import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.services.toolbox.test.systemclock.A_FAKE_TIMESTAMP
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.nonNull
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class DefaultSummaryGroupMessageCreatorTest {
+class DefaultSummaryGroupMessageCreatorTest : RobolectricTest() {
     @Test
     fun `process notifications`() = runTest {
         val notificationCreator = FakeNotificationCreator()

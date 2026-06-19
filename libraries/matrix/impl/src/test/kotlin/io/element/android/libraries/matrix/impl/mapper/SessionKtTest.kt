@@ -10,8 +10,8 @@ package io.element.android.libraries.matrix.impl.mapper
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.auth.external.ExternalSession
+import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustSession
-import io.element.android.libraries.matrix.impl.paths.SessionPaths
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL_2
@@ -36,7 +36,7 @@ class SessionKtTest {
         assertThat(result.refreshToken).isEqualTo("refreshToken")
         assertThat(result.homeserverUrl).isEqualTo(A_HOMESERVER_URL)
         assertThat(result.isTokenValid).isTrue()
-        assertThat(result.oidcData).isNull()
+        assertThat(result.oAuthData).isNull()
         assertThat(result.loginType).isEqualTo(LoginType.PASSWORD)
         assertThat(result.loginTimestamp).isNotNull()
         assertThat(result.passphrase).isEqualTo(A_SECRET)
@@ -82,7 +82,7 @@ class SessionKtTest {
         assertThat(result.refreshToken).isNull()
         assertThat(result.homeserverUrl).isEqualTo(A_HOMESERVER_URL)
         assertThat(result.isTokenValid).isTrue()
-        assertThat(result.oidcData).isNull()
+        assertThat(result.oAuthData).isNull()
         assertThat(result.loginType).isEqualTo(LoginType.PASSWORD)
         assertThat(result.loginTimestamp).isNotNull()
         assertThat(result.passphrase).isEqualTo(A_SECRET)

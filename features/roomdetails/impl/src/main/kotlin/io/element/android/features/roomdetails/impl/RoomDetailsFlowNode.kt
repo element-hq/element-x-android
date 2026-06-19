@@ -25,7 +25,7 @@ import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.annotations.ContributesNode
 import io.element.android.appconfig.LearnMoreConfig
-import io.element.android.features.call.api.CallType
+import io.element.android.features.call.api.CallData
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.knockrequests.api.list.KnockRequestsListEntryPoint
 import io.element.android.features.messages.api.MessagesEntryPoint
@@ -176,6 +176,10 @@ class RoomDetailsFlowNode(
         return when (navTarget) {
             NavTarget.RoomDetails -> {
                 val roomDetailsCallback = object : RoomDetailsNode.Callback {
+                    override fun navigateBack() {
+                        callback.onDone()
+                    }
+
                     override fun navigateToRoomMemberList() {
                         backstack.push(NavTarget.RoomMemberList)
                     }
@@ -225,13 +229,13 @@ class RoomDetailsFlowNode(
                     }
 
                     override fun navigateToRoomCall(callIntent: CallIntent) {
-                        val inputs = CallType.RoomCall(
+                        val callData = CallData(
                             sessionId = room.sessionId,
                             roomId = room.roomId,
                             isAudioCall = callIntent == CallIntent.AUDIO
                         )
                         analyticsService.captureInteraction(Interaction.Name.MobileRoomCallButton)
-                        elementCallEntryPoint.startCall(inputs)
+                        elementCallEntryPoint.startCall(callData)
                     }
 
                     override fun navigateToReportRoom() {
@@ -254,6 +258,10 @@ class RoomDetailsFlowNode(
                     override fun navigateToInviteMembers() {
                         backstack.push(NavTarget.InviteMembers)
                     }
+
+                    override fun navigateToAvatarPreview(username: String, avatarUrl: String) {
+                        overlay.show(NavTarget.AvatarPreview(username, avatarUrl))
+                    }
                 }
                 createNode<RoomMemberListNode>(buildContext, listOf(roomMemberListCallback))
             }
@@ -263,7 +271,20 @@ class RoomDetailsFlowNode(
             }
 
             NavTarget.InviteMembers -> {
-                createNode<RoomInviteMembersNode>(buildContext)
+                val callback = object : RoomInviteMembersNode.Callback {
+                    override fun openCreatedRoom(roomId: RoomId) {
+                        navigateUp()
+                        room.roomCoroutineScope.launch {
+                            callback.navigateToRoom(
+                                roomId = roomId,
+                                serverNames = emptyList(),
+                                // Remove the invite screen from the backstack to avoid navigating back to it after the new room has been created
+                                clearBackStack = true,
+                            )
+                        }
+                    }
+                }
+                createNode<RoomInviteMembersNode>(buildContext, plugins = listOf(callback))
             }
 
             is NavTarget.RoomNotificationSettings -> {
@@ -288,7 +309,7 @@ class RoomDetailsFlowNode(
 
                     override fun startCall(dmRoomId: RoomId, callIntent: CallIntent) {
                         elementCallEntryPoint.startCall(
-                            CallType.RoomCall(
+                            CallData(
                                 roomId = dmRoomId,
                                 sessionId = room.sessionId,
                                 isAudioCall = callIntent == CallIntent.AUDIO

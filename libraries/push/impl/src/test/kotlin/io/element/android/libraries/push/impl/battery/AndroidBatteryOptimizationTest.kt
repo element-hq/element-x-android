@@ -16,12 +16,10 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.services.toolbox.api.intent.ExternalIntentLauncher
 import io.element.android.services.toolbox.test.intent.FakeExternalIntentLauncher
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class AndroidBatteryOptimizationTest {
+class AndroidBatteryOptimizationTest : RobolectricTest() {
     @Test
     fun `isIgnoringBatteryOptimizations should return false`() {
         val sut = createAndroidBatteryOptimization()

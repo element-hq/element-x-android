@@ -50,7 +50,7 @@ import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
-import io.element.android.libraries.matrix.api.auth.OidcDetails
+import io.element.android.libraries.matrix.api.auth.OAuthDetails
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -68,7 +68,7 @@ fun OnBoardingView(
     onSignInWithQrCode: () -> Unit,
     onSignIn: (mustChooseAccountProvider: Boolean) -> Unit,
     onCreateAccount: () -> Unit,
-    onOidcDetails: (OidcDetails) -> Unit,
+    onOAuthDetails: (OAuthDetails) -> Unit,
     onNeedLoginPassword: () -> Unit,
     onLearnMoreClick: () -> Unit,
     onCreateAccountContinue: (url: String) -> Unit,
@@ -82,7 +82,7 @@ fun OnBoardingView(
                 state.eventSink(OnBoardingEvents.ClearError)
             },
             onLearnMoreClick = onLearnMoreClick,
-            onOidcDetails = onOidcDetails,
+            onOAuthDetails = onOAuthDetails,
             onNeedLoginPassword = onNeedLoginPassword,
             onCreateAccountContinue = onCreateAccountContinue,
         )
@@ -354,7 +354,7 @@ internal fun OnBoardingViewPreview(
         onSignIn = {},
         onCreateAccount = {},
         onReportProblem = {},
-        onOidcDetails = {},
+        onOAuthDetails = {},
         onNeedLoginPassword = {},
         onLearnMoreClick = {},
         onCreateAccountContinue = {},

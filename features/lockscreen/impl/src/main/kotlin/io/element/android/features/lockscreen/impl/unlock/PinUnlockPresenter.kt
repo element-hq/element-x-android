@@ -69,7 +69,13 @@ class PinUnlockPresenter(
         LaunchedEffect(Unit) {
             suspend {
                 val pinCodeSize = pinCodeManager.getPinCodeSize()
-                PinEntry.createEmpty(pinCodeSize)
+                if (pinCodeSize == null) {
+                    // No pin code set, deleted store? Force sign out
+                    showSignOutPrompt = true
+                    error("No pin code size found")
+                } else {
+                    PinEntry.createEmpty(pinCodeSize)
+                }
             }.runCatchingUpdatingState(pinEntryState)
         }
         LaunchedEffect(biometricUnlock) {
@@ -95,28 +101,28 @@ class PinUnlockPresenter(
             isUnlocked.value = true
         }
 
-        fun handleEvent(event: PinUnlockEvents) {
+        fun handleEvent(event: PinUnlockEvent) {
             when (event) {
-                is PinUnlockEvents.OnPinKeypadPressed -> {
+                is PinUnlockEvent.OnPinKeypadPressed -> {
                     pinEntryState.value = pinEntry.process(event.pinKeypadModel)
                 }
-                PinUnlockEvents.OnForgetPin -> showSignOutPrompt = true
-                PinUnlockEvents.ClearSignOutPrompt -> showSignOutPrompt = false
-                PinUnlockEvents.SignOut -> {
+                PinUnlockEvent.OnForgetPin -> showSignOutPrompt = true
+                PinUnlockEvent.ClearSignOutPrompt -> showSignOutPrompt = false
+                PinUnlockEvent.SignOut -> {
                     if (showSignOutPrompt) {
                         showSignOutPrompt = false
                         coroutineScope.signOut(signOutAction)
                     }
                 }
-                PinUnlockEvents.OnUseBiometric -> {
+                PinUnlockEvent.OnUseBiometric -> {
                     coroutineScope.launch {
                         biometricUnlockResult = biometricUnlock.authenticate()
                     }
                 }
-                PinUnlockEvents.ClearBiometricError -> {
+                PinUnlockEvent.ClearBiometricError -> {
                     biometricUnlockResult = null
                 }
-                is PinUnlockEvents.OnPinEntryChanged -> {
+                is PinUnlockEvent.OnPinEntryChanged -> {
                     pinEntryState.value = pinEntry.process(event.entryAsText)
                 }
             }

@@ -54,6 +54,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 private val PIN_WIDTH = 42.dp
@@ -395,7 +396,7 @@ private object LocationPinRenderer {
 internal fun LocationPinPreview() = ElementPreview {
     val sampleAvatarData = AvatarData(
         id = "@alice:matrix.org",
-        name = "Alice",
+        name = USER_NAME_ALICE,
         url = null,
         size = AvatarSize.SelectedUser
     )

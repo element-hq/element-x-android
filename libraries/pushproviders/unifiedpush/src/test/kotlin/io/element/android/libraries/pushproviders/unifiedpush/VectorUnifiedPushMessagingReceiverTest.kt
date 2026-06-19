@@ -27,21 +27,19 @@ import io.element.android.libraries.pushproviders.unifiedpush.registration.Regis
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertThrows
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.unifiedpush.android.connector.FailedReason
 import org.unifiedpush.android.connector.data.PublicKeySet
 import org.unifiedpush.android.connector.data.PushEndpoint
 import org.unifiedpush.android.connector.data.PushMessage
 
-@RunWith(RobolectricTestRunner::class)
-class VectorUnifiedPushMessagingReceiverTest {
+class VectorUnifiedPushMessagingReceiverTest : RobolectricTest() {
     @Test
     fun `onReceive does the binding`() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().context
@@ -268,7 +266,6 @@ class VectorUnifiedPushMessagingReceiverTest {
         return VectorUnifiedPushMessagingReceiver().apply {
             this.pushParser = unifiedPushParser
             this.pushHandler = pushHandler
-            this.guardServiceStarter = NoopGuardServiceStarter()
             this.unifiedPushStore = unifiedPushStore
             this.unifiedPushGatewayResolver = unifiedPushGatewayResolver
             this.unifiedPushGatewayUrlResolver = unifiedPushGatewayUrlResolver

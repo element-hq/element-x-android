@@ -78,7 +78,7 @@ class MediaGalleryPresenter(
             .collectAsState(AsyncData.Uninitialized)
 
         LaunchedEffect(Unit) {
-            mediaGalleryDataSource.start()
+            mediaGalleryDataSource.start(this)
         }
 
         val permissions by room.permissionsAsState(MediaPermissions.DEFAULT) { perms ->
@@ -94,7 +94,9 @@ class MediaGalleryPresenter(
                     mode = event.mode
                 }
                 is MediaGalleryEvent.LoadMore -> coroutineScope.launch {
-                    mediaGalleryDataSource.loadMore(event.direction)
+                    if (mediaGalleryDataSource.isReady) {
+                        mediaGalleryDataSource.loadMore(event.direction)
+                    }
                 }
                 is MediaGalleryEvent.Delete -> coroutineScope.launch {
                     mediaGalleryDataSource.deleteItem(event.eventId)
@@ -127,6 +129,7 @@ class MediaGalleryPresenter(
                 }
                 is MediaGalleryEvent.OpenInfo -> coroutineScope.launch {
                     mediaBottomSheetState = MediaBottomSheetState.Details(
+                        fromGallery = true,
                         eventId = event.mediaItem.eventId(),
                         canDelete = when (event.mediaItem.mediaInfo().senderId) {
                             null -> false

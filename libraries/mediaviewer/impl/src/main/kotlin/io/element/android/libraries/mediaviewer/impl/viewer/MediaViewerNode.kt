@@ -13,6 +13,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -118,6 +119,7 @@ class MediaViewerNode(
         navigator = this,
         dataSource = MediaViewerDataSource(
             mode = inputs.mode,
+            coroutineScope = lifecycleScope,
             dispatcher = coroutineDispatchers.computation,
             galleryDataSource = mediaGallerySource,
             mediaLoader = mediaLoader,

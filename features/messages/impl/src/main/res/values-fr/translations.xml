@@ -16,6 +16,10 @@
   <string name="emoji_picker_category_places">"Voyages &amp; lieux"</string>
   <string name="emoji_picker_category_recent">"Emojis récents"</string>
   <string name="emoji_picker_category_symbols">"Symboles"</string>
+  <plurals name="screen_image_edition_a11y_rotation_state">
+    <item quantity="one">"%1$d degré"</item>
+    <item quantity="other">"%1$d degrés"</item>
+  </plurals>
   <string name="screen_media_upload_preview_caption_warning">"Les légendes peuvent ne pas être visibles pour les utilisateurs d’anciennes applications."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Cliquez pour modifier la qualité d’envoi de la vidéo"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Le fichier n’a pas pu être envoyé."</string>

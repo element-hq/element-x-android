@@ -23,7 +23,7 @@ Vyberte si niečo zapamätateľné. Ak tento kód PIN zabudnete, budete z aplik�
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Zadajte prosím ten istý PIN dvakrát"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN kódy sa nezhodujú"</string>
   <string name="screen_app_lock_signout_alert_message">"Ak chcete pokračovať, musíte sa znovu prihlásiť a vytvoriť nový PIN kód."</string>
-  <string name="screen_app_lock_signout_alert_title">"Prebieha odhlasovanie"</string>
+  <string name="screen_app_lock_signout_alert_title">"Toto zariadenie sa odstraňuje"</string>
   <plurals name="screen_app_lock_subtitle">
     <item quantity="one">"Máte %1$d pokus na odomknutie"</item>
     <item quantity="few">"Máte %1$d pokusy na odomknutie"</item>
@@ -36,5 +36,5 @@ Vyberte si niečo zapamätateľné. Ak tento kód PIN zabudnete, budete z aplik�
   </plurals>
   <string name="screen_app_lock_use_biometric_android">"Použiť biometrické údaje"</string>
   <string name="screen_app_lock_use_pin_android">"Použiť PIN"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Prebieha odhlasovanie…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Odoberanie zariadenia…"</string>
 </resources>

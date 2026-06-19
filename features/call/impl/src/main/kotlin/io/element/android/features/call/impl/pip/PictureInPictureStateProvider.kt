@@ -11,7 +11,7 @@ package io.element.android.features.call.impl.pip
 fun aPictureInPictureState(
     supportPip: Boolean = false,
     isInPictureInPicture: Boolean = false,
-    eventSink: (PictureInPictureEvents) -> Unit = {},
+    eventSink: (PictureInPictureEvent) -> Unit = {},
 ): PictureInPictureState {
     return PictureInPictureState(
         supportPip = supportPip,

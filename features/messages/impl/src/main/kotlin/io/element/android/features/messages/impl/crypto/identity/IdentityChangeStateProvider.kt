@@ -11,6 +11,7 @@ package io.element.android.features.messages.impl.crypto.identity
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.ui.room.IdentityRoomMember
@@ -32,7 +33,7 @@ class IdentityChangeStateProvider : PreviewParameterProvider<IdentityChangeState
             anIdentityChangeState(
                 roomMemberIdentityStateChanges = listOf(
                     aRoomMemberIdentityStateChange(
-                        identityRoomMember = anIdentityRoomMember(displayNameOrDefault = "Alice"),
+                        identityRoomMember = anIdentityRoomMember(displayNameOrDefault = USER_NAME_ALICE),
                         identityState = IdentityState.VerificationViolation,
                     ),
                 ),

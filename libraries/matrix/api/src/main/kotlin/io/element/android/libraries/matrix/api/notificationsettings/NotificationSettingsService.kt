@@ -21,7 +21,7 @@ interface NotificationSettingsService {
     val notificationSettingsChangeFlow: SharedFlow<Unit>
     suspend fun getRoomNotificationSettings(roomId: RoomId, isEncrypted: Boolean, isOneToOne: Boolean): Result<RoomNotificationSettings>
     suspend fun getDefaultRoomNotificationMode(isEncrypted: Boolean, isOneToOne: Boolean): Result<RoomNotificationMode>
-    suspend fun setDefaultRoomNotificationMode(isEncrypted: Boolean, mode: RoomNotificationMode, isOneToOne: Boolean): Result<Unit>
+    suspend fun setDefaultRoomNotificationMode(isEncrypted: Boolean, mode: RoomNotificationMode, isDM: Boolean): Result<Unit>
     suspend fun setRoomNotificationMode(roomId: RoomId, mode: RoomNotificationMode): Result<Unit>
     suspend fun restoreDefaultRoomNotificationMode(roomId: RoomId): Result<Unit>
     suspend fun muteRoom(roomId: RoomId): Result<Unit>

@@ -22,7 +22,7 @@ interface NotificationConversationService {
     suspend fun onSendMessage(
         sessionId: SessionId,
         roomId: RoomId,
-        roomName: String,
+        roomName: String?,
         roomIsDirect: Boolean,
         roomAvatarUrl: String?,
     )

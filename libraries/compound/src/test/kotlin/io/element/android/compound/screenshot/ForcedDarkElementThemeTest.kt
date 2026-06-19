@@ -18,20 +18,18 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.takahirom.roborazzi.captureRoboImage
 import io.element.android.compound.colors.SemanticColorsLightDark
 import io.element.android.compound.screenshot.utils.screenshotFile
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.theme.ForcedDarkElementTheme
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 
-@RunWith(AndroidJUnit4::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-class ForcedDarkElementThemeTest {
+class ForcedDarkElementThemeTest : RobolectricTest() {
     @Test
     @Config(sdk = [35], qualifiers = "xxhdpi")
     fun screenshots() {

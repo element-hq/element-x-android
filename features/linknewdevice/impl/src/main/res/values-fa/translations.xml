@@ -15,6 +15,8 @@
   <string name="screen_qr_code_login_connection_note_secure_state_list_header">"اکنون چه؟"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"ورود دستی در صورت کار نکردنش"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"اتّصال ناامن"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"از شما خواسته خواهد شد که دو رقم نشان داده روی این افزاره را وارد کنید."</string>
+  <string name="screen_qr_code_login_device_code_title">"شمارهٔ زیر را روی افزارهٔ دیگرتان وارد کنید"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"ورود روی افزارهٔ دیگر لغو شد."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"درخواست ورد لغو شد"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"ورود به دست افزارهٔ دیگر رد شد."</string>
@@ -33,4 +35,5 @@
   <string name="screen_qr_code_login_no_camera_permission_state_description">"برای ادامه باید اجازهٔ استفادهٔ %1$s از دوربین افزاره‌تان را بدهید."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"اجازهٔ دسترسی دوربین برای پویش کد پاس"</string>
   <string name="screen_qr_code_login_unknown_error_description">"خطایی غیرمنتظره رخ داد. لطفاً دوباره تلاش کنید."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"منتظر افزارهٔ دیگرتان"</string>
 </resources>

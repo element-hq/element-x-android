@@ -200,7 +200,6 @@
   <string name="common_current_user_left_room">"Saiu da sala"</string>
   <string name="common_current_user_left_space">"Saiu do espaço"</string>
   <string name="common_current_user_rejected_invite">"Convite recusado"</string>
-  <string name="common_dark">"Escuro"</string>
   <string name="common_decryption_error">"Erro de descriptografia"</string>
   <string name="common_description">"Descrição"</string>
   <string name="common_developer_options">"Opções de desenvolvedor"</string>
@@ -238,7 +237,6 @@ Motivo:​ %1$s."</string>
   <string name="common_invite_unknown_profile">"Este ID Matrix não foi encontrado, então o convite pode não ser recebido"</string>
   <string name="common_leaving_room">"Saindo da sala"</string>
   <string name="common_leaving_space">"Saindo do espaço"</string>
-  <string name="common_light">"Claro"</string>
   <string name="common_line_copied_to_clipboard">"Linha copiada para a área de transferência"</string>
   <string name="common_link_copied_to_clipboard">"Link copiado para área de transferência"</string>
   <string name="common_link_new_device">"Vincular novo dispositivo"</string>
@@ -300,7 +298,6 @@ Motivo:​ %1$s."</string>
     <item quantity="other">"%1$d respostas"</item>
   </plurals>
   <string name="common_replying_to">"Respondendo a %1$s"</string>
-  <string name="common_report_a_bug">"Denunciar um bug"</string>
   <string name="common_report_a_problem">"Relatar um problema"</string>
   <string name="common_report_submitted">"Relatório enviado"</string>
   <string name="common_rich_text_editor">"Editor de rich text"</string>
@@ -351,7 +348,6 @@ Motivo:​ %1$s."</string>
   <string name="common_suggested">"Sugerido"</string>
   <string name="common_suggestions">"Sugestões"</string>
   <string name="common_syncing">"Sincronizando"</string>
-  <string name="common_system">"Sistema"</string>
   <string name="common_text">"Texto"</string>
   <string name="common_third_party_notices">"Comunicados de terceiros"</string>
   <string name="common_thread">"Tópico"</string>

@@ -24,7 +24,7 @@
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"任何人"</string>
   <string name="screen_security_and_privacy_room_access_footer">"选择哪些无需邀请即可加入此房间的空间成员。%1$s"</string>
   <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"管理空间"</string>
-  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"仅限受邀者加入。"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"仅限受邀人员加入。"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"仅限受邀者"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"访问权限"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_multiple_parents_description">"任何位于已授权空间的成员均可加入。"</string>

@@ -51,7 +51,7 @@ fun LockScreenSettingsView(
                     },
                     style = ListItemStyle.Destructive,
                     onClick = {
-                        state.eventSink(LockScreenSettingsEvents.OnRemovePin)
+                        state.eventSink(LockScreenSettingsEvent.OnRemovePin)
                     }
                 )
             }
@@ -61,7 +61,7 @@ fun LockScreenSettingsView(
                     title = stringResource(id = R.string.screen_app_lock_settings_enable_biometric_unlock),
                     isChecked = state.isBiometricEnabled,
                     onCheckedChange = {
-                        state.eventSink(LockScreenSettingsEvents.ToggleBiometricAllowed)
+                        state.eventSink(LockScreenSettingsEvent.ToggleBiometricAllowed)
                     }
                 )
             }
@@ -72,10 +72,10 @@ fun LockScreenSettingsView(
             title = stringResource(id = R.string.screen_app_lock_settings_remove_pin_alert_title),
             content = stringResource(id = R.string.screen_app_lock_settings_remove_pin_alert_message),
             onSubmitClick = {
-                state.eventSink(LockScreenSettingsEvents.ConfirmRemovePin)
+                state.eventSink(LockScreenSettingsEvent.ConfirmRemovePin)
             },
             onDismiss = {
-                state.eventSink(LockScreenSettingsEvents.CancelRemovePin)
+                state.eventSink(LockScreenSettingsEvent.CancelRemovePin)
             }
         )
     }
