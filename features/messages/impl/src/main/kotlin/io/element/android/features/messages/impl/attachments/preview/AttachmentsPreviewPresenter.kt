@@ -364,6 +364,7 @@ class AttachmentsPreviewPresenter(
                 }
                 is AttachmentsPreviewEvent.SetCurrentCarouselIndex -> {
                     currentIndex = event.index
+                    appliedImageEdits = AttachmentImageEdits()
                 }
             }
         }
