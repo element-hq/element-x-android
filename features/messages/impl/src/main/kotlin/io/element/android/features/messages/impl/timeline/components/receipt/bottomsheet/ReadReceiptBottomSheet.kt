@@ -46,7 +46,7 @@ internal fun ReadReceiptBottomSheet(
     val isVisible = state.selectedEvent != null
 
     val sheetState = rememberBottomSheetState(
-        initialValue = SheetValue.Expanded,
+        initialValue = SheetValue.Hidden,
     )
     val coroutineScope = rememberCoroutineScope()
     if (isVisible) {

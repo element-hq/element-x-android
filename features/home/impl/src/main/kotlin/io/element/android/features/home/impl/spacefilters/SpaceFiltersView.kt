@@ -58,7 +58,7 @@ fun SpaceFiltersView(
 ) {
     val isSelecting by rememberUpdatedState(state is SpaceFiltersState.Selecting)
     val sheetState = rememberBottomSheetState(
-        initialValue = SheetValue.Expanded,
+        initialValue = SheetValue.Hidden,
         enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
         confirmValueChange = { sheetValueTarget ->
             // This ensures the hide animation is not cancelled

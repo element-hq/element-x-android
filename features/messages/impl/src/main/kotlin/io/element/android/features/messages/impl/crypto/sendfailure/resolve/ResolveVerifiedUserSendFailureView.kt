@@ -45,7 +45,7 @@ fun ResolveVerifiedUserSendFailureView(
     modifier: Modifier = Modifier,
 ) {
     val sheetState = rememberBottomSheetState(
-        initialValue = SheetValue.Expanded,
+        initialValue = SheetValue.Hidden,
         enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
     )
     var showSheet by remember { mutableStateOf(false) }

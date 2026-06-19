@@ -59,7 +59,7 @@ fun ModalBottomSheet(
     scrollable: Boolean,
     modifier: Modifier = Modifier,
     sheetState: SheetState = rememberBottomSheetState(
-        initialValue = SheetValue.Expanded,
+        initialValue = SheetValue.Hidden,
     ),
     shape: Shape = BottomSheetDefaults.ExpandedShape,
     containerColor: Color = MaterialTheme.colorScheme.surface,

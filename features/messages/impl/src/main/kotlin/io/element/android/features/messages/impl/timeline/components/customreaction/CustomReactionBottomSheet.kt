@@ -32,7 +32,7 @@ fun CustomReactionBottomSheet(
     modifier: Modifier = Modifier,
 ) {
     val sheetState = rememberBottomSheetState(
-        initialValue = SheetValue.Expanded,
+        initialValue = SheetValue.Hidden,
     )
     val coroutineScope = rememberCoroutineScope()
     val target = state.target as? CustomReactionState.Target.Success

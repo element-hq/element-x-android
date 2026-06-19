@@ -41,7 +41,7 @@ fun SimpleModalBottomSheet(
         onDismissRequest = onDismiss,
         modifier = modifier,
         sheetState = rememberBottomSheetState(
-            initialValue = SheetValue.Expanded,
+            initialValue = SheetValue.Hidden,
             enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
         ),
         scrollable = false,

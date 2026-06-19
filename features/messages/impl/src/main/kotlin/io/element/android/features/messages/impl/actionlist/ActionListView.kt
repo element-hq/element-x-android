@@ -111,7 +111,7 @@ fun ActionListView(
     modifier: Modifier = Modifier,
 ) {
     val sheetState = rememberBottomSheetState(
-        initialValue = SheetValue.Expanded,
+        initialValue = SheetValue.Hidden,
     )
     val coroutineScope = rememberCoroutineScope()
     val targetItem = (state.target as? ActionListState.Target.Success)?.event

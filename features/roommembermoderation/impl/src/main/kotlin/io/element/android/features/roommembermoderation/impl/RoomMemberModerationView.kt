@@ -223,7 +223,7 @@ private fun RoomMemberActionsBottomSheet(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val bottomSheetState = rememberBottomSheetState(
-        initialValue = SheetValue.Expanded,
+        initialValue = SheetValue.Hidden,
         enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
     )
     ModalBottomSheet(
