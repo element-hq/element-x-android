@@ -1,3 +1,33 @@
+Changes in Element X v26.06.4
+=============================
+
+<!-- Release notes generated using configuration in .github/release.yml at v26.06.4 -->
+
+## What's Changed
+### ✨ Features
+* Add well-known parsing and extension seam for custom recovery passphrase by @jennaharris7 in https://github.com/element-hq/element-x-android/pull/6944
+### 🙌 Improvements
+* Add ability to forward a message to several rooms. by @bmarty in https://github.com/element-hq/element-x-android/pull/7013
+### 🐛 Bugfixes
+* `screen_custom_recovery_key_input_notice` is now a plurals. by @bmarty in https://github.com/element-hq/element-x-android/pull/7045
+* Replace `ContentResolver.delete` usage with a backwards-compatible version by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7053
+### Dependency upgrades
+* Update kotlin to v0.5.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7036
+* Update gradle/actions action to v6.1.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7037
+* Update jna monorepo to v5.19.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7026
+* Update coil to v3.5.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7043
+* Update metro to v1.2.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7048
+* Update dependency io.sentry:sentry-android to v8.43.2 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7047
+* Update dependencyAnalysis to v3.15.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7050
+* Compile with sdk37 and target API 37 by @bmarty in https://github.com/element-hq/element-x-android/pull/7041
+### Others
+* call: Remove deprecated web<->EX api calls, use the new ones by @BillCarsonFr in https://github.com/element-hq/element-x-android/pull/6628
+* Fix deprecation warning by @bmarty in https://github.com/element-hq/element-x-android/pull/7042
+* Let Divider use our theme color. by @bmarty in https://github.com/element-hq/element-x-android/pull/7054
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v26.06.3...v26.06.4
+
 Changes in Element X v26.06.3
 =============================
 
