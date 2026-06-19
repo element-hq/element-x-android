@@ -78,17 +78,6 @@ val SemanticColors.pinnedMessageBannerBorder
 val SemanticColors.floatingDateBadgeBackground
     get() = if (isLight) bgCanvasDefault else bgSubtlePrimary
 
-// The OLED/Black theme forces bgCanvasDefault to pure black (see ElementTheme.kt) but leaves the
-// divider color at its standard-dark value, which is almost invisible against pure black. Lighten
-// the section-separator divider only in that case; light and standard-dark themes are unchanged.
-@OptIn(CoreColorToken::class)
-val SemanticColors.listSectionDivider: Color
-    get() = if (!isLight && bgCanvasDefault == Color.Black) {
-        DarkColorTokens.colorAlphaGray700
-    } else {
-        if (isLight) LightColorTokens.colorAlphaGray400 else DarkColorTokens.colorAlphaGray400
-    }
-
 @PreviewsDayNight
 @Composable
 internal fun ColorAliasesPreview() = ElementPreview {
