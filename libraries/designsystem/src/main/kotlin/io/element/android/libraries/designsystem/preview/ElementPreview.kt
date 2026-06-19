@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.movableContentOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.res.ResourcesCompat
@@ -44,19 +46,20 @@ fun ElementPreview(
         }
     ) {
         ElementTheme(theme = theme) {
+            val movableContent = remember { movableContentOf { content() } }
             if (showBackground) {
                 // If we have a proper contentColor applied we need a Surface instead of a Box
                 Surface(
                     modifier = if (fillMaxSize) Modifier.fillMaxSize() else Modifier,
-                    content = content,
+                    content = movableContent,
                 )
             } else {
                 if (fillMaxSize) {
                     Box(modifier = Modifier.fillMaxSize()) {
-                        content()
+                        movableContent()
                     }
                 } else {
-                    content()
+                    movableContent()
                 }
             }
         }
