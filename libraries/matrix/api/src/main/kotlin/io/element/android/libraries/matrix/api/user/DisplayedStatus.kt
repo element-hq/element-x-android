@@ -8,8 +8,10 @@
 package io.element.android.libraries.matrix.api.user
 
 import android.os.Parcelable
+import androidx.compose.runtime.Immutable
 import kotlinx.parcelize.Parcelize
 
+@Immutable
 sealed interface DisplayedStatus : Parcelable {
     /** Status set manually by the user via m.status. */
     @Parcelize

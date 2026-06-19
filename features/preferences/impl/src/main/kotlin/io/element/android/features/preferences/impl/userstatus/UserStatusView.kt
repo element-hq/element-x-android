@@ -61,7 +61,7 @@ import io.element.android.libraries.matrix.api.user.UserStatus
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
-fun UserStatusRow(
+fun UserStatusView(
     state: UserStatusState,
     modifier: Modifier = Modifier,
 ) {
@@ -85,8 +85,8 @@ fun UserStatusRow(
                 UserStatusPickerBottomSheet(
                     currentRawStatus = state.rawStatus,
                     onDismiss = { state.eventSink(UserStatusEvent.DismissPicker) },
-                    onSelectPredefined = { status -> state.eventSink(UserStatusEvent.SetStatus(status)) },
-                    onSelectCustom = { state.eventSink(UserStatusEvent.OpenCustomInput) },
+                    onSelectPredefinedStatus = { status -> state.eventSink(UserStatusEvent.SetStatus(status)) },
+                    onSelectCustomStatus = { state.eventSink(UserStatusEvent.OpenCustomInput) },
                 )
             }
         }
@@ -95,7 +95,6 @@ fun UserStatusRow(
                 emoji = pickerState.emoji,
                 textFieldState = pickerState.textFieldState,
                 rawStatus = state.rawStatus,
-                onEmojiChange = { state.eventSink(UserStatusEvent.UpdateCustomEmoji(it)) },
                 onConfirm = {
                     state.eventSink(
                         UserStatusEvent.SetStatus(UserStatus(pickerState.emoji, pickerState.textFieldState.text.toString()))
@@ -159,8 +158,8 @@ private fun CurrentStatusRow(
 private fun UserStatusPickerBottomSheet(
     currentRawStatus: UserStatus?,
     onDismiss: () -> Unit,
-    onSelectPredefined: (UserStatus) -> Unit,
-    onSelectCustom: () -> Unit,
+    onSelectPredefinedStatus: (UserStatus) -> Unit,
+    onSelectCustomStatus: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -191,7 +190,7 @@ private fun UserStatusPickerBottomSheet(
                 },
                 onClick = {
                     sheetState.hide(coroutineScope) {
-                        onSelectPredefined(predefinedUserStatus)
+                        onSelectPredefinedStatus(predefinedUserStatus)
                     }
                 },
             )
@@ -203,7 +202,7 @@ private fun UserStatusPickerBottomSheet(
             leadingContent = ListItemContent.Text(text = "✏️"),
             onClick = {
                 sheetState.hide(coroutineScope) {
-                    onSelectCustom()
+                    onSelectCustomStatus()
                 }
             },
         )
@@ -217,7 +216,6 @@ private fun CustomStatusInputRow(
     emoji: String,
     textFieldState: TextFieldState,
     rawStatus: UserStatus?,
-    onEmojiChange: (String) -> Unit,
     onConfirm: () -> Unit,
     onCancel: () -> Unit,
     modifier: Modifier = Modifier,
@@ -299,6 +297,6 @@ private fun CustomStatusInputRow(
 
 @PreviewsDayNight
 @Composable
-internal fun UserStatusRowPreview(@PreviewParameter(UserStatusStateProvider::class) state: UserStatusState) = ElementPreview {
-    UserStatusRow(state = state)
+internal fun UserStatusViewPreview(@PreviewParameter(UserStatusStateProvider::class) state: UserStatusState) = ElementPreview {
+    UserStatusView(state = state)
 }
