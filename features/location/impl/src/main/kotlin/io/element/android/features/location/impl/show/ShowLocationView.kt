@@ -93,7 +93,7 @@ fun ShowLocationView(
 
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberBottomSheetState(
-            initialValue = SheetValue.Hidden,
+            initialValue = SheetValue.Expanded,
         )
     )
     LaunchedEffect(state.isSheetDraggable) {

@@ -106,7 +106,7 @@ fun ShareLocationView(
 
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberBottomSheetState(
-            initialValue = SheetValue.Hidden,
+            initialValue = SheetValue.Expanded,
         )
     )
     val cameraState = rememberCameraState(firstPosition = MapDefaults.defaultCameraPosition)
