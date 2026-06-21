@@ -10,6 +10,7 @@ package io.element.android.libraries.matrix.impl.room.threads
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.threads.ThreadListDiff
 import io.element.android.libraries.matrix.api.room.threads.ThreadListItem
 import io.element.android.libraries.matrix.api.room.threads.ThreadListItemEvent
 import io.element.android.libraries.matrix.api.room.threads.ThreadListPaginationStatus
@@ -22,6 +23,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import org.matrix.rustcomponents.sdk.ThreadListEntriesListener
@@ -45,6 +47,18 @@ class RustThreadsListService(
         }
 
         return items
+    }
+
+    override fun subscribeToItemDiffs(): Flow<List<ThreadListDiff>> {
+        return mxCallbackFlow {
+            inner.subscribeToItemsUpdates(object : ThreadListEntriesListener {
+                override fun onUpdate(diff: List<ThreadListUpdate>) {
+                    trySend(diff)
+                }
+            })
+        }.map { diffs ->
+            diffs.map { it.toApiDiff(contentMapper) }
+        }
     }
 
     private fun doSubscribeToItemUpdates(): Job {
@@ -133,6 +147,40 @@ private fun MutableList<ThreadListItem>.apply(
                 subList(diffItem.length.toInt(), size).clear()
             }
         }
+    }
+}
+
+private fun ThreadListUpdate.toApiDiff(contentMapper: TimelineEventContentMapper): ThreadListDiff {
+    return when (this) {
+        is ThreadListUpdate.Append -> ThreadListDiff.Append(
+            values = values.map { it.map(contentMapper) }
+        )
+        is ThreadListUpdate.Clear -> ThreadListDiff.Clear
+        is ThreadListUpdate.Insert -> ThreadListDiff.Insert(
+            index = index.toInt(),
+            value = value.map(contentMapper)
+        )
+        is ThreadListUpdate.PushBack -> ThreadListDiff.PushBack(
+            value = value.map(contentMapper)
+        )
+        is ThreadListUpdate.PushFront -> ThreadListDiff.PushFront(
+            value = value.map(contentMapper)
+        )
+        is ThreadListUpdate.PopBack -> ThreadListDiff.PopBack
+        is ThreadListUpdate.PopFront -> ThreadListDiff.PopFront
+        is ThreadListUpdate.Remove -> ThreadListDiff.Remove(
+            index = index.toInt()
+        )
+        is ThreadListUpdate.Reset -> ThreadListDiff.Reset(
+            values = values.map { it.map(contentMapper) }
+        )
+        is ThreadListUpdate.Set -> ThreadListDiff.Set(
+            index = index.toInt(),
+            value = value.map(contentMapper)
+        )
+        is ThreadListUpdate.Truncate -> ThreadListDiff.Truncate(
+            length = length.toInt()
+        )
     }
 }
 

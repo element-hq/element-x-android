@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ThreadsListService {
     fun subscribeToItemUpdates(): Flow<List<ThreadListItem>>
+    fun subscribeToItemDiffs(): Flow<List<ThreadListDiff>>
     fun subscribeToPaginationUpdates(): Flow<ThreadListPaginationStatus>
     suspend fun paginate(): Result<Unit>
     suspend fun reset(): Result<Unit>
