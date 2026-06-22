@@ -95,6 +95,7 @@
   <string name="screen_notification_settings_sound_set_sound_error_dismiss_a11y">"忽略提示音错误"</string>
   <string name="screen_notification_settings_sound_set_sound_error_title">"设置提示音时出现问题"</string>
   <string name="screen_notification_settings_sound_silent">"静默"</string>
+  <string name="screen_notification_settings_sound_system_default">"系统默认"</string>
   <string name="screen_notification_settings_system_notifications_action_required">"要接收通知，请更改 %1$s。"</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"系统设置"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"系统通知已关闭"</string>

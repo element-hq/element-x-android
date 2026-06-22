@@ -96,6 +96,7 @@
   <string name="screen_notification_settings_sound_set_sound_error_dismiss_a11y">"알림음 오류 해제"</string>
   <string name="screen_notification_settings_sound_set_sound_error_title">"알림 소리 설정 문제"</string>
   <string name="screen_notification_settings_sound_silent">"무음"</string>
+  <string name="screen_notification_settings_sound_system_default">"시스템 기본값"</string>
   <string name="screen_notification_settings_system_notifications_action_required">"알림을 받으려면 %1$s 을 변경해 주세요."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"시스템 설정"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"시스템 알림이 꺼져 있습니다."</string>

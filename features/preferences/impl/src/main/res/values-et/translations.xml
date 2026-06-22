@@ -96,6 +96,7 @@ Kui sa jätkad muutmist, siis võivad muutuda ka need peidetud eelistused."</str
   <string name="screen_notification_settings_sound_set_sound_error_dismiss_a11y">"Sulge helinavea viga"</string>
   <string name="screen_notification_settings_sound_set_sound_error_title">"Viga helina seadistamisel"</string>
   <string name="screen_notification_settings_sound_silent">"Vaikne"</string>
+  <string name="screen_notification_settings_sound_system_default">"Süsteemi vaikimisi väärtus"</string>
   <string name="screen_notification_settings_system_notifications_action_required">"Teavituste saamiseks palun muuda oma %1$s."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"süsteemi seadistusi"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Süsteemi teavitused on välja lülitatud"</string>

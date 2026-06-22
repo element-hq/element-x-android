@@ -96,6 +96,7 @@ If you proceed, some of your settings may change."</string>
   <string name="screen_notification_settings_sound_set_sound_error_dismiss_a11y">"Dismiss alert sound error"</string>
   <string name="screen_notification_settings_sound_set_sound_error_title">"Problem setting alert sound"</string>
   <string name="screen_notification_settings_sound_silent">"Silent"</string>
+  <string name="screen_notification_settings_sound_system_default">"System Default"</string>
   <string name="screen_notification_settings_system_notifications_action_required">"To receive notifications, please change your %1$s."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"system settings"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"System notifications turned off"</string>

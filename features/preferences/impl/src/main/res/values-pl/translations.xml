@@ -97,6 +97,7 @@ Niektóre ustawienia mogą ulec zmianie, jeśli kontynuujesz."</string>
   <string name="screen_notification_settings_sound_set_sound_error_dismiss_a11y">"Pomiń dźwięk błędu"</string>
   <string name="screen_notification_settings_sound_set_sound_error_title">"Nie udało się ustawić dźwięku powiadomień"</string>
   <string name="screen_notification_settings_sound_silent">"Cichy"</string>
+  <string name="screen_notification_settings_sound_system_default">"Ustawienie domyślne"</string>
   <string name="screen_notification_settings_system_notifications_action_required">"Aby otrzymywać powiadomienia, zmień swoje%1$s."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"ustawienia systemowe"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Powiadomienia systemowe wyłączone"</string>

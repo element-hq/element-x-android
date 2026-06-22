@@ -97,6 +97,7 @@
   <string name="screen_notification_settings_sound_set_sound_error_dismiss_a11y">"Отклонить ошибку о звуке"</string>
   <string name="screen_notification_settings_sound_set_sound_error_title">"Проблема с настройкой звукового оповещения"</string>
   <string name="screen_notification_settings_sound_silent">"Без звука"</string>
+  <string name="screen_notification_settings_sound_system_default">"Как в системе"</string>
   <string name="screen_notification_settings_system_notifications_action_required">"Чтобы получать уведомления, измените %1$s."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"системные настройки"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Системные уведомления выключены"</string>

@@ -96,6 +96,7 @@ Si vous continuez, il est possible que certains de vos paramètres soient modifi
   <string name="screen_notification_settings_sound_set_sound_error_dismiss_a11y">"Ignorer l’erreur des sons d’alerte"</string>
   <string name="screen_notification_settings_sound_set_sound_error_title">"Problème de configuration du son d’alerte"</string>
   <string name="screen_notification_settings_sound_silent">"Silencieux"</string>
+  <string name="screen_notification_settings_sound_system_default">"Paramètres par défaut du système"</string>
   <string name="screen_notification_settings_system_notifications_action_required">"Pour recevoir des notifications, veuillez modifier votre %1$s."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"paramètres du système"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Les notifications du système sont désactivées"</string>
