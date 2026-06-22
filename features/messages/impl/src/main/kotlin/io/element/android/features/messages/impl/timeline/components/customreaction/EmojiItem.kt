@@ -59,7 +59,9 @@ import io.element.android.features.messages.impl.timeline.components.customreact
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 
 @Composable
 fun EmojiItem(
@@ -71,7 +73,7 @@ fun EmojiItem(
     onLongPress: ((Emoji) -> Unit)? = null,
     skinPickerEmoji: Emoji? = null,
     onDismissSkinPicker: (() -> Unit)? = null,
-    selectedSkinUnicodes: Set<String> = emptySet(),
+    selectedSkinUnicodes: ImmutableSet<String> = persistentSetOf(),
     hasSelectedSkin: Boolean = false,
 ) {
     val backgroundColor = when {

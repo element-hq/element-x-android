@@ -32,7 +32,9 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toSp
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 
 val SkinToneSlotSize = 48.dp
 val SkinToneSlotSpacing = 2.dp
@@ -44,7 +46,7 @@ fun SkinTonePicker(
     onSelect: (Emoji) -> Unit,
     modifier: Modifier = Modifier,
     hoveredIndex: Int = -1,
-    selectedUnicodes: Set<String> = emptySet(),
+    selectedUnicodes: ImmutableSet<String> = persistentSetOf(),
 ) {
     val skins = emoji.skins.orEmpty()
     val emojiSize = 32.dp.toSp()
