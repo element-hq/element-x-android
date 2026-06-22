@@ -80,7 +80,7 @@ jobs:
           path: |
             app/build/outputs/apk/gplay/debug/*-universal-debug.apk
             app/build/outputs/apk/fdroid/debug/*-universal-debug.apk
-      - uses: rnkdsh/action-upload-diawi@4e1421305be7cfc510d05f47850262eeaf345108 # v1.5.12
+      - uses: rnkdsh/action-upload-diawi@76778fcd1f9f589efaaa62f63d5f03430bbb1306 # v1.5.13
         id: diawi
         # Do not fail the whole build if Diawi upload fails
         continue-on-error: true
