@@ -96,7 +96,6 @@ Jos jatkat, jotkin asetukset saattavat muuttua."</string>
   <string name="screen_notification_settings_sound_set_sound_error_dismiss_a11y">"Hylkää hälytysäänen virhe"</string>
   <string name="screen_notification_settings_sound_set_sound_error_title">"Ongelma ilmoitusäänen asettamisessa"</string>
   <string name="screen_notification_settings_sound_silent">"Hiljainen"</string>
-  <string name="screen_notification_settings_sound_system_default">"Järjestelmän oletus"</string>
   <string name="screen_notification_settings_system_notifications_action_required">"Jos haluat saada ilmoituksia, vaihda %1$s."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"järjestelmäsi asetuksia"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Järjestelmän ilmoitukset on poissa päältä"</string>
