@@ -11,6 +11,9 @@
     <!-- To be able to install APK from the application -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
+    <!-- Access local network for connecting to local homeservers -->
+    <uses-permission android:name="android.permission.ACCESS_LOCAL_NETWORK" />
+
     <application
         android:name=".ElementXApplication"
         android:allowBackup="false"

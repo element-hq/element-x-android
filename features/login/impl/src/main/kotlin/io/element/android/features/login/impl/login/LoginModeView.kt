@@ -59,6 +59,11 @@ fun LoginModeView(
                                 onSubmit = onClearError,
                             )
                         }
+                        ChangeServerError.LocalNetworkPermissionDenied ->
+                            ErrorDialog(
+                                content = stringResource(R.string.screen_change_server_error_local_network_permission_denied),
+                                onSubmit = onClearError,
+                            )
                         is ChangeServerError.SlidingSyncAlert -> {
                             SlidingSyncNotSupportedDialog(
                                 onLearnMoreClick = {

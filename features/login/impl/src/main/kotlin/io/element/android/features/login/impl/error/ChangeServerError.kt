@@ -29,6 +29,7 @@ sealed class ChangeServerError : Exception() {
     data object SlidingSyncAlert : ChangeServerError()
     data object InvalidServer : ChangeServerError()
     data object UnsupportedServer : ChangeServerError()
+    data object LocalNetworkPermissionDenied : ChangeServerError()
 
     companion object {
         fun from(error: Throwable): ChangeServerError = when (error) {

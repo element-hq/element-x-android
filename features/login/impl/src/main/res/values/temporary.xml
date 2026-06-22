@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2025 Element Creations Ltd.
+  ~
+  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+  ~ Please see LICENSE files in the repository root for full details.
+  -->
+<resources>
+    <string name="screen_change_server_local_network_permission_title">"Allow access to local network?"</string>
+    <string name="screen_change_server_local_network_permission_message">"The homeserver you\'re connecting to is on a local network. The app needs permission to access it."</string>
+    <string name="screen_change_server_error_local_network_permission_denied">"Local network access is required to connect to this server. Please grant the permission and try again."</string>
+</resources>

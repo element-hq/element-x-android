@@ -46,5 +46,6 @@ fun aChangeServerState(
     changeServerAction: AsyncData<Unit> = AsyncData.Uninitialized,
 ) = ChangeServerState(
     changeServerAction = changeServerAction,
+    localNetworkPermissionState = null,
     eventSink = {}
 )

@@ -27,6 +27,7 @@ import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.LocalBuildMeta
+import io.element.android.libraries.permissions.api.PermissionsView
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -96,6 +97,14 @@ fun ChangeServerView(
                         },
                     )
                 }
+                ChangeServerError.LocalNetworkPermissionDenied ->
+                    ErrorDialog(
+                        modifier = modifier,
+                        content = stringResource(R.string.screen_change_server_error_local_network_permission_denied),
+                        onSubmit = {
+                            eventSink.invoke(ChangeServerEvents.ClearError)
+                        }
+                    )
                 is ChangeServerError.UnauthorizedAccountProvider -> {
                     ErrorDialog(
                         modifier = modifier,
@@ -120,6 +129,14 @@ fun ChangeServerView(
             }
         }
         AsyncData.Uninitialized -> Unit
+    }
+
+    state.localNetworkPermissionState?.let { permissionState ->
+        PermissionsView(
+            state = permissionState,
+            title = stringResource(id = R.string.screen_change_server_local_network_permission_title),
+            content = stringResource(id = R.string.screen_change_server_local_network_permission_message),
+        )
     }
 }
 
