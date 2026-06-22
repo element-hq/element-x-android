@@ -194,7 +194,6 @@ fun EmojiItem(
                         interactionSource.emit(press)
                         if (tryAwaitRelease()) {
                             interactionSource.emit(PressInteraction.Release(press))
-                            onSelectEmoji(item)
                         } else {
                             interactionSource.emit(PressInteraction.Cancel(press))
                         }
