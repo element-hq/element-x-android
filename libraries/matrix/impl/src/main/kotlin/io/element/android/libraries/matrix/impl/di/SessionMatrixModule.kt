@@ -13,6 +13,7 @@ import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
+import io.element.android.libraries.matrix.api.HomeserverCapabilitiesProvider
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
@@ -89,5 +90,10 @@ object SessionMatrixModule {
     @Provides
     fun providesSpaceService(matrixClient: MatrixClient): SpaceService {
         return matrixClient.spaceService
+    }
+
+    @Provides
+    fun providesHomeserverCapabilitiesProvider(matrixClient: MatrixClient): HomeserverCapabilitiesProvider {
+        return matrixClient.homeserverCapabilities()
     }
 }

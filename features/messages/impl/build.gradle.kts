@@ -54,6 +54,7 @@ dependencies {
     implementation(projects.libraries.sessionStorage.api)
     implementation(projects.libraries.recentemojis.api)
     implementation(projects.libraries.roomselect.api)
+    implementation(projects.libraries.slashcommands.api)
     implementation(projects.libraries.audio.api)
     implementation(projects.libraries.voiceplayer.api)
     implementation(projects.libraries.voicerecorder.api)
@@ -108,4 +109,5 @@ dependencies {
     testImplementation(projects.features.poll.test)
     testImplementation(projects.libraries.eventformatter.test)
     testImplementation(projects.libraries.recentemojis.test)
+    testImplementation(projects.libraries.slashcommands.test)
 }

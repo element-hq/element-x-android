@@ -111,9 +111,9 @@ internal val LocalCompoundColors = staticCompositionLocalOf { compoundColorsLigh
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ElementTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    theme: Theme = if (isSystemInDarkTheme()) Theme.Dark else Theme.Light,
     applySystemBarsUpdate: Boolean = true,
-    lightStatusBar: Boolean = !darkTheme,
+    lightStatusBar: Boolean = !theme.isDark(),
     // true to enable MaterialYou
     dynamicColor: Boolean = false,
     useExpressiveMotion: Boolean = true,
@@ -124,8 +124,13 @@ fun ElementTheme(
     typography: Typography = compoundTypography,
     content: @Composable () -> Unit,
 ) {
+    val darkTheme = theme.isDark()
     val baseCompoundColor = when {
-        darkTheme -> compoundDark
+        darkTheme -> if (theme == Theme.Black) {
+            compoundDark.copy(bgCanvasDefault = Color.Black)
+        } else {
+            compoundDark
+        }
         else -> compoundLight
     }
 
@@ -134,7 +139,11 @@ fun ElementTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-        darkTheme -> materialColorsDark
+        darkTheme -> if (theme == Theme.Black) {
+            baseCompoundColor.toMaterialColorScheme()
+        } else {
+            materialColorsDark
+        }
         else -> materialColorsLight
     }
 
@@ -159,7 +168,7 @@ fun ElementTheme(
 
     if (applySystemBarsUpdate) {
         val activity = LocalActivity.current as? ComponentActivity
-        LaunchedEffect(statusBarColorScheme, darkTheme, lightStatusBar) {
+        LaunchedEffect(statusBarColorScheme, theme, lightStatusBar) {
             activity?.enableEdgeToEdge(
                 // For Status bar use the background color of the app
                 statusBarStyle = SystemBarStyle.auto(

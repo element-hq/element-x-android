@@ -28,4 +28,5 @@ sealed interface AdvancedSettingsEvents {
     data object ToggleSendReadReceipts : AdvancedSettingsEvents
     data object ToggleSendTypingNotifications : AdvancedSettingsEvents
     data object ToggleSharePresence : AdvancedSettingsEvents
+    data class SetLiveLocationMinimumDistanceUpdate(val value: Int) : AdvancedSettingsEvents
 }

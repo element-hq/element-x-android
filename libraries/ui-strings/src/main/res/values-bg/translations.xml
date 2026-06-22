@@ -145,7 +145,6 @@
   <string name="common_creating_room">"Създаване на стая…"</string>
   <string name="common_current_user_left_room">"Стаята е напусната"</string>
   <string name="common_current_user_left_space">"Пространството е напуснато"</string>
-  <string name="common_dark">"Тъмен"</string>
   <string name="common_decryption_error">"Грешка при разшифроване"</string>
   <string name="common_description">"Описание"</string>
   <string name="common_developer_options">"Опции за разработчици"</string>
@@ -176,7 +175,6 @@
   <string name="common_invite_unknown_profile">"Този Matrix ID не може да бъде намерен, така че поканата може да не бъде получена."</string>
   <string name="common_leaving_room">"Стаята се напуска"</string>
   <string name="common_leaving_space">"Пространството се напуска"</string>
-  <string name="common_light">"Светъл"</string>
   <string name="common_link_copied_to_clipboard">"Връзката е копирана в клипборда"</string>
   <string name="common_loading">"Зарежда се…"</string>
   <string name="common_loading_more">"Зарежда се още…"</string>
@@ -231,7 +229,6 @@
     <item quantity="other">"%1$d отговора"</item>
   </plurals>
   <string name="common_replying_to">"В отговор на %1$s"</string>
-  <string name="common_report_a_bug">"Съобщаване за грешка"</string>
   <string name="common_report_a_problem">"Съобщаване за проблем"</string>
   <string name="common_report_submitted">"Докладът е изпратен"</string>
   <string name="common_rich_text_editor">"Редактор на богат текст"</string>
@@ -270,7 +267,6 @@
   <string name="common_success">"Успешно"</string>
   <string name="common_suggestions">"Предложения"</string>
   <string name="common_syncing">"Синхронизиране"</string>
-  <string name="common_system">"Система"</string>
   <string name="common_text">"Текст"</string>
   <string name="common_third_party_notices">"Уведомления от трети страни"</string>
   <string name="common_thread">"Нишка"</string>

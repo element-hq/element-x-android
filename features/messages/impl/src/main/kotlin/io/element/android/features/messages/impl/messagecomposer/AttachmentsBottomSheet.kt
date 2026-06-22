@@ -13,6 +13,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -32,7 +34,6 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
-import io.element.android.libraries.designsystem.theme.components.ListItemStyle
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.Text
 
@@ -74,7 +75,8 @@ internal fun AttachmentsBottomSheet(
             sheetState = rememberModalBottomSheetState(
                 skipPartiallyExpanded = true
             ),
-            onDismissRequest = { isVisible = false }
+            onDismissRequest = { isVisible = false },
+            scrollable = false,
         ) {
             AttachmentSourcePickerMenu(
                 state = state,
@@ -97,30 +99,27 @@ private fun AttachmentSourcePickerMenu(
         modifier = Modifier
             .navigationBarsPadding()
             .imePadding()
+            .verticalScroll(rememberScrollState())
     ) {
         ListItem(
             modifier = Modifier.clickable { state.eventSink(MessageComposerEvent.PickAttachmentSource.PhotoFromCamera) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.TakePhoto())),
             headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_camera_photo)) },
-            style = ListItemStyle.Primary,
         )
         ListItem(
             modifier = Modifier.clickable { state.eventSink(MessageComposerEvent.PickAttachmentSource.VideoFromCamera) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.VideoCall())),
             headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_camera_video)) },
-            style = ListItemStyle.Primary,
         )
         ListItem(
             modifier = Modifier.clickable { state.eventSink(MessageComposerEvent.PickAttachmentSource.FromGallery) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Image())),
             headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_gallery)) },
-            style = ListItemStyle.Primary,
         )
         ListItem(
             modifier = Modifier.clickable { state.eventSink(MessageComposerEvent.PickAttachmentSource.FromFiles) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Attachment())),
             headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_files)) },
-            style = ListItemStyle.Primary,
         )
         if (state.canShareLocation) {
             ListItem(
@@ -130,7 +129,6 @@ private fun AttachmentSourcePickerMenu(
                 },
                 leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.LocationPin())),
                 headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_location)) },
-                style = ListItemStyle.Primary,
             )
         }
         ListItem(
@@ -140,14 +138,12 @@ private fun AttachmentSourcePickerMenu(
             },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Polls())),
             headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_poll)) },
-            style = ListItemStyle.Primary,
         )
         if (enableTextFormatting) {
             ListItem(
                 modifier = Modifier.clickable { state.eventSink(MessageComposerEvent.ToggleTextFormatting(enabled = true)) },
                 leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.TextFormatting())),
                 headlineContent = { Text(stringResource(R.string.screen_room_attachment_text_formatting)) },
-                style = ListItemStyle.Primary,
             )
         }
     }

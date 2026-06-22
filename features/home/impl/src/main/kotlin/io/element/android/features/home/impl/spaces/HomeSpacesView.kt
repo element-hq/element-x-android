@@ -54,7 +54,7 @@ fun HomeSpacesView(
     onExploreClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (state.canCreateSpaces && state.spaceRooms.isEmpty()) {
+    if (state.spaceRooms.isEmpty()) {
         EmptySpaceHomeView(
             modifier = modifier.padding(contentPadding),
             onCreateSpaceClick = onCreateSpaceClick,

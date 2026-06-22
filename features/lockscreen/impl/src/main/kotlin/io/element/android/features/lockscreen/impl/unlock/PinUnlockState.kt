@@ -23,11 +23,15 @@ data class PinUnlockState(
     val showBiometricUnlock: Boolean,
     val isUnlocked: Boolean,
     val biometricUnlockResult: BiometricAuthenticator.AuthenticationResult?,
-    val eventSink: (PinUnlockEvents) -> Unit
+    val eventSink: (PinUnlockEvent) -> Unit
 ) {
-    val isSignOutPromptCancellable = when (remainingAttempts) {
-        is AsyncData.Success -> remainingAttempts.data > 0
-        else -> true
+    val isSignOutPromptCancellable = if (pinEntry.isFailure()) {
+        false
+    } else {
+        when (remainingAttempts) {
+            is AsyncData.Success -> remainingAttempts.data > 0
+            else -> true
+        }
     }
 
     val biometricUnlockErrorMessage = when {

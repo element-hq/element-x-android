@@ -56,7 +56,7 @@ import io.element.android.wysiwyg.link.Link
 @Composable
 fun TimelineItemTextView(
     content: TimelineItemTextBasedContent,
-    showUrlPreviews: Boolean,
+    showUrlPreviews: Boolean = true,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
     modifier: Modifier = Modifier,

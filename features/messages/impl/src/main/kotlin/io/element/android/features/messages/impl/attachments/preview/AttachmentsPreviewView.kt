@@ -31,6 +31,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -76,6 +78,9 @@ import io.element.android.wysiwyg.display.TextDisplay
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
+/**
+ * Ref: https://www.figma.com/design/zftpgS6LjiczobJZ1GUNpt/Updates-to-Media---File-Upload?node-id=51-3514
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AttachmentsPreviewView(
@@ -110,6 +115,10 @@ fun AttachmentsPreviewView(
         state.eventSink(AttachmentsPreviewEvent.CloseImageEditor)
     }
 
+    fun postResetImageEditor() {
+        state.eventSink(AttachmentsPreviewEvent.ResetImageEdits)
+    }
+
     fun postApplyImageEdits() {
         state.eventSink(AttachmentsPreviewEvent.ApplyImageEdits)
     }
@@ -128,8 +137,11 @@ fun AttachmentsPreviewView(
             onCropRectChange = { cropRect ->
                 state.eventSink(AttachmentsPreviewEvent.UpdateImageCropRect(cropRect))
             },
-            onRotateClick = { state.eventSink(AttachmentsPreviewEvent.RotateImage) },
+            onRotateClick = { state.eventSink(AttachmentsPreviewEvent.RotateImageToTheLeft) },
+            onFlipHorizontallyClick = { state.eventSink(AttachmentsPreviewEvent.FlipImageHorizontally) },
+            onFlipVerticallyClick = { state.eventSink(AttachmentsPreviewEvent.FlipImageVertically) },
             onCancelClick = ::postCloseImageEditor,
+            onResetClick = ::postResetImageEditor,
             onDoneClick = ::postApplyImageEdits,
             modifier = modifier,
         )
@@ -140,16 +152,24 @@ fun AttachmentsPreviewView(
                 TopAppBar(
                     navigationIcon = {
                         BackButton(
-                            imageVector = CompoundIcons.Close(),
                             onClick = ::postCancel,
                         )
                     },
-                    title = {},
+                    title = {
+                        Text(
+                            modifier = Modifier.semantics {
+                                heading()
+                            },
+                            text = stringResource(R.string.screen_media_upload_preview_title),
+                        )
+                    },
                     actions = {
                         if (state.canEditImage && canShowEditAction) {
-                            IconButton(onClick = ::postOpenImageEditor) {
+                            IconButton(
+                                onClick = ::postOpenImageEditor,
+                            ) {
                                 Icon(
-                                    imageVector = CompoundIcons.Edit(),
+                                    imageVector = CompoundIcons.Crop(),
                                     contentDescription = stringResource(CommonStrings.action_edit),
                                 )
                             }
@@ -202,32 +222,32 @@ private fun AttachmentSendStateView(
             )
         }
         else -> when (sendActionState) {
-        is SendActionState.Sending.Processing -> {
-            if (sendActionState.displayProgress) {
+            is SendActionState.Sending.Processing -> {
+                if (sendActionState.displayProgress) {
+                    ProgressDialog(
+                        type = ProgressDialogType.Indeterminate,
+                        text = stringResource(CommonStrings.common_preparing),
+                        showCancelButton = true,
+                        onDismissRequest = onDismissClick,
+                    )
+                }
+            }
+            is SendActionState.Sending.Uploading -> {
                 ProgressDialog(
                     type = ProgressDialogType.Indeterminate,
-                    text = stringResource(CommonStrings.common_preparing),
+                    text = stringResource(id = CommonStrings.common_sending),
                     showCancelButton = true,
                     onDismissRequest = onDismissClick,
                 )
             }
-        }
-        is SendActionState.Sending.Uploading -> {
-            ProgressDialog(
-                type = ProgressDialogType.Indeterminate,
-                text = stringResource(id = CommonStrings.common_sending),
-                showCancelButton = true,
-                onDismissRequest = onDismissClick,
-            )
-        }
-        is SendActionState.Failure -> {
-            RetryDialog(
-                content = stringResource(sendAttachmentError(sendActionState.error)),
-                onDismiss = onDismissClick,
-                onRetry = onRetryClick
-            )
-        }
-        else -> Unit
+            is SendActionState.Failure -> {
+                RetryDialog(
+                    content = stringResource(sendAttachmentError(sendActionState.error)),
+                    onDismiss = onDismissClick,
+                    onRetry = onRetryClick
+                )
+            }
+            else -> Unit
         }
     }
 }
@@ -291,7 +311,8 @@ private fun AttachmentPreviewContent(
 private fun ImageOptimizationSelector(state: MediaOptimizationSelectorState) {
     if (state.displayMediaSelectorViews == true) {
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .niceClickable {
                     state.isImageOptimizationEnabled?.let { value ->
                         state.eventSink(MediaOptimizationSelectorEvent.SelectImageOptimization(!value))
@@ -300,7 +321,9 @@ private fun ImageOptimizationSelector(state: MediaOptimizationSelectorState) {
                 .padding(horizontal = 16.dp, vertical = 16.dp)
         ) {
             Text(
-                modifier = Modifier.weight(1f).align(Alignment.CenterVertically),
+                modifier = Modifier
+                    .weight(1f)
+                    .align(Alignment.CenterVertically),
                 text = stringResource(R.string.screen_media_upload_preview_optimize_image_quality_title),
                 style = ElementTheme.typography.fontBodyLgRegular,
             )
@@ -326,7 +349,8 @@ private fun VideoPresetSelector(
 
     if (state.displayMediaSelectorViews == true && videoPresets != null && state.selectedVideoPreset != null) {
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 16.dp)
                 .niceClickable { state.eventSink(MediaOptimizationSelectorEvent.OpenVideoPresetSelectorDialog) }
         ) {

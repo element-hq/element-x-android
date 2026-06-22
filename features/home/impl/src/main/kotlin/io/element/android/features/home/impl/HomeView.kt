@@ -11,34 +11,23 @@
 package io.element.android.features.home.impl
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FabPosition
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -47,7 +36,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import io.element.android.libraries.designsystem.theme.components.Text
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
@@ -69,7 +57,6 @@ import io.element.android.features.home.impl.spacefilters.SpaceFiltersState
 import io.element.android.features.home.impl.spacefilters.SpaceFiltersView
 import io.element.android.features.home.impl.spaces.HomeSpacesView
 import io.element.android.libraries.androidutils.throttler.FirstThrottler
-import io.element.android.libraries.designsystem.animation.M3Motion
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
@@ -185,6 +172,7 @@ private fun HomeScaffold(
     val hazeState = rememberHazeState()
     val roomsLazyListState = rememberLazyListState()
     val spacesLazyListState = rememberLazyListState()
+
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -211,139 +199,96 @@ private fun HomeScaffold(
             )
         },
         floatingActionButton = {
-            val fabContentDescription = when (state.currentHomeNavigationBarItem) {
-                HomeNavigationBarItem.Chats -> CommonStrings.action_create_room
-                HomeNavigationBarItem.Spaces -> if (state.homeSpacesState.canCreateSpaces) {
-                    CommonStrings.action_create_space
-                } else null
-            }
-            val fabOnClick = when (state.currentHomeNavigationBarItem) {
-                HomeNavigationBarItem.Chats -> onStartChatClick
-                HomeNavigationBarItem.Spaces -> onCreateSpaceClick
-            }
-            if (fabContentDescription != null) {
-                val isScrollingUp = roomsLazyListState.isScrollingUp()
-                AnimatedVisibility(
-                    visible = isScrollingUp,
-                    enter = M3Motion.enterTransition,
-                    exit = M3Motion.exitTransition,
-                ) {
-                    HomeFloatingActionButton(fabOnClick, fabContentDescription)
-                }
-            }
-        },
-        floatingActionButtonPosition = FabPosition.End,
-        bottomBar = {
-            if (state.showNavigationBar) {
-                val coroutineScope = rememberCoroutineScope()
-                NavigationBar {
-                    HomeNavigationBarItem.entries.forEach { item ->
-                        val isSelected = state.currentHomeNavigationBarItem == item
-                        NavigationBarItem(
-                            selected = isSelected,
-                            onClick = {
-                                if (isSelected) {
-                                    val lazyListStateTarget = when (item) {
-                                        HomeNavigationBarItem.Chats -> roomsLazyListState
-                                        HomeNavigationBarItem.Spaces -> spacesLazyListState
-                                    }
-                                    coroutineScope.launch {
-                                        if (lazyListStateTarget.firstVisibleItemIndex > 10) {
-                                            lazyListStateTarget.scrollToItem(10)
-                                        }
-                                        scrollBehavior.state.heightOffset = 0f
-                                        lazyListStateTarget.animateScrollToItem(0)
-                                    }
-                                } else {
-                                    state.eventSink(HomeEvent.SelectHomeNavigationBarItem(item))
-                                }
-                            },
-                            icon = { Icon(imageVector = item.icon(isSelected), contentDescription = stringResource(item.labelRes)) },
-                            label = { Text(text = stringResource(item.labelRes)) },
-                        )
+            val coroutineScope = rememberCoroutineScope()
+            HomeBottomBar(
+                currentHomeNavigationBarItem = state.currentHomeNavigationBarItem,
+                onItemClick = { item ->
+                    // scroll to top if selecting the same item
+                    if (item == state.currentHomeNavigationBarItem) {
+                        val lazyListStateTarget = when (item) {
+                            HomeNavigationBarItem.Chats -> roomsLazyListState
+                            HomeNavigationBarItem.Spaces -> spacesLazyListState
+                        }
+                        coroutineScope.launch {
+                            if (lazyListStateTarget.firstVisibleItemIndex > 10) {
+                                lazyListStateTarget.scrollToItem(10)
+                            }
+                            // Also reset the scrollBehavior height offset as it's not triggered by programmatic scrolls
+                            scrollBehavior.state.heightOffset = 0f
+                            lazyListStateTarget.animateScrollToItem(0)
+                        }
+                    } else {
+                        state.eventSink(HomeEvent.SelectHomeNavigationBarItem(item))
                     }
-                }
-            }
+                },
+                floatingActionButton = {
+                    when (state.currentHomeNavigationBarItem) {
+                        HomeNavigationBarItem.Chats -> {
+                            HomeFloatingActionButton(onStartChatClick, CommonStrings.action_create_room)
+                        }
+                        HomeNavigationBarItem.Spaces -> {
+                            HomeFloatingActionButton(onCreateSpaceClick, CommonStrings.action_create_space)
+                        }
+                    }
+                },
+            )
         },
+        floatingActionButtonPosition = FabPosition.Center,
         content = { padding ->
             val contentPadding = PaddingValues(
-                bottom = 16.dp,
+                bottom = 96.dp,
             )
-            Crossfade(
-                targetState = state.currentHomeNavigationBarItem,
-                animationSpec = M3Motion.defaultValueSpec(),
-                label = "home tab crossfade",
-            ) { currentItem ->
-                when (currentItem) {
-                    HomeNavigationBarItem.Chats -> {
-                        RoomListContentView(
-                            contentState = roomListState.contentState,
-                            filtersState = roomListState.filtersState,
-                            spaceFiltersState = roomListState.spaceFiltersState,
-                            lazyListState = roomsLazyListState,
-                            hideInvitesAvatars = roomListState.hideInvitesAvatars,
-                            eventSink = roomListState.eventSink,
-                            onSetUpRecoveryClick = onSetUpRecoveryClick,
-                            onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
-                            onRoomClick = ::onRoomClick,
-                            onCreateRoomClick = onStartChatClick,
-                            contentPadding = contentPadding,
-                            modifier = Modifier
-                                .padding(
-                                    PaddingValues(
-                                        start = padding.calculateStartPadding(LocalLayoutDirection.current),
-                                        end = padding.calculateEndPadding(LocalLayoutDirection.current),
-                                        // Remove these two lines once https://issuetracker.google.com/issues/436432313 has been fixed
-                                        bottom = padding.calculateBottomPadding(),
-                                        top = padding.calculateTopPadding()
-                                    )
+            when (state.currentHomeNavigationBarItem) {
+                HomeNavigationBarItem.Chats -> {
+                    RoomListContentView(
+                        contentState = roomListState.contentState,
+                        filtersState = roomListState.filtersState,
+                        spaceFiltersState = roomListState.spaceFiltersState,
+                        lazyListState = roomsLazyListState,
+                        hideInvitesAvatars = roomListState.hideInvitesAvatars,
+                        eventSink = roomListState.eventSink,
+                        onSetUpRecoveryClick = onSetUpRecoveryClick,
+                        onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
+                        onRoomClick = ::onRoomClick,
+                        onCreateRoomClick = onStartChatClick,
+                        contentPadding = contentPadding,
+                        modifier = Modifier
+                            .padding(
+                                PaddingValues(
+                                    start = padding.calculateStartPadding(LocalLayoutDirection.current),
+                                    end = padding.calculateEndPadding(LocalLayoutDirection.current),
+                                    // Remove these two lines once https://issuetracker.google.com/issues/436432313 has been fixed
+                                    bottom = padding.calculateBottomPadding(),
+                                    top = padding.calculateTopPadding()
                                 )
-                                .consumeWindowInsets(padding)
-                                .hazeSource(state = hazeState)
-                        )
-                        SpaceFiltersView(roomListState.spaceFiltersState)
-                    }
-                    HomeNavigationBarItem.Spaces -> {
-                        HomeSpacesView(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(padding)
-                                .consumeWindowInsets(padding)
-                                .hazeSource(state = hazeState),
-                            contentPadding = contentPadding,
-                            state = state.homeSpacesState,
-                            lazyListState = spacesLazyListState,
-                            onSpaceClick = { spaceId ->
-                                onRoomClick(spaceId)
-                            },
-                            onCreateSpaceClick = onCreateSpaceClick,
-                            // TODO use actual callbacks for this
-                            onExploreClick = {},
-                        )
-                    }
+                            )
+                            .consumeWindowInsets(padding)
+                            .hazeSource(state = hazeState)
+                    )
+                    SpaceFiltersView(roomListState.spaceFiltersState)
+                }
+                HomeNavigationBarItem.Spaces -> {
+                    HomeSpacesView(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(padding)
+                            .consumeWindowInsets(padding)
+                            .hazeSource(state = hazeState),
+                        contentPadding = contentPadding,
+                        state = state.homeSpacesState,
+                        lazyListState = spacesLazyListState,
+                        onSpaceClick = { spaceId ->
+                            onRoomClick(spaceId)
+                        },
+                        onCreateSpaceClick = onCreateSpaceClick,
+                        // TODO use actual callbacks for this
+                        onExploreClick = {},
+                    )
                 }
             }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
     )
-}
-
-@Composable
-private fun LazyListState.isScrollingUp(): Boolean {
-    var previousIndex by remember { mutableIntStateOf(firstVisibleItemIndex) }
-    var previousScrollOffset by remember { mutableIntStateOf(firstVisibleItemScrollOffset) }
-    return remember {
-        derivedStateOf {
-            if (previousIndex != firstVisibleItemIndex) {
-                previousIndex > firstVisibleItemIndex
-            } else {
-                previousScrollOffset >= firstVisibleItemScrollOffset
-            }.also {
-                previousIndex = firstVisibleItemIndex
-                previousScrollOffset = firstVisibleItemScrollOffset
-            }
-        }
-    }.value
 }
 
 @Composable
@@ -360,6 +305,33 @@ private fun HomeFloatingActionButton(
     }
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+private fun HomeBottomBar(
+    currentHomeNavigationBarItem: HomeNavigationBarItem,
+    onItemClick: (HomeNavigationBarItem) -> Unit,
+    modifier: Modifier = Modifier,
+    floatingActionButton: (@Composable () -> Unit)?,
+) {
+    HorizontalFloatingToolbar(
+        floatingActionButton = floatingActionButton,
+        modifier = modifier
+            .zIndex(1f),
+    ) {
+        HomeNavigationBarItem.entries.forEachIndexed { index, item ->
+            if (index > 0) {
+                HorizontalFloatingToolbarSeparator()
+            }
+            val isSelected = currentHomeNavigationBarItem == item
+            HorizontalFloatingToolbarItem(
+                icon = item.icon(isSelected),
+                tooltipLabel = stringResource(item.labelRes),
+                isSelected = isSelected,
+                onClick = { onItemClick(item) },
+            )
+        }
+    }
+}
 
 internal fun RoomListRoomSummary.contentType() = displayType.ordinal
 

@@ -12,6 +12,7 @@ import io.element.android.libraries.androidutils.hash.hash
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -20,9 +21,10 @@ import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.JoinedRoom
-import io.element.android.libraries.matrix.api.room.isDm
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.MsgType
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.TimelineException
@@ -43,6 +45,7 @@ import io.element.android.libraries.matrix.impl.timeline.postprocessor.TypingNot
 import io.element.android.libraries.matrix.impl.timeline.reply.InReplyToMapper
 import io.element.android.libraries.matrix.impl.util.MessageEventContent
 import io.element.android.services.toolbox.api.systemclock.SystemClock
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -81,7 +84,7 @@ private const val PAGINATION_SIZE = 50
 class RustTimeline(
     private val inner: InnerTimeline,
     override val mode: Timeline.Mode,
-    private val systemClock: SystemClock,
+    systemClock: SystemClock,
     private val joinedRoom: JoinedRoom,
     private val coroutineScope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
@@ -121,6 +124,13 @@ class RustTimeline(
     private val lastForwardIndicatorsPostProcessor = LastForwardIndicatorsPostProcessor(mode)
     private val typingNotificationPostProcessor = TypingNotificationPostProcessor(mode)
 
+    private data class RoomTimelineInfo(
+        val roomCreators: ImmutableList<UserId>,
+        val isDm: Boolean,
+        val joinRule: JoinRule?,
+        val isEncrypted: Boolean?,
+    )
+
     override val backwardPaginationStatus = MutableStateFlow(
         Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = mode != Timeline.Mode.PinnedEvents)
     )
@@ -128,6 +138,8 @@ class RustTimeline(
     override val forwardPaginationStatus = MutableStateFlow(
         Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = mode is Timeline.Mode.FocusedOnEvent)
     )
+
+    private val loggerTag = "Timeline($mode)"
 
     init {
         when (mode) {
@@ -176,10 +188,11 @@ class RustTimeline(
     }
 
     private fun updatePaginationStatus(direction: Timeline.PaginationDirection, update: (Timeline.PaginationStatus) -> Timeline.PaginationStatus) {
-        when (direction) {
+        val result = when (direction) {
             Timeline.PaginationDirection.BACKWARDS -> backwardPaginationStatus.getAndUpdate(update)
             Timeline.PaginationDirection.FORWARDS -> forwardPaginationStatus.getAndUpdate(update)
         }
+        Timber.tag(loggerTag).d("updatePaginationStatus $direction: $result")
     }
 
     // Use NonCancellable to avoid breaking the timeline when the coroutine is cancelled.
@@ -194,12 +207,13 @@ class RustTimeline(
                 }
             }.onFailure { error ->
                 if (error is TimelineException.CannotPaginate) {
-                    Timber.d("Can't paginate $direction on room ${joinedRoom.roomId} with paginationStatus: ${backwardPaginationStatus.value}")
+                    Timber.tag(loggerTag).d("Can't paginate $direction on room ${joinedRoom.roomId} with paginationStatus: ${backwardPaginationStatus.value}")
                 } else {
                     updatePaginationStatus(direction) { it.copy(isPaginating = false) }
-                    Timber.e(error, "Error paginating $direction on room ${joinedRoom.roomId}")
+                    Timber.tag(loggerTag).e(error, "Error paginating $direction on room ${joinedRoom.roomId}")
                 }
             }.onSuccess { hasReachedEnd ->
+                Timber.tag(loggerTag).d("Finished paginating $direction on room ${joinedRoom.roomId}, hasReachedEnd: $hasReachedEnd")
                 updatePaginationStatus(direction) { it.copy(isPaginating = false, hasMoreToLoad = !hasReachedEnd) }
             }
         }
@@ -216,14 +230,15 @@ class RustTimeline(
         _timelineItems,
         backwardPaginationStatus,
         forwardPaginationStatus,
-        joinedRoom.roomInfoFlow.map { it.creators to it.isDm }.distinctUntilChanged(),
+        joinedRoom.roomInfoFlow.map { RoomTimelineInfo(it.creators, it.isDm, it.joinRule, it.isEncrypted) }.distinctUntilChanged(),
     ) {
         timelineItems,
         backwardPaginationStatus,
         forwardPaginationStatus,
-        (roomCreators, isDm),
+        roomInfo,
         ->
         withContext(dispatcher) {
+            val (roomCreators, isDm, joinRule, isEncrypted) = roomInfo
             timelineItems
                 .let { items ->
                     roomBeginningPostProcessor.process(
@@ -263,7 +278,7 @@ class RustTimeline(
         try {
             inner.fetchMembers()
         } catch (exception: Exception) {
-            Timber.e(exception, "Error fetching members for room ${joinedRoom.roomId}")
+            Timber.tag(loggerTag).e(exception, "Error fetching members for room ${joinedRoom.roomId}")
         }
     }
 
@@ -271,8 +286,16 @@ class RustTimeline(
         body: String,
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
+        msgType: MsgType,
+        asPlainText: Boolean,
     ): Result<Unit> = withContext(dispatcher) {
-        MessageEventContent.from(body, htmlBody, intentionalMentions).use { content ->
+        MessageEventContent.from(
+            body = body,
+            htmlBody = htmlBody,
+            intentionalMentions = intentionalMentions,
+            msgType = msgType,
+            asPlainText = asPlainText,
+        ).use { content ->
             runCatchingExceptions<Unit> {
                 inner.send(content)
             }
@@ -337,9 +360,15 @@ class RustTimeline(
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
         fromNotification: Boolean,
+        msgType: MsgType,
     ): Result<Unit> = withContext(dispatcher) {
         runCatchingExceptions {
-            val msg = MessageEventContent.from(body, htmlBody, intentionalMentions)
+            val msg = MessageEventContent.from(
+                body = body,
+                htmlBody = htmlBody,
+                intentionalMentions = intentionalMentions,
+                msgType = msgType,
+            )
             inner.sendReply(
                 msg = msg,
                 eventId = repliedToEventId.value,
@@ -355,7 +384,7 @@ class RustTimeline(
         formattedCaption: String?,
         inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler> {
-        Timber.d("Sending image ${file.path.hash()}")
+        Timber.tag(loggerTag).d("Sending image ${file.path.hash()}")
         return sendAttachment(listOfNotNull(file, thumbnailFile)) {
             inner.sendImage(
                 params = UploadParameters(
@@ -381,7 +410,7 @@ class RustTimeline(
         formattedCaption: String?,
         inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler> {
-        Timber.d("Sending video ${file.path.hash()}")
+        Timber.tag(loggerTag).d("Sending video ${file.path.hash()}")
         return sendAttachment(listOfNotNull(file, thumbnailFile)) {
             inner.sendVideo(
                 params = UploadParameters(
@@ -406,7 +435,7 @@ class RustTimeline(
         formattedCaption: String?,
         inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler> {
-        Timber.d("Sending audio ${file.path.hash()}")
+        Timber.tag(loggerTag).d("Sending audio ${file.path.hash()}")
         return sendAttachment(listOf(file)) {
             inner.sendAudio(
                 params = UploadParameters(
@@ -430,7 +459,7 @@ class RustTimeline(
         formattedCaption: String?,
         inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler> {
-        Timber.d("Sending file ${file.path.hash()}")
+        Timber.tag(loggerTag).d("Sending file ${file.path.hash()}")
         return sendAttachment(listOf(file)) {
             inner.sendFile(
                 params = UploadParameters(
@@ -460,7 +489,7 @@ class RustTimeline(
         runCatchingExceptions {
             roomContentForwarder.forward(fromTimeline = inner, eventId = eventId, toRoomIds = roomIds)
         }.onFailure {
-            Timber.e(it)
+            Timber.tag(loggerTag).e(it)
         }
     }
 

@@ -73,7 +73,8 @@ fun CustomReactionBottomSheet(
         ModalBottomSheet(
             onDismissRequest = ::onDismiss,
             sheetState = sheetState,
-            modifier = modifier
+            modifier = modifier,
+            scrollable = false,
         ) {
             // Text reaction input
             var textReaction by remember { mutableStateOf("") }

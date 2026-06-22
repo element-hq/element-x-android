@@ -43,6 +43,7 @@ val excludedKoverSubProjects = listOf(
     ":libraries:core",
     ":libraries:coroutines",
     ":libraries:di",
+    ":libraries:rustls-tls",
     ":tests:detekt-rules",
     ":tests:konsist",
     ":tests:testutils",
@@ -125,6 +126,14 @@ fun Project.setupKover() {
                         "io.element.android.tests.konsist.failures",
                         // Copied from Appyx
                         "io.element.android.libraries.architecture.appyx.SafeChildrenTransitionScope",
+                        // DI-generated classes
+                        "io.element.android.x.di.*Impl",
+                        "io.element.android.x.di.*Impls",
+                        "io.element.android.x.di.*Mirror",
+                        "io.element.android.x.di.*Factory",
+                        $$"io.element.android.*$Metro*",
+                        $$"io.element.android.*$Factory*",
+                        $$"io.element.android.*$Impl*",
                     )
                     annotatedBy(
                         "androidx.compose.ui.tooling.preview.Preview",

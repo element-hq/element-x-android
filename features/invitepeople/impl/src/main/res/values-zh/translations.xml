@@ -2,4 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_invite_users_already_a_member">"已经是成员"</string>
   <string name="screen_invite_users_already_invited">"已邀请"</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_multiple_users">"你与这些联系人暂无任何聊天。请确认对方被邀请到此房间后再继续。"</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_one_user">"你与此人暂无任何聊天。请确认对方被邀请到此房间后再继续。"</string>
+  <string name="screen_invite_users_confirm_dialog_title_mutiple_users">"邀请新联系人到此房间？"</string>
+  <string name="screen_invite_users_confirm_dialog_title_one_user">"邀请新联系人到此房间？"</string>
 </resources>

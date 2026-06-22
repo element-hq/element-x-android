@@ -11,6 +11,7 @@ package io.element.android.libraries.push.impl.push
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.push.impl.db.PushRequest
@@ -35,6 +36,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 private val loggerTag = LoggerTag("PushHandler", LoggerTag.PushLoggerTag)
@@ -53,6 +55,7 @@ class DefaultPushHandler(
     private val workManagerScheduler: WorkManagerScheduler,
     private val syncPendingNotificationsRequestFactory: SyncPendingNotificationsRequestBuilder.Factory,
     resultProcessor: NotificationResultProcessor,
+    private val dispatchers: CoroutineDispatchers,
 ) : PushHandler {
     init {
         resultProcessor.start()
@@ -64,7 +67,7 @@ class DefaultPushHandler(
      * @param pushData the data received in the push.
      * @param providerInfo the provider info.
      */
-    override suspend fun handle(pushData: PushData, providerInfo: String): Boolean {
+    override suspend fun handle(pushData: PushData, providerInfo: String): Boolean = withContext(dispatchers.computation) {
         // Start measuring how long it takes to display a notification from when the push is received
         Timber.d("Calculating push-to-notification for event ${pushData.eventId}")
         val parent = analyticsService.startLongRunningTransaction(AnalyticsLongRunningTransaction.PushToNotification(pushData.eventId.value))
@@ -81,7 +84,7 @@ class DefaultPushHandler(
         }
 
         // Diagnostic Push
-        return if (pushData.eventId == DefaultTestPush.TEST_EVENT_ID) {
+        if (pushData.eventId == DefaultTestPush.TEST_EVENT_ID) {
             pushHistoryService.onDiagnosticPush(providerInfo)
             diagnosticPushHandler.handlePush()
             false
@@ -90,7 +93,7 @@ class DefaultPushHandler(
         }
     }
 
-    override suspend fun handleInvalid(providerInfo: String, data: String) {
+    override suspend fun handleInvalid(providerInfo: String, data: String) = withContext(dispatchers.computation) {
         incrementPushDataStore.incrementPushCounter()
         pushHistoryService.onInvalidPushReceived(providerInfo, data)
     }

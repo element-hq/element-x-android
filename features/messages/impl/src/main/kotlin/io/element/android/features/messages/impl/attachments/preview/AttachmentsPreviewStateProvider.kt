@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.core.net.toUri
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.imageeditor.AttachmentImageEditorState
-import io.element.android.features.messages.impl.attachments.preview.imageeditor.AttachmentImageEdits
+import io.element.android.features.messages.impl.attachments.preview.imageeditor.anAttachmentImageEditorState
 import io.element.android.features.messages.impl.attachments.video.MediaOptimizationSelectorState
 import io.element.android.features.messages.impl.attachments.video.VideoUploadEstimation
 import io.element.android.libraries.architecture.AsyncData
@@ -45,7 +45,7 @@ open class AttachmentsPreviewStateProvider : PreviewParameterProvider<Attachment
             anAttachmentsPreviewState(sendActionState = SendActionState.Sending.Uploading(aMediaUploadInfo())),
             anAttachmentsPreviewState(sendActionState = SendActionState.Failure(RuntimeException("error"), aMediaUploadInfo())),
             anAttachmentsPreviewState(
-                imageEditorState = AttachmentImageEditorState(LocalMedia("file://path".toUri(), anImageMediaInfo()), edits = AttachmentImageEdits())
+                imageEditorState = anAttachmentImageEditorState(),
             ),
             anAttachmentsPreviewState(displayFileTooLargeError = true),
             anAttachmentsPreviewState(

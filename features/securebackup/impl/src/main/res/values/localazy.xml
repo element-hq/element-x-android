@@ -20,6 +20,27 @@
   <string name="screen_create_new_recovery_key_list_item_4">"Follow the instructions to create a new recovery key"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"Save your new recovery key in a password manager or encrypted note"</string>
   <string name="screen_create_new_recovery_key_title">"Reset the encryption for your account using another device"</string>
+  <string name="screen_custom_recovery_key_confirm_error_mismatch">"The recovery key you entered doesn\'t match"</string>
+  <string name="screen_custom_recovery_key_confirm_submit">"Finish setup"</string>
+  <string name="screen_custom_recovery_key_confirm_subtitle">"Enter your recovery key again."</string>
+  <string name="screen_custom_recovery_key_confirm_title">"Confirm your recovery key"</string>
+  <plurals name="screen_custom_recovery_key_input_notice">
+    <item quantity="one">"Minimum %1$d character. Do not use your account password"</item>
+    <item quantity="other">"Minimum %1$d characters. Do not use your account password"</item>
+  </plurals>
+  <string name="screen_custom_recovery_key_input_strength">"Strength"</string>
+  <string name="screen_custom_recovery_key_input_strength_a11y">"Passphrase strength: %1$s"</string>
+  <string name="screen_custom_recovery_key_input_strength_moderate">"Moderate"</string>
+  <string name="screen_custom_recovery_key_input_strength_strong">"Strong"</string>
+  <string name="screen_custom_recovery_key_input_strength_very_strong">"Very strong"</string>
+  <string name="screen_custom_recovery_key_input_strength_very_weak">"Very weak"</string>
+  <string name="screen_custom_recovery_key_input_strength_weak">"Weak"</string>
+  <string name="screen_custom_recovery_key_input_subtitle">"Choose a recovery key that you can memorize."</string>
+  <string name="screen_custom_recovery_key_input_title">"Enter a recovery key"</string>
+  <string name="screen_custom_recovery_key_loading_a11y">"Loading recovery key requirements"</string>
+  <string name="screen_custom_recovery_key_success_notice">"To change your recovery key, go to Settings → Encryption → Backup"</string>
+  <string name="screen_custom_recovery_key_success_subtitle">"You can use your recovery key to confirm new devices or restore your encrypted chats if you lose access to all your devices."</string>
+  <string name="screen_custom_recovery_key_success_title">"Your backup is now fully set up"</string>
   <string name="screen_encryption_reset_action_continue_reset">"Continue reset"</string>
   <string name="screen_encryption_reset_bullet_1">"Your account details, contacts, preferences, and chat list will be kept"</string>
   <string name="screen_encryption_reset_bullet_2">"You will lose any message history that’s stored only on the server"</string>

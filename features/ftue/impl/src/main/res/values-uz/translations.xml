@@ -2,8 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"Tasdiqlay olmayapsizmi?"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"Yangi tiklash kalitini yarating"</string>
-  <string name="screen_identity_confirmation_subtitle">"Xavfsiz xabarlashuvni sozlash uchun ushbu qurilmani tasdiqlang."</string>
-  <string name="screen_identity_confirmation_title">"Shaxsingizni tasdiqlang"</string>
+  <string name="screen_identity_confirmation_subtitle">"Xavfsiz xabar almashinuvni sozlash uchun tasdiqlash usulini tanlang."</string>
+  <string name="screen_identity_confirmation_title">"Raqamli shaxsingizni tasdiqlang"</string>
   <string name="screen_identity_confirmation_use_another_device">"Boshqa qurilmadan foydalanish"</string>
   <string name="screen_identity_confirmation_use_recovery_key">"Qayta tiklash kalitidan foydalaning"</string>
   <string name="screen_identity_confirmed_subtitle">"Endi xabarlarni xavfsiz tarzda o‘qish yoki yuborish imkoniyatiga egasiz, shuningdek, siz bilan muloqot qilayotgan har qanday kishi ham bu qurilmaga ishonch bildirishi mumkin."</string>

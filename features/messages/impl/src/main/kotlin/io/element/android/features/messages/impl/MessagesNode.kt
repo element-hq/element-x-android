@@ -35,14 +35,14 @@ import io.element.android.features.messages.impl.actionlist.model.TimelineItemAc
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvent
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
+import io.element.android.features.messages.impl.urlpreview.LocalUrlPreviewService
+import io.element.android.features.messages.impl.urlpreview.UrlPreviewService
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.urlpreview.LocalUrlPreviewService
-import io.element.android.features.messages.impl.urlpreview.UrlPreviewService
 import io.element.android.features.roommembermoderation.api.ModerationAction
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationRenderer
@@ -68,8 +68,11 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
+import io.element.android.libraries.matrix.ui.model.getBestName
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.libraries.ui.utils.a11y.hasExternalKeyboard
+import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.LoadMessagesUi
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.api.finishLongRunningTransaction
@@ -92,11 +95,11 @@ class MessagesNode(
     presenterFactory: MessagesPresenter.Factory,
     actionListPresenterFactory: ActionListPresenter.Factory,
     private val timelineItemPresenterFactories: TimelineItemPresenterFactories,
-    private val urlPreviewService: UrlPreviewService,
     private val mediaPlayer: MediaPlayer,
     private val permalinkParser: PermalinkParser,
     private val knockRequestsBannerRenderer: KnockRequestsBannerRenderer,
     private val roomMemberModerationRenderer: RoomMemberModerationRenderer,
+    private val urlPreviewService: UrlPreviewService,
 ) : Node(buildContext, plugins = plugins), MessagesNavigator {
     data class Inputs(
         val focusedEventId: EventId?,
@@ -108,7 +111,7 @@ class MessagesNode(
     private val timelineController = TimelineController(room, room.liveTimeline)
     private val presenter = presenterFactory.create(
         navigator = this,
-        composerPresenter = messageComposerPresenterFactory.create(timelineController, this),
+        composerPresenter = messageComposerPresenterFactory.create(timelineController, this, threadRoot = null),
         timelinePresenter = timelinePresenterFactory.create(timelineController = timelineController, this),
         actionListPresenter = actionListPresenterFactory.create(
             postProcessor = TimelineItemActionPostProcessor.Default,
@@ -118,7 +121,7 @@ class MessagesNode(
     )
 
     interface Callback : Plugin {
-        fun handleEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event): Boolean
+        fun handleEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event, canUseOverlay: Boolean): Boolean
         fun navigateToPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?)
         fun navigateToRoomMemberDetails(userId: UserId)
         fun handlePermalinkClick(data: PermalinkData)
@@ -128,12 +131,17 @@ class MessagesNode(
         fun navigateToSendLocation()
         fun navigateToCreatePoll()
         fun navigateToEditPoll(eventId: EventId)
+        fun navigateToCurrentLiveLocation()
         fun navigateToRoomCall(roomId: RoomId, isAudioCall: Boolean)
         fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?)
         fun navigateToRoomDetails()
         fun navigateToPinnedMessagesList()
         fun navigateToKnockRequestsList()
+        fun navigateToDeveloperSettings()
+
         fun navigateToThreadsList()
+
+        fun navigateToAvatarPreview(username: String, avatarUrl: String)
     }
 
     override fun onBuilt() {
@@ -226,8 +234,20 @@ class MessagesNode(
         }
     }
 
+    override fun navigateToMember(userId: UserId) {
+        callback.navigateToRoomMemberDetails(userId)
+    }
+
     override fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?) {
         callback.navigateToThread(threadRootId, focusedEventId)
+    }
+
+    override fun navigateToDeveloperSettings() {
+        callback.navigateToDeveloperSettings()
+    }
+
+    override fun navigateToCurrentLiveLocation() {
+        callback.navigateToCurrentLiveLocation()
     }
 
     private fun displaySameRoomToast() {
@@ -240,6 +260,7 @@ class MessagesNode(
     override fun View(modifier: Modifier) {
         val activity = requireNotNull(LocalActivity.current)
         val isDark = ElementTheme.isLightTheme.not()
+        val canUseOverlay = !isTalkbackActive() && !hasExternalKeyboard()
         CompositionLocalProvider(
             LocalTimelineItemPresenterFactories provides timelineItemPresenterFactories,
             LocalUrlPreviewService provides urlPreviewService,
@@ -262,11 +283,11 @@ class MessagesNode(
                 onRoomDetailsClick = callback::navigateToRoomDetails,
                 onEventContentClick = { isLive, event ->
                     if (isLive) {
-                        callback.handleEventClick(timelineController.mainTimelineMode(), event)
+                        callback.handleEventClick(timelineController.mainTimelineMode(), event, canUseOverlay)
                     } else {
                         val detachedTimelineMode = timelineController.detachedTimelineMode()
                         if (detachedTimelineMode != null) {
-                            callback.handleEventClick(detachedTimelineMode, event)
+                            callback.handleEventClick(detachedTimelineMode, event, canUseOverlay)
                         } else {
                             false
                         }
@@ -288,7 +309,6 @@ class MessagesNode(
                     callback.navigateToRoomCall(room.roomId, isAudioCall)
                 },
                 onViewAllPinnedMessagesClick = callback::navigateToPinnedMessagesList,
-                onShowThreadsListClick = callback::navigateToThreadsList,
                 modifier = modifier,
                 knockRequestsBannerView = {
                     knockRequestsBannerRenderer.View(
@@ -296,6 +316,7 @@ class MessagesNode(
                         onViewRequestsClick = callback::navigateToKnockRequestsList,
                     )
                 },
+                onThreadsListClick = callback::navigateToThreadsList,
             )
             roomMemberModerationRenderer.Render(
                 state = state.roomMemberModerationState,
@@ -303,6 +324,11 @@ class MessagesNode(
                     when (action) {
                         is ModerationAction.DisplayProfile -> callback.navigateToRoomMemberDetails(target.userId)
                         else -> state.roomMemberModerationState.eventSink(RoomMemberModerationEvents.ProcessAction(action, target))
+                    }
+                },
+                onAvatarClick = { user ->
+                    user.avatarUrl?.let { url ->
+                        callback.navigateToAvatarPreview(user.getBestName(), url)
                     }
                 },
                 modifier = Modifier,

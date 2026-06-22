@@ -76,7 +76,6 @@ class DefaultSyncPendingNotificationsRequestBuilder(
             .removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)
 
         // If we're in an air-gapped environment, we shouldn't validate internet connectivity, as the checker will fail and the worker won't run at all.
-        // Note this will always be false for FOSS, since the feature is only enabled in Element Pro.
         if (networkMonitor.isInAirGappedEnvironment.first()) {
             Timber.d("In an air-gapped environment, not adding NET_CAPABILITY_VALIDATED to the network request")
             networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)

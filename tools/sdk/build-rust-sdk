@@ -27,6 +27,7 @@ set -u
 
 buildLocal=0
 rustSdkPath="../matrix-rust-sdk/"
+kotlinComponentsPath="../matrix-rust-components-kotlin"
 rustSdkUrl="https://github.com/matrix-org/matrix-rust-sdk.git"
 rustSdkBranch="main"
 buildApp=1
@@ -38,10 +39,18 @@ default_arch="${default_arch/arm64/aarch64}"
 target_arch="${default_arch}"
 
 sdkArg=""
+update_components=1
 
 ## Argument parsing
 
-TEMP=$(getopt -o 'rs:b:at:h' --long 'remote,sdk:,branch:,build-app,target-arch,help' -- "$@")
+# Use GNU getopt (required for --long support on macOS)
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    GNU_GETOPT="$(brew --prefix gnu-getopt)/bin/getopt"
+else
+    GNU_GETOPT="getopt"
+fi
+
+TEMP=$("$GNU_GETOPT" -o 'rs:b:at:nh' --long 'remote,sdk:,branch:,build-app,target-arch:,no-update-components,help' -- "$@")
 
 if [ $? -ne 0 ]; then
     echo 'Terminating...' >&2
@@ -53,32 +62,37 @@ unset TEMP
 
 while true; do
     case "$1" in
-        'r'|'--remote')
+        '-r'|'--remote')
             buildLocal=1
             shift
             continue
         ;;
-        's'|'--sdk')
+        '-s'|'--sdk')
             sdkArg="$2"
             shift 2
             continue
         ;;
-        'b'|'--branch')
+        '-b'|'--branch')
             rustSdkBranch="$2"
             shift 2
             continue
         ;;
-        'a'|'--build-app')
+        '-a'|'--build-app')
             buildApp=0
             shift
             continue
         ;;
-        't'|'--target-arch')
+        '-t'|'--target-arch')
             target_arch="$2"
             shift 2
             continue
         ;;
-        'h'|'--help')
+        '-n'|'--no-update-components')
+            update_components=0
+            shift
+            continue
+        ;;
+        '-h'|'--help')
             cat << END
 SYNOPSIS
 
@@ -102,6 +116,9 @@ ARGUMENTS
 
     -t --target-arch
         The architecture for which to build the app. Defaults to the architecture of this machine (${default_arch}).
+
+    -n --no-update-components
+        Do not attempt to update matrix-rust-components-kotlin from git. It must already be cloned and up-to-date.
 
 EXAMPLES
 
@@ -187,20 +204,24 @@ cd "${elementPwd}"
 
 ## Clone matrix-rust-components-kotlin if needed
 
-if [ ! -d "../matrix-rust-components-kotlin" ]; then
-    printf "\nFolder ../matrix-rust-components-kotlin does not exist."
-    printf "Cloning the repository into ../matrix-rust-components-kotlin.\n\n"
-    git clone \
-        https://github.com/matrix-org/matrix-rust-components-kotlin.git \
-        ../matrix-rust-components-kotlin
+if [ "$update_components" == "1" ]; then
+    if [ ! -d "${kotlinComponentsPath}" ]; then
+        printf "\nFolder ${kotlinComponentsPath} does not exist."
+        printf "Cloning the repository into ${kotlinComponentsPath}.\n\n"
+        git clone \
+            https://github.com/matrix-org/matrix-rust-components-kotlin.git \
+            "${kotlinComponentsPath}"
+    fi
+
+    printf "\n## Resetting ${kotlinComponentsPath} to the latest main...\n\n"
+
+    cd "${kotlinComponentsPath}"
+    git reset --hard
+    git checkout main
+    git pull
+else
+    cd "${kotlinComponentsPath}"
 fi
-
-printf "\n## Resetting matrix-rust-components-kotlin to the latest main...\n\n"
-
-cd ../matrix-rust-components-kotlin
-git reset --hard
-git checkout main
-git pull
 
 ## Build the SDK
 
@@ -228,7 +249,7 @@ cp \
 
 if [ "${buildApp}" == "0" ]; then
     printf "\n## Building the application...\n\n"
-    ./gradlew assembleDebug
+    ./gradlew :app:assembleGplayDebug
 fi
 
 ## Clean remote checkout of SDK repo

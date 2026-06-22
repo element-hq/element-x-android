@@ -68,7 +68,7 @@ import io.element.android.libraries.matrix.ui.messages.sender.SenderNameMode
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.libraries.ui.utils.time.isTalkbackActive
+import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 
 @Composable
 internal fun TimelineItemEventRowModernContent(
@@ -279,6 +279,7 @@ private fun ModernMessageContent(
                             .padding(vertical = 4.dp)
                     )
                 }
+            TimestampPosition.Hidden -> Box(modifier) { content {} }
         }
     }
 

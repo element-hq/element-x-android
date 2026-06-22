@@ -41,6 +41,7 @@ class DefaultLocalMediaRenderer(
             textFileViewer = textFileViewer,
             audioFocus = audioFocus,
             onClick = {},
+            onOpenWith = null,
         )
     }
 }

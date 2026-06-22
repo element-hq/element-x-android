@@ -13,8 +13,10 @@ import org.jsoup.Jsoup
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
+@Config(sdk = [36])
 class UrlPreviewParserTest {
     @Test
     fun `find first previewable url returns first previewable raw text url`() {

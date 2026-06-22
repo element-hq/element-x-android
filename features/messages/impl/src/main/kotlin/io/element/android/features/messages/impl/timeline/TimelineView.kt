@@ -85,11 +85,12 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.libraries.ui.utils.time.isTalkbackActive
+import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.transform
@@ -110,7 +111,7 @@ fun TimelineView(
     onReactionLongClick: (emoji: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
-    onJoinCallClick: (isAudioCall: Boolean) -> Unit,
+    onJoinCallClick: (isAudioCall: Boolean) -> Unit = {},
     modifier: Modifier = Modifier,
     lazyListState: LazyListState = rememberLazyListState(),
     forceJumpToBottomVisibility: Boolean = false,
@@ -233,7 +234,6 @@ fun TimelineView(
                                     timelineMode = state.timelineMode,
                                     timelineRoomInfo = state.timelineRoomInfo,
                                     timelineProtectionState = timelineProtectionState,
-                                    renderReadReceipts = state.renderReadReceipts,
                                     isLastOutgoingMessage = state.isLastOutgoingMessage(timelineItem.identifier()),
                                     focusedEventId = state.focusedEventId,
                                     displayThreadSummaries = state.displayThreadSummaries,
@@ -248,7 +248,6 @@ fun TimelineView(
                                     onMoreReactionsClick = onMoreReactionsClick,
                                     onReadReceiptClick = onReadReceiptClick,
                                     onSwipeToReply = onSwipeToReply,
-                                    onJoinCallClick = onJoinCallClick,
                                     eventSink = eventSinkStable,
                                 )
                             }
@@ -259,7 +258,6 @@ fun TimelineView(
                                 timelineMode = state.timelineMode,
                                 timelineRoomInfo = state.timelineRoomInfo,
                                 timelineProtectionState = timelineProtectionState,
-                                renderReadReceipts = state.renderReadReceipts,
                                 isLastOutgoingMessage = state.isLastOutgoingMessage(timelineItem.identifier()),
                                 focusedEventId = state.focusedEventId,
                                 displayThreadSummaries = state.displayThreadSummaries,
@@ -274,7 +272,6 @@ fun TimelineView(
                                 onMoreReactionsClick = onMoreReactionsClick,
                                 onReadReceiptClick = onReadReceiptClick,
                                 onSwipeToReply = onSwipeToReply,
-                                onJoinCallClick = onJoinCallClick,
                                 eventSink = eventSinkStable,
                             )
                         }
@@ -343,11 +340,14 @@ private fun TimelinePrefetchingHelper(
             firstVisibleItemIndex + layoutInfo.visibleItemsInfo.size >= layoutInfo.totalItemsCount - 40
         }
 
+        val isEmptyTimelineFlow = layoutInfoFlow.map { it.totalItemsCount == 0 }
+
         combine(
             isCloseToStartOfLoadedTimelineFlow.distinctUntilChanged(),
             isScrollingFlow.distinctUntilChanged(),
-        ) { needsPrefetch, isScrolling ->
-            needsPrefetch && isScrolling
+            isEmptyTimelineFlow,
+        ) { needsPrefetch, isScrolling, isEmptyAndNeedsBackPagination ->
+            isEmptyAndNeedsBackPagination || needsPrefetch && isScrolling
         }
             .distinctUntilChanged()
             .collectLatest { needsPrefetch ->

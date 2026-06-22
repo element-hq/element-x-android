@@ -46,7 +46,7 @@ class OutgoingVerificationStateMachine(
             inState<State.RequestingVerification> {
                 onEnterEffect { event ->
                     when (event.verificationRequest) {
-                        is VerificationRequest.Outgoing.CurrentSession -> sessionVerificationService.requestCurrentSessionVerification()
+                        is VerificationRequest.Outgoing.CurrentSession -> sessionVerificationService.requestDeviceVerification()
                         is VerificationRequest.Outgoing.User -> sessionVerificationService.requestUserVerification(event.verificationRequest.userId)
                     }
                 }
@@ -56,7 +56,7 @@ class OutgoingVerificationStateMachine(
             }
             inState<State.StartingSasVerification> {
                 onEnterEffect {
-                    sessionVerificationService.startVerification()
+                    sessionVerificationService.startSasVerification()
                 }
             }
             inState<State.VerificationRequestAccepted> {

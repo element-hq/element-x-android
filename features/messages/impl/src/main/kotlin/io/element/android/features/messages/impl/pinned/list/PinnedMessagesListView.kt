@@ -216,7 +216,6 @@ private fun PinnedMessagesListLoaded(
                 timelineItem = timelineItem,
                 timelineMode = Timeline.Mode.PinnedEvents,
                 timelineRoomInfo = state.timelineRoomInfo,
-                renderReadReceipts = false,
                 timelineProtectionState = state.timelineProtectionState,
                 isLastOutgoingMessage = false,
                 focusedEventId = null,
@@ -234,7 +233,6 @@ private fun PinnedMessagesListLoaded(
                 onMoreReactionsClick = {},
                 onReadReceiptClick = {},
                 onSwipeToReply = {},
-                onJoinCallClick = {},
                 eventSink = {},
                 eventContentView = { event, contentModifier, onContentLayoutChange ->
                     TimelineItemEventContentViewWrapper(

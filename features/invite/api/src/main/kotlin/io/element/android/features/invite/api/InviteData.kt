@@ -11,7 +11,6 @@ package io.element.android.features.invite.api
 import android.os.Parcelable
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomInfo
-import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import kotlinx.parcelize.Parcelize

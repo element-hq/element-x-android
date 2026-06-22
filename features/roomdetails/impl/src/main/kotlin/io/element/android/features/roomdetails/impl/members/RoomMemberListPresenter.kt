@@ -38,12 +38,12 @@ import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.room.toMatrixUser
 import io.element.android.libraries.matrix.ui.room.PowerLevelRoomMemberComparator
 import io.element.android.libraries.matrix.ui.room.roomMemberIdentityStateChange
+import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
-import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch

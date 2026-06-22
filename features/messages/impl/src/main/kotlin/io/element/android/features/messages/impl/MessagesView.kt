@@ -57,6 +57,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.location.api.LiveLocationSharingBanner
 import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerEvent
 import io.element.android.features.messages.impl.actionlist.ActionListEvent
 import io.element.android.features.messages.impl.actionlist.ActionListView
@@ -146,7 +147,7 @@ fun MessagesView(
     onCreatePollClick: () -> Unit,
     onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     onViewAllPinnedMessagesClick: () -> Unit,
-    onShowThreadsListClick: () -> Unit = {},
+    onThreadsListClick: () -> Unit = {},
     modifier: Modifier = Modifier,
     forceJumpToBottomVisibility: Boolean = false,
     knockRequestsBannerView: @Composable () -> Unit,
@@ -290,11 +291,11 @@ fun MessagesView(
                             onBackClick = { hidingKeyboard { onBackClick() } },
                             onRoomDetailsClick = { hidingKeyboard { onRoomDetailsClick() } },
                         ) {
-                            if (state.showThreadsButton) {
-                                IconButton(onClick = onShowThreadsListClick) {
+                            if (state.threads.hasThreads) {
+                                IconButton(onClick = onThreadsListClick) {
                                     Icon(
                                         imageVector = CompoundIcons.ThreadsSolid(),
-                                        contentDescription = stringResource(CommonStrings.common_thread),
+                                        contentDescription = stringResource(CommonStrings.common_threads),
                                     )
                                 }
                             }
@@ -634,6 +635,12 @@ private fun MessagesViewContent(
                         state = state.pinnedMessagesBannerState,
                         onClick = ::focusOnPinnedEvent,
                         onViewAllClick = onViewAllPinnedMessagesClick,
+                    )
+                }
+                if (state.showLiveLocationShareBanner) {
+                    LiveLocationSharingBanner(
+                        onClick = { state.eventSink(MessagesEvent.ShowLiveLocationShare) },
+                        onStopClick = { state.eventSink(MessagesEvent.StopLiveLocationShare) },
                     )
                 }
                 knockRequestsBannerView()

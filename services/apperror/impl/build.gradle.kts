@@ -10,7 +10,7 @@ import extension.testCommonDependencies
  */
 
 plugins {
-    id("io.element.android-compose-library")
+    id("io.element.android-library")
 }
 
 setupDependencyInjection()
@@ -22,8 +22,6 @@ android {
 dependencies {
     implementation(projects.libraries.core)
     implementation(projects.libraries.di)
-    implementation(projects.libraries.designsystem)
-    implementation(projects.libraries.uiStrings)
     implementation(projects.services.toolbox.api)
 
     implementation(libs.coroutines.core)

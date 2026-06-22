@@ -11,6 +11,7 @@ package io.element.android.features.space.impl.leave
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.designsystem.preview.SPACE_NAME
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import io.element.android.libraries.previewutils.room.aSpaceRoom
@@ -117,7 +118,7 @@ class LeaveSpaceStateProvider : PreviewParameterProvider<LeaveSpaceState> {
 }
 
 fun aLeaveSpaceState(
-    spaceName: String? = "Space name",
+    spaceName: String? = SPACE_NAME,
     isLastOwner: Boolean = false,
     areCreatorsPrivileged: Boolean = false,
     selectableSpaceRooms: AsyncData<ImmutableList<SelectableSpaceRoom>> = AsyncData.Uninitialized,

@@ -16,6 +16,7 @@ android {
 
 dependencies {
     api(projects.features.messages.impl)
+    implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.test)
     implementation(projects.libraries.audio.test)
     implementation(projects.libraries.mediaplayer.test)
@@ -26,5 +27,5 @@ dependencies {
     implementation(projects.libraries.voicerecorder.test)
     implementation(projects.services.analytics.test)
     implementation(projects.tests.testutils)
-    implementation(projects.libraries.mediaupload.impl)
+    implementation(projects.libraries.mediaupload.api)
 }

@@ -236,7 +236,6 @@ internal fun TimelineItemEventRowModernWithReadReceiptsPreview() = ElementPrevie
             ),
         ),
         timelineRoomInfo = modernRoomInfo,
-        renderReadReceipts = true,
         isLastOutgoingMessage = true,
     )
 }

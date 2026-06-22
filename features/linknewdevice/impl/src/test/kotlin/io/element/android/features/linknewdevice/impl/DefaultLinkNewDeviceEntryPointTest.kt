@@ -11,6 +11,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.enterprise.test.FakeSessionEnterpriseService
 import io.element.android.features.linknewdevice.api.LinkNewDeviceEntryPoint
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.tests.testutils.lambda.lambdaError
@@ -37,6 +38,7 @@ class DefaultLinkNewDeviceEntryPointTest {
                 sessionCoroutineScope = backgroundScope,
                 linkNewMobileHandler = LinkNewMobileHandler(client),
                 linkNewDesktopHandler = LinkNewDesktopHandler(client),
+                sessionEnterpriseService = FakeSessionEnterpriseService(),
             )
         }
         val callback: LinkNewDeviceEntryPoint.Callback = object : LinkNewDeviceEntryPoint.Callback {

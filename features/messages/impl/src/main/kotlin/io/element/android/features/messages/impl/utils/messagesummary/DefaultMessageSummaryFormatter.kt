@@ -10,6 +10,7 @@ package io.element.android.features.messages.impl.utils.messagesummary
 
 import android.content.Context
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.features.messages.impl.timeline.model.event.RtcNotificationState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
@@ -41,7 +42,10 @@ class DefaultMessageSummaryFormatter(
             is TimelineItemTextBasedContent -> content.plainText
             is TimelineItemProfileChangeContent -> content.body
             is TimelineItemStateContent -> content.body
-            is TimelineItemLocationContent -> context.getString(CommonStrings.common_shared_location)
+            is TimelineItemLocationContent -> when (content.mode) {
+                is TimelineItemLocationContent.Mode.Live -> context.getString(CommonStrings.common_shared_live_location)
+                is TimelineItemLocationContent.Mode.Static -> context.getString(CommonStrings.common_shared_location)
+            }
             is TimelineItemEncryptedContent -> context.getString(CommonStrings.common_unable_to_decrypt)
             is TimelineItemRedactedContent -> context.getString(CommonStrings.common_message_removed)
             is TimelineItemPollContent -> content.question
@@ -53,7 +57,16 @@ class DefaultMessageSummaryFormatter(
             is TimelineItemFileContent -> context.getString(CommonStrings.common_file)
             is TimelineItemAudioContent -> context.getString(CommonStrings.common_audio)
             is TimelineItemLegacyCallInviteContent -> context.getString(CommonStrings.common_unsupported_call)
-            is TimelineItemRtcNotificationContent -> context.getString(CommonStrings.common_call_started)
+            is TimelineItemRtcNotificationContent -> when (content.state) {
+                is RtcNotificationState.Declined -> {
+                    if (content.state.byMe) {
+                        context.getString(CommonStrings.common_call_you_declined)
+                    } else {
+                        context.getString(CommonStrings.common_call_declined)
+                    }
+                }
+                RtcNotificationState.Started -> context.getString(CommonStrings.common_call_started)
+            }
         }
             // Truncate the message to a safe length to avoid crashes in Compose
             .toSafeLength()

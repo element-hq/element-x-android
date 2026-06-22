@@ -39,7 +39,7 @@ private const val versionYear = 26
  * Month of the version on 2 digits. Value must be in [1,12].
  * Do not update this value. it is updated by the release script.
  */
-private const val versionMonth = 3
+private const val versionMonth = 6
 
 /**
  * Release number in the month. Value must be in [0,99].
@@ -61,19 +61,19 @@ object Versions {
      * Compile SDK version. Must be updated when a new Android version is released.
      * When updating COMPILE_SDK, please also update BUILD_TOOLS_VERSION.
      */
-    const val COMPILE_SDK = 36
+    const val COMPILE_SDK = 37
 
     /**
      * Build tools version. Must be kept in sync with COMPILE_SDK.
      * The value is used by the release script.
      */
     @Suppress("unused")
-    private const val BUILD_TOOLS_VERSION = "36.0.0"
+    private const val BUILD_TOOLS_VERSION = "37.0.0"
 
     /**
      * Target SDK version. Should be kept up to date with COMPILE_SDK.
      */
-    const val TARGET_SDK = 36
+    const val TARGET_SDK = 37
 
     /**
      * Minimum SDK version for FOSS builds.

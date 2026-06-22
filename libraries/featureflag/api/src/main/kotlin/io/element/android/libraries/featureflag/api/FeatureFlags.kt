@@ -22,13 +22,6 @@ enum class FeatureFlags(
     override val isFinished: Boolean,
     override val isInLabs: Boolean = false,
 ) : Feature {
-    RoomDirectorySearch(
-        key = "feature.roomdirectorysearch",
-        title = "Room directory search",
-        description = "Allow user to search for public rooms in their homeserver",
-        defaultValue = { false },
-        isFinished = false,
-    ),
     ShowBlockedUsersDetails(
         key = "feature.showBlockedUsersDetails",
         title = "Show blocked users details",
@@ -72,27 +65,6 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
-    CreateSpaces(
-        key = "feature.createSpaces",
-        title = "Create spaces",
-        description = "Allow creating spaces.",
-        defaultValue = { true },
-        isFinished = false,
-    ),
-    SpaceSettings(
-        key = "feature.spaceSettings",
-        title = "Space settings",
-        description = "Allow managing space settings such as details, permissions and privacy.",
-        defaultValue = { true },
-        isFinished = false,
-    ),
-    RoomListSpaceFilters(
-        key = "feature.roomListSpaceFilters",
-        title = "Room list space filters",
-        description = "Allow filtering the room list by space.",
-        defaultValue = { true },
-        isFinished = false,
-    ),
     PrintLogsToLogcat(
         key = "feature.print_logs_to_logcat",
         title = "Print logs to logcat",
@@ -128,14 +100,6 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
-    SyncNotificationsWithWorkManager(
-        key = "feature.sync_notifications_with_workmanager",
-        title = "Sync notifications with WorkManager",
-        description = "Use WorkManager to schedule notification sync tasks when a push is received." +
-            " This should improve reliability and battery usage.",
-        defaultValue = { true },
-        isFinished = false,
-    ),
     QrCodeLogin(
         key = "feature.qr_code_login",
         title = "QR Code Login",
@@ -166,9 +130,17 @@ enum class FeatureFlags(
         isFinished = false,
         isInLabs = true,
     ),
+    AllowBlackTheme(
+        key = "feature.allow_black_theme",
+        title = "Black theme",
+        description = "Allow selecting the black appearance theme for battery saving on OLED.",
+        defaultValue = { false },
+        isFinished = false,
+        isInLabs = true,
+    ),
     ValidateNetworkWhenSchedulingNotificationFetching(
         key = "feature.validate_network_when_scheduling_notification_fetching",
-        title = "validate internet connectivity when scheduling notification fetching",
+        title = "Validate internet connectivity when scheduling notification fetching",
         description = "Only fetch events for push notifications when the device has internet connectivity. " +
             "Enabling this can be problematic in air-gapped environments.",
         defaultValue = { true },
@@ -181,5 +153,34 @@ enum class FeatureFlags(
         defaultValue = { it.buildType != BuildType.RELEASE },
         isFinished = false,
         isInLabs = true,
+    ),
+    SlashCommand(
+        key = "feature.slash_command",
+        title = "Parse slash commands in the message composer",
+        description = "Allow parsing slash commands in the message composer and perform action.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    RoomThreadList(
+        key = "feature.room_thread_list",
+        title = "Add a list of threads in a room",
+        description = "Add a new screen with a list of threads in a room.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    AutomaticBackPagination(
+        key = "feature.automatic_back_pagination",
+        title = "Automatic back pagination of rooms",
+        description = "Allow the app to automatically back paginate in rooms to pre-fetch older messages in background." +
+            "\nRequires an app restart to take effect.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    UnreadIndicatorCount(
+        key = "feature.unread_indicator_count",
+        title = "Unread indicator count",
+        description = "Show the number of unread messages on the unread indicator in the room list.",
+        defaultValue = { false },
+        isFinished = false,
     ),
 }

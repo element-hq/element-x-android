@@ -66,8 +66,8 @@ import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.asEventId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
-import io.element.android.libraries.oidc.api.OidcAction
-import io.element.android.libraries.oidc.api.OidcActionFlow
+import io.element.android.libraries.oauth.api.OAuthAction
+import io.element.android.libraries.oauth.api.OAuthActionFlow
 import io.element.android.libraries.sessionstorage.api.LoggedInState
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.ui.common.nodes.emptyNode
@@ -98,7 +98,7 @@ class RootFlowNode(
     private val signedOutEntryPoint: SignedOutEntryPoint,
     private val accountSelectEntryPoint: AccountSelectEntryPoint,
     private val intentResolver: IntentResolver,
-    private val oidcActionFlow: OidcActionFlow,
+    private val oAuthActionFlow: OAuthActionFlow,
     private val featureFlagService: FeatureFlagService,
     private val announcementService: AnnouncementService,
     private val analyticsService: AnalyticsService,
@@ -263,7 +263,8 @@ class RootFlowNode(
             val transitionHandler = rememberDelegateTransitionHandler<NavTarget, BackStack.State> { navTarget ->
                 when (navTarget) {
                     is NavTarget.SplashScreen,
-                    is NavTarget.LoggedInFlow -> backstackFader
+                    is NavTarget.LoggedInFlow,
+                    is NavTarget.NotLoggedInFlow -> backstackFader
                     else -> backstackSlider
                 }
             }
@@ -402,7 +403,7 @@ class RootFlowNode(
                 navigateTo(resolvedIntent.deeplinkData)
             }
             is ResolvedIntent.Login -> onLoginLink(resolvedIntent.params)
-            is ResolvedIntent.Oidc -> onOidcAction(resolvedIntent.oidcAction)
+            is ResolvedIntent.OAuth -> onOAuthAction(resolvedIntent.oAuthAction)
             is ResolvedIntent.Permalink -> navigateTo(resolvedIntent.permalinkData)
             is ResolvedIntent.IncomingShare -> onIncomingShare(resolvedIntent.shareIntentData)
         }
@@ -543,8 +544,8 @@ class RootFlowNode(
         }
     }
 
-    private fun onOidcAction(oidcAction: OidcAction) {
-        oidcActionFlow.post(oidcAction)
+    private fun onOAuthAction(oAuthAction: OAuthAction) {
+        oAuthActionFlow.post(oAuthAction)
     }
 
     private suspend fun attachSession(sessionId: SessionId): LoggedInFlowNode {

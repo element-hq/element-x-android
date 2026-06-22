@@ -9,7 +9,6 @@
 package io.element.android.libraries.architecture
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
@@ -85,11 +84,9 @@ inline fun <reified NavTarget : Any> BaseFlowNode<NavTarget>.OverlayView(
 @Composable
 inline fun <reified NavTarget : Any> BaseFlowNode<NavTarget>.BackstackWithOverlayBox(
     modifier: Modifier = Modifier,
-    content: @Composable BoxScope.() -> Unit = {},
 ) {
     Box(modifier = modifier) {
         BackstackView()
         OverlayView()
-        content()
     }
 }

@@ -54,6 +54,7 @@ import kotlinx.collections.immutable.toImmutableList
 fun AdvancedSettingsView(
     state: AdvancedSettingsState,
     onBackClick: () -> Unit,
+    onOpenAppSettingsClick: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     val analyticsService = LocalAnalyticsService.current

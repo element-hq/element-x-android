@@ -9,6 +9,8 @@
 package io.element.android.libraries.matrix.ui.components
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.designsystem.preview.SPACE_NAME
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomType
@@ -28,10 +30,10 @@ class SpaceRoomProvider : PreviewParameterProvider<SpaceRoom> {
             state = CurrentUserMembership.LEFT,
         ),
         aSpaceRoom(
-            displayName = "Alice",
+            displayName = SPACE_NAME,
             roomType = RoomType.Room,
             isDirect = true,
-            heroes = listOf(aMatrixUser(displayName = "Alice")),
+            heroes = listOf(aMatrixUser(displayName = USER_NAME_ALICE)),
             state = CurrentUserMembership.JOINED,
             numJoinedMembers = 2,
         ),
@@ -69,9 +71,9 @@ class SpaceRoomProvider : PreviewParameterProvider<SpaceRoom> {
             state = CurrentUserMembership.INVITED,
         ),
         aSpaceRoom(
-            displayName = "Alice",
+            displayName = SPACE_NAME,
             roomType = RoomType.Space,
-            heroes = listOf(aMatrixUser(displayName = "Alice")),
+            heroes = listOf(aMatrixUser(displayName = USER_NAME_ALICE)),
             state = CurrentUserMembership.JOINED,
             numJoinedMembers = 2,
         ),

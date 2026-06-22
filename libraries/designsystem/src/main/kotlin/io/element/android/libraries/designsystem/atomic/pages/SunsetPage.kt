@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.annotations.CoreColorToken
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.theme.Theme
 import io.element.android.compound.tokens.generated.internal.DarkColorTokens
 import io.element.android.compound.tokens.generated.internal.LightColorTokens
 import io.element.android.libraries.designsystem.R
@@ -49,7 +50,7 @@ fun SunsetPage(
 ) {
     ElementTheme(
         // Always use the opposite value of the current theme
-        darkTheme = ElementTheme.isLightTheme,
+        theme = if (ElementTheme.isLightTheme) Theme.Dark else Theme.Light,
         applySystemBarsUpdate = false,
     ) {
         Box(

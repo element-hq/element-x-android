@@ -26,6 +26,8 @@ import io.element.android.features.messages.impl.attachments.preview.imageeditor
 import io.element.android.features.messages.impl.attachments.preview.imageeditor.AttachmentImageEditorState
 import io.element.android.features.messages.impl.attachments.preview.imageeditor.AttachmentImageEdits
 import io.element.android.features.messages.impl.attachments.video.MediaOptimizationSelectorPresenter
+import io.element.android.features.messages.impl.attachments.video.MediaOptimizationSelectorState
+import io.element.android.features.messages.impl.attachments.video.VideoCompressionPresetSelector
 import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.androidutils.hash.hash
@@ -66,6 +68,7 @@ class AttachmentsPreviewPresenter(
     private val temporaryUriDeleter: TemporaryUriDeleter,
     private val attachmentImageEditor: AttachmentImageEditor,
     private val mediaOptimizationSelectorPresenterFactory: MediaOptimizationSelectorPresenter.Factory,
+    private val videoCompressionPresetSelector: VideoCompressionPresetSelector,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
     private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
@@ -109,7 +112,10 @@ class AttachmentsPreviewPresenter(
 
         val mediaAttachment = currentAttachment as Attachment.Media
         val mediaOptimizationSelectorPresenter = remember {
-            mediaOptimizationSelectorPresenterFactory.create(mediaAttachment.localMedia)
+            mediaOptimizationSelectorPresenterFactory.create(
+                localMedia = mediaAttachment.localMedia,
+                sendAsFile = mediaAttachment.sendAsFile,
+            )
         }
         val mediaOptimizationSelectorState by rememberUpdatedState(mediaOptimizationSelectorPresenter.present())
 
@@ -117,14 +123,32 @@ class AttachmentsPreviewPresenter(
 
         var displayFileTooLargeError by remember { mutableStateOf(false) }
 
-        LaunchedEffect(mediaOptimizationSelectorState.displayMediaSelectorViews, currentAttachment, imageEditorState, isApplyingImageEdits) {
+        LaunchedEffect(
+            mediaOptimizationSelectorState.displayMediaSelectorViews,
+            mediaOptimizationSelectorState.videoSizeEstimations,
+            currentAttachment,
+            imageEditorState,
+            isApplyingImageEdits,
+        ) {
             // If the media optimization selector is not displayed, we can pre-process the media
             // to prepare it for sending. This is done to avoid blocking the UI thread when the
             // user clicks on the send button.
-            if (mediaOptimizationSelectorState.displayMediaSelectorViews == false && imageEditorState == null && !isApplyingImageEdits) {
-                preprocessMediaJob = preProcessAttachment(
+            @Suppress("ComplexCondition")
+            if (mediaOptimizationSelectorState.displayMediaSelectorViews == false &&
+                preprocessMediaJob == null &&
+                imageEditorState == null &&
+                !isApplyingImageEdits) {
+                if (mediaAttachment.localMedia.info.mimeType.isMimeTypeVideo() && mediaOptimizationSelectorState.videoSizeEstimations.dataOrNull() == null) {
+                    Timber.d("Waiting for video size estimations to be able to select the best video compression preset before pre-processing the media")
+                    return@LaunchedEffect
+                }
+                val config = getAutoPreprocessMediaOptimizationConfig(
+                    mediaAttachment = mediaAttachment,
+                    mediaOptimizationSelectorState = mediaOptimizationSelectorState,
+                ) ?: return@LaunchedEffect
+                preprocessMediaJob = coroutineScope.preProcessAttachment(
                     attachment = currentAttachment,
-                    mediaOptimizationConfig = mediaOptimizationConfigProvider.get(),
+                    mediaOptimizationConfig = config,
                     displayProgress = false,
                     sendActionState = sendActionState,
                 )
@@ -252,6 +276,7 @@ class AttachmentsPreviewPresenter(
                         imageEditorState = AttachmentImageEditorState(
                             localMedia = originalLocalMedia,
                             edits = appliedImageEdits,
+                            previewDebug = false,
                         )
                     }
                 }
@@ -264,10 +289,27 @@ class AttachmentsPreviewPresenter(
                         edits = pendingState.edits.copy(cropRect = event.cropRect)
                     )
                 }
-                AttachmentsPreviewEvent.RotateImage -> {
+                AttachmentsPreviewEvent.RotateImageToTheLeft -> {
                     val pendingState = imageEditorState ?: return
                     imageEditorState = pendingState.copy(
-                        edits = pendingState.edits.rotateClockwise()
+                        edits = pendingState.edits.rotateAntiClockwise()
+                    )
+                }
+                AttachmentsPreviewEvent.FlipImageHorizontally -> {
+                    val pendingState = imageEditorState ?: return
+                    imageEditorState = pendingState.copy(
+                        edits = pendingState.edits.flipHorizontally()
+                    )
+                }
+                AttachmentsPreviewEvent.FlipImageVertically -> {
+                    val pendingState = imageEditorState ?: return
+                    imageEditorState = pendingState.copy(
+                        edits = pendingState.edits.flipVertically()
+                    )
+                }
+                AttachmentsPreviewEvent.ResetImageEdits -> {
+                    imageEditorState = imageEditorState?.copy(
+                        edits = AttachmentImageEdits()
                     )
                 }
                 AttachmentsPreviewEvent.ApplyImageEdits -> {
@@ -325,6 +367,28 @@ class AttachmentsPreviewPresenter(
             displayFileTooLargeError = displayFileTooLargeError,
             eventSink = ::handleEvent,
         )
+    }
+
+    private suspend fun getAutoPreprocessMediaOptimizationConfig(
+        mediaAttachment: Attachment.Media,
+        mediaOptimizationSelectorState: MediaOptimizationSelectorState,
+    ): MediaOptimizationConfig? {
+        return if (mediaAttachment.sendAsFile) {
+            // If we're sending the media as a file, we can skip image compression and we should select the highest video compression preset that still fits
+            // the upload limit (if the estimations are available)
+            val videoCompressionPreset = videoCompressionPresetSelector.selectBestVideoPreset(
+                expectedVideoPreset = VideoCompressionPreset.HIGH,
+                videoSizeEstimations = mediaOptimizationSelectorState.videoSizeEstimations,
+            ).dataOrNull() ?: VideoCompressionPreset.HIGH
+
+            MediaOptimizationConfig(
+                compressImages = false,
+                videoCompressionPreset = videoCompressionPreset,
+            )
+        } else {
+            // Otherwise, we just rely on the user preferences for media optimization
+            mediaOptimizationConfigProvider.get()
+        }
     }
 
     private fun CoroutineScope.preProcessAttachment(

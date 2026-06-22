@@ -23,6 +23,7 @@ import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import io.element.android.features.location.api.live.ActiveLiveLocationShareManager
 import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.features.messages.impl.UserEventPermissions
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureEvent
@@ -48,7 +49,6 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.asEventId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
-import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
@@ -63,14 +63,15 @@ import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.api.finishLongRunningTransaction
 import io.element.android.services.analyticsproviders.api.AnalyticsUserData
+import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
-import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -100,6 +101,7 @@ class TimelinePresenter(
     private val roomCallStatePresenter: Presenter<RoomCallState>,
     private val featureFlagService: FeatureFlagService,
     private val analyticsService: AnalyticsService,
+    private val liveLocationShareManager: ActiveLiveLocationShareManager,
 ) : Presenter<TimelineState> {
     private val tag = "TimelinePresenter"
 
@@ -145,12 +147,6 @@ class TimelinePresenter(
         var selectedMessageIds by remember { mutableStateOf<ImmutableSet<UniqueId>>(persistentSetOf()) }
 
         val resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailurePresenter.present()
-        val isSendPublicReadReceiptsEnabled by remember {
-            sessionPreferencesStore.isSendPublicReadReceiptsEnabled()
-        }.collectAsState(initial = true)
-        val renderReadReceipts by remember {
-            sessionPreferencesStore.isRenderReadReceiptsEnabled()
-        }.collectAsState(initial = true)
         val isLive by remember {
             timelineController.isLive()
         }.collectAsState(initial = true)
@@ -176,12 +172,15 @@ class TimelinePresenter(
                             newEventState.value = NewEventState.None
                         }
                         Timber.tag(tag).d("## sendReadReceiptIfNeeded firstVisibleIndex: ${event.firstIndex}")
-                        sessionCoroutineScope.sendReadReceiptIfNeeded(
-                            firstVisibleIndex = event.firstIndex,
-                            timelineItems = timelineItems,
-                            lastReadReceiptId = lastReadReceiptId,
-                            readReceiptType = if (isSendPublicReadReceiptsEnabled) ReceiptType.READ else ReceiptType.READ_PRIVATE,
-                        )
+                        sessionCoroutineScope.launch {
+                            val sendPublicReadReceipts = sessionPreferencesStore.isSendPublicReadReceiptsEnabled().first()
+                            sendReadReceiptIfNeeded(
+                                firstVisibleIndex = event.firstIndex,
+                                timelineItems = timelineItems,
+                                lastReadReceiptId = lastReadReceiptId,
+                                readReceiptType = if (sendPublicReadReceipts) ReceiptType.READ else ReceiptType.READ_PRIVATE,
+                            )
+                        }
                     } else {
                         newEventState.value = NewEventState.None
                     }
@@ -205,6 +204,9 @@ class TimelinePresenter(
                 }
                 is TimelineEvent.EditPoll -> {
                     navigator.navigateToEditPoll(event.pollStartId)
+                }
+                is TimelineEvent.StopLiveLocationShare -> sessionCoroutineScope.launch {
+                    liveLocationShareManager.stopShare(room.roomId)
                 }
                 is TimelineEvent.FocusOnEvent -> sessionCoroutineScope.launch {
                     focusRequestState.value = FocusRequestState.Requested(event.eventId, event.debounce)
@@ -235,9 +237,9 @@ class TimelinePresenter(
                 is TimelineEvent.ToggleMessageSelection -> {
                     val id = event.id
                     selectedMessageIds = if (id in selectedMessageIds) {
-                        (selectedMessageIds - id).toPersistentSet()
+                        (selectedMessageIds - id).toImmutableSet()
                     } else {
-                        (selectedMessageIds + id).toPersistentSet()
+                        (selectedMessageIds + id).toImmutableSet()
                     }
                     if (selectedMessageIds.isEmpty()) isSelectionMode = false
                 }
@@ -292,13 +294,18 @@ class TimelinePresenter(
                 }
                 .launchIn(this)
 
-            combine(timelineController.timelineItems(), room.membersStateFlow) { items, membersState ->
+            combine(
+                timelineController.timelineItems(),
+                room.membersStateFlow,
+                sessionPreferencesStore.isRenderReadReceiptsEnabled(),
+            ) { items, membersState, renderReadReceipts ->
                 val parent = analyticsService.getLongRunningTransaction(DisplayFirstTimelineItems)
                 val transaction = parent?.startChild("timelineItemsFactory.replaceWith", "Processing timeline items")
                 transaction?.putExtraData(AnalyticsUserData.TIMELINE_ITEM_COUNT, items.count().toString())
                 timelineItemsFactory.replaceWith(
                     timelineItems = items,
-                    roomMembers = membersState.roomMembers().orEmpty()
+                    roomMembers = membersState.roomMembers().orEmpty(),
+                    renderReadReceipts = renderReadReceipts,
                 )
                 transaction?.finish()
                 items
@@ -357,7 +364,6 @@ class TimelinePresenter(
             timelineItems = timelineItems,
             timelineMode = timelineMode,
             timelineRoomInfo = timelineRoomInfo,
-            renderReadReceipts = renderReadReceipts,
             newEventState = newEventState.value,
             isLive = isLive,
             focusRequestState = focusRequestState.value,

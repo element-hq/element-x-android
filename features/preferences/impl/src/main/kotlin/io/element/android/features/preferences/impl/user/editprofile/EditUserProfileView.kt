@@ -127,6 +127,7 @@ fun EditUserProfileView(
                 state = avatarPickerState,
                 onClick = ::onAvatarClick,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
+                enabled = state.canChangeAvatarUrl,
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
@@ -141,6 +142,7 @@ fun EditUserProfileView(
                 value = state.displayName,
                 placeholder = stringResource(CommonStrings.common_room_name_placeholder),
                 singleLine = true,
+                enabled = state.canChangeDisplayName,
                 onValueChange = { state.eventSink(EditUserProfileEvent.UpdateDisplayName(it)) },
             )
         }

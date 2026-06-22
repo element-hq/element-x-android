@@ -19,12 +19,15 @@
   <string name="screen_advanced_settings_push_provider_android">"فراهم کنندهٔ آگاهی‌های ارسالی"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"از کار انداختن ویرایشگر متن غنی یا نوشتن دستی مارک‌دون."</string>
   <string name="screen_advanced_settings_send_read_receipts">"رسید‌های خواندن"</string>
+  <string name="screen_advanced_settings_send_read_receipts_description">"اگر خاموش باشد، رسیدهای خوانده شدن شما برای کسی ارسال نمی‌شود. شما همچنان رسیدهای خوانده شدن را از سایر کاربران دریافت خواهید کرد."</string>
   <string name="screen_advanced_settings_share_presence">"هم‌رسانی حضور"</string>
+  <string name="screen_advanced_settings_share_presence_description">"اگر خاموش باشد، نمی‌توانید رسیدهای خوانده شدن یا اعلان‌های تایپ را ارسال یا دریافت کنید."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"نهفتن همیشگی"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_show">"نمایش همیشگی"</string>
   <string name="screen_advanced_settings_show_media_timeline_private_rooms">"در اتاق‌های خصوصی"</string>
   <string name="screen_advanced_settings_show_media_timeline_subtitle">"رسانه‌های نهفته همواره خواهند توانست با زدن رویشان نمایان شوند"</string>
   <string name="screen_advanced_settings_show_media_timeline_title">"نمایش رسانه در خط زمانی"</string>
+  <string name="screen_advanced_settings_view_source_description">"گزینه مشاهده منبع پیام در جدول زمانی را فعال کنید."</string>
   <string name="screen_blocked_users_empty">"هیچ کاربر مسدودی ندارید"</string>
   <string name="screen_blocked_users_unblock_alert_action">"رفع انسداد"</string>
   <string name="screen_blocked_users_unblock_alert_description">"قادر خواهید بود دوباره همهٔ پیام‌هایش را ببینید."</string>
@@ -64,6 +67,9 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"تنظیمات سامانه"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"آگاهی‌های سامانه‌ای خاموش شدند"</string>
   <string name="screen_notification_settings_title">"آگاهی‌ها"</string>
+  <string name="theme_dark">"تیره"</string>
+  <string name="theme_light">"روشن"</string>
+  <string name="theme_system">"سامانه"</string>
   <string name="troubleshoot_notifications_entry_point_push_history_title">"تاریخچهٔ آگاهی‌های ارسالی"</string>
   <string name="troubleshoot_notifications_entry_point_section">"رفع‌اشکال"</string>
   <string name="troubleshoot_notifications_entry_point_title">"رفع‌اشکال آگاهی‌ها"</string>

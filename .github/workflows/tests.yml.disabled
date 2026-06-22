@@ -49,7 +49,7 @@ jobs:
           sudo swapon /mnt/swapfile
           sudo swapon --show
       - name: ⏬ Checkout with LFS
-        uses: nschloe/action-cached-lfs-checkout@f46300cd8952454b9f0a21a3d133d4bd5684cfc2 # v1.2.3
+        uses: nschloe/action-cached-lfs-checkout@385a8ecc719e50b8c71af6ab01a624b486b7c3bc # v1.2.5
         with:
           # Ensure we are building the branch and not the branch after being merged on develop
           # https://github.com/actions/checkout/issues/881
@@ -68,7 +68,7 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '21'
       - name: Configure gradle
-        uses: gradle/actions/setup-gradle@0723195856401067f7a2779048b490ace7a47d7c # v5.0.2
+        uses: gradle/actions/setup-gradle@5e2ebd065dc2488b7a6ad670704656cbbe1e8f60 # v6.1.1
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
 
@@ -77,7 +77,7 @@ jobs:
 
       - name: 🚫 Upload kover failed coverage reports
         if: failure()
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: kover-error-report
           path: |
@@ -89,7 +89,7 @@ jobs:
 
       - name: 🚫 Upload test results on error
         if: failure()
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: tests-and-screenshot-tests-results
           path: |
@@ -108,7 +108,7 @@ jobs:
 
       # https://github.com/codecov/codecov-action
       - name: ☂️ Upload coverage reports to codecov
-        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         with:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}

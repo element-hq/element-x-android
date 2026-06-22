@@ -172,7 +172,6 @@
   <string name="common_creating_room">"Kamer maken…"</string>
   <string name="common_current_user_left_room">"Heeft de kamer verlaten"</string>
   <string name="common_current_user_rejected_invite">"Uitnodiging geweigerd"</string>
-  <string name="common_dark">"Donker"</string>
   <string name="common_decryption_error">"Decryptie fout"</string>
   <string name="common_developer_options">"Ontwikkelaarsopties"</string>
   <string name="common_device_id">"Apparaat-ID"</string>
@@ -200,7 +199,6 @@ Reden: %1$s."</string>
   <string name="common_install_apk_android">"APK installeren"</string>
   <string name="common_invite_unknown_profile">"Deze Matrix-ID kan niet worden gevonden, dus de uitnodiging is mogelijk niet ontvangen."</string>
   <string name="common_leaving_room">"De kamer verlaten"</string>
-  <string name="common_light">"Licht"</string>
   <string name="common_link_copied_to_clipboard">"Link gekopieerd naar klembord"</string>
   <string name="common_loading">"Laden…"</string>
   <plurals name="common_many_members">
@@ -250,7 +248,6 @@ Reden: %1$s."</string>
     <item quantity="other">"%1$d antwoorden"</item>
   </plurals>
   <string name="common_replying_to">"Reageren op %1$s"</string>
-  <string name="common_report_a_bug">"Een fout melden"</string>
   <string name="common_report_a_problem">"Meld een probleem"</string>
   <string name="common_report_submitted">"Melding ingediend"</string>
   <string name="common_rich_text_editor">"Uitgebreide tekstverwerker"</string>
@@ -279,7 +276,6 @@ Reden: %1$s."</string>
   <string name="common_success">"Geslaagd"</string>
   <string name="common_suggestions">"Suggesties"</string>
   <string name="common_syncing">"Synchroniseren"</string>
-  <string name="common_system">"Systeem"</string>
   <string name="common_text">"Tekst"</string>
   <string name="common_third_party_notices">"Kennisgevingen van derden"</string>
   <string name="common_thread">"Gesprek"</string>

@@ -12,8 +12,11 @@ package io.element.android.features.location.impl.show
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetValue
@@ -21,11 +24,15 @@ import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -36,13 +43,14 @@ import io.element.android.features.location.impl.common.ui.LocationPinMarkers
 import io.element.android.features.location.impl.common.ui.LocationShareRow
 import io.element.android.features.location.impl.common.ui.MapBottomSheetScaffold
 import io.element.android.features.location.impl.common.ui.UserLocationPuck
-import io.element.android.features.location.impl.common.ui.rememberUserLocationState
+import io.element.android.features.location.impl.common.userlocation.UserLocationTrackingEffect
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import org.maplibre.compose.camera.CameraMoveReason
 import org.maplibre.compose.camera.CameraPosition
@@ -65,19 +73,18 @@ fun ShowLocationView(
         onDismiss = { state.eventSink(ShowLocationEvent.DismissDialog) },
     )
 
-    val initialPosition = remember {
-        if (state.locationShares.isEmpty()) {
-            MapDefaults.defaultCameraPosition
-        } else {
-            val firstLocation = state.locationShares.first().location
-            CameraPosition(
-                target = Position(latitude = firstLocation.lat, longitude = firstLocation.lon),
+    val cameraState = rememberCameraState(firstPosition = MapDefaults.defaultCameraPosition)
+    var hasAnimatedToFocusedLocation by remember { mutableStateOf(false) }
+    LaunchedEffect(state.focusedLocation) {
+        if (state.focusedLocation != null && !hasAnimatedToFocusedLocation) {
+            hasAnimatedToFocusedLocation = true
+            val position = CameraPosition(
+                target = Position(latitude = state.focusedLocation.location.lat, longitude = state.focusedLocation.location.lon),
                 zoom = MapDefaults.DEFAULT_ZOOM
             )
+            cameraState.position = position
         }
     }
-    val cameraState = rememberCameraState(firstPosition = initialPosition)
-    val userLocationState = rememberUserLocationState(state.hasLocationPermission)
     LaunchedEffect(cameraState.isCameraMoving) {
         if (cameraState.moveReason == CameraMoveReason.GESTURE) {
             state.eventSink(ShowLocationEvent.TrackMyLocation(false))
@@ -85,16 +92,15 @@ fun ShowLocationView(
     }
 
     val scaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = rememberStandardBottomSheetState(
-            initialValue =
-                if (state.isSheetDraggable) {
-                    SheetValue.PartiallyExpanded
-                } else {
-                    SheetValue.Expanded
-                }
-        )
+        bottomSheetState = rememberStandardBottomSheetState(SheetValue.Expanded)
     )
+    LaunchedEffect(state.isSheetDraggable) {
+        if (!state.isSheetDraggable) {
+            scaffoldState.bottomSheetState.expand()
+        }
+    }
     MapBottomSheetScaffold(
+        customMapStyleUrl = state.customMapStyleUrl,
         sheetDragHandle = if (state.isSheetDraggable) {
             { BottomSheetDefaults.DragHandle() }
         } else {
@@ -116,39 +122,65 @@ fun ShowLocationView(
         },
         sheetContent = { sheetPaddings ->
             val coroutineScope = rememberCoroutineScope()
-            Spacer(Modifier.height(20.dp))
-            Text(
-                text = stringResource(CommonStrings.screen_static_location_sheet_title),
-                style = ElementTheme.typography.fontBodyLgMedium,
-                color = ElementTheme.colors.textPrimary,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-            )
-            state.locationShares.forEach { locationShare ->
-                LocationShareRow(
-                    item = locationShare,
-                    onShareClick = { state.eventSink(ShowLocationEvent.Share(locationShare.location)) },
-                    modifier = Modifier.clickable {
-                        state.eventSink(ShowLocationEvent.TrackMyLocation(false))
-                        val position = CameraPosition(
-                            padding = sheetPaddings,
-                            target = Position(locationShare.location.lon, locationShare.location.lat),
-                            zoom = MapDefaults.DEFAULT_ZOOM
-                        )
-                        coroutineScope.launch {
-                            cameraState.animateTo(finalPosition = position)
-                        }
-                    }
+            if (!state.isSheetDraggable) {
+                // If sheet is draggable the DragHandle has already some padding
+                Spacer(Modifier.height(20.dp))
+            }
+            if (state.locationShares.isEmpty()) {
+                Text(
+                    text = stringResource(CommonStrings.screen_live_location_sheet_nobody_sharing),
+                    style = ElementTheme.typography.fontBodyLgMedium,
+                    color = ElementTheme.colors.textPrimary,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(all = 16.dp),
+                    textAlign = TextAlign.Center,
                 )
+            } else {
+                Text(
+                    text = stringResource(CommonStrings.screen_static_location_sheet_title),
+                    style = ElementTheme.typography.fontBodyLgMedium,
+                    color = ElementTheme.colors.textPrimary,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                )
+                LazyColumn {
+                    items(state.locationShares) { locationShare ->
+                        LocationShareRow(
+                            item = locationShare,
+                            onShareClick = { state.eventSink(ShowLocationEvent.Share(locationShare.location)) },
+                            onStopClick = { state.eventSink(ShowLocationEvent.StopLocationSharing) },
+                            modifier = Modifier.clickable {
+                                state.eventSink(ShowLocationEvent.TrackMyLocation(false))
+                                val position = CameraPosition(
+                                    padding = sheetPaddings,
+                                    target = Position(locationShare.location.lon, locationShare.location.lat),
+                                    // Force pointing to NORTH
+                                    bearing = 0.0,
+                                    zoom = cameraState.position.zoom.coerceAtLeast(MapDefaults.DEFAULT_ZOOM),
+                                )
+                                coroutineScope.launch {
+                                    cameraState.animateTo(finalPosition = position)
+                                }
+                            }
+                        )
+                    }
+                }
             }
         },
         mapContent = {
-            UserLocationPuck(
+            UserLocationTrackingEffect(
                 cameraState = cameraState,
-                locationState = userLocationState,
-                trackUserLocation = state.isTrackMyLocation
+                locationState = state.userLocationState,
+                enabled = state.isTrackMyLocation,
             )
+            if (!state.hideUserLocationPuck) {
+                UserLocationPuck(
+                    cameraState = cameraState,
+                    location = state.userLocationState.location,
+                )
+            }
             val markers = remember(state.locationShares) {
-                state.locationShares.map { it.toMarkerData() }
+                state.locationShares.map { it.toMarkerData() }.toImmutableList()
             }
             LocationPinMarkers(markers)
         },

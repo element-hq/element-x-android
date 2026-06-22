@@ -154,6 +154,7 @@ private fun ChangeOwnRoleBottomSheet(
             .navigationBarsPadding(),
         sheetState = sheetState,
         onDismissRequest = ::dismiss,
+        scrollable = true,
     ) {
         Text(
             modifier = Modifier.padding(14.dp),
@@ -181,7 +182,6 @@ private fun ChangeOwnRoleBottomSheet(
         ListItem(
             headlineContent = { Text(stringResource(CommonStrings.action_cancel)) },
             onClick = ::dismiss,
-            style = ListItemStyle.Primary,
         )
     }
 }
@@ -192,7 +192,12 @@ internal fun RolesAndPermissionsViewPreview(@PreviewParameter(RolesAndPermission
     ElementPreview {
         RolesAndPermissionsView(
             state = state,
-            rolesAndPermissionsNavigator = object : RolesAndPermissionsNavigator {},
+            rolesAndPermissionsNavigator = object : RolesAndPermissionsNavigator {
+                override fun onBackClick() {}
+                override fun openAdminList() {}
+                override fun openModeratorList() {}
+                override fun openEditPermissions() {}
+            },
         )
     }
 }

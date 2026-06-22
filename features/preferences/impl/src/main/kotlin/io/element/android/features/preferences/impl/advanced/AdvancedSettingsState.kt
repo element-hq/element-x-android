@@ -15,7 +15,8 @@ import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.designsystem.components.preferences.DropdownOption
 import io.element.android.libraries.preferences.api.store.TimelineLayoutMode
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
-import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 data class AdvancedSettingsState(
     val isDeveloperModeEnabled: Boolean,
@@ -28,7 +29,9 @@ data class AdvancedSettingsState(
     val mediaOptimizationState: MediaOptimizationState?,
     val theme: ThemeOption,
     val timelineLayoutMode: TimelineLayoutMode?,
+    val availableThemeOptions: ImmutableList<ThemeOption> = ThemeOption.entries.toImmutableList(),
     val mediaPreviewConfigState: MediaPreviewConfigState,
+    val liveLocationMinimumDistanceUpdate: Int? = null,
     val eventSink: (AdvancedSettingsEvents) -> Unit
 )
 
@@ -74,16 +77,24 @@ enum class ThemeOption : DropdownOption {
     System {
         @Composable
         @ReadOnlyComposable
-        override fun getText(): String = stringResource(CommonStrings.common_system)
+        override fun getText(): String = stringResource(R.string.theme_system)
     },
-    Dark {
-        @Composable
-        @ReadOnlyComposable
-        override fun getText(): String = stringResource(CommonStrings.common_dark)
-    },
+
     Light {
         @Composable
         @ReadOnlyComposable
-        override fun getText(): String = stringResource(CommonStrings.common_light)
+        override fun getText(): String = stringResource(R.string.theme_light)
+    },
+
+    Dark {
+        @Composable
+        @ReadOnlyComposable
+        override fun getText(): String = stringResource(R.string.theme_dark)
+    },
+
+    Black {
+        @Composable
+        @ReadOnlyComposable
+        override fun getText(): String = stringResource(R.string.theme_black)
     }
 }

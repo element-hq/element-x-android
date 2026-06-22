@@ -84,7 +84,6 @@ class ConfigureRoomPresenter(
 
     @Composable
     override fun present(): ConfigureRoomState {
-        val canAddRoomToSpace by featureFlagService.isFeatureEnabledFlow(FeatureFlags.CreateSpaces).collectAsState(false)
         val cameraPermissionState = cameraPermissionPresenter.present()
         val createRoomConfig by dataStore.getCreateRoomConfigFlow().collectAsState()
         val homeserverName = remember { matrixClient.userIdServerName() }
@@ -113,12 +112,8 @@ class ConfigureRoomPresenter(
         }
 
         var spaces by remember { mutableStateOf<ImmutableList<SpaceRoom>>(persistentListOf()) }
-        LaunchedEffect(canAddRoomToSpace) {
-            spaces = if (canAddRoomToSpace) {
-                matrixClient.spaceService.editableSpaces().getOrElse { emptyList() }.toImmutableList()
-            } else {
-                persistentListOf()
-            }
+        LaunchedEffect(Unit) {
+            spaces = matrixClient.spaceService.editableSpaces().getOrElse { emptyList() }.toImmutableList()
             val parentSpace = spaces.find { it.roomId == initialParentSpaceId }
             parentSpace?.let {
                 dataStore.setParentSpace(parentSpace = parentSpace, updateVisibility = true)

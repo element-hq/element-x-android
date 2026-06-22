@@ -11,13 +11,12 @@ package io.element.android.libraries.mediaviewer.impl.local.player
 import androidx.compose.animation.AnimatedVisibility
 import io.element.android.libraries.designsystem.animation.M3Motion
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -27,8 +26,10 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -91,50 +92,66 @@ fun MediaPlayerControllerView(
                     .widthIn(max = 480.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                val bgColor = if (state.isPlaying) {
-                    ElementTheme.colors.bgCanvasDefault
+                val colors = if (state.isPlaying) {
+                    IconButtonDefaults.iconButtonColors(
+                        containerColor = ElementTheme.colors.bgCanvasDefault,
+                        contentColor = ElementTheme.colors.iconPrimary,
+                    )
                 } else {
-                    ElementTheme.colors.textPrimary
+                    IconButtonDefaults.iconButtonColors(
+                        containerColor = ElementTheme.colors.iconPrimary,
+                        contentColor = ElementTheme.colors.iconOnSolidPrimary,
+                    )
                 }
-                Box(
+                val a11yPause = stringResource(CommonStrings.a11y_pause)
+                val a11yPlay = stringResource(CommonStrings.a11y_play)
+                IconButton(
                     modifier = Modifier
                         .minimumInteractiveComponentSize()
                         .size(36.dp)
-                        .background(
-                            color = bgColor,
-                            shape = CircleShape,
-                        )
-                        .clip(CircleShape)
-                        .clickable { onTogglePlay() }
-                        .padding(8.dp),
-                    contentAlignment = Alignment.Center,
+                        .semantics {
+                            stateDescription = if (state.isPlaying) a11yPause else a11yPlay
+                        },
+                    onClick = onTogglePlay,
+                    colors = colors,
                 ) {
                     if (state.isPlaying) {
                         Icon(
                             imageVector = CompoundIcons.PauseSolid(),
-                            tint = ElementTheme.colors.iconPrimary,
-                            contentDescription = stringResource(CommonStrings.a11y_pause)
+                            contentDescription = null,
                         )
                     } else {
                         Icon(
                             imageVector = CompoundIcons.PlaySolid(),
-                            tint = ElementTheme.colors.iconOnSolidPrimary,
-                            contentDescription = stringResource(CommonStrings.a11y_play)
+                            contentDescription = null,
                         )
                     }
                 }
+                val position = state.displayProgressInMillis.toHumanReadableDuration()
+                val a11yPosition = stringResource(CommonStrings.a11y_position, position)
                 Text(
                     modifier = Modifier
                         .widthIn(min = 48.dp)
-                        .padding(horizontal = 8.dp),
-                    text = state.displayProgressInMillis.toHumanReadableDuration(),
+                        .padding(horizontal = 8.dp)
+                        .semantics {
+                            contentDescription = a11yPosition
+                        },
+                    text = position,
                     textAlign = TextAlign.Center,
                     color = ElementTheme.colors.textPrimary,
                     style = ElementTheme.typography.fontBodyXsMedium,
                 )
                 var lastSelectedValue by remember { mutableFloatStateOf(-1f) }
                 Slider(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .semantics {
+                            // Speak out a progress percent instead of milliseconds
+                            stateDescription = buildString {
+                                append((state.progressAsFloat * 100).toInt())
+                                append("%")
+                            }
+                        },
                     valueRange = 0f..state.durationInMillis.toFloat(),
                     value = lastSelectedValue.takeIf { it >= 0 }
                         ?: state.seekingToMillis?.toFloat()
@@ -151,30 +168,40 @@ fun MediaPlayerControllerView(
                 val formattedDuration = remember(state.durationInMillis) {
                     state.durationInMillis.toHumanReadableDuration()
                 }
+                val a11yDuration = stringResource(CommonStrings.a11y_duration, formattedDuration)
                 Text(
                     modifier = Modifier
                         .widthIn(min = 48.dp)
-                        .padding(horizontal = 8.dp),
+                        .padding(horizontal = 8.dp)
+                        .semantics {
+                            contentDescription = a11yDuration
+                        },
                     text = formattedDuration,
                     textAlign = TextAlign.Center,
                     color = ElementTheme.colors.textPrimary,
                     style = ElementTheme.typography.fontBodyXsMedium,
                 )
                 if (state.canMute) {
+                    val a11yUnmute = stringResource(CommonStrings.common_unmute)
+                    val a11yMute = stringResource(CommonStrings.common_mute)
                     IconButton(
                         onClick = onToggleMute,
+                        modifier = Modifier
+                            .semantics {
+                                stateDescription = if (state.isMuted) a11yUnmute else a11yMute
+                            },
                     ) {
                         if (state.isMuted) {
                             Icon(
                                 imageVector = CompoundIcons.VolumeOffSolid(),
                                 tint = ElementTheme.colors.iconPrimary,
-                                contentDescription = stringResource(CommonStrings.common_unmute)
+                                contentDescription = null,
                             )
                         } else {
                             Icon(
                                 imageVector = CompoundIcons.VolumeOnSolid(),
                                 tint = ElementTheme.colors.iconPrimary,
-                                contentDescription = stringResource(CommonStrings.common_mute)
+                                contentDescription = null,
                             )
                         }
                     }

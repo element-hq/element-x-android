@@ -16,7 +16,6 @@ import coil3.gif.GifDecoder
 import coil3.network.okhttp.OkHttpNetworkFetcherFactory
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Provider
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import okhttp3.OkHttpClient
@@ -29,7 +28,7 @@ interface ImageLoaderFactory {
 @ContributesBinding(AppScope::class)
 class DefaultImageLoaderFactory(
     @ApplicationContext private val context: Context,
-    private val okHttpClient: Provider<OkHttpClient>,
+    private val okHttpClient: () -> OkHttpClient,
 ) : ImageLoaderFactory {
     private val okHttpNetworkFetcherFactory = OkHttpNetworkFetcherFactory(
         callFactory = {

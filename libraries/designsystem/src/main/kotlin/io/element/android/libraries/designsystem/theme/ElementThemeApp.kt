@@ -25,6 +25,8 @@ import io.element.android.compound.tokens.generated.compoundColorsHcDark
 import io.element.android.compound.tokens.generated.compoundColorsHcLight
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 
 val LocalBuildMeta = staticCompositionLocalOf {
@@ -56,14 +58,19 @@ val LocalBuildMeta = staticCompositionLocalOf {
 @Composable
 fun ElementThemeApp(
     appPreferencesStore: AppPreferencesStore,
+    featureFlagService: FeatureFlagService,
     compoundLight: SemanticColors,
     compoundDark: SemanticColors,
     buildMeta: BuildMeta,
     useExpressiveMotion: Boolean = true,
     content: @Composable () -> Unit,
 ) {
-    val theme by remember {
-        appPreferencesStore.getThemeFlow().mapToTheme()
+    val isBlackThemeAllowed by remember {
+        featureFlagService.isFeatureEnabledFlow(FeatureFlags.AllowBlackTheme)
+    }
+        .collectAsState(initial = false)
+    val theme by remember(isBlackThemeAllowed) {
+        appPreferencesStore.getThemeFlow().mapToTheme(allowBlackTheme = isBlackThemeAllowed)
     }
         .collectAsState(initial = Theme.System)
     val dynamicColor by remember {
@@ -82,7 +89,7 @@ fun ElementThemeApp(
             when (theme) {
                 Theme.System -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
                 Theme.Light -> AppCompatDelegate.MODE_NIGHT_NO
-                Theme.Dark -> AppCompatDelegate.MODE_NIGHT_YES
+                Theme.Dark, Theme.Black -> AppCompatDelegate.MODE_NIGHT_YES
             }
         )
     }
@@ -90,7 +97,7 @@ fun ElementThemeApp(
         LocalBuildMeta provides buildMeta,
     ) {
         ElementTheme(
-            darkTheme = theme.isDark(),
+            theme = theme,
             dynamicColor = dynamicColor,
             useExpressiveMotion = useExpressiveMotion,
             content = content,

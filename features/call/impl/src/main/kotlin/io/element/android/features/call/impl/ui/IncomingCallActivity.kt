@@ -19,7 +19,7 @@ import androidx.core.content.IntentCompat
 import androidx.lifecycle.lifecycleScope
 import dev.zacsweers.metro.Inject
 import io.element.android.compound.colors.SemanticColorsLightDark
-import io.element.android.features.call.api.CallType
+import io.element.android.features.call.api.CallData
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.call.impl.di.CallBindings
 import io.element.android.features.call.impl.notifications.CallNotificationData
@@ -30,6 +30,7 @@ import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.theme.ElementThemeApp
 import io.element.android.libraries.di.annotations.AppCoroutineScope
+import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filter
@@ -56,6 +57,9 @@ class IncomingCallActivity : AppCompatActivity() {
 
     @Inject
     lateinit var appPreferencesStore: AppPreferencesStore
+
+    @Inject
+    lateinit var featureFlagService: FeatureFlagService
 
     @Inject
     lateinit var enterpriseService: EnterpriseService
@@ -88,6 +92,7 @@ class IncomingCallActivity : AppCompatActivity() {
                 }.collectAsState(SemanticColorsLightDark.default)
                 ElementThemeApp(
                     appPreferencesStore = appPreferencesStore,
+                    featureFlagService = featureFlagService,
                     compoundLight = colors.light,
                     compoundDark = colors.dark,
                     buildMeta = buildMeta,
@@ -113,10 +118,10 @@ class IncomingCallActivity : AppCompatActivity() {
 
     private fun onAnswer(notificationData: CallNotificationData) {
         elementCallEntryPoint.startCall(
-            CallType.RoomCall(
-                notificationData.sessionId,
-                notificationData.roomId,
-                isAudioCall = notificationData.audioOnly
+            CallData(
+                sessionId = notificationData.sessionId,
+                roomId = notificationData.roomId,
+                isAudioCall = notificationData.audioOnly,
             )
         )
     }
@@ -124,7 +129,7 @@ class IncomingCallActivity : AppCompatActivity() {
     private fun onCancel() {
         val activeCall = activeCallManager.activeCall.value ?: return
         appCoroutineScope.launch {
-            activeCallManager.hangUpCall(callType = activeCall.callType)
+            activeCallManager.hangUpCall(callData = activeCall.callData)
         }
     }
 }

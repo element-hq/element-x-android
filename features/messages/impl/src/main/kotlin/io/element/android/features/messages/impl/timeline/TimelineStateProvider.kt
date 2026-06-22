@@ -29,6 +29,8 @@ import io.element.android.features.messages.impl.typing.aTypingNotificationState
 import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.preview.ROOM_NAME
+import io.element.android.libraries.designsystem.preview.USER_NAME_SENDER
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UniqueId
@@ -52,7 +54,6 @@ import kotlin.random.Random
 fun aTimelineState(
     timelineItems: ImmutableList<TimelineItem> = persistentListOf(),
     timelineMode: Timeline.Mode = Timeline.Mode.Live,
-    renderReadReceipts: Boolean = false,
     timelineRoomInfo: TimelineRoomInfo = aTimelineRoomInfo(),
     focusedEventIndex: Int = -1,
     isLive: Boolean = true,
@@ -73,7 +74,6 @@ fun aTimelineState(
         timelineItems = timelineItems,
         timelineMode = timelineMode,
         timelineRoomInfo = timelineRoomInfo,
-        renderReadReceipts = renderReadReceipts,
         newEventState = NewEventState.None,
         isLive = isLive,
         focusRequestState = focusRequestState,
@@ -148,7 +148,7 @@ internal fun aTimelineItemEvent(
     isMine: Boolean = false,
     isEditable: Boolean = false,
     canBeRepliedTo: Boolean = false,
-    senderDisplayName: String = "Sender",
+    senderDisplayName: String = USER_NAME_SENDER,
     displayNameAmbiguous: Boolean = false,
     content: TimelineItemEventContent = aTimelineItemTextContent(),
     groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.None,
@@ -165,7 +165,7 @@ internal fun aTimelineItemEvent(
         eventId = eventId,
         transactionId = transactionId,
         senderId = UserId("@senderId:domain"),
-        senderAvatar = AvatarData("@senderId:domain", "sender", size = AvatarSize.TimelineSender),
+        senderAvatar = AvatarData("@senderId:domain", USER_NAME_SENDER, size = AvatarSize.TimelineSender),
         content = content,
         reactionsState = timelineItemReactions,
         readReceiptState = readReceiptState,
@@ -258,7 +258,7 @@ internal fun aGroupedEvents(
 }
 
 internal fun aTimelineRoomInfo(
-    name: String = "Room name",
+    name: String = ROOM_NAME,
     isDm: Boolean = false,
     userHasPermissionToSendMessage: Boolean = true,
     pinnedEventIds: List<EventId> = emptyList(),

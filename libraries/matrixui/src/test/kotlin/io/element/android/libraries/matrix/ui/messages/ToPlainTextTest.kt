@@ -13,13 +13,11 @@ import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.jsoup.Jsoup
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class ToPlainTextTest {
+class ToPlainTextTest : RobolectricTest() {
     @Test
     fun `Document toPlainText - returns a plain text version of the document`() {
         val document = Jsoup.parse(
@@ -135,5 +133,20 @@ class ToPlainTextTest {
             )
         )
         assertThat(messageType.toPlainText(permalinkParser = FakePermalinkParser())).isEqualTo("This is the fallback text")
+    }
+
+    @Test
+    fun `TextMessageType toPlainText - ignores mx-reply element`() {
+        val messageType = TextMessageType(
+            body = "This is the fallback text",
+            formatted = FormattedBody(
+                format = MessageFormat.HTML,
+                body = """
+                    <mx-reply>In reply to...</mx-reply>
+                    This is the message content.
+                """.trimIndent()
+            )
+        )
+        assertThat(messageType.toPlainText(permalinkParser = FakePermalinkParser())).isEqualTo("This is the message content.")
     }
 }

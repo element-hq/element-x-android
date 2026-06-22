@@ -78,7 +78,7 @@ fun SpaceRoomItemView(
             indication = ripple(),
             interactionSource = remember { MutableInteractionSource() }
         )
-        .onKeyboardContextMenuAction { onLongClick }
+        .onKeyboardContextMenuAction(onLongClick)
     Column(
         modifier = modifier
             .then(clickModifier)

@@ -21,9 +21,8 @@ import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMembersState
@@ -31,6 +30,7 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPermissions
+import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -45,8 +45,11 @@ import io.element.android.libraries.matrix.test.notificationsettings.FakeNotific
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
+import io.element.android.libraries.push.api.notifications.NotificationCleaner
+import io.element.android.libraries.push.test.notifications.FakeNotificationCleaner
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.EventsRecorder
@@ -82,15 +85,12 @@ class RoomDetailsPresenterTest {
         dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
         analyticsService: AnalyticsService = FakeAnalyticsService(),
-        featureFlagService: FeatureFlagService = FakeFeatureFlagService(
-            mapOf(
-                FeatureFlags.Knock.key to false,
-            )
-        ),
         encryptionService: FakeEncryptionService = FakeEncryptionService(),
         clipboardHelper: ClipboardHelper = FakeClipboardHelper(),
         appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
-        sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
+        navigator: RoomDetailsNavigator = FakeRoomDetailsNavigator(),
+        notificationCleaner: NotificationCleaner = FakeNotificationCleaner(),
+        sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
     ): RoomDetailsPresenter {
         val matrixClient = FakeMatrixClient(notificationSettingsService = notificationSettingsService)
         val roomMemberDetailsPresenterFactory = object : RoomMemberDetailsPresenter.Factory {
@@ -107,9 +107,9 @@ class RoomDetailsPresenterTest {
             }
         }
         return RoomDetailsPresenter(
+            navigator = navigator,
             client = matrixClient,
             room = room,
-            featureFlagService = featureFlagService,
             notificationSettingsService = matrixClient.notificationSettingsService,
             roomMembersDetailsPresenterFactory = roomMemberDetailsPresenterFactory,
             leaveRoomPresenter = { leaveRoomState },
@@ -118,6 +118,7 @@ class RoomDetailsPresenterTest {
             analyticsService = analyticsService,
             clipboardHelper = clipboardHelper,
             appPreferencesStore = appPreferencesStore,
+            notificationCleaner = notificationCleaner,
             sessionPreferencesStore = sessionPreferencesStore,
         )
     }
@@ -236,19 +237,14 @@ class RoomDetailsPresenterTest {
             givenRoomInfo(
                 aRoomInfo(
                     isEncrypted = true,
-                    isDirect = true,
+                    isDm = true,
                 )
             )
         }
         val presenter = createRoomDetailsPresenter(room)
         presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
             val initialState = awaitItem()
-            assertThat(initialState.roomType).isEqualTo(
-                RoomDetailsType.Dm(
-                    me = myRoomMember,
-                    otherMember = otherRoomMember,
-                )
-            )
+            assertThat(initialState.roomType).isEqualTo(RoomDetailsType.Dm(otherMember = otherRoomMember))
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -326,7 +322,7 @@ class RoomDetailsPresenterTest {
             givenRoomInfo(
                 aRoomInfo(
                     isEncrypted = true,
-                    isDirect = true,
+                    isDm = true,
                 )
             )
         }
@@ -349,7 +345,6 @@ class RoomDetailsPresenterTest {
         val myRoomMember = aRoomMember(A_SESSION_ID)
         val otherRoomMember = aRoomMember(A_USER_ID_2)
         val room = aJoinedRoom(
-            isDirect = true,
             topic = null,
             roomPermissions = roomPermissions(),
             userDisplayNameResult = { Result.success(A_USER_NAME) },
@@ -367,7 +362,7 @@ class RoomDetailsPresenterTest {
 
             givenRoomInfo(
                 aRoomInfo(
-                    isDirect = true,
+                    isDm = true,
                     activeMembersCount = 2,
                     topic = null,
                 )
@@ -607,17 +602,11 @@ class RoomDetailsPresenterTest {
             roomPermissions = roomPermissions(),
             joinRule = JoinRule.Knock,
         )
-        val featureFlagService = FakeFeatureFlagService(
-            mapOf(FeatureFlags.Knock.key to false)
-        )
         val presenter = createRoomDetailsPresenter(
             room = room,
-            featureFlagService = featureFlagService,
         )
         presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
             skipItems(1)
-            assertThat(awaitItem().canShowKnockRequests).isFalse()
-            featureFlagService.setFeatureEnabled(FeatureFlags.Knock, true)
             assertThat(awaitItem().canShowKnockRequests).isTrue()
             room.givenRoomInfo(aRoomInfo(joinRule = JoinRule.Invite))
             assertThat(awaitItem().canShowKnockRequests).isFalse()
@@ -630,8 +619,7 @@ class RoomDetailsPresenterTest {
         val room = aJoinedRoom(
             roomPermissions = roomPermissions(),
         )
-        val featureFlagService = FakeFeatureFlagService()
-        val presenter = createRoomDetailsPresenter(room = room, featureFlagService = featureFlagService)
+        val presenter = createRoomDetailsPresenter(room = room)
         presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
             skipItems(1)
             with(awaitItem()) {
@@ -654,6 +642,87 @@ class RoomDetailsPresenterTest {
             with(awaitItem()) {
                 assertThat(showDebugInfo).isTrue()
             }
+        }
+    }
+
+    @Test
+    fun `present - mark as read`() = runTest {
+        val markAsReadResult = lambdaRecorder<ReceiptType, Result<Unit>> { _ -> Result.success(Unit) }
+        val room = aJoinedRoom(
+            markAsReadResult = markAsReadResult,
+        )
+        val clearMessagesForRoomResult = lambdaRecorder<SessionId, RoomId, Unit> { _, _ -> Result.success(Unit) }
+        val notificationCleaner = FakeNotificationCleaner(
+            clearMessagesForRoomLambda = clearMessagesForRoomResult,
+        )
+        val presenter = createRoomDetailsPresenter(
+            room = room,
+            notificationCleaner = notificationCleaner,
+        )
+        presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
+            skipItems(1)
+            with(awaitItem()) {
+                eventSink(RoomDetailsEvent.MarkAsRead)
+            }
+            assertThat(room.baseRoom.setUnreadFlagCalls).containsExactly(false)
+            markAsReadResult.assertions().isCalledOnce().with(value(ReceiptType.READ))
+            clearMessagesForRoomResult.assertions().isCalledOnce().with(
+                value(room.sessionId),
+                value(room.roomId),
+            )
+        }
+    }
+
+    @Test
+    fun `present - mark as read - private`() = runTest {
+        val markAsReadResult = lambdaRecorder<ReceiptType, Result<Unit>> { _ -> Result.success(Unit) }
+        val room = aJoinedRoom(
+            markAsReadResult = markAsReadResult,
+        )
+        val sessionPreferencesStore = InMemorySessionPreferencesStore(
+            isSendPublicReadReceiptsEnabled = false,
+        )
+        val clearMessagesForRoomResult = lambdaRecorder<SessionId, RoomId, Unit> { _, _ -> Result.success(Unit) }
+        val notificationCleaner = FakeNotificationCleaner(
+            clearMessagesForRoomLambda = clearMessagesForRoomResult,
+        )
+        val presenter = createRoomDetailsPresenter(
+            room = room,
+            notificationCleaner = notificationCleaner,
+            sessionPreferencesStore = sessionPreferencesStore,
+        )
+        presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
+            skipItems(1)
+            with(awaitItem()) {
+                eventSink(RoomDetailsEvent.MarkAsRead)
+            }
+            assertThat(room.baseRoom.setUnreadFlagCalls).containsExactly(false)
+            markAsReadResult.assertions().isCalledOnce().with(value(ReceiptType.READ_PRIVATE))
+            clearMessagesForRoomResult.assertions().isCalledOnce().with(
+                value(room.sessionId),
+                value(room.roomId),
+            )
+        }
+    }
+
+    @Test
+    fun `present - mark as unread`() = runTest {
+        val room = aJoinedRoom()
+        val onDoneResult = lambdaRecorder<Unit> { }
+        val navigator = FakeRoomDetailsNavigator(
+            onDoneResult = onDoneResult
+        )
+        val presenter = createRoomDetailsPresenter(
+            room = room,
+            navigator = navigator,
+        )
+        presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
+            skipItems(1)
+            with(awaitItem()) {
+                eventSink(RoomDetailsEvent.MarkAsUnread)
+            }
+            onDoneResult.assertions().isCalledOnce()
+            assertThat(room.baseRoom.setUnreadFlagCalls).containsExactly(true)
         }
     }
 

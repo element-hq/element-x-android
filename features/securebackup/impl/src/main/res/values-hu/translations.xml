@@ -12,6 +12,7 @@
   <string name="screen_chat_backup_recovery_action_confirm">"Adja meg a helyreállítási kulcsot"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"A kulcstároló jelenleg nincs szinkronizálva."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Helyreállítási kulcs beszerzése"</string>
+  <string name="screen_chat_backup_recovery_action_setup_description">"A csevegésekről automatikusan készül biztonsági mentés végpontok közötti titkosítással. A biztonsági mentés helyreállításához és digitális személyazonossága megőrzéséhez szüksége lesz a helyreállítási kulcsára, ha elveszíti a hozzáférést az összes eszközéhez."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Nyissa meg az %1$set egy asztali eszközön"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Jelentkezzen be újra a fiókjába"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Amikor az eszköz ellenőrzését kéri, válassza ezt a lehetőséget: %1$s"</string>
@@ -23,11 +24,11 @@
   <string name="screen_encryption_reset_bullet_1">"A fiókadatok, a kapcsolatok, a beállítások és a csevegéslista megmarad"</string>
   <string name="screen_encryption_reset_bullet_2">"Elveszíti meglévő üzenetelőzményeit"</string>
   <string name="screen_encryption_reset_bullet_3">"Újból ellenőriznie kell az összes meglévő eszközét és csevegőpartnerét"</string>
-  <string name="screen_encryption_reset_footer">"Csak akkor állítsa alaphelyzetbe a személyazonosságát, ha nem fér hozzá másik bejelentkezett eszközhöz, és elvesztette a helyreállítási kulcsot."</string>
+  <string name="screen_encryption_reset_footer">"Csak akkor állítsa alaphelyzetbe a személyazonosságát, ha nem fér hozzá más bejelentkezett eszközhöz, és elveszítette a helyreállítási kulcsát."</string>
   <string name="screen_encryption_reset_title">"Nem tudja megerősíteni? Alaphelyzetbe kell állítania a digitális személyazonosságát."</string>
-  <string name="screen_key_backup_disable_confirmation_action_turn_off">"Kikapcsolás"</string>
-  <string name="screen_key_backup_disable_confirmation_description">"Ha kijelentkezik az összes eszközéről, akkor elveszti a titkosított üzeneteit."</string>
-  <string name="screen_key_backup_disable_confirmation_title">"Biztos, hogy kikapcsolja a biztonsági mentéseket?"</string>
+  <string name="screen_key_backup_disable_confirmation_action_turn_off">"Törlés"</string>
+  <string name="screen_key_backup_disable_confirmation_description">"Ha eltávolítja az összes eszközét, elveszíti titkosított csevegési előzményeit, és újra be kell állítania digitális személyazonosságát."</string>
+  <string name="screen_key_backup_disable_confirmation_title">"Biztosan törölni szeretné a kulcstárolót?"</string>
   <string name="screen_key_backup_disable_description">"A kulcstároló törlése eltávolítja a digitális személyazonosságát és az üzenetkulcsait a kiszolgálóról, és kikapcsolja a következő biztonsági funkciókat:"</string>
   <string name="screen_key_backup_disable_description_point_1">"Nem lesznek meg a titkosított üzenetek előzményei az új eszközein"</string>
   <string name="screen_key_backup_disable_description_point_2">"Elveszti a hozzáférését a titkosított üzeneteihez, ha mindenhol kilép az %1$sből"</string>
