@@ -34,10 +34,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.messages.impl.R
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -66,6 +72,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageTy
 import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 
@@ -128,26 +135,34 @@ fun ThreadsListView(
             )
         }
     ) { padding ->
-        val lazyListState = rememberLazyListState()
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = padding,
-            state = lazyListState,
-        ) {
-            itemsIndexed(state.threads, key = { _, row -> row.item.threadId }) { index, row ->
-                ThreadListItemRow(
-                    threadItem = row,
-                    onClick = onThreadClick,
-                )
+        if (state.threads.isEmpty() && state.hasLoadedFirstPage) {
+            EmptyThreadList(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding),
+            )
+        } else {
+            val lazyListState = rememberLazyListState()
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = padding,
+                state = lazyListState,
+            ) {
+                itemsIndexed(state.threads, key = { _, row -> row.item.threadId }) { index, row ->
+                    ThreadListItemRow(
+                        threadItem = row,
+                        onClick = onThreadClick,
+                    )
 
-                if (index < state.threads.size - 1) {
-                    HorizontalDivider()
+                    if (index < state.threads.size - 1) {
+                        HorizontalDivider()
+                    }
                 }
             }
-        }
 
-        ScrollHelper(lazyListState) {
-            state.eventSink(ThreadsListEvents.Paginate)
+            ScrollHelper(lazyListState) {
+                state.eventSink(ThreadsListEvents.Paginate)
+            }
         }
     }
 }
@@ -170,6 +185,40 @@ private fun ScrollHelper(
                 delay(400L)
             }
         }
+    }
+}
+
+@Composable
+private fun EmptyThreadList(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier.padding(horizontal = 60.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Text(
+            text = stringResource(R.string.screen_thread_list_empty_title),
+            style = ElementTheme.typography.fontHeadingMdBold,
+            color = ElementTheme.colors.textPrimary,
+            textAlign = TextAlign.Center,
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        val subtitleTemplate = stringResource(R.string.screen_thread_list_empty_subtitle)
+        val replyInThread = stringResource(CommonStrings.action_reply_in_thread)
+        Text(
+            text = buildAnnotatedString {
+                val parts = subtitleTemplate.split("%1\$s")
+                append(parts[0])
+                withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                    append(replyInThread)
+                }
+                if (parts.size > 1) {
+                    append(parts[1])
+                }
+            },
+            style = ElementTheme.typography.fontBodyLgRegular,
+            color = ElementTheme.colors.textSecondary,
+            textAlign = TextAlign.Center,
+        )
     }
 }
 
@@ -322,6 +371,27 @@ internal fun ThreadsListViewPreview() {
                 roomAvatarUrl = null,
                 threads = List(10) { aThreadListRowItem(threadId = ThreadId("\$thread-$it")) }.toImmutableList(),
                 isRoomTombstoned = false,
+                hasLoadedFirstPage = true,
+                eventSink = {},
+            ),
+            onThreadClick = {},
+            onBackClick = {},
+        )
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun ThreadsListViewEmptyPreview() {
+    ElementPreview {
+        ThreadsListView(
+            state = ThreadsListState(
+                roomId = RoomId("!room-id:server"),
+                roomName = ROOM_NAME,
+                roomAvatarUrl = null,
+                threads = persistentListOf(),
+                isRoomTombstoned = false,
+                hasLoadedFirstPage = true,
                 eventSink = {},
             ),
             onThreadClick = {},

@@ -10,8 +10,11 @@ package io.element.android.features.messages.impl.threads.list
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentFactory
 import io.element.android.features.messages.impl.utils.messagesummary.MessageSummaryFormatter
@@ -45,7 +48,10 @@ class ThreadsListPresenter(
         val coroutineScope = rememberCoroutineScope()
         val threadsListService = room.threadsListService
 
+        var hasLoadedFirstPage by remember { mutableStateOf(false) }
+
         val threads by produceState(initialValue = persistentListOf(), key1 = threadsListService) {
+            var isFirstDiff = true
             val rows = mutableListOf<ThreadListRowItem>()
             threadsListService.subscribeToItemDiffs()
                 .onStart { threadsListService.paginate() }
@@ -78,6 +84,10 @@ class ThreadsListPresenter(
                         }
                     }
                     value = rows.toImmutableList()
+                    if (isFirstDiff) {
+                        isFirstDiff = false
+                        hasLoadedFirstPage = true
+                    }
                 }
         }
 
@@ -112,6 +122,7 @@ class ThreadsListPresenter(
             roomName = roomInfo.name ?: room.roomId.value,
             roomAvatarUrl = roomInfo.avatarUrl,
             isRoomTombstoned = roomInfo.successorRoom != null,
+            hasLoadedFirstPage = hasLoadedFirstPage,
             eventSink = ::handleEvent,
         )
     }
@@ -152,6 +163,7 @@ data class ThreadsListState(
     val roomAvatarUrl: String?,
     val isRoomTombstoned: Boolean,
     val threads: ImmutableList<ThreadListRowItem>,
+    val hasLoadedFirstPage: Boolean = false,
     val eventSink: (ThreadsListEvents) -> Unit,
 )
 

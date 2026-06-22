@@ -38,6 +38,9 @@ class ThreadsListPresenterTest {
                 assertThat(roomName).isEqualTo(A_ROOM_NAME)
                 assertThat(roomAvatarUrl).isEqualTo(AN_AVATAR_URL)
             }
+            // The Fake emits diffs synchronously, which triggers hasLoadedFirstPage.
+            // Consume that emission to avoid unconsumed event errors.
+            awaitItem().let { /* hasLoadedFirstPage is now true */ }
         }
     }
 
@@ -54,6 +57,10 @@ class ThreadsListPresenterTest {
 
             // Pagination is automatically triggered on start, so we should have one call to paginate already
             paginateRecorder.assertions().isCalledOnce()
+
+            // The Fake emits diffs synchronously, which triggers hasLoadedFirstPage.
+            // Consume that emission before proceeding.
+            awaitItem()
 
             initialItem.eventSink(ThreadsListEvents.Paginate)
 
