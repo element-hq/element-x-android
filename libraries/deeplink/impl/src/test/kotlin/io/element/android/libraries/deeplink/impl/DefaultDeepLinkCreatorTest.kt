@@ -28,15 +28,15 @@ class DefaultDeepLinkCreatorTest {
         val threadId = A_THREAD_ID
         val eventId = AN_EVENT_ID
         assertThat(sut.create(sessionId, null, null, null))
-            .isEqualTo("elementx://open/%40alice%3Aserver.org")
+            .isEqualTo("dottie://open/%40alice%3Aserver.org")
         assertThat(sut.create(sessionId, roomId, null, null))
-            .isEqualTo("elementx://open/%40alice%3Aserver.org/%21aRoomId%3Adomain")
+            .isEqualTo("dottie://open/%40alice%3Aserver.org/%21aRoomId%3Adomain")
         assertThat(sut.create(sessionId, roomId, threadId, null))
-            .isEqualTo("elementx://open/%40alice%3Aserver.org/%21aRoomId%3Adomain/%24aThreadId")
+            .isEqualTo("dottie://open/%40alice%3Aserver.org/%21aRoomId%3Adomain/%24aThreadId")
         assertThat(sut.create(sessionId, roomId, threadId, eventId))
-            .isEqualTo("elementx://open/%40alice%3Aserver.org/%21aRoomId%3Adomain/%24aThreadId/%24anEventId")
+            .isEqualTo("dottie://open/%40alice%3Aserver.org/%21aRoomId%3Adomain/%24aThreadId/%24anEventId")
         assertThat(sut.create(sessionId, roomId, null, eventId))
-            .isEqualTo("elementx://open/%40alice%3Aserver.org/%21aRoomId%3Adomain//%24anEventId")
+            .isEqualTo("dottie://open/%40alice%3Aserver.org/%21aRoomId%3Adomain//%24anEventId")
     }
 
     @Test
@@ -47,12 +47,12 @@ class DefaultDeepLinkCreatorTest {
         val threadId = ThreadId("\$a/ThreadId")
         val eventId = EventId("\$an/EventId")
         assertThat(sut.create(sessionId, roomId, null, null))
-            .isEqualTo("elementx://open/%40a%2F%3Adomain/%21a%2FRoomId%3Adomain")
+            .isEqualTo("dottie://open/%40a%2F%3Adomain/%21a%2FRoomId%3Adomain")
         assertThat(sut.create(sessionId, roomId, threadId, null))
-            .isEqualTo("elementx://open/%40a%2F%3Adomain/%21a%2FRoomId%3Adomain/%24a%2FThreadId")
+            .isEqualTo("dottie://open/%40a%2F%3Adomain/%21a%2FRoomId%3Adomain/%24a%2FThreadId")
         assertThat(sut.create(sessionId, roomId, threadId, eventId))
-            .isEqualTo("elementx://open/%40a%2F%3Adomain/%21a%2FRoomId%3Adomain/%24a%2FThreadId/%24an%2FEventId")
+            .isEqualTo("dottie://open/%40a%2F%3Adomain/%21a%2FRoomId%3Adomain/%24a%2FThreadId/%24an%2FEventId")
         assertThat(sut.create(sessionId, roomId, null, eventId))
-            .isEqualTo("elementx://open/%40a%2F%3Adomain/%21a%2FRoomId%3Adomain//%24an%2FEventId")
+            .isEqualTo("dottie://open/%40a%2F%3Adomain/%21a%2FRoomId%3Adomain//%24an%2FEventId")
     }
 }

@@ -72,7 +72,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data
                     android:host="open"
-                    android:scheme="elementx" />
+                    android:scheme="dottie" />
             </intent-filter>
             <!--
               OAuth redirection

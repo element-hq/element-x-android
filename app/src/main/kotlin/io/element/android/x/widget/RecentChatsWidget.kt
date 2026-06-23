@@ -66,7 +66,7 @@ class OpenChatActionCallback : ActionCallback {
         val roomId = parameters[RoomIdKey]
         val intent = if (!sessionId.isNullOrEmpty() && !roomId.isNullOrEmpty()) {
             val deepLinkUri = Uri.parse(
-                "elementx://open/${Uri.encode(sessionId)}/${Uri.encode(roomId)}"
+                "dottie://open/${Uri.encode(sessionId)}/${Uri.encode(roomId)}"
             )
             Intent(Intent.ACTION_VIEW, deepLinkUri).apply {
                 setClass(context, MainActivity::class.java)
@@ -90,7 +90,7 @@ class NewChatActionCallback : ActionCallback {
         val chats = RecentChatsDataStore.loadChats(context)
         val sessionId = chats.firstOrNull()?.sessionId
         val intent = if (!sessionId.isNullOrEmpty()) {
-            val deepLinkUri = Uri.parse("elementx://open/${Uri.encode(sessionId)}/create-room")
+            val deepLinkUri = Uri.parse("dottie://open/${Uri.encode(sessionId)}/create-room")
             Intent(Intent.ACTION_VIEW, deepLinkUri).apply {
                 setClass(context, MainActivity::class.java)
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
@@ -113,7 +113,7 @@ class OpenAppActionCallback : ActionCallback {
         val chats = RecentChatsDataStore.loadChats(context)
         val sessionId = chats.firstOrNull()?.sessionId
         val intent = if (!sessionId.isNullOrEmpty()) {
-            val deepLinkUri = Uri.parse("elementx://open/${Uri.encode(sessionId)}")
+            val deepLinkUri = Uri.parse("dottie://open/${Uri.encode(sessionId)}")
             Intent(Intent.ACTION_VIEW, deepLinkUri).apply {
                 setClass(context, MainActivity::class.java)
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
@@ -195,7 +195,7 @@ class RecentChatsWidget : GlanceAppWidget() {
                     )
                     Spacer(modifier = GlanceModifier.height(4.dp))
                     Text(
-                        text = "Tap to open Element X",
+                        text = "Tap to open Dottie",
                         style = TextStyle(
                             fontSize = 12.sp,
                             color = GlanceTheme.colors.onSurfaceVariant,
@@ -226,13 +226,13 @@ class RecentChatsWidget : GlanceAppWidget() {
             // App icon
             Image(
                 provider = ImageProvider(io.element.android.appicon.element.R.mipmap.ic_launcher_round),
-                contentDescription = "Element X",
+                contentDescription = "Dottie",
                 modifier = GlanceModifier.size(24.dp).cornerRadius(12.dp),
             )
             Spacer(modifier = GlanceModifier.width(8.dp))
-            // "Element X (N)" — clickable to open app
+            // "Dottie (N)" — clickable to open app
             Text(
-                text = "Element X ($chatCount)",
+                text = "Dottie ($chatCount)",
                 style = TextStyle(
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,

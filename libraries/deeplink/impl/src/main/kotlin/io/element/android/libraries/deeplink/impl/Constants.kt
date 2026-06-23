@@ -8,5 +8,5 @@
 
 package io.element.android.libraries.deeplink.impl
 
-internal const val SCHEME = "elementx"
+internal const val SCHEME = "dottie"
 internal const val HOST = "open"

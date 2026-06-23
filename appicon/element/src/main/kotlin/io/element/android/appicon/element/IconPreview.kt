@@ -30,7 +30,7 @@ internal fun IconPreview() {
             contentDescription = null,
         )
         Image(
-            painter = painterResource(id = R.mipmap.ic_launcher_foreground),
+            painter = painterResource(id = R.drawable.ic_launcher_foreground),
             contentDescription = null,
         )
     }
@@ -46,7 +46,7 @@ internal fun RoundIconPreview() {
             contentDescription = null,
         )
         Image(
-            painter = painterResource(id = R.mipmap.ic_launcher_foreground),
+            painter = painterResource(id = R.drawable.ic_launcher_foreground),
             contentDescription = null,
         )
     }
@@ -60,7 +60,7 @@ internal fun MonochromeIconPreview() {
             .background(Color(0xFF2F3133)),
     ) {
         Image(
-            painter = painterResource(id = R.mipmap.ic_launcher_monochrome),
+            painter = painterResource(id = R.drawable.ic_launcher_monochrome),
             colorFilter = ColorFilter.tint(Color(0xFFC3E0F6)),
             contentDescription = null
         )
