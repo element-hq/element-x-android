@@ -177,7 +177,7 @@ class DefaultMediaSender(
         val galleryLogId = "gallery[${mediaUploadInfos.size} items]"
         Timber.d("Sending $galleryLogId")
         return getTimeline().flatMap { timeline ->
-            val galleryItems = mediaUploadInfos.map { it.toGalleryItemInfo(null, null) }
+            val galleryItems = mediaUploadInfos.map { it.toGalleryItemInfo() }
             timeline.sendGallery(
                 items = galleryItems,
                 caption = caption,

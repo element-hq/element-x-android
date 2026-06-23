@@ -33,38 +33,38 @@ fun MediaUploadInfo.allFiles(): List<File> {
     )
 }
 
-fun MediaUploadInfo.toGalleryItemInfo(caption: String?, formattedCaption: String?): GalleryItemInfo {
+fun MediaUploadInfo.toGalleryItemInfo(): GalleryItemInfo {
     return when (this) {
         is MediaUploadInfo.Image -> GalleryItemInfo.Image(
             file = file,
             imageInfo = imageInfo,
             thumbnailFile = thumbnailFile,
-            caption = caption,
+            caption = null,
             formattedCaption = null,
         )
         is MediaUploadInfo.Video -> GalleryItemInfo.Video(
             file = file,
             videoInfo = videoInfo,
             thumbnailFile = thumbnailFile,
-            caption = caption,
+            caption = null,
             formattedCaption = null,
         )
         is MediaUploadInfo.Audio -> GalleryItemInfo.Audio(
             file = file,
             audioInfo = audioInfo,
-            caption = caption,
+            caption = null,
             formattedCaption = null,
         )
         is MediaUploadInfo.VoiceMessage -> GalleryItemInfo.Audio(
             file = file,
             audioInfo = audioInfo,
-            caption = caption,
+            caption = null,
             formattedCaption = null,
         )
         is MediaUploadInfo.AnyFile -> GalleryItemInfo.MediaFile(
             file = file,
             fileInfo = fileInfo,
-            caption = caption,
+            caption = null,
             formattedCaption = null,
         )
     }
