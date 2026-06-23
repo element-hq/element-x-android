@@ -20,3 +20,33 @@ sealed interface ThreadListDiff {
     data class Truncate(val length: Int) : ThreadListDiff
     data class Reset(val values: List<ThreadListItem>) : ThreadListDiff
 }
+
+suspend fun <T> MutableList<T>.applyDiffs(
+    diffs: List<ThreadListDiff>,
+    transform: suspend (ThreadListItem) -> T,
+) {
+    for (diff in diffs) {
+        when (diff) {
+            is ThreadListDiff.Reset -> {
+                clear()
+                for (value in diff.values) {
+                    add(transform(value))
+                }
+            }
+            is ThreadListDiff.Append -> {
+                for (value in diff.values) {
+                    add(transform(value))
+                }
+            }
+            is ThreadListDiff.Clear -> clear()
+            is ThreadListDiff.Insert -> add(diff.index, transform(diff.value))
+            is ThreadListDiff.Set -> set(diff.index, transform(diff.value))
+            is ThreadListDiff.Remove -> removeAt(diff.index)
+            is ThreadListDiff.PushBack -> add(transform(diff.value))
+            is ThreadListDiff.PushFront -> add(0, transform(diff.value))
+            is ThreadListDiff.PopBack -> if (isNotEmpty()) removeAt(lastIndex)
+            is ThreadListDiff.PopFront -> if (isNotEmpty()) removeAt(0)
+            is ThreadListDiff.Truncate -> if (diff.length < size) subList(diff.length, size).clear()
+        }
+    }
+}

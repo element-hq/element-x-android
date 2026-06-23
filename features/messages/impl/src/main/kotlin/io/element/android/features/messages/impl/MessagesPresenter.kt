@@ -80,6 +80,8 @@ import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
+import io.element.android.libraries.matrix.api.room.threads.ThreadListItem
+import io.element.android.libraries.matrix.api.room.threads.applyDiffs
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.reply.map
@@ -92,7 +94,6 @@ import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -169,9 +170,13 @@ class MessagesPresenter(
         val roomCallState = roomCallStatePresenter.present()
         val roomMemberModerationState = roomMemberModerationPresenter.present()
         val threadsList by produceState(persistentListOf()) {
-            room.threadsListService.subscribeToItemUpdates()
+            val items = mutableListOf<ThreadListItem>()
+            room.threadsListService.subscribeToItemDiffs()
                 .onStart { room.threadsListService.paginate() }
-                .collectLatest { value = it.toImmutableList() }
+                .collect { diffs ->
+                    items.applyDiffs(diffs) { it }
+                    value = items.toImmutableList()
+                }
         }
 
         val canOpenThreadList by featureFlagService.isFeatureEnabledFlow(FeatureFlags.RoomThreadList).collectAsState(initial = false)

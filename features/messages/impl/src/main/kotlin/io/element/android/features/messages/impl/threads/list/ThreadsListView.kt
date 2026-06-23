@@ -46,7 +46,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.preview.ROOM_NAME
 import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -66,6 +65,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageTy
 import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 
@@ -316,27 +316,9 @@ private fun ThreadListItemRow(
 internal fun ThreadsListViewPreview() {
     ElementPreview {
         ThreadsListView(
-            state = ThreadsListState(
-                roomId = RoomId("!room-id:server"),
-                roomName = ROOM_NAME,
-                roomAvatarUrl = null,
-                threads = List(10) { aThreadListRowItem(threadId = ThreadId("\$thread-$it")) }.toImmutableList(),
-                isRoomTombstoned = false,
-                eventSink = {},
-            ),
+            state = aThreadsListState(),
             onThreadClick = {},
             onBackClick = {},
-        )
-    }
-}
-
-@PreviewsDayNight
-@Composable
-internal fun ThreadListItemRowPreview() {
-    ElementPreview {
-        ThreadListItemRow(
-            threadItem = aThreadListRowItem(),
-            onClick = {},
         )
     }
 }
@@ -392,4 +374,20 @@ fun aThreadListItemEvent(
     isOwn = isOwn,
     content = content,
     timestamp = timestamp,
+)
+
+fun aThreadsListState(
+    roomId: RoomId = RoomId("!room-id:server"),
+    roomName: String = "Room name",
+    roomAvatarUrl: String? = null,
+    isRoomTombstoned: Boolean = false,
+    threads: ImmutableList<ThreadListRowItem> = List(10) { aThreadListRowItem(threadId = ThreadId("\$thread-$it")) }.toImmutableList(),
+    eventSink: (ThreadsListEvents) -> Unit = {},
+) = ThreadsListState(
+    roomId = roomId,
+    roomName = roomName,
+    roomAvatarUrl = roomAvatarUrl,
+    isRoomTombstoned = isRoomTombstoned,
+    threads = threads,
+    eventSink = eventSink,
 )

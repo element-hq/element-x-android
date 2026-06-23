@@ -21,9 +21,9 @@ import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
-import io.element.android.libraries.matrix.api.room.threads.ThreadListDiff
 import io.element.android.libraries.matrix.api.room.threads.ThreadListItem
 import io.element.android.libraries.matrix.api.room.threads.ThreadListPaginationStatus
+import io.element.android.libraries.matrix.api.room.threads.applyDiffs
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -50,32 +50,8 @@ class ThreadsListPresenter(
             threadsListService.subscribeToItemDiffs()
                 .onStart { threadsListService.paginate() }
                 .collect { diffs ->
-                    Timber.d("Received thread list diffs: $diffs")
                     withContext(coroutineDispatchers.computation) {
-                        for (diff in diffs) {
-                            when (diff) {
-                                is ThreadListDiff.Reset -> {
-                                    rows.clear()
-                                    rows.addAll(diff.values.map { it.toRowItem() })
-                                }
-                                is ThreadListDiff.Append -> {
-                                    rows.addAll(diff.values.map { it.toRowItem() })
-                                }
-                                is ThreadListDiff.Clear -> rows.clear()
-                                is ThreadListDiff.Insert -> {
-                                    rows.add(diff.index, diff.value.toRowItem())
-                                }
-                                is ThreadListDiff.Set -> {
-                                    rows[diff.index] = diff.value.toRowItem()
-                                }
-                                is ThreadListDiff.Remove -> rows.removeAt(diff.index)
-                                is ThreadListDiff.PushBack -> rows.add(diff.value.toRowItem())
-                                is ThreadListDiff.PushFront -> rows.add(0, diff.value.toRowItem())
-                                is ThreadListDiff.PopBack -> if (rows.isNotEmpty()) rows.removeAt(rows.lastIndex)
-                                is ThreadListDiff.PopFront -> if (rows.isNotEmpty()) rows.removeAt(0)
-                                is ThreadListDiff.Truncate -> if (diff.length < rows.size) rows.subList(diff.length, rows.size).clear()
-                            }
-                        }
+                        rows.applyDiffs(diffs) { it.toRowItem() }
                     }
                     value = rows.toImmutableList()
                 }

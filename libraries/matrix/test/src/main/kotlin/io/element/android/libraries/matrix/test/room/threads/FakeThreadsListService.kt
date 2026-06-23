@@ -18,17 +18,12 @@ import kotlinx.coroutines.flow.map
 class FakeThreadsListService(
     private val items: MutableStateFlow<List<ThreadListItem>> = MutableStateFlow(emptyList()),
     private val paginationStatus: MutableStateFlow<ThreadListPaginationStatus> = MutableStateFlow(ThreadListPaginationStatus.Idle(hasMoreToLoad = true)),
-    private val subscribeToItemUpdates: () -> Flow<List<ThreadListItem>> = { items },
     private val subscribeToItemDiffs: () -> Flow<List<ThreadListDiff>> = { items.map { listOf(ThreadListDiff.Reset(values = it)) } },
     private val subscribeToPaginationUpdates: () -> Flow<ThreadListPaginationStatus> = { paginationStatus },
     private val paginate: suspend () -> Result<Unit> = { Result.success(Unit) },
     private val reset: suspend () -> Result<Unit> = { Result.success(Unit) },
     private val destroy: () -> Unit = {},
 ) : ThreadsListService {
-    override fun subscribeToItemUpdates(): Flow<List<ThreadListItem>> {
-        return subscribeToItemUpdates.invoke()
-    }
-
     override fun subscribeToItemDiffs(): Flow<List<ThreadListDiff>> {
         return subscribeToItemDiffs.invoke()
     }
