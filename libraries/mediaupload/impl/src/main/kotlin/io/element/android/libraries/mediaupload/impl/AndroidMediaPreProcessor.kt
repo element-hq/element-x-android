@@ -12,7 +12,6 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
 import android.net.Uri
-import android.util.Xml
 import androidx.exifinterface.media.ExifInterface
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
@@ -43,7 +42,6 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
-import org.xmlpull.v1.XmlPullParser
 import timber.log.Timber
 import java.io.File
 import java.io.InputStream
@@ -69,10 +67,7 @@ class AndroidMediaPreProcessor(
          */
         private const val IMAGE_SCALE_REF_SIZE = 640
 
-        private const val SVG_DEFAULT_WIDTH = 640L
-        private const val SVG_DEFAULT_HEIGHT = 480L
-
-        private val notCompressibleImageTypes = listOf(MimeTypes.Gif, MimeTypes.WebP, MimeTypes.Svg)
+        private val notCompressibleImageTypes = listOf(MimeTypes.Gif, MimeTypes.WebP)
     }
 
     private val contentResolver = context.contentResolver
@@ -88,6 +83,7 @@ class AndroidMediaPreProcessor(
     ): Result<MediaUploadInfo> = withContext(coroutineDispatchers.computation) {
         runCatchingExceptions {
             val result = when {
+                mimeType == MimeTypes.Svg -> processSvgImage(uri, mimeType)
                 mimeType.isMimeTypeImage() -> {
                     val shouldBeCompressed = mediaOptimizationConfig.compressImages && mimeType !in notCompressibleImageTypes
                     processImage(uri, mimeType, shouldBeCompressed)
@@ -162,10 +158,6 @@ class AndroidMediaPreProcessor(
     private suspend fun processImage(uri: Uri, mimeType: String, shouldBeCompressed: Boolean): MediaUploadInfo {
         Timber.d("Processing image ${uri.path.orEmpty().hash()}")
 
-        if (mimeType == MimeTypes.Svg) {
-            return processSvgImage(uri, mimeType)
-        }
-
         suspend fun processImageWithCompression(): MediaUploadInfo {
             // Read the orientation metadata from its own stream. Trying to reuse this stream for compression will fail.
             val orientation = contentResolver.openInputStream(uri).use { input ->
@@ -226,10 +218,12 @@ class AndroidMediaPreProcessor(
         }
     }
 
+    private val svgDimensionExtractor = SvgDimensionExtractor()
+
     private suspend fun processSvgImage(uri: Uri, mimeType: String): MediaUploadInfo {
         Timber.d("Processing SVG image ${uri.path.orEmpty().hash()}")
         val file = copyToTmpFile(uri)
-        val (width, height) = extractSvgDimensions(file)
+        val (width, height) = svgDimensionExtractor.extractDimensions(file)
         val imageInfo = ImageInfo(
             width = width,
             height = height,
@@ -244,56 +238,6 @@ class AndroidMediaPreProcessor(
             imageInfo = imageInfo,
             thumbnailFile = null,
         )
-    }
-
-    private fun extractSvgDimensions(file: File): Pair<Long, Long> {
-        return file.inputStream().use { inputStream ->
-            try {
-                val parser = Xml.newPullParser()
-                parser.setInput(inputStream, null)
-                var eventType = parser.eventType
-                while (eventType != XmlPullParser.END_DOCUMENT) {
-                    if (eventType == XmlPullParser.START_TAG && parser.name.equals("svg", ignoreCase = true)) {
-                        val width = parser.getAttributeValue(null, "width")
-                        val height = parser.getAttributeValue(null, "height")
-                        val viewBox = parser.getAttributeValue(null, "viewBox")
-
-                        val parsedWidth = width?.let { parseSvgLength(it) }
-                        val parsedHeight = height?.let { parseSvgLength(it) }
-
-                        if (parsedWidth != null && parsedHeight != null) {
-                            return parsedWidth to parsedHeight
-                        }
-
-                        if (viewBox != null) {
-                            val parts = viewBox.trim().split("\\s+".toRegex()).map { it.toFloatOrNull() }
-                            if (parts.size == 4 && parts[2] != null && parts[3] != null) {
-                                val vbWidth = parts[2]!!.toLong().coerceAtLeast(1)
-                                val vbHeight = parts[3]!!.toLong().coerceAtLeast(1)
-                                return vbWidth to vbHeight
-                            }
-                        }
-
-                        return (parsedWidth ?: SVG_DEFAULT_WIDTH) to (parsedHeight ?: SVG_DEFAULT_HEIGHT)
-                    }
-                    eventType = parser.next()
-                }
-                SVG_DEFAULT_WIDTH to SVG_DEFAULT_HEIGHT
-            } catch (_: Exception) {
-                SVG_DEFAULT_WIDTH to SVG_DEFAULT_HEIGHT
-            }
-        }
-    }
-
-    private fun parseSvgLength(value: String): Long? {
-        val trimmed = value.trim()
-        if (trimmed.isEmpty()) return null
-        return try {
-            val numericPart = trimmed.replace(Regex("[^\\d.]"), "")
-            if (numericPart.isEmpty()) null else numericPart.toFloat().toLong().coerceAtLeast(1)
-        } catch (_: NumberFormatException) {
-            null
-        }
     }
 
     private suspend fun processVideo(uri: Uri, mimeType: String?, videoCompressionPreset: VideoCompressionPreset): MediaUploadInfo {

@@ -42,7 +42,6 @@ class DefaultImageLoaderFactory(
         return ImageLoader.Builder(context)
             .components {
                 add(okHttpNetworkFetcherFactory)
-                add(SvgDecoder.Factory())
             }
             .build()
     }

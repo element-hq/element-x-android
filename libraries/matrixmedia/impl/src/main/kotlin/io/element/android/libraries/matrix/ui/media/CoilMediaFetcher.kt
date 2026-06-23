@@ -36,17 +36,16 @@ internal class CoilMediaFetcher(
         return when (val kind = mediaData.kind) {
             is MediaRequestData.Kind.Content -> fetchContent(mediaSource)
             is MediaRequestData.Kind.Thumbnail -> {
-                val thumbnailResult = fetchThumbnail(mediaSource, kind)
-                if (thumbnailResult.isSuccess) {
-                    thumbnailResult.getOrThrow()
-                } else {
-                    val error = thumbnailResult.exceptionOrNull()
-                    if (error?.isNetworkError() == true) {
-                        null
-                    } else {
-                        fetchContent(mediaSource)
+                fetchThumbnail(mediaSource, kind).fold(
+                    onSuccess = { it },
+                    onFailure = { error ->
+                        if (error.isNetworkError()) {
+                            null
+                        } else {
+                            fetchContent(mediaSource)
+                        }
                     }
-                }
+                )
             }
             is MediaRequestData.Kind.File -> fetchFile(mediaSource, kind)
         }
