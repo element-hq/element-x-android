@@ -9,12 +9,14 @@
 package io.element.android.appnav.loggedin
 
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.permissions.api.PermissionsState
 
 data class LoggedInState(
     val showSyncSpinner: Boolean,
     val pusherRegistrationState: AsyncData<Unit>,
     val ignoreRegistrationError: Boolean,
     val forceNativeSlidingSyncMigration: Boolean,
+    val localNetworkPermissionState: PermissionsState?,
     val appName: String,
     val eventSink: (LoggedInEvents) -> Unit,
 )

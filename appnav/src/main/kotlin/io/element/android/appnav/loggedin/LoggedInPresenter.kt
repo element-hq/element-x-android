@@ -8,6 +8,7 @@
 
 package io.element.android.appnav.loggedin
 
+import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -15,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -28,6 +30,7 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.core.network.isLocalNetworkHost
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
@@ -36,8 +39,12 @@ import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
+import io.element.android.libraries.permissions.api.PermissionsEvent
+import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.push.api.PusherRegistrationFailure
+import io.element.android.libraries.sessionstorage.api.SessionData
+import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.combine
@@ -58,6 +65,8 @@ class LoggedInPresenter(
     private val encryptionService: EncryptionService,
     private val buildMeta: BuildMeta,
     private val networkMonitor: NetworkMonitor,
+    private val sessionStore: SessionStore,
+    private val permissionsPresenterFactory: PermissionsPresenter.Factory,
 ) : Presenter<LoggedInState> {
     @Composable
     override fun present(): LoggedInState {
@@ -66,6 +75,35 @@ class LoggedInPresenter(
             pushService.ignoreRegistrationError(matrixClient.sessionId)
         }.collectAsState(initial = false)
         val pusherRegistrationState = remember<MutableState<AsyncData<Unit>>> { mutableStateOf(AsyncData.Uninitialized) }
+
+        val sessionData by produceState<SessionData?>(initialValue = null) {
+            value = sessionStore.getSession(matrixClient.sessionId.value)
+        }
+
+        val localNetworkPermissionPresenter: PermissionsPresenter? = remember(sessionData) {
+            val homeserverUrl = sessionData?.homeserverUrl
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE &&
+                homeserverUrl != null && homeserverUrl.isLocalNetworkHost()
+            ) {
+                permissionsPresenterFactory.create(android.Manifest.permission.ACCESS_LOCAL_NETWORK)
+            } else {
+                null
+            }
+        }
+
+        val localNetworkPermissionState = localNetworkPermissionPresenter?.present()
+        var hasRequestedLocalNetworkPermission by remember { mutableStateOf(false) }
+
+        LaunchedEffect(localNetworkPermissionState?.permissionGranted) {
+            if (localNetworkPermissionState != null &&
+                !localNetworkPermissionState.permissionGranted &&
+                !hasRequestedLocalNetworkPermission
+            ) {
+                hasRequestedLocalNetworkPermission = true
+                localNetworkPermissionState.eventSink(PermissionsEvent.RequestPermissions)
+            }
+        }
+
         LaunchedEffect(Unit) { preloadAccountManagementUrl() }
         LaunchedEffect(Unit) {
             sessionVerificationService.sessionVerifiedStatus
@@ -142,6 +180,7 @@ class LoggedInPresenter(
             pusherRegistrationState = pusherRegistrationState.value,
             ignoreRegistrationError = ignoreRegistrationError,
             forceNativeSlidingSyncMigration = forceNativeSlidingSyncMigration,
+            localNetworkPermissionState = localNetworkPermissionState,
             appName = buildMeta.applicationName,
             eventSink = ::handleEvent,
         )

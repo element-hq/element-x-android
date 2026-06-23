@@ -32,6 +32,7 @@ fun aLoggedInState(
     pusherRegistrationState = pusherRegistrationState,
     ignoreRegistrationError = false,
     forceNativeSlidingSyncMigration = forceNativeSlidingSyncMigration,
+    localNetworkPermissionState = null,
     appName = appName,
     eventSink = {},
 )

@@ -25,6 +25,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.matrix.api.exception.isNetworkError
+import io.element.android.libraries.permissions.api.PermissionsView
 import io.element.android.libraries.push.api.PusherRegistrationFailure
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -80,6 +81,14 @@ fun LoggedInView(
             onSubmit = {
                 state.eventSink(LoggedInEvents.LogoutAndMigrateToNativeSlidingSync)
             }
+        )
+    }
+
+    state.localNetworkPermissionState?.let { permissionState ->
+        PermissionsView(
+            state = permissionState,
+            title = stringResource(id = R.string.screen_change_server_local_network_permission_title),
+            content = stringResource(id = R.string.screen_change_server_local_network_permission_message),
         )
     }
 }
