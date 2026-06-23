@@ -639,7 +639,7 @@ internal fun GalleryCarouselPill(
     ) {
         Text(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-            text = stringResource(R.string.screen_media_upload_preview_count, currentIndex, totalCount),
+            text = stringResource(R.string.screen_media_upload_preview_item_count, currentIndex, totalCount),
             style = ElementTheme.typography.fontBodyMdMedium,
             color = ElementTheme.colors.textPrimary,
         )
