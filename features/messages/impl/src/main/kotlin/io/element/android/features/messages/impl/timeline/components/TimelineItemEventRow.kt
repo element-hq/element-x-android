@@ -78,8 +78,6 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
-import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemAttachmentsContent
-import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemGalleryContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.ensureActiveLiveLocation
