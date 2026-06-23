@@ -110,83 +110,6 @@ fun EmojiItem(
             .background(backgroundColor, CircleShape)
             .indication(interactionSource, ripple())
             .pointerInput(item) {
-                // Only detect drag after long press for those items which have a skin tone picker
-                if (hasSkinTones) {
-                    val slotWidthPx = with(density) { SkinToneSlotSize.toPx() }
-                    val spacingPx = with(density) { SkinToneSlotSpacing.toPx() }
-                    val paddingPx = with(density) { SkinTonePadding.toPx() }
-                    var startOffset = Offset.Zero
-                    detectDragGesturesAfterLongPress(
-                        onDragStart = { position ->
-                            if (onLongPress != null) {
-                                startOffset = position
-                                dismissed = false
-                                onLongPress(item)
-                                hoveredIndex = -1
-                            }
-                        },
-                        onDrag = { change, _ ->
-                            if (!dismissed) {
-                                change.consume()
-                                // It's a valid drag event if it's within ~2 items height above, so, on top of the current one or the skin tone selector,
-                                // or 1 item below, which should be far enough to not be triggered by mistake
-                                val isValidDrag = if (change.position.y < startOffset.y) {
-                                    startOffset.y - change.position.y <= itemSize.height * 2f
-                                } else {
-                                    change.position.y - startOffset.y <= itemSize.height
-                                }
-                                if (!isValidDrag) {
-                                    dismissed = true
-                                    hoveredIndex = -1
-                                    onDismissSkinPicker?.invoke()
-                                } else {
-                                    val skinItemsCount = item.skins!!.size
-                                    // Original + variants
-                                    val totalSlots = 1 + skinItemsCount
-                                    // Calculate the whole size of the skin tone picker
-                                    val pickerWidthPx = 2 * paddingPx + totalSlots * slotWidthPx + (totalSlots - 1) * spacingPx
-                                    // Calculate the initial offset inside the picker, given the relative position of the item inside its parent
-                                    val initialOffset = pickerWidthPx * itemOffsetPercent
-                                    val xInPicker = initialOffset + change.position.x
-
-                                    // If it's a valid offset, calculate the hovered index, otherwise, set it to -1 to indicate that no item is hovered
-                                    val index = if (xInPicker in 0f..pickerWidthPx) {
-                                        (xInPicker / slotWidthPx).toInt().coerceIn(0, totalSlots - 1)
-                                    } else {
-                                        -1
-                                    }
-                                    hoveredIndex = index
-                                }
-                            }
-                        },
-                        onDragEnd = {
-                            if (!dismissed) {
-                                val idx = hoveredIndex
-                                val skinCount = item.skins?.size ?: 0
-                                if (idx in 0..skinCount) {
-                                    if (idx == 0) {
-                                        onSelectEmoji(item)
-                                    } else {
-                                        val skin = item.skins?.getOrNull(idx - 1)
-                                        if (skin != null) {
-                                            onSelectEmoji(item.copy(unicode = skin.unicode))
-                                        }
-                                    }
-                                } else if (idx < 0) {
-                                    onSelectEmoji(item)
-                                }
-                            }
-                            dismissed = false
-                            hoveredIndex = -1
-                            onDismissSkinPicker?.invoke()
-                        },
-                        onDragCancel = {
-                            dismissed = false
-                            hoveredIndex = -1
-                        },
-                    )
-                }
-
                 // Always detect long press and tap gestures
                 detectTapGestures(
                     onPress = { pressOffset ->
@@ -194,6 +117,9 @@ fun EmojiItem(
                         interactionSource.emit(press)
                         if (tryAwaitRelease()) {
                             interactionSource.emit(PressInteraction.Release(press))
+                            if (hasSkinTones) {
+                                onSelectEmoji(item)
+                            }
                         } else {
                             interactionSource.emit(PressInteraction.Cancel(press))
                         }
@@ -201,6 +127,88 @@ fun EmojiItem(
                     onTap = { onSelectEmoji(item) },
                 )
             }
+            .then(
+                // Only detect drag after long press for those items which have a skin tone picker
+                if (hasSkinTones) {
+                    Modifier.pointerInput(item) {
+                        val slotWidthPx = with(density) { SkinToneSlotSize.toPx() }
+                        val spacingPx = with(density) { SkinToneSlotSpacing.toPx() }
+                        val paddingPx = with(density) { SkinTonePadding.toPx() }
+                        var startOffset = Offset.Zero
+                        detectDragGesturesAfterLongPress(
+                            onDragStart = { position ->
+                                if (onLongPress != null) {
+                                    startOffset = position
+                                    dismissed = false
+                                    onLongPress(item)
+                                    hoveredIndex = -1
+                                }
+                            },
+                            onDrag = { change, _ ->
+                                if (!dismissed) {
+                                    change.consume()
+                                    // It's a valid drag event if it's within ~2 items height above, so, on top of the current one or the skin tone selector,
+                                    // or 1 item below, which should be far enough to not be triggered by mistake
+                                    val isValidDrag = if (change.position.y < startOffset.y) {
+                                        startOffset.y - change.position.y <= itemSize.height * 2f
+                                    } else {
+                                        change.position.y - startOffset.y <= itemSize.height
+                                    }
+                                    if (!isValidDrag) {
+                                        dismissed = true
+                                        hoveredIndex = -1
+                                        onDismissSkinPicker?.invoke()
+                                    } else {
+                                        val skinItemsCount = item.skins!!.size
+                                        // Original + variants
+                                        val totalSlots = 1 + skinItemsCount
+                                        // Calculate the whole size of the skin tone picker
+                                        val pickerWidthPx = 2 * paddingPx + totalSlots * slotWidthPx + (totalSlots - 1) * spacingPx
+                                        // Calculate the initial offset inside the picker, given the relative position of the item inside its parent
+                                        val initialOffset = pickerWidthPx * itemOffsetPercent
+                                        val xInPicker = initialOffset + change.position.x
+
+                                        // If it's a valid offset, calculate the hovered index, otherwise, set it to -1 to indicate that no item is hovered
+                                        val index = if (xInPicker in 0f..pickerWidthPx) {
+                                            (xInPicker / slotWidthPx).toInt().coerceIn(0, totalSlots - 1)
+                                        } else {
+                                            -1
+                                        }
+                                        hoveredIndex = index
+                                    }
+                                }
+                            },
+                            onDragEnd = {
+                                if (!dismissed) {
+                                    val idx = hoveredIndex
+                                    val skinCount = item.skins?.size ?: 0
+                                    if (idx in 0..skinCount) {
+                                        if (idx == 0) {
+                                            onSelectEmoji(item)
+                                        } else {
+                                            val skin = item.skins?.getOrNull(idx - 1)
+                                            if (skin != null) {
+                                                onSelectEmoji(item.copy(unicode = skin.unicode))
+                                            }
+                                        }
+                                    } else if (idx < 0) {
+                                        onSelectEmoji(item)
+                                    }
+                                }
+                                dismissed = false
+                                hoveredIndex = -1
+                                onDismissSkinPicker?.invoke()
+                            },
+                            onDragCancel = {
+                                dismissed = false
+                                hoveredIndex = -1
+                            },
+                        )
+                    }
+                } else {
+                    Modifier
+                }
+            )
             .clearAndSetSemantics {
                 contentDescription = description
             },
