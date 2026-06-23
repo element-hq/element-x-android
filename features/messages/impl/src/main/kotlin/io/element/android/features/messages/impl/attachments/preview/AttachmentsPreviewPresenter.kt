@@ -82,6 +82,11 @@ class AttachmentsPreviewPresenter(
         ): AttachmentsPreviewPresenter
     }
 
+    data class AttachmentAndEdits(
+        val attachment: Attachment,
+        val edits: AttachmentImageEdits,
+    )
+
     private val mediaSender = mediaSenderFactory.create(timelineMode)
 
     @Composable
@@ -95,7 +100,6 @@ class AttachmentsPreviewPresenter(
         var currentAttachment by remember { mutableStateOf(attachments.first()) }
         var canEditImage by remember { mutableStateOf(originalLocalMedia.info.canEditImage()) }
         var imageEditorState by remember { mutableStateOf<AttachmentImageEditorState?>(null) }
-        var appliedImageEdits by remember { mutableStateOf(AttachmentImageEdits()) }
         var isApplyingImageEdits by remember { mutableStateOf(false) }
         var displayImageEditError by remember { mutableStateOf(false) }
         var editedTempFiles by remember { mutableStateOf<Map<Int, File>>(emptyMap()) }
@@ -109,7 +113,13 @@ class AttachmentsPreviewPresenter(
 
         var currentIndex by remember { mutableIntStateOf(0) }
 
-        var currentAttachments by remember { mutableStateOf(attachments) }
+        var attachmentsAndEdits by remember {
+            mutableStateOf(
+                attachments.map {
+                    AttachmentAndEdits(it, AttachmentImageEdits())
+                }
+            )
+        }
 
         var preprocessMediaJob by remember { mutableStateOf<Job?>(null) }
 
@@ -141,7 +151,7 @@ class AttachmentsPreviewPresenter(
                 )
                 preprocessMediaJob = coroutineScope.launch(dispatchers.io) {
                     preProcessAttachments(
-                        attachments = currentAttachments,
+                        attachments = attachmentsAndEdits.map { it.attachment },
                         mediaOptimizationConfig = config,
                         displayProgress = false,
                         sendActionState = sendActionState,
@@ -199,7 +209,7 @@ class AttachmentsPreviewPresenter(
                             )
                             preprocessMediaJob = coroutineScope.launch(dispatchers.io) {
                                 preProcessAttachments(
-                                    attachments = currentAttachments,
+                                    attachments = attachmentsAndEdits.map { it.attachment },
                                     mediaOptimizationConfig = config,
                                     displayProgress = true,
                                     sendActionState = sendActionState,
@@ -251,7 +261,7 @@ class AttachmentsPreviewPresenter(
 
                     // Dismiss the screen
                     dismiss(
-                        attachments = currentAttachments,
+                        attachments = attachmentsAndEdits.map { it.attachment },
                         sendActionState = sendActionState,
                         editedTempFiles = editedTempFiles,
                     )
@@ -279,7 +289,7 @@ class AttachmentsPreviewPresenter(
                         resetPreparedMedia(sendActionState)
                         imageEditorState = AttachmentImageEditorState(
                             localMedia = currentLocalMedia,
-                            edits = appliedImageEdits,
+                            edits = attachmentsAndEdits.get(currentIndex).edits,
                             previewDebug = false,
                         )
                     }
@@ -321,10 +331,12 @@ class AttachmentsPreviewPresenter(
                     if (!pendingState.edits.hasChanges) {
                         editedTempFiles[currentIndex]?.safeDelete()
                         editedTempFiles = editedTempFiles - currentIndex
-                        appliedImageEdits = pendingState.edits
-                        currentAttachment = currentAttachments[currentIndex]
-                        currentAttachments = currentAttachments.toMutableList().also {
-                            it[currentIndex] = currentAttachment
+                        currentAttachment = attachmentsAndEdits[currentIndex].attachment
+                        attachmentsAndEdits = attachmentsAndEdits.toMutableList().also {
+                            it[currentIndex] = AttachmentAndEdits(
+                                currentAttachment,
+                                pendingState.edits,
+                            )
                         }.toImmutableList()
                         imageEditorState = null
                         resetPreparedMedia(sendActionState)
@@ -343,10 +355,12 @@ class AttachmentsPreviewPresenter(
                             onSuccess = { editedMedia ->
                                 editedTempFiles[currentIndex]?.safeDelete()
                                 editedTempFiles = editedTempFiles + (currentIndex to editedMedia.file)
-                                appliedImageEdits = pendingState.edits
                                 currentAttachment = Attachment.Media(editedMedia.localMedia)
-                                currentAttachments = currentAttachments.toMutableList().also {
-                                    it[currentIndex] = currentAttachment
+                                attachmentsAndEdits = attachmentsAndEdits.toMutableList().also {
+                                    it[currentIndex] = AttachmentAndEdits(
+                                        currentAttachment,
+                                        pendingState.edits,
+                                    )
                                 }.toImmutableList()
                                 imageEditorState = null
                                 resetPreparedMedia(sendActionState)
@@ -364,13 +378,12 @@ class AttachmentsPreviewPresenter(
                 }
                 is AttachmentsPreviewEvent.SetCurrentCarouselIndex -> {
                     currentIndex = event.index
-                    appliedImageEdits = AttachmentImageEdits()
                 }
             }
         }
 
         return AttachmentsPreviewState(
-            attachments = currentAttachments,
+            attachments = attachmentsAndEdits.map { it.attachment }.toImmutableList(),
             imageEditorState = imageEditorState,
             canEditImage = canEditImage,
             isApplyingImageEdits = isApplyingImageEdits,
