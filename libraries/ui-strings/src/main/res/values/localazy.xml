@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_avatar">"Add avatar"</string>
   <string name="a11y_add_reaction">"Add reaction: %1$s"</string>
   <string name="a11y_address">"Address"</string>
   <string name="a11y_avatar">"Avatar"</string>
@@ -29,6 +30,7 @@
   <string name="a11y_page_n">"Page %1$d"</string>
   <string name="a11y_pause">"Pause"</string>
   <string name="a11y_paused_voice_message">"Voice message, duration: %1$s, current position: %2$s"</string>
+  <string name="a11y_photo_preview">"Photo preview"</string>
   <string name="a11y_pin_field">"PIN field"</string>
   <string name="a11y_pinned_location">"Pinned location"</string>
   <string name="a11y_play">"Play"</string>
@@ -63,6 +65,7 @@
   <string name="a11y_tombstoned_room">"Tombstoned room"</string>
   <string name="a11y_user_avatar">"User avatar"</string>
   <string name="a11y_user_menu">"User menu"</string>
+  <string name="a11y_video_preview">"Video preview"</string>
   <string name="a11y_view_avatar">"View avatar"</string>
   <string name="a11y_view_details">"View details"</string>
   <string name="a11y_voice_message">"Voice message, duration: %1$s"</string>
@@ -214,6 +217,7 @@
   <string name="common_blocked_users">"Blocked users"</string>
   <string name="common_bubbles">"Bubbles"</string>
   <string name="common_call_declined">"Call declined"</string>
+  <string name="common_call_in_progress">"Call in progress"</string>
   <string name="common_call_started">"Call started"</string>
   <string name="common_call_you_declined">"You declined a call"</string>
   <string name="common_chat_backup">"Chat backup"</string>
@@ -258,6 +262,7 @@ Reason: %1$s."</string>
   <string name="common_forward_message">"Forward message"</string>
   <string name="common_frequently_used">"Frequently used"</string>
   <string name="common_gif">"GIF"</string>
+  <string name="common_group_call_in_progress">"Group call in progress"</string>
   <string name="common_image">"Image"</string>
   <string name="common_in_reply_to">"In reply to %1$s"</string>
   <string name="common_install_apk_android">"Install APK"</string>
@@ -400,6 +405,7 @@ Reason: %1$s."</string>
   <string name="common_unmute">"Unmute"</string>
   <string name="common_unsupported_call">"Unsupported call"</string>
   <string name="common_unsupported_event">"Unsupported event"</string>
+  <string name="common_user_started_a_call">"%1$s started a call"</string>
   <string name="common_username">"Username"</string>
   <string name="common_verification_cancelled">"Verification cancelled"</string>
   <string name="common_verification_complete">"Verification complete"</string>
@@ -534,6 +540,10 @@ Are you sure you want to continue?"</string>
   <string name="screen_space_list_title">"Spaces"</string>
   <string name="screen_static_location_sheet_timestamp_description">"Shared %1$s"</string>
   <string name="screen_static_location_sheet_title">"On the map"</string>
+  <plurals name="screen_timeline_active_call_extra_joined_count">
+    <item quantity="one">"+ %1$d joined"</item>
+    <item quantity="other">"+ %1$d joined"</item>
+  </plurals>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Message not sent because %1$s’s verified digital identity was reset."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Message not sent because %1$s has not verified all devices."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Message not sent because you have not verified one or more of your devices."</string>
