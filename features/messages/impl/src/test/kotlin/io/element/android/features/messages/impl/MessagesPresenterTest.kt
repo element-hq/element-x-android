@@ -25,6 +25,7 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.aLoadedPinnedMessagesBannerState
+import io.element.android.features.messages.impl.threads.list.aThreadListItem
 import io.element.android.features.messages.impl.timeline.FakeMarkAsFullyRead
 import io.element.android.features.messages.impl.timeline.MarkAsFullyRead
 import io.element.android.features.messages.impl.timeline.TimelineController
@@ -112,6 +113,7 @@ import io.element.android.tests.testutils.testWithLifecycleOwner
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
@@ -1290,8 +1292,9 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - only has threads enabled if the feature flag is on`() = runTest {
+        val itemsFlow = MutableStateFlow(listOf(aThreadListItem()))
         val room = FakeJoinedRoom(
-            threadsListService = FakeThreadsListService()
+            threadsListService = FakeThreadsListService(items = itemsFlow)
         )
         val featureFlagService = FakeFeatureFlagService(
             initialState = mapOf(FeatureFlags.Threads.key to false)
@@ -1302,17 +1305,16 @@ class MessagesPresenterTest {
         )
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
-            // The feature flag is disabled, so it will return it doesn't have any
+            // The feature flag is disabled, so even if the thread list has items, it will return it doesn't have any
             assertThat(initialState.threads.hasThreads).isFalse()
 
-            // Enable the feature flag, now it should report having threads
+            // Enable the feature flag, now it should reflect the thread list state
             featureFlagService.setFeatureEnabled(FeatureFlags.RoomThreadList, true)
-            // skip any intermediate emissions from sub-presenters
             skipItems(1)
             assertThat(awaitItem().threads.hasThreads).isTrue()
 
-            // Disable the feature flag, it should update accordingly
-            featureFlagService.setFeatureEnabled(FeatureFlags.RoomThreadList, false)
+            // And if we remove the items, it should update accordingly
+            itemsFlow.value = emptyList()
             assertThat(awaitItem().threads.hasThreads).isFalse()
         }
     }
