@@ -215,6 +215,21 @@ class AttachmentsPreviewPresenter(
                                     sendActionState = sendActionState,
                                 )
                             }
+                        } else if (preprocessMediaJob?.isActive != true && sendActionState.value !is SendActionState.Sending.ReadyToUpload) {
+                            val config = MediaOptimizationConfig(
+                                compressImages = mediaOptimizationSelectorState.isImageOptimizationEnabled
+                                    ?: mediaOptimizationConfigProvider.get().compressImages,
+                                videoCompressionPreset = mediaOptimizationSelectorState.selectedVideoPreset
+                                    ?: mediaOptimizationConfigProvider.get().videoCompressionPreset,
+                            )
+                            preprocessMediaJob = coroutineScope.launch(dispatchers.io) {
+                                preProcessAttachments(
+                                    attachments = attachmentsAndEdits.map { it.attachment },
+                                    mediaOptimizationConfig = config,
+                                    displayProgress = true,
+                                    sendActionState = sendActionState,
+                                )
+                            }
                         }
 
                         // If the processing was hidden before, make it visible now

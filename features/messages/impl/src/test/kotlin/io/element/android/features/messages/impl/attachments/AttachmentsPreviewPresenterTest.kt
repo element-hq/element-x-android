@@ -32,6 +32,7 @@ import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
+import io.element.android.libraries.matrix.api.media.GalleryItemInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
@@ -68,6 +69,7 @@ import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -856,10 +858,56 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
         }
     }
 
+    @Test
+    fun `present - sending gallery after image edits restarts preprocessing`() = runTest {
+        val sendGalleryResult =
+            lambdaRecorder<List<GalleryItemInfo>, String?, String?, EventId?, Result<FakeMediaUploadHandler>> { _, _, _, _ ->
+                Result.success(FakeMediaUploadHandler())
+            }
+        val firstLocalMedia = aLocalMedia(uri = Uri.parse("file:///tmp/original-1.jpeg"))
+        val secondLocalMedia = aLocalMedia(uri = Uri.parse("file:///tmp/original-2.jpeg"))
+        val editedUri = Uri.parse("file:///tmp/edited-1.jpeg")
+        val presenter = createAttachmentsPreviewPresenter(
+            room = FakeJoinedRoom(
+                liveTimeline = FakeTimeline().apply {
+                    sendGalleryLambda = sendGalleryResult
+                },
+            ),
+            attachments = persistentListOf(
+                aMediaAttachment(firstLocalMedia),
+                aMediaAttachment(secondLocalMedia),
+            ),
+            displayMediaQualitySelectorViews = false,
+            attachmentImageEditor = FakeAttachmentImageEditor {
+                Result.success(
+                    EditedLocalMedia(
+                        localMedia = firstLocalMedia.copy(uri = editedUri),
+                        file = File("/tmp/edited-1.jpeg"),
+                    )
+                )
+            },
+        )
+
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(AttachmentsPreviewEvent.OpenImageEditor)
+            val editorState = consumeItemsUntilPredicate { it.imageEditorState != null }.last()
+
+            editorState.eventSink(AttachmentsPreviewEvent.ApplyImageEdits)
+            val appliedState = consumeItemsUntilPredicate { !it.isApplyingImageEdits && it.imageEditorState == null }.last()
+
+            appliedState.eventSink(AttachmentsPreviewEvent.SendAttachment)
+            consumeItemsUntilPredicate { it.sendActionState == SendActionState.Done }
+
+            sendGalleryResult.assertions().isCalledOnce()
+        }
+    }
+
     private fun TestScope.createAttachmentsPreviewPresenter(
         localMedia: LocalMedia = aLocalMedia(
             uri = mockMediaUrl,
         ),
+        attachments: ImmutableList<Attachment> = persistentListOf(aMediaAttachment(localMedia)),
         room: JoinedRoom = FakeJoinedRoom(),
         timelineMode: Timeline.Mode = Timeline.Mode.Live,
         permalinkBuilder: PermalinkBuilder = FakePermalinkBuilder(),
@@ -891,7 +939,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
         },
     ): AttachmentsPreviewPresenter {
         return AttachmentsPreviewPresenter(
-            attachments = persistentListOf(aMediaAttachment(localMedia)),
+            attachments = attachments,
             onDoneListener = onDoneListener,
             mediaSenderFactory = MediaSenderFactory { timelineMode ->
                 DefaultMediaSender(
