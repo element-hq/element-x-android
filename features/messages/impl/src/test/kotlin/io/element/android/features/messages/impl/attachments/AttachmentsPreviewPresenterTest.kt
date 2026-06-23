@@ -675,7 +675,6 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
         val mediaPreProcessor = FakeMediaPreProcessor()
         val presenter = createAttachmentsPreviewPresenter(
             localMedia = aLocalMedia(mockMediaUrl, anImageMediaInfo()),
-            sendAsFile = true,
             mediaPreProcessor = mediaPreProcessor,
             // Selector views are hidden in the sendAsFile flow, which triggers the auto pre-process path.
             displayMediaQualitySelectorViews = false,
@@ -818,7 +817,6 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
         val mediaPreProcessor = FakeMediaPreProcessor()
         val presenter = createAttachmentsPreviewPresenter(
             localMedia = aLocalMedia(mockMediaUrl, aVideoMediaInfo()),
-            sendAsFile = true,
             mediaPreProcessor = mediaPreProcessor,
             // Selector views are hidden in the sendAsFile flow, which triggers the auto pre-process path.
             displayMediaQualitySelectorViews = false,
@@ -867,6 +865,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
         val firstLocalMedia = aLocalMedia(uri = Uri.parse("file:///tmp/original-1.jpeg"))
         val secondLocalMedia = aLocalMedia(uri = Uri.parse("file:///tmp/original-2.jpeg"))
         val editedUri = Uri.parse("file:///tmp/edited-1.jpeg")
+        val onDoneListener = lambdaRecorder<Unit> { }
         val presenter = createAttachmentsPreviewPresenter(
             room = FakeJoinedRoom(
                 liveTimeline = FakeTimeline().apply {
@@ -886,6 +885,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
                     )
                 )
             },
+            onDoneListener = OnDoneListener { onDoneListener() },
         )
 
         presenter.test {
@@ -900,6 +900,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
             consumeItemsUntilPredicate { it.sendActionState == SendActionState.Done }
 
             sendGalleryResult.assertions().isCalledOnce()
+            onDoneListener.assertions().isCalledOnce()
         }
     }
 
