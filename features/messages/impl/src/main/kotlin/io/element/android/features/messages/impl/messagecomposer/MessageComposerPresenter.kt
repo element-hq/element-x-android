@@ -619,8 +619,14 @@ class MessageComposerPresenter(
         val inReplyToEventId = (messageComposerContext.composerMode as? MessageComposerMode.Reply)?.eventId
         navigator.navigateToPreviewAttachments(persistentListOf(mediaAttachment), inReplyToEventId)
 
-        // Reset composer since the attachment will be sent in a separate flow
-        messageComposerContext.composerMode = MessageComposerMode.Normal
+        // Reset composer since the attachment will be sent in a separate flow.
+        // But keep an in-progress edit alive: an attachment can't fulfil a text edit (a text event
+        // can't be replaced by media), so the edit stays pending and the typed text still edits the
+        // original message on the next send. Clearing the mode here would orphan that edit and turn
+        // the next send into a new message instead.
+        if (!messageComposerContext.composerMode.isEditing) {
+            messageComposerContext.composerMode = MessageComposerMode.Normal
+        }
     }
 
     private suspend fun sendMedia(

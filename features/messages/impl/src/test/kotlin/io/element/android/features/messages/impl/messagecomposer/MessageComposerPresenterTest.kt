@@ -719,6 +719,51 @@ class MessageComposerPresenterTest : RobolectricTest() {
     }
 
     @Test
+    fun `present - Pick media from gallery while editing keeps the edit pending`() = runTest {
+        val onPreviewAttachmentLambda = lambdaRecorder { _: ImmutableList<Attachment>, _: EventId? -> }
+        val navigator = FakeMessagesNavigator(
+            onPreviewAttachmentLambda = onPreviewAttachmentLambda
+        )
+        val presenter = createPresenter(navigator = navigator)
+        pickerProvider.givenMimeType(MimeTypes.Images)
+        presenter.test {
+            var state = awaitFirstItem()
+            val editMode = anEditMode()
+            state.eventSink(MessageComposerEvent.SetMode(editMode))
+            state = awaitItem()
+            assertThat(state.mode).isEqualTo(editMode)
+            // Attaching media while editing sends the photo as a new message (a text event can't be
+            // replaced by media), but the edit must stay active so the typed text still edits the
+            // original on send. The composer mode must NOT flip back to Normal here.
+            state.eventSink(MessageComposerEvent.PickAttachmentSource.FromGallery)
+            onPreviewAttachmentLambda.assertions().isCalledOnce()
+            expectNoEvents()
+            assertThat(state.mode).isEqualTo(editMode)
+        }
+    }
+
+    @Test
+    fun `present - Pick media from gallery while replying clears the reply mode`() = runTest {
+        val onPreviewAttachmentLambda = lambdaRecorder { _: ImmutableList<Attachment>, _: EventId? -> }
+        val navigator = FakeMessagesNavigator(
+            onPreviewAttachmentLambda = onPreviewAttachmentLambda
+        )
+        val presenter = createPresenter(navigator = navigator)
+        pickerProvider.givenMimeType(MimeTypes.Images)
+        presenter.test {
+            var state = awaitFirstItem()
+            state.eventSink(MessageComposerEvent.SetMode(aReplyMode()))
+            state = awaitItem()
+            assertThat(state.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
+            // The photo becomes the reply, so the reply intent is consumed and the composer resets.
+            state.eventSink(MessageComposerEvent.PickAttachmentSource.FromGallery)
+            onPreviewAttachmentLambda.assertions().isCalledOnce()
+            state = awaitItem()
+            assertThat(state.mode).isEqualTo(MessageComposerMode.Normal)
+        }
+    }
+
+    @Test
     fun `present - Pick video from gallery`() = runTest {
         val room = FakeJoinedRoom(
             typingNoticeResult = { Result.success(Unit) }
