@@ -8,6 +8,5 @@
 package io.element.android.features.linknewdevice.impl.screens.root
 
 sealed interface LinkNewDeviceRootEvent {
-    data object LinkMobileDevice : LinkNewDeviceRootEvent
     data object CloseDialog : LinkNewDeviceRootEvent
 }

@@ -191,7 +191,12 @@ internal fun RolesAndPermissionsViewPreview(@PreviewParameter(RolesAndPermission
     ElementPreview {
         RolesAndPermissionsView(
             state = state,
-            rolesAndPermissionsNavigator = object : RolesAndPermissionsNavigator {},
+            rolesAndPermissionsNavigator = object : RolesAndPermissionsNavigator {
+                override fun onBackClick() {}
+                override fun openAdminList() {}
+                override fun openModeratorList() {}
+                override fun openEditPermissions() {}
+            },
         )
     }
 }

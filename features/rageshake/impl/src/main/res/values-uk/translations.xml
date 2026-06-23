@@ -8,6 +8,8 @@
   <string name="screen_bug_report_editor_placeholder">"Опишіть проблему…"</string>
   <string name="screen_bug_report_editor_supporting">"Якщо можливо, будь ласка, напишіть опис англійською мовою."</string>
   <string name="screen_bug_report_error_description_too_short">"Опис закороткий, будь ласка, надайте докладнішу інформацію про те, що сталося. Дякуємо!"</string>
+  <string name="screen_bug_report_github_issue_description">"Ви можете ввести номер вже існуючої проблеми на GitHub, якщо така є."</string>
+  <string name="screen_bug_report_github_issue_label">"Тікет на GitHub"</string>
   <string name="screen_bug_report_include_crash_logs">"Надіслати журнали збоїв"</string>
   <string name="screen_bug_report_include_logs">"Дозволити журнали"</string>
   <string name="screen_bug_report_include_logs_error">"Ваші журнали надмірно великі, тому їх не можна включити в цей звіт, будь ласка, надішліть їх нам іншим способом."</string>

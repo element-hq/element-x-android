@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_avatar">"Lisa tunnuspilt"</string>
   <string name="a11y_add_reaction">"Reageeri: %1$s"</string>
   <string name="a11y_address">"Aadress"</string>
   <string name="a11y_avatar">"Tunnuspilt"</string>
@@ -214,6 +215,7 @@
   <string name="common_blocked_users">"Blokeeritud kasutajad"</string>
   <string name="common_bubbles">"Mullid"</string>
   <string name="common_call_declined">"Osapool keeldus kõnest"</string>
+  <string name="common_call_in_progress">"Kõne on pooleli"</string>
   <string name="common_call_started">"Kõne algas"</string>
   <string name="common_call_you_declined">"Sa keeldusid kõnest"</string>
   <string name="common_chat_backup">"Vestluse varukoopia"</string>
@@ -258,6 +260,7 @@ Põhjus: %1$s."</string>
   <string name="common_forward_message">"Edasta sõnum"</string>
   <string name="common_frequently_used">"Sagedasti kasutatud"</string>
   <string name="common_gif">"GIF"</string>
+  <string name="common_group_call_in_progress">"Rühmakõne on pooleli"</string>
   <string name="common_image">"Pilt"</string>
   <string name="common_in_reply_to">"Vastuseks kasutajale %1$s"</string>
   <string name="common_install_apk_android">"Paigalda APK-failist"</string>
@@ -400,6 +403,7 @@ Põhjus: %1$s."</string>
   <string name="common_unmute">"Lõpeta summutamine"</string>
   <string name="common_unsupported_call">"See kõne pole toetatud"</string>
   <string name="common_unsupported_event">"Toetamata sündmus"</string>
+  <string name="common_user_started_a_call">"%1$s helistas"</string>
   <string name="common_username">"Kasutajanimi"</string>
   <string name="common_verification_cancelled">"Verifitseerimine on katkestatud"</string>
   <string name="common_verification_complete">"Verifitseerimine on tehtud"</string>
@@ -534,6 +538,10 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="screen_space_list_title">"Kogukonnad"</string>
   <string name="screen_static_location_sheet_timestamp_description">"Jagatud %1$s"</string>
   <string name="screen_static_location_sheet_title">"Kaardil"</string>
+  <plurals name="screen_timeline_active_call_extra_joined_count">
+    <item quantity="one">"%1$d liitus"</item>
+    <item quantity="other">"%1$d liitusid"</item>
+  </plurals>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Sõnum on saatmata, kuna kasutaja %1$s digitaalse identiteet on lähtestatud."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Sõnum on saatmata, kuna %1$s pole verifitseerinud kõiki oma seadmeid."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Kuna sa pole üks või enamgi oma seadet verifitseerinud, siis sinu sõnum on saatmata."</string>
