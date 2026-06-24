@@ -13,6 +13,7 @@ import android.text.style.StyleSpan
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
+import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import org.jsoup.nodes.Document
 
@@ -176,17 +177,19 @@ fun aTimelineItemAttachmentsContent(
 fun anAttachmentItem(
     filename: String = "file.pdf",
     fileExtension: String = "pdf",
-    fileSize: Long = 1_000_000L,
+    fileSize: Long? = 1_000_000L,
     formattedFileSize: String = "1MB",
+    mimeType: String? = null,
+    thumbnailSource: MediaSource? = null,
     hasThumbnail: Boolean = false,
 ) = AttachmentItem(
     filename = filename,
-    mimeType = when {
+    mimeType = mimeType ?: when {
         hasThumbnail -> "image/jpeg"
         else -> "application/$fileExtension"
     },
-    mediaSource = io.element.android.libraries.matrix.api.media.MediaSource(url = "", json = ""),
-    thumbnailSource = if (hasThumbnail) io.element.android.libraries.matrix.api.media.MediaSource(url = "", json = "") else null,
+    mediaSource = MediaSource(url = "", json = ""),
+    thumbnailSource = thumbnailSource ?: if (hasThumbnail) MediaSource(url = "", json = "") else null,
     fileSize = fileSize,
     formattedFileSize = formattedFileSize,
     fileExtension = fileExtension,
