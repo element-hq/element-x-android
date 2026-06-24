@@ -30,16 +30,16 @@ import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-class DefaultFirebaseNewTokenHandlerTest {
+class DefaultFirebaseNewInstallationIdHandlerTest {
     @Test
     fun `when a new token is received it is stored in the firebase store`() = runTest {
         val firebaseStore = InMemoryFirebaseStore()
-        assertThat(firebaseStore.getFcmToken()).isNull()
+        assertThat(firebaseStore.getInstallationId()).isNull()
         val firebaseNewTokenHandler = createDefaultFirebaseNewTokenHandler(
             firebaseStore = firebaseStore,
         )
         firebaseNewTokenHandler.handle("aToken")
-        assertThat(firebaseStore.getFcmToken()).isEqualTo("aToken")
+        assertThat(firebaseStore.getInstallationId()).isEqualTo("aToken")
     }
 
     @Test
@@ -142,8 +142,8 @@ class DefaultFirebaseNewTokenHandlerTest {
         matrixClientProvider: MatrixClientProvider = FakeMatrixClientProvider(),
         firebaseStore: FirebaseStore = InMemoryFirebaseStore(),
         firebaseGatewayProvider: FirebaseGatewayProvider = FakeFirebaseGatewayProvider(),
-    ): FirebaseNewTokenHandler {
-        return DefaultFirebaseNewTokenHandler(
+    ): FirebaseNewInstallationIdHandler {
+        return DefaultFirebaseNewInstallationIdHandler(
             pusherSubscriber = pusherSubscriber,
             sessionStore = sessionStore,
             userPushStoreFactory = userPushStoreFactory,

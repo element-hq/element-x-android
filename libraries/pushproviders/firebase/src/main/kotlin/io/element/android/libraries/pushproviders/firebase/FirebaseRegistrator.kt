@@ -11,38 +11,37 @@ package io.element.android.libraries.pushproviders.firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import kotlinx.coroutines.suspendCancellableCoroutine
 import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
-interface FirebaseTokenGetter {
+fun interface FirebaseRegistrator {
     /**
-     * Read the current Firebase token from FirebaseMessaging.
-     * If the token does not exist, it will be generated.
+     * Register the device to Firebase Messaging.
      */
-    suspend fun get(): String
+    suspend fun get()
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultFirebaseTokenGetter(
+class DefaultFirebaseRegistrator(
     private val isPlayServiceAvailable: IsPlayServiceAvailable,
-) : FirebaseTokenGetter {
-    override suspend fun get(): String {
+) : FirebaseRegistrator {
+    override suspend fun get() {
         // 'app should always check the device for a compatible Google Play services APK before accessing Google Play services features'
         isPlayServiceAvailable.checkAvailableOrThrow()
-        return suspendCoroutine { continuation ->
+        return suspendCancellableCoroutine { continuation ->
             try {
-                FirebaseMessaging.getInstance().token
-                    .addOnSuccessListener { token ->
-                        continuation.resume(token)
+                FirebaseMessaging.getInstance().register()
+                    .addOnSuccessListener {
+                        continuation.resume(Unit)
                     }
                     .addOnFailureListener { e ->
-                        Timber.e(e, "## retrievedFirebaseToken() : failed")
+                        Timber.e(e, "## registerFirebaseMessaging() : failed")
                         continuation.resumeWithException(e)
                     }
             } catch (e: Throwable) {
-                Timber.e(e, "## retrievedFirebaseToken() : failed")
+                Timber.e(e, "## registerFirebaseMessaging() : failed")
                 continuation.resumeWithException(e)
             }
         }

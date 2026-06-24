@@ -21,13 +21,11 @@ interface FirebaseTroubleshooter {
  */
 @ContributesBinding(AppScope::class)
 class DefaultFirebaseTroubleshooter(
-    private val newTokenHandler: FirebaseNewTokenHandler,
-    private val firebaseTokenGetter: FirebaseTokenGetter,
+    private val firebaseMessagingSessionRotator: FirebaseMessagingSessionRotator,
 ) : FirebaseTroubleshooter {
     override suspend fun troubleshoot(): Result<Unit> {
         return runCatchingExceptions {
-            val token = firebaseTokenGetter.get()
-            newTokenHandler.handle(token)
+            firebaseMessagingSessionRotator.rotate()
         }
     }
 }

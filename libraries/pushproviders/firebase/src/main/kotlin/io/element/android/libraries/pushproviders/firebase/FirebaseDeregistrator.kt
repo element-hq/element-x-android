@@ -16,7 +16,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-interface FirebaseTokenDeleter {
+fun interface FirebaseDeregistrator {
     /**
      * Deletes the current Firebase token.
      */
@@ -24,24 +24,24 @@ interface FirebaseTokenDeleter {
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultFirebaseTokenDeleter(
+class DefaultFirebaseDeregistrator(
     private val isPlayServiceAvailable: IsPlayServiceAvailable,
-) : FirebaseTokenDeleter {
+) : FirebaseDeregistrator {
     override suspend fun delete() {
         // 'app should always check the device for a compatible Google Play services APK before accessing Google Play services features'
         isPlayServiceAvailable.checkAvailableOrThrow()
         suspendCoroutine { continuation ->
             try {
-                FirebaseMessaging.getInstance().deleteToken()
+                FirebaseMessaging.getInstance().unregister()
                     .addOnSuccessListener {
                         continuation.resume(Unit)
                     }
                     .addOnFailureListener { e ->
-                        Timber.e(e, "## deleteFirebaseToken() : failed")
+                        Timber.e(e, "## unregisterFirebaseMessaging() : failed")
                         continuation.resumeWithException(e)
                     }
             } catch (e: Throwable) {
-                Timber.e(e, "## deleteFirebaseToken() : failed")
+                Timber.e(e, "## unregisterFirebaseMessaging() : failed")
                 continuation.resumeWithException(e)
             }
         }

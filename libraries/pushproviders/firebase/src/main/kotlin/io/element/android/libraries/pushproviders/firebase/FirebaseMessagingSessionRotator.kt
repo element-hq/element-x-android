@@ -12,7 +12,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 
-interface FirebaseTokenRotator {
+fun interface FirebaseMessagingSessionRotator {
     suspend fun rotate(): Result<Unit>
 }
 
@@ -20,14 +20,14 @@ interface FirebaseTokenRotator {
  * This class delete the Firebase token and generate a new one.
  */
 @ContributesBinding(AppScope::class)
-class DefaultFirebaseTokenRotator(
-    private val firebaseTokenDeleter: FirebaseTokenDeleter,
-    private val firebaseTokenGetter: FirebaseTokenGetter,
-) : FirebaseTokenRotator {
+class DefaultFirebaseMessagingSessionRotator(
+    private val firebaseRegistrator: FirebaseRegistrator,
+    private val firebaseDeregistrator: FirebaseDeregistrator,
+) : FirebaseMessagingSessionRotator {
     override suspend fun rotate(): Result<Unit> {
         return runCatchingExceptions {
-            firebaseTokenDeleter.delete()
-            firebaseTokenGetter.get()
+            firebaseDeregistrator.delete()
+            firebaseRegistrator.get()
         }
     }
 }
