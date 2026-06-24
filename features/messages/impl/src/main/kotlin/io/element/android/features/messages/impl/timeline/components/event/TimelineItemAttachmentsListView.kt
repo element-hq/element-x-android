@@ -65,10 +65,7 @@ fun TimelineItemAttachmentsListView(
             content.attachments.forEachIndexed { index, attachment ->
                 Column {
                     if (index > 0) {
-                        HorizontalDivider(
-                            modifier = Modifier,
-                            thickness = 1.dp,
-                        )
+                        HorizontalDivider()
                     }
                     AttachmentListItem(
                         attachment = attachment,
@@ -80,10 +77,7 @@ fun TimelineItemAttachmentsListView(
         }
 
         if (content.showCaption) {
-            HorizontalDivider(
-                modifier = Modifier,
-                thickness = 1.dp,
-            )
+            HorizontalDivider()
             val caption = if (LocalInspectionMode.current) {
                 android.text.SpannedString(content.caption)
             } else {
