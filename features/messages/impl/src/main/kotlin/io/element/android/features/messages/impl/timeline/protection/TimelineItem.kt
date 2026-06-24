@@ -34,26 +34,32 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
  */
 fun TimelineItem.mustBeProtected(): Boolean {
     return when (this) {
-        is TimelineItem.Event -> when (content) {
-            is TimelineItemImageContent,
-            is TimelineItemVideoContent,
-            is TimelineItemStickerContent -> true
-            is TimelineItemAudioContent,
-            is TimelineItemRtcNotificationContent,
-            is TimelineItemEncryptedContent,
-            is TimelineItemFileContent,
-            TimelineItemLegacyCallInviteContent,
-            is TimelineItemLocationContent,
-            is TimelineItemPollContent,
-            TimelineItemRedactedContent,
-            is TimelineItemProfileChangeContent,
-            is TimelineItemRoomMembershipContent,
-            is TimelineItemStateEventContent,
-            is TimelineItemEmoteContent,
-            is TimelineItemNoticeContent,
-            is TimelineItemTextContent,
-            TimelineItemUnknownContent,
-            is TimelineItemVoiceContent -> false
+        is TimelineItem.Event -> {
+            if (isMine) {
+                false
+            } else {
+                when (content) {
+                    is TimelineItemImageContent,
+                    is TimelineItemVideoContent,
+                    is TimelineItemStickerContent -> true
+                    is TimelineItemAudioContent,
+                    is TimelineItemRtcNotificationContent,
+                    is TimelineItemEncryptedContent,
+                    is TimelineItemFileContent,
+                    TimelineItemLegacyCallInviteContent,
+                    is TimelineItemLocationContent,
+                    is TimelineItemPollContent,
+                    TimelineItemRedactedContent,
+                    is TimelineItemProfileChangeContent,
+                    is TimelineItemRoomMembershipContent,
+                    is TimelineItemStateEventContent,
+                    is TimelineItemEmoteContent,
+                    is TimelineItemNoticeContent,
+                    is TimelineItemTextContent,
+                    TimelineItemUnknownContent,
+                    is TimelineItemVoiceContent -> false
+                }
+            }
         }
         is TimelineItem.Virtual -> false
         is TimelineItem.GroupedEvents -> false

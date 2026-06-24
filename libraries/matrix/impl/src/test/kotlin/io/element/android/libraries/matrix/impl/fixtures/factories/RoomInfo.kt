@@ -19,6 +19,7 @@ import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomMember
 import org.matrix.rustcomponents.sdk.RoomNotificationMode
 import org.matrix.rustcomponents.sdk.RoomPowerLevels
+import org.matrix.rustcomponents.sdk.RtcCallIntentConsensus
 import org.matrix.rustcomponents.sdk.SuccessorRoom
 import uniffi.matrix_sdk_base.EncryptionState
 
@@ -60,6 +61,10 @@ internal fun aRustRoomInfo(
     privilegedCreatorsRole: Boolean = false,
     serviceMembers: List<String> = emptyList(),
     isLowPriority: Boolean = false,
+    activeRoomCallConsensusIntent: RtcCallIntentConsensus = RtcCallIntentConsensus.None,
+    activeServiceMembersCount: Int = 0,
+    isDm: Boolean = false,
+    fullyReadEventId: String? = null,
 ) = RoomInfo(
     id = id,
     displayName = displayName,
@@ -98,4 +103,8 @@ internal fun aRustRoomInfo(
     privilegedCreatorsRole = privilegedCreatorsRole,
     serviceMembers = serviceMembers,
     isLowPriority = isLowPriority,
+    activeRoomCallConsensusIntent = activeRoomCallConsensusIntent,
+    activeServiceMembersCount = activeServiceMembersCount.toULong(),
+    isDm = isDm,
+    fullyReadEventId = fullyReadEventId,
 )

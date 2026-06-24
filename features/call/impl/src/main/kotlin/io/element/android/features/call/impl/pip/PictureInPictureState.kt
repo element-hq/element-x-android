@@ -11,5 +11,5 @@ package io.element.android.features.call.impl.pip
 data class PictureInPictureState(
     val supportPip: Boolean,
     val isInPictureInPicture: Boolean,
-    val eventSink: (PictureInPictureEvents) -> Unit,
+    val eventSink: (PictureInPictureEvent) -> Unit,
 )

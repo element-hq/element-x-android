@@ -8,9 +8,8 @@
 package io.element.android.libraries.push.impl.notifications
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.call.api.CallType
+import io.element.android.features.call.api.CallData
 import io.element.android.features.call.test.FakeElementCallEntryPoint
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -34,7 +33,6 @@ import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEv
 import io.element.android.libraries.push.impl.push.FakeMutableBatteryOptimizationStore
 import io.element.android.libraries.push.impl.push.FakeOnNotifiableEventReceived
 import io.element.android.libraries.push.impl.push.FakeOnRedactedEventReceived
-import io.element.android.libraries.push.impl.push.SyncOnNotifiableEvent
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStoreFactory
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.lambda.any
@@ -106,7 +104,7 @@ class DefaultNotificationResultProcessorTest {
     @Test
     fun `when ringing call PushData is received, the incoming call will be handled`() = runTest {
         val handleIncomingCallLambda = lambdaRecorder<
-            CallType.RoomCall,
+            CallData,
             EventId,
             UserId,
             String?,
@@ -142,7 +140,7 @@ class DefaultNotificationResultProcessorTest {
     fun `when notify call PushData is received, the incoming call will be treated as a normal notification`() = runTest {
         val onNotifiableEventsReceived = lambdaRecorder<List<NotifiableEvent>, Unit> {}
         val handleIncomingCallLambda = lambdaRecorder<
-            CallType.RoomCall,
+            CallData,
             EventId,
             UserId,
             String?,
@@ -178,7 +176,7 @@ class DefaultNotificationResultProcessorTest {
     fun `when notify call PushData is received, the incoming call will be treated as a normal notification even if notification are disabled`() = runTest {
         val onNotifiableEventsReceived = lambdaRecorder<List<NotifiableEvent>, Unit> {}
         val handleIncomingCallLambda = lambdaRecorder<
-            CallType.RoomCall,
+            CallData,
             EventId,
             UserId,
             String?,
@@ -289,8 +287,6 @@ class DefaultNotificationResultProcessorTest {
         userPushStoreFactory: FakeUserPushStoreFactory = FakeUserPushStoreFactory(),
         onRedactedEventReceived: (List<ResolvedPushEvent.Redaction>) -> Unit = {},
         onNotifiableEventsReceived: (List<NotifiableEvent>) -> Unit = {},
-        featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
-        syncOnNotifiableEvent: SyncOnNotifiableEvent = {},
         elementCallEntryPoint: FakeElementCallEntryPoint = FakeElementCallEntryPoint(),
         notificationChannels: FakeNotificationChannels = FakeNotificationChannels(),
         coroutineScope: CoroutineScope = backgroundScope,
@@ -301,8 +297,6 @@ class DefaultNotificationResultProcessorTest {
         userPushStoreFactory = userPushStoreFactory,
         onRedactedEventReceived = FakeOnRedactedEventReceived(onRedactedEventReceived),
         onNotifiableEventReceived = FakeOnNotifiableEventReceived(onNotifiableEventsReceived),
-        featureFlagService = featureFlagService,
-        syncOnNotifiableEvent = syncOnNotifiableEvent,
         elementCallEntryPoint = elementCallEntryPoint,
         notificationChannels = notificationChannels,
         coroutineScope = coroutineScope,

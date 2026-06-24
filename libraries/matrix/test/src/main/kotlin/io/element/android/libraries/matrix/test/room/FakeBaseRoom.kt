@@ -186,10 +186,6 @@ class FakeBaseRoom(
         membersStateFlow.value = state
     }
 
-    override suspend fun clearEventCacheStorage(): Result<Unit> {
-        return Result.success(Unit)
-    }
-
     override suspend fun reportRoom(reason: String?) = reportRoomResult(reason)
 
     override suspend fun declineCall(notificationEventId: EventId): Result<Unit> {
@@ -223,4 +219,6 @@ fun defaultRoomPowerLevelValues() = RoomPowerLevelsValues(
     roomAvatar = 50,
     roomTopic = 50,
     spaceChild = 50,
+    beacon = 0,
+    beaconInfo = 0,
 )

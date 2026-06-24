@@ -19,7 +19,7 @@ fun BaseRoom.toAnalyticsViewRoom(
     val activeSpace = selectedSpace?.toActiveSpace() ?: ViewRoom.ActiveSpace.Home
 
     return ViewRoom(
-        isDM = info().isDirect,
+        isDM = info().isDm,
         isSpace = info().isSpace,
         trigger = trigger,
         activeSpace = activeSpace,

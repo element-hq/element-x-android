@@ -95,7 +95,8 @@ internal fun SelectParentSpaceOptions(
                     sheetState.hide(coroutineScope) {
                         displaySelectSpaceBottomSheet = false
                     }
-                }
+                },
+                scrollable = false,
             ) {
                 SelectParentSpaceBottomSheet(
                     spaces = spaces,

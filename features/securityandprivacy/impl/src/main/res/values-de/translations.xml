@@ -29,6 +29,7 @@ Wir empfehlen keine Verschlüsselung für Chats zu aktivieren, die jeder finden 
   <string name="screen_security_and_privacy_room_access_section_header">"Zugang"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_multiple_parents_description">"Jeder in autorisierten Spaces kann beitreten."</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_single_parent_description">"Jeder in %1$s kann beitreten."</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_title">"Space Mitglieder"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Spaces werden zur Zeit nicht unterstützt."</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Du benötigst eine Chat-Adresse, um den Chat im öffentlichen Verzeichnis sichtbar zu machen."</string>
   <string name="screen_security_and_privacy_room_address_section_header">"Adresse"</string>

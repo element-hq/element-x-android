@@ -66,6 +66,7 @@ class ChangeRoomPermissionsPresenterTest {
             assertThat(itemsBySection[RoomPermissionsSection.MessagesAndContent]).containsExactly(
                 RoomPermissionType.SEND_EVENTS,
                 RoomPermissionType.REDACT_EVENTS,
+                RoomPermissionType.SHARE_LIVE_LOCATION,
             )
             assertThat(itemsBySection[RoomPermissionsSection.ManageMembers]).containsExactly(
                 RoomPermissionType.INVITE,
@@ -148,7 +149,9 @@ class ChangeRoomPermissionsPresenterTest {
                         roomName = Moderator.powerLevel,
                         roomAvatar = Moderator.powerLevel,
                         roomTopic = Moderator.powerLevel,
-                        spaceChild = initialPermissions.spaceChild
+                        spaceChild = initialPermissions.spaceChild,
+                        beacon = initialPermissions.beacon,
+                        beaconInfo = initialPermissions.beaconInfo,
                     )
                 )
             }

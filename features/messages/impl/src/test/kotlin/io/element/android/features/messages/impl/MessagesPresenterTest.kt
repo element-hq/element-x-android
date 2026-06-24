@@ -13,6 +13,7 @@ package io.element.android.features.messages.impl
 import androidx.lifecycle.Lifecycle
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.PinUnpinAction
+import io.element.android.features.location.test.FakeActiveLiveLocationShareManager
 import io.element.android.features.messages.impl.actionlist.ActionListEvent
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.anActionListState
@@ -24,6 +25,7 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.aLoadedPinnedMessagesBannerState
+import io.element.android.features.messages.impl.threads.list.aThreadListItem
 import io.element.android.features.messages.impl.timeline.FakeMarkAsFullyRead
 import io.element.android.features.messages.impl.timeline.MarkAsFullyRead
 import io.element.android.features.messages.impl.timeline.TimelineController
@@ -88,6 +90,7 @@ import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
+import io.element.android.libraries.matrix.test.room.threads.FakeThreadsListService
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.aTimelineItemDebugInfo
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
@@ -110,6 +113,7 @@ import io.element.android.tests.testutils.testWithLifecycleOwner
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
@@ -117,6 +121,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 @Suppress("LargeClass")
 class MessagesPresenterTest {
@@ -137,6 +142,39 @@ class MessagesPresenterTest {
             assertThat(initialState.snackbarMessage).isNull()
             assertThat(initialState.inviteProgress).isEqualTo(AsyncData.Uninitialized)
             assertThat(initialState.showReinvitePrompt).isFalse()
+            assertThat(initialState.showLiveLocationShareBanner).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - exposes live location sharing banner visibility for current room`() = runTest {
+        val liveLocationShareManager = FakeActiveLiveLocationShareManager(
+            startShareLambda = { _, _ -> Result.success(Unit) },
+        )
+        liveLocationShareManager.startShare(A_ROOM_ID, 60.seconds)
+        val presenter = createMessagesPresenter(liveLocationShareManager = liveLocationShareManager)
+
+        presenter.testWithLifecycleOwner {
+            val state = consumeItemsUntilTimeout().last()
+            assertThat(state.showLiveLocationShareBanner).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - stop live location share delegates to manager for current room`() = runTest {
+        val stopShareLambda = lambdaRecorder<RoomId, Result<Unit>> { Result.success(Unit) }
+        val liveLocationShareManager = FakeActiveLiveLocationShareManager(
+            stopShareLambda = stopShareLambda
+        )
+        val presenter = createMessagesPresenter(liveLocationShareManager = liveLocationShareManager)
+
+        presenter.testWithLifecycleOwner {
+            val state = consumeItemsUntilTimeout().last()
+            state.eventSink(MessagesEvent.StopLiveLocationShare)
+            advanceUntilIdle()
+            assert(stopShareLambda)
+                .isCalledOnce()
+                .with(value(A_ROOM_ID))
         }
     }
 
@@ -560,7 +598,7 @@ class MessagesPresenterTest {
             baseRoom = FakeBaseRoom(
                 roomPermissions = roomPermissions(),
             ).apply {
-                givenRoomInfo(aRoomInfo(isDirect = true, joinedMembersCount = 1, activeMembersCount = 1))
+                givenRoomInfo(aRoomInfo(isDm = true, joinedMembersCount = 1, activeMembersCount = 1))
             },
             typingNoticeResult = { Result.success(Unit) },
         )
@@ -1074,7 +1112,7 @@ class MessagesPresenterTest {
                     canRedactOwn = true,
                     canPinUnpin = true,
                 ),
-                initialRoomInfo = aRoomInfo(isDirect = true, isEncrypted = true)
+                initialRoomInfo = aRoomInfo(isDm = true, isEncrypted = true)
             ).apply {
                 givenRoomMembersState(RoomMembersState.Ready(persistentListOf(aRoomMember(userId = A_SESSION_ID), aRoomMember(userId = A_USER_ID_2))))
             },
@@ -1225,9 +1263,6 @@ class MessagesPresenterTest {
                     initialRoomInfo = aRoomInfo(isEncrypted = true, historyVisibility = RoomHistoryVisibility.Shared),
                 ),
             ),
-            featureFlagService = FakeFeatureFlagService(
-                initialState = mapOf(FeatureFlags.EnableKeyShareOnInvite.key to true)
-            )
         )
         presenter.testWithLifecycleOwner {
             awaitItem()
@@ -1246,15 +1281,41 @@ class MessagesPresenterTest {
                     initialRoomInfo = aRoomInfo(isEncrypted = true, historyVisibility = RoomHistoryVisibility.WorldReadable),
                 ),
             ),
-            featureFlagService = FakeFeatureFlagService(
-                initialState = mapOf(FeatureFlags.EnableKeyShareOnInvite.key to true)
-            )
         )
         presenter.testWithLifecycleOwner {
             awaitItem()
             runCurrent()
             val state = awaitItem()
             assertThat(state.topBarSharedHistoryIcon).isEqualTo(SharedHistoryIcon.WORLD_READABLE)
+        }
+    }
+
+    @Test
+    fun `present - only has threads enabled if the feature flag is on`() = runTest {
+        val itemsFlow = MutableStateFlow(listOf(aThreadListItem()))
+        val room = FakeJoinedRoom(
+            threadsListService = FakeThreadsListService(items = itemsFlow)
+        )
+        val featureFlagService = FakeFeatureFlagService(
+            initialState = mapOf(FeatureFlags.Threads.key to false)
+        )
+        val presenter = createMessagesPresenter(
+            joinedRoom = room,
+            featureFlagService = featureFlagService
+        )
+        presenter.testWithLifecycleOwner {
+            val initialState = awaitItem()
+            // The feature flag is disabled, so even if the thread list has items, it will return it doesn't have any
+            assertThat(initialState.threads.hasThreads).isFalse()
+
+            // Enable the feature flag, now it should reflect the thread list state
+            featureFlagService.setFeatureEnabled(FeatureFlags.RoomThreadList, true)
+            skipItems(1)
+            assertThat(awaitItem().threads.hasThreads).isTrue()
+
+            // And if we remove the items, it should update accordingly
+            itemsFlow.value = emptyList()
+            assertThat(awaitItem().threads.hasThreads).isFalse()
         }
     }
 
@@ -1321,6 +1382,7 @@ class MessagesPresenterTest {
         actionListEventSink: (ActionListEvent) -> Unit = {},
         addRecentEmoji: AddRecentEmoji = AddRecentEmoji { _ -> lambdaError() },
         markAsFullyRead: MarkAsFullyRead = FakeMarkAsFullyRead(),
+        liveLocationShareManager: FakeActiveLiveLocationShareManager = FakeActiveLiveLocationShareManager(),
     ): MessagesPresenter {
         return MessagesPresenter(
             navigator = navigator,
@@ -1350,6 +1412,7 @@ class MessagesPresenterTest {
             featureFlagService = featureFlagService,
             addRecentEmoji = addRecentEmoji,
             markAsFullyRead = markAsFullyRead,
+            liveLocationShareManager = liveLocationShareManager,
             sessionCoroutineScope = backgroundScope,
         )
     }

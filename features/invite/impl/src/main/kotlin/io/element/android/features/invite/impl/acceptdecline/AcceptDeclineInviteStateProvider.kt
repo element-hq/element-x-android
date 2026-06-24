@@ -15,6 +15,7 @@ import io.element.android.features.invite.api.acceptdecline.ConfirmingDeclineInv
 import io.element.android.features.invite.api.acceptdecline.anAcceptDeclineInviteState
 import io.element.android.features.invite.impl.AcceptInvite
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.designsystem.preview.ROOM_NAME
 import io.element.android.libraries.matrix.api.core.RoomId
 
 open class AcceptDeclineInviteStateProvider : PreviewParameterProvider<AcceptDeclineInviteState> {
@@ -26,7 +27,7 @@ open class AcceptDeclineInviteStateProvider : PreviewParameterProvider<AcceptDec
                     InviteData(
                         roomId = RoomId("!room:matrix.org"),
                         isDm = true,
-                        roomName = "Alice"
+                        roomName = ROOM_NAME,
                     ),
                     blockUser = false,
                 ),
@@ -36,7 +37,7 @@ open class AcceptDeclineInviteStateProvider : PreviewParameterProvider<AcceptDec
                     InviteData(
                         roomId = RoomId("!room:matrix.org"),
                         isDm = true,
-                        roomName = "Alice"
+                        roomName = ROOM_NAME,
                     ),
                     blockUser = true,
                 ),

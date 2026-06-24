@@ -2,4 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_invite_users_already_a_member">"Уже учасник"</string>
   <string name="screen_invite_users_already_invited">"Уже запрошені"</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_multiple_users">"Наразі у вас немає чатів із цими контактами. Підтвердьте запрошення їх до цієї кімнати, перш ніж продовжувати."</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_one_user">"Наразі у вас немає чатів із цим контактом. Підтвердьте запрошення до цієї кімнати, перш ніж продовжувати."</string>
+  <string name="screen_invite_users_confirm_dialog_title_mutiple_users">"Запросити нових контактів до цієї кімнати?"</string>
+  <string name="screen_invite_users_confirm_dialog_title_one_user">"Запросити нового контакта до цієї кімнати?"</string>
 </resources>

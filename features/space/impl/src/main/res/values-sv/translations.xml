@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_leave_space_choose_owners_action">"Välj ägare"</string>
+  <string name="screen_leave_space_subtitle">"Välj de rum du vill lämna och som du inte är ensam administratör för:"</string>
   <string name="screen_leave_space_title">"Lämna %1$s?"</string>
   <string name="screen_space_settings_leave_space">"Lämna utrymmet"</string>
   <string name="screen_space_settings_roles_and_permissions">"Roller och behörigheter"</string>

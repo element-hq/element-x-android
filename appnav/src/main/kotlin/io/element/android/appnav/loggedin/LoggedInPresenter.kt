@@ -21,6 +21,8 @@ import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.CryptoSessionStateChange
 import im.vector.app.features.analytics.plan.UserProperties
+import io.element.android.features.networkmonitor.api.NetworkMonitor
+import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.extensions.runCatchingExceptions
@@ -29,7 +31,6 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
-import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
@@ -56,6 +57,7 @@ class LoggedInPresenter(
     private val analyticsService: AnalyticsService,
     private val encryptionService: EncryptionService,
     private val buildMeta: BuildMeta,
+    private val networkMonitor: NetworkMonitor,
 ) : Presenter<LoggedInState> {
     @Composable
     override fun present(): LoggedInState {
@@ -105,6 +107,14 @@ class LoggedInPresenter(
             ) { verificationState, recoveryState ->
                 reportCryptoStatusToAnalytics(verificationState, recoveryState)
             }.launchIn(this)
+        }
+
+        val networkConnectivity by networkMonitor.connectivity.collectAsState()
+        LaunchedEffect(networkConnectivity) {
+            if (networkConnectivity == NetworkStatus.Connected) {
+                // Refresh homeserver capabilities when the network is back
+                matrixClient.homeserverCapabilities().refresh()
+            }
         }
 
         fun handleEvent(event: LoggedInEvents) {
@@ -166,7 +176,6 @@ class LoggedInPresenter(
     }
 
     private fun CoroutineScope.preloadAccountManagementUrl() = launch {
-        matrixClient.getAccountManagementUrl(AccountManagementAction.Profile)
-        matrixClient.getAccountManagementUrl(AccountManagementAction.DevicesList)
+        matrixClient.getAccountManagementUrl(null)
     }
 }

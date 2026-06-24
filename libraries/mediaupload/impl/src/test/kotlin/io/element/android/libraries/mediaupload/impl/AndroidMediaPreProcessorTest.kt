@@ -12,6 +12,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import androidx.core.net.toUri
+import androidx.exifinterface.media.ExifInterface
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
@@ -28,20 +29,42 @@ import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
 import io.element.android.tests.testutils.fake.FakeTemporaryUriDeleter
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Ignore
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
 import kotlin.time.Duration
 
-@RunWith(RobolectricTestRunner::class)
-class AndroidMediaPreProcessorTest {
+class AndroidMediaPreProcessorTest : RobolectricTest() {
+    @Test
+    fun `orientedImageDimensions swaps width and height for 90 degree exif orientation`() {
+        val (width, height) = orientedImageDimensions(
+            rawWidth = 4032,
+            rawHeight = 2268,
+            orientation = ExifInterface.ORIENTATION_ROTATE_90,
+        )
+
+        assertThat(width).isEqualTo(2268)
+        assertThat(height).isEqualTo(4032)
+    }
+
+    @Test
+    fun `orientedImageDimensions keeps width and height for upright exif orientation`() {
+        val (width, height) = orientedImageDimensions(
+            rawWidth = 4032,
+            rawHeight = 2268,
+            orientation = ExifInterface.ORIENTATION_NORMAL,
+        )
+
+        assertThat(width).isEqualTo(4032)
+        assertThat(height).isEqualTo(2268)
+    }
+
     private suspend fun TestScope.process(
         asset: Asset,
         mediaOptimizationConfig: MediaOptimizationConfig,

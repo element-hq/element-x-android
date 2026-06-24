@@ -28,4 +28,14 @@ class AndroidStringProvider(private val resources: Resources) : StringProvider {
     override fun getQuantityString(@PluralsRes resId: Int, quantity: Int, vararg formatArgs: Any?): String {
         return resources.getQuantityString(resId, quantity, *formatArgs)
     }
+
+    override fun getSimpleQuantityString(
+        resIdForOne: Int,
+        resIdForOthers: Int,
+        quantity: Int,
+        vararg formatArgs: Any?,
+    ): String {
+        val resId = if (quantity == 1) resIdForOne else resIdForOthers
+        return resources.getString(resId, *formatArgs)
+    }
 }

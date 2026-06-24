@@ -22,7 +22,12 @@ enum class TimestampPosition {
     /**
      * Timestamp should always be rendered below the timeline event content (eg. poll).
      */
-    Below;
+    Below,
+
+    /**
+     * Timestamp should be hidden.
+     */
+    Hidden;
 
     companion object {
         /**

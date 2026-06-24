@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Sí, accepta-les totes"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"Segur que vols acceptar totes les sol·licituds d\'unió?"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"Accepta totes les sol·licituds"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Accepta-les totes"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_description">"No s\'han pogut acceptar totes les sol·licituds. Vols tornar-ho a intentar?"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_title">"No s\'han pogut acceptar totes les sol·licituds"</string>
+  <string name="screen_knock_requests_list_accept_all_loading_title">"Acceptant totes les sol·licituds d\'unió"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_description">"No s\'ha pogut acceptar la sol·licitud. Vols tornar-ho a intentar?"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_title">"No s\'ha pogut acceptar la sol·licitud"</string>
+  <string name="screen_knock_requests_list_accept_loading_title">"Acceptant sol·licitud d\'unió"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Sí, rebutja i bandeja"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Segur que vols rebutjar i bandejar %1$s? L\'usuari no podrà sol·licitar de nou l\'accés d\'unió a aquesta sala."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"Rebutja i bandeja l\'accés"</string>
+  <string name="screen_knock_requests_list_ban_loading_title">"Rebutjant i bandejant l\'accés"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Sí, rebutja"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"Segur que vols rebutjar %1$s d\'unir-se a aquesta sala?"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"Rebutja l\'accés"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Rebutja i bandeja"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_description">"No s\'ha pogut rebutjar la sol·licitud. Vols tornar-ho a intentar?"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_title">"No s\'ha pogut rebutjar la sol·licitud"</string>
+  <string name="screen_knock_requests_list_decline_loading_title">"Rebutjant sol·licitud d\'unió"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Quan algú demani unir-se a la sala, aquí podràs veure la sol·licitud."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"No hi ha sol·licituds d\'unió pendents"</string>
+  <string name="screen_knock_requests_list_initial_loading_title">"Carregant sol·licituds d\'unió…"</string>
+  <string name="screen_knock_requests_list_title">"Sol·licituds d\'unió"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s +%2$d altre volen unir-se a la sala"</item>
+    <item quantity="other">"%1$s +%2$d altres volen unir-se a la sala"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Veure totes"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Accepta"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s vol unir-se a aquesta sala"</string>
+</resources>

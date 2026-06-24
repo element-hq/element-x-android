@@ -17,8 +17,8 @@ import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.eventformatter.api.RoomLatestEventFormatter
+import io.element.android.libraries.matrix.api.room.CallIntentConsensus
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
-import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.roomlist.LatestEventValue
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.ui.model.getAvatarData
@@ -50,6 +50,11 @@ class RoomListRoomSummaryFactory(
             avatarData = avatarData,
             userDefinedNotificationMode = roomInfo.userDefinedNotificationMode,
             hasRoomCall = roomInfo.hasRoomCall,
+            activeCallIntent = when (val consensus = roomInfo.activeCallIntentConsensus) {
+                is CallIntentConsensus.Full -> consensus.callIntent
+                is CallIntentConsensus.Partial -> consensus.callIntent
+                CallIntentConsensus.None -> null
+            },
             isDirect = roomInfo.isDirect,
             isFavorite = roomInfo.isFavorite,
             inviteSender = roomInfo.inviter?.toInviteSender(),

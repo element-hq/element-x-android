@@ -11,6 +11,8 @@ package io.element.android.libraries.matrix.impl.timeline.item.event
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.notification.CallIntent
+import io.element.android.libraries.matrix.api.room.location.LiveLocationInfo
 import io.element.android.libraries.matrix.api.timeline.item.EmbeddedEventInfo
 import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.ThreadSummary
@@ -19,6 +21,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.LegacyCallInviteContent
+import io.element.android.libraries.matrix.api.timeline.item.event.LiveLocationContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
@@ -33,8 +36,10 @@ import io.element.android.libraries.matrix.api.timeline.item.event.UtdCause
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.poll.map
 import io.element.android.libraries.matrix.impl.room.join.map
+import io.element.android.libraries.matrix.impl.room.location.into
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
+import org.matrix.rustcomponents.sdk.BeaconInfo
 import org.matrix.rustcomponents.sdk.EmbeddedEventDetails
 import org.matrix.rustcomponents.sdk.MsgLikeContent
 import org.matrix.rustcomponents.sdk.MsgLikeKind
@@ -107,6 +112,16 @@ class TimelineEventContentMapper(
                                 threadInfo = extractThreadInfo(it.content),
                             )
                         }
+                        is MsgLikeKind.LiveLocation -> {
+                            LiveLocationContent(
+                                isLive = kind.content.isLive,
+                                startTimestamp = kind.content.ts.toLong(),
+                                description = kind.content.description,
+                                timeout = kind.content.timeoutMs.toLong(),
+                                assetType = kind.content.assetType.into(),
+                                locations = kind.content.locations.map { location -> location.map() }
+                            )
+                        }
                         is MsgLikeKind.Other -> UnknownContent
                     }
                 }
@@ -133,10 +148,14 @@ class TimelineEventContentMapper(
                     )
                 }
                 is TimelineItemContent.CallInvite -> LegacyCallInviteContent
-                is TimelineItemContent.RtcNotification -> CallNotifyContent
-                is TimelineItemContent.LiveLocation -> {
-                    UnknownContent
-                }
+                is TimelineItemContent.RtcNotification -> CallNotifyContent(
+                    callIntent = if (it.callIntent == "audio") {
+                        CallIntent.AUDIO
+                    } else {
+                        CallIntent.VIDEO
+                    },
+                    declinedBy = it.declinedBy.map(::UserId)
+                )
             }
         }
     }
@@ -222,7 +241,6 @@ private fun RustOtherState.map(): OtherState {
         RustOtherState.PolicyRuleRoom -> OtherState.PolicyRuleRoom
         RustOtherState.PolicyRuleServer -> OtherState.PolicyRuleServer
         RustOtherState.PolicyRuleUser -> OtherState.PolicyRuleUser
-        RustOtherState.RoomAliases -> OtherState.RoomAliases
         is RustOtherState.RoomAvatar -> OtherState.RoomAvatar(url)
         RustOtherState.RoomCanonicalAlias -> OtherState.RoomCanonicalAlias
         RustOtherState.RoomCreate -> OtherState.RoomCreate
@@ -258,4 +276,12 @@ private fun RustEncryptedMessage.map(): UnableToDecryptContent.Data {
         is RustEncryptedMessage.OlmV1Curve25519AesSha2 -> UnableToDecryptContent.Data.OlmV1Curve25519AesSha2(senderKey)
         RustEncryptedMessage.Unknown -> UnableToDecryptContent.Data.Unknown
     }
+}
+
+private fun BeaconInfo.map(): LiveLocationInfo {
+    return LiveLocationInfo(
+        description = description,
+        geoUri = geoUri,
+        timestamp = ts.toLong(),
+    )
 }

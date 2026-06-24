@@ -28,7 +28,8 @@ class FakeEncryptionService(
     private val pinUserIdentityResult: (UserId) -> Result<Unit> = { lambdaError() },
     private val withdrawVerificationResult: (UserId) -> Result<Unit> = { lambdaError() },
     private val getUserIdentityResult: (UserId) -> Result<IdentityState?> = { lambdaError() },
-    private val enableRecoveryLambda: (Boolean) -> Result<Unit> = { lambdaError() },
+    private val enableRecoveryLambda: (Boolean, String?) -> Result<String> = { _, _ -> lambdaError() },
+    private val resetRecoveryKeyLambda: () -> Result<String> = { Result.success(FAKE_RECOVERY_KEY) },
 ) : EncryptionService {
     private var disableRecoveryFailure: Exception? = null
     override val backupStateStateFlow: MutableStateFlow<BackupState> = MutableStateFlow(BackupState.UNKNOWN)
@@ -90,11 +91,11 @@ class FakeEncryptionService(
     }
 
     override suspend fun resetRecoveryKey(): Result<String> = simulateLongTask {
-        return Result.success(FAKE_RECOVERY_KEY)
+        return resetRecoveryKeyLambda()
     }
 
-    override suspend fun enableRecovery(waitForBackupsToUpload: Boolean): Result<Unit> = simulateLongTask {
-        return enableRecoveryLambda(waitForBackupsToUpload)
+    override suspend fun enableRecovery(waitForBackupsToUpload: Boolean, passphrase: String?): Result<String> = simulateLongTask {
+        return enableRecoveryLambda(waitForBackupsToUpload, passphrase)
     }
 
     fun givenWaitForBackupUploadSteadyStateFlow(flow: Flow<BackupUploadState>) {

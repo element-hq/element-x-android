@@ -1,0 +1,2 @@
+Main changes in this version: fixed an issue with devices not supporting Vulkan, added image editing before sending and an option for custom notification sounds, improved start times, several other bug fixes and improvements.
+Full changelog: https://github.com/element-hq/element-x-android/releases

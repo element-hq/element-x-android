@@ -75,6 +75,9 @@ val SemanticColors.pinnedMessageBannerIndicator
 val SemanticColors.pinnedMessageBannerBorder
     get() = if (isLight) LightColorTokens.colorAlphaGray400 else DarkColorTokens.colorAlphaGray400
 
+val SemanticColors.floatingDateBadgeBackground
+    get() = if (isLight) bgCanvasDefault else bgSubtlePrimary
+
 @PreviewsDayNight
 @Composable
 internal fun ColorAliasesPreview() = ElementPreview {

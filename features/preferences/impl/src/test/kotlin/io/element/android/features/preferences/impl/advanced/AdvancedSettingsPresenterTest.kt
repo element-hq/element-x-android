@@ -12,14 +12,17 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.compound.theme.Theme
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -40,6 +43,9 @@ class AdvancedSettingsPresenterTest {
                 assertThat(isSharePresenceEnabled).isTrue()
                 assertThat(mediaOptimizationState).isNull()
                 assertThat(theme).isEqualTo(ThemeOption.System)
+                assertThat(availableThemeOptions).isEqualTo(
+                    listOf(ThemeOption.System, ThemeOption.Light, ThemeOption.Dark).toImmutableList()
+                )
                 assertThat(mediaPreviewConfigState.hideInviteAvatars).isFalse()
                 assertThat(mediaPreviewConfigState.timelineMediaPreviewValue).isEqualTo(MediaPreviewValue.On)
                 assertThat(mediaPreviewConfigState.setHideInviteAvatarsAction).isEqualTo(AsyncAction.Uninitialized)
@@ -205,6 +211,82 @@ class AdvancedSettingsPresenterTest {
     }
 
     @Test
+    fun `present - exposes live location minimum distance from app preferences`() = runTest {
+        val appPreferencesStore = InMemoryAppPreferencesStore(
+            liveLocationMinimumDistanceUpdate = 50,
+        )
+        val presenter = createAdvancedSettingsPresenter(appPreferencesStore = appPreferencesStore)
+
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+
+            with(awaitItem()) {
+                assertThat(liveLocationMinimumDistanceUpdate).isEqualTo(50)
+            }
+        }
+    }
+
+    @Test
+    fun `present - saving live location minimum distance updates app preferences`() = runTest {
+        val appPreferencesStore = InMemoryAppPreferencesStore(
+            liveLocationMinimumDistanceUpdate = 10,
+        )
+        val presenter = createAdvancedSettingsPresenter(appPreferencesStore = appPreferencesStore)
+
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+
+            with(awaitItem()) {
+                assertThat(liveLocationMinimumDistanceUpdate).isEqualTo(10)
+                eventSink(AdvancedSettingsEvents.SetLiveLocationMinimumDistanceUpdate(42))
+            }
+            with(awaitItem()) {
+                assertThat(liveLocationMinimumDistanceUpdate).isEqualTo(42)
+            }
+        }
+    }
+
+    @Test
+    fun `present - black theme option shown when feature flag enabled`() = runTest {
+        val presenter = createAdvancedSettingsPresenter(
+            featureFlagService = FakeFeatureFlagService().apply {
+                setFeatureEnabled(FeatureFlags.AllowBlackTheme, true)
+            }
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+
+            with(awaitItem()) {
+                assertThat(availableThemeOptions).contains(ThemeOption.Black)
+                assertThat(availableThemeOptions).isEqualTo(ThemeOption.entries.toImmutableList())
+            }
+        }
+    }
+
+    @Test
+    fun `present - stored black theme falls back to dark when feature flag disabled`() = runTest {
+        val appPreferencesStore = InMemoryAppPreferencesStore().apply {
+            setTheme(Theme.Black.name)
+        }
+        val presenter = createAdvancedSettingsPresenter(appPreferencesStore = appPreferencesStore)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+
+            with(awaitItem()) {
+                assertThat(theme).isEqualTo(ThemeOption.Dark)
+            }
+        }
+    }
+
+    @Test
     fun `present - hide invite avatars`() = runTest {
         val mediaPreviewStore = FakeMediaPreviewConfigStateStore()
         val presenter = createAdvancedSettingsPresenter(mediaPreviewConfigStateStore = mediaPreviewStore)
@@ -297,7 +379,7 @@ class AdvancedSettingsPresenterTest {
     }
 
     private fun CoroutineScope.createAdvancedSettingsPresenter(
-        appPreferencesStore: InMemoryAppPreferencesStore = InMemoryAppPreferencesStore(),
+        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
         sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
         mediaPreviewConfigStateStore: MediaPreviewConfigStateStore = FakeMediaPreviewConfigStateStore(),
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),

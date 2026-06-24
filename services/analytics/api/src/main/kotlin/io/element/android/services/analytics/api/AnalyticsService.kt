@@ -8,6 +8,7 @@
 
 package io.element.android.services.analytics.api
 
+import androidx.annotation.Discouraged
 import io.element.android.services.analyticsproviders.api.AnalyticsProvider
 import io.element.android.services.analyticsproviders.api.AnalyticsTransaction
 import io.element.android.services.analyticsproviders.api.trackers.AnalyticsTracker
@@ -74,6 +75,7 @@ interface AnalyticsService : AnalyticsTracker, ErrorTracker {
     fun removeLongRunningTransaction(longRunningTransaction: AnalyticsLongRunningTransaction): AnalyticsTransaction?
 
     /** Enter a span inside the Rust SDK tracing system. If a [parentTraceId] is provided, the SDK trace will be added as a child of that trace. */
+    @Discouraged("This method can cause crashes of the app when using debug builds of the Rust SDK.")
     fun enterSdkSpan(name: String?, parentTraceId: String?): AnalyticsSdkSpan
 }
 
@@ -116,6 +118,7 @@ fun AnalyticsService.finishLongRunningTransaction(
     } ?: false
 }
 
+@Discouraged("This method can cause crashes of the app when using debug builds of the Rust SDK.")
 inline fun <T> AnalyticsService.inBridgeSdkSpan(parentTraceId: String?, block: (AnalyticsSdkSpan) -> T): T {
     val span = enterSdkSpan(name = null, parentTraceId = parentTraceId)
     return try {

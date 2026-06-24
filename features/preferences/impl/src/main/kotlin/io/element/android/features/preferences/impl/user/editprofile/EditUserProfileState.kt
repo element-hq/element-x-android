@@ -22,5 +22,7 @@ data class EditUserProfileState(
     val saveButtonEnabled: Boolean,
     val saveAction: AsyncAction<Unit>,
     val cameraPermissionState: PermissionsState,
+    val canChangeDisplayName: Boolean,
+    val canChangeAvatarUrl: Boolean,
     val eventSink: (EditUserProfileEvent) -> Unit
 )

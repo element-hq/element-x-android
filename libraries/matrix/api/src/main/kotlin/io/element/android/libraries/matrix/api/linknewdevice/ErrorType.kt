@@ -24,6 +24,11 @@ sealed class ErrorType(message: String) : Exception(message) {
     class UnsupportedProtocol(message: String) : ErrorType(message)
 
     /**
+     * The QR code type is not supported by the client.
+     */
+    class UnsupportedQrCodeType(message: String) : ErrorType(message)
+
+    /**
      * Secrets backup not set up properly.
      */
     class MissingSecretsBackup(message: String) : ErrorType(message)

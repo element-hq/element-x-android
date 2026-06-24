@@ -17,7 +17,7 @@ data class SetupPinState(
     val isConfirmationStep: Boolean,
     val setupPinFailure: SetupPinFailure?,
     val appName: String,
-    val eventSink: (SetupPinEvents) -> Unit
+    val eventSink: (SetupPinEvent) -> Unit
 ) {
     val activePinEntry = if (isConfirmationStep) {
         confirmPinEntry

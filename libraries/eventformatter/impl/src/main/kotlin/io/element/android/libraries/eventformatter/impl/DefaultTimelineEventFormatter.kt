@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventTimeline
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.LegacyCallInviteContent
+import io.element.android.libraries.matrix.api.timeline.item.event.LiveLocationContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
@@ -69,6 +70,7 @@ class DefaultTimelineEventFormatter(
             is MessageContent,
             is FailedToParseMessageLikeContent,
             is FailedToParseStateContent,
+            is LiveLocationContent,
             is UnknownContent -> {
                 if (buildMeta.isDebuggable) {
                     error("You should not use this formatter for this event content: $content")

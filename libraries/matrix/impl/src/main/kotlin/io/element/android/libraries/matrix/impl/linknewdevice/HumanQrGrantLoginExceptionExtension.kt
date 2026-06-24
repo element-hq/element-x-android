@@ -22,4 +22,5 @@ internal fun HumanQrGrantLoginException.map() = when (this) {
     is HumanQrGrantLoginException.OtherDeviceAlreadySignedIn -> ErrorType.OtherDeviceAlreadySignedIn(message.orEmpty())
     is HumanQrGrantLoginException.Unknown -> ErrorType.Unknown(message.orEmpty())
     is HumanQrGrantLoginException.UnsupportedProtocol -> ErrorType.UnsupportedProtocol(message.orEmpty())
+    is HumanQrGrantLoginException.UnsupportedQrCodeType -> ErrorType.UnsupportedQrCodeType(message.orEmpty())
 }

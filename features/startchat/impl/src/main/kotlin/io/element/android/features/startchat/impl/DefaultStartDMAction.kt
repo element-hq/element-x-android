@@ -44,7 +44,11 @@ class DefaultStartDMAction(
                 actionState.value = AsyncAction.Failure(result.throwable)
             }
             StartDMResult.DmDoesNotExist -> {
-                actionState.value = ConfirmingStartDmWithMatrixUser(matrixUser = matrixUser)
+                val identityState = matrixClient.encryptionService.getUserIdentity(matrixUser.userId, fallbackToServer = false).getOrNull()
+                actionState.value = ConfirmingStartDmWithMatrixUser(
+                    matrixUser = matrixUser,
+                    isUserIdentityUnknown = identityState == null
+                )
             }
         }
     }

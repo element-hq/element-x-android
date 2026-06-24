@@ -11,14 +11,12 @@ package io.element.android.libraries.androidutils.filesize
 import android.os.Build
 import com.google.common.truth.Truth.assertThat
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
-@RunWith(RobolectricTestRunner::class)
-class AndroidFileSizeFormatterTest {
+class AndroidFileSizeFormatterTest : RobolectricTest() {
     @Config(sdk = [Build.VERSION_CODES.N])
     @Test
     fun `test api 24 long format`() {

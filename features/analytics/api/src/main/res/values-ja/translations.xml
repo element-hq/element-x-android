@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_analytics_settings_help_us_improve">"改善のため、匿名の使用データの共有にご協力ください。"</string>
+  <string name="screen_analytics_settings_read_terms">"規約の全文は%1$sから確認することができます。"</string>
+  <string name="screen_analytics_settings_read_terms_content_link">"こちら"</string>
+  <string name="screen_analytics_settings_share_data">"使用データを共有"</string>
+</resources>

@@ -6,34 +6,32 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.features.home.impl.filters
 
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import io.element.android.features.home.impl.R
 import io.element.android.features.home.impl.filters.selection.FilterSelectionState
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.pressTag
-import org.junit.Rule
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class RoomListFiltersViewTest {
-    @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
-
+class RoomListFiltersViewTest : RobolectricTest() {
     @Test
-    fun `clicking on filters generates expected Event`() {
+    fun `clicking on filters generates expected Event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<RoomListFiltersEvent>()
-        rule.setContent {
+        setContent {
             RoomListFiltersView(
                 state = aRoomListFiltersState(eventSink = eventsRecorder),
             )
         }
-        rule.clickOn(R.string.screen_roomlist_filter_rooms)
+        clickOn(R.string.screen_roomlist_filter_rooms)
         eventsRecorder.assertList(
             listOf(
                 RoomListFiltersEvent.ToggleFilter(RoomListFilter.Rooms),
@@ -42,9 +40,9 @@ class RoomListFiltersViewTest {
     }
 
     @Test
-    fun `clicking on clear filters generates expected Event`() {
+    fun `clicking on clear filters generates expected Event`() = runAndroidComposeUiTest<ComponentActivity> {
         val eventsRecorder = EventsRecorder<RoomListFiltersEvent>()
-        rule.setContent {
+        setContent {
             RoomListFiltersView(
                 state = aRoomListFiltersState(
                     filterSelectionStates = RoomListFilter.entries.map { FilterSelectionState(it, isSelected = true) },
@@ -52,7 +50,7 @@ class RoomListFiltersViewTest {
                 ),
             )
         }
-        rule.pressTag(TestTags.homeScreenClearFilters.value)
+        pressTag(TestTags.homeScreenClearFilters.value)
         eventsRecorder.assertList(
             listOf(
                 RoomListFiltersEvent.ClearSelectedFilters,

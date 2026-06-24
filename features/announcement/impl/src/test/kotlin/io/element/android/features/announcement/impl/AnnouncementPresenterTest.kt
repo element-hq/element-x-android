@@ -14,6 +14,7 @@ import io.element.android.features.announcement.impl.store.AnnouncementStatus
 import io.element.android.features.announcement.impl.store.AnnouncementStore
 import io.element.android.features.announcement.impl.store.InMemoryAnnouncementStore
 import io.element.android.tests.testutils.test
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -23,25 +24,47 @@ class AnnouncementPresenterTest {
         val presenter = createAnnouncementPresenter()
         presenter.test {
             val state = awaitItem()
-            assertThat(state.showSpaceAnnouncement).isFalse()
+            assertThat(state.announcement).isNull()
         }
     }
 
     @Test
-    fun `present - showSpaceAnnouncement value depends on the value in the store`() = runTest {
+    fun `present - showFullscreen value depends on the value in the store`() = runTest {
         val store = InMemoryAnnouncementStore()
         val presenter = createAnnouncementPresenter(
             announcementStore = store,
         )
         presenter.test {
             val state = awaitItem()
-            assertThat(state.showSpaceAnnouncement).isFalse()
-            store.setAnnouncementStatus(Announcement.Space, AnnouncementStatus.Show)
+            assertThat(state.announcement).isNull()
+            store.setAnnouncementStatus(Announcement.Fullscreen.Space, AnnouncementStatus.Show)
             val updatedState = awaitItem()
-            assertThat(updatedState.showSpaceAnnouncement).isTrue()
-            store.setAnnouncementStatus(Announcement.Space, AnnouncementStatus.Shown)
+            assertThat(updatedState.announcement).isEqualTo(Announcement.Fullscreen.Space)
+            store.setAnnouncementStatus(Announcement.Fullscreen.Space, AnnouncementStatus.Shown)
             val finalState = awaitItem()
-            assertThat(finalState.showSpaceAnnouncement).isFalse()
+            assertThat(finalState.announcement).isNull()
+        }
+    }
+
+    @Test
+    fun `present - continue event will mark the announcement as Shown`() = runTest {
+        val store = InMemoryAnnouncementStore()
+        val presenter = createAnnouncementPresenter(
+            announcementStore = store,
+        )
+        presenter.test {
+            val state = awaitItem()
+            assertThat(state.announcement).isNull()
+            store.setAnnouncementStatus(Announcement.Fullscreen.Space, AnnouncementStatus.Show)
+            val statusShow = store.announcementStatusFlow(Announcement.Fullscreen.Space).first()
+            assertThat(statusShow).isEqualTo(AnnouncementStatus.Show)
+            val updatedState = awaitItem()
+            assertThat(updatedState.announcement).isEqualTo(Announcement.Fullscreen.Space)
+            updatedState.eventSink(AnnouncementEvent.Continue(Announcement.Fullscreen.Space))
+            val statusShown = store.announcementStatusFlow(Announcement.Fullscreen.Space).first()
+            assertThat(statusShown).isEqualTo(AnnouncementStatus.Shown)
+            val finalState = awaitItem()
+            assertThat(finalState.announcement).isNull()
         }
     }
 }

@@ -82,9 +82,11 @@ class JoinedRoomLoadedFlowNode(
     plugins = plugins,
 ), DependencyInjectionGraphOwner {
     interface Callback : Plugin {
-        fun navigateToRoom(roomId: RoomId, serverNames: List<String>)
+        fun onDone()
+        fun navigateToRoom(roomId: RoomId, serverNames: List<String>, clearBackStack: Boolean = false)
         fun handlePermalinkClick(data: PermalinkData, pushToBackstack: Boolean)
         fun navigateToGlobalNotificationSettings()
+        fun navigateToDeveloperSettings()
     }
 
     data class Inputs(
@@ -141,11 +143,19 @@ class JoinedRoomLoadedFlowNode(
 
     private fun createRoomDetailsNode(buildContext: BuildContext, initialTarget: RoomDetailsEntryPoint.InitialTarget): Node {
         val callback = object : RoomDetailsEntryPoint.Callback {
+            override fun onDone() {
+                callback.onDone()
+            }
+
             override fun navigateToGlobalNotificationSettings() {
                 callback.navigateToGlobalNotificationSettings()
             }
 
-            override fun navigateToRoom(roomId: RoomId, serverNames: List<String>) {
+            override fun navigateToDeveloperSettings() {
+                callback.navigateToDeveloperSettings()
+            }
+
+            override fun navigateToRoom(roomId: RoomId, serverNames: List<String>, clearBackStack: Boolean) {
                 callback.navigateToRoom(roomId, serverNames)
             }
 
@@ -251,6 +261,10 @@ class JoinedRoomLoadedFlowNode(
 
             override fun navigateToRoom(roomId: RoomId) {
                 callback.navigateToRoom(roomId, emptyList())
+            }
+
+            override fun navigateToDeveloperSettings() {
+                callback.navigateToDeveloperSettings()
             }
         }
         val params = MessagesEntryPoint.Params(

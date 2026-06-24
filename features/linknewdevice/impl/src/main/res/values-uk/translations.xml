@@ -26,6 +26,7 @@
   <string name="screen_link_new_device_root_loading_qr_code">"Завантаження QR-коду…"</string>
   <string name="screen_link_new_device_root_mobile_device">"Мобільний пристрій"</string>
   <string name="screen_link_new_device_root_title">"Який тип пристрою ви хочете під\'єднати?"</string>
+  <string name="screen_link_new_device_wrong_number_subtitle">"Спробуйте ще раз і переконайтеся, що ви правильно ввели двозначний код. Якщо цифри все одно не збігаються, зверніться до свого провайдера облікового запису."</string>
   <string name="screen_link_new_device_wrong_number_title">"Цифри не збігаються"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Не вдалося встановити безпечне з\'єднання з новим пристроєм. Ваші наявні пристрої досі в безпеці, і вам не потрібно про них турбуватися."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_header">"Що тепер?"</string>
@@ -33,6 +34,8 @@
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"Якщо ви зіткнулися з тією ж проблемою, спробуйте іншу мережу Wi-Fi або використовуйте мобільний інтернет замість Wi-Fi"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Якщо це не спрацює, увійдіть вручну"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"З\'єднання не безпечне"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"Вас попросять ввести дві цифри, показані на цьому пристрої."</string>
+  <string name="screen_qr_code_login_device_code_title">"Введіть номер нижче на іншому пристрої"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"Вхід було скасовано на іншому пристрої."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Запит на вхід скасовано"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"Вхід був відхилений на іншому пристрої."</string>
@@ -53,4 +56,5 @@
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Вам потрібно дати дозвіл %1$s на використання камери вашого пристрою, щоб продовжити."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Надайте доступ до камери, щоб сканувати QR-код"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Сталася несподівана помилка. Будь ласка, спробуйте ще раз."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"Чекаємо на ваш інший пристрій"</string>
 </resources>

@@ -10,8 +10,11 @@ package io.element.android.features.location.impl.common.actions
 
 import android.content.Context
 import android.content.Intent
+import android.location.LocationManager
 import android.net.Uri
+import android.provider.Settings
 import androidx.annotation.VisibleForTesting
+import androidx.core.location.LocationManagerCompat
 import androidx.core.net.toUri
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
@@ -40,8 +43,25 @@ class AndroidLocationActions(
         }
     }
 
-    override fun openSettings() {
+    override fun openAppSettings() {
         context.openAppSettingsPage()
+    }
+
+    override fun isLocationEnabled(): Boolean {
+        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return LocationManagerCompat.isLocationEnabled(locationManager)
+    }
+
+    override fun openLocationSettings() {
+        runCatchingExceptions {
+            val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(intent)
+        }.onSuccess {
+            Timber.v("Open location settings succeed")
+        }.onFailure {
+            Timber.e(it, "Open location settings failed")
+        }
     }
 }
 

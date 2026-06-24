@@ -12,10 +12,13 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,6 +29,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -51,6 +56,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.location.api.LiveLocationSharingBanner
 import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerEvent
 import io.element.android.features.messages.impl.actionlist.ActionListEvent
 import io.element.android.features.messages.impl.actionlist.ActionListView
@@ -73,6 +80,7 @@ import io.element.android.features.messages.impl.timeline.aGroupedEvents
 import io.element.android.features.messages.impl.timeline.aTimelineItemDaySeparator
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.aTimelineState
+import io.element.android.features.messages.impl.timeline.components.CallMenuItem
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionBottomSheet
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionEvent
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryEvent
@@ -87,6 +95,7 @@ import io.element.android.features.messages.impl.topbars.MessagesViewTopBar
 import io.element.android.features.messages.impl.topbars.ThreadTopBar
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessagePermissionRationaleDialog
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageSendingFailedDialog
+import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.androidutils.ui.hideKeyboard
 import io.element.android.libraries.designsystem.atomic.molecules.ComposerAlertMolecule
 import io.element.android.libraries.designsystem.components.ExpandableBottomSheetLayout
@@ -98,6 +107,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toAnnotatedString
 import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.BottomSheetDragHandle
+import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.HideKeyboardWhenDisposed
@@ -132,6 +142,7 @@ fun MessagesView(
     onCreatePollClick: () -> Unit,
     onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     onViewAllPinnedMessagesClick: () -> Unit,
+    onThreadsListClick: () -> Unit,
     modifier: Modifier = Modifier,
     forceJumpToBottomVisibility: Boolean = false,
     knockRequestsBannerView: @Composable () -> Unit,
@@ -196,15 +207,15 @@ fun MessagesView(
     val expandableState = rememberExpandableBottomSheetLayoutState()
     ExpandableBottomSheetLayout(
         modifier = modifier
-            .fillMaxSize()
-            .imePadding()
-            .systemBarsPadding()
-            .onSizeChanged { size ->
-                // Let the composer takes at max half of the available height.
-                // The value will be different if the soft keyboard is displayed
-                // or not.
-                maxComposerHeightPx = (size.height * 0.5f).toInt()
-            },
+                .fillMaxSize()
+                .imePadding()
+                .systemBarsPadding()
+                .onSizeChanged { size ->
+                    // Let the composer takes at max half of the available height.
+                    // The value will be different if the soft keyboard is displayed
+                    // or not.
+                    maxComposerHeightPx = (size.height * 0.5f).toInt()
+                },
         content = {
             Scaffold(
                 contentWindowInsets = WindowInsets.statusBars,
@@ -223,20 +234,26 @@ fun MessagesView(
                             roomAvatar = state.roomAvatar,
                             isTombstoned = state.isTombstoned,
                             heroes = state.heroes,
-                            roomCallState = state.roomCallState,
                             dmUserIdentityState = state.dmUserVerificationState,
                             sharedHistoryIcon = state.topBarSharedHistoryIcon,
                             onBackClick = { hidingKeyboard { onBackClick() } },
                             onRoomDetailsClick = { hidingKeyboard { onRoomDetailsClick() } },
-                            onJoinCallClick = onJoinCallClick,
+                            menuActions = {
+                                MessagesMenuActions(
+                                    displayThreads = state.timelineState.timelineMode !is Timeline.Mode.Thread && state.threads.hasThreads,
+                                    roomCallState = state.roomCallState,
+                                    onJoinCallClick = onJoinCallClick,
+                                    onThreadsListClick = onThreadsListClick
+                                )
+                            }
                         )
                     }
                 },
                 content = { padding ->
                     Box(
                         modifier = Modifier
-                            .padding(padding)
-                            .consumeWindowInsets(padding)
+                                .padding(padding)
+                                .consumeWindowInsets(padding)
                     ) {
                         MessagesViewContent(
                             state = state,
@@ -267,17 +284,16 @@ fun MessagesView(
                                 state.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Reply, targetEvent))
                             },
                             forceJumpToBottomVisibility = forceJumpToBottomVisibility,
-                            onJoinCallClick = onJoinCallClick,
                             onViewAllPinnedMessagesClick = onViewAllPinnedMessagesClick,
                             knockRequestsBannerView = knockRequestsBannerView,
                         )
 
                         SuggestionsPickerView(
                             modifier = Modifier
-                                .shadow(10.dp)
-                                .background(ElementTheme.colors.bgCanvasDefault)
-                                .align(Alignment.BottomStart)
-                                .heightIn(max = 230.dp),
+                                    .shadow(10.dp)
+                                    .background(ElementTheme.colors.bgCanvasDefault)
+                                    .align(Alignment.BottomStart)
+                                    .heightIn(max = 230.dp),
                             roomId = state.roomId,
                             roomName = state.roomName,
                             roomAvatarData = state.roomAvatar,
@@ -397,6 +413,28 @@ fun MessagesView(
 }
 
 @Composable
+internal fun RowScope.MessagesMenuActions(
+    displayThreads: Boolean,
+    roomCallState: RoomCallState,
+    onJoinCallClick: (isAudioCall: Boolean) -> Unit,
+    onThreadsListClick: () -> Unit,
+) {
+    if (displayThreads) {
+        Icon(
+            modifier = Modifier.clickable(enabled = true, onClick = onThreadsListClick),
+            imageVector = CompoundIcons.ThreadsSolid(),
+            contentDescription = stringResource(CommonStrings.common_threads),
+        )
+        Spacer(Modifier.width(8.dp))
+    }
+    CallMenuItem(
+        roomCallState = roomCallState,
+        onJoinCallClick = onJoinCallClick,
+    )
+    Spacer(Modifier.width(8.dp))
+}
+
+@Composable
 private fun ReinviteDialog(state: MessagesState) {
     if (state.showReinvitePrompt) {
         ConfirmationDialog(
@@ -423,7 +461,6 @@ private fun MessagesViewContent(
     onMessageLongClick: (TimelineItem.Event) -> Unit,
     onSendLocationClick: () -> Unit,
     onCreatePollClick: () -> Unit,
-    onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     onViewAllPinnedMessagesClick: () -> Unit,
     forceJumpToBottomVisibility: Boolean,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
@@ -432,9 +469,9 @@ private fun MessagesViewContent(
 ) {
     Box(
         modifier = modifier
-            .fillMaxSize()
-            .navigationBarsPadding()
-            .imePadding(),
+                .fillMaxSize()
+                .navigationBarsPadding()
+                .imePadding(),
     ) {
         AttachmentsBottomSheet(
             state = state.composerState,
@@ -464,6 +501,9 @@ private fun MessagesViewContent(
             val scrollBehavior = PinnedMessagesBannerViewDefaults.rememberScrollBehavior(
                 pinnedMessagesCount = (state.pinnedMessagesBannerState as? PinnedMessagesBannerState.Visible)?.pinnedMessagesCount() ?: 0,
             )
+            val density = LocalDensity.current
+            var pinnedBannerHeightDp by remember { mutableStateOf(0.dp) }
+
             TimelineView(
                 state = state.timelineState,
                 timelineProtectionState = state.timelineProtectionState,
@@ -477,29 +517,39 @@ private fun MessagesViewContent(
                 onMoreReactionsClick = onMoreReactionsClick,
                 onReadReceiptClick = onReadReceiptClick,
                 forceJumpToBottomVisibility = forceJumpToBottomVisibility,
-                onJoinCallClick = onJoinCallClick,
                 nestedScrollConnection = scrollBehavior.nestedScrollConnection,
+                floatingDateTopOffset = pinnedBannerHeightDp,
             )
 
             if (state.timelineState.timelineMode !is Timeline.Mode.Thread) {
-                AnimatedVisibility(
-                    visible = state.pinnedMessagesBannerState is PinnedMessagesBannerState.Visible && scrollBehavior.isVisible,
-                    enter = expandVertically(),
-                    exit = shrinkVertically(),
-                ) {
-                    fun focusOnPinnedEvent(eventId: EventId) {
-                        state.timelineState.eventSink(
-                            TimelineEvent.FocusOnEvent(eventId = eventId, debounce = FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS.milliseconds)
+                Column {
+                    AnimatedVisibility(
+                        visible = state.pinnedMessagesBannerState is PinnedMessagesBannerState.Visible && scrollBehavior.isVisible,
+                        modifier = Modifier.onSizeChanged { pinnedBannerHeightDp = with(density) { it.height.toDp() } },
+                        enter = expandVertically(),
+                        exit = shrinkVertically(),
+                    ) {
+                        fun focusOnPinnedEvent(eventId: EventId) {
+                            state.timelineState.eventSink(
+                                TimelineEvent.FocusOnEvent(eventId = eventId, debounce = FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS.milliseconds)
+                            )
+                        }
+                        PinnedMessagesBannerView(
+                            state = state.pinnedMessagesBannerState,
+                            onClick = ::focusOnPinnedEvent,
+                            onViewAllClick = onViewAllPinnedMessagesClick,
                         )
                     }
-                    PinnedMessagesBannerView(
-                        state = state.pinnedMessagesBannerState,
-                        onClick = ::focusOnPinnedEvent,
-                        onViewAllClick = onViewAllPinnedMessagesClick,
-                    )
+                    if (state.showLiveLocationShareBanner) {
+                        LiveLocationSharingBanner(
+                            onClick = { state.eventSink(MessagesEvent.ShowLiveLocationShare) },
+                            onStopClick = { state.eventSink(MessagesEvent.StopLiveLocationShare) }
+                        )
+                    }
                 }
-                knockRequestsBannerView()
             }
+
+            knockRequestsBannerView()
         }
     }
 }
@@ -548,9 +598,9 @@ private fun MessagesViewComposerBottomSheetContents(
 private fun CantSendMessageBanner() {
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .background(ElementTheme.colors.bgSubtleSecondary)
-            .padding(16.dp),
+                .fillMaxWidth()
+                .background(ElementTheme.colors.bgSubtleSecondary)
+                .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
@@ -595,6 +645,7 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class)
         onViewAllPinnedMessagesClick = { },
         forceJumpToBottomVisibility = true,
         knockRequestsBannerView = {},
+        onThreadsListClick = {},
     )
 }
 
@@ -646,7 +697,8 @@ internal fun MessagesViewA11yPreview() = ElementPreview {
         onSendLocationClick = {},
         onCreatePollClick = {},
         onJoinCallClick = {},
-        onViewAllPinnedMessagesClick = { },
+        onViewAllPinnedMessagesClick = {},
+        onThreadsListClick = {},
         forceJumpToBottomVisibility = true,
         knockRequestsBannerView = {},
     )

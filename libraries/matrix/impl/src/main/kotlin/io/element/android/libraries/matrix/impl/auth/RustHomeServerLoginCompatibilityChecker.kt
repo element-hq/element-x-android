@@ -13,26 +13,23 @@ import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.auth.HomeServerLoginCompatibilityChecker
 import io.element.android.libraries.matrix.impl.ClientBuilderProvider
-import io.element.android.libraries.matrix.impl.certificates.UserCertificatesProvider
 import timber.log.Timber
 
 @ContributesBinding(AppScope::class)
 class RustHomeServerLoginCompatibilityChecker(
     private val clientBuilderProvider: ClientBuilderProvider,
-    private val userCertificatesProvider: UserCertificatesProvider,
-) : HomeServerLoginCompatibilityChecker {
+    ) : HomeServerLoginCompatibilityChecker {
     override suspend fun check(url: String): Result<Boolean> = runCatchingExceptions {
         clientBuilderProvider.provide()
             .inMemoryStore()
             .serverNameOrHomeserverUrl(url)
-            .addRootCertificates(userCertificatesProvider.provides())
             .build()
             .use {
                 it.homeserverLoginDetails()
             }
             .use {
-                Timber.d("Homeserver $url | OIDC: ${it.supportsOidcLogin()} | Password: ${it.supportsPasswordLogin()} | SSO: ${it.supportsSsoLogin()}")
-                it.supportsOidcLogin() || it.supportsPasswordLogin()
+                Timber.d("Homeserver $url | OAuth: ${it.supportsOauthLogin()} | Password: ${it.supportsPasswordLogin()} | SSO: ${it.supportsSsoLogin()}")
+                it.supportsOauthLogin() || it.supportsPasswordLogin()
             }
     }
 }

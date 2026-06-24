@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="call_foreground_service_channel_title_android">"通話中"</string>
+  <string name="call_foreground_service_message_android">"タップして通話に戻る"</string>
+  <string name="call_foreground_service_title_android">"☎️ 通話中"</string>
+  <string name="call_invalid_audio_device_bluetooth_devices_disabled">"Element CallはこのAndroidバージョンにおいて、Bluetoothオーディオデバイスの使用をサポートしていません。別のオーディオデバイスを選択してください。"</string>
+  <string name="screen_incoming_call_subtitle_android">"Element Call の着信"</string>
+</resources>

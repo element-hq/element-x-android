@@ -88,6 +88,7 @@ class EnterNumberPresenterTest {
             navigator = navigator,
             linkNewMobileHandler = linkNewMobileHandler,
         ).test {
+            skipItems(1)
             val initialState = awaitItem()
             linkMobileHandler.emitStep(
                 LinkMobileStep.QrScanned(checkCodeSender)
@@ -96,7 +97,7 @@ class EnterNumberPresenterTest {
             initialState.eventSink(EnterNumberEvent.UpdateNumber("88"))
             skipItems(1)
             initialState.eventSink(EnterNumberEvent.Continue)
-            skipItems(1)
+            skipItems(2)
             val finalState = awaitItem()
             assertThat(finalState.sendingCode.isLoading()).isTrue()
             advanceUntilIdle()
@@ -130,6 +131,7 @@ class EnterNumberPresenterTest {
                 LinkMobileStep.QrScanned(checkCodeSender)
             )
             runCurrent()
+            skipItems(1)
             initialState.eventSink(EnterNumberEvent.UpdateNumber("88"))
             skipItems(1)
             initialState.eventSink(EnterNumberEvent.Continue)
@@ -163,6 +165,7 @@ class EnterNumberPresenterTest {
         createPresenter(
             linkNewMobileHandler = linkNewMobileHandler,
         ).test {
+            skipItems(1)
             val initialState = awaitItem()
             linkMobileHandler.emitStep(
                 LinkMobileStep.QrScanned(checkCodeSender)
@@ -171,7 +174,7 @@ class EnterNumberPresenterTest {
             initialState.eventSink(EnterNumberEvent.UpdateNumber("88"))
             skipItems(1)
             initialState.eventSink(EnterNumberEvent.Continue)
-            skipItems(1)
+            skipItems(2)
             val loadingState = awaitItem()
             assertThat(loadingState.sendingCode.isLoading()).isTrue()
             expectNoEvents()

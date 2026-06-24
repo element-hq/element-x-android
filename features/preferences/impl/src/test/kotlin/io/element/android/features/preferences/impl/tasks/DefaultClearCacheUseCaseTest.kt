@@ -19,19 +19,19 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.push.test.FakePushService
+import io.element.android.libraries.sessionstorage.test.InMemoryCacheStore
+import io.element.android.libraries.sessionstorage.test.aCacheData
 import io.element.android.services.appnavstate.impl.DefaultActiveRoomsHolder
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import okhttp3.OkHttpClient
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class DefaultClearCacheUseCaseTest {
+class DefaultClearCacheUseCaseTest : RobolectricTest() {
     @Test
     fun `execute clear cache should do all the expected tasks`() = runTest {
         val activeRoomsHolder = DefaultActiveRoomsHolder().apply { addRoom(FakeJoinedRoom()) }
@@ -49,6 +49,9 @@ class DefaultClearCacheUseCaseTest {
         )
         val seenInvitesStore = InMemorySeenInvitesStore(setOf(A_ROOM_ID))
         assertThat(seenInvitesStore.seenRoomIds().first()).isNotEmpty()
+        val cacheStore = InMemoryCacheStore(
+            initialData = mapOf("key1" to aCacheData())
+        )
         val sut = DefaultClearCacheUseCase(
             context = InstrumentationRegistry.getInstrumentation().context,
             matrixClient = matrixClient,
@@ -58,9 +61,11 @@ class DefaultClearCacheUseCaseTest {
             pushService = pushService,
             seenInvitesStore = seenInvitesStore,
             activeRoomsHolder = activeRoomsHolder,
+            cacheStore = cacheStore,
         )
         defaultCacheService.clearedCacheEventFlow.test {
             sut.invoke()
+            assertThat(cacheStore.dataMap).isEmpty()
             clearCacheLambda.assertions().isCalledOnce()
             setIgnoreRegistrationErrorLambda.assertions().isCalledOnce()
                 .with(value(matrixClient.sessionId), value(false))
