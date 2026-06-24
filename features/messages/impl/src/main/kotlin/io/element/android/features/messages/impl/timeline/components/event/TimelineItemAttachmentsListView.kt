@@ -7,6 +7,7 @@
 
 package io.element.android.features.messages.impl.timeline.components.event
 
+import android.text.SpannedString
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -26,6 +27,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
@@ -45,6 +47,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -79,10 +82,10 @@ fun TimelineItemAttachmentsListView(
         if (content.showCaption) {
             HorizontalDivider()
             val caption = if (LocalInspectionMode.current) {
-                android.text.SpannedString(content.caption)
+                SpannedString(content.caption)
             } else {
-                (content.formattedCaption ?: android.text.SpannedString(content.caption)).let {
-                    if (it is String) it else android.text.SpannedString(content.caption)
+                (content.formattedCaption ?: SpannedString(content.caption)).let {
+                    if (it is String) it else SpannedString(content.caption)
                 }
             }
             CompositionLocalProvider(
@@ -155,7 +158,7 @@ private fun AttachmentListItem(
                         modifier = Modifier
                             .size(iconSize)
                             .background(
-                                color = androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.3f),
+                                color = Color.Black.copy(alpha = 0.3f),
                                 shape = RoundedCornerShape(4.dp)
                             ),
                         contentAlignment = Alignment.Center,
@@ -163,7 +166,7 @@ private fun AttachmentListItem(
                         Icon(
                             imageVector = CompoundIcons.VideoCallSolid(),
                             contentDescription = stringResource(CommonStrings.common_video),
-                            tint = androidx.compose.ui.graphics.Color.White,
+                            tint = Color.White,
                             modifier = Modifier.size(20.dp),
                         )
                     }
@@ -231,7 +234,7 @@ internal fun TimelineItemAttachmentsListViewPreview() = ElementPreview {
                 AttachmentItem(
                     filename = "document.pdf",
                     mimeType = "application/pdf",
-                    mediaSource = io.element.android.libraries.matrix.api.media.MediaSource(url = "", json = ""),
+                    mediaSource = MediaSource(url = "", json = ""),
                     thumbnailSource = null,
                     fileSize = null,
                     formattedFileSize = "2.5 MB",
@@ -240,8 +243,8 @@ internal fun TimelineItemAttachmentsListViewPreview() = ElementPreview {
                 AttachmentItem(
                     filename = "photo.jpg",
                     mimeType = "image/jpeg",
-                    mediaSource = io.element.android.libraries.matrix.api.media.MediaSource(url = "", json = ""),
-                    thumbnailSource = io.element.android.libraries.matrix.api.media.MediaSource(url = "thumb", json = ""),
+                    mediaSource = MediaSource(url = "", json = ""),
+                    thumbnailSource = MediaSource(url = "thumb", json = ""),
                     fileSize = null,
                     formattedFileSize = "1.2 MB",
                     fileExtension = "JPG",
@@ -249,7 +252,7 @@ internal fun TimelineItemAttachmentsListViewPreview() = ElementPreview {
                 AttachmentItem(
                     filename = "spreadsheet.xlsx",
                     mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                    mediaSource = io.element.android.libraries.matrix.api.media.MediaSource(url = "", json = ""),
+                    mediaSource = MediaSource(url = "", json = ""),
                     thumbnailSource = null,
                     fileSize = null,
                     formattedFileSize = "450 KB",
@@ -275,7 +278,7 @@ internal fun TimelineItemAttachmentsListViewWithCaptionPreview() = ElementPrevie
                 AttachmentItem(
                     filename = "report.pdf",
                     mimeType = "application/pdf",
-                    mediaSource = io.element.android.libraries.matrix.api.media.MediaSource(url = "", json = ""),
+                    mediaSource = MediaSource(url = "", json = ""),
                     thumbnailSource = null,
                     fileSize = null,
                     formattedFileSize = "3.2 MB",
@@ -284,7 +287,7 @@ internal fun TimelineItemAttachmentsListViewWithCaptionPreview() = ElementPrevie
                 AttachmentItem(
                     filename = "notes.txt",
                     mimeType = "text/plain",
-                    mediaSource = io.element.android.libraries.matrix.api.media.MediaSource(url = "", json = ""),
+                    mediaSource = MediaSource(url = "", json = ""),
                     thumbnailSource = null,
                     fileSize = null,
                     formattedFileSize = "12 KB",

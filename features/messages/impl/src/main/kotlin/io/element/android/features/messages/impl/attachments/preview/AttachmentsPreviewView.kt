@@ -9,7 +9,6 @@
 package io.element.android.features.messages.impl.attachments.preview
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -42,7 +41,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
@@ -93,6 +91,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlin.time.Duration.Companion.milliseconds
 
 private val SingleItemPreviewRenderer = object : LocalMediaRenderer {
     @Composable
@@ -330,7 +329,7 @@ private fun AttachmentPreviewContent(
                             if (isScrolling) {
                                 isPillVisible = true
                             } else {
-                                delay(2000L)
+                                delay(2000.milliseconds)
                                 isPillVisible = false
                             }
                         }
