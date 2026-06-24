@@ -130,7 +130,7 @@ class DefaultVoiceMessagePlayer(
     mediaSource: MediaSource,
     mimeType: String?,
     filename: String?,
-    private val voiceMessageAudioManager: VoiceMessageAudioManager?,
+    private val voiceMessageAudioManager: VoiceMessageAudioManager,
     @SessionCoroutineScope
     private val sessionCoroutineScope: CoroutineScope,
 ) : VoiceMessagePlayer {
@@ -138,7 +138,7 @@ class DefaultVoiceMessagePlayer(
     class Factory(
         private val mediaPlayer: MediaPlayer,
         private val voiceMessageMediaRepoFactory: VoiceMessageMediaRepo.Factory,
-        private val voiceMessageAudioManager: VoiceMessageAudioManager?,
+        private val voiceMessageAudioManager: VoiceMessageAudioManager,
         @SessionCoroutineScope
         private val sessionCoroutineScope: CoroutineScope,
     ) : VoiceMessagePlayer.Factory {
@@ -176,13 +176,13 @@ class DefaultVoiceMessagePlayer(
     )
 
     override fun close() {
-        voiceMessageAudioManager?.stopRouting()
+        voiceMessageAudioManager.stopRouting()
     }
 
     override val state: Flow<VoiceMessagePlayer.State> = combine(mediaPlayer.state, internalState) { mediaPlayerState, internalState ->
         if (mediaPlayerState.isMyTrack) {
             if (mediaPlayerState.isEnded && !this.internalState.value.isEnded) {
-                voiceMessageAudioManager?.stopRouting()
+                voiceMessageAudioManager.stopRouting()
             }
             this.internalState.update {
                 it.copy(
@@ -227,7 +227,7 @@ class DefaultVoiceMessagePlayer(
 
     override fun play() {
         if (inControl()) {
-            voiceMessageAudioManager?.startRouting()
+            voiceMessageAudioManager.startRouting()
             mediaPlayer.play()
         }
     }
@@ -235,7 +235,7 @@ class DefaultVoiceMessagePlayer(
     override fun pause() {
         if (inControl()) {
             mediaPlayer.pause()
-            voiceMessageAudioManager?.stopRouting()
+            voiceMessageAudioManager.stopRouting()
         }
     }
 

@@ -45,7 +45,7 @@ import timber.log.Timber
 class DefaultVoiceMessageAudioManager(
     @ApplicationContext private val context: Context,
     @AppCoroutineScope private val appCoroutineScope: CoroutineScope,
-    coroutineDispatchers: CoroutineDispatchers,
+    private val coroutineDispatchers: CoroutineDispatchers,
 ) : VoiceMessageAudioManager {
     private val audioManager = context.getSystemService<AudioManager>()
     private val sensorManager = context.getSystemService<SensorManager>()
