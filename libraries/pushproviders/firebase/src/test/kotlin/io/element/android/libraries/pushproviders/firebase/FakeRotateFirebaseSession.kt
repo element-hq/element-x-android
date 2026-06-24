@@ -13,7 +13,7 @@ import io.element.android.tests.testutils.lambda.lambdaError
 class FakeRotateFirebaseSession(
     private val rotateWithResult: () -> Result<Unit> = { lambdaError() }
 ) : RotateFirebaseSession {
-    override suspend fun rotate(): Result<Unit> {
+    override suspend fun invoke(): Result<Unit> {
         return rotateWithResult()
     }
 }
