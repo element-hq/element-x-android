@@ -32,6 +32,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.getBestName
+import io.element.android.libraries.matrix.ui.model.toEmojiText
 
 @Composable
 fun MatrixUserHeader(
@@ -58,13 +59,11 @@ fun MatrixUserHeader(
             verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             // Name
-            Text(
-                modifier = Modifier.clipToBounds(),
-                text = matrixUser.getBestName(),
-                maxLines = 1,
-                style = ElementTheme.typography.fontHeadingMdRegular,
-                overflow = TextOverflow.Ellipsis,
-                color = ElementTheme.colors.textPrimary,
+            DisplayNameWithStatus(
+                name = matrixUser.getBestName(),
+                status = matrixUser.displayedStatus?.toEmojiText(),
+                nameColor = ElementTheme.colors.textPrimary,
+                style = ElementTheme.typography.fontHeadingMdRegular
             )
             // Id
             if (matrixUser.displayName.isNullOrEmpty().not()) {

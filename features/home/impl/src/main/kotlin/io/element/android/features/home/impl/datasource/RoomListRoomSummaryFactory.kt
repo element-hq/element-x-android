@@ -76,6 +76,7 @@ class RoomListRoomSummaryFactory(
             }.toImmutableList(),
             isTombstoned = roomInfo.successorRoom != null,
             isSpace = roomInfo.isSpace,
+            dmUserStatus = if (roomInfo.isDm) roomInfo.heroes.firstOrNull()?.displayedStatus else null,
         )
     }
 

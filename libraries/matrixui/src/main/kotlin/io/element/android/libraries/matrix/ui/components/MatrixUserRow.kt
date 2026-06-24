@@ -10,6 +10,7 @@ package io.element.android.libraries.matrix.ui.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import io.element.android.compound.theme.ElementTheme
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -19,6 +20,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.getBestName
+import io.element.android.libraries.matrix.ui.model.toEmojiText
 
 @Composable
 fun MatrixUserRow(
@@ -29,7 +31,14 @@ fun MatrixUserRow(
     trailingContent: @Composable (() -> Unit)? = null,
 ) = UserRow(
     avatarData = matrixUser.getAvatarData(avatarSize),
-    name = matrixUser.getBestName(),
+    nameContent = {
+        DisplayNameWithStatus(
+            name = matrixUser.getBestName(),
+            status = matrixUser.displayedStatus?.toEmojiText(),
+            nameColor = ElementTheme.colors.textPrimary,
+            style = ElementTheme.typography.fontBodyLgRegular,
+        )
+    },
     subtext = if (matrixUser.displayName.isNullOrEmpty()) null else matrixUser.userId.value,
     modifier = modifier,
     verticalSpaceWidth = verticalSpaceWidth,

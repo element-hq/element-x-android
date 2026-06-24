@@ -319,6 +319,7 @@ class MessagesPresenter(
             appName = buildMeta.applicationName,
             pinnedMessagesBannerState = pinnedMessagesBannerState,
             dmUserVerificationState = dmUserVerificationState,
+            dmUserStatus = dmRoomMember?.displayedStatus,
             roomMemberModerationState = roomMemberModerationState,
             topBarSharedHistoryIcon = topBarSharedHistoryIcon,
             successorRoom = roomInfo.successorRoom,
