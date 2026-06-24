@@ -61,8 +61,8 @@ class DefaultMessageSummaryFormatter(
             is TimelineItemGalleryContent -> context.getString(CommonStrings.common_gallery)
             is TimelineItemAttachmentsContent -> {
                 val count = content.attachments.size
-                val extensions = content.attachments.take(3).joinToString(", ") { it.fileExtension }
-                if (count == 1) {
+                val extensions = content.attachments.take(3).joinToString() { it.fileExtension }
+                if (count <= 3) {
                     extensions
                 } else {
                     "$extensions +${count - 3}"
