@@ -149,6 +149,7 @@ class AttachmentsPreviewPresenter(
                     compressImages = mediaOptimizationSelectorState.isImageOptimizationEnabled ?: mediaOptimizationConfigProvider.get().compressImages,
                     videoCompressionPreset = mediaOptimizationSelectorState.selectedVideoPreset ?: mediaOptimizationConfigProvider.get().videoCompressionPreset,
                 )
+                preprocessMediaJob?.cancel()
                 preprocessMediaJob = coroutineScope.launch(dispatchers.io) {
                     preProcessAttachments(
                         attachments = attachmentsAndEdits.map { it.attachment },
