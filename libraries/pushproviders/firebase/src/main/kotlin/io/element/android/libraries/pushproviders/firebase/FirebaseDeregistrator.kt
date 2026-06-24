@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.pushproviders.firebase
 
+import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.messaging.FirebaseMessaging
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
@@ -33,6 +34,8 @@ class DefaultFirebaseDeregistrator(
         suspendCoroutine { continuation ->
             try {
                 FirebaseMessaging.getInstance().unregister()
+                    // Also delete the existing installation id from Firebase
+                    .continueWithTask { FirebaseInstallations.getInstance().delete() }
                     .addOnSuccessListener {
                         continuation.resume(Unit)
                     }
