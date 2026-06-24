@@ -32,6 +32,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import io.element.android.compound.theme.ElementTheme
@@ -47,7 +48,6 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -223,78 +223,11 @@ private fun AttachmentListItem(
 
 @PreviewsDayNight
 @Composable
-internal fun TimelineItemAttachmentsListViewPreview() = ElementPreview {
+internal fun TimelineItemAttachmentsListViewPreview(
+    @PreviewParameter(TimelineItemAttachmentsContentProvider::class) content: TimelineItemAttachmentsContent
+) = ElementPreview {
     TimelineItemAttachmentsListView(
-        content = TimelineItemAttachmentsContent(
-            body = "Files",
-            caption = null,
-            formattedCaption = null,
-            isEdited = false,
-            attachments = listOf(
-                AttachmentItem(
-                    filename = "document.pdf",
-                    mimeType = "application/pdf",
-                    mediaSource = MediaSource(url = "", json = ""),
-                    thumbnailSource = null,
-                    fileSize = null,
-                    formattedFileSize = "2.5 MB",
-                    fileExtension = "PDF",
-                ),
-                AttachmentItem(
-                    filename = "photo.jpg",
-                    mimeType = "image/jpeg",
-                    mediaSource = MediaSource(url = "", json = ""),
-                    thumbnailSource = MediaSource(url = "thumb", json = ""),
-                    fileSize = null,
-                    formattedFileSize = "1.2 MB",
-                    fileExtension = "JPG",
-                ),
-                AttachmentItem(
-                    filename = "spreadsheet.xlsx",
-                    mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                    mediaSource = MediaSource(url = "", json = ""),
-                    thumbnailSource = null,
-                    fileSize = null,
-                    formattedFileSize = "450 KB",
-                    fileExtension = "XLSX",
-                ),
-            ),
-        ),
-        onContentClick = {},
-        onContentLayoutChange = {},
-    )
-}
-
-@PreviewsDayNight
-@Composable
-internal fun TimelineItemAttachmentsListViewWithCaptionPreview() = ElementPreview {
-    TimelineItemAttachmentsListView(
-        content = TimelineItemAttachmentsContent(
-            body = "Files",
-            caption = "Important documents",
-            formattedCaption = null,
-            isEdited = false,
-            attachments = listOf(
-                AttachmentItem(
-                    filename = "report.pdf",
-                    mimeType = "application/pdf",
-                    mediaSource = MediaSource(url = "", json = ""),
-                    thumbnailSource = null,
-                    fileSize = null,
-                    formattedFileSize = "3.2 MB",
-                    fileExtension = "PDF",
-                ),
-                AttachmentItem(
-                    filename = "notes.txt",
-                    mimeType = "text/plain",
-                    mediaSource = MediaSource(url = "", json = ""),
-                    thumbnailSource = null,
-                    fileSize = null,
-                    formattedFileSize = "12 KB",
-                    fileExtension = "TXT",
-                ),
-            ),
-        ),
+        content = content,
         onContentClick = {},
         onContentLayoutChange = {},
     )
