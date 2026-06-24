@@ -41,16 +41,16 @@ sealed interface SendActionState {
     sealed interface Sending : SendActionState {
         data class Processing(val displayProgress: Boolean) : Sending
         data class ReadyToUpload(val mediaInfos: List<MediaUploadInfo>) : Sending
-        data class Uploading(val mediaUploadInfo: MediaUploadInfo) : Sending
+        data class Uploading(val mediaInfos: List<MediaUploadInfo>) : Sending
     }
 
-    data class Failure(val error: Throwable, val mediaUploadInfo: MediaUploadInfo?) : SendActionState
+    data class Failure(val error: Throwable, val mediaInfos: List<MediaUploadInfo>) : SendActionState
     data object Done : SendActionState
 
-    fun mediaUploadInfo(): MediaUploadInfo? = when (this) {
-        is Sending.ReadyToUpload -> mediaInfos.firstOrNull()
-        is Sending.Uploading -> mediaUploadInfo
-        is Failure -> mediaUploadInfo
+    fun mediaUploadInfoList(): List<MediaUploadInfo>? = when (this) {
+        is Sending.ReadyToUpload -> mediaInfos
+        is Sending.Uploading -> mediaInfos
+        is Failure -> mediaInfos
         else -> null
     }
 }

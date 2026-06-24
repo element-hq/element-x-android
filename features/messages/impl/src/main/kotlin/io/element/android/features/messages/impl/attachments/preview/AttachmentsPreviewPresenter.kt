@@ -288,9 +288,9 @@ class AttachmentsPreviewPresenter(
                         ongoingSendAttachmentJob.value = null
                     }
 
-                    val mediaUploadInfo = sendActionState.value.mediaUploadInfo()
-                    sendActionState.value = if (mediaUploadInfo != null) {
-                        SendActionState.Sending.ReadyToUpload(listOf(mediaUploadInfo))
+                    val mediaUploadInfoList = sendActionState.value.mediaUploadInfoList()
+                    sendActionState.value = if (mediaUploadInfoList != null) {
+                        SendActionState.Sending.ReadyToUpload(mediaUploadInfoList)
                     } else {
                         SendActionState.Idle
                     }
@@ -437,7 +437,7 @@ class AttachmentsPreviewPresenter(
                             if (it is CancellationException) {
                                 throw it
                             } else {
-                                sendActionState.value = SendActionState.Failure(it, null)
+                                sendActionState.value = SendActionState.Failure(it, emptyList())
                                 return
                             }
                         }
@@ -476,7 +476,7 @@ class AttachmentsPreviewPresenter(
     }
 
     private fun resetPreparedMedia(sendActionState: MutableState<SendActionState>) {
-        sendActionState.value.mediaUploadInfo()?.let(::cleanUp)
+        sendActionState.value.mediaUploadInfoList()?.forEach(::cleanUp)
         mediaSender.cleanUp()
         sendActionState.value = SendActionState.Idle
     }
@@ -488,7 +488,7 @@ class AttachmentsPreviewPresenter(
         inReplyToEventId: EventId?,
     ) = runCatchingExceptions {
         if (mediaUploadInfos.size == 1) {
-            sendActionState.value = SendActionState.Sending.Uploading(mediaUploadInfos.first())
+            sendActionState.value = SendActionState.Sending.Uploading(mediaUploadInfos)
             mediaSender.sendPreProcessedMedia(
                 mediaUploadInfo = mediaUploadInfos.first(),
                 caption = caption,
@@ -514,7 +514,7 @@ class AttachmentsPreviewPresenter(
             if (error is CancellationException) {
                 throw error
             } else {
-                sendActionState.value = SendActionState.Failure(error, mediaUploadInfos.firstOrNull())
+                sendActionState.value = SendActionState.Failure(error, mediaUploadInfos)
             }
         }
     )

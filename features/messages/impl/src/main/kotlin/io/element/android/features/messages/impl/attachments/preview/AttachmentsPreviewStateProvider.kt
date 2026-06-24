@@ -42,8 +42,8 @@ open class AttachmentsPreviewStateProvider : PreviewParameterProvider<Attachment
             ),
             anAttachmentsPreviewState(sendActionState = SendActionState.Sending.Processing(displayProgress = true)),
             anAttachmentsPreviewState(sendActionState = SendActionState.Sending.ReadyToUpload(listOf(aMediaUploadInfo()))),
-            anAttachmentsPreviewState(sendActionState = SendActionState.Sending.Uploading(aMediaUploadInfo())),
-            anAttachmentsPreviewState(sendActionState = SendActionState.Failure(RuntimeException("error"), aMediaUploadInfo())),
+            anAttachmentsPreviewState(sendActionState = SendActionState.Sending.Uploading(listOf(aMediaUploadInfo()))),
+            anAttachmentsPreviewState(sendActionState = SendActionState.Failure(RuntimeException("error"), listOf(aMediaUploadInfo()))),
             anAttachmentsPreviewState(
                 imageEditorState = anAttachmentImageEditorState(),
             ),
