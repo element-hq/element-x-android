@@ -114,7 +114,7 @@ sealed interface GalleryItemType {
     data class Audio(val content: AudioMessageType) : GalleryItemType
     data class Video(val content: VideoMessageType) : GalleryItemType
     data class File(val content: FileMessageType) : GalleryItemType
-    data class Other(val itemtype: String, val body: String) : GalleryItemType
+    data class Other(val itemType: String, val body: String) : GalleryItemType
 }
 
 data class OtherMessageType(

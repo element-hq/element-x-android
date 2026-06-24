@@ -179,7 +179,7 @@ class EventMessageMapper {
         }
         is RustGalleryItemType.Other -> {
             GalleryItemType.Other(
-                itemtype = type.itemtype,
+                itemType = type.itemtype,
                 body = type.body,
             )
         }
