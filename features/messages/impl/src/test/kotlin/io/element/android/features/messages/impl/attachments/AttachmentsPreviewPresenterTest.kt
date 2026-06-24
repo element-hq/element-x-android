@@ -69,8 +69,8 @@ import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
@@ -414,7 +414,6 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(listOf(mediaUploadInfo)))
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(mediaUploadInfo))
-
             val failureState = awaitItem()
             assertThat(failureState.sendActionState).isEqualTo(SendActionState.Failure(failure, mediaUploadInfo))
             sendFileResult.assertions().isCalledOnce()
@@ -459,7 +458,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
         val maxUploadSize = 999L // Set a max upload size smaller than the file size
 
         val presenter = createAttachmentsPreviewPresenter(
-            localMedia = localMedia,
+            attachments = listOf(Attachment.Media(localMedia)),
             room = FakeJoinedRoom(
                 liveTimeline = FakeTimeline().apply {
                     sendFileLambda = { _, _, _, _, _ ->
@@ -498,7 +497,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
         val localMedia = aLocalMedia(uri = Uri.EMPTY, mediaInfo = aVideoMediaInfo())
 
         val presenter = createAttachmentsPreviewPresenter(
-            localMedia = localMedia,
+            attachments = listOf(Attachment.Media(localMedia)),
             room = FakeJoinedRoom(
                 liveTimeline = FakeTimeline().apply {
                     sendFileLambda = { _, _, _, _, _ ->
@@ -596,7 +595,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
             bottom = 0.9f,
         )
         val presenter = createAttachmentsPreviewPresenter(
-            localMedia = originalLocalMedia,
+            attachments = listOf(Attachment.Media(originalLocalMedia)),
             displayMediaQualitySelectorViews = true,
             attachmentImageEditor = FakeAttachmentImageEditor {
                 Result.success(
@@ -668,20 +667,26 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
         }
     }
 
+    @Test
     fun `present - sendAsFile attachment is pre-processed without image compression`() = runTest {
         // Even though the user has enabled "Optimize media quality" globally, picking the file
         // through the Files picker (sendAsFile = true) must skip compression. Regression test
         // for https://github.com/element-hq/element-x-android/issues/6365
         val mediaPreProcessor = FakeMediaPreProcessor()
         val presenter = createAttachmentsPreviewPresenter(
-            localMedia = aLocalMedia(mockMediaUrl, anImageMediaInfo()),
+            attachments = listOf(
+                Attachment.Media(
+                    localMedia = aLocalMedia(mockMediaUrl, anImageMediaInfo()),
+                    sendAsFile = true,
+                )
+            ),
             mediaPreProcessor = mediaPreProcessor,
             // Selector views are hidden in the sendAsFile flow, which triggers the auto pre-process path.
             displayMediaQualitySelectorViews = false,
             mediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(
                 config = MediaOptimizationConfig(
-                    compressImages = true,
-                    videoCompressionPreset = VideoCompressionPreset.STANDARD,
+                    compressImages = false,
+                    videoCompressionPreset = VideoCompressionPreset.HIGH,
                 )
             ),
         )
@@ -766,8 +771,9 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
                 fileExtension = "png",
             ),
         )
-        val presenter = createAttachmentsPreviewPresenter(localMedia = localMedia)
-
+        val presenter = createAttachmentsPreviewPresenter(
+            attachments = listOf(Attachment.Media(localMedia)),
+        )
         presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.canEditImage).isTrue()
@@ -789,7 +795,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
             ),
         )
         val presenter = createAttachmentsPreviewPresenter(
-            localMedia = localMedia,
+            attachments = listOf(Attachment.Media(localMedia)),
             attachmentImageEditor = FakeAttachmentImageEditor(
                 canEditResult = true,
             ) {
@@ -816,7 +822,12 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
     fun `present - sendAsFile video is pre-processed with best fitting preset`() = runTest {
         val mediaPreProcessor = FakeMediaPreProcessor()
         val presenter = createAttachmentsPreviewPresenter(
-            localMedia = aLocalMedia(mockMediaUrl, aVideoMediaInfo()),
+            attachments = listOf(
+                Attachment.Media(
+                    localMedia = aLocalMedia(mockMediaUrl, aVideoMediaInfo()),
+                    sendAsFile = true,
+                )
+            ),
             mediaPreProcessor = mediaPreProcessor,
             // Selector views are hidden in the sendAsFile flow, which triggers the auto pre-process path.
             displayMediaQualitySelectorViews = false,
@@ -905,10 +916,13 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
     }
 
     private fun TestScope.createAttachmentsPreviewPresenter(
-        localMedia: LocalMedia = aLocalMedia(
-            uri = mockMediaUrl,
+        attachments: List<Attachment> = listOf(
+            aMediaAttachment(
+                aLocalMedia(
+                    uri = mockMediaUrl,
+                )
+            ),
         ),
-        attachments: ImmutableList<Attachment> = persistentListOf(aMediaAttachment(localMedia)),
         room: JoinedRoom = FakeJoinedRoom(),
         timelineMode: Timeline.Mode = Timeline.Mode.Live,
         permalinkBuilder: PermalinkBuilder = FakePermalinkBuilder(),
@@ -931,16 +945,21 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
         ),
         mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
         attachmentImageEditor: AttachmentImageEditor = FakeAttachmentImageEditor {
-            Result.success(
-                EditedLocalMedia(
-                    localMedia = localMedia.copy(uri = Uri.parse("file:///tmp/default-edited.jpeg")),
-                    file = File("/tmp/default-edited.jpeg"),
+            val localMediaResult = (attachments.first() as? Attachment.Media)?.localMedia?.copy(uri = Uri.parse("file:///tmp/default-edited.jpeg"))
+            if (localMediaResult != null) {
+                Result.success(
+                    EditedLocalMedia(
+                        localMedia = localMediaResult,
+                        file = File("/tmp/default-edited.jpeg"),
+                    )
                 )
-            )
+            } else {
+                Result.failure(IllegalStateException("Check test values"))
+            }
         },
     ): AttachmentsPreviewPresenter {
         return AttachmentsPreviewPresenter(
-            attachments = attachments,
+            attachments = attachments.toImmutableList(),
             onDoneListener = onDoneListener,
             mediaSenderFactory = MediaSenderFactory { timelineMode ->
                 DefaultMediaSender(

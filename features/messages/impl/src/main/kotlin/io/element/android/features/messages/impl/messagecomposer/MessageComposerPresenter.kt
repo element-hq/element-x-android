@@ -34,7 +34,6 @@ import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.location.api.LocationService
 import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.features.messages.impl.attachments.Attachment
-import io.element.android.features.messages.impl.attachments.Attachment.Media
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
 import io.element.android.features.messages.impl.draft.ComposerDraftService
 import io.element.android.features.messages.impl.messagecomposer.suggestions.RoomAliasSuggestionsDataSource
@@ -190,10 +189,10 @@ class MessageComposerPresenter(
             handlePickedMediaList(uris)
         }
         val filesPicker = mediaPickerProvider.registerFileMultiPicker(AnyMimeTypes) { uris ->
-            handlePickedMediaList(uris)
+            handlePickedMediaList(uris, sendAsFile = true)
         }
         val fileSinglePicker = mediaPickerProvider.registerFilePicker(AnyMimeTypes) { uri, mimeType ->
-            handlePickedMedia(uri, mimeType)
+            handlePickedMedia(uri, mimeType ?: MimeTypes.OctetStream, sendAsFile = true)
         }
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker { uri ->
             handlePickedMedia(uri, MimeTypes.Jpeg)
@@ -278,7 +277,7 @@ class MessageComposerPresenter(
                 is MessageComposerEvent.SendUri -> {
                     val inReplyToEventId = (messageComposerContext.composerMode as? MessageComposerMode.Reply)?.eventId
                     sessionCoroutineScope.sendAttachment(
-                        attachment = Media(
+                        attachment = Attachment.Media(
                             localMedia = localMediaFactory.createFromUri(
                                 uri = event.uri,
                                 mimeType = null,
@@ -645,10 +644,11 @@ class MessageComposerPresenter(
 
     private fun handlePickedMediaList(
         uris: List<Uri>,
+        sendAsFile: Boolean = false,
     ) {
         if (uris.isEmpty()) return
         if (uris.size == 1) {
-            handlePickedMedia(uris.first())
+            handlePickedMedia(uris.first(), sendAsFile = sendAsFile)
             return
         }
         val attachments = uris.map { uri ->
@@ -658,7 +658,7 @@ class MessageComposerPresenter(
                 name = null,
                 formattedFileSize = null,
             )
-            Attachment.Media(localMedia)
+            Attachment.Media(localMedia, sendAsFile = sendAsFile)
         }.toImmutableList()
         val inReplyToEventId = (messageComposerContext.composerMode as? MessageComposerMode.Reply)?.eventId
         navigator.navigateToPreviewAttachments(attachments, inReplyToEventId)
