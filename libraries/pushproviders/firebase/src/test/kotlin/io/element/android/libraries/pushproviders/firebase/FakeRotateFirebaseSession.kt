@@ -10,9 +10,9 @@ package io.element.android.libraries.pushproviders.firebase
 
 import io.element.android.tests.testutils.lambda.lambdaError
 
-class FakeFirebaseMessagingSessionRotator(
+class FakeRotateFirebaseSession(
     private val rotateWithResult: () -> Result<Unit> = { lambdaError() }
-) : FirebaseMessagingSessionRotator {
+) : RotateFirebaseSession {
     override suspend fun rotate(): Result<Unit> {
         return rotateWithResult()
     }

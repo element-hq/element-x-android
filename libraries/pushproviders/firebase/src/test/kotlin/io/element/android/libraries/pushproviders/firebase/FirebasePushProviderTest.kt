@@ -172,7 +172,7 @@ class FirebasePushProviderTest {
     fun `rotateToken invokes the FirebaseMessagingSessionRotator`() = runTest {
         val lambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
         val firebasePushProvider = createFirebasePushProvider(
-            firebaseMessagingSessionRotator = FakeFirebaseMessagingSessionRotator(lambda),
+            rotateFirebaseSession = FakeRotateFirebaseSession(lambda),
         )
         firebasePushProvider.rotateToken()
         lambda.assertions().isCalledOnce()
@@ -194,14 +194,14 @@ class FirebasePushProviderTest {
         firebaseStore: FirebaseStore = InMemoryFirebaseStore(),
         pusherSubscriber: PusherSubscriber = FakePusherSubscriber(),
         isPlayServiceAvailable: IsPlayServiceAvailable = FakeIsPlayServiceAvailable(false),
-        firebaseMessagingSessionRotator: FirebaseMessagingSessionRotator = FakeFirebaseMessagingSessionRotator(),
+        rotateFirebaseSession: RotateFirebaseSession = FakeRotateFirebaseSession(),
         firebaseGatewayProvider: FirebaseGatewayProvider = FakeFirebaseGatewayProvider()
     ): FirebasePushProvider {
         return FirebasePushProvider(
             firebaseStore = firebaseStore,
             pusherSubscriber = pusherSubscriber,
             isPlayServiceAvailable = isPlayServiceAvailable,
-            firebaseMessagingSessionRotator = firebaseMessagingSessionRotator,
+            rotateFirebaseSession = rotateFirebaseSession,
             firebaseGatewayProvider = firebaseGatewayProvider,
         )
     }

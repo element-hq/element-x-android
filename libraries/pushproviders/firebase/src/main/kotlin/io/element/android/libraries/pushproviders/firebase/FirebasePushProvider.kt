@@ -26,7 +26,7 @@ class FirebasePushProvider(
     private val firebaseStore: FirebaseStore,
     private val pusherSubscriber: PusherSubscriber,
     private val isPlayServiceAvailable: IsPlayServiceAvailable,
-    private val firebaseMessagingSessionRotator: FirebaseMessagingSessionRotator,
+    private val rotateFirebaseSession: RotateFirebaseSession,
     private val firebaseGatewayProvider: FirebaseGatewayProvider,
 ) : PushProvider {
     override val index = FirebaseConfig.INDEX
@@ -85,7 +85,7 @@ class FirebasePushProvider(
     override fun canRotateToken(): Boolean = true
 
     override suspend fun rotateToken(): Result<Unit> {
-        return firebaseMessagingSessionRotator.rotate()
+        return rotateFirebaseSession()
     }
 
     companion object {
