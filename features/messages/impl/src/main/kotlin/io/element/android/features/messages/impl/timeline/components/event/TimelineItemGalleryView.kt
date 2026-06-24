@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import io.element.android.compound.theme.ElementTheme
@@ -55,7 +56,6 @@ import io.element.android.wysiwyg.compose.EditorStyledText
 import io.element.android.wysiwyg.link.Link
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import kotlin.time.Duration.Companion.seconds
 
 private const val MAX_TILES = 5
 private val GALLERY_WIDTH = 264.dp
@@ -405,247 +405,15 @@ private fun RemainingCountOverlay(count: Int) {
 
 @PreviewsDayNight
 @Composable
-internal fun TimelineItemGalleryViewPreview() = ElementPreview {
+internal fun TimelineItemGalleryViewPreview(
+    @PreviewParameter(TimelineItemGalleryContentProvider::class) content: TimelineItemGalleryContent,
+) = ElementPreview {
     TimelineItemGalleryView(
-        content = TimelineItemGalleryContent(
-            body = "Gallery",
-            caption = "My vacation photos",
-            formattedCaption = null,
-            isEdited = false,
-            items = listOf(
-                createSampleGalleryItem(isVideo = false),
-                createSampleGalleryItem(isVideo = true, duration = 65.seconds),
-                createSampleGalleryItem(isVideo = false),
-                createSampleGalleryItem(isVideo = false),
-            ),
-        ),
+        content = content,
         onContentClick = {},
         onLongClick = {},
         onLinkClick = {},
         onLinkLongClick = {},
         onContentLayoutChange = {},
-    )
-}
-
-@PreviewsDayNight
-@Composable
-internal fun TimelineItemGalleryViewSingleItemPreview() = ElementPreview {
-    TimelineItemGalleryView(
-        content = TimelineItemGalleryContent(
-            body = "Gallery",
-            caption = null,
-            formattedCaption = null,
-            isEdited = false,
-            items = listOf(
-                createSampleGalleryItem(isVideo = false),
-            ),
-        ),
-        onContentClick = {},
-        onLongClick = {},
-        onLinkClick = {},
-        onLinkLongClick = {},
-        onContentLayoutChange = {},
-    )
-}
-
-@PreviewsDayNight
-@Composable
-internal fun TimelineItemGalleryViewTwoLandscapePreview() = ElementPreview {
-    TimelineItemGalleryView(
-        content = TimelineItemGalleryContent(
-            body = "Gallery",
-            caption = null,
-            formattedCaption = null,
-            isEdited = false,
-            items = listOf(
-                createSampleGalleryItem(width = 1920, height = 1080),
-                createSampleGalleryItem(width = 1600, height = 900),
-            ),
-        ),
-        onContentClick = {},
-        onLongClick = {},
-        onLinkClick = {},
-        onLinkLongClick = {},
-        onContentLayoutChange = {},
-    )
-}
-
-@PreviewsDayNight
-@Composable
-internal fun TimelineItemGalleryViewTwoPortraitPreview() = ElementPreview {
-    TimelineItemGalleryView(
-        content = TimelineItemGalleryContent(
-            body = "Gallery",
-            caption = null,
-            formattedCaption = null,
-            isEdited = false,
-            items = listOf(
-                createSampleGalleryItem(width = 1080, height = 1920),
-                createSampleGalleryItem(width = 900, height = 1600),
-            ),
-        ),
-        onContentClick = {},
-        onLongClick = {},
-        onLinkClick = {},
-        onLinkLongClick = {},
-        onContentLayoutChange = {},
-    )
-}
-
-@PreviewsDayNight
-@Composable
-internal fun TimelineItemGalleryViewTwoMixedPreview() = ElementPreview {
-    TimelineItemGalleryView(
-        content = TimelineItemGalleryContent(
-            body = "Gallery",
-            caption = null,
-            formattedCaption = null,
-            isEdited = false,
-            items = listOf(
-                createSampleGalleryItem(width = 1920, height = 1080),
-                createSampleGalleryItem(width = 1080, height = 1920),
-            ),
-        ),
-        onContentClick = {},
-        onLongClick = {},
-        onLinkClick = {},
-        onLinkLongClick = {},
-        onContentLayoutChange = {},
-    )
-}
-
-@PreviewsDayNight
-@Composable
-internal fun TimelineItemGalleryViewThreeItemsPreview() = ElementPreview {
-    TimelineItemGalleryView(
-        content = TimelineItemGalleryContent(
-            body = "Gallery",
-            caption = null,
-            formattedCaption = null,
-            isEdited = false,
-            items = listOf(
-                createSampleGalleryItem(isVideo = true, duration = 45.seconds),
-                createSampleGalleryItem(isVideo = false),
-                createSampleGalleryItem(isVideo = false),
-            ),
-        ),
-        onContentClick = {},
-        onLongClick = {},
-        onLinkClick = {},
-        onLinkLongClick = {},
-        onContentLayoutChange = {},
-    )
-}
-
-@PreviewsDayNight
-@Composable
-internal fun TimelineItemGalleryViewThree2L1PPreview() = ElementPreview {
-    TimelineItemGalleryView(
-        content = TimelineItemGalleryContent(
-            body = "Gallery",
-            caption = "2 landscape + 1 portrait",
-            formattedCaption = null,
-            isEdited = false,
-            items = listOf(
-                createSampleGalleryItem(width = 1920, height = 1080),
-                createSampleGalleryItem(width = 1600, height = 900),
-                createSampleGalleryItem(width = 1080, height = 1920),
-            ),
-        ),
-        onContentClick = {},
-        onLongClick = {},
-        onLinkClick = {},
-        onLinkLongClick = {},
-        onContentLayoutChange = {},
-    )
-}
-
-@PreviewsDayNight
-@Composable
-internal fun TimelineItemGalleryViewThree1L2PPreview() = ElementPreview {
-    TimelineItemGalleryView(
-        content = TimelineItemGalleryContent(
-            body = "Gallery",
-            caption = "1 landscape + 2 portrait",
-            formattedCaption = null,
-            isEdited = false,
-            items = listOf(
-                createSampleGalleryItem(width = 1920, height = 1080),
-                createSampleGalleryItem(width = 1080, height = 1920),
-                createSampleGalleryItem(width = 900, height = 1600),
-            ),
-        ),
-        onContentClick = {},
-        onLongClick = {},
-        onLinkClick = {},
-        onLinkLongClick = {},
-        onContentLayoutChange = {},
-    )
-}
-
-@PreviewsDayNight
-@Composable
-internal fun TimelineItemGalleryViewFiveItemsPreview() = ElementPreview {
-    TimelineItemGalleryView(
-        content = TimelineItemGalleryContent(
-            body = "Gallery",
-            caption = null,
-            formattedCaption = null,
-            isEdited = false,
-            items = listOf(
-                createSampleGalleryItem(isVideo = false),
-                createSampleGalleryItem(isVideo = false),
-                createSampleGalleryItem(isVideo = true, duration = 120.seconds),
-                createSampleGalleryItem(isVideo = false),
-                createSampleGalleryItem(isVideo = false),
-            ),
-        ),
-        onContentClick = {},
-        onLongClick = {},
-        onLinkClick = {},
-        onLinkLongClick = {},
-        onContentLayoutChange = {},
-    )
-}
-
-@PreviewsDayNight
-@Composable
-internal fun TimelineItemGalleryViewManyItemsPreview() = ElementPreview {
-    TimelineItemGalleryView(
-        content = TimelineItemGalleryContent(
-            body = "Gallery",
-            caption = "Many photos",
-            formattedCaption = null,
-            isEdited = false,
-            items = (1..12).map { createSampleGalleryItem(isVideo = it == 3) },
-        ),
-        onContentClick = {},
-        onLongClick = {},
-        onLinkClick = {},
-        onLinkLongClick = {},
-        onContentLayoutChange = {},
-    )
-}
-
-private fun createSampleGalleryItem(
-    isVideo: Boolean = false,
-    width: Int = 400,
-    height: Int = 300,
-    duration: kotlin.time.Duration = kotlin.time.Duration.ZERO,
-): GalleryItem {
-    return GalleryItem(
-        filename = "photo.jpg",
-        mimeType = "image/jpeg",
-        mediaSource = io.element.android.libraries.matrix.api.media.MediaSource(url = "", json = ""),
-        thumbnailSource = null,
-        width = width,
-        height = height,
-        thumbnailWidth = width,
-        thumbnailHeight = height,
-        blurhash = null,
-        isVideo = isVideo,
-        isAudio = false,
-        isFile = false,
-        duration = duration,
     )
 }
