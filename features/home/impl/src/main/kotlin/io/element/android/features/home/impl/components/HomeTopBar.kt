@@ -95,6 +95,8 @@ fun HomeTopBar(
     filtersState: RoomListFiltersState,
     spaceFiltersState: SpaceFiltersState,
     modifier: Modifier = Modifier,
+    isLock:Boolean,
+    onLock: () -> Unit,
 ) {
     Column(modifier) {
         TopAppBar(
@@ -140,6 +142,8 @@ fun HomeTopBar(
                         onMenuActionClick = onMenuActionClick,
                         canReportBug = canReportBug,
                         spaceFiltersState = spaceFiltersState,
+                        isLock = isLock,
+                        onLock = onLock
                     )
                 }
             },
@@ -166,7 +170,17 @@ private fun RowScope.RoomListMenuItems(
     onMenuActionClick: (RoomListMenuAction) -> Unit,
     canReportBug: Boolean,
     spaceFiltersState: SpaceFiltersState,
+    isLock: Boolean,
+    onLock: () -> Unit
 ) {
+    if (isLock) IconButton(
+        onClick = onLock,
+    ) {
+        Icon(
+            imageVector = CompoundIcons.Lock(),
+            contentDescription = stringResource(CommonStrings.common_screen_lock),
+        )
+    }
     IconButton(
         onClick = onToggleSearch,
     ) {
@@ -360,6 +374,8 @@ internal fun HomeTopBarPreview() = ElementPreview {
         filtersState = aRoomListFiltersState(),
         spaceFiltersState = anUnselectedSpaceFiltersState(),
         onMenuActionClick = {},
+        isLock = true,
+        onLock = {}
     )
 }
 
@@ -381,6 +397,8 @@ internal fun HomeTopBarSpaceFiltersSelectedPreview() = ElementPreview {
         filtersState = aRoomListFiltersState(),
         spaceFiltersState = aSelectedSpaceFiltersState(),
         onMenuActionClick = {},
+        isLock = true,
+        onLock = {}
     )
 }
 
@@ -402,6 +420,8 @@ internal fun HomeTopBarSpacesPreview() = ElementPreview {
         filtersState = aRoomListFiltersState(),
         spaceFiltersState = anUnselectedSpaceFiltersState(),
         onMenuActionClick = {},
+        isLock = true,
+        onLock = {}
     )
 }
 
@@ -423,6 +443,8 @@ internal fun HomeTopBarWithIndicatorPreview() = ElementPreview {
         filtersState = aRoomListFiltersState(),
         spaceFiltersState = anUnselectedSpaceFiltersState(),
         onMenuActionClick = {},
+        isLock = true,
+        onLock = {}
     )
 }
 
@@ -444,5 +466,7 @@ internal fun HomeTopBarMultiAccountPreview() = ElementPreview {
         filtersState = aRoomListFiltersState(),
         spaceFiltersState = anUnselectedSpaceFiltersState(),
         onMenuActionClick = {},
+        isLock = true,
+        onLock = {}
     )
 }

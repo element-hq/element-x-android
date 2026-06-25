@@ -26,6 +26,7 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dev.zacsweers.metro.Assisted
@@ -40,6 +41,8 @@ import io.element.android.features.invite.api.InviteData
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteView
 import io.element.android.features.invite.api.declineandblock.DeclineInviteAndBlockEntryPoint
 import io.element.android.features.leaveroom.api.LeaveRoomRenderer
+import io.element.android.features.lockscreen.api.LockScreenService
+import io.element.android.features.lockscreen.impl.unlock.PinLockNode
 import io.element.android.features.logout.api.direct.DirectLogoutView
 import io.element.android.features.reportroom.api.ReportRoomEntryPoint
 import io.element.android.features.rolesandpermissions.api.ChangeRoomMemberRolesEntryPoint
@@ -49,6 +52,7 @@ import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.appyx.launchMolecule
 import io.element.android.libraries.architecture.callback
+import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.deeplink.api.usecase.InviteFriendsUseCase
 import io.element.android.libraries.designsystem.components.ProgressDialog
@@ -88,7 +92,9 @@ class HomeFlowNode(
     private val changeRoomMemberRolesEntryPoint: ChangeRoomMemberRolesEntryPoint,
     private val leaveRoomRenderer: LeaveRoomRenderer,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
-) : BaseFlowNode<HomeFlowNode.NavTarget>(
+    private val lockScreenService: LockScreenService,
+
+    ) : BaseFlowNode<HomeFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
         savedStateMap = buildContext.savedStateMap,
@@ -134,6 +140,8 @@ class HomeFlowNode(
 
         @Parcelize
         data class SelectNewOwnersWhenLeavingRoom(val roomId: RoomId) : NavTarget
+        @Parcelize
+        data object NavigateLockUnLock : NavTarget
     }
 
     private fun navigateToReportRoom(roomId: RoomId) {
@@ -216,6 +224,10 @@ class HomeFlowNode(
                 }
                 loadingJoinedRoomJob.value = AsyncData.Loading(job)
             }
+            fun navigateToLock() {
+                backstack.newRoot(NavTarget.NavigateLockUnLock)
+            }
+            val isLock = lockScreenService.isPinSetup().collectAsState(initial = false).value
 
             HomeView(
                 homeState = state,
@@ -244,7 +256,9 @@ class HomeFlowNode(
                         onSelectNewOwners = ::navigateToSelectNewOwnersWhenLeavingRoom,
                         modifier = Modifier
                     )
-                }
+                },
+                isLock = isLock,
+                onLock = ::navigateToLock
             )
             directLogoutView.Render(state.directLogoutState)
         }
@@ -279,6 +293,15 @@ class HomeFlowNode(
                     room = room,
                     listType = ChangeRoomMemberRolesListType.SelectNewOwnersWhenLeaving,
                 )
+            }
+            is NavTarget.NavigateLockUnLock -> {
+                val callback = object : PinLockNode.Callback {
+                    override fun onUnlock() {
+                        backstack.newRoot(NavTarget.Root)
+                    }
+                }
+
+                createNode<PinLockNode>(buildContext, plugins = listOf(callback))
             }
             NavTarget.Root -> rootNode(buildContext)
         }

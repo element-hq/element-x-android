@@ -87,6 +87,8 @@ fun HomeView(
     acceptDeclineInviteView: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     leaveRoomView: @Composable () -> Unit,
+    isLock: Boolean,
+    onLock: () -> Unit
 ) {
     val state: RoomListState = homeState.roomListState
     val coroutineScope = rememberCoroutineScope()
@@ -121,6 +123,8 @@ fun HomeView(
             onStartChatClick = { if (firstThrottler.canHandle()) onStartChatClick() },
             onCreateSpaceClick = { if (firstThrottler.canHandle()) onCreateSpaceClick() },
             onMenuActionClick = onMenuActionClick,
+            isLock = isLock,
+            onLock = onLock,
         )
         // This overlaid view will only be visible when state.displaySearchResults is true
         RoomListSearchView(
@@ -148,6 +152,8 @@ private fun HomeScaffold(
     onCreateSpaceClick: () -> Unit,
     onMenuActionClick: (RoomListMenuAction) -> Unit,
     modifier: Modifier = Modifier,
+    isLock: Boolean,
+    onLock: () -> Unit,
 ) {
     fun onRoomClick(room: RoomListRoomSummary) {
         onRoomClick(room.roomId)
@@ -195,7 +201,9 @@ private fun HomeScaffold(
                 modifier = Modifier.hazeEffect(
                     state = hazeState,
                     style = HazeMaterials.thick(),
-                )
+                ),
+                isLock = isLock,
+                onLock = onLock
             )
         },
         floatingActionButton = {
@@ -351,7 +359,9 @@ internal fun HomeViewPreview(@PreviewParameter(HomeStateProvider::class) state: 
         onMenuActionClick = {},
         onDeclineInviteAndBlockUser = {},
         acceptDeclineInviteView = {},
-        leaveRoomView = {}
+        leaveRoomView = {},
+        isLock = true,
+        onLock = {}
     )
 }
 
@@ -371,6 +381,8 @@ internal fun HomeViewA11yPreview() = ElementPreview {
         onMenuActionClick = {},
         onDeclineInviteAndBlockUser = {},
         acceptDeclineInviteView = {},
-        leaveRoomView = {}
+        leaveRoomView = {},
+        isLock = true,
+        onLock = {}
     )
 }
