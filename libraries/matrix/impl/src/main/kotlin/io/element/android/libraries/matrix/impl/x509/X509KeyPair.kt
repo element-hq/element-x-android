@@ -9,9 +9,9 @@ package io.element.android.libraries.matrix.impl.x509
 
 import android.util.Base64
 import org.matrix.rustcomponents.sdk.X509Sign
-import org.matrix.rustcomponents.sdk.X509Signature
-import org.matrix.rustcomponents.sdk.X509SignatureAndKeyId
 import timber.log.Timber
+import uniffi.matrix_sdk_crypto.RawX509Signature
+import uniffi.matrix_sdk_crypto.X509SignatureScheme
 import java.security.PrivateKey
 import java.security.Signature
 import java.security.cert.Certificate
@@ -48,7 +48,7 @@ class X509KeyPair(private val key: PrivateKey, private val certificateChain: Arr
         this.deviceId = Base64.encodeToString(aki.sliceArray(6..aki.size - 1), Base64.NO_WRAP + Base64.NO_PADDING)
     }
 
-    override fun sign(message: ByteArray): X509SignatureAndKeyId {
+    override fun sign(message: ByteArray): RawX509Signature {
         val certificateChainBuilder = StringBuilder()
         for (cert in this.certificateChain) {
             if (cert != null) {
@@ -60,18 +60,16 @@ class X509KeyPair(private val key: PrivateKey, private val certificateChain: Arr
         }
 
         if (key.algorithm == "RSA") {
-            val signature = Signature.getInstance("SHA256withRSA/PSS");
+            val signature = Signature.getInstance("SHA512withRSA/PSS");
             signature.initSign(this.key)
             signature.update(message)
             Timber.i("X509: signing message %s", String(message))
 
-            val x509Signature = X509Signature(
+            return RawX509Signature(
                 certificateChain = certificateChainBuilder.toString(),
-                signatureScheme = 0x0806u, // https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-signaturescheme
-                signature = Base64.encodeToString(signature.sign(), Base64.NO_PADDING)
+                signatureScheme = X509SignatureScheme.RSA_PSS_SHA512,
+                signatureBytes = signature.sign(),
             )
-
-            return X509SignatureAndKeyId(deviceId = deviceId, signature = x509Signature)
         } else {
             error("X509: Unable to sign object: unsupported key algorithm "+ key.algorithm)
         }

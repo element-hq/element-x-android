@@ -7,11 +7,10 @@
 
 package io.element.android.libraries.matrix.impl.x509
 
-import android.util.Base64
-
-import org.matrix.rustcomponents.sdk.X509Signature
 import org.matrix.rustcomponents.sdk.X509Verify
 import timber.log.Timber
+import uniffi.matrix_sdk_crypto.RawX509Signature
+import uniffi.matrix_sdk_crypto.X509SignatureScheme
 import java.io.ByteArrayInputStream
 import java.nio.charset.StandardCharsets
 import java.security.KeyStore
@@ -28,11 +27,11 @@ import java.security.cert.X509Certificate
 
 
 class X509TrustRoot : X509Verify {
-    override fun verify(message: ByteArray, sig: X509Signature): Boolean {
+    override fun verify(message: ByteArray, sig: RawX509Signature): Boolean {
         Timber.i("X509TrustRoot.verify()")
         try {
-            if (sig.signatureScheme != 0x0806.toUShort()) {
-                Timber.i("X509: Unsupported signature scheme %#x", sig.signatureScheme)
+            if (sig.signatureScheme != X509SignatureScheme.RSA_PSS_SHA512) {
+                Timber.i("X509: Unsupported signature scheme %s", sig.signatureScheme)
                 return false
             }
 
@@ -48,10 +47,10 @@ class X509TrustRoot : X509Verify {
 
             /* Step 2: Check the signature on the signed object */
             val leafCert = certPath.certificates[0]
-            var signature = Signature.getInstance("SHA256withRSA/PSS");
-            signature.initVerify(leafCert.publicKey);
-            signature.update(message);
-            if (signature.verify(Base64.decode(sig.signature, Base64.NO_PADDING))) {
+            val signature = Signature.getInstance("SHA512withRSA/PSS")
+            signature.initVerify(leafCert.publicKey)
+            signature.update(message)
+            if (signature.verify(sig.signatureBytes)) {
                 Timber.i("X509: signature verified")
             } else {
                 Timber.w("X509: signature invalid. Message was: %s", String(message))
@@ -59,7 +58,7 @@ class X509TrustRoot : X509Verify {
             }
 
             return true
-        } catch ( e: Exception) {
+        } catch (e: Exception) {
             Timber.e(e,"X509: Error during verification")
             return false
         }
@@ -87,5 +86,4 @@ class X509TrustRoot : X509Verify {
 
         Timber.i("X509: Validated certPath via Trust anchor %s", result.trustAnchor.trustedCert.subjectDN)
     }
-
 }
