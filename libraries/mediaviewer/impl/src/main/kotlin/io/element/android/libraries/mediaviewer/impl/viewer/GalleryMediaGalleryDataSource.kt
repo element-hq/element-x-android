@@ -56,27 +56,27 @@ class GalleryMediaGalleryDataSource(
                     duration = null,
                 )
                 val id = UniqueId("${eventId?.value ?: "gallery"}_$index")
-                val mediaItem: MediaItem.Event = when {
-                    galleryItem.isVideo -> MediaItem.Video(
+                val mediaItem: MediaItem.Event = when (galleryItem.type) {
+                    GalleryItemData.Type.Video -> MediaItem.Video(
                         id = id,
                         eventId = eventId,
                         mediaInfo = itemMediaInfo,
                         mediaSource = galleryItem.mediaSource,
                         thumbnailSource = galleryItem.thumbnailSource,
                     )
-                    galleryItem.isAudio -> MediaItem.Audio(
+                    GalleryItemData.Type.Audio -> MediaItem.Audio(
                         id = id,
                         eventId = eventId,
                         mediaInfo = itemMediaInfo,
                         mediaSource = galleryItem.mediaSource,
                     )
-                    galleryItem.isFile -> MediaItem.File(
+                    GalleryItemData.Type.File -> MediaItem.File(
                         id = id,
                         eventId = eventId,
                         mediaInfo = itemMediaInfo,
                         mediaSource = galleryItem.mediaSource,
                     )
-                    else -> MediaItem.Image(
+                    GalleryItemData.Type.Image -> MediaItem.Image(
                         id = id,
                         eventId = eventId,
                         mediaInfo = itemMediaInfo,

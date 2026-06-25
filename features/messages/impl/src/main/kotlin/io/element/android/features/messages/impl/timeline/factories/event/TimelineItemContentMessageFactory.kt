@@ -280,15 +280,13 @@ class TimelineItemContentMessageFactory(
                                 filename = item.content.filename,
                                 mimeType = item.content.info?.mimetype ?: MimeTypes.OctetStream,
                                 mediaSource = item.content.source,
+                                type = GalleryItem.Type.Image,
                                 thumbnailSource = item.content.info?.thumbnailSource,
                                 width = item.content.info?.width?.toInt(),
                                 height = item.content.info?.height?.toInt(),
                                 thumbnailWidth = item.content.info?.thumbnailInfo?.width?.toInt(),
                                 thumbnailHeight = item.content.info?.thumbnailInfo?.height?.toInt(),
                                 blurhash = item.content.info?.blurhash,
-                                isVideo = false,
-                                isAudio = false,
-                                isFile = false,
                             )
                         }
                         is GalleryItemType.Video -> {
@@ -296,16 +294,14 @@ class TimelineItemContentMessageFactory(
                                 filename = item.content.filename,
                                 mimeType = item.content.info?.mimetype ?: MimeTypes.OctetStream,
                                 mediaSource = item.content.source,
+                                type = GalleryItem.Type.Video,
                                 thumbnailSource = item.content.info?.thumbnailSource,
                                 width = item.content.info?.width?.toInt(),
                                 height = item.content.info?.height?.toInt(),
                                 thumbnailWidth = item.content.info?.thumbnailInfo?.width?.toInt(),
                                 thumbnailHeight = item.content.info?.thumbnailInfo?.height?.toInt(),
                                 blurhash = item.content.info?.blurhash,
-                                isVideo = true,
-                                isAudio = false,
-                                isFile = false,
-                                duration = item.content.info?.duration ?: kotlin.time.Duration.ZERO,
+                                duration = item.content.info?.duration ?: Duration.ZERO,
                             )
                         }
                         is GalleryItemType.Audio -> {
@@ -313,15 +309,14 @@ class TimelineItemContentMessageFactory(
                                 filename = item.content.filename,
                                 mimeType = item.content.info?.mimetype ?: MimeTypes.OctetStream,
                                 mediaSource = item.content.source,
+                                type = GalleryItem.Type.Audio,
                                 thumbnailSource = null,
                                 width = null,
                                 height = null,
                                 thumbnailWidth = null,
                                 thumbnailHeight = null,
                                 blurhash = null,
-                                isVideo = false,
-                                isAudio = true,
-                                isFile = false,
+                                duration = item.content.info?.duration ?: Duration.ZERO,
                             )
                         }
                         is GalleryItemType.File -> {
@@ -329,15 +324,13 @@ class TimelineItemContentMessageFactory(
                                 filename = item.content.filename,
                                 mimeType = item.content.info?.mimetype ?: MimeTypes.OctetStream,
                                 mediaSource = item.content.source,
+                                type = GalleryItem.Type.File,
                                 thumbnailSource = item.content.info?.thumbnailSource,
                                 width = null,
                                 height = null,
                                 thumbnailWidth = null,
                                 thumbnailHeight = null,
                                 blurhash = null,
-                                isVideo = false,
-                                isAudio = false,
-                                isFile = true,
                             )
                         }
                         is GalleryItemType.Other -> null
@@ -345,7 +338,7 @@ class TimelineItemContentMessageFactory(
                 }
                 val hasPreviews = galleryItems.any { it.thumbnailSource != null }
                 val isMediaGallery = galleryItems.all { item ->
-                    item.isVideo || !item.isAudio && !item.isFile
+                    item.type.isMedia()
                 }
                 if (isMediaGallery && hasPreviews) {
                     TimelineItemGalleryContent(

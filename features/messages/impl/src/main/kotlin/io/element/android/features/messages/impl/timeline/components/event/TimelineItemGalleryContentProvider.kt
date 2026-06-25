@@ -21,15 +21,15 @@ class TimelineItemGalleryContentProvider : PreviewParameterProvider<TimelineItem
             aTimelineItemGalleryContent(
                 caption = "My vacation photos",
                 items = listOf(
-                    aGalleryItem(isVideo = false),
-                    aGalleryItem(isVideo = true, duration = 65.seconds),
-                    aGalleryItem(isVideo = false),
-                    aGalleryItem(isVideo = false),
+                    aGalleryItem(),
+                    aGalleryItem(type = GalleryItem.Type.Video, duration = 65.seconds),
+                    aGalleryItem(),
+                    aGalleryItem(),
                 ),
             ),
             aTimelineItemGalleryContent(
                 items = listOf(
-                    aGalleryItem(isVideo = false),
+                    aGalleryItem(),
                 ),
             ),
             aTimelineItemGalleryContent(
@@ -52,9 +52,9 @@ class TimelineItemGalleryContentProvider : PreviewParameterProvider<TimelineItem
             ),
             aTimelineItemGalleryContent(
                 items = listOf(
-                    aGalleryItem(isVideo = true, duration = 45.seconds),
-                    aGalleryItem(isVideo = false),
-                    aGalleryItem(isVideo = false),
+                    aGalleryItem(type = GalleryItem.Type.Video, duration = 45.seconds),
+                    aGalleryItem(),
+                    aGalleryItem(),
                 ),
             ),
             aTimelineItemGalleryContent(
@@ -75,22 +75,26 @@ class TimelineItemGalleryContentProvider : PreviewParameterProvider<TimelineItem
             ),
             aTimelineItemGalleryContent(
                 items = listOf(
-                    aGalleryItem(isVideo = false),
-                    aGalleryItem(isVideo = false),
-                    aGalleryItem(isVideo = true, duration = 120.seconds),
-                    aGalleryItem(isVideo = false),
-                    aGalleryItem(isVideo = false),
+                    aGalleryItem(),
+                    aGalleryItem(),
+                    aGalleryItem(type = GalleryItem.Type.Video, duration = 120.seconds),
+                    aGalleryItem(),
+                    aGalleryItem(),
                 ),
             ),
             aTimelineItemGalleryContent(
                 caption = "Many photos",
-                items = (1..12).map { aGalleryItem(isVideo = it == 3) },
+                items = (1..12).map {
+                    aGalleryItem(
+                        type = if (it == 3) GalleryItem.Type.Video else GalleryItem.Type.Image,
+                    )
+                },
             ),
         )
 }
 
 private fun aGalleryItem(
-    isVideo: Boolean = false,
+    type: GalleryItem.Type = GalleryItem.Type.Image,
     width: Int = 400,
     height: Int = 300,
     duration: Duration = Duration.ZERO,
@@ -105,9 +109,7 @@ private fun aGalleryItem(
         thumbnailWidth = width,
         thumbnailHeight = height,
         blurhash = null,
-        isVideo = isVideo,
-        isAudio = false,
-        isFile = false,
+        type = type,
         duration = duration,
     )
 }

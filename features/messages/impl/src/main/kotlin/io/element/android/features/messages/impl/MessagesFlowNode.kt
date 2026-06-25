@@ -47,6 +47,7 @@ import io.element.android.features.messages.impl.threads.list.ThreadsListNode
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.debug.EventDebugInfoNode
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.GalleryItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentWithAttachment
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
@@ -735,12 +736,10 @@ class MessagesFlowNode(
                         mimeType = galleryItem.mimeType,
                         mediaSource = galleryItem.mediaSource,
                         thumbnailSource = galleryItem.thumbnailSource,
-                        isVideo = galleryItem.isVideo,
-                        isAudio = galleryItem.isAudio,
-                        isFile = galleryItem.isFile,
+                        type = galleryItem.type.toMediaViewerType(),
                     )
                 }.reversed()
-                val mode = if (event.content.items.any { it.isVideo || !it.isAudio && !it.isFile }) {
+                val mode = if (event.content.items.any { it.type.isMedia() }) {
                     MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(timelineMode)
                 } else {
                     MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios(timelineMode)
@@ -836,5 +835,14 @@ class MessagesFlowNode(
         ) {
             BackstackWithOverlayBox(modifier)
         }
+    }
+}
+
+private fun GalleryItem.Type.toMediaViewerType(): GalleryItemData.Type {
+    return when (this) {
+        GalleryItem.Type.Image -> GalleryItemData.Type.Image
+        GalleryItem.Type.Video -> GalleryItemData.Type.Video
+        GalleryItem.Type.Audio -> GalleryItemData.Type.Audio
+        GalleryItem.Type.File -> GalleryItemData.Type.File
     }
 }

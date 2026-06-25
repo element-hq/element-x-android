@@ -17,7 +17,12 @@ data class GalleryItemData(
     val mimeType: String,
     val mediaSource: MediaSource,
     val thumbnailSource: MediaSource?,
-    val isVideo: Boolean,
-    val isAudio: Boolean,
-    val isFile: Boolean,
-) : Parcelable
+    val type: Type,
+) : Parcelable {
+    enum class Type {
+        Image,
+        Video,
+        Audio,
+        File,
+    }
+}

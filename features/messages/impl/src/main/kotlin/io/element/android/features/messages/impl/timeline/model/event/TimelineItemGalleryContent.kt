@@ -28,17 +28,24 @@ data class GalleryItem(
     val filename: String,
     val mimeType: String,
     val mediaSource: MediaSource,
+    val type: Type,
     val thumbnailSource: MediaSource?,
     val width: Int?,
     val height: Int?,
     val thumbnailWidth: Int?,
     val thumbnailHeight: Int?,
     val blurhash: String?,
-    val isVideo: Boolean,
-    val isAudio: Boolean,
-    val isFile: Boolean,
     val duration: Duration = Duration.ZERO,
 ) {
+    enum class Type {
+        Image,
+        Video,
+        Audio,
+        File;
+
+        fun isMedia() = this in setOf(Image, Video)
+    }
+
     val thumbnailMediaRequestData: MediaRequestData by lazy {
         MediaRequestData(
             source = thumbnailSource ?: mediaSource,

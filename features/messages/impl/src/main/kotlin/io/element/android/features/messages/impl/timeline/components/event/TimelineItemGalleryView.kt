@@ -336,7 +336,7 @@ private fun GalleryItemCell(
             contentDescription = item.filename,
         )
 
-        if (item.isVideo) {
+        if (item.type == GalleryItem.Type.Video) {
             VideoOverlay(duration = item.duration)
         }
 

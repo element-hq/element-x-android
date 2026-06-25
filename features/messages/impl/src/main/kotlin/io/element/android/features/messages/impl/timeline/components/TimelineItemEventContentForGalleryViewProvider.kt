@@ -8,6 +8,7 @@
 package io.element.android.features.messages.impl.timeline.components
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.messages.impl.timeline.model.event.GalleryItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aGalleryItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemAttachmentsContent
@@ -50,11 +51,11 @@ class TimelineItemEventContentForGalleryViewProvider :
                 caption = "Videos",
                 items = listOf(
                     aGalleryItem(
-                        isVideo = true,
+                        type = GalleryItem.Type.Video,
                         duration = Duration.parse("PT1M30S")
                     ),
                     aGalleryItem(
-                        isVideo = true,
+                        type = GalleryItem.Type.Video,
                         duration = Duration.parse("PT45S")
                     ),
                     aGalleryItem(),
