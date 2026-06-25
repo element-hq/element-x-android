@@ -39,33 +39,23 @@ fun MediaUploadInfo.toGalleryItemInfo(): GalleryItemInfo {
             file = file,
             imageInfo = imageInfo,
             thumbnailFile = thumbnailFile,
-            caption = null,
-            formattedCaption = null,
         )
         is MediaUploadInfo.Video -> GalleryItemInfo.Video(
             file = file,
             videoInfo = videoInfo,
             thumbnailFile = thumbnailFile,
-            caption = null,
-            formattedCaption = null,
         )
         is MediaUploadInfo.Audio -> GalleryItemInfo.Audio(
             file = file,
             audioInfo = audioInfo,
-            caption = null,
-            formattedCaption = null,
         )
         is MediaUploadInfo.VoiceMessage -> GalleryItemInfo.Audio(
             file = file,
             audioInfo = audioInfo,
-            caption = null,
-            formattedCaption = null,
         )
         is MediaUploadInfo.AnyFile -> GalleryItemInfo.MediaFile(
             file = file,
             fileInfo = fileInfo,
-            caption = null,
-            formattedCaption = null,
         )
     }
 }

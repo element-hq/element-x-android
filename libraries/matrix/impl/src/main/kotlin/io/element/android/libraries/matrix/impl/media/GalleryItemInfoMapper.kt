@@ -16,8 +16,8 @@ fun GalleryItemInfo.map(): RustGalleryItemInfo = when (this) {
         RustGalleryItemInfo.Image(
             imageInfo = imageInfo.map(),
             source = RustUploadSource.File(file.path),
-            caption = caption,
-            formattedCaption = formattedCaption?.map(),
+            caption = null,
+            formattedCaption = null,
             thumbnailSource = thumbnailFile?.path?.let(RustUploadSource::File),
         )
     }
@@ -25,8 +25,8 @@ fun GalleryItemInfo.map(): RustGalleryItemInfo = when (this) {
         RustGalleryItemInfo.Video(
             videoInfo = videoInfo.map(),
             source = RustUploadSource.File(file.path),
-            caption = caption,
-            formattedCaption = formattedCaption?.map(),
+            caption = null,
+            formattedCaption = null,
             thumbnailSource = thumbnailFile?.path?.let(RustUploadSource::File),
         )
     }
@@ -34,16 +34,16 @@ fun GalleryItemInfo.map(): RustGalleryItemInfo = when (this) {
         RustGalleryItemInfo.Audio(
             audioInfo = audioInfo.map(),
             source = RustUploadSource.File(file.path),
-            caption = caption,
-            formattedCaption = formattedCaption?.map(),
+            caption = null,
+            formattedCaption = null,
         )
     }
     is GalleryItemInfo.MediaFile -> {
         RustGalleryItemInfo.File(
             fileInfo = fileInfo.map(),
             source = RustUploadSource.File(file.path),
-            caption = caption,
-            formattedCaption = formattedCaption?.map(),
+            caption = null,
+            formattedCaption = null,
         )
     }
 }
