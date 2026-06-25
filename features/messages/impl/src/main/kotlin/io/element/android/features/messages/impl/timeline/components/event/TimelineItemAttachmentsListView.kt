@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
@@ -49,12 +51,17 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
+import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.wysiwyg.compose.EditorStyledText
+import io.element.android.wysiwyg.link.Link
 
 @Composable
 fun TimelineItemAttachmentsListView(
     content: TimelineItemAttachmentsContent,
     onContentClick: ((Int) -> Unit)?,
+    onLinkClick: (Link) -> Unit,
+    onLinkLongClick: (Link) -> Unit,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -81,25 +88,26 @@ fun TimelineItemAttachmentsListView(
 
         if (content.showCaption) {
             HorizontalDivider()
+            Spacer(modifier = Modifier.height(8.dp))
             val caption = if (LocalInspectionMode.current) {
                 SpannedString(content.caption)
             } else {
-                (content.formattedCaption ?: SpannedString(content.caption)).let {
-                    if (it is String) it else SpannedString(content.caption)
-                }
+                content.formattedCaption ?: SpannedString(content.caption)
             }
             CompositionLocalProvider(
                 LocalContentColor provides ElementTheme.colors.textPrimary,
                 LocalTextStyle provides ElementTheme.typography.fontBodyLgRegular
             ) {
-                Text(
+                EditorStyledText(
                     modifier = Modifier
-                        .padding(top = 8.dp, start = 4.dp, end = 4.dp)
+                        .padding(horizontal = 4.dp)
                         .widthIn(min = 120.dp),
-                    text = caption.toString(),
-                    style = ElementTheme.typography.fontBodyLgRegular,
-                    maxLines = 5,
-                    overflow = TextOverflow.Ellipsis,
+                    text = caption,
+                    style = ElementRichTextEditorStyle.textStyle(),
+                    onLinkClickedListener = onLinkClick,
+                    onLinkLongClickedListener = onLinkLongClick,
+                    releaseOnDetach = false,
+                    onTextLayout = ContentAvoidingLayout.measureLegacyLastTextLine(onContentLayoutChange = onContentLayoutChange),
                 )
             }
         }
@@ -229,6 +237,8 @@ internal fun TimelineItemAttachmentsListViewPreview(
     TimelineItemAttachmentsListView(
         content = content,
         onContentClick = {},
+        onLinkClick = {},
+        onLinkLongClick = {},
         onContentLayoutChange = {},
     )
 }

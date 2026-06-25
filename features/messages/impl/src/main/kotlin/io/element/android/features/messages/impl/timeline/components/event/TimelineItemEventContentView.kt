@@ -105,6 +105,8 @@ fun TimelineItemEventContentView(
         is TimelineItemAttachmentsContent -> TimelineItemAttachmentsListView(
             content = content,
             onContentClick = { index -> onGalleryItemClick?.invoke(index) },
+            onLinkClick = onLinkClick,
+            onLinkLongClick = onLinkLongClick,
             onContentLayoutChange = {},
             modifier = modifier,
         )
