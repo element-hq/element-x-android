@@ -230,7 +230,7 @@ private fun RowScope.RoomListMenuItems(
 private fun SpaceFilterButton(
     spaceFiltersState: SpaceFiltersState,
 ) {
-    if (spaceFiltersState == SpaceFiltersState.Disabled) return
+    if (spaceFiltersState is SpaceFiltersState.Disabled) return
 
     fun onClick() {
         when (spaceFiltersState) {
