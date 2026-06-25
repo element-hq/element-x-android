@@ -31,6 +31,7 @@ import io.element.android.features.messages.impl.crypto.sendfailure.resolve.Reso
 import io.element.android.features.messages.impl.timeline.components.MessageShieldData
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactoryConfig
+import io.element.android.features.messages.impl.timeline.groups.collapseRedactedRuns
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemTypingNotificationModel
@@ -63,6 +64,7 @@ import io.element.android.services.analytics.api.finishLongRunningTransaction
 import io.element.android.services.analyticsproviders.api.AnalyticsUserData
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
@@ -311,8 +313,15 @@ class TimelinePresenter(
             Timber.tag(tag).d("Timeline: $timelineMode | focus state: ${focusRequestState.value}")
         }
 
+        // Collapse runs of consecutive deleted messages into a single expandable group instead of
+        // showing each as its own placeholder, like element-web. Day dividers stay untouched, so a
+        // day is never emptied.
+        val visibleTimelineItems = remember(timelineItems) {
+            timelineItems.collapseRedactedRuns().toImmutableList()
+        }
+
         return TimelineState(
-            timelineItems = timelineItems,
+            timelineItems = visibleTimelineItems,
             timelineMode = timelineMode,
             timelineRoomInfo = timelineRoomInfo,
             newEventState = newEventState.value,
