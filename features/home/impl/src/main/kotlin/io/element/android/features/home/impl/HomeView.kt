@@ -70,7 +70,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbar
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
-
+//test
 @Composable
 fun HomeView(
     homeState: HomeState,
