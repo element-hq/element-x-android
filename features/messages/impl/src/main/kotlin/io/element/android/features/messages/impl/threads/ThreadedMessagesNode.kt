@@ -125,7 +125,8 @@ class ThreadedMessagesNode(
     }
 
     interface Callback : Plugin {
-        fun handleEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event, canUseOverlay: Boolean, galleryItemIndex: Int? = null): Boolean
+        fun handleEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event, canUseOverlay: Boolean): Boolean
+        fun handleGalleryItemClick(event: TimelineItem.Event, canUseOverlay: Boolean, galleryItemIndex: Int): Boolean
         fun navigateToPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?)
         fun navigateToRoomMemberDetails(userId: UserId)
         fun handlePermalinkClick(data: PermalinkData)
@@ -289,19 +290,8 @@ class ThreadedMessagesNode(
                             }
                         } == true
                     },
-                    onGalleryItemClick = { isLive, event, index ->
-                        timelineController?.let { controller ->
-                            if (isLive) {
-                                callback.handleEventClick(controller.mainTimelineMode(), event, canUseOverlay, index)
-                            } else {
-                                val detachedTimelineMode = controller.detachedTimelineMode()
-                                if (detachedTimelineMode != null) {
-                                    callback.handleEventClick(detachedTimelineMode, event, canUseOverlay, index)
-                                } else {
-                                    false
-                                }
-                            }
-                        } == true
+                    onGalleryEventItemClick = { event, index ->
+                        callback.handleGalleryItemClick(event, canUseOverlay, index)
                     },
                     onUserDataClick = callback::navigateToRoomMemberDetails,
                     onLinkClick = { url, customTab ->

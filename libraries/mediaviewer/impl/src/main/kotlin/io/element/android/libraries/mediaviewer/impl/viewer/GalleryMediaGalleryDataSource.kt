@@ -11,6 +11,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.mediaviewer.api.GalleryInfo
 import io.element.android.libraries.mediaviewer.api.GalleryItemData
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.impl.datasource.MediaGalleryDataSource
@@ -34,7 +35,7 @@ class GalleryMediaGalleryDataSource(
         fun createFrom(
             eventId: EventId?,
             galleryItems: List<GalleryItemData>,
-            mediaInfo: MediaInfo,
+            galleryInfo: GalleryInfo,
         ): GalleryMediaGalleryDataSource {
             val imageAndVideoItems = mutableListOf<MediaItem.Event>()
             val fileItems = mutableListOf<MediaItem.Event>()
@@ -43,15 +44,15 @@ class GalleryMediaGalleryDataSource(
                 val itemMediaInfo = MediaInfo(
                     filename = galleryItem.filename,
                     fileSize = null,
-                    caption = mediaInfo.caption,
+                    caption = galleryInfo.caption,
                     mimeType = galleryItem.mimeType,
                     formattedFileSize = "",
                     fileExtension = galleryItem.filename.substringAfterLast('.', ""),
-                    senderId = mediaInfo.senderId,
-                    senderName = mediaInfo.senderName,
-                    senderAvatar = mediaInfo.senderAvatar,
-                    dateSent = mediaInfo.dateSent,
-                    dateSentFull = mediaInfo.dateSentFull,
+                    senderId = galleryInfo.senderId,
+                    senderName = galleryInfo.senderName,
+                    senderAvatar = galleryInfo.senderAvatar,
+                    dateSent = galleryInfo.dateSent,
+                    dateSentFull = galleryInfo.dateSentFull,
                     waveform = null,
                     duration = null,
                 )

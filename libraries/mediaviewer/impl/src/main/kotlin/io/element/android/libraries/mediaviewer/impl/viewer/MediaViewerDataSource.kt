@@ -62,7 +62,6 @@ class MediaViewerDataSource(
     private val mediaFiles: ConcurrentHashMap<MediaSource, MediaFile> = ConcurrentHashMap()
 
     private val galleryMode = when (mode) {
-        MediaViewerMode.SingleMedia,
         is MediaViewerMode.TimelineImagesAndVideos -> MediaGalleryMode.Images
         is MediaViewerMode.TimelineFilesAndAudios -> MediaGalleryMode.Files
     }
