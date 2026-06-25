@@ -18,7 +18,6 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.extensions.runCatchingExceptions
@@ -32,13 +31,12 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.pressBack
 import io.element.android.tests.testutils.pressBackKey
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.collections.immutable.toImmutableList
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
-@RunWith(AndroidJUnit4::class)
-class ChangeRolesViewTest {
+class ChangeRolesViewTest : RobolectricTest() {
     @Test
     fun `passing a 'User' role throws an exception`() = runAndroidComposeUiTest {
         val exception = runCatchingExceptions {

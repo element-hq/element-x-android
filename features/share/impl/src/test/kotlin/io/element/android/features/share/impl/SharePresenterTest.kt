@@ -32,15 +32,13 @@ import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.appnavstate.impl.DefaultActiveRoomsHolder
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class SharePresenterTest {
+class SharePresenterTest : RobolectricTest() {
     @get:Rule
     val warmUpRule = WarmUpRule()
 

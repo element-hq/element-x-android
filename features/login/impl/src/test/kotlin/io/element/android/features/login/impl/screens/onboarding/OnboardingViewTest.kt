@@ -32,12 +32,10 @@ import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBack
+import io.element.android.tests.testutils.robolectric.RobolectricTestParameter
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestParameterInjector
 
-@RunWith(RobolectricTestParameterInjector::class)
-class OnboardingViewTest {
+class OnboardingViewTest : RobolectricTestParameter() {
     @Test
     fun `when can create account - clicking on create account calls the expected callback`() = runAndroidComposeUiTest {
         val eventSink = EventsRecorder<OnBoardingEvents>(expectEvents = false)

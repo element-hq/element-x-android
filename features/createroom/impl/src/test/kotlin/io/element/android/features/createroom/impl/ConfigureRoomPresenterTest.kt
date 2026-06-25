@@ -56,6 +56,7 @@ import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.test
 import io.mockk.mockk
 import kotlinx.collections.immutable.persistentMapOf
@@ -66,8 +67,6 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import java.io.File
 import java.util.Optional
 
@@ -75,8 +74,7 @@ private const val AN_URI_FROM_CAMERA = "content://uri_from_camera"
 private const val AN_URI_FROM_CAMERA_2 = "content://uri_from_camera_2"
 private const val AN_URI_FROM_GALLERY = "content://uri_from_gallery"
 
-@RunWith(RobolectricTestRunner::class)
-class ConfigureRoomPresenterTest {
+class ConfigureRoomPresenterTest : RobolectricTest() {
     @get:Rule
     val warmUpRule = WarmUpRule()
 

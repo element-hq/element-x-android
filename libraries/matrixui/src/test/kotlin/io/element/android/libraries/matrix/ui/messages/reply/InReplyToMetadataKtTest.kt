@@ -8,7 +8,6 @@
 
 package io.element.android.libraries.matrix.ui.messages.reply
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
@@ -47,14 +46,13 @@ import io.element.android.libraries.matrix.test.timeline.item.event.aRoomMembers
 import io.element.android.libraries.matrix.ui.components.A_BLUR_HASH
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.withConfigurationAndContext
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
 import kotlin.time.Duration.Companion.minutes
 
-@RunWith(AndroidJUnit4::class)
-class InReplyToMetadataKtTest {
+class InReplyToMetadataKtTest : RobolectricTest() {
     @Test
     fun `any message content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {

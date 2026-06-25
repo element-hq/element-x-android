@@ -13,6 +13,8 @@ import androidx.compose.ui.graphics.Color
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
+import io.element.android.features.lockscreen.api.LockScreenService
+import io.element.android.features.lockscreen.test.FakeLockScreenService
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
@@ -510,6 +512,7 @@ fun TestScope.createDefaultNotificationDrawerManager(
     enterpriseService: EnterpriseService = FakeEnterpriseService(),
     sessionObserver: SessionObserver = FakeSessionObserver(),
     analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
+    lockScreenService: LockScreenService = FakeLockScreenService(),
 ): DefaultNotificationDrawerManager {
     return DefaultNotificationDrawerManager(
         notificationDisplayer = notificationDisplayer,
@@ -530,6 +533,7 @@ fun TestScope.createDefaultNotificationDrawerManager(
         matrixClientProvider = matrixClientProvider,
         imageLoaderHolder = FakeImageLoaderHolder(),
         activeNotificationsProvider = activeNotificationsProvider,
+        lockScreenService = lockScreenService,
         sessionObserver = sessionObserver,
     )
 }

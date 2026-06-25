@@ -9,7 +9,7 @@ package io.element.android.libraries.matrix.impl.storage
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.matrix.impl.paths.SessionPaths
+import io.element.android.libraries.matrix.api.paths.SessionPaths
 
 interface SqliteStoreBuilderProvider {
     fun provide(sessionPaths: SessionPaths): SqliteStoreBuilder

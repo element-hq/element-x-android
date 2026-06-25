@@ -20,6 +20,26 @@
   <string name="screen_create_new_recovery_key_list_item_4">"Uue taastevõtme loomiseks palun järgi juhendit"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"Salvesta oma uus taastevõti kas salasõnahalduris, krüptitud failis või mõnel muul turvalisel viisil"</string>
   <string name="screen_create_new_recovery_key_title">"Lähtesta oma konto krüptimine mõnest muust oma seadmest"</string>
+  <string name="screen_custom_recovery_key_confirm_error_mismatch">"Sisestatud taastevõti ei vasta süsteemis leiduvale"</string>
+  <string name="screen_custom_recovery_key_confirm_submit">"Lõpeta seadistus"</string>
+  <string name="screen_custom_recovery_key_confirm_subtitle">"Sisesta oma taastevõti uuesti."</string>
+  <string name="screen_custom_recovery_key_confirm_title">"Korda oma taastevõtit"</string>
+  <plurals name="screen_custom_recovery_key_input_notice">
+    <item quantity="other">"Vähemalt %1$s tähemärki. Ära kasuta oma konto salasõna."</item>
+  </plurals>
+  <string name="screen_custom_recovery_key_input_strength">"Tugevus"</string>
+  <string name="screen_custom_recovery_key_input_strength_a11y">"Salafraasi tugevus: %1$s"</string>
+  <string name="screen_custom_recovery_key_input_strength_moderate">"Mõõdukas"</string>
+  <string name="screen_custom_recovery_key_input_strength_strong">"Tugev"</string>
+  <string name="screen_custom_recovery_key_input_strength_very_strong">"Väga tugev"</string>
+  <string name="screen_custom_recovery_key_input_strength_very_weak">"Väga kehv"</string>
+  <string name="screen_custom_recovery_key_input_strength_weak">"Kehv"</string>
+  <string name="screen_custom_recovery_key_input_subtitle">"Sisesta taastevõti, mille saad meelde jätta."</string>
+  <string name="screen_custom_recovery_key_input_title">"Sisesta taastevõti"</string>
+  <string name="screen_custom_recovery_key_loading_a11y">"Laadin taastevõtme nõudeid"</string>
+  <string name="screen_custom_recovery_key_success_notice">"Taastevõtme muutmiseks ava menüü: Seadistused → Krüptimine → Varundamine"</string>
+  <string name="screen_custom_recovery_key_success_subtitle">"Võid oma taastevõtit kasutada uute seadmete verifitseerimiseks või krüptitud vestluste taastamiseks, kui kaotate juurdepääsu kõigile oma seadmetele."</string>
+  <string name="screen_custom_recovery_key_success_title">"Sinu varundus on nüüd täielikult seadistatud"</string>
   <string name="screen_encryption_reset_action_continue_reset">"Jätka lähtestamisega"</string>
   <string name="screen_encryption_reset_bullet_1">"Sinu kasutajakonto andmed, kontaktid, eelistused ja vestluste loend säiluvad"</string>
   <string name="screen_encryption_reset_bullet_2">"Sa kaotad seniste sõnumite ajaloo"</string>

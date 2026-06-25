@@ -7,6 +7,10 @@
   -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application>
+        <meta-data
+            android:name="firebase_messaging_installation_id_enabled"
+            android:value="true" />
+
         <!-- Firebase components -->
         <meta-data
             android:name="firebase_analytics_collection_deactivated"

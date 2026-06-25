@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_edit_room_address_title">"Рэдагаваць адрас"</string>
   <string name="screen_manage_authorized_spaces_your_spaces_section_title">"Вашы прасторы"</string>
+  <string name="screen_security_and_privacy_room_address_section_header">"Адрас"</string>
 </resources>

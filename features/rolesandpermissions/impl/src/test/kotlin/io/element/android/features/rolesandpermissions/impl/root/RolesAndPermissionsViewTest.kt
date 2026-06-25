@@ -14,7 +14,6 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.rolesandpermissions.impl.R
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.room.RoomMember
@@ -25,13 +24,12 @@ import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledTimes
 import io.element.android.tests.testutils.pressBack
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.setSafeContent
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
-@RunWith(AndroidJUnit4::class)
-class RolesAndPermissionsViewTest {
+class RolesAndPermissionsViewTest : RobolectricTest() {
     @Test
     fun `click on back invokes expected callback`() = runAndroidComposeUiTest {
         ensureCalledOnce { callback ->

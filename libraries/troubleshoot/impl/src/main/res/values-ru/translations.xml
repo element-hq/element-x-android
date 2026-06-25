@@ -7,6 +7,6 @@
   <string name="troubleshoot_notifications_screen_notice">"Выполните тесты, чтобы выявить проблемы в конфигурации, из-за которой уведомления могут работать не так, как ожидалось."</string>
   <string name="troubleshoot_notifications_screen_quick_fix_action">"Попытаться исправить"</string>
   <string name="troubleshoot_notifications_screen_success">"Все тесты прошли успешно."</string>
-  <string name="troubleshoot_notifications_screen_title">"Уведомления об устранении неполадок"</string>
+  <string name="troubleshoot_notifications_screen_title">"Устранение неполадок с уведомлениями"</string>
   <string name="troubleshoot_notifications_screen_waiting">"Некоторые тесты требуют вашего внимания. Пожалуйста, проверьте подробности."</string>
 </resources>

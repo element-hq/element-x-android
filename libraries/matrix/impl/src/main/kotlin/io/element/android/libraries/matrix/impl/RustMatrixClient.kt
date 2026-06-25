@@ -32,6 +32,7 @@ import io.element.android.libraries.matrix.api.linknewdevice.LinkDesktopHandler
 import io.element.android.libraries.matrix.api.linknewdevice.LinkMobileHandler
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.oauth.AccountManagementAction
+import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -81,7 +82,6 @@ import io.element.android.libraries.matrix.impl.spaces.RustSpaceService
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import io.element.android.libraries.matrix.impl.sync.map
 import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
-import io.element.android.libraries.matrix.impl.util.SessionPathsProvider
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
@@ -137,6 +137,7 @@ import org.matrix.rustcomponents.sdk.RoomPreset as RustRoomPreset
 import org.matrix.rustcomponents.sdk.SyncService as ClientSyncService
 
 class RustMatrixClient(
+    override val sessionPaths: SessionPaths,
     private val innerClient: Client,
     private val sessionStore: SessionStore,
     private val sessionDelegate: RustClientSessionDelegate,
@@ -186,8 +187,6 @@ class RustMatrixClient(
         client = innerClient,
         sessionDispatcher = sessionDispatcher,
     )
-
-    private val sessionPathsProvider = SessionPathsProvider(sessionStore)
 
     private val roomSyncSubscriber: RoomSyncSubscriber = RoomSyncSubscriber(innerRoomListService, dispatchers)
 
@@ -824,17 +823,16 @@ class RustMatrixClient(
     private suspend fun getCacheSize(
         includeCryptoDb: Boolean = false,
     ): Long = withContext(sessionDispatcher) {
-        val sessionDirectory = sessionPathsProvider.provides(sessionId) ?: return@withContext 0L
-        val cacheSize = sessionDirectory.cacheDirectory.getSizeOfFiles()
+        val cacheSize = sessionPaths.cacheDirectory.getSizeOfFiles()
         if (includeCryptoDb) {
-            cacheSize + sessionDirectory.fileDirectory.getSizeOfFiles()
+            cacheSize + sessionPaths.fileDirectory.getSizeOfFiles()
         } else {
             cacheSize + listOf(
                 "matrix-sdk-state.sqlite3",
                 "matrix-sdk-state.sqlite3-shm",
                 "matrix-sdk-state.sqlite3-wal",
             ).map { fileName ->
-                File(sessionDirectory.fileDirectory, fileName)
+                File(sessionPaths.fileDirectory, fileName)
             }.sumOf { file ->
                 file.length()
             }
@@ -843,7 +841,7 @@ class RustMatrixClient(
 
     private suspend fun deleteSessionDirectory() = withContext(sessionDispatcher) {
         // Delete all the files for this session
-        sessionPathsProvider.provides(sessionId)?.deleteRecursively()
+        sessionPaths.deleteRecursively()
     }
 
     private fun scheduleDatabaseVacuum() {

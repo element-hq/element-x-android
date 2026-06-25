@@ -95,7 +95,7 @@ class RoomMemberListNode(
 }
 
 interface RoomMemberListNavigator {
-    fun exitRoomMemberList() {}
-    fun openRoomMemberDetails(roomMemberId: UserId) {}
-    fun openInviteMembers() {}
+    fun exitRoomMemberList()
+    fun openRoomMemberDetails(roomMemberId: UserId)
+    fun openInviteMembers()
 }

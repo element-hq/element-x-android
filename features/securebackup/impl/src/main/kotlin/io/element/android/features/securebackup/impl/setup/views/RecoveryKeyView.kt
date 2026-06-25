@@ -9,7 +9,6 @@
 package io.element.android.features.securebackup.impl.setup.views
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -50,6 +49,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.PasswordVisibilityToggle
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.testtags.TestTags
@@ -223,16 +223,10 @@ private fun RecoveryKeyFormContent(
         ),
         placeholder = stringResource(id = R.string.screen_recovery_key_confirm_key_placeholder),
         trailingIcon = {
-            val image =
-                if (state.displayTextFieldContents) CompoundIcons.VisibilityOn() else CompoundIcons.VisibilityOff()
-            val description =
-                if (state.displayTextFieldContents) stringResource(CommonStrings.a11y_hide_password) else stringResource(CommonStrings.a11y_show_password)
-            Box(Modifier.clickable { toggleRecoveryKeyVisibility(!state.displayTextFieldContents) }) {
-                Icon(
-                    imageVector = image,
-                    contentDescription = description,
-                )
-            }
+            PasswordVisibilityToggle(
+                visible = state.displayTextFieldContents,
+                onToggle = { toggleRecoveryKeyVisibility(!state.displayTextFieldContents) },
+            )
         },
     )
 }

@@ -9,7 +9,6 @@
 package io.element.android.features.messages.impl.utils
 
 import android.net.Uri
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -27,11 +26,10 @@ import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
 import io.element.android.libraries.textcomposer.mentions.MentionType
 import io.element.android.libraries.textcomposer.mentions.getMentionSpans
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class DefaultTextPillificationHelperTest {
+class DefaultTextPillificationHelperTest : RobolectricTest() {
     @Test
     fun `pillify - adds pills for user ids`() {
         val text = "A @user:server.com"

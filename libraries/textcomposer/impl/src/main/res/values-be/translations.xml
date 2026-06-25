@@ -4,7 +4,9 @@
   <string name="rich_text_editor_bullet_list">"Пераключыць маркіраваны спіс"</string>
   <string name="rich_text_editor_close_formatting_options">"Закрыць параметры фарматавання"</string>
   <string name="rich_text_editor_code_block">"Пераключыць блок кода"</string>
+  <string name="rich_text_editor_composer_encrypted_placeholder">"Зашыфраванае паведамленне…"</string>
   <string name="rich_text_editor_composer_placeholder">"Паведамленне…"</string>
+  <string name="rich_text_editor_composer_unencrypted_placeholder">"Незашыфраванае паведамленне…"</string>
   <string name="rich_text_editor_create_link">"Стварыць спасылку"</string>
   <string name="rich_text_editor_edit_link">"Рэдагаваць спасылку"</string>
   <string name="rich_text_editor_format_bold">"Ужыць тоўсты шрыфт"</string>

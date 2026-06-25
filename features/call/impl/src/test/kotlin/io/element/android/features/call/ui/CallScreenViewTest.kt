@@ -15,7 +15,6 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.call.impl.pip.PictureInPictureEvent
 import io.element.android.features.call.impl.pip.PictureInPictureState
 import io.element.android.features.call.impl.pip.aPictureInPictureState
@@ -26,9 +25,9 @@ import io.element.android.features.call.impl.ui.JavascriptBackHandlerBridge
 import io.element.android.features.call.impl.ui.aCallScreenState
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.pressBackKey
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.Implementation
 import org.robolectric.annotation.Implements
@@ -36,8 +35,7 @@ import org.robolectric.annotation.Resetter
 import org.robolectric.shadows.ShadowWebView
 
 @OptIn(ExperimentalTestApi::class)
-@RunWith(AndroidJUnit4::class)
-class CallScreenViewTest {
+class CallScreenViewTest : RobolectricTest() {
     @Test
     fun `pressing back key triggers hangup when no web view is available and pip is unsupported`() = runAndroidComposeUiTest {
         val callEvents = EventsRecorder<CallScreenEvent>()

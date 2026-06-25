@@ -15,7 +15,6 @@ import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
@@ -24,11 +23,10 @@ import io.element.android.libraries.matrix.ui.room.RoomMemberIdentityStateChange
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class IdentityChangeStateViewTest {
+class IdentityChangeStateViewTest : RobolectricTest() {
     @Test
     fun `show and resolve pin violation`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<IdentityChangeEvent>()

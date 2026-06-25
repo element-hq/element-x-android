@@ -18,28 +18,28 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 
 /**
- * This class store the Firebase token in SharedPrefs.
+ * This class stores the Firebase installationId in SharedPrefs.
  */
 interface FirebaseStore {
-    fun getFcmToken(): String?
-    fun fcmTokenFlow(): Flow<String?>
-    fun storeFcmToken(token: String?)
+    fun getInstallationId(): String?
+    fun fcmInstallationIdFlow(): Flow<String?>
+    fun storeInstallationId(installationId: String?)
 }
 
 @ContributesBinding(AppScope::class)
 class SharedPreferencesFirebaseStore(
     private val sharedPreferences: SharedPreferences,
 ) : FirebaseStore {
-    override fun getFcmToken(): String? {
-        return sharedPreferences.getString(PREFS_KEY_FCM_TOKEN, null)
+    override fun getInstallationId(): String? {
+        return sharedPreferences.getString(PREFS_KEY_FCM_INSTALLATION_ID, null)
     }
 
-    override fun fcmTokenFlow(): Flow<String?> {
-        val flow = MutableStateFlow(getFcmToken())
+    override fun fcmInstallationIdFlow(): Flow<String?> {
+        val flow = MutableStateFlow(getInstallationId())
         val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, k ->
-            if (k == PREFS_KEY_FCM_TOKEN) {
+            if (k == PREFS_KEY_FCM_INSTALLATION_ID) {
                 try {
-                    flow.value = getFcmToken()
+                    flow.value = getInstallationId()
                 } catch (_: Exception) {
                     flow.value = null
                 }
@@ -50,13 +50,13 @@ class SharedPreferencesFirebaseStore(
             .onCompletion { sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener) }
     }
 
-    override fun storeFcmToken(token: String?) {
+    override fun storeInstallationId(installationId: String?) {
         sharedPreferences.edit {
-            putString(PREFS_KEY_FCM_TOKEN, token)
+            putString(PREFS_KEY_FCM_INSTALLATION_ID, installationId)
         }
     }
 
     companion object {
-        private const val PREFS_KEY_FCM_TOKEN = "FCM_TOKEN"
+        private const val PREFS_KEY_FCM_INSTALLATION_ID = "FCM_TOKEN"
     }
 }

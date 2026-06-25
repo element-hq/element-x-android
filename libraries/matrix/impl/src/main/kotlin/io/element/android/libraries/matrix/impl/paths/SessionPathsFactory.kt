@@ -11,6 +11,7 @@ package io.element.android.libraries.matrix.impl.paths
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.BaseDirectory
 import io.element.android.libraries.di.CacheDirectory
+import io.element.android.libraries.matrix.api.paths.SessionPaths
 import java.io.File
 import java.util.UUID
 

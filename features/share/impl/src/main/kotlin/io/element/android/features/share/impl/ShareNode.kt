@@ -70,7 +70,10 @@ class ShareNode(
         return roomSelectEntryPoint.createNode(
             parentNode = this,
             buildContext = buildContext,
-            params = RoomSelectEntryPoint.Params(mode = RoomSelectMode.Share),
+            params = RoomSelectEntryPoint.Params(
+                mode = RoomSelectMode.Share,
+                maxNumberOfRooms = RoomSelectEntryPoint.DEFAULT_MAX_NUMBER_OF_ROOMS,
+            ),
             callback = callback,
         )
     }

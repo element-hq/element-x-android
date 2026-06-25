@@ -16,16 +16,14 @@ import androidx.core.text.inSpans
 import androidx.core.text.toSpannable
 import com.google.common.truth.Truth.assertThat
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 import org.robolectric.shadow.api.Shadow.newInstanceOf
 
-@RunWith(RobolectricTestRunner::class)
-class LinkifierHelperTest {
+class LinkifierHelperTest : RobolectricTest() {
     @get:Rule
     val warmUpRule = WarmUpRule()
 

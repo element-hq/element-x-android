@@ -29,13 +29,11 @@ import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.oauth.api.OAuthAction
 import io.element.android.libraries.oauth.test.FakeOAuthIntentResolver
 import io.element.android.tests.testutils.lambda.lambdaError
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
-@RunWith(RobolectricTestRunner::class)
-class IntentResolverTest {
+class IntentResolverTest : RobolectricTest() {
     @Test
     fun `resolve launcher intent should return null`() {
         val sut = createIntentResolver()

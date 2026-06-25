@@ -10,8 +10,8 @@ package io.element.android.libraries.matrix.impl.mapper
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.auth.external.ExternalSession
+import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustSession
-import io.element.android.libraries.matrix.impl.paths.SessionPaths
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL_2

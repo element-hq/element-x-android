@@ -41,7 +41,7 @@ class PinUnlockActivity : AppCompatActivity() {
         }
     }
 
-    @Inject lateinit var presenter: PinUnlockPresenter
+    @Inject lateinit var presenterFactory: PinUnlockPresenter.Factory
     @Inject lateinit var lockScreenService: LockScreenService
     @Inject lateinit var appPreferencesStore: AppPreferencesStore
     @Inject lateinit var featureFlagService: FeatureFlagService
@@ -52,6 +52,7 @@ class PinUnlockActivity : AppCompatActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         bindings<PinUnlockBindings>().inject(this)
+        val presenter = presenterFactory.create(forDeviceUnlock = false)
         setContent {
             val colors by remember {
                 enterpriseService.semanticColorsFlow(sessionId = null)
@@ -67,6 +68,9 @@ class PinUnlockActivity : AppCompatActivity() {
                 PinUnlockView(
                     state = state,
                     isInAppUnlock = false,
+                    onCancel = {
+                        // Should not happen
+                    },
                 )
             }
         }

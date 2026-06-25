@@ -13,7 +13,6 @@ import androidx.compose.runtime.InternalComposeApi
 import androidx.compose.runtime.currentComposer
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
@@ -25,6 +24,7 @@ import io.element.android.emojibasebindings.EmojibaseCategory
 import io.element.android.emojibasebindings.EmojibaseStore
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -33,10 +33,8 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class EmojiPickerPresenterTest {
+class EmojiPickerPresenterTest : RobolectricTest() {
     @get:Rule
     val warmUpRule = WarmUpRule()
 

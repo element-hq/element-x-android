@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.matrix.impl.room
 
+import io.element.android.appconfig.TimelineConfig
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.core.extensions.mapFailure
@@ -222,7 +223,13 @@ class JoinedRustRoom(
             )
             is CreateTimelineParams.Focused,
             CreateTimelineParams.PinnedOnly,
-            is CreateTimelineParams.Threaded -> TimelineFilter.All
+            is CreateTimelineParams.Threaded -> {
+                RustTimelineEventFilterFactory().create(
+                    joinRule = roomInfoFlow.value.joinRule,
+                    isEncrypted = roomInfoFlow.value.isEncrypted,
+                    excludedStateTypes = TimelineConfig.excludedEvents,
+                )?.let(TimelineFilter::EventFilter) ?: TimelineFilter.All
+            }
         }
 
         val internalIdPrefix = when (createTimelineParams) {

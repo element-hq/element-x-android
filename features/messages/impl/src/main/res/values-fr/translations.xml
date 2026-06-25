@@ -16,10 +16,18 @@
   <string name="emoji_picker_category_places">"Voyages &amp; lieux"</string>
   <string name="emoji_picker_category_recent">"Emojis récents"</string>
   <string name="emoji_picker_category_symbols">"Symboles"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally">"Retourner l’image horizontalement"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Retournée horizontalement"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Originale"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically">"Retourner l’image verticalement"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_flipped">"Retournée verticalement"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_original">"Originale"</string>
+  <string name="screen_image_edition_a11y_rotate_to_the_left">"Pivoter l’image vers la gauche"</string>
   <plurals name="screen_image_edition_a11y_rotation_state">
     <item quantity="one">"%1$d degré"</item>
     <item quantity="other">"%1$d degrés"</item>
   </plurals>
+  <string name="screen_image_edition_title">"Modifier la photo"</string>
   <string name="screen_media_upload_preview_caption_warning">"Les légendes peuvent ne pas être visibles pour les utilisateurs d’anciennes applications."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Cliquez pour modifier la qualité d’envoi de la vidéo"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Le fichier n’a pas pu être envoyé."</string>
@@ -30,6 +38,7 @@
   <string name="screen_media_upload_preview_item_count">"Élément %1$d sur %2$d"</string>
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Optimiser la qualité de l’image"</string>
   <string name="screen_media_upload_preview_processing">"Traitement en cours…"</string>
+  <string name="screen_media_upload_preview_title">"Ajouter un média"</string>
   <string name="screen_report_content_block_user">"Bloquer l’utilisateur"</string>
   <string name="screen_report_content_block_user_hint">"Cochez si vous souhaitez masquer tous les messages actuels et futurs de cet utilisateur."</string>
   <string name="screen_report_content_explanation">"Ce message sera signalé à l’administrateur de votre serveur d’accueil. Il ne pourra lire aucun message chiffré."</string>

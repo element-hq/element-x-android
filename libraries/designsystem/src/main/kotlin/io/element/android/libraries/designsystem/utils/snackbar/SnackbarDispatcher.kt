@@ -18,39 +18,35 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import io.element.android.libraries.designsystem.theme.components.Snackbar
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 /**
  * A global dispatcher of [SnackbarMessage] to be displayed in [Snackbar] via a [SnackbarHostState].
+ *
+ * The current head of the queue is exposed as a [MutableStateFlow] so that every collector — including
+ * hosts that subscribe *after* a message was posted (e.g. a screen recomposing as a flow pops back to
+ * it) — observes the current message. An earlier mutex-gated implementation delivered each message to
+ * whichever single collector happened to be parked on the lock, which could starve the host that was
+ * actually on screen, dropping the snackbar.
  */
 class SnackbarDispatcher {
-    private val queueMutex = Mutex()
     private val snackBarMessageQueue = ArrayDeque<SnackbarMessage>()
-    val snackbarMessage: Flow<SnackbarMessage?> = flow {
-        while (currentCoroutineContext().isActive) {
-            queueMutex.lock()
-            emit(snackBarMessageQueue.firstOrNull())
-        }
-    }
+    private val currentMessage = MutableStateFlow<SnackbarMessage?>(null)
 
+    val snackbarMessage: Flow<SnackbarMessage?> = currentMessage.asStateFlow()
+
+    @Synchronized
     fun post(message: SnackbarMessage) {
-        if (snackBarMessageQueue.isEmpty()) {
-            snackBarMessageQueue.add(message)
-            if (queueMutex.isLocked) queueMutex.unlock()
-        } else {
-            snackBarMessageQueue.add(message)
-        }
+        snackBarMessageQueue.add(message)
+        currentMessage.value = snackBarMessageQueue.firstOrNull()
     }
 
+    @Synchronized
     fun clear() {
-        if (snackBarMessageQueue.isNotEmpty()) {
-            snackBarMessageQueue.removeFirstOrNull()
-            if (queueMutex.isLocked) queueMutex.unlock()
-        }
+        snackBarMessageQueue.removeFirstOrNull()
+        currentMessage.value = snackBarMessageQueue.firstOrNull()
     }
 }
 

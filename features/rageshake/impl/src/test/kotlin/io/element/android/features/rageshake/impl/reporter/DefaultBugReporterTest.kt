@@ -32,6 +32,7 @@ import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -46,12 +47,9 @@ import okhttp3.mockwebserver.RecordedRequest
 import okio.buffer
 import okio.source
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
-@RunWith(RobolectricTestRunner::class)
-class DefaultBugReporterTest {
+class DefaultBugReporterTest : RobolectricTest() {
     @Test
     fun `test sendBugReport success`() = runTest {
         val server = MockWebServer()

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_avatar">"添加头像"</string>
   <string name="a11y_add_reaction">"添加反应：%1$s"</string>
   <string name="a11y_address">"地址"</string>
   <string name="a11y_avatar">"头像"</string>
@@ -28,6 +29,7 @@
   <string name="a11y_page_n">"第 %1$d 页"</string>
   <string name="a11y_pause">"暂停"</string>
   <string name="a11y_paused_voice_message">"语音消息，时长：%1$s，当前位置：%2$s"</string>
+  <string name="a11y_photo_preview">"照片预览"</string>
   <string name="a11y_pin_field">"PIN 字段"</string>
   <string name="a11y_pinned_location">"已钉住的位置"</string>
   <string name="a11y_play">"播放"</string>
@@ -60,6 +62,7 @@
   <string name="a11y_tombstoned_room">"已封存的房间"</string>
   <string name="a11y_user_avatar">"用户头像"</string>
   <string name="a11y_user_menu">"用户菜单"</string>
+  <string name="a11y_video_preview">"视频预览"</string>
   <string name="a11y_view_avatar">"查看头像"</string>
   <string name="a11y_view_details">"查看详情"</string>
   <string name="a11y_voice_message">"语音消息，时长：%1$s"</string>
@@ -211,6 +214,7 @@
   <string name="common_blocked_users">"已屏蔽用户"</string>
   <string name="common_bubbles">"气泡"</string>
   <string name="common_call_declined">"来电被拒接"</string>
+  <string name="common_call_in_progress">"通话进行中"</string>
   <string name="common_call_started">"通话已开始"</string>
   <string name="common_call_you_declined">"你已拒接来电"</string>
   <string name="common_chat_backup">"聊天记录备份"</string>
@@ -255,6 +259,7 @@
   <string name="common_forward_message">"转发消息"</string>
   <string name="common_frequently_used">"常用"</string>
   <string name="common_gif">"GIF"</string>
+  <string name="common_group_call_in_progress">"群组通话进行中"</string>
   <string name="common_image">"图片"</string>
   <string name="common_in_reply_to">"回复 %1$s"</string>
   <string name="common_install_apk_android">"安装 APK"</string>
@@ -390,6 +395,7 @@
   <string name="common_unmute">"解除静音"</string>
   <string name="common_unsupported_call">"不受支持的通话"</string>
   <string name="common_unsupported_event">"不支持的事件"</string>
+  <string name="common_user_started_a_call">"%1$s 开始了通话"</string>
   <string name="common_username">"用户名"</string>
   <string name="common_verification_cancelled">"验证已取消"</string>
   <string name="common_verification_complete">"验证完成"</string>
@@ -464,6 +470,7 @@
   <string name="invite_friends_text">"嗨！请通过 %1$s 与我联系：%2$s"</string>
   <string name="live_location_sharing_foreground_service_channel_title_android">"正在共享实时位置"</string>
   <string name="live_location_sharing_foreground_service_message_android">"位置共享正在进行"</string>
+  <string name="live_location_sharing_foreground_service_title_android">"%1$s 实时位置"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"摇一摇以报告 bug"</string>
   <string name="screen_bug_report_a11y_screenshot">"屏幕截图"</string>
@@ -521,6 +528,9 @@
   <string name="screen_space_list_title">"空间"</string>
   <string name="screen_static_location_sheet_timestamp_description">"已共享 %1$s"</string>
   <string name="screen_static_location_sheet_title">"在地图上"</string>
+  <plurals name="screen_timeline_active_call_extra_joined_count">
+    <item quantity="other">"+ %1$d 人已加入"</item>
+  </plurals>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"消息未能发送，因为 %1$s 的已验证数字身份已被重置。"</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"消息未能发送，因为 %1$s 尚未验证所有设备。"</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"消息未能发送，因为你有尚未验证的设备。"</string>

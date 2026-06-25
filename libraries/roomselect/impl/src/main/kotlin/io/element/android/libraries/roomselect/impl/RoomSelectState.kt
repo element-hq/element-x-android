@@ -16,9 +16,12 @@ import kotlinx.collections.immutable.ImmutableList
 
 data class RoomSelectState(
     val mode: RoomSelectMode,
+    val maxNumberOfRooms: Int,
     val resultState: SearchBarResultState<ImmutableList<SelectRoomInfo>>,
     val searchQuery: TextFieldState,
     val isSearchActive: Boolean,
     val selectedRooms: ImmutableList<SelectRoomInfo>,
-    val eventSink: (RoomSelectEvents) -> Unit
-)
+    val eventSink: (RoomSelectEvent) -> Unit,
+) {
+    val canSelectMoreRooms = selectedRooms.size < maxNumberOfRooms
+}

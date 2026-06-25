@@ -15,7 +15,7 @@
   <string name="screen_link_new_device_error_not_supported_title">"QR-код не поддерживается"</string>
   <string name="screen_link_new_device_error_request_cancelled_subtitle">"Вход на другом устройстве был отменен."</string>
   <string name="screen_link_new_device_error_request_cancelled_title">"Запрос на вход отменен"</string>
-  <string name="screen_link_new_device_error_request_timeout_subtitle">"Срок действия входа истек. Пожалуйста, попробуйте еще раз."</string>
+  <string name="screen_link_new_device_error_request_timeout_subtitle">"Срок действия входа истек. Пожалуйста, попробуйте ещё раз."</string>
   <string name="screen_link_new_device_error_request_timeout_title">"Вход в систему не был выполнен вовремя"</string>
   <string name="screen_link_new_device_mobile_step1">"Откройте %1$s на другом устройстве"</string>
   <string name="screen_link_new_device_mobile_step2">"Выберите %1$s"</string>
@@ -26,7 +26,7 @@
   <string name="screen_link_new_device_root_loading_qr_code">"Загрузка QR-кода…"</string>
   <string name="screen_link_new_device_root_mobile_device">"Смартфон"</string>
   <string name="screen_link_new_device_root_title">"Какое устройство вы хотите привязать?"</string>
-  <string name="screen_link_new_device_wrong_number_subtitle">"Пожалуйста, попробуйте еще раз и убедитесь, что вы правильно ввели 2-значный код. Если цифры по-прежнему не совпадают, обратитесь к администратору сервера."</string>
+  <string name="screen_link_new_device_wrong_number_subtitle">"Пожалуйста, попробуйте ещё раз и убедитесь, что Вы правильно ввели 2-значный код. Если цифры по-прежнему не совпадают, обратитесь к администратору сервера."</string>
   <string name="screen_link_new_device_wrong_number_title">"Цифры не совпадают"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Не удалось установить безопасное соединение с новым устройством. Не беспокойтесь, существующие устройства в безопасности."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_header">"Что теперь?"</string>
@@ -40,9 +40,9 @@
   <string name="screen_qr_code_login_error_cancelled_title">"Запрос на вход отменен"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"Вход в систему был отклонен на другом устройстве."</string>
   <string name="screen_qr_code_login_error_declined_title">"Вход отклонен"</string>
-  <string name="screen_qr_code_login_error_device_already_signed_in_subtitle">"На этом все."</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_subtitle">"На этом всё."</string>
   <string name="screen_qr_code_login_error_device_already_signed_in_title">"Вход уже выполнен на другом устройстве"</string>
-  <string name="screen_qr_code_login_error_expired_subtitle">"Срок действия входа истек. Пожалуйста, попробуйте еще раз."</string>
+  <string name="screen_qr_code_login_error_expired_subtitle">"Срок действия входа истек. Пожалуйста, попробуйте ещё раз."</string>
   <string name="screen_qr_code_login_error_expired_title">"Вход в систему не был выполнен вовремя"</string>
   <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"Другое устройство не поддерживает вход в %s с помощью QR-кода.
 
@@ -55,6 +55,6 @@
   <string name="screen_qr_code_login_invalid_scan_state_subtitle">"Неверный QR-код"</string>
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Чтобы продолжить, вам необходимо разрешить %1$s использовать камеру вашего устройства."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Разрешите доступ к камере для сканирования QR-кода"</string>
-  <string name="screen_qr_code_login_unknown_error_description">"Произошла непредвиденная ошибка. Пожалуйста, попробуйте еще раз."</string>
+  <string name="screen_qr_code_login_unknown_error_description">"Произошла непредвиденная ошибка. Пожалуйста, попробуйте ещё раз."</string>
   <string name="screen_qr_code_login_verify_code_loading">"Ожидание другого устройства"</string>
 </resources>

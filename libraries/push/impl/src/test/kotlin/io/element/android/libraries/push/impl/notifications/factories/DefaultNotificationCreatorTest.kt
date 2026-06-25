@@ -45,14 +45,12 @@ import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvid
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.services.toolbox.test.systemclock.A_FAKE_TIMESTAMP
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
-@RunWith(RobolectricTestRunner::class)
-class DefaultNotificationCreatorTest {
+class DefaultNotificationCreatorTest : RobolectricTest() {
     @Test
     fun `test createDiagnosticNotification`() {
         val sut = createNotificationCreator()

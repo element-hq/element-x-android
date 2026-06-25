@@ -72,6 +72,7 @@ fun View.showKeyboard(andRequestFocus: Boolean = false) {
         windowInsetsController?.show(WindowInsets.Type.ime())
     } else {
         val imm = context?.getSystemService<InputMethodManager>()
+        @Suppress("DEPRECATION")
         imm?.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
     }
 }

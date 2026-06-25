@@ -28,7 +28,6 @@ import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.announcement.api.Announcement
 import io.element.android.features.announcement.api.AnnouncementService
 import io.element.android.features.home.impl.datasource.RoomListDataSource
-import io.element.android.features.home.impl.filters.RoomListFilter.Rooms
 import io.element.android.features.home.impl.filters.RoomListFiltersState
 import io.element.android.features.home.impl.filters.into
 import io.element.android.features.home.impl.search.RoomListSearchEvent
@@ -54,7 +53,6 @@ import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.ui.safety.rememberHideInvitesAvatar
-import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.push.api.battery.BatteryOptimizationState
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
@@ -87,7 +85,6 @@ class RoomListPresenter(
     private val fullScreenIntentPermissionsPresenter: Presenter<FullScreenIntentPermissionsState>,
     private val batteryOptimizationPresenter: Presenter<BatteryOptimizationState>,
     private val notificationCleaner: NotificationCleaner,
-    private val appPreferencesStore: AppPreferencesStore,
     private val seenInvitesStore: SeenInvitesStore,
     private val announcementService: AnnouncementService,
     private val coldStartWatcher: AnalyticsColdStartWatcher,
@@ -157,7 +154,6 @@ class RoomListPresenter(
                 }
                 is RoomListEvent.ShowDeclineInviteMenu -> declineInviteMenu.value = RoomListState.DeclineInviteMenu.Shown(event.roomSummary)
                 RoomListEvent.HideDeclineInviteMenu -> declineInviteMenu.value = RoomListState.DeclineInviteMenu.Hidden
-                is RoomListEvent.ClearCacheOfRoom -> coroutineScope.clearCacheOfRoom(event.roomId)
             }
         }
 
@@ -280,7 +276,6 @@ class RoomListPresenter(
             isDm = event.roomSummary.isDm,
             isFavorite = event.roomSummary.isFavorite,
             hasNewContent = event.roomSummary.hasNewContent,
-            displayClearRoomCacheAction = appPreferencesStore.isDeveloperModeEnabledFlow().first(),
         )
         contextMenuState.value = initialState
 
@@ -334,12 +329,6 @@ class RoomListPresenter(
                 .onSuccess {
                     analyticsService.captureInteraction(name = Interaction.Name.MobileRoomListRoomContextMenuUnreadToggle)
                 }
-        }
-    }
-
-    private fun CoroutineScope.clearCacheOfRoom(roomId: RoomId) = launch {
-        client.getRoom(roomId)?.use { room ->
-            room.clearEventCacheStorage()
         }
     }
 }

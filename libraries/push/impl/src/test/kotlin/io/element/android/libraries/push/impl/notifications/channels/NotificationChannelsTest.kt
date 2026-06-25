@@ -21,19 +21,17 @@ import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.api.store.NotificationSound
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
-@RunWith(RobolectricTestRunner::class)
-class NotificationChannelsTest {
+class NotificationChannelsTest : RobolectricTest() {
     @Test
     @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
     fun `init - creates notification channels and migrates old ones`() {

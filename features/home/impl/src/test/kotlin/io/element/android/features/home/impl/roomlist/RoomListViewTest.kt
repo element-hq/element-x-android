@@ -19,7 +19,6 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.home.impl.HomeView
 import io.element.android.features.home.impl.R
 import io.element.android.features.home.impl.aHomeState
@@ -34,13 +33,12 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.setSafeContent
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
-@RunWith(AndroidJUnit4::class)
-class RoomListViewTest {
+class RoomListViewTest : RobolectricTest() {
     @Config(qualifiers = "h1024dp")
     @Test
     fun `displaying the view automatically sends a couple of UpdateVisibleRangeEvents`() = runAndroidComposeUiTest {

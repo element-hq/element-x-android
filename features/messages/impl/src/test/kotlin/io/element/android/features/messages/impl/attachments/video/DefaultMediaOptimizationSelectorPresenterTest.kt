@@ -10,7 +10,6 @@ package io.element.android.features.messages.impl.attachments.video
 
 import android.net.Uri
 import android.util.Size
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.test.attachments.video.FakeVideoMetadataExtractor
 import io.element.android.features.messages.test.attachments.video.FakeVideoMetadataExtractorFactory
@@ -26,16 +25,15 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.test.viewer.aLocalMedia
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.test
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import kotlin.time.Duration.Companion.minutes
 
-@RunWith(AndroidJUnit4::class)
-class DefaultMediaOptimizationSelectorPresenterTest {
+class DefaultMediaOptimizationSelectorPresenterTest : RobolectricTest() {
     @get:Rule
     val warmUpRule = WarmUpRule()
 

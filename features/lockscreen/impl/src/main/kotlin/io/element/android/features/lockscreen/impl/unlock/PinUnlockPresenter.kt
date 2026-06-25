@@ -16,7 +16,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.lockscreen.impl.biometric.BiometricAuthenticator
 import io.element.android.features.lockscreen.impl.biometric.BiometricAuthenticatorManager
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
@@ -32,8 +34,9 @@ import io.element.android.libraries.di.annotations.AppCoroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Inject
+@AssistedInject
 class PinUnlockPresenter(
+    @Assisted private val forDeviceUnlock: Boolean,
     private val pinCodeManager: PinCodeManager,
     private val biometricAuthenticatorManager: BiometricAuthenticatorManager,
     private val logoutUseCase: LogoutUseCase,
@@ -41,6 +44,11 @@ class PinUnlockPresenter(
     private val coroutineScope: CoroutineScope,
     private val pinUnlockHelper: PinUnlockHelper,
 ) : Presenter<PinUnlockState> {
+    @AssistedFactory
+    interface Factory {
+        fun create(forDeviceUnlock: Boolean): PinUnlockPresenter
+    }
+
     @Composable
     override fun present(): PinUnlockState {
         val pinEntryState = remember {
@@ -98,7 +106,7 @@ class PinUnlockPresenter(
             }
         }
         pinUnlockHelper.OnUnlockEffect {
-            isUnlocked.value = true
+            isUnlocked.value = it
         }
 
         fun handleEvent(event: PinUnlockEvent) {
@@ -128,6 +136,7 @@ class PinUnlockPresenter(
             }
         }
         return PinUnlockState(
+            canNavigateBack = forDeviceUnlock,
             pinEntry = pinEntry,
             showWrongPinTitle = showWrongPinTitle,
             remainingAttempts = remainingAttempts,

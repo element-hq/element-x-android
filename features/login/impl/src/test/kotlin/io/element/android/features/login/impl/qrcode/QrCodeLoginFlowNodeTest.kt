@@ -8,7 +8,6 @@
 
 package io.element.android.features.login.impl.qrcode
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.bumble.appyx.core.modality.AncestryInfo
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.utils.customisations.NodeCustomisationDirectoryImpl
@@ -22,16 +21,15 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.auth.qrlogin.FakeMatrixQrCodeLoginData
 import io.element.android.tests.testutils.lambda.lambdaError
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class QrCodeLoginFlowNodeTest {
+class QrCodeLoginFlowNodeTest : RobolectricTest() {
     @Test
     fun `backstack changes when confirmation steps are received`() = runTest {
         val qrCodeLoginManager = FakeQrCodeLoginManager()

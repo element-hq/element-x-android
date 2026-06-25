@@ -13,12 +13,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.mediapickers.api.PickerType
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class PickerTypeTest {
+class PickerTypeTest : RobolectricTest() {
     @Test
     fun `ImageAndVideo - assert types`() {
         val pickerType = PickerType.ImageAndVideo

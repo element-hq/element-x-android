@@ -19,14 +19,12 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class DefaultActiveNotificationsProviderTest {
+class DefaultActiveNotificationsProviderTest : RobolectricTest() {
     private val notificationIdProvider = NotificationIdProvider
 
     @Test

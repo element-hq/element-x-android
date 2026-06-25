@@ -13,13 +13,11 @@ import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.jsoup.Jsoup
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class ToPlainTextTest {
+class ToPlainTextTest : RobolectricTest() {
     @Test
     fun `Document toPlainText - returns a plain text version of the document`() {
         val document = Jsoup.parse(
