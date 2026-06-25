@@ -136,10 +136,6 @@ class AttachmentsPreviewPresenter(
 
         var displayFileTooLargeError by remember { mutableStateOf(false) }
 
-        LaunchedEffect(attachments) {
-            currentIndex = 0
-        }
-
         LaunchedEffect(mediaOptimizationSelectorState.displayMediaSelectorViews, mediaOptimizationSelectorState.selectedVideoPreset) {
             if (mediaOptimizationSelectorState.displayMediaSelectorViews == false &&
                 imageEditorState == null &&
