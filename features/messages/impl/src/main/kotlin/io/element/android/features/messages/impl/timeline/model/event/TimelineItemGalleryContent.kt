@@ -9,6 +9,7 @@ package io.element.android.features.messages.impl.timeline.model.event
 
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
+import kotlinx.collections.immutable.ImmutableList
 import kotlin.time.Duration
 
 data class TimelineItemGalleryContent(
@@ -16,7 +17,7 @@ data class TimelineItemGalleryContent(
     val caption: String?,
     val formattedCaption: CharSequence?,
     override val isEdited: Boolean,
-    val items: List<GalleryItem>,
+    val items: ImmutableList<GalleryItem>,
 ) : TimelineItemEventContent, TimelineItemEventMutableContent {
     override val type: String = "TimelineItemGalleryContent"
 

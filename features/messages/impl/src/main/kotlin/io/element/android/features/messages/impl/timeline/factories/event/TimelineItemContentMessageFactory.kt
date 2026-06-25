@@ -353,7 +353,7 @@ class TimelineItemContentMessageFactory(
                         caption = messageType.body.trimEnd().takeIf { it.isNotEmpty() },
                         formattedCaption = formattedCaption,
                         isEdited = content.isEdited,
-                        items = galleryItems,
+                        items = galleryItems.toImmutableList(),
                     )
                 } else {
                     val attachments = messageType.items.mapNotNull { item ->

@@ -15,6 +15,7 @@ import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
+import kotlinx.collections.immutable.toImmutableList
 import org.jsoup.nodes.Document
 
 class TimelineItemEventContentProvider : PreviewParameterProvider<TimelineItemEventContent> {
@@ -127,7 +128,7 @@ fun aTimelineItemGalleryContent(
     caption = caption,
     formattedCaption = null,
     isEdited = false,
-    items = items,
+    items = items.toImmutableList(),
 )
 
 fun aGalleryItem(
