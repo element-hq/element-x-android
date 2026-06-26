@@ -15,7 +15,15 @@ import kotlinx.serialization.Serializable
  * Example:
  * <pre>
  * {
- *     "registration_helper_url": "https://element.io"
+ *     "registration_helper_url": "https://element.io",
+ *     "enforce_element_pro": true,
+ *     "rageshake_url": "https://example.org/rageshake",
+ *     "brand_color": "#FF0000",
+ *     "notification_sound": "ring.flac",
+ *     "idp_app_scheme": "io.element.app",
+ *     "custom_recovery_passphrase": {
+ *         "min_character_count": 8
+ *     }
  * }
  * </pre>
  * .
@@ -32,4 +40,14 @@ data class InternalElementWellKnown(
     val brandColor: String? = null,
     @SerialName("notification_sound")
     val notificationSound: String? = null,
+    @SerialName("idp_app_scheme")
+    val identityProviderAppScheme: String? = null,
+    @SerialName("custom_recovery_passphrase")
+    val customRecoveryPassphrase: InternalCustomRecoveryPassphrase? = null,
+)
+
+@Serializable
+data class InternalCustomRecoveryPassphrase(
+    @SerialName("min_character_count")
+    val minCharacterCount: Int? = null,
 )

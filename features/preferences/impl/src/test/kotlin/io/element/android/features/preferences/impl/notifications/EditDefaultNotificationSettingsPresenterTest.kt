@@ -198,7 +198,7 @@ class EditDefaultNotificationSettingsPresenterTest {
     ): EditDefaultNotificationSettingPresenter {
         return EditDefaultNotificationSettingPresenter(
             notificationSettingsService = notificationSettingsService,
-            isOneToOne = false,
+            isDm = false,
             roomListService = roomListService,
         )
     }

@@ -5,97 +5,97 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.features.linknewdevice.impl.screens.root
 
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import io.element.android.features.linknewdevice.impl.R
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
+import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
+import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBackKey
-import org.junit.Rule
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.rules.TestRule
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class LinkNewDeviceRootViewTest {
-    @get:Rule
-    val rule = createAndroidComposeRule<ComponentActivity>()
-
+class LinkNewDeviceRootViewTest : RobolectricTest() {
     @Test
-    fun `on back pressed - calls the onRetry callback`() {
+    fun `on back pressed - calls the onRetry callback`() = runAndroidComposeUiTest {
         val eventRecorder = EventsRecorder<LinkNewDeviceRootEvent>(expectEvents = false)
         ensureCalledOnce { callback ->
-            rule.setLinkNewDeviceRootView(
+            setLinkNewDeviceRootView(
                 state = aLinkNewDeviceRootState(
                     eventSink = eventRecorder,
                 ),
                 onBackClick = callback
             )
-            rule.pressBackKey()
+            pressBackKey()
         }
     }
 
     @Test
-    fun `link desktop button clicked - calls the expected callback`() {
+    fun `link desktop button clicked - calls the expected callback`() = runAndroidComposeUiTest {
         val eventRecorder = EventsRecorder<LinkNewDeviceRootEvent>(expectEvents = false)
-        ensureCalledOnce { callback ->
-            rule.setLinkNewDeviceRootView(
+        ensureCalledOnceWithParam(LinkDeviceType.Desktop) { callback ->
+            setLinkNewDeviceRootView(
                 state = aLinkNewDeviceRootState(
                     isSupported = AsyncData.Success(true),
                     eventSink = eventRecorder,
                 ),
-                onLinkDesktopDeviceClick = callback,
+                onUnlockDevice = callback,
             )
-            rule.clickOn(R.string.screen_link_new_device_root_desktop_computer)
+            clickOn(R.string.screen_link_new_device_root_desktop_computer)
         }
     }
 
     @Test
-    fun `link mobile button clicked - emits the expected event`() {
-        val eventRecorder = EventsRecorder<LinkNewDeviceRootEvent>()
-        rule.setLinkNewDeviceRootView(
-            state = aLinkNewDeviceRootState(
-                isSupported = AsyncData.Success(true),
-                eventSink = eventRecorder,
+    fun `link mobile button clicked - calls the expected callback`() = runAndroidComposeUiTest {
+        val eventRecorder = EventsRecorder<LinkNewDeviceRootEvent>(expectEvents = false)
+        ensureCalledOnceWithParam(LinkDeviceType.Mobile) { callback ->
+            setLinkNewDeviceRootView(
+                state = aLinkNewDeviceRootState(
+                    isSupported = AsyncData.Success(true),
+                    eventSink = eventRecorder,
+                ),
+                onUnlockDevice = callback,
             )
-        )
-        rule.clickOn(R.string.screen_link_new_device_root_mobile_device)
-        eventRecorder.assertSingle(LinkNewDeviceRootEvent.LinkMobileDevice)
+            clickOn(R.string.screen_link_new_device_root_mobile_device)
+        }
     }
 
     @Test
-    fun `not supported - dismiss click - invokes the expected callback`() {
+    fun `not supported - dismiss click - invokes the expected callback`() = runAndroidComposeUiTest {
         val eventRecorder = EventsRecorder<LinkNewDeviceRootEvent>(expectEvents = false)
         ensureCalledOnce { callback ->
-            rule.setLinkNewDeviceRootView(
+            setLinkNewDeviceRootView(
                 state = aLinkNewDeviceRootState(
                     isSupported = AsyncData.Success(false),
                     eventSink = eventRecorder,
                 ),
                 onBackClick = callback,
             )
-            rule.clickOn(CommonStrings.action_dismiss)
+            clickOn(CommonStrings.action_dismiss)
         }
     }
 
-    private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setLinkNewDeviceRootView(
+    private fun AndroidComposeUiTest<ComponentActivity>.setLinkNewDeviceRootView(
         state: LinkNewDeviceRootState = aLinkNewDeviceRootState(),
         onBackClick: () -> Unit = EnsureNeverCalled(),
-        onLinkDesktopDeviceClick: () -> Unit = EnsureNeverCalled(),
+        onUnlockDevice: (type: LinkDeviceType) -> Unit = EnsureNeverCalledWithParam(),
     ) {
         setContent {
             LinkNewDeviceRootView(
                 state = state,
                 onBackClick = onBackClick,
-                onLinkDesktopDeviceClick = onLinkDesktopDeviceClick,
+                onUnlockDevice = onUnlockDevice,
             )
         }
     }

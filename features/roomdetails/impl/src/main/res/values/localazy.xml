@@ -56,6 +56,7 @@
   <string name="screen_room_details_invite_people_dont_close">"Don\'t close the app until finished."</string>
   <string name="screen_room_details_invite_people_preparing">"Preparing invitations…"</string>
   <string name="screen_room_details_invite_people_title">"Invite people"</string>
+  <string name="screen_room_details_invite_title">"Invite"</string>
   <string name="screen_room_details_leave_conversation_title">"Leave conversation"</string>
   <string name="screen_room_details_leave_room_title">"Leave room"</string>
   <string name="screen_room_details_media_gallery_title">"Media and files"</string>
@@ -131,6 +132,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Roles"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Room details"</string>
   <string name="screen_room_roles_and_permissions_title">"Roles &amp; permissions"</string>
+  <string name="screen_roomlist_mark_as_read">"Mark as read"</string>
+  <string name="screen_roomlist_mark_as_unread">"Mark as unread"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Add address"</string>
   <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Anyone in authorised spaces can join, but everyone else must request access."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Everyone must request access."</string>

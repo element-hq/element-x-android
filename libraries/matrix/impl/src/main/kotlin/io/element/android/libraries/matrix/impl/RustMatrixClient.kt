@@ -31,7 +31,8 @@ import io.element.android.libraries.matrix.api.createroom.RoomPreset
 import io.element.android.libraries.matrix.api.linknewdevice.LinkDesktopHandler
 import io.element.android.libraries.matrix.api.linknewdevice.LinkMobileHandler
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
-import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
+import io.element.android.libraries.matrix.api.oauth.AccountManagementAction
+import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -59,7 +60,7 @@ import io.element.android.libraries.matrix.impl.media.RustMediaLoader
 import io.element.android.libraries.matrix.impl.media.RustMediaPreviewService
 import io.element.android.libraries.matrix.impl.notification.RustNotificationService
 import io.element.android.libraries.matrix.impl.notificationsettings.RustNotificationSettingsService
-import io.element.android.libraries.matrix.impl.oidc.toRustAction
+import io.element.android.libraries.matrix.impl.oauth.toRustAction
 import io.element.android.libraries.matrix.impl.pushers.RustPushersService
 import io.element.android.libraries.matrix.impl.room.GetRoomResult
 import io.element.android.libraries.matrix.impl.room.NotJoinedRustRoom
@@ -70,6 +71,7 @@ import io.element.android.libraries.matrix.impl.room.RustRoomFactory
 import io.element.android.libraries.matrix.impl.room.TimelineEventFilterFactory
 import io.element.android.libraries.matrix.impl.room.history.map
 import io.element.android.libraries.matrix.impl.room.join.map
+import io.element.android.libraries.matrix.impl.room.location.map
 import io.element.android.libraries.matrix.impl.room.preview.RoomPreviewInfoMapper
 import io.element.android.libraries.matrix.impl.roomdirectory.RustRoomDirectoryService
 import io.element.android.libraries.matrix.impl.roomdirectory.map
@@ -80,7 +82,6 @@ import io.element.android.libraries.matrix.impl.spaces.RustSpaceService
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import io.element.android.libraries.matrix.impl.sync.map
 import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
-import io.element.android.libraries.matrix.impl.util.SessionPathsProvider
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
@@ -113,6 +114,8 @@ import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.AuthData
 import org.matrix.rustcomponents.sdk.AuthDataPasswordDetails
+import org.matrix.rustcomponents.sdk.BeaconInfoListener
+import org.matrix.rustcomponents.sdk.BeaconInfoUpdate
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientException
 import org.matrix.rustcomponents.sdk.IgnoredUsersListener
@@ -134,6 +137,7 @@ import org.matrix.rustcomponents.sdk.RoomPreset as RustRoomPreset
 import org.matrix.rustcomponents.sdk.SyncService as ClientSyncService
 
 class RustMatrixClient(
+    override val sessionPaths: SessionPaths,
     private val innerClient: Client,
     private val sessionStore: SessionStore,
     private val sessionDelegate: RustClientSessionDelegate,
@@ -184,8 +188,6 @@ class RustMatrixClient(
         sessionDispatcher = sessionDispatcher,
     )
 
-    private val sessionPathsProvider = SessionPathsProvider(sessionStore)
-
     private val roomSyncSubscriber: RoomSyncSubscriber = RoomSyncSubscriber(innerRoomListService, dispatchers)
 
     override val roomListService: RoomListService = RustRoomListService(
@@ -206,6 +208,15 @@ class RustMatrixClient(
         sessionDispatcher = sessionDispatcher,
         analyticsService = analyticsService,
     )
+
+    override val ownBeaconInfoUpdates = mxCallbackFlow {
+        val listener = object : BeaconInfoListener {
+            override fun onUpdate(update: BeaconInfoUpdate) {
+                trySend(update.map())
+            }
+        }
+        innerClient.subscribeToOwnBeaconInfoUpdates(listener)
+    }
 
     override val sessionVerificationService = RustSessionVerificationService(
         client = innerClient,
@@ -796,6 +807,12 @@ class RustMatrixClient(
         }
     }
 
+    override suspend fun getMapStyleUrl(): Result<String?> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.tileServer()?.mapStyleUrl
+        }
+    }
+
     override suspend fun resetWellKnownConfig(): Result<Unit> {
         return runCatchingExceptions {
             Timber.d("Resetting well-known config for session $sessionId")
@@ -806,17 +823,16 @@ class RustMatrixClient(
     private suspend fun getCacheSize(
         includeCryptoDb: Boolean = false,
     ): Long = withContext(sessionDispatcher) {
-        val sessionDirectory = sessionPathsProvider.provides(sessionId) ?: return@withContext 0L
-        val cacheSize = sessionDirectory.cacheDirectory.getSizeOfFiles()
+        val cacheSize = sessionPaths.cacheDirectory.getSizeOfFiles()
         if (includeCryptoDb) {
-            cacheSize + sessionDirectory.fileDirectory.getSizeOfFiles()
+            cacheSize + sessionPaths.fileDirectory.getSizeOfFiles()
         } else {
             cacheSize + listOf(
                 "matrix-sdk-state.sqlite3",
                 "matrix-sdk-state.sqlite3-shm",
                 "matrix-sdk-state.sqlite3-wal",
             ).map { fileName ->
-                File(sessionDirectory.fileDirectory, fileName)
+                File(sessionPaths.fileDirectory, fileName)
             }.sumOf { file ->
                 file.length()
             }
@@ -825,7 +841,7 @@ class RustMatrixClient(
 
     private suspend fun deleteSessionDirectory() = withContext(sessionDispatcher) {
         // Delete all the files for this session
-        sessionPathsProvider.provides(sessionId)?.deleteRecursively()
+        sessionPaths.deleteRecursively()
     }
 
     private fun scheduleDatabaseVacuum() {

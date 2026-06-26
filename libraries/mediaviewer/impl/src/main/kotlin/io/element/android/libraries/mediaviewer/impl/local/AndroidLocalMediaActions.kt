@@ -100,7 +100,11 @@ class AndroidLocalMediaActions(
     override suspend fun share(localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
         require(localMedia.uri.scheme == ContentResolver.SCHEME_FILE)
         runCatchingExceptions {
-            val shareableUri = localMedia.toShareableUri()
+            // Make a copy of the shared file in the cache directory, otherwise the original file will be gone once this screen is dismissed
+            // and will prevent sharing the media to another room inside the app.
+            val copiedFile = localMedia.uri.toFile()
+                .copyTo(File(context.cacheDir, "temp/media/" + (localMedia.uri.lastPathSegment ?: "shared_file")), true)
+            val shareableUri = copiedFile.toShareableUri()
             val shareMediaIntent = Intent(Intent.ACTION_SEND)
                 .setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 .putExtra(Intent.EXTRA_STREAM, shareableUri)
@@ -157,10 +161,13 @@ class AndroidLocalMediaActions(
         }
     }
 
-    private fun LocalMedia.toShareableUri(): Uri {
-        val mediaAsFile = this.toFile()
+    private fun File.toShareableUri(): Uri {
         val authority = "${buildMeta.applicationId}.fileprovider"
-        return FileProvider.getUriForFile(context, authority, mediaAsFile).normalizeScheme()
+        return FileProvider.getUriForFile(context, authority, this).normalizeScheme()
+    }
+
+    private fun LocalMedia.toShareableUri(): Uri {
+        return this.toFile().toShareableUri()
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)

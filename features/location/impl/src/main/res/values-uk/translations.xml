@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_share_location_live_location_disclaimer_title">"Ваша історія поточного місцезнаходження зберігатиметься у кімнаті та буде доступна учасникам після завершення сеансу."</string>
+  <string name="screen_share_location_live_location_duration_picker_title">"Виберіть, як довго ділитися своїм місцезнаходженням."</string>
+  <string name="screen_share_location_live_location_missing_permissions">"У вас немає дозволу ділитися своїм місцезнаходженням у реальному часі в цій кімнаті"</string>
+</resources>

@@ -9,9 +9,9 @@
 /**
  * This will generate the plugin "io.element.android-compose-library", used in android library with compose modules.
  */
-import extension.androidConfig
+import extension.androidLibraryConfig
 import extension.commonDependencies
-import extension.composeConfig
+import extension.composeLibraryConfig
 import extension.composeDependencies
 import extension.setupKover
 import org.gradle.accessors.dm.LibrariesForLibs
@@ -19,14 +19,13 @@ import org.gradle.accessors.dm.LibrariesForLibs
 val libs = the<LibrariesForLibs>()
 plugins {
     id("com.android.library")
-    id("kotlin-android")
     id("com.autonomousapps.dependency-analysis")
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
-    androidConfig(project)
-    composeConfig()
+    androidLibraryConfig(project)
+    composeLibraryConfig()
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
     }

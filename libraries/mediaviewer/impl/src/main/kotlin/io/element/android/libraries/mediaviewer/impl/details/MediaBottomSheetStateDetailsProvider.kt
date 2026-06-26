@@ -8,6 +8,7 @@
 package io.element.android.libraries.mediaviewer.impl.details
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.anApkMediaInfo
@@ -28,17 +29,22 @@ open class MediaBottomSheetStateDetailsProvider : PreviewParameterProvider<Media
             aMediaBottomSheetStateDetails(
                 eventId = null,
             ),
+            aMediaBottomSheetStateDetails(
+                fromGallery = true,
+            ),
         )
 }
 
 fun aMediaBottomSheetStateDetails(
+    fromGallery: Boolean = false,
     eventId: EventId? = EventId($$"$eventId"),
     canDelete: Boolean = true,
     mediaInfo: MediaInfo = anImageMediaInfo(
-        senderName = "Alice",
+        senderName = USER_NAME_ALICE,
         dateSentFull = "December 6, 2024 at 12:59",
     ),
 ) = MediaBottomSheetState.Details(
+    fromGallery = fromGallery,
     eventId = eventId,
     canDelete = canDelete,
     mediaInfo = mediaInfo,

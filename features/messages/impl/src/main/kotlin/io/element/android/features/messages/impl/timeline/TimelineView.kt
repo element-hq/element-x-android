@@ -77,7 +77,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.libraries.ui.utils.time.isTalkbackActive
+import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -171,7 +171,6 @@ fun TimelineView(
                         timelineMode = state.timelineMode,
                         timelineRoomInfo = state.timelineRoomInfo,
                         timelineProtectionState = timelineProtectionState,
-                        renderReadReceipts = state.renderReadReceipts,
                         isLastOutgoingMessage = state.isLastOutgoingMessage(timelineItem.identifier()),
                         focusedEventId = state.focusedEventId,
                         displayThreadSummaries = state.displayThreadSummaries,
@@ -213,7 +212,7 @@ fun TimelineView(
                 onFocusEventRender = ::onFocusEventRender,
             )
 
-            if (state.displayFloatingDateBadge && useReverseLayout) {
+            if (useReverseLayout) {
                 FloatingDateBadgeOverlay(
                     lazyListState = lazyListState,
                     timelineItems = state.timelineItems,

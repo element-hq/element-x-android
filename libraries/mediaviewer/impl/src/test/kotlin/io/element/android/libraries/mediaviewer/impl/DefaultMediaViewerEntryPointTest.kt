@@ -33,16 +33,21 @@ import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.node.TestParentNode
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.mockk.mockk
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.junit.Rule
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class DefaultMediaViewerEntryPointTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Test
     fun `test node builder`() = runTest {
+        Dispatchers.setMain(testCoroutineDispatchers().main)
         val entryPoint = DefaultMediaViewerEntryPoint()
         val mockMediaUri: Uri = mockk("localMediaUri")
         val localMediaFactory = FakeLocalMediaFactory(mockMediaUri)
@@ -89,6 +94,7 @@ class DefaultMediaViewerEntryPointTest {
 
     @Test
     fun `test node builder avatar`() = runTest {
+        Dispatchers.setMain(testCoroutineDispatchers().main)
         val entryPoint = DefaultMediaViewerEntryPoint()
         val mockMediaUri: Uri = mockk("localMediaUri")
         val localMediaFactory = FakeLocalMediaFactory(mockMediaUri)

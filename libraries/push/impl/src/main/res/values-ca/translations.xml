@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="notification_channel_call">"Trucada"</string>
+  <string name="notification_channel_listening_for_events">"Escoltant esdeveniments"</string>
+  <string name="notification_channel_noisy">"Notificacions sonores"</string>
+  <string name="notification_channel_ringing_calls">"Trucades amb so"</string>
+  <string name="notification_channel_silent">"Notificacions silencioses"</string>
+  <plurals name="notification_compat_summary_line_for_room">
+    <item quantity="one">"%1$s: %2$d missatge"</item>
+    <item quantity="other">"%1$s: %2$d missatges"</item>
+  </plurals>
+  <plurals name="notification_compat_summary_title">
+    <item quantity="one">"%d notificació"</item>
+    <item quantity="other">"%d notificacions"</item>
+  </plurals>
+  <string name="notification_fallback_content">"Tens missatges nous."</string>
+  <string name="notification_incoming_call">"📹 Trucada entrant"</string>
+  <string name="notification_inline_reply_failed">"** No s\'ha pogut enviar. Obre la sala"</string>
+  <string name="notification_invitation_action_join">"Uneix-te"</string>
+  <string name="notification_invitation_action_reject">"Rebutja"</string>
+  <plurals name="notification_invitations">
+    <item quantity="one">"%d invitació"</item>
+    <item quantity="other">"%d invitacions"</item>
+  </plurals>
+  <string name="notification_invite_body">"T\'ha convidat a xatejar"</string>
+  <string name="notification_invite_body_with_sender">"%1$s t\'ha convidat a xatejar"</string>
+  <string name="notification_mentioned_you_body">"T\'ha mencionat: %1$s"</string>
+  <string name="notification_new_messages">"Missatges nous"</string>
+  <plurals name="notification_new_messages_for_room">
+    <item quantity="one">"%d missatge nou"</item>
+    <item quantity="other">"%d missatges nous"</item>
+  </plurals>
+  <string name="notification_reaction_body">"Ha reaccionat amb %1$s"</string>
+  <string name="notification_room_action_mark_as_read">"Marca com a llegit"</string>
+  <string name="notification_room_action_quick_reply">"Resposta ràpida"</string>
+  <string name="notification_room_invite_body">"T\'ha convidat a unir-te a la sala"</string>
+  <string name="notification_room_invite_body_with_sender">"%1$s t\'ha convidat a unir-te a la sala"</string>
+  <string name="notification_sender_me">"Jo"</string>
+  <string name="notification_sender_mention_reply">"%1$s ha mencionat o respost"</string>
+  <string name="notification_test_push_notification_content">"Estàs veient la notificació! Fes-hi clic!"</string>
+  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
+  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
+  <plurals name="notification_unread_notified_messages">
+    <item quantity="one">"%d missatge notificat no llegit"</item>
+    <item quantity="other">"%d missatges notificats no llegits"</item>
+  </plurals>
+  <string name="notification_unread_notified_messages_and_invitation">"%1$s i %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room">"%1$s en %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s en %2$s i %3$s"</string>
+  <plurals name="notification_unread_notified_messages_in_room_rooms">
+    <item quantity="one">"%d sala"</item>
+    <item quantity="other">"%d sales"</item>
+  </plurals>
+  <string name="push_distributor_background_sync_android">"Sincronització en segon pla"</string>
+  <string name="push_distributor_firebase_android">"Serveis de Google"</string>
+  <string name="push_no_valid_google_play_services_apk_android">"No s\'ha trobat \'Serveis de Google Play\' vàlid. És possible que les notificacions no funcionin correctament."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_title">"Usuaris bloquejats"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"Obté el nom del proveïdor actual."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"No s\'han seleccionat proveïdors push."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success">"Proveïdor actual de notificacions push: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"Proveïdor actual de notificacions push"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"Assegura\'t que l\'aplicació admet com a mínim un proveïdor de notificacions push."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"No s\'ha trobat cap proveïdor de notificacions push."</string>
+  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
+    <item quantity="one">"S\'ha trobat %1$d proveïdor push: %2$s"</item>
+    <item quantity="other">"S\'han trobat %1$d proveïdors push: %2$s"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"L\'aplicació s\'ha creat per permetre: %1$s"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Suport del proveïdor de notificacions Push"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"Comprova que l\'aplicació pot mostrar notificacions."</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"No s\'ha fet clic a la notificació."</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"No es pot mostrar la notificació."</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"S\'ha fet clic a la notificació!"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"Mostrar notificació"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Fes clic a la notificació per continuar el test."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_description">"Assegureua\'t que l\'aplicació rep notificacions push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Error: el proveïdor push ha rebutjat la sol·licitud."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Error: %1$s."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Error, no s\'han pogut provar les notificacions push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Error, s\'ha acabat el temps d\'espera de la notificació push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_success">"El bucle de notificacions push ha tardat %1$d ms."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_title">"Prova el bucle de notificacions push"</string>
+</resources>

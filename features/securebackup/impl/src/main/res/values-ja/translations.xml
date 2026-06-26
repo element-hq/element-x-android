@@ -6,7 +6,7 @@
   <string name="screen_chat_backup_key_backup_title">"鍵の保管庫"</string>
   <string name="screen_chat_backup_key_storage_disabled_error">"チャットをバックアップするには、鍵の保管庫を使用する必要があります。"</string>
   <string name="screen_chat_backup_key_storage_toggle_description">"この端末上の鍵をアップロードします"</string>
-  <string name="screen_chat_backup_key_storage_toggle_title">"鍵の保管庫を使用します"</string>
+  <string name="screen_chat_backup_key_storage_toggle_title">"鍵の保管庫を使用"</string>
   <string name="screen_chat_backup_recovery_action_change">"回復鍵を変更"</string>
   <string name="screen_chat_backup_recovery_action_change_description">"あなたのチャットはエンドツーエンド暗号化を使用して自動的にバックアップされています。すべての端末を使用できない状況で、このバックアップからデジタルIDを復元するには、回復鍵が必要となります。"</string>
   <string name="screen_chat_backup_recovery_action_confirm">"回復鍵を入力"</string>
@@ -21,7 +21,7 @@
   <string name="screen_create_new_recovery_key_list_item_5">"生成された回復鍵をパスワードマネージャや暗号化に対応するメモアプリに保存してください。"</string>
   <string name="screen_create_new_recovery_key_title">"他の端末を使用して暗号化をリセット"</string>
   <string name="screen_encryption_reset_action_continue_reset">"リセットを続行"</string>
-  <string name="screen_encryption_reset_bullet_1">"アカウントの情報と連絡先や設定などは残ります"</string>
+  <string name="screen_encryption_reset_bullet_1">"アカウントの情報や連絡先, 設定などは残ります"</string>
   <string name="screen_encryption_reset_bullet_2">"サーバー上にのみ存在する過去のメッセージは確認できなくなります"</string>
   <string name="screen_encryption_reset_bullet_3">"すべての端末と連絡先を再度検証する必要があります"</string>
   <string name="screen_encryption_reset_footer">"デジタルIDのリセットは、他のサインイン済みの端末と、回復鍵の両方へのアクセスを失った場合にのみ行ってください。"</string>

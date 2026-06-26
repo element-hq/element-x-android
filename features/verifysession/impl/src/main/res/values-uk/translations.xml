@@ -50,5 +50,5 @@
   <string name="screen_session_verification_waiting_subtitle">"Після погодження ви зможете продовжити верифікацію."</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Щоб продовжити, прийміть запит на початок процесу верифікації в іншому сеансі."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Очікування на прийняття запиту"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Вихід…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Видалення пристрою…"</string>
 </resources>

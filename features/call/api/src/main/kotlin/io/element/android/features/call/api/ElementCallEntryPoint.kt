@@ -17,13 +17,13 @@ import io.element.android.libraries.matrix.api.core.UserId
 interface ElementCallEntryPoint {
     /**
      * Start a call of the given type.
-     * @param callType The type of call to start.
+     * @param callData The data of call to start.
      */
-    fun startCall(callType: CallType)
+    fun startCall(callData: CallData)
 
     /**
      * Handle an incoming call.
-     * @param callType The type of call.
+     * @param callData The data of call.
      * @param eventId The event id of the event that started the call.
      * @param senderId The user id of the sender of the event that started the call.
      * @param roomName The name of the room the call is in.
@@ -35,7 +35,7 @@ interface ElementCallEntryPoint {
      * @param textContent The text content of the notification. If null the default content from the system will be used.
      */
     suspend fun handleIncomingCall(
-        callType: CallType.RoomCall,
+        callData: CallData,
         eventId: EventId,
         senderId: UserId,
         roomName: String?,

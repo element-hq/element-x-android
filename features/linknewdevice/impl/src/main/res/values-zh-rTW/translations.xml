@@ -34,6 +34,8 @@
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"如果遇到相同的問題，請嘗試使用其他 wifi 網路或您的行動數據"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"若無法運作，請手動登入"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"連線不安全"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"系統會要求您輸入此裝置上顯示的兩位數字。"</string>
+  <string name="screen_qr_code_login_device_code_title">"在您的其他裝置上輸入以下數字"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"已在其他裝置上取消登入。"</string>
   <string name="screen_qr_code_login_error_cancelled_title">"已取消登入請求"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"其他裝置拒絕登入。"</string>
@@ -54,4 +56,5 @@
   <string name="screen_qr_code_login_no_camera_permission_state_description">"您必須授予 %1$s 權限以使用裝置相機才能繼續。"</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"允許相機權限以掃描 QR code"</string>
   <string name="screen_qr_code_login_unknown_error_description">"發生意外錯誤。請再試一次。"</string>
+  <string name="screen_qr_code_login_verify_code_loading">"等待您的其他裝置"</string>
 </resources>

@@ -49,6 +49,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatch
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
@@ -57,7 +58,6 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
 import io.element.android.libraries.matrix.api.room.getDirectRoomMember
-import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.powerlevels.use
 import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
@@ -110,7 +110,7 @@ import io.element.android.libraries.core.mimetype.MimeTypes.Any as AnyMimeTypes
 class MessageComposerPresenter(
     @Assisted private val navigator: MessagesNavigator,
     @Assisted private val timelineController: TimelineController,
-    @Assisted private val isInThread: Boolean,
+    @Assisted private val threadRoot: ThreadId?,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
     private val room: JoinedRoom,
     private val mediaPickerProvider: PickerProvider,
@@ -139,10 +139,11 @@ class MessageComposerPresenter(
         fun create(
             timelineController: TimelineController,
             navigator: MessagesNavigator,
-            isInThread: Boolean,
+            threadRoot: ThreadId?,
         ): MessageComposerPresenter
     }
 
+    private val isInThread = threadRoot != null
     private val mediaSender = mediaSenderFactory.create(timelineMode = timelineController.mainTimelineMode())
 
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)
@@ -180,7 +181,7 @@ class MessageComposerPresenter(
             handlePickedMedia(uri, mimeType)
         }
         val filesPicker = mediaPickerProvider.registerFilePicker(AnyMimeTypes) { uri, mimeType ->
-            handlePickedMedia(uri, mimeType ?: MimeTypes.OctetStream)
+            handlePickedMedia(uri, mimeType ?: MimeTypes.OctetStream, sendAsFile = true)
         }
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker { uri ->
             handlePickedMedia(uri, MimeTypes.Jpeg)
@@ -235,8 +236,7 @@ class MessageComposerPresenter(
         LaunchedEffect(Unit) {
             val draft = draftService.loadDraft(
                 roomId = room.roomId,
-                // TODO support threads in composer
-                threadRoot = null,
+                threadRoot = threadRoot,
                 isVolatile = false
             )
             if (draft != null) {
@@ -572,7 +572,7 @@ class MessageComposerPresenter(
         notificationConversationService.onSendMessage(
             sessionId = room.sessionId,
             roomId = roomInfo.id,
-            roomName = roomInfo.name ?: roomInfo.id.value,
+            roomName = roomInfo.name,
             roomIsDirect = roomInfo.isDm,
             roomAvatarUrl = roomInfo.avatarUrl ?: roomMembers.getDirectRoomMember(roomInfo = roomInfo, sessionId = room.sessionId)?.avatarUrl,
         )
@@ -606,6 +606,7 @@ class MessageComposerPresenter(
     private fun handlePickedMedia(
         uri: Uri?,
         mimeType: String? = null,
+        sendAsFile: Boolean = false,
     ) {
         uri ?: return
         val localMedia = localMediaFactory.createFromUri(
@@ -614,7 +615,7 @@ class MessageComposerPresenter(
             name = null,
             formattedFileSize = null
         )
-        val mediaAttachment = Attachment.Media(localMedia)
+        val mediaAttachment = Attachment.Media(localMedia, sendAsFile = sendAsFile)
         val inReplyToEventId = (messageComposerContext.composerMode as? MessageComposerMode.Reply)?.eventId
         navigator.navigateToPreviewAttachments(persistentListOf(mediaAttachment), inReplyToEventId)
 
@@ -652,8 +653,7 @@ class MessageComposerPresenter(
             roomId = room.roomId,
             draft = draft,
             isVolatile = isVolatile,
-            // TODO support threads in composer
-            threadRoot = null,
+            threadRoot = threadRoot,
         )
     }
 
@@ -816,8 +816,7 @@ class MessageComposerPresenter(
         // Use the volatile draft only when coming from edit mode otherwise.
         val draft = draftService.loadDraft(
             roomId = room.roomId,
-            // TODO support threads in composer
-            threadRoot = null,
+            threadRoot = threadRoot,
             isVolatile = true
         ).takeIf { fromEdit }
         if (draft != null) {

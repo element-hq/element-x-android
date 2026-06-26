@@ -9,7 +9,7 @@
   <string name="screen_identity_confirmed_subtitle">"现在你可以安全地读取或发送消息，并且与你聊天的任何人也可以信任此设备。"</string>
   <string name="screen_identity_confirmed_title">"设备已验证"</string>
   <string name="screen_identity_use_another_device">"使用其它设备"</string>
-  <string name="screen_identity_waiting_on_other_device">"正在等待其它设备……"</string>
+  <string name="screen_identity_waiting_on_other_device">"正在等待其它设备…"</string>
   <string name="screen_session_verification_cancelled_subtitle">"发生了一些错误。网络请求超时，或者被服务器拒绝。"</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"确认以下 Emoji 与你的其它设备上显示的相匹配。"</string>
   <string name="screen_session_verification_compare_emojis_title">"比较 Emoji"</string>
@@ -25,7 +25,7 @@
   <string name="screen_session_verification_open_existing_session_title">"打开已有会话"</string>
   <string name="screen_session_verification_positive_button_canceled">"重试验证"</string>
   <string name="screen_session_verification_positive_button_initial">"准备就绪"</string>
-  <string name="screen_session_verification_positive_button_verifying_ongoing">"等待比对……"</string>
+  <string name="screen_session_verification_positive_button_verifying_ongoing">"正在等待对比…"</string>
   <string name="screen_session_verification_ready_subtitle">"比较一组唯一的 Emoji。"</string>
   <string name="screen_session_verification_request_accepted_subtitle">"比较唯一的 Emoji，确保它们以相同顺序排列。"</string>
   <string name="screen_session_verification_request_details_timestamp">"已登录"</string>
@@ -50,5 +50,5 @@
   <string name="screen_session_verification_waiting_subtitle">"一旦被接受，你将能够继续进行验证。"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"接受此请求以在另一会话中开始验证流程以继续操作。"</string>
   <string name="screen_session_verification_waiting_to_accept_title">"等待接受请求"</string>
-  <string name="screen_signout_in_progress_dialog_content">"正在删除设备……"</string>
+  <string name="screen_signout_in_progress_dialog_content">"正在移除设备…"</string>
 </resources>

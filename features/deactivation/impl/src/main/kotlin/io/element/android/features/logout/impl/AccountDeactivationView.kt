@@ -8,7 +8,6 @@
 
 package io.element.android.features.logout.impl
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -60,6 +59,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.buildAnnotatedStringWithStyledPart
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.PasswordVisibilityToggle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextField
@@ -280,14 +280,10 @@ private fun Content(
                 placeholder = stringResource(CommonStrings.common_password),
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
-                    val image =
-                        if (passwordVisible) CompoundIcons.VisibilityOn() else CompoundIcons.VisibilityOff()
-                    val description =
-                        if (passwordVisible) stringResource(CommonStrings.a11y_hide_password) else stringResource(CommonStrings.a11y_show_password)
-
-                    Box(modifier = Modifier.clickable { passwordVisible = !passwordVisible }) {
-                        Icon(imageVector = image, description)
-                    }
+                    PasswordVisibilityToggle(
+                        visible = passwordVisible,
+                        onToggle = { passwordVisible = !passwordVisible },
+                    )
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Password,

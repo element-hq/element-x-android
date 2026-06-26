@@ -112,6 +112,11 @@ class RoomSummaryListProcessor(
     private suspend fun updateRoomSummaries(updates: List<RoomListEntriesUpdate>, block: suspend MutableList<RoomSummary>.() -> Unit) = withContext(
         coroutineContext
     ) {
+        // Capture the description before applying updates: applyUpdate consumes each Room via
+        // `entry.use { ... }` which destroys it, and the duplicate-detection branch below reads
+        // id() through `describe()`. Without this capture the trackError call crashes before it
+        // can be reported.
+        val updatesDescription = updates.description()
         mutex.withLock {
             val current = roomSummaries.replayCache.lastOrNull()
             val mutableRoomSummaries = current.orEmpty().toMutableList()
@@ -126,7 +131,7 @@ class RoomSummaryListProcessor(
                     analyticsService.trackError(
                         IllegalStateException(
                             "Found duplicates in room summaries after a list update from the SDK: $duplicates. " +
-                                "Updates: ${updates.description()}"
+                                "Updates: $updatesDescription"
                         )
                     )
                 }

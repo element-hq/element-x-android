@@ -237,7 +237,6 @@ private fun PinnedMessagesListLoaded(
                 timelineItem = timelineItem,
                 timelineMode = Timeline.Mode.PinnedEvents,
                 timelineRoomInfo = state.timelineRoomInfo,
-                renderReadReceipts = false,
                 timelineProtectionState = state.timelineProtectionState,
                 isLastOutgoingMessage = false,
                 focusedEventId = null,
@@ -311,7 +310,7 @@ private fun TimelineItemEventContentViewWrapper(
     } else {
         TimelineItemEventContentView(
             content = event.content,
-            hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId),
+            hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId, event.isMine),
             onShowContentClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
             onLinkClick = onLinkClick,
             onLinkLongClick = onLinkLongClick,

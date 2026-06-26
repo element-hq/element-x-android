@@ -76,6 +76,9 @@ Hvis du fortsetter, kan noen av innstillingene dine endres."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"systeminnstillinger"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Systemvarsler er slått av"</string>
   <string name="screen_notification_settings_title">"Varslinger"</string>
+  <string name="theme_dark">"Mørk"</string>
+  <string name="theme_light">"Lys"</string>
+  <string name="theme_system">"System"</string>
   <string name="troubleshoot_notifications_entry_point_push_history_title">"Push-historikk"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Feilsøk"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Feilsøk varsler"</string>

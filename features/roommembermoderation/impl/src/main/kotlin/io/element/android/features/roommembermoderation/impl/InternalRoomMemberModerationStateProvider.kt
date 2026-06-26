@@ -14,6 +14,7 @@ import io.element.android.features.roommembermoderation.api.ModerationActionStat
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationPermissions
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.toImmutableList
@@ -78,8 +79,8 @@ class InternalRoomMemberModerationStateProvider : PreviewParameterProvider<Inter
 }
 
 fun anAlice() = MatrixUser(
-    UserId(value = "@alice:server.org"),
-    displayName = "Alice",
+    userId = UserId(value = "@alice:server.org"),
+    displayName = USER_NAME_ALICE,
     avatarUrl = null,
 )
 

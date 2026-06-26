@@ -152,8 +152,8 @@
   <string name="action_share_link">"Partilhar ligação"</string>
   <string name="action_show">"Mostrar"</string>
   <string name="action_sign_in_again">"Iniciar sessão novamente"</string>
-  <string name="action_signout">"Terminar sessão"</string>
-  <string name="action_signout_anyway">"Terminar mesmo assim"</string>
+  <string name="action_signout">"Remover este dispositivo"</string>
+  <string name="action_signout_anyway">"Remover mesmo assim"</string>
   <string name="action_skip">"Saltar"</string>
   <string name="action_start">"Iniciar"</string>
   <string name="action_start_chat">"Iniciar conversa"</string>
@@ -195,7 +195,6 @@
   <string name="common_current_user_left_room">"Saíste da sala"</string>
   <string name="common_current_user_left_space">"Saíste do espaço"</string>
   <string name="common_current_user_rejected_invite">"Convite rejeitado"</string>
-  <string name="common_dark">"Escuro"</string>
   <string name="common_decryption_error">"Erro de decifragem"</string>
   <string name="common_description">"Descrição"</string>
   <string name="common_developer_options">"Opções de programador"</string>
@@ -233,7 +232,6 @@ Razão: %1$s."</string>
   <string name="common_invite_unknown_profile">"Não foi possível encontrar este ID Matrix, portanto o convite pode não ser recebido."</string>
   <string name="common_leaving_room">"A sair da sala"</string>
   <string name="common_leaving_space">"A sair do espaço"</string>
-  <string name="common_light">"Claro"</string>
   <string name="common_line_copied_to_clipboard">"Linha copiada para a área de transferência"</string>
   <string name="common_link_copied_to_clipboard">"Ligação copiada para a área de transferência"</string>
   <string name="common_loading">"A carregar…"</string>
@@ -291,7 +289,6 @@ Razão: %1$s."</string>
     <item quantity="other">"%1$d respostas"</item>
   </plurals>
   <string name="common_replying_to">"Em resposta a %1$s"</string>
-  <string name="common_report_a_bug">"Comunicar falha"</string>
   <string name="common_report_a_problem">"Comunicar um problema"</string>
   <string name="common_report_submitted">"Denúncia submetida"</string>
   <string name="common_rich_text_editor">"Editor de texto rico"</string>
@@ -322,7 +319,7 @@ Razão: %1$s."</string>
   <string name="common_share_space">"Partilhar espaço"</string>
   <string name="common_shared_location">"Localização partilhada"</string>
   <string name="common_shared_space">"Espaço partilhado"</string>
-  <string name="common_signing_out">"A terminar sessão"</string>
+  <string name="common_signing_out">"A remover dispositivo"</string>
   <string name="common_something_went_wrong">"Algo correu mal"</string>
   <string name="common_something_went_wrong_message">"Encontramos um erro. Por favor, tenta novamente."</string>
   <string name="common_space">"Espaço"</string>
@@ -335,7 +332,6 @@ Razão: %1$s."</string>
   <string name="common_success">"Sucesso"</string>
   <string name="common_suggestions">"Sugestões"</string>
   <string name="common_syncing">"A sincronizar…"</string>
-  <string name="common_system">"Sistema"</string>
   <string name="common_text">"Texto"</string>
   <string name="common_third_party_notices">"Avisos de terceiros"</string>
   <string name="common_thread">"Tópico"</string>
@@ -458,7 +454,7 @@ Tens a certeza de que queres continuar?"</string>
   <string name="screen_share_open_apple_maps">"Abrir no Apple Maps"</string>
   <string name="screen_share_open_google_maps">"Abrir no Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Abrir no OpenStreetMap"</string>
-  <string name="screen_share_this_location_action">"Partilhar este local"</string>
+  <string name="screen_share_this_location_action">"Partilhar local selecionado"</string>
   <string name="screen_space_list_description">"Espaços que criaste ou nos quais entraste."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_parent_space">"Espaço %1$s"</string>

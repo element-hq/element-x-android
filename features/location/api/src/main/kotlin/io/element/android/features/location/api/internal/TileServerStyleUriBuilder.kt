@@ -19,11 +19,10 @@ import io.element.android.compound.theme.ElementTheme
  */
 interface TileServerStyleUriBuilder {
     fun build(
+        customMapStyleUrl: String?,
         darkMode: Boolean,
     ): String
 }
-
-fun TileServerStyleUriBuilder(): TileServerStyleUriBuilder = MapTilerTileServerStyleUriBuilder()
 
 /**
  * Provides and remembers a style URI for a MapLibre compatible tile server.
@@ -31,9 +30,14 @@ fun TileServerStyleUriBuilder(): TileServerStyleUriBuilder = MapTilerTileServerS
  * Used for rendering dynamic maps.
  */
 @Composable
-fun rememberTileStyleUrl(): String {
+fun rememberTileStyleUrl(
+    customMapStyleUrl: String?,
+): String {
     val darkMode = !ElementTheme.isLightTheme
-    return remember(darkMode) {
-        TileServerStyleUriBuilder().build(darkMode)
+    return remember(darkMode, customMapStyleUrl) {
+        MapTilerTileServerStyleUriBuilder().build(
+            customMapStyleUrl = customMapStyleUrl,
+            darkMode = darkMode,
+        )
     }
 }

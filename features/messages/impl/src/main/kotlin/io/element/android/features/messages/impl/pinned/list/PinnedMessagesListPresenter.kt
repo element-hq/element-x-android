@@ -46,7 +46,6 @@ import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.room.JoinedRoom
-import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
@@ -227,7 +226,8 @@ class PinnedMessagesListPresenter(
                     combine(timelineItemsFlow, room.membersStateFlow) { items, membersState ->
                         timelineItemsFactory.replaceWith(
                             timelineItems = items,
-                            roomMembers = membersState.roomMembers().orEmpty()
+                            roomMembers = membersState.roomMembers().orEmpty(),
+                            renderReadReceipts = false,
                         )
                     }.launchIn(this)
 
