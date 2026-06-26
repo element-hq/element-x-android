@@ -55,7 +55,6 @@ import io.element.android.libraries.ui.utils.time.formatShort
 import io.element.android.wysiwyg.compose.EditorStyledText
 import io.element.android.wysiwyg.link.Link
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 
 private const val MAX_TILES = 5
 private val GALLERY_WIDTH = 264.dp
@@ -76,7 +75,6 @@ fun TimelineItemGalleryView(
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (content.items.isEmpty()) return
     val totalItems = content.items.size
     val showOverflow = totalItems > MAX_TILES
     val overflowCount = totalItems - MAX_TILES
@@ -86,37 +84,30 @@ fun TimelineItemGalleryView(
             modifier = containerModifier.width(GALLERY_WIDTH),
             verticalArrangement = Arrangement.spacedBy(GRID_SPACING),
         ) {
-            when {
-                totalItems == 1 -> {
-                    SingleItemLayout(
-                        item = content.items[0],
-                        onClick = { onGalleryItemClick(0) },
-                        onLongClick = onLongClick,
-                    )
-                }
-                totalItems == 2 -> {
-                    TwoItemLayout(
-                        items = content.items.toImmutableList(),
-                        onItemClick = onGalleryItemClick,
-                        onLongClick = onLongClick,
-                    )
-                }
-                totalItems == 3 -> {
-                    ThreeItemLayout(
-                        items = content.items.toImmutableList(),
-                        onItemClick = onGalleryItemClick,
-                        onLongClick = onLongClick,
-                    )
-                }
-                totalItems >= 4 -> {
-                    FourPlusItemLayout(
-                        items = content.items.toImmutableList(),
-                        showOverflow = showOverflow,
-                        overflowCount = overflowCount,
-                        onItemClick = onGalleryItemClick,
-                        onLongClick = onLongClick,
-                    )
-                }
+            when (totalItems) {
+                0 -> Unit
+                1 -> SingleItemLayout(
+                    item = content.items[0],
+                    onClick = { onGalleryItemClick(0) },
+                    onLongClick = onLongClick,
+                )
+                2 -> TwoItemLayout(
+                    items = content.items,
+                    onItemClick = onGalleryItemClick,
+                    onLongClick = onLongClick,
+                )
+                3 -> ThreeItemLayout(
+                    items = content.items,
+                    onItemClick = onGalleryItemClick,
+                    onLongClick = onLongClick,
+                )
+                else -> FourPlusItemLayout(
+                    items = content.items,
+                    showOverflow = showOverflow,
+                    overflowCount = overflowCount,
+                    onItemClick = onGalleryItemClick,
+                    onLongClick = onLongClick,
+                )
             }
         }
         if (content.showCaption) {

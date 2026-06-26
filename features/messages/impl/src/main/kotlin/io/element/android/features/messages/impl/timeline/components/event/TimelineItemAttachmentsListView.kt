@@ -65,7 +65,6 @@ fun TimelineItemAttachmentsListView(
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (content.attachments.isEmpty()) return
     Column(modifier = modifier) {
         Column(
             modifier = Modifier.fillMaxWidth(),

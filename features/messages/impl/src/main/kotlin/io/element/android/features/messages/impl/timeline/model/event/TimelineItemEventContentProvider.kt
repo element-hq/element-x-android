@@ -169,7 +169,7 @@ fun aTimelineItemAttachmentsContent(
     caption = caption,
     formattedCaption = null,
     isEdited = false,
-    attachments = attachments,
+    attachments = attachments.toImmutableList(),
 )
 
 fun anAttachmentItem(

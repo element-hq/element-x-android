@@ -403,7 +403,7 @@ class TimelineItemContentMessageFactory(
                         caption = messageType.body.trimEnd().takeIf { it.isNotEmpty() },
                         formattedCaption = formattedCaption,
                         isEdited = content.isEdited,
-                        attachments = attachments,
+                        attachments = attachments.toImmutableList(),
                     )
                 }
             }

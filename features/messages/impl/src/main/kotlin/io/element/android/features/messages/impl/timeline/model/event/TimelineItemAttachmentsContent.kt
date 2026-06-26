@@ -8,13 +8,14 @@
 package io.element.android.features.messages.impl.timeline.model.event
 
 import io.element.android.libraries.matrix.api.media.MediaSource
+import kotlinx.collections.immutable.ImmutableList
 
 data class TimelineItemAttachmentsContent(
     val body: String,
     val caption: String?,
     val formattedCaption: CharSequence?,
     override val isEdited: Boolean,
-    val attachments: List<AttachmentItem>,
+    val attachments: ImmutableList<AttachmentItem>,
 ) : TimelineItemEventContent, TimelineItemEventMutableContent {
     override val type: String = "TimelineItemAttachmentsContent"
 
