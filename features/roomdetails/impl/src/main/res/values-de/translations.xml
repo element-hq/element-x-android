@@ -56,6 +56,7 @@
   <string name="screen_room_details_invite_people_dont_close">"Schließ die App erst, wenn du fertig bist."</string>
   <string name="screen_room_details_invite_people_preparing">"Einladungen werden vorbereitet…"</string>
   <string name="screen_room_details_invite_people_title">"Nutzer einladen"</string>
+  <string name="screen_room_details_invite_title">"Einladen"</string>
   <string name="screen_room_details_leave_conversation_title">"Unterhaltung verlassen"</string>
   <string name="screen_room_details_leave_room_title">"Verlassen"</string>
   <string name="screen_room_details_media_gallery_title">"Medien und Dateien"</string>
@@ -131,6 +132,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Rollen"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Chat-Details anpassen"</string>
   <string name="screen_room_roles_and_permissions_title">"Rollen und Berechtigungen"</string>
+  <string name="screen_roomlist_mark_as_read">"Als gelesen markieren"</string>
+  <string name="screen_roomlist_mark_as_unread">"Als ungelesen markieren"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Chat-Adresse hinzufügen"</string>
   <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Jedes Mitglied eines autorisierten Space kann beitreten, aber alle anderen müssen einen Beitritt anfragen."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Zugang nur auf Anfrage."</string>

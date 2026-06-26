@@ -24,11 +24,11 @@ import extension.buildConfigFieldStr
 import extension.locales
 import extension.setupDependencyInjection
 import extension.testCommonDependencies
+import org.sonarqube.gradle.SonarResolverTask
 import java.util.Locale
 
 plugins {
     id("io.element.android-compose-application")
-    alias(libs.plugins.kotlin.android)
     // When using precompiled plugins, we need to apply the firebase plugin like this
     id(libs.plugins.firebaseAppDistribution.get().pluginId)
     id("kotlin-parcelize")
@@ -103,13 +103,13 @@ android {
     logger.warnInBox("Building ${defaultConfig.applicationId} ($baseAppName) [$buildType]")
 
     buildTypes {
-        val oidcRedirectSchemeBase = BuildTimeConfig.METADATA_HOST_REVERSED ?: "io.element.android"
+        val oAuthRedirectSchemeBase = BuildTimeConfig.METADATA_HOST_REVERSED ?: "io.element.android"
         getByName("debug") {
             resValue("string", "app_name", "$baseAppName dbg")
             resValue(
                 "string",
                 "login_redirect_scheme",
-                "$oidcRedirectSchemeBase.debug",
+                "$oAuthRedirectSchemeBase.debug",
             )
             applicationIdSuffix = ".debug"
             signingConfig = signingConfigs.getByName("debug")
@@ -120,7 +120,7 @@ android {
             resValue(
                 "string",
                 "login_redirect_scheme",
-                oidcRedirectSchemeBase,
+                oAuthRedirectSchemeBase,
             )
             signingConfig = signingConfigs.getByName("debug")
 
@@ -157,7 +157,7 @@ android {
             resValue(
                 "string",
                 "login_redirect_scheme",
-                "$oidcRedirectSchemeBase.nightly",
+                "$oAuthRedirectSchemeBase.nightly",
             )
             matchingFallbacks += listOf("release")
             signingConfig = signingConfigs.getByName("nightly")
@@ -189,6 +189,7 @@ android {
 
     buildFeatures {
         buildConfig = true
+        resValues = true
     }
     flavorDimensions += "store"
     productFlavors {
@@ -243,6 +244,11 @@ androidComponents {
 
     val reportingExtension: ReportingExtension = project.extensions.getByType(ReportingExtension::class.java)
     configureLicensesTasks(reportingExtension)
+}
+
+// Configure the SonarQube plugin to wait for the resource generation tasks to complete before running the analysis.
+tasks.withType<SonarResolverTask>().configureEach {
+    dependsOn("generateGplayDebugResValues", "generateGplayDebugAndroidTestResValues")
 }
 
 setupDependencyInjection()

@@ -2,9 +2,9 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_chat_backup_key_backup_action_disable">"Backup deaktivieren"</string>
   <string name="screen_chat_backup_key_backup_action_enable">"Backup aktivieren"</string>
-  <string name="screen_chat_backup_key_backup_description">"Speichere deine kryptographische Identität und die Nachrichtenschlüssel auf dem Server. Auf diese Weise kannst du deinen Nachrichtenverlauf auf neuen Geräten einsehen. %1$s."</string>
+  <string name="screen_chat_backup_key_backup_description">"Dadurch kannst du deinen Chatverlauf auf allen neuen Geräten einsehen. Er ist außerdem für die Sicherung von Chats und deiner digitalen Identität erforderlich. %1$s."</string>
   <string name="screen_chat_backup_key_backup_title">"Schlüsselspeicher"</string>
-  <string name="screen_chat_backup_key_storage_disabled_error">"Der Schlüsselspeicher muss aktiviert sein, um Datenwiederherstellung zu ermöglichen."</string>
+  <string name="screen_chat_backup_key_storage_disabled_error">"Die Schlüsselspeicherung muss aktiviert sein, damit deine Chats gesichert werden können."</string>
   <string name="screen_chat_backup_key_storage_toggle_description">"Schlüssel von diesem Gerät hochladen"</string>
   <string name="screen_chat_backup_key_storage_toggle_title">"Schlüsselspeicherung zulassen"</string>
   <string name="screen_chat_backup_recovery_action_change">"Wiederherstellungsschlüssel ändern"</string>
@@ -34,10 +34,10 @@
   <string name="screen_encryption_reset_bullet_3">"Du musst alle deine bestehenden Geräte und Kontakte erneut verifizieren."</string>
   <string name="screen_encryption_reset_footer">"Setze deine digitale Identität nur dann zurück, wenn du keinen Zugriff auf ein anderes verifiziertes Gerät hast und deinen Wiederherstellungsschlüssel verloren hast."</string>
   <string name="screen_encryption_reset_title">"Bestätigung nicht möglich? Setze deine digitale Identität zurück."</string>
-  <string name="screen_key_backup_disable_confirmation_action_turn_off">"Ausschalten"</string>
-  <string name="screen_key_backup_disable_confirmation_description">"Du verlierst deine verschlüsselten Nachrichten, wenn du auf allen Geräten abgemeldet bist."</string>
-  <string name="screen_key_backup_disable_confirmation_title">"Bist du sicher, dass du das Backup deaktivieren willst?"</string>
-  <string name="screen_key_backup_disable_description">"Das Löschen des Schlüsselspeichers entfernt deine kryptografische Identität und deine Nachrichtenschlüssel vom Server. Die folgenden Sicherheitsfunktionen werden deaktiviert:"</string>
+  <string name="screen_key_backup_disable_confirmation_action_turn_off">"Löschen"</string>
+  <string name="screen_key_backup_disable_confirmation_description">"Wenn du alle deine Geräte entfernst, gehen deine verschlüsselten Chatverläufe verloren und du musst deine digitale Identität zurücksetzen."</string>
+  <string name="screen_key_backup_disable_confirmation_title">"Bist du sicher, dass du den Schlüsselspeicher löschen möchtest?"</string>
+  <string name="screen_key_backup_disable_description">"Durch das Löschen des Schlüsselspeichers werden deine digitale Identität und deine Nachrichtenschlüssel vom Server entfernt und die folgenden Sicherheitsfunktionen deaktiviert:"</string>
   <string name="screen_key_backup_disable_description_point_1">"Kein Nachrichtenverlauf für verschlüsselte Nachrichten auf neuen Geräten"</string>
   <string name="screen_key_backup_disable_description_point_2">"Kein Zugriff auf verschlüsselten Nachrichten, wenn du überall von %1$s abgemeldet bist"</string>
   <string name="screen_key_backup_disable_title">"Möchtest du die Speicherung der Schlüssel wirklich deaktivieren und entfernen?"</string>

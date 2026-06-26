@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiCheckCodeS
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiGrantLoginWithQrCodeHandler
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiQrCodeData
 import io.element.android.libraries.matrix.test.QR_CODE_DATA_RECIPROCATE
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -30,7 +31,13 @@ import org.matrix.rustcomponents.sdk.HumanQrGrantLoginException
 class RustLinkMobileHandlerTest {
     @Test
     fun `start function works as expected`() = runTest {
-        val handler = FakeFfiGrantLoginWithQrCodeHandler()
+        val completable = CompletableDeferred<Unit>()
+        val handler = FakeFfiGrantLoginWithQrCodeHandler(
+            generateResult = {
+                // Ensure that the coroutine is hold
+                completable.await()
+            }
+        )
         val sut = createRustLinkMobileHandler(
             handler,
         )
@@ -56,6 +63,36 @@ class RustLinkMobileHandlerTest {
                 handler.emitGenerateProgress(progress)
                 assertThat(awaitItem()).isInstanceOf(expectedStepClass)
             }
+            // generate returns, no new event is emitted
+            completable.complete(Unit)
+            expectNoEvents()
+        }
+    }
+
+    @Test
+    fun `when generates does not emits the Done state, the code emits it`() = runTest {
+        val completable = CompletableDeferred<Unit>()
+        val handler = FakeFfiGrantLoginWithQrCodeHandler(
+            generateResult = {
+                // Ensure that the coroutine is hold
+                completable.await()
+            }
+        )
+        val sut = createRustLinkMobileHandler(
+            handler,
+        )
+        sut.linkMobileStep.test {
+            val initialItem = awaitItem()
+            assertThat(initialItem).isEqualTo(LinkMobileStep.Uninitialized)
+            backgroundScope.launch {
+                sut.start()
+            }
+            runCurrent()
+            handler.emitGenerateProgress(GrantGeneratedQrLoginProgress.Starting)
+            assertThat(awaitItem()).isEqualTo(LinkMobileStep.Starting)
+            // generate returns, Done event is emitted
+            completable.complete(Unit)
+            assertThat(awaitItem()).isEqualTo(LinkMobileStep.Done)
         }
     }
 
@@ -78,6 +115,61 @@ class RustLinkMobileHandlerTest {
             assertThat(errorState).isInstanceOf(LinkMobileStep.Error::class.java)
             val errorType = (errorState as LinkMobileStep.Error).errorType
             assertThat(errorType).isInstanceOf(ErrorType.NotFound::class.java)
+        }
+    }
+
+    @Test
+    fun `when start throws HumanQrGrantLoginException_NotFound when in state QrReady, the handler emits QrRotating step`() = runTest {
+        val completable = CompletableDeferred<Unit>()
+        val handler = FakeFfiGrantLoginWithQrCodeHandler(
+            generateResult = {
+                completable.await()
+                throw HumanQrGrantLoginException.NotFound("Timeout")
+            }
+        )
+        val sut = createRustLinkMobileHandler(
+            handler,
+        )
+        sut.linkMobileStep.test {
+            val initialItem = awaitItem()
+            assertThat(initialItem).isEqualTo(LinkMobileStep.Uninitialized)
+            backgroundScope.launch {
+                sut.start()
+            }
+            runCurrent()
+            handler.emitGenerateProgress(GrantGeneratedQrLoginProgress.QrReady(FakeFfiQrCodeData(toBytesResult = { QR_CODE_DATA_RECIPROCATE })))
+            val readyState = awaitItem()
+            assertThat(readyState).isInstanceOf(LinkMobileStep.QrReady::class.java)
+            // generate returns, error is emitted
+            completable.complete(Unit)
+            val qrRotatingState = awaitItem()
+            assertThat(qrRotatingState).isEqualTo(LinkMobileStep.QrRotating)
+        }
+    }
+
+    @Test
+    fun `when start throws HumanQrGrantLoginException_Expired, the handler emits QrRotating step`() = runTest {
+        val completable = CompletableDeferred<Unit>()
+        val handler = FakeFfiGrantLoginWithQrCodeHandler(
+            generateResult = {
+                completable.await()
+                throw HumanQrGrantLoginException.Expired("Expired")
+            }
+        )
+        val sut = createRustLinkMobileHandler(
+            handler,
+        )
+        sut.linkMobileStep.test {
+            val initialItem = awaitItem()
+            assertThat(initialItem).isEqualTo(LinkMobileStep.Uninitialized)
+            backgroundScope.launch {
+                sut.start()
+            }
+            runCurrent()
+            // generate returns, error is emitted
+            completable.complete(Unit)
+            val qrRotatingState = awaitItem()
+            assertThat(qrRotatingState).isEqualTo(LinkMobileStep.QrRotating)
         }
     }
 

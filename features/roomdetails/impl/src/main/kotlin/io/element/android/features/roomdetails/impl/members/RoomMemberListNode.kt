@@ -27,6 +27,7 @@ import io.element.android.libraries.architecture.appyx.launchMolecule
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.ui.model.getBestName
 import io.element.android.services.analytics.api.AnalyticsService
 
 @ContributesNode(RoomScope::class)
@@ -41,6 +42,7 @@ class RoomMemberListNode(
     interface Callback : Plugin {
         fun navigateToRoomMemberDetails(roomMemberId: UserId)
         fun navigateToInviteMembers()
+        fun navigateToAvatarPreview(username: String, avatarUrl: String)
     }
 
     private val callback: Callback = callback()
@@ -82,13 +84,18 @@ class RoomMemberListNode(
                     else -> state.moderationState.eventSink(RoomMemberModerationEvents.ProcessAction(action, target))
                 }
             },
+            onAvatarClick = { user ->
+                user.avatarUrl?.let { url ->
+                    callback.navigateToAvatarPreview(user.getBestName(), url)
+                }
+            },
             modifier = Modifier,
         )
     }
 }
 
 interface RoomMemberListNavigator {
-    fun exitRoomMemberList() {}
-    fun openRoomMemberDetails(roomMemberId: UserId) {}
-    fun openInviteMembers() {}
+    fun exitRoomMemberList()
+    fun openRoomMemberDetails(roomMemberId: UserId)
+    fun openInviteMembers()
 }

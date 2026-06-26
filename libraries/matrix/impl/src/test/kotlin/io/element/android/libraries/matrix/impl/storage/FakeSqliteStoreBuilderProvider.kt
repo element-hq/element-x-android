@@ -7,7 +7,7 @@
 
 package io.element.android.libraries.matrix.impl.storage
 
-import io.element.android.libraries.matrix.impl.paths.SessionPaths
+import io.element.android.libraries.matrix.api.paths.SessionPaths
 
 class FakeSqliteStoreBuilderProvider : SqliteStoreBuilderProvider {
     override fun provide(sessionPaths: SessionPaths): SqliteStoreBuilder {

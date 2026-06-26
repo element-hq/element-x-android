@@ -107,6 +107,7 @@ import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.waitForPredicate
 import io.mockk.mockk
@@ -118,14 +119,11 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import uniffi.wysiwyg_composer.MentionsState
 import java.io.File
 
 @Suppress("LargeClass")
-@RunWith(RobolectricTestRunner::class)
-class MessageComposerPresenterTest {
+class MessageComposerPresenterTest : RobolectricTest() {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -1066,7 +1064,7 @@ class MessageComposerPresenterTest {
             )
             givenRoomInfo(
                 aRoomInfo(
-                    isDirect = true,
+                    isDm = true,
                     activeMembersCount = 2,
                 )
             )
@@ -1534,12 +1532,12 @@ class MessageComposerPresenterTest {
         isRichTextEditorEnabled: Boolean = true,
         draftService: ComposerDraftService = FakeComposerDraftService(),
         mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
-        isInThread: Boolean = false,
+        threadRoot: ThreadId? = null,
         slashCommandService: SlashCommandService = FakeSlashCommandService(),
     ) = MessageComposerPresenter(
         navigator = navigator,
         sessionCoroutineScope = this,
-        isInThread = isInThread,
+        threadRoot = threadRoot,
         room = room,
         mediaPickerProvider = pickerProvider,
         sessionPreferencesStore = sessionPreferencesStore,

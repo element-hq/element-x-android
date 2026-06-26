@@ -55,6 +55,27 @@ class SnackbarDispatcherTest {
     }
 
     @Test
+    fun `a host that subscribes after a message is posted still receives it`() = runTest {
+        val snackbarDispatcher = SnackbarDispatcher()
+        val message = SnackbarMessage(0)
+        // A first host is already collecting (mirrors a background screen still subscribed).
+        snackbarDispatcher.snackbarMessage.test {
+            assertThat(awaitItem()).isNull()
+            snackbarDispatcher.post(message)
+            assertThat(awaitItem()).isEqualTo(message)
+
+            // A second host subscribes only afterwards — e.g. the screen a flow pops back to once the
+            // message has already been posted. It must observe the current message rather than being
+            // starved waiting for the next post (regression: an earlier mutex-gated implementation
+            // delivered each post to a single parked collector, dropping the snackbar for any host
+            // that subscribed later).
+            snackbarDispatcher.snackbarMessage.test {
+                assertThat(awaitItem()).isEqualTo(message)
+            }
+        }
+    }
+
+    @Test
     fun `given 2 message emissions, the next message is displayed only after a call to clear`() = runTest {
         val snackbarDispatcher = SnackbarDispatcher()
         snackbarDispatcher.snackbarMessage.test {

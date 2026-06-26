@@ -35,10 +35,14 @@ class RoomSelectNode(
 ) : Node(buildContext, plugins = plugins) {
     data class Inputs(
         val mode: RoomSelectMode,
+        val maxNumberOfRooms: Int,
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
-    private val presenter = presenterFactory.create(inputs.mode)
+    private val presenter = presenterFactory.create(
+        mode = inputs.mode,
+        maxNumberOfRooms = inputs.maxNumberOfRooms,
+    )
     private val stateFlow = launchMolecule { presenter.present() }
     private val callback: RoomSelectEntryPoint.Callback = callback()
 

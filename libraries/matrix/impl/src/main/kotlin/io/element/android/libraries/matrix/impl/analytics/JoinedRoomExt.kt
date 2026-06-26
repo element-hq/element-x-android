@@ -11,7 +11,6 @@ package io.element.android.libraries.matrix.impl.analytics
 import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.RoomInfo
-import io.element.android.libraries.matrix.api.room.isDm
 import kotlinx.coroutines.flow.first
 
 private fun Long.toAnalyticsRoomSize(): JoinedRoom.RoomSize {

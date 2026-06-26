@@ -18,8 +18,8 @@ import org.junit.Test
 
 class RustHomeserverLoginCompatibilityCheckerTest {
     @Test
-    fun `check - is valid if it supports OIDC login`() = runTest {
-        val sut = createChecker { FakeFfiHomeserverLoginDetails(supportsOidcLogin = true) }
+    fun `check - is valid if it supports OAuth login`() = runTest {
+        val sut = createChecker { FakeFfiHomeserverLoginDetails(supportsOAuthLogin = true) }
         assertThat(sut.check("https://matrix.host.org").getOrNull()).isTrue()
     }
 
@@ -49,6 +49,5 @@ class RustHomeserverLoginCompatibilityCheckerTest {
                 FakeFfiClient(homeserverLoginDetailsResult = result)
             }
         },
-        userCertificatesProvider = FakeUserCertificatesProvider(),
     )
 }

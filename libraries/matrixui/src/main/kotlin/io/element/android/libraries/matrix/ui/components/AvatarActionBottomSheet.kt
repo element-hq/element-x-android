@@ -67,6 +67,7 @@ fun AvatarActionBottomSheet(
             },
             modifier = modifier,
             sheetState = sheetState,
+            scrollable = false,
         ) {
             AvatarActionBottomSheetContent(
                 actions = actions,
@@ -103,7 +104,7 @@ private fun AvatarActionBottomSheetContent(
                 leadingContent = ListItemContent.Icon(IconSource.Resource(action.iconResourceId)),
                 style = when {
                     action.destructive -> ListItemStyle.Destructive
-                    else -> ListItemStyle.Primary
+                    else -> ListItemStyle.Default
                 }
             )
         }

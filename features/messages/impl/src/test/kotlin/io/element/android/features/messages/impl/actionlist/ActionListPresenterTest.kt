@@ -17,6 +17,7 @@ import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUser
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
+import io.element.android.features.messages.impl.timeline.model.event.RtcNotificationState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRtcNotificationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
@@ -1169,7 +1170,7 @@ class ActionListPresenterTest {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(
                 isMine = true,
-                content = TimelineItemRtcNotificationContent(callIntent = CallIntent.VIDEO),
+                content = TimelineItemRtcNotificationContent(callIntent = CallIntent.VIDEO, state = RtcNotificationState.Started),
             )
             initialState.eventSink.invoke(
                 ActionListEvent.ComputeForMessage(

@@ -36,7 +36,7 @@ private fun aSessionData(
         accessToken = "anAccessToken",
         refreshToken = "aRefreshToken",
         homeserverUrl = "aHomeserverUrl",
-        oidcData = null,
+        oAuthData = null,
         loginTimestamp = null,
         isTokenValid = isTokenValid,
         loginType = LoginType.UNKNOWN,

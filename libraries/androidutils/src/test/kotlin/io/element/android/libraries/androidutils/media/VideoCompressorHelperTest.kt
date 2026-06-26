@@ -9,13 +9,11 @@
 package io.element.android.libraries.androidutils.media
 
 import android.util.Size
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class VideoCompressorHelperTest {
+class VideoCompressorHelperTest : RobolectricTest() {
     @Test
     fun `test getOutputSize`() {
         val helper = VideoCompressorHelper(maxSize = 720)

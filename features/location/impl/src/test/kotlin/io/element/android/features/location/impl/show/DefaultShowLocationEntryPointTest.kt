@@ -14,10 +14,13 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.ShowLocationEntryPoint
 import io.element.android.features.location.api.ShowLocationMode
+import io.element.android.features.location.impl.common.FakeUserLocationStateFactory
 import io.element.android.features.location.impl.common.actions.FakeLocationActions
 import io.element.android.features.location.impl.common.permissions.FakePermissionsPresenter
+import io.element.android.features.location.test.FakeActiveLiveLocationShareManager
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.services.analytics.test.FakeAnalyticsService
@@ -34,6 +37,7 @@ class DefaultShowLocationEntryPointTest {
     fun `test node builder`() {
         val entryPoint = DefaultShowLocationEntryPoint()
         val parentNode = TestParentNode.create { buildContext, plugins ->
+            val joinedRoom = FakeJoinedRoom()
             ShowLocationNode(
                 buildContext = buildContext,
                 plugins = plugins,
@@ -45,7 +49,10 @@ class DefaultShowLocationEntryPointTest {
                         buildMeta = aBuildMeta(),
                         dateFormatter = FakeDateFormatter(),
                         stringProvider = FakeStringProvider(),
-                        joinedRoom = FakeJoinedRoom(),
+                        joinedRoom = joinedRoom,
+                        client = FakeMatrixClient(),
+                        liveLocationShareManager = FakeActiveLiveLocationShareManager(),
+                        userLocationStateFactory = FakeUserLocationStateFactory(),
                     )
                 },
                 analyticsService = FakeAnalyticsService(),

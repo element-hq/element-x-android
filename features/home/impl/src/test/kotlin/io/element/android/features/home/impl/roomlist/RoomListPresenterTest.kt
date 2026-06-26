@@ -36,6 +36,8 @@ import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.eventformatter.api.RoomLatestEventFormatter
 import io.element.android.libraries.eventformatter.test.FakeRoomLatestEventFormatter
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.fullscreenintent.api.aFullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -61,9 +63,7 @@ import io.element.android.libraries.matrix.test.roomlist.FakeDynamicRoomList
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
-import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
-import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.push.api.battery.aBatteryOptimizationState
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
@@ -89,6 +89,7 @@ import org.junit.Rule
 import org.junit.Test
 import kotlin.time.Duration.Companion.seconds
 
+@Suppress("LargeClass")
 class RoomListPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
@@ -227,7 +228,6 @@ class RoomListPresenterTest {
                             isDm = false,
                             isFavorite = false,
                             hasNewContent = false,
-                            displayClearRoomCacheAction = false,
                         )
                     )
             }
@@ -244,35 +244,6 @@ class RoomListPresenterTest {
                             isDm = false,
                             isFavorite = true,
                             hasNewContent = false,
-                            displayClearRoomCacheAction = false,
-                        )
-                    )
-            }
-        }
-    }
-
-    @Test
-    fun `present - show context menu with view source on`() = runTest {
-        val presenter = createRoomListPresenter(
-            appPreferencesStore = InMemoryAppPreferencesStore(
-                isDeveloperModeEnabled = true,
-            )
-        )
-        presenter.test {
-            val initialState = awaitItem()
-            val summary = createRoomListRoomSummary()
-            initialState.eventSink(RoomListEvent.ShowContextMenu(summary))
-            awaitItem().also { state ->
-                assertThat(state.contextMenu)
-                    .isEqualTo(
-                        RoomListState.ContextMenu.Shown(
-                            roomId = summary.roomId,
-                            roomName = summary.name,
-                            isDm = false,
-                            isFavorite = false,
-                            // true here.
-                            hasNewContent = false,
-                            displayClearRoomCacheAction = true,
                         )
                     )
             }
@@ -300,7 +271,6 @@ class RoomListPresenterTest {
                         isDm = false,
                         isFavorite = false,
                         hasNewContent = false,
-                        displayClearRoomCacheAction = false,
                     )
                 )
 
@@ -665,9 +635,9 @@ class RoomListPresenterTest {
         spaceFiltersPresenter: Presenter<SpaceFiltersState> = Presenter { aDisabledSpaceFiltersState() },
         acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState> = Presenter { anAcceptDeclineInviteState() },
         notificationCleaner: NotificationCleaner = FakeNotificationCleaner(),
-        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
         seenInvitesStore: SeenInvitesStore = InMemorySeenInvitesStore(),
         announcementService: AnnouncementService = FakeAnnouncementService(),
+        featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
     ) = RoomListPresenter(
         client = client,
         leaveRoomPresenter = { leaveRoomState },
@@ -692,9 +662,9 @@ class RoomListPresenterTest {
         fullScreenIntentPermissionsPresenter = { aFullScreenIntentPermissionsState() },
         batteryOptimizationPresenter = { aBatteryOptimizationState() },
         notificationCleaner = notificationCleaner,
-        appPreferencesStore = appPreferencesStore,
         seenInvitesStore = seenInvitesStore,
         announcementService = announcementService,
         coldStartWatcher = FakeAnalyticsColdStartWatcher(),
+        featureFlagService = featureFlagService,
     )
 }

@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.matrix.impl.room.location
 
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.location.LastLocation
 import io.element.android.libraries.matrix.api.room.location.LiveLocationShare
@@ -16,8 +17,8 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.callbackFlow
-import org.matrix.rustcomponents.sdk.LiveLocationShareListener
 import org.matrix.rustcomponents.sdk.LiveLocationShareUpdate
+import org.matrix.rustcomponents.sdk.LiveLocationsListener
 import org.matrix.rustcomponents.sdk.RoomInterface
 import org.matrix.rustcomponents.sdk.LiveLocationShare as RustLiveLocationShare
 
@@ -41,9 +42,9 @@ fun RoomInterface.liveLocationSharesFlow(): Flow<List<LiveLocationShare>> {
         }
     }
     return callbackFlow {
-        val liveLocationShares = liveLocationShares()
+        val observer = liveLocationsObserver()
         val shares: MutableList<LiveLocationShare> = ArrayList()
-        val taskHandle = liveLocationShares.subscribe(object : LiveLocationShareListener {
+        val taskHandle = observer.subscribe(object : LiveLocationsListener {
             override fun onUpdate(updates: List<LiveLocationShareUpdate>) {
                 for (update in updates) {
                     shares.applyUpdate(update)
@@ -53,13 +54,14 @@ fun RoomInterface.liveLocationSharesFlow(): Flow<List<LiveLocationShare>> {
         })
         awaitClose {
             taskHandle.cancelAndDestroy()
-            liveLocationShares.destroy()
+            observer.destroy()
         }
     }.buffer(Channel.UNLIMITED)
 }
 
 private fun RustLiveLocationShare.into(): LiveLocationShare {
     return LiveLocationShare(
+        beaconId = EventId(beaconId),
         userId = UserId(userId),
         lastLocation = lastLocation?.let {
             LastLocation(
@@ -69,6 +71,6 @@ private fun RustLiveLocationShare.into(): LiveLocationShare {
             )
         },
         startTimestamp = startTs.toLong(),
-        endTimestamp = (startTs + timeout).toLong()
+        endTimestamp = (startTs + timeout).toLong(),
     )
 }

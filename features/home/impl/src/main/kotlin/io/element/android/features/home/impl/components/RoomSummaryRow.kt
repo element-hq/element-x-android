@@ -29,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -75,8 +76,9 @@ internal fun RoomSummaryRow(
     hideInviteAvatars: Boolean,
     isInviteSeen: Boolean,
     onClick: (RoomListRoomSummary) -> Unit,
-    eventSink: (RoomListEvent) -> Unit,
     modifier: Modifier = Modifier,
+    showUnreadCount: Boolean = false,
+    eventSink: (RoomListEvent) -> Unit,
 ) {
     Box(modifier = modifier) {
         when (room.displayType) {
@@ -126,7 +128,7 @@ internal fun RoomSummaryRow(
                         timestamp = room.timestamp,
                         isHighlighted = room.isHighlighted
                     )
-                    MessagePreviewAndIndicatorRow(room = room)
+                    MessagePreviewAndIndicatorRow(room = room, showUnreadCount = showUnreadCount)
                 }
             }
             RoomSummaryDisplayType.KNOCKED -> {
@@ -222,20 +224,17 @@ private fun NameAndTimestampRow(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = spacedBy(16.dp)
     ) {
-        Row(
-            modifier = Modifier.weight(1f),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            // Name
-            Text(
-                style = ElementTheme.typography.fontBodyLgMedium,
-                text = name?.toSafeLength(ellipsize = true) ?: stringResource(id = CommonStrings.common_no_room_name),
-                fontStyle = FontStyle.Italic.takeIf { name == null },
-                color = ElementTheme.colors.roomListRoomName,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
+        Text(
+            modifier = Modifier
+                .weight(1f)
+                .clipToBounds(),
+            style = ElementTheme.typography.fontBodyLgMedium,
+            text = name?.toSafeLength(ellipsize = true) ?: stringResource(id = CommonStrings.common_no_room_name),
+            fontStyle = FontStyle.Italic.takeIf { name == null },
+            color = ElementTheme.colors.roomListRoomName,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
         // Timestamp
         Text(
             text = timestamp ?: "",
@@ -262,12 +261,12 @@ private fun InviteSubtitle(
     }
     if (subtitle != null) {
         Text(
+            modifier = modifier.clipToBounds(),
             text = subtitle,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             style = ElementTheme.typography.fontBodyMdRegular,
             color = ElementTheme.colors.roomListRoomMessage,
-            modifier = modifier,
         )
     }
 }
@@ -275,6 +274,7 @@ private fun InviteSubtitle(
 @Composable
 private fun MessagePreviewAndIndicatorRow(
     room: RoomListRoomSummary,
+    showUnreadCount: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -326,7 +326,9 @@ private fun MessagePreviewAndIndicatorRow(
                 val messagePreview = room.latestEvent.content()
                 val annotatedMessagePreview = messagePreview as? AnnotatedString ?: AnnotatedString(text = messagePreview.orEmpty().toString())
                 Text(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .clipToBounds(),
                     text = annotatedMessagePreview,
                     color = ElementTheme.colors.roomListRoomMessage,
                     style = ElementTheme.typography.fontBodyMdRegular,
@@ -360,8 +362,18 @@ private fun MessagePreviewAndIndicatorRow(
             }
             if (room.hasNewContent) {
                 val contentDescription = stringResource(CommonStrings.a11y_notifications_new_messages)
+                val count = if (showUnreadCount) {
+                    if (room.userDefinedNotificationMode == RoomNotificationMode.MUTE) {
+                        room.numberOfUnreadMessages
+                    } else {
+                        room.numberOfUnreadNotifications
+                    }
+                } else {
+                    null
+                }
                 UnreadIndicatorAtom(
                     color = tint,
+                    count = count,
                     contentDescription = contentDescription,
                 )
             }
@@ -381,7 +393,9 @@ private fun InviteNameAndIndicatorRow(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .clipToBounds(),
             style = ElementTheme.typography.fontBodyLgMedium,
             text = name?.toSafeLength(ellipsize = true) ?: stringResource(id = CommonStrings.common_no_room_name),
             fontStyle = FontStyle.Italic.takeIf { name == null },
