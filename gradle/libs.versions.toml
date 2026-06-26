@@ -88,7 +88,7 @@ google_firebase_bom = "com.google.firebase:firebase-bom:34.15.0"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 ksp_plugin = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
-google_tink = "com.google.crypto.tink:tink-android:1.21.0"
+google_tink = "com.google.crypto.tink:tink-android:1.22.0"
 jna = "net.java.dev.jna:jna:5.19.1"
 
 # AndroidX
