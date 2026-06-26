@@ -50,7 +50,13 @@ class LinkNewDeviceRootPresenter(
         LaunchedEffect(step) {
             when (val finalStep = step) {
                 is LinkMobileStep.Uninitialized -> {
-                    qrCodeData = AsyncData.Uninitialized
+                    // Ignore this step when loading QrCode
+                    if (!qrCodeData.isLoading()) {
+                        qrCodeData = AsyncData.Uninitialized
+                    }
+                }
+                is LinkMobileStep.CreatingQrCode -> {
+                    qrCodeData = AsyncData.Loading()
                 }
                 is LinkMobileStep.QrReady -> {
                     qrCodeData = AsyncData.Success(Unit)
@@ -64,12 +70,6 @@ class LinkNewDeviceRootPresenter(
 
         fun handleEvent(event: LinkNewDeviceRootEvent) {
             when (event) {
-                LinkNewDeviceRootEvent.LinkMobileDevice -> coroutineScope.launch {
-                    qrCodeData = AsyncData.Loading()
-                    // Wait for the QrCode to be ready
-                    linkNewMobileHandler.reset()
-                    linkNewMobileHandler.createAndStartNewHandler()
-                }
                 LinkNewDeviceRootEvent.CloseDialog -> coroutineScope.launch {
                     linkNewMobileHandler.reset()
                 }

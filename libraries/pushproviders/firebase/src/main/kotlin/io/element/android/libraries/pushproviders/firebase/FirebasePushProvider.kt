@@ -26,7 +26,7 @@ class FirebasePushProvider(
     private val firebaseStore: FirebaseStore,
     private val pusherSubscriber: PusherSubscriber,
     private val isPlayServiceAvailable: IsPlayServiceAvailable,
-    private val firebaseTokenRotator: FirebaseTokenRotator,
+    private val rotateFirebaseSession: RotateFirebaseSession,
     private val firebaseGatewayProvider: FirebaseGatewayProvider,
 ) : PushProvider {
     override val index = FirebaseConfig.INDEX
@@ -40,7 +40,7 @@ class FirebasePushProvider(
     }
 
     override suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor): Result<Unit> {
-        val pushKey = firebaseStore.getFcmToken() ?: return Result.failure<Unit>(
+        val pushKey = firebaseStore.getInstallationId() ?: return Result.failure<Unit>(
             IllegalStateException(
                 "Unable to register pusher, Firebase token is not known."
             )
@@ -59,7 +59,7 @@ class FirebasePushProvider(
     override suspend fun getCurrentDistributor(sessionId: SessionId) = firebaseDistributor
 
     override suspend fun unregister(matrixClient: MatrixClient): Result<Unit> {
-        val pushKey = firebaseStore.getFcmToken()
+        val pushKey = firebaseStore.getInstallationId()
         return if (pushKey == null) {
             Timber.tag(loggerTag.value).w("Unable to unregister pusher, Firebase token is not known.")
             Result.success(Unit)
@@ -74,7 +74,7 @@ class FirebasePushProvider(
     override suspend fun onSessionDeleted(sessionId: SessionId) = Unit
 
     override suspend fun getPushConfig(sessionId: SessionId): Config? {
-        return firebaseStore.getFcmToken()?.let { fcmToken ->
+        return firebaseStore.getInstallationId()?.let { fcmToken ->
             Config(
                 url = firebaseGatewayProvider.getFirebaseGateway(),
                 pushKey = fcmToken
@@ -85,7 +85,7 @@ class FirebasePushProvider(
     override fun canRotateToken(): Boolean = true
 
     override suspend fun rotateToken(): Result<Unit> {
-        return firebaseTokenRotator.rotate()
+        return rotateFirebaseSession()
     }
 
     companion object {
