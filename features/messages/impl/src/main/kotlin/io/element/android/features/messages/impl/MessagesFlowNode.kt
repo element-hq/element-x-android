@@ -812,6 +812,7 @@ class MessagesFlowNode(
                         mode = DateFormatterMode.Full,
                     ),
                     initialIndex = galleryItemIndex,
+                    isAttachment = false,
                 )
                 val galleryItems = event.content.items.map { galleryItem ->
                     GalleryItemData(
@@ -844,6 +845,7 @@ class MessagesFlowNode(
                         mode = DateFormatterMode.Full,
                     ),
                     initialIndex = galleryItemIndex,
+                    isAttachment = true,
                 )
                 val galleryItems = event.content.attachments.map { attachment ->
                     GalleryItemData(

@@ -129,7 +129,11 @@ class MediaViewerNode(
                 is MediaViewerEntryPoint.Params.Avatar ->
                     MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(Timeline.Mode.Media)
                 is MediaViewerEntryPoint.Params.EventGallery ->
-                    MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(Timeline.Mode.Media)
+                    if (inputs.galleryInfo.isAttachment) {
+                        MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios(Timeline.Mode.Media)
+                    } else {
+                        MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(Timeline.Mode.Media)
+                    }
                 is MediaViewerEntryPoint.Params.RoomMedia ->
                     inputs.mode
             },

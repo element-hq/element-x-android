@@ -23,6 +23,7 @@ data class GalleryInfo(
     val dateSent: String?,
     val dateSentFull: String?,
     val initialIndex: Int,
+    val isAttachment: Boolean,
 ) : Parcelable
 
 @Parcelize
