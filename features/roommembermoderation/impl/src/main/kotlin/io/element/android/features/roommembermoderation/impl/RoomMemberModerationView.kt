@@ -46,6 +46,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.dialogs.TextFieldDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
+import io.element.android.libraries.designsystem.modifiers.niceClickable
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.IconSource
@@ -77,6 +78,7 @@ fun RoomMemberModerationView(
                 onSelectAction = onSelectAction,
                 onAvatarClick = onAvatarClick,
                 onDismiss = { state.eventSink(InternalRoomMemberModerationEvents.Reset) },
+                onCopyToClipboard = { text -> state.eventSink(InternalRoomMemberModerationEvents.CopyToClipboard(text)) },
             )
         }
         RoomMemberAsyncActions(state = state)
@@ -219,6 +221,7 @@ private fun RoomMemberActionsBottomSheet(
     onSelectAction: (ModerationAction, MatrixUser) -> Unit,
     onAvatarClick: ((MatrixUser) -> Unit)? = null,
     onDismiss: () -> Unit,
+    onCopyToClipboard: (String) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -236,7 +239,8 @@ private fun RoomMemberActionsBottomSheet(
         Column(
             modifier = Modifier
                 .padding(vertical = 16.dp)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Avatar(
                 avatarData = user.getAvatarData(size = AvatarSize.RoomListManageUser),
@@ -261,7 +265,7 @@ private fun RoomMemberActionsBottomSheet(
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
-                    .fillMaxWidth()
+                    .niceClickable { onCopyToClipboard(bestName) }
             )
             // Show user ID only if it's different from the display name
             if (bestName != user.userId.value) {
@@ -274,7 +278,7 @@ private fun RoomMemberActionsBottomSheet(
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
-                        .fillMaxWidth()
+                        .niceClickable { onCopyToClipboard(user.userId.value) }
                 )
             }
             Spacer(modifier = Modifier.height(32.dp))

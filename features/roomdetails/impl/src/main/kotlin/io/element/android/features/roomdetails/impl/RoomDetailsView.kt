@@ -154,6 +154,9 @@ fun RoomDetailsView(
                         openAvatarPreview = { avatarUrl ->
                             openAvatarPreview(state.roomName, avatarUrl)
                         },
+                        onTitleClick = {
+                            state.eventSink(RoomDetailsEvent.CopyToClipboard(state.roomName))
+                        },
                         onSubtitleClick = { subtitle ->
                             state.eventSink(RoomDetailsEvent.CopyToClipboard(subtitle))
                         }
@@ -166,6 +169,9 @@ fun RoomDetailsView(
                         isTombstoned = state.isTombstoned,
                         openAvatarPreview = { name, avatarUrl ->
                             openAvatarPreview(name, avatarUrl)
+                        },
+                        onTitleClick = {
+                            state.eventSink(RoomDetailsEvent.CopyToClipboard(state.roomName))
                         },
                         onSubtitleClick = { subtitle ->
                             state.eventSink(RoomDetailsEvent.CopyToClipboard(subtitle))
@@ -462,7 +468,8 @@ private fun RoomHeaderSection(
     heroes: ImmutableList<MatrixUser>,
     isTombstoned: Boolean,
     openAvatarPreview: (url: String) -> Unit,
-    onSubtitleClick: (String) -> Unit,
+    onTitleClick: (() -> Unit)? = null,
+    onSubtitleClick: ((String) -> Unit)? = null,
 ) {
     Column(
         modifier = Modifier
@@ -492,6 +499,7 @@ private fun RoomHeaderSection(
         TitleAndSubtitle(
             title = roomName,
             subtitle = roomAlias?.value,
+            onTitleClick = onTitleClick,
             onSubtitleClick = onSubtitleClick,
         )
     }
@@ -503,7 +511,8 @@ private fun DmHeaderSection(
     roomName: String,
     isTombstoned: Boolean,
     openAvatarPreview: (name: String, url: String) -> Unit,
-    onSubtitleClick: (String) -> Unit,
+    onTitleClick: (() -> Unit)? = null,
+    onSubtitleClick: ((String) -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -534,6 +543,7 @@ private fun DmHeaderSection(
         TitleAndSubtitle(
             title = roomName,
             subtitle = otherMember.userId.value,
+            onTitleClick = onTitleClick,
             onSubtitleClick = onSubtitleClick,
         )
     }
@@ -543,11 +553,17 @@ private fun DmHeaderSection(
 private fun TitleAndSubtitle(
     title: String,
     subtitle: String?,
-    onSubtitleClick: (String) -> Unit,
+    onTitleClick: (() -> Unit)? = null,
+    onSubtitleClick: ((String) -> Unit)? = null,
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(modifier = Modifier.height(24.dp))
         Text(
+            modifier = if (onTitleClick != null) {
+                Modifier.niceClickable { onTitleClick() }
+            } else {
+                Modifier
+            },
             text = title,
             style = ElementTheme.typography.fontHeadingLgBold,
             textAlign = TextAlign.Center,
@@ -555,7 +571,11 @@ private fun TitleAndSubtitle(
         if (subtitle != null) {
             Spacer(modifier = Modifier.height(6.dp))
             Text(
-                modifier = Modifier.niceClickable { onSubtitleClick(subtitle) },
+                modifier = if (onSubtitleClick != null) {
+                    Modifier.niceClickable { onSubtitleClick(subtitle) }
+                } else {
+                    Modifier
+                },
                 text = subtitle,
                 style = ElementTheme.typography.fontBodyLgRegular,
                 color = ElementTheme.colors.textSecondary,
