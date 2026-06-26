@@ -29,20 +29,18 @@ import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
 import io.element.android.tests.testutils.fake.FakeTemporaryUriDeleter
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Ignore
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
 import kotlin.time.Duration
 
-@RunWith(RobolectricTestRunner::class)
-class AndroidMediaPreProcessorTest {
+class AndroidMediaPreProcessorTest : RobolectricTest() {
     @Test
     fun `orientedImageDimensions swaps width and height for 90 degree exif orientation`() {
         val (width, height) = orientedImageDimensions(

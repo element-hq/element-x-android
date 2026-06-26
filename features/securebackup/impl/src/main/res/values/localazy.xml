@@ -24,7 +24,10 @@
   <string name="screen_custom_recovery_key_confirm_submit">"Finish setup"</string>
   <string name="screen_custom_recovery_key_confirm_subtitle">"Enter your recovery key again."</string>
   <string name="screen_custom_recovery_key_confirm_title">"Confirm your recovery key"</string>
-  <string name="screen_custom_recovery_key_input_notice">"Minimum %1$s characters. Do not use your account password"</string>
+  <plurals name="screen_custom_recovery_key_input_notice">
+    <item quantity="one">"Minimum %1$d character. Do not use your account password"</item>
+    <item quantity="other">"Minimum %1$d characters. Do not use your account password"</item>
+  </plurals>
   <string name="screen_custom_recovery_key_input_strength">"Strength"</string>
   <string name="screen_custom_recovery_key_input_strength_a11y">"Passphrase strength: %1$s"</string>
   <string name="screen_custom_recovery_key_input_strength_moderate">"Moderate"</string>

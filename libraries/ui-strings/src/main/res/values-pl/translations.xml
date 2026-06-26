@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_avatar">"Dodaj awatar"</string>
   <string name="a11y_add_reaction">"Dodaj reakcję: %1$s"</string>
   <string name="a11y_address">"Adres"</string>
   <string name="a11y_avatar">"Awatar"</string>
@@ -30,6 +31,7 @@
   <string name="a11y_page_n">"Strona %1$d"</string>
   <string name="a11y_pause">"Wstrzymaj"</string>
   <string name="a11y_paused_voice_message">"Wiadomość głosowa, czas trwania: %1$s, aktualna pozycja: %2$s"</string>
+  <string name="a11y_photo_preview">"Podgląd zdjęcia"</string>
   <string name="a11y_pin_field">"Pole PIN"</string>
   <string name="a11y_pinned_location">"Przypięta lokalizacja"</string>
   <string name="a11y_play">"Odtwórz"</string>
@@ -65,6 +67,7 @@
   <string name="a11y_tombstoned_room">"Pokój nagrobkowy"</string>
   <string name="a11y_user_avatar">"Awatar użytkownika"</string>
   <string name="a11y_user_menu">"Menu użytkownika"</string>
+  <string name="a11y_video_preview">"Podgląd wideo"</string>
   <string name="a11y_view_avatar">"Wyświetl awatar"</string>
   <string name="a11y_view_details">"Wyświetl szczegóły"</string>
   <string name="a11y_voice_message">"Wiadomość głosowa, czas trwania: %1$s"</string>
@@ -216,6 +219,7 @@
   <string name="common_blocked_users">"Zablokowani użytkownicy"</string>
   <string name="common_bubbles">"Bąbelki"</string>
   <string name="common_call_declined">"Połączenie odrzucone"</string>
+  <string name="common_call_in_progress">"Trwa połączenie"</string>
   <string name="common_call_started">"Rozpoczęto rozmowę"</string>
   <string name="common_call_you_declined">"Odrzuciłeś połączenie"</string>
   <string name="common_chat_backup">"Backup czatu"</string>
@@ -260,6 +264,7 @@ Powód: %1$s."</string>
   <string name="common_forward_message">"Przekaż wiadomość"</string>
   <string name="common_frequently_used">"Często używane"</string>
   <string name="common_gif">"GIF"</string>
+  <string name="common_group_call_in_progress">"Trwa połączenie grupowe"</string>
   <string name="common_image">"Zdjęcie"</string>
   <string name="common_in_reply_to">"W odpowiedzi do %1$s"</string>
   <string name="common_install_apk_android">"Zainstaluj APK"</string>
@@ -409,6 +414,7 @@ Powód: %1$s."</string>
   <string name="common_unmute">"Wyłącz wyciszenie"</string>
   <string name="common_unsupported_call">"Nieobsługiwane połączenie"</string>
   <string name="common_unsupported_event">"Nieobsługiwane zdarzenie"</string>
+  <string name="common_user_started_a_call">"%1$s rozpoczął połączenie"</string>
   <string name="common_username">"Nazwa użytkownika"</string>
   <string name="common_verification_cancelled">"Weryfikacja anulowana"</string>
   <string name="common_verification_complete">"Weryfikacja zakończona"</string>
@@ -545,6 +551,11 @@ Czy na pewno chcesz kontynuować?"</string>
   <string name="screen_space_list_title">"Przestrzenie"</string>
   <string name="screen_static_location_sheet_timestamp_description">"Udostępnianie %1$s"</string>
   <string name="screen_static_location_sheet_title">"Na mapie"</string>
+  <plurals name="screen_timeline_active_call_extra_joined_count">
+    <item quantity="one">"+ %1$d dołączył"</item>
+    <item quantity="few">"+ %1$d dołączyło"</item>
+    <item quantity="many">"+ %1$d dołączyło"</item>
+  </plurals>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Wiadomość nie została wysłana, ponieważ tożsamość %1$s została zresetowana."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Wiadomość nie została wysłana, ponieważ %1$s nie zweryfikował wszystkich urządzeń."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Wiadomość nie została wysłana, ponieważ nie zweryfikowałeś jednego lub więcej swoich urządzeń."</string>
