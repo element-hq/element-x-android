@@ -69,6 +69,7 @@ fun TimelineItemGroupedEventsRow(
                 eventSink = eventSink,
                 modifier = contentModifier,
                 onContentClick = null,
+                onGalleryItemClick = {},
                 onLongClick = null,
                 onContentLayoutChange = onContentLayoutChange
             )
@@ -140,6 +141,7 @@ private fun TimelineItemGroupedEventsRowContent(
                 eventSink = eventSink,
                 modifier = contentModifier,
                 onContentClick = null,
+                onGalleryItemClick = {},
                 onLongClick = null,
                 onContentLayoutChange = onContentLayoutChange
             )
@@ -177,6 +179,7 @@ private fun TimelineItemGroupedEventsRowContent(
                         onLinkClick = onLinkClick,
                         onLinkLongClick = onLinkLongClick,
                         onContentClick = onClick,
+                        onGalleryItemClick = { _, _ -> },
                         onLongClick = onLongClick,
                         inReplyToClick = inReplyToClick,
                         onReactionClick = onReactionClick,

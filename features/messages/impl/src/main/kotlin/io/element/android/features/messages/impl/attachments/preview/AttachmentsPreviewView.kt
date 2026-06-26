@@ -9,11 +9,16 @@
 package io.element.android.features.messages.impl.attachments.preview
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,12 +26,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -62,9 +72,11 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Scaffold
+import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Switch
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.theme.floatingDateBadgeBackground
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaRenderer
@@ -77,6 +89,20 @@ import io.element.android.libraries.ui.utils.formatter.rememberFileSizeFormatter
 import io.element.android.wysiwyg.display.TextDisplay
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
+import kotlin.time.Duration.Companion.milliseconds
+
+private val SingleItemPreviewRenderer = object : LocalMediaRenderer {
+    @Composable
+    override fun Render(localMedia: LocalMedia) {
+        Image(
+            painter = painterResource(id = CommonDrawables.sample_background),
+            modifier = Modifier.fillMaxSize(),
+            contentDescription = null,
+        )
+    }
+}
 
 /**
  * Ref: https://www.figma.com/design/zftpgS6LjiczobJZ1GUNpt/Updates-to-Media---File-Upload?node-id=51-3514
@@ -252,6 +278,7 @@ private fun AttachmentSendStateView(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 private fun AttachmentPreviewContent(
     state: AttachmentsPreviewState,
@@ -266,16 +293,75 @@ private fun AttachmentPreviewContent(
     ) {
         Box(
             modifier = Modifier
-                .weight(1f),
-            contentAlignment = Alignment.Center
+                .fillMaxSize()
+                .weight(1f)
         ) {
-            when (val attachment = state.attachment) {
-                is Attachment.Media -> {
-                    localMediaRenderer.Render(attachment.localMedia)
+            if (state.isGallery) {
+                val pagerState = rememberPagerState(
+                    initialPage = state.currentIndex,
+                    pageCount = { state.attachments.size },
+                )
+                var isPillVisible by remember { mutableStateOf(true) }
+
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier.fillMaxSize(),
+                    beyondViewportPageCount = 1,
+                    contentPadding = PaddingValues(horizontal = 20.dp),
+                    pageSpacing = 10.dp,
+                ) { page ->
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        val attachment = state.attachments[page]
+                        when (attachment) {
+                            is Attachment.Media -> {
+                                localMediaRenderer.Render(attachment.localMedia)
+                            }
+                        }
+                    }
+                }
+
+                LaunchedEffect(pagerState) {
+                    snapshotFlow { pagerState.isScrollInProgress }
+                        .collectLatest { isScrolling ->
+                            if (isScrolling) {
+                                isPillVisible = true
+                            } else {
+                                delay(2000.milliseconds)
+                                isPillVisible = false
+                            }
+                        }
+                }
+
+                androidx.compose.animation.AnimatedVisibility(
+                    visible = isPillVisible,
+                    enter = fadeIn(animationSpec = tween(150)),
+                    exit = fadeOut(animationSpec = tween(300)),
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .padding(top = 8.dp),
+                ) {
+                    GalleryCarouselPill(
+                        currentIndex = pagerState.currentPage + 1,
+                        totalCount = state.totalCount,
+                    )
+                }
+
+                LaunchedEffect(pagerState.currentPage) {
+                    state.eventSink(AttachmentsPreviewEvent.SetCurrentCarouselIndex(pagerState.currentPage))
+                }
+            } else {
+                val firstAttachment = state.attachments.first()
+                when (firstAttachment) {
+                    is Attachment.Media -> {
+                        localMediaRenderer.Render(firstAttachment.localMedia)
+                    }
                 }
             }
         }
-        val mediaInfo = (state.attachment as? Attachment.Media)?.localMedia?.info
+        val mediaInfo = (state.attachments.first() as? Attachment.Media)?.localMedia?.info
         if (mediaInfo?.isImageAttachment() == true) {
             ImageOptimizationSelector(state.mediaOptimizationSelectorState)
         } else if (mediaInfo?.mimeType?.isMimeTypeVideo() == true) {
@@ -485,16 +571,16 @@ private fun AttachmentsPreviewBottomActions(
 internal fun AttachmentsPreviewViewPreview(@PreviewParameter(AttachmentsPreviewStateProvider::class) state: AttachmentsPreviewState) = ElementPreviewDark {
     AttachmentsPreviewView(
         state = state,
-        localMediaRenderer = object : LocalMediaRenderer {
-            @Composable
-            override fun Render(localMedia: LocalMedia) {
-                Image(
-                    painter = painterResource(id = CommonDrawables.sample_background),
-                    modifier = Modifier.fillMaxSize(),
-                    contentDescription = null,
-                )
-            }
-        }
+        localMediaRenderer = SingleItemPreviewRenderer,
+    )
+}
+
+@Preview
+@Composable
+internal fun AttachmentsPreviewGalleryViewPreview() = ElementPreviewDark {
+    AttachmentsPreviewView(
+        state = anAttachmentsPreviewGalleryState(),
+        localMediaRenderer = SingleItemPreviewRenderer,
     )
 }
 
@@ -536,4 +622,25 @@ fun VideoCompressionPreset.subtitle(): String {
             VideoCompressionPreset.LOW -> CommonStrings.common_video_quality_low_description
         }
     )
+}
+
+@Composable
+internal fun GalleryCarouselPill(
+    currentIndex: Int,
+    totalCount: Int,
+    modifier: Modifier = Modifier,
+) {
+    Surface(
+        modifier = modifier,
+        shape = RoundedCornerShape(16.dp),
+        color = ElementTheme.colors.floatingDateBadgeBackground,
+        shadowElevation = 4.dp,
+    ) {
+        Text(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            text = stringResource(R.string.screen_media_upload_preview_item_count, currentIndex, totalCount),
+            style = ElementTheme.typography.fontBodyMdMedium,
+            color = ElementTheme.colors.textPrimary,
+        )
+    }
 }

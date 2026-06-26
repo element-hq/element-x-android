@@ -70,6 +70,8 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemGalleryContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
@@ -145,6 +147,7 @@ fun TimelineItemEventRow(
     isLastOutgoingMessage: Boolean,
     displayThreadSummaries: Boolean,
     onEventClick: () -> Unit,
+    onGalleryItemClick: ((Int) -> Unit),
     onLongClick: () -> Unit,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
@@ -165,13 +168,14 @@ fun TimelineItemEventRow(
             content = event.content,
             hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId),
             onContentClick = onContentClick,
+            onGalleryItemClick = onGalleryItemClick,
             onLongClick = onLongClick,
             onShowContentClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
             onLinkClick = onLinkClick,
             onLinkLongClick = onLinkLongClick,
             eventSink = eventSink,
             modifier = contentModifier,
-            onContentLayoutChange = onContentLayoutChange
+            onContentLayoutChange = onContentLayoutChange,
         )
     },
 ) {
@@ -776,6 +780,8 @@ private fun MessageEventBubbleContent(
     val timestampPosition = when (val content = event.content) {
         is TimelineItemImageContent -> if (content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
         is TimelineItemVideoContent -> if (content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
+        is TimelineItemGalleryContent -> if (content.showCaption) TimestampPosition.Aligned else TimestampPosition.Below
+        is TimelineItemAttachmentsContent -> TimestampPosition.Below
         is TimelineItemStickerContent -> TimestampPosition.Overlay
         is TimelineItemLocationContent -> {
             val content = content.ensureActiveLiveLocation()
@@ -790,6 +796,8 @@ private fun MessageEventBubbleContent(
     val paddingBehaviour = when (event.content) {
         is TimelineItemImageContent -> if (event.content.showCaption) ContentPadding.CaptionedMedia else ContentPadding.Media
         is TimelineItemVideoContent -> if (event.content.showCaption) ContentPadding.CaptionedMedia else ContentPadding.Media
+        is TimelineItemGalleryContent -> ContentPadding.CaptionedMedia
+        is TimelineItemAttachmentsContent -> ContentPadding.CaptionedMedia
         is TimelineItemStickerContent,
         is TimelineItemLocationContent -> ContentPadding.Media
         else -> ContentPadding.Textual

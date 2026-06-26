@@ -13,8 +13,11 @@ import android.text.style.StyleSpan
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
+import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
+import kotlinx.collections.immutable.toImmutableList
 import org.jsoup.nodes.Document
+import kotlin.time.Duration
 
 class TimelineItemEventContentProvider : PreviewParameterProvider<TimelineItemEventContent> {
     override val values = sequenceOf(
@@ -110,4 +113,82 @@ fun aTimelineItemStateEventContent(
     body: String = "A state event",
 ) = TimelineItemStateEventContent(
     body = body,
+)
+
+fun aTimelineItemGalleryContent(
+    body: String = "Gallery",
+    caption: String? = null,
+    items: List<GalleryItem> = listOf(
+        aGalleryItem(),
+        aGalleryItem(),
+        aGalleryItem(),
+        aGalleryItem(),
+    ),
+) = TimelineItemGalleryContent(
+    body = body,
+    caption = caption,
+    formattedCaption = null,
+    isEdited = false,
+    items = items.toImmutableList(),
+)
+
+fun aGalleryItem(
+    filename: String = "photo.jpg",
+    width: Int = 400,
+    height: Int = 300,
+    type: GalleryItem.Type = GalleryItem.Type.Image,
+    duration: Duration = Duration.ZERO,
+) = GalleryItem(
+    filename = filename,
+    mimeType = when (type) {
+        GalleryItem.Type.Video -> "video/mp4"
+        GalleryItem.Type.Audio -> "audio/mpeg"
+        GalleryItem.Type.File -> "application/pdf"
+        GalleryItem.Type.Image -> "image/jpeg"
+    },
+    mediaSource = MediaSource(url = "", json = ""),
+    type = type,
+    thumbnailSource = null,
+    width = width,
+    height = height,
+    thumbnailWidth = width,
+    thumbnailHeight = height,
+    blurhash = null,
+    duration = duration,
+)
+
+fun aTimelineItemAttachmentsContent(
+    body: String = "Attachments",
+    caption: String? = null,
+    attachments: List<AttachmentItem> = listOf(
+        anAttachmentItem(filename = "document.pdf", fileExtension = "pdf"),
+        anAttachmentItem(filename = "recording.mp3", fileExtension = "mp3", fileSize = 4_500_000L, formattedFileSize = "4.5MB"),
+    ),
+) = TimelineItemAttachmentsContent(
+    body = body,
+    caption = caption,
+    formattedCaption = null,
+    isEdited = false,
+    attachments = attachments.toImmutableList(),
+)
+
+fun anAttachmentItem(
+    filename: String = "file.pdf",
+    fileExtension: String = "pdf",
+    fileSize: Long? = 1_000_000L,
+    formattedFileSize: String = "1MB",
+    mimeType: String? = null,
+    thumbnailSource: MediaSource? = null,
+    hasThumbnail: Boolean = false,
+) = AttachmentItem(
+    filename = filename,
+    mimeType = mimeType ?: when {
+        hasThumbnail -> "image/jpeg"
+        else -> "application/$fileExtension"
+    },
+    mediaSource = MediaSource(url = "", json = ""),
+    thumbnailSource = thumbnailSource ?: if (hasThumbnail) MediaSource(url = "", json = "") else null,
+    fileSize = fileSize,
+    formattedFileSize = formattedFileSize,
+    fileExtension = fileExtension,
 )

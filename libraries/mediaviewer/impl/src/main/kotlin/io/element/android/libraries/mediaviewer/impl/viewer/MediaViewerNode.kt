@@ -74,42 +74,49 @@ class MediaViewerNode(
         callback.onDone()
     }
 
-    private val mediaGallerySource = if (inputs.mode == MediaViewerEntryPoint.MediaViewerMode.SingleMedia) {
-        SingleMediaGalleryDataSource.createFrom(inputs)
-    } else {
-        val eventId = inputs.eventId
-        if (eventId == null) {
-            // Should not happen
-            timelineMediaGalleryDataSource
-        } else {
-            // Can we use a specific timeline?
-            val timelineMode = inputs.mode.getTimelineMode()
-            when (timelineMode) {
-                null -> timelineMediaGalleryDataSource
-                Timeline.Mode.Live,
-                is Timeline.Mode.FocusedOnEvent,
-                is Timeline.Mode.Thread -> {
-                    // Does timelineMediaGalleryDataSource knows the eventId?
-                    val lastData = timelineMediaGalleryDataSource.getLastData().dataOrNull()
-                    val isEventKnown = lastData?.hasEvent(eventId) == true
-                    if (isEventKnown) {
-                        timelineMediaGalleryDataSource
-                    } else {
+    private val mediaGallerySource = when (inputs) {
+        is MediaViewerEntryPoint.Params.Avatar ->
+            SingleMediaGalleryDataSource.createFrom(inputs)
+        is MediaViewerEntryPoint.Params.EventGallery ->
+            GalleryMediaGalleryDataSource.createFrom(
+                eventId = inputs.eventId,
+                galleryItems = inputs.galleryItems,
+                galleryInfo = inputs.galleryInfo,
+            )
+        is MediaViewerEntryPoint.Params.RoomMedia -> {
+            val eventId = inputs.eventId
+            if (eventId == null) {
+                // Should not happen
+                timelineMediaGalleryDataSource
+            } else {
+                // Can we use a specific timeline?
+                val timelineMode = inputs.mode.getTimelineMode()
+                when (timelineMode) {
+                    Timeline.Mode.Live,
+                    is Timeline.Mode.FocusedOnEvent,
+                    is Timeline.Mode.Thread -> {
+                        // Does timelineMediaGalleryDataSource knows the eventId?
+                        val lastData = timelineMediaGalleryDataSource.getLastData().dataOrNull()
+                        val isEventKnown = lastData?.hasEvent(eventId) == true
+                        if (isEventKnown) {
+                            timelineMediaGalleryDataSource
+                        } else {
+                            focusedTimelineMediaGalleryDataSourceFactory.createFor(
+                                eventId = eventId,
+                                mediaItem = inputs.toMediaItem(),
+                                onlyPinnedEvents = false,
+                            )
+                        }
+                    }
+                    Timeline.Mode.PinnedEvents -> {
                         focusedTimelineMediaGalleryDataSourceFactory.createFor(
                             eventId = eventId,
                             mediaItem = inputs.toMediaItem(),
-                            onlyPinnedEvents = false,
+                            onlyPinnedEvents = true,
                         )
                     }
+                    Timeline.Mode.Media -> timelineMediaGalleryDataSource
                 }
-                Timeline.Mode.PinnedEvents -> {
-                    focusedTimelineMediaGalleryDataSourceFactory.createFor(
-                        eventId = eventId,
-                        mediaItem = inputs.toMediaItem(),
-                        onlyPinnedEvents = true,
-                    )
-                }
-                Timeline.Mode.Media -> timelineMediaGalleryDataSource
             }
         }
     }
@@ -118,7 +125,18 @@ class MediaViewerNode(
         inputs = inputs,
         navigator = this,
         dataSource = MediaViewerDataSource(
-            mode = inputs.mode,
+            mode = when (inputs) {
+                is MediaViewerEntryPoint.Params.Avatar ->
+                    MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(Timeline.Mode.Media)
+                is MediaViewerEntryPoint.Params.EventGallery ->
+                    if (inputs.galleryInfo.isAttachment) {
+                        MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios(Timeline.Mode.Media)
+                    } else {
+                        MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(Timeline.Mode.Media)
+                    }
+                is MediaViewerEntryPoint.Params.RoomMedia ->
+                    inputs.mode
+            },
             coroutineScope = lifecycleScope,
             dispatcher = coroutineDispatchers.computation,
             galleryDataSource = mediaGallerySource,
@@ -149,10 +167,9 @@ class MediaViewerNode(
     }
 }
 
-internal fun MediaViewerEntryPoint.MediaViewerMode.getTimelineMode(): Timeline.Mode? {
+internal fun MediaViewerEntryPoint.MediaViewerMode.getTimelineMode(): Timeline.Mode {
     return when (this) {
         is MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos -> timelineMode
         is MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios -> timelineMode
-        else -> null
     }
 }
