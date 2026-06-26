@@ -95,7 +95,7 @@ fun TimelineItemEventContentView(
         )
         is TimelineItemGalleryContent -> TimelineItemGalleryView(
             content = content,
-            onContentClick = { index -> onGalleryItemClick(index) },
+            onGalleryItemClick = { index -> onGalleryItemClick(index) },
             onLongClick = onLongClick,
             onLinkClick = onLinkClick,
             onLinkLongClick = onLinkLongClick,
@@ -104,7 +104,7 @@ fun TimelineItemEventContentView(
         )
         is TimelineItemAttachmentsContent -> TimelineItemAttachmentsListView(
             content = content,
-            onContentClick = { index -> onGalleryItemClick(index) },
+            onGalleryItemClick = { index -> onGalleryItemClick(index) },
             onLinkClick = onLinkClick,
             onLinkLongClick = onLinkLongClick,
             onContentLayoutChange = {},

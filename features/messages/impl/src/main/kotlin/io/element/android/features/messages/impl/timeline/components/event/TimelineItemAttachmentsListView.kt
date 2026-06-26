@@ -59,14 +59,13 @@ import io.element.android.wysiwyg.link.Link
 @Composable
 fun TimelineItemAttachmentsListView(
     content: TimelineItemAttachmentsContent,
-    onContentClick: ((Int) -> Unit)?,
+    onGalleryItemClick: (Int) -> Unit,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (content.attachments.isEmpty()) return
-
     Column(modifier = modifier) {
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -80,12 +79,11 @@ fun TimelineItemAttachmentsListView(
                     }
                     AttachmentListItem(
                         attachment = attachment,
-                        onClick = onContentClick?.let { { it(index) } },
+                        onClick = { onGalleryItemClick(index) },
                     )
                 }
             }
         }
-
         if (content.showCaption) {
             HorizontalDivider(
                 color = ElementTheme.colors.borderInteractiveSecondary,
@@ -119,7 +117,7 @@ fun TimelineItemAttachmentsListView(
 @Composable
 private fun AttachmentListItem(
     attachment: AttachmentItem,
-    onClick: (() -> Unit)?,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val iconSize = 36.dp
@@ -127,13 +125,7 @@ private fun AttachmentListItem(
     val spacing = 8.dp
     Row(
         modifier = modifier
-            .then(
-                if (onClick != null) {
-                    Modifier.clickable(onClick = onClick)
-                } else {
-                    Modifier
-                }
-            )
+            .clickable(onClick = onClick)
             .padding(vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(spacing),
@@ -223,7 +215,7 @@ internal fun TimelineItemAttachmentsListViewPreview(
 ) = ElementPreview {
     TimelineItemAttachmentsListView(
         content = content,
-        onContentClick = {},
+        onGalleryItemClick = {},
         onLinkClick = {},
         onLinkLongClick = {},
         onContentLayoutChange = {},

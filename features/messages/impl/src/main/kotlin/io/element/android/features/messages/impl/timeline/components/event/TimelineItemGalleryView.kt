@@ -69,7 +69,7 @@ private val THREE_IMAGE_ROW_HEIGHT = 85.dp
 @Composable
 fun TimelineItemGalleryView(
     content: TimelineItemGalleryContent,
-    onContentClick: ((Int) -> Unit)?,
+    onGalleryItemClick: (Int) -> Unit,
     onLongClick: (() -> Unit)?,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
@@ -77,14 +77,11 @@ fun TimelineItemGalleryView(
     modifier: Modifier = Modifier,
 ) {
     if (content.items.isEmpty()) return
-
     val totalItems = content.items.size
     val showOverflow = totalItems > MAX_TILES
     val overflowCount = totalItems - MAX_TILES
-
     Column(modifier = modifier) {
         val containerModifier = Modifier.clip(RoundedCornerShape(GROUP_CORNER_RADIUS))
-
         Column(
             modifier = containerModifier.width(GALLERY_WIDTH),
             verticalArrangement = Arrangement.spacedBy(GRID_SPACING),
@@ -93,21 +90,21 @@ fun TimelineItemGalleryView(
                 totalItems == 1 -> {
                     SingleItemLayout(
                         item = content.items[0],
-                        onClick = onContentClick?.let { { it(0) } },
+                        onClick = { onGalleryItemClick(0) },
                         onLongClick = onLongClick,
                     )
                 }
                 totalItems == 2 -> {
                     TwoItemLayout(
                         items = content.items.toImmutableList(),
-                        onContentClick = onContentClick,
+                        onItemClick = onGalleryItemClick,
                         onLongClick = onLongClick,
                     )
                 }
                 totalItems == 3 -> {
                     ThreeItemLayout(
                         items = content.items.toImmutableList(),
-                        onContentClick = onContentClick,
+                        onItemClick = onGalleryItemClick,
                         onLongClick = onLongClick,
                     )
                 }
@@ -116,13 +113,12 @@ fun TimelineItemGalleryView(
                         items = content.items.toImmutableList(),
                         showOverflow = showOverflow,
                         overflowCount = overflowCount,
-                        onContentClick = onContentClick,
+                        onItemClick = onGalleryItemClick,
                         onLongClick = onLongClick,
                     )
                 }
             }
         }
-
         if (content.showCaption) {
             Spacer(modifier = Modifier.height(8.dp))
             val caption = if (LocalInspectionMode.current) {
@@ -153,7 +149,7 @@ fun TimelineItemGalleryView(
 @Composable
 private fun SingleItemLayout(
     item: GalleryItem,
-    onClick: (() -> Unit)?,
+    onClick: () -> Unit,
     onLongClick: (() -> Unit)?,
 ) {
     GalleryItemCell(
@@ -171,7 +167,7 @@ private fun SingleItemLayout(
 @Composable
 private fun TwoItemLayout(
     items: ImmutableList<GalleryItem>,
-    onContentClick: ((Int) -> Unit)?,
+    onItemClick: (Int) -> Unit,
     onLongClick: (() -> Unit)?,
 ) {
     Column(
@@ -183,7 +179,7 @@ private fun TwoItemLayout(
                 item = item,
                 isLast = false,
                 remainingCount = 0,
-                onClick = onContentClick?.let { { it(index) } },
+                onClick = { onItemClick(index) },
                 onLongClick = onLongClick,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -196,7 +192,7 @@ private fun TwoItemLayout(
 @Composable
 private fun ThreeItemLayout(
     items: ImmutableList<GalleryItem>,
-    onContentClick: ((Int) -> Unit)?,
+    onItemClick: (Int) -> Unit,
     onLongClick: (() -> Unit)?,
 ) {
     Column(
@@ -207,7 +203,7 @@ private fun ThreeItemLayout(
             item = items[0],
             isLast = false,
             remainingCount = 0,
-            onClick = onContentClick?.let { { it(0) } },
+            onClick = { onItemClick(0) },
             onLongClick = onLongClick,
             modifier = Modifier
                 .fillMaxWidth()
@@ -217,26 +213,18 @@ private fun ThreeItemLayout(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(GRID_SPACING),
         ) {
-            GalleryItemCell(
-                item = items[1],
-                isLast = false,
-                remainingCount = 0,
-                onClick = onContentClick?.let { { it(1) } },
-                onLongClick = onLongClick,
-                modifier = Modifier
-                    .weight(1f)
-                    .height(TWO_IMAGE_ROW_HEIGHT),
-            )
-            GalleryItemCell(
-                item = items[2],
-                isLast = false,
-                remainingCount = 0,
-                onClick = onContentClick?.let { { it(2) } },
-                onLongClick = onLongClick,
-                modifier = Modifier
-                    .weight(1f)
-                    .height(TWO_IMAGE_ROW_HEIGHT),
-            )
+            for (it in 1..2) {
+                GalleryItemCell(
+                    item = items[it],
+                    isLast = false,
+                    remainingCount = 0,
+                    onClick = { onItemClick(it) },
+                    onLongClick = onLongClick,
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(TWO_IMAGE_ROW_HEIGHT),
+                )
+            }
         }
     }
 }
@@ -246,7 +234,7 @@ private fun FourPlusItemLayout(
     items: ImmutableList<GalleryItem>,
     showOverflow: Boolean,
     overflowCount: Int,
-    onContentClick: ((Int) -> Unit)?,
+    onItemClick: (Int) -> Unit,
     onLongClick: (() -> Unit)?,
 ) {
     Column(
@@ -257,26 +245,18 @@ private fun FourPlusItemLayout(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(GRID_SPACING),
         ) {
-            GalleryItemCell(
-                item = items[0],
-                isLast = false,
-                remainingCount = 0,
-                onClick = onContentClick?.let { { it(0) } },
-                onLongClick = onLongClick,
-                modifier = Modifier
-                    .weight(1f)
-                    .height(TWO_IMAGE_ROW_HEIGHT),
-            )
-            GalleryItemCell(
-                item = items[1],
-                isLast = false,
-                remainingCount = 0,
-                onClick = onContentClick?.let { { it(1) } },
-                onLongClick = onLongClick,
-                modifier = Modifier
-                    .weight(1f)
-                    .height(TWO_IMAGE_ROW_HEIGHT),
-            )
+            for (it in 0..1) {
+                GalleryItemCell(
+                    item = items[it],
+                    isLast = false,
+                    remainingCount = 0,
+                    onClick = { onItemClick(it) },
+                    onLongClick = onLongClick,
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(TWO_IMAGE_ROW_HEIGHT),
+                )
+            }
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -292,7 +272,7 @@ private fun FourPlusItemLayout(
                         item = items[itemIndex],
                         isLast = isOverflowItem,
                         remainingCount = if (isOverflowItem) overflowCount else 0,
-                        onClick = onContentClick?.let { { it(itemIndex) } },
+                        onClick = { onItemClick(itemIndex) },
                         onLongClick = onLongClick,
                         modifier = Modifier
                             .weight(1f)
@@ -309,22 +289,16 @@ private fun GalleryItemCell(
     item: GalleryItem,
     isLast: Boolean,
     remainingCount: Int,
-    onClick: (() -> Unit)?,
+    onClick: () -> Unit,
     onLongClick: (() -> Unit)?,
     modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier
             .blurHashBackground(item.blurhash, alpha = 0.9f)
-            .then(
-                if (onClick != null) {
-                    Modifier.combinedClickable(
-                        onClick = onClick,
-                        onLongClick = onLongClick,
-                    )
-                } else {
-                    Modifier
-                }
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = onLongClick,
             ),
         contentAlignment = Alignment.Center,
     ) {
@@ -410,7 +384,7 @@ internal fun TimelineItemGalleryViewPreview(
 ) = ElementPreview {
     TimelineItemGalleryView(
         content = content,
-        onContentClick = {},
+        onGalleryItemClick = {},
         onLongClick = {},
         onLinkClick = {},
         onLinkLongClick = {},

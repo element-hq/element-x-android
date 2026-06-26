@@ -48,6 +48,7 @@ import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.debug.EventDebugInfoNode
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.GalleryItem
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentWithAttachment
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
@@ -795,43 +796,82 @@ class MessagesFlowNode(
         galleryItemIndex: Int,
         canUseOverlay: Boolean,
     ): Boolean {
-        if (event.content !is TimelineItemGalleryContent) return false
-        val galleryInfo = GalleryInfo(
-            caption = event.content.caption,
-            senderId = event.senderId,
-            senderName = event.safeSenderName,
-            senderAvatar = event.senderAvatar.url,
-            dateSent = dateFormatter.format(
-                event.sentTimeMillis,
-                mode = DateFormatterMode.Day,
-            ),
-            dateSentFull = dateFormatter.format(
-                timestamp = event.sentTimeMillis,
-                mode = DateFormatterMode.Full,
-            ),
-            initialIndex = galleryItemIndex,
-        )
-        val galleryItems = event.content.items.map { galleryItem ->
-            GalleryItemData(
-                filename = galleryItem.filename,
-                mimeType = galleryItem.mimeType,
-                mediaSource = galleryItem.mediaSource,
-                thumbnailSource = galleryItem.thumbnailSource,
-                type = galleryItem.type.toMediaViewerType(),
-            )
-        }.reversed()
-        val navTarget = NavTarget.GalleryViewer(
-            eventId = event.eventId,
-            galleryInfo = galleryInfo,
-            canUseOverlay = canUseOverlay,
-            galleryItems = galleryItems,
-        )
-        if (canUseOverlay) {
-            overlay.show(navTarget)
-        } else {
-            backstack.push(navTarget)
+        val navTarget = when (event.content) {
+            is TimelineItemGalleryContent -> {
+                val galleryInfo = GalleryInfo(
+                    caption = event.content.caption,
+                    senderId = event.senderId,
+                    senderName = event.safeSenderName,
+                    senderAvatar = event.senderAvatar.url,
+                    dateSent = dateFormatter.format(
+                        event.sentTimeMillis,
+                        mode = DateFormatterMode.Day,
+                    ),
+                    dateSentFull = dateFormatter.format(
+                        timestamp = event.sentTimeMillis,
+                        mode = DateFormatterMode.Full,
+                    ),
+                    initialIndex = galleryItemIndex,
+                )
+                val galleryItems = event.content.items.map { galleryItem ->
+                    GalleryItemData(
+                        filename = galleryItem.filename,
+                        mimeType = galleryItem.mimeType,
+                        mediaSource = galleryItem.mediaSource,
+                        thumbnailSource = galleryItem.thumbnailSource,
+                        type = galleryItem.type.toMediaViewerType(),
+                    )
+                }.reversed()
+                NavTarget.GalleryViewer(
+                    eventId = event.eventId,
+                    galleryInfo = galleryInfo,
+                    canUseOverlay = canUseOverlay,
+                    galleryItems = galleryItems,
+                )
+            }
+            is TimelineItemAttachmentsContent -> {
+                val galleryInfo = GalleryInfo(
+                    caption = event.content.caption,
+                    senderId = event.senderId,
+                    senderName = event.safeSenderName,
+                    senderAvatar = event.senderAvatar.url,
+                    dateSent = dateFormatter.format(
+                        event.sentTimeMillis,
+                        mode = DateFormatterMode.Day,
+                    ),
+                    dateSentFull = dateFormatter.format(
+                        timestamp = event.sentTimeMillis,
+                        mode = DateFormatterMode.Full,
+                    ),
+                    initialIndex = galleryItemIndex,
+                )
+                val galleryItems = event.content.attachments.map { attachment ->
+                    GalleryItemData(
+                        filename = attachment.filename,
+                        mimeType = attachment.mimeType,
+                        mediaSource = attachment.mediaSource,
+                        thumbnailSource = attachment.thumbnailSource,
+                        type = GalleryItemData.Type.File,
+                    )
+                }.reversed()
+                NavTarget.GalleryViewer(
+                    eventId = event.eventId,
+                    galleryInfo = galleryInfo,
+                    canUseOverlay = canUseOverlay,
+                    galleryItems = galleryItems,
+                )
+            }
+            else -> null
         }
-        return true
+        if (navTarget != null) {
+            if (canUseOverlay) {
+                overlay.show(navTarget)
+            } else {
+                backstack.push(navTarget)
+            }
+            return true
+        }
+        return false
     }
 
     private fun buildMediaViewerNavTarget(
