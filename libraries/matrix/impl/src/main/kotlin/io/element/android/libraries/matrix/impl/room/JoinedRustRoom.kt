@@ -396,6 +396,12 @@ class JoinedRustRoom(
         }
     }
 
+    override suspend fun sendStateEventRaw(eventType: String, stateKey: String, content: String): Result<EventId> = withContext(roomDispatcher) {
+        runCatchingExceptions {
+            innerRoom.sendStateEventRaw(eventType = eventType, stateKey = stateKey, content = content)
+        }.map(::EventId)
+    }
+
     override suspend fun enableEncryption(): Result<Unit> = withContext(roomDispatcher) {
         runCatchingExceptions {
             innerRoom.enableEncryption()

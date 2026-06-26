@@ -92,6 +92,14 @@ interface JoinedRoom : BaseRoom {
     suspend fun updateHistoryVisibility(historyVisibility: RoomHistoryVisibility): Result<Unit>
 
     /**
+     * Send a state event with raw JSON [content] for the given [eventType] and [stateKey].
+     *
+     * Used for state events that have no dedicated typed method (e.g. MSC1763 `m.room.retention`).
+     * Returns the id of the sent state event.
+     */
+    suspend fun sendStateEventRaw(eventType: String, stateKey: String, content: String): Result<EventId>
+
+    /**
      * Publish a new room alias for this room in the room directory.
      *
      * Returns:
