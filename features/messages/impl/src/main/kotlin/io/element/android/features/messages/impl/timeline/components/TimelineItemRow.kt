@@ -64,6 +64,7 @@ internal fun TimelineItemRow(
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
     onContentClick: (TimelineItem.Event) -> Unit,
+    onGalleryItemClick: (TimelineItem.Event, Int) -> Unit,
     onLongClick: (TimelineItem.Event) -> Unit,
     inReplyToClick: (EventId) -> Unit,
     onReactionClick: (key: String, TimelineItem.Event) -> Unit,
@@ -73,7 +74,6 @@ internal fun TimelineItemRow(
     onSwipeToReply: (TimelineItem.Event) -> Unit,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
-    onGalleryItemClick: ((TimelineItem.Event, Int) -> Unit)? = null,
     eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit =
         { event, contentModifier, onContentLayoutChange ->
             TimelineItemEventContentView(
@@ -81,7 +81,7 @@ internal fun TimelineItemRow(
                 hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId, event.isMine),
                 onShowContentClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
                 onContentClick = { onContentClick(event) },
-                onGalleryItemClick = { index -> onGalleryItemClick?.invoke(event, index) },
+                onGalleryItemClick = { index -> onGalleryItemClick(event, index) },
                 onLongClick = { onLongClick(event) },
                 onLinkClick = onLinkClick,
                 onLinkLongClick = onLinkLongClick,
@@ -180,7 +180,7 @@ internal fun TimelineItemRow(
                             onMoreReactionsClick = onMoreReactionsClick,
                             onReadReceiptClick = onReadReceiptClick,
                             onSwipeToReply = { onSwipeToReply(timelineItem) },
-                            onGalleryItemClick = { index -> onGalleryItemClick?.invoke(timelineItem, index) },
+                            onGalleryItemClick = { index -> onGalleryItemClick(timelineItem, index) },
                             eventSink = eventSink,
                             eventContentView = { contentModifier, onContentLayoutChange ->
                                 eventContentView(timelineItem, contentModifier, onContentLayoutChange)

@@ -119,7 +119,7 @@ class MessagesNode(
 
     interface Callback : Plugin {
         fun handleEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event, canUseOverlay: Boolean): Boolean
-        fun handleGalleryItemClick(event: TimelineItem.Event, canUseOverlay: Boolean, galleryItemIndex: Int): Boolean
+        fun handleGalleryItemClick(event: TimelineItem.Event, galleryItemIndex: Int, canUseOverlay: Boolean): Boolean
         fun navigateToPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?)
         fun navigateToRoomMemberDetails(userId: UserId)
         fun handlePermalinkClick(data: PermalinkData)
@@ -291,7 +291,7 @@ class MessagesNode(
                     }
                 },
                 onGalleryEventItemClick = { event, index ->
-                    callback.handleGalleryItemClick(event, canUseOverlay, index)
+                    callback.handleGalleryItemClick(event, index, canUseOverlay)
                 },
                 onUserDataClick = callback::navigateToRoomMemberDetails,
                 onLinkClick = { url, customTab ->

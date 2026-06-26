@@ -42,13 +42,13 @@ fun TimelineItemEventContentView(
     content: TimelineItemEventContent,
     hideMediaContent: Boolean,
     onContentClick: (() -> Unit)?,
+    onGalleryItemClick: ((Int) -> Unit),
     onLongClick: (() -> Unit)?,
     onShowContentClick: () -> Unit,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
-    onGalleryItemClick: ((Int) -> Unit)? = null,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit = {},
 ) {
     val presenterFactories = LocalTimelineItemPresenterFactories.current
@@ -95,7 +95,7 @@ fun TimelineItemEventContentView(
         )
         is TimelineItemGalleryContent -> TimelineItemGalleryView(
             content = content,
-            onContentClick = { index -> onGalleryItemClick?.invoke(index) },
+            onContentClick = { index -> onGalleryItemClick(index) },
             onLongClick = onLongClick,
             onLinkClick = onLinkClick,
             onLinkLongClick = onLinkLongClick,
@@ -104,7 +104,7 @@ fun TimelineItemEventContentView(
         )
         is TimelineItemAttachmentsContent -> TimelineItemAttachmentsListView(
             content = content,
-            onContentClick = { index -> onGalleryItemClick?.invoke(index) },
+            onContentClick = { index -> onGalleryItemClick(index) },
             onLinkClick = onLinkClick,
             onLinkLongClick = onLinkLongClick,
             onContentLayoutChange = {},

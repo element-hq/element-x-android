@@ -147,6 +147,7 @@ fun TimelineItemEventRow(
     isLastOutgoingMessage: Boolean,
     displayThreadSummaries: Boolean,
     onEventClick: () -> Unit,
+    onGalleryItemClick: ((Int) -> Unit),
     onLongClick: () -> Unit,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
@@ -159,7 +160,6 @@ fun TimelineItemEventRow(
     onSwipeToReply: () -> Unit,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
-    onGalleryItemClick: ((Int) -> Unit)? = null,
     eventContentView: @Composable (Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit = { contentModifier, onContentLayoutChange ->
         // Only pass down a custom clickable lambda if the content can be clicked separately
         val onContentClick = onEventClick.takeUnless { event.isWholeContentClickable }

@@ -265,8 +265,8 @@ class MessagesFlowNode(
 
                     override fun handleGalleryItemClick(
                         event: TimelineItem.Event,
-                        canUseOverlay: Boolean,
                         galleryItemIndex: Int,
+                        canUseOverlay: Boolean,
                     ): Boolean {
                         return processGalleryEventClick(
                             event = event,
@@ -513,6 +513,18 @@ class MessagesFlowNode(
                         )
                     }
 
+                    override fun handleGalleryItemClick(
+                        event: TimelineItem.Event,
+                        galleryItemIndex: Int,
+                        canUseOverlay: Boolean,
+                    ) {
+                        processGalleryEventClick(
+                            event = event,
+                            galleryItemIndex = galleryItemIndex,
+                            canUseOverlay = canUseOverlay,
+                        )
+                    }
+
                     override fun navigateToRoomMemberDetails(userId: UserId) {
                         callback.navigateToRoomMemberDetails(userId)
                     }
@@ -562,8 +574,8 @@ class MessagesFlowNode(
 
                     override fun handleGalleryItemClick(
                         event: TimelineItem.Event,
-                        canUseOverlay: Boolean,
                         galleryItemIndex: Int,
+                        canUseOverlay: Boolean,
                     ): Boolean {
                         return processGalleryEventClick(
                             event = event,
@@ -780,8 +792,8 @@ class MessagesFlowNode(
 
     private fun processGalleryEventClick(
         event: TimelineItem.Event,
-        canUseOverlay: Boolean,
         galleryItemIndex: Int,
+        canUseOverlay: Boolean,
     ): Boolean {
         if (event.content !is TimelineItemGalleryContent) return false
         val galleryInfo = GalleryInfo(
