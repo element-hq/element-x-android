@@ -131,7 +131,7 @@ class MediaViewerNode(
                 is MediaViewerEntryPoint.Params.Avatar ->
                     MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(Timeline.Mode.Media)
                 is MediaViewerEntryPoint.Params.EventGallery ->
-                    MediaViewerEntryPoint.MediaViewerMode.EventGallery
+                    MediaViewerEntryPoint.MediaViewerMode.EventGallery(fromPinnedMessages = inputs.fromPinnedMessages)
                 is MediaViewerEntryPoint.Params.RoomMedia ->
                     inputs.mode
             },
@@ -169,6 +169,6 @@ internal fun MediaViewerEntryPoint.MediaViewerMode.getTimelineMode(): Timeline.M
     return when (this) {
         is MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos -> timelineMode
         is MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios -> timelineMode
-        MediaViewerEntryPoint.MediaViewerMode.EventGallery -> null
+        is MediaViewerEntryPoint.MediaViewerMode.EventGallery -> null
     }
 }

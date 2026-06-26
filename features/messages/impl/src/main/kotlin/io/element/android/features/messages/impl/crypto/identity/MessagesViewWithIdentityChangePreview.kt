@@ -35,6 +35,7 @@ internal fun MessagesViewWithIdentityChangePreview(
         onBackClick = {},
         onRoomDetailsClick = {},
         onEventContentClick = { _, _ -> false },
+        onGalleryEventItemClick = { _, _, _ -> false },
         onUserDataClick = {},
         onLinkClick = { _, _ -> },
         onSendLocationClick = {},
@@ -43,6 +44,5 @@ internal fun MessagesViewWithIdentityChangePreview(
         onViewAllPinnedMessagesClick = {},
         knockRequestsBannerView = {},
         onThreadsListClick = {},
-        onGalleryEventItemClick = { _, _ -> false },
     )
 }

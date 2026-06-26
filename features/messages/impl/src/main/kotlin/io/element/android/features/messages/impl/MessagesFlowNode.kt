@@ -159,6 +159,7 @@ class MessagesFlowNode(
 
         @Parcelize
         data class GalleryViewer(
+            val fromPinnedMessages: Boolean,
             val eventId: EventId?,
             val galleryInfo: GalleryInfo,
             val canUseOverlay: Boolean,
@@ -265,11 +266,13 @@ class MessagesFlowNode(
                     }
 
                     override fun handleGalleryItemClick(
+                        timelineMode: Timeline.Mode,
                         event: TimelineItem.Event,
                         galleryItemIndex: Int,
                         canUseOverlay: Boolean,
                     ): Boolean {
                         return processGalleryEventClick(
+                            timelineMode = timelineMode,
                             event = event,
                             canUseOverlay = canUseOverlay,
                             galleryItemIndex = galleryItemIndex,
@@ -405,6 +408,7 @@ class MessagesFlowNode(
                     eventId = navTarget.eventId,
                     galleryInfo = navTarget.galleryInfo,
                     galleryItems = navTarget.galleryItems,
+                    fromPinnedMessages = navTarget.fromPinnedMessages,
                 )
                 val callback = object : MediaViewerEntryPoint.Callback {
                     override fun onDone() {
@@ -520,6 +524,7 @@ class MessagesFlowNode(
                         canUseOverlay: Boolean,
                     ) {
                         processGalleryEventClick(
+                            timelineMode = Timeline.Mode.PinnedEvents,
                             event = event,
                             galleryItemIndex = galleryItemIndex,
                             canUseOverlay = canUseOverlay,
@@ -574,11 +579,13 @@ class MessagesFlowNode(
                     }
 
                     override fun handleGalleryItemClick(
+                        timelineMode: Timeline.Mode,
                         event: TimelineItem.Event,
                         galleryItemIndex: Int,
                         canUseOverlay: Boolean,
                     ): Boolean {
                         return processGalleryEventClick(
+                            timelineMode = timelineMode,
                             event = event,
                             canUseOverlay = canUseOverlay,
                             galleryItemIndex = galleryItemIndex,
@@ -792,6 +799,7 @@ class MessagesFlowNode(
     }
 
     private fun processGalleryEventClick(
+        timelineMode: Timeline.Mode,
         event: TimelineItem.Event,
         galleryItemIndex: Int,
         canUseOverlay: Boolean,
@@ -827,6 +835,7 @@ class MessagesFlowNode(
                     galleryInfo = galleryInfo,
                     canUseOverlay = canUseOverlay,
                     galleryItems = galleryItems,
+                    fromPinnedMessages = timelineMode is Timeline.Mode.PinnedEvents
                 )
             }
             is TimelineItemAttachmentsContent -> {
@@ -859,6 +868,7 @@ class MessagesFlowNode(
                     galleryInfo = galleryInfo,
                     canUseOverlay = canUseOverlay,
                     galleryItems = galleryItems,
+                    fromPinnedMessages = timelineMode is Timeline.Mode.PinnedEvents
                 )
             }
             else -> null

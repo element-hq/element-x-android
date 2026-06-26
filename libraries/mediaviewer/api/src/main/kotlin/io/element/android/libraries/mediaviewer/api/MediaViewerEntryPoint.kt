@@ -48,6 +48,7 @@ interface MediaViewerEntryPoint : FeatureEntryPoint {
             val eventId: EventId?,
             val galleryInfo: GalleryInfo,
             val galleryItems: List<GalleryItemData>,
+            val fromPinnedMessages: Boolean,
         ) : Params
 
         data class Avatar(
@@ -59,7 +60,7 @@ interface MediaViewerEntryPoint : FeatureEntryPoint {
 
     sealed interface MediaViewerMode : Parcelable {
         @Parcelize
-        data object EventGallery : MediaViewerMode
+        data class EventGallery(val fromPinnedMessages: Boolean) : MediaViewerMode
 
         @Parcelize
         data class TimelineImagesAndVideos(val timelineMode: Timeline.Mode) : MediaViewerMode

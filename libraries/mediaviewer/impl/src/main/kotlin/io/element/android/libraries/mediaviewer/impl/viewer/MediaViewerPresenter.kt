@@ -151,8 +151,11 @@ class MediaViewerPresenter(
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
                     navigator.onForwardClick(
                         eventId = event.eventId,
-                        // TODO We can have a pinned gallery
-                        fromPinnedEvents = inputs.mode()?.getTimelineMode() == Timeline.Mode.PinnedEvents,
+                        fromPinnedEvents = when (inputs) {
+                            is MediaViewerEntryPoint.Params.RoomMedia -> inputs.mode == Timeline.Mode.PinnedEvents
+                            is MediaViewerEntryPoint.Params.EventGallery -> inputs.fromPinnedMessages
+                            is MediaViewerEntryPoint.Params.Avatar -> false
+                        },
                     )
                 }
                 is MediaViewerEvent.OpenInfo -> coroutineScope.launch {
@@ -241,7 +244,7 @@ class MediaViewerPresenter(
                 is MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos -> R.string.screen_media_details_no_more_media_to_show
                 is MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios -> R.string.screen_media_details_no_more_files_to_show
                 // Should not happen
-                MediaViewerEntryPoint.MediaViewerMode.EventGallery -> R.string.screen_media_details_no_more_media_to_show
+                is MediaViewerEntryPoint.MediaViewerMode.EventGallery -> R.string.screen_media_details_no_more_media_to_show
             }
             val message = SnackbarMessage(messageResId)
             snackbarDispatcher.post(message)
@@ -318,10 +321,4 @@ private fun MediaViewerEntryPoint.Params.mediaSource() = when (this) {
     is MediaViewerEntryPoint.Params.Avatar -> mediaSource
     is MediaViewerEntryPoint.Params.EventGallery -> null
     is MediaViewerEntryPoint.Params.RoomMedia -> mediaSource
-}
-
-private fun MediaViewerEntryPoint.Params.mode() = when (this) {
-    is MediaViewerEntryPoint.Params.Avatar -> null
-    is MediaViewerEntryPoint.Params.EventGallery -> null
-    is MediaViewerEntryPoint.Params.RoomMedia -> mode
 }

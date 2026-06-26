@@ -136,7 +136,7 @@ fun MessagesView(
     onBackClick: () -> Unit,
     onRoomDetailsClick: () -> Unit,
     onEventContentClick: (isLive: Boolean, event: TimelineItem.Event) -> Boolean,
-    onGalleryEventItemClick: (event: TimelineItem.Event, index: Int) -> Boolean,
+    onGalleryEventItemClick: (isLive: Boolean, event: TimelineItem.Event, index: Int) -> Boolean,
     onUserDataClick: (UserId) -> Unit,
     onLinkClick: (String, Boolean) -> Unit,
     onSendLocationClick: () -> Unit,
@@ -260,7 +260,11 @@ fun MessagesView(
                             state = state,
                             onContentClick = ::onContentClick,
                             onGalleryItemClick = { event, index ->
-                                val hideKeyboard = onGalleryEventItemClick(event, index)
+                                val hideKeyboard = onGalleryEventItemClick(
+                                    state.timelineState.isLive,
+                                    event,
+                                    index,
+                                )
                                 if (hideKeyboard) {
                                     localView.hideKeyboard()
                                 }
@@ -646,6 +650,7 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class)
         onBackClick = {},
         onRoomDetailsClick = {},
         onEventContentClick = { _, _ -> false },
+        onGalleryEventItemClick = { _, _, _ -> false },
         onUserDataClick = {},
         onLinkClick = { _, _ -> },
         onSendLocationClick = {},
@@ -655,7 +660,6 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class)
         forceJumpToBottomVisibility = true,
         knockRequestsBannerView = {},
         onThreadsListClick = {},
-        onGalleryEventItemClick = { _, _ -> false },
     )
 }
 
@@ -702,6 +706,7 @@ internal fun MessagesViewA11yPreview() = ElementPreview {
         onBackClick = {},
         onRoomDetailsClick = {},
         onEventContentClick = { _, _ -> false },
+        onGalleryEventItemClick = { _, _, _ -> false },
         onUserDataClick = {},
         onLinkClick = { _, _ -> },
         onSendLocationClick = {},
@@ -709,7 +714,6 @@ internal fun MessagesViewA11yPreview() = ElementPreview {
         onJoinCallClick = {},
         onViewAllPinnedMessagesClick = {},
         onThreadsListClick = {},
-        onGalleryEventItemClick = { _, _ -> false },
         forceJumpToBottomVisibility = true,
         knockRequestsBannerView = {},
     )
