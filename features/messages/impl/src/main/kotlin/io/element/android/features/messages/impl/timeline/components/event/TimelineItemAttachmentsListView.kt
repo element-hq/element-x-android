@@ -70,24 +70,26 @@ fun TimelineItemAttachmentsListView(
     Column(modifier = modifier) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(0.dp),
         ) {
             content.attachments.forEachIndexed { index, attachment ->
                 Column {
                     if (index > 0) {
-                        HorizontalDivider()
+                        HorizontalDivider(
+                            color = ElementTheme.colors.borderInteractiveSecondary,
+                        )
                     }
                     AttachmentListItem(
                         attachment = attachment,
                         onClick = onContentClick?.let { { it(index) } },
-                        onContentLayoutChange = onContentLayoutChange,
                     )
                 }
             }
         }
 
         if (content.showCaption) {
-            HorizontalDivider()
+            HorizontalDivider(
+                color = ElementTheme.colors.borderInteractiveSecondary,
+            )
             Spacer(modifier = Modifier.height(8.dp))
             val caption = if (LocalInspectionMode.current) {
                 SpannedString(content.caption)
@@ -118,24 +120,21 @@ fun TimelineItemAttachmentsListView(
 private fun AttachmentListItem(
     attachment: AttachmentItem,
     onClick: (() -> Unit)?,
-    onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val iconSize = 36.dp
     val thumbnailSize = 36L
     val spacing = 8.dp
-    val hasCaption = false
-
     Row(
         modifier = modifier
-            .padding(vertical = 6.dp)
             .then(
                 if (onClick != null) {
                     Modifier.clickable(onClick = onClick)
                 } else {
                     Modifier
                 }
-            ),
+            )
+            .padding(vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(spacing),
     ) {
@@ -148,7 +147,6 @@ private fun AttachmentListItem(
         ) {
             if (attachment.thumbnailSource != null) {
                 val isVideo = attachment.mimeType.isMimeTypeVideo()
-
                 AsyncImage(
                     model = MediaRequestData(
                         source = attachment.thumbnailSource,
@@ -160,7 +158,6 @@ private fun AttachmentListItem(
                         .size(iconSize)
                         .clip(RoundedCornerShape(4.dp)),
                 )
-
                 if (isVideo) {
                     Box(
                         modifier = Modifier
@@ -183,14 +180,12 @@ private fun AttachmentListItem(
                 val isImage = attachment.mimeType.isMimeTypeImage()
                 val isVideo = attachment.mimeType.isMimeTypeVideo()
                 val isAudio = attachment.mimeType.isMimeTypeAudio()
-
                 val icon = when {
                     isImage -> CompoundIcons.Image()
                     isVideo -> CompoundIcons.VideoCall()
                     isAudio -> CompoundIcons.Audio()
                     else -> CompoundIcons.Attachment()
                 }
-
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
@@ -216,14 +211,6 @@ private fun AttachmentListItem(
                 style = ElementTheme.typography.fontBodySmRegular,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                onTextLayout = if (hasCaption) {
-                    {}
-                } else {
-                    ContentAvoidingLayout.measureLastTextLine(
-                        onContentLayoutChange = onContentLayoutChange,
-                        extraWidth = iconSize + spacing
-                    )
-                },
             )
         }
     }
