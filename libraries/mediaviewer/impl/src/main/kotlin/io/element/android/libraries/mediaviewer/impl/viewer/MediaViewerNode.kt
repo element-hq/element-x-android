@@ -116,6 +116,8 @@ class MediaViewerNode(
                         )
                     }
                     Timeline.Mode.Media -> timelineMediaGalleryDataSource
+                    // null should not happen, input should be MediaViewerEntryPoint.Params.EventGallery in this case
+                    null -> timelineMediaGalleryDataSource
                 }
             }
         }
@@ -129,11 +131,7 @@ class MediaViewerNode(
                 is MediaViewerEntryPoint.Params.Avatar ->
                     MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(Timeline.Mode.Media)
                 is MediaViewerEntryPoint.Params.EventGallery ->
-                    if (inputs.galleryInfo.isAttachment) {
-                        MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios(Timeline.Mode.Media)
-                    } else {
-                        MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(Timeline.Mode.Media)
-                    }
+                    MediaViewerEntryPoint.MediaViewerMode.EventGallery
                 is MediaViewerEntryPoint.Params.RoomMedia ->
                     inputs.mode
             },
@@ -167,9 +165,10 @@ class MediaViewerNode(
     }
 }
 
-internal fun MediaViewerEntryPoint.MediaViewerMode.getTimelineMode(): Timeline.Mode {
+internal fun MediaViewerEntryPoint.MediaViewerMode.getTimelineMode(): Timeline.Mode? {
     return when (this) {
         is MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos -> timelineMode
         is MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios -> timelineMode
+        MediaViewerEntryPoint.MediaViewerMode.EventGallery -> null
     }
 }

@@ -64,6 +64,7 @@ class MediaViewerDataSource(
     private val galleryMode = when (mode) {
         is MediaViewerMode.TimelineImagesAndVideos -> MediaGalleryMode.Images
         is MediaViewerMode.TimelineFilesAndAudios -> MediaGalleryMode.Files
+        MediaViewerMode.EventGallery -> MediaGalleryMode.Images
     }
 
     // Map of sourceUrl to local media state

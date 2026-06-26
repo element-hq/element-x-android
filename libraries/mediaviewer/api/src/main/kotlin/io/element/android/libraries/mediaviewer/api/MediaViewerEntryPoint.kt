@@ -59,6 +59,9 @@ interface MediaViewerEntryPoint : FeatureEntryPoint {
 
     sealed interface MediaViewerMode : Parcelable {
         @Parcelize
+        data object EventGallery : MediaViewerMode
+
+        @Parcelize
         data class TimelineImagesAndVideos(val timelineMode: Timeline.Mode) : MediaViewerMode
 
         @Parcelize

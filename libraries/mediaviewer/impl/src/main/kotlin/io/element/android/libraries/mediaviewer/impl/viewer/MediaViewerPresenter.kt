@@ -240,6 +240,8 @@ class MediaViewerPresenter(
             val messageResId = when (inputs.mode) {
                 is MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos -> R.string.screen_media_details_no_more_media_to_show
                 is MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios -> R.string.screen_media_details_no_more_files_to_show
+                // Should not happen
+                MediaViewerEntryPoint.MediaViewerMode.EventGallery -> R.string.screen_media_details_no_more_media_to_show
             }
             val message = SnackbarMessage(messageResId)
             snackbarDispatcher.post(message)

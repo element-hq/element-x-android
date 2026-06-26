@@ -85,10 +85,8 @@ class GalleryMediaGalleryDataSource(
                         thumbnailSource = galleryItem.thumbnailSource,
                     )
                 }
-                when (mediaItem) {
-                    is MediaItem.Image, is MediaItem.Video -> imageAndVideoItems.add(mediaItem)
-                    is MediaItem.Audio, is MediaItem.File, is MediaItem.Voice -> fileItems.add(mediaItem)
-                }
+                // Add all items to imageAndVideoItems (we can have mixed attachments)
+                imageAndVideoItems.add(mediaItem)
             }
 
             return GalleryMediaGalleryDataSource(
