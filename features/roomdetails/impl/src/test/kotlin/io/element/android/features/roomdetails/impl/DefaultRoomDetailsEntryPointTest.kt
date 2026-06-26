@@ -10,12 +10,14 @@ package io.element.android.features.roomdetails.impl
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.call.test.FakeElementCallEntryPoint
 import io.element.android.features.changeroommemberroles.test.FakeChangeRoomMemberRolesEntryPoint
 import io.element.android.features.changeroommemberroles.test.FakeRolesAndPermissionsEntryPoint
 import io.element.android.features.knockrequests.test.FakeKnockRequestsListEntryPoint
+import io.element.android.features.messageretention.api.MessageRetentionEntryPoint
 import io.element.android.features.messages.test.FakeMessagesEntryPoint
 import io.element.android.features.poll.test.history.FakePollHistoryEntryPoint
 import io.element.android.features.reportroom.test.FakeReportRoomEntryPoint
@@ -64,6 +66,13 @@ class DefaultRoomDetailsEntryPointTest {
                 changeRoomMemberRolesEntryPoint = FakeChangeRoomMemberRolesEntryPoint(),
                 rolesAndPermissionsEntryPoint = FakeRolesAndPermissionsEntryPoint(),
                 securityAndPrivacyEntryPoint = FakeSecurityAndPrivacyEntryPoint(),
+                messageRetentionEntryPoint = object : MessageRetentionEntryPoint {
+                    override fun createNode(
+                        parentNode: Node,
+                        buildContext: BuildContext,
+                        callback: MessageRetentionEntryPoint.Callback,
+                    ): Node = lambdaError()
+                },
                 roomDetailsEditEntryPoint = FakeRoomDetailsEditEntryPoint(),
             )
         }

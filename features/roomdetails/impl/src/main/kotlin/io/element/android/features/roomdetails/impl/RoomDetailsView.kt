@@ -117,6 +117,7 @@ fun RoomDetailsView(
     onPinnedMessagesClick: () -> Unit,
     onKnockRequestsClick: () -> Unit,
     onSecurityAndPrivacyClick: () -> Unit,
+    onMessageRetentionClick: () -> Unit,
     onProfileClick: (UserId) -> Unit,
     onReportRoomClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -305,19 +306,24 @@ fun RoomDetailsView(
                     )
                 }
             }
-            if (state.isEncrypted) {
+            if (state.canShowMessageRetention || state.isEncrypted) {
                 PreferenceCategory(
                     title = stringResource(R.string.screen_room_details_security_title)
                 ) {
-                    ListItem(
-                        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Lock())),
-                        headlineContent = {
-                            Text(stringResource(id = R.string.screen_room_details_encryption_enabled_title))
-                        },
-                        supportingContent = {
-                            Text(stringResource(id = R.string.screen_room_details_encryption_enabled_subtitle))
-                        },
-                    )
+                    if (state.canShowMessageRetention) {
+                        MessageRetentionItem(onClick = onMessageRetentionClick)
+                    }
+                    if (state.isEncrypted) {
+                        ListItem(
+                            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Lock())),
+                            headlineContent = {
+                                Text(stringResource(id = R.string.screen_room_details_encryption_enabled_title))
+                            },
+                            supportingContent = {
+                                Text(stringResource(id = R.string.screen_room_details_encryption_enabled_subtitle))
+                            },
+                        )
+                    }
                 }
             }
             OtherActionsSection(
@@ -693,6 +699,19 @@ private fun SecurityAndPrivacyItem(
 }
 
 @Composable
+private fun MessageRetentionItem(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    ListItem(
+        headlineContent = { Text(stringResource(R.string.screen_room_details_message_retention_title)) },
+        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Time())),
+        onClick = onClick,
+        modifier = modifier,
+    )
+}
+
+@Composable
 private fun FavoriteItem(
     isFavorite: Boolean,
     onFavoriteChanges: (Boolean) -> Unit,
@@ -925,6 +944,7 @@ private fun ContentToPreview(state: RoomDetailsState) {
         onPinnedMessagesClick = {},
         onKnockRequestsClick = {},
         onSecurityAndPrivacyClick = {},
+        onMessageRetentionClick = {},
         onProfileClick = {},
         onReportRoomClick = {},
         leaveRoomView = {},

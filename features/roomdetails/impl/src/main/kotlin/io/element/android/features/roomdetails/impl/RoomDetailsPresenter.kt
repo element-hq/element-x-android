@@ -21,6 +21,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.Interaction
+import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.knockrequests.api.KnockRequestPermissions
 import io.element.android.features.knockrequests.api.knockRequestPermissions
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
@@ -43,6 +44,7 @@ import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.powerlevels.canEditRolesAndPermissions
 import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
@@ -62,6 +64,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
+private const val MESSAGE_RETENTION_EVENT_TYPE = "m.room.retention"
+
 @AssistedInject
 class RoomDetailsPresenter(
     @Assisted private val navigator: RoomDetailsNavigator,
@@ -77,6 +81,7 @@ class RoomDetailsPresenter(
     private val appPreferencesStore: AppPreferencesStore,
     private val sessionPreferencesStore: SessionPreferencesStore,
     private val notificationCleaner: NotificationCleaner,
+    private val enterpriseService: EnterpriseService,
 ) : Presenter<RoomDetailsState> {
     @AssistedFactory
     interface Factory {
@@ -140,6 +145,11 @@ class RoomDetailsPresenter(
         }
         val canShowSecurityAndPrivacy by remember {
             derivedStateOf { !isDm && permissions.securityAndPrivacyPermissions.hasAny(isSpace = false, joinRule = joinRule) }
+        }
+        // Message retention is an Element Pro feature; show it (for group rooms and DMs) only in
+        // enterprise builds when the user can change the retention state event.
+        val canShowMessageRetention by remember {
+            derivedStateOf { enterpriseService.isEnterpriseBuild && permissions.canChangeMessageRetention }
         }
         val isDeveloperModeEnabled by remember {
             appPreferencesStore.isDeveloperModeEnabledFlow()
@@ -209,6 +219,7 @@ class RoomDetailsPresenter(
             canShowKnockRequests = canShowKnockRequests,
             knockRequestsCount = knockRequestsCount,
             canShowSecurityAndPrivacy = canShowSecurityAndPrivacy,
+            canShowMessageRetention = canShowMessageRetention,
             hasMemberVerificationViolations = hasMemberVerificationViolations,
             canReportRoom = !isDm && canReportRoom,
             isTombstoned = roomInfo.successorRoom != null,
@@ -242,6 +253,7 @@ class RoomDetailsPresenter(
         val knockRequestsPermissions: KnockRequestPermissions = KnockRequestPermissions.DEFAULT,
         val securityAndPrivacyPermissions: SecurityAndPrivacyPermissions = SecurityAndPrivacyPermissions.DEFAULT,
         val canEditRolesAndPermissions: Boolean = false,
+        val canChangeMessageRetention: Boolean = false,
     )
 
     @Composable
@@ -253,6 +265,7 @@ class RoomDetailsPresenter(
                 knockRequestsPermissions = perms.knockRequestPermissions(),
                 canEditRolesAndPermissions = perms.canEditRolesAndPermissions(),
                 securityAndPrivacyPermissions = perms.securityAndPrivacyPermissions(),
+                canChangeMessageRetention = perms.canOwnUserSendState(StateEventType.Custom(MESSAGE_RETENTION_EVENT_TYPE)),
             )
         }
     }

@@ -11,6 +11,8 @@ package io.element.android.features.roomdetails.impl
 import androidx.lifecycle.Lifecycle
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Interaction
+import io.element.android.features.enterprise.api.EnterpriseService
+import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.roomcall.api.aStandByCallState
@@ -90,6 +92,7 @@ class RoomDetailsPresenterTest {
         navigator: RoomDetailsNavigator = FakeRoomDetailsNavigator(),
         notificationCleaner: NotificationCleaner = FakeNotificationCleaner(),
         sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
+        enterpriseService: EnterpriseService = FakeEnterpriseService(),
     ): RoomDetailsPresenter {
         val matrixClient = FakeMatrixClient(notificationSettingsService = notificationSettingsService)
         val roomMemberDetailsPresenterFactory = object : RoomMemberDetailsPresenter.Factory {
@@ -119,6 +122,7 @@ class RoomDetailsPresenterTest {
             appPreferencesStore = appPreferencesStore,
             notificationCleaner = notificationCleaner,
             sessionPreferencesStore = sessionPreferencesStore,
+            enterpriseService = enterpriseService,
         )
     }
 
@@ -706,6 +710,7 @@ class RoomDetailsPresenterTest {
         canChangeTopic: Boolean = true,
         canChangeAvatar: Boolean = true,
         canChangePowerLevels: Boolean = true,
+        canChangeMessageRetention: Boolean = true,
     ): RoomPermissions {
         return FakeRoomPermissions(
             canInvite = canInvite,
@@ -723,6 +728,7 @@ class RoomDetailsPresenterTest {
                     StateEventType.RoomName -> canChangeName
                     StateEventType.RoomTopic -> canChangeTopic
                     StateEventType.RoomPowerLevels -> canChangePowerLevels
+                    is StateEventType.Custom -> canChangeMessageRetention
                     else -> lambdaError()
                 }
             }
