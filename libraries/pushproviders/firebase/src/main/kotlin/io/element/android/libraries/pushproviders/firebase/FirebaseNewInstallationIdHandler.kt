@@ -20,26 +20,26 @@ import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.api.toUserList
 import timber.log.Timber
 
-private val loggerTag = LoggerTag("FirebaseNewTokenHandler", LoggerTag.PushLoggerTag)
+private val loggerTag = LoggerTag("FirebaseNewInstallationIdHandler", LoggerTag.PushLoggerTag)
 
 /**
- * Handle new token receive from Firebase. Will update all the sessions which are using Firebase as a push provider.
+ * Handle new installationId received from Firebase. Will update all the sessions which are using Firebase as a push provider.
  */
-interface FirebaseNewTokenHandler {
-    suspend fun handle(firebaseToken: String)
+interface FirebaseNewInstallationIdHandler {
+    suspend fun handle(installationId: String)
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultFirebaseNewTokenHandler(
+class DefaultFirebaseNewInstallationIdHandler(
     private val pusherSubscriber: PusherSubscriber,
     private val sessionStore: SessionStore,
     private val userPushStoreFactory: UserPushStoreFactory,
     private val matrixClientProvider: MatrixClientProvider,
     private val firebaseStore: FirebaseStore,
     private val firebaseGatewayProvider: FirebaseGatewayProvider,
-) : FirebaseNewTokenHandler {
-    override suspend fun handle(firebaseToken: String) {
-        firebaseStore.storeFcmToken(firebaseToken)
+) : FirebaseNewInstallationIdHandler {
+    override suspend fun handle(installationId: String) {
+        firebaseStore.storeInstallationId(installationId)
         // Register the pusher for all the sessions
         sessionStore.getAllSessions().toUserList()
             .map { SessionId(it) }
@@ -55,7 +55,7 @@ class DefaultFirebaseNewTokenHandler(
                             pusherSubscriber
                                 .registerPusher(
                                     matrixClient = client,
-                                    pushKey = firebaseToken,
+                                    pushKey = installationId,
                                     gateway = firebaseGatewayProvider.getFirebaseGateway(),
                                 )
                                 .onFailure {
