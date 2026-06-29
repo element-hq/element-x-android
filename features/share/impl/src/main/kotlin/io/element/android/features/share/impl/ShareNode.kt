@@ -23,6 +23,7 @@ import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.share.api.ShareEntryPoint
 import io.element.android.features.share.api.ShareIntentData
+import io.element.android.features.share.api.targetRoomId
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.inputs
@@ -41,7 +42,11 @@ class ShareNode(
     private val roomSelectEntryPoint: RoomSelectEntryPoint,
 ) : ParentNode<ShareNode.NavTarget>(
     navModel = PermanentNavModel(
-        navTargets = setOf(NavTarget),
+        navTargets = if (plugins.filterIsInstance<Inputs>().firstOrNull()?.shareIntentData?.targetRoomId != null) {
+            emptySet()
+        } else {
+            setOf(NavTarget)
+        },
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -80,13 +85,13 @@ class ShareNode(
 
     @Composable
     override fun View(modifier: Modifier) {
+        val state = presenter.present()
+
         Box(modifier = modifier) {
-            // Will render to room select screen
             Children(
                 navModel = navModel,
             )
 
-            val state = presenter.present()
             ShareView(
                 state = state,
                 onShareSuccess = callback::onDone,
