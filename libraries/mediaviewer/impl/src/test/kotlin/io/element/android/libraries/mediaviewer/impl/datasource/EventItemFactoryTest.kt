@@ -60,7 +60,7 @@ import kotlinx.collections.immutable.toImmutableList
 import org.junit.Test
 import kotlin.time.Duration.Companion.seconds
 
-class DefaultEventItemFactoryTest {
+class EventItemFactoryTest {
     @Test
     fun `create check all null cases`() {
         val factory = createEventItemFactory()
