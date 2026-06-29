@@ -17,6 +17,7 @@ import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.impl.datasource.MediaGalleryDataSource
 import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.flowOf
@@ -37,9 +38,7 @@ class GalleryMediaGalleryDataSource(
             galleryItems: List<GalleryItemData>,
             galleryInfo: GalleryInfo,
         ): GalleryMediaGalleryDataSource {
-            val imageAndVideoItems = mutableListOf<MediaItem.Event>()
-            val fileItems = mutableListOf<MediaItem.Event>()
-
+            val mixedItems = mutableListOf<MediaItem.Event>()
             galleryItems.forEachIndexed { index, galleryItem ->
                 val itemMediaInfo = MediaInfo(
                     filename = galleryItem.filename,
@@ -85,14 +84,12 @@ class GalleryMediaGalleryDataSource(
                         thumbnailSource = galleryItem.thumbnailSource,
                     )
                 }
-                // Add all items to imageAndVideoItems (we can have mixed attachments)
-                imageAndVideoItems.add(mediaItem)
+                mixedItems.add(mediaItem)
             }
-
             return GalleryMediaGalleryDataSource(
                 data = GroupedMediaItems(
-                    imageAndVideoItems = imageAndVideoItems.toImmutableList(),
-                    fileItems = fileItems.toImmutableList(),
+                    imageAndVideoItems = mixedItems.toImmutableList(),
+                    fileItems = persistentListOf(),
                 )
             )
         }
