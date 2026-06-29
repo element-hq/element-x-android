@@ -183,6 +183,7 @@ private fun TimelineItemGroupedEventsRowContent(
                         onReactionLongClick = onReactionLongClick,
                         onMoreReactionsClick = onMoreReactionsClick,
                         onReadReceiptClick = onReadReceiptClick,
+                        onJoinCallClick = {},
                         onSwipeToReply = {},
                         eventSink = eventSink,
                         eventContentView = eventContentView,
