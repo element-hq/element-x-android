@@ -60,6 +60,8 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
             aSharedHistoryRoomDetailsState(roomHistoryVisibility = RoomHistoryVisibility.Joined),
             aSharedHistoryRoomDetailsState(roomHistoryVisibility = RoomHistoryVisibility.Shared),
             aSharedHistoryRoomDetailsState(roomHistoryVisibility = RoomHistoryVisibility.WorldReadable),
+            aRoomDetailsState(canShowMessageRetention = true),
+            aRoomDetailsState(canShowMessageRetention = true, isEncrypted = false),
             // Add other state here
         )
 }

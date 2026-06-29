@@ -146,8 +146,7 @@ class RoomDetailsPresenter(
         val canShowSecurityAndPrivacy by remember {
             derivedStateOf { !isDm && permissions.securityAndPrivacyPermissions.hasAny(isSpace = false, joinRule = joinRule) }
         }
-        // Message retention is an Element Pro feature; show it (for group rooms and DMs) only in
-        // enterprise builds when the user can change the retention state event.
+        // Show message retention when the user can change its state event.
         val canShowMessageRetention by remember {
             derivedStateOf { enterpriseService.isEnterpriseBuild && permissions.canChangeMessageRetention }
         }

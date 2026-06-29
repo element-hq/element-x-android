@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2026 Element Creations Ltd.
- * Copyright 2026 New Vector Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
@@ -17,9 +16,7 @@ import io.element.android.features.messageretention.api.MessageRetentionEntryPoi
 import io.element.android.libraries.di.RoomScope
 
 /**
- * No-op FOSS binding. Message retention is an Element Pro feature, so the FOSS build never surfaces
- * the entry point — this returns an inert node and enterprise builds replace this binding with the
- * real flow.
+ * Default no-op entry point that returns an inert node.
  */
 @ContributesBinding(RoomScope::class)
 class DefaultMessageRetentionEntryPoint : MessageRetentionEntryPoint {

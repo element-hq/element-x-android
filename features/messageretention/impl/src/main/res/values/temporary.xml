@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2026 Element Creations Ltd.
+  ~
+  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+  ~ Please see LICENSE files in the repository root for full details.
+  -->
+
+<resources>
+    <string name="screen_message_retention_title">Message retention</string>
+    <string name="screen_message_retention_section_title">Retain room messages for:</string>
+    <string name="screen_message_retention_server_default">Server default</string>
+    <string name="screen_message_retention_custom">Custom</string>
+    <string name="screen_message_retention_range">Message retention is restricted to a range of %1$s to %2$s.</string>
+    <string name="screen_message_retention_update_dialog_title">Update message retention</string>
+    <string name="screen_message_retention_update_dialog_message">Any room messages older than the new retention period will be permanently deleted. This action cannot be undone.</string>
+    <string name="screen_message_retention_update_dialog_confirm">Yes, update</string>
+    <string name="screen_message_retention_custom_title">Custom retention</string>
+    <string name="screen_message_retention_set">Set</string>
+    <string name="screen_message_retention_unit_minutes">minutes</string>
+    <string name="screen_message_retention_unit_hours">hours</string>
+    <string name="screen_message_retention_unit_days">days</string>
+    <string name="screen_message_retention_unit_weeks">weeks</string>
+
+    <plurals name="screen_message_retention_minutes">
+        <item quantity="one">%1$d minute</item>
+        <item quantity="other">%1$d minutes</item>
+    </plurals>
+    <plurals name="screen_message_retention_hours">
+        <item quantity="one">%1$d hour</item>
+        <item quantity="other">%1$d hours</item>
+    </plurals>
+    <plurals name="screen_message_retention_days">
+        <item quantity="one">%1$d day</item>
+        <item quantity="other">%1$d days</item>
+    </plurals>
+    <plurals name="screen_message_retention_weeks">
+        <item quantity="one">%1$d week</item>
+        <item quantity="other">%1$d weeks</item>
+    </plurals>
+    <plurals name="screen_message_retention_years">
+        <item quantity="one">%1$d year</item>
+        <item quantity="other">%1$d years</item>
+    </plurals>
+</resources>
