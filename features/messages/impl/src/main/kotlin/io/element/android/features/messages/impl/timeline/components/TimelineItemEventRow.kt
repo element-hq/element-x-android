@@ -660,23 +660,6 @@ private fun MessageEventBubbleContent(
                             .padding(horizontal = 4.dp, vertical = 2.dp)
                     )
                 }
-            TimestampPosition.Aligned ->
-                ContentAvoidingLayout(
-                    modifier = modifier,
-                    // The spacing is negative to make the content overlap the empty space at the start of the timestamp
-                    spacing = (-4).dp,
-                    overlayOffset = DpOffset(0.dp, -1.dp),
-                    shrinkContent = canShrinkContent,
-                    content = { content(this::onContentLayoutChange) },
-                    overlay = {
-                        TimelineEventTimestampView(
-                            event = event,
-                            eventSink = eventSink,
-                            modifier = Modifier
-                                .padding(horizontal = 8.dp, vertical = 4.dp)
-                        )
-                    }
-                )
             TimestampPosition.Aligned -> @Composable {
                 val originalLayoutDirection = LocalLayoutDirection.current
                 // Detect if the direction of the text content (if any) does not match the layout direction, to place the content and timestamp correctly
@@ -706,6 +689,7 @@ private fun MessageEventBubbleContent(
                                 TimelineEventTimestampView(
                                     event = event,
                                     eventSink = eventSink,
+                                    isLayoutDirectionMismatched = originalLayoutDirection != contentDirection,
                                     modifier = Modifier
                                         .padding(horizontal = 8.dp, vertical = 4.dp)
                                 )
