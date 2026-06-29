@@ -10,8 +10,8 @@ package io.element.android.features.messages.impl.timeline.components.event
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.messages.impl.timeline.model.event.GalleryItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemGalleryContent
-import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemGalleryContent
 import io.element.android.libraries.matrix.api.media.MediaSource
+import kotlinx.collections.immutable.toImmutableList
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -93,15 +93,38 @@ class TimelineItemGalleryContentProvider : PreviewParameterProvider<TimelineItem
         )
 }
 
-private fun aGalleryItem(
+fun aTimelineItemGalleryContent(
+    body: String = "Gallery",
+    caption: String? = null,
+    items: List<GalleryItem> = listOf(
+        aGalleryItem(),
+        aGalleryItem(),
+        aGalleryItem(),
+        aGalleryItem(),
+    ),
+) = TimelineItemGalleryContent(
+    body = body,
+    caption = caption,
+    formattedCaption = null,
+    isEdited = false,
+    items = items.toImmutableList(),
+)
+
+fun aGalleryItem(
+    filename: String = "photo.jpg",
     type: GalleryItem.Type = GalleryItem.Type.Image,
     width: Int = 400,
     height: Int = 300,
     duration: Duration = Duration.ZERO,
 ): GalleryItem {
     return GalleryItem(
-        filename = "photo.jpg",
-        mimeType = "image/jpeg",
+        filename = filename,
+        mimeType = when (type) {
+            GalleryItem.Type.Video -> "video/mp4"
+            GalleryItem.Type.Audio -> "audio/mpeg"
+            GalleryItem.Type.File -> "application/pdf"
+            GalleryItem.Type.Image -> "image/jpeg"
+        },
         mediaSource = MediaSource(url = "", json = ""),
         thumbnailSource = null,
         width = width,

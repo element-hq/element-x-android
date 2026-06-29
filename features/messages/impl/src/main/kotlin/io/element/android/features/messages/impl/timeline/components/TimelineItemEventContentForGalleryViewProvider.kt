@@ -8,11 +8,11 @@
 package io.element.android.features.messages.impl.timeline.components
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.messages.impl.timeline.components.event.aGalleryItem
+import io.element.android.features.messages.impl.timeline.components.event.aTimelineItemGalleryContent
 import io.element.android.features.messages.impl.timeline.model.event.GalleryItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
-import io.element.android.features.messages.impl.timeline.model.event.aGalleryItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemAttachmentsContent
-import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemGalleryContent
 import io.element.android.features.messages.impl.timeline.model.event.anAttachmentItem
 import kotlin.time.Duration
 

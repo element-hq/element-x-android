@@ -17,7 +17,6 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import kotlinx.collections.immutable.toImmutableList
 import org.jsoup.nodes.Document
-import kotlin.time.Duration
 
 class TimelineItemEventContentProvider : PreviewParameterProvider<TimelineItemEventContent> {
     override val values = sequenceOf(
@@ -113,48 +112,6 @@ fun aTimelineItemStateEventContent(
     body: String = "A state event",
 ) = TimelineItemStateEventContent(
     body = body,
-)
-
-fun aTimelineItemGalleryContent(
-    body: String = "Gallery",
-    caption: String? = null,
-    items: List<GalleryItem> = listOf(
-        aGalleryItem(),
-        aGalleryItem(),
-        aGalleryItem(),
-        aGalleryItem(),
-    ),
-) = TimelineItemGalleryContent(
-    body = body,
-    caption = caption,
-    formattedCaption = null,
-    isEdited = false,
-    items = items.toImmutableList(),
-)
-
-fun aGalleryItem(
-    filename: String = "photo.jpg",
-    width: Int = 400,
-    height: Int = 300,
-    type: GalleryItem.Type = GalleryItem.Type.Image,
-    duration: Duration = Duration.ZERO,
-) = GalleryItem(
-    filename = filename,
-    mimeType = when (type) {
-        GalleryItem.Type.Video -> "video/mp4"
-        GalleryItem.Type.Audio -> "audio/mpeg"
-        GalleryItem.Type.File -> "application/pdf"
-        GalleryItem.Type.Image -> "image/jpeg"
-    },
-    mediaSource = MediaSource(url = "", json = ""),
-    type = type,
-    thumbnailSource = null,
-    width = width,
-    height = height,
-    thumbnailWidth = width,
-    thumbnailHeight = height,
-    blurhash = null,
-    duration = duration,
 )
 
 fun aTimelineItemAttachmentsContent(
