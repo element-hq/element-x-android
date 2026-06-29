@@ -15,13 +15,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.style.ResolvedTextDirection
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.designsystem.text.roundToPx
 import io.element.android.wysiwyg.compose.EditorStyledText
 import kotlin.math.max
@@ -149,13 +149,13 @@ object ContentAvoidingLayout {
         onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
         extraWidth: Dp = 0.dp,
     ): ((TextLayoutResult) -> Unit) {
-        val layoutDirection = LocalLayoutDirection.current
         val extraWidthPx = extraWidth.roundToPx()
         return { textLayout: TextLayoutResult ->
             // We need to add the external extra width so it's not taken into account as 'free space'
-            val lastLineWidth = when (layoutDirection) {
-                LayoutDirection.Ltr -> textLayout.getLineRight(textLayout.lineCount - 1).roundToInt()
-                LayoutDirection.Rtl -> textLayout.getLineLeft(textLayout.lineCount - 1).roundToInt()
+            val textDirection = tryOrNull { textLayout.getParagraphDirection(0) }
+            val lastLineWidth = when (textDirection) {
+                ResolvedTextDirection.Rtl -> textLayout.getLineLeft(textLayout.lineCount - 1).roundToInt()
+                else -> textLayout.getLineRight(textLayout.lineCount - 1).roundToInt()
             }
             val lastLineHeight = textLayout.getLineBottom(textLayout.lineCount - 1).roundToInt()
             onContentLayoutChange(
