@@ -12,6 +12,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.media.AudioDetails
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
@@ -20,7 +21,6 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
-import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.CallNotifyContent
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
@@ -60,6 +60,7 @@ import kotlinx.collections.immutable.toImmutableList
 import org.junit.Test
 import kotlin.time.Duration.Companion.seconds
 
+@Suppress("LargeClass")
 class EventItemFactoryTest {
     @Test
     fun `create check all null cases`() {

@@ -34,13 +34,13 @@ import io.element.android.libraries.matrix.impl.fixtures.factories.aRustImageMes
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustMessageTypeGallery
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustVideoMessageContent
 import org.junit.Test
-import org.matrix.rustcomponents.sdk.AssetType as RustAssetType
 import org.matrix.rustcomponents.sdk.EmoteMessageContent
 import org.matrix.rustcomponents.sdk.LocationContent
 import org.matrix.rustcomponents.sdk.MessageType
 import org.matrix.rustcomponents.sdk.NoticeMessageContent
 import org.matrix.rustcomponents.sdk.TextMessageContent
 import org.matrix.rustcomponents.sdk.UnstableVoiceContent
+import org.matrix.rustcomponents.sdk.AssetType as RustAssetType
 
 class EventMessageMapperTest {
     private val sut = EventMessageMapper()
