@@ -28,14 +28,6 @@ class TimelineItemAttachmentsContentProvider : PreviewParameterProvider<Timeline
                         fileExtension = "PDF",
                     ),
                     anAttachmentItem(
-                        filename = "photo.jpg",
-                        mimeType = "image/jpeg",
-                        thumbnailSource = MediaSource(url = "thumb", json = ""),
-                        fileSize = null,
-                        formattedFileSize = "1.2 MB",
-                        fileExtension = "JPG",
-                    ),
-                    anAttachmentItem(
                         filename = "spreadsheet.xlsx",
                         mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                         fileSize = null,
@@ -46,7 +38,7 @@ class TimelineItemAttachmentsContentProvider : PreviewParameterProvider<Timeline
             ),
             aTimelineItemAttachmentsContent(
                 body = "Files",
-                caption = "Important documents",
+                caption = "Files mixed with media",
                 attachments = listOf(
                     anAttachmentItem(
                         filename = "report.pdf",
@@ -61,6 +53,22 @@ class TimelineItemAttachmentsContentProvider : PreviewParameterProvider<Timeline
                         fileSize = null,
                         formattedFileSize = "12 KB",
                         fileExtension = "TXT",
+                    ),
+                    anAttachmentItem(
+                        filename = "photo.jpg",
+                        mimeType = "image/jpeg",
+                        thumbnailSource = MediaSource(url = "thumb", json = ""),
+                        fileSize = null,
+                        formattedFileSize = "1.2 MB",
+                        fileExtension = "JPG",
+                    ),
+                    anAttachmentItem(
+                        filename = "video.mp4",
+                        mimeType = "video/mp4",
+                        thumbnailSource = MediaSource(url = "thumb", json = ""),
+                        fileSize = null,
+                        formattedFileSize = "15 MB",
+                        fileExtension = "MP4",
                     ),
                 ),
             ),
