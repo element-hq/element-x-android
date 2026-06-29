@@ -68,6 +68,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureCalledOnceWithTwoParamsAndResult
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
+import io.element.android.tests.testutils.EnsureNeverCalledWithThreeParamsAndResult
 import io.element.android.tests.testutils.EnsureNeverCalledWithTwoParams
 import io.element.android.tests.testutils.EnsureNeverCalledWithTwoParamsAndResult
 import io.element.android.tests.testutils.EventsRecorder
@@ -685,7 +686,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setMessagesView(
     onBackClick: () -> Unit = EnsureNeverCalled(),
     onRoomDetailsClick: () -> Unit = EnsureNeverCalled(),
     onEventClick: (isLive: Boolean, event: TimelineItem.Event) -> Boolean = EnsureNeverCalledWithTwoParamsAndResult(),
-    onGalleryEventItemClick: (event: TimelineItem.Event, index: Int) -> Boolean = EnsureNeverCalledWithTwoParamsAndResult(),
+    onGalleryEventItemClick: (isLive: Boolean, event: TimelineItem.Event, index: Int) -> Boolean = EnsureNeverCalledWithThreeParamsAndResult(),
     onUserDataClick: (UserId) -> Unit = EnsureNeverCalledWithParam(),
     onLinkClick: (String, Boolean) -> Unit = EnsureNeverCalledWithTwoParams(),
     onSendLocationClick: () -> Unit = EnsureNeverCalled(),

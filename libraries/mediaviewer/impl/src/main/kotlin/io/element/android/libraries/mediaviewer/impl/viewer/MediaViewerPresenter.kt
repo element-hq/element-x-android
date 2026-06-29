@@ -152,7 +152,11 @@ class MediaViewerPresenter(
                     navigator.onForwardClick(
                         eventId = event.eventId,
                         fromPinnedEvents = when (inputs) {
-                            is MediaViewerEntryPoint.Params.RoomMedia -> inputs.mode == Timeline.Mode.PinnedEvents
+                            is MediaViewerEntryPoint.Params.RoomMedia -> when (val myMode = inputs.mode) {
+                                is MediaViewerEntryPoint.MediaViewerMode.EventGallery -> myMode.fromPinnedMessages
+                                is MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios -> myMode.getTimelineMode() == Timeline.Mode.PinnedEvents
+                                is MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos -> myMode.getTimelineMode() == Timeline.Mode.PinnedEvents
+                            }
                             is MediaViewerEntryPoint.Params.EventGallery -> inputs.fromPinnedMessages
                             is MediaViewerEntryPoint.Params.Avatar -> false
                         },
