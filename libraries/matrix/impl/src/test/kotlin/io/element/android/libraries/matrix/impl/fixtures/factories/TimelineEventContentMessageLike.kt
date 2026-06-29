@@ -8,7 +8,7 @@
 
 package io.element.android.libraries.matrix.impl.fixtures.factories
 
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeMediaSource
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiMediaSource
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import org.matrix.rustcomponents.sdk.AudioInfo
 import org.matrix.rustcomponents.sdk.AudioMessageContent
@@ -92,7 +92,7 @@ internal fun aRustImageMessageContent(
     filename: String = "image.jpg",
     caption: String? = null,
     formattedCaption: FormattedBody? = null,
-    source: MediaSource = FakeMediaSource("mxc://server/image"),
+    source: MediaSource = FakeFfiMediaSource("mxc://server/image"),
     info: ImageInfo? = null,
 ) = ImageMessageContent(
     filename = filename,
@@ -106,7 +106,7 @@ internal fun aRustAudioMessageContent(
     filename: String = "audio.mp3",
     caption: String? = null,
     formattedCaption: FormattedBody? = null,
-    source: MediaSource = FakeMediaSource("mxc://server/audio"),
+    source: MediaSource = FakeFfiMediaSource("mxc://server/audio"),
     info: AudioInfo? = null,
     audio: UnstableAudioDetailsContent? = null,
     voice: UnstableVoiceContent? = null,
@@ -124,7 +124,7 @@ internal fun aRustVideoMessageContent(
     filename: String = "video.mp4",
     caption: String? = null,
     formattedCaption: FormattedBody? = null,
-    source: MediaSource = FakeMediaSource("mxc://server/video"),
+    source: MediaSource = FakeFfiMediaSource("mxc://server/video"),
     info: VideoInfo? = null,
 ) = VideoMessageContent(
     filename = filename,
@@ -138,7 +138,7 @@ internal fun aRustFileMessageContent(
     filename: String = "document.pdf",
     caption: String? = null,
     formattedCaption: FormattedBody? = null,
-    source: MediaSource = FakeMediaSource("mxc://server/file"),
+    source: MediaSource = FakeFfiMediaSource("mxc://server/file"),
     info: FileInfo? = null,
 ) = FileMessageContent(
     filename = filename,

@@ -10,7 +10,7 @@ package io.element.android.libraries.matrix.impl.fixtures.fakes
 import org.matrix.rustcomponents.sdk.MediaSource
 import org.matrix.rustcomponents.sdk.NoHandle
 
-internal class FakeMediaSource(
+internal class FakeFfiMediaSource(
     private val fakeUrl: String = "mxc://server/media",
 ) : MediaSource(NoHandle) {
     override fun url(): String = fakeUrl
