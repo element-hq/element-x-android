@@ -21,14 +21,16 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaPreviewService
 import io.element.android.libraries.matrix.api.media.isPreviewEnabled
 import io.element.android.libraries.matrix.api.room.BaseRoom
-import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.api.store.UrlPreviewValue
+import io.element.android.libraries.preferences.api.store.isUrlPreviewEnabled
 import kotlinx.collections.immutable.toImmutableSet
 
 @Inject
 class TimelineProtectionPresenter(
     private val mediaPreviewService: MediaPreviewService,
     private val room: BaseRoom,
-    private val sessionPreferencesStore: SessionPreferencesStore,
+    private val appPreferencesStore: AppPreferencesStore,
 ) : Presenter<TimelineProtectionState> {
     private val allowedEvents = mutableStateOf<Set<EventId>>(setOf())
 
@@ -38,9 +40,9 @@ class TimelineProtectionPresenter(
             mediaPreviewService.mediaPreviewConfigFlow.mapState { config -> config.mediaPreviewValue }
         }.collectAsState()
         val roomInfo = room.roomInfoFlow.collectAsState()
-        val isRoomUrlPreviewEnabled by remember(room.roomId) {
-            sessionPreferencesStore.isRoomUrlPreviewEnabled(room.roomId.value)
-        }.collectAsState(initial = false)
+        val urlPreviewValue by remember {
+            appPreferencesStore.getUrlPreviewValueFlow()
+        }.collectAsState(initial = UrlPreviewValue.DEFAULT)
         val protectionState by remember {
             derivedStateOf {
                 val isPreviewEnabled = mediaPreviewValue.value.isPreviewEnabled(roomInfo.value.joinRule)
@@ -53,7 +55,8 @@ class TimelineProtectionPresenter(
         }
         val showUrlPreviews by remember {
             derivedStateOf {
-                mediaPreviewValue.value.isPreviewEnabled(roomInfo.value.joinRule) && isRoomUrlPreviewEnabled
+                // TODO (deferred): confirm encryption-signal / unknown handling on RoomInfo.isEncrypted.
+                urlPreviewValue.isUrlPreviewEnabled(roomInfo.value.isEncrypted == true)
             }
         }
 

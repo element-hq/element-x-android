@@ -24,6 +24,7 @@ import io.element.android.libraries.preferences.api.store.NotificationSound
 import io.element.android.libraries.preferences.api.store.NotificationSound.Companion.toStored
 import io.element.android.libraries.preferences.api.store.NotificationSoundChannelConfig
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
+import io.element.android.libraries.preferences.api.store.UrlPreviewValue
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -34,6 +35,7 @@ private val themeKey = stringPreferencesKey("theme")
 private val hideInviteAvatarsKey = booleanPreferencesKey("hideInviteAvatars")
 private val timelineMediaPreviewValueKey = stringPreferencesKey("timelineMediaPreviewValue")
 private val liveLocationMinimumDistanceUpdateKey = intPreferencesKey("liveLocationMinimumDistanceUpdate")
+private val urlPreviewValueKey = stringPreferencesKey("urlPreviewValue")
 private val logLevelKey = stringPreferencesKey("logLevel")
 private val traceLogPacksKey = stringPreferencesKey("traceLogPacks")
 private val messageSoundUriKey = stringPreferencesKey("notificationMessageSoundUri")
@@ -136,6 +138,18 @@ class DefaultAppPreferencesStore(
     override fun getTimelineMediaPreviewValueFlow(): Flow<MediaPreviewValue?> {
         return store.data.map { prefs ->
             prefs[timelineMediaPreviewValueKey]?.let { MediaPreviewValue.valueOf(it) }
+        }
+    }
+
+    override suspend fun setUrlPreviewValue(value: UrlPreviewValue) {
+        store.edit { prefs ->
+            prefs[urlPreviewValueKey] = value.name
+        }
+    }
+
+    override fun getUrlPreviewValueFlow(): Flow<UrlPreviewValue> {
+        return store.data.map { prefs ->
+            prefs[urlPreviewValueKey]?.let { UrlPreviewValue.valueOf(it) } ?: UrlPreviewValue.DEFAULT
         }
     }
 

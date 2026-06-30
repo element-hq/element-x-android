@@ -17,7 +17,6 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import io.element.android.features.roomdetails.impl.members.aRoomMember
@@ -104,22 +103,6 @@ class RoomDetailsViewTest : RobolectricTest() {
             )
             clickOn(R.string.screen_room_details_notification_title)
         }
-    }
-
-    @Config(qualifiers = "h1024dp")
-    @Test
-    fun `click on url preview emits expected event`() {
-        val eventsRecorder = EventsRecorder<RoomDetailsEvent>()
-        rule.setRoomDetailView(
-            state = aRoomDetailsState(
-                eventSink = eventsRecorder,
-                isUrlPreviewEnabled = false,
-            ),
-        )
-
-        rule.onNodeWithText(rule.activity.getString(R.string.screen_room_details_url_preview_title)).performClick()
-
-        eventsRecorder.assertSingle(RoomDetailsEvent.SetUrlPreviewEnabled(true))
     }
 
     @Test

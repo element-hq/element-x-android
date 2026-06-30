@@ -33,7 +33,6 @@ import io.element.android.libraries.matrix.api.room.powerlevels.RoomPermissions
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
-import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_ROOM_TOPIC
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -140,39 +139,6 @@ class RoomDetailsPresenterTest {
             assertThat(initialState.canShowSecurityAndPrivacy).isFalse()
             assertThat(initialState.showDebugInfo).isFalse()
 
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `present - initial state includes room url preview preference`() = runTest {
-        val sessionPreferencesStore = InMemorySessionPreferencesStore().apply {
-            setRoomUrlPreviewEnabled(A_ROOM_ID.value, true)
-        }
-        val presenter = createRoomDetailsPresenter(
-            sessionPreferencesStore = sessionPreferencesStore,
-        )
-        presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
-            val updatedState = consumeItemsUntilPredicate { it.isUrlPreviewEnabled }.last()
-            assertThat(updatedState.isUrlPreviewEnabled).isTrue()
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `present - set url preview event updates session preferences`() = runTest {
-        val sessionPreferencesStore = InMemorySessionPreferencesStore()
-        val presenter = createRoomDetailsPresenter(
-            sessionPreferencesStore = sessionPreferencesStore,
-        )
-        presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
-            val initialState = awaitItem()
-            assertThat(initialState.isUrlPreviewEnabled).isFalse()
-
-            initialState.eventSink(RoomDetailsEvent.SetUrlPreviewEnabled(true))
-
-            val updatedState = consumeItemsUntilPredicate { it.isUrlPreviewEnabled }.last()
-            assertThat(updatedState.isUrlPreviewEnabled).isTrue()
             cancelAndIgnoreRemainingEvents()
         }
     }

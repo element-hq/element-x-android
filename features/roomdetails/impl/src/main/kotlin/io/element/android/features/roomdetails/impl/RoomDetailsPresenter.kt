@@ -146,9 +146,6 @@ class RoomDetailsPresenter(
         }.collectAsState(initial = false)
 
         val roomNotificationSettingsState by room.roomNotificationSettingsStateFlow.collectAsState()
-        val isUrlPreviewEnabled by remember(room.roomId) {
-            sessionPreferencesStore.isRoomUrlPreviewEnabled(room.roomId.value)
-        }.collectAsState(initial = false)
 
         val snackbarDispatcher = LocalSnackbarDispatcher.current
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
@@ -169,11 +166,6 @@ class RoomDetailsPresenter(
                     }
                 }
                 is RoomDetailsEvent.SetFavorite -> scope.setFavorite(event.isFavorite)
-                is RoomDetailsEvent.SetUrlPreviewEnabled -> {
-                    scope.launch(dispatchers.io) {
-                        sessionPreferencesStore.setRoomUrlPreviewEnabled(room.roomId.value, event.enabled)
-                    }
-                }
                 is RoomDetailsEvent.CopyToClipboard -> {
                     clipboardHelper.copyPlainText(event.text)
                     snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_copied_to_clipboard))
@@ -209,7 +201,6 @@ class RoomDetailsPresenter(
             leaveRoomState = leaveRoomState,
             roomNotificationSettings = roomNotificationSettingsState.roomNotificationSettings(),
             isFavorite = isFavorite,
-            isUrlPreviewEnabled = isUrlPreviewEnabled,
             displayRolesAndPermissionsSettings = !isDm && permissions.canEditRolesAndPermissions,
             isPublic = joinRule == JoinRule.Public,
             heroes = roomInfo.heroes,
