@@ -60,11 +60,12 @@ dependencies {
     implementation(projects.features.reportroom.api)
     implementation(projects.features.rolesandpermissions.api)
     implementation(projects.libraries.previewutils)
-    implementation(projects.features.sharing.api)
+    implementation(projects.features.share.api)
     api(projects.features.home.api)
 
     testCommonDependencies(libs, true)
     testImplementation(projects.features.announcement.test)
+    testImplementation(projects.features.share.test)
     testImplementation(projects.features.invite.test)
     testImplementation(projects.features.logout.test)
     testImplementation(projects.features.networkmonitor.test)
