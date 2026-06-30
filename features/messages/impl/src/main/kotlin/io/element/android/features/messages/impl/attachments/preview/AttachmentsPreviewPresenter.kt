@@ -246,7 +246,7 @@ class AttachmentsPreviewPresenter(
 
                         // Send the media using the session coroutine scope so it doesn't matter if this screen or the chat one are closed
                         sessionCoroutineScope.launch(dispatchers.io) {
-                            sendGalleryPreProcessed(
+                            sendMedia(
                                 mediaUploadInfos = allMediaUploadInfos,
                                 caption = caption,
                                 sendActionState = sendActionState,
@@ -478,7 +478,7 @@ class AttachmentsPreviewPresenter(
         sendActionState.value = SendActionState.Idle
     }
 
-    private suspend fun sendGalleryPreProcessed(
+    private suspend fun sendMedia(
         mediaUploadInfos: List<MediaUploadInfo>,
         caption: String?,
         sendActionState: MutableState<SendActionState>,
