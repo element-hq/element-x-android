@@ -49,7 +49,6 @@ import io.element.android.libraries.matrix.api.scanner.ContentScanner
 import io.element.android.libraries.matrix.api.spaces.SpaceService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncState
-import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.UserStatus
@@ -58,7 +57,8 @@ import io.element.android.libraries.matrix.impl.exception.mapClientException
 import io.element.android.libraries.matrix.impl.linknewdevice.RustLinkDesktopHandler
 import io.element.android.libraries.matrix.impl.linknewdevice.RustLinkMobileHandler
 import io.element.android.libraries.matrix.impl.linknewdevice.RustQrCodeDataParser
-import io.element.android.libraries.matrix.impl.mapper.map
+import io.element.android.libraries.matrix.impl.user.into
+import io.element.android.libraries.matrix.impl.user.map
 import io.element.android.libraries.matrix.impl.media.RustMediaLoader
 import io.element.android.libraries.matrix.impl.media.RustMediaPreviewService
 import io.element.android.libraries.matrix.impl.notification.RustNotificationService
@@ -85,7 +85,7 @@ import io.element.android.libraries.matrix.impl.search.RustMessageSearchService
 import io.element.android.libraries.matrix.impl.spaces.RustSpaceService
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import io.element.android.libraries.matrix.impl.sync.map
-import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
+import io.element.android.libraries.matrix.impl.user.UserSearchResultMapper
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
@@ -270,8 +270,6 @@ class RustMatrixClient(
     )
 
     private var clientDelegateTaskHandle: TaskHandle? = innerClient.setDelegate(sessionDelegate)
-
-    @Volatile private var localUserStatus: UserStatus? = null
 
     private val _userProfile: MutableStateFlow<MatrixUser> = MutableStateFlow(
         MatrixUser(
@@ -458,13 +456,8 @@ class RustMatrixClient(
 
     override suspend fun getUserProfile(): Result<MatrixUser> = getProfile(sessionId)
         .onSuccess { matrixUser ->
-            _userProfile.emit(
-                matrixUser.copy(
-                    rawStatus = localUserStatus,
-                    displayedStatus = localUserStatus?.let { DisplayedStatus.UserSet(it) },
-                )
-            )
             // Also update our session storage
+            _userProfile.emit(matrixUser)
             sessionStore.updateUserProfile(
                 sessionId = sessionId.value,
                 displayName = matrixUser.displayName,
@@ -495,25 +488,21 @@ class RustMatrixClient(
         }
 
     override suspend fun setUserStatus(status: UserStatus): Result<Unit> = withContext(sessionDispatcher) {
-        localUserStatus = status
-        _userProfile.emit(
-            _userProfile.value.copy(
-                rawStatus = status,
-                displayedStatus = DisplayedStatus.UserSet(status),
-            )
-        )
-        Result.success(Unit)
+        runCatchingExceptions {
+            innerClient.setUserStatus(status.into())
+        }.onSuccess {
+            // try to refresh data once it's updated
+            getUserProfile()
+        }
     }
 
     override suspend fun clearUserStatus(): Result<Unit> = withContext(sessionDispatcher) {
-        localUserStatus = null
-        _userProfile.emit(
-            _userProfile.value.copy(
-                rawStatus = null,
-                displayedStatus = null,
-            )
-        )
-        Result.success(Unit)
+        runCatchingExceptions {
+            innerClient.clearUserStatus()
+        }.onSuccess {
+            // try to refresh data once it's updated
+            getUserProfile()
+        }
     }
 
     override suspend fun joinRoom(roomId: RoomId): Result<RoomInfo?> = withContext(sessionDispatcher) {

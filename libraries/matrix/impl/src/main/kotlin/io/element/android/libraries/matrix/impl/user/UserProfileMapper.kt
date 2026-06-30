@@ -6,9 +6,10 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.matrix.impl.mapper
+package io.element.android.libraries.matrix.impl.user
 
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import org.matrix.rustcomponents.sdk.UserProfile
 
@@ -16,4 +17,6 @@ fun UserProfile.map() = MatrixUser(
     userId = UserId(userId),
     displayName = displayName,
     avatarUrl = avatarUrl,
+    rawStatus = status?.into(),
+    displayedStatus = DisplayedStatus.from(status, call)
 )
