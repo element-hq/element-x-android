@@ -26,6 +26,7 @@ import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
 import io.element.android.features.share.api.DirectShareShortcutsPublisher
 import io.element.android.features.share.api.SharingRoomInfo
+import io.element.android.libraries.core.extensions.ellipsize
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.di.annotations.ApplicationContext
@@ -71,7 +72,7 @@ class DefaultDirectShareShortcutsPublisher(
         } ?: IconCompat.createWithResource(context, android.R.drawable.sym_def_app_icon)
 
         return ShortcutInfoCompat.Builder(context, id)
-            .setShortLabel(safeShortLabel(room.displayName))
+            .setShortLabel(room.displayName.trim().ellipsize(12))
             .setLongLabel(context.getString(R.string.common_share_to, room.displayName))
             .setIntent(baseIntent)
             .setIcon(icon)
@@ -124,10 +125,5 @@ class DefaultDirectShareShortcutsPublisher(
             Base64.encodeToString(this.toByteArray(Charsets.UTF_8), Base64.NO_WRAP)
 
         return "directshare_${sessionId.toBase64()}_${roomId.toBase64()}"
-    }
-
-    private fun safeShortLabel(displayName: String): String {
-        val trimmed = displayName.trim()
-        return if (trimmed.length <= 12) trimmed else trimmed.take(12) + "…"
     }
 }
