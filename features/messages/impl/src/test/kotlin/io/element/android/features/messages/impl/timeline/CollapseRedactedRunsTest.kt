@@ -20,6 +20,8 @@ import kotlinx.collections.immutable.toImmutableList
 import org.junit.Test
 
 class CollapseRedactedRunsTest {
+    private val groupIds = mutableMapOf<String, String>()
+
     private fun redacted(id: String) = aTimelineItemEvent(
         eventId = EventId(id),
         content = TimelineItemRedactedContent,
@@ -30,7 +32,7 @@ class CollapseRedactedRunsTest {
         val r1 = redacted("\$R1")
         val r2 = redacted("\$R2")
         val r3 = redacted("\$R3")
-        val result = listOf<TimelineItem>(r1, r2, r3).collapseRedactedRuns()
+        val result = listOf<TimelineItem>(r1, r2, r3).collapseRedactedRuns(groupIds)
         assertThat(result).hasSize(1)
         val group = result.single() as TimelineItem.GroupedEvents
         // Stored oldest-first (the input is newest-first), like the existing grouper.
@@ -39,15 +41,15 @@ class CollapseRedactedRunsTest {
             EventId("\$R2"),
             EventId("\$R1"),
         ).inOrder()
-        // Group id is derived from the newest event of the run so it survives older pagination.
-        assertThat(group.id).isEqualTo(computeGroupIdWith(r1))
+        // Group id comes from the shared registry, keyed like the other groups (oldest member).
+        assertThat(group.id).isEqualTo(computeGroupIdWith(r3))
     }
 
     @Test
     fun `leaves a run shorter than three as individual tiles`() {
         val r1 = redacted("\$R1")
         val r2 = redacted("\$R2")
-        val result = listOf<TimelineItem>(r1, r2).collapseRedactedRuns()
+        val result = listOf<TimelineItem>(r1, r2).collapseRedactedRuns(groupIds)
         assertThat(result).containsExactly(r1, r2).inOrder()
     }
 
@@ -58,7 +60,7 @@ class CollapseRedactedRunsTest {
         val r2 = redacted("\$R2")
         val r3 = redacted("\$R3")
         val oldest = aTimelineItemEvent(eventId = EventId("\$OLD"))
-        val result = listOf<TimelineItem>(newest, r1, r2, r3, oldest).collapseRedactedRuns()
+        val result = listOf<TimelineItem>(newest, r1, r2, r3, oldest).collapseRedactedRuns(groupIds)
         assertThat(result).hasSize(3)
         assertThat(result.first()).isEqualTo(newest)
         assertThat(result.last()).isEqualTo(oldest)
@@ -74,7 +76,7 @@ class CollapseRedactedRunsTest {
         val sep = aTimelineItemDaySeparator()
         val r4 = redacted("\$R4")
         val r5 = redacted("\$R5")
-        val result = listOf<TimelineItem>(r1, r2, r3, sep, r4, r5).collapseRedactedRuns()
+        val result = listOf<TimelineItem>(r1, r2, r3, sep, r4, r5).collapseRedactedRuns(groupIds)
         // First run (3) collapses, the separator passes through, the second run (2) stays as tiles.
         assertThat(result).hasSize(4)
         assertThat(result.first()).isInstanceOf(TimelineItem.GroupedEvents::class.java)
@@ -89,14 +91,14 @@ class CollapseRedactedRunsTest {
         val r2 = redacted("\$R2")
         val between = aTimelineItemEvent(eventId = EventId("\$MID"))
         val r3 = redacted("\$R3")
-        val result = listOf<TimelineItem>(r1, r2, between, r3).collapseRedactedRuns()
+        val result = listOf<TimelineItem>(r1, r2, between, r3).collapseRedactedRuns(groupIds)
         assertThat(result).containsExactly(r1, r2, between, r3).inOrder()
     }
 
     @Test
     fun `collapses a long run into a single group keeping every event`() {
         val run = (1..5).map { redacted("\$R$it") }
-        val result = run.collapseRedactedRuns()
+        val result = run.collapseRedactedRuns(groupIds)
         assertThat(result).hasSize(1)
         assertThat((result.single() as TimelineItem.GroupedEvents).events).hasSize(5)
     }
@@ -106,7 +108,7 @@ class CollapseRedactedRunsTest {
         val firstRun = (1..3).map { redacted("\$A$it") }
         val separator = aTimelineItemEvent(eventId = EventId("\$SEP"))
         val secondRun = (1..3).map { redacted("\$B$it") }
-        val result = (firstRun + separator + secondRun).collapseRedactedRuns()
+        val result = (firstRun + separator + secondRun).collapseRedactedRuns(groupIds)
         assertThat(result).hasSize(3)
         assertThat(result[0]).isInstanceOf(TimelineItem.GroupedEvents::class.java)
         assertThat(result[1]).isEqualTo(separator)
@@ -120,7 +122,7 @@ class CollapseRedactedRunsTest {
     fun `collapses a run that sits at the very end of the list`() {
         val newest = aTimelineItemEvent(eventId = EventId("\$NEW"))
         val run = (1..3).map { redacted("\$R$it") }
-        val result = (listOf<TimelineItem>(newest) + run).collapseRedactedRuns()
+        val result = (listOf<TimelineItem>(newest) + run).collapseRedactedRuns(groupIds)
         assertThat(result).hasSize(2)
         assertThat(result.first()).isEqualTo(newest)
         assertThat(result.last()).isInstanceOf(TimelineItem.GroupedEvents::class.java)
@@ -129,7 +131,7 @@ class CollapseRedactedRunsTest {
     @Test
     fun `leaves a single redacted event untouched`() {
         val r1 = redacted("\$R1")
-        assertThat(listOf<TimelineItem>(r1).collapseRedactedRuns()).containsExactly(r1)
+        assertThat(listOf<TimelineItem>(r1).collapseRedactedRuns(groupIds)).containsExactly(r1)
     }
 
     @Test
@@ -146,7 +148,7 @@ class CollapseRedactedRunsTest {
             redactedWithReceipt("\$R2", 1),
             redactedWithReceipt("\$R3", 2),
         )
-        val group = run.collapseRedactedRuns().single() as TimelineItem.GroupedEvents
+        val group = run.collapseRedactedRuns(groupIds).single() as TimelineItem.GroupedEvents
         assertThat(group.aggregatedReadReceipts).hasSize(3)
     }
 
@@ -154,7 +156,7 @@ class CollapseRedactedRunsTest {
     fun `an existing grouped item breaks the run and is passed through untouched`() {
         val stateGroup = aGroupedEvents(id = UniqueId("state"))
         val run = (1..3).map { redacted("\$R$it") }
-        val result = (run + stateGroup).collapseRedactedRuns()
+        val result = (run + stateGroup).collapseRedactedRuns(groupIds)
         assertThat(result).hasSize(2)
         assertThat(result.first()).isInstanceOf(TimelineItem.GroupedEvents::class.java)
         assertThat(result.last()).isEqualTo(stateGroup)
@@ -162,6 +164,20 @@ class CollapseRedactedRunsTest {
 
     @Test
     fun `is a no-op on an empty list`() {
-        assertThat(emptyList<TimelineItem>().collapseRedactedRuns()).isEmpty()
+        assertThat(emptyList<TimelineItem>().collapseRedactedRuns(groupIds)).isEmpty()
+    }
+
+    @Test
+    fun `the group id survives the run growing at either end`() {
+        val r1 = redacted("\$R1")
+        val r2 = redacted("\$R2")
+        val r3 = redacted("\$R3")
+        val first = listOf<TimelineItem>(r1, r2, r3).collapseRedactedRuns(groupIds).single() as TimelineItem.GroupedEvents
+        // A newer adjacent message gets redacted and older history loads in: the id must not move,
+        // or the user's expanded group would snap shut on the update.
+        val grown = listOf<TimelineItem>(redacted("\$R0"), r1, r2, r3, redacted("\$R4"))
+            .collapseRedactedRuns(groupIds)
+            .single() as TimelineItem.GroupedEvents
+        assertThat(grown.id).isEqualTo(first.id)
     }
 }

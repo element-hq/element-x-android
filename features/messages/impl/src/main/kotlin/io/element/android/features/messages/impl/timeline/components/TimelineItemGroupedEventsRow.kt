@@ -264,7 +264,7 @@ internal fun TimelineItemGroupedEventsRowContentCollapsePreview() = ElementPrevi
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemRedactedMessagesGroupPreview() = ElementPreview {
-    // A collapsed run of deleted messages, shown as a single "N deleted messages" header.
+    // A collapsed run of deleted messages, shown as a single "N removed messages" header.
     TimelineItemGroupedEventsRowContent(
         isExpanded = false,
         onExpandGroupClick = {},
