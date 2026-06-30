@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (c) 2025 Element Creations Ltd.
+  ~ Copyright (c) 2026 Element Creations Ltd.
   ~
   ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
   ~ Please see LICENSE files in the repository root for full details.
   -->
 
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
-    <share-target android:targetClass="io.element.android.features.sharing.impl.ShareReceiverActivity">
+    <share-target android:targetClass="io.element.android.x.MainActivity">
         <data android:mimeType="text/plain" />
         <data android:mimeType="image/*" />
         <data android:mimeType="video/*" />

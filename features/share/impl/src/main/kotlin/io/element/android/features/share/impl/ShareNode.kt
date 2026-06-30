@@ -23,7 +23,6 @@ import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.share.api.ShareEntryPoint
 import io.element.android.features.share.api.ShareIntentData
-import io.element.android.features.share.api.targetRoomId
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.inputs
@@ -42,7 +41,7 @@ class ShareNode(
     private val roomSelectEntryPoint: RoomSelectEntryPoint,
 ) : ParentNode<ShareNode.NavTarget>(
     navModel = PermanentNavModel(
-        navTargets = if (plugins.filterIsInstance<Inputs>().firstOrNull()?.shareIntentData?.targetRoomId != null) {
+        navTargets = if (plugins.filterIsInstance<Inputs>().firstOrNull()?.shareIntentData?.directShareRoomId != null) {
             emptySet()
         } else {
             setOf(NavTarget)

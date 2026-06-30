@@ -32,7 +32,8 @@ import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.preferences.impl.tasks.MarkRoomAsRead
 import io.element.android.features.rageshake.test.logs.FakeAnnouncementService
-import io.element.android.features.sharing.api.SharingShortcutsManager
+import io.element.android.features.share.api.DirectShareShortcutsPublisher
+import io.element.android.features.share.test.FakeDirectShareShortcutsPublisher
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
@@ -665,7 +666,7 @@ class RoomListPresenterTest {
         announcementService: AnnouncementService = FakeAnnouncementService(),
         featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
         markRoomAsRead: MarkRoomAsRead? = null,
-        sharingShortcutsManager: SharingShortcutsManager = FakeSharingShortcutsManager(),
+        directShareShortcutsPublisher: DirectShareShortcutsPublisher = FakeDirectShareShortcutsPublisher(),
     ) = RoomListPresenter(
         client = client,
         leaveRoomPresenter = { leaveRoomState },
@@ -697,6 +698,6 @@ class RoomListPresenterTest {
         announcementService = announcementService,
         coldStartWatcher = FakeAnalyticsColdStartWatcher(),
         featureFlagService = featureFlagService,
-        sharingShortcutsManager = sharingShortcutsManager,
+        directShareShortcutsPublisher = directShareShortcutsPublisher,
     )
 }

@@ -32,10 +32,8 @@ open class ShareStateProvider : PreviewParameterProvider<ShareState> {
 
 fun aShareState(
     shareAction: AsyncAction<List<RoomId>> = AsyncAction.Uninitialized,
-    isDirectShare: Boolean = false,
     eventSink: (ShareEvents) -> Unit = {}
 ) = ShareState(
     shareAction = shareAction,
-    isDirectShare = isDirectShare,
     eventSink = eventSink
 )

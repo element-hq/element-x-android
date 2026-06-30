@@ -43,6 +43,11 @@ dependencies {
     api(libs.statemachine)
     api(projects.features.share.api)
 
+    implementation(libs.coil)
+    implementation(libs.androidx.core)
+    implementation(libs.androidx.corektx)
+    implementation(libs.androidx.sharetarget)
+
     testCommonDependencies(libs, true)
     testImplementation(projects.features.share.test)
     testImplementation(projects.libraries.matrix.test)
