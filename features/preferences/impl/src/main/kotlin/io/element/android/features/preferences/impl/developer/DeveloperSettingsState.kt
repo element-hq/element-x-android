@@ -19,7 +19,6 @@ data class DeveloperSettingsState(
     val databaseSizes: AsyncData<ImmutableMap<String, String>>,
     val clearCacheAction: AsyncAction<Unit>,
     val markAllRoomsAsReadAction: AsyncAction<Unit>,
-    val showMarkAllRoomsAsReadConfirmation: Boolean,
     val isEnterpriseBuild: Boolean,
     val showColorPicker: Boolean,
     val eventSink: (DeveloperSettingsEvents) -> Unit

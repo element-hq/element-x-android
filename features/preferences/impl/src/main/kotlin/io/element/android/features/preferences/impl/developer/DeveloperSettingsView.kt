@@ -47,12 +47,12 @@ fun DeveloperSettingsView(
     if (state.showLoader) {
         ProgressDialog()
     }
-    if (state.showMarkAllRoomsAsReadConfirmation) {
+    if (state.markAllRoomsAsReadAction.isConfirming()) {
         ConfirmationDialog(
             title = stringResource(R.string.screen_developer_settings_mark_all_rooms_as_read_alert_title),
             content = "",
             submitText = stringResource(CommonStrings.action_yes),
-            onSubmitClick = { state.eventSink(DeveloperSettingsEvents.ConfirmMarkAllRoomsAsRead) },
+            onSubmitClick = { state.eventSink(DeveloperSettingsEvents.MarkAllRoomsAsRead(needsConfirmation = false)) },
             onDismiss = { state.eventSink(DeveloperSettingsEvents.DismissMarkAllRoomsAsReadConfirmation) },
         )
     }
@@ -180,7 +180,7 @@ private fun MarkAllRoomsAsReadCategory(state: DeveloperSettingsState) {
             },
             enabled = !state.showLoader,
             onClick = {
-                state.eventSink(DeveloperSettingsEvents.ShowMarkAllRoomsAsReadConfirmation)
+                state.eventSink(DeveloperSettingsEvents.MarkAllRoomsAsRead(needsConfirmation = true))
             },
         )
     }

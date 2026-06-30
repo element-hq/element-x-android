@@ -63,9 +63,6 @@ class DeveloperSettingsPresenter(
         val markAllRoomsAsReadAction = remember {
             mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
         }
-        var showMarkAllRoomsAsReadConfirmation by remember {
-            mutableStateOf(false)
-        }
         var showColorPicker by remember {
             mutableStateOf(false)
         }
@@ -96,16 +93,18 @@ class DeveloperSettingsPresenter(
                 DeveloperSettingsEvents.VacuumStores -> coroutineScope.launch {
                     vacuumStoresUseCase()
                 }
-                DeveloperSettingsEvents.ShowMarkAllRoomsAsReadConfirmation -> {
-                    showMarkAllRoomsAsReadConfirmation = true
+                is DeveloperSettingsEvents.MarkAllRoomsAsRead -> {
+                    if (event.needsConfirmation) {
+                        markAllRoomsAsReadAction.value = AsyncAction.ConfirmingNoParams
+                    } else {
+                        coroutineScope.markAllRoomsAsRead(
+                            markAllRoomsAsReadAction = markAllRoomsAsReadAction,
+                        )
+                    }
                 }
                 DeveloperSettingsEvents.DismissMarkAllRoomsAsReadConfirmation -> {
-                    showMarkAllRoomsAsReadConfirmation = false
+                    markAllRoomsAsReadAction.value = AsyncAction.Uninitialized
                 }
-                DeveloperSettingsEvents.ConfirmMarkAllRoomsAsRead -> coroutineScope.markAllRoomsAsRead(
-                    markAllRoomsAsReadAction = markAllRoomsAsReadAction,
-                    dismissConfirmation = { showMarkAllRoomsAsReadConfirmation = false },
-                )
             }
         }
 
@@ -116,7 +115,6 @@ class DeveloperSettingsPresenter(
             databaseSizes = databaseSizes.value,
             clearCacheAction = clearCacheAction.value,
             markAllRoomsAsReadAction = markAllRoomsAsReadAction.value,
-            showMarkAllRoomsAsReadConfirmation = showMarkAllRoomsAsReadConfirmation,
             isEnterpriseBuild = enterpriseService.isEnterpriseBuild,
             showColorPicker = showColorPicker,
             eventSink = ::handleEvent,
@@ -156,9 +154,7 @@ class DeveloperSettingsPresenter(
 
     private fun CoroutineScope.markAllRoomsAsRead(
         markAllRoomsAsReadAction: MutableState<AsyncAction<Unit>>,
-        dismissConfirmation: () -> Unit,
     ) = launch {
-        dismissConfirmation()
         suspend {
             markAllRoomsAsRead().getOrThrow()
         }.runCatchingUpdatingState(state = markAllRoomsAsReadAction)
