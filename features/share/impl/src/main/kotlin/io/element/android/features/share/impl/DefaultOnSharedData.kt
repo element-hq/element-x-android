@@ -7,6 +7,7 @@
 
 package io.element.android.features.share.impl
 
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -15,13 +16,14 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.share.api.OnSharedData
 import io.element.android.features.share.api.ShareIntentData
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.annotations.ApplicationContext
 import timber.log.Timber
-import kotlin.collections.forEach
 
 @ContributesBinding(AppScope::class)
 class DefaultOnSharedData(
     @ApplicationContext private val context: Context,
+    private val buildMeta: BuildMeta,
 ) : OnSharedData {
     override fun invoke(data: ShareIntentData) {
         when (data) {
@@ -29,6 +31,13 @@ class DefaultOnSharedData(
                 // No-op, there is nothing to do for plain text intents.
             }
             is ShareIntentData.Uris -> {
+                val fileProvider = "${buildMeta.applicationId}.fileprovider"
+                for (sharedUri in data.uris) {
+                    // Remove the local copy of the shared file, as it is not needed anymore
+                    if (sharedUri.uri.scheme == ContentResolver.SCHEME_CONTENT && sharedUri.uri.host == fileProvider) {
+                        context.contentResolver.delete(sharedUri.uri, null, emptyArray())
+                    }
+                }
                 revokeUriPermissions(data.uris.map { it.uri })
             }
         }

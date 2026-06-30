@@ -10,10 +10,12 @@ package io.element.android.libraries.matrix.impl.room
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.room.MessageEventType
+import org.junit.Ignore
 import org.junit.Test
-import org.matrix.rustcomponents.sdk.MessageLikeEventType
+import uniffi.ruma_events.MessageLikeEventType
 
 class MessageEventTypeKtTest {
+    @Ignore("Can't use MessageLikeEventType as that will try accessing the Rust SDK")
     @Test
     fun `map Rust type should result to correct Kotlin type`() {
         assertThat(MessageLikeEventType.CallAnswer.map()).isEqualTo(MessageEventType.CallAnswer)

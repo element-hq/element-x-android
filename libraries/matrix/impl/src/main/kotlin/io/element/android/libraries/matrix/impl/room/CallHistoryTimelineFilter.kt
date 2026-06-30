@@ -8,8 +8,8 @@
 package io.element.android.libraries.matrix.impl.room
 
 import org.matrix.rustcomponents.sdk.FilterTimelineEventType
-import org.matrix.rustcomponents.sdk.MessageLikeEventType
 import org.matrix.rustcomponents.sdk.TimelineEventFilter
+import uniffi.ruma_events.MessageLikeEventType
 
 internal object CallHistoryTimelineFilter {
     fun create(): TimelineEventFilter = TimelineEventFilter.includeEventTypes(

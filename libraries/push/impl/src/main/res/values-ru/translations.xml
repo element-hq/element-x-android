@@ -15,8 +15,8 @@
     <item quantity="few">"%d уведомления"</item>
     <item quantity="many">"%d уведомлений"</item>
   </plurals>
-  <string name="notification_error_unified_push_unregistered_android">"Не удалось зарегистрировать дистрибьютора уведомлений UnifiedPush, поэтому вы больше не будете получать уведомления. Проверьте настройки уведомлений в приложении и статус дистрибьютора push-уведомлений."</string>
-  <string name="notification_fallback_content">"У вас есть новые сообщения."</string>
+  <string name="notification_error_unified_push_unregistered_android">"Не удалось зарегистрировать дистрибьютора уведомлений UnifiedPush, поэтому Вы больше не будете получать уведомления. Проверьте настройки уведомлений в приложении и статус дистрибьютора push-уведомлений."</string>
+  <string name="notification_fallback_content">"У Вас есть новые сообщения."</string>
   <plurals name="notification_fallback_n_content">
     <item quantity="one">"У Вас %d новое сообщение."</item>
     <item quantity="few">"У Вас %d новых сообщения."</item>
@@ -32,8 +32,8 @@
     <item quantity="few">"%d приглашения"</item>
     <item quantity="many">"%d приглашений"</item>
   </plurals>
-  <string name="notification_invite_body">"Пригласил(а) вас в чат"</string>
-  <string name="notification_invite_body_with_sender">"%1$s пригласил(а) вас в чат"</string>
+  <string name="notification_invite_body">"Пригласил(а) Вас в чат"</string>
+  <string name="notification_invite_body_with_sender">"%1$s пригласил(а) Вас в чат"</string>
   <string name="notification_mentioned_you_body">"Упомянул(а) вас: %1$s"</string>
   <string name="notification_new_messages">"Новые сообщения"</string>
   <plurals name="notification_new_messages_for_room">
@@ -44,12 +44,12 @@
   <string name="notification_reaction_body">"Отреагировал(а) на %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Пометить как прочитанное"</string>
   <string name="notification_room_action_quick_reply">"Быстрый ответ"</string>
-  <string name="notification_room_invite_body">"Пригласил(а) вас в комнату"</string>
-  <string name="notification_room_invite_body_with_sender">"%1$s пригласил(а) вас в комнату"</string>
+  <string name="notification_room_invite_body">"Пригласил(а) Вас в комнату"</string>
+  <string name="notification_room_invite_body_with_sender">"%1$s пригласил(а) Вас в комнату"</string>
   <string name="notification_sender_me">"Я"</string>
   <string name="notification_sender_mention_reply">"%1$s упомянул(а) или ответил(а)"</string>
-  <string name="notification_space_invite_body">"Пригласил(а) вас в пространство"</string>
-  <string name="notification_space_invite_body_with_sender">"%1$s пригласил(а) вас в пространство"</string>
+  <string name="notification_space_invite_body">"Пригласил(а) Вас в пространство"</string>
+  <string name="notification_space_invite_body_with_sender">"%1$s пригласил(а) Вас в пространство"</string>
   <string name="notification_test_push_notification_content">"Вы просматриваете уведомление! Нажмите на меня!"</string>
   <string name="notification_thread_in_room">"Обсуждение в %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>

@@ -24,9 +24,15 @@ interface EncryptionService {
     suspend fun enableBackups(): Result<Unit>
 
     /**
-     * Enable recovery. Observe enableProgressStateFlow to get progress and recovery key.
+     * Enable recovery and return the SDK-generated recovery key on success.
+     * Observe [enableRecoveryProgressStateFlow] for in-progress UI updates.
+     *
+     * @param waitForBackupsToUpload when true, suspends until existing room keys finish uploading.
+     * @param passphrase optional user-supplied passphrase. When set, the SDK derives the
+     *   secret-storage key from it instead of a random base58 key; the passphrase can later be
+     *   passed to [recover], and the returned base58 key should not be surfaced to the user.
      */
-    suspend fun enableRecovery(waitForBackupsToUpload: Boolean): Result<Unit>
+    suspend fun enableRecovery(waitForBackupsToUpload: Boolean, passphrase: String? = null): Result<String>
 
     /**
      * Change the recovery and return the new recovery key.

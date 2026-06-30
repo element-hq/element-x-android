@@ -24,17 +24,23 @@ class PinUnlockHelper(
     private val pinCodeManager: PinCodeManager
 ) {
     @Composable
-    fun OnUnlockEffect(onUnlock: () -> Unit) {
+    fun OnUnlockEffect(onUnlock: (Boolean) -> Unit) {
         val latestOnUnlock by rememberUpdatedState(onUnlock)
         DisposableEffect(Unit) {
             val biometricUnlockCallback = object : DefaultBiometricUnlockCallback() {
                 override fun onBiometricAuthenticationSuccess() {
-                    latestOnUnlock()
+                    latestOnUnlock(true)
+                }
+
+                override fun onBiometricAuthenticationFailed(error: Exception?) {
+                    if (error != null) {
+                        latestOnUnlock(false)
+                    }
                 }
             }
             val pinCodeVerifiedCallback = object : DefaultPinCodeManagerCallback() {
                 override fun onPinCodeVerified() {
-                    latestOnUnlock()
+                    latestOnUnlock(true)
                 }
             }
             biometricAuthenticatorManager.addCallback(biometricUnlockCallback)

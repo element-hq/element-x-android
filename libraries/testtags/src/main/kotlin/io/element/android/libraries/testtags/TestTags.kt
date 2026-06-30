@@ -29,6 +29,8 @@ object TestTags {
      * Verification screen.
      */
     val recoveryKey = TestTag("verification-recovery_key")
+    val customRecoveryPassphrase = TestTag("verification-custom_recovery_passphrase")
+    val customRecoveryPassphraseConfirm = TestTag("verification-custom_recovery_passphrase_confirm")
 
     /**
      * Sign out screen.

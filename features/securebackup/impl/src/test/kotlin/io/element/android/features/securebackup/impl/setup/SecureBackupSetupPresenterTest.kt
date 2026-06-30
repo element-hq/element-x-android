@@ -117,7 +117,7 @@ class SecureBackupSetupPresenterTest {
     @Test
     fun `present - handle errors`() = runTest {
         val encryptionService = FakeEncryptionService(
-            enableRecoveryLambda = { Result.failure(IllegalStateException("Test error")) }
+            enableRecoveryLambda = { _, _ -> Result.failure(IllegalStateException("Test error")) }
         )
         val presenter = createSecureBackupSetupPresenter(
             isChangeRecoveryKeyUserStory = false,
@@ -189,7 +189,7 @@ class SecureBackupSetupPresenterTest {
     private fun createSecureBackupSetupPresenter(
         isChangeRecoveryKeyUserStory: Boolean = false,
         encryptionService: EncryptionService = FakeEncryptionService(
-            enableRecoveryLambda = { Result.success(Unit) },
+            enableRecoveryLambda = { _, _ -> Result.success("") },
         ),
     ): SecureBackupSetupPresenter {
         return SecureBackupSetupPresenter(
