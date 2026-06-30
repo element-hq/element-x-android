@@ -44,7 +44,7 @@ class TimelineMediaItemsFactory(
                 when (val currentTimelineItem = timelineItems[index]) {
                     is MatrixTimelineItem.Event -> {
                         val cachedItems = cache[currentTimelineItem.uniqueId]
-                        val items = if (cachedItems != null && isItemUnchanged(currentTimelineItem, previousTimelineItems)) {
+                        val items = if (cachedItems != null && currentTimelineItem.isUnchanged(previousTimelineItems)) {
                             cachedItems
                         } else {
                             eventItemFactory.create(currentTimelineItem).also { newItems ->
@@ -65,16 +65,15 @@ class TimelineMediaItemsFactory(
             _timelineItems.emit(newTimelineItemStates.toImmutableList())
         }
     }
+}
 
-    private fun isItemUnchanged(
-        currentTimelineItem: MatrixTimelineItem.Event,
-        previousItems: List<MatrixTimelineItem>,
-    ): Boolean {
-        if (previousItems.isEmpty()) return false
-        val previousIndex = previousItems.indexOfFirst { it is MatrixTimelineItem.Event && it.uniqueId == currentTimelineItem.uniqueId }
-        if (previousIndex < 0) return false
-        val previousItem = previousItems[previousIndex] as? MatrixTimelineItem.Event ?: return false
-        return previousItem.event.eventId == currentTimelineItem.event.eventId &&
-               previousItem.event.timestamp == currentTimelineItem.event.timestamp
-    }
+private fun MatrixTimelineItem.Event.isUnchanged(
+    previousItems: List<MatrixTimelineItem>,
+): Boolean {
+    val previousItem = previousItems
+        .filterIsInstance<MatrixTimelineItem.Event>()
+        .find { it.uniqueId == uniqueId }
+    return previousItem != null &&
+        previousItem.event.eventId == event.eventId &&
+        previousItem.event.timestamp == event.timestamp
 }
