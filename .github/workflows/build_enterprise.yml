@@ -13,13 +13,12 @@ permissions: {}
 env:
   GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx8g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError -XX:+UseG1GC -Dkotlin.daemon.jvm.options=-Xmx4g
   CI_GRADLE_ARG_PROPERTIES: --stacktrace -Dsonar.gradle.skipCompile=true --no-configuration-cache
+  CAN_BUILD_ENTERPRISE: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
 
 jobs:
   build:
     name: Build Enterprise APKs
     runs-on: ubuntu-latest
-    # Skip in forks
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
     strategy:
       matrix:
         variant: [debug, release, nightly]
@@ -30,6 +29,7 @@ jobs:
       cancel-in-progress: true
     steps:
       - name: Free Disk Space (Ubuntu)
+        if: ${{ env.CAN_BUILD_ENTERPRISE == 'true' }}
         uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be
         with:
           # This might remove tools that are actually needed, if set to "true" but frees about 6 GB
@@ -44,28 +44,33 @@ jobs:
           swap-storage: false
 
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        if: ${{ env.CAN_BUILD_ENTERPRISE == 'true' }}
         with:
           # Ensure we are building the branch and not the branch after being merged on develop
           # https://github.com/actions/checkout/issues/881
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
           persist-credentials: false
       - name: Add SSH private keys for submodule repositories
+        if: ${{ env.CAN_BUILD_ENTERPRISE == 'true' }}
         uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
         with:
           ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
       - name: Clone submodules
+        if: ${{ env.CAN_BUILD_ENTERPRISE == 'true' }}
         run: git submodule update --init --recursive
       - name: Use JDK 21
+        if: ${{ env.CAN_BUILD_ENTERPRISE == 'true' }}
         uses: actions/setup-java@ad2b38190b15e4d6bdf0c97fb4fca8412226d287 # v5.3.0
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '21'
       - name: Configure gradle
+        if: ${{ env.CAN_BUILD_ENTERPRISE == 'true' }}
         uses: gradle/actions/setup-gradle@3f131e8634966bd73d06cc69884922b02e6faf92 # v6.2.0
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Assemble debug Gplay Enterprise APK
-        if: ${{ matrix.variant == 'debug' }}
+        if: ${{ env.CAN_BUILD_ENTERPRISE == 'true' && matrix.variant == 'debug' }}
         env:
           ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
           ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID: ${{ secrets.MAPTILER_LIGHT_MAP_ID }}
@@ -78,15 +83,15 @@ jobs:
           ELEMENT_CALL_RAGESHAKE_URL: ${{ secrets.ELEMENT_CALL_RAGESHAKE_URL }}
         run: ./gradlew :app:assembleGplayDebug -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
       - name: Upload debug Enterprise APKs
-        if: ${{ matrix.variant == 'debug' }}
+        if: ${{ env.CAN_BUILD_ENTERPRISE == 'true' && matrix.variant == 'debug' }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: elementx-enterprise-debug
           path: |
             app/build/outputs/apk/gplay/debug/*-universal-debug.apk
       - name: Compile nightly and release sources
-        if: ${{ matrix.variant == 'release' }}
+        if: ${{ env.CAN_BUILD_ENTERPRISE == 'true' && matrix.variant == 'release' }}
         run: ./gradlew compileReleaseSources -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
       - name: Compile nightly sources
-        if: ${{ matrix.variant == 'nightly' }}
+        if: ${{ env.CAN_BUILD_ENTERPRISE == 'true' && matrix.variant == 'nightly' }}
         run: ./gradlew compileGplayNightlySources -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
