@@ -49,7 +49,7 @@ fun DeveloperSettingsView(
     }
     if (state.markAllRoomsAsReadAction.isConfirming()) {
         ConfirmationDialog(
-            title = stringResource(R.string.screen_developer_settings_mark_all_rooms_as_read_alert_title),
+            title = "Are you sure you want to mark all the rooms as read?",
             content = "",
             submitText = stringResource(CommonStrings.action_yes),
             onSubmitClick = { state.eventSink(DeveloperSettingsEvents.MarkAllRoomsAsRead(needsConfirmation = false)) },
@@ -169,11 +169,15 @@ private fun MarkAllRoomsAsReadCategory(state: DeveloperSettingsState) {
     PreferenceCategory(title = "Room list") {
         ListItem(
             headlineContent = {
-                Text(stringResource(R.string.screen_developer_settings_mark_all_rooms_as_read))
+                Text("Mark all rooms as read")
             },
             supportingContent = {
                 Text(
-                    text = stringResource(R.string.screen_developer_settings_mark_all_rooms_as_read_footer),
+                    text = """
+                        This will send a private read receipt and a read marker in every room you are part of. 
+                        It's a long running operation that might get rate limited.
+                        It will run in the background but the app must be alive for it to finish.
+                        """.trimIndent(),
                     style = ElementTheme.typography.fontBodySmRegular,
                     color = ElementTheme.colors.textSecondary,
                 )
