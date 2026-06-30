@@ -13,7 +13,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,7 +38,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -77,8 +75,6 @@ import io.element.android.libraries.designsystem.theme.components.Switch
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.theme.floatingDateBadgeBackground
-import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaRenderer
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.libraries.textcomposer.TextComposer
@@ -92,17 +88,6 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlin.time.Duration.Companion.milliseconds
-
-private val SingleItemPreviewRenderer = object : LocalMediaRenderer {
-    @Composable
-    override fun Render(localMedia: LocalMedia) {
-        Image(
-            painter = painterResource(id = CommonDrawables.sample_background),
-            modifier = Modifier.fillMaxSize(),
-            contentDescription = null,
-        )
-    }
-}
 
 /**
  * Ref: https://www.figma.com/design/zftpgS6LjiczobJZ1GUNpt/Updates-to-Media---File-Upload?node-id=51-3514
@@ -571,7 +556,7 @@ private fun AttachmentsPreviewBottomActions(
 internal fun AttachmentsPreviewViewPreview(@PreviewParameter(AttachmentsPreviewStateProvider::class) state: AttachmentsPreviewState) = ElementPreviewDark {
     AttachmentsPreviewView(
         state = state,
-        localMediaRenderer = SingleItemPreviewRenderer,
+        localMediaRenderer = SampleMediaRenderer(),
     )
 }
 
@@ -580,7 +565,7 @@ internal fun AttachmentsPreviewViewPreview(@PreviewParameter(AttachmentsPreviewS
 internal fun AttachmentsPreviewGalleryViewPreview() = ElementPreviewDark {
     AttachmentsPreviewView(
         state = anAttachmentsPreviewGalleryState(),
-        localMediaRenderer = SingleItemPreviewRenderer,
+        localMediaRenderer = SampleMediaRenderer(),
     )
 }
 
