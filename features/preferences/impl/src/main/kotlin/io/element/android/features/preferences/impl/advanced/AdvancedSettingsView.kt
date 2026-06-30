@@ -116,6 +116,19 @@ fun AdvancedSettingsView(
             ),
             onClick = { state.eventSink(AdvancedSettingsEvents.SetSharePresenceEnabled(!state.isSharePresenceEnabled)) }
         )
+        ListItem(
+            headlineContent = {
+                Text(text = stringResource(id = R.string.screen_advanced_settings_hide_space_rooms_toggle_title))
+            },
+            supportingContent = {
+                Text(text = stringResource(id = R.string.screen_advanced_settings_hide_space_rooms_toggle_description))
+            },
+            trailingContent = ListItemContent.Switch(
+                checked = state.isHideSpaceRoomMembersEnabled,
+            ),
+            onClick = { state.eventSink(AdvancedSettingsEvents.SetHideSpaceRoomMembers(!state.isHideSpaceRoomMembersEnabled)) }
+        )
+
         val compressImages = state.mediaOptimizationState?.shouldCompressImages
 
         when (state.mediaOptimizationState) {
