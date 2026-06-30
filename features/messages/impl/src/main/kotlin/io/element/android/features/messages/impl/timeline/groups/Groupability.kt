@@ -41,7 +41,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
-import kotlinx.collections.immutable.toImmutableList
 
 /**
  * Return true when every event in the group is a redacted (deleted) message, i.e. the group is a
@@ -50,48 +49,6 @@ import kotlinx.collections.immutable.toImmutableList
  */
 internal fun TimelineItem.GroupedEvents.isRedactedMessagesGroup(): Boolean =
     events.isNotEmpty() && events.all { it.content is TimelineItemRedactedContent }
-
-// Runs shorter than this are left as individual "Message removed" tiles, like element-web.
-internal const val MIN_REDACTED_RUN_SIZE = 3
-
-/**
- * Collapse runs of [MIN_REDACTED_RUN_SIZE] or more consecutive redacted events into a single
- * [TimelineItem.GroupedEvents], so they render as one expandable "N deleted messages" block the way
- * element-web does. Shorter runs and every non-redacted item are passed through untouched, day
- * dividers included. The grouped events are stored oldest-first to match the existing grouper, and
- * the group id is derived from the newest event of the run (its first element in this newest-first
- * list) so it stays stable as older history pages in and the run grows at its older end.
- */
-internal fun List<TimelineItem>.collapseRedactedRuns(): List<TimelineItem> {
-    val result = mutableListOf<TimelineItem>()
-    val run = mutableListOf<TimelineItem.Event>()
-
-    fun flushRun() {
-        when {
-            run.isEmpty() -> Unit
-            run.size < MIN_REDACTED_RUN_SIZE -> result.addAll(run)
-            else -> result.add(
-                TimelineItem.GroupedEvents(
-                    id = computeGroupIdWith(run.first()),
-                    events = run.reversed().toImmutableList(),
-                    aggregatedReadReceipts = run.flatMap { it.readReceiptState.receipts }.toImmutableList(),
-                )
-            )
-        }
-        run.clear()
-    }
-
-    for (item in this) {
-        if (item is TimelineItem.Event && item.content is TimelineItemRedactedContent) {
-            run.add(item)
-        } else {
-            flushRun()
-            result.add(item)
-        }
-    }
-    flushRun()
-    return result
-}
 
 /**
  * Return true if the Event can be grouped in a collapse/expand block
