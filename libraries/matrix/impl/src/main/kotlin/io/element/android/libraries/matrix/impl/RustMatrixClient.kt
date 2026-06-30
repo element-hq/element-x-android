@@ -800,6 +800,12 @@ class RustMatrixClient(
         }
     }
 
+    override suspend fun markAllRoomsAsRead(): Result<Unit> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.markAllRoomsAsRead()
+        }
+    }
+
     override suspend fun performDatabaseVacuum(): Result<Unit> = withContext(sessionDispatcher) {
         runCatchingExceptions {
             Timber.d("Performing database vacuuming for session $sessionId...")
