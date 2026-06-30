@@ -11,7 +11,7 @@ package io.element.android.libraries.matrix.api.auth
 data class MatrixHomeServerDetails(
     val url: String,
     val supportsPasswordLogin: Boolean,
-    val supportsOidcLogin: Boolean,
+    val supportsOAuthLogin: Boolean,
 ) {
-    val isSupported = supportsPasswordLogin || supportsOidcLogin
+    val isSupported = supportsPasswordLogin || supportsOAuthLogin
 }

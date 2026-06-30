@@ -28,4 +28,14 @@ class FakeStringProvider(
         lastResIdParam = resId
         return defaultResult + " ($quantity) " + formatArgs.joinToString()
     }
+
+    override fun getSimpleQuantityString(
+        resIdForOne: Int,
+        resIdForOthers: Int,
+        quantity: Int,
+        vararg formatArgs: Any?,
+    ): String {
+        lastResIdParam = if (quantity == 1) resIdForOne else resIdForOthers
+        return defaultResult + " ($quantity) " + formatArgs.joinToString()
+    }
 }

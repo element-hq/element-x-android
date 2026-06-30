@@ -8,8 +8,6 @@
 
 package io.element.android.features.securebackup.impl.reset.password
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,7 +30,7 @@ import io.element.android.libraries.designsystem.modifiers.onTabOrEnterKeyFocusN
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.PasswordVisibilityToggle
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TextFieldValidity
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -92,14 +90,10 @@ private fun Content(text: String, onTextChange: (String) -> Unit, hasError: Bool
         singleLine = true,
         visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = {
-            val image =
-                if (showPassword) CompoundIcons.VisibilityOn() else CompoundIcons.VisibilityOff()
-            val description =
-                if (showPassword) stringResource(CommonStrings.a11y_hide_password) else stringResource(CommonStrings.a11y_show_password)
-
-            Box(Modifier.clickable { showPassword = !showPassword }) {
-                Icon(imageVector = image, description)
-            }
+            PasswordVisibilityToggle(
+                visible = showPassword,
+                onToggle = { showPassword = !showPassword },
+            )
         },
         validity = if (hasError) TextFieldValidity.Invalid else TextFieldValidity.None,
         supportingText = if (hasError) {

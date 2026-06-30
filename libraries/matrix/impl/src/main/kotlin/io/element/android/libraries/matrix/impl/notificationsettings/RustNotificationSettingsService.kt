@@ -62,11 +62,11 @@ class RustNotificationSettingsService(
     override suspend fun setDefaultRoomNotificationMode(
         isEncrypted: Boolean,
         mode: RoomNotificationMode,
-        isOneToOne: Boolean
+        isDM: Boolean
     ): Result<Unit> = withContext(dispatchers.io) {
         runCatchingExceptions {
             try {
-                notificationSettings.await().setDefaultRoomNotificationMode(isEncrypted, isOneToOne, mode.let(RoomNotificationSettingsMapper::mapMode))
+                notificationSettings.await().setDefaultRoomNotificationMode(isEncrypted, isDM, mode.let(RoomNotificationSettingsMapper::mapMode))
             } catch (exception: NotificationSettingsException.RuleNotFound) {
                 // `setDefaultRoomNotificationMode` updates multiple rules including unstable rules (e.g. the polls push rules defined in the MSC3930)
                 // since production home servers may not have these rules yet, we drop the RuleNotFound error

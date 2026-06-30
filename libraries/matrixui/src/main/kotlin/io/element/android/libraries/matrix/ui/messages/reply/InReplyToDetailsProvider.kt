@@ -9,6 +9,7 @@
 package io.element.android.libraries.matrix.ui.messages.reply
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.designsystem.preview.USER_NAME_SENDER
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
@@ -71,7 +72,7 @@ open class InReplyToDetailsProvider : PreviewParameterProvider<InReplyToDetails>
             ),
             aMessageContent(
                 body = "Location",
-                type = LocationMessageType("Location", "geo:1,2", null),
+                type = LocationMessageType("Location", "geo:1,2", null, assetType = null),
             ),
             aMessageContent(
                 body = "Notice",
@@ -152,14 +153,14 @@ private fun aInReplyToDetails(
     eventId = EventId("\$event"),
     eventContent = eventContent,
     senderId = UserId("@Sender:domain"),
-    senderProfile = aProfileTimelineDetailsReady(
+    senderProfile = aProfileDetailsReady(
         displayNameAmbiguous = displayNameAmbiguous,
     ),
     textContent = (eventContent as? MessageContent)?.body.orEmpty(),
 )
 
-fun aProfileTimelineDetailsReady(
-    displayName: String? = "Sender",
+fun aProfileDetailsReady(
+    displayName: String? = USER_NAME_SENDER,
     displayNameAmbiguous: Boolean = false,
     avatarUrl: String? = null,
 ) = ProfileDetails.Ready(

@@ -8,13 +8,16 @@
   <plurals name="a11y_digits_entered">
     <item quantity="other">"%1$d자리 입력됨"</item>
   </plurals>
+  <string name="a11y_duration">"소요 시간: %1$s"</string>
   <string name="a11y_edit_avatar">"아바타 편집"</string>
   <string name="a11y_edit_room_address_hint">"전체 주소는 다음과 같습니다 %1$s"</string>
   <string name="a11y_encryption_details">"암호화 세부 정보"</string>
   <string name="a11y_expand_message_text_field">"메시지 텍스트 필드 확장"</string>
   <string name="a11y_hide_password">"비밀번호 숨기기"</string>
+  <string name="a11y_info">"정보"</string>
   <string name="a11y_join_call">"통화 참가"</string>
   <string name="a11y_jump_to_bottom">"맨 아래로 이동"</string>
+  <string name="a11y_jump_to_unread">"읽지 않은 항목으로 이동"</string>
   <string name="a11y_move_the_map_to_my_location">"지도를 내 위치로 이동"</string>
   <string name="a11y_notifications_mentions_only">"멘션만"</string>
   <string name="a11y_notifications_muted">"음소거함"</string>
@@ -26,10 +29,12 @@
   <string name="a11y_pause">"일시중지"</string>
   <string name="a11y_paused_voice_message">"음성 메시지, 지속 시간: %1$s, 현재 위치: %2$s"</string>
   <string name="a11y_pin_field">"PIN 필드"</string>
+  <string name="a11y_pinned_location">"고정된 위치"</string>
   <string name="a11y_play">"재생"</string>
   <string name="a11y_playback_speed">"재생 속도"</string>
   <string name="a11y_poll">"투표"</string>
   <string name="a11y_poll_end">"종료된 투표"</string>
+  <string name="a11y_position">"위치: %1$s"</string>
   <string name="a11y_qr_code">"QR 코드"</string>
   <string name="a11y_react_with">"%1$s에 반응하세요"</string>
   <string name="a11y_react_with_other_emojis">"다른 이모지로 반응하세요"</string>
@@ -43,9 +48,16 @@
   <string name="a11y_remove_reaction_with">"%1$s 반응을 제거하세요"</string>
   <string name="a11y_room_avatar">"방 아바타"</string>
   <string name="a11y_send_files">"파일 보내기"</string>
-  <string name="a11y_session_verification_time_limited_action_required">"시간 제한 조치가 필요합니다"</string>
+  <string name="a11y_sender_location">"발신자 위치"</string>
+  <string name="a11y_sent_by_sender_at_date">"%1$s님이 %2$s에 보냈습니다."</string>
+  <string name="a11y_session_verification_time_limited_action_required">"제한 시간 내 인증이 필요합니다.1분 안에 확인해 주세요."</string>
+  <string name="a11y_settings_with_required_action">"설정,조치 필요"</string>
   <string name="a11y_show_password">"비밀번호 표시"</string>
   <string name="a11y_start_call">"통화 시작"</string>
+  <string name="a11y_start_video_call">"영상 통화 시작"</string>
+  <string name="a11y_start_voice_call">"음성 통화 시작"</string>
+  <string name="a11y_thread_in_room">"%1$s 내 스레드"</string>
+  <string name="a11y_threads_in_room">"%1$s 내 스레드 목록"</string>
   <string name="a11y_tombstoned_room">"묘비 방"</string>
   <string name="a11y_user_avatar">"사용자 아바타"</string>
   <string name="a11y_user_menu">"사용자 메뉴"</string>
@@ -63,6 +75,7 @@
   <string name="action_call">"통화"</string>
   <string name="action_cancel">"취소"</string>
   <string name="action_cancel_for_now">"현재 취소"</string>
+  <string name="action_choose_file">"파일 선택"</string>
   <string name="action_choose_photo">"사진 선택"</string>
   <string name="action_clear">"지우기"</string>
   <string name="action_close">"닫기"</string>
@@ -82,12 +95,16 @@
   <string name="action_deactivate_account">"계정 비활성화"</string>
   <string name="action_decline">"거절"</string>
   <string name="action_decline_and_block">"거부 및 차단"</string>
+  <string name="action_delete">"삭제"</string>
+  <string name="action_delete_account">"계정 삭제"</string>
+  <string name="action_delete_file">"파일 삭제"</string>
   <string name="action_delete_poll">"투표 삭제"</string>
   <string name="action_deselect_all">"전체 선택 해제"</string>
   <string name="action_disable">"비활성화"</string>
   <string name="action_discard">"취소"</string>
   <string name="action_dismiss">"닫기"</string>
   <string name="action_done">"완료"</string>
+  <string name="action_download">"다운로드"</string>
   <string name="action_edit">"편집"</string>
   <string name="action_edit_caption">"캡션 편집"</string>
   <string name="action_edit_poll">"투표 수정"</string>
@@ -115,6 +132,7 @@
   <string name="action_leave_space">"스페이스 떠나기"</string>
   <string name="action_load_more">"더 불러오기"</string>
   <string name="action_manage_account">"계정 관리"</string>
+  <string name="action_manage_account_and_devices">"계정 및 기기 관리"</string>
   <string name="action_manage_devices">"기기 관리"</string>
   <string name="action_manage_rooms">"방 관리"</string>
   <string name="action_message">"메시지"</string>
@@ -157,14 +175,15 @@
   <string name="action_share_live_location">"실시간 위치 공유"</string>
   <string name="action_show">"표시"</string>
   <string name="action_sign_in_again">"다시 로그인"</string>
-  <string name="action_signout">"로그아웃"</string>
-  <string name="action_signout_anyway">"무시하고 로그아웃"</string>
+  <string name="action_signout">"이 기기 로그아웃"</string>
+  <string name="action_signout_anyway">"무시하고 이 기기 제거"</string>
   <string name="action_skip">"건너뛰기"</string>
   <string name="action_start">"시작"</string>
   <string name="action_start_chat">"채팅 시작"</string>
   <string name="action_start_over">"다시 시작하다"</string>
   <string name="action_start_verification">"인증 시작"</string>
   <string name="action_static_map_load">"탭해서 지도 불러오기"</string>
+  <string name="action_stop">"중지"</string>
   <string name="action_take_photo">"사진 찍기"</string>
   <string name="action_tap_for_options">"옵션을 보려면 탭하세요"</string>
   <string name="action_translate">"번역"</string>
@@ -192,7 +211,9 @@
   <string name="common_beta">"베타"</string>
   <string name="common_blocked_users">"차단한 사용자"</string>
   <string name="common_bubbles">"버블"</string>
+  <string name="common_call_declined">"통화 거절"</string>
   <string name="common_call_started">"통화 시작"</string>
+  <string name="common_call_you_declined">"통화를 거절하셨습니다"</string>
   <string name="common_chat_backup">"채팅 백업"</string>
   <string name="common_copied_to_clipboard">"클립보드에 복사됨"</string>
   <string name="common_copyright">"저작권"</string>
@@ -202,7 +223,6 @@
   <string name="common_current_user_left_room">"방 떠남"</string>
   <string name="common_current_user_left_space">"스페이스 떠남"</string>
   <string name="common_current_user_rejected_invite">"초대 거부됨"</string>
-  <string name="common_dark">"다크"</string>
   <string name="common_decryption_error">"복호화 오류"</string>
   <string name="common_description">"설명"</string>
   <string name="common_developer_options">"개발자 설정"</string>
@@ -218,6 +238,7 @@
   <string name="common_empty_file">"빈 파일"</string>
   <string name="common_encryption">"암호화"</string>
   <string name="common_encryption_enabled">"암호화 활성화됨"</string>
+  <string name="common_ends_at">"%1$s에 종료"</string>
   <string name="common_enter_your_pin">"PIN을 입력하세요"</string>
   <string name="common_error">"오류"</string>
   <string name="common_error_registering_pusher_android">"오류가 발생했습니다, 새 메시지 알림을 받지 못할 수 있습니다. 설정에서 알림 문제를 해결하세요.
@@ -227,6 +248,7 @@
   <string name="common_failed">"실패"</string>
   <string name="common_favourite">"즐겨찾기"</string>
   <string name="common_favourited">"즐겨찾기 됨"</string>
+  <string name="common_fetching_notifications_title_android">"알림 동기화 중…"</string>
   <string name="common_file">"파일"</string>
   <string name="common_file_deleted">"파일 삭제됨"</string>
   <string name="common_file_saved">"파일 저장됨"</string>
@@ -240,10 +262,11 @@
   <string name="common_invite_unknown_profile">"Matrix ID를 찾을 수 없기 때문에 초대가 수신되지 않을 수도 있습니다."</string>
   <string name="common_leaving_room">"방을 떠나는 중"</string>
   <string name="common_leaving_space">"스페이스 떠나는 중"</string>
-  <string name="common_light">"라이트"</string>
   <string name="common_line_copied_to_clipboard">"줄이 클립보드에 복사되었습니다."</string>
   <string name="common_link_copied_to_clipboard">"링크가 클립보드에 복사됨"</string>
   <string name="common_link_new_device">"새 기기 연결"</string>
+  <string name="common_live_location">"실시간 위치"</string>
+  <string name="common_live_location_ended">"실시간 위치 공유 종료"</string>
   <string name="common_loading">"로딩 중…"</string>
   <string name="common_loading_more">"더 많은 내용이 로딩 중…"</string>
   <plurals name="common_many_members">
@@ -268,6 +291,7 @@
   <string name="common_offline">"오프라인"</string>
   <string name="common_open_source_licenses">"오픈 소스 라이선스"</string>
   <string name="common_or">"또는"</string>
+  <string name="common_other_options">"기타 옵션"</string>
   <string name="common_password">"비밀번호"</string>
   <string name="common_people">"사람"</string>
   <string name="common_permalink">"퍼머링크"</string>
@@ -277,6 +301,7 @@
   <string name="common_please_wait">"기다려 주세요…"</string>
   <string name="common_poll_end_confirmation">"정말로 이 투표를 종료하시겠어요?"</string>
   <string name="common_poll_summary">"투표: %1$s"</string>
+  <string name="common_poll_summary_prefix">"투표"</string>
   <string name="common_poll_total_votes">"총 투표수: %1$s"</string>
   <string name="common_poll_undisclosed_text">"결과는 투표가 끝난 이후에 공개됨"</string>
   <plurals name="common_poll_votes_count">
@@ -300,7 +325,6 @@
     <item quantity="other">"%1$d 답변"</item>
   </plurals>
   <string name="common_replying_to">"%1$s님에게 답장하는 중"</string>
-  <string name="common_report_a_bug">"버그 보고"</string>
   <string name="common_report_a_problem">"문제 보고"</string>
   <string name="common_report_submitted">"보고 제출됨"</string>
   <string name="common_rich_text_editor">"리치 텍스트 편집기"</string>
@@ -333,9 +357,10 @@
   <string name="common_settings">"설정"</string>
   <string name="common_share_space">"스페이스 공유"</string>
   <string name="common_shared_history">"새 멤버에게 대화 기록 공개"</string>
+  <string name="common_shared_live_location">"공유 중인 실시간 위치"</string>
   <string name="common_shared_location">"공유된 위치"</string>
   <string name="common_shared_space">"공유된 스페이스"</string>
-  <string name="common_signing_out">"로그아웃"</string>
+  <string name="common_signing_out">"기기 제거"</string>
   <string name="common_something_went_wrong">"뭔가 잘못됐어요"</string>
   <string name="common_something_went_wrong_message">"문제가 발생했습니다. 다시 시도해 주세요."</string>
   <string name="common_space">"스페이스"</string>
@@ -350,16 +375,16 @@
   <string name="common_suggested">"공유된 스페이스"</string>
   <string name="common_suggestions">"제안"</string>
   <string name="common_syncing">"동기화 중"</string>
-  <string name="common_system">"시스템"</string>
   <string name="common_text">"글자"</string>
   <string name="common_third_party_notices">"제3자 고지"</string>
   <string name="common_thread">"스레드"</string>
+  <string name="common_threads">"스레드"</string>
   <string name="common_topic">"주제"</string>
   <string name="common_topic_placeholder">"이 방은 어떤 곳인가요?"</string>
   <string name="common_unable_to_decrypt">"해독 불가"</string>
   <string name="common_unable_to_decrypt_insecure_device">"보안되지 않은 장치에서 전송됨"</string>
   <string name="common_unable_to_decrypt_no_access">"이 메시지에 액세스할 수 없습니다"</string>
-  <string name="common_unable_to_decrypt_verification_violation">"발신자의 검증된 신원이 재설정되었습니다."</string>
+  <string name="common_unable_to_decrypt_verification_violation">"발신자의 인증된 디지털 신원이 재설정되었습니다"</string>
   <string name="common_unable_to_invite_message">"한 명 이상의 사용자에게 초대를 보낼 수 없습니다."</string>
   <string name="common_unable_to_invite_title">"초대를 보낼 수 없음"</string>
   <string name="common_unlock">"잠금 해제"</string>
@@ -384,16 +409,17 @@
   <string name="common_voice_message">"음성 메시지"</string>
   <string name="common_waiting">"대기 중…"</string>
   <string name="common_waiting_for_decryption_key">"이 메시지를 기다리고 있습니다"</string>
+  <string name="common_waiting_live_location">"실시간 위치 정보를 기다리는 중…"</string>
   <string name="common_world_readable_history">"누구나 대화 기록 보기 가능"</string>
   <string name="common_you">"당신"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s(%2$s)님이 이 메시지를 공유했습니다. 메시지 전송 당시 귀하가 방에 참여 중이 아니었기 때문입니다."</string>
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s님이 이 메시지를 공유했습니다. 메시지 전송 당시 귀하가 방에 참여 중이 아니었기 때문입니다."</string>
   <string name="crypto_history_visible">"이 방은 새 멤버가 이전 대화 기록을 읽을 수 있도록 설정되었습니다. %1$s"</string>
-  <string name="crypto_identity_change_pin_violation">"%1$s 의 신원이 재설정되었습니다. %2$s"</string>
+  <string name="crypto_identity_change_pin_violation">"%1$s님의 디지털 신원이 재설정되었습니다. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"%1$s의 %2$s 신원이 재설정되었습니다. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
-  <string name="crypto_identity_change_profile_pin_violation">"%1$s의 신원이 재설정되었습니다."</string>
-  <string name="crypto_identity_change_verification_violation_new">"%1$s의 %2$s 신원이 재설정되었습니다. %3$s"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"%1$s의 디지털 신원이 재설정되었습니다."</string>
+  <string name="crypto_identity_change_verification_violation_new">"%1$s님의 %2$s 디지털 신원이 재설정되었습니다. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"확인 취소"</string>
   <string name="dialog_allow_access">"액세스 허용"</string>
   <string name="dialog_confirm_link_message">"%1$s 링크는 다른 사이트로 이동합니다 %2$s
@@ -427,6 +453,7 @@
   <string name="error_failed_locating_user">"%1$s가 위치에 접근할 수 없습니다. 나중에 다시 시도해 주세요."</string>
   <string name="error_failed_uploading_voice_message">"음성 메시지 업로드에 실패했습니다."</string>
   <string name="error_invalid_invite">"해당 방이 더 이상 존재하지 않거나 초대장이 더 이상 유효하지 않습니다."</string>
+  <string name="error_location_service_disabled_android">"위치 기반 기능을 사용하려면 GPS를 켜 주세요."</string>
   <string name="error_message_not_found">"메시지를 찾을 수 없습니다"</string>
   <string name="error_missing_location_auth_android">"%1$s에서 위치에 접근할 수 있는 권한이 없습니다. 설정에서 활성화가 가능합니다."</string>
   <string name="error_missing_location_rationale_android">"%1$s에서 위치에 접근할 수 있는 권한이 없습니다. 아래에서 허용해주세요."</string>
@@ -438,6 +465,9 @@
   <string name="error_unknown">"이런, 오류가 발생했어요"</string>
   <string name="invite_friends_rich_title">"🔐️ %1$s에 참여하기"</string>
   <string name="invite_friends_text">"%1$s에서 대화해요: %2$s"</string>
+  <string name="live_location_sharing_foreground_service_channel_title_android">"실시간 위치 공유"</string>
+  <string name="live_location_sharing_foreground_service_message_android">"위치 공유 중"</string>
+  <string name="live_location_sharing_foreground_service_title_android">"%1$s님의 실시간 위치"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"강하게 흔들어서 오류 보고하기"</string>
   <string name="screen_bug_report_a11y_screenshot">"스크린샷"</string>
@@ -445,6 +475,12 @@
   <string name="screen_create_poll_options_section_title">"옵션"</string>
   <string name="screen_create_poll_remove_accessibility_label">"%1$s 제거"</string>
   <string name="screen_create_poll_settings_section_title">"설정"</string>
+  <string name="screen_live_location_sheet_nobody_sharing">"위치를 공유 중인 사용자가 없습니다."</string>
+  <string name="screen_live_location_sheet_sharing_live_location">"실시간 위치 공유 중"</string>
+  <plurals name="screen_live_location_sheet_subtitle">
+    <item quantity="other">"%1$d명"</item>
+  </plurals>
+  <string name="screen_live_location_sheet_title">"지도 보기"</string>
   <string name="screen_media_picker_error_failed_selection">"미디어 선택에 실패했습니다. 다시 시도해 주세요."</string>
   <string name="screen_pinned_timeline_empty_state_description">"메시지를 누르고 \"%1$s\" 를 선택하여 여기에 포함합니다."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"중요한 메시지를 고정하여 쉽게 찾을 수 있도록 합니다"</string>
@@ -452,11 +488,11 @@
     <item quantity="other">"%1$d 고정된 메시지"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"고정된 메세지"</string>
-  <string name="screen_reset_identity_confirmation_subtitle">"%1$s 계정으로 이동하여 신원을 재설정하시게 됩니다. 이후 앱으로 돌아가게 됩니다."</string>
-  <string name="screen_reset_identity_confirmation_title">"확인할 수 없으신가요? 계정으로 이동하여 신원을 재설정하세요."</string>
+  <string name="screen_reset_identity_confirmation_subtitle">"디지털 신원을 재설정하기 위해 %1$s 계정 페이지로 이동합니다. 재설정을 마친 후 다시 앱으로 돌아오게 됩니다."</string>
+  <string name="screen_reset_identity_confirmation_title">"확인할 수 없나요? 계정 설정으로 이동하여 디지털 신원을 재설정하세요."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"인증 철회 및 전송"</string>
   <string name="screen_resolve_send_failure_changed_identity_subtitle">"확인 절차를 철회하고 이 메시지를 보내거나, 지금 취소하고 나중에 %1$s 을 확인한 후 다시 시도할 수 있습니다."</string>
-  <string name="screen_resolve_send_failure_changed_identity_title">"%1$s의 인증된 신원이 재설정되어 귀하의 메시지가 전송되지 않았습니다."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"%1$s님의 인증된 디지털 신원이 재설정되어 메시지를 전송하지 못했습니다."</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"아무튼 메시지 보내기"</string>
   <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s 는 하나 이상의 확인되지 않은 장치를 사용하고 있습니다. 메시지를 보내거나, %2$s 이 모든 장치를 확인한 후에 다시 시도할 수 있습니다."</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"%1$s 이(가) 모든 기기를 확인하지 않았기 때문에 귀하의 메시지가 전송되지 않았습니다."</string>
@@ -468,6 +504,7 @@
   <string name="screen_room_event_pill">"메시지 %1$s"</string>
   <string name="screen_room_grouped_state_events_expand">"펼치기"</string>
   <string name="screen_room_grouped_state_events_reduce">"줄이다"</string>
+  <string name="screen_room_live_location_banner">"실시간 위치 공유 중"</string>
   <string name="screen_room_permalink_same_room_android">"이 방을 이미 보고 있습니다!"</string>
   <string name="screen_room_pinned_banner_indicator">"%2$s 의 %1$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s 고정된 메시지"</string>
@@ -479,13 +516,16 @@
   <string name="screen_share_open_apple_maps">"Apple Maps에서 열기"</string>
   <string name="screen_share_open_google_maps">"Google Maps에서 열기"</string>
   <string name="screen_share_open_osm_maps">"OpenStreetMap에서 열기"</string>
-  <string name="screen_share_this_location_action">"이 위치 공유"</string>
+  <string name="screen_share_this_location_action">"선택한 위치 공유"</string>
+  <string name="screen_sharing_location_option_sheet_title">"공유 옵션"</string>
   <string name="screen_space_list_description">"당신이 스페이스를 만들거나 가입했습니다."</string>
   <string name="screen_space_list_details">"%1$s•%2$s"</string>
   <string name="screen_space_list_empty_state_title">"스페이스를 생성하여 방을 체계적으로 관리해 보세요."</string>
   <string name="screen_space_list_parent_space">"%1$s 스페이스"</string>
   <string name="screen_space_list_title">"스페이스"</string>
-  <string name="screen_timeline_item_menu_send_failure_changed_identity">"%1$s의 인증된 신원이 재설정되어 메시지가 전송되지 않았습니다."</string>
+  <string name="screen_static_location_sheet_timestamp_description">"공유된 %1$s"</string>
+  <string name="screen_static_location_sheet_title">"지도에서 보기"</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"%1$s님의 인증된 디지털 신원이 재설정되어 메시지를 보내지 못했습니다."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"%1$s 이 모든 장치를 확인하지 않았기 때문에 메시지가 전송되지 않았습니다."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"하나 이상의 기기를 확인하지 않았기 때문에 메시지가 전송되지 않았습니다."</string>
   <string name="screen_view_location_title">"위치"</string>
@@ -495,5 +535,5 @@
   <string name="timeline_decryption_failure_historical_event_unverified_device">"이전 메시지에 액세스하려면 이 장치를 확인해야 합니다."</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"이 메시지에 액세스할 수 없습니다"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"메시지를 해독할 수 없습니다."</string>
-  <string name="timeline_decryption_failure_withheld_unverified">"이 메시지는 귀하가 기기를 확인하지 않았거나 발신자가 귀하의 신원을 확인해야 하기 때문에 차단되었습니다."</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"기기가 인증되지 않았거나, 발신자가 귀하의 디지털 신원을 확인해야 하므로 이 메시지가 차단되었습니다."</string>
 </resources>

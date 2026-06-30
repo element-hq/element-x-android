@@ -12,7 +12,6 @@
   <string name="screen_chat_backup_recovery_action_confirm">"Kurtarma anahtarını girin"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Anahtar depolama alanınız şu anda senkronize değil."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Kurtarmayı ayarlayın"</string>
-  <string name="screen_chat_backup_recovery_action_setup_description">"Tüm cihazlarınızı kaybettiğinizde veya %1$s adresinden çıkış yaptığınızda şifrelenmiş mesajlarınıza her yerden erişin."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Masaüstü cihazında aç %1$s"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Hesabınızda tekrar oturum açın"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Cihazınızı doğrulamanız istendiğinde %1$s öğesini seçin"</string>

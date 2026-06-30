@@ -416,11 +416,6 @@ class SecurityAndPrivacyPresenterTest {
         val presenter = createSecurityAndPrivacyPresenter(
             room = room,
             matrixClient = client,
-            featureFlagService = FakeFeatureFlagService(
-                initialState = mapOf(
-                    FeatureFlags.SpaceSettings.key to true,
-                )
-            )
         )
         presenter.test {
             skipItems(1)
@@ -461,11 +456,6 @@ class SecurityAndPrivacyPresenterTest {
             room = room,
             navigator = navigator,
             matrixClient = client,
-            featureFlagService = FakeFeatureFlagService(
-                initialState = mapOf(
-                    FeatureFlags.SpaceSettings.key to true,
-                )
-            )
         )
         presenter.test {
             skipItems(1)
@@ -587,7 +577,6 @@ class SecurityAndPrivacyPresenterTest {
             featureFlagService = FakeFeatureFlagService(
                 initialState = mapOf(
                     FeatureFlags.Knock.key to true,
-                    FeatureFlags.SpaceSettings.key to true,
                 )
             )
         )
@@ -633,7 +622,6 @@ class SecurityAndPrivacyPresenterTest {
             featureFlagService = FakeFeatureFlagService(
                 initialState = mapOf(
                     FeatureFlags.Knock.key to true,
-                    FeatureFlags.SpaceSettings.key to true,
                 )
             )
         )
@@ -859,9 +847,6 @@ class SecurityAndPrivacyPresenterTest {
         val presenter = createSecurityAndPrivacyPresenter(
             room = room,
             matrixClient = client,
-            featureFlagService = FakeFeatureFlagService(
-                initialState = mapOf(FeatureFlags.SpaceSettings.key to true)
-            )
         )
         presenter.test {
             skipItems(1)
@@ -901,9 +886,6 @@ class SecurityAndPrivacyPresenterTest {
         val presenter = createSecurityAndPrivacyPresenter(
             room = room,
             matrixClient = client,
-            featureFlagService = FakeFeatureFlagService(
-                initialState = mapOf(FeatureFlags.SpaceSettings.key to true)
-            )
         )
         presenter.test {
             skipItems(1)
@@ -975,7 +957,6 @@ class SecurityAndPrivacyPresenterTest {
             featureFlagService = FakeFeatureFlagService(
                 initialState = mapOf(
                     FeatureFlags.Knock.key to true,
-                    FeatureFlags.SpaceSettings.key to true,
                 )
             )
         )

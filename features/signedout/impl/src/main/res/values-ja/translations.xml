@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signed_out_reason_1">"他のセッションでパスワードを変更しました"</string>
+  <string name="screen_signed_out_reason_2">"このセッションは他のセッションより削除されました"</string>
+  <string name="screen_signed_out_reason_3">"サーバー管理者があなたのアクセスを無効にしました"</string>
+  <string name="screen_signed_out_subtitle">"以下のいずれかの理由によってサインアウトされました。%s を引き続き使用するには再度サインインしてください。"</string>
+  <string name="screen_signed_out_title">"サインアウトしました"</string>
+</resources>

@@ -302,7 +302,6 @@ class DefaultNotifiableEventResolver(
             NotificationContent.StateEvent.PolicyRuleRoom,
             NotificationContent.StateEvent.PolicyRuleServer,
             NotificationContent.StateEvent.PolicyRuleUser,
-            NotificationContent.StateEvent.RoomAliases,
             NotificationContent.StateEvent.RoomAvatar,
             NotificationContent.StateEvent.RoomCanonicalAlias,
             NotificationContent.StateEvent.RoomCreate,

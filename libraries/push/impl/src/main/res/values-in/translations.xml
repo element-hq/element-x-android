@@ -48,6 +48,8 @@
   <string name="push_distributor_background_sync_android">"Sinkronisasi latar belakang"</string>
   <string name="push_distributor_firebase_android">"Layanan Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Tidak ditemukan Layanan Google Play yang valid. Pemberitahuan mungkin tidak berfungsi dengan baik."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_description">"Memeriksa pengguna yang diblokir"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_result_none">"Tidak ada pengguna yang diblokir."</string>
   <string name="troubleshoot_notifications_test_blocked_users_title">"Pengguna yang diblokir"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Dapatkan nama penyedia saat ini."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Tidak ada penyedia notifikasi dorongan yang dipilih."</string>

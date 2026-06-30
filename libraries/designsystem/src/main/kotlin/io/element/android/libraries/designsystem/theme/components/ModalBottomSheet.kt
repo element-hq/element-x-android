@@ -10,10 +10,13 @@ package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -21,6 +24,8 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.movableContentOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -42,10 +47,15 @@ import io.element.android.libraries.designsystem.preview.sheetStateForPreview
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+/**
+ * For parameter [scrollable], set it to true if the content of the sheet does not already contain a scrollable component, such as a LazyColumn,
+ * to avoid nested scroll issues. In this case, the content will be wrapped in a Column with verticalScroll.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ModalBottomSheet(
     onDismissRequest: () -> Unit,
+    scrollable: Boolean,
     modifier: Modifier = Modifier,
     sheetState: SheetState = rememberModalBottomSheetState(),
     shape: Shape = BottomSheetDefaults.ExpandedShape,
@@ -54,7 +64,7 @@ fun ModalBottomSheet(
     tonalElevation: Dp = if (ElementTheme.isLightTheme) 0.dp else BottomSheetDefaults.Elevation,
     scrimColor: Color = BottomSheetDefaults.ScrimColor,
     dragHandle: @Composable (() -> Unit)? = { BottomSheetDefaults.DragHandle() },
-    contentWindowInsets: @Composable () -> WindowInsets = { BottomSheetDefaults.windowInsets },
+    contentWindowInsets: @Composable () -> WindowInsets = { BottomSheetDefaults.modalWindowInsets },
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val safeSheetState = if (LocalInspectionMode.current) sheetStateForPreview() else sheetState
@@ -79,8 +89,18 @@ fun ModalBottomSheet(
         scrimColor = scrimColor,
         dragHandle = dragHandle,
         contentWindowInsets = contentWindowInsets,
-        content = content,
-    )
+    ) {
+        val movableContent = remember { movableContentOf { content() } }
+        if (scrollable) {
+            Column(
+                modifier = Modifier.verticalScroll(rememberScrollState()),
+            ) {
+                movableContent()
+            }
+        } else {
+            movableContent()
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -91,13 +111,11 @@ fun SheetState.hide(coroutineScope: CoroutineScope, then: suspend () -> Unit) {
     }
 }
 
-// This preview and its screenshots are blank, see: https://issuetracker.google.com/issues/283843380
 @Preview(group = PreviewGroup.BottomSheets)
 @Composable
 internal fun ModalBottomSheetLightPreview() =
     ElementPreviewLight { ContentToPreview() }
 
-// This preview and its screenshots are blank, see: https://issuetracker.google.com/issues/283843380
 @Preview(group = PreviewGroup.BottomSheets)
 @Composable
 internal fun ModalBottomSheetDarkPreview() =
@@ -112,6 +130,7 @@ private fun ContentToPreview() {
     ) {
         ModalBottomSheet(
             onDismissRequest = {},
+            scrollable = false,
         ) {
             Text(
                 text = "Sheet Content",

@@ -9,14 +9,11 @@
 package io.element.android.features.home.impl
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.announcement.api.Announcement
-import io.element.android.features.announcement.api.AnnouncementService
 import io.element.android.features.home.impl.roomlist.aRoomListState
 import io.element.android.features.home.impl.spaces.HomeSpacesState
 import io.element.android.features.home.impl.spaces.aHomeSpacesState
 import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
-import io.element.android.features.rageshake.test.logs.FakeAnnouncementService
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.indicator.api.IndicatorService
@@ -33,10 +30,7 @@ import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
-import io.element.android.tests.testutils.MutablePresenter
 import io.element.android.tests.testutils.WarmUpRule
-import io.element.android.tests.testutils.lambda.lambdaRecorder
-import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -79,7 +73,6 @@ class HomePresenterTest {
                 MatrixUser(A_USER_ID, A_USER_NAME, AN_AVATAR_URL)
             )
             assertThat(withUserState.showAvatarIndicator).isFalse()
-            assertThat(withUserState.showNavigationBar).isTrue()
         }
     }
 
@@ -139,14 +132,10 @@ class HomePresenterTest {
 
     @Test
     fun `present - NavigationBar change`() = runTest {
-        val showAnnouncementResult = lambdaRecorder<Announcement, Unit> { }
         val presenter = createHomePresenter(
             sessionStore = InMemorySessionStore(
                 updateUserProfileResult = { _, _, _ -> },
             ),
-            announcementService = FakeAnnouncementService(
-                showAnnouncementResult = showAnnouncementResult,
-            )
         )
         presenter.test {
             val initialState = awaitItem()
@@ -154,38 +143,6 @@ class HomePresenterTest {
             initialState.eventSink(HomeEvent.SelectHomeNavigationBarItem(HomeNavigationBarItem.Spaces))
             val finalState = awaitItem()
             assertThat(finalState.currentHomeNavigationBarItem).isEqualTo(HomeNavigationBarItem.Spaces)
-            showAnnouncementResult.assertions().isCalledOnce()
-                .with(value(Announcement.Space))
-        }
-    }
-
-    @Test
-    fun `present - NavigationBar is hidden when the last space is left when the user can't create new spaces`() = runTest {
-        val homeSpacesPresenter = MutablePresenter(aHomeSpacesState())
-        val presenter = createHomePresenter(
-            sessionStore = InMemorySessionStore(
-                updateUserProfileResult = { _, _, _ -> },
-            ),
-            homeSpacesPresenter = homeSpacesPresenter,
-            announcementService = FakeAnnouncementService(
-                showAnnouncementResult = {},
-            )
-        )
-        presenter.test {
-            val initialState = awaitItem()
-            assertThat(initialState.currentHomeNavigationBarItem).isEqualTo(HomeNavigationBarItem.Chats)
-            assertThat(initialState.showNavigationBar).isTrue()
-            // User navigate to Spaces
-            initialState.eventSink(HomeEvent.SelectHomeNavigationBarItem(HomeNavigationBarItem.Spaces))
-            val spaceState = awaitItem()
-            assertThat(spaceState.currentHomeNavigationBarItem).isEqualTo(HomeNavigationBarItem.Spaces)
-            // The last space is left
-            homeSpacesPresenter.updateState(aHomeSpacesState(spaceRooms = emptyList(), canCreateSpaces = false))
-            skipItems(1)
-            val finalState = awaitItem()
-            // We are back to Chats
-            assertThat(finalState.currentHomeNavigationBarItem).isEqualTo(HomeNavigationBarItem.Chats)
-            assertThat(finalState.showNavigationBar).isFalse()
         }
     }
 }
@@ -198,7 +155,6 @@ internal fun createHomePresenter(
     indicatorService: IndicatorService = FakeIndicatorService(),
     homeSpacesPresenter: Presenter<HomeSpacesState> = Presenter { aHomeSpacesState() },
     sessionStore: SessionStore = InMemorySessionStore(),
-    announcementService: AnnouncementService = FakeAnnouncementService(),
 ) = HomePresenter(
     client = client,
     syncService = syncService,
@@ -209,5 +165,4 @@ internal fun createHomePresenter(
     logoutPresenter = { aDirectLogoutState() },
     rageshakeFeatureAvailability = rageshakeFeatureAvailability,
     sessionStore = sessionStore,
-    announcementService = announcementService,
 )

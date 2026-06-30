@@ -9,19 +9,56 @@
 package io.element.android.features.location.impl.show
 
 import io.element.android.features.location.api.Location
+import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
+import io.element.android.features.location.impl.common.ui.LocationMarkerData
+import io.element.android.features.location.impl.common.userlocation.UserLocationState
+import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.designsystem.components.PinVariant
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.location.AssetType
+import kotlinx.collections.immutable.ImmutableList
 
 data class ShowLocationState(
-    val permissionDialog: Dialog,
-    val location: Location,
-    val description: String?,
-    val hasLocationPermission: Boolean,
+    val customMapStyleUrl: AsyncData<String?>,
+    val isLive: Boolean,
+    val dialogState: LocationConstraintsDialogState,
+    val locationShares: ImmutableList<LocationShareItem>,
+    val focusedLocation: LocationShareItem?,
     val isTrackMyLocation: Boolean,
+    val userLocationState: UserLocationState,
     val appName: String,
-    val eventSink: (ShowLocationEvents) -> Unit,
+    val hideUserLocationPuck: Boolean,
+    val eventSink: (ShowLocationEvent) -> Unit,
 ) {
-    sealed interface Dialog {
-        data object None : Dialog
-        data object PermissionRationale : Dialog
-        data object PermissionDenied : Dialog
+    val isSheetDraggable = isLive && locationShares.isNotEmpty()
+}
+
+data class LocationShareItem(
+    val userId: UserId,
+    val displayName: String,
+    val avatarData: AvatarData,
+    val formattedTimestamp: String,
+    val location: Location,
+    val isLive: Boolean,
+    val assetType: AssetType?,
+    val isOwnUser: Boolean
+) {
+    val canStopSharing = isLive && isOwnUser
+}
+
+fun LocationShareItem.toMarkerData(): LocationMarkerData {
+    val pinVariant = if (assetType == AssetType.PIN) {
+        PinVariant.PinnedLocation
+    } else {
+        PinVariant.UserLocation(
+            avatarData = avatarData,
+            isLive = isLive,
+        )
     }
+    return LocationMarkerData(
+        id = userId.value,
+        location = location,
+        variant = pinVariant,
+    )
 }

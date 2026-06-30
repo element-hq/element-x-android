@@ -9,7 +9,8 @@
 package io.element.android.libraries.matrix.impl.room
 
 import io.element.android.libraries.matrix.api.room.MessageEventType
-import org.matrix.rustcomponents.sdk.MessageLikeEventType
+import uniffi.ruma_events.MessageLikeEventType
+import uniffi.ruma_events.messageLikeEventTypeFromString
 
 fun MessageEventType.map(): MessageLikeEventType = when (this) {
     MessageEventType.Audio -> MessageLikeEventType.Audio
@@ -51,7 +52,7 @@ fun MessageEventType.map(): MessageLikeEventType = when (this) {
     MessageEventType.UnstablePollStart -> MessageLikeEventType.UnstablePollStart
     MessageEventType.Video -> MessageLikeEventType.Video
     MessageEventType.Voice -> MessageLikeEventType.Voice
-    is MessageEventType.Other -> MessageLikeEventType.Other(type)
+    is MessageEventType.Other -> messageLikeEventTypeFromString(type)
 }
 
 fun MessageLikeEventType.map(): MessageEventType = when (this) {
@@ -94,5 +95,5 @@ fun MessageLikeEventType.map(): MessageEventType = when (this) {
     MessageLikeEventType.RtcDecline -> MessageEventType.RtcDecline
     MessageLikeEventType.Video -> MessageEventType.Video
     MessageLikeEventType.Voice -> MessageEventType.Voice
-    is MessageLikeEventType.Other -> MessageEventType.Other(v1)
+    is MessageLikeEventType.Custom -> MessageEventType.Other(type = toString())
 }

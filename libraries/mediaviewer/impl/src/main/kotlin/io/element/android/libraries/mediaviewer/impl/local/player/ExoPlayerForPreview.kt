@@ -258,7 +258,7 @@ class ExoPlayerForPreview(
     override fun setPriorityTaskManager(priorityTaskManager: PriorityTaskManager?) {}
     override fun isSleepingForOffload(): Boolean = throw NotImplementedError()
     override fun isTunnelingEnabled(): Boolean = throw NotImplementedError()
-    override fun isReleased(): Boolean = throw NotImplementedError()
+    override fun isReleased(): Boolean = false
     override fun setImageOutput(imageOutput: ImageOutput?) {}
     override fun setAudioCodecParameters(codecParameters: CodecParameters) {}
     override fun addAudioCodecParametersChangeListener(listener: CodecParametersChangeListener, keys: List<String>) {}

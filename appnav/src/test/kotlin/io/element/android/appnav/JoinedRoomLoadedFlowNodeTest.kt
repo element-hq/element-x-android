@@ -43,17 +43,15 @@ import io.element.android.services.analytics.api.watchers.AnalyticsSendMessageWa
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.analytics.test.watchers.FakeAnalyticsSendMessageWatcher
 import io.element.android.services.appnavstate.api.ActiveRoomsHolder
-import io.element.android.services.appnavstate.impl.DefaultActiveRoomsHolder
+import io.element.android.services.appnavstate.test.FakeActiveRoomsHolder
 import io.element.android.services.appnavstate.test.FakeAppNavigationStateService
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class JoinedRoomLoadedFlowNodeTest {
+class JoinedRoomLoadedFlowNodeTest : RobolectricTest() {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
@@ -128,7 +126,7 @@ class JoinedRoomLoadedFlowNodeTest {
         roomDetailsEntryPoint: RoomDetailsEntryPoint = FakeRoomDetailsEntryPoint(),
         spaceEntryPoint: SpaceEntryPoint = FakeSpaceEntryPoint(),
         forwardEntryPoint: ForwardEntryPoint = FakeForwardEntryPoint(),
-        activeRoomsHolder: ActiveRoomsHolder = DefaultActiveRoomsHolder(),
+        activeRoomsHolder: ActiveRoomsHolder = FakeActiveRoomsHolder(),
         matrixClient: FakeMatrixClient = FakeMatrixClient(),
     ) = JoinedRoomLoadedFlowNode(
         buildContext = BuildContext.root(savedStateMap = null),
@@ -213,7 +211,7 @@ class JoinedRoomLoadedFlowNodeTest {
         val fakeMessagesEntryPoint = FakeMessagesEntryPoint()
         val fakeRoomDetailsEntryPoint = FakeRoomDetailsEntryPoint()
         val inputs = JoinedRoomLoadedFlowNode.Inputs(room, RoomNavigationTarget.Root())
-        val activeRoomsHolder = DefaultActiveRoomsHolder()
+        val activeRoomsHolder = FakeActiveRoomsHolder()
         val roomFlowNode = createJoinedRoomLoadedFlowNode(
             plugins = listOf(inputs, FakeJoinedRoomLoadedFlowNodeCallback()),
             messagesEntryPoint = fakeMessagesEntryPoint,
@@ -236,7 +234,7 @@ class JoinedRoomLoadedFlowNodeTest {
         val fakeMessagesEntryPoint = FakeMessagesEntryPoint()
         val fakeRoomDetailsEntryPoint = FakeRoomDetailsEntryPoint()
         val inputs = JoinedRoomLoadedFlowNode.Inputs(room, RoomNavigationTarget.Root())
-        val activeRoomsHolder = DefaultActiveRoomsHolder().apply {
+        val activeRoomsHolder = FakeActiveRoomsHolder().apply {
             addRoom(room)
         }
         val roomFlowNode = createJoinedRoomLoadedFlowNode(

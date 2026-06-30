@@ -12,7 +12,6 @@
   <string name="screen_chat_backup_recovery_action_confirm">"Rhowch eich allwedd adfer"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Nid yw eich storfa allweddi wedi\'i chydweddu ar hyn o bryd."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Gosod adfer"</string>
-  <string name="screen_chat_backup_recovery_action_setup_description">"Cael mynediad i\'ch negeseuon wedi\'u hamgryptio os byddwch yn colli\'ch holl ddyfeisiau neu\'n cael eich allgofnodi o %1$s ym mhobman."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Agor %1$s mewn dyfais bwrdd gwaith"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Mewngofnodwch i\'ch cyfrif eto"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Pan fydd gofyn i chi ddilysu\'ch dyfais, dewiswch %1$s"</string>

@@ -6,7 +6,7 @@
   <string name="banner_new_sound_message">"Varslingssignalet ditt er oppdatert – tydeligere, raskere og mindre forstyrrende."</string>
   <string name="banner_new_sound_title">"Vi har oppdatert lydene dine"</string>
   <string name="banner_set_up_recovery_content">"Gjenopprett din kryptografiske identitet og meldingshistorikk med en gjenopprettingsnøkkel hvis du har mistet alle dine brukte enheter."</string>
-  <string name="banner_set_up_recovery_submit">"Konfigurer gjenoppretting"</string>
+  <string name="banner_set_up_recovery_submit">"Hent gjenopprettingsnøkkel"</string>
   <string name="banner_set_up_recovery_title">"Konfigurer gjenoppretting for å beskytte kontoen din"</string>
   <string name="confirm_recovery_key_banner_message">"Verifiser gjenopprettingsnøkkelen for å opprettholde tilgangen til nøkkellageret og meldingshistorikken."</string>
   <string name="confirm_recovery_key_banner_primary_button_title">"Skriv inn gjenopprettingsnøkkelen din"</string>

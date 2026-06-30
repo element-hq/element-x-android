@@ -30,7 +30,6 @@ interface VideoMetadataExtractor : AutoCloseable {
     }
 }
 
-@ContributesBinding(AppScope::class)
 @AssistedInject
 class DefaultVideoMetadataExtractor(
     @ApplicationContext private val context: Context,

@@ -3,5 +3,7 @@
   <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"Send invite"</string>
   <string name="screen_bottom_sheet_create_dm_message">"Would you like to start a chat with %1$s?"</string>
   <string name="screen_bottom_sheet_create_dm_title">"Send invite?"</string>
+  <string name="screen_bottom_sheet_create_dm_unknown_user_content">"You currently don’t have any chats with this person. Confirm inviting them before continuing."</string>
+  <string name="screen_bottom_sheet_create_dm_unknown_user_title">"Start a chat with this new contact?"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) invited you"</string>
 </resources>

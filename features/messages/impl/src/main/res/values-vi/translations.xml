@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crypto_event_authenticity_mismatched_sender">"Người gửi sự kiện không khớp với chủ sở hữu của thiết bị đã gửi nó."</string>
+  <string name="crypto_event_authenticity_not_guaranteed">"Tin nhắn mã hóa này không thể được xác thực trên thiết bị này."</string>
+  <string name="crypto_event_authenticity_previously_verified">"Được mã hóa bởi một người dùng đã từng được xác minh."</string>
+  <string name="crypto_event_authenticity_sent_in_clear">"Không được mã hóa"</string>
+  <string name="crypto_event_authenticity_unknown_device">"Được mã hóa bởi một thiết bị không xác định hoặc đã bị xóa."</string>
+  <string name="crypto_event_authenticity_unsigned_device">"Được mã hóa bởi một thiết bị chưa được chủ sở hữu xác minh."</string>
+  <string name="crypto_event_authenticity_unverified_identity">"Được mã hóa bởi một người dùng chưa được xác minh."</string>
+  <string name="emoji_picker_category_activity">"Hoạt động"</string>
+  <string name="emoji_picker_category_flags">"Cờ"</string>
+  <string name="emoji_picker_category_foods">"Thực phẩm và đồ uống"</string>
+  <string name="emoji_picker_category_nature">"Động vật và thiên nhiên"</string>
+  <string name="emoji_picker_category_objects">"Đồ vật"</string>
+  <string name="emoji_picker_category_people">"Mặt cười &amp; mọi người"</string>
+  <string name="emoji_picker_category_places">"Du lịch và địa danh"</string>
+  <string name="emoji_picker_category_recent">"Biểu tượng cảm xúc gần đây"</string>
+  <string name="emoji_picker_category_symbols">"Biểu tượng"</string>
+  <string name="screen_media_upload_preview_error_failed_processing">"Xử lý phương tiện tải lên không thành công, vui lòng thử lại."</string>
+  <string name="screen_media_upload_preview_error_failed_sending">"Không thể tải lên tệp phương tiện. Vui lòng thử lại."</string>
+  <string name="screen_report_content_block_user">"Chặn người dùng"</string>
+  <string name="screen_report_content_block_user_hint">"Chọn tùy chọn này nếu bạn muốn ẩn tất cả tin nhắn hiện tại và tương lai từ người dùng này."</string>
+  <string name="screen_report_content_explanation">"Tin nhắn này sẽ được báo cáo cho quản trị viên máy chủ của bạn. Họ sẽ không thể đọc bất kỳ tin nhắn được mã hóa nào."</string>
+  <string name="screen_report_content_hint">"Lý do báo cáo nội dung này"</string>
+  <string name="screen_room_attachment_source_camera">"Máy ảnh"</string>
+  <string name="screen_room_attachment_source_camera_photo">"Chụp ảnh"</string>
+  <string name="screen_room_attachment_source_camera_video">"Quay video"</string>
+  <string name="screen_room_attachment_source_files">"Tệp đính kèm"</string>
+  <string name="screen_room_attachment_source_gallery">"Thư viện ảnh và video"</string>
+  <string name="screen_room_attachment_source_location">"Chia sẻ vị trí"</string>
+  <string name="screen_room_attachment_source_poll">"Bỏ phiếu"</string>
+  <string name="screen_room_attachment_text_formatting">"Định dạng văn bản"</string>
+  <string name="screen_room_encrypted_history_banner">"Lịch sử tin nhắn hiện không khả dụng."</string>
+  <string name="screen_room_encrypted_history_banner_unverified">"Lịch sử tin nhắn không khả dụng trong phòng này. Vui lòng xác minh thiết bị này để xem lịch sử tin nhắn của bạn."</string>
+  <string name="screen_room_invite_again_alert_message">"Bạn có muốn mời họ quay lại không?"</string>
+  <string name="screen_room_invite_again_alert_title">"Bạn đang một mình trong cuộc trò chuyện này"</string>
+  <string name="screen_room_mentions_at_room_subtitle">"Thông báo cho cả phòng"</string>
+  <string name="screen_room_mentions_at_room_title">"Mọi người"</string>
+  <string name="screen_room_retry_send_menu_send_again_action">"Gửi lại"</string>
+  <string name="screen_room_retry_send_menu_title">"Gửi tin nhắn không thành công"</string>
+  <string name="screen_room_timeline_add_reaction">"Thêm biểu cảm"</string>
+  <string name="screen_room_timeline_beginning_of_room">"Đây là sự kiện khởi đầu của phòng %1$s ."</string>
+  <string name="screen_room_timeline_beginning_of_room_no_name">"Đây là khởi đầu của cuộc trò chuyện này."</string>
+  <string name="screen_room_timeline_legacy_call">"Cuộc gọi không được hỗ trợ. Hãy hỏi xem người gọi có thể sử dụng ứng dụng Element X mới hay không."</string>
+  <string name="screen_room_timeline_less_reactions">"Thu gọn"</string>
+  <string name="screen_room_timeline_message_copied">"Đã sao chép tin nhắn"</string>
+  <string name="screen_room_timeline_no_permission_to_post">"Bạn không có quyền gửi tin nhắn trong phòng này"</string>
+  <plurals name="screen_room_timeline_reaction_a11y">
+    <item quantity="other">"%1$d thành viên đã phản ứng với %2$s"</item>
+  </plurals>
+  <plurals name="screen_room_timeline_reaction_including_you_a11y">
+    <item quantity="other">"Bạn và thành viên %1$d đã phản ứng với%2$s"</item>
+  </plurals>
+  <string name="screen_room_timeline_reactions_show_less">"Thu gọn"</string>
+  <string name="screen_room_timeline_reactions_show_more">"Xem thêm"</string>
+  <string name="screen_room_timeline_read_marker_title">"Mới"</string>
+  <plurals name="screen_room_timeline_state_changes">
+    <item quantity="other">"%1$d số lượng phòng thay đổi"</item>
+  </plurals>
+  <plurals name="screen_room_typing_many_members">
+    <item quantity="other">"%1$s,%2$s và %3$d người khác"</item>
+  </plurals>
+  <plurals name="screen_room_typing_notification">
+    <item quantity="other">"%1$s đang gõ"</item>
+  </plurals>
+  <string name="screen_room_typing_two_members">"%1$s và %2$s"</string>
+</resources>

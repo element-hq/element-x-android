@@ -5,9 +5,9 @@
   <string name="banner_battery_optimization_title_android">"Ils vous manque des notifications?"</string>
   <string name="banner_new_sound_message">"Le son des notifications a été modifié: plus clair, plus court et moins perturbateur."</string>
   <string name="banner_new_sound_title">"Nous avons rafraîchi les sons"</string>
-  <string name="banner_set_up_recovery_content">"Générez une nouvelle clé de récupération qui peut être utilisée pour restaurer l’historique de vos messages chiffrés au cas où vous perdriez l’accès à vos appareils."</string>
-  <string name="banner_set_up_recovery_submit">"Configurer la sauvegarde"</string>
-  <string name="banner_set_up_recovery_title">"Configurer la récupération"</string>
+  <string name="banner_set_up_recovery_content">"Vos discussions sont automatiquement sauvegardées grâce à un chiffrement de bout en bout. Pour restaurer cette sauvegarde et conserver votre identité numérique en cas de perte d’accès à tous vos appareils, vous aurez besoin de votre clé de récupération."</string>
+  <string name="banner_set_up_recovery_submit">"Obtenir une clé de récupération"</string>
+  <string name="banner_set_up_recovery_title">"Sauvegarder vos discussions"</string>
   <string name="confirm_recovery_key_banner_message">"Confirmez votre clé de récupération pour conserver l’accès à votre stockage de clés et à l’historique des messages."</string>
   <string name="confirm_recovery_key_banner_primary_button_title">"Saisissez votre clé de récupération"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Clé de récupération oubliée ?"</string>

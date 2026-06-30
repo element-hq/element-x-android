@@ -2,11 +2,11 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="crypto_event_authenticity_mismatched_sender">"Відправник події не збігається з власником пристрою, який його надіслав."</string>
   <string name="crypto_event_authenticity_not_guaranteed">"Автентичність цього зашифрованого повідомлення не може бути гарантована на цьому пристрої."</string>
-  <string name="crypto_event_authenticity_previously_verified">"Зашифровано попередньо перевіреним користувачем."</string>
+  <string name="crypto_event_authenticity_previously_verified">"Зашифровано звіреним раніше користувачем."</string>
   <string name="crypto_event_authenticity_sent_in_clear">"Не зашифровано."</string>
   <string name="crypto_event_authenticity_unknown_device">"Зашифровано невідомим або видаленим пристроєм."</string>
-  <string name="crypto_event_authenticity_unsigned_device">"Зашифровано пристроєм, який не верифіковано його власником."</string>
-  <string name="crypto_event_authenticity_unverified_identity">"Зашифровано неверифікованим користувачем."</string>
+  <string name="crypto_event_authenticity_unsigned_device">"Зашифровано пристроєм, який не звірено його власником."</string>
+  <string name="crypto_event_authenticity_unverified_identity">"Зашифровано не звіреним користувачем."</string>
   <string name="emoji_picker_category_activity">"Дії"</string>
   <string name="emoji_picker_category_flags">"Прапори"</string>
   <string name="emoji_picker_category_foods">"Їжа та напої"</string>
@@ -16,6 +16,19 @@
   <string name="emoji_picker_category_places">"Подорожі та місця"</string>
   <string name="emoji_picker_category_recent">"Нещодавні емодзі"</string>
   <string name="emoji_picker_category_symbols">"Символи"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally">"Повернути зображення по горизонталі"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Перевернуто по горизонталі"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Оригінал"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically">"Повернути зображення по вертикалі"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_flipped">"Перевернуто по вертикалі"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_original">"Оригінал"</string>
+  <string name="screen_image_edition_a11y_rotate_to_the_left">"Повернути зображення вліво"</string>
+  <plurals name="screen_image_edition_a11y_rotation_state">
+    <item quantity="one">"%1$d градус"</item>
+    <item quantity="few">"%1$d градуси"</item>
+    <item quantity="many">"%1$d градусів"</item>
+  </plurals>
+  <string name="screen_image_edition_title">"Редагувати фото"</string>
   <string name="screen_media_upload_preview_caption_warning">"Користувачі старих застосунків можуть не бачити підписи."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Натисніть, щоб змінити якість вивантажуваного відео"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Файл не може бути вивантажено."</string>
@@ -26,6 +39,7 @@
   <string name="screen_media_upload_preview_item_count">"Елемент %1$d з %2$d"</string>
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Оптимізувати якість зображення"</string>
   <string name="screen_media_upload_preview_processing">"Обробка…"</string>
+  <string name="screen_media_upload_preview_title">"Додати медіа"</string>
   <string name="screen_report_content_block_user">"Заблокувати користувача"</string>
   <string name="screen_report_content_block_user_hint">"Перевірте, чи хочете ви приховати всі поточні та майбутні повідомлення від цього користувача"</string>
   <string name="screen_report_content_explanation">"Це повідомлення буде надіслано адміністраторам вашого домашнього сервера. Вони не зможуть прочитати зашифровані повідомлення."</string>
@@ -35,11 +49,11 @@
   <string name="screen_room_attachment_source_camera_video">"Записати відео"</string>
   <string name="screen_room_attachment_source_files">"Вкладення"</string>
   <string name="screen_room_attachment_source_gallery">"Бібліотека фото та відео"</string>
-  <string name="screen_room_attachment_source_location">"Розташування"</string>
+  <string name="screen_room_attachment_source_location">"Поділитися місцеперебуванням"</string>
   <string name="screen_room_attachment_source_poll">"Опитування"</string>
   <string name="screen_room_attachment_text_formatting">"Форматування тексту"</string>
   <string name="screen_room_encrypted_history_banner">"Історія повідомлень наразі недоступна."</string>
-  <string name="screen_room_encrypted_history_banner_unverified">"Історія повідомлень недоступна в цій кімнаті. Перевірте цей пристрій, щоб побачити історію повідомлень."</string>
+  <string name="screen_room_encrypted_history_banner_unverified">"Історія повідомлень недоступна в цій кімнаті. Звірте цей пристрій, щоб побачити історію повідомлень."</string>
   <string name="screen_room_invite_again_alert_message">"Чи хотіли б ви запросити їх знову?"</string>
   <string name="screen_room_invite_again_alert_title">"Ви одні в цій бесіді"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Сповістити всю кімнату"</string>

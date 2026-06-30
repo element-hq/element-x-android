@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="leave_conversation_alert_subtitle">"本当にこの会話を退出しますか？この会話は非公開で、再度参加するには招待が必要です。"</string>
+  <string name="leave_room_alert_empty_subtitle">"本当にこのルームを退出しますか？あなたが最後の一人であり、このルームには誰も参加することができなくなります。"</string>
+  <string name="leave_room_alert_private_subtitle">"ルームから退出してもよいですか？ このルームは非公開のため、参加しなおすには改めて招待される必要があります。"</string>
+  <string name="leave_room_alert_select_new_owner_action">"所有者を選択"</string>
+  <string name="leave_room_alert_select_new_owner_subtitle">"あなたがこのルームの唯一の所有者です。退出する前に所有権を他のユーザーへ譲与する必要があります。"</string>
+  <string name="leave_room_alert_select_new_owner_title">"所有権の譲与"</string>
+  <string name="leave_room_alert_subtitle">"本当にこのルームを退出しますか？"</string>
+</resources>

@@ -56,20 +56,17 @@ import io.element.android.libraries.push.impl.notifications.model.FallbackNotifi
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEvent
-import io.element.android.libraries.push.test.notifications.FakeCallNotificationEventResolver
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
 import io.element.android.services.toolbox.test.systemclock.A_FAKE_TIMESTAMP
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
 @Suppress("LargeClass")
-@RunWith(RobolectricTestRunner::class)
-class DefaultNotifiableEventResolverTest {
+class DefaultNotifiableEventResolverTest : RobolectricTest() {
     @Test
     fun `resolve event no session`() = runTest {
         val sut = createDefaultNotifiableEventResolver(notificationService = null)
@@ -339,7 +336,7 @@ class DefaultNotifiableEventResolverTest {
                     AN_EVENT_ID to Result.success(aNotificationData(
                         content = NotificationContent.MessageLike.RoomMessage(
                             senderId = A_USER_ID_2,
-                            messageType = LocationMessageType("Location", "geo:1,2", null),
+                            messageType = LocationMessageType("Location", "geo:1,2", null, null),
                         ),
                     ))
                 )
@@ -835,7 +832,6 @@ class DefaultNotifiableEventResolverTest {
         testNoResults(NotificationContent.StateEvent.PolicyRuleRoom)
         testNoResults(NotificationContent.StateEvent.PolicyRuleServer)
         testNoResults(NotificationContent.StateEvent.PolicyRuleUser)
-        testNoResults(NotificationContent.StateEvent.RoomAliases)
         testNoResults(NotificationContent.StateEvent.RoomAvatar)
         testNoResults(NotificationContent.StateEvent.RoomCanonicalAlias)
         testNoResults(NotificationContent.StateEvent.RoomCreate)

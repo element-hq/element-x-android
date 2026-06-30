@@ -9,6 +9,7 @@
 package io.element.android.libraries.matrix.impl
 
 import dev.zacsweers.metro.Inject
+import io.element.android.libraries.androidutils.crypto.ClientSecret
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.data.ByteUnit
 import io.element.android.libraries.core.data.megaBytes
@@ -16,8 +17,8 @@ import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.matrix.impl.analytics.UtdTracker
-import io.element.android.libraries.matrix.impl.paths.SessionPaths
 import io.element.android.libraries.matrix.impl.paths.getSessionPaths
 import io.element.android.libraries.matrix.impl.proxy.ProxyProvider
 import io.element.android.libraries.matrix.impl.room.TimelineEventFilterFactory
@@ -40,6 +41,7 @@ import org.matrix.rustcomponents.sdk.SlidingSyncVersion
 import org.matrix.rustcomponents.sdk.SlidingSyncVersionBuilder
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
+import uniffi.matrix_sdk_base.DmRoomDefinition
 import uniffi.matrix_sdk_base.MediaRetentionPolicy
 import uniffi.matrix_sdk_crypto.CollectStrategy
 import uniffi.matrix_sdk_crypto.DecryptionSettings
@@ -69,13 +71,14 @@ class RustMatrixClientFactory(
         sessionStore = sessionStore,
         appCoroutineScope = appCoroutineScope,
         analyticsService = analyticsService,
-        coroutineDispatchers = coroutineDispatchers
     )
 
     suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
+        // This secret is called 'passphrase' for historical reasons, but it can be a raw key or an actual passphrase
+        val clientSecret = sessionData.passphrase?.let(ClientSecret::fromString)
         val client = getBaseClientBuilder(
             sessionPaths = sessionData.getSessionPaths(),
-            passphrase = sessionData.passphrase,
+            clientSecret = clientSecret,
             slidingSyncType = ClientBuilderSlidingSync.Restored,
         )
             .homeserverUrl(sessionData.homeserverUrl)
@@ -97,11 +100,16 @@ class RustMatrixClientFactory(
 
         client.restoreSession(sessionData.toSession())
 
-        create(client)
+        create(client, sessionData)
     }
 
-    suspend fun create(client: Client): RustMatrixClient {
+    suspend fun create(client: Client, sessionData: SessionData): RustMatrixClient {
         val (anonymizedAccessToken, anonymizedRefreshToken) = client.session().anonymizedTokens()
+
+        // Must be called before creating the sync service, timelines etc.
+        if (featureFlagService.isFeatureEnabled(FeatureFlags.AutomaticBackPagination)) {
+            client.enableAutomaticBackpagination()
+        }
 
         client.setUtdDelegate(UtdTracker(analyticsService))
 
@@ -111,6 +119,7 @@ class RustMatrixClientFactory(
             .finish()
 
         return RustMatrixClient(
+            sessionPaths = sessionData.getSessionPaths(),
             innerClient = client,
             sessionStore = sessionStore,
             appCoroutineScope = appCoroutineScope,
@@ -124,19 +133,19 @@ class RustMatrixClientFactory(
             analyticsService = analyticsService,
             workManagerScheduler = workManagerScheduler,
         ).also {
-            Timber.tag(it.toString()).d("Creating Client with access token '$anonymizedAccessToken' and refresh token '$anonymizedRefreshToken'")
+            Timber.tag("RustMatrixClient").i("Creating Client with access token '$anonymizedAccessToken' and refresh token '$anonymizedRefreshToken'")
         }
     }
 
     internal suspend fun getBaseClientBuilder(
         sessionPaths: SessionPaths,
-        passphrase: String?,
+        clientSecret: ClientSecret?,
         slidingSyncType: ClientBuilderSlidingSync,
     ): ClientBuilder {
         return clientBuilderProvider.provide()
             .run {
                 sqliteStoreBuilderProvider.provide(sessionPaths)
-                    .passphrase(passphrase)
+                    .secret(clientSecret)
                     .setupClientBuilder(this)
             }
             .setSessionDelegate(sessionDelegate)
@@ -159,8 +168,9 @@ class RustMatrixClientFactory(
                     }
                 )
             )
-            .enableShareHistoryOnInvite(featureFlagService.isFeatureEnabled(FeatureFlags.EnableKeyShareOnInvite))
+            .enableShareHistoryOnInvite(true)
             .threadsEnabled(featureFlagService.isFeatureEnabled(FeatureFlags.Threads), threadSubscriptions = false)
+            .dmRoomDefinition(DmRoomDefinition.TWO_MEMBERS)
             .requestConfig(
                 RequestConfig(
                     timeout = 30_000uL,
@@ -206,5 +216,5 @@ fun SessionData.toSession() = Session(
     deviceId = deviceId,
     homeserverUrl = homeserverUrl,
     slidingSyncVersion = SlidingSyncVersion.NATIVE,
-    oidcData = oidcData,
+    oauthData = oAuthData,
 )

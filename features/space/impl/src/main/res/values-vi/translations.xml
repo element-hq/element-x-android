@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_leave_space_choose_owners_action">"Chọn chủ sở hữu"</string>
+  <plurals name="screen_leave_space_submit">
+    <item quantity="other">"Rời khỏi %1$d phòng và không gian"</item>
+  </plurals>
+  <plurals name="screen_space_remove_rooms_confirmation_title">
+    <item quantity="other">"Xoá %1$d phòng từ %2$s"</item>
+  </plurals>
+  <string name="screen_space_settings_leave_space">"Rời space"</string>
+  <string name="screen_space_settings_roles_and_permissions">"Vai trò và quyền hạn"</string>
+</resources>

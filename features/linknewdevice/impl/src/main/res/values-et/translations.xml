@@ -34,6 +34,8 @@
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"Kui sama probleem kordub, siis kasuta mõnda muud WiFi- või mobiilset andmedsideühendust"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Kui see ka ei aita, siis logi sisse käsitsi"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Ühendus pole turvaline"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"Sul palutakse sisestada kaks selles seadmes kuvatud numbrit."</string>
+  <string name="screen_qr_code_login_device_code_title">"Sisesta see number oma teises seadmes"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"Sisselogimine katkestati teises seadmes."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Sisselogimispäring on tühistatud"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"Sisselogimisest on teises seadmes keeldutud."</string>
@@ -54,4 +56,5 @@ Proovi käsitsi sisselogimist või skaneeri QR-koodi mõne muu seadmega."</strin
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Jätkamiseks pead lubama, et %1$s saab kasutada sinu nutiseadme kaamerat"</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"QR-koodi lugemiseks luba kaamerat kasutada"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Tekkis ootamatu viga. Palun proovi uuesti."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"Ootame sinu teise seadme järgi"</string>
 </resources>

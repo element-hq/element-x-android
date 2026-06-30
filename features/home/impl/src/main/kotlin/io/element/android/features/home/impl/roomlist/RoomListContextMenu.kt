@@ -11,6 +11,8 @@ package io.element.android.features.home.impl.roomlist
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -43,6 +45,7 @@ fun RoomListContextMenu(
 ) {
     ModalBottomSheet(
         onDismissRequest = { eventSink(RoomListEvent.HideContextMenu) },
+        scrollable = false,
     ) {
         RoomListModalBottomSheetContent(
             contextMenu = contextMenu,
@@ -66,10 +69,6 @@ fun RoomListContextMenu(
             onFavoriteChange = { isFavorite ->
                 eventSink(RoomListEvent.SetRoomIsFavorite(contextMenu.roomId, isFavorite))
             },
-            onClearCacheRoomClick = {
-                eventSink(RoomListEvent.HideContextMenu)
-                eventSink(RoomListEvent.ClearCacheOfRoom(contextMenu.roomId))
-            },
             onReportRoomClick = {
                 eventSink(RoomListEvent.HideContextMenu)
                 onReportRoomClick(contextMenu.roomId)
@@ -87,11 +86,12 @@ private fun RoomListModalBottomSheetContent(
     onFavoriteChange: (isFavorite: Boolean) -> Unit,
     onRoomMarkReadClick: () -> Unit,
     onRoomMarkUnreadClick: () -> Unit,
-    onClearCacheRoomClick: () -> Unit,
     onReportRoomClick: () -> Unit,
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
     ) {
         ListItem(
             headlineContent = {
@@ -114,7 +114,6 @@ private fun RoomListModalBottomSheetContent(
                 leadingContent = ListItemContent.Icon(
                     iconSource = IconSource.Vector(CompoundIcons.MarkAsRead())
                 ),
-                style = ListItemStyle.Primary,
             )
         } else {
             ListItem(
@@ -128,7 +127,6 @@ private fun RoomListModalBottomSheetContent(
                 leadingContent = ListItemContent.Icon(
                     iconSource = IconSource.Vector(CompoundIcons.MarkAsUnread())
                 ),
-                style = ListItemStyle.Primary,
             )
         }
         val (textResId, icon) = if (contextMenu.isFavorite) {
@@ -154,7 +152,6 @@ private fun RoomListModalBottomSheetContent(
             onClick = {
                 onFavoriteChange(!contextMenu.isFavorite)
             },
-            style = ListItemStyle.Primary,
         )
         ListItem(
             headlineContent = {
@@ -169,7 +166,6 @@ private fun RoomListModalBottomSheetContent(
                     CompoundIcons.Settings(),
                 )
             ),
-            style = ListItemStyle.Primary,
         )
         if (canReportRoom) {
             ListItem(
@@ -197,38 +193,19 @@ private fun RoomListModalBottomSheetContent(
             ),
             style = ListItemStyle.Destructive,
         )
-        if (contextMenu.displayClearRoomCacheAction) {
-            ListItem(
-                headlineContent = {
-                    Text(text = "Clear cache for this room")
-                },
-                modifier = Modifier.clickable { onClearCacheRoomClick() },
-                leadingContent = ListItemContent.Icon(
-                    iconSource = IconSource.Vector(CompoundIcons.Delete())
-                ),
-                style = ListItemStyle.Primary,
-            )
-        }
     }
 }
 
-// TODO This component should be seen in [RoomListView] @Preview but it doesn't show up.
-// see: https://issuetracker.google.com/issues/283843380
-// Remove this preview when the issue is fixed.
 @PreviewsDayNight
 @Composable
-internal fun RoomListModalBottomSheetContentPreview(
+internal fun RoomListContextMenuPreview(
     @PreviewParameter(RoomListStateContextMenuShownProvider::class) contextMenu: RoomListState.ContextMenu.Shown
 ) = ElementPreview {
-    RoomListModalBottomSheetContent(
+    RoomListContextMenu(
         contextMenu = contextMenu,
         canReportRoom = true,
-        onRoomMarkReadClick = {},
-        onRoomMarkUnreadClick = {},
         onRoomSettingsClick = {},
-        onLeaveRoomClick = {},
-        onFavoriteChange = {},
-        onClearCacheRoomClick = {},
         onReportRoomClick = {},
+        eventSink = {},
     )
 }

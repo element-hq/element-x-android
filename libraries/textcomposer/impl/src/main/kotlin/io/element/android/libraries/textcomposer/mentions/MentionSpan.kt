@@ -55,14 +55,14 @@ class MentionSpan(
 
         backgroundColor = when (type) {
             is MentionType.User -> if (isCurrentUser) mentionSpanTheme.currentUserBackgroundColor else mentionSpanTheme.otherBackgroundColor
-            is MentionType.Everyone -> mentionSpanTheme.currentUserBackgroundColor
+            is MentionType.Everyone -> mentionSpanTheme.otherBackgroundColor
             is MentionType.Room -> mentionSpanTheme.otherBackgroundColor
             is MentionType.Message -> mentionSpanTheme.otherBackgroundColor
         }
 
         textColor = when (type) {
             is MentionType.User -> if (isCurrentUser) mentionSpanTheme.currentUserTextColor else mentionSpanTheme.otherTextColor
-            is MentionType.Everyone -> mentionSpanTheme.currentUserTextColor
+            is MentionType.Everyone -> mentionSpanTheme.otherTextColor
             is MentionType.Room -> mentionSpanTheme.otherTextColor
             is MentionType.Message -> mentionSpanTheme.otherTextColor
         }
@@ -105,15 +105,12 @@ class MentionSpan(
         bottom: Int,
         paint: Paint
     ) {
-        // Extra vertical space to add below the baseline (y). This helps us center the span vertically
-        val extraVerticalSpace = y + paint.ascent() + paint.descent() - top
-
         val availableWidth = (canvas.width - x).coerceAtLeast(0f)
         val measuredWidth = measuredTextWidth + startPadding + endPadding
         val pillWidth = minOf(availableWidth, measuredWidth.toFloat())
 
         backgroundPaint.color = backgroundColor
-        val rect = RectF(x, top.toFloat(), x + pillWidth, y.toFloat() + extraVerticalSpace)
+        val rect = RectF(x, top.toFloat(), x + pillWidth, bottom.toFloat())
         val radius = rect.height() / 2
         canvas.drawRoundRect(rect, radius, radius, backgroundPaint)
 

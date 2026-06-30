@@ -44,8 +44,8 @@ fun TimelineItemUrlPreviewView(
     preview: UrlPreviewData,
     onClick: (Link) -> Unit,
     onLongClick: (Link) -> Unit,
-    cardWidth: Dp? = null,
     modifier: Modifier = Modifier,
+    cardWidth: Dp? = null,
 ) {
     val link = Link(preview.url, preview.title ?: preview.url)
     Column(

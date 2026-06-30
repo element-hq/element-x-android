@@ -175,7 +175,6 @@
   <string name="common_current_user_canceled_knock">"İstek iptal edildi"</string>
   <string name="common_current_user_left_room">"Sol oda"</string>
   <string name="common_current_user_rejected_invite">"Davet reddedildi"</string>
-  <string name="common_dark">"Koyu"</string>
   <string name="common_decryption_error">"Şifre çözme hatası"</string>
   <string name="common_developer_options">"Geliştirici seçenekleri"</string>
   <string name="common_device_id">"Cihaz Kimliği"</string>
@@ -211,7 +210,6 @@ Neden: %1$s."</string>
   <string name="common_install_apk_android">"APK\'yı yükleyin"</string>
   <string name="common_invite_unknown_profile">"Bu Matrix Kimliği bulunamıyor, bu nedenle davet alınmayabilir."</string>
   <string name="common_leaving_room">"Odadan ayrılma"</string>
-  <string name="common_light">"Aydınlık"</string>
   <string name="common_line_copied_to_clipboard">"Metin panoya kopyalandı"</string>
   <string name="common_link_copied_to_clipboard">"Bağlantı panoya kopyalandı"</string>
   <string name="common_loading">"Yükleniyor…"</string>
@@ -264,7 +262,6 @@ Neden: %1$s."</string>
   <string name="common_recovery_key">"Kurtarma anahtarı"</string>
   <string name="common_refreshing">"Yenileniyor…"</string>
   <string name="common_replying_to">"Cevaplamak için %1$s"</string>
-  <string name="common_report_a_bug">"Hata bildir"</string>
   <string name="common_report_a_problem">"Sorun bildir"</string>
   <string name="common_report_submitted">"Rapor gönderildi"</string>
   <string name="common_rich_text_editor">"Zengin metin editörü"</string>
@@ -296,7 +293,6 @@ Neden: %1$s."</string>
   <string name="common_success">"Başarılı"</string>
   <string name="common_suggestions">"Öneriler"</string>
   <string name="common_syncing">"Senkronizasyon"</string>
-  <string name="common_system">"Sistem"</string>
   <string name="common_text">"Metin"</string>
   <string name="common_third_party_notices">"Üçüncü taraf bildirimleri"</string>
   <string name="common_thread">"Konu"</string>

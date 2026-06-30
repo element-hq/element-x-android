@@ -22,14 +22,40 @@ class MapTilerTileServerStyleUriBuilderTest {
     @Test
     fun `light map uri`() {
         assertThat(
-            builder.build(darkMode = false)
+            builder.build(
+                customMapStyleUrl = null,
+                darkMode = false,
+            )
         ).isEqualTo("https://base.url/aLightMapId/style.json?key=anApiKey")
     }
 
     @Test
     fun `dark map uri`() {
         assertThat(
-            builder.build(darkMode = true)
+            builder.build(
+                customMapStyleUrl = null,
+                darkMode = true,
+            )
         ).isEqualTo("https://base.url/aDarkMapId/style.json?key=anApiKey")
+    }
+
+    @Test
+    fun `custom map uri light`() {
+        assertThat(
+            builder.build(
+                customMapStyleUrl = "https://custom.url/style.json",
+                darkMode = false,
+            )
+        ).isEqualTo("https://custom.url/style.json?key=anApiKey")
+    }
+
+    @Test
+    fun `custom map uri dark`() {
+        assertThat(
+            builder.build(
+                customMapStyleUrl = "https://custom.url/style.json",
+                darkMode = true,
+            )
+        ).isEqualTo("https://custom.url/style.json?key=anApiKey")
     }
 }

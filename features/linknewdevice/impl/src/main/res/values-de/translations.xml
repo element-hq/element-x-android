@@ -34,6 +34,8 @@
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"Wenn das Problem bestehen bleibt, versuche es mit einem anderen WLAN-Netzwerk oder verwende deine mobilen Daten statt WLAN."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Wenn das nicht funktioniert, melde dich manuell an"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Die Verbindung ist nicht sicher"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"Du wirst aufgefordert, die beiden unten abgebildeten Ziffern einzugeben."</string>
+  <string name="screen_qr_code_login_device_code_title">"Trage die unten angezeigte Zahl auf einem anderen Device ein"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"Die Anmeldung wurde auf dem anderen Gerät abgebrochen."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Anmeldeanfrage abgebrochen"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"Die Anmeldung auf dem anderen Gerät wurde abgelehnt."</string>
@@ -54,4 +56,5 @@ Versuche, dich manuell anzumelden, oder scanne den QR-Code mit einem anderen Ger
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Du musst %1$s die Berechtigung erteilen, die Kamera deines Geräts zu verwenden, um fortzufahren."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Erlaube Zugriff auf die Kamera zum Scannen des QR-Codes"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Ein unerwarteter Fehler ist aufgetreten. Bitte versuche es erneut."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"Warten auf dein anderes Gerät"</string>
 </resources>

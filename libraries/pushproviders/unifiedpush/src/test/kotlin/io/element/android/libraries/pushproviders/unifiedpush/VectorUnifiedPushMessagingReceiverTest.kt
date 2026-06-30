@@ -18,7 +18,7 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SECRET
-import io.element.android.libraries.push.test.push.FakePushHandlingWakeLock
+import io.element.android.libraries.push.test.push.FakeFetchPushForegroundServiceManager
 import io.element.android.libraries.push.test.test.FakePushHandler
 import io.element.android.libraries.pushproviders.api.PushData
 import io.element.android.libraries.pushproviders.api.PushHandler
@@ -27,21 +27,19 @@ import io.element.android.libraries.pushproviders.unifiedpush.registration.Regis
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertThrows
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.unifiedpush.android.connector.FailedReason
 import org.unifiedpush.android.connector.data.PublicKeySet
 import org.unifiedpush.android.connector.data.PushEndpoint
 import org.unifiedpush.android.connector.data.PushMessage
 
-@RunWith(RobolectricTestRunner::class)
-class VectorUnifiedPushMessagingReceiverTest {
+class VectorUnifiedPushMessagingReceiverTest : RobolectricTest() {
     @Test
     fun `onReceive does the binding`() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().context
@@ -76,7 +74,7 @@ class VectorUnifiedPushMessagingReceiverTest {
     @Test
     fun `onMessage valid invokes the push handler`() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().context
-        val pushHandlerResult = lambdaRecorder<PushData, String, Unit> { _, _ -> }
+        val pushHandlerResult = lambdaRecorder<PushData, String, Boolean> { _, _ -> true }
         val vectorUnifiedPushMessagingReceiver = createVectorUnifiedPushMessagingReceiver(
             pushHandler = FakePushHandler(
                 handleResult = pushHandlerResult
@@ -99,6 +97,60 @@ class VectorUnifiedPushMessagingReceiverTest {
                     UnifiedPushConfig.NAME + " - " + A_SECRET
                 )
             )
+    }
+
+    @Test
+    fun `pushHandler returning true locks the wake lock but does not unlock it so it continues to run`() = runTest {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val pushHandlerResult = lambdaRecorder<PushData, String, Boolean> { _, _ -> true }
+        val lockLambda = lambdaRecorder<Boolean> { true }
+        val unlockLambda = lambdaRecorder<Boolean> { true }
+        val vectorUnifiedPushMessagingReceiver = createVectorUnifiedPushMessagingReceiver(
+            pushHandler = FakePushHandler(
+                handleResult = pushHandlerResult
+            ),
+            pushHandlingWakeLock = FakeFetchPushForegroundServiceManager(
+                lock = lockLambda,
+                unlock = unlockLambda,
+            ),
+        )
+        vectorUnifiedPushMessagingReceiver.onMessage(context, aPushMessage(), A_SECRET)
+
+        // The wakelock should be locked but not unlocked, so it should continue to run
+        lockLambda.assertions().isCalledOnce()
+        unlockLambda.assertions().isNeverCalled()
+
+        advanceUntilIdle()
+
+        // After waiting for any possible timeout, the lock is still locked
+        unlockLambda.assertions().isNeverCalled()
+    }
+
+    @Test
+    fun `pushHandler returning false locks and unlocks the wakelock early`() = runTest {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val pushHandlerResult = lambdaRecorder<PushData, String, Boolean> { _, _ -> false }
+        val lockLambda = lambdaRecorder<Boolean> { true }
+        val unlockLambda = lambdaRecorder<Boolean> { true }
+        val vectorUnifiedPushMessagingReceiver = createVectorUnifiedPushMessagingReceiver(
+            pushHandler = FakePushHandler(
+                handleResult = pushHandlerResult
+            ),
+            pushHandlingWakeLock = FakeFetchPushForegroundServiceManager(
+                lock = lockLambda,
+                unlock = unlockLambda,
+            ),
+        )
+        vectorUnifiedPushMessagingReceiver.onMessage(context, aPushMessage(), A_SECRET)
+
+        // The wakelock should be locked but not unlocked, so it should continue to run
+        lockLambda.assertions().isCalledOnce()
+        unlockLambda.assertions().isNeverCalled()
+
+        advanceUntilIdle()
+
+        // After waiting for a bit, the lock should have been unlocked since the handler returned false
+        unlockLambda.assertions().isCalledOnce()
     }
 
     @Test
@@ -209,12 +261,11 @@ class VectorUnifiedPushMessagingReceiverTest {
         unifiedPushNewGatewayHandler: UnifiedPushNewGatewayHandler = FakeUnifiedPushNewGatewayHandler(),
         endpointRegistrationHandler: EndpointRegistrationHandler = EndpointRegistrationHandler(),
         removedGatewayHandler: UnifiedPushRemovedGatewayHandler = UnifiedPushRemovedGatewayHandler { lambdaError() },
-        pushHandlingWakeLock: FakePushHandlingWakeLock = FakePushHandlingWakeLock(),
+        pushHandlingWakeLock: FakeFetchPushForegroundServiceManager = FakeFetchPushForegroundServiceManager(),
     ): VectorUnifiedPushMessagingReceiver {
         return VectorUnifiedPushMessagingReceiver().apply {
             this.pushParser = unifiedPushParser
             this.pushHandler = pushHandler
-            this.guardServiceStarter = NoopGuardServiceStarter()
             this.unifiedPushStore = unifiedPushStore
             this.unifiedPushGatewayResolver = unifiedPushGatewayResolver
             this.unifiedPushGatewayUrlResolver = unifiedPushGatewayUrlResolver
@@ -222,7 +273,7 @@ class VectorUnifiedPushMessagingReceiverTest {
             this.removedGatewayHandler = removedGatewayHandler
             this.endpointRegistrationHandler = endpointRegistrationHandler
             this.coroutineScope = this@createVectorUnifiedPushMessagingReceiver
-            this.pushHandlingWakeLock = pushHandlingWakeLock
+            this.fetchPushForegroundServiceManager = pushHandlingWakeLock
         }
     }
 }

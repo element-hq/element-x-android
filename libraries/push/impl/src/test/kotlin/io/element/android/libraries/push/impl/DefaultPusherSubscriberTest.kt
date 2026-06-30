@@ -103,6 +103,7 @@ class DefaultPusherSubscriberTest {
                         profileTag = DEFAULT_PUSHER_FILE_TAG + "_",
                         lang = "en",
                         defaultPayload = "{\"cs\":\"$A_SECRET\"}",
+                        append = false,
                     ),
                 )
             )

@@ -18,7 +18,7 @@ import timber.log.Timber
 @ContributesBinding(AppScope::class)
 class RustHomeServerLoginCompatibilityChecker(
     private val clientBuilderProvider: ClientBuilderProvider,
-) : HomeServerLoginCompatibilityChecker {
+    ) : HomeServerLoginCompatibilityChecker {
     override suspend fun check(url: String): Result<Boolean> = runCatchingExceptions {
         clientBuilderProvider.provide()
             .inMemoryStore()
@@ -28,8 +28,8 @@ class RustHomeServerLoginCompatibilityChecker(
                 it.homeserverLoginDetails()
             }
             .use {
-                Timber.d("Homeserver $url | OIDC: ${it.supportsOidcLogin()} | Password: ${it.supportsPasswordLogin()} | SSO: ${it.supportsSsoLogin()}")
-                it.supportsOidcLogin() || it.supportsPasswordLogin()
+                Timber.d("Homeserver $url | OAuth: ${it.supportsOauthLogin()} | Password: ${it.supportsPasswordLogin()} | SSO: ${it.supportsSsoLogin()}")
+                it.supportsOauthLogin() || it.supportsPasswordLogin()
             }
     }
 }

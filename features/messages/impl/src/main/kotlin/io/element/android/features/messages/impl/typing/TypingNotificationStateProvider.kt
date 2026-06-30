@@ -9,6 +9,11 @@
 package io.element.android.features.messages.impl.typing
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
+import io.element.android.libraries.designsystem.preview.USER_NAME_BOB
+import io.element.android.libraries.designsystem.preview.USER_NAME_CHARLIE
+import io.element.android.libraries.designsystem.preview.USER_NAME_DAVID
+import io.element.android.libraries.designsystem.preview.USER_NAME_EVE
 import kotlinx.collections.immutable.toImmutableList
 
 class TypingNotificationStateProvider : PreviewParameterProvider<TypingNotificationState> {
@@ -22,7 +27,7 @@ class TypingNotificationStateProvider : PreviewParameterProvider<TypingNotificat
             ),
             aTypingNotificationState(
                 typingMembers = listOf(
-                    aTypingRoomMember(disambiguatedDisplayName = "Alice"),
+                    aTypingRoomMember(disambiguatedDisplayName = USER_NAME_ALICE),
                 ),
             ),
             aTypingNotificationState(
@@ -32,24 +37,24 @@ class TypingNotificationStateProvider : PreviewParameterProvider<TypingNotificat
             ),
             aTypingNotificationState(
                 typingMembers = listOf(
-                    aTypingRoomMember(disambiguatedDisplayName = "Alice"),
-                    aTypingRoomMember(disambiguatedDisplayName = "Bob"),
+                    aTypingRoomMember(disambiguatedDisplayName = USER_NAME_ALICE),
+                    aTypingRoomMember(disambiguatedDisplayName = USER_NAME_BOB),
                 ),
             ),
             aTypingNotificationState(
                 typingMembers = listOf(
-                    aTypingRoomMember(disambiguatedDisplayName = "Alice"),
-                    aTypingRoomMember(disambiguatedDisplayName = "Bob"),
-                    aTypingRoomMember(disambiguatedDisplayName = "Charlie"),
+                    aTypingRoomMember(disambiguatedDisplayName = USER_NAME_ALICE),
+                    aTypingRoomMember(disambiguatedDisplayName = USER_NAME_BOB),
+                    aTypingRoomMember(disambiguatedDisplayName = USER_NAME_CHARLIE),
                 ),
             ),
             aTypingNotificationState(
                 typingMembers = listOf(
-                    aTypingRoomMember(disambiguatedDisplayName = "Alice"),
-                    aTypingRoomMember(disambiguatedDisplayName = "Bob"),
-                    aTypingRoomMember(disambiguatedDisplayName = "Charlie"),
-                    aTypingRoomMember(disambiguatedDisplayName = "Dan"),
-                    aTypingRoomMember(disambiguatedDisplayName = "Eve"),
+                    aTypingRoomMember(disambiguatedDisplayName = USER_NAME_ALICE),
+                    aTypingRoomMember(disambiguatedDisplayName = USER_NAME_BOB),
+                    aTypingRoomMember(disambiguatedDisplayName = USER_NAME_CHARLIE),
+                    aTypingRoomMember(disambiguatedDisplayName = USER_NAME_DAVID),
+                    aTypingRoomMember(disambiguatedDisplayName = USER_NAME_EVE),
                 ),
             ),
             aTypingNotificationState(

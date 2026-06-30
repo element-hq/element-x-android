@@ -26,7 +26,6 @@ data class TimelineState(
     val timelineItems: ImmutableList<TimelineItem>,
     val timelineRoomInfo: TimelineRoomInfo,
     val timelineMode: Timeline.Mode,
-    val renderReadReceipts: Boolean,
     val newEventState: NewEventState,
     val isLive: Boolean,
     val focusRequestState: FocusRequestState,

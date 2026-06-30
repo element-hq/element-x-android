@@ -15,21 +15,21 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserHeader
-import io.element.android.libraries.matrix.ui.components.MatrixUserWithNullProvider
+import io.element.android.libraries.matrix.ui.components.MatrixUserProvider
 
 @Composable
 fun UserPreferences(
-    user: MatrixUser?,
+    matrixUser: MatrixUser,
     modifier: Modifier = Modifier,
 ) {
     MatrixUserHeader(
         modifier = modifier,
-        matrixUser = user
+        matrixUser = matrixUser,
     )
 }
 
 @PreviewsDayNight
 @Composable
-internal fun UserPreferencesPreview(@PreviewParameter(MatrixUserWithNullProvider::class) matrixUser: MatrixUser?) = ElementPreview {
+internal fun UserPreferencesPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) = ElementPreview {
     UserPreferences(matrixUser)
 }

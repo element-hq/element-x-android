@@ -27,15 +27,17 @@ class TimelineItemEventContentProvider : PreviewParameterProvider<TimelineItemEv
         aTimelineItemAudioContent(),
         aTimelineItemAudioContent("An even bigger bigger bigger bigger bigger bigger bigger sound name which doesn't fit .mp3"),
         aTimelineItemVoiceContent(),
-        aTimelineItemLocationContent(),
-        aTimelineItemLocationContent("Location description"),
+        aTimelineItemLocationContent(mode = aStaticLocationMode()),
         aTimelineItemPollContent(),
         aTimelineItemNoticeContent(),
         aTimelineItemRedactedContent(),
         aTimelineItemTextContent(),
         aTimelineItemUnknownContent(),
         aTimelineItemTextContent().copy(isEdited = true),
-        aTimelineItemTextContent(body = AN_EMOJI_ONLY_TEXT)
+        aTimelineItemTextContent(body = AN_EMOJI_ONLY_TEXT),
+        aTimelineItemLocationContent(
+            mode = aLiveLocationMode(isActive = true, endsAt = "Ends at 12:34", endTimestamp = 0L, lastKnownLocation = null)
+        ),
     )
 }
 

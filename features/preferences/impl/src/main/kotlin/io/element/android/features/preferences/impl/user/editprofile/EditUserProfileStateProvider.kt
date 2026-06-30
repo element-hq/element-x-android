@@ -10,6 +10,7 @@ package io.element.android.features.preferences.impl.user.editprofile
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.designsystem.preview.USER_NAME_JOHN_DOE
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.permissions.api.PermissionsState
@@ -22,17 +23,20 @@ open class EditUserProfileStateProvider : PreviewParameterProvider<EditUserProfi
             aEditUserProfileState(),
             aEditUserProfileState(userAvatarUrl = "example://uri"),
             aEditUserProfileState(saveAction = AsyncAction.ConfirmingCancellation),
+            aEditUserProfileState(canChangeAvatarUrl = false, canChangeDisplayName = false),
         )
 }
 
 fun aEditUserProfileState(
     userId: UserId = UserId("@john.doe:matrix.org"),
-    displayName: String = "John Doe",
+    displayName: String = USER_NAME_JOHN_DOE,
     userAvatarUrl: String? = null,
     avatarActions: List<AvatarAction> = emptyList(),
     saveButtonEnabled: Boolean = true,
     saveAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     cameraPermissionState: PermissionsState = aPermissionsState(showDialog = false),
+    canChangeDisplayName: Boolean = true,
+    canChangeAvatarUrl: Boolean = true,
     eventSink: (EditUserProfileEvent) -> Unit = {},
 ) = EditUserProfileState(
     userId = userId,
@@ -42,5 +46,7 @@ fun aEditUserProfileState(
     saveButtonEnabled = saveButtonEnabled,
     saveAction = saveAction,
     cameraPermissionState = cameraPermissionState,
+    canChangeDisplayName = canChangeDisplayName,
+    canChangeAvatarUrl = canChangeAvatarUrl,
     eventSink = eventSink,
 )
