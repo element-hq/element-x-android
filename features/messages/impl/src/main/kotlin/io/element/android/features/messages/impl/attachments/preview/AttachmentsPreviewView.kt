@@ -278,8 +278,8 @@ private fun AttachmentPreviewContent(
     ) {
         Box(
             modifier = Modifier
-                .fillMaxSize()
-                .weight(1f)
+                .weight(1f),
+            contentAlignment = Alignment.Center,
         ) {
             if (state.isGallery) {
                 val pagerState = rememberPagerState(
