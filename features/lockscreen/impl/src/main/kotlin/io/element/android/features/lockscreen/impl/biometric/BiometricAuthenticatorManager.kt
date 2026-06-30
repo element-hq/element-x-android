@@ -21,6 +21,11 @@ interface BiometricAuthenticatorManager {
      */
     val hasAvailableAuthenticator: Boolean
 
+    /**
+     * If the device is secured for example with a pin, a pattern, a password, or biometric.
+     */
+    val canUseDeviceUnlock: Boolean
+
     fun addCallback(callback: BiometricAuthenticator.Callback)
     fun removeCallback(callback: BiometricAuthenticator.Callback)
 
@@ -34,6 +39,12 @@ interface BiometricAuthenticatorManager {
      */
     @Composable
     fun rememberUnlockBiometricAuthenticator(): BiometricAuthenticator
+
+    /**
+     * Remember a biometric authenticator ready for unlocking the app, using the device settings.
+     */
+    @Composable
+    fun rememberUnlockDeviceBiometricAuthenticator(): BiometricAuthenticator
 
     /**
      * Remember a biometric authenticator ready for confirmation.

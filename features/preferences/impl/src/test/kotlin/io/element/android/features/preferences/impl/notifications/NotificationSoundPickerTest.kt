@@ -14,12 +14,10 @@ import android.provider.Settings
 import androidx.core.net.toUri
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.preferences.api.store.NotificationSound
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class NotificationSoundPickerTest {
+class NotificationSoundPickerTest : RobolectricTest() {
     @Test
     fun `buildRingtonePickerIntent encodes SystemDefault as the system default URI`() {
         val intent = buildRingtonePickerIntent(

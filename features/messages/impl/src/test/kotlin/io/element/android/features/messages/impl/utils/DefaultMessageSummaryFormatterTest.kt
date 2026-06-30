@@ -18,14 +18,12 @@ import io.element.android.features.messages.impl.utils.messagesummary.DefaultMes
 import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.timeline.aProfileDetails
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
-@RunWith(RobolectricTestRunner::class)
-class DefaultMessageSummaryFormatterTest {
+class DefaultMessageSummaryFormatterTest : RobolectricTest() {
     private val formatter = DefaultMessageSummaryFormatter(
         RuntimeEnvironment.getApplication() as Context
     )

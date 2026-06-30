@@ -9,13 +9,13 @@
 
 package io.element.android.features.linknewdevice.impl.screens.scan
 
+import android.os.Build.VERSION_CODES.UPSIDE_DOWN_CAKE
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -24,12 +24,13 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBackKey
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 
-@RunWith(AndroidJUnit4::class)
-class ScanQrCodeViewTest {
+class ScanQrCodeViewTest : RobolectricTest() {
     @Test
+    @Config(sdk = [UPSIDE_DOWN_CAKE])
     fun `on back pressed - calls the expected callback`() = runAndroidComposeUiTest {
         val eventRecorder = EventsRecorder<ScanQrCodeEvent>(expectEvents = false)
         ensureCalledOnce { callback ->
@@ -44,6 +45,7 @@ class ScanQrCodeViewTest {
     }
 
     @Test
+    @Config(sdk = [UPSIDE_DOWN_CAKE])
     fun `try again button clicked - emits the expected event`() = runAndroidComposeUiTest {
         val eventRecorder = EventsRecorder<ScanQrCodeEvent>()
         setView(
