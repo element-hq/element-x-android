@@ -11,6 +11,7 @@ package io.element.android.features.messages.impl.attachments.preview
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -121,6 +122,12 @@ class AttachmentsPreviewPresenter(
             )
         }
 
+        val editedAttachments by remember {
+            derivedStateOf {
+                attachmentsAndEdits.map { it.attachment }.toImmutableList()
+            }
+        }
+
         var preprocessMediaJob by remember { mutableStateOf<Job?>(null) }
 
         val firstMediaAttachment = attachments.first() as Attachment.Media
@@ -148,7 +155,7 @@ class AttachmentsPreviewPresenter(
                 preprocessMediaJob?.cancel()
                 preprocessMediaJob = coroutineScope.launch(dispatchers.io) {
                     preProcessAttachments(
-                        attachments = attachmentsAndEdits.map { it.attachment },
+                        attachments = editedAttachments,
                         mediaOptimizationConfig = config,
                         displayProgress = false,
                         sendActionState = sendActionState,
@@ -206,7 +213,7 @@ class AttachmentsPreviewPresenter(
                             )
                             preprocessMediaJob = coroutineScope.launch(dispatchers.io) {
                                 preProcessAttachments(
-                                    attachments = attachmentsAndEdits.map { it.attachment },
+                                    attachments = editedAttachments,
                                     mediaOptimizationConfig = config,
                                     displayProgress = true,
                                     sendActionState = sendActionState,
@@ -221,7 +228,7 @@ class AttachmentsPreviewPresenter(
                             )
                             preprocessMediaJob = coroutineScope.launch(dispatchers.io) {
                                 preProcessAttachments(
-                                    attachments = attachmentsAndEdits.map { it.attachment },
+                                    attachments = editedAttachments,
                                     mediaOptimizationConfig = config,
                                     displayProgress = true,
                                     sendActionState = sendActionState,
@@ -273,7 +280,7 @@ class AttachmentsPreviewPresenter(
 
                     // Dismiss the screen
                     dismiss(
-                        attachments = attachmentsAndEdits.map { it.attachment },
+                        attachments = editedAttachments,
                         sendActionState = sendActionState,
                         editedTempFiles = editedTempFiles,
                     )
@@ -395,7 +402,7 @@ class AttachmentsPreviewPresenter(
         }
 
         return AttachmentsPreviewState(
-            attachments = attachmentsAndEdits.map { it.attachment }.toImmutableList(),
+            attachments = editedAttachments,
             imageEditorState = imageEditorState,
             canEditImage = canEditImage,
             isApplyingImageEdits = isApplyingImageEdits,
