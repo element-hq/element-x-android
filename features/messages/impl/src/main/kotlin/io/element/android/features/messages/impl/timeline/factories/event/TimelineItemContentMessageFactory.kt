@@ -337,10 +337,10 @@ class TimelineItemContentMessageFactory(
                     }
                 }
                 val hasPreviews = galleryItems.any { it.thumbnailSource != null }
-                val isMediaGallery = galleryItems.all { item ->
-                    item.type.isMedia()
+                val isOnlyVisualMedia = galleryItems.all { item ->
+                    item.type.isVisualMedia()
                 }
-                if (isMediaGallery && hasPreviews) {
+                if (isOnlyVisualMedia && hasPreviews) {
                     TimelineItemGalleryContent(
                         body = messageType.body,
                         caption = messageType.body.trimEnd().takeIf { it.isNotEmpty() },

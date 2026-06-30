@@ -43,7 +43,7 @@ data class GalleryItem(
         Audio,
         File;
 
-        fun isMedia() = this in setOf(Image, Video)
+        fun isVisualMedia() = this in setOf(Image, Video)
     }
 
     val thumbnailMediaRequestData: MediaRequestData by lazy {
