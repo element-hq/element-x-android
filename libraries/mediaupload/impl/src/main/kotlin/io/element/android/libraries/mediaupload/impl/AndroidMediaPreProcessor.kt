@@ -67,7 +67,7 @@ class AndroidMediaPreProcessor(
          */
         private const val IMAGE_SCALE_REF_SIZE = 640
 
-        private val notCompressibleImageTypes = listOf(MimeTypes.Gif, MimeTypes.WebP, MimeTypes.Svg)
+        private val notCompressibleImageTypes = listOf(MimeTypes.Gif, MimeTypes.WebP)
     }
 
     private val contentResolver = context.contentResolver
@@ -83,10 +83,7 @@ class AndroidMediaPreProcessor(
     ): Result<MediaUploadInfo> = withContext(coroutineDispatchers.computation) {
         runCatchingExceptions {
             val result = when {
-                // Special case for SVG, since Android can't read its metadata or create a thumbnail, it must be sent as a file
-                mimeType == MimeTypes.Svg -> {
-                    processFile(uri, mimeType)
-                }
+                mimeType == MimeTypes.Svg -> processSvgImage(uri, mimeType)
                 mimeType.isMimeTypeImage() -> {
                     val shouldBeCompressed = mediaOptimizationConfig.compressImages && mimeType !in notCompressibleImageTypes
                     processImage(uri, mimeType, shouldBeCompressed)
@@ -160,6 +157,7 @@ class AndroidMediaPreProcessor(
 
     private suspend fun processImage(uri: Uri, mimeType: String, shouldBeCompressed: Boolean): MediaUploadInfo {
         Timber.d("Processing image ${uri.path.orEmpty().hash()}")
+
         suspend fun processImageWithCompression(): MediaUploadInfo {
             // Read the orientation metadata from its own stream. Trying to reuse this stream for compression will fail.
             val orientation = contentResolver.openInputStream(uri).use { input ->
@@ -218,6 +216,28 @@ class AndroidMediaPreProcessor(
         } else {
             processImageWithoutCompression()
         }
+    }
+
+    private val svgDimensionExtractor = SvgDimensionExtractor()
+
+    private suspend fun processSvgImage(uri: Uri, mimeType: String): MediaUploadInfo {
+        Timber.d("Processing SVG image ${uri.path.orEmpty().hash()}")
+        val file = copyToTmpFile(uri)
+        val (width, height) = svgDimensionExtractor.extractDimensions(file)
+        val imageInfo = ImageInfo(
+            width = width,
+            height = height,
+            mimetype = mimeType,
+            size = file.length(),
+            thumbnailInfo = null,
+            thumbnailSource = null,
+            blurhash = null,
+        )
+        return MediaUploadInfo.Image(
+            file = file,
+            imageInfo = imageInfo,
+            thumbnailFile = null,
+        )
     }
 
     private suspend fun processVideo(uri: Uri, mimeType: String?, videoCompressionPreset: VideoCompressionPreset): MediaUploadInfo {
