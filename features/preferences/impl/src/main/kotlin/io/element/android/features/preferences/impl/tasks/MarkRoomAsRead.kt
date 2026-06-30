@@ -8,7 +8,6 @@
 package io.element.android.features.preferences.impl.tasks
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -24,7 +23,6 @@ interface MarkRoomAsRead {
 }
 
 @ContributesBinding(SessionScope::class)
-@Inject
 class DefaultMarkRoomAsRead(
     private val client: MatrixClient,
     private val notificationCleaner: NotificationCleaner,
