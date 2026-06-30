@@ -22,7 +22,7 @@ camera = "1.6.1"
 work = "2.11.2"
 
 # Compose
-compose_bom = "2026.05.01"
+compose_bom = "2026.06.00"
 
 # Coroutines
 coroutines = "1.11.0"
@@ -130,6 +130,7 @@ androidx_compose_material3 = { module = "androidx.compose.material3:material3", 
 androidx_compose_material3_windowsizeclass = { module = "androidx.compose.material3:material3-window-size-class" }
 androidx_compose_material3_adaptive = "androidx.compose.material3:material3-adaptive-android:1.0.0-alpha06"
 androidx_compose_ui = { module = "androidx.compose.ui:ui" }
+androidx_compose_ui_text = { module = "androidx.compose.ui:ui-text" }
 androidx_compose_ui_tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx_compose_ui_tooling_preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 androidx_compose_ui_test_manifest = { module = "androidx.compose.ui:ui-test-manifest" }
@@ -240,7 +241,7 @@ sigpwned_emoji4j = "com.sigpwned:emoji4j-core:16.0.0"
 metro_runtime = { module = "dev.zacsweers.metro:runtime", version.ref = "metro" }
 
 # Element Call
-element_call_embedded = "io.element.android:element-call-embedded:0.20.2"
+element_call_embedded = "io.element.android:element-call-embedded:0.20.3"
 
 # Auto services
 google_autoservice = { module = "com.google.auto.service:auto-service", version.ref = "autoservice" }
