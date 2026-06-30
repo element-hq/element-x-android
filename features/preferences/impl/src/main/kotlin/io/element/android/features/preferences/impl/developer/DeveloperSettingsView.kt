@@ -10,7 +10,6 @@ package io.element.android.features.preferences.impl.developer
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.runtime.Composable
@@ -172,16 +171,17 @@ private fun MarkAllRoomsAsReadCategory(state: DeveloperSettingsState) {
             headlineContent = {
                 Text(stringResource(R.string.screen_developer_settings_mark_all_rooms_as_read))
             },
+            supportingContent = {
+                Text(
+                    text = stringResource(R.string.screen_developer_settings_mark_all_rooms_as_read_footer),
+                    style = ElementTheme.typography.fontBodySmRegular,
+                    color = ElementTheme.colors.textSecondary,
+                )
+            },
             enabled = !state.showLoader,
             onClick = {
                 state.eventSink(DeveloperSettingsEvents.ShowMarkAllRoomsAsReadConfirmation)
             },
-        )
-        Text(
-            text = stringResource(R.string.screen_developer_settings_mark_all_rooms_as_read_footer),
-            style = ElementTheme.typography.fontBodySmRegular,
-            color = ElementTheme.colors.textSecondary,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
         )
     }
 }
