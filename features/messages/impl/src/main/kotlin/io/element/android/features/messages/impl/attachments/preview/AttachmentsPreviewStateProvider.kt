@@ -146,6 +146,7 @@ fun aMediaOptimisationSelectorState(
     displayMediaSelectorViews: Boolean = true,
     displayVideoPresetSelectorDialog: Boolean = false,
 ) = MediaOptimizationSelectorState(
+    index = 0,
     maxUploadSize = AsyncData.Success(maxUploadSize),
     videoSizeEstimations = videoSizeEstimations,
     isImageOptimizationEnabled = isImageOptimizationEnabled,

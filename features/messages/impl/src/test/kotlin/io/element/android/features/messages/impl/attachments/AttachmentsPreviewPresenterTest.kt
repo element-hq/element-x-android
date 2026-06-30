@@ -23,6 +23,7 @@ import io.element.android.features.messages.impl.attachments.preview.imageeditor
 import io.element.android.features.messages.impl.attachments.preview.imageeditor.NormalizedCropRect
 import io.element.android.features.messages.impl.attachments.preview.imageeditor.assertIsSimilarTo
 import io.element.android.features.messages.impl.attachments.video.MediaOptimizationSelectorState
+import io.element.android.features.messages.impl.attachments.video.VideoCompressionPresetSelector
 import io.element.android.features.messages.impl.attachments.video.VideoUploadEstimation
 import io.element.android.features.messages.impl.fixtures.aMediaAttachment
 import io.element.android.features.messages.test.attachments.video.FakeMediaOptimizationSelectorPresenterFactory
@@ -93,6 +94,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
     @Test
     fun `present - initial state`() = runTest {
         createAttachmentsPreviewPresenter().test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
         }
@@ -117,6 +119,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
             onDoneListener = { onDoneListener() },
         )
         presenter.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
@@ -151,6 +154,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
             onDoneListener = { onDoneListener() },
         )
         presenter.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
             // Pre-processing finishes
@@ -187,6 +191,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
             onDoneListener = { onDoneListener() },
         )
         presenter.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
@@ -216,6 +221,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
             onDoneListener = { onDoneListener() },
         )
         presenter.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
             initialState.eventSink(AttachmentsPreviewEvent.SendAttachment)
@@ -239,6 +245,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
             onDoneListener = { onDoneListener() },
         )
         presenter.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
             // Pre-processing finishes
@@ -261,6 +268,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
             onDoneListener = { onDoneListener() },
         )
         presenter.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
             initialState.eventSink(AttachmentsPreviewEvent.CancelAndDismiss)
@@ -292,6 +300,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
             onDoneListener = { onDoneListener() },
         )
         presenter.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
             initialState.textEditorState.setMarkdown(A_CAPTION)
@@ -333,6 +342,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
             onDoneListener = { onDoneListener() },
         )
         presenter.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
             initialState.textEditorState.setMarkdown(A_CAPTION)
@@ -374,6 +384,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
             onDoneListener = { onDoneListener() },
         )
         presenter.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
             initialState.textEditorState.setMarkdown(A_CAPTION)
@@ -408,6 +419,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
         )
         val presenter = createAttachmentsPreviewPresenter(room = room, onDoneListener = onDoneListenerResult)
         presenter.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
             initialState.eventSink(AttachmentsPreviewEvent.SendAttachment)
@@ -437,6 +449,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
             onDoneListener = onDoneListenerResult,
         )
         presenter.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
             initialState.eventSink(AttachmentsPreviewEvent.SendAttachment)
@@ -469,6 +482,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
             onDoneListener = onDoneListenerResult,
             mediaOptimizationSelectorPresenterFactory = FakeMediaOptimizationSelectorPresenterFactory {
                 MediaOptimizationSelectorState(
+                    index = 0,
                     // Set a max upload size smaller than the file size
                     maxUploadSize = AsyncData.Success(maxUploadSize),
                     videoSizeEstimations = AsyncData.Uninitialized,
@@ -508,6 +522,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
             onDoneListener = onDoneListenerResult,
             mediaOptimizationSelectorPresenterFactory = FakeMediaOptimizationSelectorPresenterFactory {
                 MediaOptimizationSelectorState(
+                    index = 0,
                     // Set a max upload size smaller than the file size
                     maxUploadSize = AsyncData.Success(Long.MAX_VALUE),
                     videoSizeEstimations = AsyncData.Success(
@@ -565,6 +580,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
         )
 
         presenter.test {
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink(AttachmentsPreviewEvent.OpenImageEditor)
             val editorState = awaitItem()
@@ -775,6 +791,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
             attachments = listOf(Attachment.Media(localMedia)),
         )
         presenter.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.canEditImage).isTrue()
 
@@ -833,6 +850,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
             displayMediaQualitySelectorViews = false,
             mediaOptimizationSelectorPresenterFactory = FakeMediaOptimizationSelectorPresenterFactory {
                 MediaOptimizationSelectorState(
+                    index = 0,
                     maxUploadSize = AsyncData.Success(250_000_000L),
                     videoSizeEstimations = AsyncData.Success(
                         persistentListOf(
@@ -933,6 +951,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
         mediaOptimizationSelectorPresenterFactory: FakeMediaOptimizationSelectorPresenterFactory = FakeMediaOptimizationSelectorPresenterFactory(
             fakePresenter = {
                 MediaOptimizationSelectorState(
+                    index = 0,
                     maxUploadSize = AsyncData.Uninitialized,
                     videoSizeEstimations = AsyncData.Uninitialized,
                     isImageOptimizationEnabled = null,
@@ -957,6 +976,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
                 Result.failure(IllegalStateException("Check test values"))
             }
         },
+        videoCompressionPresetSelector: VideoCompressionPresetSelector = VideoCompressionPresetSelector(),
     ): AttachmentsPreviewPresenter {
         return AttachmentsPreviewPresenter(
             attachments = attachments.toImmutableList(),
@@ -977,6 +997,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
             sessionCoroutineScope = this,
             dispatchers = testCoroutineDispatchers(),
             mediaOptimizationSelectorPresenterFactory = mediaOptimizationSelectorPresenterFactory,
+            videoCompressionPresetSelector = videoCompressionPresetSelector,
             timelineMode = timelineMode,
             inReplyToEventId = null,
             mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,

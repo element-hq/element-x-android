@@ -346,7 +346,7 @@ private fun AttachmentPreviewContent(
                 }
             }
         }
-        val mediaInfo = (state.attachments.first() as? Attachment.Media)?.localMedia?.info
+        val mediaInfo = (state.attachments[state.currentIndex] as? Attachment.Media)?.localMedia?.info
         if (mediaInfo?.isImageAttachment() == true) {
             ImageOptimizationSelector(state.mediaOptimizationSelectorState)
         } else if (mediaInfo?.mimeType?.isMimeTypeVideo() == true) {
