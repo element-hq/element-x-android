@@ -1,3 +1,52 @@
+Changes in Element X v26.07.0
+=============================
+
+<!-- Release notes generated using configuration in .github/release.yml at v26.07.0 -->
+
+## What's Changed
+### ✨ Features
+* Add read all messages feature by @hghgrtut in https://github.com/element-hq/element-x-android/pull/7049
+### 🐛 Bugfixes
+* Detect RTL text in events and adjust the text rendering by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6994
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/7071
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/7115
+### 🧱 Build
+* Fix Sonar with AGP 9 (some workarounds) by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7055
+* Disable periodically generating the screenshot gallery by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7110
+* Try a different workaround for flaky `ScanQrCodeViewTest` by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7109
+### 🚧 In development 🚧
+* Protect link new device by @bmarty in https://github.com/element-hq/element-x-android/pull/6992
+### Dependency upgrades
+* Update metro to v1.2.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7057
+* Update gradle/actions action to v6.2.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7063
+* Update roborazzi to v1.64.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7068
+* Update rnkdsh/action-upload-diawi action to v1.5.13 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7067
+* Update dependency io.element.android:element-call-embedded to v0.20.2 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7075
+* Update dependency com.github.matrix-org:matrix-analytics-events to v0.37.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7079
+* Update actions/setup-java action to v5.3.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7088
+* Update dependency org.matrix.rustcomponents:sdk-android to v26.06.18 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7052
+* Update firebaseAppDistribution to v5.3.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7096
+* Update dependency com.google.firebase:firebase-bom to v34.15.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7089
+* Update dependency com.google.crypto.tink:tink-android to v1.22.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7105
+* Update actions/checkout action to v7 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7098
+* Update lifecycle to v2.11.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7097
+* Update danger/danger-js action to v13.0.8 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7104
+* Update dependency org.matrix.rustcomponents:sdk-android to v26.06.25 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7107
+* Update dependency androidx.compose:compose-bom to v2026.06.00 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7095
+* Update dependency io.element.android:element-call-embedded to v0.20.3 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7117
+* Update zizmorcore/zizmor-action action to v0.5.7 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7116
+* Update dependency org.matrix.rustcomponents:sdk-android to v26.06.30 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7127
+* Update dependency com.posthog:posthog-android to v3.51.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7128
+### Others
+* Fix small code smell by @bmarty in https://github.com/element-hq/element-x-android/pull/7058
+* Hide message notification content when the app is locked by @bxdxnn in https://github.com/element-hq/element-x-android/pull/6902
+
+## New Contributors
+* @hghgrtut made their first contribution in https://github.com/element-hq/element-x-android/pull/7049
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v26.06.4...v26.07.0
+
 Changes in Element X v26.06.4
 =============================
 
