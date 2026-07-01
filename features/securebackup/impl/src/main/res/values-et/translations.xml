@@ -25,7 +25,8 @@
   <string name="screen_custom_recovery_key_confirm_subtitle">"Sisesta oma taastevõti uuesti."</string>
   <string name="screen_custom_recovery_key_confirm_title">"Korda oma taastevõtit"</string>
   <plurals name="screen_custom_recovery_key_input_notice">
-    <item quantity="other">"Vähemalt %1$s tähemärki. Ära kasuta oma konto salasõna."</item>
+    <item quantity="one">"Vähemalt %1$d tähemärk. Ära pruugi kasutajakonto salasõna."</item>
+    <item quantity="other">"Vähemalt %1$d tähemärki. Ära pruugi kasutajakonto salasõna."</item>
   </plurals>
   <string name="screen_custom_recovery_key_input_strength">"Tugevus"</string>
   <string name="screen_custom_recovery_key_input_strength_a11y">"Salafraasi tugevus: %1$s"</string>

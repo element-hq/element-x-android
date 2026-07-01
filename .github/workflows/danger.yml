@@ -5,9 +5,18 @@ on: [pull_request, merge_group]
 permissions: {}
 
 jobs:
+  check-secret:
+    name: Check Enterprise Deploy Key
+    runs-on: ubuntu-latest
+    outputs:
+      has_key: ${{ steps.check.outputs.has_key }}
+    steps:
+      - id: check
+        run: echo "has_key=${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY != '' }}" >> $GITHUB_OUTPUT
   build:
     runs-on: ubuntu-latest
     name: Danger main check
+    needs: check-secret
     # Skip in forks, it doesn't work even with the fallback token
     if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
     steps:
@@ -15,16 +24,17 @@ jobs:
         with:
           persist-credentials: false
       - name: Add SSH private keys for submodule repositories
+        if: ${{ needs.check-secret.outputs.has_key == 'true' }}
         uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
         with:
           ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
       - name: Clone submodules
-        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
+        if: ${{ needs.check-secret.outputs.has_key == 'true' }}
         run: git submodule update --init --recursive
       - run: |
           npm install --save-dev @babel/plugin-transform-flow-strip-types
       - name: Danger
-        uses: danger/danger-js@67ed2c1f42fd2fc198cc3c14b43c8f83351f4fe9 # 13.0.5
+        uses: danger/danger-js@58355dc2b274a87699c8b7deac01baba16d6f061 # 13.0.8
         with:
           args: "--dangerfile ./tools/danger/dangerfile.js"
         env:

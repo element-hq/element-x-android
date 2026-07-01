@@ -5,15 +5,15 @@
   <string name="banner_battery_optimization_title_android">"Не надходять сповіщення?"</string>
   <string name="banner_new_sound_message">"Ваш сигнал сповіщень оновлено — він став чіткішим, швидшим і не таким надокучливим."</string>
   <string name="banner_new_sound_title">"Ми оновили ваші звуки"</string>
-  <string name="banner_set_up_recovery_content">"Відновіть свою криптографічну ідентичність та історію повідомлень за допомогою ключа відновлення, якщо ви втратили всі наявні пристрої."</string>
-  <string name="banner_set_up_recovery_submit">"Налаштувати відновлення"</string>
-  <string name="banner_set_up_recovery_title">"Налаштуйте відновлення для захисту свого облікового запису"</string>
+  <string name="banner_set_up_recovery_content">"Ваші бесіди автоматично резервуються з використанням наскрізного шифрування. Щоб відновити цю резервну копію та зберегти свою цифрову ідентичність у разі втрати доступу до всіх своїх пристроїв, вам знадобиться ключ відновлення."</string>
+  <string name="banner_set_up_recovery_submit">"Отримати ключ відновлення"</string>
+  <string name="banner_set_up_recovery_title">"Створити резервну копію своїх бесід"</string>
   <string name="confirm_recovery_key_banner_message">"Підтвердіть свій ключ відновлення, щоб мати доступ до сховища ключів та історії повідомлень."</string>
   <string name="confirm_recovery_key_banner_primary_button_title">"Введіть ключ відновлення"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Забули ключ відновлення?"</string>
   <string name="confirm_recovery_key_banner_title">"Ваше сховище ключів не синхронізовано"</string>
   <string name="full_screen_intent_banner_message">"Щоб ніколи не пропустити важливий виклик, змініть налаштування, щоб увімкнути повноекранні сповіщення, коли телефон заблоковано."</string>
-  <string name="full_screen_intent_banner_title">"Покращуйте досвід дзвінків"</string>
+  <string name="full_screen_intent_banner_title">"Покращуйте якість викликів"</string>
   <string name="screen_home_tab_chats">"Бесіди"</string>
   <string name="screen_home_tab_spaces">"Простори"</string>
   <string name="screen_invites_decline_chat_message">"Ви впевнені, що хочете відхилити запрошення приєднатися до %1$s?"</string>
@@ -51,6 +51,6 @@
   <string name="screen_roomlist_mark_as_unread">"Позначити непрочитаним"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Цю кімнату оновлено"</string>
   <string name="screen_roomlist_your_spaces">"Ваші простори"</string>
-  <string name="session_verification_banner_message">"Схоже, ви використовуєте новий пристрій. Щоб отримати доступ до зашифрованих повідомлень, підтвердьте особу за допомогою іншого пристрою."</string>
+  <string name="session_verification_banner_message">"Здається, ви використовуєте новий пристрій. Звірте його за допомогою іншого пристрою, щоб отримати доступ до своїх зашифрованих повідомлень."</string>
   <string name="session_verification_banner_title">"Підтвердьте, що це ви"</string>
 </resources>

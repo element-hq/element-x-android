@@ -155,8 +155,8 @@
   <string name="action_share_link">"Compartilhar link"</string>
   <string name="action_show">"Mostrar"</string>
   <string name="action_sign_in_again">"Entrar novamente"</string>
-  <string name="action_signout">"Sair"</string>
-  <string name="action_signout_anyway">"Sair mesmo assim"</string>
+  <string name="action_signout">"Remover este dispositivo"</string>
+  <string name="action_signout_anyway">"Remover este dispositivo mesmo assim"</string>
   <string name="action_skip">"Pular"</string>
   <string name="action_start">"Iniciar"</string>
   <string name="action_start_chat">"Iniciar conversa"</string>
@@ -473,7 +473,7 @@ Você tem certeza de que deseja continuar?"</string>
   <string name="screen_share_open_apple_maps">"Abrir no Apple Maps"</string>
   <string name="screen_share_open_google_maps">"Abrir no Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Abrir no OpenStreetMap"</string>
-  <string name="screen_share_this_location_action">"Compartilhar esta localização"</string>
+  <string name="screen_share_this_location_action">"Compartilhar localização selecionada"</string>
   <string name="screen_space_list_description">"Os espaços que você criou ou entrou."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_empty_state_title">"Crie espaços para organizar salas"</string>

@@ -15,11 +15,20 @@ env:
   CI_GRADLE_ARG_PROPERTIES: --stacktrace -Dsonar.gradle.skipCompile=true --no-configuration-cache
 
 jobs:
+  check-secret:
+    name: Check Enterprise Deploy Key
+    runs-on: ubuntu-latest
+    outputs:
+      has_key: ${{ steps.check.outputs.has_key }}
+    steps:
+      - id: check
+        run: echo "has_key=${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY != '' }}" >> $GITHUB_OUTPUT
   build:
     name: Build Enterprise APKs
     runs-on: ubuntu-latest
-    # Skip in forks
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
+    needs: check-secret
+    # Skip if the enterprise deploy key is not set
+    if: needs.check-secret.outputs.has_key == 'true'
     strategy:
       matrix:
         variant: [debug, release, nightly]

@@ -39,7 +39,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.platform.ViewConfiguration
 import androidx.compose.ui.res.pluralStringResource
@@ -49,9 +51,12 @@ import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.traversalIndex
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstrainScope
@@ -68,12 +73,14 @@ import io.element.android.features.messages.impl.timeline.components.receipt.Rea
 import io.element.android.features.messages.impl.timeline.components.receipt.TimelineItemReadReceiptView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
+import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
@@ -91,6 +98,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.modifiers.niceClickable
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewWithExtraLargeHeight
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.designsystem.swipe.SwipeableActionsState
@@ -106,6 +114,7 @@ import io.element.android.libraries.matrix.api.timeline.item.EmbeddedEventInfo
 import io.element.android.libraries.matrix.api.timeline.item.ThreadSummary
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
@@ -122,7 +131,9 @@ import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonPlurals
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
+import io.element.android.libraries.ui.utils.text.detect
 import io.element.android.wysiwyg.link.Link
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -649,23 +660,44 @@ private fun MessageEventBubbleContent(
                             .padding(horizontal = 4.dp, vertical = 2.dp)
                     )
                 }
-            TimestampPosition.Aligned ->
-                ContentAvoidingLayout(
-                    modifier = modifier,
-                    // The spacing is negative to make the content overlap the empty space at the start of the timestamp
-                    spacing = (-4).dp,
-                    overlayOffset = DpOffset(0.dp, -1.dp),
-                    shrinkContent = canShrinkContent,
-                    content = { content(this::onContentLayoutChange) },
-                    overlay = {
-                        TimelineEventTimestampView(
-                            event = event,
-                            eventSink = eventSink,
-                            modifier = Modifier
-                                .padding(horizontal = 8.dp, vertical = 4.dp)
-                        )
+            TimestampPosition.Aligned -> @Composable {
+                val originalLayoutDirection = LocalLayoutDirection.current
+                // Detect if the direction of the text content (if any) does not match the layout direction, to place the content and timestamp correctly
+                val contentDirection = if (event.content is TimelineItemTextContent) {
+                    remember(event.content.body) {
+                        when (TextDirection.detect(event.content.body)) {
+                            TextDirection.Ltr, TextDirection.ContentOrLtr -> LayoutDirection.Ltr
+                            TextDirection.Rtl, TextDirection.ContentOrRtl -> LayoutDirection.Rtl
+                            else -> originalLayoutDirection
+                        }
                     }
-                )
+                } else {
+                    originalLayoutDirection
+                }
+
+                CompositionLocalProvider(LocalLayoutDirection provides contentDirection) {
+                    ContentAvoidingLayout(
+                        modifier = modifier,
+                        // The spacing is negative to make the content overlap the empty space at the start of the timestamp
+                        spacing = (-4).dp,
+                        overlayOffset = DpOffset(0.dp, -1.dp),
+                        shrinkContent = canShrinkContent,
+                        content = { content(this::onContentLayoutChange) },
+                        overlay = {
+                            // Use the original layout direction for the timestamp
+                            CompositionLocalProvider(LocalLayoutDirection provides originalLayoutDirection) {
+                                TimelineEventTimestampView(
+                                    event = event,
+                                    eventSink = eventSink,
+                                    isLayoutDirectionMismatched = originalLayoutDirection != contentDirection,
+                                    modifier = Modifier
+                                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                                )
+                            }
+                        }
+                    )
+                }
+            }
             TimestampPosition.Below ->
                 Column(modifier) {
                     content {}
@@ -875,6 +907,149 @@ internal fun TimelineItemEventRowWithThreadSummaryPreview() = ElementPreview {
                 ),
                 displayThreadSummaries = true,
             )
+        }
+    }
+}
+
+@PreviewWithExtraLargeHeight
+@Composable
+internal fun TimelineItemEventRowRtlContentPreview() = ElementPreview {
+    Column {
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.LightGray)
+                .padding(8.dp),
+            text = "LTR layout direction",
+            textAlign = TextAlign.Center,
+            style = ElementTheme.typography.fontHeadingMdBold,
+        )
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+            sequenceOf(false, true).forEach { isMine ->
+                ATimelineItemEventRow(
+                    event = aTimelineItemEvent(
+                        senderDisplayName = "Sender with a super long name that should ellipsize",
+                        isMine = isMine,
+                        content = aTimelineItemTextContent(
+                            body = "ظَة وَدَاع يَسْتَغْرِب فِيهَ"
+                        ),
+                        timelineItemReactions = TimelineItemReactions(persistentListOf()),
+                        groupPosition = TimelineItemGroupPosition.First,
+                    )
+                )
+                ATimelineItemEventRow(
+                    event = aTimelineItemEvent(
+                        senderDisplayName = "Sender with a super long name that should ellipsize",
+                        isMine = isMine,
+                        content = aTimelineItemTextContent(
+                            body = "ظَة وَدَاع يَسْتَغْرِب فِيهَ",
+                            isEdited = true,
+                        ),
+                        timelineItemReactions = TimelineItemReactions(persistentListOf()),
+                        groupPosition = TimelineItemGroupPosition.Middle,
+                        messageShield = MessageShield.UnknownDevice(isCritical = true),
+                    )
+                )
+                ATimelineItemEventRow(
+                    event = aTimelineItemEvent(
+                        senderDisplayName = "Sender with a super long name that should ellipsize",
+                        isMine = isMine,
+                        content = aTimelineItemTextContent(
+                            body = "ظَة وَدَاع \nيَسْتَغْرِب فِيهَ"
+                        ),
+                        timelineItemReactions = TimelineItemReactions(persistentListOf()),
+                        groupPosition = TimelineItemGroupPosition.Middle,
+                    )
+                )
+                ATimelineItemEventRow(
+                    event = aTimelineItemEvent(
+                        senderDisplayName = "Sender with a super long name that should ellipsize",
+                        isMine = isMine,
+                        content = aTimelineItemTextContent(
+                            body = "ظَة وَدَاع يَسْتَغْرِب فِيهَا اَلشَّاعِر أَنْ لَا يَبْكِي مِنْ أَلَم اَلْفِرَاق،" +
+                                " وَيَصِف حَالَة اَلْمُودِعِينَ"
+                        ),
+                        timelineItemReactions = TimelineItemReactions(persistentListOf()),
+                        groupPosition = TimelineItemGroupPosition.Last,
+                    )
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.LightGray)
+                .padding(8.dp),
+            text = "RTL layout direction",
+            textAlign = TextAlign.Center,
+            style = ElementTheme.typography.fontHeadingMdBold,
+        )
+
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+            sequenceOf(false, true).forEach { isMine ->
+                ATimelineItemEventRow(
+                    event = aTimelineItemEvent(
+                        senderDisplayName = "Sender with a super long name that should ellipsize",
+                        isMine = isMine,
+                        content = aTimelineItemTextContent(
+                            body = "ظَة وَدَاع يَسْتَغْرِب فِيهَا اَلشَّاعِر أَنْ لَا يَبْكِي مِنْ أَلَم اَلْفِرَاق،" +
+                                " وَيَصِف حَالَة اَلْمُودِعِينَ",
+                        ),
+                        timelineItemReactions = TimelineItemReactions(persistentListOf()),
+                        groupPosition = TimelineItemGroupPosition.First,
+                    )
+                )
+                ATimelineItemEventRow(
+                    event = aTimelineItemEvent(
+                        senderDisplayName = "Sender with a super long name that should ellipsize",
+                        isMine = isMine,
+                        content = aTimelineItemTextContent(
+                            body = "Testing\nLTR Line\nBreaks.",
+                        ),
+                        timelineItemReactions = TimelineItemReactions(persistentListOf()),
+                        groupPosition = TimelineItemGroupPosition.Middle,
+                    )
+                )
+                ATimelineItemEventRow(
+                    event = aTimelineItemEvent(
+                        senderDisplayName = "Sender with a super long name that should ellipsize",
+                        isMine = isMine,
+                        content = aTimelineItemTextContent(
+                            body = "Testing a very long LTR text in an RTL layout."
+                        ),
+                        timelineItemReactions = TimelineItemReactions(persistentListOf()),
+                        groupPosition = TimelineItemGroupPosition.Middle,
+                    )
+                )
+                ATimelineItemEventRow(
+                    event = aTimelineItemEvent(
+                        senderDisplayName = "Sender with a super long name that should ellipsize",
+                        isMine = isMine,
+                        content = aTimelineItemTextContent(
+                            body = "Testing LTR in RTL layout.",
+                        ),
+                        timelineItemReactions = TimelineItemReactions(persistentListOf()),
+                        groupPosition = TimelineItemGroupPosition.Last,
+                        messageShield = MessageShield.UnknownDevice(isCritical = true),
+                    )
+                )
+                ATimelineItemEventRow(
+                    event = aTimelineItemEvent(
+                        senderDisplayName = "Sender with a super long name that should ellipsize",
+                        isMine = isMine,
+                        content = aTimelineItemTextContent(
+                            body = "Testing LTR in RTL layout.",
+                            isEdited = true,
+                        ),
+                        timelineItemReactions = TimelineItemReactions(persistentListOf()),
+                        groupPosition = TimelineItemGroupPosition.Last,
+                        messageShield = MessageShield.UnknownDevice(isCritical = true),
+                    )
+                )
+            }
         }
     }
 }
