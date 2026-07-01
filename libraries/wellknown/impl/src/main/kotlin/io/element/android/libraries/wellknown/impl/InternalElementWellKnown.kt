@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.wellknown.impl
 
+import io.element.android.libraries.wellknown.api.ElementWellKnown
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -44,7 +45,21 @@ data class InternalElementWellKnown(
     val identityProviderAppScheme: String? = null,
     @SerialName("custom_recovery_passphrase")
     val customRecoveryPassphrase: InternalCustomRecoveryPassphrase? = null,
-)
+    @SerialName("content_scanner_url")
+    val contentScannerUrl: String? = null,
+) {
+    companion object {
+        fun from(elementWellKnown: ElementWellKnown) = InternalElementWellKnown(
+            registrationHelperUrl = elementWellKnown.registrationHelperUrl,
+            enforceElementPro = elementWellKnown.enforceElementPro,
+            rageshakeUrl = elementWellKnown.rageshakeUrl,
+            brandColor = elementWellKnown.brandColor,
+            notificationSound = elementWellKnown.notificationSound,
+            identityProviderAppScheme = elementWellKnown.identityProviderAppScheme,
+            contentScannerUrl = elementWellKnown.contentScannerUrl,
+        )
+    }
+}
 
 @Serializable
 data class InternalCustomRecoveryPassphrase(

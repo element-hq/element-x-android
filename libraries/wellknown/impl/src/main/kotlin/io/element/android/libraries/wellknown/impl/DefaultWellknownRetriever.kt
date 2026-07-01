@@ -14,21 +14,26 @@ import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.network.RetrofitFactory
 import io.element.android.libraries.wellknown.api.ElementWellKnown
+import io.element.android.libraries.wellknown.api.ElementWellknownStore
 import io.element.android.libraries.wellknown.api.WellknownRetriever
 import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
 import retrofit2.HttpException
 import timber.log.Timber
 import java.net.HttpURLConnection
+import java.net.URL
 
 @ContributesBinding(AppScope::class)
 class DefaultWellknownRetriever(
     private val retrofitFactory: RetrofitFactory,
+    private val elementWellknownStore: ElementWellknownStore,
 ) : WellknownRetriever {
     override suspend fun getElementWellKnown(baseUrl: String): WellknownRetrieverResult<ElementWellKnown> {
+        val domain = URL(baseUrl).host
         return buildWellknownApi(baseUrl)
             .map { wellknownApi ->
                 try {
                     val result = wellknownApi.getElementWellKnown().map()
+                    elementWellknownStore.update(domain, result)
                     WellknownRetrieverResult.Success(result)
                 } catch (e: Exception) {
                     // Is it a 404?
