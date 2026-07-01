@@ -17,6 +17,7 @@ import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -32,6 +33,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,9 +49,11 @@ import io.element.android.features.home.impl.R
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
+import kotlinx.coroutines.launch
 
 /**
  * Ref: https://www.figma.com/design/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?node-id=2191-606
@@ -67,6 +71,7 @@ fun RoomListFiltersView(
         state.eventSink(RoomListFiltersEvent.ToggleFilter(filter))
     }
 
+    val coroutineScope = rememberCoroutineScope()
     var scrollToStart by remember { mutableIntStateOf(0) }
     val lazyListState = rememberLazyListState()
     LaunchedEffect(scrollToStart) {
@@ -93,13 +98,27 @@ fun RoomListFiltersView(
         )
     }
     val previousFilters = remember { mutableStateOf(listOf<RoomListFilter>()) }
-    LazyRow(
-        contentPadding = PaddingValues(start = 8.dp, end = 16.dp),
+    Row(
         modifier = modifier.fillMaxWidth(),
-        state = lazyListState,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        if (lazyListState.canScrollBackward) {
+            IconButton(
+                onClick = { coroutineScope.launch { lazyListState.animateScrollBy(-300f) } },
+            ) {
+                Icon(
+                    imageVector = CompoundIcons.ChevronLeft(),
+                    contentDescription = stringResource(R.string.a11y_filter_carousel_scroll_left),
+                )
+            }
+        }
+        LazyRow(
+            contentPadding = PaddingValues(start = 8.dp, end = 16.dp),
+            modifier = Modifier.weight(1f),
+            state = lazyListState,
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
         item("clear_filters") {
             if (state.hasAnyFilterSelected) {
                 RoomListClearFiltersButton(
@@ -133,6 +152,17 @@ fun RoomListFiltersView(
                             scrollToStart++
                         }
                     },
+                )
+            }
+        }
+        }
+        if (lazyListState.canScrollForward) {
+            IconButton(
+                onClick = { coroutineScope.launch { lazyListState.animateScrollBy(300f) } },
+            ) {
+                Icon(
+                    imageVector = CompoundIcons.ChevronRight(),
+                    contentDescription = stringResource(R.string.a11y_filter_carousel_scroll_right),
                 )
             }
         }
