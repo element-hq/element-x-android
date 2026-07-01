@@ -21,6 +21,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItemRead
 import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
 import io.element.android.features.messages.impl.timeline.model.anAggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.virtual.aTimelineItemDaySeparatorModel
@@ -247,6 +248,23 @@ internal fun aGroupedEvents(
         id = id,
         events = events.toImmutableList(),
         aggregatedReadReceipts = events.flatMap { it.readReceiptState.receipts }.toImmutableList(),
+    )
+}
+
+internal fun aRedactedMessagesGroupedEvents(
+    id: UniqueId = UniqueId("redacted_group"),
+    count: Int = 4,
+): TimelineItem.GroupedEvents {
+    val events = (0 until count).map { index ->
+        aTimelineItemEvent(
+            eventId = EventId("\$redacted_$index"),
+            content = TimelineItemRedactedContent,
+        )
+    }
+    return TimelineItem.GroupedEvents(
+        id = id,
+        events = events.toImmutableList(),
+        aggregatedReadReceipts = persistentListOf(),
     )
 }
 

@@ -43,6 +43,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
 import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
 import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
+import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
@@ -362,6 +363,28 @@ class TimelinePresenterTest {
             awaitLastSequentialItem().also { state ->
                 assertThat(state.newEventState).isEqualTo(NewEventState.FromOther)
             }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - collapses a run of three or more redacted events into a single group`() = runTest {
+        val timeline = FakeTimeline(
+            timelineItems = flowOf(
+                (0 until 3).map { index ->
+                    MatrixTimelineItem.Event(
+                        uniqueId = UniqueId("redacted_$index"),
+                        event = anEventTimelineItem(eventId = EventId("\$R$index"), content = RedactedContent),
+                    )
+                }
+            ),
+        )
+        val presenter = createTimelinePresenter(timeline = timeline)
+        presenter.test {
+            val state = consumeItemsUntilPredicate { it.timelineItems.size == 1 }.last()
+            val group = state.timelineItems.single()
+            assertThat(group).isInstanceOf(TimelineItem.GroupedEvents::class.java)
+            assertThat((group as TimelineItem.GroupedEvents).events).hasSize(3)
             cancelAndIgnoreRemainingEvents()
         }
     }
