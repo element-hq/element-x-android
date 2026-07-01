@@ -13,6 +13,14 @@ env:
   CI_GRADLE_ARG_PROPERTIES: --stacktrace --no-daemon -Dsonar.gradle.skipCompile=true --no-configuration-cache
 
 jobs:
+  check-secret:
+    name: Check Enterprise Deploy Key
+    runs-on: ubuntu-latest
+    outputs:
+      has_key: ${{ steps.check.outputs.has_key }}
+    steps:
+      - id: check
+        run: echo "has_key=${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY != '' }}" >> $GITHUB_OUTPUT
   gplay:
     name: Create App Bundle (Gplay)
     runs-on: ubuntu-latest
@@ -66,7 +74,8 @@ jobs:
   enterprise:
     name: Create App Bundle Enterprise
     runs-on: ubuntu-latest
-    if: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY != '' }}
+    needs: check-secret
+    if: needs.check-secret.outputs.has_key == 'true'
     concurrency:
       group: ${{ format('build-release-main-enterprise-{0}', github.sha) }}
       cancel-in-progress: true
