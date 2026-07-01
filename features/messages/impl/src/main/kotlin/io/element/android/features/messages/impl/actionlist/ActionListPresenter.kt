@@ -137,12 +137,16 @@ class DefaultActionListPresenter(
     ) = launch {
         target.value = ActionListState.Target.Loading(timelineItem)
 
+        // "Select" lets the menu reach mass selection - notably for media, where a long-press
+        // opens this menu instead of entering selection directly (long-press media -> Select).
+        val isMultiSelectEnabled = featureFlagService.isFeatureEnabled(FeatureFlags.MessageMultiSelect)
         val actions = buildActions(
             timelineItem = timelineItem,
             usersEventPermissions = usersEventPermissions,
             isDeveloperModeEnabled = isDeveloperModeEnabled,
             isEventPinned = pinnedEventIds.contains(timelineItem.eventId),
             isThreadsEnabled = isThreadsEnabled,
+            isMultiSelectEnabled = isMultiSelectEnabled,
         )
 
         val verifiedUserSendFailure = userSendFailureFactory.create(timelineItem.localSendState)
@@ -176,6 +180,7 @@ class DefaultActionListPresenter(
         isDeveloperModeEnabled: Boolean,
         isEventPinned: Boolean,
         isThreadsEnabled: Boolean,
+        isMultiSelectEnabled: Boolean = false,
     ): List<TimelineItemAction> {
         val canRedact = timelineItem.isMine && usersEventPermissions.canRedactOwn || !timelineItem.isMine && usersEventPermissions.canRedactOther
         return buildSet {
@@ -193,6 +198,9 @@ class DefaultActionListPresenter(
                         add(TimelineItemAction.Reply)
                     }
                 }
+            }
+            if (isMultiSelectEnabled && timelineItem.isRemote) {
+                add(TimelineItemAction.Select)
             }
             if (timelineItem.isRemote && timelineItem.content.canBeForwarded()) {
                 add(TimelineItemAction.Forward)

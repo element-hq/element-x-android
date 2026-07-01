@@ -87,6 +87,37 @@ fun TimelineItemEventContent.canReact(): Boolean =
     }
 
 /**
+ * Whether a tap on this content opens its own media viewer (image/video/file/audio/location).
+ * For these, a long-press should surface the context menu (details, edit caption, forward,
+ * react...) rather than entering selection - tap already "consumes" the content. Mirrors the
+ * navigation in MessagesFlowNode.processEventClick.
+ */
+fun TimelineItemEventContent.opensMediaViewer(): Boolean =
+    when (this) {
+        is TimelineItemImageContent,
+        is TimelineItemVideoContent,
+        is TimelineItemFileContent,
+        is TimelineItemAudioContent,
+        is TimelineItemLocationContent -> true
+        else -> false
+    }
+
+/**
+ * Whether this event can take part in bulk (multi/drag) selection. State changes ("joined",
+ * "left room", avatar/name changes), redacted messages and call notifications are noise that
+ * should never be swept into a copy/forward/delete selection.
+ */
+fun TimelineItemEventContent.isBulkSelectable(): Boolean =
+    when (this) {
+        is TimelineItemStateContent,
+        is TimelineItemRedactedContent,
+        is TimelineItemLegacyCallInviteContent,
+        is TimelineItemRtcNotificationContent,
+        TimelineItemUnknownContent -> false
+        else -> true
+    }
+
+/**
  * Whether the event content has been edited.
  */
 fun TimelineItemEventContent.isEdited(): Boolean = when (this) {
