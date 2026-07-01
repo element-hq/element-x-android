@@ -22,8 +22,18 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -32,6 +42,8 @@ import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.pinDigitBg
+import io.element.android.libraries.ui.strings.CommonPlurals
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun PinEntryTextField(
@@ -40,15 +52,21 @@ fun PinEntryTextField(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var isFocused by remember { mutableStateOf(false) }
+    val filledCount = pinEntry.digits.count { it is PinDigit.Filled }
+    val pinFieldLabel = stringResource(CommonStrings.a11y_pin_field)
+    val digitsEnteredLabel = pluralStringResource(CommonPlurals.a11y_digits_entered, filledCount, filledCount)
     BasicTextField(
-        modifier = modifier,
+        modifier = modifier
+            .onFocusChanged { isFocused = it.isFocused }
+            .semantics { contentDescription = "$pinFieldLabel, $digitsEnteredLabel" },
         value = pinEntry.toText(),
         onValueChange = {
             onValueChange(it)
         },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
         decorationBox = {
-            PinEntryRow(pinEntry = pinEntry, isSecured = isSecured)
+            PinEntryRow(pinEntry = pinEntry, isSecured = isSecured, isFocused = isFocused)
         }
     )
 }
@@ -58,8 +76,14 @@ fun PinEntryTextField(
 private fun PinEntryRow(
     pinEntry: PinEntry,
     isSecured: Boolean,
+    isFocused: Boolean = false,
 ) {
     FlowRow(
+        modifier = Modifier.border(
+            width = 2.dp,
+            color = if (isFocused) ElementTheme.colors.borderInteractiveHovered else Color.Transparent,
+            shape = RoundedCornerShape(8.dp),
+        ),
         horizontalArrangement = Arrangement.spacedBy(8.dp, alignment = Alignment.CenterHorizontally),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
