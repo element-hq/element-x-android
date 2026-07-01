@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.GalleryMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
@@ -195,6 +196,7 @@ class DefaultRoomLatestEventFormatterTest : RobolectricTest() {
             AudioMessageType(body, null, null, MediaSource("url"), null),
             VoiceMessageType(body, null, null, MediaSource("url"), null, null),
             ImageMessageType(body, null, null, MediaSource("url"), null),
+            GalleryMessageType(body, null, emptyList()),
             StickerMessageType(body, null, null, MediaSource("url"), null),
             FileMessageType(body, null, null, MediaSource("url"), null),
             LocationMessageType(body, "geo:1,2", null, null),
@@ -227,6 +229,7 @@ class DefaultRoomLatestEventFormatterTest : RobolectricTest() {
                 is AudioMessageType -> "Audio: Shared body"
                 is VoiceMessageType -> "Voice message"
                 is ImageMessageType -> "Image: Shared body"
+                is GalleryMessageType -> "Gallery: Shared body"
                 is StickerMessageType -> "Sticker: Shared body"
                 is FileMessageType -> "File: Shared body"
                 is LocationMessageType -> "Shared location"
@@ -247,6 +250,7 @@ class DefaultRoomLatestEventFormatterTest : RobolectricTest() {
                 is TextMessageType -> false
                 is NoticeMessageType -> false
                 is OtherMessageType -> false
+                is GalleryMessageType -> true
             }
             if (shouldCreateAnnotatedString) {
                 assertWithMessage("$type doesn't produce an AnnotatedString")
@@ -264,6 +268,7 @@ class DefaultRoomLatestEventFormatterTest : RobolectricTest() {
                 is AudioMessageType -> "$expectedPrefix: Audio: Shared body"
                 is VoiceMessageType -> "$expectedPrefix: Voice message"
                 is ImageMessageType -> "$expectedPrefix: Image: Shared body"
+                is GalleryMessageType -> "$expectedPrefix: Gallery: Shared body"
                 is StickerMessageType -> "$expectedPrefix: Sticker: Shared body"
                 is FileMessageType -> "$expectedPrefix: File: Shared body"
                 is LocationMessageType -> "$expectedPrefix: Shared location"
@@ -284,6 +289,7 @@ class DefaultRoomLatestEventFormatterTest : RobolectricTest() {
                 is TextMessageType -> true
                 is NoticeMessageType -> true
                 is OtherMessageType -> true
+                is GalleryMessageType -> true
             }
             if (shouldCreateAnnotatedString) {
                 assertWithMessage("$type doesn't produce an AnnotatedString")

@@ -216,6 +216,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setTimelineView(
     onReactionLongClick: (emoji: String, TimelineItem.Event) -> Unit = EnsureNeverCalledWithTwoParams(),
     onMoreReactionsClick: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
     onReadReceiptClick: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
+    onGalleryItemClick: (TimelineItem.Event, Int) -> Unit = EnsureNeverCalledWithTwoParams(),
     forceJumpToBottomVisibility: Boolean = false,
 ) {
     setSafeContent(clearAndroidUiDispatcher = true) {
@@ -231,6 +232,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setTimelineView(
             onReactionLongClick = onReactionLongClick,
             onMoreReactionsClick = onMoreReactionsClick,
             onReadReceiptClick = onReadReceiptClick,
+            onGalleryItemClick = onGalleryItemClick,
             forceJumpToBottomVisibility = forceJumpToBottomVisibility,
         )
     }

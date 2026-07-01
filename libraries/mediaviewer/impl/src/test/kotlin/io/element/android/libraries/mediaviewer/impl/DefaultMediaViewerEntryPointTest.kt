@@ -13,14 +13,12 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bumble.appyx.core.modality.BuildContext
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.enterprise.test.FakeEnterpriseService
-import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.media.FakeMatrixMediaLoader
 import io.element.android.libraries.mediaplayer.test.FakeAudioFocus
-import io.element.android.libraries.mediaviewer.api.MediaInfo
+import io.element.android.libraries.mediaviewer.api.AvatarInfo
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.impl.datasource.createTimelineMediaGalleryDataSource
 import io.element.android.libraries.mediaviewer.impl.viewer.MediaViewerNode
@@ -128,7 +126,7 @@ class DefaultMediaViewerEntryPointTest {
             override fun forwardEvent(eventId: EventId, fromPinnedEvents: Boolean) = lambdaError()
         }
         val params = entryPoint.createParamsForAvatar(
-            filename = "fn",
+            filename = "avatar.png",
             avatarUrl = "avatarUrl",
         )
         val result = entryPoint.createNode(
@@ -139,27 +137,10 @@ class DefaultMediaViewerEntryPointTest {
         )
         assertThat(result).isInstanceOf(MediaViewerNode::class.java)
         assertThat(result.plugins).contains(
-            MediaViewerEntryPoint.Params(
-                mode = MediaViewerEntryPoint.MediaViewerMode.SingleMedia,
-                eventId = null,
-                mediaInfo = MediaInfo(
-                    filename = "fn",
-                    fileSize = null,
-                    caption = null,
-                    mimeType = MimeTypes.Images,
-                    formattedFileSize = "",
-                    fileExtension = "",
-                    senderId = UserId("@dummy:server.org"),
-                    senderName = null,
-                    senderAvatar = null,
-                    dateSent = null,
-                    dateSentFull = null,
-                    waveform = null,
-                    duration = null,
-                ),
+            MediaViewerEntryPoint.Params.Avatar(
+                avatarInfo = AvatarInfo(filename = "avatar.png"),
                 mediaSource = MediaSource(url = "avatarUrl"),
                 thumbnailSource = null,
-                canShowInfo = false,
             )
         )
         assertThat(result.plugins).contains(callback)

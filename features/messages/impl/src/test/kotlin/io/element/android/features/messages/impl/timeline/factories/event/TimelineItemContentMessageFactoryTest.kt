@@ -19,9 +19,13 @@ import androidx.core.text.inSpans
 import androidx.core.text.toSpannable
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.location.api.Location
+import io.element.android.features.messages.impl.timeline.model.event.AttachmentItem
+import io.element.android.features.messages.impl.timeline.model.event.GalleryItem
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEmoteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemGalleryContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemNoticeContent
@@ -47,6 +51,8 @@ import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
+import io.element.android.libraries.matrix.api.timeline.item.event.GalleryItemType
+import io.element.android.libraries.matrix.api.timeline.item.event.GalleryMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
@@ -765,6 +771,428 @@ class TimelineItemContentMessageFactoryTest : RobolectricTest() {
         )
 
         (result as TimelineItemTextContent).formattedBody.assertSpannedEquals(expectedSpanned)
+    }
+
+    @Test
+    fun `test create GalleryMessageType with image items returns TimelineItemGalleryContent`() = runTest {
+        val sut = createTimelineItemContentMessageFactory()
+        val result = sut.create(
+            content = createMessageContent(
+                type = GalleryMessageType(
+                    body = "Gallery body",
+                    formatted = null,
+                    items = listOf(
+                        GalleryItemType.Image(
+                            content = ImageMessageType(
+                                filename = "image.jpg",
+                                caption = null,
+                                formattedCaption = null,
+                                source = MediaSource("image_url"),
+                                info = ImageInfo(
+                                    height = 100L,
+                                    width = 200L,
+                                    mimetype = MimeTypes.Jpeg,
+                                    size = 888L,
+                                    thumbnailInfo = ThumbnailInfo(height = 10L, width = 20L, mimetype = MimeTypes.Jpeg, size = 111L),
+                                    thumbnailSource = MediaSource("thumbnail_url"),
+                                    blurhash = A_BLUR_HASH,
+                                )
+                            )
+                        )
+                    )
+                )
+            ),
+            senderId = A_USER_ID,
+            senderProfile = aProfileDetails(),
+            eventId = AN_EVENT_ID,
+        )
+        val expected = TimelineItemGalleryContent(
+            body = "Gallery body",
+            caption = "Gallery body",
+            formattedCaption = null,
+            isEdited = false,
+            items = persistentListOf(
+                GalleryItem(
+                    filename = "image.jpg",
+                    mimeType = MimeTypes.Jpeg,
+                    mediaSource = MediaSource("image_url"),
+                    type = GalleryItem.Type.Image,
+                    thumbnailSource = MediaSource("thumbnail_url"),
+                    width = 200,
+                    height = 100,
+                    thumbnailWidth = 20,
+                    thumbnailHeight = 10,
+                    blurhash = A_BLUR_HASH,
+                )
+            )
+        )
+        assertThat(result).isEqualTo(expected)
+    }
+
+    @Test
+    fun `test create GalleryMessageType with video items returns TimelineItemGalleryContent`() = runTest {
+        val sut = createTimelineItemContentMessageFactory()
+        val result = sut.create(
+            content = createMessageContent(
+                type = GalleryMessageType(
+                    body = "Gallery body",
+                    formatted = null,
+                    items = listOf(
+                        GalleryItemType.Video(
+                            content = VideoMessageType(
+                                filename = "video.mp4",
+                                caption = null,
+                                formattedCaption = null,
+                                source = MediaSource("video_url"),
+                                info = VideoInfo(
+                                    duration = 1.minutes,
+                                    height = 100L,
+                                    width = 200L,
+                                    mimetype = MimeTypes.Mp4,
+                                    size = 1234L,
+                                    thumbnailInfo = ThumbnailInfo(height = 10L, width = 20L, mimetype = MimeTypes.Jpeg, size = 111L),
+                                    thumbnailSource = MediaSource("thumbnail_url"),
+                                    blurhash = A_BLUR_HASH,
+                                )
+                            )
+                        )
+                    )
+                )
+            ),
+            senderId = A_USER_ID,
+            senderProfile = aProfileDetails(),
+            eventId = AN_EVENT_ID,
+        )
+        val expected = TimelineItemGalleryContent(
+            body = "Gallery body",
+            caption = "Gallery body",
+            formattedCaption = null,
+            isEdited = false,
+            items = persistentListOf(
+                GalleryItem(
+                    filename = "video.mp4",
+                    mimeType = MimeTypes.Mp4,
+                    mediaSource = MediaSource("video_url"),
+                    type = GalleryItem.Type.Video,
+                    thumbnailSource = MediaSource("thumbnail_url"),
+                    width = 200,
+                    height = 100,
+                    thumbnailWidth = 20,
+                    thumbnailHeight = 10,
+                    blurhash = A_BLUR_HASH,
+                    duration = 1.minutes,
+                )
+            )
+        )
+        assertThat(result).isEqualTo(expected)
+    }
+
+    @Test
+    fun `test create GalleryMessageType with audio items returns TimelineItemAttachmentsContent`() = runTest {
+        val sut = createTimelineItemContentMessageFactory()
+        val result = sut.create(
+            content = createMessageContent(
+                type = GalleryMessageType(
+                    body = "Gallery body",
+                    formatted = null,
+                    items = listOf(
+                        GalleryItemType.Audio(
+                            content = AudioMessageType(
+                                filename = "audio.mp3",
+                                caption = null,
+                                formattedCaption = null,
+                                source = MediaSource("audio_url"),
+                                info = AudioInfo(
+                                    duration = 1.minutes,
+                                    size = 123L,
+                                    mimetype = MimeTypes.Mp3,
+                                )
+                            )
+                        )
+                    )
+                )
+            ),
+            senderId = A_USER_ID,
+            senderProfile = aProfileDetails(),
+            eventId = AN_EVENT_ID,
+        )
+        val expected = TimelineItemAttachmentsContent(
+            body = "Gallery body",
+            caption = "Gallery body",
+            formattedCaption = null,
+            isEdited = false,
+            attachments = persistentListOf(
+                AttachmentItem(
+                    filename = "audio.mp3",
+                    mimeType = MimeTypes.Mp3,
+                    mediaSource = MediaSource("audio_url"),
+                    thumbnailSource = null,
+                    fileSize = 123L,
+                    formattedFileSize = "123 Bytes",
+                    fileExtension = "mp3",
+                )
+            )
+        )
+        assertThat(result).isEqualTo(expected)
+    }
+
+    @Test
+    fun `test create GalleryMessageType with file items returns TimelineItemAttachmentsContent`() = runTest {
+        val sut = createTimelineItemContentMessageFactory()
+        val result = sut.create(
+            content = createMessageContent(
+                type = GalleryMessageType(
+                    body = "Gallery body",
+                    formatted = null,
+                    items = listOf(
+                        GalleryItemType.File(
+                            content = FileMessageType(
+                                filename = "document.pdf",
+                                caption = null,
+                                formattedCaption = null,
+                                source = MediaSource("file_url"),
+                                info = FileInfo(
+                                    mimetype = MimeTypes.Pdf,
+                                    size = 456L,
+                                    thumbnailInfo = null,
+                                    thumbnailSource = null,
+                                )
+                            )
+                        )
+                    )
+                )
+            ),
+            senderId = A_USER_ID,
+            senderProfile = aProfileDetails(),
+            eventId = AN_EVENT_ID,
+        )
+        val expected = TimelineItemAttachmentsContent(
+            body = "Gallery body",
+            caption = "Gallery body",
+            formattedCaption = null,
+            isEdited = false,
+            attachments = persistentListOf(
+                AttachmentItem(
+                    filename = "document.pdf",
+                    mimeType = MimeTypes.Pdf,
+                    mediaSource = MediaSource("file_url"),
+                    thumbnailSource = null,
+                    fileSize = 456L,
+                    formattedFileSize = "456 Bytes",
+                    fileExtension = "pdf",
+                )
+            )
+        )
+        assertThat(result).isEqualTo(expected)
+    }
+
+    @Test
+    fun `test create GalleryMessageType with image items without thumbnails returns TimelineItemAttachmentsContent`() = runTest {
+        val sut = createTimelineItemContentMessageFactory()
+        val result = sut.create(
+            content = createMessageContent(
+                type = GalleryMessageType(
+                    body = "Gallery body",
+                    formatted = null,
+                    items = listOf(
+                        GalleryItemType.Image(
+                            content = ImageMessageType(
+                                filename = "image.jpg",
+                                caption = null,
+                                formattedCaption = null,
+                                source = MediaSource("image_url"),
+                                info = ImageInfo(
+                                    height = 100L,
+                                    width = 200L,
+                                    mimetype = MimeTypes.Jpeg,
+                                    size = 888L,
+                                    thumbnailInfo = null,
+                                    thumbnailSource = null,
+                                    blurhash = null,
+                                )
+                            )
+                        )
+                    )
+                )
+            ),
+            senderId = A_USER_ID,
+            senderProfile = aProfileDetails(),
+            eventId = AN_EVENT_ID,
+        )
+        val expected = TimelineItemAttachmentsContent(
+            body = "Gallery body",
+            caption = "Gallery body",
+            formattedCaption = null,
+            isEdited = false,
+            attachments = persistentListOf(
+                AttachmentItem(
+                    filename = "image.jpg",
+                    mimeType = MimeTypes.Jpeg,
+                    mediaSource = MediaSource("image_url"),
+                    thumbnailSource = null,
+                    fileSize = 888L,
+                    formattedFileSize = "888 Bytes",
+                    fileExtension = "jpg",
+                )
+            )
+        )
+        assertThat(result).isEqualTo(expected)
+    }
+
+    @Test
+    fun `test create GalleryMessageType with only Other items returns TimelineItemAttachmentsContent with empty attachments`() = runTest {
+        val sut = createTimelineItemContentMessageFactory()
+        val result = sut.create(
+            content = createMessageContent(
+                type = GalleryMessageType(
+                    body = "Gallery body",
+                    formatted = null,
+                    items = listOf(
+                        GalleryItemType.Other(itemType = "unknown_type", body = "Some body")
+                    )
+                )
+            ),
+            senderId = A_USER_ID,
+            senderProfile = aProfileDetails(),
+            eventId = AN_EVENT_ID,
+        )
+        val expected = TimelineItemAttachmentsContent(
+            body = "Gallery body",
+            caption = "Gallery body",
+            formattedCaption = null,
+            isEdited = false,
+            attachments = persistentListOf(),
+        )
+        assertThat(result).isEqualTo(expected)
+    }
+
+    @Test
+    fun `test create GalleryMessageType with mixed image and file items returns TimelineItemAttachmentsContent`() = runTest {
+        val sut = createTimelineItemContentMessageFactory()
+        val result = sut.create(
+            content = createMessageContent(
+                type = GalleryMessageType(
+                    body = "Gallery body",
+                    formatted = null,
+                    items = listOf(
+                        GalleryItemType.Image(
+                            content = ImageMessageType(
+                                filename = "image.jpg",
+                                caption = null,
+                                formattedCaption = null,
+                                source = MediaSource("image_url"),
+                                info = ImageInfo(
+                                    height = 100L,
+                                    width = 200L,
+                                    mimetype = MimeTypes.Jpeg,
+                                    size = 888L,
+                                    thumbnailInfo = ThumbnailInfo(height = 10L, width = 20L, mimetype = MimeTypes.Jpeg, size = 111L),
+                                    thumbnailSource = MediaSource("thumbnail_url"),
+                                    blurhash = null,
+                                )
+                            )
+                        ),
+                        GalleryItemType.File(
+                            content = FileMessageType(
+                                filename = "document.pdf",
+                                caption = null,
+                                formattedCaption = null,
+                                source = MediaSource("file_url"),
+                                info = FileInfo(
+                                    mimetype = MimeTypes.Pdf,
+                                    size = 456L,
+                                    thumbnailInfo = null,
+                                    thumbnailSource = null,
+                                )
+                            )
+                        )
+                    )
+                )
+            ),
+            senderId = A_USER_ID,
+            senderProfile = aProfileDetails(),
+            eventId = AN_EVENT_ID,
+        )
+        assertThat(result).isInstanceOf(TimelineItemAttachmentsContent::class.java)
+        val attachmentsContent = result as TimelineItemAttachmentsContent
+        assertThat(attachmentsContent.attachments).hasSize(2)
+    }
+
+    @Test
+    fun `test create GalleryMessageType with formatted caption returns TimelineItemGalleryContent with formatted caption`() = runTest {
+        val sut = createTimelineItemContentMessageFactory()
+        val result = sut.create(
+            content = createMessageContent(
+                type = GalleryMessageType(
+                    body = "Gallery body",
+                    formatted = FormattedBody(MessageFormat.HTML, "formatted"),
+                    items = listOf(
+                        GalleryItemType.Image(
+                            content = ImageMessageType(
+                                filename = "image.jpg",
+                                caption = null,
+                                formattedCaption = null,
+                                source = MediaSource("image_url"),
+                                info = ImageInfo(
+                                    height = 100L,
+                                    width = 200L,
+                                    mimetype = MimeTypes.Jpeg,
+                                    size = 888L,
+                                    thumbnailInfo = ThumbnailInfo(height = 10L, width = 20L, mimetype = MimeTypes.Jpeg, size = 111L),
+                                    thumbnailSource = MediaSource("thumbnail_url"),
+                                    blurhash = null,
+                                )
+                            )
+                        )
+                    )
+                )
+            ),
+            senderId = A_USER_ID,
+            senderProfile = aProfileDetails(),
+            eventId = AN_EVENT_ID,
+        )
+        assertThat(result).isInstanceOf(TimelineItemGalleryContent::class.java)
+        val galleryContent = result as TimelineItemGalleryContent
+        galleryContent.formattedCaption.assertSpannedEquals(SpannedString("formatted"))
+    }
+
+    @Test
+    fun `test create GalleryMessageType with empty body has no caption`() = runTest {
+        val sut = createTimelineItemContentMessageFactory()
+        val result = sut.create(
+            content = createMessageContent(
+                type = GalleryMessageType(
+                    body = "",
+                    formatted = null,
+                    items = listOf(
+                        GalleryItemType.Image(
+                            content = ImageMessageType(
+                                filename = "image.jpg",
+                                caption = null,
+                                formattedCaption = null,
+                                source = MediaSource("image_url"),
+                                info = ImageInfo(
+                                    height = 100L,
+                                    width = 200L,
+                                    mimetype = MimeTypes.Jpeg,
+                                    size = 888L,
+                                    thumbnailInfo = ThumbnailInfo(height = 10L, width = 20L, mimetype = MimeTypes.Jpeg, size = 111L),
+                                    thumbnailSource = MediaSource("thumbnail_url"),
+                                    blurhash = null,
+                                )
+                            )
+                        )
+                    )
+                )
+            ),
+            senderId = A_USER_ID,
+            senderProfile = aProfileDetails(),
+            eventId = AN_EVENT_ID,
+        )
+        assertThat(result).isInstanceOf(TimelineItemGalleryContent::class.java)
+        val galleryContent = result as TimelineItemGalleryContent
+        assertThat(galleryContent.caption).isNull()
+        assertThat(galleryContent.formattedCaption).isNull()
     }
 
     private fun createMessageContent(

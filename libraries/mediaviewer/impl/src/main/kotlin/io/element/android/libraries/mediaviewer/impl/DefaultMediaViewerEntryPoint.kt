@@ -13,40 +13,20 @@ import com.bumble.appyx.core.node.Node
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.core.mimetype.MimeTypes
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
-import io.element.android.libraries.mediaviewer.api.MediaInfo
+import io.element.android.libraries.mediaviewer.api.AvatarInfo
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.impl.viewer.MediaViewerNode
 
 @ContributesBinding(AppScope::class)
 class DefaultMediaViewerEntryPoint : MediaViewerEntryPoint {
     override fun createParamsForAvatar(filename: String, avatarUrl: String): MediaViewerEntryPoint.Params {
-        // We need to fake the MimeType here for the viewer to work.
-        val mimeType = MimeTypes.Images
-        return MediaViewerEntryPoint.Params(
-            mode = MediaViewerEntryPoint.MediaViewerMode.SingleMedia,
-            eventId = null,
-            mediaInfo = MediaInfo(
+        return MediaViewerEntryPoint.Params.Avatar(
+            avatarInfo = AvatarInfo(
                 filename = filename,
-                fileSize = null,
-                caption = null,
-                formattedCaption = null,
-                mimeType = mimeType,
-                formattedFileSize = "",
-                fileExtension = "",
-                senderId = UserId("@dummy:server.org"),
-                senderName = null,
-                senderAvatar = null,
-                dateSent = null,
-                dateSentFull = null,
-                waveform = null,
-                duration = null,
             ),
             mediaSource = MediaSource(url = avatarUrl),
             thumbnailSource = null,
-            canShowInfo = false,
         )
     }
 

@@ -9,10 +9,8 @@
 package io.element.android.libraries.mediaviewer.impl.datasource
 
 import dev.zacsweers.metro.Inject
-import io.element.android.libraries.androidutils.diff.DefaultDiffCacheInvalidator
-import io.element.android.libraries.androidutils.diff.DiffCacheUpdater
-import io.element.android.libraries.androidutils.diff.MutableListDiffCache
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 import kotlinx.collections.immutable.ImmutableList
@@ -32,18 +30,8 @@ class TimelineMediaItemsFactory(
 ) {
     private val _timelineItems = MutableSharedFlow<ImmutableList<MediaItem>>(replay = 1)
     private val lock = Mutex()
-    private val diffCache = MutableListDiffCache<MediaItem>()
-    private val diffCacheUpdater = DiffCacheUpdater<MatrixTimelineItem, MediaItem>(
-        diffCache = diffCache,
-        detectMoves = false,
-        cacheInvalidator = DefaultDiffCacheInvalidator()
-    ) { old, new ->
-        if (old is MatrixTimelineItem.Event && new is MatrixTimelineItem.Event) {
-            old.uniqueId == new.uniqueId
-        } else {
-            false
-        }
-    }
+    private val cache = mutableMapOf<UniqueId, List<MediaItem>>()
+    private var previousTimelineItems: List<MatrixTimelineItem> = emptyList()
 
     val timelineItems: Flow<ImmutableList<MediaItem>> = _timelineItems.distinctUntilChanged()
 
@@ -51,39 +39,41 @@ class TimelineMediaItemsFactory(
         timelineItems: List<MatrixTimelineItem>,
     ) = withContext(dispatchers.computation) {
         lock.withLock {
-            diffCacheUpdater.updateWith(timelineItems)
-            buildAndEmitTimelineItemStates(timelineItems)
-        }
-    }
-
-    private suspend fun buildAndEmitTimelineItemStates(
-        timelineItems: List<MatrixTimelineItem>,
-    ) {
-        val newTimelineItemStates = ArrayList<MediaItem>()
-        for (index in diffCache.indices().reversed()) {
-            val cacheItem = diffCache.get(index)
-            if (cacheItem == null) {
-                buildAndCacheItem(timelineItems, index)?.also { timelineItemState ->
-                    newTimelineItemStates.add(timelineItemState)
+            val newTimelineItemStates = ArrayList<MediaItem>()
+            for (index in timelineItems.indices.reversed()) {
+                when (val currentTimelineItem = timelineItems[index]) {
+                    is MatrixTimelineItem.Event -> {
+                        val cachedItems = cache[currentTimelineItem.uniqueId]
+                        val items = if (cachedItems != null && currentTimelineItem.isUnchanged(previousTimelineItems)) {
+                            cachedItems
+                        } else {
+                            eventItemFactory.create(currentTimelineItem).also { newItems ->
+                                cache[currentTimelineItem.uniqueId] = newItems
+                            }
+                        }
+                        newTimelineItemStates.addAll(items.asReversed())
+                    }
+                    is MatrixTimelineItem.Virtual -> {
+                        virtualItemFactory.create(currentTimelineItem)?.also {
+                            newTimelineItemStates.add(it)
+                        }
+                    }
+                    MatrixTimelineItem.Other -> Unit
                 }
-            } else {
-                newTimelineItemStates.add(cacheItem)
             }
+            previousTimelineItems = timelineItems
+            _timelineItems.emit(newTimelineItemStates.toImmutableList())
         }
-        _timelineItems.emit(newTimelineItemStates.toImmutableList())
     }
+}
 
-    private fun buildAndCacheItem(
-        timelineItems: List<MatrixTimelineItem>,
-        index: Int,
-    ): MediaItem? {
-        val timelineItem =
-            when (val currentTimelineItem = timelineItems[index]) {
-                is MatrixTimelineItem.Event -> eventItemFactory.create(currentTimelineItem)
-                is MatrixTimelineItem.Virtual -> virtualItemFactory.create(currentTimelineItem)
-                MatrixTimelineItem.Other -> null
-            }
-        diffCache[index] = timelineItem
-        return timelineItem
-    }
+private fun MatrixTimelineItem.Event.isUnchanged(
+    previousItems: List<MatrixTimelineItem>,
+): Boolean {
+    val previousItem = previousItems
+        .filterIsInstance<MatrixTimelineItem.Event>()
+        .find { it.uniqueId == uniqueId }
+    return previousItem != null &&
+        previousItem.event.eventId == event.eventId &&
+        previousItem.event.timestamp == event.timestamp
 }

@@ -12,6 +12,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.media.AudioDetails
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
@@ -26,6 +27,8 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.GalleryItemType
+import io.element.android.libraries.matrix.api.timeline.item.event.GalleryMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.LegacyCallInviteContent
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
@@ -57,7 +60,8 @@ import kotlinx.collections.immutable.toImmutableList
 import org.junit.Test
 import kotlin.time.Duration.Companion.seconds
 
-class DefaultEventItemFactoryTest {
+@Suppress("LargeClass")
+class EventItemFactoryTest {
     @Test
     fun `create check all null cases`() {
         val factory = createEventItemFactory()
@@ -97,7 +101,7 @@ class DefaultEventItemFactoryTest {
                     )
                 )
             )
-            assertThat(result).isNull()
+            assertThat(result).isEmpty()
         }
     }
 
@@ -122,7 +126,7 @@ class DefaultEventItemFactoryTest {
                     )
                 )
             )
-            assertThat(result).isNull()
+            assertThat(result).isEmpty()
         }
     }
 
@@ -150,7 +154,7 @@ class DefaultEventItemFactoryTest {
                 )
             )
         )
-        assertThat(result).isEqualTo(
+        assertThat(result).containsExactly(
             MediaItem.File(
                 id = A_UNIQUE_ID,
                 eventId = AN_EVENT_ID,
@@ -201,7 +205,7 @@ class DefaultEventItemFactoryTest {
                 )
             )
         )
-        assertThat(result).isEqualTo(
+        assertThat(result).containsExactly(
             MediaItem.Image(
                 id = A_UNIQUE_ID,
                 eventId = AN_EVENT_ID,
@@ -249,7 +253,7 @@ class DefaultEventItemFactoryTest {
                 )
             )
         )
-        assertThat(result).isEqualTo(
+        assertThat(result).containsExactly(
             MediaItem.Audio(
                 id = A_UNIQUE_ID,
                 eventId = AN_EVENT_ID,
@@ -301,7 +305,7 @@ class DefaultEventItemFactoryTest {
                 )
             )
         )
-        assertThat(result).isEqualTo(
+        assertThat(result).containsExactly(
             MediaItem.Video(
                 id = A_UNIQUE_ID,
                 eventId = AN_EVENT_ID,
@@ -353,7 +357,7 @@ class DefaultEventItemFactoryTest {
                 )
             )
         )
-        assertThat(result).isEqualTo(
+        assertThat(result).containsExactly(
             MediaItem.Voice(
                 id = A_UNIQUE_ID,
                 eventId = AN_EVENT_ID,
@@ -375,6 +379,321 @@ class DefaultEventItemFactoryTest {
                 mediaSource = MediaSource(""),
             )
         )
+    }
+
+    @Test
+    fun `create for GalleryMessageType with image item`() {
+        val factory = createEventItemFactory()
+        val result = factory.create(
+            MatrixTimelineItem.Event(
+                uniqueId = A_UNIQUE_ID,
+                event = anEventTimelineItem(
+                    content = aMessageContent(
+                        messageType = GalleryMessageType(
+                            body = "Gallery body",
+                            formatted = null,
+                            items = listOf(
+                                GalleryItemType.Image(
+                                    content = ImageMessageType(
+                                        filename = "image.jpg",
+                                        caption = "caption",
+                                        formattedCaption = null,
+                                        source = MediaSource("image_url"),
+                                        info = ImageInfo(
+                                            mimetype = MimeTypes.Jpeg,
+                                            size = 123L,
+                                            thumbnailInfo = null,
+                                            thumbnailSource = MediaSource("thumbnail_url"),
+                                            height = 1L,
+                                            width = 2L,
+                                            blurhash = null,
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        )
+        assertThat(result).containsExactly(
+            MediaItem.Image(
+                id = UniqueId("aUniqueId_0"),
+                eventId = AN_EVENT_ID,
+                mediaInfo = MediaInfo(
+                    mimeType = MimeTypes.Jpeg,
+                    filename = "image.jpg",
+                    fileSize = 123L,
+                    caption = "caption",
+                    formattedFileSize = "123 Bytes",
+                    fileExtension = "jpg",
+                    senderId = A_USER_ID,
+                    senderName = "alice",
+                    senderAvatar = null,
+                    dateSent = "0 Day false",
+                    dateSentFull = "0 Full false",
+                    waveform = null,
+                    duration = null,
+                ),
+                mediaSource = MediaSource("image_url"),
+                thumbnailSource = MediaSource("thumbnail_url"),
+            )
+        )
+    }
+
+    @Test
+    fun `create for GalleryMessageType with video item`() {
+        val factory = createEventItemFactory()
+        val result = factory.create(
+            MatrixTimelineItem.Event(
+                uniqueId = A_UNIQUE_ID,
+                event = anEventTimelineItem(
+                    content = aMessageContent(
+                        messageType = GalleryMessageType(
+                            body = "Gallery body",
+                            formatted = null,
+                            items = listOf(
+                                GalleryItemType.Video(
+                                    content = VideoMessageType(
+                                        filename = "video.mp4",
+                                        caption = "caption",
+                                        formattedCaption = null,
+                                        source = MediaSource("video_url"),
+                                        info = VideoInfo(
+                                            mimetype = MimeTypes.Mp4,
+                                            size = 123L,
+                                            thumbnailInfo = null,
+                                            duration = 123.seconds,
+                                            height = 1L,
+                                            width = 2L,
+                                            thumbnailSource = MediaSource("thumbnail_url"),
+                                            blurhash = null,
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        )
+        assertThat(result).containsExactly(
+            MediaItem.Video(
+                id = UniqueId("aUniqueId_0"),
+                eventId = AN_EVENT_ID,
+                mediaInfo = MediaInfo(
+                    mimeType = MimeTypes.Mp4,
+                    filename = "video.mp4",
+                    fileSize = 123L,
+                    caption = "caption",
+                    formattedFileSize = "123 Bytes",
+                    fileExtension = "mp4",
+                    senderId = A_USER_ID,
+                    senderName = "alice",
+                    senderAvatar = null,
+                    dateSent = "0 Day false",
+                    dateSentFull = "0 Full false",
+                    waveform = null,
+                    duration = "2:03",
+                ),
+                mediaSource = MediaSource("video_url"),
+                thumbnailSource = MediaSource("thumbnail_url"),
+            )
+        )
+    }
+
+    @Test
+    fun `create for GalleryMessageType with audio item`() {
+        val factory = createEventItemFactory()
+        val result = factory.create(
+            MatrixTimelineItem.Event(
+                uniqueId = A_UNIQUE_ID,
+                event = anEventTimelineItem(
+                    content = aMessageContent(
+                        messageType = GalleryMessageType(
+                            body = "Gallery body",
+                            formatted = null,
+                            items = listOf(
+                                GalleryItemType.Audio(
+                                    content = AudioMessageType(
+                                        filename = "audio.mp3",
+                                        caption = "caption",
+                                        formattedCaption = null,
+                                        source = MediaSource("audio_url"),
+                                        info = AudioInfo(
+                                            mimetype = MimeTypes.Mp3,
+                                            size = 123L,
+                                            duration = 456.seconds,
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        )
+        assertThat(result).containsExactly(
+            MediaItem.Audio(
+                id = UniqueId("aUniqueId_0"),
+                eventId = AN_EVENT_ID,
+                mediaInfo = MediaInfo(
+                    mimeType = MimeTypes.Mp3,
+                    filename = "audio.mp3",
+                    fileSize = 123L,
+                    caption = "caption",
+                    formattedFileSize = "123 Bytes",
+                    fileExtension = "mp3",
+                    senderId = A_USER_ID,
+                    senderName = "alice",
+                    senderAvatar = null,
+                    dateSent = "0 Day false",
+                    dateSentFull = "0 Full false",
+                    waveform = null,
+                    duration = null,
+                ),
+                mediaSource = MediaSource("audio_url"),
+            )
+        )
+    }
+
+    @Test
+    fun `create for GalleryMessageType with file item`() {
+        val factory = createEventItemFactory()
+        val result = factory.create(
+            MatrixTimelineItem.Event(
+                uniqueId = A_UNIQUE_ID,
+                event = anEventTimelineItem(
+                    content = aMessageContent(
+                        messageType = GalleryMessageType(
+                            body = "Gallery body",
+                            formatted = null,
+                            items = listOf(
+                                GalleryItemType.File(
+                                    content = FileMessageType(
+                                        filename = "document.pdf",
+                                        caption = "caption",
+                                        formattedCaption = null,
+                                        source = MediaSource("file_url"),
+                                        info = FileInfo(
+                                            mimetype = MimeTypes.Pdf,
+                                            size = 456L,
+                                            thumbnailInfo = null,
+                                            thumbnailSource = null,
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        )
+        assertThat(result).containsExactly(
+            MediaItem.File(
+                id = UniqueId("aUniqueId_0"),
+                eventId = AN_EVENT_ID,
+                mediaInfo = MediaInfo(
+                    mimeType = MimeTypes.Pdf,
+                    filename = "document.pdf",
+                    fileSize = 456L,
+                    caption = "caption",
+                    formattedFileSize = "456 Bytes",
+                    fileExtension = "pdf",
+                    senderId = A_USER_ID,
+                    senderName = "alice",
+                    senderAvatar = null,
+                    dateSent = "0 Day false",
+                    dateSentFull = "0 Full false",
+                    waveform = null,
+                    duration = null,
+                ),
+                mediaSource = MediaSource("file_url"),
+            )
+        )
+    }
+
+    @Test
+    fun `create for GalleryMessageType with Other item returns empty list`() {
+        val factory = createEventItemFactory()
+        val result = factory.create(
+            MatrixTimelineItem.Event(
+                uniqueId = A_UNIQUE_ID,
+                event = anEventTimelineItem(
+                    content = aMessageContent(
+                        messageType = GalleryMessageType(
+                            body = "Gallery body",
+                            formatted = null,
+                            items = listOf(
+                                GalleryItemType.Other(itemType = "unknown_type", body = "Some body")
+                            )
+                        )
+                    )
+                )
+            )
+        )
+        assertThat(result).isEmpty()
+    }
+
+    @Test
+    fun `create for GalleryMessageType with multiple items produces indexed IDs`() {
+        val factory = createEventItemFactory()
+        val result = factory.create(
+            MatrixTimelineItem.Event(
+                uniqueId = A_UNIQUE_ID,
+                event = anEventTimelineItem(
+                    content = aMessageContent(
+                        messageType = GalleryMessageType(
+                            body = "Gallery body",
+                            formatted = null,
+                            items = listOf(
+                                GalleryItemType.Image(
+                                    content = ImageMessageType(
+                                        filename = "image.jpg",
+                                        caption = null,
+                                        formattedCaption = null,
+                                        source = MediaSource("image_url"),
+                                        info = ImageInfo(
+                                            mimetype = MimeTypes.Jpeg,
+                                            size = 123L,
+                                            thumbnailInfo = null,
+                                            thumbnailSource = null,
+                                            height = 1L,
+                                            width = 2L,
+                                            blurhash = null,
+                                        )
+                                    )
+                                ),
+                                GalleryItemType.Video(
+                                    content = VideoMessageType(
+                                        filename = "video.mp4",
+                                        caption = null,
+                                        formattedCaption = null,
+                                        source = MediaSource("video_url"),
+                                        info = VideoInfo(
+                                            mimetype = MimeTypes.Mp4,
+                                            size = 456L,
+                                            thumbnailInfo = null,
+                                            duration = null,
+                                            height = 1L,
+                                            width = 2L,
+                                            thumbnailSource = null,
+                                            blurhash = null,
+                                        )
+                                    )
+                                ),
+                                GalleryItemType.Other(itemType = "unknown_type", body = "ignored"),
+                            )
+                        )
+                    )
+                )
+            )
+        )
+        assertThat(result).hasSize(2)
+        assertThat(result[0]).isInstanceOf(MediaItem.Image::class.java)
+        assertThat((result[0] as MediaItem.Image).id).isEqualTo(UniqueId("aUniqueId_0"))
+        assertThat(result[1]).isInstanceOf(MediaItem.Video::class.java)
+        assertThat((result[1] as MediaItem.Video).id).isEqualTo(UniqueId("aUniqueId_1"))
     }
 
     @Test
@@ -404,7 +723,7 @@ class DefaultEventItemFactoryTest {
                 )
             )
         )
-        assertThat(result).isEqualTo(
+        assertThat(result).containsExactly(
             MediaItem.Image(
                 id = A_UNIQUE_ID,
                 eventId = AN_EVENT_ID,

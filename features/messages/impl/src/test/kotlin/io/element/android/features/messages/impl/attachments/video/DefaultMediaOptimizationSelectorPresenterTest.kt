@@ -274,6 +274,7 @@ class DefaultMediaOptimizationSelectorPresenterTest : RobolectricTest() {
     }
 
     private fun createDefaultMediaOptimizationSelectorPresenter(
+        index: Int = 0,
         localMedia: LocalMedia = aLocalMedia(mockMediaUrl, aVideoMediaInfo()),
         maxUploadSizeProvider: MaxUploadSizeProvider = MaxUploadSizeProvider { Result.success(1_000L) },
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.SelectableMediaQuality.key to true)),
@@ -283,6 +284,7 @@ class DefaultMediaOptimizationSelectorPresenterTest : RobolectricTest() {
         sendAsFile: Boolean = false,
     ): DefaultMediaOptimizationSelectorPresenter {
         return DefaultMediaOptimizationSelectorPresenter(
+            index = index,
             localMedia = localMedia,
             sendAsFile = sendAsFile,
             maxUploadSizeProvider = maxUploadSizeProvider,

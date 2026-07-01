@@ -47,10 +47,10 @@ import io.element.android.features.messages.impl.timeline.components.reactionsum
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentWithAttachment
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
+import io.element.android.features.messages.impl.timeline.model.event.captionOrNull
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.voicemessages.composer.DefaultVoiceMessageComposerPresenter
 import io.element.android.features.roomcall.api.RoomCallState
@@ -533,7 +533,7 @@ class MessagesPresenter(
     ) {
         val composerMode = MessageComposerMode.EditCaption(
             eventOrTransactionId = targetEvent.eventOrTransactionId,
-            content = (targetEvent.content as? TimelineItemEventContentWithAttachment)?.caption.orEmpty(),
+            content = targetEvent.content.captionOrNull().orEmpty(),
         )
         composerState.eventSink(
             MessageComposerEvent.SetMode(composerMode)
@@ -606,7 +606,7 @@ class MessagesPresenter(
     }
 
     private fun handleCopyCaption(event: TimelineItem.Event) {
-        val content = (event.content as? TimelineItemEventContentWithAttachment)?.caption ?: return
+        val content = event.content.captionOrNull() ?: return
         clipboardHelper.copyPlainText(content)
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_copied_to_clipboard))

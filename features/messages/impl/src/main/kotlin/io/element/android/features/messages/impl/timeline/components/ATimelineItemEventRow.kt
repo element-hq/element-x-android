@@ -33,6 +33,7 @@ internal fun ATimelineItemEventRow(
     isLastOutgoingMessage = isLastOutgoingMessage,
     displayThreadSummaries = displayThreadSummaries,
     onEventClick = {},
+    onGalleryItemClick = {},
     onLongClick = {},
     onLinkClick = {},
     onLinkLongClick = {},

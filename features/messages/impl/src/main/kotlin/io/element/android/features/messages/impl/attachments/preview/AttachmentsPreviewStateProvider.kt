@@ -41,9 +41,9 @@ open class AttachmentsPreviewStateProvider : PreviewParameterProvider<Attachment
                 )
             ),
             anAttachmentsPreviewState(sendActionState = SendActionState.Sending.Processing(displayProgress = true)),
-            anAttachmentsPreviewState(sendActionState = SendActionState.Sending.ReadyToUpload(aMediaUploadInfo())),
-            anAttachmentsPreviewState(sendActionState = SendActionState.Sending.Uploading(aMediaUploadInfo())),
-            anAttachmentsPreviewState(sendActionState = SendActionState.Failure(RuntimeException("error"), aMediaUploadInfo())),
+            anAttachmentsPreviewState(sendActionState = SendActionState.Sending.ReadyToUpload(listOf(aMediaUploadInfo()))),
+            anAttachmentsPreviewState(sendActionState = SendActionState.Sending.Uploading(listOf(aMediaUploadInfo()))),
+            anAttachmentsPreviewState(sendActionState = SendActionState.Failure(RuntimeException("error"), listOf(aMediaUploadInfo()))),
             anAttachmentsPreviewState(
                 imageEditorState = anAttachmentImageEditorState(),
             ),
@@ -72,9 +72,12 @@ fun anAttachmentsPreviewState(
     imageEditorState: AttachmentImageEditorState? = null,
     mediaOptimizationSelectorState: MediaOptimizationSelectorState = aMediaOptimisationSelectorState(),
     displayFileTooLargeError: Boolean = false,
+    currentIndex: Int = 0,
 ) = AttachmentsPreviewState(
-    attachment = Attachment.Media(
-        localMedia = LocalMedia("file://path".toUri(), mediaInfo),
+    attachments = persistentListOf(
+        Attachment.Media(
+            localMedia = LocalMedia("file://path".toUri(), mediaInfo),
+        ),
     ),
     imageEditorState = imageEditorState,
     canEditImage = true,
@@ -84,6 +87,37 @@ fun anAttachmentsPreviewState(
     textEditorState = textEditorState,
     mediaOptimizationSelectorState = mediaOptimizationSelectorState,
     displayFileTooLargeError = displayFileTooLargeError,
+    currentIndex = currentIndex,
+    eventSink = {}
+)
+
+fun anAttachmentsPreviewGalleryState(
+    mediaInfo: MediaInfo = anImageMediaInfo(),
+    textEditorState: TextEditorState = aTextEditorStateMarkdown(),
+    sendActionState: SendActionState = SendActionState.Idle,
+    mediaOptimizationSelectorState: MediaOptimizationSelectorState = aMediaOptimisationSelectorState(),
+    currentIndex: Int = 0,
+) = AttachmentsPreviewState(
+    attachments = persistentListOf(
+        Attachment.Media(
+            localMedia = LocalMedia("file://path1".toUri(), mediaInfo),
+        ),
+        Attachment.Media(
+            localMedia = LocalMedia("file://path2".toUri(), mediaInfo),
+        ),
+        Attachment.Media(
+            localMedia = LocalMedia("file://path3".toUri(), mediaInfo),
+        ),
+    ),
+    imageEditorState = null,
+    canEditImage = false,
+    isApplyingImageEdits = false,
+    displayImageEditError = false,
+    sendActionState = sendActionState,
+    textEditorState = textEditorState,
+    mediaOptimizationSelectorState = mediaOptimizationSelectorState,
+    displayFileTooLargeError = false,
+    currentIndex = currentIndex,
     eventSink = {}
 )
 
@@ -112,6 +146,7 @@ fun aMediaOptimisationSelectorState(
     displayMediaSelectorViews: Boolean = true,
     displayVideoPresetSelectorDialog: Boolean = false,
 ) = MediaOptimizationSelectorState(
+    index = 0,
     maxUploadSize = AsyncData.Success(maxUploadSize),
     videoSizeEstimations = videoSizeEstimations,
     isImageOptimizationEnabled = isImageOptimizationEnabled,
