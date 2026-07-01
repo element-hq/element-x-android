@@ -62,6 +62,8 @@ dependencies {
     implementation(projects.features.rolesandpermissions.api)
     implementation(projects.libraries.previewutils)
     api(projects.features.home.api)
+    api(projects.features.lockscreen.api)
+    api(projects.features.lockscreen.impl)
 
     testCommonDependencies(libs, true)
     testImplementation(projects.features.announcement.test)
