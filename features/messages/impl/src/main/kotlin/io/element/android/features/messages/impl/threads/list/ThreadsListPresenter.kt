@@ -16,16 +16,20 @@ import dev.zacsweers.metro.Inject
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentFactory
 import io.element.android.features.messages.impl.utils.messagesummary.MessageSummaryFormatter
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.room.threads.ThreadListItem
 import io.element.android.libraries.matrix.api.room.threads.ThreadListPaginationStatus
+import io.element.android.libraries.matrix.api.room.threads.applyDiffs
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 @Inject
@@ -34,6 +38,7 @@ class ThreadsListPresenter(
     private val timelineItemContentFactory: TimelineItemContentFactory,
     private val messageSummaryFormatter: MessageSummaryFormatter,
     private val dateFormatter: DateFormatter,
+    private val coroutineDispatchers: CoroutineDispatchers,
 ) : Presenter<ThreadsListState> {
     @Composable
     override fun present(): ThreadsListState {
@@ -41,46 +46,14 @@ class ThreadsListPresenter(
         val threadsListService = room.threadsListService
 
         val threads by produceState(initialValue = persistentListOf(), key1 = threadsListService) {
-            threadsListService.subscribeToItemUpdates()
+            val rows = mutableListOf<ThreadListRowItem>()
+            threadsListService.subscribeToItemDiffs()
                 .onStart { threadsListService.paginate() }
-                .collect { items ->
-                    Timber.d("Received thread list update with ${items.size} items")
-                    value = items.map { item ->
-                        val rootTimelineEvent = item.rootEvent.content?.let {
-                            timelineItemContentFactory.create(
-                                itemContent = it,
-                                eventId = item.rootEvent.eventId,
-                                isEditable = false,
-                                sender = item.rootEvent.senderId,
-                                senderProfile = item.rootEvent.senderProfile,
-                            )
-                        }
-                        val rootEventText = rootTimelineEvent?.let { messageSummaryFormatter.format(it) }
-
-                        val latestTimelineEvent = item.latestEvent?.content?.let {
-                            timelineItemContentFactory.create(
-                                itemContent = it,
-                                eventId = item.latestEvent!!.eventId,
-                                isEditable = false,
-                                sender = item.latestEvent!!.senderId,
-                                senderProfile = item.latestEvent!!.senderProfile,
-                            )
-                        }
-                        val latestEventText = latestTimelineEvent?.let { messageSummaryFormatter.format(it) }
-
-                        val formattedTimestamp = dateFormatter.format(
-                            timestamp = item.latestEvent?.timestamp ?: item.rootEvent.timestamp,
-                            mode = DateFormatterMode.TimeOrDate,
-                            useRelative = true,
-                        )
-
-                        ThreadListRowItem(
-                            item = item,
-                            rootEventText = rootEventText,
-                            latestEventText = latestEventText,
-                            formattedTimestamp = formattedTimestamp,
-                        )
-                    }.toImmutableList()
+                .collect { diffs ->
+                    withContext(coroutineDispatchers.computation) {
+                        rows.applyDiffs(diffs) { it.toRowItem() }
+                    }
+                    value = rows.toImmutableList()
                 }
         }
 
@@ -118,6 +91,35 @@ class ThreadsListPresenter(
             eventSink = ::handleEvent,
         )
     }
+
+    private suspend fun ThreadListItem.toRowItem() = ThreadListRowItem(
+        item = this,
+        rootEventText = rootEvent.content?.let { content ->
+            timelineItemContentFactory.create(
+                itemContent = content,
+                eventId = rootEvent.eventId,
+                isEditable = false,
+                sender = rootEvent.senderId,
+                senderProfile = rootEvent.senderProfile,
+            ).let { messageSummaryFormatter.format(it) }
+        },
+        latestEventText = latestEvent?.let { latestEvent ->
+            latestEvent.content?.let { content ->
+                timelineItemContentFactory.create(
+                    itemContent = content,
+                    eventId = latestEvent.eventId,
+                    isEditable = false,
+                    sender = latestEvent.senderId,
+                    senderProfile = latestEvent.senderProfile,
+                ).let { messageSummaryFormatter.format(it) }
+            }
+        },
+        formattedTimestamp = dateFormatter.format(
+            timestamp = latestEvent?.timestamp ?: rootEvent.timestamp,
+            mode = DateFormatterMode.TimeOrDate,
+            useRelative = true,
+        ),
+    )
 }
 
 data class ThreadsListState(

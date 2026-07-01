@@ -25,10 +25,9 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -47,7 +46,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.preview.ROOM_NAME
 import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -67,6 +65,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageTy
 import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 
@@ -159,19 +158,17 @@ private fun ScrollHelper(
     onPaginate: () -> Unit,
 ) {
     val updatedOnPaginate by rememberUpdatedState(onPaginate)
-    val lastVisibleItemIndex by remember {
-        derivedStateOf { listState.firstVisibleItemIndex + listState.layoutInfo.visibleItemsInfo.size - 1 }
-    }
-    val shouldPaginate by remember {
-        derivedStateOf {
-            val canLoadNewItems = listState.isScrollInProgress || listState.layoutInfo.totalItemsCount == 0
-            canLoadNewItems && lastVisibleItemIndex >= listState.layoutInfo.totalItemsCount - 1
-        }
-    }
-    LaunchedEffect(shouldPaginate, lastVisibleItemIndex) {
-        if (shouldPaginate) {
-            updatedOnPaginate()
-            delay(400L)
+    LaunchedEffect(Unit) {
+        snapshotFlow {
+            val layoutInfo = listState.layoutInfo
+            val lastVisibleItemIndex = listState.firstVisibleItemIndex + layoutInfo.visibleItemsInfo.size - 1
+            val canLoadNewItems = listState.isScrollInProgress || layoutInfo.totalItemsCount == 0
+            canLoadNewItems && lastVisibleItemIndex >= layoutInfo.totalItemsCount - 1
+        }.collect { shouldPaginate ->
+            if (shouldPaginate) {
+                updatedOnPaginate()
+                delay(400L)
+            }
         }
     }
 }
@@ -319,27 +316,9 @@ private fun ThreadListItemRow(
 internal fun ThreadsListViewPreview() {
     ElementPreview {
         ThreadsListView(
-            state = ThreadsListState(
-                roomId = RoomId("!room-id:server"),
-                roomName = ROOM_NAME,
-                roomAvatarUrl = null,
-                threads = List(10) { aThreadListRowItem(threadId = ThreadId("\$thread-$it")) }.toImmutableList(),
-                isRoomTombstoned = false,
-                eventSink = {},
-            ),
+            state = aThreadsListState(),
             onThreadClick = {},
             onBackClick = {},
-        )
-    }
-}
-
-@PreviewsDayNight
-@Composable
-internal fun ThreadListItemRowPreview() {
-    ElementPreview {
-        ThreadListItemRow(
-            threadItem = aThreadListRowItem(),
-            onClick = {},
         )
     }
 }
@@ -395,4 +374,20 @@ fun aThreadListItemEvent(
     isOwn = isOwn,
     content = content,
     timestamp = timestamp,
+)
+
+fun aThreadsListState(
+    roomId: RoomId = RoomId("!room-id:server"),
+    roomName: String = "Room name",
+    roomAvatarUrl: String? = null,
+    isRoomTombstoned: Boolean = false,
+    threads: ImmutableList<ThreadListRowItem> = List(10) { aThreadListRowItem(threadId = ThreadId("\$thread-$it")) }.toImmutableList(),
+    eventSink: (ThreadsListEvents) -> Unit = {},
+) = ThreadsListState(
+    roomId = roomId,
+    roomName = roomName,
+    roomAvatarUrl = roomAvatarUrl,
+    isRoomTombstoned = isRoomTombstoned,
+    threads = threads,
+    eventSink = eventSink,
 )
