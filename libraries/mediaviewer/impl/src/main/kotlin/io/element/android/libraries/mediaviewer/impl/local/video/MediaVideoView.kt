@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.media3.common.MediaItem
@@ -60,6 +61,7 @@ import io.element.android.libraries.mediaviewer.impl.local.player.rememberExoPla
 import io.element.android.libraries.mediaviewer.impl.local.player.seekToEnsurePlaying
 import io.element.android.libraries.mediaviewer.impl.local.player.togglePlay
 import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaViewState
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import kotlinx.coroutines.delay
 import me.saket.telephoto.zoomable.zoomable
@@ -218,6 +220,7 @@ private fun ExoPlayerMediaVideoView(
                 text = "A Video Player will render here",
             )
         } else {
+            val videoDescription = stringResource(CommonStrings.a11y_video_preview)
             AndroidView(
                 modifier = Modifier
                     .fillMaxSize()
@@ -236,6 +239,7 @@ private fun ExoPlayerMediaVideoView(
                         resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
                         layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
                         useController = false
+                        contentDescription = videoDescription
                     }
                 },
                 onRelease = { playerView ->
