@@ -11,4 +11,5 @@ interface ElementWellknownStore {
     suspend fun get(domain: String): WellknownRetrieverResult<ElementWellKnown>
     suspend fun update(domain: String, wellknown: String): Result<Unit>
     suspend fun delete(domain: String): Result<Unit>
+    suspend fun update(domain: String, wellKnown: ElementWellKnown): Result<Unit>
 }
