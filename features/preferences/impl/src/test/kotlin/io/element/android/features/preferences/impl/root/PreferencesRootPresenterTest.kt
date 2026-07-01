@@ -15,6 +15,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.enterprise.api.SessionEnterpriseService
 import io.element.android.features.enterprise.test.FakeSessionEnterpriseService
 import io.element.android.features.logout.api.direct.aDirectLogoutState
+import io.element.android.features.preferences.impl.userstatus.aUserStatusState
 import io.element.android.features.preferences.impl.utils.ShowDeveloperSettingsProvider
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.libraries.core.meta.BuildType
@@ -346,5 +347,6 @@ class PreferencesRootPresenterTest {
         featureFlagService = featureFlagService,
         sessionStore = sessionStore,
         sessionEnterpriseService = sessionEnterpriseService,
+        userStatusPresenter = { aUserStatusState() },
     )
 }
