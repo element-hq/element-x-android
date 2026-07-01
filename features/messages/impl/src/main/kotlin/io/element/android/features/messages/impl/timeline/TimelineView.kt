@@ -77,7 +77,6 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -128,9 +127,6 @@ fun TimelineView(
     val context = LocalContext.current
     val toastMessage = stringResource(CommonStrings.common_copied_to_clipboard)
     val view = LocalView.current
-    // Disable reverse layout when TalkBack is enabled to avoid incorrect ordering issues seen in the current Compose UI version
-    val useReverseLayout = !isTalkbackActive()
-
     fun inReplyToClick(eventId: EventId) {
         state.eventSink(TimelineEvent.FocusOnEvent(eventId))
     }
@@ -158,7 +154,7 @@ fun TimelineView(
                     .nestedScroll(nestedScrollConnection)
                     .testTag(TestTags.timeline),
                 state = lazyListState,
-                reverseLayout = useReverseLayout,
+                reverseLayout = true,
                 contentPadding = PaddingValues(top = 64.dp, bottom = 8.dp),
             ) {
                 items(
