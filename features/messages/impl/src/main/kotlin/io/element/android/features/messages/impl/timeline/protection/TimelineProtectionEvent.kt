@@ -8,8 +8,16 @@
 
 package io.element.android.features.messages.impl.timeline.protection
 
+import androidx.compose.runtime.MutableState
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.media.MediaSource
 
 sealed interface TimelineProtectionEvent {
     data class ShowContent(val eventId: EventId?) : TimelineProtectionEvent
+    data class ValidateContent(
+        val eventId: EventId,
+        val mediaSource: MediaSource,
+        val validationState: MutableState<AsyncData<Boolean>>
+    ) : TimelineProtectionEvent
 }

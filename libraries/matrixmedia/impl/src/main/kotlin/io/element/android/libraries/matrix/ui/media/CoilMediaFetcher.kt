@@ -61,7 +61,7 @@ internal class CoilMediaFetcher(
             .onFailure {
                 Timber.e(it)
             }
-            .getOrNull()
+            .getOrThrow()
     }
 
     private suspend fun fetchContent(mediaSource: MediaSource): FetchResult? {
@@ -71,7 +71,7 @@ internal class CoilMediaFetcher(
             byteArray.asSourceResult()
         }.onFailure {
             Timber.e(it)
-        }.getOrNull()
+        }.getOrThrow()
     }
 
     private suspend fun fetchThumbnail(mediaSource: MediaSource, kind: MediaRequestData.Kind.Thumbnail): FetchResult? {
@@ -83,7 +83,7 @@ internal class CoilMediaFetcher(
             byteArray.asSourceResult()
         }.onFailure {
             Timber.e(it)
-        }.getOrNull()
+        }.getOrThrow()
     }
 
     private fun ByteArray.asSourceResult(): SourceFetchResult {

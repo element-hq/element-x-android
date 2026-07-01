@@ -22,6 +22,7 @@ import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.compound.colors.SemanticColorsLightDark
 import io.element.android.compound.theme.ForcedDarkElementTheme
+import io.element.android.features.contentscanner.api.ContentScannerService
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.viewfolder.api.TextFileViewer
 import io.element.android.libraries.architecture.callback
@@ -57,6 +58,7 @@ class MediaViewerNode(
     private val audioFocus: AudioFocus,
     private val sessionId: SessionId,
     private val enterpriseService: EnterpriseService,
+    private val contentScannerService: ContentScannerService,
 ) : Node(buildContext, plugins = plugins),
     MediaViewerNavigator {
     private val callback: MediaViewerEntryPoint.Callback = callback()
@@ -126,6 +128,7 @@ class MediaViewerNode(
             localMediaFactory = localMediaFactory,
             systemClock = systemClock,
             pagerKeysHandler = pagerKeysHandler,
+            contentScannerService = contentScannerService,
         )
     )
 

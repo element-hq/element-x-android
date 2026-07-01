@@ -44,6 +44,7 @@ import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.contentscanner.api.ContentValidationState
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.components.ATimelineItemEventRow
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayout
@@ -54,6 +55,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.protection.ProtectedView
 import io.element.android.features.messages.impl.timeline.protection.coerceRatioWhenHidingContent
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.blurhash.blurHashBackground
 import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
 import io.element.android.libraries.designsystem.modifiers.roundedBackground
@@ -79,6 +81,7 @@ fun TimelineItemVideoView(
     onLinkLongClick: (Link) -> Unit,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
+    contentValidationState: ContentValidationState = remember { ContentValidationState() },
 ) {
     val isTalkbackActive = isTalkbackActive()
     val a11yLabel = stringResource(CommonStrings.common_video)
@@ -91,57 +94,64 @@ fun TimelineItemVideoView(
         } else {
             Modifier
         }
-        TimelineItemAspectRatioBox(
-            modifier = containerModifier.blurHashBackground(content.blurHash, alpha = 0.9f),
-            aspectRatio = coerceRatioWhenHidingContent(content.aspectRatio, hideMediaContent),
-            contentAlignment = Alignment.Center,
-        ) {
-            ProtectedView(
-                hideContent = hideMediaContent,
-                onShowClick = onShowContentClick,
-            ) {
-                var isLoaded by remember { mutableStateOf(false) }
-                AsyncImage(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .then(if (isLoaded) Modifier.background(Color.White) else Modifier)
-                        .then(
-                            if (!isTalkbackActive && onContentClick != null) {
-                                Modifier
-                                    .combinedClickable(
-                                        onClick = onContentClick,
-                                        onLongClick = onLongClick,
-                                    )
-                                    .onKeyboardContextMenuAction(onLongClick)
-                            } else {
-                                Modifier
-                            }
-                        ),
-                    model = MediaRequestData(
-                        source = content.thumbnailSource,
-                        kind = MediaRequestData.Kind.Thumbnail(
-                            width = content.thumbnailWidth?.toLong() ?: MAX_THUMBNAIL_WIDTH,
-                            height = content.thumbnailHeight?.toLong() ?: MAX_THUMBNAIL_HEIGHT,
-                        )
-                    ),
-                    contentScale = ContentScale.Crop,
-                    alignment = Alignment.Center,
-                    contentDescription = description,
-                    onState = { isLoaded = it is AsyncImagePainter.State.Success },
-                )
 
-                Box(
-                    modifier = Modifier.roundedBackground(),
-                    contentAlignment = Alignment.Center,
+        val isContentBeingValidated = contentValidationState.state.value is AsyncData.Loading
+        val isDangerous = contentValidationState.isInvalid()
+        if (isContentBeingValidated || !isDangerous) {
+            TimelineItemAspectRatioBox(
+                modifier = containerModifier.blurHashBackground(content.blurHash, alpha = 0.9f),
+                aspectRatio = coerceRatioWhenHidingContent(content.aspectRatio, hideMediaContent),
+                contentAlignment = Alignment.Center,
+            ) {
+                ProtectedView(
+                    hideContent = hideMediaContent,
+                    onShowClick = onShowContentClick,
                 ) {
-                    Image(
-                        imageVector = CompoundIcons.PlaySolid(),
-                        contentDescription = stringResource(id = CommonStrings.a11y_play),
-                        colorFilter = ColorFilter.tint(Color.White),
-                        modifier = Modifier.semantics { hideFromAccessibility() }
+                    var isLoaded by remember { mutableStateOf(false) }
+                    AsyncImage(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .then(if (isLoaded) Modifier.background(Color.White) else Modifier)
+                            .then(
+                                if (!isTalkbackActive && onContentClick != null) {
+                                    Modifier
+                                        .combinedClickable(
+                                            onClick = onContentClick,
+                                            onLongClick = onLongClick,
+                                        )
+                                        .onKeyboardContextMenuAction(onLongClick)
+                                } else {
+                                    Modifier
+                                }
+                            ),
+                        model = MediaRequestData(
+                            source = content.thumbnailSource,
+                            kind = MediaRequestData.Kind.Thumbnail(
+                                width = content.thumbnailWidth?.toLong() ?: MAX_THUMBNAIL_WIDTH,
+                                height = content.thumbnailHeight?.toLong() ?: MAX_THUMBNAIL_HEIGHT,
+                            )
+                        ),
+                        contentScale = ContentScale.Crop,
+                        alignment = Alignment.Center,
+                        contentDescription = description,
+                        onState = { isLoaded = it is AsyncImagePainter.State.Success },
                     )
+
+                    Box(
+                        modifier = Modifier.roundedBackground(),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Image(
+                            imageVector = CompoundIcons.PlaySolid(),
+                            contentDescription = stringResource(id = CommonStrings.a11y_play),
+                            colorFilter = ColorFilter.tint(Color.White),
+                            modifier = Modifier.semantics { hideFromAccessibility() }
+                        )
+                    }
                 }
             }
+        } else {
+            TimelineItemDangerousMediaView()
         }
 
         if (content.showCaption) {

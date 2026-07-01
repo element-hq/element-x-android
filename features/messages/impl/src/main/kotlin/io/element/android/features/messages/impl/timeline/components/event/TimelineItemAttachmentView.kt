@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -41,19 +43,28 @@ fun TimelineItemAttachmentView(
     caption: String?,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
+    isDangerous: Boolean = false,
 ) {
     Column(
         modifier = modifier,
     ) {
-        TimelineItemAttachmentHeaderView(
-            icon = icon,
-            iconContentDescription = iconContentDescription,
-            filename = filename,
-            fileExtensionAndSize = fileExtensionAndSize,
-            hasCaption = caption != null,
-            onContentLayoutChange = onContentLayoutChange,
-        )
+        if (!isDangerous) {
+            TimelineItemAttachmentHeaderView(
+                icon = icon,
+                iconContentDescription = iconContentDescription,
+                filename = filename,
+                fileExtensionAndSize = fileExtensionAndSize,
+                hasCaption = caption != null,
+                onContentLayoutChange = onContentLayoutChange,
+            )
+        } else {
+            TimelineItemDangerousFileView()
+        }
         if (caption != null) {
+            if (isDangerous) {
+                // Add some spacing between the dangerous file view and the caption
+                Spacer(Modifier.height(8.dp))
+            }
             TimelineItemAttachmentCaptionView(
                 modifier = Modifier.padding(top = 4.dp),
                 caption = caption,

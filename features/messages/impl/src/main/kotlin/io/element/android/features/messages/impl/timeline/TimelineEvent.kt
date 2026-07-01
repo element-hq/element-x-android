@@ -8,11 +8,14 @@
 
 package io.element.android.features.messages.impl.timeline
 
+import androidx.compose.runtime.MutableState
 import io.element.android.features.messages.impl.timeline.components.MessageShieldData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.ThreadId
+import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import kotlin.time.Duration
 
@@ -59,4 +62,6 @@ sealed interface TimelineEvent {
     ) : TimelineItemPollEvent
 
     data object StopLiveLocationShare : TimelineItemEvent
+
+    data class ValidateMedia(val eventId: EventId, val mediaSource: MediaSource, val validationState: MutableState<AsyncData<Boolean>>) : TimelineItemEvent
 }

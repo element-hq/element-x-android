@@ -12,6 +12,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -49,6 +50,7 @@ import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubti
 import io.element.android.libraries.designsystem.background.OnboardingBackground
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.async.AsyncFailure
+import io.element.android.libraries.designsystem.components.blurhash.blurHashBackground
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -343,14 +345,14 @@ private fun MediaGalleryFilesList(
                         },
                     )
                 }
-                is MediaItem.DateSeparator -> DateItemView(
-                    modifier = Modifier.animateItem(),
-                    item = item
-                )
                 is MediaItem.Image,
                 is MediaItem.Video -> {
                     // Should not happen
                 }
+                is MediaItem.DateSeparator -> DateItemView(
+                    modifier = Modifier.animateItem(),
+                    item = item
+                )
                 is MediaItem.LoadingIndicator -> LoadingMoreIndicator(
                     modifier = Modifier.animateItem(),
                     item = item,
@@ -387,11 +389,24 @@ private fun MediaGalleryImageGrid(
             key = { it.id() },
             contentType = { it::class.java },
         ) { item ->
+            val blurHash = when (item) {
+                is MediaItem.Image -> item.blurHash
+                is MediaItem.Video -> item.blurHash
+                else -> null
+            }
+
+            val blurHashBackgroundModifier = if (blurHash != null) {
+                Modifier.blurHashBackground(blurHash)
+            } else {
+                Modifier
+            }
+
             when (item) {
-                is MediaItem.DateSeparator -> DateItemView(
-                    modifier = Modifier.animateItem(),
-                    item = item,
-                )
+                is MediaItem.Event if item.validationState.value.isLoading() -> {
+                    Box(modifier = blurHashBackgroundModifier.aspectRatio(1f), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator()
+                    }
+                }
                 is MediaItem.Audio -> {
                     // Should not happen
                 }
@@ -402,7 +417,7 @@ private fun MediaGalleryImageGrid(
                     // Should not happen
                 }
                 is MediaItem.Image -> ImageItemView(
-                    modifier = Modifier.animateItem(),
+                    modifier = blurHashBackgroundModifier.animateItem(),
                     image = item,
                     onClick = { onItemClick(item) },
                     onLongClick = {
@@ -410,12 +425,16 @@ private fun MediaGalleryImageGrid(
                     },
                 )
                 is MediaItem.Video -> VideoItemView(
-                    modifier = Modifier.animateItem(),
+                    modifier = blurHashBackgroundModifier.animateItem(),
                     video = item,
                     onClick = { onItemClick(item) },
                     onLongClick = {
                         eventSink(MediaGalleryEvent.OpenInfo(item))
                     },
+                )
+                is MediaItem.DateSeparator -> DateItemView(
+                    modifier = Modifier.animateItem(),
+                    item = item,
                 )
                 is MediaItem.LoadingIndicator -> LoadingMoreIndicator(
                     modifier = Modifier.animateItem(),

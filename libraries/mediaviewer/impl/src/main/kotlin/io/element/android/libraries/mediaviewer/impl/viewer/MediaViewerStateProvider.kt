@@ -275,6 +275,34 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
                     )
                 )
             },
+            anImageMediaInfo(
+                senderName = "Frank",
+                dateSent = "26 NOV, 2024",
+            ).let {
+                aMediaViewerState(
+                    listOf(
+                        aMediaViewerPageData(
+                            downloadedMedia = AsyncData.Uninitialized,
+                            validationState = AsyncData.Loading(),
+                            mediaInfo = it,
+                        )
+                    )
+                )
+            },
+            anImageMediaInfo(
+                senderName = "Frank",
+                dateSent = "26 NOV, 2024",
+            ).let {
+                aMediaViewerState(
+                    listOf(
+                        aMediaViewerPageData(
+                            downloadedMedia = AsyncData.Uninitialized,
+                            validationState = AsyncData.Success(false),
+                            mediaInfo = it,
+                        )
+                    )
+                )
+            },
         )
 }
 
@@ -293,6 +321,7 @@ fun aMediaViewerPageData(
     downloadedMedia: AsyncData<LocalMedia> = AsyncData.Uninitialized,
     mediaInfo: MediaInfo = anImageMediaInfo(),
     mediaSource: MediaSource = MediaSource(""),
+    validationState: AsyncData<Boolean> = AsyncData.Uninitialized,
 ): MediaViewerPageData.MediaViewerData = MediaViewerPageData.MediaViewerData(
     eventId = null,
     mediaInfo = mediaInfo,
@@ -300,6 +329,7 @@ fun aMediaViewerPageData(
     thumbnailSource = null,
     downloadedMedia = mutableStateOf(downloadedMedia),
     pagerKey = 0L,
+    validationState = mutableStateOf(validationState),
 )
 
 fun aMediaViewerState(

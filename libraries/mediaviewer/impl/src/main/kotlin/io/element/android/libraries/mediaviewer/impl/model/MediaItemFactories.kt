@@ -8,6 +8,8 @@
 
 package io.element.android.libraries.mediaviewer.impl.model
 
+import androidx.compose.runtime.mutableStateOf
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.media.WaveFormSamples
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
@@ -25,6 +27,7 @@ fun aMediaItemImage(
     eventId: EventId? = null,
     senderId: UserId? = null,
     mediaSourceUrl: String = "",
+    validationState: AsyncData<Boolean> = AsyncData.Uninitialized,
 ): MediaItem.Image {
     return MediaItem.Image(
         id = id,
@@ -34,6 +37,8 @@ fun aMediaItemImage(
         ),
         mediaSource = MediaSource(mediaSourceUrl),
         thumbnailSource = null,
+        blurHash = null,
+        validationState = mutableStateOf(validationState),
     )
 }
 
@@ -41,6 +46,7 @@ fun aMediaItemVideo(
     id: UniqueId = UniqueId("videoId"),
     mediaSource: MediaSource = MediaSource(""),
     duration: String? = "1:23",
+    validationState: AsyncData<Boolean> = AsyncData.Uninitialized,
 ): MediaItem.Video {
     return MediaItem.Video(
         id = id,
@@ -50,6 +56,8 @@ fun aMediaItemVideo(
         ),
         mediaSource = mediaSource,
         thumbnailSource = null,
+        blurHash = null,
+        validationState = mutableStateOf(validationState),
     )
 }
 
@@ -58,6 +66,7 @@ fun aMediaItemFile(
     eventId: EventId? = null,
     filename: String = "filename",
     caption: String? = null,
+    validationState: AsyncData<Boolean> = AsyncData.Uninitialized,
 ): MediaItem.File {
     return MediaItem.File(
         id = id,
@@ -67,6 +76,7 @@ fun aMediaItemFile(
             caption = caption,
         ),
         mediaSource = MediaSource(""),
+        validationState = mutableStateOf(validationState),
     )
 }
 
@@ -75,6 +85,7 @@ fun aMediaItemAudio(
     eventId: EventId? = null,
     filename: String = "filename",
     caption: String? = null,
+    validationState: AsyncData<Boolean> = AsyncData.Uninitialized,
 ): MediaItem.Audio {
     return MediaItem.Audio(
         id = id,
@@ -84,6 +95,7 @@ fun aMediaItemAudio(
             caption = caption,
         ),
         mediaSource = MediaSource(""),
+        validationState = mutableStateOf(validationState),
     )
 }
 
@@ -93,6 +105,7 @@ fun aMediaItemVoice(
     caption: String? = null,
     duration: String? = "1:23",
     waveform: List<Float> = WaveFormSamples.realisticWaveForm,
+    validationState: AsyncData<Boolean> = AsyncData.Uninitialized,
 ): MediaItem.Voice {
     return MediaItem.Voice(
         id = id,
@@ -104,6 +117,7 @@ fun aMediaItemVoice(
             waveForm = waveform,
         ),
         mediaSource = MediaSource(""),
+        validationState = mutableStateOf(validationState),
     )
 }
 

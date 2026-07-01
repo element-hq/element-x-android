@@ -27,6 +27,7 @@ fun TimelineItemFileView(
     content: TimelineItemFileContent,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
+    isDangerous: Boolean = false,
 ) {
     TimelineItemAttachmentView(
         icon = CompoundIcons.Attachment(),
@@ -36,6 +37,7 @@ fun TimelineItemFileView(
         caption = content.caption,
         onContentLayoutChange = onContentLayoutChange,
         modifier = modifier,
+        isDangerous = isDangerous,
     )
 }
 

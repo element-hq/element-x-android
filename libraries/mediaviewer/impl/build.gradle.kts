@@ -52,6 +52,7 @@ dependencies {
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.uiUtils)
     implementation(projects.libraries.voiceplayer.api)
+    implementation(projects.features.contentscanner.api)
     implementation(projects.services.toolbox.api)
 
     api(projects.libraries.mediaviewer.api)

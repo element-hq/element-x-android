@@ -22,6 +22,7 @@ fun TimelineItemAudioView(
     content: TimelineItemAudioContent,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
+    isDangerous: Boolean = false,
 ) {
     TimelineItemAttachmentView(
         icon = CompoundIcons.Audio(),
@@ -31,6 +32,7 @@ fun TimelineItemAudioView(
         caption = content.caption,
         onContentLayoutChange = onContentLayoutChange,
         modifier = modifier,
+        isDangerous = isDangerous,
     )
 }
 

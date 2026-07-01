@@ -8,8 +8,10 @@
 
 package io.element.android.libraries.mediaviewer.impl.datasource
 
+import androidx.compose.runtime.mutableStateOf
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.dateformatter.api.toHumanReadableDuration
@@ -111,6 +113,7 @@ class EventItemFactory(
                             duration = null,
                         ),
                         mediaSource = type.source,
+                        validationState = mutableStateOf(AsyncData.Uninitialized),
                     )
                     is FileMessageType -> MediaItem.File(
                         id = currentTimelineItem.uniqueId,
@@ -132,6 +135,7 @@ class EventItemFactory(
                             duration = null,
                         ),
                         mediaSource = type.source,
+                        validationState = mutableStateOf(AsyncData.Uninitialized),
                         // TODO We may want to add a thumbnailSource and set it to type.info?.thumbnailSource
                     )
                     is ImageMessageType -> MediaItem.Image(
@@ -155,6 +159,8 @@ class EventItemFactory(
                         ),
                         mediaSource = type.source,
                         thumbnailSource = type.info?.thumbnailSource,
+                        blurHash = type.info?.blurhash,
+                        validationState = mutableStateOf(AsyncData.Uninitialized),
                     )
                     is StickerMessageType -> MediaItem.Image(
                         id = currentTimelineItem.uniqueId,
@@ -177,6 +183,8 @@ class EventItemFactory(
                         ),
                         mediaSource = type.source,
                         thumbnailSource = type.info?.thumbnailSource,
+                        blurHash = type.info?.blurhash,
+                        validationState = mutableStateOf(AsyncData.Uninitialized),
                     )
                     is VideoMessageType -> MediaItem.Video(
                         id = currentTimelineItem.uniqueId,
@@ -199,6 +207,8 @@ class EventItemFactory(
                         ),
                         mediaSource = type.source,
                         thumbnailSource = type.info?.thumbnailSource,
+                        blurHash = type.info?.blurhash,
+                        validationState = mutableStateOf(AsyncData.Uninitialized),
                     )
                     is VoiceMessageType -> MediaItem.Voice(
                         id = currentTimelineItem.uniqueId,
@@ -220,6 +230,7 @@ class EventItemFactory(
                             duration = type.info?.duration?.inWholeMilliseconds?.toHumanReadableDuration(),
                         ),
                         mediaSource = type.source,
+                        validationState = mutableStateOf(AsyncData.Uninitialized),
                     )
                 }
             }

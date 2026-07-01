@@ -8,6 +8,7 @@
 
 package io.element.android.features.messages.impl.timeline.factories
 
+import androidx.compose.runtime.MutableState
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
@@ -18,7 +19,9 @@ import io.element.android.features.messages.impl.timeline.groups.TimelineItemGro
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.androidutils.diff.DiffCacheUpdater
 import io.element.android.libraries.androidutils.diff.MutableListDiffCache
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import kotlinx.collections.immutable.ImmutableList
@@ -58,6 +61,8 @@ class TimelineItemsFactory(
             false
         }
     }
+
+    private val contentValidationStateCache = mutableMapOf<EventId, MutableState<AsyncData<Boolean>>>()
 
     val timelineItems: Flow<ImmutableList<TimelineItem>> = _timelineItems.distinctUntilChanged()
 
@@ -110,7 +115,9 @@ class TimelineItemsFactory(
     ): TimelineItem? {
         val timelineItem =
             when (val currentTimelineItem = timelineItems[index]) {
-                is MatrixTimelineItem.Event -> eventItemFactory.create(currentTimelineItem, index, timelineItems, roomMembers, renderReadReceipts)
+                is MatrixTimelineItem.Event -> {
+                    eventItemFactory.create(currentTimelineItem, index, timelineItems, roomMembers, renderReadReceipts)
+                }
                 is MatrixTimelineItem.Virtual -> virtualItemFactory.create(currentTimelineItem)
                 MatrixTimelineItem.Other -> null
             }

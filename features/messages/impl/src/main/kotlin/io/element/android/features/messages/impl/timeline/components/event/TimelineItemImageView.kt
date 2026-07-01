@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.contentscanner.api.ContentValidationState
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.components.ATimelineItemEventRow
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayout
@@ -48,10 +49,13 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.protection.ProtectedView
 import io.element.android.features.messages.impl.timeline.protection.coerceRatioWhenHidingContent
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.blurhash.blurHashBackground
 import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
@@ -68,6 +72,7 @@ fun TimelineItemImageView(
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
     onShowContentClick: () -> Unit,
+    contentValidationState: ContentValidationState = remember { ContentValidationState() },
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -79,38 +84,58 @@ fun TimelineItemImageView(
         } else {
             Modifier
         }
-        TimelineItemAspectRatioBox(
-            modifier = containerModifier.blurHashBackground(content.blurhash, alpha = 0.9f).align(Alignment.CenterHorizontally),
-            aspectRatio = coerceRatioWhenHidingContent(content.aspectRatio, hideMediaContent),
-        ) {
-            ProtectedView(
-                hideContent = hideMediaContent,
-                onShowClick = onShowContentClick,
+
+        val isContentBeingValidated = contentValidationState.state.value is AsyncData.Loading
+        val isDangerous = contentValidationState.isInvalid()
+        if (isContentBeingValidated || !isDangerous) {
+            TimelineItemAspectRatioBox(
+                modifier = containerModifier.blurHashBackground(content.blurhash, alpha = 0.9f).align(Alignment.CenterHorizontally),
+                aspectRatio = coerceRatioWhenHidingContent(content.aspectRatio, hideMediaContent),
             ) {
-                var isLoaded by remember { mutableStateOf(false) }
-                AsyncImage(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .then(if (isLoaded) Modifier.background(Color.White) else Modifier)
-                        .then(
-                            if (!isTalkbackActive() && onContentClick != null) {
-                                Modifier
-                                    .combinedClickable(
-                                        onClick = onContentClick,
-                                        onLongClick = onLongClick,
-                                    )
-                                    .onKeyboardContextMenuAction(onLongClick)
-                            } else {
-                                Modifier
-                            }
-                        ),
-                    model = content.thumbnailMediaRequestData,
-                    contentScale = ContentScale.Crop,
-                    alignment = Alignment.Center,
-                    contentDescription = description,
-                    onState = { isLoaded = it is AsyncImagePainter.State.Success },
-                )
+                if (isContentBeingValidated) {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                } else {
+                    ProtectedView(
+                        hideContent = hideMediaContent,
+                        onShowClick = onShowContentClick,
+                    ) {
+                        var isLoaded by remember { mutableStateOf(false) }
+                        AsyncImage(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .then(if (isLoaded) Modifier.background(Color.White) else Modifier)
+                                .then(
+                                    if (!isTalkbackActive() && onContentClick != null) {
+                                        Modifier
+                                            .combinedClickable(
+                                                onClick = onContentClick,
+                                                onLongClick = onLongClick,
+                                            )
+                                            .onKeyboardContextMenuAction(onLongClick)
+                                    } else {
+                                        Modifier
+                                    }
+                                ),
+                            model = content.thumbnailMediaRequestData,
+                            contentScale = ContentScale.Crop,
+                            alignment = Alignment.Center,
+                            contentDescription = description,
+                            onState = {
+                                isLoaded = it is AsyncImagePainter.State.Success
+                                val isDangerousFile = if (it is AsyncImagePainter.State.Error) {
+                                    val cause = it.result.throwable
+                                    cause is ClientException.ContentScanner && cause.reason.isDangerous()
+                                } else {
+                                    false
+                                }
+                                contentValidationState.state.value = AsyncData.Success(!isDangerousFile)
+                            },
+                        )
+                    }
+                }
             }
+        } else {
+            TimelineItemDangerousMediaView()
         }
 
         if (content.showCaption) {

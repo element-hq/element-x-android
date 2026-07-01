@@ -11,15 +11,19 @@ package io.element.android.libraries.mediaviewer.impl.gallery
 import android.content.ActivityNotFoundException
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import io.element.android.features.contentscanner.api.ContentScannerService
+import io.element.android.features.contentscanner.api.EventContentValidationCache
 import io.element.android.libraries.androidutils.R
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -44,6 +48,12 @@ import io.element.android.libraries.mediaviewer.impl.model.mediaInfo
 import io.element.android.libraries.mediaviewer.impl.model.mediaPermissions
 import io.element.android.libraries.mediaviewer.impl.model.mediaSource
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.PersistentSet
+import kotlinx.collections.immutable.persistentSetOf
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @AssistedInject
@@ -55,6 +65,8 @@ class MediaGalleryPresenter(
     private val mediaLoader: MatrixMediaLoader,
     private val localMediaActions: LocalMediaActions,
     private val snackbarDispatcher: SnackbarDispatcher,
+    private val contentScannerService: ContentScannerService,
+    private val eventContentValidationCache: EventContentValidationCache,
 ) : Presenter<MediaGalleryState> {
     @AssistedFactory
     interface Factory {
@@ -69,11 +81,52 @@ class MediaGalleryPresenter(
         var mode by remember { mutableStateOf(MediaGalleryMode.Images) }
 
         val roomInfo by room.roomInfoFlow.collectAsState()
+        val invalidMediaEvents = remember { mutableStateOf(persistentSetOf<EventId>()) }
 
         var mediaBottomSheetState by remember { mutableStateOf<MediaBottomSheetState>(MediaBottomSheetState.Hidden) }
 
+        val invalidMediaEventsFlow = snapshotFlow { invalidMediaEvents.value }
+
         val groupedMediaItems by remember {
             mediaGalleryDataSource.groupedMediaItemsFlow()
+                .combine(invalidMediaEventsFlow) { groupedItems, invalidEventIds ->
+                    when (groupedItems) {
+                        is AsyncData.Success -> {
+                            val filteredImageAndVideoItems = groupedItems.data.imageAndVideoItems.filter { item ->
+                                if (item is MediaItem.Event) {
+                                    item.eventId()?.let { eventId -> eventId !in invalidEventIds } ?: true
+                                } else {
+                                    true
+                                }
+                            }
+                            val filteredFileItems = groupedItems.data.fileItems.filter { item ->
+                                if (item is MediaItem.Event) {
+                                    item.eventId()?.let { eventId -> eventId !in invalidEventIds } ?: true
+                                } else {
+                                    true
+                                }
+                            }
+                            AsyncData.Success(
+                                GroupedMediaItems(
+                                    imageAndVideoItems = filteredImageAndVideoItems.toImmutableList(),
+                                    fileItems = filteredFileItems.toImmutableList(),
+                                )
+                            )
+                        }
+                        else -> groupedItems
+                    }
+                }
+                .onEach { groupedItems ->
+                    if (groupedItems is AsyncData.Success) {
+                        val items = groupedItems.data.getItems(mode)
+                        items.forEach { item ->
+                            if (item is MediaItem.Event) {
+                                val eventId = item.eventId() ?: return@forEach
+                                coroutineScope.validateMedia(eventId, item, invalidMediaEvents)
+                            }
+                        }
+                    }
+                }
         }
             .collectAsState(AsyncData.Uninitialized)
 
@@ -218,6 +271,26 @@ class MediaGalleryPresenter(
                 val snackbarMessage = SnackbarMessage(mediaActionsError(it))
                 snackbarDispatcher.post(snackbarMessage)
             }
+    }
+
+    private fun CoroutineScope.validateMedia(eventId: EventId, mediaItem: MediaItem.Event, invalidMediaEventIds: MutableState<PersistentSet<EventId>>) {
+        launch {
+            val mediaSource = mediaItem.mediaSource()
+            val currentState = eventContentValidationCache[eventId]
+
+            if (currentState.state.value.isLoading() || currentState.state.value.isSuccess()) {
+                return@launch
+            }
+
+            contentScannerService.scan(eventId, mediaSource) { isValid ->
+                currentState.state.value = isValid
+
+                if (isValid.dataOrNull() == false) {
+                    val currentValue = invalidMediaEventIds.value
+                    invalidMediaEventIds.value = currentValue.adding(eventId)
+                }
+            }
+        }
     }
 
     private fun mediaActionsError(throwable: Throwable): Int {

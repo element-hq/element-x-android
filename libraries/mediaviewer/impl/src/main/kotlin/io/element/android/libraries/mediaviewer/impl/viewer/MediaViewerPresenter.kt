@@ -42,7 +42,9 @@ import io.element.android.libraries.mediaviewer.impl.model.MediaPermissions
 import io.element.android.libraries.mediaviewer.impl.model.mediaPermissions
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import io.element.android.libraries.androidutils.R as UtilsR
@@ -67,6 +69,7 @@ class MediaViewerPresenter(
     // Use a local snackbarDispatcher because this presenter is used in an Overlay Node
     private val snackbarDispatcher = SnackbarDispatcher()
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Composable
     override fun present(): MediaViewerState {
         val coroutineScope = rememberCoroutineScope()
@@ -82,7 +85,7 @@ class MediaViewerPresenter(
                     // Restore index based on the eventId after the initial items have been loaded
                     currentIndex.intValue = dataSource.findEventIndex(inputs.eventId) ?: 0
                 }
-                value = new
+                value = new.toImmutableList()
             }
         }
 
@@ -172,6 +175,7 @@ class MediaViewerPresenter(
                 is MediaViewerEvent.LoadMore -> coroutineScope.launch {
                     dataSource.loadMore(event.direction)
                 }
+                is MediaViewerEvent.ValidateMedia -> dataSource.validateMedia(event.eventId, event.mediaSource)
             }
         }
 

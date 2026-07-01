@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.rememberUpdatedState
+import io.element.android.features.contentscanner.api.ContentScannerService
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.extensions.mapCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
@@ -57,6 +58,7 @@ class MediaViewerDataSource(
     private val localMediaFactory: LocalMediaFactory,
     private val systemClock: SystemClock,
     private val pagerKeysHandler: PagerKeysHandler,
+    private val contentScannerService: ContentScannerService,
 ) {
     // List of media files that are currently being loaded
     private val mediaFiles: ConcurrentHashMap<MediaSource, MediaFile> = ConcurrentHashMap()
@@ -69,6 +71,9 @@ class MediaViewerDataSource(
 
     // Map of sourceUrl to local media state
     private val localMediaStates: MutableMap<String, MutableState<AsyncData<LocalMedia>>> =
+        mutableMapOf()
+
+    private val mediaValidationState: MutableMap<String, MutableState<AsyncData<Boolean>>> =
         mutableMapOf()
 
     fun setup(coroutineScope: CoroutineScope) {
@@ -159,6 +164,9 @@ class MediaViewerDataSource(
                     val localMedia = localMediaStates.getOrPut(sourceUrl) {
                         mutableStateOf(AsyncData.Uninitialized)
                     }
+                    val validationState = mediaValidationState.getOrPut(sourceUrl) {
+                        mutableStateOf(AsyncData.Uninitialized)
+                    }
                     add(
                         MediaViewerPageData.MediaViewerData(
                             eventId = mediaItem.eventId(),
@@ -167,6 +175,7 @@ class MediaViewerDataSource(
                             thumbnailSource = mediaItem.thumbnailSource(),
                             downloadedMedia = localMedia,
                             pagerKey = pagerKeysHandler.getKey(mediaItem),
+                            validationState = validationState,
                         )
                     )
                 }
@@ -224,6 +233,21 @@ class MediaViewerDataSource(
             .onFailure {
                 localMediaState.value = AsyncData.Failure(it)
             }
+    }
+
+    fun validateMedia(
+        eventId: EventId,
+        mediaSource: MediaSource,
+    ) {
+        val validationState = mediaValidationState[mediaSource.safeUrl] ?: return
+
+        if (validationState.value is AsyncData.Loading || validationState.value is AsyncData.Success) {
+            return
+        }
+
+        contentScannerService.scan(eventId, mediaSource) {
+            validationState.value = it
+        }
     }
 
     fun cancelLoadingMedia(data: MediaViewerPageData.MediaViewerData) {

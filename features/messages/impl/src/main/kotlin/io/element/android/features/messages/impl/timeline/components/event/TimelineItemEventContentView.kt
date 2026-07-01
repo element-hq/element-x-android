@@ -9,6 +9,9 @@
 package io.element.android.features.messages.impl.timeline.components.event
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
@@ -31,23 +34,44 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.ensureActiveLiveLocation
+import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
+import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
+import io.element.android.features.messages.impl.timeline.protection.rememberEventContentValidationState
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.voiceplayer.api.VoiceMessageState
 import io.element.android.wysiwyg.link.Link
 
 @Composable
 fun TimelineItemEventContentView(
+    eventId: EventId?,
     content: TimelineItemEventContent,
-    hideMediaContent: Boolean,
     onContentClick: (() -> Unit)?,
+    timelineProtectionState: TimelineProtectionState,
     onLongClick: (() -> Unit)?,
-    onShowContentClick: () -> Unit,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit = {},
 ) {
+    val hideMediaContent = remember(eventId, timelineProtectionState.protectionState) {
+        timelineProtectionState.hideMediaContent(eventId)
+    }
+
+    val onShowContentClick = remember(timelineProtectionState.eventSink) {
+        {
+            timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(eventId))
+        }
+    }
+
+    val contentValidationState = rememberEventContentValidationState(eventId)
+
+    if (eventId != null) {
+        ValidateMediaHelper(eventId, content, contentValidationState.state, eventSink)
+    }
+
     val presenterFactories = LocalTimelineItemPresenterFactories.current
     when (content) {
         is TimelineItemEncryptedContent -> TimelineItemEncryptedView(
@@ -79,46 +103,61 @@ fun TimelineItemEventContentView(
                 modifier = modifier
             )
         }
-        is TimelineItemImageContent -> TimelineItemImageView(
-            content = content,
-            hideMediaContent = hideMediaContent,
-            onContentClick = onContentClick,
-            onLongClick = onLongClick,
-            onShowContentClick = onShowContentClick,
-            onLinkClick = onLinkClick,
-            onLinkLongClick = onLinkLongClick,
-            onContentLayoutChange = onContentLayoutChange,
-            modifier = modifier,
-        )
-        is TimelineItemStickerContent -> TimelineItemStickerView(
-            content = content,
-            hideMediaContent = hideMediaContent,
-            onContentClick = onContentClick,
-            onLongClick = onLongClick,
-            onShowClick = onShowContentClick,
-            modifier = modifier,
-        )
-        is TimelineItemVideoContent -> TimelineItemVideoView(
-            content = content,
-            hideMediaContent = hideMediaContent,
-            onContentClick = onContentClick,
-            onLongClick = onLongClick,
-            onShowContentClick = onShowContentClick,
-            onLinkClick = onLinkClick,
-            onLinkLongClick = onLinkLongClick,
-            onContentLayoutChange = onContentLayoutChange,
-            modifier = modifier
-        )
-        is TimelineItemFileContent -> TimelineItemFileView(
-            content = content,
-            onContentLayoutChange = onContentLayoutChange,
-            modifier = modifier
-        )
-        is TimelineItemAudioContent -> TimelineItemAudioView(
-            content = content,
-            onContentLayoutChange = onContentLayoutChange,
-            modifier = modifier
-        )
+        is TimelineItemImageContent -> {
+            TimelineItemImageView(
+                content = content,
+                hideMediaContent = hideMediaContent,
+                onContentClick = onContentClick,
+                onLongClick = onLongClick,
+                onShowContentClick = onShowContentClick,
+                onLinkClick = onLinkClick,
+                onLinkLongClick = onLinkLongClick,
+                onContentLayoutChange = onContentLayoutChange,
+                contentValidationState = contentValidationState,
+                modifier = modifier,
+            )
+        }
+        is TimelineItemStickerContent -> {
+            TimelineItemStickerView(
+                content = content,
+                hideMediaContent = hideMediaContent,
+                onContentClick = onContentClick,
+                onLongClick = onLongClick,
+                onShowClick = onShowContentClick,
+                modifier = modifier,
+                isDangerousContent = contentValidationState.isInvalid(),
+            )
+        }
+        is TimelineItemVideoContent -> {
+            TimelineItemVideoView(
+                content = content,
+                hideMediaContent = hideMediaContent,
+                onContentClick = onContentClick,
+                onLongClick = onLongClick,
+                onShowContentClick = onShowContentClick,
+                onLinkClick = onLinkClick,
+                onLinkLongClick = onLinkLongClick,
+                onContentLayoutChange = onContentLayoutChange,
+                contentValidationState = contentValidationState,
+                modifier = modifier
+            )
+        }
+        is TimelineItemFileContent -> {
+            TimelineItemFileView(
+                content = content,
+                onContentLayoutChange = onContentLayoutChange,
+                modifier = modifier,
+                isDangerous = contentValidationState.isInvalid(),
+            )
+        }
+        is TimelineItemAudioContent -> {
+            TimelineItemAudioView(
+                content = content,
+                onContentLayoutChange = onContentLayoutChange,
+                modifier = modifier,
+                isDangerous = contentValidationState.isInvalid(),
+            )
+        }
         is TimelineItemLegacyCallInviteContent -> TimelineItemLegacyCallInviteView(modifier = modifier)
         is TimelineItemStateContent -> TimelineItemStateView(
             content = content,
@@ -135,9 +174,31 @@ fun TimelineItemEventContentView(
                 state = presenter.present(),
                 content = content,
                 onContentLayoutChange = onContentLayoutChange,
-                modifier = modifier
+                modifier = modifier,
+                isDangerousContent = contentValidationState.isInvalid(),
             )
         }
         is TimelineItemRtcNotificationContent -> error("This shouldn't be rendered as the content of a bubble")
+    }
+}
+
+@Composable
+private fun ValidateMediaHelper(
+    eventId: EventId,
+    content: TimelineItemEventContent,
+    contentValidationState: MutableState<AsyncData<Boolean>>,
+    eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
+) {
+    val mediaSource = when (content) {
+        is TimelineItemImageContent -> content.mediaSource
+        is TimelineItemStickerContent -> content.mediaSource
+        is TimelineItemVideoContent -> content.mediaSource
+        is TimelineItemFileContent -> content.mediaSource
+        is TimelineItemAudioContent -> content.mediaSource
+        is TimelineItemVoiceContent -> content.mediaSource
+        else -> return
+    }
+    LaunchedEffect(eventId, mediaSource) {
+        eventSink(TimelineEvent.ValidateMedia(eventId, mediaSource, contentValidationState))
     }
 }

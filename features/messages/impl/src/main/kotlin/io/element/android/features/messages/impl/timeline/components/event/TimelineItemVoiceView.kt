@@ -64,81 +64,86 @@ fun TimelineItemVoiceView(
     content: TimelineItemVoiceContent,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
+    isDangerousContent: Boolean = false,
 ) {
-    fun playPause() {
-        state.eventSink(VoiceMessageEvent.PlayPause)
-    }
-
-    val a11y = stringResource(CommonStrings.common_voice_message)
-    val a11yActionLabel = stringResource(
-        when (state.buttonType) {
-            VoiceMessageState.ButtonType.Play -> CommonStrings.a11y_play
-            VoiceMessageState.ButtonType.Pause -> CommonStrings.a11y_pause
-            VoiceMessageState.ButtonType.Downloading -> CommonStrings.common_downloading
-            VoiceMessageState.ButtonType.Retry -> CommonStrings.action_retry
-            VoiceMessageState.ButtonType.Disabled -> CommonStrings.error_unknown
+    if (isDangerousContent) {
+        TimelineItemDangerousFileView(modifier)
+    } else {
+        fun playPause() {
+            state.eventSink(VoiceMessageEvent.PlayPause)
         }
-    )
-    Row(
-        modifier = modifier
-            .clearAndSetSemantics {
-                contentDescription = a11y
-                if (state.buttonType == VoiceMessageState.ButtonType.Disabled) {
-                    disabled()
-                } else if (state.buttonType in listOf(VoiceMessageState.ButtonType.Play, VoiceMessageState.ButtonType.Pause)) {
-                    onClick(label = a11yActionLabel) {
-                        playPause()
-                        true
+
+        val a11y = stringResource(CommonStrings.common_voice_message)
+        val a11yActionLabel = stringResource(
+            when (state.buttonType) {
+                VoiceMessageState.ButtonType.Play -> CommonStrings.a11y_play
+                VoiceMessageState.ButtonType.Pause -> CommonStrings.a11y_pause
+                VoiceMessageState.ButtonType.Downloading -> CommonStrings.common_downloading
+                VoiceMessageState.ButtonType.Retry -> CommonStrings.action_retry
+                VoiceMessageState.ButtonType.Disabled -> CommonStrings.error_unknown
+            }
+        )
+        Row(
+            modifier = modifier
+                .clearAndSetSemantics {
+                    contentDescription = a11y
+                    if (state.buttonType == VoiceMessageState.ButtonType.Disabled) {
+                        disabled()
+                    } else if (state.buttonType in listOf(VoiceMessageState.ButtonType.Play, VoiceMessageState.ButtonType.Pause)) {
+                        onClick(label = a11yActionLabel) {
+                            playPause()
+                            true
+                        }
                     }
                 }
-            }
-            .onSizeChanged {
-                onContentLayoutChange(
-                    ContentAvoidingLayoutData(
-                        contentWidth = it.width,
-                        contentHeight = it.height,
+                .onSizeChanged {
+                    onContentLayoutChange(
+                        ContentAvoidingLayoutData(
+                            contentWidth = it.width,
+                            contentHeight = it.height,
+                        )
                     )
-                )
-            },
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        if (!isTalkbackActive()) {
-            when (state.buttonType) {
-                VoiceMessageState.ButtonType.Play -> PlayButton(onClick = ::playPause)
-                VoiceMessageState.ButtonType.Pause -> PauseButton(onClick = ::playPause)
-                VoiceMessageState.ButtonType.Downloading -> ProgressButton()
-                VoiceMessageState.ButtonType.Retry -> RetryButton(onClick = ::playPause)
-                VoiceMessageState.ButtonType.Disabled -> PlayButton(onClick = {}, enabled = false)
-            }
-        }
-        Spacer(Modifier.width(8.dp))
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(2.dp),
+                },
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            PlaybackSpeedButton(
-                speed = state.playbackSpeed,
-                onClick = { state.eventSink(VoiceMessageEvent.ChangePlaybackSpeed) },
-            )
-            Text(
-                text = state.time,
-                color = ElementTheme.colors.textSecondary,
-                style = ElementTheme.typography.fontBodySmMedium,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
+            if (!isTalkbackActive()) {
+                when (state.buttonType) {
+                    VoiceMessageState.ButtonType.Play -> PlayButton(onClick = ::playPause)
+                    VoiceMessageState.ButtonType.Pause -> PauseButton(onClick = ::playPause)
+                    VoiceMessageState.ButtonType.Downloading -> ProgressButton()
+                    VoiceMessageState.ButtonType.Retry -> RetryButton(onClick = ::playPause)
+                    VoiceMessageState.ButtonType.Disabled -> PlayButton(onClick = {}, enabled = false)
+                }
+            }
+            Spacer(Modifier.width(8.dp))
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(2.dp),
+            ) {
+                PlaybackSpeedButton(
+                    speed = state.playbackSpeed,
+                    onClick = { state.eventSink(VoiceMessageEvent.ChangePlaybackSpeed) },
+                )
+                Text(
+                    text = state.time,
+                    color = ElementTheme.colors.textSecondary,
+                    style = ElementTheme.typography.fontBodySmMedium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+            Spacer(Modifier.width(8.dp))
+            WaveformPlaybackView(
+                showCursor = state.showCursor,
+                playbackProgress = state.progress,
+                waveform = content.waveform,
+                modifier = Modifier
+                    .weight(1f)
+                    .height(34.dp),
+                seekEnabled = !isTalkbackActive(),
+                onSeek = { state.eventSink(VoiceMessageEvent.Seek(it)) },
             )
         }
-        Spacer(Modifier.width(8.dp))
-        WaveformPlaybackView(
-            showCursor = state.showCursor,
-            playbackProgress = state.progress,
-            waveform = content.waveform,
-            modifier = Modifier
-                .weight(1f)
-                .height(34.dp),
-            seekEnabled = !isTalkbackActive(),
-            onSeek = { state.eventSink(VoiceMessageEvent.Seek(it)) },
-        )
     }
 }
 

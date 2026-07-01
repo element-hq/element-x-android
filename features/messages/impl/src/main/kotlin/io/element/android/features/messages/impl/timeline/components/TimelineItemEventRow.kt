@@ -86,9 +86,9 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.ensureActiveLiveLocation
-import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.timeline.protection.mustBeProtected
+import io.element.android.features.messages.impl.timeline.protection.rememberEventContentValidationState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
@@ -173,11 +173,11 @@ fun TimelineItemEventRow(
         val onContentClick = onEventClick.takeUnless { event.isWholeContentClickable }
 
         TimelineItemEventContentView(
+            eventId = event.eventId,
             content = event.content,
-            hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId),
+            timelineProtectionState = timelineProtectionState,
             onContentClick = onContentClick,
             onLongClick = onLongClick,
-            onShowContentClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
             onLinkClick = onLinkClick,
             onLinkLongClick = onLinkLongClick,
             eventSink = eventSink,
@@ -464,6 +464,14 @@ private fun TimelineItemEventRowContent(
             )
         }
 
+        val isContentInvalid = rememberEventContentValidationState(event.eventId).isInvalid()
+
+        // If the event has a dangerous media content without a preview, we need to set a custom message bubble background color
+        val themeColors = ElementTheme.colors
+        val dangerousContentBubbleColor = remember(themeColors.isLight, isContentInvalid, event.content.type) {
+            themeColors.bgCriticalSubtle.takeIf { isContentInvalid && event.content.isMedia }
+        }
+
         // Message bubble
         val bubbleState = BubbleState(
             groupPosition = event.groupPosition,
@@ -490,6 +498,7 @@ private fun TimelineItemEventRowContent(
             interactionSource = interactionSource,
             onClick = onContentClick,
             onLongClick = onLongClick,
+            customBackgroundColor = dangerousContentBubbleColor,
         ) {
             MessageEventBubbleContent(
                 event = event,
@@ -819,6 +828,7 @@ private fun MessageEventBubbleContent(
         is TimelineItemPollContent -> TimestampPosition.Below
         else -> TimestampPosition.Default
     }
+
     val paddingBehaviour = when (event.content) {
         is TimelineItemImageContent -> if (event.content.showCaption) ContentPadding.CaptionedMedia else ContentPadding.Media
         is TimelineItemVideoContent -> if (event.content.showCaption) ContentPadding.CaptionedMedia else ContentPadding.Media

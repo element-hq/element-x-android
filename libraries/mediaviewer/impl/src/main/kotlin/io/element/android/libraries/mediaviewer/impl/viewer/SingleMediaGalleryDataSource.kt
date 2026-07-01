@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.mediaviewer.impl.viewer
 
+import androidx.compose.runtime.mutableStateOf
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeAudio
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeImage
@@ -54,6 +55,8 @@ fun MediaViewerEntryPoint.Params.toMediaItem() = when {
             mediaInfo = mediaInfo,
             mediaSource = mediaSource,
             thumbnailSource = thumbnailSource,
+            blurHash = null,
+            validationState = mutableStateOf(AsyncData.Uninitialized),
         )
     }
     mediaInfo.mimeType.isMimeTypeVideo() -> {
@@ -63,6 +66,8 @@ fun MediaViewerEntryPoint.Params.toMediaItem() = when {
             mediaInfo = mediaInfo,
             mediaSource = mediaSource,
             thumbnailSource = thumbnailSource,
+            blurHash = null,
+            validationState = mutableStateOf(AsyncData.Uninitialized),
         )
     }
     mediaInfo.mimeType.isMimeTypeAudio() -> {
@@ -72,6 +77,7 @@ fun MediaViewerEntryPoint.Params.toMediaItem() = when {
                 eventId = eventId,
                 mediaInfo = mediaInfo,
                 mediaSource = mediaSource,
+                validationState = mutableStateOf(AsyncData.Uninitialized),
             )
         } else {
             MediaItem.Voice(
@@ -79,6 +85,7 @@ fun MediaViewerEntryPoint.Params.toMediaItem() = when {
                 eventId = eventId,
                 mediaInfo = mediaInfo,
                 mediaSource = mediaSource,
+                validationState = mutableStateOf(AsyncData.Uninitialized),
             )
         }
     }
@@ -88,6 +95,7 @@ fun MediaViewerEntryPoint.Params.toMediaItem() = when {
             eventId = eventId,
             mediaInfo = mediaInfo,
             mediaSource = mediaSource,
+            validationState = mutableStateOf(AsyncData.Uninitialized),
         )
     }
 }

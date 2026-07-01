@@ -35,6 +35,7 @@ import io.element.android.libraries.designsystem.components.blurhash.blurHashBac
 import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -48,6 +49,7 @@ fun TimelineItemStickerView(
     onLongClick: (() -> Unit)?,
     onShowClick: () -> Unit,
     modifier: Modifier = Modifier,
+    isDangerousContent: Boolean = false,
 ) {
     val description = content.bestDescription.takeIf { it.isNotEmpty() } ?: stringResource(CommonStrings.common_image)
     Column(
@@ -64,6 +66,7 @@ fun TimelineItemStickerView(
                 onShowClick = onShowClick,
             ) {
                 var isLoaded by remember { mutableStateOf(false) }
+                var isDangerous by remember(isDangerousContent) { mutableStateOf(isDangerousContent) }
                 AsyncImage(
                     modifier = Modifier
                         .fillMaxSize()
@@ -91,7 +94,16 @@ fun TimelineItemStickerView(
                     contentScale = ContentScale.Crop,
                     alignment = Alignment.Center,
                     contentDescription = description,
-                    onState = { isLoaded = it is AsyncImagePainter.State.Success },
+                    onState = {
+                        isLoaded = it is AsyncImagePainter.State.Success
+                        val isDangerousFile = if (it is AsyncImagePainter.State.Error) {
+                            val cause = it.result.throwable
+                            cause is ClientException.ContentScanner && cause.reason.isDangerous()
+                        } else {
+                            false
+                        }
+                        isDangerous = isDangerousFile
+                    },
                 )
             }
         }

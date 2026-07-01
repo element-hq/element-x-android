@@ -8,6 +8,9 @@
 
 package io.element.android.libraries.mediaviewer.impl.model
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.media.MediaSource
@@ -27,7 +30,9 @@ sealed interface MediaItem {
         val timestamp: Long,
     ) : MediaItem
 
-    sealed interface Event : MediaItem
+    sealed interface Event : MediaItem {
+        val validationState: State<AsyncData<Boolean>>
+    }
 
     data class Image(
         val id: UniqueId,
@@ -35,6 +40,8 @@ sealed interface MediaItem {
         val mediaInfo: MediaInfo,
         val mediaSource: MediaSource,
         val thumbnailSource: MediaSource?,
+        val blurHash: String?,
+        override val validationState: MutableState<AsyncData<Boolean>>,
     ) : Event {
         val thumbnailMediaRequestData: MediaRequestData
             get() = MediaRequestData(thumbnailSource ?: mediaSource, MediaRequestData.Kind.Thumbnail(100))
@@ -46,6 +53,8 @@ sealed interface MediaItem {
         val mediaInfo: MediaInfo,
         val mediaSource: MediaSource,
         val thumbnailSource: MediaSource?,
+        val blurHash: String?,
+        override val validationState: MutableState<AsyncData<Boolean>>,
     ) : Event {
         val thumbnailMediaRequestData: MediaRequestData
             get() = MediaRequestData(thumbnailSource ?: mediaSource, MediaRequestData.Kind.Thumbnail(100))
@@ -56,6 +65,7 @@ sealed interface MediaItem {
         val eventId: EventId?,
         val mediaInfo: MediaInfo,
         val mediaSource: MediaSource,
+        override val validationState: MutableState<AsyncData<Boolean>>,
     ) : Event
 
     data class Voice(
@@ -63,6 +73,7 @@ sealed interface MediaItem {
         val eventId: EventId?,
         val mediaInfo: MediaInfo,
         val mediaSource: MediaSource,
+        override val validationState: MutableState<AsyncData<Boolean>>,
     ) : Event
 
     data class File(
@@ -70,6 +81,7 @@ sealed interface MediaItem {
         val eventId: EventId?,
         val mediaInfo: MediaInfo,
         val mediaSource: MediaSource,
+        override val validationState: MutableState<AsyncData<Boolean>>,
     ) : Event
 }
 
@@ -123,4 +135,13 @@ fun MediaItem.Event.thumbnailSource(): MediaSource? {
         is MediaItem.Audio -> null
         is MediaItem.Voice -> null
     }
+}
+
+fun MediaItem.isMediaValid(): Boolean? = when (this) {
+    is MediaItem.Image -> validationState.value.dataOrNull()
+    is MediaItem.Video -> validationState.value.dataOrNull()
+    is MediaItem.File -> validationState.value.dataOrNull()
+    is MediaItem.Audio -> validationState.value.dataOrNull()
+    is MediaItem.Voice -> validationState.value.dataOrNull()
+    else -> null
 }

@@ -15,6 +15,28 @@ import kotlin.time.Duration
 @Immutable
 sealed interface TimelineItemEventContent {
     val type: String
+
+    val isMedia: Boolean
+        get() = this is TimelineItemEventContentWithAttachment
+
+    val isMediaWithPreview: Boolean
+        get() = when (this) {
+            is TimelineItemImageContent,
+            is TimelineItemVideoContent,
+            is TimelineItemStickerContent -> true
+            else -> false
+        }
+
+    val isMediaWithoutPreview: Boolean
+        get() = when (this) {
+            is TimelineItemFileContent,
+            is TimelineItemAudioContent,
+            is TimelineItemVoiceContent -> true
+            is TimelineItemImageContent,
+            is TimelineItemVideoContent,
+            is TimelineItemStickerContent -> false
+            else -> false
+        }
 }
 
 interface TimelineItemEventMutableContent {

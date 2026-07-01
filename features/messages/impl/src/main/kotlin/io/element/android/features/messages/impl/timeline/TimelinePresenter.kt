@@ -34,6 +34,8 @@ import io.element.android.features.messages.impl.timeline.factories.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemTypingNotificationModel
+import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
+import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.features.messages.impl.userEventPermissions
 import io.element.android.features.messages.impl.voicemessages.timeline.RedactedVoiceMessageManager
@@ -63,6 +65,7 @@ import io.element.android.services.analytics.api.finishLongRunningTransaction
 import io.element.android.services.analyticsproviders.api.AnalyticsUserData
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
@@ -96,6 +99,7 @@ class TimelinePresenter(
     private val featureFlagService: FeatureFlagService,
     private val analyticsService: AnalyticsService,
     private val liveLocationShareManager: ActiveLiveLocationShareManager,
+    private val timelineProtectionPresenter: Presenter<TimelineProtectionState>,
 ) : Presenter<TimelineState> {
     private val tag = "TimelinePresenter"
 
@@ -145,6 +149,8 @@ class TimelinePresenter(
         val displayThreadSummaries by produceState(false) {
             value = featureFlagService.isFeatureEnabled(FeatureFlags.Threads)
         }
+
+        val timelineProtectionState = timelineProtectionPresenter.present()
 
         fun handleEvent(event: TimelineEvent) {
             when (event) {
@@ -233,6 +239,10 @@ class TimelinePresenter(
                         focusedEventId = event.focusedEvent,
                     )
                 }
+
+                is TimelineEvent.ValidateMedia -> {
+                    timelineProtectionState.eventSink(TimelineProtectionEvent.ValidateContent(event.eventId, event.mediaSource, event.validationState))
+                }
             }
         }
 
@@ -240,7 +250,7 @@ class TimelinePresenter(
             timelineItemsFactory.timelineItems
                 .onEach { newTimelineItems ->
                     timelineItemIndexer.process(newTimelineItems)
-                    timelineItems = newTimelineItems
+                    timelineItems = newTimelineItems.toImmutableList()
 
                     analyticsService.run {
                         finishLongRunningTransaction(DisplayFirstTimelineItems)
