@@ -49,7 +49,7 @@ class FirebaseTokenTest(
     override suspend fun run(coroutineScope: CoroutineScope) {
         currentJob?.cancel()
         delegate.start()
-        currentJob = firebaseStore.fcmTokenFlow()
+        currentJob = firebaseStore.fcmInstallationIdFlow()
             .onEach { token ->
                 if (token != null) {
                     delegate.updateState(

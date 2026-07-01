@@ -8,21 +8,21 @@ android_gradle_plugin = "9.2.1"
 kotlin = "2.4.0"
 kotlinpoet = "2.3.0"
 ksp = "2.3.9"
-firebaseAppDistribution = "5.2.1"
+firebaseAppDistribution = "5.3.0"
 
 # AndroidX
 core = "1.18.0"
 datastore = "1.2.1"
 constraintlayout = "2.2.1"
 constraintlayout_compose = "1.1.1"
-lifecycle = "2.10.0"
+lifecycle = "2.11.0"
 activity = "1.13.0"
 media3 = "1.10.1"
 camera = "1.6.1"
 work = "2.11.2"
 
 # Compose
-compose_bom = "2026.05.01"
+compose_bom = "2026.06.00"
 
 # Coroutines
 coroutines = "1.11.0"
@@ -32,7 +32,7 @@ accompanist = "0.37.3"
 
 # Test
 test_core = "1.7.0"
-roborazzi = "1.63.0"
+roborazzi = "1.64.0"
 
 # Jetbrain
 datetime = "0.8.0"
@@ -54,7 +54,7 @@ haze = "1.7.2"
 dependencyAnalysis = "3.15.0"
 
 # DI
-metro = "1.2.0"
+metro = "1.2.1"
 
 # Auto service
 autoservice = "1.1.1"
@@ -84,11 +84,11 @@ kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlin
 kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 ksp_gradle_plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:34.14.1"
+google_firebase_bom = "com.google.firebase:firebase-bom:34.15.0"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 ksp_plugin = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
-google_tink = "com.google.crypto.tink:tink-android:1.21.0"
+google_tink = "com.google.crypto.tink:tink-android:1.22.0"
 jna = "net.java.dev.jna:jna:5.19.1"
 
 # AndroidX
@@ -130,6 +130,7 @@ androidx_compose_material3 = { module = "androidx.compose.material3:material3", 
 androidx_compose_material3_windowsizeclass = { module = "androidx.compose.material3:material3-window-size-class" }
 androidx_compose_material3_adaptive = "androidx.compose.material3:material3-adaptive-android:1.0.0-alpha06"
 androidx_compose_ui = { module = "androidx.compose.ui:ui" }
+androidx_compose_ui_text = { module = "androidx.compose.ui:ui-text" }
 androidx_compose_ui_tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx_compose_ui_tooling_preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 androidx_compose_ui_test_manifest = { module = "androidx.compose.ui:ui-test-manifest" }
@@ -184,7 +185,7 @@ test_detekt_test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version
 # https://github.com/matrix-org/matrix-rust-components-kotlin/commits/main/sdk/sdk-android/src/main/kotlin/org/matrix/rustcomponents/sdk/matrix_sdk_ffi.kt
 # All new features should not be implemented in the pull request that upgrades the version, developers should
 # only fix API breaks and may add some TODOs.
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.06.11"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.06.30"
 
 # Others
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
@@ -227,10 +228,10 @@ haze_materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = 
 color_picker = "io.mhssn:colorpicker:1.0.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.47.0"
+posthog = "com.posthog:posthog-android:3.51.1"
 sentry = "io.sentry:sentry-android:8.43.2"
 # main branch can be tested replacing the version with main-SNAPSHOT
-matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.36.1"
+matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.37.0"
 
 # Emojibase
 matrix_emojibase_bindings = "io.element.android:emojibase-bindings:1.5.3"
@@ -240,7 +241,7 @@ sigpwned_emoji4j = "com.sigpwned:emoji4j-core:16.0.0"
 metro_runtime = { module = "dev.zacsweers.metro:runtime", version.ref = "metro" }
 
 # Element Call
-element_call_embedded = "io.element.android:element-call-embedded:0.20.1"
+element_call_embedded = "io.element.android:element-call-embedded:0.20.3"
 
 # Auto services
 google_autoservice = { module = "com.google.auto.service:auto-service", version.ref = "autoservice" }

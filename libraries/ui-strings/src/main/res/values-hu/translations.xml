@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_avatar">"Profilkép hozzáadása"</string>
   <string name="a11y_add_reaction">"Reakció hozzáadása: %1$s"</string>
   <string name="a11y_address">"Cím"</string>
   <string name="a11y_avatar">"Profilkép"</string>

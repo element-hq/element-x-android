@@ -45,7 +45,7 @@ class FirebaseTokenTestTest {
             firebaseStore = firebaseStore,
             firebaseTroubleshooter = FakeFirebaseTroubleshooter(
                 troubleShootResult = {
-                    firebaseStore.storeFcmToken(FAKE_TOKEN)
+                    firebaseStore.storeInstallationId(FAKE_TOKEN)
                     Result.success(Unit)
                 }
             ),
@@ -70,7 +70,7 @@ class FirebaseTokenTestTest {
             firebaseStore = firebaseStore,
             firebaseTroubleshooter = FakeFirebaseTroubleshooter(
                 troubleShootResult = {
-                    firebaseStore.storeFcmToken(FAKE_TOKEN)
+                    firebaseStore.storeInstallationId(FAKE_TOKEN)
                     Result.success(Unit)
                 }
             ),

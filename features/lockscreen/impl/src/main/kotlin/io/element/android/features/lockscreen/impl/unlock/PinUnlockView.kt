@@ -36,6 +36,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -50,6 +51,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -65,6 +67,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun PinUnlockView(
     state: PinUnlockState,
     isInAppUnlock: Boolean,
+    onCancel: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     OnLifecycleEvent { _, event ->
@@ -74,7 +77,7 @@ fun PinUnlockView(
         }
     }
     Surface(modifier) {
-        PinUnlockPage(state = state, isInAppUnlock = isInAppUnlock)
+        PinUnlockPage(state = state, isInAppUnlock = isInAppUnlock, onCancel = onCancel)
         if (state.showSignOutPrompt) {
             SignOutPrompt(
                 isCancellable = state.isSignOutPromptCancellable,
@@ -105,13 +108,14 @@ fun PinUnlockView(
 private fun PinUnlockPage(
     state: PinUnlockState,
     isInAppUnlock: Boolean,
+    onCancel: () -> Unit,
 ) {
     BoxWithConstraints {
         val commonModifier = Modifier
-                .fillMaxSize()
-                .systemBarsPadding()
-                .imePadding()
-                .padding(all = 20.dp)
+            .fillMaxSize()
+            .systemBarsPadding()
+            .imePadding()
+            .padding(all = 20.dp)
 
         val header = @Composable {
             PinUnlockHeader(
@@ -147,8 +151,8 @@ private fun PinUnlockPage(
                             state.eventSink(PinUnlockEvent.OnPinEntryChanged(it))
                         },
                         modifier = Modifier
-                                .focusRequester(focusRequester)
-                                .fillMaxWidth()
+                            .focusRequester(focusRequester)
+                            .fillMaxWidth()
                     )
                 }
             } else {
@@ -175,6 +179,15 @@ private fun PinUnlockPage(
                 footer = footer,
                 content = content,
                 modifier = commonModifier,
+            )
+        }
+        if (state.canNavigateBack) {
+            BackButton(
+                onClick = onCancel,
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .systemBarsPadding()
+                    .padding(8.dp),
             )
         }
     }
@@ -217,8 +230,8 @@ private fun PinUnlockCompactView(
         }
         BoxWithConstraints(
             modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight(),
+                .weight(1f)
+                .fillMaxHeight(),
             contentAlignment = Alignment.Center,
         ) {
             content()
@@ -239,9 +252,9 @@ private fun PinUnlockExpandedView(
         header()
         BoxWithConstraints(
             modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-                    .padding(top = 40.dp),
+                .weight(1f)
+                .fillMaxWidth()
+                .padding(top = 40.dp),
         ) {
             content()
         }
@@ -274,8 +287,8 @@ private fun PinDot(
     }
     Box(
         modifier = Modifier
-                .size(14.dp)
-                .background(backgroundColor, CircleShape)
+            .size(14.dp)
+            .background(backgroundColor, CircleShape)
     )
 }
 
@@ -373,6 +386,7 @@ internal fun PinUnlockViewInAppPreview(@PreviewParameter(PinUnlockStateProvider:
         PinUnlockView(
             state = state,
             isInAppUnlock = true,
+            onCancel = {},
         )
     }
 }
@@ -384,6 +398,19 @@ internal fun PinUnlockViewPreview(@PreviewParameter(PinUnlockStateProvider::clas
         PinUnlockView(
             state = state,
             isInAppUnlock = false,
+            onCancel = {},
+        )
+    }
+}
+
+@Composable
+@Preview(heightDp = 480, widthDp = 800)
+internal fun PinUnlockViewCompactPreview(@PreviewParameter(PinUnlockStateCompactProvider::class) state: PinUnlockState) {
+    ElementPreview {
+        PinUnlockView(
+            state = state,
+            isInAppUnlock = false,
+            onCancel = {},
         )
     }
 }

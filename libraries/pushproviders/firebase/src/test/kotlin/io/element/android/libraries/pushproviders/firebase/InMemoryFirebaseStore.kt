@@ -12,13 +12,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 class InMemoryFirebaseStore(
-    private var token: String? = null
+    private var installationId: String? = null
 ) : FirebaseStore {
-    override fun getFcmToken(): String? = token
+    override fun getInstallationId(): String? = installationId
 
-    override fun fcmTokenFlow(): Flow<String?> = flowOf(token)
+    override fun fcmInstallationIdFlow(): Flow<String?> = flowOf(installationId)
 
-    override fun storeFcmToken(token: String?) {
-        this.token = token
+    override fun storeInstallationId(installationId: String?) {
+        this.installationId = installationId
     }
 }

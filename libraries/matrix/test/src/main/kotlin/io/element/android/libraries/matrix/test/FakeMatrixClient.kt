@@ -117,6 +117,7 @@ class FakeMatrixClient(
     private val getRecentEmojisLambda: () -> Result<List<String>> = { Result.success(emptyList()) },
     private val addRecentEmojiLambda: (String) -> Result<Unit> = { Result.success(Unit) },
     private val markRoomAsFullyReadResult: (RoomId, EventId) -> Result<Unit> = { _, _ -> lambdaError() },
+    private val markAllRoomsAsReadResult: () -> Result<Unit> = { Result.success(Unit) },
     private val performDatabaseVacuumLambda: () -> Result<Unit> = { lambdaError() },
     private val getMapStyleUrlResult: () -> Result<String?> = { lambdaError() },
     private val getDatabaseSizesLambda: () -> Result<SdkStoreSizes> = { lambdaError() },
@@ -371,6 +372,10 @@ class FakeMatrixClient(
 
     override suspend fun markRoomAsFullyRead(roomId: RoomId, eventId: EventId): Result<Unit> {
         return markRoomAsFullyReadResult(roomId, eventId)
+    }
+
+    override suspend fun markAllRoomsAsRead(): Result<Unit> {
+        return markAllRoomsAsReadResult()
     }
 
     override suspend fun performDatabaseVacuum(): Result<Unit> {

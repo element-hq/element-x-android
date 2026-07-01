@@ -38,10 +38,20 @@ open class PinUnlockStateProvider : PreviewParameterProvider<PinUnlockState> {
                 showWrongPinTitle = true,
                 isUnlocked = true,
             ),
+            aPinUnlockState(canNavigateBack = true),
+        )
+}
+
+open class PinUnlockStateCompactProvider : PreviewParameterProvider<PinUnlockState> {
+    override val values: Sequence<PinUnlockState>
+        get() = sequenceOf(
+            aPinUnlockState(),
+            aPinUnlockState(canNavigateBack = true)
         )
 }
 
 fun aPinUnlockState(
+    canNavigateBack: Boolean = false,
     pinEntry: AsyncData<PinEntry> = AsyncData.Success(PinEntry.createEmpty(4)),
     remainingAttempts: AsyncData<Int> = AsyncData.Success(3),
     showWrongPinTitle: Boolean = false,
@@ -51,6 +61,7 @@ fun aPinUnlockState(
     isUnlocked: Boolean = false,
     signOutAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
 ) = PinUnlockState(
+    canNavigateBack = canNavigateBack,
     pinEntry = pinEntry,
     showWrongPinTitle = showWrongPinTitle,
     remainingAttempts = remainingAttempts,

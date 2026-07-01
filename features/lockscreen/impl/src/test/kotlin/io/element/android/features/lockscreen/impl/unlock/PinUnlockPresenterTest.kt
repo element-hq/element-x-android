@@ -147,11 +147,37 @@ class PinUnlockPresenterTest {
         }
     }
 
+    @Test
+    fun `present - forDeviceUnlock is exposed in state`() = runTest {
+        val presenter = createPinUnlockPresenter(forDeviceUnlock = true)
+        presenter.test {
+            skipItems(1)
+            awaitItem().also { state ->
+                assertThat(state.canNavigateBack).isTrue()
+            }
+        }
+    }
+
+    @Test
+    fun `present - pin entry changed event updates pin entry`() = runTest {
+        val presenter = createPinUnlockPresenter()
+        presenter.test {
+            skipItems(1)
+            awaitItem().also { state ->
+                state.eventSink(PinUnlockEvent.OnPinEntryChanged(halfCompletePin))
+            }
+            awaitItem().also { state ->
+                state.pinEntry.assertText(halfCompletePin)
+            }
+        }
+    }
+
     private fun AsyncData<PinEntry>.assertText(text: String) {
         dataOrNull()?.assertText(text)
     }
 
     private suspend fun TestScope.createPinUnlockPresenter(
+        forDeviceUnlock: Boolean = false,
         biometricAuthenticatorManager: BiometricAuthenticatorManager = FakeBiometricAuthenticatorManager(),
         callback: PinCodeManager.Callback = DefaultPinCodeManagerCallback(),
         logoutUseCase: FakeLogoutUseCase = FakeLogoutUseCase(logoutLambda = {}),
@@ -162,6 +188,7 @@ class PinUnlockPresenterTest {
             createPinCode(completePin)
         }
         return PinUnlockPresenter(
+            forDeviceUnlock = forDeviceUnlock,
             pinCodeManager = pinCodeManager,
             biometricAuthenticatorManager = biometricAuthenticatorManager,
             logoutUseCase = logoutUseCase,

@@ -43,6 +43,7 @@ fun TimelineEventTimestampView(
     event: TimelineItem.Event,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
+    isLayoutDirectionMismatched: Boolean = false,
 ) {
     val formattedTime = event.sentTime
     val hasError = event.failedToSend
@@ -77,9 +78,16 @@ fun TimelineEventTimestampView(
             else -> Modifier
         }
     }
+
+    val padding = if (!isLayoutDirectionMismatched) {
+        PaddingValues(start = TimelineEventTimestampViewDefaults.spacing)
+    } else {
+        PaddingValues(end = TimelineEventTimestampViewDefaults.spacing)
+    }
+
     Row(
         modifier = Modifier
-            .padding(PaddingValues(start = TimelineEventTimestampViewDefaults.spacing))
+            .padding(padding)
             // For a better click target, make the corners rounded
             .clip(RoundedCornerShape(8.dp))
             .then(clickableModifier)

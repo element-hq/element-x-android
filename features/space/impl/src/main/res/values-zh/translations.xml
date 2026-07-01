@@ -16,7 +16,7 @@
   <string name="screen_space_add_rooms_room_access_description">"添加房间不会影响其访问权限。如需更改访问权限，请前往“房间设置” &gt; “安全与隐私”。"</string>
   <string name="screen_space_empty_state_title">"添加第一个房间"</string>
   <string name="screen_space_menu_action_members">"查看成员"</string>
-  <string name="screen_space_remove_rooms_confirmation_content">"移除房间不会影响其访问权限。要更改访问权限，请转到“房间信息” &gt; “隐私和安全”。"</string>
+  <string name="screen_space_remove_rooms_confirmation_content">"移除房间不会影响其访问权限。要更改访问权限，请转到“房间信息”→“隐私与安全”。"</string>
   <plurals name="screen_space_remove_rooms_confirmation_title">
     <item quantity="other">"移除 %2$s 个房间，共 %1$d 个"</item>
   </plurals>

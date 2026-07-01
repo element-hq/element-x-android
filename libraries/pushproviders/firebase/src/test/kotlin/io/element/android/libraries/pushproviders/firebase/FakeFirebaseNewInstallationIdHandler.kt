@@ -10,10 +10,10 @@ package io.element.android.libraries.pushproviders.firebase
 
 import io.element.android.tests.testutils.lambda.lambdaError
 
-class FakeFirebaseTokenRotator(
-    private val rotateWithResult: () -> Result<Unit> = { lambdaError() }
-) : FirebaseTokenRotator {
-    override suspend fun rotate(): Result<Unit> {
-        return rotateWithResult()
+class FakeFirebaseNewInstallationIdHandler(
+    private val handleResult: (String) -> Unit = { lambdaError() }
+) : FirebaseNewInstallationIdHandler {
+    override suspend fun handle(installationId: String) {
+        handleResult(installationId)
     }
 }

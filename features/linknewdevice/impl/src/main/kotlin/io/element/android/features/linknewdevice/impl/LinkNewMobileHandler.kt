@@ -43,12 +43,15 @@ class LinkNewMobileHandler(
     val stepFlow: StateFlow<LinkMobileStep>
         get() = linkMobileStepFlow.asStateFlow()
 
-    fun createAndStartNewHandler() {
+    fun createAndStartNewHandler(forRotating: Boolean = false) {
         Timber.tag(loggerTag.value).d("createAndStartNewHandler()")
         currentJob?.cancel()
         handler = matrixClient.createLinkMobileHandler().getOrNull()
         handler?.let { h ->
             currentJob = sessionScope.launch {
+                if (!forRotating) {
+                    linkMobileStepFlow.emit(LinkMobileStep.CreatingQrCode)
+                }
                 h.linkMobileStep
                     .onEach {
                         linkMobileStepFlow.emit(it)
@@ -68,7 +71,7 @@ class LinkNewMobileHandler(
     }
 
     fun rotateQrCode() {
-        createAndStartNewHandler()
+        createAndStartNewHandler(forRotating = true)
     }
 
     fun onTooManyRotation() {

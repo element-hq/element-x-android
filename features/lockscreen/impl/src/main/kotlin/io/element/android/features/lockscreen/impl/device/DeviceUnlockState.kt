@@ -5,8 +5,9 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.matrix.impl.certificates
+package io.element.android.features.lockscreen.impl.device
 
-interface UserCertificatesProvider {
-    fun provides(): List<ByteArray>
-}
+data class DeviceUnlockState(
+    val showApplicationPinCode: Boolean,
+    val eventSink: (DeviceUnlockEvent) -> Unit,
+)

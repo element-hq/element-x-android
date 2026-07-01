@@ -11,7 +11,7 @@ jobs:
     # Skip in forks, it doesn't work even with the fallback token
     if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
       - name: Add SSH private keys for submodule repositories
@@ -24,7 +24,7 @@ jobs:
       - run: |
           npm install --save-dev @babel/plugin-transform-flow-strip-types
       - name: Danger
-        uses: danger/danger-js@67ed2c1f42fd2fc198cc3c14b43c8f83351f4fe9 # 13.0.5
+        uses: danger/danger-js@58355dc2b274a87699c8b7deac01baba16d6f061 # 13.0.8
         with:
           args: "--dangerfile ./tools/danger/dangerfile.js"
         env:

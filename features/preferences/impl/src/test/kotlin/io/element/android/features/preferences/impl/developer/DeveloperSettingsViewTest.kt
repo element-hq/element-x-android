@@ -71,7 +71,7 @@ class DeveloperSettingsViewTest : RobolectricTest() {
         }
     }
 
-    @Config(qualifiers = "h2200dp")
+    @Config(qualifiers = "h2400dp")
     @Test
     fun `clicking on clear cache emits the expected event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<DeveloperSettingsEvents>()

@@ -266,7 +266,6 @@ class VectorUnifiedPushMessagingReceiverTest : RobolectricTest() {
         return VectorUnifiedPushMessagingReceiver().apply {
             this.pushParser = unifiedPushParser
             this.pushHandler = pushHandler
-            this.guardServiceStarter = NoopGuardServiceStarter()
             this.unifiedPushStore = unifiedPushStore
             this.unifiedPushGatewayResolver = unifiedPushGatewayResolver
             this.unifiedPushGatewayUrlResolver = unifiedPushGatewayUrlResolver

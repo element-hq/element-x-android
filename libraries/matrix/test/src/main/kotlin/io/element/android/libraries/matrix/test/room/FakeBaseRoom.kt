@@ -186,10 +186,6 @@ class FakeBaseRoom(
         membersStateFlow.value = state
     }
 
-    override suspend fun clearEventCacheStorage(): Result<Unit> {
-        return Result.success(Unit)
-    }
-
     override suspend fun reportRoom(reason: String?) = reportRoomResult(reason)
 
     override suspend fun declineCall(notificationEventId: EventId): Result<Unit> {

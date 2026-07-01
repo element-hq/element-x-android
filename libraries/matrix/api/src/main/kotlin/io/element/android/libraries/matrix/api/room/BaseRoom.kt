@@ -158,11 +158,6 @@ interface BaseRoom : Closeable {
     suspend fun setUnreadFlag(isUnread: Boolean): Result<Unit>
 
     /**
-     * Clear the event cache storage for the current room.
-     */
-    suspend fun clearEventCacheStorage(): Result<Unit>
-
-    /**
      * Get the permalink for the room.
      */
     suspend fun getPermalink(): Result<String>

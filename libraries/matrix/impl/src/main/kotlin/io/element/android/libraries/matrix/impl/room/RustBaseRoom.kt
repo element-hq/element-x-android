@@ -200,12 +200,6 @@ class RustBaseRoom(
         }
     }
 
-    override suspend fun clearEventCacheStorage(): Result<Unit> = withContext(roomDispatcher) {
-        runCatchingExceptions {
-            innerRoom.clearEventCacheStorage()
-        }
-    }
-
     override suspend fun setIsFavorite(isFavorite: Boolean): Result<Unit> = withContext(roomDispatcher) {
         runCatchingExceptions {
             innerRoom.setIsFavourite(isFavorite, null)
