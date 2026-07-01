@@ -14,6 +14,8 @@ import io.element.android.features.home.impl.spaces.HomeSpacesState
 import io.element.android.features.home.impl.spaces.aHomeSpacesState
 import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
+import io.element.android.features.recentcalls.impl.recentcalls.RecentCallsState
+import io.element.android.features.recentcalls.impl.recentcalls.aRecentCallsState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.indicator.api.IndicatorService
@@ -145,6 +147,17 @@ class HomePresenterTest {
             assertThat(finalState.currentHomeNavigationBarItem).isEqualTo(HomeNavigationBarItem.Spaces)
         }
     }
+
+    @Test
+    fun `present - can select Calls tab`() = runTest {
+        val presenter = createHomePresenter()
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(HomeEvent.SelectHomeNavigationBarItem(HomeNavigationBarItem.Calls))
+            val finalState = awaitItem()
+            assertThat(finalState.currentHomeNavigationBarItem).isEqualTo(HomeNavigationBarItem.Calls)
+        }
+    }
 }
 
 internal fun createHomePresenter(
@@ -154,6 +167,7 @@ internal fun createHomePresenter(
     rageshakeFeatureAvailability: RageshakeFeatureAvailability = RageshakeFeatureAvailability { flowOf(false) },
     indicatorService: IndicatorService = FakeIndicatorService(),
     homeSpacesPresenter: Presenter<HomeSpacesState> = Presenter { aHomeSpacesState() },
+    recentCallsPresenter: Presenter<RecentCallsState> = Presenter { aRecentCallsState() },
     sessionStore: SessionStore = InMemorySessionStore(),
 ) = HomePresenter(
     client = client,
@@ -162,6 +176,7 @@ internal fun createHomePresenter(
     indicatorService = indicatorService,
     roomListPresenter = { aRoomListState() },
     homeSpacesPresenter = homeSpacesPresenter,
+    recentCallsPresenter = recentCallsPresenter,
     logoutPresenter = { aDirectLogoutState() },
     rageshakeFeatureAvailability = rageshakeFeatureAvailability,
     sessionStore = sessionStore,

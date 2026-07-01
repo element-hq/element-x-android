@@ -87,9 +87,11 @@ dependencies {
     implementation(libs.serialization.json)
     implementation(libs.element.call.embedded)
     api(projects.features.call.api)
+    implementation(projects.features.recentcalls.api)
 
     testCommonDependencies(libs, true)
     testImplementation(projects.features.call.test)
+    testImplementation(projects.features.recentcalls.test)
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.libraries.matrix.test)

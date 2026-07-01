@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_recent_calls_empty">"No calls yet"</string>
+    <string name="screen_recent_calls_filter_all">"All"</string>
+    <string name="screen_recent_calls_filter_missed">"Missed"</string>
+    <string name="screen_recent_calls_call_back">"Call back"</string>
+    <string name="screen_recent_calls_voice">"Voice"</string>
+    <string name="screen_recent_calls_video">"Video"</string>
+    <string name="screen_recent_calls_status_ongoing">"Ongoing"</string>
+    <string name="screen_recent_calls_status_missed">"Missed"</string>
+    <string name="screen_recent_calls_status_declined">"Declined"</string>
+    <string name="screen_recent_calls_status_completed">"Completed"</string>
+</resources>

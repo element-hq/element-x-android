@@ -24,11 +24,13 @@ import io.element.android.features.call.api.CallData
 import io.element.android.features.call.api.CurrentCall
 import io.element.android.features.call.impl.notifications.CallNotificationData
 import io.element.android.features.call.impl.notifications.RingingCallNotificationCreator
+import io.element.android.features.recentcalls.api.CallSessionRecorderProvider
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
 import io.element.android.libraries.push.api.notifications.ForegroundServiceType
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
@@ -103,6 +105,7 @@ class DefaultActiveCallManager(
     private val appForegroundStateService: AppForegroundStateService,
     private val imageLoaderHolder: ImageLoaderHolder,
     private val systemClock: SystemClock,
+    private val callSessionRecorderProvider: CallSessionRecorderProvider,
 ) : ActiveCallManager {
     private val tag = "ActiveCallManager"
     private var timedOutCallJob: Job? = null
@@ -150,6 +153,15 @@ class DefaultActiveCallManager(
                 ),
                 callState = CallState.Ringing(notificationData),
             )
+            callSessionRecorderProvider.get(sessionId = notificationData.sessionId)?.onIncomingRing(
+                roomId = notificationData.roomId,
+                roomDisplayName = notificationData.roomName ?: notificationData.senderName ?: notificationData.roomId.value,
+                avatarUrl = notificationData.avatarUrl,
+                isDirect = notificationData.senderName != null,
+                counterpartUserId = notificationData.senderId,
+                callIntent = if (notificationData.audioOnly) CallIntent.AUDIO else CallIntent.VIDEO,
+                timestamp = notificationData.timestamp,
+            )
 
             timedOutCallJob = coroutineScope.launch {
                 setUpCoil(notificationData.sessionId)
@@ -195,6 +207,11 @@ class DefaultActiveCallManager(
         if (displayMissedCallNotification) {
             displayMissedCallNotification(notificationData)
         }
+        callSessionRecorderProvider.get(notificationData.sessionId)?.onMissed(
+            roomId = notificationData.roomId,
+            callIntent = if (notificationData.audioOnly) CallIntent.AUDIO else CallIntent.VIDEO,
+            timestamp = systemClock.epochMillis(),
+        )
     }
 
     override suspend fun hangUpCall(
@@ -241,22 +258,35 @@ class DefaultActiveCallManager(
             activeWakeLock.release()
         }
         timedOutCallJob?.cancel()
+        if (currentActiveCall.callState is CallState.Ringing) {
+            callSessionRecorderProvider.get(callData.sessionId)?.onDeclined(
+                roomId = callData.roomId,
+                callIntent = if (callData.isAudioCall) CallIntent.AUDIO else CallIntent.VIDEO,
+                timestamp = systemClock.epochMillis(),
+            )
+        }
         activeCall.value = null
     }
 
-    override suspend fun joinedCall(callData: CallData) = mutex.withLock {
-        Timber.tag(tag).d("Joined call: $callData")
-        cancelIncomingCallNotification()
-        if (activeWakeLock?.isHeld == true) {
-            Timber.tag(tag).d("Releasing partial wakelock after joining call")
-            activeWakeLock.release()
-        }
-        timedOutCallJob?.cancel()
+    override suspend fun joinedCall(callData: CallData) {
+        mutex.withLock {
+            Timber.tag(tag).d("Joined call: $callData")
+            cancelIncomingCallNotification()
+            if (activeWakeLock?.isHeld == true) {
+                Timber.tag(tag).d("Releasing partial wakelock after joining call")
+                activeWakeLock.release()
+            }
+            timedOutCallJob?.cancel()
 
-        activeCall.value = ActiveCall(
-            callData = callData,
-            callState = CallState.InCall,
-        )
+            activeCall.value = ActiveCall(
+                callData = callData,
+                callState = CallState.InCall,
+            )
+            callSessionRecorderProvider.get(callData.sessionId)?.onJoined(
+                roomId = callData.roomId,
+                timestamp = systemClock.epochMillis(),
+            )
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -378,9 +408,16 @@ class DefaultActiveCallManager(
     }
 
     private fun observeCurrentCall() {
+        var previousCall: ActiveCall? = null
         activeCall
             .onEach { value ->
                 if (value == null) {
+                    previousCall?.takeIf { it.callState is CallState.InCall }?.let { previous ->
+                        callSessionRecorderProvider.get(previous.callData.sessionId)?.onCompleted(
+                            roomId = previous.callData.roomId,
+                            durationMs = 0,
+                        )
+                    }
                     defaultCurrentCallService.onCallEnded()
                 } else {
                     when (value.callState) {
@@ -392,6 +429,7 @@ class DefaultActiveCallManager(
                         }
                     }
                 }
+                previousCall = value
             }
             .launchIn(coroutineScope)
     }

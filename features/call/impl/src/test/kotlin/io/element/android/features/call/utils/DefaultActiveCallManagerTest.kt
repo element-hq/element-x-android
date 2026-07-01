@@ -20,6 +20,7 @@ import io.element.android.features.call.impl.utils.ActiveCall
 import io.element.android.features.call.impl.utils.CallState
 import io.element.android.features.call.impl.utils.DefaultActiveCallManager
 import io.element.android.features.call.impl.utils.DefaultCurrentCallService
+import io.element.android.features.recentcalls.test.FakeCallSessionRecorderProvider
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -534,5 +535,6 @@ class DefaultActiveCallManagerTest : RobolectricTest() {
         appForegroundStateService = FakeAppForegroundStateService(),
         imageLoaderHolder = FakeImageLoaderHolder(),
         systemClock = systemClock,
+        callSessionRecorderProvider = FakeCallSessionRecorderProvider(),
     )
 }

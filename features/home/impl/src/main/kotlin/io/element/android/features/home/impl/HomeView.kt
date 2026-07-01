@@ -56,6 +56,7 @@ import io.element.android.features.home.impl.spacefilters.SpaceFiltersEvent
 import io.element.android.features.home.impl.spacefilters.SpaceFiltersState
 import io.element.android.features.home.impl.spacefilters.SpaceFiltersView
 import io.element.android.features.home.impl.spaces.HomeSpacesView
+import io.element.android.features.recentcalls.impl.recentcalls.RecentCallsView
 import io.element.android.libraries.androidutils.throttler.FirstThrottler
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -172,6 +173,7 @@ private fun HomeScaffold(
     val hazeState = rememberHazeState()
     val roomsLazyListState = rememberLazyListState()
     val spacesLazyListState = rememberLazyListState()
+    val callsLazyListState = rememberLazyListState()
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -207,6 +209,7 @@ private fun HomeScaffold(
                     if (item == state.currentHomeNavigationBarItem) {
                         val lazyListStateTarget = when (item) {
                             HomeNavigationBarItem.Chats -> roomsLazyListState
+                            HomeNavigationBarItem.Calls -> callsLazyListState
                             HomeNavigationBarItem.Spaces -> spacesLazyListState
                         }
                         coroutineScope.launch {
@@ -226,6 +229,7 @@ private fun HomeScaffold(
                         HomeNavigationBarItem.Chats -> {
                             HomeFloatingActionButton(onStartChatClick, CommonStrings.action_create_room)
                         }
+                        HomeNavigationBarItem.Calls -> {}
                         HomeNavigationBarItem.Spaces -> {
                             HomeFloatingActionButton(onCreateSpaceClick, CommonStrings.action_create_space)
                         }
@@ -266,6 +270,24 @@ private fun HomeScaffold(
                             .hazeSource(state = hazeState)
                     )
                     SpaceFiltersView(roomListState.spaceFiltersState)
+                }
+                HomeNavigationBarItem.Calls -> {
+                    RecentCallsView(
+                        state = state.recentCallsState,
+                        onRoomClick = onRoomClick,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(
+                                PaddingValues(
+                                    start = padding.calculateStartPadding(LocalLayoutDirection.current),
+                                    end = padding.calculateEndPadding(LocalLayoutDirection.current),
+                                    bottom = padding.calculateBottomPadding(),
+                                    top = padding.calculateTopPadding()
+                                )
+                            )
+                            .consumeWindowInsets(padding)
+                            .hazeSource(state = hazeState),
+                    )
                 }
                 HomeNavigationBarItem.Spaces -> {
                     HomeSpacesView(
