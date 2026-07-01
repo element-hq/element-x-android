@@ -8,7 +8,10 @@
 
 package io.element.android.features.call.impl.utils
 
+import android.content.res.Configuration
+import android.webkit.JavascriptInterface
 import android.webkit.WebView
+import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -18,7 +21,13 @@ import kotlin.coroutines.suspendCoroutine
  */
 class WebViewPipController(
     private val webView: WebView,
+    updatePipOrientation: (orientation: Int?) -> Unit,
 ) : PipController {
+    init {
+        // Register the JavaScript interface ahead of time to ensure it's available when the WebView content is loaded and tries to call it
+        webView.addJavascriptInterface(PipBridge(updatePipOrientation), "androidPipBridge")
+    }
+
     override suspend fun canEnterPip(): Boolean {
         return suspendCoroutine { continuation ->
             webView.evaluateJavascript("controls.canEnterPip()") { result ->
@@ -29,10 +38,30 @@ class WebViewPipController(
     }
 
     override fun enterPip() {
+        Timber.d("Adding callback in controls.onPipMediaOrientationUpdate")
+        webView.evaluateJavascript("controls.onPipMediaOrientationUpdate = (orientation) => { androidPipBridge.setPipOrientation(orientation); };", null)
+
         webView.evaluateJavascript("controls.enablePip()", null)
     }
 
     override fun exitPip() {
         webView.evaluateJavascript("controls.disablePip()", null)
+    }
+
+}
+
+private class PipBridge(
+    private val onOrientationChange: (orientation: Int?) -> Unit,
+) {
+    @JavascriptInterface
+    fun setPipOrientation(orientation: String?) {
+        Timber.d("Picture-in-picture orientation changed in webview, orientation: $orientation")
+        // This callback is used to update the picture-in-picture orientation in the WebView when it changes
+        val orientation = when (orientation) {
+            "portrait" -> Configuration.ORIENTATION_PORTRAIT
+            "landscape" -> Configuration.ORIENTATION_LANDSCAPE
+            else -> return
+        }
+        onOrientationChange(orientation)
     }
 }

@@ -14,4 +14,5 @@ sealed interface PictureInPictureEvent {
     data class SetPipController(val pipController: PipController) : PictureInPictureEvent
     data object EnterPictureInPicture : PictureInPictureEvent
     data class OnPictureInPictureModeChanged(val isInPip: Boolean) : PictureInPictureEvent
+    data class SetPipOrientation(val orientation: Int?) : PictureInPictureEvent
 }
