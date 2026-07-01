@@ -28,4 +28,8 @@ sealed interface SpaceEvents {
     data object ConfirmRoomRemoval : SpaceEvents
     data object RemoveSelectedRooms : SpaceEvents
     data object ClearRemoveAction : SpaceEvents
+
+    // Search mode events
+    data object EnterSearchMode : SpaceEvents
+    data object ExitSearchMode : SpaceEvents
 }

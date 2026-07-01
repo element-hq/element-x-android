@@ -8,6 +8,7 @@
 
 package io.element.android.features.space.impl.root
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
@@ -80,6 +81,8 @@ fun aSpaceState(
     selectedRoomIds: Set<RoomId> = emptySet(),
     canManageRooms: Boolean = true,
     removeRoomsAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    isSearchMode: Boolean = false,
+    searchQuery: TextFieldState = TextFieldState(),
     eventSink: (SpaceEvents) -> Unit = { },
 ) = SpaceState(
     spaceInfo = spaceInfo,
@@ -95,6 +98,8 @@ fun aSpaceState(
     selectedRoomIds = selectedRoomIds.toImmutableSet(),
     canEditSpaceGraph = canManageRooms,
     removeRoomsAction = removeRoomsAction,
+    isSearchMode = isSearchMode,
+    searchQuery = searchQuery,
     eventSink = eventSink,
 )
 
