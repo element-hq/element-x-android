@@ -9,6 +9,7 @@
 package io.element.android.features.preferences.impl.advanced
 
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
+import io.element.android.libraries.preferences.api.store.UrlPreviewValue
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 
 sealed interface AdvancedSettingsEvents {
@@ -19,6 +20,7 @@ sealed interface AdvancedSettingsEvents {
     data class SetVideoUploadQuality(val videoPreset: VideoCompressionPreset) : AdvancedSettingsEvents
     data class SetTheme(val theme: ThemeOption) : AdvancedSettingsEvents
     data class SetTimelineMediaPreviewValue(val value: MediaPreviewValue) : AdvancedSettingsEvents
+    data class SetUrlPreviewValue(val value: UrlPreviewValue) : AdvancedSettingsEvents
     data class SetHideInviteAvatars(val value: Boolean) : AdvancedSettingsEvents
     data class SetLiveLocationMinimumDistanceUpdate(val value: Int) : AdvancedSettingsEvents
 }

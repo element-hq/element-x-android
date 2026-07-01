@@ -26,6 +26,8 @@ import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.urlpreview.LocalUrlPreviewService
+import io.element.android.features.messages.impl.urlpreview.UrlPreviewService
 import io.element.android.libraries.androidutils.system.copyToClipboard
 import io.element.android.libraries.androidutils.system.openUrlInExternalApp
 import io.element.android.libraries.architecture.callback
@@ -49,6 +51,7 @@ class PinnedMessagesListNode(
     presenterFactory: PinnedMessagesListPresenter.Factory,
     actionListPresenterFactory: ActionListPresenter.Factory,
     private val timelineItemPresenterFactories: TimelineItemPresenterFactories,
+    private val urlPreviewService: UrlPreviewService,
     private val permalinkParser: PermalinkParser,
 ) : Node(buildContext, plugins = plugins), PinnedMessagesListNavigator {
     interface Callback : Plugin {
@@ -108,6 +111,7 @@ class PinnedMessagesListNode(
         val canUseOverlay = !isTalkbackActive() && !hasExternalKeyboard()
         CompositionLocalProvider(
             LocalTimelineItemPresenterFactories provides timelineItemPresenterFactories,
+            LocalUrlPreviewService provides urlPreviewService,
         ) {
             val context = LocalContext.current
             val toastMessage = stringResource(CommonStrings.common_copied_to_clipboard)

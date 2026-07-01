@@ -10,8 +10,10 @@ package io.element.android.features.messages.impl.timeline.protection
 
 fun aTimelineProtectionState(
     protectionState: ProtectionState = ProtectionState.RenderAll,
+    showUrlPreviews: Boolean = false,
     eventSink: (TimelineProtectionEvent) -> Unit = {},
 ) = TimelineProtectionState(
     protectionState = protectionState,
+    showUrlPreviews = showUrlPreviews,
     eventSink = eventSink,
 )

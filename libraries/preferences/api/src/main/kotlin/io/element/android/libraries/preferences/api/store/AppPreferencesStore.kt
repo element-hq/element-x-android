@@ -35,6 +35,9 @@ interface AppPreferencesStore {
     @Deprecated("Use MediaPreviewService instead. Kept only for migration.")
     fun getTimelineMediaPreviewValueFlow(): Flow<MediaPreviewValue?>
 
+    suspend fun setUrlPreviewValue(value: UrlPreviewValue)
+    fun getUrlPreviewValueFlow(): Flow<UrlPreviewValue>
+
     suspend fun setTracingLogLevel(logLevel: LogLevel)
     fun getTracingLogLevelFlow(): Flow<LogLevel>
 

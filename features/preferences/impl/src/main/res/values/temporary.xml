@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation,UnusedResources">
+    <string name="screen_advanced_settings_show_link_previews_title">Show link previews</string>
+    <string name="screen_advanced_settings_show_link_previews_subtitle">Previews may share your IP address with the linked website</string>
+    <string name="screen_advanced_settings_show_link_previews_off">Never show</string>
+    <string name="screen_advanced_settings_show_link_previews_unencrypted_only">In unencrypted rooms only</string>
+    <string name="screen_advanced_settings_show_link_previews_all">Always show</string>
+</resources>

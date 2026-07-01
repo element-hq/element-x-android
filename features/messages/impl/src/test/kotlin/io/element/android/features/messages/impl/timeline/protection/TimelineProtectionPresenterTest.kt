@@ -18,7 +18,11 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.media.FakeMediaPreviewService
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.api.store.UrlPreviewValue
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.test
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,6 +40,8 @@ class TimelineProtectionPresenterTest {
         presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.protectionState).isEqualTo(ProtectionState.RenderAll)
+            // Default UrlPreviewValue is UnencryptedOnly and the default room is unencrypted.
+            assertThat(initialState.showUrlPreviews).isTrue()
         }
     }
 
@@ -87,11 +93,61 @@ class TimelineProtectionPresenterTest {
         }
     }
 
+    @Test
+    fun `present - url previews off hides previews even in unencrypted room`() = runTest {
+        val presenter = createPresenter(
+            room = FakeBaseRoom(initialRoomInfo = aRoomInfo(isEncrypted = false)),
+            appPreferencesStore = InMemoryAppPreferencesStore(urlPreviewValue = UrlPreviewValue.Off),
+        )
+        presenter.test {
+            val state = consumeItemsUntilPredicate { !it.showUrlPreviews }.last()
+            assertThat(state.showUrlPreviews).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - url previews unencrypted only shows in unencrypted room`() = runTest {
+        val presenter = createPresenter(
+            room = FakeBaseRoom(initialRoomInfo = aRoomInfo(isEncrypted = false)),
+            appPreferencesStore = InMemoryAppPreferencesStore(urlPreviewValue = UrlPreviewValue.UnencryptedOnly),
+        )
+        presenter.test {
+            val state = consumeItemsUntilPredicate { it.showUrlPreviews }.last()
+            assertThat(state.showUrlPreviews).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - url previews unencrypted only hides in encrypted room`() = runTest {
+        val presenter = createPresenter(
+            room = FakeBaseRoom(initialRoomInfo = aRoomInfo(isEncrypted = true)),
+            appPreferencesStore = InMemoryAppPreferencesStore(urlPreviewValue = UrlPreviewValue.UnencryptedOnly),
+        )
+        presenter.test {
+            val state = consumeItemsUntilPredicate { !it.showUrlPreviews }.last()
+            assertThat(state.showUrlPreviews).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - url previews on shows even in encrypted room`() = runTest {
+        val presenter = createPresenter(
+            room = FakeBaseRoom(initialRoomInfo = aRoomInfo(isEncrypted = true)),
+            appPreferencesStore = InMemoryAppPreferencesStore(urlPreviewValue = UrlPreviewValue.On),
+        )
+        presenter.test {
+            val state = consumeItemsUntilPredicate { it.showUrlPreviews }.last()
+            assertThat(state.showUrlPreviews).isTrue()
+        }
+    }
+
     private fun createPresenter(
         room: BaseRoom = FakeBaseRoom(),
         mediaPreviewService: MediaPreviewService = FakeMediaPreviewService(),
+        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
     ) = TimelineProtectionPresenter(
         mediaPreviewService = mediaPreviewService,
         room = room,
+        appPreferencesStore = appPreferencesStore,
     )
 }

@@ -54,6 +54,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
+import io.element.android.libraries.preferences.api.store.UrlPreviewValue
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.compose.LocalAnalyticsService
@@ -203,6 +204,7 @@ fun AdvancedSettingsView(
         }
 
         ModerationAndSafety(state)
+        LinkPreviews(state)
         if (state.liveLocationMinimumDistanceUpdate != null) {
             LiveLocationUpdatesSection(
                 value = state.liveLocationMinimumDistanceUpdate,
@@ -332,6 +334,59 @@ private fun ModerationAndSafety(
                 state.eventSink(AdvancedSettingsEvents.SetTimelineMediaPreviewValue(MediaPreviewValue.On))
             },
             enabled = !state.mediaPreviewConfigState.setTimelineMediaPreviewAction.isLoading()
+        )
+    }
+}
+
+@Composable
+private fun LinkPreviews(
+    state: AdvancedSettingsState,
+    modifier: Modifier = Modifier,
+) {
+    PreferenceCategory(
+        modifier = modifier,
+        title = stringResource(R.string.screen_advanced_settings_show_link_previews_title),
+        showTopDivider = true
+    ) {
+        ListSectionHeader(
+            title = stringResource(R.string.screen_advanced_settings_show_link_previews_title),
+            hasDivider = false,
+            description = {
+                ListSupportingText(
+                    text = stringResource(R.string.screen_advanced_settings_show_link_previews_subtitle),
+                    contentPadding = ListSupportingTextDefaults.Padding.None,
+                )
+            }
+        )
+        ListItem(
+            headlineContent = { Text(text = stringResource(R.string.screen_advanced_settings_show_link_previews_off)) },
+            leadingContent = ListItemContent.RadioButton(
+                selected = state.urlPreviewValue == UrlPreviewValue.Off,
+                compact = true
+            ),
+            onClick = {
+                state.eventSink(AdvancedSettingsEvents.SetUrlPreviewValue(UrlPreviewValue.Off))
+            },
+        )
+        ListItem(
+            headlineContent = { Text(text = stringResource(R.string.screen_advanced_settings_show_link_previews_unencrypted_only)) },
+            leadingContent = ListItemContent.RadioButton(
+                selected = state.urlPreviewValue == UrlPreviewValue.UnencryptedOnly,
+                compact = true
+            ),
+            onClick = {
+                state.eventSink(AdvancedSettingsEvents.SetUrlPreviewValue(UrlPreviewValue.UnencryptedOnly))
+            },
+        )
+        ListItem(
+            headlineContent = { Text(text = stringResource(R.string.screen_advanced_settings_show_link_previews_all)) },
+            leadingContent = ListItemContent.RadioButton(
+                selected = state.urlPreviewValue == UrlPreviewValue.On,
+                compact = true
+            ),
+            onClick = {
+                state.eventSink(AdvancedSettingsEvents.SetUrlPreviewValue(UrlPreviewValue.On))
+            },
         )
     }
 }

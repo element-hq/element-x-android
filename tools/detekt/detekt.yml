@@ -237,6 +237,7 @@ Compose:
       - LocalBuildMeta
       - LocalUiTestMode
       - LocalSdkIntVersionProvider
+      - LocalUrlPreviewService
   CompositionLocalNaming:
     active: true
   ContentEmitterReturningValues:
