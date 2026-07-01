@@ -25,12 +25,14 @@ data class PollFormState(
     val question: String,
     val answers: ImmutableList<String>,
     val isDisclosed: Boolean,
+    val maxSelections: Int,
 ) {
     companion object {
         val Empty = PollFormState(
             question = "",
             answers = MutableList(MIN_ANSWERS) { "" }.toImmutableList(),
             isDisclosed = true,
+            maxSelections = 1,
         )
     }
 
@@ -44,13 +46,17 @@ data class PollFormState(
      * Create a copy of the [PollFormState] with a new blank answer added.
      *
      * If the maximum number of answers has already been reached an answer is not added.
+     *
+     * Also clamps [maxSelections] to the new answer count to keep state consistent.
      */
     fun withNewAnswer(): PollFormState {
         if (!canAddAnswer) {
             return this
         }
 
-        return copy(answers = (answers + "").toImmutableList())
+        val newAnswers = (answers + "").toImmutableList()
+        val clampedMaxSelections = maxSelections.coerceIn(1, newAnswers.size)
+        return copy(answers = newAnswers, maxSelections = clampedMaxSelections)
     }
 
     /**
@@ -67,7 +73,9 @@ data class PollFormState(
             return this
         }
 
-        return copy(answers = answers.filterIndexed { i, _ -> i != index }.toImmutableList())
+        val newAnswers = answers.filterIndexed { i, _ -> i != index }.toImmutableList()
+        val clampedMaxSelections = maxSelections.coerceIn(1, newAnswers.size)
+        return copy(answers = newAnswers, maxSelections = clampedMaxSelections)
     }
 
     /**
@@ -96,6 +104,11 @@ data class PollFormState(
     val canDeleteAnswer get() = answers.size > MIN_ANSWERS
 
     /**
+     * The effective max selections, clamped to the number of answers.
+     */
+    val effectiveMaxSelections get() = maxSelections.coerceIn(1, answers.size)
+
+    /**
      * Whether the form is currently valid.
      */
     val isValid get() = question.isNotBlank() && answers.size >= MIN_ANSWERS && answers.all { it.isNotBlank() }
@@ -110,6 +123,7 @@ internal val pollFormStateSaver = mapSaver(
             "question" to it.question,
             "answers" to it.answers.toTypedArray(),
             "isDisclosed" to it.isDisclosed,
+            "maxSelections" to it.maxSelections,
         )
     },
     restore = { saved ->
@@ -117,6 +131,7 @@ internal val pollFormStateSaver = mapSaver(
             question = saved["question"] as String,
             answers = (saved["answers"] as Array<*>).map { it as String }.toImmutableList(),
             isDisclosed = saved["isDisclosed"] as Boolean,
+            maxSelections = saved["maxSelections"] as Int,
         )
     }
 )

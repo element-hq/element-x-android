@@ -19,7 +19,7 @@ class FakeSendPollResponseAction : SendPollResponseAction {
         assert(executionCount == count)
     }
 
-    override suspend fun execute(timeline: Timeline, pollStartId: EventId, answerId: String): Result<Unit> {
+    override suspend fun execute(timeline: Timeline, pollStartId: EventId, answerIds: List<String>): Result<Unit> {
         executionCount++
         return Result.success(Unit)
     }

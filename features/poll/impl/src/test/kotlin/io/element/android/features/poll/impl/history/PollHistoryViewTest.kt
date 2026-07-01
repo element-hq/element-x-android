@@ -133,7 +133,7 @@ class PollHistoryViewTest : RobolectricTest() {
             useUnmergedTree = true,
         ).performClick()
         eventsRecorder.assertSingle(
-            PollHistoryEvents.SelectPollAnswer(eventId, answer.id)
+            PollHistoryEvents.SelectPollAnswer(eventId, listOf(answer.id))
         )
     }
 

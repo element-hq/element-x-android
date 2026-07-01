@@ -84,6 +84,7 @@ fun aPollContentState(
     hasVotes: Boolean = true,
     question: String = aPollQuestion(),
     pollKind: PollKind = PollKind.Disclosed,
+    maxSelections: ULong = 1u,
     answerItems: ImmutableList<PollAnswerItem> = aPollAnswerItemList(
         isEnded = isEnded,
         showVotes = showVotes,
@@ -94,6 +95,7 @@ fun aPollContentState(
     question = question,
     answerItems = answerItems,
     pollKind = pollKind,
+    maxSelections = maxSelections,
     isPollEditable = isMine && !isEnded && isPollEditable,
     isPollEnded = isEnded,
     isMine = isMine,

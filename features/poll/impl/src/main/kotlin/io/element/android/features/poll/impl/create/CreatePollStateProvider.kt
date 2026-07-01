@@ -150,6 +150,21 @@ class CreatePollStateProvider : PreviewParameterProvider<CreatePollState> {
                 showDeleteConfirmation = true,
                 showBackConfirmation = false,
             ),
+            aCreatePollState(
+                mode = CreatePollState.Mode.New,
+                canCreate = true,
+                canAddAnswer = true,
+                question = "What type of food should we have?",
+                answers = listOf(
+                    Answer("Italian \uD83C\uDDEE\uD83C\uDDF9", false),
+                    Answer("Chinese \uD83C\uDDE8\uD83C\uDDF3", false),
+                    Answer("Brazilian \uD83C\uDDE7\uD83C\uDDF7", true),
+                ),
+                showBackConfirmation = false,
+                showDeleteConfirmation = false,
+                pollKind = PollKind.Disclosed,
+                maxSelections = 2,
+            ),
         )
 }
 
@@ -161,7 +176,8 @@ private fun aCreatePollState(
     answers: List<Answer>,
     showBackConfirmation: Boolean,
     showDeleteConfirmation: Boolean,
-    pollKind: PollKind
+    pollKind: PollKind,
+    maxSelections: Int = 1,
 ): CreatePollState {
     return CreatePollState(
         mode = mode,
@@ -172,6 +188,8 @@ private fun aCreatePollState(
         showBackConfirmation = showBackConfirmation,
         showDeleteConfirmation = showDeleteConfirmation,
         pollKind = pollKind,
+        maxSelections = maxSelections,
+        maxAllowedSelections = answers.size,
         eventSink = {}
     )
 }
