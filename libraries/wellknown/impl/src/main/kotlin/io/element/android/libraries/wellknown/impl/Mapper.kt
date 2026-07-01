@@ -30,6 +30,7 @@ internal fun InternalElementWellKnown.map() = ElementWellKnown(
     notificationSound = notificationSound,
     identityProviderAppScheme = identityProviderAppScheme,
     customRecoveryPassphrase = customRecoveryPassphrase?.toPublic(),
+    contentScannerUrl = contentScannerUrl,
 )
 
 private fun InternalCustomRecoveryPassphrase.toPublic(): CustomRecoveryPassphrase {

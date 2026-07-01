@@ -53,6 +53,7 @@ class DefaultSessionWellknownRetrieverTest {
                     notificationSound = null,
                     identityProviderAppScheme = null,
                     customRecoveryPassphrase = null,
+                    contentScannerUrl = null,
                 )
             )
         )
@@ -79,6 +80,7 @@ class DefaultSessionWellknownRetrieverTest {
                     notificationSound = "a_notification_sound.flac",
                     identityProviderAppScheme = "an_app_scheme",
                     customRecoveryPassphrase = null,
+                    contentScannerUrl = "https://content-scanner.example.com",
                 )
             )
         )
@@ -108,6 +110,7 @@ class DefaultSessionWellknownRetrieverTest {
                     brandColor = null,
                     notificationSound = null,
                     identityProviderAppScheme = null,
+                    contentScannerUrl = null,
                     customRecoveryPassphrase = null,
                 )
             )
@@ -248,6 +251,7 @@ class DefaultSessionWellknownRetrieverTest {
                     notificationSound = "a_notification_sound.flac",
                     identityProviderAppScheme = "an_app_scheme",
                     customRecoveryPassphrase = null,
+                    contentScannerUrl = "https://content-scanner.example.com",
                 )
             )
         )
@@ -302,6 +306,7 @@ class DefaultSessionWellknownRetrieverTest {
                     notificationSound = "a_notification_sound.flac",
                     identityProviderAppScheme = "an_app_scheme",
                     customRecoveryPassphrase = null,
+                    contentScannerUrl = "https://content-scanner.example.com",
                 )
             )
         )
@@ -338,7 +343,8 @@ class DefaultSessionWellknownRetrieverTest {
                 "rageshake_url": "a_rageshake_url",
                 "brand_color": "#FF0000",
                 "notification_sound": "a_notification_sound.flac",
-                "idp_app_scheme": "an_app_scheme"
+                "idp_app_scheme": "an_app_scheme",
+                "content_scanner_url": "https://content-scanner.example.com"
             }"""
     }
 }
