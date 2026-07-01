@@ -122,7 +122,7 @@ class RustMatrixClientFactory(
         // If a content scanner URL is available for the homeserver, create a RustContentScanner and set it on the client.
         // This allows the SDK to use the content scanner for automatic media scanning.
         // If no content scanner URL is available, the contentScanner will be null.
-        val contentScanner = if (domainName != null) {
+        val contentScanner = domainName?.let {
             contentScannerUrlProvider.getContentScannerUrl(domainName)
                 .getOrNull()
                 ?.let { contentScannerUrl ->
@@ -133,8 +133,6 @@ class RustMatrixClientFactory(
                         rustScanner = ContentScanner(contentScannerUrl),
                     )
                 }
-        } else {
-            null
         }
 
         val syncService = client.syncService()

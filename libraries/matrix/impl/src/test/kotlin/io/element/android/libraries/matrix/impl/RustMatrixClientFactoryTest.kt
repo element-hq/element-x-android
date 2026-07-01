@@ -65,4 +65,5 @@ fun TestScope.createRustMatrixClientFactory(
     clientBuilderProvider = clientBuilderProvider,
     sqliteStoreBuilderProvider = FakeSqliteStoreBuilderProvider(),
     workManagerScheduler = workManagerScheduler,
+    contentScannerUrlProvider = { Result.success(null) }
 )

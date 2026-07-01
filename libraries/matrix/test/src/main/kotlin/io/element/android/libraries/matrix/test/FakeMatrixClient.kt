@@ -38,6 +38,7 @@ import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.room.location.BeaconInfoUpdate
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.scanner.ContentScanner
 import io.element.android.libraries.matrix.api.spaces.SpaceService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
@@ -122,6 +123,7 @@ class FakeMatrixClient(
     private val getMapStyleUrlResult: () -> Result<String?> = { lambdaError() },
     private val getDatabaseSizesLambda: () -> Result<SdkStoreSizes> = { lambdaError() },
     private val resetWellKnownConfigLambda: () -> Result<Unit> = { lambdaError() },
+    override val contentScanner: ContentScanner? = null
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
         private set
