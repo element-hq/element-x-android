@@ -9,6 +9,9 @@
 package io.element.android.features.messages.impl.urlpreview
 
 import android.net.Uri
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.URLSpan
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -16,6 +19,8 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
+import io.element.android.libraries.textcomposer.mentions.MentionSpan
+import io.element.android.libraries.textcomposer.mentions.MentionType
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.jsoup.Jsoup
 import org.junit.Test
@@ -79,6 +84,45 @@ class UrlPreviewParserTest : RobolectricTest() {
         )
 
         assertThat(result).isEqualTo("https://example.org/first")
+    }
+
+    @Test
+    fun `find first previewable url ignores the auto-linked server tail of a mention`() {
+        val text = "@someone:my.homeserver"
+        val tailStart = text.indexOf("my.homeserver")
+        val spanned = SpannableString(text).apply {
+            setSpan(MentionSpan(MentionType.User(UserId("@someone:my.homeserver"))), 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            setSpan(URLSpan("http://my.homeserver"), tailStart, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        val result = findFirstPreviewableUrl(
+            formattedBody = spanned,
+            htmlDocument = null,
+            permalinkParser = permalinkParser,
+        )
+
+        assertThat(result).isNull()
+    }
+
+    @Test
+    fun `find first previewable url keeps a real link next to a mention`() {
+        val text = "@someone:my.homeserver https://example.org"
+        val mentionEnd = text.indexOf(' ')
+        val tailStart = text.indexOf("my.homeserver")
+        val linkStart = text.indexOf("https://example.org")
+        val spanned = SpannableString(text).apply {
+            setSpan(MentionSpan(MentionType.User(UserId("@someone:my.homeserver"))), 0, mentionEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            setSpan(URLSpan("http://my.homeserver"), tailStart, mentionEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            setSpan(URLSpan("https://example.org"), linkStart, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        val result = findFirstPreviewableUrl(
+            formattedBody = spanned,
+            htmlDocument = null,
+            permalinkParser = permalinkParser,
+        )
+
+        assertThat(result).isEqualTo("https://example.org")
     }
 
     @Test

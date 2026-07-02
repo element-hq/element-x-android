@@ -13,6 +13,7 @@ import android.text.style.URLSpan
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
+import io.element.android.libraries.textcomposer.mentions.getMentionSpans
 import org.jsoup.nodes.Document
 import java.net.URI
 
@@ -49,6 +50,8 @@ private fun CharSequence.extractUrlSpans(): List<String> {
     return spanned.getSpans(0, spanned.length, URLSpan::class.java)
         .orEmpty()
         .sortedBy { spanned.getSpanStart(it) }
+        // Drop URLSpans inside a mention: Linkify auto-links the ":server" tail of the id.
+        .filter { spanned.getMentionSpans(spanned.getSpanStart(it), spanned.getSpanEnd(it)).isEmpty() }
         .map { it.url }
 }
 
