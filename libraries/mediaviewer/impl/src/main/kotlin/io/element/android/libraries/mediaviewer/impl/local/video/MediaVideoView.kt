@@ -77,6 +77,7 @@ fun MediaVideoView(
     localMedia: LocalMedia?,
     autoplay: Boolean,
     audioFocus: AudioFocus?,
+    forPreview: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val exoPlayer = rememberExoPlayer(forAudioOnly = false)
@@ -88,6 +89,7 @@ fun MediaVideoView(
         localMedia = localMedia,
         autoplay = autoplay,
         audioFocus = audioFocus,
+        forPreview = forPreview,
         modifier = modifier,
     )
 }
@@ -102,6 +104,7 @@ private fun ExoPlayerMediaVideoView(
     localMedia: LocalMedia?,
     autoplay: Boolean,
     audioFocus: AudioFocus?,
+    forPreview: Boolean,
     modifier: Modifier = Modifier,
 ) {
     var mediaPlayerControllerState: MediaPlayerControllerState by remember {
@@ -220,7 +223,11 @@ private fun ExoPlayerMediaVideoView(
                 text = "A Video Player will render here",
             )
         } else {
-            val videoDescription = stringResource(CommonStrings.a11y_video_preview)
+            val videoDescription = if (forPreview) {
+                stringResource(CommonStrings.a11y_video_preview)
+            } else {
+                stringResource(CommonStrings.common_video)
+            }
             AndroidView(
                 modifier = Modifier
                     .fillMaxSize()
@@ -359,5 +366,6 @@ internal fun MediaVideoViewPreview() = ElementPreview {
         localMedia = null,
         audioFocus = null,
         autoplay = false,
+        forPreview = false,
     )
 }
