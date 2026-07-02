@@ -38,6 +38,7 @@ dependencies {
 
     testCommonDependencies(libs)
     testImplementation(libs.coroutines.core)
+    testImplementation(projects.libraries.cachestore.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.wellknown.test)
     testImplementation(projects.services.toolbox.test)

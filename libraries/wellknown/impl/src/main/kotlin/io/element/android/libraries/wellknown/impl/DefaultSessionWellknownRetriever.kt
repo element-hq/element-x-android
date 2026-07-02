@@ -71,7 +71,7 @@ class DefaultSessionWellknownRetriever(
                 val data = String(it)
                 val parsed = json().decodeFromString<InternalElementWellKnown>(data).map()
                 // Also store in cache, if valid
-                elementWellknownStore.update(domain, parsed)
+                elementWellknownStore.update(domain, data)
                     .onFailure { exception ->
                         Timber.e(exception, "Failed to parse cached Element .well-known data for $domain, deleting cache")
                         elementWellknownStore.delete(domain)

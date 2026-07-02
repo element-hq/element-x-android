@@ -15,6 +15,7 @@ import io.element.android.features.wellknown.test.FakeElementWellknownStore
 import io.element.android.features.wellknown.test.anElementWellKnown
 import io.element.android.libraries.androidutils.json.DefaultJsonProvider
 import io.element.android.libraries.androidutils.json.JsonProvider
+import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.wellknown.api.CustomRecoveryPassphrase
@@ -221,6 +222,16 @@ class DefaultSessionWellknownRetrieverTest {
             }
         )
         assertThat(sut.getElementWellKnown()).isInstanceOf(WellknownRetrieverResult.Error::class.java)
+    }
+
+    @Test
+    fun `get element wellknown 404 http error counts as not found`() = runTest {
+        val sut = createDefaultSessionWellknownRetriever(
+            getUrlLambda = {
+                Result.failure(ClientException.Generic("Not Found: 404 status code", "The file could not be found"))
+            }
+        )
+        assertThat(sut.getElementWellKnown()).isInstanceOf(WellknownRetrieverResult.NotFound::class.java)
     }
 
     @Test
