@@ -10,8 +10,10 @@ package io.element.android.features.preferences.impl.userstatus
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.InputTransformation
@@ -34,11 +36,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -140,16 +142,33 @@ private fun CurrentStatusRow(
     }
     ListItem(
         headlineContent = { Text(text = text, modifier = Modifier.padding(vertical = 16.dp)) },
-        leadingContent = ListItemContent.Custom({
-            Text(text = emoji, modifier = Modifier.size(24.dp), textAlign = TextAlign.Center)
-        }),
+        leadingContent = ListItemContent.Custom { EmojiText(emoji) },
         trailingContent = ListItemContent.Custom({
-            IconButton(onClick = onClear) {
-                Icon(imageVector = CompoundIcons.Close(), contentDescription = null)
+            IconButton(
+                onClick = onClear,
+                // Remove the extra padding caused by IconButton
+                modifier = Modifier.offset(x = 12.dp)
+            ) {
+                Icon(
+                    imageVector = CompoundIcons.Close(),
+                    contentDescription = stringResource(CommonStrings.action_clear),
+                )
             }
         }),
         onClick = onClick,
         modifier = modifier,
+    )
+}
+
+@Composable
+private fun EmojiText(emoji: String) {
+    // Ensure the emoji doesn't scale with fontSize to match icons size
+    val fontSize = with(LocalDensity.current) { 16.dp.toSp() }
+    Text(
+        modifier = Modifier.sizeIn(minWidth = 24.dp, minHeight = 24.dp),
+        text = emoji,
+        textAlign = TextAlign.Center,
+        style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = fontSize),
     )
 }
 
@@ -176,15 +195,9 @@ private fun UserStatusPickerBottomSheet(
             val isSelected = currentRawStatus == predefinedUserStatus
             ListItem(
                 headlineContent = { Text(text = label) },
-                leadingContent = ListItemContent.Text(text = predefined.emoji),
+                leadingContent = ListItemContent.Custom { EmojiText(predefined.emoji) },
                 trailingContent = if (isSelected) {
-                    ListItemContent.Custom({
-                    Icon(
-                        imageVector = CompoundIcons.Check(),
-                        contentDescription = null,
-                        tint = ElementTheme.colors.iconAccentPrimary,
-                    )
-                })
+                    ListItemContent.Icon(IconSource.Vector(CompoundIcons.Check()), tintColor = ElementTheme.colors.iconAccentPrimary)
                 } else {
                     null
                 },
@@ -199,7 +212,7 @@ private fun UserStatusPickerBottomSheet(
             headlineContent = {
                 Text(text = stringResource(R.string.common_user_status_custom))
             },
-            leadingContent = ListItemContent.Text(text = "✏️"),
+            leadingContent = ListItemContent.Custom { EmojiText("✏️") },
             onClick = {
                 sheetState.hide(coroutineScope) {
                     onSelectCustomStatus()
@@ -258,22 +271,22 @@ private fun CustomStatusInputRow(
         },
         trailingContent = ListItemContent.Custom({
             // Layout measures both buttons to determine the max natural width,
-            // then places only the active one — no hardcoded padding values needed.
+            // then places only the active one.
             Layout(
                 content = {
                     TextButton(onClick = onConfirm, text = saveLabel)
                     TextButton(onClick = onCancel, text = cancelLabel)
                 }
             ) { measurables, constraints ->
-                val placeables = measurables.map { it.measure(Constraints()) }
+                val placeables = measurables.map { it.measure(constraints) }
                 val maxWidth = placeables.maxOf { it.width }
                 val maxHeight = placeables.maxOf { it.height }
                 layout(maxWidth, maxHeight) {
-                    if (hasChanges) {
-                        placeables[0].placeRelative(0, 0)
-                    } else {
-                        placeables[1].placeRelative(0, 0)
-                    }
+                    val active = if (hasChanges) placeables[0] else placeables[1]
+                    active.placeRelative(
+                        x = (maxWidth - active.width) / 2,
+                        y = (maxHeight - active.height) / 2,
+                    )
                 }
             }
         }),
@@ -287,7 +300,7 @@ private fun CustomStatusInputRow(
                     .clickable { },
             ) {
                 Box(contentAlignment = Alignment.Center) {
-                    Text(text = emoji, style = ElementTheme.typography.fontBodyLgRegular)
+                    EmojiText(emoji)
                 }
             }
         }),
