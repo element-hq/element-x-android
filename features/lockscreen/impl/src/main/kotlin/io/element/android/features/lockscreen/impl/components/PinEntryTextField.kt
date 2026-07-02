@@ -105,7 +105,7 @@ private fun PinDigitView(
             if (isFocused) {
                 Modifier.border(2.dp, ElementTheme.colors.borderFocused, shape)
             } else {
-                Modifier.border(1.dp, ElementTheme.colors.iconSecondary, shape)
+                Modifier.border(1.dp, ElementTheme.colors.iconPrimary, shape)
             }
         }
         is PinDigit.Filled -> {
