@@ -11,6 +11,7 @@ package io.element.android.libraries.push.impl.notifications.channels
 import android.os.Build
 import android.provider.Settings
 import androidx.core.app.NotificationChannelCompat
+import androidx.core.app.NotificationChannelGroupCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.net.toUri
 import com.google.common.truth.Truth.assertThat
@@ -43,6 +44,23 @@ class NotificationChannelsTest : RobolectricTest() {
 
         verify { notificationManager.createNotificationChannel(any<NotificationChannelCompat>()) }
         verify { notificationManager.deleteNotificationChannel(any<String>()) }
+    }
+
+    @Test
+    @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
+    fun `init - creates the Private chats and Rooms notification channel groups`() {
+        val captured = slot<List<NotificationChannelGroupCompat>>()
+        val notificationManager = mockk<NotificationManagerCompat>(relaxed = true) {
+            every { notificationChannels } returns emptyList()
+            every { createNotificationChannelGroupsCompat(capture(captured)) } returns Unit
+        }
+
+        createNotificationChannels(notificationManager = notificationManager)
+
+        assertThat(captured.captured.map { it.id }).containsExactly(
+            PRIVATE_CHATS_CHANNEL_GROUP_ID,
+            ROOMS_CHANNEL_GROUP_ID,
+        )
     }
 
     @Test

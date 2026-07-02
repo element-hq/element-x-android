@@ -13,17 +13,20 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStoreFile
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.androidutils.hash.hash
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.io.File
 
@@ -47,6 +50,16 @@ class DefaultSessionPreferencesStore(
     private val skipSessionVerification = booleanPreferencesKey("skipSessionVerification")
     private val compressImages = booleanPreferencesKey("compressMedia")
     private val compressMediaPreset = stringPreferencesKey("compressMediaPreset")
+
+    // Keyed by a hash of the room id rather than declared statically: DataStore doesn't require
+    // enumerable keys, and one room can't collide with another's hashed prefix. Also looked up by
+    // raw hash, since a channel id enumerated from the system only carries that hash, not the
+    // original RoomId.
+    private val roomChannelLastNotifiedKeySuffix = "notifChannelLastNotified"
+    private fun roomChannelLastNotifiedKey(roomId: RoomId) =
+        longPreferencesKey("room_${roomId.value.hash().take(16)}_$roomChannelLastNotifiedKeySuffix")
+    private fun roomChannelLastNotifiedKeyFromHash(roomHash: String) =
+        longPreferencesKey("room_${roomHash}_$roomChannelLastNotifiedKeySuffix")
 
     private val dataStoreFile = storeFile(context, sessionId)
     private val store = PreferenceDataStoreFactory.create(
@@ -93,6 +106,31 @@ class DefaultSessionPreferencesStore(
     override suspend fun setVideoCompressionPreset(preset: VideoCompressionPreset) = update(compressMediaPreset, preset.name)
     override fun getVideoCompressionPreset(): Flow<VideoCompressionPreset> = get(compressMediaPreset) { VideoCompressionPreset.STANDARD.name }
         .map { tryOrNull { VideoCompressionPreset.valueOf(it) } ?: VideoCompressionPreset.STANDARD }
+
+    override suspend fun recordRoomChannelNotified(roomId: RoomId) {
+        update(roomChannelLastNotifiedKey(roomId), System.currentTimeMillis())
+    }
+
+    override suspend fun clearRoomChannelLastNotified(roomId: RoomId) {
+        store.edit { prefs -> prefs.remove(roomChannelLastNotifiedKey(roomId)) }
+    }
+
+    override suspend fun getRoomChannelLastNotifiedByHash(): Map<String, Long> {
+        val suffix = "_$roomChannelLastNotifiedKeySuffix"
+        return store.data.first().asMap().entries
+            .mapNotNull { (key, value) ->
+                if (key.name.startsWith("room_") && key.name.endsWith(suffix) && value is Long) {
+                    key.name.removePrefix("room_").removeSuffix(suffix) to value
+                } else {
+                    null
+                }
+            }
+            .toMap()
+    }
+
+    override suspend fun clearRoomChannelLastNotifiedByHash(roomHash: String) {
+        store.edit { prefs -> prefs.remove(roomChannelLastNotifiedKeyFromHash(roomHash)) }
+    }
 
     override suspend fun clear() {
         dataStoreFile.safeDelete()

@@ -8,6 +8,8 @@
 
 package io.element.android.libraries.preferences.test
 
+import io.element.android.libraries.androidutils.hash.hash
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import kotlinx.coroutines.flow.Flow
@@ -31,8 +33,14 @@ class InMemorySessionPreferencesStore(
     private val isSessionVerificationSkipped = MutableStateFlow(isSessionVerificationSkipped)
     private val doesCompressMedia = MutableStateFlow(doesCompressMedia)
     private val videoCompressionPreset = MutableStateFlow(videoCompressionPreset)
+
+    // Keyed by the same room-id hash used in channel ids (see DefaultRoomNotificationChannelManager),
+    // matching how the real store has to bridge RoomId <-> channel-id-embedded hash.
+    private val roomChannelLastNotified = mutableMapOf<String, Long>()
     var clearCallCount = 0
         private set
+
+    private fun roomHash(roomId: RoomId): String = roomId.value.hash().take(16)
 
     override suspend fun setSharePresence(enabled: Boolean) {
         isSharePresenceEnabled.tryEmit(enabled)
@@ -82,6 +90,25 @@ class InMemorySessionPreferencesStore(
 
     override fun getVideoCompressionPreset(): Flow<VideoCompressionPreset> {
         return videoCompressionPreset
+    }
+
+    override suspend fun recordRoomChannelNotified(roomId: RoomId) {
+        roomChannelLastNotified[roomHash(roomId)] = System.currentTimeMillis()
+    }
+
+    override suspend fun clearRoomChannelLastNotified(roomId: RoomId) {
+        roomChannelLastNotified.remove(roomHash(roomId))
+    }
+
+    override suspend fun getRoomChannelLastNotifiedByHash(): Map<String, Long> = roomChannelLastNotified.toMap()
+
+    override suspend fun clearRoomChannelLastNotifiedByHash(roomHash: String) {
+        roomChannelLastNotified.remove(roomHash)
+    }
+
+    /** Test-only helper to backdate a room's channel last-notified timestamp. */
+    fun givenRoomChannelLastNotified(roomId: RoomId, timestampMs: Long) {
+        roomChannelLastNotified[roomHash(roomId)] = timestampMs
     }
 
     override suspend fun clear() {
