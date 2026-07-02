@@ -137,8 +137,6 @@ private fun FullscreenAnnouncementContent(
         VisualList(
             modifier = Modifier.fillMaxWidth(),
             items = announcement.items(),
-            textStyle = ElementTheme.typography.fontBodyLgMedium,
-            iconTint = ElementTheme.colors.iconSecondary,
             iconSize = 24.dp
         )
         announcement.notice()?.let { notice ->

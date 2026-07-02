@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
@@ -43,9 +42,9 @@ fun SignedOutView(
     BackHandler(onBack = { state.eventSink(SignedOutEvents.SignInAgain) })
     HeaderFooterPage(
         modifier = modifier
-                .fillMaxSize()
-                .systemBarsPadding()
-                .imePadding(),
+            .fillMaxSize()
+            .systemBarsPadding()
+            .imePadding(),
         header = { SignedOutHeader(state) },
         content = { SignedOutContent() },
         footer = {
@@ -90,8 +89,6 @@ private fun SignedOutContent() {
                     iconVector = CompoundIcons.Block(),
                 ),
             ),
-            textStyle = ElementTheme.typography.fontBodyMdMedium,
-            iconTint = ElementTheme.colors.iconSecondary,
         )
     }
 }

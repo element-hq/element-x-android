@@ -65,9 +65,9 @@ fun AnalyticsOptInView(
     BackHandler(onBack = ::onDeclineTerms)
     HeaderFooterPage(
         modifier = modifier
-                .fillMaxSize()
-                .systemBarsPadding()
-                .imePadding(),
+            .fillMaxSize()
+            .systemBarsPadding()
+            .imePadding(),
         background = { OnboardingBackground() },
         header = { AnalyticsOptInHeader(state, onClickTerms) },
         content = { AnalyticsOptInContent() },
@@ -144,7 +144,6 @@ private fun AnalyticsOptInContent() {
                     iconVector = CompoundIcons.CheckCircle(),
                 ),
             ),
-            textStyle = ElementTheme.typography.fontBodyLgMedium,
             iconTint = ElementTheme.colors.iconSuccessPrimary,
         )
     }

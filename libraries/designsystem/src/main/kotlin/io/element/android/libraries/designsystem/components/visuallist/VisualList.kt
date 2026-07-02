@@ -11,8 +11,6 @@ package io.element.android.libraries.designsystem.components.visuallist
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,9 +34,9 @@ fun VisualList(
     items: ImmutableList<VisualListItemData>,
     modifier: Modifier = Modifier,
     backgroundColor: Color = ElementTheme.colors.bgSubtleSecondary,
-    iconTint: Color = LocalContentColor.current,
+    iconTint: Color = ElementTheme.colors.iconSecondary,
     iconSize: Dp = 20.dp,
-    textStyle: TextStyle = LocalTextStyle.current,
+    textStyle: TextStyle = ElementTheme.typography.fontBodyMdMedium,
     textColor: Color = ElementTheme.colors.textPrimary,
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(4.dp),
 ) {
