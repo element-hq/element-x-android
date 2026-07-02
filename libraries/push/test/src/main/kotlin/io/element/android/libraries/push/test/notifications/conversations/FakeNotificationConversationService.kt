@@ -11,15 +11,19 @@ package io.element.android.libraries.push.test.notifications.conversations
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
+import io.element.android.tests.testutils.lambda.LambdaFiveParamsRecorder
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 
-class FakeNotificationConversationService : NotificationConversationService {
+class FakeNotificationConversationService(
+    private val onSendMessageLambda: LambdaFiveParamsRecorder<SessionId, RoomId, String?, Boolean, String?, Unit> = lambdaRecorder { _, _, _, _, _ -> },
+) : NotificationConversationService {
     override suspend fun onSendMessage(
         sessionId: SessionId,
         roomId: RoomId,
         roomName: String?,
         roomIsDirect: Boolean,
         roomAvatarUrl: String?,
-    ) = Unit
+    ) = onSendMessageLambda(sessionId, roomId, roomName, roomIsDirect, roomAvatarUrl)
 
     override suspend fun onLeftRoom(sessionId: SessionId, roomId: RoomId) = Unit
 
