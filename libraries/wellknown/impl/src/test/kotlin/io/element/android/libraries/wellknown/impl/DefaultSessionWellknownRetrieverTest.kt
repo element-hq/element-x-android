@@ -11,20 +11,16 @@
 package io.element.android.libraries.wellknown.impl
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.wellknown.test.FakeElementWellknownStore
 import io.element.android.features.wellknown.test.anElementWellKnown
 import io.element.android.libraries.androidutils.json.DefaultJsonProvider
 import io.element.android.libraries.androidutils.json.JsonProvider
-import io.element.android.libraries.cachestore.api.CacheData
-import io.element.android.libraries.cachestore.api.CacheStore
+import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.sessionstorage.test.InMemoryCacheStore
 import io.element.android.libraries.wellknown.api.CustomRecoveryPassphrase
 import io.element.android.libraries.wellknown.api.ElementWellKnown
 import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
-import io.element.android.services.toolbox.api.systemclock.SystemClock
-import io.element.android.services.toolbox.test.systemclock.A_FAKE_TIMESTAMP
-import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -53,6 +49,7 @@ class DefaultSessionWellknownRetrieverTest {
                     notificationSound = null,
                     identityProviderAppScheme = null,
                     customRecoveryPassphrase = null,
+                    contentScannerUrl = null,
                 )
             )
         )
@@ -79,6 +76,7 @@ class DefaultSessionWellknownRetrieverTest {
                     notificationSound = "a_notification_sound.flac",
                     identityProviderAppScheme = "an_app_scheme",
                     customRecoveryPassphrase = null,
+                    contentScannerUrl = "https://content-scanner.example.com",
                 )
             )
         )
@@ -108,6 +106,7 @@ class DefaultSessionWellknownRetrieverTest {
                     brandColor = null,
                     notificationSound = null,
                     identityProviderAppScheme = null,
+                    contentScannerUrl = null,
                     customRecoveryPassphrase = null,
                 )
             )
@@ -226,15 +225,22 @@ class DefaultSessionWellknownRetrieverTest {
     }
 
     @Test
+    fun `get element wellknown 404 http error counts as not found`() = runTest {
+        val sut = createDefaultSessionWellknownRetriever(
+            getUrlLambda = {
+                Result.failure(ClientException.Generic("Not Found: 404 status code", "The file could not be found"))
+            }
+        )
+        assertThat(sut.getElementWellKnown()).isInstanceOf(WellknownRetrieverResult.NotFound::class.java)
+    }
+
+    @Test
     fun `get element wellknown hitting cache`() = runTest {
         val sut = createDefaultSessionWellknownRetriever(
             getUrlLambda = { lambdaError() },
-            cacheStore = InMemoryCacheStore(
+            cacheStore = FakeElementWellknownStore(
                 initialData = mapOf(
-                    WELLKNOWN_URL to CacheData(
-                        value = WELLKNOWN_CONTENT,
-                        updatedAt = A_FAKE_TIMESTAMP,
-                    )
+                    WELLKNOWN_URL to WellknownRetrieverResult.Success(parsedWellKnownContent())
                 )
             )
         )
@@ -248,6 +254,7 @@ class DefaultSessionWellknownRetrieverTest {
                     notificationSound = "a_notification_sound.flac",
                     identityProviderAppScheme = "an_app_scheme",
                     customRecoveryPassphrase = null,
+                    contentScannerUrl = "https://content-scanner.example.com",
                 )
             )
         )
@@ -255,12 +262,9 @@ class DefaultSessionWellknownRetrieverTest {
 
     @Test
     fun `get element wellknown hitting cache containing invalid json`() = runTest {
-        val cacheStore = InMemoryCacheStore(
+        val cacheStore = FakeElementWellknownStore(
             initialData = mapOf(
-                WELLKNOWN_URL to CacheData(
-                    value = WELLKNOWN_CONTENT,
-                    updatedAt = A_FAKE_TIMESTAMP,
-                )
+                WELLKNOWN_URL to WellknownRetrieverResult.Error(IllegalStateException("Invalid JSON"))
             )
         )
         val sut = createDefaultSessionWellknownRetriever(
@@ -272,28 +276,24 @@ class DefaultSessionWellknownRetrieverTest {
         )
         assertThat(sut.getElementWellKnown()).isInstanceOf(WellknownRetrieverResult.Error::class.java)
         // Ensure that the cache is deleted after the failure to parse it
-        assertThat(cacheStore.dataMap).isEmpty()
+        assertThat(cacheStore.get(WELLKNOWN_URL)).isEqualTo(WellknownRetrieverResult.NotFound)
     }
 
     @Test
     fun `get element wellknown hitting outdated cache`() = runTest {
+        val cacheStore = FakeElementWellknownStore(
+            initialData = mapOf(
+                WELLKNOWN_URL to WellknownRetrieverResult.Outdated(parsedWellKnownContent()),
+            )
+        )
         val sut = createDefaultSessionWellknownRetriever(
             getUrlLambda = {
                 Result.success("{}".toByteArray())
             },
-            cacheStore = InMemoryCacheStore(
-                initialData = mapOf(
-                    WELLKNOWN_URL to CacheData(
-                        value = WELLKNOWN_CONTENT,
-                        updatedAt = 0L,
-                    )
-                ),
-            ),
-            // 3 days later, so the cache is outdated
-            systemClock = FakeSystemClock(3 * 24 * 60 * 60 * 1000L)
+            cacheStore = cacheStore,
         )
         assertThat(sut.getElementWellKnown()).isEqualTo(
-            WellknownRetrieverResult.Success(
+            WellknownRetrieverResult.Outdated(
                 ElementWellKnown(
                     registrationHelperUrl = "a_registration_url",
                     enforceElementPro = true,
@@ -302,6 +302,7 @@ class DefaultSessionWellknownRetrieverTest {
                     notificationSound = "a_notification_sound.flac",
                     identityProviderAppScheme = "an_app_scheme",
                     customRecoveryPassphrase = null,
+                    contentScannerUrl = "https://content-scanner.example.com",
                 )
             )
         )
@@ -314,20 +315,20 @@ class DefaultSessionWellknownRetrieverTest {
         )
     }
 
+    private fun parsedWellKnownContent() = DefaultJsonProvider().invoke().decodeFromString<InternalElementWellKnown>(WELLKNOWN_CONTENT).map()
+
     private fun TestScope.createDefaultSessionWellknownRetriever(
+        cacheStore: FakeElementWellknownStore = FakeElementWellknownStore(),
         getUrlLambda: (String) -> Result<ByteArray>,
         jsonProvider: JsonProvider = DefaultJsonProvider(),
-        cacheStore: CacheStore = InMemoryCacheStore(),
-        systemClock: SystemClock = FakeSystemClock(),
     ) = DefaultSessionWellknownRetriever(
         matrixClient = FakeMatrixClient(
             userIdServerNameLambda = { "user.domain.org" },
             getUrlLambda = getUrlLambda,
         ),
         json = jsonProvider,
-        cacheStore = cacheStore,
-        systemClock = systemClock,
         sessionCoroutineScope = backgroundScope,
+        elementWellknownStore = cacheStore,
     )
 
     companion object {
@@ -338,7 +339,8 @@ class DefaultSessionWellknownRetrieverTest {
                 "rageshake_url": "a_rageshake_url",
                 "brand_color": "#FF0000",
                 "notification_sound": "a_notification_sound.flac",
-                "idp_app_scheme": "an_app_scheme"
+                "idp_app_scheme": "an_app_scheme",
+                "content_scanner_url": "https://content-scanner.example.com"
             }"""
     }
 }

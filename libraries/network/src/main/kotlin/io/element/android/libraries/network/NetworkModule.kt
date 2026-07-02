@@ -16,6 +16,7 @@ import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.network.interceptors.DynamicHttpLoggingInterceptor
 import io.element.android.libraries.network.interceptors.FormattedJsonHttpLogger
 import io.element.android.libraries.network.interceptors.UserAgentInterceptor
+import okhttp3.Call
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
@@ -35,6 +36,9 @@ object NetworkModule {
         addInterceptor(userAgentInterceptor)
         addInterceptor(dynamicHttpLoggingInterceptor)
     }.build()
+
+    @Provides
+    fun providesCallFactory(okHttpClient: OkHttpClient): Call.Factory = Call.Factory { request -> okHttpClient.newCall(request) }
 
     @Provides
     @SingleIn(AppScope::class)
