@@ -4,6 +4,7 @@
   <string name="a11y_add_reaction">"Add reaction: %1$s"</string>
   <string name="a11y_address">"Address"</string>
   <string name="a11y_avatar">"Avatar"</string>
+  <string name="a11y_clear_search_field">"Clear search field"</string>
   <string name="a11y_collapse_message_text_field">"Minimise message text field"</string>
   <string name="a11y_create_poll_votes_allowed_decrease">"Decrease votes allowed per person"</string>
   <string name="a11y_create_poll_votes_allowed_increase">"Increase votes allowed per person"</string>
