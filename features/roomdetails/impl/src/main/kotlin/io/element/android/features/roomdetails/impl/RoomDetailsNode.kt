@@ -64,6 +64,7 @@ class RoomDetailsNode(
         fun navigateToRoomCall(callIntent: CallIntent)
         fun navigateToReportRoom()
         fun navigateToSelectNewOwnersWhenLeaving()
+        fun navigateToPushToTalk()
     }
 
     private val presenter = presenterFactory.create(this)
@@ -137,6 +138,7 @@ class RoomDetailsNode(
             onSecurityAndPrivacyClick = callback::navigateToSecurityAndPrivacy,
             onProfileClick = callback::navigateToRoomMemberDetails,
             onReportRoomClick = callback::navigateToReportRoom,
+            onPushToTalkClick = callback::navigateToPushToTalk,
             leaveRoomView = {
                 leaveRoomRenderer.Render(
                     state = state.leaveRoomState,

@@ -119,6 +119,7 @@ fun RoomDetailsView(
     onSecurityAndPrivacyClick: () -> Unit,
     onProfileClick: (UserId) -> Unit,
     onReportRoomClick: () -> Unit,
+    onPushToTalkClick: () -> Unit,
     modifier: Modifier = Modifier,
     leaveRoomView: @Composable () -> Unit,
 ) {
@@ -244,6 +245,10 @@ fun RoomDetailsView(
                 )
                 PollsItem(
                     openPollHistory = openPollHistory
+                )
+                // Push-to-talk (Stage 1 prototype): drives Element Call as a PTT channel.
+                PushToTalkItem(
+                    onClick = onPushToTalkClick
                 )
             }
             when (state.roomType) {
@@ -811,6 +816,18 @@ private fun MediaGalleryItem(
     )
 }
 
+// NOTE: hard-coded label — debug-only Stage 1 PTT prototype entry, not localised.
+@Composable
+private fun PushToTalkItem(
+    onClick: () -> Unit,
+) {
+    ListItem(
+        headlineContent = { Text("Push-to-talk (prototype)") },
+        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.VoiceCall())),
+        onClick = onClick,
+    )
+}
+
 @Composable
 private fun OtherActionsSection(
     canReportRoom: Boolean,
@@ -927,6 +944,7 @@ private fun ContentToPreview(state: RoomDetailsState) {
         onSecurityAndPrivacyClick = {},
         onProfileClick = {},
         onReportRoomClick = {},
+        onPushToTalkClick = {},
         leaveRoomView = {},
     )
 }

@@ -30,6 +30,7 @@ import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.knockrequests.api.list.KnockRequestsListEntryPoint
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.poll.api.history.PollHistoryEntryPoint
+import io.element.android.features.ptt.api.PttEntryPoint
 import io.element.android.features.reportroom.api.ReportRoomEntryPoint
 import io.element.android.features.rolesandpermissions.api.ChangeRoomMemberRolesEntryPoint
 import io.element.android.features.rolesandpermissions.api.ChangeRoomMemberRolesListType
@@ -87,6 +88,7 @@ class RoomDetailsFlowNode(
     private val rolesAndPermissionsEntryPoint: RolesAndPermissionsEntryPoint,
     private val securityAndPrivacyEntryPoint: SecurityAndPrivacyEntryPoint,
     private val roomDetailsEditEntryPoint: RoomDetailsEditEntryPoint,
+    private val pttEntryPoint: PttEntryPoint,
 ) : BaseFlowNode<RoomDetailsFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = plugins.filterIsInstance<RoomDetailsEntryPoint.Params>().first().initialElement.toNavTarget(),
@@ -149,6 +151,9 @@ class RoomDetailsFlowNode(
 
         @Parcelize
         data object SelectNewOwnersWhenLeaving : NavTarget
+
+        @Parcelize
+        data object Ptt : NavTarget
     }
 
     private val callback: RoomDetailsEntryPoint.Callback = callback()
@@ -244,6 +249,10 @@ class RoomDetailsFlowNode(
 
                     override fun navigateToSelectNewOwnersWhenLeaving() {
                         backstack.push(NavTarget.SelectNewOwnersWhenLeaving)
+                    }
+
+                    override fun navigateToPushToTalk() {
+                        backstack.push(NavTarget.Ptt)
                     }
                 }
                 createNode<RoomDetailsNode>(buildContext, listOf(roomDetailsCallback))
@@ -475,6 +484,9 @@ class RoomDetailsFlowNode(
                     room = room,
                     listType = ChangeRoomMemberRolesListType.SelectNewOwnersWhenLeaving,
                 )
+            }
+            NavTarget.Ptt -> {
+                pttEntryPoint.createNode(this, buildContext)
             }
         }
     }
