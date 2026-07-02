@@ -29,10 +29,12 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
 import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
+import io.element.android.libraries.push.api.notifications.RoomNotificationChannelManager
 import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
 import io.element.android.libraries.push.impl.intent.IntentProvider
 import io.element.android.libraries.push.impl.notifications.shortcut.createShortcutId
 import io.element.android.libraries.push.impl.notifications.shortcut.filterBySession
+import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.api.observer.SessionListener
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -51,6 +53,8 @@ class DefaultNotificationConversationService(
     private val matrixClientProvider: MatrixClientProvider,
     private val imageLoaderHolder: ImageLoaderHolder,
     private val lockScreenService: LockScreenService,
+    private val roomNotificationChannelManager: RoomNotificationChannelManager,
+    private val sessionStore: SessionStore,
     sessionObserver: SessionObserver,
     @AppCoroutineScope private val coroutineScope: CoroutineScope,
 ) : NotificationConversationService {
@@ -67,7 +71,11 @@ class DefaultNotificationConversationService(
             .withPreviousValue()
             .onEach { (hadPinCode, hasPinCode) ->
                 if (hadPinCode == false && hasPinCode) {
+                    // Shortcuts and per-room channels both surface a room's display name/icon in
+                    // system UI (launcher, Settings) regardless of in-app lock state, so both must
+                    // be wiped the moment the user opts into hiding that - not just shortcuts.
                     clearShortcuts()
+                    clearAllRoomChannelsForAllSessions()
                 }
             }
             .launchIn(coroutineScope)
@@ -139,6 +147,11 @@ class DefaultNotificationConversationService(
         }.onFailure {
             Timber.e(it, "Failed to remove shortcut for room $roomId in session $sessionId")
         }
+        runCatchingExceptions {
+            roomNotificationChannelManager.clearRoomChannel(sessionId, roomId)
+        }.onFailure {
+            Timber.e(it, "Failed to clear notification channel for room $roomId in session $sessionId")
+        }
     }
 
     override suspend fun onAvailableRoomsChanged(sessionId: SessionId, roomIds: Set<RoomId>) {
@@ -167,6 +180,16 @@ class DefaultNotificationConversationService(
         }.onFailure {
             Timber.e(it, "Failed to remove shortcuts for session $sessionId")
         }
+        runCatchingExceptions {
+            roomNotificationChannelManager.pruneChannelsForSession(sessionId, roomIds)
+        }.onFailure {
+            Timber.e(it, "Failed to prune notification channels for session $sessionId")
+        }
+        runCatchingExceptions {
+            roomNotificationChannelManager.pruneInactiveChannels(sessionId)
+        }.onFailure {
+            Timber.e(it, "Failed to prune inactive notification channels for session $sessionId")
+        }
     }
 
     private fun clearShortcuts() {
@@ -177,7 +200,20 @@ class DefaultNotificationConversationService(
         }
     }
 
-    private fun onSessionLogOut(sessionId: SessionId) {
+    private suspend fun clearAllRoomChannelsForAllSessions() {
+        runCatchingExceptions { sessionStore.getAllSessions() }
+            .onFailure { Timber.e(it, "Failed to list sessions to clear notification channels after enabling PIN lock") }
+            .getOrElse { emptyList() }
+            .forEach { sessionData ->
+                runCatchingExceptions {
+                    roomNotificationChannelManager.clearAllChannelsForSession(SessionId(sessionData.userId))
+                }.onFailure {
+                    Timber.e(it, "Failed to clear notification channels for session ${sessionData.userId} after enabling PIN lock")
+                }
+            }
+    }
+
+    private suspend fun onSessionLogOut(sessionId: SessionId) {
         runCatchingExceptions {
             val shortcuts = ShortcutManagerCompat.getDynamicShortcuts(context)
             val shortcutIdsToRemove = shortcuts.filterBySession(sessionId).map { it.id }
@@ -192,6 +228,11 @@ class DefaultNotificationConversationService(
             }
         }.onFailure {
             Timber.e(it, "Failed to remove shortcuts for session $sessionId after logout")
+        }
+        runCatchingExceptions {
+            roomNotificationChannelManager.clearAllChannelsForSession(sessionId)
+        }.onFailure {
+            Timber.e(it, "Failed to clear notification channels for session $sessionId after logout")
         }
     }
 }

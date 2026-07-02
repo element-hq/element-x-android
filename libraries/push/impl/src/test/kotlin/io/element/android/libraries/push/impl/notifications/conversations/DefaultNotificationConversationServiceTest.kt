@@ -24,7 +24,10 @@ import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.ui.media.test.FakeImageLoaderHolder
 import io.element.android.libraries.push.impl.notifications.factories.FakeIntentProvider
 import io.element.android.libraries.push.impl.notifications.shortcut.createShortcutId
+import io.element.android.libraries.push.test.notifications.channels.FakeRoomNotificationChannelManager
 import io.element.android.libraries.push.test.notifications.push.FakeNotificationBitmapLoader
+import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
+import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.libraries.sessionstorage.test.observer.FakeSessionObserver
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -141,6 +144,34 @@ class DefaultNotificationConversationServiceTest : RobolectricTest() {
         assertThat(shortcuts).isEmpty()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `on pin code enabled, notification channels are cleared for every session`() = runTest {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val lockScreenService = FakeLockScreenService()
+        val clearedSessions = mutableListOf<Any>()
+        val roomNotificationChannelManager = FakeRoomNotificationChannelManager(
+            clearAllChannelsForSessionLambda = { sessionId -> clearedSessions.add(sessionId) },
+        )
+        val sessionStore = InMemorySessionStore(
+            initialList = listOf(aSessionData(sessionId = A_SESSION_ID.value), aSessionData(sessionId = A_SESSION_ID_2.value)),
+        )
+        createService(
+            context,
+            lockScreenService = lockScreenService,
+            roomNotificationChannelManager = roomNotificationChannelManager,
+            sessionStore = sessionStore,
+        )
+
+        lockScreenService.setIsPinSetup(false)
+        runCurrent()
+
+        lockScreenService.setIsPinSetup(true)
+        runCurrent()
+
+        assertThat(clearedSessions).containsExactly(A_SESSION_ID, A_SESSION_ID_2)
+    }
+
     @Test
     fun `on session logged out, all shortcuts for the session are cleared`() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().context
@@ -172,10 +203,64 @@ class DefaultNotificationConversationServiceTest : RobolectricTest() {
         assertThat(shortcuts.first().id).startsWith(A_SESSION_ID_2.value)
     }
 
+    @Test
+    fun `onLeftRoom clears the room's notification channel`() = runTest {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        var clearedRoom: Pair<Any, Any>? = null
+        val roomNotificationChannelManager = FakeRoomNotificationChannelManager(
+            clearRoomChannelLambda = { sessionId, roomId -> clearedRoom = sessionId to roomId },
+        )
+        val service = createService(context, roomNotificationChannelManager = roomNotificationChannelManager)
+
+        service.onLeftRoom(sessionId = A_SESSION_ID, roomId = A_ROOM_ID)
+
+        assertThat(clearedRoom).isEqualTo(A_SESSION_ID to A_ROOM_ID)
+    }
+
+    @Test
+    fun `onAvailableRoomsChanged prunes and prunes inactive channels on the channel manager`() = runTest {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        var prunedRooms: Pair<Any, Any>? = null
+        var prunedInactiveSession: Any? = null
+        val roomNotificationChannelManager = FakeRoomNotificationChannelManager(
+            pruneChannelsForSessionLambda = { sessionId, roomIds -> prunedRooms = sessionId to roomIds },
+            pruneInactiveChannelsLambda = { sessionId -> prunedInactiveSession = sessionId },
+        )
+        val service = createService(context, roomNotificationChannelManager = roomNotificationChannelManager)
+
+        service.onAvailableRoomsChanged(sessionId = A_SESSION_ID, roomIds = setOf(A_ROOM_ID))
+
+        assertThat(prunedRooms).isEqualTo(A_SESSION_ID to setOf(A_ROOM_ID))
+        assertThat(prunedInactiveSession).isEqualTo(A_SESSION_ID)
+    }
+
+    @Test
+    fun `on session logged out, the session's notification channels are cleared`() = runTest {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val sessionObserver = FakeSessionObserver()
+        var clearedSession: Any? = null
+        val roomNotificationChannelManager = FakeRoomNotificationChannelManager(
+            clearAllChannelsForSessionLambda = { sessionId -> clearedSession = sessionId },
+        )
+        createService(context, sessionObserver = sessionObserver, roomNotificationChannelManager = roomNotificationChannelManager)
+
+        sessionObserver.onSessionCreated(A_SESSION_ID.value)
+        sessionObserver.onSessionDeleted(A_SESSION_ID.value)
+
+        assertThat(clearedSession).isEqualTo(A_SESSION_ID)
+    }
+
     private fun TestScope.createService(
         context: Context = InstrumentationRegistry.getInstrumentation().context,
         sessionObserver: FakeSessionObserver = FakeSessionObserver(),
         lockScreenService: FakeLockScreenService = FakeLockScreenService(),
+        roomNotificationChannelManager: FakeRoomNotificationChannelManager = FakeRoomNotificationChannelManager(
+            clearRoomChannelLambda = { _, _ -> },
+            pruneChannelsForSessionLambda = { _, _ -> },
+            clearAllChannelsForSessionLambda = { },
+            pruneInactiveChannelsLambda = { },
+        ),
+        sessionStore: InMemorySessionStore = InMemorySessionStore(),
     ) = DefaultNotificationConversationService(
         context = context,
         intentProvider = FakeIntentProvider(),
@@ -184,6 +269,8 @@ class DefaultNotificationConversationServiceTest : RobolectricTest() {
         imageLoaderHolder = FakeImageLoaderHolder(),
         sessionObserver = sessionObserver,
         lockScreenService = lockScreenService,
+        roomNotificationChannelManager = roomNotificationChannelManager,
+        sessionStore = sessionStore,
         coroutineScope = backgroundScope,
     )
 }

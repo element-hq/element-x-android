@@ -31,6 +31,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.getBestName
 import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
+import io.element.android.libraries.push.api.notifications.RoomNotificationChannelManager
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.RoomEventGroupInfo
 import io.element.android.libraries.push.impl.notifications.channels.NotificationChannels
@@ -114,6 +115,7 @@ interface NotificationCreator {
 class DefaultNotificationCreator(
     @ApplicationContext private val context: Context,
     private val notificationChannels: NotificationChannels,
+    private val roomNotificationChannelManager: RoomNotificationChannelManager,
     private val stringProvider: StringProvider,
     private val buildMeta: BuildMeta,
     private val pendingIntentFactory: PendingIntentFactory,
@@ -152,8 +154,11 @@ class DefaultNotificationCreator(
         val channelId = if (containsMissedCall) {
             notificationChannels.getChannelForIncomingCall(false)
         } else {
-            notificationChannels.getChannelIdForMessage(
+            roomNotificationChannelManager.getChannelIdForRoom(
                 sessionId = roomInfo.sessionId,
+                roomId = roomInfo.roomId,
+                roomDisplayName = roomInfo.roomDisplayName,
+                isDm = roomInfo.isDm,
                 noisy = roomInfo.shouldBing,
             )
         }

@@ -18,6 +18,7 @@ import io.element.android.appconfig.NotificationConfig
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_COLOR_INT
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -28,6 +29,7 @@ import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.media.test.FakeImageLoader
 import io.element.android.libraries.matrix.ui.media.test.FakeInitialsAvatarBitmapGenerator
 import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
+import io.element.android.libraries.push.api.notifications.RoomNotificationChannelManager
 import io.element.android.libraries.push.impl.notifications.DefaultNotificationBitmapLoader
 import io.element.android.libraries.push.impl.notifications.NotificationActionIds
 import io.element.android.libraries.push.impl.notifications.RoomEventGroupInfo
@@ -41,6 +43,7 @@ import io.element.android.libraries.push.impl.notifications.fixtures.aFallbackNo
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
+import io.element.android.libraries.push.test.notifications.channels.FakeRoomNotificationChannelManager
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.services.toolbox.test.systemclock.A_FAKE_TIMESTAMP
@@ -302,6 +305,50 @@ class DefaultNotificationCreatorTest : RobolectricTest() {
         result.commonAssertions()
     }
 
+    @Test
+    fun `test createMessagesListNotification asks the room channel manager for the channel id`() = runTest {
+        var requestedRoomId: RoomId? = null
+        var requestedRoomDisplayName: String? = null
+        var requestedIsDm: Boolean? = null
+        var requestedNoisy: Boolean? = null
+        val sut = createNotificationCreator(
+            roomNotificationChannelManager = FakeRoomNotificationChannelManager(
+                getChannelIdForRoomLambda = { _, roomId, roomDisplayName, isDm, noisy ->
+                    requestedRoomId = roomId
+                    requestedRoomDisplayName = roomDisplayName
+                    requestedIsDm = isDm
+                    requestedNoisy = noisy
+                    "A_ROOM_CHANNEL_ID"
+                },
+            ),
+        )
+        sut.createMessagesListNotification(
+            notificationAccountParams = aNotificationAccountParams(),
+            roomInfo = RoomEventGroupInfo(
+                sessionId = A_SESSION_ID,
+                roomId = A_ROOM_ID,
+                roomDisplayName = "roomDisplayName",
+                isDm = true,
+                hasSmartReplyError = false,
+                shouldBing = true,
+                customSound = null,
+                isUpdated = false,
+            ),
+            threadId = null,
+            largeIcon = null,
+            lastMessageTimestamp = 123_456L,
+            tickerText = "tickerText",
+            existingNotification = null,
+            imageLoader = FakeImageLoader(),
+            events = listOf(aNotifiableMessageEvent()),
+        )
+
+        assertThat(requestedRoomId).isEqualTo(A_ROOM_ID)
+        assertThat(requestedRoomDisplayName).isEqualTo("roomDisplayName")
+        assertThat(requestedIsDm).isTrue()
+        assertThat(requestedNoisy).isTrue()
+    }
+
     private fun Notification.commonAssertions(
         expectedGroup: String? = aMatrixUser().userId.value,
         expectedCategory: String? = NotificationCompat.CATEGORY_MESSAGE,
@@ -322,6 +369,9 @@ fun createNotificationCreator(
     buildMeta: BuildMeta = aBuildMeta(),
     enterpriseService: EnterpriseService = FakeEnterpriseService(),
     notificationChannels: NotificationChannels = createNotificationChannels(enterpriseService),
+    roomNotificationChannelManager: RoomNotificationChannelManager = FakeRoomNotificationChannelManager(
+        getChannelIdForRoomLambda = { sessionId, _, _, _, noisy -> notificationChannels.getChannelIdForMessage(sessionId, noisy) },
+    ),
     bitmapLoader: NotificationBitmapLoader = DefaultNotificationBitmapLoader(
         context = context,
         sdkIntProvider = FakeBuildVersionSdkIntProvider(Build.VERSION_CODES.R),
@@ -331,6 +381,7 @@ fun createNotificationCreator(
     return DefaultNotificationCreator(
         context = context,
         notificationChannels = notificationChannels,
+        roomNotificationChannelManager = roomNotificationChannelManager,
         stringProvider = FakeStringProvider("test"),
         buildMeta = buildMeta,
         pendingIntentFactory = PendingIntentFactory(
