@@ -13,8 +13,12 @@ import org.matrix.rustcomponents.sdk.MediaSource
 import org.matrix.rustcomponents.sdk.NoHandle
 import uniffi.matrix_sdk_contentscanner.MediaScanResponse
 
-class FakeFfiContentScanner : ContentScanner(NoHandle) {
+class FakeFfiContentScanner(
+    private val scan: suspend (client: Client, mediaSource: MediaSource) -> MediaScanResponse = { _, _ ->
+        MediaScanResponse(clean = true, info = "Just peachy")
+    },
+) : ContentScanner(NoHandle) {
     override suspend fun scan(client: Client, mediaSource: MediaSource): MediaScanResponse {
-        return MediaScanResponse(clean = true, info = "Just peachy")
+        return scan.invoke(client, mediaSource)
     }
 }

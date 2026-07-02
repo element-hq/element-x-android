@@ -11,6 +11,7 @@ import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.scanner.ContentScanner
 import org.matrix.rustcomponents.sdk.Client
+import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.ContentScanner as RustScanner
 import org.matrix.rustcomponents.sdk.MediaSource as RustMediaSource
 
@@ -23,15 +24,22 @@ class RustContentScanner(
             rustScanner.scan(client, mediaSource.toRustMediaSource()).clean
         }
     }
-
-    fun toRust(): RustScanner = rustScanner
 }
 
 private fun MediaSource.toRustMediaSource(): RustMediaSource {
     val json = this.json
-    return if (json != null) {
-        RustMediaSource.fromJson(json)
-    } else {
-        RustMediaSource.fromUrl(safeUrl)
+    return try {
+        if (json != null) {
+            RustMediaSource.fromJson(json)
+        } else {
+            RustMediaSource.fromUrl(safeUrl)
+        }
+    } catch (e: LinkageError) {
+        // Used for tests, since we can't instantiate an actual `RustMediaSource` because the native library can't be loaded
+        if (Class.forName("org.junit.Test") != null) {
+            RustMediaSource(NoHandle)
+        } else {
+            throw e
+        }
     }
 }

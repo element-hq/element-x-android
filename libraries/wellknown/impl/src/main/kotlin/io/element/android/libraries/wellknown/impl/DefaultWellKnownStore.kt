@@ -28,11 +28,10 @@ class DefaultWellKnownStore(
         return runCatchingExceptions {
             val cachedData = cacheStore.getData(key(domain))
             if (cachedData != null) {
+                val data = json().decodeFromString<InternalElementWellKnown>(cachedData.value).map()
                 if (systemClock.epochMillis() > cachedData.updatedAt + CACHE_VALIDITY_MILLIS) {
-                    val data = json().decodeFromString<InternalElementWellKnown>(cachedData.value).map()
                     WellknownRetrieverResult.Outdated(data)
                 } else {
-                    val data = json().decodeFromString<InternalElementWellKnown>(cachedData.value).map()
                     WellknownRetrieverResult.Success(data)
                 }
             } else {
@@ -43,10 +42,9 @@ class DefaultWellKnownStore(
         }.getOrThrow()
     }
 
-    override suspend fun update(domain: String, wellKnown: ElementWellKnown): Result<Unit> {
+    override suspend fun update(domain: String, wellknown: String): Result<Unit> {
         return runCatchingExceptions {
-            val jsonString = json().encodeToString(InternalElementWellKnown.from(wellKnown))
-            cacheStore.storeData(key(domain), CacheData(jsonString, systemClock.epochMillis()))
+            cacheStore.storeData(key(domain), CacheData(wellknown, systemClock.epochMillis()))
         }
     }
 
