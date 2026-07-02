@@ -6,9 +6,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.designsystem.atomic.organisms
+package io.element.android.libraries.designsystem.components.visuallist
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
@@ -17,14 +16,11 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.libraries.designsystem.atomic.molecules.InfoListItemMolecule
-import io.element.android.libraries.designsystem.atomic.molecules.InfoListItemPosition
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -32,9 +28,12 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
+/**
+ * Ref: https://www.figma.com/design/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?node-id=2001-140
+ */
 @Composable
-fun InfoListOrganism(
-    items: ImmutableList<InfoListItem>,
+fun VisualList(
+    items: ImmutableList<VisualListItemData>,
     modifier: Modifier = Modifier,
     backgroundColor: Color = ElementTheme.colors.bgSubtleSecondary,
     iconTint: Color = LocalContentColor.current,
@@ -49,12 +48,12 @@ fun InfoListOrganism(
     ) {
         for ((index, item) in items.withIndex()) {
             val position = when {
-                items.size == 1 -> InfoListItemPosition.Single
-                index == 0 -> InfoListItemPosition.Top
-                index == items.size - 1 -> InfoListItemPosition.Bottom
-                else -> InfoListItemPosition.Middle
+                items.size == 1 -> VisualListItemPosition.Single
+                index == 0 -> VisualListItemPosition.Top
+                index == items.size - 1 -> VisualListItemPosition.Bottom
+                else -> VisualListItemPosition.Middle
             }
-            InfoListItemMolecule(
+            VisualListItem(
                 message = {
                     if (item.message is AnnotatedString) {
                         Text(
@@ -96,22 +95,15 @@ fun InfoListOrganism(
     }
 }
 
-data class InfoListItem(
-    val message: CharSequence,
-    @DrawableRes val iconId: Int? = null,
-    val iconVector: ImageVector? = null,
-    val iconComposable: @Composable () -> Unit = {},
-)
-
 @PreviewsDayNight
 @Composable
-internal fun InfoListOrganismPreview() = ElementPreview {
+internal fun VisualListPreview() = ElementPreview {
     val items = persistentListOf(
-        InfoListItem(message = "A top item"),
-        InfoListItem(message = "A middle item"),
-        InfoListItem(message = "A bottom item"),
+        VisualListItemData(message = "A top item"),
+        VisualListItemData(message = "A middle item"),
+        VisualListItemData(message = "A bottom item"),
     )
-    InfoListOrganism(
+    VisualList(
         items = items,
     )
 }
