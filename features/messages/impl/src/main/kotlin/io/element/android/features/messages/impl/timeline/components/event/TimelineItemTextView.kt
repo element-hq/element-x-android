@@ -40,6 +40,7 @@ import io.element.android.features.messages.impl.timeline.components.layout.Cont
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContentProvider
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.features.messages.impl.urlpreview.LocalPermalinkParser
 import io.element.android.features.messages.impl.urlpreview.LocalUrlPreviewService
 import io.element.android.features.messages.impl.urlpreview.UrlPreviewData
 import io.element.android.features.messages.impl.urlpreview.findFirstPreviewableUrl
@@ -74,8 +75,9 @@ fun TimelineItemTextView(
     ) {
         val text = getTextWithResolvedMentions(content)
         val urlPreviewService = LocalUrlPreviewService.current
-        val previewUrl = remember(content.formattedBody, content.htmlDocument) {
-            findFirstPreviewableUrl(content.formattedBody, content.htmlDocument)
+        val permalinkParser = LocalPermalinkParser.current
+        val previewUrl = remember(content.formattedBody, content.htmlDocument, permalinkParser) {
+            findFirstPreviewableUrl(content.formattedBody, content.htmlDocument, permalinkParser)
         }
         val urlPreview by produceState<UrlPreviewData?>(null, previewUrl, showUrlPreviews, urlPreviewService) {
             value = if (showUrlPreviews && previewUrl != null) {

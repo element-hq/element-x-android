@@ -41,6 +41,7 @@ import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.urlpreview.LocalPermalinkParser
 import io.element.android.features.messages.impl.urlpreview.LocalUrlPreviewService
 import io.element.android.features.messages.impl.urlpreview.UrlPreviewService
 import io.element.android.features.roommembermoderation.api.ModerationAction
@@ -264,6 +265,7 @@ class MessagesNode(
         CompositionLocalProvider(
             LocalTimelineItemPresenterFactories provides timelineItemPresenterFactories,
             LocalUrlPreviewService provides urlPreviewService,
+            LocalPermalinkParser provides permalinkParser,
         ) {
             val state = presenter.present()
 
