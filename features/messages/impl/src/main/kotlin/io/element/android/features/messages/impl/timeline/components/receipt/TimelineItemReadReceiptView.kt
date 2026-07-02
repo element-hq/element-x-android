@@ -26,9 +26,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -63,7 +63,7 @@ fun TimelineItemReadReceiptView(
                 receipts = state.receipts,
                 modifier = Modifier
                     .clip(RoundedCornerShape(4.dp))
-                    .clickable { onReadReceiptsClick() }
+                    .clickable(onClick = onReadReceiptsClick)
                     .padding(2.dp)
             )
         }
@@ -132,7 +132,7 @@ private fun ReadReceiptsAvatars(
     val receiptDescription = computeReceiptDescription(receipts)
     Row(
         modifier = modifier
-            .semantics {
+            .clearAndSetSemantics {
                 testTag = TestTags.messageReadReceipts.value
                 contentDescription = receiptDescription
                 role = Role.Button
