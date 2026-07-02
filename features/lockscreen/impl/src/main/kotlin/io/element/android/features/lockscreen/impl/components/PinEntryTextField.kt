@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -50,8 +49,9 @@ fun PinEntryTextField(
     isSecured: Boolean,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    initialIsFocus: Boolean = false,
 ) {
-    var isFocused by remember { mutableStateOf(false) }
+    var isFocused by remember { mutableStateOf(initialIsFocus) }
     val filledCount = pinEntry.digits.count { it is PinDigit.Filled }
     val pinFieldLabel = stringResource(CommonStrings.a11y_pin_field)
     val digitsEnteredLabel = pluralStringResource(CommonPlurals.a11y_digits_entered, filledCount, filledCount)
@@ -137,18 +137,19 @@ private fun PinDigitView(
 internal fun PinEntryTextFieldPreview() {
     ElementPreview {
         val pinEntry = PinEntry.createEmpty(4).fillWith("12")
-        Column {
-            PinEntryTextField(
-                pinEntry = pinEntry,
-                isSecured = true,
-                onValueChange = {},
-            )
-            Spacer(modifier = Modifier.size(16.dp))
-            PinEntryTextField(
-                pinEntry = pinEntry,
-                isSecured = false,
-                onValueChange = {},
-            )
+        Column(
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            listOf(true, false).forEach { isSecured ->
+                listOf(true, false).forEach { initialIsFocus ->
+                    PinEntryTextField(
+                        pinEntry = pinEntry,
+                        isSecured = isSecured,
+                        initialIsFocus = initialIsFocus,
+                        onValueChange = {},
+                    )
+                }
+            }
         }
     }
 }
