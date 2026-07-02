@@ -26,6 +26,8 @@ sealed interface RoomCallState {
         val isAudioCall: Boolean,
         val isUserInTheCall: Boolean,
         val isUserLocallyInTheCall: Boolean,
+        /** Number of participants currently in the call/session (for the PTT session banner). */
+        val participantCount: Int = 0,
     ) : RoomCallState
 }
 

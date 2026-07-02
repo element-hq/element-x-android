@@ -59,6 +59,7 @@ class RoomCallStatePresenter(
                         isUserInTheCall = isUserInTheCall,
                         isUserLocallyInTheCall = isUserLocallyInTheCall,
                         isAudioCall = roomInfo.activeCallIntentConsensus.isAudio(),
+                        participantCount = roomInfo.activeRoomCallParticipants.size,
                     )
                     else -> RoomCallState.StandBy(
                         canStartCall = canJoinCall,
