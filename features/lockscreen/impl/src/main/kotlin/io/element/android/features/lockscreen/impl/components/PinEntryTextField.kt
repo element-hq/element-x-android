@@ -28,12 +28,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -59,7 +58,9 @@ fun PinEntryTextField(
     BasicTextField(
         modifier = modifier
             .onFocusChanged { isFocused = it.isFocused }
-            .semantics { contentDescription = "$pinFieldLabel, $digitsEnteredLabel" },
+            .clearAndSetSemantics {
+                contentDescription = "$pinFieldLabel, $digitsEnteredLabel"
+            },
         value = pinEntry.toText(),
         onValueChange = {
             onValueChange(it)
@@ -76,19 +77,18 @@ fun PinEntryTextField(
 private fun PinEntryRow(
     pinEntry: PinEntry,
     isSecured: Boolean,
-    isFocused: Boolean = false,
+    isFocused: Boolean,
 ) {
     FlowRow(
-        modifier = Modifier.border(
-            width = 2.dp,
-            color = if (isFocused) ElementTheme.colors.borderInteractiveHovered else Color.Transparent,
-            shape = RoundedCornerShape(8.dp),
-        ),
         horizontalArrangement = Arrangement.spacedBy(8.dp, alignment = Alignment.CenterHorizontally),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        for (digit in pinEntry.digits) {
-            PinDigitView(digit = digit, isSecured = isSecured)
+        pinEntry.digits.forEachIndexed { index, digit ->
+            PinDigitView(
+                digit = digit,
+                isSecured = isSecured,
+                isFocused = isFocused && index == pinEntry.digits.indexOfFirst { it is PinDigit.Empty }
+            )
         }
     }
 }
@@ -97,11 +97,16 @@ private fun PinEntryRow(
 private fun PinDigitView(
     digit: PinDigit,
     isSecured: Boolean,
+    isFocused: Boolean,
 ) {
     val shape = RoundedCornerShape(8.dp)
     val appearanceModifier = when (digit) {
         PinDigit.Empty -> {
-            Modifier.border(1.dp, ElementTheme.colors.iconPrimary, shape)
+            if (isFocused) {
+                Modifier.border(2.dp, ElementTheme.colors.borderFocused, shape)
+            } else {
+                Modifier.border(1.dp, ElementTheme.colors.iconSecondary, shape)
+            }
         }
         is PinDigit.Filled -> {
             Modifier.background(ElementTheme.colors.pinDigitBg, shape)
