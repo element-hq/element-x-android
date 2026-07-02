@@ -81,6 +81,8 @@ import io.element.android.features.messages.impl.timeline.aTimelineItemDaySepara
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.aTimelineState
 import io.element.android.features.messages.impl.timeline.components.CallMenuItem
+import io.element.android.features.messages.impl.timeline.components.PttMenuItem
+import io.element.android.features.messages.impl.timeline.components.PttSessionBanner
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionBottomSheet
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionEvent
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryEvent
@@ -241,6 +243,7 @@ fun MessagesView(
                             menuActions = {
                                 MessagesMenuActions(
                                     displayThreads = state.timelineState.timelineMode !is Timeline.Mode.Thread && state.threads.hasThreads,
+                                    isPttEnabled = state.isPttEnabled,
                                     roomCallState = state.roomCallState,
                                     onJoinCallClick = onJoinCallClick,
                                     onThreadsListClick = onThreadsListClick
@@ -285,6 +288,7 @@ fun MessagesView(
                             },
                             forceJumpToBottomVisibility = forceJumpToBottomVisibility,
                             onViewAllPinnedMessagesClick = onViewAllPinnedMessagesClick,
+                            onJoinPttClick = { onJoinCallClick(true) },
                             knockRequestsBannerView = knockRequestsBannerView,
                         )
 
@@ -415,6 +419,7 @@ fun MessagesView(
 @Composable
 internal fun RowScope.MessagesMenuActions(
     displayThreads: Boolean,
+    isPttEnabled: Boolean,
     roomCallState: RoomCallState,
     onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     onThreadsListClick: () -> Unit,
@@ -427,10 +432,20 @@ internal fun RowScope.MessagesMenuActions(
         )
         Spacer(Modifier.width(8.dp))
     }
-    CallMenuItem(
-        roomCallState = roomCallState,
-        onJoinCallClick = onJoinCallClick,
-    )
+    if (isPttEnabled) {
+        // In PTT-enabled rooms the PTT control replaces the voice/video call button (audio-only).
+        PttMenuItem(
+            roomCallState = roomCallState,
+            onStartOrJoinClick = { onJoinCallClick(true) },
+            // TODO leaving a joined session has no non-UI path yet — re-open the call to hang up.
+            onLeaveClick = { onJoinCallClick(true) },
+        )
+    } else {
+        CallMenuItem(
+            roomCallState = roomCallState,
+            onJoinCallClick = onJoinCallClick,
+        )
+    }
     Spacer(Modifier.width(8.dp))
 }
 
@@ -462,6 +477,7 @@ private fun MessagesViewContent(
     onSendLocationClick: () -> Unit,
     onCreatePollClick: () -> Unit,
     onViewAllPinnedMessagesClick: () -> Unit,
+    onJoinPttClick: () -> Unit,
     forceJumpToBottomVisibility: Boolean,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
@@ -523,6 +539,14 @@ private fun MessagesViewContent(
 
             if (state.timelineState.timelineMode !is Timeline.Mode.Thread) {
                 Column {
+                    val pttCallState = state.roomCallState
+                    if (state.isPttEnabled && pttCallState is RoomCallState.OnGoing && !pttCallState.isUserLocallyInTheCall) {
+                        PttSessionBanner(
+                            participantCount = pttCallState.participantCount,
+                            avatarData = state.roomAvatar,
+                            onJoinClick = onJoinPttClick,
+                        )
+                    }
                     AnimatedVisibility(
                         visible = state.pinnedMessagesBannerState is PinnedMessagesBannerState.Visible && scrollBehavior.isVisible,
                         modifier = Modifier.onSizeChanged { pinnedBannerHeightDp = with(density) { it.height.toDp() } },
@@ -584,6 +608,12 @@ private fun MessagesViewComposerBottomSheetContents(
                         state = state.composerState,
                         voiceMessageState = state.voiceMessageComposerState,
                         modifier = Modifier.fillMaxWidth(),
+                        // In a PTT-enabled room, once joined the mic slot becomes the push-to-talk button.
+                        showPushToTalkButton = state.isPttEnabled &&
+                            (state.roomCallState as? RoomCallState.OnGoing)?.isUserLocallyInTheCall == true,
+                        // TODO wire transmit start/stop once Element Call exposes a mic control (Stage 2).
+                        onPushToTalkPress = {},
+                        onPushToTalkRelease = {},
                     )
                 }
             }

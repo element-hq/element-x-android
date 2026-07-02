@@ -42,6 +42,7 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
 import io.element.android.features.messages.test.timeline.FakeHtmlConverterProvider
 import io.element.android.features.messages.test.timeline.voicemessages.composer.FakeDefaultVoiceMessageComposerPresenterFactory
+import io.element.android.features.ptt.test.FakePttRoomService
 import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
@@ -1399,6 +1400,7 @@ class MessagesPresenterTest {
             readReceiptBottomSheetPresenter = { aReadReceiptBottomSheetState() },
             pinnedMessagesBannerPresenter = { aLoadedPinnedMessagesBannerState() },
             roomCallStatePresenter = { aStandByCallState() },
+            pttRoomService = FakePttRoomService(),
             roomMemberModerationPresenter = roomMemberModerationPresenter,
             snackbarDispatcher = SnackbarDispatcher(),
             dispatchers = coroutineDispatchers,

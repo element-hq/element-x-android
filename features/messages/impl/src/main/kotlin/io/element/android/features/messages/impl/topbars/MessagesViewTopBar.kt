@@ -198,6 +198,7 @@ internal fun MessagesViewTopBarPreview() = ElementPreview {
             MessagesMenuActions(
                 roomCallState = roomCallState,
                 displayThreads = displayThreads,
+                isPttEnabled = false,
                 onJoinCallClick = {},
                 onThreadsListClick = {},
             )
