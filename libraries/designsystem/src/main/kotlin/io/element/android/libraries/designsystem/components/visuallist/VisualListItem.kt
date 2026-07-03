@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.designsystem.atomic.molecules
+package io.element.android.libraries.designsystem.components.visuallist
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -27,10 +27,13 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 
+/**
+ * Ref: https://www.figma.com/design/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?node-id=2001-159
+ */
 @Composable
-fun InfoListItemMolecule(
+fun VisualListItem(
     message: @Composable () -> Unit,
-    position: InfoListItemPosition,
+    position: VisualListItemPosition,
     backgroundColor: Color,
     modifier: Modifier = Modifier,
     icon: @Composable () -> Unit = {},
@@ -38,10 +41,10 @@ fun InfoListItemMolecule(
     val radius = 14.dp
     val backgroundShape = remember(position) {
         when (position) {
-            InfoListItemPosition.Single -> RoundedCornerShape(radius)
-            InfoListItemPosition.Top -> RoundedCornerShape(topStart = radius, topEnd = radius)
-            InfoListItemPosition.Middle -> RoundedCornerShape(0.dp)
-            InfoListItemPosition.Bottom -> RoundedCornerShape(bottomStart = radius, bottomEnd = radius)
+            VisualListItemPosition.Single -> RoundedCornerShape(radius)
+            VisualListItemPosition.Top -> RoundedCornerShape(topStart = radius, topEnd = radius)
+            VisualListItemPosition.Middle -> RoundedCornerShape(0.dp)
+            VisualListItemPosition.Bottom -> RoundedCornerShape(bottomStart = radius, bottomEnd = radius)
         }
     }
     Row(
@@ -61,42 +64,42 @@ fun InfoListItemMolecule(
 
 @PreviewsDayNight
 @Composable
-internal fun InfoListItemMoleculePreview() {
+internal fun VisualListItemPreview() {
     ElementPreview {
         val color = ElementTheme.colors.bgSubtleSecondary
         Column(
             modifier = Modifier.padding(10.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            InfoListItemMolecule(
+            VisualListItem(
                 message = { Text("A single item") },
                 icon = { Icon(imageVector = CompoundIcons.InfoSolid(), contentDescription = null) },
-                position = InfoListItemPosition.Single,
+                position = VisualListItemPosition.Single,
                 backgroundColor = color,
             )
-            InfoListItemMolecule(
+            VisualListItem(
                 message = { Text("A top item") },
                 icon = { Icon(imageVector = CompoundIcons.InfoSolid(), contentDescription = null) },
-                position = InfoListItemPosition.Top,
+                position = VisualListItemPosition.Top,
                 backgroundColor = color,
             )
-            InfoListItemMolecule(
+            VisualListItem(
                 message = { Text("A middle item") },
                 icon = { Icon(imageVector = CompoundIcons.InfoSolid(), contentDescription = null) },
-                position = InfoListItemPosition.Middle,
+                position = VisualListItemPosition.Middle,
                 backgroundColor = color,
             )
-            InfoListItemMolecule(
+            VisualListItem(
                 message = { Text("A bottom item") },
                 icon = { Icon(imageVector = CompoundIcons.InfoSolid(), contentDescription = null) },
-                position = InfoListItemPosition.Bottom,
+                position = VisualListItemPosition.Bottom,
                 backgroundColor = color,
             )
         }
     }
 }
 
-enum class InfoListItemPosition {
+enum class VisualListItemPosition {
     Top,
     Middle,
     Bottom,

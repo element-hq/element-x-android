@@ -1,9 +1,10 @@
 name: Generate GitHub Pages
 on:
   workflow_dispatch:
-  schedule:
-    # At 00:00 on every Tuesday UTC
-    - cron: '0 0 * * 2'
+# Disabled for now, as we don't want to generate GitHub Pages on every push to main anymore
+#  schedule:
+#    # At 00:00 on every Tuesday UTC
+#    - cron: '0 0 * * 2'
 
 permissions: {}
 

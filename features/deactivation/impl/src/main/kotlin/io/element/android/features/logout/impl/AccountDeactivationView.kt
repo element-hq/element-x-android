@@ -48,11 +48,11 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.deactivation.impl.R
 import io.element.android.features.logout.impl.ui.AccountDeactivationActionDialog
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.designsystem.atomic.organisms.InfoListItem
-import io.element.android.libraries.designsystem.atomic.organisms.InfoListOrganism
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.components.list.SwitchListItem
+import io.element.android.libraries.designsystem.components.visuallist.VisualList
+import io.element.android.libraries.designsystem.components.visuallist.VisualListItemData
 import io.element.android.libraries.designsystem.modifiers.onTabOrEnterKeyFocusNext
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -175,9 +175,9 @@ private fun Content(
             style = ElementTheme.typography.fontBodyMdRegular,
             color = ElementTheme.colors.textSecondary,
         )
-        InfoListOrganism(
+        VisualList(
             items = persistentListOf(
-                InfoListItem(
+                VisualListItemData(
                     message = buildAnnotatedStringWithStyledPart(
                         R.string.screen_deactivate_account_list_item_1,
                         R.string.screen_deactivate_account_list_item_1_bold_part,
@@ -194,7 +194,7 @@ private fun Content(
                         )
                     },
                 ),
-                InfoListItem(
+                VisualListItemData(
                     message = stringResource(R.string.screen_deactivate_account_list_item_2),
                     iconComposable = {
                         Icon(
@@ -205,7 +205,7 @@ private fun Content(
                         )
                     },
                 ),
-                InfoListItem(
+                VisualListItemData(
                     message = stringResource(R.string.screen_deactivate_account_list_item_3),
                     iconComposable = {
                         Icon(
@@ -216,7 +216,7 @@ private fun Content(
                         )
                     },
                 ),
-                InfoListItem(
+                VisualListItemData(
                     message = stringResource(R.string.screen_deactivate_account_list_item_4),
                     iconComposable = {
                         Icon(
