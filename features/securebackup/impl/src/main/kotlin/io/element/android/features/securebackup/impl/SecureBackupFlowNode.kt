@@ -21,11 +21,11 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.securebackup.api.SecureBackupEntryPoint
+import io.element.android.features.securebackup.api.SecureBackupSetupEntryPoint
 import io.element.android.features.securebackup.impl.disable.SecureBackupDisableNode
 import io.element.android.features.securebackup.impl.enter.SecureBackupEnterRecoveryKeyNode
 import io.element.android.features.securebackup.impl.reset.ResetIdentityFlowNode
 import io.element.android.features.securebackup.impl.root.SecureBackupRootNode
-import io.element.android.features.securebackup.impl.setup.SecureBackupSetupNode
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.appyx.canPop
@@ -39,6 +39,7 @@ import kotlinx.parcelize.Parcelize
 class SecureBackupFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    private val secureBackupSetupEntryPoint: SecureBackupSetupEntryPoint,
 ) : BaseFlowNode<SecureBackupFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = when (plugins.filterIsInstance<SecureBackupEntryPoint.Params>().first().initialElement) {
@@ -97,16 +98,18 @@ class SecureBackupFlowNode(
                 createNode<SecureBackupRootNode>(buildContext, listOf(callback))
             }
             NavTarget.Setup -> {
-                val inputs = SecureBackupSetupNode.Inputs(
-                    isChangeRecoveryKeyUserStory = false,
+                secureBackupSetupEntryPoint.createNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    inputs = SecureBackupSetupEntryPoint.Inputs(isChangeRecoveryKeyUserStory = false),
                 )
-                createNode<SecureBackupSetupNode>(buildContext, listOf(inputs))
             }
             NavTarget.Change -> {
-                val inputs = SecureBackupSetupNode.Inputs(
-                    isChangeRecoveryKeyUserStory = true,
+                secureBackupSetupEntryPoint.createNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    inputs = SecureBackupSetupEntryPoint.Inputs(isChangeRecoveryKeyUserStory = true),
                 )
-                createNode<SecureBackupSetupNode>(buildContext, listOf(inputs))
             }
             NavTarget.Disable -> {
                 createNode<SecureBackupDisableNode>(buildContext)

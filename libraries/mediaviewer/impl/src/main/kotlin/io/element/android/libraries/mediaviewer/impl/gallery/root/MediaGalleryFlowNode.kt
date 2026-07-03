@@ -128,13 +128,12 @@ class MediaGalleryFlowNode(
                 mediaViewerEntryPoint.createNode(
                     parentNode = this,
                     buildContext = buildContext,
-                    params = MediaViewerEntryPoint.Params(
+                    params = MediaViewerEntryPoint.Params.RoomMedia(
                         mode = navTarget.mode,
                         eventId = navTarget.eventId,
                         mediaInfo = navTarget.mediaInfo,
                         mediaSource = navTarget.mediaSource,
                         thumbnailSource = navTarget.thumbnailSource,
-                        canShowInfo = true,
                     ),
                     callback = callback,
                 )

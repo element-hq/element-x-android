@@ -11,13 +11,10 @@ package io.element.android.libraries.mediaupload.impl
 import androidx.media3.transformer.VideoEncoderSettings
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-
 @Suppress("NOTHING_TO_INLINE")
-@RunWith(RobolectricTestRunner::class)
-class VideoCompressorConfigFactoryTest {
+class VideoCompressorConfigFactoryTest : RobolectricTest() {
     @Test
     fun `if we don't have metadata the video will be resized`() {
         // Given

@@ -9,7 +9,6 @@
 
 package io.element.android.services.analyticsproviders.sentry
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
@@ -27,15 +26,14 @@ import io.element.android.services.analyticsproviders.api.AnalyticsUserData
 import io.element.android.services.appnavstate.api.AppNavigationState
 import io.element.android.services.appnavstate.api.NavigationState
 import io.element.android.services.appnavstate.test.FakeAppNavigationStateService
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.sentry.Sentry
 import io.sentry.SentryTracer
 import io.sentry.protocol.SentryId
 import io.sentry.protocol.SentryTransaction
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class SentryAnalyticsProviderTest {
+class SentryAnalyticsProviderTest : RobolectricTest() {
     @Test
     fun `init enables Sentry if DSN is present`() {
         createSentryAnalyticsProvider().run {

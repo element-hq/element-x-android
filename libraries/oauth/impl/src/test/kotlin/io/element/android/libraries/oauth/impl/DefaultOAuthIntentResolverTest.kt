@@ -13,13 +13,11 @@ import androidx.core.net.toUri
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.test.auth.FakeOAuthRedirectUrlProvider
 import io.element.android.libraries.oauth.api.OAuthAction
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
-@RunWith(RobolectricTestRunner::class)
-class DefaultOAuthIntentResolverTest {
+class DefaultOAuthIntentResolverTest : RobolectricTest() {
     @Test
     fun `test resolve OAuth go back`() {
         val sut = createDefaultOAuthIntentResolver()

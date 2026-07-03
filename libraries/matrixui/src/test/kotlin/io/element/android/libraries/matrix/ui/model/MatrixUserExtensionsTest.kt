@@ -8,7 +8,6 @@
 
 package io.element.android.libraries.matrix.ui.model
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
@@ -18,14 +17,13 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.withConfigurationAndContext
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class MatrixUserExtensionsTest {
+class MatrixUserExtensionsTest : RobolectricTest() {
     @get:Rule
     val warmUpRule = WarmUpRule()
 

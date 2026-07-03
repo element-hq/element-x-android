@@ -93,6 +93,7 @@ fun MarkdownTextInput(
                 setText(text)
                 setHint(placeholder)
                 setHintTextColor(ColorStateList.valueOf(placeholderColor.toArgb()))
+                contentDescription = placeholder
                 inputType = InputType.TYPE_CLASS_TEXT or
                     InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or
                     InputType.TYPE_TEXT_FLAG_MULTI_LINE or
@@ -129,6 +130,7 @@ fun MarkdownTextInput(
             }
         },
         update = { editText ->
+            editText.contentDescription = placeholder
             editText.applyStyleInCompose(richTextEditorStyle)
             val text = state.text.value()
             mentionSpanUpdater.updateMentionSpans(text)

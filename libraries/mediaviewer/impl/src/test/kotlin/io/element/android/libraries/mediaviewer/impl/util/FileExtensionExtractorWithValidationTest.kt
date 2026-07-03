@@ -9,12 +9,10 @@
 package io.element.android.libraries.mediaviewer.impl.util
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class FileExtensionExtractorWithValidationTest {
+class FileExtensionExtractorWithValidationTest : RobolectricTest() {
     @Test
     fun `test FileExtensionExtractor with validation OK`() {
         val sut = FileExtensionExtractorWithValidation()

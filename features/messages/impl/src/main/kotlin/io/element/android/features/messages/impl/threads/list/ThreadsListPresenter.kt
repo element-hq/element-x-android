@@ -101,9 +101,10 @@ class ThreadsListPresenter(
                     coroutineScope.launch {
                         Timber.d("Paginating thread list: $paginationStatus")
                         threadsListService.paginate()
+                            .onFailure { Timber.w(it, "Failed to paginate thread list") }
                     }
                 } else {
-                    Timber.d("Not paginating since there is nothing else to load, current status: $paginationStatus")
+                    Timber.d("Not paginating, current status: $paginationStatus")
                 }
             }
         }

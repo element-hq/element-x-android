@@ -26,18 +26,15 @@ import io.element.android.libraries.push.impl.notifications.factories.FakeIntent
 import io.element.android.libraries.push.impl.notifications.shortcut.createShortcutId
 import io.element.android.libraries.push.test.notifications.push.FakeNotificationBitmapLoader
 import io.element.android.libraries.sessionstorage.test.observer.FakeSessionObserver
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-
-@RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
-class DefaultNotificationConversationServiceTest {
+class DefaultNotificationConversationServiceTest : RobolectricTest() {
     @Test
     fun `onSendMessage adds a shortcut`() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().context

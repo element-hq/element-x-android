@@ -317,6 +317,7 @@
         "screen_chat_backup_.*",
         "screen_key_backup_disable_.*",
         "screen_recovery_key_.*",
+        "screen\\.custom_recovery_key\\..*",
         "screen_create_new_recovery_key_.*",
         "screen_encryption_reset.*",
         "screen_reset_encryption.*",

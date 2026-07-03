@@ -124,6 +124,7 @@ fun TimelineView(
     onUserDataClick: (MatrixUser) -> Unit,
     onLinkClick: (Link) -> Unit,
     onContentClick: (TimelineItem.Event) -> Unit,
+    onGalleryItemClick: ((TimelineItem.Event, Int) -> Unit),
     onMessageLongClick: (TimelineItem.Event) -> Unit,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
     onReactionClick: (emoji: String, TimelineItem.Event) -> Unit,
@@ -214,6 +215,7 @@ fun TimelineView(
                         onLinkClick = onLinkClick,
                         onLinkLongClick = ::onLinkLongClick,
                         onContentClick = onContentClick,
+                        onGalleryItemClick = onGalleryItemClick,
                         onLongClick = onMessageLongClick,
                         inReplyToClick = ::inReplyToClick,
                         onReactionClick = onReactionClick,
@@ -605,6 +607,7 @@ internal fun TimelineViewPreview(
             onReactionLongClick = { _, _ -> },
             onMoreReactionsClick = {},
             onReadReceiptClick = {},
+            onGalleryItemClick = { _, _ -> },
             forceJumpToBottomVisibility = true,
         )
     }
