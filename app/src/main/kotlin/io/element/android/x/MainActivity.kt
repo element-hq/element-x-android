@@ -65,7 +65,7 @@ class MainActivity : NodeActivity() {
         }
 
         val activity = this
-        GlobalScope.async { appBindings.x509Provider().initKeyAlias(activity) }
+        GlobalScope.async { appBindings.x509Provider().onAppStartup(activity) }
     }
 
     @Composable

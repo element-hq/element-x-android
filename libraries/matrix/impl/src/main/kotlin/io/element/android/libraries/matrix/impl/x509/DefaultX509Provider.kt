@@ -18,7 +18,7 @@ import io.element.android.libraries.matrix.api.x509.X509Verify
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultX509Provider: X509Provider {
-    override suspend fun initKeyAlias(parentActivity: Activity) {
+    override suspend fun onAppStartup(parentActivity: Activity) {
     }
 
     override suspend fun getX509Sign(): X509Sign? {
