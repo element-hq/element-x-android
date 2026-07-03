@@ -11,8 +11,8 @@ import io.element.android.libraries.matrix.api.x509.X509Sign
 import io.element.android.libraries.matrix.api.x509.X509SignatureScheme
 import uniffi.matrix_sdk_crypto.RawX509Signature
 
-/** A shim which maps from our own [io.element.android.libraries.matrix.api.x509.X509Sign] interface to the rust-sdk's interface of the same name */
-class X509SignWrapper(val x509Sign: X509Sign): org.matrix.rustcomponents.sdk.X509Sign {
+/** A shim which maps from our own [X509Sign] interface to the rust-sdk's interface of the same name */
+class X509SignWrapper(private val x509Sign: X509Sign): org.matrix.rustcomponents.sdk.X509Sign {
     override fun sign(message: ByteArray): RawX509Signature {
         val sig = x509Sign.sign(message)
         val signatureScheme = when(sig.signatureScheme) {
