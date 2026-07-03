@@ -136,6 +136,7 @@ fun MessagesView(
     onBackClick: () -> Unit,
     onRoomDetailsClick: () -> Unit,
     onEventContentClick: (isLive: Boolean, event: TimelineItem.Event) -> Boolean,
+    onGalleryEventItemClick: (isLive: Boolean, event: TimelineItem.Event, index: Int) -> Boolean,
     onUserDataClick: (UserId) -> Unit,
     onLinkClick: (String, Boolean) -> Unit,
     onSendLocationClick: () -> Unit,
@@ -207,15 +208,15 @@ fun MessagesView(
     val expandableState = rememberExpandableBottomSheetLayoutState()
     ExpandableBottomSheetLayout(
         modifier = modifier
-                .fillMaxSize()
-                .imePadding()
-                .systemBarsPadding()
-                .onSizeChanged { size ->
-                    // Let the composer takes at max half of the available height.
-                    // The value will be different if the soft keyboard is displayed
-                    // or not.
-                    maxComposerHeightPx = (size.height * 0.5f).toInt()
-                },
+            .fillMaxSize()
+            .imePadding()
+            .systemBarsPadding()
+            .onSizeChanged { size ->
+                // Let the composer takes at max half of the available height.
+                // The value will be different if the soft keyboard is displayed
+                // or not.
+                maxComposerHeightPx = (size.height * 0.5f).toInt()
+            },
         content = {
             Scaffold(
                 contentWindowInsets = WindowInsets.statusBars,
@@ -252,12 +253,22 @@ fun MessagesView(
                 content = { padding ->
                     Box(
                         modifier = Modifier
-                                .padding(padding)
-                                .consumeWindowInsets(padding)
+                            .padding(padding)
+                            .consumeWindowInsets(padding)
                     ) {
                         MessagesViewContent(
                             state = state,
                             onContentClick = ::onContentClick,
+                            onGalleryItemClick = { event, index ->
+                                val hideKeyboard = onGalleryEventItemClick(
+                                    state.timelineState.isLive,
+                                    event,
+                                    index,
+                                )
+                                if (hideKeyboard) {
+                                    localView.hideKeyboard()
+                                }
+                            },
                             onMessageLongClick = ::onMessageLongClick,
                             onUserDataClick = {
                                 hidingKeyboard {
@@ -290,10 +301,10 @@ fun MessagesView(
 
                         SuggestionsPickerView(
                             modifier = Modifier
-                                    .shadow(10.dp)
-                                    .background(ElementTheme.colors.bgCanvasDefault)
-                                    .align(Alignment.BottomStart)
-                                    .heightIn(max = 230.dp),
+                                .shadow(10.dp)
+                                .background(ElementTheme.colors.bgCanvasDefault)
+                                .align(Alignment.BottomStart)
+                                .heightIn(max = 230.dp),
                             roomId = state.roomId,
                             roomName = state.roomName,
                             roomAvatarData = state.roomAvatar,
@@ -459,6 +470,7 @@ private fun MessagesViewContent(
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
     onMessageLongClick: (TimelineItem.Event) -> Unit,
+    onGalleryItemClick: ((TimelineItem.Event, Int) -> Unit),
     onSendLocationClick: () -> Unit,
     onCreatePollClick: () -> Unit,
     onViewAllPinnedMessagesClick: () -> Unit,
@@ -469,9 +481,9 @@ private fun MessagesViewContent(
 ) {
     Box(
         modifier = modifier
-                .fillMaxSize()
-                .navigationBarsPadding()
-                .imePadding(),
+            .fillMaxSize()
+            .navigationBarsPadding()
+            .imePadding(),
     ) {
         AttachmentsBottomSheet(
             state = state.composerState,
@@ -510,6 +522,7 @@ private fun MessagesViewContent(
                 onUserDataClick = onUserDataClick,
                 onLinkClick = { link -> onLinkClick(link, false) },
                 onContentClick = onContentClick,
+                onGalleryItemClick = onGalleryItemClick,
                 onMessageLongClick = onMessageLongClick,
                 onSwipeToReply = onSwipeToReply,
                 onReactionClick = onReactionClick,
@@ -598,9 +611,9 @@ private fun MessagesViewComposerBottomSheetContents(
 private fun CantSendMessageBanner() {
     Row(
         modifier = Modifier
-                .fillMaxWidth()
-                .background(ElementTheme.colors.bgSubtleSecondary)
-                .padding(16.dp),
+            .fillMaxWidth()
+            .background(ElementTheme.colors.bgSubtleSecondary)
+            .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
@@ -637,6 +650,7 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class)
         onBackClick = {},
         onRoomDetailsClick = {},
         onEventContentClick = { _, _ -> false },
+        onGalleryEventItemClick = { _, _, _ -> false },
         onUserDataClick = {},
         onLinkClick = { _, _ -> },
         onSendLocationClick = {},
@@ -692,6 +706,7 @@ internal fun MessagesViewA11yPreview() = ElementPreview {
         onBackClick = {},
         onRoomDetailsClick = {},
         onEventContentClick = { _, _ -> false },
+        onGalleryEventItemClick = { _, _, _ -> false },
         onUserDataClick = {},
         onLinkClick = { _, _ -> },
         onSendLocationClick = {},

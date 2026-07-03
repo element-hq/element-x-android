@@ -16,6 +16,7 @@ import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
+import io.element.android.libraries.matrix.api.media.GalleryItemInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
@@ -154,6 +155,13 @@ interface Timeline : AutoCloseable {
         file: File,
         audioInfo: AudioInfo,
         waveform: List<Float>,
+        inReplyToEventId: EventId?,
+    ): Result<MediaUploadHandler>
+
+    suspend fun sendGallery(
+        items: List<GalleryItemInfo>,
+        caption: String?,
+        formattedCaption: String?,
         inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler>
 
