@@ -71,8 +71,8 @@ private fun MatrixTimelineItem.Event.isUnchanged(
     previousItems: List<MatrixTimelineItem>,
 ): Boolean {
     val previousItem = previousItems
-        .filterIsInstance<MatrixTimelineItem.Event>()
-        .find { it.uniqueId == uniqueId }
+        .find { (it as? MatrixTimelineItem.Event)?.uniqueId == uniqueId }
+        as? MatrixTimelineItem.Event
     return previousItem != null &&
         previousItem.event.eventId == event.eventId &&
         previousItem.event.timestamp == event.timestamp
