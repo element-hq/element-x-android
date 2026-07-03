@@ -83,11 +83,12 @@ private fun PinEntryRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp, alignment = Alignment.CenterHorizontally),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
+        val focusedIndex = pinEntry.digits.indexOfFirst { it is PinDigit.Empty }
         pinEntry.digits.forEachIndexed { index, digit ->
             PinDigitView(
                 digit = digit,
                 isSecured = isSecured,
-                isFocused = isFocused && index == pinEntry.digits.indexOfFirst { it is PinDigit.Empty }
+                isFocused = isFocused && index == focusedIndex
             )
         }
     }
