@@ -8,10 +8,10 @@
 package io.element.android.libraries.matrix.impl.x509
 
 import android.util.Base64
-import org.matrix.rustcomponents.sdk.X509Sign
+import io.element.android.libraries.matrix.api.x509.RawX509Signature
+import io.element.android.libraries.matrix.api.x509.X509Sign
+import io.element.android.libraries.matrix.api.x509.X509SignatureScheme
 import timber.log.Timber
-import uniffi.matrix_sdk_crypto.RawX509Signature
-import uniffi.matrix_sdk_crypto.X509SignatureScheme
 import java.security.PrivateKey
 import java.security.Signature
 import java.security.cert.Certificate
@@ -60,7 +60,7 @@ class X509KeyPair(private val key: PrivateKey, private val certificateChain: Arr
         }
 
         if (key.algorithm == "RSA") {
-            val signature = Signature.getInstance("SHA512withRSA/PSS");
+            val signature = Signature.getInstance("SHA512withRSA/PSS")
             signature.initSign(this.key)
             signature.update(message)
             Timber.i("X509: signing message %s", String(message))

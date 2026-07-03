@@ -24,7 +24,9 @@ import io.element.android.libraries.matrix.impl.proxy.ProxyProvider
 import io.element.android.libraries.matrix.impl.room.TimelineEventFilterFactory
 import io.element.android.libraries.matrix.impl.storage.SqliteStoreBuilderProvider
 import io.element.android.libraries.matrix.impl.util.anonymizedTokens
-import io.element.android.libraries.matrix.impl.x509.X509Provider
+import io.element.android.libraries.matrix.api.x509.X509Provider
+import io.element.android.libraries.matrix.impl.x509.X509SignWrapper
+import io.element.android.libraries.matrix.impl.x509.X509VerifyWrapper
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -188,12 +190,12 @@ class RustMatrixClientFactory(
 
         val x509sign = x509Provider.getX509Sign()
         if (x509sign != null) {
-            builder = builder.withX509Sign(x509sign)
+            builder = builder.withX509Sign(X509SignWrapper(x509sign))
         }
 
         val x509verify = x509Provider.getX509Verify()
         if (x509verify != null) {
-            builder = builder.withX509Verify(x509verify)
+            builder = builder.withX509Verify(X509VerifyWrapper(x509verify))
         }
 
         return builder.run {

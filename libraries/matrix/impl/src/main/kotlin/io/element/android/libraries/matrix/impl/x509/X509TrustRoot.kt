@@ -7,10 +7,10 @@
 
 package io.element.android.libraries.matrix.impl.x509
 
-import org.matrix.rustcomponents.sdk.X509Verify
+import io.element.android.libraries.matrix.api.x509.RawX509Signature
+import io.element.android.libraries.matrix.api.x509.X509SignatureScheme
+import io.element.android.libraries.matrix.api.x509.X509Verify
 import timber.log.Timber
-import uniffi.matrix_sdk_crypto.RawX509Signature
-import uniffi.matrix_sdk_crypto.X509SignatureScheme
 import java.io.ByteArrayInputStream
 import java.nio.charset.StandardCharsets
 import java.security.KeyStore

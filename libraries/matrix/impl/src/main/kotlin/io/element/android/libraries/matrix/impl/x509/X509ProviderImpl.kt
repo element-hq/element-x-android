@@ -17,11 +17,12 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.ApplicationContext
+import io.element.android.libraries.matrix.api.x509.X509Provider
+import io.element.android.libraries.matrix.api.x509.X509Sign
+import io.element.android.libraries.matrix.api.x509.X509Verify
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import org.matrix.rustcomponents.sdk.X509Sign
-import org.matrix.rustcomponents.sdk.X509Verify
 import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine

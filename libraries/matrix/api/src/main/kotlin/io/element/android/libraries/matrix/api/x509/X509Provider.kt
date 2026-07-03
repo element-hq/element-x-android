@@ -5,16 +5,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.matrix.impl.x509
-import org.matrix.rustcomponents.sdk.X509Sign
-import org.matrix.rustcomponents.sdk.X509Verify
+package io.element.android.libraries.matrix.api.x509
 
 import android.app.Activity
 
 interface X509Provider {
+    /** Called on app startup. */
     suspend fun initKeyAlias(parentActivity: Activity)
-
     suspend fun getX509Sign(): X509Sign?
     suspend fun getX509Verify(): X509Verify?
 }
-
