@@ -445,8 +445,12 @@ class AttachmentsPreviewPresenter(
                 videoCompressionPreset = videoCompressionPreset,
             )
         } else {
-            // Otherwise, we just rely on the user preferences for media optimization
-            mediaOptimizationConfigProvider.get()
+            MediaOptimizationConfig(
+                compressImages = mediaOptimizationSelectorState.isImageOptimizationEnabled
+                    ?: mediaOptimizationConfigProvider.get().compressImages,
+                videoCompressionPreset = mediaOptimizationSelectorState.selectedVideoPreset
+                    ?: mediaOptimizationConfigProvider.get().videoCompressionPreset,
+            )
         }
     }
 
