@@ -184,16 +184,16 @@ class RustMatrixClientFactory(
                 )
             )
             // Make sure all built clients use the single process cross-process lock config
-            .crossProcessLockConfig(CrossProcessLockConfig.SingleProcess);
+            .crossProcessLockConfig(CrossProcessLockConfig.SingleProcess)
 
-        var x509keyPair = x509Provider.getX509KeyPair()
-        if (x509keyPair != null) {
-            builder = builder.withX509Sign(x509keyPair)
+        val x509sign = x509Provider.getX509Sign()
+        if (x509sign != null) {
+            builder = builder.withX509Sign(x509sign)
         }
 
-        var x509TrustRoot = x509Provider.getX509TustRoot();
-        if (x509TrustRoot != null) {
-            builder = builder.withX509Verify(x509TrustRoot)
+        val x509verify = x509Provider.getX509Verify()
+        if (x509verify != null) {
+            builder = builder.withX509Verify(x509verify)
         }
 
         return builder.run {

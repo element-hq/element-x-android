@@ -6,13 +6,15 @@
  */
 
 package io.element.android.libraries.matrix.impl.x509
+import org.matrix.rustcomponents.sdk.X509Sign
+import org.matrix.rustcomponents.sdk.X509Verify
 
 import android.app.Activity
 
 interface X509Provider {
     suspend fun initKeyAlias(parentActivity: Activity)
 
-    suspend fun getX509KeyPair(): X509KeyPair?
-    suspend fun getX509TustRoot(): X509TrustRoot?
+    suspend fun getX509Sign(): X509Sign?
+    suspend fun getX509Verify(): X509Verify?
 }
 

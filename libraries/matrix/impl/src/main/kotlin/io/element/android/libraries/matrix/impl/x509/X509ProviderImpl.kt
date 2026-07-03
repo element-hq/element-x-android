@@ -20,6 +20,8 @@ import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import org.matrix.rustcomponents.sdk.X509Sign
+import org.matrix.rustcomponents.sdk.X509Verify
 import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -63,9 +65,7 @@ class X509ProviderImpl(
         )
     }
 
-
-
-    override suspend fun getX509KeyPair(): X509KeyPair? {
+    override suspend fun getX509Sign(): X509Sign? {
         val alias = this.getKeyAlias()
         if (alias == null) {
             Timber.w("X509: No key granted (yet)")
@@ -83,7 +83,7 @@ class X509ProviderImpl(
         return X509KeyPair(key, certificateChain)
     }
 
-    override suspend fun getX509TustRoot(): X509TrustRoot? {
+    override suspend fun getX509Verify(): X509Verify? {
         return X509TrustRoot()
     }
 }
