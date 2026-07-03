@@ -20,7 +20,7 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMediaRenderer
  * An implementation of [LocalMediaRenderer] that displays a sample background image.
  * To be used for Previews only.
  */
-class SampleMediaRenderer : LocalMediaRenderer {
+internal class SampleMediaRenderer : LocalMediaRenderer {
     @Composable
     override fun Render(localMedia: LocalMedia) {
         Image(
