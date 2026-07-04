@@ -176,8 +176,8 @@ class DefaultRoomNotificationChannelManager(
 
     /**
      * Matches the app's shared noisy channel's defaults (default importance, system default
-     * sound, vibration and lights on), since a channel is only ever created from a notification
-     * that was already noisy - see the class doc on [RoomNotificationChannelManager].
+     * sound, vibration and lights on), since a channel is only ever created when `noisy` is true
+     * - see the class doc on [RoomNotificationChannelManager].
      */
     private fun buildRoomChannel(
         id: String,

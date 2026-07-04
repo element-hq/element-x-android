@@ -31,6 +31,8 @@ import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.GalleryItemInfo
@@ -57,6 +59,7 @@ import io.element.android.libraries.mediaviewer.api.anImageMediaInfo
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.test.viewer.aLocalMedia
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
+import io.element.android.libraries.push.test.notifications.conversations.FakeNotificationConversationService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
@@ -112,11 +115,15 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
             },
         )
         val onDoneListener = lambdaRecorder<Unit> { }
+        val onMessageSent = lambdaRecorder<SessionId, RoomId, String?, Boolean, String?, Unit> { _, _, _, _, _ ->
+        }
+        val notificationConversationService = FakeNotificationConversationService(onMessageSentLambda = onMessageSent)
         val mediaPreProcessor = FakeMediaPreProcessor()
         val presenter = createAttachmentsPreviewPresenter(
             room = room,
             mediaPreProcessor = mediaPreProcessor,
             onDoneListener = { onDoneListener() },
+            notificationConversationService = notificationConversationService,
         )
         presenter.test {
             skipItems(1)
@@ -130,6 +137,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             sendFileResult.assertions().isCalledOnce()
             onDoneListener.assertions().isCalledOnce()
+            onMessageSent.assertions().isCalledOnce()
             assertThat(mediaPreProcessor.cleanUpCallCount).isEqualTo(1)
         }
     }
@@ -977,6 +985,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
             }
         },
         videoCompressionPresetSelector: VideoCompressionPresetSelector = VideoCompressionPresetSelector(),
+        notificationConversationService: FakeNotificationConversationService = FakeNotificationConversationService(),
     ): AttachmentsPreviewPresenter {
         return AttachmentsPreviewPresenter(
             attachments = attachments.toImmutableList(),
@@ -1001,6 +1010,8 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
             timelineMode = timelineMode,
             inReplyToEventId = null,
             mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
+            room = room,
+            notificationConversationService = notificationConversationService,
         )
     }
 

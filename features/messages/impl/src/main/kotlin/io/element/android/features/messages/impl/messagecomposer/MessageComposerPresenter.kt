@@ -594,7 +594,7 @@ class MessageComposerPresenter(
         val roomInfo = room.info()
         val roomMembers = room.membersStateFlow.value
 
-        notificationConversationService.onSendMessage(
+        notificationConversationService.onMessageSent(
             sessionId = room.sessionId,
             roomId = roomInfo.id,
             roomName = roomInfo.name,

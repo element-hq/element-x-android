@@ -24,12 +24,12 @@ import org.junit.Test
 class OnNotifiableEventReceivedTest {
     @Test
     fun `pushes a shortcut for a new incoming message`() = runTest {
-        val onSendMessage = lambdaRecorder<SessionId, RoomId, String?, Boolean, String?, Unit> { _, _, _, _, _ -> }
-        val service = FakeNotificationConversationService(onSendMessageLambda = onSendMessage)
+        val onMessageReceived = lambdaRecorder<SessionId, RoomId, String?, Boolean, String?, Unit> { _, _, _, _, _ -> }
+        val service = FakeNotificationConversationService(onMessageReceivedLambda = onMessageReceived)
 
         service.pushShortcutsForIncomingMessages(listOf(aNotifiableMessageEvent(roomId = A_ROOM_ID)))
 
-        onSendMessage.assertions().isCalledOnce().with(
+        onMessageReceived.assertions().isCalledOnce().with(
             value(A_SESSION_ID),
             value(A_ROOM_ID),
             value(A_ROOM_NAME),
@@ -40,30 +40,30 @@ class OnNotifiableEventReceivedTest {
 
     @Test
     fun `skips outgoing messages`() = runTest {
-        val onSendMessage = lambdaRecorder<SessionId, RoomId, String?, Boolean, String?, Unit> { _, _, _, _, _ -> }
-        val service = FakeNotificationConversationService(onSendMessageLambda = onSendMessage)
+        val onMessageReceived = lambdaRecorder<SessionId, RoomId, String?, Boolean, String?, Unit> { _, _, _, _, _ -> }
+        val service = FakeNotificationConversationService(onMessageReceivedLambda = onMessageReceived)
         val outgoing = aNotifiableMessageEvent(roomId = A_ROOM_ID).copy(outGoingMessage = true)
 
         service.pushShortcutsForIncomingMessages(listOf(outgoing))
 
-        onSendMessage.assertions().isNeverCalled()
+        onMessageReceived.assertions().isNeverCalled()
     }
 
     @Test
     fun `skips thread messages`() = runTest {
-        val onSendMessage = lambdaRecorder<SessionId, RoomId, String?, Boolean, String?, Unit> { _, _, _, _, _ -> }
-        val service = FakeNotificationConversationService(onSendMessageLambda = onSendMessage)
+        val onMessageReceived = lambdaRecorder<SessionId, RoomId, String?, Boolean, String?, Unit> { _, _, _, _, _ -> }
+        val service = FakeNotificationConversationService(onMessageReceivedLambda = onMessageReceived)
         val threadEvent = aNotifiableMessageEvent(roomId = A_ROOM_ID, threadId = ThreadId("\$a-thread-id"))
 
         service.pushShortcutsForIncomingMessages(listOf(threadEvent))
 
-        onSendMessage.assertions().isNeverCalled()
+        onMessageReceived.assertions().isNeverCalled()
     }
 
     @Test
     fun `dedupes multiple events for the same room`() = runTest {
-        val onSendMessage = lambdaRecorder<SessionId, RoomId, String?, Boolean, String?, Unit> { _, _, _, _, _ -> }
-        val service = FakeNotificationConversationService(onSendMessageLambda = onSendMessage)
+        val onMessageReceived = lambdaRecorder<SessionId, RoomId, String?, Boolean, String?, Unit> { _, _, _, _, _ -> }
+        val service = FakeNotificationConversationService(onMessageReceivedLambda = onMessageReceived)
 
         service.pushShortcutsForIncomingMessages(
             listOf(
@@ -73,6 +73,6 @@ class OnNotifiableEventReceivedTest {
             )
         )
 
-        onSendMessage.assertions().isCalledExactly(2)
+        onMessageReceived.assertions().isCalledExactly(2)
     }
 }

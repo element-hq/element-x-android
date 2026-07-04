@@ -39,10 +39,10 @@ class DefaultOnNotifiableEventReceived(
 }
 
 /**
- * Otherwise, [NotificationConversationService.onSendMessage] (despite the name, it just
- * creates/refreshes a room's conversation shortcut) is only called from the message composer, so
- * a room you've only ever received messages in never gets a shortcut - and without one, its
- * per-room notification channel has no icon/avatar to show in system Settings until you reply.
+ * Otherwise, a room's conversation shortcut would only ever be refreshed from the message
+ * composer (see [NotificationConversationService.onMessageSent]), so a room you've only ever
+ * received messages in never gets one - and without one, its per-room notification channel has no
+ * icon/avatar to show in system Settings until you reply.
  */
 internal suspend fun NotificationConversationService.pushShortcutsForIncomingMessages(notifiableEvents: List<NotifiableEvent>) {
     notifiableEvents
@@ -51,7 +51,7 @@ internal suspend fun NotificationConversationService.pushShortcutsForIncomingMes
         .filter { !it.outGoingMessage && it.threadId == null }
         .distinctBy { it.sessionId to it.roomId }
         .forEach { event ->
-            onSendMessage(
+            onMessageReceived(
                 sessionId = event.sessionId,
                 roomId = event.roomId,
                 roomName = event.roomName ?: event.roomId.value,

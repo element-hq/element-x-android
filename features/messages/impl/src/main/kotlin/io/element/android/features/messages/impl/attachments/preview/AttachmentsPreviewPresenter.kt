@@ -41,6 +41,8 @@ import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
+import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.room.getDirectRoomMember
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfig
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
@@ -48,6 +50,7 @@ import io.element.android.libraries.mediaupload.api.MediaSenderFactory
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.api.allFiles
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
+import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
 import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.textcomposer.model.rememberMarkdownTextEditorState
 import kotlinx.collections.immutable.ImmutableList
@@ -75,6 +78,8 @@ class AttachmentsPreviewPresenter(
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
     private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
+    private val room: JoinedRoom,
+    private val notificationConversationService: NotificationConversationService,
 ) : Presenter<AttachmentsPreviewState> {
     @AssistedFactory
     interface Factory {
@@ -547,6 +552,7 @@ class AttachmentsPreviewPresenter(
         }
     }.fold(
         onSuccess = {
+            notifyMessageSent()
             mediaUploadInfos.forEach { cleanUp(it) }
             sendActionState.value = SendActionState.Done
             onDoneListener()
@@ -560,4 +566,20 @@ class AttachmentsPreviewPresenter(
             }
         }
     )
+
+    private suspend fun notifyMessageSent() {
+        runCatchingExceptions {
+            val roomInfo = room.info()
+            val roomMembers = room.membersStateFlow.value
+            notificationConversationService.onMessageSent(
+                sessionId = room.sessionId,
+                roomId = roomInfo.id,
+                roomName = roomInfo.name,
+                roomIsDirect = roomInfo.isDm,
+                roomAvatarUrl = roomInfo.avatarUrl ?: roomMembers.getDirectRoomMember(roomInfo = roomInfo, sessionId = room.sessionId)?.avatarUrl,
+            )
+        }.onFailure {
+            Timber.e(it, "Failed to update notification conversation after sending attachment")
+        }
+    }
 }

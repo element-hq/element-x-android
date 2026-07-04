@@ -12,17 +12,20 @@ import io.element.android.libraries.matrix.api.core.SessionId
 
 /**
  * Manages a per-room Android `NotificationChannel`, created automatically the first time a room
- * produces a noisy notification. It is linked to the app's shared "noisy" channel via
- * `setConversationId`, which is what makes the room eligible for Android's Conversations UI
- * (grouped shade section, Priority Conversation toggle in system Settings) - without it, a
- * room's notification is never listed there no matter how it's otherwise built (shortcut,
- * `MessagingStyle`, etc).
+ * produces a noisy notification - or the first time a message is sent in a room whose
+ * notification mode is `ALL_MESSAGES`, so a room you've only ever sent messages in (e.g. a
+ * self-chat, which never notifies its own sender) still gets one. It is linked to the app's
+ * shared "noisy" channel via `setConversationId`, which is what makes the room eligible for
+ * Android's Conversations UI (grouped shade section, Priority Conversation toggle in system
+ * Settings) - without it, a room's notification is never listed there no matter how it's
+ * otherwise built (shortcut, `MessagingStyle`, etc).
  *
- * A channel is only ever created from a *noisy* notification: some Matrix push rule modes (e.g.
- * "mentions only") vary noisy per-event within the same room, and a channel's importance can
- * never change after creation, so creating one from a silent event would permanently silence a
- * room's future mentions. A silent notification for a room with no channel yet keeps using the
- * app's plain shared silent channel exactly as before this existed.
+ * Either way, a channel is only ever created by passing [noisy][getChannelIdForRoom] `= true`:
+ * some Matrix push rule modes (e.g. "mentions only") vary noisy per-event within the same room,
+ * and a channel's importance can never change after creation, so creating one from a silent
+ * event (or a room whose mode isn't `ALL_MESSAGES`) would permanently silence a room's future
+ * mentions. A silent notification, or a send in a non-`ALL_MESSAGES` room, keeps using the app's
+ * plain shared channel exactly as before this existed.
  */
 interface RoomNotificationChannelManager {
     /**

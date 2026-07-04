@@ -24,9 +24,11 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.di.annotations.ApplicationContext
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
 import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
 import io.element.android.libraries.push.api.notifications.RoomNotificationChannelManager
@@ -43,6 +45,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
+import kotlin.jvm.optionals.getOrNull
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
@@ -81,23 +84,51 @@ class DefaultNotificationConversationService(
             .launchIn(coroutineScope)
     }
 
-    override suspend fun onSendMessage(
+    override suspend fun onMessageSent(
         sessionId: SessionId,
         roomId: RoomId,
         roomName: String?,
         roomIsDirect: Boolean,
         roomAvatarUrl: String?,
     ) {
+        val pushed = pushConversationShortcut(sessionId, roomId, roomName, roomIsDirect, roomAvatarUrl) ?: return
+        ensureRoomNotificationChannel(pushed.client, sessionId, roomId, pushed.roomDisplayName, roomIsDirect)
+    }
+
+    override suspend fun onMessageReceived(
+        sessionId: SessionId,
+        roomId: RoomId,
+        roomName: String?,
+        roomIsDirect: Boolean,
+        roomAvatarUrl: String?,
+    ) {
+        // Deliberately does not call ensureRoomNotificationChannel: DefaultNotificationCreator
+        // already ensures the channel for a genuinely noisy incoming notification, using that
+        // event's actual noisiness rather than the room's static mode. Doing it again here would
+        // duplicate that work (extra SDK round-trips on the path to showing the notification) and
+        // could disagree with it.
+        pushConversationShortcut(sessionId, roomId, roomName, roomIsDirect, roomAvatarUrl)
+    }
+
+    private class PushedShortcut(val client: MatrixClient, val roomDisplayName: String)
+
+    private suspend fun pushConversationShortcut(
+        sessionId: SessionId,
+        roomId: RoomId,
+        roomName: String?,
+        roomIsDirect: Boolean,
+        roomAvatarUrl: String?,
+    ): PushedShortcut? {
         if (lockScreenService.isPinSetup().first()) {
             // We don't create shortcuts when a pin code is set for privacy reasons
-            return
+            return null
         }
 
         val categories = setOfNotNull(
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) ShortcutInfo.SHORTCUT_CATEGORY_CONVERSATION else null
         )
 
-        val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return
+        val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return null
         val imageLoader = imageLoaderHolder.get(client)
 
         val defaultShortcutIconSize = ShortcutManagerCompat.getIconMaxWidth(context)
@@ -130,6 +161,58 @@ class DefaultNotificationConversationService(
         runCatchingExceptions { ShortcutManagerCompat.pushDynamicShortcut(context, shortcutInfo) }
             .onFailure {
                 Timber.e(it, "Failed to create shortcut for room $roomId in session $sessionId")
+            }
+
+        return PushedShortcut(client, name)
+    }
+
+    /**
+     * A room's per-room channel is otherwise only created from a genuinely noisy incoming
+     * notification (see [RoomNotificationChannelManager]), so a room you've only ever sent
+     * messages in - e.g. a self-chat, which never generates a notification for its own sender -
+     * would never get one. Mirror that same "genuinely noisy" gate here using the room's actual
+     * notification mode, rather than assuming every send should promote the room.
+     */
+    private suspend fun ensureRoomNotificationChannel(
+        client: MatrixClient,
+        sessionId: SessionId,
+        roomId: RoomId,
+        roomDisplayName: String,
+        isDm: Boolean,
+    ) {
+        runCatchingExceptions {
+            val isEncrypted = client.getRoomInfoFlow(roomId).first().getOrNull()?.isEncrypted
+            if (isEncrypted == null) {
+                // The room's (or specifically its encryption) state hasn't synced yet. Guessing
+                // unencrypted could resolve against the wrong default push rule bucket, so skip
+                // rather than promote on a guess - a later send or receive in this room will
+                // retry once it's known.
+                Timber.d("Skipping notification channel for room $roomId in session $sessionId: encryption state not yet known")
+                return@runCatchingExceptions
+            }
+            val mode = client.notificationSettingsService.getRoomNotificationSettings(roomId, isEncrypted, isDm).getOrNull()?.mode
+            roomNotificationChannelManager.getChannelIdForRoom(
+                sessionId = sessionId,
+                roomId = roomId,
+                roomDisplayName = roomDisplayName,
+                isDm = isDm,
+                noisy = mode == RoomNotificationMode.ALL_MESSAGES,
+            )
+        }.onFailure {
+            Timber.e(it, "Failed to ensure notification channel for room $roomId in session $sessionId")
+        }
+    }
+
+    private suspend fun clearAllRoomChannelsForAllSessions() {
+        runCatchingExceptions { sessionStore.getAllSessions() }
+            .onFailure { Timber.e(it, "Failed to list sessions to clear notification channels after enabling PIN lock") }
+            .getOrElse { emptyList() }
+            .forEach { sessionData ->
+                runCatchingExceptions {
+                    roomNotificationChannelManager.clearAllChannelsForSession(SessionId(sessionData.userId))
+                }.onFailure {
+                    Timber.e(it, "Failed to clear notification channels for session ${sessionData.userId} after enabling PIN lock")
+                }
             }
     }
 
@@ -198,19 +281,6 @@ class DefaultNotificationConversationService(
         }.onFailure {
             Timber.e(it, "Failed to clear all shortcuts")
         }
-    }
-
-    private suspend fun clearAllRoomChannelsForAllSessions() {
-        runCatchingExceptions { sessionStore.getAllSessions() }
-            .onFailure { Timber.e(it, "Failed to list sessions to clear notification channels after enabling PIN lock") }
-            .getOrElse { emptyList() }
-            .forEach { sessionData ->
-                runCatchingExceptions {
-                    roomNotificationChannelManager.clearAllChannelsForSession(SessionId(sessionData.userId))
-                }.onFailure {
-                    Timber.e(it, "Failed to clear notification channels for session ${sessionData.userId} after enabling PIN lock")
-                }
-            }
     }
 
     private suspend fun onSessionLogOut(sessionId: SessionId) {
