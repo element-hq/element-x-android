@@ -26,6 +26,7 @@ dependencies {
     implementation(libs.androidx.annotationjvm)
     implementation(libs.coroutines.core)
     implementation(platform(libs.network.retrofit.bom))
+    implementation(platform(libs.network.okhttp.bom))
     implementation(libs.network.retrofit)
     implementation(libs.serialization.json)
     implementation(projects.libraries.core)
@@ -38,6 +39,7 @@ dependencies {
 
     testCommonDependencies(libs)
     testImplementation(libs.coroutines.core)
+    testImplementation(libs.network.mockwebserver)
     testImplementation(projects.libraries.cachestore.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.wellknown.test)
