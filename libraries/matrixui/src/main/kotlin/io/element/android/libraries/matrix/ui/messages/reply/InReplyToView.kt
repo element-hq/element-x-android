@@ -43,7 +43,9 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
+import io.element.android.libraries.matrix.api.timeline.item.event.isMediaContentWithPreview
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
+import io.element.android.libraries.matrix.ui.media.contentvalidation.InvalidContentView
 import io.element.android.libraries.matrix.ui.messages.sender.SenderName
 import io.element.android.libraries.matrix.ui.messages.sender.SenderNameMode
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -55,18 +57,21 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun InReplyToView(
     inReplyTo: InReplyToDetails,
     hideImage: Boolean,
+    isContentValid: Boolean? ,
     modifier: Modifier = Modifier,
     maxLines: Int = 2,
 ) {
     when (inReplyTo) {
-        is InReplyToDetails.Ready -> {
-            ReplyToReadyContent(
+        is InReplyToDetails.Ready -> when (isContentValid) {
+            true -> ReplyToReadyContent(
                 senderId = inReplyTo.senderId,
                 senderProfile = inReplyTo.senderProfile,
                 metadata = inReplyTo.metadata(hideImage),
                 maxLines = maxLines,
                 modifier = modifier,
             )
+            false -> ReplyToInvalidContent(contentHasPreview = inReplyTo.eventContent?.isMediaContentWithPreview() ?: false)
+            null -> ReplyToLoadingContent(modifier = modifier)
         }
         is InReplyToDetails.Error ->
             ReplyToErrorContent(data = inReplyTo, maxLines = maxLines, modifier = modifier)
@@ -86,7 +91,7 @@ private fun ReplyToReadyContent(
     val paddings = if (metadata is InReplyToMetadata.Thumbnail) {
         PaddingValues(end = 8.dp)
     } else {
-        PaddingValues(start = 8.dp, end = 8.dp)
+        PaddingValues(horizontal = 8.dp)
     }
     Row(
         modifier
@@ -213,11 +218,32 @@ private fun ReplyToContentText(
     }
 }
 
+@Composable
+private fun ReplyToInvalidContent(
+    contentHasPreview: Boolean,
+    modifier: Modifier = Modifier
+) {
+    InvalidContentView(
+        contentHasPreview = contentHasPreview,
+        modifier = modifier,
+        contentPadding = PaddingValues(horizontal = 8.dp)
+    )
+}
+
 @PreviewsDayNight
 @Composable
 internal fun InReplyToViewPreview(@PreviewParameter(provider = InReplyToDetailsProvider::class) inReplyTo: InReplyToDetails) = ElementPreview {
     InReplyToView(
         inReplyTo = inReplyTo,
         hideImage = false,
+        isContentValid = null,
     )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun ReplyToInvalidContentPreview() {
+    ElementPreview {
+        ReplyToInvalidContent(contentHasPreview = true, modifier = Modifier.padding(10.dp))
+    }
 }

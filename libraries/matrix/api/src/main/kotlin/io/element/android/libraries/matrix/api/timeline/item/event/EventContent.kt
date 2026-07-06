@@ -124,3 +124,19 @@ data class CallNotifyContent(
 ) : EventContent
 
 data object UnknownContent : EventContent
+
+fun EventContent.isMediaContent(): Boolean {
+    return when (this) {
+        is MessageContent -> type is MessageTypeWithAttachment
+        is StickerContent -> true
+        else -> false
+    }
+}
+
+fun EventContent.isMediaContentWithPreview(): Boolean {
+    return when (this) {
+        is MessageContent -> type is ImageMessageType || type is VideoMessageType
+        is StickerContent -> true
+        else -> false
+    }
+}

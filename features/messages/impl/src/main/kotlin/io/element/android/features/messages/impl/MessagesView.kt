@@ -91,7 +91,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
-import io.element.android.features.messages.impl.timeline.protection.LocalEventContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.LocalEventContentValidationState
 import io.element.android.features.messages.impl.topbars.MessagesViewTopBar
 import io.element.android.features.messages.impl.topbars.ThreadTopBar
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessagePermissionRationaleDialog

@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.contentscanner.api
+package io.element.android.libraries.matrix.ui.media.contentvalidation
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
@@ -20,6 +20,8 @@ class ContentValidationState(
     val state: MutableState<AsyncData<Boolean>>,
 ) {
     constructor() : this(state = mutableStateOf(AsyncData.Uninitialized))
+
+    constructor(isValid: Boolean) : this(state = mutableStateOf(AsyncData.Success(isValid)))
 
     fun isValid(): Boolean {
         return state.value.dataOrNull() == true

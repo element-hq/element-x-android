@@ -10,8 +10,8 @@ package io.element.android.features.contentscanner.impl
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
-import io.element.android.features.contentscanner.api.ContentValidationState
-import io.element.android.features.contentscanner.api.EventContentValidationCache
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.EventContentValidationCache
 import io.element.android.libraries.matrix.api.core.EventId
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.collections.getOrPut

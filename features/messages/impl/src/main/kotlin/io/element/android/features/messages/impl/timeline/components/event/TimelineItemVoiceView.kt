@@ -40,6 +40,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayout
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContentProvider
@@ -51,6 +52,7 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrix.ui.media.contentvalidation.InvalidContentView
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import io.element.android.libraries.voiceplayer.api.VoiceMessageEvent
@@ -64,10 +66,18 @@ fun TimelineItemVoiceView(
     content: TimelineItemVoiceContent,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
-    isDangerousContent: Boolean = false,
+    isDangerousContent: Boolean? = false,
 ) {
-    if (isDangerousContent) {
-        TimelineItemDangerousFileView(modifier)
+    if (isDangerousContent == true) {
+        InvalidContentView(
+            modifier = modifier,
+            contentHasPreview = false,
+            onTextLayout = ContentAvoidingLayout.measureLastTextLine(
+                onContentLayoutChange = onContentLayoutChange,
+                // Icon + horizontal paddings
+                extraWidth = 24.dp + 20.dp,
+            ),
+        )
     } else {
         fun playPause() {
             state.eventSink(VoiceMessageEvent.PlayPause)
@@ -107,12 +117,16 @@ fun TimelineItemVoiceView(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             if (!isTalkbackActive()) {
-                when (state.buttonType) {
-                    VoiceMessageState.ButtonType.Play -> PlayButton(onClick = ::playPause)
-                    VoiceMessageState.ButtonType.Pause -> PauseButton(onClick = ::playPause)
-                    VoiceMessageState.ButtonType.Downloading -> ProgressButton()
-                    VoiceMessageState.ButtonType.Retry -> RetryButton(onClick = ::playPause)
-                    VoiceMessageState.ButtonType.Disabled -> PlayButton(onClick = {}, enabled = false)
+                if (isDangerousContent == false) {
+                    when (state.buttonType) {
+                        VoiceMessageState.ButtonType.Play -> PlayButton(onClick = ::playPause)
+                        VoiceMessageState.ButtonType.Pause -> PauseButton(onClick = ::playPause)
+                        VoiceMessageState.ButtonType.Downloading -> ProgressButton()
+                        VoiceMessageState.ButtonType.Retry -> RetryButton(onClick = ::playPause)
+                        VoiceMessageState.ButtonType.Disabled -> PlayButton(onClick = {}, enabled = false)
+                    }
+                } else if (isDangerousContent == null) {
+                    ProgressButton(displayImmediately = true)
                 }
             }
             Spacer(Modifier.width(8.dp))

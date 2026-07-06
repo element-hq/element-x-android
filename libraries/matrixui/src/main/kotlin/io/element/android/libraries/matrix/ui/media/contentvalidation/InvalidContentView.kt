@@ -5,18 +5,22 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.messages.impl.timeline.components.event
+package io.element.android.libraries.matrix.ui.media.contentvalidation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -24,11 +28,16 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 
 @Composable
-fun TimelineItemDangerousFileView(
+fun InvalidContentView(
+    contentHasPreview: Boolean,
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues.Zero,
+    onTextLayout: (TextLayoutResult) -> Unit = {},
 ) {
     Row(
-        modifier = modifier.background(ElementTheme.colors.bgCriticalSubtle),
+        modifier = modifier
+            .background(color = ElementTheme.colors.bgCriticalSubtle)
+            .padding(contentPadding),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -37,16 +46,19 @@ fun TimelineItemDangerousFileView(
             contentDescription = null,
             tint = ElementTheme.colors.iconCriticalPrimary
         )
-        Column(modifier = Modifier.fillMaxWidth()) {
+        Column(Modifier.weight(1f)) {
             Text(
-                modifier = Modifier.fillMaxWidth(),
                 text = "The file is not safe",
                 color = ElementTheme.colors.textCriticalPrimary,
                 style = ElementTheme.typography.fontBodyLgMedium,
             )
+            val text = if (contentHasPreview) "Download and preview have been disabled" else "Download has been disabled."
+            val textMeasurer = rememberTextMeasurer()
+            LaunchedEffect(text) {
+                onTextLayout(textMeasurer.measure(text))
+            }
             Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = "Download has been disabled.",
+                text = text,
                 color = ElementTheme.colors.textSecondary,
                 style = ElementTheme.typography.fontBodyMdRegular,
             )
@@ -56,6 +68,9 @@ fun TimelineItemDangerousFileView(
 
 @PreviewsDayNight
 @Composable
-internal fun TimelineItemDangerousFileViewPreview() = ElementPreview {
-    TimelineItemDangerousFileView()
+internal fun InvalidContentViewPreview() = ElementPreview {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        InvalidContentView(contentHasPreview = true)
+        InvalidContentView(contentHasPreview = false)
+    }
 }

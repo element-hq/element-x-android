@@ -10,7 +10,7 @@ package io.element.android.features.contentscanner.impl
 import androidx.collection.LruCache
 import androidx.compose.runtime.MutableState
 import io.element.android.features.contentscanner.api.ContentScannerService
-import io.element.android.features.contentscanner.api.EventContentValidationCache
+import io.element.android.libraries.matrix.ui.media.contentvalidation.EventContentValidationCache
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.core.EventId

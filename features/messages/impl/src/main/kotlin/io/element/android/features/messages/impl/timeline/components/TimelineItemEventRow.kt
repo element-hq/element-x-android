@@ -88,7 +88,7 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.model.event.ensureActiveLiveLocation
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.timeline.protection.mustBeProtected
-import io.element.android.features.messages.impl.timeline.protection.rememberEventContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.rememberEventContentValidationState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
@@ -123,6 +123,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.getDisplayNam
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToView
+import io.element.android.libraries.matrix.ui.messages.reply.content
 import io.element.android.libraries.matrix.ui.messages.reply.eventId
 import io.element.android.libraries.matrix.ui.messages.sender.SenderName
 import io.element.android.libraries.matrix.ui.messages.sender.SenderNameMode
@@ -464,7 +465,7 @@ private fun TimelineItemEventRowContent(
             )
         }
 
-        val isContentInvalid = rememberEventContentValidationState(event.eventId).isInvalid()
+        val isContentInvalid = rememberEventContentValidationState(eventId = event.eventId, needsValidation = event.content.isMedia).isInvalid()
 
         // If the event has a dangerous media content without a preview, we need to set a custom message bubble background color
         val themeColors = ElementTheme.colors
@@ -775,10 +776,12 @@ private fun MessageEventBubbleContent(
         }
 
         val inReplyTo = @Composable { inReplyTo: InReplyToDetails ->
+            val contentValidationState = rememberEventContentValidationState(eventId = inReplyTo.eventId(), eventContent = inReplyTo.content())
             val topPadding = if (showThreadDecoration) 0.dp else 8.dp
+            val shape = RoundedCornerShape(6.dp)
             val inReplyToModifier = Modifier
                 .padding(top = topPadding, start = 8.dp, end = 8.dp)
-                .clip(RoundedCornerShape(6.dp))
+                .clip(shape)
 
             val talkbackCompatModifier = if (isTalkbackActive()) {
                 // Use z-index to make the replied to text being read after the message
@@ -787,14 +790,18 @@ private fun MessageEventBubbleContent(
             } else {
                 inReplyToModifier.clickable(onClick = inReplyToClick)
             }
+
+            val borderColor = if (contentValidationState.isInvalid()) ElementTheme.colors.borderCriticalSubtle else ElementTheme.colors.separatorPrimary
+            val backgroundColor = if (contentValidationState.isInvalid()) ElementTheme.colors.bgCriticalSubtle else ElementTheme.colors.bgCanvasDefault
             Box(
                 modifier = talkbackCompatModifier
-                    .border(1.dp, ElementTheme.colors.separatorPrimary, RoundedCornerShape(6.dp))
-                    .background(ElementTheme.colors.bgCanvasDefault, RoundedCornerShape(6.dp))
+                    .border(1.dp, borderColor, shape)
+                    .background(backgroundColor, shape)
                     .padding(4.dp)
             ) {
                 InReplyToView(
                     inReplyTo = inReplyTo,
+                    isContentValid = contentValidationState.state.value.dataOrNull(),
                     hideImage = timelineProtectionState.hideMediaContent(inReplyTo.eventId()),
                 )
             }
@@ -814,19 +821,25 @@ private fun MessageEventBubbleContent(
         }
     }
 
-    val timestampPosition = when (val content = event.content) {
-        is TimelineItemImageContent -> if (content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
-        is TimelineItemVideoContent -> if (content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
-        is TimelineItemStickerContent -> TimestampPosition.Overlay
-        is TimelineItemLocationContent -> {
-            val content = content.ensureActiveLiveLocation()
-            val shouldHide = content.mode is TimelineItemLocationContent.Mode.Live &&
-                content.mode.isActive &&
-                content.mode.isOwnUser
-            if (shouldHide) TimestampPosition.Hidden else TimestampPosition.Overlay
+    val isContentDangerous = rememberEventContentValidationState(eventId = event.eventId, needsValidation = event.content.isMedia).isInvalid()
+
+    val timestampPosition = if (isContentDangerous) {
+        TimestampPosition.Aligned
+    } else {
+        when (val content = event.content) {
+            is TimelineItemImageContent -> if (content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
+            is TimelineItemVideoContent -> if (content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
+            is TimelineItemStickerContent -> TimestampPosition.Overlay
+            is TimelineItemLocationContent -> {
+                val content = content.ensureActiveLiveLocation()
+                val shouldHide = content.mode is TimelineItemLocationContent.Mode.Live &&
+                    content.mode.isActive &&
+                    content.mode.isOwnUser
+                if (shouldHide) TimestampPosition.Hidden else TimestampPosition.Overlay
+            }
+            is TimelineItemPollContent -> TimestampPosition.Below
+            else -> TimestampPosition.Default
         }
-        is TimelineItemPollContent -> TimestampPosition.Below
-        else -> TimestampPosition.Default
     }
 
     val paddingBehaviour = when (event.content) {

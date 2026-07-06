@@ -49,6 +49,7 @@ dependencies {
     implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixmedia.api)
+    implementation(projects.libraries.matrixui)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.uiUtils)
     implementation(projects.libraries.voiceplayer.api)

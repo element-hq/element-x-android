@@ -23,7 +23,6 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.contentscanner.api.ContentScannerService
-import io.element.android.features.contentscanner.api.EventContentValidationCache
 import io.element.android.libraries.androidutils.R
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -35,6 +34,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.EventContentValidationCache
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.mediaviewer.impl.datasource.MediaGalleryDataSource

@@ -12,7 +12,7 @@ import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 import io.element.android.features.contentscanner.api.ContentScannerService
-import io.element.android.features.contentscanner.api.EventContentValidationCache
+import io.element.android.libraries.matrix.ui.media.contentvalidation.EventContentValidationCache
 import io.element.android.features.contentscanner.impl.DefaultContentScannerService
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope

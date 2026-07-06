@@ -16,5 +16,5 @@ import io.element.android.libraries.matrix.api.scanner.ContentScannerUrlProvider
  */
 @ContributesBinding(AppScope::class)
 class DefaultContentScannerUrlProvider : ContentScannerUrlProvider {
-    override suspend fun getContentScannerUrl(homeserver: String): Result<String?> = Result.success(null)
+    override suspend fun getContentScannerUrl(homeserver: String): Result<String?> = Result.success("http://192.168.1.38:8080") //Result.success(null)
 }

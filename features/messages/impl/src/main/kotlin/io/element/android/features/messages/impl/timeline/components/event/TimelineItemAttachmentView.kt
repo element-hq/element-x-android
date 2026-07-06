@@ -27,8 +27,10 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayout
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrix.ui.media.contentvalidation.InvalidContentView
 
 /**
  * package-private, you should only use TimelineItemFileView and TimelineItemAudioView.
@@ -43,25 +45,33 @@ fun TimelineItemAttachmentView(
     caption: String?,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
-    isDangerous: Boolean = false,
+    isDangerous: Boolean? = false,
 ) {
     Column(
         modifier = modifier,
     ) {
-        if (!isDangerous) {
+        if (isDangerous != true) {
             TimelineItemAttachmentHeaderView(
                 icon = icon,
                 iconContentDescription = iconContentDescription,
                 filename = filename,
                 fileExtensionAndSize = fileExtensionAndSize,
                 hasCaption = caption != null,
+                isLoading = isDangerous == null,
                 onContentLayoutChange = onContentLayoutChange,
             )
         } else {
-            TimelineItemDangerousFileView()
+            InvalidContentView(
+                contentHasPreview = false,
+                onTextLayout = ContentAvoidingLayout.measureLastTextLine(
+                    onContentLayoutChange = onContentLayoutChange,
+                    // Icon + horizontal paddings
+                    extraWidth = 24.dp + 20.dp,
+                )
+            )
         }
         if (caption != null) {
-            if (isDangerous) {
+            if (isDangerous == true) {
                 // Add some spacing between the dangerous file view and the caption
                 Spacer(Modifier.height(8.dp))
             }
@@ -81,6 +91,7 @@ private fun TimelineItemAttachmentHeaderView(
     filename: String,
     fileExtensionAndSize: String,
     hasCaption: Boolean,
+    isLoading: Boolean,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -97,12 +108,19 @@ private fun TimelineItemAttachmentHeaderView(
                 .background(ElementTheme.colors.bgCanvasDefault, RoundedCornerShape(4.dp)),
             contentAlignment = Alignment.Center,
         ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = iconContentDescription,
-                tint = ElementTheme.colors.iconPrimary,
-                modifier = Modifier.size(24.dp),
-            )
+            if (isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(24.dp),
+                    color = ElementTheme.colors.iconPrimary,
+                )
+            } else {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = iconContentDescription,
+                    tint = ElementTheme.colors.iconPrimary,
+                    modifier = Modifier.size(24.dp),
+                )
+            }
         }
         Column {
             Text(

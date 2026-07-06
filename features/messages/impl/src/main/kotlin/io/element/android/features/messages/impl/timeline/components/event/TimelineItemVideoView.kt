@@ -44,7 +44,7 @@ import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.contentscanner.api.ContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.components.ATimelineItemEventRow
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayout
@@ -64,6 +64,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.ui.media.MAX_THUMBNAIL_HEIGHT
 import io.element.android.libraries.matrix.ui.media.MAX_THUMBNAIL_WIDTH
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
+import io.element.android.libraries.matrix.ui.media.contentvalidation.InvalidContentView
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
@@ -151,7 +152,7 @@ fun TimelineItemVideoView(
                 }
             }
         } else {
-            TimelineItemDangerousMediaView()
+            InvalidContentView(modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp), contentHasPreview = true)
         }
 
         if (content.showCaption) {

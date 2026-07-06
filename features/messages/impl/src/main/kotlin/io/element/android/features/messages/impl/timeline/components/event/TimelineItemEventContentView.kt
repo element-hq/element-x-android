@@ -36,7 +36,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.ensureActiveLiveLocation
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
-import io.element.android.features.messages.impl.timeline.protection.rememberEventContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.rememberEventContentValidationState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.EventId
@@ -66,7 +66,7 @@ fun TimelineItemEventContentView(
         }
     }
 
-    val contentValidationState = rememberEventContentValidationState(eventId)
+    val contentValidationState = rememberEventContentValidationState(eventId = eventId, needsValidation = content.isMedia)
 
     if (eventId != null) {
         ValidateMediaHelper(eventId, content, contentValidationState.state, eventSink)
@@ -147,7 +147,7 @@ fun TimelineItemEventContentView(
                 content = content,
                 onContentLayoutChange = onContentLayoutChange,
                 modifier = modifier,
-                isDangerous = contentValidationState.isInvalid(),
+                isDangerous = contentValidationState.state.value.dataOrNull()?.not(),
             )
         }
         is TimelineItemAudioContent -> {
@@ -155,7 +155,7 @@ fun TimelineItemEventContentView(
                 content = content,
                 onContentLayoutChange = onContentLayoutChange,
                 modifier = modifier,
-                isDangerous = contentValidationState.isInvalid(),
+                isDangerous = contentValidationState.state.value.dataOrNull()?.not(),
             )
         }
         is TimelineItemLegacyCallInviteContent -> TimelineItemLegacyCallInviteView(modifier = modifier)
@@ -175,7 +175,7 @@ fun TimelineItemEventContentView(
                 content = content,
                 onContentLayoutChange = onContentLayoutChange,
                 modifier = modifier,
-                isDangerousContent = contentValidationState.isInvalid(),
+                isDangerousContent = contentValidationState.state.value.dataOrNull()?.not(),
             )
         }
         is TimelineItemRtcNotificationContent -> error("This shouldn't be rendered as the content of a bubble")
