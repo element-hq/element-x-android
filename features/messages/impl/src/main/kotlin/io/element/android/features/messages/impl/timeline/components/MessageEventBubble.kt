@@ -27,6 +27,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.drawOutline
+import androidx.compose.ui.graphics.drawscope.DrawStyle
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.layer.CompositingStrategy
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.LayoutDirection
@@ -63,6 +66,7 @@ fun MessageEventBubble(
     onLongClick: () -> Unit,
     modifier: Modifier = Modifier,
     customBackgroundColor: Color? = null,
+    borderColor: Color? = null,
     content: @Composable BoxScope.() -> Unit = {},
 ) {
     val clickableModifier = if (isTalkbackActive()) {
@@ -100,6 +104,10 @@ fun MessageEventBubble(
                     ) {
                         // Draw the background first, so that it's behind the content
                         drawRect(backgroundBubbleColor)
+
+                        if (borderColor != null) {
+                            drawOutline(outline, borderColor, style = Stroke(width = 1.dp.toPx()))
+                        }
 
                         // Then draw the content on top of it
                         drawContent()

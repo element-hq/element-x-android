@@ -473,6 +473,10 @@ private fun TimelineItemEventRowContent(
             themeColors.bgCriticalSubtle.takeIf { isContentInvalid && event.content.isMedia }
         }
 
+        val borderColor = remember(themeColors.isLight, isContentInvalid) {
+            themeColors.borderCriticalSubtle.takeIf { isContentInvalid }
+        }
+
         // Message bubble
         val bubbleState = BubbleState(
             groupPosition = event.groupPosition,
@@ -500,6 +504,7 @@ private fun TimelineItemEventRowContent(
             onClick = onContentClick,
             onLongClick = onLongClick,
             customBackgroundColor = dangerousContentBubbleColor,
+            borderColor = borderColor,
         ) {
             MessageEventBubbleContent(
                 event = event,
