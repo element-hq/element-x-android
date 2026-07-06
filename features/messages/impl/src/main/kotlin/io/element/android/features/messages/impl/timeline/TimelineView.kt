@@ -646,6 +646,7 @@ private fun TimelineViewWithReadMarker(
             onUserDataClick = {},
             onLinkClick = {},
             onContentClick = {},
+            onGalleryItemClick = { _, _ -> },
             onMessageLongClick = {},
             onSwipeToReply = {},
             onReactionClick = { _, _ -> },
