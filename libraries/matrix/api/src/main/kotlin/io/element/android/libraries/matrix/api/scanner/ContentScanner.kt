@@ -10,11 +10,14 @@ package io.element.android.libraries.matrix.api.scanner
 import io.element.android.libraries.matrix.api.media.MediaSource
 
 /**
- * Component used to scan media content for potential security risks.
+ * Component used to manually scan media content for potential security risks.
+ *
+ * While the Matrix SDK automatically scans media content we load if a content scanner instance is provided, this interface allows for scanning
+ * some media sources in advance without actually loading their contents, which can be useful for pre-fetching scenarios.
  */
 interface ContentScanner {
     /**
-     * Scans the given [mediaSource] for potential security risks.
+     * Manually scans the given [mediaSource] for potential security risks.
      *
      * @param mediaSource The media source to scan.
      * @return A [Result] containing a [Boolean] indicating whether the content is safe (true) or potentially unsafe (false).
