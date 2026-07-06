@@ -13,7 +13,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.features.contentscanner.api"
+    namespace = "io.element.android.features.contentscanner.impl"
 }
 
 setupDependencyInjection()
