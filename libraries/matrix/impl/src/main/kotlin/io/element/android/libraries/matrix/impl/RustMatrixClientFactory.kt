@@ -130,7 +130,7 @@ class RustMatrixClientFactory(
                     client.setContentScanner(contentScanner)
                     RustContentScanner(
                         client = client,
-                        rustScanner = ContentScanner(contentScannerUrl),
+                        rustScanner = contentScanner,
                     )
                 }
         }
