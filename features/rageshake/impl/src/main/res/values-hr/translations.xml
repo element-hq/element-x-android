@@ -8,6 +8,8 @@
   <string name="screen_bug_report_editor_placeholder">"Opišite problem…"</string>
   <string name="screen_bug_report_editor_supporting">"Ako je moguće, molimo vas da opis bude na engleskom jeziku."</string>
   <string name="screen_bug_report_error_description_too_short">"Opis je prekratak; navedite više pojedinosti o tome što se dogodilo. Hvala!"</string>
+  <string name="screen_bug_report_github_issue_description">"Možete unijeti broj povezanog GitHub problema, ako postoji."</string>
+  <string name="screen_bug_report_github_issue_label">"Problem s GitHubom"</string>
   <string name="screen_bug_report_include_crash_logs">"Pošalji zapisnike o padu aplikacije"</string>
   <string name="screen_bug_report_include_logs">"Dopusti zapisnike"</string>
   <string name="screen_bug_report_include_logs_error">"Vaši su zapisnici preopširni pa ih nije moguće uključiti u ovo izvješće. Molimo vas da nam ih pošaljete na drugi način."</string>

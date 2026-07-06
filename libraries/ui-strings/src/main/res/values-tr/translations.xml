@@ -37,7 +37,6 @@
     <item quantity="other">"%1$s ve %2$d diğer kişi tarafından okundu"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Okuyan %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Tümünü göstermek için dokunun"</string>
   <string name="a11y_remove_reaction">"Tepkimeyi kaldır %1$s"</string>
   <string name="a11y_remove_reaction_with">"%1$s ile verilen tepkiyi kaldır"</string>
   <string name="a11y_room_avatar">"Oda avatarı"</string>

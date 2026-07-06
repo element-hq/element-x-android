@@ -49,7 +49,6 @@
     <item quantity="other">"Seda lugesid %1$s ja veel %2$d kasutajat"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Seda luges %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Vaata kõiki"</string>
   <string name="a11y_remove_reaction">"Eemalda reageerimine %1$s emotikoniga"</string>
   <string name="a11y_remove_reaction_with">"Eemalda reageerimine: %1$s"</string>
   <string name="a11y_room_avatar">"Jututoa tunnuspilt"</string>

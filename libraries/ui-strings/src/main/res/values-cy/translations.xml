@@ -45,7 +45,6 @@
     <item quantity="other">"Wedi\'i ddarllen gan %1$s a %2$d arall"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Wedi\'i ddarllen gan %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Tapio i ddangos y cyfan"</string>
   <string name="a11y_remove_reaction">"Wedi dileu adwaith gyda %1$s"</string>
   <string name="a11y_remove_reaction_with">"Wedi dileu adwaith gyda %1$s"</string>
   <string name="a11y_room_avatar">"Afatar ystafell"</string>

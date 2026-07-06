@@ -4,6 +4,7 @@
   <string name="a11y_add_reaction">"添加反应：%1$s"</string>
   <string name="a11y_address">"地址"</string>
   <string name="a11y_avatar">"头像"</string>
+  <string name="a11y_clear_search_field">"清除搜索框"</string>
   <string name="a11y_collapse_message_text_field">"最小化消息文本框"</string>
   <string name="a11y_create_poll_votes_allowed_decrease">"减少每人允许的投票数"</string>
   <string name="a11y_create_poll_votes_allowed_increase">"增加每人允许的投票数"</string>
@@ -42,12 +43,12 @@
   <string name="a11y_qr_code">"二维码"</string>
   <string name="a11y_react_with">"使用 %1$s 反应"</string>
   <string name="a11y_react_with_other_emojis">"使用其它 Emoji 做出反应"</string>
-  <string name="a11y_read_receipts_multiple">"%1$s 和 %2$s 已读"</string>
+  <string name="a11y_read_receipts_multiple">"上一个消息已被 %1$s 与 %2$d 阅读"</string>
   <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="other">"%1$s 及其他 %2$d 人已读"</item>
+    <item quantity="other">"上一个消息已被 %1$s 与 %2$d 及其他人阅读"</item>
   </plurals>
-  <string name="a11y_read_receipts_single">"%1$s 已读"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"点击以显示全部"</string>
+  <string name="a11y_read_receipts_single">"上一个消息已被 %1$s 阅读"</string>
+  <string name="a11y_read_receipts_tap_to_show_all_android">"显示所有已读回执"</string>
   <string name="a11y_remove_reaction">"移除反应：%1$s"</string>
   <string name="a11y_remove_reaction_with">"移除反应：%1$s"</string>
   <string name="a11y_room_avatar">"房间头像"</string>
@@ -222,6 +223,10 @@
   <string name="common_call_started">"通话已开始"</string>
   <string name="common_call_you_declined">"你已拒接来电"</string>
   <string name="common_chat_backup">"聊天记录备份"</string>
+  <string name="common_content_scanner_not_found">"无法下载。"</string>
+  <string name="common_content_scanner_not_found_title">"文件未找到"</string>
+  <string name="common_content_scanner_unsafe_message">"预览与下载功能已被禁用。"</string>
+  <string name="common_content_scanner_unsafe_title">"此文件不安全"</string>
   <string name="common_copied_to_clipboard">"已复制到剪贴板"</string>
   <string name="common_copyright">"版权"</string>
   <string name="common_creating_room">"正在创建房间…"</string>

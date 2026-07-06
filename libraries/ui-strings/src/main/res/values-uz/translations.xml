@@ -41,7 +41,6 @@
     <item quantity="other">"%1$s va %2$d boshqa kishilar tomonidan oʻqildi"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Muallif: %1$s bilan oʻqish"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Hammasini ko\'rsatish uchun bosing"</string>
   <string name="a11y_remove_reaction">"Reaktsiyani olib tashlang: %1$s"</string>
   <string name="a11y_remove_reaction_with">"%1$s bilan reaktsiyani olib tashlang"</string>
   <string name="a11y_room_avatar">"Xona avatari"</string>

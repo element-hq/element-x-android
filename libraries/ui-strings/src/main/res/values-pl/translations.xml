@@ -51,7 +51,6 @@
     <item quantity="many">"Odczytano przez %1$s i %2$d innych"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Odczytane przez %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Stuknij, aby pokazać wszystkich"</string>
   <string name="a11y_remove_reaction">"Usuń reakcję %1$s"</string>
   <string name="a11y_remove_reaction_with">"Usuń reakcję z %1$s"</string>
   <string name="a11y_room_avatar">"Awatar pokoju"</string>

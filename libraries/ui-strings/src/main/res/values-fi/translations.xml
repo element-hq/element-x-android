@@ -45,7 +45,6 @@
     <item quantity="other">"%1$s ja %2$d muuta on lukenut viestin"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"%1$s on lukenut viestin"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Näytä kaikki napauttamalla"</string>
   <string name="a11y_remove_reaction">"Poista reaktio: %1$s"</string>
   <string name="a11y_remove_reaction_with">"Poista reaktio: %1$s"</string>
   <string name="a11y_room_avatar">"Huoneen avatar"</string>
