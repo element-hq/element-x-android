@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.features.contentscanner.impl"
+    namespace = "io.element.android.features.contentscanner.api"
 }
 
 dependencies {
