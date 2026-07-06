@@ -36,10 +36,7 @@ private fun MediaSource.toRustMediaSource(): RustMediaSource {
         }
     } catch (e: LinkageError) {
         // Used for tests, since we can't instantiate an actual `RustMediaSource` because the native library can't be loaded
-        if (Class.forName("org.junit.Test") != null) {
-            RustMediaSource(NoHandle)
-        } else {
-            throw e
-        }
+        val isTest = runCatchingExceptions { Class.forName("org.junit.Test") }.isSuccess
+        if (isTest) RustMediaSource(NoHandle) else throw e
     }
 }
