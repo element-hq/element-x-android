@@ -161,6 +161,8 @@ class KonsistPreviewTest {
         "TimelineItemVoiceViewUnifiedPreview",
         "TimelineVideoWithCaptionRowPreview",
         "TimelineViewMessageShieldPreview",
+        "TimelineViewWithReadMarkerBothIndicatorsPreview",
+        "TimelineViewWithReadMarkerJumpToUnreadIndicatorOnlyPreview",
         "UserAvatarColorsPreview",
         "UserProfileHeaderSectionWithVerificationViolationPreview",
         "VoiceItemViewPlayPreview",
