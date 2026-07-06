@@ -146,6 +146,8 @@ fun MessagesView(
     onViewAllPinnedMessagesClick: () -> Unit,
     onThreadsListClick: () -> Unit,
     modifier: Modifier = Modifier,
+    onJoinPttSession: () -> Unit = {},
+    onLeavePttSession: () -> Unit = {},
     forceJumpToBottomVisibility: Boolean = false,
     knockRequestsBannerView: @Composable () -> Unit,
 ) {
@@ -246,6 +248,8 @@ fun MessagesView(
                                     isPttEnabled = state.isPttEnabled,
                                     roomCallState = state.roomCallState,
                                     onJoinCallClick = onJoinCallClick,
+                                    onJoinPttSession = onJoinPttSession,
+                                    onLeavePttSession = onLeavePttSession,
                                     onThreadsListClick = onThreadsListClick
                                 )
                             }
@@ -288,7 +292,7 @@ fun MessagesView(
                             },
                             forceJumpToBottomVisibility = forceJumpToBottomVisibility,
                             onViewAllPinnedMessagesClick = onViewAllPinnedMessagesClick,
-                            onJoinPttClick = { onJoinCallClick(true) },
+                            onJoinPttClick = onJoinPttSession,
                             knockRequestsBannerView = knockRequestsBannerView,
                         )
 
@@ -422,6 +426,8 @@ internal fun RowScope.MessagesMenuActions(
     isPttEnabled: Boolean,
     roomCallState: RoomCallState,
     onJoinCallClick: (isAudioCall: Boolean) -> Unit,
+    onJoinPttSession: () -> Unit,
+    onLeavePttSession: () -> Unit,
     onThreadsListClick: () -> Unit,
 ) {
     if (displayThreads) {
@@ -436,9 +442,8 @@ internal fun RowScope.MessagesMenuActions(
         // In PTT-enabled rooms the PTT control replaces the voice/video call button (audio-only).
         PttMenuItem(
             roomCallState = roomCallState,
-            onStartOrJoinClick = { onJoinCallClick(true) },
-            // TODO leaving a joined session has no non-UI path yet — re-open the call to hang up.
-            onLeaveClick = { onJoinCallClick(true) },
+            onStartOrJoinClick = onJoinPttSession,
+            onLeaveClick = onLeavePttSession,
         )
     } else {
         CallMenuItem(

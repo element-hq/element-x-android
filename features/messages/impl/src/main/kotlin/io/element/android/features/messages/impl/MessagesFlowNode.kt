@@ -311,6 +311,23 @@ class MessagesFlowNode(
                         elementCallEntryPoint.startCall(callData)
                     }
 
+                    override fun navigateToPttSession(roomId: RoomId) {
+                        // Headless: joins the Element Call audio session without the full-screen call UI,
+                        // and skips the EC lobby so it auto-joins (no "Join now" tap).
+                        elementCallEntryPoint.startPttSession(
+                            CallData(
+                                sessionId = sessionId,
+                                roomId = roomId,
+                                isAudioCall = true,
+                                skipLobby = true,
+                            )
+                        )
+                    }
+
+                    override fun leavePttSession() {
+                        elementCallEntryPoint.stopPttSession()
+                    }
+
                     override fun navigateToPinnedMessagesList() {
                         backstack.push(NavTarget.PinnedMessagesList)
                     }

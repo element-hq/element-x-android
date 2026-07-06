@@ -200,6 +200,8 @@ internal fun MessagesViewTopBarPreview() = ElementPreview {
                 displayThreads = displayThreads,
                 isPttEnabled = false,
                 onJoinCallClick = {},
+                onJoinPttSession = {},
+                onLeavePttSession = {},
                 onThreadsListClick = {},
             )
         }
