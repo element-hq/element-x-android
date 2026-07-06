@@ -63,6 +63,9 @@ internal fun CallScreenView(
     onConsoleMessage: (ConsoleMessage) -> Unit,
     requestPermissions: (Array<String>, RequestPermissionCallback) -> Unit,
     modifier: Modifier = Modifier,
+    // Suppress Compose dialogs — they need an Activity window token, which a headless (service
+    // overlay) host doesn't have. Used by the PTT overlay host.
+    hideDialogs: Boolean = false,
 ) {
     var callWebView by remember { mutableStateOf<WebView?>(null) }
 
@@ -80,21 +83,25 @@ internal fun CallScreenView(
         handleBack(fromNative = true)
     }
     if (state.webViewError != null) {
-        ErrorDialog(
-            content = buildString {
-                append(stringResource(CommonStrings.error_unknown))
-                state.webViewError.takeIf { it.isNotEmpty() }?.let { append("\n\n").append(it) }
-            },
-            onSubmit = { state.eventSink(CallScreenEvent.Hangup) },
-        )
+        if (!hideDialogs) {
+            ErrorDialog(
+                content = buildString {
+                    append(stringResource(CommonStrings.error_unknown))
+                    state.webViewError.takeIf { it.isNotEmpty() }?.let { append("\n\n").append(it) }
+                },
+                onSubmit = { state.eventSink(CallScreenEvent.Hangup) },
+            )
+        }
     } else {
         var webViewAudioManager by remember { mutableStateOf<WebViewAudioManager?>(null) }
         val coroutineScope = rememberCoroutineScope()
 
         var invalidAudioDeviceReason by remember { mutableStateOf<InvalidAudioDeviceReason?>(null) }
-        invalidAudioDeviceReason?.let {
-            InvalidAudioDeviceDialog(invalidAudioDeviceReason = it) {
-                invalidAudioDeviceReason = null
+        if (!hideDialogs) {
+            invalidAudioDeviceReason?.let {
+                InvalidAudioDeviceDialog(invalidAudioDeviceReason = it) {
+                    invalidAudioDeviceReason = null
+                }
             }
         }
 
@@ -142,13 +149,17 @@ internal fun CallScreenView(
         when (state.urlState) {
             AsyncData.Uninitialized,
             is AsyncData.Loading ->
-                ProgressDialog(text = stringResource(id = CommonStrings.common_please_wait))
+                if (!hideDialogs) {
+                    ProgressDialog(text = stringResource(id = CommonStrings.common_please_wait))
+                }
             is AsyncData.Failure -> {
                 Timber.e(state.urlState.error, "WebView failed to load URL: ${state.urlState.error.message}")
-                ErrorDialog(
-                    content = state.urlState.error.message.orEmpty(),
-                    onSubmit = { state.eventSink(CallScreenEvent.Hangup) },
-                )
+                if (!hideDialogs) {
+                    ErrorDialog(
+                        content = state.urlState.error.message.orEmpty(),
+                        onSubmit = { state.eventSink(CallScreenEvent.Hangup) },
+                    )
+                }
             }
             is AsyncData.Success -> Unit
         }

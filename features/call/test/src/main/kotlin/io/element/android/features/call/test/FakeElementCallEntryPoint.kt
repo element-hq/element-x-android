@@ -16,6 +16,8 @@ import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeElementCallEntryPoint(
     var startCallResult: (CallData) -> Unit = { lambdaError() },
+    var startPttSessionResult: (CallData) -> Unit = { lambdaError() },
+    var stopPttSessionResult: () -> Unit = { lambdaError() },
     var handleIncomingCallResult: (
         CallData,
         EventId,
@@ -29,6 +31,14 @@ class FakeElementCallEntryPoint(
 ) : ElementCallEntryPoint {
     override fun startCall(callData: CallData) {
         startCallResult(callData)
+    }
+
+    override fun startPttSession(callData: CallData) {
+        startPttSessionResult(callData)
+    }
+
+    override fun stopPttSession() {
+        stopPttSessionResult()
     }
 
     override suspend fun handleIncomingCall(

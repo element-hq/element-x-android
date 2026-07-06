@@ -14,6 +14,7 @@ import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.call.api.CallData
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.call.impl.notifications.CallNotificationData
+import io.element.android.features.call.impl.services.OverlayPttCallService
 import io.element.android.features.call.impl.utils.ActiveCallManager
 import io.element.android.features.call.impl.utils.IntentProvider
 import io.element.android.libraries.di.annotations.ApplicationContext
@@ -32,6 +33,14 @@ class DefaultElementCallEntryPoint(
 
     override fun startCall(callData: CallData) {
         context.startActivity(IntentProvider.createIntent(context, callData))
+    }
+
+    override fun startPttSession(callData: CallData) {
+        OverlayPttCallService.start(context, callData)
+    }
+
+    override fun stopPttSession() {
+        OverlayPttCallService.hangup(context)
     }
 
     override suspend fun handleIncomingCall(

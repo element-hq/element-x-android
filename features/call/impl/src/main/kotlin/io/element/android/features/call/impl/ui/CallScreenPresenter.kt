@@ -213,7 +213,8 @@ class CallScreenPresenter(
             ).getOrThrow()
             callWidgetDriver.value = result.driver
             Timber.d("Call widget driver initialized for sessionId: ${callData.sessionId}, roomId: ${callData.roomId}")
-            result.url
+            // Headless PTT: append the Element Call auto-join param so it skips the lobby (no "Join now").
+            if (callData.skipLobby) "${result.url}&skipLobby=true" else result.url
         }
     }
 

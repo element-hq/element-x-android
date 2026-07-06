@@ -26,6 +26,9 @@
 
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
 
+    <!-- Headless PTT: host the Element Call WebView in an invisible overlay window. -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
     <application>
         <activity
             android:name=".ui.ElementCallActivity"
@@ -45,6 +48,13 @@
 
         <service
             android:name=".services.CallForegroundService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="microphone" />
+
+        <!-- Headless PTT session host: mounts the Element Call WebView in an invisible overlay. -->
+        <service
+            android:name=".services.OverlayPttCallService"
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="microphone" />

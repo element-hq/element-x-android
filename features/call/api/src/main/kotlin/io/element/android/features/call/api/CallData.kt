@@ -18,5 +18,7 @@ import kotlinx.parcelize.Parcelize
 data class CallData(
     val sessionId: SessionId,
     val roomId: RoomId,
-    val isAudioCall: Boolean
+    val isAudioCall: Boolean,
+    /** When true, ask Element Call to auto-join without showing its lobby (used by headless PTT). */
+    val skipLobby: Boolean = false,
 ) : NodeInputs, Parcelable
