@@ -290,3 +290,32 @@ internal fun EmojiItemPreview() = ElementPreview {
         }
     }
 }
+
+@PreviewsDayNight
+@Composable
+internal fun EmojiItemWithPopupPreview() = ElementPreview {
+    Row(
+        modifier = Modifier
+            .padding(top = 100.dp, bottom = 4.dp, start = 200.dp, end = 200.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        val item = Emoji(
+            hexcode = "",
+            label = "",
+            tags = null,
+            shortcodes = persistentListOf(),
+            unicode = "👍",
+            skins = aSkinList(),
+        )
+        EmojiItem(
+            item = item,
+            isSelected = false,
+            onSelectEmoji = {},
+            hasSelectedSkin = false,
+            onLongPress = {},
+            onDismissSkinPicker = {},
+            skinPickerEmoji = item,
+            selectedSkinUnicodes = persistentSetOf("👍🏾"),
+        )
+    }
+}
