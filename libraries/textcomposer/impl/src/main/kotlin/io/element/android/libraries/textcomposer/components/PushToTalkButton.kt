@@ -10,7 +10,7 @@ package io.element.android.libraries.textcomposer.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
@@ -50,34 +50,37 @@ internal fun PushToTalkButton(
     val haptic = LocalHapticFeedback.current
     var isPressed by remember { mutableStateOf(false) }
     Box(
-        modifier = modifier
-            // TODO localise once the prototype graduates.
-            .clearAndSetSemantics { contentDescription = "Push to talk. Hold to transmit." }
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onPress = {
-                        isPressed = true
-                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                        onPress()
-                        tryAwaitRelease()
-                        isPressed = false
-                        onRelease()
-                    }
-                )
-            },
-        contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxHeight(),
+        contentAlignment = Alignment.Center
     ) {
-        Icon(
-            modifier = Modifier
+        Box(
+            modifier = modifier
                 .clip(CircleShape)
-                .size(36.dp)
                 .background(
                     if (isPressed) ElementTheme.colors.iconAccentPrimary else ElementTheme.colors.iconPrimary
                 )
-                .padding(8.dp),
-            imageVector = ImageVector.vectorResource(R.drawable.ic_ptt),
-            contentDescription = null,
-            tint = ElementTheme.colors.iconOnSolidPrimary,
-        )
+                // TODO localise once the prototype graduates.
+                .clearAndSetSemantics { contentDescription = "Push to talk. Hold to transmit." }
+                .pointerInput(Unit) {
+                    detectTapGestures(
+                        onPress = {
+                            isPressed = true
+                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                            onPress()
+                            tryAwaitRelease()
+                            isPressed = false
+                            onRelease()
+                        }
+                    )
+                },
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(
+                modifier = Modifier.size(26.dp),
+                imageVector = ImageVector.vectorResource(R.drawable.ic_ptt_solid),
+                contentDescription = null,
+                tint = ElementTheme.colors.iconOnSolidPrimary,
+            )
+        }
     }
 }

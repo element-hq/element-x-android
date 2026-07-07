@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -560,7 +561,8 @@ private fun StandardLayout(
                     onRelease = onPushToTalkRelease,
                     modifier = Modifier
                         .padding(bottom = 5.dp, top = 5.dp, end = 6.dp, start = 6.dp)
-                        .size(48.dp),
+                        .requiredHeightIn(min = 42.dp)
+                        .width(96.dp),
                 )
             } else {
                 // To avoid loosing keyboard focus, the IconButton has to be defined here and has to be always enabled.

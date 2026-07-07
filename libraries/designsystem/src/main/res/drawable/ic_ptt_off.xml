@@ -1,33 +1,10 @@
-<!--
-  ~ Copyright (c) 2026 Element Creations Ltd.
-  ~
-  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
-  ~ Please see LICENSE files in the repository root for full details.
-  -->
-<!-- Interim placeholder "leave PTT" glyph (walkie-talkie with a slash); replace with the final Compound asset. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"
     android:height="24dp"
     android:viewportWidth="24"
     android:viewportHeight="24">
-    <path
-        android:pathData="M9.5,7 L14.5,7 A1.5,1.5 0 0 1 16,8.5 L16,19.5 A1.5,1.5 0 0 1 14.5,21 L9.5,21 A1.5,1.5 0 0 1 8,19.5 L8,8.5 A1.5,1.5 0 0 1 9.5,7 Z"
-        android:strokeColor="#000000"
-        android:strokeWidth="1.5"
-        android:fillColor="#00000000" />
-    <path
-        android:pathData="M13.5,7 L13.5,3.5"
-        android:strokeColor="#000000"
-        android:strokeWidth="1.5"
-        android:strokeLineCap="round" />
-    <path
-        android:pathData="M10,10 L14,10"
-        android:strokeColor="#000000"
-        android:strokeWidth="1.5"
-        android:strokeLineCap="round" />
-    <path
-        android:pathData="M4.5,4.5 L19.5,19.5"
-        android:strokeColor="#000000"
-        android:strokeWidth="1.7"
-        android:strokeLineCap="round" />
+  <path
+      android:pathData="M15.988,2.031H17.987V15.203L15.988,13.203V6.994H9.778L7.791,5.006C7.863,4.998 7.937,4.994 8.012,4.994H15.988V2.031ZM15.988,16.031L17.987,18.031V18.031L20.516,20.559L19.101,21.974L17.843,20.716C17.548,21.45 16.828,21.969 15.988,21.969H8.012C6.908,21.969 6.012,21.073 6.012,19.969V8.885L2.601,5.474L4.016,4.059L6.17,6.214C6.17,6.214 6.17,6.214 6.17,6.214L8.012,8.056V8.056L13.956,14H13.956L14.009,14.053V14.053L15.988,16.031V16.031ZM15.988,18.86L12.122,14.994H9.987V14H11.128L8.012,10.885L8.012,19.969H15.988V18.86ZM14.009,10.006H12.791L11.797,9.012H14.009V10.006Z"
+      android:fillColor="#000000"
+      android:fillType="evenOdd"/>
 </vector>
