@@ -205,9 +205,7 @@ private fun PinnedMessagesListLoaded(
     }
 
     fun onReactionClick(emoji: String, event: TimelineItem.Event) {
-        event.eventOrTransactionId.let { eventOrTransactionId ->
-            state.eventSink(PinnedMessagesListEvent.ToggleReaction(emoji, eventOrTransactionId))
-        }
+        state.eventSink(PinnedMessagesListEvent.ToggleReaction(emoji, event.eventOrTransactionId))
     }
 
     fun onReactionLongClick(emoji: String, event: TimelineItem.Event) {

@@ -10,6 +10,8 @@ package io.element.android.features.messages.impl.pinned.list
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.messages.impl.UserEventPermissions
+import io.element.android.features.messages.impl.aCustomReactionState
+import io.element.android.features.messages.impl.aReactionSummaryState
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.link.LinkState
@@ -22,8 +24,6 @@ import io.element.android.features.messages.impl.timeline.aTimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.aCustomReactionState
-import io.element.android.features.messages.impl.aReactionSummaryState
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemFileContent
