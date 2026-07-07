@@ -8,5 +8,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Required since targetSdk 37 (Android 17) to reach homeservers on the local network. -->
+    <uses-permission android:name="android.permission.ACCESS_LOCAL_NETWORK" />
 
 </manifest>
