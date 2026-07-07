@@ -7,6 +7,7 @@
 
 plugins {
     id("io.element.android-compose-library")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -16,4 +17,5 @@ android {
 dependencies {
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
+    implementation(libs.kotlinx.collections.immutable)
 }
