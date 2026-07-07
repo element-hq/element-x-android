@@ -23,7 +23,7 @@ Pilih sesuatu yang mudah untuk diingat. Jika Anda lupa PIN ini, Anda akan dikelu
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Silakan masukkan PIN yang sama dua kali"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN tidak cocok"</string>
   <string name="screen_app_lock_signout_alert_message">"Anda harus masuk ulang dan membuat PIN baru untuk melanjutkan"</string>
-  <string name="screen_app_lock_signout_alert_title">"Anda sedang dikeluarkan"</string>
+  <string name="screen_app_lock_signout_alert_title">"Perangkat ini sedang dilepas"</string>
   <plurals name="screen_app_lock_subtitle">
     <item quantity="other">"Anda memiliki %1$d percobaan lagi untuk membuka kunci"</item>
   </plurals>

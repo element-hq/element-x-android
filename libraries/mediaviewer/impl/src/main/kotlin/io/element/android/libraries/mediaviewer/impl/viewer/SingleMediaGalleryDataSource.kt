@@ -9,12 +9,14 @@
 package io.element.android.libraries.mediaviewer.impl.viewer
 
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeAudio
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeImage
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.impl.datasource.MediaGalleryDataSource
 import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
@@ -36,17 +38,40 @@ class SingleMediaGalleryDataSource(
     override suspend fun deleteItem(eventId: EventId) = Unit
 
     companion object {
-        fun createFrom(params: MediaViewerEntryPoint.Params) = SingleMediaGalleryDataSource(
+        fun createFrom(params: MediaViewerEntryPoint.Params.Avatar) = SingleMediaGalleryDataSource(
             data = GroupedMediaItems(
                 // Always use imageAndVideoItems, in Single mode, this is the data that will be used
-                imageAndVideoItems = persistentListOf(params.toMediaItem()),
+                imageAndVideoItems = persistentListOf(
+                    MediaItem.Image(
+                        id = UniqueId("dummy"),
+                        eventId = null,
+                        mediaInfo = MediaInfo(
+                            filename = params.avatarInfo.filename,
+                            caption = null,
+                            formattedCaption = null,
+                            mimeType = MimeTypes.Images,
+                            fileSize = null,
+                            formattedFileSize = "",
+                            fileExtension = "",
+                            senderId = null,
+                            senderName = null,
+                            senderAvatar = null,
+                            dateSent = null,
+                            dateSentFull = null,
+                            waveform = null,
+                            duration = null,
+                        ),
+                        mediaSource = params.mediaSource,
+                        thumbnailSource = params.thumbnailSource,
+                    )
+                ),
                 fileItems = persistentListOf(),
             )
         )
     }
 }
 
-fun MediaViewerEntryPoint.Params.toMediaItem() = when {
+fun MediaViewerEntryPoint.Params.RoomMedia.toMediaItem() = when {
     mediaInfo.mimeType.isMimeTypeImage() -> {
         MediaItem.Image(
             id = UniqueId("dummy"),
