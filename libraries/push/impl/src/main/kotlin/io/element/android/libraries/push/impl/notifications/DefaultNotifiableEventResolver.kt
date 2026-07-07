@@ -41,6 +41,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.GalleryMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
@@ -344,6 +345,7 @@ class DefaultNotifiableEventResolver(
             is TextMessageType -> messageType.toPlainText(permalinkParser = permalinkParser)
             is VideoMessageType -> messageType.bestDescription
             is LocationMessageType -> messageType.body
+            is GalleryMessageType -> messageType.body
             is OtherMessageType -> messageType.body
         }
     }

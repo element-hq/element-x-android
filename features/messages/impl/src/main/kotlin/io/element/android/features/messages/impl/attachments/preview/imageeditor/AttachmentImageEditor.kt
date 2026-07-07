@@ -87,30 +87,30 @@ class DefaultAttachmentImageEditor(
                 decodedBitmap.recycle()
             }
 
-            val rotatedBitmap = normalizedBitmap.rotateQuarterTurns(edits.rotationQuarterTurns)
-            if (rotatedBitmap !== normalizedBitmap) {
+            val transformedBitmap = normalizedBitmap.applyEdits(edits)
+            if (transformedBitmap !== normalizedBitmap) {
                 normalizedBitmap.recycle()
             }
 
             val cropRect = edits.cropRect.toPixelRect(
-                imageWidth = rotatedBitmap.width,
-                imageHeight = rotatedBitmap.height,
+                imageWidth = transformedBitmap.width,
+                imageHeight = transformedBitmap.height,
             )
             val isCropUnchanged = cropRect.left == 0 && cropRect.top == 0 &&
-                cropRect.width() == rotatedBitmap.width && cropRect.height() == rotatedBitmap.height
+                cropRect.width() == transformedBitmap.width && cropRect.height() == transformedBitmap.height
             val croppedBitmap = if (isCropUnchanged) {
-                rotatedBitmap
+                transformedBitmap
             } else {
                 Bitmap.createBitmap(
-                    rotatedBitmap,
+                    transformedBitmap,
                     cropRect.left,
                     cropRect.top,
                     cropRect.width(),
                     cropRect.height(),
                 )
             }
-            if (croppedBitmap !== rotatedBitmap) {
-                rotatedBitmap.recycle()
+            if (croppedBitmap !== transformedBitmap) {
+                transformedBitmap.recycle()
             }
 
             val editedMediaDir = File(context.cacheDir, EDITED_MEDIA_DIR_NAME).apply { mkdirs() }
@@ -141,11 +141,22 @@ internal fun exportedMimeTypeFor(sourceMimeType: String?): String {
     }
 }
 
-private fun Bitmap.rotateQuarterTurns(quarterTurns: Int): Bitmap {
-    val normalizedTurns = (quarterTurns % 4 + 4) % 4
-    if (normalizedTurns == 0) return this
+private fun Bitmap.applyEdits(edits: AttachmentImageEdits): Bitmap {
+    val normalizedTurns = (edits.rotationQuarterTurns % 4 + 4) % 4
+    if (normalizedTurns == 0 && !edits.isFlippedHorizontally && !edits.isFlippedVertically) {
+        return this
+    }
+    val centerX = width / 2f
+    val centerY = height / 2f
     val matrix = Matrix().apply {
-        postRotate(normalizedTurns * 90f)
+        val scaleX = if (edits.isFlippedHorizontally) -1f else 1f
+        val scaleY = if (edits.isFlippedVertically) -1f else 1f
+        if (scaleX < 0f || scaleY < 0f) {
+            postScale(scaleX, scaleY, centerX, centerY)
+        }
+        if (normalizedTurns != 0) {
+            postRotate(normalizedTurns * 90f, centerX, centerY)
+        }
     }
     return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
 }

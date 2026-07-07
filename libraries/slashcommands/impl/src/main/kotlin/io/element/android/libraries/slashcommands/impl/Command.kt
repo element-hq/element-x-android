@@ -109,7 +109,7 @@ enum class Command(
         parameters = "<display-name>",
         description = R.string.slash_command_description_nick_for_room,
         isAllowedInThread = false,
-        isSupported = false,
+        isSupported = true,
     ),
     ROOM_AVATAR(
         command = "/roomavatar",

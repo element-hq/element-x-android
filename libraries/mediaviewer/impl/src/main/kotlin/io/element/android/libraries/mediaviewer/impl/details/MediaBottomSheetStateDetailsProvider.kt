@@ -29,10 +29,14 @@ open class MediaBottomSheetStateDetailsProvider : PreviewParameterProvider<Media
             aMediaBottomSheetStateDetails(
                 eventId = null,
             ),
+            aMediaBottomSheetStateDetails(
+                fromGallery = true,
+            ),
         )
 }
 
 fun aMediaBottomSheetStateDetails(
+    fromGallery: Boolean = false,
     eventId: EventId? = EventId($$"$eventId"),
     canDelete: Boolean = true,
     mediaInfo: MediaInfo = anImageMediaInfo(
@@ -40,6 +44,7 @@ fun aMediaBottomSheetStateDetails(
         dateSentFull = "December 6, 2024 at 12:59",
     ),
 ) = MediaBottomSheetState.Details(
+    fromGallery = fromGallery,
     eventId = eventId,
     canDelete = canDelete,
     mediaInfo = mediaInfo,

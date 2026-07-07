@@ -8,13 +8,13 @@
   <string name="screen_chat_backup_key_storage_toggle_description">"Загрузить ключи с этого устройства"</string>
   <string name="screen_chat_backup_key_storage_toggle_title">"Разрешить хранение ключей"</string>
   <string name="screen_chat_backup_recovery_action_change">"Изменить ключ восстановления"</string>
-  <string name="screen_chat_backup_recovery_action_change_description">"Если вы потеряли доступ к другим устройствам, то сможете восстановить свою идентификацию и историю сообщений с помощью ключа восстановления."</string>
+  <string name="screen_chat_backup_recovery_action_change_description">"Ваши чаты автоматически резервируются с помощью сквозного шифрования. Для восстановления резервной копии и сохранения Вашей цифровой личности в случае потери доступа ко всем устройствам потребуется ключ восстановления."</string>
   <string name="screen_chat_backup_recovery_action_confirm">"Введите ключ восстановления"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"В настоящее время резервная копия ваших чатов не синхронизирована."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Получить ключ восстановления"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Ваши чаты автоматически резервируются с использованием сквозного шифрования. Для восстановления этой резервной копии и сохранения вашей цифровой личности в случае потери доступа ко всем вашим устройствам вам потребуется ключ восстановления."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Откройте %1$s на компьютере"</string>
-  <string name="screen_create_new_recovery_key_list_item_2">"Войдите в свой аккаунт еще раз"</string>
+  <string name="screen_create_new_recovery_key_list_item_2">"Войдите в свой аккаунт ещё раз"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Когда потребуется подтвердить устройство, выберите %1$s"</string>
   <string name="screen_create_new_recovery_key_list_item_3_reset_all">"«Сбросить все»"</string>
   <string name="screen_create_new_recovery_key_list_item_4">"Следуйте инструкциям, чтобы создать новый ключ восстановления"</string>
@@ -24,7 +24,7 @@
   <string name="screen_encryption_reset_bullet_1">"Данные вашего аккаунта, контакты, настройки и список чатов будут сохранены"</string>
   <string name="screen_encryption_reset_bullet_2">"Вы потеряете историю тех сообщений, которые хранятся только на сервере"</string>
   <string name="screen_encryption_reset_bullet_3">"Вам нужно будет заново подтвердить все существующие устройства и контакты."</string>
-  <string name="screen_encryption_reset_footer">"Сбрасывайте ключ шифрования только в том случае, если у вас нет доступа к другому устройству, на котором выполнен вход, и вы потеряли ключ восстановления."</string>
+  <string name="screen_encryption_reset_footer">"Сбрасывайте ключ шифрования только в том случае, если у Вас нет доступа к другому устройству, на котором выполнен вход, и Вы потеряли ключ восстановления."</string>
   <string name="screen_encryption_reset_title">"Не можете подтвердить? Вам потребуется сбросить свою цифровую идентификацию."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Удалить"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Вы потеряете зашифрованные сообщения, если выйдете из всех устройств."</string>
@@ -40,9 +40,9 @@
   <string name="screen_recovery_key_change_title">"Изменить ключ восстановления?"</string>
   <string name="screen_recovery_key_confirm_create_new_recovery_key">"Создать новый ключ восстановления"</string>
   <string name="screen_recovery_key_confirm_description">"Убедитесь, что никто не подсматривает)"</string>
-  <string name="screen_recovery_key_confirm_error_content">"Пожалуйста, попробуйте еще раз, чтобы подтвердить доступ к резервной копии чата."</string>
+  <string name="screen_recovery_key_confirm_error_content">"Пожалуйста, попробуйте ещё раз, чтобы подтвердить доступ к резервной копии чата."</string>
   <string name="screen_recovery_key_confirm_error_title">"Неверный ключ восстановления"</string>
-  <string name="screen_recovery_key_confirm_key_description">"Если у вас есть пароль для восстановления или секретный пароль/ключ, это тоже сработает."</string>
+  <string name="screen_recovery_key_confirm_key_description">"Если у Вас есть ключ/фраза для восстановления, это тоже сработает."</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Введите…"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"Потеряли ключ восстановления?"</string>
   <string name="screen_recovery_key_confirm_success">"Ключ восстановления подтвержден"</string>

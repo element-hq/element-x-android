@@ -16,6 +16,18 @@
   <string name="emoji_picker_category_places">"Reisimine ja kohad"</string>
   <string name="emoji_picker_category_recent">"Hiljutised emojid"</string>
   <string name="emoji_picker_category_symbols">"Sümbolid"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally">"Pööra pilti ümber rõhttelje"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Pilt on pööratud ümber rõhttelje"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Pildi algne variant"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically">"Pööra pilti ümber püsttelje"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_flipped">"Pilt on pööratud ümber püsttelje"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_original">"Pildi algne variant"</string>
+  <string name="screen_image_edition_a11y_rotate_to_the_left">"Pööra pilti vasakule"</string>
+  <plurals name="screen_image_edition_a11y_rotation_state">
+    <item quantity="one">"%1$d kraad"</item>
+    <item quantity="other">"%1$d kraadi"</item>
+  </plurals>
+  <string name="screen_image_edition_title">"Muuda fotot"</string>
   <string name="screen_media_upload_preview_caption_warning">"Selgitused ja alapealkirjad ei pruugi olla nähtavad vanemate rakenduste kasutajatele."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Klõpsa üleslaaditava video kvaliteedi muutmiseks"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Faili üleslaadimine ei õnnestunud."</string>
@@ -26,6 +38,7 @@
   <string name="screen_media_upload_preview_item_count">"Objekt %1$d/%2$d"</string>
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Optimeeri pildikvaliteeti"</string>
   <string name="screen_media_upload_preview_processing">"Töötlen…"</string>
+  <string name="screen_media_upload_preview_title">"Lisa meediumi"</string>
   <string name="screen_report_content_block_user">"Blokeeri kasutaja"</string>
   <string name="screen_report_content_block_user_hint">"Vali see eelistus, kui sa soovid peita selle kasutaja kõik senised ja tulevased sõnumid"</string>
   <string name="screen_report_content_explanation">"Teade selle sõnumi kohta edastatakse sinu koduserveri haldajale. Haldajal ei ole võimalik lugeda krüptitud sõnumite sisu."</string>

@@ -26,6 +26,8 @@ data class AttachmentImageEditorState(
 data class AttachmentImageEdits(
     val cropRect: NormalizedCropRect = NormalizedCropRect.default(),
     val rotationQuarterTurns: Int = 0,
+    val isFlippedHorizontally: Boolean = false,
+    val isFlippedVertically: Boolean = false,
 ) {
     val normalizedRotationQuarterTurns: Int
         get() = rotationQuarterTurns % 4
@@ -34,18 +36,32 @@ data class AttachmentImageEdits(
         get() = normalizedRotationQuarterTurns * 90
 
     val hasChanges: Boolean
-        get() = cropRect != NormalizedCropRect.default() || normalizedRotationQuarterTurns != 0
+        get() = cropRect != NormalizedCropRect.default() ||
+            normalizedRotationQuarterTurns != 0 ||
+            isFlippedHorizontally ||
+            isFlippedVertically
 
     fun rotateAntiClockwise(): AttachmentImageEdits {
         return copy(
             rotationQuarterTurns = (normalizedRotationQuarterTurns + 3) % 4,
             // Also update the crop rect to keep the same selected area
-            cropRect = NormalizedCropRect(
-                left = cropRect.top,
-                top = 1f - cropRect.right,
-                right = cropRect.bottom,
-                bottom = 1f - cropRect.left,
-            )
+            cropRect = cropRect.rotateAntiClockwise()
+        )
+    }
+
+    fun flipHorizontally(): AttachmentImageEdits {
+        return copy(
+            isFlippedHorizontally = !isFlippedHorizontally,
+            // Also update the crop rect to keep the same selected area
+            cropRect = cropRect.flipHorizontally(),
+        )
+    }
+
+    fun flipVertically(): AttachmentImageEdits {
+        return copy(
+            isFlippedVertically = !isFlippedVertically,
+            // Also update the crop rect to keep the same selected area
+            cropRect = cropRect.flipVertically(),
         )
     }
 }
@@ -134,6 +150,23 @@ data class NormalizedCropRect(
             left = (left + deltaX).coerceIn(0f, right - MIN_CROP_SIZE),
         )
     }
+
+    fun rotateAntiClockwise() = copy(
+        left = top,
+        top = 1f - right,
+        right = bottom,
+        bottom = 1f - left,
+    )
+
+    fun flipHorizontally() = copy(
+        left = 1f - right,
+        right = 1f - left,
+    )
+
+    fun flipVertically() = copy(
+        top = 1f - bottom,
+        bottom = 1f - top,
+    )
 
     companion object {
         fun default() = NormalizedCropRect(

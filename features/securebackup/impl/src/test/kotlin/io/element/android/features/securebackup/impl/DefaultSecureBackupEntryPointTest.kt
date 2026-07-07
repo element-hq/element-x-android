@@ -32,6 +32,7 @@ class DefaultSecureBackupEntryPointTest {
             SecureBackupFlowNode(
                 buildContext = buildContext,
                 plugins = plugins,
+                secureBackupSetupEntryPoint = DefaultSecureBackupSetupEntryPoint(),
             )
         }
         val callback = object : SecureBackupEntryPoint.Callback {

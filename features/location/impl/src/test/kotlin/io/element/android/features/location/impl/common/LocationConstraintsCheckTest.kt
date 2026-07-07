@@ -64,10 +64,25 @@ class LocationConstraintsCheckTest {
     }
 
     @Test
-    fun `checkLocationConstraints returns PermissionDenied when permissions denied without rationale`() {
+    fun `checkLocationConstraints returns PermissionShouldBeRequested when permissions not yet requested`() {
         val permissionsState = aPermissionsState(
             permissions = PermissionsState.Permissions.NoneGranted,
             shouldShowRationale = false,
+            permissionsRequested = false,
+        )
+        val locationActions = FakeLocationActions(isLocationEnabled = true)
+
+        val result = checkLocationConstraints(permissionsState, locationActions, SendLiveLocationPermissions.GRANTED)
+
+        assertThat(result).isEqualTo(LocationConstraintsCheck.PermissionShouldBeRequested)
+    }
+
+    @Test
+    fun `checkLocationConstraints returns PermissionDenied when permissions already requested and denied without rationale`() {
+        val permissionsState = aPermissionsState(
+            permissions = PermissionsState.Permissions.NoneGranted,
+            shouldShowRationale = false,
+            permissionsRequested = true,
         )
         val locationActions = FakeLocationActions(isLocationEnabled = true)
 

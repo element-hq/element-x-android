@@ -56,7 +56,6 @@ internal fun TimelineItemRow(
     timelineItem: TimelineItem,
     timelineMode: Timeline.Mode,
     timelineRoomInfo: TimelineRoomInfo,
-    renderReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
     timelineProtectionState: TimelineProtectionState,
     focusedEventId: EventId?,
@@ -65,6 +64,7 @@ internal fun TimelineItemRow(
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
     onContentClick: (TimelineItem.Event) -> Unit,
+    onGalleryItemClick: (TimelineItem.Event, Int) -> Unit,
     onLongClick: (TimelineItem.Event) -> Unit,
     inReplyToClick: (EventId) -> Unit,
     onReactionClick: (key: String, TimelineItem.Event) -> Unit,
@@ -81,12 +81,13 @@ internal fun TimelineItemRow(
                 hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId, event.isMine),
                 onShowContentClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
                 onContentClick = { onContentClick(event) },
+                onGalleryItemClick = { index -> onGalleryItemClick(event, index) },
                 onLongClick = { onLongClick(event) },
                 onLinkClick = onLinkClick,
                 onLinkLongClick = onLinkLongClick,
                 eventSink = eventSink,
                 modifier = contentModifier,
-                onContentLayoutChange = onContentLayoutChange
+                onContentLayoutChange = onContentLayoutChange,
             )
         },
 ) {
@@ -114,7 +115,6 @@ internal fun TimelineItemRow(
                     is TimelineItemStateContent, is TimelineItemLegacyCallInviteContent -> {
                         TimelineItemStateEventRow(
                             event = timelineItem,
-                            renderReadReceipts = renderReadReceipts,
                             isLastOutgoingMessage = isLastOutgoingMessage,
                             onClick = { onContentClick(timelineItem) },
                             onReadReceiptsClick = onReadReceiptClick,
@@ -127,7 +127,6 @@ internal fun TimelineItemRow(
                             timelineRoomInfo = timelineRoomInfo,
                             event = timelineItem,
                             content = timelineItem.content,
-                            renderReadReceipts = renderReadReceipts,
                             isLastOutgoingMessage = isLastOutgoingMessage,
                             onLongClick = onLongClick,
                             onReadReceiptsClick = onReadReceiptClick,
@@ -167,7 +166,6 @@ internal fun TimelineItemRow(
                             event = timelineItem,
                             timelineMode = timelineMode,
                             timelineRoomInfo = timelineRoomInfo,
-                            renderReadReceipts = renderReadReceipts,
                             timelineProtectionState = timelineProtectionState,
                             isLastOutgoingMessage = isLastOutgoingMessage,
                             displayThreadSummaries = displayThreadSummaries,
@@ -182,6 +180,7 @@ internal fun TimelineItemRow(
                             onMoreReactionsClick = onMoreReactionsClick,
                             onReadReceiptClick = onReadReceiptClick,
                             onSwipeToReply = { onSwipeToReply(timelineItem) },
+                            onGalleryItemClick = { index -> onGalleryItemClick(timelineItem, index) },
                             eventSink = eventSink,
                             eventContentView = { contentModifier, onContentLayoutChange ->
                                 eventContentView(timelineItem, contentModifier, onContentLayoutChange)
@@ -196,7 +195,6 @@ internal fun TimelineItemRow(
                     timelineMode = timelineMode,
                     timelineRoomInfo = timelineRoomInfo,
                     timelineProtectionState = timelineProtectionState,
-                    renderReadReceipts = renderReadReceipts,
                     isLastOutgoingMessage = isLastOutgoingMessage,
                     focusedEventId = focusedEventId,
                     displayThreadSummaries = displayThreadSummaries,

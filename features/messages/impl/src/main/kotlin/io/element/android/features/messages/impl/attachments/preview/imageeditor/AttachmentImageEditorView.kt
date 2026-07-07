@@ -10,7 +10,6 @@ package io.element.android.features.messages.impl.attachments.preview.imageedito
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,7 +23,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -90,6 +88,8 @@ fun AttachmentImageEditorView(
     state: AttachmentImageEditorState,
     onCropRectChange: (NormalizedCropRect) -> Unit,
     onRotateClick: () -> Unit,
+    onFlipHorizontallyClick: () -> Unit,
+    onFlipVerticallyClick: () -> Unit,
     onResetClick: () -> Unit,
     onCancelClick: () -> Unit,
     onDoneClick: () -> Unit,
@@ -101,8 +101,18 @@ fun AttachmentImageEditorView(
         state.edits.rotationDegrees,
         state.edits.rotationDegrees,
     )
-    val rotateButtonBackground = ElementTheme.colors.bgCanvasDefault
-
+    val flipHorizontalLabel = stringResource(R.string.screen_image_edition_a11y_flip_image_horizontally)
+    val flipHorizontalState = if (state.edits.isFlippedHorizontally) {
+        stringResource(R.string.screen_image_edition_a11y_flip_image_horizontally_state_flipped)
+    } else {
+        stringResource(R.string.screen_image_edition_a11y_flip_image_horizontally_state_original)
+    }
+    val flipVerticalLabel = stringResource(R.string.screen_image_edition_a11y_flip_image_vertically)
+    val flipVerticalState = if (state.edits.isFlippedVertically) {
+        stringResource(R.string.screen_image_edition_a11y_flip_image_vertically_state_flipped)
+    } else {
+        stringResource(R.string.screen_image_edition_a11y_flip_image_vertically_state_original)
+    }
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
@@ -158,27 +168,47 @@ fun AttachmentImageEditorView(
                         onClick = onResetClick,
                     )
                 }
-                Box(
-                    modifier = Modifier.weight(1f),
-                    contentAlignment = Alignment.Center,
+                Row(
+                    modifier = Modifier.weight(2f),
+                    // Center the content horizontally
+                    horizontalArrangement = Arrangement.Center,
                 ) {
+                    IconButton(
+                        onClick = onFlipHorizontallyClick,
+                        modifier = Modifier
+                            .clearAndSetSemantics {
+                                contentDescription = flipHorizontalLabel
+                                stateDescription = flipHorizontalState
+                            }
+                    ) {
+                        Icon(
+                            imageVector = CompoundIcons.FlipHorizontal(),
+                            contentDescription = null,
+                        )
+                    }
                     IconButton(
                         onClick = onRotateClick,
                         modifier = Modifier
-                            .background(
-                                color = rotateButtonBackground,
-                                shape = CircleShape,
-                            )
-                            .border(1.dp, ElementTheme.colors.borderInteractiveSecondary, CircleShape)
                             .clearAndSetSemantics {
                                 contentDescription = rotateContentDescription
                                 stateDescription = rotationStateDescription
                             }
                     ) {
                         Icon(
-                            modifier = Modifier
-                                .size(22.dp),
                             imageVector = CompoundIcons.RotateLeft(),
+                            contentDescription = null,
+                        )
+                    }
+                    IconButton(
+                        onClick = onFlipVerticallyClick,
+                        modifier = Modifier
+                            .clearAndSetSemantics {
+                                contentDescription = flipVerticalLabel
+                                stateDescription = flipVerticalState
+                            }
+                    ) {
+                        Icon(
+                            imageVector = CompoundIcons.FlipVertical(),
                             contentDescription = null,
                         )
                     }
@@ -188,7 +218,7 @@ fun AttachmentImageEditorView(
                     contentAlignment = Alignment.CenterEnd,
                 ) {
                     TextButton(
-                        text = stringResource(CommonStrings.action_done),
+                        text = stringResource(CommonStrings.action_save),
                         onClick = onDoneClick,
                     )
                 }
@@ -204,6 +234,8 @@ private fun BoxScope.CropEditorCanvas(
 ) {
     var imageSize by remember(state.localMedia.uri) { mutableStateOf(IntSize.Zero) }
     val rotationQuarterTurns = state.edits.normalizedRotationQuarterTurns
+    val flipScaleX = if (state.edits.isFlippedHorizontally) -1f else 1f
+    val flipScaleY = if (state.edits.isFlippedVertically) -1f else 1f
 
     var imageRect by remember { mutableStateOf(Rect.Zero) }
 
@@ -257,6 +289,10 @@ private fun BoxScope.CropEditorCanvas(
                     contentDescription = null,
                     modifier = Modifier
                         .requiredSize(imageLayoutWidthDp, imageLayoutHeightDp)
+                        .graphicsLayer {
+                            scaleX = flipScaleX
+                            scaleY = flipScaleY
+                        }
                         .graphicsLayer { rotationZ = rotationQuarterTurns * 90f },
                     contentScale = ContentScale.Fit,
                 )
@@ -266,6 +302,10 @@ private fun BoxScope.CropEditorCanvas(
                     contentDescription = stringResource(CommonStrings.common_image),
                     modifier = Modifier
                         .requiredSize(imageLayoutWidthDp, imageLayoutHeightDp)
+                        .graphicsLayer {
+                            scaleX = flipScaleX
+                            scaleY = flipScaleY
+                        }
                         .graphicsLayer { rotationZ = rotationQuarterTurns * 90f },
                     contentScale = ContentScale.Fit,
                     onState = { painterState ->
@@ -316,11 +356,13 @@ private fun BoxScope.CropEditorCanvas(
                     ) { change, dragAmount ->
                         val activeTarget = dragTarget ?: return@detectDragGestures
                         change.consume()
+                        val gestureAreaWidth = imageRect.width.takeIf { it > 0f } ?: size.width.toFloat()
+                        val gestureAreaHeight = imageRect.height.takeIf { it > 0f } ?: size.height.toFloat()
                         onCropRectChange(
                             latestCropRect.applyChange(
                                 dragTarget = activeTarget,
-                                deltaX = dragAmount.x / size.width.toFloat(),
-                                deltaY = dragAmount.y / size.height.toFloat(),
+                                deltaX = dragAmount.x / gestureAreaWidth,
+                                deltaY = dragAmount.y / gestureAreaHeight,
                             )
                         )
                     }
@@ -640,6 +682,8 @@ internal fun AttachmentImageEditorViewPreview(
         state = state,
         onCropRectChange = {},
         onRotateClick = {},
+        onFlipHorizontallyClick = {},
+        onFlipVerticallyClick = {},
         onResetClick = {},
         onCancelClick = {},
         onDoneClick = {},

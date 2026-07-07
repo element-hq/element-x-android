@@ -16,6 +16,17 @@
   <string name="emoji_picker_category_places">"文旅景点"</string>
   <string name="emoji_picker_category_recent">"最近的 Emoji"</string>
   <string name="emoji_picker_category_symbols">"符号"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally">"水平翻转图像"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"水平翻转"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"原始"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically">"垂直翻转图像"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_flipped">"垂直翻转"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_original">"原始"</string>
+  <string name="screen_image_edition_a11y_rotate_to_the_left">"向左旋转图像"</string>
+  <plurals name="screen_image_edition_a11y_rotation_state">
+    <item quantity="other">"%1$d 度"</item>
+  </plurals>
+  <string name="screen_image_edition_title">"编辑照片"</string>
   <string name="screen_media_upload_preview_caption_warning">"使用旧版应用程序的用户可能无法看到字幕。"</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"点按以更改视频上传质量"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"无法上传该文件。"</string>

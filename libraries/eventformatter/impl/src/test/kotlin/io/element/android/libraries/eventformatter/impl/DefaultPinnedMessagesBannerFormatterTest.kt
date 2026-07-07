@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventTimeline
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.GalleryMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
@@ -50,16 +51,14 @@ import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.libraries.matrix.test.timeline.item.event.aRoomMembershipContent
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
 @Suppress("LargeClass")
-@RunWith(RobolectricTestRunner::class)
-class DefaultPinnedMessagesBannerFormatterTest {
+class DefaultPinnedMessagesBannerFormatterTest : RobolectricTest() {
     private lateinit var context: Context
     private lateinit var fakeMatrixClient: FakeMatrixClient
     private lateinit var formatter: DefaultPinnedMessagesBannerFormatter
@@ -143,6 +142,7 @@ class DefaultPinnedMessagesBannerFormatterTest {
             AudioMessageType(body, null, null, MediaSource("url"), null),
             VoiceMessageType(body, null, null, MediaSource("url"), null, null),
             ImageMessageType(body, null, null, MediaSource("url"), null),
+            GalleryMessageType(body, null, emptyList()),
             StickerMessageType(body, null, null, MediaSource("url"), null),
             FileMessageType(body, null, null, MediaSource("url"), null),
             LocationMessageType(body, "geo:1,2", null, null),
@@ -165,6 +165,7 @@ class DefaultPinnedMessagesBannerFormatterTest {
                 is VideoMessageType,
                 is AudioMessageType,
                 is ImageMessageType,
+                is GalleryMessageType,
                 is StickerMessageType,
                 is FileMessageType,
                 is LocationMessageType -> AnnotatedString::class.java
@@ -183,6 +184,7 @@ class DefaultPinnedMessagesBannerFormatterTest {
                 is AudioMessageType -> "Audio: Shared body"
                 is VoiceMessageType -> "Voice message"
                 is ImageMessageType -> "Image: Shared body"
+                is GalleryMessageType -> "Gallery: Shared body"
                 is StickerMessageType -> "Sticker: Shared body"
                 is FileMessageType -> "File: Shared body"
                 is LocationMessageType -> "Shared location: Shared body"

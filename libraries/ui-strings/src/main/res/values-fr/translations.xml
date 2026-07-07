@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_avatar">"Ajouter un avatar"</string>
   <string name="a11y_add_reaction">"Ajouter une réaction: %1$s"</string>
   <string name="a11y_address">"Adresse"</string>
   <string name="a11y_avatar">"Avatar"</string>
@@ -99,6 +100,7 @@
   <string name="action_decline_and_block">"Refuser et bloquer"</string>
   <string name="action_delete">"Supprimer"</string>
   <string name="action_delete_account">"Supprimer le compte"</string>
+  <string name="action_delete_file">"Supprimer le fichier"</string>
   <string name="action_delete_poll">"Supprimer le sondage"</string>
   <string name="action_deselect_all">"Tout désélectionner"</string>
   <string name="action_disable">"Désactiver"</string>
@@ -304,6 +306,7 @@ Raison : %1$s."</string>
   <string name="common_please_wait">"Veuillez patienter…"</string>
   <string name="common_poll_end_confirmation">"Êtes-vous sûr de vouloir mettre fin à ce sondage ?"</string>
   <string name="common_poll_summary">"Sondage : %1$s"</string>
+  <string name="common_poll_summary_prefix">"Sondage"</string>
   <string name="common_poll_total_votes">"Nombre total de votes : %1$s"</string>
   <string name="common_poll_undisclosed_text">"Les résultats s’afficheront une fois le sondage terminé"</string>
   <plurals name="common_poll_votes_count">
@@ -543,4 +546,6 @@ Raison : %1$s."</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Vous ne pouvez pas voir ce message"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Impossible de déchiffrer le message"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Ce message a été bloqué soit parce que vous n’avez pas vérifié votre session, soit parce que l’expéditeur doit vérifier votre identité numérique."</string>
+  <string name="vulkan_not_supported_dialog_content_android">"Votre appareil est trop ancien, un appareil fonctionnant sous Android 8 ou une version plus récente est requis."</string>
+  <string name="vulkan_not_supported_dialog_title_android">"Affichage des cartes non supporté"</string>
 </resources>

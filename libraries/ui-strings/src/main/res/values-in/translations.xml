@@ -145,7 +145,7 @@
   <string name="action_show">"Tampilkan"</string>
   <string name="action_sign_in_again">"Masuk lagi"</string>
   <string name="action_signout">"Hapus device dari akun"</string>
-  <string name="action_signout_anyway">"Keluar saja"</string>
+  <string name="action_signout_anyway">"Hapus Perangkat ini"</string>
   <string name="action_skip">"Lewati"</string>
   <string name="action_start">"Mulai"</string>
   <string name="action_start_chat">"Mulai obrolan"</string>
@@ -184,6 +184,7 @@
   <string name="common_creating_room">"Membuat ruangan…"</string>
   <string name="common_current_user_canceled_knock">"Permintaan dibatalkan"</string>
   <string name="common_current_user_left_room">"Keluar dari ruangan"</string>
+  <string name="common_current_user_left_space">"Ruang tersisa"</string>
   <string name="common_current_user_rejected_invite">"Undangan ditolak"</string>
   <string name="common_decryption_error">"Kesalahan dekripsi"</string>
   <string name="common_description">"Deskripsi"</string>
@@ -296,8 +297,9 @@ Alasan: %1$s."</string>
   <string name="common_server_unreachable">"Server tidak dapat dijangkau"</string>
   <string name="common_server_url">"URL Server"</string>
   <string name="common_settings">"Pengaturan"</string>
+  <string name="common_share_space">"Berbagi ruang"</string>
   <string name="common_shared_location">"Lokasi terbagi"</string>
-  <string name="common_signing_out">"Mengeluarkan dari akun"</string>
+  <string name="common_signing_out">"Melepaskan perangkat"</string>
   <string name="common_something_went_wrong">"Ada yang salah"</string>
   <string name="common_something_went_wrong_message">"Kami mengalami masalah. Silakan coba lagi."</string>
   <string name="common_space">"Space"</string>

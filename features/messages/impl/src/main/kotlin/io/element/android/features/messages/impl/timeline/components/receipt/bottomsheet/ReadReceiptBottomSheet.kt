@@ -9,13 +9,13 @@
 package io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -44,7 +44,9 @@ internal fun ReadReceiptBottomSheet(
 ) {
     val isVisible = state.selectedEvent != null
 
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberBottomSheetState(
+        initialValue = SheetValue.Hidden,
+    )
     val coroutineScope = rememberCoroutineScope()
     if (isVisible) {
         ModalBottomSheet(
@@ -115,9 +117,9 @@ private fun ReadReceiptBottomSheetContent(
 
 @PreviewsDayNight
 @Composable
-internal fun ReadReceiptBottomSheetPreview(@PreviewParameter(ReadReceiptBottomSheetStateProvider::class) state: ReadReceiptBottomSheetState) = ElementPreview {
-    Column {
-        ReadReceiptBottomSheetContent(
+internal fun ReadReceiptBottomSheetPreview(@PreviewParameter(ReadReceiptBottomSheetStateProvider::class) state: ReadReceiptBottomSheetState) {
+    ElementPreview(fillMaxSize = true) {
+        ReadReceiptBottomSheet(
             state = state,
             onUserDataClick = {},
         )

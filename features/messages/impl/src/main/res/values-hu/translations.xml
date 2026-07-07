@@ -16,6 +16,18 @@
   <string name="emoji_picker_category_places">"Utazás és helyek"</string>
   <string name="emoji_picker_category_recent">"Legutóbbi emodzsik"</string>
   <string name="emoji_picker_category_symbols">"Szimbólumok"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally">"Kép vízszintes tükrözése"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Vízszintesen tükrözve"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Eredeti"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically">"Kép függőleges tükrözése"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_flipped">"Függőlegesen tükrözve"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_original">"Eredeti"</string>
+  <string name="screen_image_edition_a11y_rotate_to_the_left">"Kép elforgatása balra"</string>
+  <plurals name="screen_image_edition_a11y_rotation_state">
+    <item quantity="one">"%1$d fok"</item>
+    <item quantity="other">"%1$d fok"</item>
+  </plurals>
+  <string name="screen_image_edition_title">"Fotó szerkesztése"</string>
   <string name="screen_media_upload_preview_caption_warning">"Előfordulhat, hogy a feliratok nem láthatók a régebbi alkalmazásokat használók számára."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Koppintson a feltöltött videók minőségének módosításához"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"A fájl nem tölthető fel."</string>
@@ -26,6 +38,7 @@
   <string name="screen_media_upload_preview_item_count">"%1$d. elem / %2$d"</string>
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Képminőség optimalizációja"</string>
   <string name="screen_media_upload_preview_processing">"Feldolgozás…"</string>
+  <string name="screen_media_upload_preview_title">"Média hozzáadása"</string>
   <string name="screen_report_content_block_user">"Felhasználó letiltása"</string>
   <string name="screen_report_content_block_user_hint">"Jelölje be, ha el akarja rejteni az összes jelenlegi és jövőbeli üzenetet ettől a felhasználótól"</string>
   <string name="screen_report_content_explanation">"Ez az üzenet jelentve lesz a Matrix-kiszolgáló adminisztrátorának. Nem fogja tudni elolvasni a titkosított üzeneteket."</string>

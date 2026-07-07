@@ -106,7 +106,7 @@ fun aRoomDetailsState(
     canEdit: Boolean = false,
     roomCallState: RoomCallState = aStandByCallState(),
     roomType: RoomDetailsType = RoomDetailsType.Room,
-    roomMemberDetailsState: UserProfileState? = null,
+    dmOtherMemberDetailsState: UserProfileState? = null,
     leaveRoomState: LeaveRoomState = aLeaveRoomState(),
     roomNotificationSettings: RoomNotificationSettings = aRoomNotificationSettings(),
     isFavorite: Boolean = false,
@@ -137,7 +137,7 @@ fun aRoomDetailsState(
     canEdit = canEdit,
     roomCallState = roomCallState,
     roomType = roomType,
-    roomMemberDetailsState = roomMemberDetailsState,
+    dmOtherMemberDetailsState = dmOtherMemberDetailsState,
     leaveRoomState = leaveRoomState,
     roomNotificationSettings = roomNotificationSettings,
     isFavorite = isFavorite,
@@ -184,7 +184,7 @@ fun aDmRoomDetailsState(
     isEncrypted = isEncrypted,
     canInvite = true,
     roomType = RoomDetailsType.Dm(otherMember = aDmRoomMember(isIgnored = isDmMemberIgnored)),
-    roomMemberDetailsState = aUserProfileState(
+    dmOtherMemberDetailsState = aUserProfileState(
         isBlocked = AsyncData.Success(isDmMemberIgnored),
         verificationState = dmRoomMemberVerificationState,
     )

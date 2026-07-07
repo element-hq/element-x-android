@@ -13,6 +13,7 @@ package io.element.android.libraries.matrix.impl
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.data.bytes
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClient
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiSyncService
 import io.element.android.libraries.matrix.impl.room.FakeTimelineEventFilterFactory
@@ -141,6 +142,7 @@ class RustMatrixClientTest {
         ),
     ) = RustMatrixClient(
         innerClient = client,
+        sessionPaths = SessionPaths(fileDirectory = File("files"), cacheDirectory = File("cache")),
         sessionStore = sessionStore,
         appCoroutineScope = backgroundScope,
         sessionDelegate = aRustClientSessionDelegate(

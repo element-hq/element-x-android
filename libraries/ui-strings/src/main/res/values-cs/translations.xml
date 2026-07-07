@@ -50,12 +50,15 @@
   <string name="a11y_room_avatar">"Avatar místnosti"</string>
   <string name="a11y_send_files">"Odeslat soubory"</string>
   <string name="a11y_sender_location">"Poloha odesílatele"</string>
+  <string name="a11y_sent_by_sender_at_date">"Odesláno %1$s v %2$s"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Vyžaduje se časově omezená akce, na ověření máte jednu minutu"</string>
   <string name="a11y_settings_with_required_action">"Nastavení, vyžaduje akci"</string>
   <string name="a11y_show_password">"Zobrazit heslo"</string>
   <string name="a11y_start_call">"Zahájit hovor"</string>
   <string name="a11y_start_video_call">"Zahájit videohovor"</string>
   <string name="a11y_start_voice_call">"Zahájit hlasový hovor"</string>
+  <string name="a11y_thread_in_room">"Vlákno v %1$s"</string>
+  <string name="a11y_threads_in_room">"Vlákna v %1$s"</string>
   <string name="a11y_tombstoned_room">"Místnost s náhrobkem"</string>
   <string name="a11y_user_avatar">"Avatar uživatele"</string>
   <string name="a11y_user_menu">"Uživatelské menu"</string>

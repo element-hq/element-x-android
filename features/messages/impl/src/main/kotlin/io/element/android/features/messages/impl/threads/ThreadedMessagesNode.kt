@@ -67,6 +67,7 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
+import io.element.android.libraries.matrix.ui.model.getBestName
 import io.element.android.libraries.ui.utils.a11y.hasExternalKeyboard
 import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import io.element.android.services.analytics.api.AnalyticsService
@@ -112,7 +113,7 @@ class ThreadedMessagesNode(
         this.timelineController = timelineController
         return presenterFactory.create(
             navigator = this,
-            composerPresenter = messageComposerPresenterFactory.create(timelineController, this, isInThread = true),
+            composerPresenter = messageComposerPresenterFactory.create(timelineController, this, threadRoot = inputs.threadRootEventId),
             timelinePresenter = timelinePresenterFactory.create(timelineController = timelineController, this),
             // TODO add special processor for threaded timeline
             actionListPresenter = actionListPresenterFactory.create(
@@ -125,6 +126,7 @@ class ThreadedMessagesNode(
 
     interface Callback : Plugin {
         fun handleEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event, canUseOverlay: Boolean): Boolean
+        fun handleGalleryItemClick(timelineMode: Timeline.Mode, event: TimelineItem.Event, galleryItemIndex: Int, canUseOverlay: Boolean): Boolean
         fun navigateToPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?)
         fun navigateToRoomMemberDetails(userId: UserId)
         fun handlePermalinkClick(data: PermalinkData)
@@ -138,6 +140,8 @@ class ThreadedMessagesNode(
         fun navigateToRoomCall(roomId: RoomId, isAudioCall: Boolean)
         fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?)
         fun navigateToDeveloperSettings()
+
+        fun navigateToAvatarPreview(username: String, avatarUrl: String)
     }
 
     override fun onBuilt() {
@@ -286,6 +290,20 @@ class ThreadedMessagesNode(
                             }
                         } == true
                     },
+                    onGalleryEventItemClick = { isLive, event, index ->
+                        timelineController?.let { controller ->
+                            if (isLive) {
+                                callback.handleGalleryItemClick(controller.mainTimelineMode(), event, index, canUseOverlay)
+                            } else {
+                                val detachedTimelineMode = controller.detachedTimelineMode()
+                                if (detachedTimelineMode != null) {
+                                    callback.handleGalleryItemClick(detachedTimelineMode, event, index, canUseOverlay)
+                                } else {
+                                    false
+                                }
+                            }
+                        } == true
+                    },
                     onUserDataClick = callback::navigateToRoomMemberDetails,
                     onLinkClick = { url, customTab ->
                         onLinkClick(
@@ -313,6 +331,11 @@ class ThreadedMessagesNode(
                         when (action) {
                             is ModerationAction.DisplayProfile -> callback.navigateToRoomMemberDetails(target.userId)
                             else -> state.roomMemberModerationState.eventSink(RoomMemberModerationEvents.ProcessAction(action, target))
+                        }
+                    },
+                    onAvatarClick = { user ->
+                        user.avatarUrl?.let { url ->
+                            callback.navigateToAvatarPreview(user.getBestName(), url)
                         }
                     },
                     modifier = Modifier,

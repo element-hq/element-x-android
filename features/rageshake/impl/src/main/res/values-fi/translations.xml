@@ -8,6 +8,8 @@
   <string name="screen_bug_report_editor_placeholder">"Kuvaile ongelmaasi…"</string>
   <string name="screen_bug_report_editor_supporting">"Jos mahdollista, kirjoita englanniksi."</string>
   <string name="screen_bug_report_error_description_too_short">"Kuvaus on liian lyhyt. Kerro tarkemmin mitä tapahtui, kiitos!"</string>
+  <string name="screen_bug_report_github_issue_description">"Voit kirjoittaa mahdollisen GitHub-issuen numeron."</string>
+  <string name="screen_bug_report_github_issue_label">"GitHub-issue"</string>
   <string name="screen_bug_report_include_crash_logs">"Lähetä kaatumislokit"</string>
   <string name="screen_bug_report_include_logs">"Lähetä lokitiedostot"</string>
   <string name="screen_bug_report_include_logs_error">"Lokitiedostosi ovat liian suuria, joten niitä ei voida sisällyttää tähän raporttiin. Lähetä ne meille toisella tavalla."</string>

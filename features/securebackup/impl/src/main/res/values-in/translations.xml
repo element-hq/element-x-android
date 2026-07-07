@@ -11,7 +11,7 @@
   <string name="screen_chat_backup_recovery_action_change_description">"Pulihkan identitas kriptografi dan riwayat pesan Anda dengan kunci pemulihan jika Anda kehilangan semua perangkat yang ada."</string>
   <string name="screen_chat_backup_recovery_action_confirm">"Masukkan kunci pemulihan"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Penyimpanan kunci Anda saat ini tidak sinkron."</string>
-  <string name="screen_chat_backup_recovery_action_setup">"Siapkan pemulihan"</string>
+  <string name="screen_chat_backup_recovery_action_setup">"Siapkan Kunci pemulihan"</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Buka %1$s di perangkat desktop"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Masuk ke akun Anda lagi"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Saat diminta untuk memverifikasi perangkat Anda, pilih %1$s"</string>
@@ -25,8 +25,8 @@
   <string name="screen_encryption_reset_bullet_3">"Anda perlu memverifikasi semua perangkat dan kontak yang ada lagi"</string>
   <string name="screen_encryption_reset_footer">"Hanya atur ulang identitas Anda jika Anda tidak memiliki akses ke perangkat lain yang masuk dan Anda kehilangan kunci pemulihan."</string>
   <string name="screen_encryption_reset_title">"Tidak dapat mengonfirmasi? Anda perlu mengatur ulang identitas Anda."</string>
-  <string name="screen_key_backup_disable_confirmation_action_turn_off">"Matikan"</string>
-  <string name="screen_key_backup_disable_confirmation_description">"Anda akan kehilangan pesan terenkripsi jika Anda keluar dari semua perangkat."</string>
+  <string name="screen_key_backup_disable_confirmation_action_turn_off">"Hapus"</string>
+  <string name="screen_key_backup_disable_confirmation_description">"Anda akan kehilangan pesan terenkripsi jika Anda menghapusnya dari semua perangkat."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Apakah Anda yakin ingin mematikan pencadangan?"</string>
   <string name="screen_key_backup_disable_description">"Mematikan pencadangan akan menghapus pencadangan kunci terenkripsi saat ini dan mematikan fitur keamanan lainnya. Dalam hal ini, Anda akan:"</string>
   <string name="screen_key_backup_disable_description_point_1">"Tidak memiliki riwayat pesan terenkripsi di perangkat baru"</string>
@@ -58,7 +58,7 @@
   <string name="screen_recovery_key_setup_generate_key">"Buat kunci pemulihan Anda"</string>
   <string name="screen_recovery_key_setup_generate_key_description">"Jangan bagikan ini kepada siapa pun!"</string>
   <string name="screen_recovery_key_setup_success">"Penyiapan pemulihan berhasil"</string>
-  <string name="screen_recovery_key_setup_title">"Siapkan pemulihan"</string>
+  <string name="screen_recovery_key_setup_title">"Siapkan Kunci pemulihan"</string>
   <string name="screen_reset_encryption_confirmation_alert_action">"Ya, atur ulang sekarang"</string>
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"Proses ini tidak dapat diurungkan."</string>
   <string name="screen_reset_encryption_confirmation_alert_title">"Apakah Anda yakin ingin mengatur ulang identitas Anda?"</string>

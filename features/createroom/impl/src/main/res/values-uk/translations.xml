@@ -31,6 +31,6 @@
   <string name="screen_create_room_space_selection_no_space_option">"Не додавати до простору"</string>
   <string name="screen_create_room_space_selection_no_space_title">"Головна"</string>
   <string name="screen_create_room_space_selection_sheet_title">"Додати до простору"</string>
-  <string name="screen_create_room_topic_label">"Тема (необов\'язково)"</string>
+  <string name="screen_create_room_topic_label">"Тематика обговорень (необов’язково)"</string>
   <string name="screen_create_room_topic_placeholder">"Додати опис…"</string>
 </resources>

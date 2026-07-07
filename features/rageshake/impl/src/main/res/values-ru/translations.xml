@@ -8,13 +8,15 @@
   <string name="screen_bug_report_editor_placeholder">"Опишите проблему…"</string>
   <string name="screen_bug_report_editor_supporting">"Если возможно, пожалуйста, напишите описание на английском языке."</string>
   <string name="screen_bug_report_error_description_too_short">"Описание слишком короткое, пожалуйста, расскажите подробнее о том, что произошло. Спасибо!"</string>
+  <string name="screen_bug_report_github_issue_description">"При наличии, Вы можете ввести номер связанной проблемы из GitHub."</string>
+  <string name="screen_bug_report_github_issue_label">"Проблема на GitHub"</string>
   <string name="screen_bug_report_include_crash_logs">"Отправка журналов сбоев"</string>
   <string name="screen_bug_report_include_logs">"Разрешить ведение журналов"</string>
   <string name="screen_bug_report_include_logs_error">"Ваши журналы слишком большие для включения в этот отчет. Пожалуйста, отправьте их нам другим способом."</string>
   <string name="screen_bug_report_include_screenshot">"Отправить скриншот"</string>
   <string name="screen_bug_report_logs_description">"Чтобы убедиться, что всё работает правильно, к сообщению будут прикреплены журналы. Чтобы отправить сообщение без журналов, отключите эту настройку."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"При последнем использовании %1$s произошел сбой. Хотите отправить отчет?"</string>
-  <string name="screen_bug_report_send_notification_settings_description">"Если у вас возникли проблемы с уведомлениями, загрузка настроек уведомлений может помочь нам определить основную причину."</string>
+  <string name="screen_bug_report_send_notification_settings_description">"Если у Вас возникли проблемы с уведомлениями, загрузка настроек уведомлений может помочь нам определить причину проблемы. Обратите внимание, что эти правила могут содержать конфиденциальную информацию, такую ​​как Ваше отображаемое имя или ключевые слова, по которым должны срабатывать уведомления."</string>
   <string name="screen_bug_report_send_notification_settings_title">"Настройки отправки уведомлений"</string>
   <string name="screen_bug_report_view_logs">"Просмотр журналов"</string>
 </resources>

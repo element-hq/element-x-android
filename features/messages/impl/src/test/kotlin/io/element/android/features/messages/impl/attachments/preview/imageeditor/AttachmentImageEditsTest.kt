@@ -42,4 +42,37 @@ class AttachmentImageEditsTest {
         assertThat(result.cropRect.bottom).isWithin(0.0001f).of(0.8f)
         assertThat(result.hasChanges).isTrue()
     }
+
+    @Test
+    fun `flip horizontally updates crop and change tracking`() {
+        val sut = AttachmentImageEdits(
+            cropRect = NormalizedCropRect(
+                left = 0.1f,
+                top = 0.3f,
+                right = 0.6f,
+                bottom = 0.9f,
+            )
+        )
+        val result = sut.flipHorizontally()
+        assertThat(result.isFlippedHorizontally).isTrue()
+        assertThat(result.cropRect.left).isWithin(0.0001f).of(0.4f)
+        assertThat(result.cropRect.right).isWithin(0.0001f).of(0.9f)
+        assertThat(result.cropRect.top).isWithin(0.0001f).of(0.3f)
+        assertThat(result.cropRect.bottom).isWithin(0.0001f).of(0.9f)
+        assertThat(result.hasChanges).isTrue()
+    }
+
+    @Test
+    fun `flip vertical twice resets to default state`() {
+        val edits = AttachmentImageEdits().flipVertically().flipVertically()
+        assertThat(edits.isFlippedVertically).isFalse()
+        assertThat(edits.hasChanges).isFalse()
+    }
+
+    @Test
+    fun `flip horizontally twice resets to default state`() {
+        val edits = AttachmentImageEdits().flipHorizontally().flipHorizontally()
+        assertThat(edits.isFlippedVertically).isFalse()
+        assertThat(edits.hasChanges).isFalse()
+    }
 }

@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_avatar">"Lisa tunnuspilt"</string>
   <string name="a11y_add_reaction">"Reageeri: %1$s"</string>
   <string name="a11y_address">"Aadress"</string>
   <string name="a11y_avatar">"Tunnuspilt"</string>
   <string name="a11y_collapse_message_text_field">"Vähenda tekstivälja"</string>
+  <string name="a11y_create_poll_votes_allowed_decrease">"Vähenda kasutaja kohta lubatud hääletuskordi"</string>
+  <string name="a11y_create_poll_votes_allowed_increase">"Suurenda kasutaja kohta lubatud hääletuskordi"</string>
   <string name="a11y_delete">"Kustuta"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d number sisestatud"</item>
@@ -18,6 +21,7 @@
   <string name="a11y_info">"Teave"</string>
   <string name="a11y_join_call">"Liitu kõnega"</string>
   <string name="a11y_jump_to_bottom">"Mine lõppu"</string>
+  <string name="a11y_jump_to_unread">"Mine lugemata sõnumite juurde"</string>
   <string name="a11y_move_the_map_to_my_location">"Nihuta kaart minu asukohta"</string>
   <string name="a11y_notifications_mentions_only">"Ainult mainimised"</string>
   <string name="a11y_notifications_muted">"Summutatud"</string>
@@ -28,6 +32,7 @@
   <string name="a11y_page_n">"%1$d. lehekülg"</string>
   <string name="a11y_pause">"Peata"</string>
   <string name="a11y_paused_voice_message">"Häälsõnum, kestus:%1$s, praegune asukoht: %2$s"</string>
+  <string name="a11y_photo_preview">"Foto eelvaade"</string>
   <string name="a11y_pin_field">"PIN-koodi väli"</string>
   <string name="a11y_pinned_location">"Esiletõstetud asukoht"</string>
   <string name="a11y_play">"Esita"</string>
@@ -62,6 +67,7 @@
   <string name="a11y_tombstoned_room">"Lõpetatuks märgitud jututuba"</string>
   <string name="a11y_user_avatar">"Kasutaja tunnuspilt"</string>
   <string name="a11y_user_menu">"Kasutajamenüü"</string>
+  <string name="a11y_video_preview">"Video eelvaade"</string>
   <string name="a11y_view_avatar">"Vaata tunnuspilti"</string>
   <string name="a11y_view_details">"Vaata üksikasju"</string>
   <string name="a11y_voice_message">"Häälsõnum, kestus:%1$s"</string>
@@ -98,6 +104,7 @@
   <string name="action_decline_and_block">"Keeldu ja blokeeri"</string>
   <string name="action_delete">"Kustuta"</string>
   <string name="action_delete_account">"Kustuta kasutajakonto"</string>
+  <string name="action_delete_file">"Kustuta fail"</string>
   <string name="action_delete_poll">"Kustuta küsitlus"</string>
   <string name="action_deselect_all">"Eemalda kõik valikud"</string>
   <string name="action_disable">"Lülita välja"</string>
@@ -189,9 +196,11 @@
   <string name="action_translate">"Tõlgi"</string>
   <string name="action_try_again">"Proovi uuesti"</string>
   <string name="action_unpin">"Eemalda esiletõstmine"</string>
+  <string name="action_video_call">"Videokõne"</string>
   <string name="action_view">"Vaata"</string>
   <string name="action_view_in_timeline">"Vaata ajajoonel"</string>
   <string name="action_view_source">"Vaata lähtekoodi"</string>
+  <string name="action_voice_call">"Häälkõne"</string>
   <string name="action_yes">"Jah"</string>
   <string name="action_yes_try_again">"Jah, proovi uuesti"</string>
   <string name="banner_migrate_to_native_sliding_sync_description">"Sinu koduserver toetab uut ja kiiremat protokolli. Uuendamiseks logi korraks rakendusest välja ja siis tagasi. Mingil hetkel tulevikus vana protokoll eemaldatakse kasutusest ja tehes uuenduse nüüd, väldid hilisemat sundkorras uuendust."</string>
@@ -212,6 +221,7 @@
   <string name="common_blocked_users">"Blokeeritud kasutajad"</string>
   <string name="common_bubbles">"Mullid"</string>
   <string name="common_call_declined">"Osapool keeldus kõnest"</string>
+  <string name="common_call_in_progress">"Kõne on pooleli"</string>
   <string name="common_call_started">"Kõne algas"</string>
   <string name="common_call_you_declined">"Sa keeldusid kõnest"</string>
   <string name="common_chat_backup">"Vestluse varukoopia"</string>
@@ -255,7 +265,9 @@ Põhjus: %1$s."</string>
   <string name="common_file_saved_on_disk_android">"Fail on salvestatud kausta Allalaadimised"</string>
   <string name="common_forward_message">"Edasta sõnum"</string>
   <string name="common_frequently_used">"Sagedasti kasutatud"</string>
+  <string name="common_gallery">"Galerii"</string>
   <string name="common_gif">"GIF"</string>
+  <string name="common_group_call_in_progress">"Rühmakõne on pooleli"</string>
   <string name="common_image">"Pilt"</string>
   <string name="common_in_reply_to">"Vastuseks kasutajale %1$s"</string>
   <string name="common_install_apk_android">"Paigalda APK-failist"</string>
@@ -303,6 +315,7 @@ Põhjus: %1$s."</string>
   <string name="common_please_wait">"Palun oota…"</string>
   <string name="common_poll_end_confirmation">"Kas oled kindel, et soovid selle küsitluse lõpetada?"</string>
   <string name="common_poll_summary">"Küsitlus: %1$s"</string>
+  <string name="common_poll_summary_prefix">"Küsitlus"</string>
   <string name="common_poll_total_votes">"Hääli kokku: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Tulemused on näha peale küsitluse lõppemist"</string>
   <plurals name="common_poll_votes_count">
@@ -397,6 +410,7 @@ Põhjus: %1$s."</string>
   <string name="common_unmute">"Lõpeta summutamine"</string>
   <string name="common_unsupported_call">"See kõne pole toetatud"</string>
   <string name="common_unsupported_event">"Toetamata sündmus"</string>
+  <string name="common_user_started_a_call">"%1$s helistas"</string>
   <string name="common_username">"Kasutajanimi"</string>
   <string name="common_verification_cancelled">"Verifitseerimine on katkestatud"</string>
   <string name="common_verification_complete">"Verifitseerimine on tehtud"</string>
@@ -479,6 +493,7 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="screen_create_poll_options_section_title">"Valikud"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Kustuta: %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Seadistused"</string>
+  <string name="screen_create_poll_votes_allowed_per_person">"Hääletuskordi kasutaja kohta"</string>
   <string name="screen_live_location_sheet_nobody_sharing">"Mitte keegi ei jaga oma asukohta"</string>
   <string name="screen_live_location_sheet_sharing_live_location">"Asukoht on jagamisel reaalajas"</string>
   <plurals name="screen_live_location_sheet_subtitle">
@@ -531,6 +546,10 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="screen_space_list_title">"Kogukonnad"</string>
   <string name="screen_static_location_sheet_timestamp_description">"Jagatud %1$s"</string>
   <string name="screen_static_location_sheet_title">"Kaardil"</string>
+  <plurals name="screen_timeline_active_call_extra_joined_count">
+    <item quantity="one">"%1$d liitus"</item>
+    <item quantity="other">"%1$d liitusid"</item>
+  </plurals>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Sõnum on saatmata, kuna kasutaja %1$s digitaalse identiteet on lähtestatud."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Sõnum on saatmata, kuna %1$s pole verifitseerinud kõiki oma seadmeid."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Kuna sa pole üks või enamgi oma seadet verifitseerinud, siis sinu sõnum on saatmata."</string>
@@ -542,4 +561,6 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Sul pole ligipääsu antud sõnumile"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Sõnumi dekrüptimine ei õnnestu"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Kuna seade on verifitseerimata või saatja pole sinu digitaalset identiteeti verifitseerinud, siis sõnumi näitamine on blokeeritud."</string>
+  <string name="vulkan_not_supported_dialog_content_android">"Sinu nutiseadme tarkvara on liiga vana, vajalik on Android 8 või uuem."</string>
+  <string name="vulkan_not_supported_dialog_title_android">"Kaartide joonistamine pole toetatud"</string>
 </resources>

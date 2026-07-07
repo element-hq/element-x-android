@@ -21,12 +21,10 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.tests.testutils.assertThrowsInDebug
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class DefaultDeeplinkParserTest {
+class DefaultDeeplinkParserTest : RobolectricTest() {
     companion object {
         const val A_URI =
             "elementx://open/@alice:server.org"

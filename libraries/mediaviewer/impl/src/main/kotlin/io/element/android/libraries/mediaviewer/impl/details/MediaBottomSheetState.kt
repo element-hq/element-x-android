@@ -16,6 +16,7 @@ sealed interface MediaBottomSheetState {
     data object Hidden : MediaBottomSheetState
 
     data class Details(
+        val fromGallery: Boolean,
         val eventId: EventId?,
         val canDelete: Boolean,
         val mediaInfo: MediaInfo,

@@ -175,6 +175,8 @@ data class SemanticColors(
     val iconTertiaryAlpha: Color,
     /** Used to separate core sections of the UI as well as containers */
     val separatorPrimary: Color,
+    /** Secondary shade for separating sections of components or list items */
+    val separatorSecondary: Color,
     /** Accent text colour for plain actions. */
     val textActionAccent: Color,
     /** Default text colour for plain actions. */
