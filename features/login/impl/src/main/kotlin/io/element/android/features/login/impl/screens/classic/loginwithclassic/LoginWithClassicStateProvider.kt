@@ -9,9 +9,9 @@ package io.element.android.features.login.impl.screens.classic.loginwithclassic
 
 import android.graphics.Bitmap
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.login.impl.login.LoginMode
+import io.element.android.features.login.impl.login.LoginModeState
+import io.element.android.features.login.impl.login.aLoginModeState
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.matrix.api.core.UserId
 
@@ -29,7 +29,7 @@ fun aLoginWithClassicState(
     displayName: String? = null,
     avatar: Bitmap? = null,
     loginWithClassicAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
-    loginMode: AsyncData<LoginMode> = AsyncData.Uninitialized,
+    loginModeState: LoginModeState = aLoginModeState(),
     eventSink: (LoginWithClassicEvent) -> Unit = {},
 ) = LoginWithClassicState(
     isElementPro = isElementPro,
@@ -37,6 +37,6 @@ fun aLoginWithClassicState(
     displayName = displayName,
     avatar = avatar,
     loginWithClassicAction = loginWithClassicAction,
-    loginMode = loginMode,
+    loginModeState = loginModeState,
     eventSink = eventSink,
 )
