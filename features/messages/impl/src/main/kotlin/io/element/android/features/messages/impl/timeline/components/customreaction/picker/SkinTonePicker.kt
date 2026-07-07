@@ -120,14 +120,16 @@ internal fun SkinTonePickerPreview() = ElementPreview {
             tags = null,
             shortcodes = persistentListOf("+1", "thumbsup"),
             unicode = "👍",
-            skins = persistentListOf(
-                EmojiSkin("1F44D-1F3FB", "thumbs up: light skin tone", "👍🏻"),
-                EmojiSkin("1F44D-1F3FC", "thumbs up: medium-light skin tone", "👍🏼"),
-                EmojiSkin("1F44D-1F3FD", "thumbs up: medium skin tone", "👍🏽"),
-                EmojiSkin("1F44D-1F3FE", "thumbs up: medium-dark skin tone", "👍🏾"),
-                EmojiSkin("1F44D-1F3FF", "thumbs up: dark skin tone", "👍🏿"),
-            ),
+            skins = aSkinList(),
         ),
         onSelect = {},
     )
 }
+
+internal fun aSkinList() = persistentListOf(
+    EmojiSkin("1F44D-1F3FB", "thumbs up: light skin tone", "👍🏻"),
+    EmojiSkin("1F44D-1F3FC", "thumbs up: medium-light skin tone", "👍🏼"),
+    EmojiSkin("1F44D-1F3FD", "thumbs up: medium skin tone", "👍🏽"),
+    EmojiSkin("1F44D-1F3FE", "thumbs up: medium-dark skin tone", "👍🏾"),
+    EmojiSkin("1F44D-1F3FF", "thumbs up: dark skin tone", "👍🏿"),
+)

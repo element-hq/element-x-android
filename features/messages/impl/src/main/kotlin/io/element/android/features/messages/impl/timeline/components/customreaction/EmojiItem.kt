@@ -18,6 +18,7 @@ import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.CircleShape
@@ -56,6 +57,7 @@ import io.element.android.features.messages.impl.timeline.components.customreact
 import io.element.android.features.messages.impl.timeline.components.customreaction.picker.SkinTonePicker
 import io.element.android.features.messages.impl.timeline.components.customreaction.picker.SkinToneSlotSize
 import io.element.android.features.messages.impl.timeline.components.customreaction.picker.SkinToneSlotSpacing
+import io.element.android.features.messages.impl.timeline.components.customreaction.picker.aSkinList
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -219,6 +221,7 @@ fun EmojiItem(
             style = LocalTextStyle.current.copy(fontSize = emojiSize),
         )
         if (hasSkinTones) {
+            val pickerIndicatorColor = ElementTheme.colors.borderInteractivePrimary
             Canvas(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
@@ -230,7 +233,7 @@ fun EmojiItem(
                     lineTo(0f, size.height)
                     close()
                 }
-                drawPath(path, color = Color.Gray.copy(alpha = 0.5f), style = Fill)
+                drawPath(path, color = pickerIndicatorColor, style = Fill)
             }
         }
 
@@ -260,21 +263,28 @@ fun EmojiItem(
 @Composable
 internal fun EmojiItemPreview() = ElementPreview {
     Row(
+        modifier = Modifier.padding(4.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        for (isSelected in listOf(true, false)) {
-            EmojiItem(
-                item = Emoji(
-                    hexcode = "",
-                    label = "",
-                    tags = null,
-                    shortcodes = persistentListOf(),
-                    unicode = "👍",
-                    skins = null
-                ),
-                isSelected = isSelected,
-                onSelectEmoji = {},
-            )
+        for (isSelected in listOf(false, true)) {
+            for (skinList in listOf(persistentListOf(), aSkinList())) {
+                val hasSelectedSkinValues = if (skinList.isNotEmpty()) listOf(false, true) else listOf(false)
+                for (hasSelectedSkin in hasSelectedSkinValues) {
+                    EmojiItem(
+                        item = Emoji(
+                            hexcode = "",
+                            label = "",
+                            tags = null,
+                            shortcodes = persistentListOf(),
+                            unicode = "👍",
+                            skins = skinList,
+                        ),
+                        isSelected = isSelected,
+                        onSelectEmoji = {},
+                        hasSelectedSkin = hasSelectedSkin,
+                    )
+                }
+            }
         }
     }
 }
