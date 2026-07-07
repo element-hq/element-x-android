@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.dialogs.SlidingSyncNotSupportedDialog
 import io.element.android.features.login.impl.error.ChangeServerError
+import io.element.android.features.login.impl.localnetwork.LocalNetworkPermissionDialogView
 import io.element.android.libraries.androidutils.system.openGooglePlay
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.ProgressDialog
@@ -121,6 +122,15 @@ fun ChangeServerView(
         }
         AsyncData.Uninitialized -> Unit
     }
+    LocalNetworkPermissionDialogView(
+        dialog = state.localNetworkPermissionDialog,
+        onSubmit = {
+            eventSink.invoke(ChangeServerEvents.RequestLocalNetworkPermission)
+        },
+        onDismiss = {
+            eventSink.invoke(ChangeServerEvents.DismissLocalNetworkPermission)
+        }
+    )
 }
 
 @PreviewsDayNight
