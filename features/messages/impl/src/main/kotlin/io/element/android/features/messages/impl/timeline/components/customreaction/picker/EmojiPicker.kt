@@ -131,10 +131,10 @@ private fun EmojiResults(
     emojis: ImmutableList<Emoji>,
     isEmojiSelected: (Emoji) -> Boolean,
     onSelectEmoji: (Emoji) -> Unit,
-    onLongPress: ((Emoji) -> Unit)? = null,
-    skinPickerEmoji: Emoji? = null,
-    onDismissSkinPicker: (() -> Unit)? = null,
-    selectedEmojis: ImmutableSet<String> = persistentSetOf(),
+    onLongPress: (Emoji) -> Unit,
+    skinPickerEmoji: Emoji?,
+    onDismissSkinPicker: () -> Unit,
+    selectedEmojis: ImmutableSet<String>,
 ) {
     LazyVerticalGrid(
         modifier = Modifier.fillMaxSize(),

@@ -70,13 +70,13 @@ fun EmojiItem(
     item: Emoji,
     isSelected: Boolean,
     onSelectEmoji: (Emoji) -> Unit,
+    onLongPress: (Emoji) -> Unit,
+    onDismissSkinPicker: () -> Unit,
+    skinPickerEmoji: Emoji?,
+    selectedSkinUnicodes: ImmutableSet<String>,
+    hasSelectedSkin: Boolean,
     modifier: Modifier = Modifier,
     emojiSize: TextUnit = 20.sp,
-    onLongPress: ((Emoji) -> Unit)? = null,
-    skinPickerEmoji: Emoji? = null,
-    onDismissSkinPicker: (() -> Unit)? = null,
-    selectedSkinUnicodes: ImmutableSet<String> = persistentSetOf(),
-    hasSelectedSkin: Boolean = false,
 ) {
     val backgroundColor = when {
         isSelected -> ElementTheme.colors.bgActionPrimaryRest
@@ -139,12 +139,10 @@ fun EmojiItem(
                         var startOffset = Offset.Zero
                         detectDragGesturesAfterLongPress(
                             onDragStart = { position ->
-                                if (onLongPress != null) {
-                                    startOffset = position
-                                    dismissed = false
-                                    onLongPress(item)
-                                    hoveredIndex = -1
-                                }
+                                startOffset = position
+                                dismissed = false
+                                onLongPress(item)
+                                hoveredIndex = -1
                             },
                             onDrag = { change, _ ->
                                 if (!dismissed) {
@@ -159,7 +157,7 @@ fun EmojiItem(
                                     if (!isValidDrag) {
                                         dismissed = true
                                         hoveredIndex = -1
-                                        onDismissSkinPicker?.invoke()
+                                        onDismissSkinPicker()
                                     } else {
                                         val skinItemsCount = item.skins!!.size
                                         // Original + variants
@@ -199,7 +197,7 @@ fun EmojiItem(
                                 }
                                 dismissed = false
                                 hoveredIndex = -1
-                                onDismissSkinPicker?.invoke()
+                                onDismissSkinPicker()
                             },
                             onDragCancel = {
                                 dismissed = false
@@ -241,7 +239,7 @@ fun EmojiItem(
             val pickerHeight = SkinTonePadding * 2 + SkinToneSlotSize
             val popupOffsetPx = with(density) { -pickerHeight.roundToPx() }
             Popup(
-                onDismissRequest = { onDismissSkinPicker?.invoke() },
+                onDismissRequest = { onDismissSkinPicker() },
                 alignment = Alignment.BottomCenter,
                 offset = IntOffset(0, popupOffsetPx),
             ) {
@@ -249,7 +247,7 @@ fun EmojiItem(
                     emoji = item,
                     onSelect = { selectedEmoji ->
                         onSelectEmoji(selectedEmoji)
-                        onDismissSkinPicker?.invoke()
+                        onDismissSkinPicker()
                     },
                     hoveredIndex = hoveredIndex,
                     selectedUnicodes = selectedSkinUnicodes,
@@ -282,6 +280,10 @@ internal fun EmojiItemPreview() = ElementPreview {
                         isSelected = isSelected,
                         onSelectEmoji = {},
                         hasSelectedSkin = hasSelectedSkin,
+                        onLongPress = {},
+                        onDismissSkinPicker = {},
+                        skinPickerEmoji = null,
+                        selectedSkinUnicodes = persistentSetOf(),
                     )
                 }
             }

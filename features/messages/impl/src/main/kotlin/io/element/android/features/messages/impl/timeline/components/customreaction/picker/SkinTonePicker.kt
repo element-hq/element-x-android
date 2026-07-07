@@ -43,10 +43,10 @@ val SkinTonePadding = 4.dp
 @Composable
 fun SkinTonePicker(
     emoji: Emoji,
+    hoveredIndex: Int,
+    selectedUnicodes: ImmutableSet<String>,
     onSelect: (Emoji) -> Unit,
     modifier: Modifier = Modifier,
-    hoveredIndex: Int = -1,
-    selectedUnicodes: ImmutableSet<String> = persistentSetOf(),
 ) {
     val skins = emoji.skins.orEmpty()
     val emojiSize = 32.dp.toSp()
@@ -122,6 +122,8 @@ internal fun SkinTonePickerPreview() = ElementPreview {
             unicode = "👍",
             skins = aSkinList(),
         ),
+        hoveredIndex = -1,
+        selectedUnicodes = persistentSetOf(),
         onSelect = {},
     )
 }
