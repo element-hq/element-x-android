@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2025 Element Creations Ltd.
- * Copyright 2023-2025 New Vector Ltd.
+ * Copyright (c) 2026 Element Creations Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
@@ -16,7 +15,7 @@ class SvgDimensionExtractor(
     private val defaultWidth: Long = 640L,
     private val defaultHeight: Long = 480L,
 ) {
-    fun extractDimensions(file: File): Pair<Long, Long> {
+    fun extractDimensions(file: File): android.util.Size {
         return file.inputStream().use { inputStream ->
             try {
                 val parser = Xml.newPullParser()
@@ -32,7 +31,7 @@ class SvgDimensionExtractor(
                         val parsedHeight = height?.let { parseLength(it) }
 
                         if (parsedWidth != null && parsedHeight != null) {
-                            return parsedWidth to parsedHeight
+                            return android.util.Size(parsedWidth.toInt(), parsedHeight.toInt())
                         }
 
                         if (viewBox != null) {
@@ -40,17 +39,17 @@ class SvgDimensionExtractor(
                             if (parts.size == 4 && parts[2] != null && parts[3] != null) {
                                 val vbWidth = parts[2]!!.toLong().coerceAtLeast(1)
                                 val vbHeight = parts[3]!!.toLong().coerceAtLeast(1)
-                                return vbWidth to vbHeight
+                                return android.util.Size(vbWidth.toInt(), vbHeight.toInt())
                             }
                         }
 
-                        return (parsedWidth ?: defaultWidth) to (parsedHeight ?: defaultHeight)
+                        return android.util.Size((parsedWidth ?: defaultWidth).toInt(), (parsedHeight ?: defaultHeight).toInt())
                     }
                     eventType = parser.next()
                 }
-                defaultWidth to defaultHeight
+                android.util.Size(defaultWidth.toInt(), defaultHeight.toInt())
             } catch (_: Exception) {
-                defaultWidth to defaultHeight
+                android.util.Size(defaultWidth.toInt(), defaultHeight.toInt())
             }
         }
     }

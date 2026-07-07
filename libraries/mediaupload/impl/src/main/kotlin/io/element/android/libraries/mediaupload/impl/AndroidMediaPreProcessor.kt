@@ -223,10 +223,10 @@ class AndroidMediaPreProcessor(
     private suspend fun processSvgImage(uri: Uri, mimeType: String): MediaUploadInfo {
         Timber.d("Processing SVG image ${uri.path.orEmpty().hash()}")
         val file = copyToTmpFile(uri)
-        val (width, height) = svgDimensionExtractor.extractDimensions(file)
+        val size = svgDimensionExtractor.extractDimensions(file)
         val imageInfo = ImageInfo(
-            width = width,
-            height = height,
+            width = size.width.toLong(),
+            height = size.height.toLong(),
             mimetype = mimeType,
             size = file.length(),
             thumbnailInfo = null,
