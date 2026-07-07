@@ -103,7 +103,6 @@ import io.element.android.libraries.testtags.TestTag
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
@@ -165,9 +164,6 @@ fun TimelineView(
     val context = LocalContext.current
     val toastMessage = stringResource(CommonStrings.common_copied_to_clipboard)
     val view = LocalView.current
-    // Disable reverse layout when TalkBack is enabled to avoid incorrect ordering issues seen in the current Compose UI version
-    val useReverseLayout = !isTalkbackActive()
-
     fun inReplyToClick(eventId: EventId) {
         state.eventSink(TimelineEvent.FocusOnEvent(eventId))
     }
@@ -195,7 +191,7 @@ fun TimelineView(
                     .nestedScroll(nestedScrollConnection)
                     .testTag(TestTags.timeline),
                 state = lazyListState,
-                reverseLayout = useReverseLayout,
+                reverseLayout = true,
                 contentPadding = PaddingValues(top = 64.dp, bottom = 8.dp),
             ) {
                 items(
@@ -255,14 +251,12 @@ fun TimelineView(
                 onFocusOnEvent = ::onFocusOnEvent,
             )
 
-            if (useReverseLayout) {
-                FloatingDateBadgeOverlay(
-                    lazyListState = lazyListState,
-                    timelineItems = state.timelineItems,
-                    isLive = state.isLive,
-                    topOffset = floatingDateTopOffset,
-                )
-            }
+            FloatingDateBadgeOverlay(
+                lazyListState = lazyListState,
+                timelineItems = state.timelineItems,
+                isLive = state.isLive,
+                topOffset = floatingDateTopOffset,
+            )
         }
     }
 

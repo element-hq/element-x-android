@@ -61,10 +61,7 @@ fun TimelineItemReadReceiptView(
         ReadReceiptsRow(modifier = modifier) {
             ReadReceiptsAvatars(
                 receipts = state.receipts,
-                modifier = Modifier
-                    .clip(RoundedCornerShape(4.dp))
-                    .clickable(onClick = onReadReceiptsClick)
-                    .padding(2.dp)
+                onClick = onReadReceiptsClick,
             )
         }
     } else {
@@ -124,7 +121,8 @@ private fun ReadReceiptsRow(
 @Composable
 private fun ReadReceiptsAvatars(
     receipts: ImmutableList<ReadReceiptData>,
-    modifier: Modifier = Modifier
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val avatarSize = AvatarSize.TimelineReadReceipt.dp
     val avatarStrokeSize = 1.dp
@@ -132,6 +130,12 @@ private fun ReadReceiptsAvatars(
     val receiptDescription = computeReceiptDescription(receipts)
     Row(
         modifier = modifier
+            .clip(RoundedCornerShape(4.dp))
+            .clickable(
+                onClick = onClick,
+                onClickLabel = stringResource(id = CommonStrings.a11y_read_receipts_tap_to_show_all_android),
+            )
+            .padding(2.dp)
             .clearAndSetSemantics {
                 testTag = TestTags.messageReadReceipts.value
                 contentDescription = receiptDescription
