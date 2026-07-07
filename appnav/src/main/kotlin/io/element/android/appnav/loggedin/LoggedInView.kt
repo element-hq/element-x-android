@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.Lifecycle
 import io.element.android.appnav.R
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialogWithDoNotShowAgain
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -80,6 +81,39 @@ fun LoggedInView(
             onSubmit = {
                 state.eventSink(LoggedInEvents.LogoutAndMigrateToNativeSlidingSync)
             }
+        )
+    }
+
+    LocalNetworkPermissionDialog(state = state)
+}
+
+@Composable
+private fun LocalNetworkPermissionDialog(state: LoggedInState) {
+    when (state.localNetworkPermissionDialog) {
+        LocalNetworkPermissionDialog.None -> Unit
+        LocalNetworkPermissionDialog.Rationale -> ConfirmationDialog(
+            title = stringResource(CommonStrings.screen_local_network_opt_in_title),
+            content = stringResource(CommonStrings.screen_local_network_opt_in_subtitle),
+            submitText = stringResource(CommonStrings.dialog_allow_access),
+            cancelText = stringResource(CommonStrings.action_not_now),
+            onSubmitClick = {
+                state.eventSink(LoggedInEvents.RequestLocationNetworkPermission)
+            },
+            onDismiss = {
+                state.eventSink(LoggedInEvents.DismissLocalNetworkPermissionPrompt)
+            },
+        )
+        LocalNetworkPermissionDialog.Settings -> ConfirmationDialog(
+            title = stringResource(CommonStrings.screen_local_network_opt_in_title),
+            content = stringResource(CommonStrings.screen_local_network_opt_in_subtitle),
+            submitText = stringResource(CommonStrings.action_open_settings),
+            cancelText = stringResource(CommonStrings.action_not_now),
+            onSubmitClick = {
+                state.eventSink(LoggedInEvents.RequestLocationNetworkPermission)
+            },
+            onDismiss = {
+                state.eventSink(LoggedInEvents.DismissLocalNetworkPermissionPrompt)
+            },
         )
     }
 }

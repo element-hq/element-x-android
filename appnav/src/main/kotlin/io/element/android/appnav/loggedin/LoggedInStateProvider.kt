@@ -19,6 +19,8 @@ open class LoggedInStateProvider : PreviewParameterProvider<LoggedInState> {
             aLoggedInState(showSyncSpinner = true),
             aLoggedInState(pusherRegistrationState = AsyncData.Failure(PusherRegistrationFailure.NoDistributorsAvailable())),
             aLoggedInState(forceNativeSlidingSyncMigration = true),
+            aLoggedInState(localNetworkPermissionDialog = LocalNetworkPermissionDialog.Rationale),
+            aLoggedInState(localNetworkPermissionDialog = LocalNetworkPermissionDialog.Settings),
         )
 }
 
@@ -27,11 +29,13 @@ fun aLoggedInState(
     pusherRegistrationState: AsyncData<Unit> = AsyncData.Uninitialized,
     forceNativeSlidingSyncMigration: Boolean = false,
     appName: String = "Element X",
+    localNetworkPermissionDialog: LocalNetworkPermissionDialog = LocalNetworkPermissionDialog.None,
 ) = LoggedInState(
     showSyncSpinner = showSyncSpinner,
     pusherRegistrationState = pusherRegistrationState,
     ignoreRegistrationError = false,
     forceNativeSlidingSyncMigration = forceNativeSlidingSyncMigration,
     appName = appName,
+    localNetworkPermissionDialog = localNetworkPermissionDialog,
     eventSink = {},
 )

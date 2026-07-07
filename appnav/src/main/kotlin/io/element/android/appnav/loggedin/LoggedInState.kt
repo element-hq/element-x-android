@@ -16,5 +16,12 @@ data class LoggedInState(
     val ignoreRegistrationError: Boolean,
     val forceNativeSlidingSyncMigration: Boolean,
     val appName: String,
+    val localNetworkPermissionDialog: LocalNetworkPermissionDialog,
     val eventSink: (LoggedInEvents) -> Unit,
 )
+
+enum class LocalNetworkPermissionDialog {
+    None,
+    Rationale,
+    Settings,
+}
