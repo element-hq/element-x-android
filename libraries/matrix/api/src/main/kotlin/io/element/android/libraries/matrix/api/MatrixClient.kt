@@ -204,6 +204,12 @@ interface MatrixClient {
     suspend fun markRoomAsFullyRead(roomId: RoomId, eventId: EventId): Result<Unit>
 
     /**
+     * Mark all joined rooms as read by sending public, private and fully-read receipts
+     * on each room's latest event. Per-room errors are logged and skipped by the SDK.
+     */
+    suspend fun markAllRoomsAsRead(): Result<Unit>
+
+    /**
      * Check if linking a new device using QrCode is supported by the server.
      */
     suspend fun canLinkNewDevice(): Result<Boolean>

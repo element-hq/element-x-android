@@ -35,18 +35,32 @@ interface MediaViewerEntryPoint : FeatureEntryPoint {
         fun forwardEvent(eventId: EventId, fromPinnedEvents: Boolean)
     }
 
-    data class Params(
-        val mode: MediaViewerMode,
-        val eventId: EventId?,
-        val mediaInfo: MediaInfo,
-        val mediaSource: MediaSource,
-        val thumbnailSource: MediaSource?,
-        val canShowInfo: Boolean,
-    ) : NodeInputs
+    sealed interface Params : NodeInputs {
+        data class RoomMedia(
+            val mode: MediaViewerMode,
+            val eventId: EventId?,
+            val mediaInfo: MediaInfo,
+            val mediaSource: MediaSource,
+            val thumbnailSource: MediaSource?,
+        ) : Params
+
+        data class EventGallery(
+            val eventId: EventId?,
+            val galleryInfo: GalleryInfo,
+            val galleryItems: List<GalleryItemData>,
+            val fromPinnedMessages: Boolean,
+        ) : Params
+
+        data class Avatar(
+            val avatarInfo: AvatarInfo,
+            val mediaSource: MediaSource,
+            val thumbnailSource: MediaSource?,
+        ) : Params
+    }
 
     sealed interface MediaViewerMode : Parcelable {
         @Parcelize
-        data object SingleMedia : MediaViewerMode
+        data class EventGallery(val fromPinnedMessages: Boolean) : MediaViewerMode
 
         @Parcelize
         data class TimelineImagesAndVideos(val timelineMode: Timeline.Mode) : MediaViewerMode
