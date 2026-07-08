@@ -34,6 +34,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 @Composable
 fun UserDefinedRoomNotificationSettingsView(
     state: RoomNotificationSettingsState,
+    onShowAndroidRoomNotificationSettings: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -64,6 +65,10 @@ fun UserDefinedRoomNotificationSettingsView(
                     },
                 )
             }
+
+            AndroidRoomNotificationSettingsItem(
+                onClick = onShowAndroidRoomNotificationSettings,
+            )
 
             ListItem(
                 headlineContent = { Text(stringResource(R.string.screen_room_notification_settings_edit_remove_setting)) },
@@ -109,6 +114,7 @@ internal fun UserDefinedRoomNotificationSettingsViewPreview(
 ) = ElementPreview {
     UserDefinedRoomNotificationSettingsView(
         state = state,
+        onShowAndroidRoomNotificationSettings = {},
         onBackClick = {},
     )
 }
