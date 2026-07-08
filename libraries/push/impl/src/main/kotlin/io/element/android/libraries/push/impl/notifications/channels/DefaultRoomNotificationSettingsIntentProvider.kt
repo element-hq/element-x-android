@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.notifications.RoomNotificationChannelManager
 import io.element.android.libraries.push.api.notifications.RoomNotificationSettingsIntentProvider
+import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
 import io.element.android.libraries.push.impl.notifications.shortcut.createShortcutId
 
 @SingleIn(AppScope::class)
@@ -28,14 +29,27 @@ import io.element.android.libraries.push.impl.notifications.shortcut.createShort
 class DefaultRoomNotificationSettingsIntentProvider(
     @ApplicationContext private val context: Context,
     private val roomNotificationChannelManager: RoomNotificationChannelManager,
+    private val notificationConversationService: NotificationConversationService,
 ) : RoomNotificationSettingsIntentProvider {
     override suspend fun getIntent(
         sessionId: SessionId,
         roomId: RoomId,
         roomDisplayName: String,
         isDm: Boolean,
+        roomAvatarUrl: String?,
     ): Intent {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Publish the shortcut before opening Settings so Android can resolve the room name
+            // and icon for this conversation channel. We intentionally do not post a synthetic
+            // notification here; Android may still only list the conversation in the app-wide
+            // notification settings after it has seen a real MessagingStyle notification.
+            notificationConversationService.ensureRoomShortcut(
+                sessionId = sessionId,
+                roomId = roomId,
+                roomName = roomDisplayName,
+                roomIsDirect = isDm,
+                roomAvatarUrl = roomAvatarUrl,
+            )
             val channelId = roomNotificationChannelManager.getChannelIdForRoom(
                 sessionId = sessionId,
                 roomId = roomId,

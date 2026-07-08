@@ -11,6 +11,7 @@ package io.element.android.libraries.push.impl.notifications.conversations
 import android.content.Context
 import android.content.pm.ShortcutInfo
 import android.os.Build
+import androidx.core.content.LocusIdCompat
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
@@ -22,6 +23,7 @@ import io.element.android.libraries.core.coroutine.withPreviousValue
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -84,6 +86,16 @@ class DefaultNotificationConversationService(
             .launchIn(coroutineScope)
     }
 
+    override suspend fun ensureRoomShortcut(
+        sessionId: SessionId,
+        roomId: RoomId,
+        roomName: String?,
+        roomIsDirect: Boolean,
+        roomAvatarUrl: String?,
+    ) {
+        pushConversationShortcut(sessionId, roomId, roomName, roomIsDirect, roomAvatarUrl)
+    }
+
     override suspend fun onMessageSent(
         sessionId: SessionId,
         roomId: RoomId,
@@ -143,12 +155,15 @@ class DefaultNotificationConversationService(
             imageLoader = imageLoader,
             targetSize = defaultShortcutIconSize.toLong()
         )?.let(IconCompat::createWithBitmap)
+            ?: IconCompat.createWithResource(context, CommonDrawables.ic_notification)
 
-        val shortcutInfo = ShortcutInfoCompat.Builder(context, createShortcutId(sessionId, roomId))
+        val shortcutId = createShortcutId(sessionId, roomId)
+        val shortcutInfo = ShortcutInfoCompat.Builder(context, shortcutId)
             .setShortLabel(name)
             .setIcon(icon)
             .setIntent(intentProvider.getViewRoomIntent(sessionId, roomId, threadId = null, eventId = null))
             .setCategories(categories)
+            .setLocusId(LocusIdCompat(shortcutId))
             .setLongLived(true)
             .let {
                 when (roomIsDirect) {

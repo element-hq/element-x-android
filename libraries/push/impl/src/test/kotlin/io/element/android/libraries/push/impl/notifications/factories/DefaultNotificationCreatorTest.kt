@@ -43,6 +43,7 @@ import io.element.android.libraries.push.impl.notifications.fixtures.aFallbackNo
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
+import io.element.android.libraries.push.impl.notifications.shortcut.createShortcutId
 import io.element.android.libraries.push.test.notifications.channels.FakeRoomNotificationChannelManager
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
@@ -274,6 +275,7 @@ class DefaultNotificationCreatorTest : RobolectricTest() {
             events = listOf(aNotifiableMessageEvent()),
         )
         result.commonAssertions()
+        assertThat(result.shortcutId).isEqualTo(createShortcutId(A_SESSION_ID, A_ROOM_ID))
     }
 
     @Test
@@ -303,6 +305,7 @@ class DefaultNotificationCreatorTest : RobolectricTest() {
             events = listOf(aNotifiableMessageEvent()),
         )
         result.commonAssertions()
+        assertThat(result.shortcutId).isNull()
     }
 
     @Test

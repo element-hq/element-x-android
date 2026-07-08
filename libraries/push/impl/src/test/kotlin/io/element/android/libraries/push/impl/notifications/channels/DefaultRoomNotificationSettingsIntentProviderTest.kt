@@ -15,6 +15,8 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.impl.notifications.shortcut.createShortcutId
 import io.element.android.libraries.push.test.notifications.channels.FakeRoomNotificationChannelManager
+import io.element.android.libraries.push.test.notifications.conversations.FakeNotificationConversationService
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -31,7 +33,7 @@ class DefaultRoomNotificationSettingsIntentProviderTest : RobolectricTest() {
     fun `getIntent opens conversation notification settings on Android 11 and above`() = runTest {
         val provider = createProvider(channelId = "room-channel")
 
-        val intent = provider.getIntent(sessionId, roomId, "Room", isDm = false)
+        val intent = provider.getIntent(sessionId, roomId, "Room", isDm = false, roomAvatarUrl = "mxc://avatar")
 
         assertThat(intent.action).isEqualTo(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
         assertThat(intent.getStringExtra(Settings.EXTRA_APP_PACKAGE)).isEqualTo(context.packageName)
@@ -45,7 +47,7 @@ class DefaultRoomNotificationSettingsIntentProviderTest : RobolectricTest() {
     fun `getIntent opens channel notification settings on Android 8 to 10`() = runTest {
         val provider = createProvider(channelId = "room-channel")
 
-        val intent = provider.getIntent(sessionId, roomId, "Room", isDm = false)
+        val intent = provider.getIntent(sessionId, roomId, "Room", isDm = false, roomAvatarUrl = "mxc://avatar")
 
         assertThat(intent.action).isEqualTo(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
         assertThat(intent.getStringExtra(Settings.EXTRA_APP_PACKAGE)).isEqualTo(context.packageName)
@@ -59,7 +61,7 @@ class DefaultRoomNotificationSettingsIntentProviderTest : RobolectricTest() {
     fun `getIntent falls back to app settings before notification channels`() = runTest {
         val provider = createProvider(channelId = "room-channel")
 
-        val intent = provider.getIntent(sessionId, roomId, "Room", isDm = false)
+        val intent = provider.getIntent(sessionId, roomId, "Room", isDm = false, roomAvatarUrl = "mxc://avatar")
 
         assertThat(intent.action).isEqualTo(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
         assertThat(intent.data.toString()).isEqualTo("package:${context.packageName}")
@@ -67,10 +69,13 @@ class DefaultRoomNotificationSettingsIntentProviderTest : RobolectricTest() {
     }
 
     private fun createProvider(channelId: String): DefaultRoomNotificationSettingsIntentProvider {
+        val callOrder = mutableListOf<String>()
         return DefaultRoomNotificationSettingsIntentProvider(
             context = context,
             roomNotificationChannelManager = FakeRoomNotificationChannelManager(
                 getChannelIdForRoomLambda = { sid, rid, roomDisplayName, isDm, noisy ->
+                    callOrder.add("channel")
+                    assertThat(callOrder).containsExactly("shortcut", "channel").inOrder()
                     assertThat(sid).isEqualTo(sessionId)
                     assertThat(rid).isEqualTo(roomId)
                     assertThat(roomDisplayName).isEqualTo("Room")
@@ -78,6 +83,16 @@ class DefaultRoomNotificationSettingsIntentProviderTest : RobolectricTest() {
                     assertThat(noisy).isTrue()
                     channelId
                 }
+            ),
+            notificationConversationService = FakeNotificationConversationService(
+                ensureRoomShortcutLambda = lambdaRecorder { sid, rid, roomName, roomIsDirect, roomAvatarUrl ->
+                    callOrder.add("shortcut")
+                    assertThat(sid).isEqualTo(sessionId)
+                    assertThat(rid).isEqualTo(roomId)
+                    assertThat(roomName).isEqualTo("Room")
+                    assertThat(roomIsDirect).isFalse()
+                    assertThat(roomAvatarUrl).isEqualTo("mxc://avatar")
+                },
             ),
         )
     }

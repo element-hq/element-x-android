@@ -15,9 +15,18 @@ import io.element.android.tests.testutils.lambda.LambdaFiveParamsRecorder
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 
 class FakeNotificationConversationService(
+    private val ensureRoomShortcutLambda: LambdaFiveParamsRecorder<SessionId, RoomId, String?, Boolean, String?, Unit> = lambdaRecorder { _, _, _, _, _ -> },
     private val onMessageSentLambda: LambdaFiveParamsRecorder<SessionId, RoomId, String?, Boolean, String?, Unit> = lambdaRecorder { _, _, _, _, _ -> },
     private val onMessageReceivedLambda: LambdaFiveParamsRecorder<SessionId, RoomId, String?, Boolean, String?, Unit> = lambdaRecorder { _, _, _, _, _ -> },
 ) : NotificationConversationService {
+    override suspend fun ensureRoomShortcut(
+        sessionId: SessionId,
+        roomId: RoomId,
+        roomName: String?,
+        roomIsDirect: Boolean,
+        roomAvatarUrl: String?,
+    ) = ensureRoomShortcutLambda(sessionId, roomId, roomName, roomIsDirect, roomAvatarUrl)
+
     override suspend fun onMessageSent(
         sessionId: SessionId,
         roomId: RoomId,

@@ -16,6 +16,7 @@ import androidx.annotation.ColorInt
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.MessagingStyle
 import androidx.core.app.Person
+import androidx.core.content.LocusIdCompat
 import coil3.ImageLoader
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
@@ -171,21 +172,13 @@ class DefaultNotificationCreator(
         } else {
             NotificationCompat.CATEGORY_MESSAGE
         }
+        val roomShortcutId = createShortcutId(roomInfo.sessionId, roomInfo.roomId)
         val builder = if (existingNotification != null) {
             NotificationCompat.Builder(context, existingNotification)
                 // Clear existing actions
                 .clearActions()
         } else {
             NotificationCompat.Builder(context, channelId)
-                // ID of the corresponding shortcut, for conversation features under API 30+
-                // Must match those created in the ShortcutInfoCompat.Builder()
-                // for the notification to appear as a "Conversation":
-                // https://developer.android.com/develop/ui/views/notifications/conversations
-                .apply {
-                    if (threadId == null) {
-                        setShortcutId(createShortcutId(roomInfo.sessionId, roomInfo.roomId))
-                    }
-                }
                 .setGroupSummary(false)
                 // In order to avoid notification making sound twice (due to the summary notification)
                 .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_CHILDREN)
@@ -203,6 +196,12 @@ class DefaultNotificationCreator(
         )
         messagingStyle.addMessagesFromEvents(events, imageLoader)
         return builder
+            .apply {
+                if (threadId == null) {
+                    setShortcutId(roomShortcutId)
+                    setLocusId(LocusIdCompat(roomShortcutId))
+                }
+            }
             .setCategory(category)
             .setNumber(events.size)
             .setOnlyAlertOnce(roomInfo.isUpdated)

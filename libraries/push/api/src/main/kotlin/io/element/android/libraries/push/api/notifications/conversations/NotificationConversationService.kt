@@ -16,6 +16,21 @@ import io.element.android.libraries.matrix.api.core.SessionId
  */
 interface NotificationConversationService {
     /**
+     * Ensures Android has a long-lived conversation shortcut for [roomId].
+     *
+     * Android resolves conversation notification settings and avatars through the shortcut id
+     * attached to the room's notification channel. This method deliberately only publishes the
+     * shortcut; it does not create a notification.
+     */
+    suspend fun ensureRoomShortcut(
+        sessionId: SessionId,
+        roomId: RoomId,
+        roomName: String?,
+        roomIsDirect: Boolean,
+        roomAvatarUrl: String?,
+    )
+
+    /**
      * Called when the current user sends a message in [roomId]. Refreshes the room's conversation
      * shortcut and, unlike [onMessageReceived], also ensures the room's per-room notification
      * channel exists if its notification mode is

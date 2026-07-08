@@ -14,9 +14,9 @@ import io.element.android.libraries.push.api.notifications.RoomNotificationSetti
 import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeRoomNotificationSettingsIntentProvider(
-    private val getIntentLambda: (SessionId, RoomId, String, Boolean) -> Intent = { _, _, _, _ -> lambdaError() },
+    private val getIntentLambda: (SessionId, RoomId, String, Boolean, String?) -> Intent = { _, _, _, _, _ -> lambdaError() },
 ) : RoomNotificationSettingsIntentProvider {
-    override suspend fun getIntent(sessionId: SessionId, roomId: RoomId, roomDisplayName: String, isDm: Boolean): Intent {
-        return getIntentLambda(sessionId, roomId, roomDisplayName, isDm)
+    override suspend fun getIntent(sessionId: SessionId, roomId: RoomId, roomDisplayName: String, isDm: Boolean, roomAvatarUrl: String?): Intent {
+        return getIntentLambda(sessionId, roomId, roomDisplayName, isDm, roomAvatarUrl)
     }
 }

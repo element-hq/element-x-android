@@ -10,12 +10,15 @@ package io.element.android.libraries.push.impl.notifications.conversations
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ShortcutInfo
+import android.graphics.Bitmap
 import android.os.Build
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.lockscreen.test.FakeLockScreenService
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
@@ -76,6 +79,58 @@ class DefaultNotificationConversationServiceTest : RobolectricTest() {
 
         val shortcuts = ShortcutManagerCompat.getDynamicShortcuts(context)
         assertThat(shortcuts).isNotEmpty()
+    }
+
+    @Test
+    fun `ensureRoomShortcut adds a stable long-lived conversation shortcut with room metadata`() = runTest {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        var avatarData: AvatarData? = null
+        val bitmapLoader = FakeNotificationBitmapLoader(
+            getRoomBitmapResult = { data, _, _ ->
+                avatarData = data
+                Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+            },
+        )
+        val service = createService(context, bitmapLoader = bitmapLoader)
+
+        service.ensureRoomShortcut(
+            sessionId = A_SESSION_ID,
+            roomId = A_ROOM_ID,
+            roomName = "Room title",
+            roomIsDirect = false,
+            roomAvatarUrl = "mxc://avatar",
+        )
+
+        val shortcut = ShortcutManagerCompat.getDynamicShortcuts(context).single()
+        assertThat(shortcut.id).isEqualTo(createShortcutId(A_SESSION_ID, A_ROOM_ID))
+        assertThat(shortcut.shortLabel).isEqualTo("Room title")
+        assertThat(shortcut.categories).contains(ShortcutInfo.SHORTCUT_CATEGORY_CONVERSATION)
+        assertThat(shortcut.intent.action).isEqualTo(Intent.ACTION_VIEW)
+        assertThat(avatarData?.id).isEqualTo(A_ROOM_ID.value)
+        assertThat(avatarData?.name).isEqualTo("Room title")
+        assertThat(avatarData?.url).isEqualTo("mxc://avatar")
+    }
+
+    @Test
+    fun `ensureRoomShortcut uses a fallback icon when the room avatar cannot be loaded`() = runTest {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val service = createService(
+            context,
+            bitmapLoader = FakeNotificationBitmapLoader(
+                getRoomBitmapResult = { _, _, _ -> null },
+            ),
+        )
+
+        service.ensureRoomShortcut(
+            sessionId = A_SESSION_ID,
+            roomId = A_ROOM_ID,
+            roomName = "Room title",
+            roomIsDirect = false,
+            roomAvatarUrl = null,
+        )
+
+        val shortcut = ShortcutManagerCompat.getDynamicShortcuts(context).single()
+        assertThat(shortcut.id).isEqualTo(createShortcutId(A_SESSION_ID, A_ROOM_ID))
     }
 
     @Test
@@ -392,6 +447,7 @@ class DefaultNotificationConversationServiceTest : RobolectricTest() {
         sessionObserver: FakeSessionObserver = FakeSessionObserver(),
         lockScreenService: FakeLockScreenService = FakeLockScreenService(),
         matrixClientProvider: FakeMatrixClientProvider = FakeMatrixClientProvider(),
+        bitmapLoader: FakeNotificationBitmapLoader = FakeNotificationBitmapLoader(),
         roomNotificationChannelManager: FakeRoomNotificationChannelManager = FakeRoomNotificationChannelManager(
             getChannelIdForRoomLambda = { _, _, _, _, _ -> "a-channel-id" },
             clearRoomChannelLambda = { _, _ -> },
@@ -403,7 +459,7 @@ class DefaultNotificationConversationServiceTest : RobolectricTest() {
     ) = DefaultNotificationConversationService(
         context = context,
         intentProvider = FakeIntentProvider(),
-        bitmapLoader = FakeNotificationBitmapLoader(),
+        bitmapLoader = bitmapLoader,
         matrixClientProvider = matrixClientProvider,
         imageLoaderHolder = FakeImageLoaderHolder(),
         sessionObserver = sessionObserver,

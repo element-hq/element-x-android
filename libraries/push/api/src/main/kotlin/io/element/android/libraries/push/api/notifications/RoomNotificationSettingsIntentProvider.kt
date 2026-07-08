@@ -17,5 +17,6 @@ interface RoomNotificationSettingsIntentProvider {
         roomId: RoomId,
         roomDisplayName: String,
         isDm: Boolean,
+        roomAvatarUrl: String?,
     ): Intent
 }

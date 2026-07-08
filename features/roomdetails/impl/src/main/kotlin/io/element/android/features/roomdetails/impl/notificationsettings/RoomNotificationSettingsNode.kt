@@ -78,12 +78,14 @@ class RoomNotificationSettingsNode(
 
     private fun openAndroidRoomNotificationSettings() {
         lifecycleScope.launch {
-            val roomDisplayName = room.info().name?.takeIf { it.isNotBlank() } ?: room.roomId.value
+            val roomInfo = room.info()
+            val roomDisplayName = roomInfo.name?.takeIf { it.isNotBlank() } ?: room.roomId.value
             val intent = roomNotificationSettingsIntentProvider.getIntent(
                 sessionId = room.sessionId,
                 roomId = room.roomId,
                 roomDisplayName = roomDisplayName,
                 isDm = room.isDm(),
+                roomAvatarUrl = roomInfo.avatarUrl,
             )
             try {
                 context.startActivity(intent)
