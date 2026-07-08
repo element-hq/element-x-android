@@ -9,5 +9,5 @@
 ./gradlew assembleGplayRelease
 
 # Dump information
-$ANDROID_HOME/build-tools/37.0.0/aapt dump badging ./app/build/outputs/apk/gplay/release/app-gplay-universal-release.apk |
+$ANDROID_HOME/build-tools/37.0.0/aapt dump badging ./app/build/outputs/apk/gplay/release/app-gplay-universal-release.apk \
    > ./tools/manifest/gplay/release/aaptDump.txt
