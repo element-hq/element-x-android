@@ -73,6 +73,8 @@ import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.api.watchers.AnalyticsColdStartWatcher
 import io.element.android.services.appnavstate.api.ROOM_OPENED_FROM_NOTIFICATION
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
@@ -109,6 +111,8 @@ class RootFlowNode(
     buildContext = buildContext,
     plugins = plugins
 ) {
+    private var restoreLatestSessionRetryJob: Job? = null
+
     override fun onBuilt() {
         analyticsColdStartWatcher.start()
         appCoroutineScope.launch {
@@ -140,18 +144,26 @@ class RootFlowNode(
                         if (navState.loggedInState.isTokenValid) {
                             val sessionId = SessionId(navState.loggedInState.sessionId)
                             if (matrixSessionCache.getOrNull(sessionId) != null) {
+                                cancelRestoreLatestSessionRetry()
                                 switchToLoggedInFlow(sessionId, navState.cacheIndex)
                             } else {
                                 tryToRestoreLatestSession(
-                                    onSuccess = { sessionId -> switchToLoggedInFlow(sessionId, navState.cacheIndex) },
-                                    onFailure = { switchToNotLoggedInFlow(null) }
+                                    onSuccess = { sessionId ->
+                                        cancelRestoreLatestSessionRetry()
+                                        switchToLoggedInFlow(sessionId, navState.cacheIndex)
+                                    },
+                                    onFailure = {
+                                        scheduleRestoreLatestSessionRetry(navState.cacheIndex)
+                                    }
                                 )
                             }
                         } else {
+                            cancelRestoreLatestSessionRetry()
                             switchToSignedOutFlow(SessionId(navState.loggedInState.sessionId))
                         }
                     }
                     LoggedInState.NotLoggedIn -> {
+                        cancelRestoreLatestSessionRetry()
                         switchToNotLoggedInFlow(null)
                     }
                 }
@@ -204,6 +216,29 @@ class RootFlowNode(
 
     private fun switchToSignedOutFlow(sessionId: SessionId) {
         backstack.safeRoot(NavTarget.SignedOutFlow(sessionId))
+    }
+
+    private fun scheduleRestoreLatestSessionRetry(cacheIndex: Int) {
+        if (restoreLatestSessionRetryJob?.isActive == true) return
+        Timber.w("Failed to restore logged-in session, will retry")
+        backstack.safeRoot(NavTarget.SplashScreen)
+        restoreLatestSessionRetryJob = lifecycleScope.launch {
+            delay(1_000)
+            restoreLatestSessionRetryJob = null
+            tryToRestoreLatestSession(
+                onSuccess = { sessionId ->
+                    switchToLoggedInFlow(sessionId, cacheIndex)
+                },
+                onFailure = {
+                    scheduleRestoreLatestSessionRetry(cacheIndex)
+                }
+            )
+        }
+    }
+
+    private fun cancelRestoreLatestSessionRetry() {
+        restoreLatestSessionRetryJob?.cancel()
+        restoreLatestSessionRetryJob = null
     }
 
     private suspend fun restoreSessionIfNeeded(
