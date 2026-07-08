@@ -251,18 +251,7 @@ private fun GroupCallBody(event: TimelineItem.Event, state: RtcNotificationState
                     )
                 }
             } else {
-                val membersToShowCount = 4
-                // Keep the one with avatar first but maintain
-                // the first user as it might be the call creator
-                val sortedMembers = remember(state.joinedMembers) {
-                    if (state.joinedMembers.isEmpty()) return@remember emptyList()
-                    val first = state.joinedMembers.first()
-                    val rest = state.joinedMembers.drop(1).sortedByDescending { it.avatarUrl != null }
-                    listOf(first) + rest
-                }
-                val displayMembers = sortedMembers.take(membersToShowCount)
-                val extraCount = state.joinedMembers.size - membersToShowCount
-
+                val displayMembers = state.joinedMembers.take(3)
                 AvatarRow(
                     avatarDataList = displayMembers
                         .map { user ->
@@ -277,13 +266,15 @@ private fun GroupCallBody(event: TimelineItem.Event, state: RtcNotificationState
                     overlapRatio = 0.5f,
                     lastOnTop = true,
                 )
-                if (extraCount > 0) {
-                    Text(
-                        text = pluralStringResource(CommonPlurals.screen_timeline_active_call_extra_joined_count, count = state.joinedMembers.size, extraCount),
-                        style = ElementTheme.typography.fontBodySmRegular,
-                        color = ElementTheme.colors.textSecondary,
-                    )
-                }
+                Text(
+                    text = pluralStringResource(
+                        CommonPlurals.screen_timeline_active_call_joined_count,
+                        count = state.joinedMembers.size,
+                        state.joinedMembers.size
+                    ),
+                    style = ElementTheme.typography.fontBodySmRegular,
+                    color = ElementTheme.colors.textSecondary,
+                )
             }
         }
     }
@@ -327,7 +318,7 @@ internal fun ActiveCallTimelineItemViewPreview() = ElementPreview(
                         aMatrixUser(displayName = USER_NAME_CHARLIE),
                         aMatrixUser(displayName = USER_NAME_JOHN_DOE, avatarUrl = "anUrlC"),
                     ),
-                    isJoined = true,
+                    isJoined = false,
                     callStartTsMillis = System.currentTimeMillis(),
                     callIntent = callIntent
                 ) to false,

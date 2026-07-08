@@ -479,6 +479,10 @@ Are you sure you want to continue?"</string>
   <string name="live_location_sharing_foreground_service_message_android">"Location sharing in progress"</string>
   <string name="live_location_sharing_foreground_service_title_android">"%1$s Live Location"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="one">"%1$d joined"</item>
+    <item quantity="other">"%1$d joined"</item>
+  </plurals>
   <string name="preference_rageshake">"Rageshake to report bug"</string>
   <string name="screen_bug_report_a11y_screenshot">"Screenshot"</string>
   <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
@@ -537,10 +541,6 @@ Are you sure you want to continue?"</string>
   <string name="screen_space_list_title">"Spaces"</string>
   <string name="screen_static_location_sheet_timestamp_description">"Shared %1$s"</string>
   <string name="screen_static_location_sheet_title">"On the map"</string>
-  <plurals name="screen_timeline_active_call_extra_joined_count">
-    <item quantity="one">"+ %1$d joined"</item>
-    <item quantity="other">"+ %1$d joined"</item>
-  </plurals>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Message not sent because %1$s’s verified digital identity was reset."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Message not sent because %1$s has not verified all devices."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Message not sent because you have not verified one or more of your devices."</string>
