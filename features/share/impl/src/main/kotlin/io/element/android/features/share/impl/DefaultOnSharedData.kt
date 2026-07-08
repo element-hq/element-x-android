@@ -35,7 +35,7 @@ class DefaultOnSharedData(
                 for (sharedUri in data.uris) {
                     // Remove the local copy of the shared file, as it is not needed anymore
                     if (sharedUri.uri.scheme == ContentResolver.SCHEME_CONTENT && sharedUri.uri.host == fileProvider) {
-                        context.contentResolver.delete(sharedUri.uri, null)
+                        context.contentResolver.delete(sharedUri.uri, null, emptyArray())
                     }
                 }
                 revokeUriPermissions(data.uris.map { it.uri })

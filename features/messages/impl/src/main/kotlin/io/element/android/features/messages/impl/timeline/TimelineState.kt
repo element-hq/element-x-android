@@ -33,6 +33,8 @@ data class TimelineState(
     val messageShieldDialogData: MessageShieldData?,
     val resolveVerifiedUserSendFailureState: ResolveVerifiedUserSendFailureState,
     val displayThreadSummaries: Boolean,
+    val displayJumpToUnread: Boolean,
+    val jumpToUnread: JumpToUnreadState,
     val eventSink: (TimelineEvent) -> Unit,
 ) {
     private val lastTimelineEvent = timelineItems.firstOrNull { it is TimelineItem.Event } as? TimelineItem.Event
@@ -81,3 +83,18 @@ data class TimelineRoomInfo(
     val typingNotificationState: TypingNotificationState,
     val predecessorRoom: PredecessorRoom?,
 )
+
+/**
+ * Whether the jump-to-unread FAB should be shown, and if so, how tapping it
+ * should bring the user to the read marker.
+ */
+@Immutable
+sealed interface JumpToUnreadState {
+    data object Hidden : JumpToUnreadState
+
+    /** The read marker is materialised at [index] in the loaded timeline — smooth scroll to it. */
+    data class InWindow(val index: Int) : JumpToUnreadState
+
+    /** The read marker event is older than the loaded window — load it via focused-event navigation. */
+    data class OutOfWindow(val eventId: EventId) : JumpToUnreadState
+}

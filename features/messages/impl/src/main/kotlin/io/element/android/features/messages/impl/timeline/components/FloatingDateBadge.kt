@@ -27,6 +27,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -102,7 +104,10 @@ internal fun BoxScope.FloatingDateBadgeOverlay(
         visible = showBadge,
         modifier = Modifier
             .align(Alignment.TopCenter)
-            .padding(top = 8.dp + topOffset),
+            .padding(top = 8.dp + topOffset)
+            .clearAndSetSemantics {
+                hideFromAccessibility()
+            },
         enter = fadeIn(animationSpec = tween(150)),
         exit = fadeOut(animationSpec = tween(300)),
     ) {

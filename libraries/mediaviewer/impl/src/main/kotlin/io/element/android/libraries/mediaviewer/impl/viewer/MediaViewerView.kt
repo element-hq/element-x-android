@@ -396,6 +396,7 @@ private fun MediaViewerPage(
                     onOpenWith = onOpenWith,
                     isUserSelected = isUserSelected,
                     audioFocus = audioFocus,
+                    forPreview = false,
                 )
                 if (showThumbnail) {
                     ThumbnailView(

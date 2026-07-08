@@ -8,7 +8,6 @@
 
 package io.element.android.features.home.impl
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.bumble.appyx.core.modality.BuildContext
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.home.api.HomeEntryPoint
@@ -18,12 +17,11 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.node.TestParentNode
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class DefaultHomeEntryPointTest {
+class DefaultHomeEntryPointTest : RobolectricTest() {
     @Test
     fun `test node builder`() = runTest {
         val entryPoint = DefaultHomeEntryPoint()

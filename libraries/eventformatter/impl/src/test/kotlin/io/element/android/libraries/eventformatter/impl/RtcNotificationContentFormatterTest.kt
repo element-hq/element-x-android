@@ -15,17 +15,14 @@ import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID_3
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
-import kotlin.toString
 
 @Suppress("LargeClass")
-@RunWith(RobolectricTestRunner::class)
-class RtcNotificationContentFormatterTest {
+class RtcNotificationContentFormatterTest : RobolectricTest() {
     private lateinit var context: Context
     private lateinit var fakeMatrixClient: FakeMatrixClient
     private lateinit var formatter: RtcNotificationContentFormatter

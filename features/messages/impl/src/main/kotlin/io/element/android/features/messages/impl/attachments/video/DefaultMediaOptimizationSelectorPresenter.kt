@@ -36,6 +36,7 @@ import kotlin.math.roundToLong
 
 @AssistedInject
 class DefaultMediaOptimizationSelectorPresenter(
+    @Assisted private val index: Int,
     @Assisted private val localMedia: LocalMedia,
     @Assisted private val sendAsFile: Boolean,
     private val maxUploadSizeProvider: MaxUploadSizeProvider,
@@ -48,6 +49,7 @@ class DefaultMediaOptimizationSelectorPresenter(
     @AssistedFactory
     interface Factory : MediaOptimizationSelectorPresenter.Factory {
         override fun create(
+            index: Int,
             localMedia: LocalMedia,
             sendAsFile: Boolean,
         ): DefaultMediaOptimizationSelectorPresenter
@@ -183,6 +185,7 @@ class DefaultMediaOptimizationSelectorPresenter(
         }
 
         return MediaOptimizationSelectorState(
+            index = index,
             maxUploadSize = maxUploadSize,
             videoSizeEstimations = videoSizeEstimations,
             isImageOptimizationEnabled = selectedImageOptimization.dataOrNull(),

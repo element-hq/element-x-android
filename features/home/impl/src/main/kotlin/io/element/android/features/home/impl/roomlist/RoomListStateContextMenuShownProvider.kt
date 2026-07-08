@@ -31,5 +31,4 @@ internal fun aContextMenuShown(
     isDm = isDm,
     hasNewContent = hasNewContent,
     isFavorite = isFavorite,
-    displayClearRoomCacheAction = false,
 )
