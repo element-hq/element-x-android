@@ -45,6 +45,7 @@ import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibilit
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.scanner.ContentScanner
 import io.element.android.libraries.matrix.api.spaces.SpaceService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncState
@@ -153,6 +154,7 @@ class RustMatrixClient(
     private val featureFlagService: FeatureFlagService,
     private val analyticsService: AnalyticsService,
     private val workManagerScheduler: WorkManagerScheduler,
+    override val contentScanner: ContentScanner?,
 ) : MatrixClient {
     override val sessionId: UserId = UserId(innerClient.userId())
     override val deviceId: DeviceId = DeviceId(innerClient.deviceId())
@@ -828,6 +830,12 @@ class RustMatrixClient(
         runCatchingExceptions {
             val room = innerClient.getRoom(roomId.value) ?: error("Could not fetch associated room")
             room.markAsFullyReadUnchecked(eventId.value)
+        }
+    }
+
+    override suspend fun markAllRoomsAsRead(): Result<Unit> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.markAllRoomsAsRead()
         }
     }
 

@@ -11,19 +11,19 @@ package io.element.android.libraries.network
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.androidutils.json.JsonProvider
 import io.element.android.libraries.core.uri.ensureTrailingSlash
+import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
 @Inject
 class RetrofitFactory(
-    private val okHttpClient: () -> OkHttpClient,
+    private val callFactory: () -> Call.Factory,
     private val json: () -> JsonProvider,
 ) {
     fun create(baseUrl: String): Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl.ensureTrailingSlash())
         .addConverterFactory(json()().asConverterFactory("application/json".toMediaType()))
-        .callFactory { request -> okHttpClient().newCall(request) }
+        .callFactory(callFactory())
         .build()
 }

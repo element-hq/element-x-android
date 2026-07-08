@@ -4,8 +4,8 @@
   <string name="banner_battery_optimization_submit_android">"Nonaktifkan optimasi"</string>
   <string name="banner_battery_optimization_title_android">"Notifikasi tidak masuk?"</string>
   <string name="banner_set_up_recovery_content">"Buat kunci pemulihan baru yang dapat digunakan untuk memulihkan riwayat pesan terenkripsi Anda jika Anda kehilangan akses ke perangkat Anda."</string>
-  <string name="banner_set_up_recovery_submit">"Siapkan pemulihan"</string>
-  <string name="banner_set_up_recovery_title">"Siapkan pemulihan"</string>
+  <string name="banner_set_up_recovery_submit">"Siapkan Kunci pemulihan"</string>
+  <string name="banner_set_up_recovery_title">"Cadangkan obrolan Anda"</string>
   <string name="confirm_recovery_key_banner_message">"Konfirmasikan kunci pemulihan Anda untuk mempertahankan akses ke penyimpanan kunci dan riwayat pesan Anda."</string>
   <string name="confirm_recovery_key_banner_primary_button_title">"Masukkan kunci pemulihan Anda"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Lupa kunci pemulihan Anda?"</string>

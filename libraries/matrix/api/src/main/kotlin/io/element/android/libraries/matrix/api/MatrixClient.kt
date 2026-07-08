@@ -38,6 +38,7 @@ import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.room.location.BeaconInfoUpdate
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.scanner.ContentScanner
 import io.element.android.libraries.matrix.api.spaces.SpaceService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
@@ -72,6 +73,7 @@ interface MatrixClient {
     val ignoredUsersFlow: StateFlow<ImmutableList<UserId>>
     val roomMembershipObserver: RoomMembershipObserver
     val ownBeaconInfoUpdates: Flow<BeaconInfoUpdate>
+    val contentScanner: ContentScanner?
     suspend fun getJoinedRoom(roomId: RoomId): JoinedRoom?
     suspend fun getRoom(roomId: RoomId): BaseRoom?
     suspend fun findDM(userId: UserId): Result<RoomId?>
@@ -207,6 +209,12 @@ interface MatrixClient {
      * Use [Timeline.markAsRead] instead when possible.
      */
     suspend fun markRoomAsFullyRead(roomId: RoomId, eventId: EventId): Result<Unit>
+
+    /**
+     * Mark all joined rooms as read by sending public, private and fully-read receipts
+     * on each room's latest event. Per-room errors are logged and skipped by the SDK.
+     */
+    suspend fun markAllRoomsAsRead(): Result<Unit>
 
     /**
      * Check if linking a new device using QrCode is supported by the server.

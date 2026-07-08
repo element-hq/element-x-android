@@ -34,6 +34,8 @@ import io.element.android.features.messages.impl.utils.TextPillificationHelper
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.ThreadId
@@ -754,6 +756,79 @@ class MessageComposerPresenterTest : RobolectricTest() {
             val initialState = awaitFirstItem()
             initialState.eventSink(MessageComposerEvent.PickAttachmentSource.FromGallery)
             onPreviewAttachmentLambda.assertions().isCalledOnce()
+        }
+    }
+
+    @Test
+    fun `present - Pick media from gallery while editing keeps the edit pending`() = runTest {
+        val onPreviewAttachmentLambda = lambdaRecorder { _: ImmutableList<Attachment>, _: EventId? -> }
+        val navigator = FakeMessagesNavigator(
+            onPreviewAttachmentLambda = onPreviewAttachmentLambda
+        )
+        val presenter = createPresenter(navigator = navigator)
+        pickerProvider.givenMimeType(MimeTypes.Images)
+        presenter.test {
+            var state = awaitFirstItem()
+            val editMode = anEditMode()
+            state.eventSink(MessageComposerEvent.SetMode(editMode))
+            state = awaitItem()
+            assertThat(state.mode).isEqualTo(editMode)
+            // The media is sent as a new message while the edit stays active. If the mode reset,
+            // a Normal-mode state would be emitted and expectNoEvents() below would fail.
+            state.eventSink(MessageComposerEvent.PickAttachmentSource.FromGallery)
+            onPreviewAttachmentLambda.assertions().isCalledOnce()
+            expectNoEvents()
+            assertThat(state.mode).isEqualTo(editMode)
+        }
+    }
+
+    @Test
+    fun `present - Pick media from gallery while replying clears the reply mode`() = runTest {
+        val onPreviewAttachmentLambda = lambdaRecorder { _: ImmutableList<Attachment>, _: EventId? -> }
+        val navigator = FakeMessagesNavigator(
+            onPreviewAttachmentLambda = onPreviewAttachmentLambda
+        )
+        val presenter = createPresenter(navigator = navigator)
+        pickerProvider.givenMimeType(MimeTypes.Images)
+        presenter.test {
+            var state = awaitFirstItem()
+            state.eventSink(MessageComposerEvent.SetMode(aReplyMode()))
+            state = awaitItem()
+            assertThat(state.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
+            // The media becomes the reply, so the reply intent is consumed and the composer resets.
+            state.eventSink(MessageComposerEvent.PickAttachmentSource.FromGallery)
+            onPreviewAttachmentLambda.assertions().isCalledOnce()
+            state = awaitItem()
+            assertThat(state.mode).isEqualTo(MessageComposerMode.Normal)
+        }
+    }
+
+    @Test
+    fun `present - Pick multiple media from gallery while editing keeps the edit pending`() = runTest {
+        val onPreviewAttachmentLambda = lambdaRecorder { _: ImmutableList<Attachment>, _: EventId? -> }
+        val navigator = FakeMessagesNavigator(
+            onPreviewAttachmentLambda = onPreviewAttachmentLambda
+        )
+        val presenter = createPresenter(
+            navigator = navigator,
+            featureFlagService = FakeFeatureFlagService(
+                initialState = mapOf(FeatureFlags.SendGalleryMessages.key to true)
+            ),
+        )
+        pickerProvider.givenMimeType(MimeTypes.Images)
+        // Two Uris take the multi-item branch (handlePickedMediaList) instead of delegating to the
+        // single-item path, so the edit is preserved for gallery messages too.
+        pickerProvider.givenMultipleResults(listOf(mockk(), mockk()))
+        presenter.test {
+            var state = awaitFirstItem()
+            val editMode = anEditMode()
+            state.eventSink(MessageComposerEvent.SetMode(editMode))
+            state = awaitItem()
+            assertThat(state.mode).isEqualTo(editMode)
+            state.eventSink(MessageComposerEvent.PickAttachmentSource.FromGallery)
+            onPreviewAttachmentLambda.assertions().isCalledOnce()
+            expectNoEvents()
+            assertThat(state.mode).isEqualTo(editMode)
         }
     }
 
@@ -1534,6 +1609,7 @@ class MessageComposerPresenterTest : RobolectricTest() {
         mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
         threadRoot: ThreadId? = null,
         slashCommandService: SlashCommandService = FakeSlashCommandService(),
+        featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
     ) = MessageComposerPresenter(
         navigator = navigator,
         sessionCoroutineScope = this,
@@ -1572,6 +1648,7 @@ class MessageComposerPresenterTest : RobolectricTest() {
         mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
         notificationConversationService = notificationConversationService,
         slashCommandService = slashCommandService,
+        featureFlagService = featureFlagService,
     ).apply {
         isTesting = true
         showTextFormatting = isRichTextEditorEnabled

@@ -106,7 +106,7 @@ private fun RoomListModalBottomSheetContent(
             ListItem(
                 headlineContent = {
                     Text(
-                        text = stringResource(id = R.string.screen_roomlist_mark_as_read),
+                        text = stringResource(id = CommonStrings.action_mark_as_read),
                         style = MaterialTheme.typography.bodyLarge,
                     )
                 },
@@ -200,7 +200,7 @@ private fun RoomListModalBottomSheetContent(
 @Composable
 internal fun RoomListContextMenuPreview(
     @PreviewParameter(RoomListStateContextMenuShownProvider::class) contextMenu: RoomListState.ContextMenu.Shown
-) = ElementPreview {
+) = ElementPreview(fillMaxSize = true) {
     RoomListContextMenu(
         contextMenu = contextMenu,
         canReportRoom = true,

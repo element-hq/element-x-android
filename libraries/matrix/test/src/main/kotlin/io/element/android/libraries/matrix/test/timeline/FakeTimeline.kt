@@ -13,6 +13,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
+import io.element.android.libraries.matrix.api.media.GalleryItemInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
@@ -293,6 +294,29 @@ class FakeTimeline(
         )
     }
 
+    var sendGalleryLambda: (
+        items: List<GalleryItemInfo>,
+        caption: String?,
+        formattedCaption: String?,
+        inReplyToEventId: EventId?,
+    ) -> Result<MediaUploadHandler> = { _, _, _, _ ->
+        Result.success(FakeMediaUploadHandler())
+    }
+
+    override suspend fun sendGallery(
+        items: List<GalleryItemInfo>,
+        caption: String?,
+        formattedCaption: String?,
+        inReplyToEventId: EventId?,
+    ): Result<MediaUploadHandler> = simulateLongTask {
+        sendGalleryLambda(
+            items,
+            caption,
+            formattedCaption,
+            inReplyToEventId,
+        )
+    }
+
     var sendLocationLambda: (
         body: String,
         geoUri: String,
@@ -435,6 +459,9 @@ class FakeTimeline(
     }
 
     override suspend fun loadReplyDetails(eventId: EventId) = loadReplyDetailsLambda(eventId)
+
+    var isEventLoadedLambda: (eventId: EventId) -> Boolean = { false }
+    override suspend fun isEventLoaded(eventId: EventId): Boolean = isEventLoadedLambda(eventId)
 
     var pinEventLambda: (eventId: EventId) -> Result<Boolean> = { lambdaError() }
     override suspend fun pinEvent(eventId: EventId): Result<Boolean> {

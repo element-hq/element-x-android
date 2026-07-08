@@ -38,6 +38,7 @@ import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.room.location.BeaconInfoUpdate
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.scanner.ContentScanner
 import io.element.android.libraries.matrix.api.spaces.SpaceService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
@@ -119,10 +120,12 @@ class FakeMatrixClient(
     private val getRecentEmojisLambda: () -> Result<List<String>> = { Result.success(emptyList()) },
     private val addRecentEmojiLambda: (String) -> Result<Unit> = { Result.success(Unit) },
     private val markRoomAsFullyReadResult: (RoomId, EventId) -> Result<Unit> = { _, _ -> lambdaError() },
+    private val markAllRoomsAsReadResult: () -> Result<Unit> = { Result.success(Unit) },
     private val performDatabaseVacuumLambda: () -> Result<Unit> = { lambdaError() },
     private val getMapStyleUrlResult: () -> Result<String?> = { lambdaError() },
     private val getDatabaseSizesLambda: () -> Result<SdkStoreSizes> = { lambdaError() },
     private val resetWellKnownConfigLambda: () -> Result<Unit> = { lambdaError() },
+    override val contentScanner: ContentScanner? = null
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
         private set
@@ -401,6 +404,10 @@ class FakeMatrixClient(
 
     override suspend fun markRoomAsFullyRead(roomId: RoomId, eventId: EventId): Result<Unit> {
         return markRoomAsFullyReadResult(roomId, eventId)
+    }
+
+    override suspend fun markAllRoomsAsRead(): Result<Unit> {
+        return markAllRoomsAsReadResult()
     }
 
     override suspend fun performDatabaseVacuum(): Result<Unit> {

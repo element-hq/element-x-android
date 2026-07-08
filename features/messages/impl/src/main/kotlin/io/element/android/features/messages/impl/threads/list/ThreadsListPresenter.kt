@@ -9,8 +9,10 @@ package io.element.android.features.messages.impl.threads.list
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import dev.zacsweers.metro.Inject
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentFactory
@@ -18,9 +20,12 @@ import io.element.android.features.messages.impl.utils.messagesummary.MessageSum
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.threads.ThreadListPaginationStatus
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -95,6 +100,10 @@ class ThreadsListPresenter(
 
         val roomInfo by room.roomInfoFlow.collectAsState()
 
+        val heroes by remember {
+            derivedStateOf { roomInfo.heroes.map { it.getAvatarData(AvatarSize.CurrentUserTopBar) }.toImmutableList() }
+        }
+
         fun handleEvent(event: ThreadsListEvents) {
             when (event) {
                 ThreadsListEvents.Paginate -> if ((paginationStatus as? ThreadListPaginationStatus.Idle)?.hasMoreToLoad == true) {
@@ -115,6 +124,7 @@ class ThreadsListPresenter(
             roomName = roomInfo.name ?: room.roomId.value,
             roomAvatarUrl = roomInfo.avatarUrl,
             isRoomTombstoned = roomInfo.successorRoom != null,
+            heroes = heroes,
             eventSink = ::handleEvent,
         )
     }
@@ -125,6 +135,7 @@ data class ThreadsListState(
     val roomName: String,
     val roomAvatarUrl: String?,
     val isRoomTombstoned: Boolean,
+    val heroes: ImmutableList<AvatarData>,
     val threads: ImmutableList<ThreadListRowItem>,
     val eventSink: (ThreadsListEvents) -> Unit,
 )
