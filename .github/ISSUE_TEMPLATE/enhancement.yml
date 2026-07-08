@@ -1,5 +1,5 @@
 name: Enhancement request
-description: Do you have a suggestion or feature request? Please open issue on the repo element-hq/element-meta the request is global to all Element clients.
+description: Do you have a suggestion or feature request? Please open issue on the repo element-hq/element-meta if the request is global to all Element clients.
 labels: [T-Enhancement]
 body:
   - type: markdown
