@@ -22,7 +22,6 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.foundation.text.input.maxLength
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -121,9 +120,6 @@ private fun EmptyStatusRow(
                 modifier = Modifier.padding(vertical = 16.dp),
             )
         },
-        trailingContent = ListItemContent.Custom({
-            Box(modifier = Modifier.minimumInteractiveComponentSize())
-        }),
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Reaction())),
         modifier = modifier.clickable(onClick = onClick),
     )

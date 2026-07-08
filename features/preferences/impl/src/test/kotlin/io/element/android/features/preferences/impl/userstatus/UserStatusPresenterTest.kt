@@ -7,13 +7,11 @@
 
 package io.element.android.features.preferences.impl.userstatus
 
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.UserStatus
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.tests.testutils.test
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -23,9 +21,7 @@ class UserStatusPresenterTest {
 
     @Test
     fun `initial state - no status set`() = runTest {
-        moleculeFlow(RecompositionMode.Immediate) {
-            createPresenter().present()
-        }.test {
+        createPresenter().test {
             val state = awaitItem()
             assertThat(state.displayedStatus).isNull()
             assertThat(state.pickerState).isEqualTo(UserStatusPickerState.Hidden)
@@ -34,9 +30,7 @@ class UserStatusPresenterTest {
 
     @Test
     fun `Open event transitions to ShowingPicker`() = runTest {
-        moleculeFlow(RecompositionMode.Immediate) {
-            createPresenter().present()
-        }.test {
+        createPresenter().test {
             val state = awaitItem()
             state.eventSink(UserStatusEvent.OpenPicker)
             assertThat(awaitItem().pickerState).isEqualTo(UserStatusPickerState.ShowingPicker)
@@ -45,9 +39,7 @@ class UserStatusPresenterTest {
 
     @Test
     fun `Dismiss event from ShowingPicker goes back to Hidden`() = runTest {
-        moleculeFlow(RecompositionMode.Immediate) {
-            createPresenter().present()
-        }.test {
+        createPresenter().test {
             val state = awaitItem()
             state.eventSink(UserStatusEvent.OpenPicker)
             awaitItem() // ShowingPicker
@@ -59,9 +51,7 @@ class UserStatusPresenterTest {
     @Test
     fun `Set event calls setUserStatus and transitions to Hidden with updated status`() = runTest {
         val client = FakeMatrixClient()
-        moleculeFlow(RecompositionMode.Immediate) {
-            createPresenter(client).present()
-        }.test {
+        createPresenter(client).test {
             val status = UserStatus(emoji = "💬", text = "In a meeting")
             awaitItem().eventSink(UserStatusEvent.SetStatus(status))
             val newState = awaitItem()
@@ -73,9 +63,7 @@ class UserStatusPresenterTest {
 
     @Test
     fun `OpenCustomInput with no existing status uses defaults`() = runTest {
-        moleculeFlow(RecompositionMode.Immediate) {
-            createPresenter().present()
-        }.test {
+        createPresenter().test {
             awaitItem().eventSink(UserStatusEvent.OpenCustomInput)
             val state = awaitItem()
             val pickerState = state.pickerState as UserStatusPickerState.CustomInput
@@ -87,9 +75,7 @@ class UserStatusPresenterTest {
     @Test
     fun `OpenCustomInput with existing rawStatus pre-fills values`() = runTest {
         val client = FakeMatrixClient()
-        moleculeFlow(RecompositionMode.Immediate) {
-            createPresenter(client).present()
-        }.test {
+        createPresenter(client).test {
             val status = UserStatus(emoji = "🌴", text = "Away")
             awaitItem().eventSink(UserStatusEvent.SetStatus(status))
             // Single emission: pickerState=Hidden and displayedStatus both set in one recomposition
@@ -103,9 +89,7 @@ class UserStatusPresenterTest {
 
     @Test
     fun `UpdateCustomEmoji updates emoji in CustomInput state`() = runTest {
-        moleculeFlow(RecompositionMode.Immediate) {
-            createPresenter().present()
-        }.test {
+        createPresenter().test {
             awaitItem().eventSink(UserStatusEvent.OpenCustomInput)
             awaitItem().eventSink(UserStatusEvent.UpdateCustomEmoji("🚀"))
             val state = awaitItem()
@@ -115,9 +99,7 @@ class UserStatusPresenterTest {
 
     @Test
     fun `CancelCustomInput goes back to Hidden`() = runTest {
-        moleculeFlow(RecompositionMode.Immediate) {
-            createPresenter().present()
-        }.test {
+        createPresenter().test {
             awaitItem().eventSink(UserStatusEvent.OpenCustomInput)
             awaitItem().eventSink(UserStatusEvent.CancelCustomInput) // CustomInput state, fire Cancel
             assertThat(awaitItem().pickerState).isEqualTo(UserStatusPickerState.Hidden)
@@ -127,9 +109,7 @@ class UserStatusPresenterTest {
     @Test
     fun `Clear event calls clearUserStatus and clears displayed status`() = runTest {
         val client = FakeMatrixClient()
-        moleculeFlow(RecompositionMode.Immediate) {
-            createPresenter(client).present()
-        }.test {
+        createPresenter(client).test {
             val status = UserStatus(emoji = "☕", text = "Be right back")
             awaitItem().eventSink(UserStatusEvent.SetStatus(status))
             // Single emission: pickerState=Hidden and displayedStatus both set in one recomposition

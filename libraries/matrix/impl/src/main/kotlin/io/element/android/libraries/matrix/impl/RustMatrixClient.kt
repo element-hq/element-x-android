@@ -456,6 +456,7 @@ class RustMatrixClient(
                     displayedStatus = localUserStatus?.let { DisplayedStatus.UserSet(it) },
                 )
             )
+            // Also update our session storage
             sessionStore.updateUserProfile(
                 sessionId = sessionId.value,
                 displayName = matrixUser.displayName,
