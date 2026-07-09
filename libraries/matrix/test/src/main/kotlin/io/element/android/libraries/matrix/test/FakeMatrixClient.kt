@@ -42,8 +42,10 @@ import io.element.android.libraries.matrix.api.scanner.ContentScanner
 import io.element.android.libraries.matrix.api.spaces.SpaceService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.api.user.UserStatus
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.media.FakeMatrixMediaLoader
@@ -131,6 +133,12 @@ class FakeMatrixClient(
         private set
     var removeAvatarCalled: Boolean = false
         private set
+    var setUserStatusCalled: Boolean = false
+        private set
+    var clearUserStatusCalled: Boolean = false
+        private set
+    var setUserStatusResult: Result<Unit> = Result.success(Unit)
+    var clearUserStatusResult: Result<Unit> = Result.success(Unit)
 
     private val _userProfile: MutableStateFlow<MatrixUser> = MutableStateFlow(MatrixUser(sessionId, userDisplayName, userAvatarUrl))
     override val userProfile: StateFlow<MatrixUser> = _userProfile
@@ -251,6 +259,28 @@ class FakeMatrixClient(
     override suspend fun removeAvatar(): Result<Unit> = simulateLongTask {
         removeAvatarCalled = true
         return removeAvatarResult
+    }
+
+    override suspend fun setUserStatus(status: UserStatus): Result<Unit> {
+        setUserStatusCalled = true
+        if (setUserStatusResult.isSuccess) {
+            _userProfile.emit(_userProfile.value.copy(
+                rawStatus = status,
+                displayedStatus = DisplayedStatus.UserSet(status),
+            ))
+        }
+        return setUserStatusResult
+    }
+
+    override suspend fun clearUserStatus(): Result<Unit> {
+        clearUserStatusCalled = true
+        if (clearUserStatusResult.isSuccess) {
+            _userProfile.emit(_userProfile.value.copy(
+                rawStatus = null,
+                displayedStatus = null,
+            ))
+        }
+        return clearUserStatusResult
     }
 
     override suspend fun joinRoom(roomId: RoomId): Result<RoomInfo?> = joinRoomLambda(roomId)
