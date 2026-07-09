@@ -11,6 +11,9 @@ package io.element.android.features.preferences.impl.root
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.logout.api.direct.aDirectLogoutState
+import io.element.android.features.preferences.impl.userstatus.UserStatusPickerState
+import io.element.android.features.preferences.impl.userstatus.UserStatusState
+import io.element.android.features.preferences.impl.userstatus.aUserStatusState
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -64,8 +67,9 @@ open class PreferencesRootStateProvider : PreviewParameterProvider<PreferencesRo
                 showDeveloperSettings = true,
                 canDeactivateAccount = true,
             ),
+            aPreferencesRootState(userStatusState = aUserStatusState(pickerState = UserStatusPickerState.ShowingPicker)),
             // Minimal state
-            aPreferencesRootState(),
+            aPreferencesRootState(userStatusState = null),
         )
 }
 
@@ -86,6 +90,7 @@ fun aPreferencesRootState(
     nbOfBlockedUsers: Int = 0,
     showLabsItem: Boolean = false,
     directLogoutState: DirectLogoutState = aDirectLogoutState(),
+    userStatusState: UserStatusState? = aUserStatusState(),
     snackbarMessage: SnackbarMessage? = null,
     eventSink: (PreferencesRootEvent) -> Unit = {},
 ) = PreferencesRootState(
@@ -105,6 +110,7 @@ fun aPreferencesRootState(
     nbOfBlockedUsers = nbOfBlockedUsers,
     showLabsItem = showLabsItem,
     directLogoutState = directLogoutState,
+    userStatusState = userStatusState,
     snackbarMessage = snackbarMessage,
     eventSink = eventSink,
 )
