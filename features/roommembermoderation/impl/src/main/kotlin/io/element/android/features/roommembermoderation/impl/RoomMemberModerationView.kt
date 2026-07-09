@@ -301,7 +301,7 @@ private fun RoomMemberActionsBottomSheet(
                 when (val action = actionState.action) {
                     is ModerationAction.DisplayProfile -> {
                         ListItem(
-                            headlineContent = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_member_user_info)) },
+                            content = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_member_user_info)) },
                             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.UserProfile())),
                             onClick = {
                                 coroutineScope.launch {
@@ -314,7 +314,7 @@ private fun RoomMemberActionsBottomSheet(
                     }
                     is ModerationAction.KickUser -> {
                         ListItem(
-                            headlineContent = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_remove)) },
+                            content = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_remove)) },
                             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Close())),
                             style = ListItemStyle.Destructive,
                             onClick = {
@@ -328,7 +328,7 @@ private fun RoomMemberActionsBottomSheet(
                     }
                     is ModerationAction.BanUser -> {
                         ListItem(
-                            headlineContent = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_ban)) },
+                            content = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_ban)) },
                             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block())),
                             style = ListItemStyle.Destructive,
                             onClick = {
@@ -342,7 +342,7 @@ private fun RoomMemberActionsBottomSheet(
                     }
                     is ModerationAction.UnbanUser -> {
                         ListItem(
-                            headlineContent = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_unban)) },
+                            content = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_unban)) },
                             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Restart())),
                             style = ListItemStyle.Destructive,
                             onClick = {

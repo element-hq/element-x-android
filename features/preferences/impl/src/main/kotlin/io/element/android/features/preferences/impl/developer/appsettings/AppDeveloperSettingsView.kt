@@ -84,7 +84,7 @@ fun AppDeveloperSettingsView(
         }
         PreferenceCategory(title = "Showkase") {
             ListItem(
-                headlineContent = {
+                content = {
                     Text("Open Showkase browser")
                 },
                 onClick = onOpenShowkase
@@ -95,7 +95,7 @@ fun AppDeveloperSettingsView(
         )
         PreferenceCategory(title = "Crash") {
             ListItem(
-                headlineContent = {
+                content = {
                     Text("Crash the app 💥")
                 },
                 onClick = { error("This crash is a test.") }

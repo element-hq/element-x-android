@@ -100,7 +100,7 @@ fun DependencyLicensesListView(
                     }
                     is AsyncData.Success -> items(state.licenses.data) { license ->
                         ListItem(
-                            headlineContent = { Text(license.safeName) },
+                            content = { Text(license.safeName) },
                             supportingContent = {
                                 Text(
                                     buildString {

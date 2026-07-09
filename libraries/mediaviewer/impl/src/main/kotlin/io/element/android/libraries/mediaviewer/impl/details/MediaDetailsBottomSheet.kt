@@ -113,14 +113,14 @@ fun MediaDetailsBottomSheet(
                 }
                 ListItem(
                     leadingContent = icon,
-                    headlineContent = { Text(wording) },
+                    content = { Text(wording) },
                     onClick = {
                         onOpenWith(state.eventId)
                     }
                 )
                 ListItem(
                     leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.VisibilityOn())),
-                    headlineContent = { Text(stringResource(CommonStrings.action_view_in_timeline)) },
+                    content = { Text(stringResource(CommonStrings.action_view_in_timeline)) },
                     onClick = {
                         onViewInTimeline(state.eventId)
                     }
@@ -128,14 +128,14 @@ fun MediaDetailsBottomSheet(
                 if (state.fromGallery) {
                     ListItem(
                         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ShareAndroid())),
-                        headlineContent = { Text(stringResource(CommonStrings.action_share)) },
+                        content = { Text(stringResource(CommonStrings.action_share)) },
                         onClick = {
                             onShare(state.eventId)
                         }
                     )
                     ListItem(
                         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Download())),
-                        headlineContent = { Text(stringResource(CommonStrings.action_download)) },
+                        content = { Text(stringResource(CommonStrings.action_download)) },
                         onClick = {
                             onDownload(state.eventId)
                         }
@@ -143,7 +143,7 @@ fun MediaDetailsBottomSheet(
                 }
                 ListItem(
                     leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Forward())),
-                    headlineContent = { Text(stringResource(CommonStrings.action_forward)) },
+                    content = { Text(stringResource(CommonStrings.action_forward)) },
                     onClick = {
                         onForward(state.eventId)
                     }
@@ -152,7 +152,7 @@ fun MediaDetailsBottomSheet(
                     HorizontalDivider()
                     ListItem(
                         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Delete())),
-                        headlineContent = { Text(stringResource(CommonStrings.action_delete_file)) },
+                        content = { Text(stringResource(CommonStrings.action_delete_file)) },
                         style = ListItemStyle.Destructive,
                         onClick = {
                             onDelete(state.eventId)
