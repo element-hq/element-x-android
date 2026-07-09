@@ -8,131 +8,82 @@
 
 package io.element.android.features.viewfolder.impl.root
 
-import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.navmodel.backstack.BackStack
-import com.bumble.appyx.navmodel.backstack.operation.pop
-import com.bumble.appyx.navmodel.backstack.operation.push
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.Assisted
-import dev.zacsweers.metro.AssistedInject
-import io.element.android.annotations.ContributesNode
-import io.element.android.features.viewfolder.api.ViewFolderEntryPoint
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
+import dev.zacsweers.metro.Inject
 import io.element.android.features.viewfolder.impl.file.ViewFileNode
 import io.element.android.features.viewfolder.impl.folder.ViewFolderNode
 import io.element.android.features.viewfolder.impl.model.Item
-import io.element.android.libraries.architecture.BackstackView
-import io.element.android.libraries.architecture.BaseFlowNode
-import io.element.android.libraries.architecture.NodeInputs
-import io.element.android.libraries.architecture.callback
-import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.architecture.inputs
-import kotlinx.parcelize.Parcelize
+import io.element.android.libraries.architecture.ElementNavDisplay
+import kotlinx.serialization.Serializable
 
-@ContributesNode(AppScope::class)
-@AssistedInject
+@Inject
 class ViewFolderFlowNode(
-    @Assisted buildContext: BuildContext,
-    @Assisted plugins: List<Plugin>,
-) : BaseFlowNode<ViewFolderFlowNode.NavTarget>(
-    backstack = BackStack(
-        initialElement = NavTarget.Root,
-        savedStateMap = buildContext.savedStateMap,
-    ),
-    buildContext = buildContext,
-    plugins = plugins
+    private val viewFolderNode: ViewFolderNode,
+    private val viewFileNode: ViewFileNode,
 ) {
-    sealed interface NavTarget : Parcelable {
-        @Parcelize
-        data object Root : NavTarget
+    sealed interface NavEntry : NavKey {
+        @Serializable
+        data class Root(val rootPath: String) : NavEntry
 
-        @Parcelize
-        data class Folder(
-            val path: String,
-        ) : NavTarget
+        @Serializable
+        data class Folder(val path: String) : NavEntry
 
-        @Parcelize
-        data class File(
-            val path: String,
-            val name: String,
-        ) : NavTarget
-    }
-
-    data class Inputs(
-        val rootPath: String,
-    ) : NodeInputs
-
-    private val callback: ViewFolderEntryPoint.Callback = callback()
-    private val inputs: Inputs = inputs()
-
-    override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
-        return when (navTarget) {
-            is NavTarget.Root -> {
-                createViewFolderNode(
-                    buildContext,
-                    inputs = ViewFolderNode.Inputs(
-                        canGoUp = false,
-                        path = inputs.rootPath,
-                    )
-                )
-            }
-            is NavTarget.Folder -> {
-                createViewFolderNode(
-                    buildContext,
-                    inputs = ViewFolderNode.Inputs(
-                        canGoUp = true,
-                        path = navTarget.path,
-                    )
-                )
-            }
-            is NavTarget.File -> {
-                val callback: ViewFileNode.Callback = object : ViewFileNode.Callback {
-                    override fun onBackClick() {
-                        backstack.pop()
-                    }
-                }
-                val inputs = ViewFileNode.Inputs(
-                    path = navTarget.path,
-                    name = navTarget.name,
-                )
-                createNode<ViewFileNode>(buildContext, plugins = listOf(inputs, callback))
-            }
-        }
-    }
-
-    private fun createViewFolderNode(
-        buildContext: BuildContext,
-        inputs: ViewFolderNode.Inputs,
-    ): Node {
-        val callback: ViewFolderNode.Callback = object : ViewFolderNode.Callback {
-            override fun onBackClick() {
-                callback.onDone()
-            }
-
-            override fun navigateToItem(item: Item) {
-                when (item) {
-                    Item.Parent -> {
-                        // Should not happen when in Root since parent is not accessible from root (canGoUp set to false)
-                        backstack.pop()
-                    }
-                    is Item.Folder -> {
-                        backstack.push(NavTarget.Folder(path = item.path))
-                    }
-                    is Item.File -> {
-                        backstack.push(NavTarget.File(path = item.path, name = item.name))
-                    }
-                }
-            }
-        }
-        return createNode<ViewFolderNode>(buildContext, plugins = listOf(inputs, callback))
+        @Serializable
+        data class File(val path: String, val name: String) : NavEntry
     }
 
     @Composable
-    override fun View(modifier: Modifier) {
-        BackstackView()
+    fun View(
+        rootPath: String,
+        onDone: () -> Unit,
+        modifier: Modifier = Modifier,
+    ) {
+        val backStack = rememberNavBackStack(NavEntry.Root(rootPath))
+        ElementNavDisplay(
+            backStack = backStack,
+            onBack = { if (backStack.size <= 1) onDone() else backStack.removeLastOrNull() },
+            modifier = modifier,
+            entryProvider = entryProvider {
+                entry<NavEntry.Root> { key ->
+                    viewFolderNode.View(
+                        canGoUp = false,
+                        path = key.rootPath,
+                        onBackClick = onDone,
+                        onNavigateToItem = { item ->
+                            when (item) {
+                                Item.Parent -> Unit
+                                is Item.Folder -> backStack.add(NavEntry.Folder(item.path))
+                                is Item.File -> backStack.add(NavEntry.File(item.path, item.name))
+                            }
+                        },
+                    )
+                }
+                entry<NavEntry.Folder> { key ->
+                    viewFolderNode.View(
+                        canGoUp = true,
+                        path = key.path,
+                        onBackClick = backStack::removeLastOrNull,
+                        onNavigateToItem = { item ->
+                            when (item) {
+                                Item.Parent -> backStack.removeLastOrNull()
+                                is Item.Folder -> backStack.add(NavEntry.Folder(item.path))
+                                is Item.File -> backStack.add(NavEntry.File(item.path, item.name))
+                            }
+                        },
+                    )
+                }
+                entry<NavEntry.File> { key ->
+                    viewFileNode.View(
+                        path = key.path,
+                        name = key.name,
+                        onBackClick = backStack::removeLastOrNull,
+                    )
+                }
+            },
+        )
     }
 }

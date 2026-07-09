@@ -10,26 +10,25 @@ package io.element.android.features.viewfolder.impl
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
+import com.bumble.appyx.core.node.node
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.viewfolder.api.ViewFolderEntryPoint
 import io.element.android.features.viewfolder.impl.root.ViewFolderFlowNode
-import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)
-class DefaultViewFolderEntryPoint : ViewFolderEntryPoint {
+class DefaultViewFolderEntryPoint(
+    private val viewFolderFlowNode: ViewFolderFlowNode,
+) : ViewFolderEntryPoint {
     override fun createNode(
-        parentNode: Node,
         buildContext: BuildContext,
         params: ViewFolderEntryPoint.Params,
         callback: ViewFolderEntryPoint.Callback,
-    ): Node {
-        return parentNode.createNode<ViewFolderFlowNode>(
-            buildContext = buildContext,
-            plugins = listOf(
-                ViewFolderFlowNode.Inputs(params.rootPath),
-                callback,
-            ),
+    ): Node = node(buildContext) { modifier ->
+        viewFolderFlowNode.View(
+            rootPath = params.rootPath,
+            onDone = callback::onDone,
+            modifier = modifier,
         )
     }
 }

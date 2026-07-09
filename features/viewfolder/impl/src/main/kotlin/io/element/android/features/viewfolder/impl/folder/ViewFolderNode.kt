@@ -9,52 +9,35 @@
 package io.element.android.features.viewfolder.impl.folder
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.plugin.Plugin
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.Assisted
-import dev.zacsweers.metro.AssistedInject
-import io.element.android.annotations.ContributesNode
+import dev.zacsweers.metro.Inject
 import io.element.android.features.viewfolder.impl.model.Item
-import io.element.android.libraries.architecture.NodeInputs
-import io.element.android.libraries.architecture.callback
-import io.element.android.libraries.architecture.inputs
 
-@ContributesNode(AppScope::class)
-@AssistedInject
+@Inject
 class ViewFolderNode(
-    @Assisted buildContext: BuildContext,
-    @Assisted plugins: List<Plugin>,
-    presenterFactory: ViewFolderPresenter.Factory,
-) : Node(buildContext, plugins = plugins) {
-    data class Inputs(
-        val canGoUp: Boolean,
-        val path: String,
-    ) : NodeInputs
-
-    interface Callback : Plugin {
-        fun onBackClick()
-        fun navigateToItem(item: Item)
-    }
-
-    private val callback: Callback = callback()
-    private val inputs: Inputs = inputs()
-
-    private val presenter = presenterFactory.create(
-        canGoUp = inputs.canGoUp,
-        path = inputs.path,
-    )
-
+    private val presenterFactory: ViewFolderPresenter.Factory,
+) {
     @Composable
-    override fun View(modifier: Modifier) {
+    fun View(
+        canGoUp: Boolean,
+        path: String,
+        onBackClick: () -> Unit,
+        onNavigateToItem: (Item) -> Unit,
+        modifier: Modifier = Modifier,
+    ) {
+        val presenter = remember(canGoUp, path) {
+            presenterFactory.create(
+                canGoUp = canGoUp,
+                path = path,
+            )
+        }
         val state = presenter.present()
         ViewFolderView(
             state = state,
             modifier = modifier,
-            onNavigateTo = callback::navigateToItem,
-            onBackClick = callback::onBackClick,
+            onNavigateTo = onNavigateToItem,
+            onBackClick = onBackClick,
         )
     }
 }
