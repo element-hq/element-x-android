@@ -22,7 +22,8 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.foundation.text.input.maxLength
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -177,7 +178,10 @@ private fun UserStatusPickerBottomSheet(
     onSelectCustomStatus: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberBottomSheetState(
+        initialValue = SheetValue.Hidden,
+        enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded)
+    )
     val coroutineScope = rememberCoroutineScope()
     ModalBottomSheet(
         onDismissRequest = onDismiss,
