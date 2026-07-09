@@ -10,6 +10,7 @@ package io.element.android.appnav.loggedin
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialog
 import io.element.android.libraries.push.api.PusherRegistrationFailure
 
 open class LoggedInStateProvider : PreviewParameterProvider<LoggedInState> {

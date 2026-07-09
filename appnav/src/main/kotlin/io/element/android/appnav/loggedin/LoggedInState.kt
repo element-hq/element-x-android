@@ -9,6 +9,7 @@
 package io.element.android.appnav.loggedin
 
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialog
 
 data class LoggedInState(
     val showSyncSpinner: Boolean,
@@ -19,9 +20,3 @@ data class LoggedInState(
     val localNetworkPermissionDialog: LocalNetworkPermissionDialog,
     val eventSink: (LoggedInEvents) -> Unit,
 )
-
-enum class LocalNetworkPermissionDialog {
-    None,
-    Rationale,
-    Settings,
-}

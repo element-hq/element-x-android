@@ -17,9 +17,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
-import io.element.android.libraries.permissions.api.LocalNetworkPermissionAdvisor
 import io.element.android.libraries.permissions.api.PermissionsEvent
 import io.element.android.libraries.permissions.api.PermissionsPresenter
+import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionAdvisor
+import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialog
 import kotlinx.coroutines.launch
 
 @Inject
@@ -39,13 +40,13 @@ class LocalNetworkPermissionGate(
         val permissionsState = permissionsPresenter.present()
         var pendingSubmit by remember { mutableStateOf<T?>(null) }
 
-        val urlOf by rememberUpdatedState(urlOf)
-        val onProceed by rememberUpdatedState(onProceed)
+        val latestUrlOf by rememberUpdatedState(urlOf)
+        val latestOnProceed by rememberUpdatedState(onProceed)
 
         LaunchedEffect(permissionsState.permissionGranted, pendingSubmit) {
             val pending = pendingSubmit
             if (pending != null && permissionsState.permissionGranted) {
-                coroutineScope.launch { onProceed(pending) }
+                coroutineScope.launch { latestOnProceed(pending) }
                 pendingSubmit = null
             }
         }
@@ -61,10 +62,10 @@ class LocalNetworkPermissionGate(
 
         fun submit(value: T) {
             coroutineScope.launch {
-                if (advisor.shouldRequestPermissionFor(urlOf(value))) {
+                if (advisor.shouldRequestPermissionFor(latestUrlOf(value))) {
                     pendingSubmit = value
                 } else {
-                    onProceed(value)
+                    latestOnProceed(value)
                 }
             }
         }

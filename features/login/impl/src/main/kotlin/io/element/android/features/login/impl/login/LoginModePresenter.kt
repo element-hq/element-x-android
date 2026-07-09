@@ -15,7 +15,11 @@ import androidx.compose.runtime.remember
 import dev.zacsweers.metro.Inject
 import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.features.login.impl.localnetwork.LocalNetworkPermissionGate
+import io.element.android.features.login.impl.screens.chooseaccountprovider.ChooseAccountProviderPresenter
+import io.element.android.features.login.impl.screens.classic.loginwithclassic.LoginWithClassicPresenter
+import io.element.android.features.login.impl.screens.confirmaccountprovider.ConfirmAccountProviderPresenter
 import io.element.android.features.login.impl.screens.createaccount.AccountCreationNotSupported
+import io.element.android.features.login.impl.screens.onboarding.OnBoardingPresenter
 import io.element.android.features.login.impl.web.WebClientUrlForAuthenticationRetriever
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -25,6 +29,12 @@ import io.element.android.libraries.matrix.api.auth.OAuthPrompt
 import io.element.android.libraries.oauth.api.OAuthAction
 import io.element.android.libraries.oauth.api.OAuthActionFlow
 
+/**
+ * Presenter responsible for managing the login flow, including handling OAuth actions and
+ * submitting login requests.
+ * It's a helper to avoid code duplication. It is used by [OnBoardingPresenter], [ConfirmAccountProviderPresenter],
+ * [ChooseAccountProviderPresenter] and [LoginWithClassicPresenter].
+ */
 @Inject
 class LoginModePresenter(
     private val oAuthActionFlow: OAuthActionFlow,

@@ -38,9 +38,10 @@ import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
-import io.element.android.libraries.permissions.api.LocalNetworkPermissionAdvisor
 import io.element.android.libraries.permissions.api.PermissionsEvent
 import io.element.android.libraries.permissions.api.PermissionsPresenter
+import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionAdvisor
+import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialog
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.push.api.PusherRegistrationFailure
 import io.element.android.services.analytics.api.AnalyticsService

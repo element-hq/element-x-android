@@ -7,7 +7,7 @@
 
 package io.element.android.libraries.permissions.test
 
-import io.element.android.libraries.permissions.api.LocalNetworkPermissionAdvisor
+import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionAdvisor
 
 class FakeLocalNetworkPermissionAdvisor(
     private val shouldPrompt: Boolean = false,

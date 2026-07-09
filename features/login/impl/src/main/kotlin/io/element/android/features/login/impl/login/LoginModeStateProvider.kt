@@ -7,8 +7,8 @@
 
 package io.element.android.features.login.impl.login
 
-import io.element.android.features.login.impl.localnetwork.LocalNetworkPermissionDialog
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialog
 
 fun aLoginModeState(
     loginMode: AsyncData<LoginMode> = AsyncData.Uninitialized,

@@ -10,8 +10,8 @@ package io.element.android.features.login.impl.changeserver
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.login.impl.error.ChangeServerError
-import io.element.android.features.login.impl.localnetwork.LocalNetworkPermissionDialog
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialog
 
 open class ChangeServerStateProvider : PreviewParameterProvider<ChangeServerState> {
     override val values: Sequence<ChangeServerState>

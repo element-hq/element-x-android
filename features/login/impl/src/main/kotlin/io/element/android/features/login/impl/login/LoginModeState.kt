@@ -7,9 +7,9 @@
 
 package io.element.android.features.login.impl.login
 
-import io.element.android.features.login.impl.localnetwork.LocalNetworkPermissionDialog
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.auth.OAuthDetails
+import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialog
 
 data class LoginModeState(
     val loginMode: AsyncData<LoginMode>,

@@ -15,7 +15,6 @@ import io.element.android.features.login.impl.accesscontrol.DefaultAccountProvid
 import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.error.ChangeServerError
-import io.element.android.features.login.impl.localnetwork.LocalNetworkPermissionDialog
 import io.element.android.features.login.impl.localnetwork.LocalNetworkPermissionGate
 import io.element.android.features.wellknown.test.FakeWellknownRetriever
 import io.element.android.features.wellknown.test.anElementWellKnown
@@ -25,6 +24,7 @@ import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.auth.aMatrixHomeServerDetails
+import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialog
 import io.element.android.libraries.permissions.test.FakeLocalNetworkPermissionAdvisor
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory

@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.permissions.impl
+package io.element.android.libraries.permissions.impl.localnetwork
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.androidutils.network.LocalNetworkAddressClassifier

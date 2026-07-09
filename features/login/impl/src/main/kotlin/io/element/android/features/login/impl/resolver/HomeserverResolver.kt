@@ -14,7 +14,7 @@ import io.element.android.libraries.core.coroutine.parallelMap
 import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.core.uri.isValidUrl
 import io.element.android.libraries.matrix.api.auth.HomeServerLoginCompatibilityChecker
-import io.element.android.libraries.permissions.api.LocalNetworkPermissionAdvisor
+import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionAdvisor
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -44,21 +44,14 @@ class HomeserverResolver(
                 // Skip the compatibility probe if we'd need ACCESS_LOCAL_NETWORK first —
                 // otherwise the probe hangs on the TCP timeout for ~30s. Emit the URL as a
                 // candidate directly; the actual sign-in flow triggers the permission prompt.
-                if (localNetworkPermissionAdvisor.shouldRequestPermissionFor(url)) {
-                    currentList.add(HomeserverData(homeserverUrl = url))
-                    withContext(flowContext) {
-                        emit(currentList.toList())
-                    }
-                    return@parallelMap
-                }
-
-                val isValid = homeServerLoginCompatibilityChecker.check(url)
-                    .onFailure { Timber.w(it, "Failed to check compatibility with homeserver $url") }
-                    .getOrNull()
-                    ?: return@parallelMap
+                val shouldRequestPermissionOrIsValid = localNetworkPermissionAdvisor.shouldRequestPermissionFor(url) ||
+                    homeServerLoginCompatibilityChecker.check(url)
+                        .onFailure { Timber.w(it, "Failed to check compatibility with homeserver $url") }
+                        .getOrNull()
+                        ?: return@parallelMap
 
                 // Emit the list as soon as possible
-                if (isValid) {
+                if (shouldRequestPermissionOrIsValid) {
                     currentList.add(HomeserverData(homeserverUrl = url))
                     withContext(flowContext) {
                         emit(currentList.toList())

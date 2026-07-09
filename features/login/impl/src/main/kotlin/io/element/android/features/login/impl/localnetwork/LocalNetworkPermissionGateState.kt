@@ -7,21 +7,11 @@
 
 package io.element.android.features.login.impl.localnetwork
 
+import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialog
+
 data class LocalNetworkPermissionGateState<T>(
     val dialog: LocalNetworkPermissionDialog,
     val submit: (T) -> Unit,
     val requestPermission: () -> Unit,
     val abort: () -> Unit,
 )
-
-/**
- * Which rationale dialog (if any) should be rendered on top of the caller's UI.
- *
- * [Rationale] is shown before the runtime prompt so the user knows why the permission is needed.
- * [Settings] is shown when the OS says a rationale can no longer be shown (permanently denied).
- */
-enum class LocalNetworkPermissionDialog {
-    None,
-    Rationale,
-    Settings,
-}

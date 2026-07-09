@@ -19,7 +19,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.dialogs.SlidingSyncNotSupportedDialog
 import io.element.android.features.login.impl.error.ChangeServerError
-import io.element.android.features.login.impl.localnetwork.LocalNetworkPermissionDialogView
 import io.element.android.libraries.androidutils.system.openGooglePlay
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.ProgressDialog
@@ -28,6 +27,7 @@ import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.LocalBuildMeta
+import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialogView
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
