@@ -27,6 +27,7 @@ import androidx.navigation3.scene.SinglePaneSceneStrategy
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigationevent.NavigationEvent
 
+@Suppress("UnstableCollections")
 @Composable
 fun <T : Any> ElementNavDisplay(
     backStack: List<T>,
