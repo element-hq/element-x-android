@@ -158,6 +158,7 @@ class KonsistPreviewTest {
         "TimelineItemGroupedEventsRowContentCollapsePreview",
         "TimelineItemGroupedEventsRowContentExpandedPreview",
         "TimelineItemImageViewHideMediaContentPreview",
+        "TimelineItemUrlPreviewViewNoImagePreview",
         "TimelineItemVideoViewHideMediaContentPreview",
         "TimelineItemVoiceViewUnifiedPreview",
         "TimelineVideoWithCaptionRowPreview",

@@ -14,6 +14,7 @@ import io.element.android.libraries.matrix.api.tracing.TraceLogPack
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.api.store.NotificationSound
 import io.element.android.libraries.preferences.api.store.NotificationSoundChannelConfig
+import io.element.android.libraries.preferences.api.store.UrlPreviewValue
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.updateAndGet
@@ -25,6 +26,7 @@ class InMemoryAppPreferencesStore(
     timelineMediaPreviewValue: MediaPreviewValue? = null,
     theme: String? = null,
     liveLocationMinimumDistanceUpdate: Int = 10,
+    urlPreviewValue: UrlPreviewValue = UrlPreviewValue.DEFAULT,
     logLevel: LogLevel = LogLevel.INFO,
     traceLogPacks: Set<TraceLogPack> = emptySet(),
     messageSound: NotificationSound = NotificationSound.SystemDefault,
@@ -38,6 +40,7 @@ class InMemoryAppPreferencesStore(
     private val customElementCallBaseUrl = MutableStateFlow(customElementCallBaseUrl)
     private val theme = MutableStateFlow(theme)
     private val liveLocationMinimumDistanceUpdate = MutableStateFlow(liveLocationMinimumDistanceUpdate)
+    private val urlPreviewValue = MutableStateFlow(urlPreviewValue)
     private val logLevel = MutableStateFlow(logLevel)
     private val tracingLogPacks = MutableStateFlow(traceLogPacks)
     private val hideInviteAvatars = MutableStateFlow(hideInviteAvatars)
@@ -99,6 +102,14 @@ class InMemoryAppPreferencesStore(
     @Deprecated("Use MediaPreviewService instead. Kept only for migration.")
     override suspend fun setTimelineMediaPreviewValue(mediaPreviewValue: MediaPreviewValue?) {
         timelineMediaPreviewValue.value = mediaPreviewValue
+    }
+
+    override suspend fun setUrlPreviewValue(value: UrlPreviewValue) {
+        urlPreviewValue.value = value
+    }
+
+    override fun getUrlPreviewValueFlow(): Flow<UrlPreviewValue> {
+        return urlPreviewValue
     }
 
     override suspend fun setTracingLogLevel(logLevel: LogLevel) {

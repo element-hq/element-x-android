@@ -13,6 +13,7 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.res.stringResource
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.designsystem.components.preferences.DropdownOption
+import io.element.android.libraries.preferences.api.store.UrlPreviewValue
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import kotlinx.collections.immutable.ImmutableList
 
@@ -23,6 +24,7 @@ data class AdvancedSettingsState(
     val theme: ThemeOption,
     val availableThemeOptions: ImmutableList<ThemeOption>,
     val mediaPreviewConfigState: MediaPreviewConfigState,
+    val urlPreviewValue: UrlPreviewValue,
     val liveLocationMinimumDistanceUpdate: Int?,
     val eventSink: (AdvancedSettingsEvents) -> Unit
 )

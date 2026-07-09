@@ -18,6 +18,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.api.store.UrlPreviewValue
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
@@ -354,6 +355,41 @@ class AdvancedSettingsPresenterTest {
             with(awaitItem()) {
                 assertThat(mediaPreviewConfigState.hideInviteAvatars).isTrue()
                 assertThat(mediaPreviewConfigState.timelineMediaPreviewValue).isEqualTo(MediaPreviewValue.Private)
+            }
+        }
+    }
+
+    @Test
+    fun `present - url preview value defaults to UnencryptedOnly`() = runTest {
+        val presenter = createAdvancedSettingsPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            with(awaitItem()) {
+                assertThat(urlPreviewValue).isEqualTo(UrlPreviewValue.UnencryptedOnly)
+            }
+        }
+    }
+
+    @Test
+    fun `present - setting url preview value updates app preferences`() = runTest {
+        val appPreferencesStore = InMemoryAppPreferencesStore()
+        val presenter = createAdvancedSettingsPresenter(appPreferencesStore = appPreferencesStore)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            with(awaitItem()) {
+                assertThat(urlPreviewValue).isEqualTo(UrlPreviewValue.UnencryptedOnly)
+                eventSink(AdvancedSettingsEvents.SetUrlPreviewValue(UrlPreviewValue.Off))
+            }
+            with(awaitItem()) {
+                assertThat(urlPreviewValue).isEqualTo(UrlPreviewValue.Off)
+                eventSink(AdvancedSettingsEvents.SetUrlPreviewValue(UrlPreviewValue.On))
+            }
+            with(awaitItem()) {
+                assertThat(urlPreviewValue).isEqualTo(UrlPreviewValue.On)
             }
         }
     }
