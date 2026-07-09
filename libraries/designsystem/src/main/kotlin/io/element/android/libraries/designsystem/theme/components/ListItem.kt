@@ -120,32 +120,32 @@ fun ListItem(
             content()
         }
     }
-    val decoratedSupportingContent: (@Composable () -> Unit)? = supportingContent?.let { content ->
+    val decoratedSupportingContent: (@Composable () -> Unit)? = supportingContent?.let { safeContent ->
         {
             CompositionLocalProvider(
                 LocalTextStyle provides ElementTheme.typography.fontBodyMdRegular,
                 LocalContentColor provides supportingColor,
             ) {
-                content()
+                safeContent()
             }
         }
     }
-    val decoratedLeadingContent: (@Composable () -> Unit)? = leadingContent?.let { content ->
+    val decoratedLeadingContent: (@Composable () -> Unit)? = leadingContent?.let { safeContent ->
         {
             CompositionLocalProvider(
                 LocalContentColor provides leadingContentColor,
             ) {
-                content.View(isItemEnabled = enabled)
+                safeContent.View(isItemEnabled = enabled)
             }
         }
     }
-    val decoratedTrailingContent: (@Composable () -> Unit)? = trailingContent?.let { content ->
+    val decoratedTrailingContent: (@Composable () -> Unit)? = trailingContent?.let { safeContent ->
         {
             CompositionLocalProvider(
                 LocalTextStyle provides ElementTheme.typography.fontBodyMdRegular,
                 LocalContentColor provides trailingContentColor,
             ) {
-                content.View(isItemEnabled = enabled)
+                safeContent.View(isItemEnabled = enabled)
             }
         }
     }
