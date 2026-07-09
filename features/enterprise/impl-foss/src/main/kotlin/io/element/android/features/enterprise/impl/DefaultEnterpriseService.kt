@@ -40,6 +40,8 @@ class DefaultEnterpriseService : EnterpriseService {
     override fun firebasePushGateway(): String? = null
     override fun unifiedPushDefaultPushGateway(): String? = null
 
+    override fun isX509SigningEnabled(): Boolean = false
+
     override fun bugReportUrlFlow(sessionId: SessionId?): Flow<BugReportUrl> {
         return flowOf(BugReportUrl.UseDefault)
     }

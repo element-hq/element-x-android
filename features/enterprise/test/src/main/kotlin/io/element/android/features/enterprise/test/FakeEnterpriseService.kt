@@ -31,6 +31,7 @@ class FakeEnterpriseService(
     private val unifiedPushDefaultPushGatewayResult: () -> String? = { lambdaError() },
     private val getNoisyNotificationChannelIdResult: (SessionId?) -> String? = { lambdaError() },
     private val tweakMasUrlResult: (String, String) -> String = { _, _ -> lambdaError() },
+    private val isX509SigningEnabledResult: () -> Boolean = { false },
 ) : EnterpriseService {
     private val brandColorState = MutableStateFlow(initialBrandColor)
     private val semanticColorsState = MutableStateFlow(initialSemanticColors)
@@ -69,6 +70,10 @@ class FakeEnterpriseService(
 
     override fun unifiedPushDefaultPushGateway(): String? {
         return unifiedPushDefaultPushGatewayResult()
+    }
+
+    override fun isX509SigningEnabled(): Boolean {
+        return isX509SigningEnabledResult()
     }
 
     val bugReportUrlMutableFlow = MutableStateFlow<BugReportUrl>(BugReportUrl.UseDefault)
