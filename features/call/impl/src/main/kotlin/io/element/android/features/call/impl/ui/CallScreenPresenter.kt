@@ -84,7 +84,7 @@ class CallScreenPresenter(
         var ignoreWebViewError by rememberSaveable { mutableStateOf(false) }
         var webViewError by remember { mutableStateOf<String?>(null) }
         val languageTag = languageTagProvider.provideLanguageTag()
-        val theme = if (ElementTheme.isLightTheme) "light" else "dark"
+        val theme = "dark"
 
         DisposableEffect(Unit) {
             coroutineScope.launch {
