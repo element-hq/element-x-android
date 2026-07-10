@@ -249,6 +249,7 @@ class TimelineMediaGalleryDataSourceTest {
                                 ),
                                 mediaSource = MediaSource("url"),
                                 thumbnailSource = MediaSource("url_thumbnail"),
+                                blurHash = A_BLUR_HASH,
                             )
                         ),
                         fileItems = persistentListOf()

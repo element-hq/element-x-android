@@ -226,6 +226,7 @@ class EventItemFactoryTest {
                 ),
                 mediaSource = MediaSource(""),
                 thumbnailSource = null,
+                blurHash = null,
             )
         )
     }
@@ -326,6 +327,7 @@ class EventItemFactoryTest {
                 ),
                 mediaSource = MediaSource(""),
                 thumbnailSource = null,
+                blurHash = null,
             )
         )
     }
@@ -437,6 +439,7 @@ class EventItemFactoryTest {
                 ),
                 mediaSource = MediaSource("image_url"),
                 thumbnailSource = MediaSource("thumbnail_url"),
+                blurHash = null,
             )
         )
     }
@@ -498,6 +501,7 @@ class EventItemFactoryTest {
                 ),
                 mediaSource = MediaSource("video_url"),
                 thumbnailSource = MediaSource("thumbnail_url"),
+                blurHash = null,
             )
         )
     }
@@ -744,6 +748,7 @@ class EventItemFactoryTest {
                 ),
                 mediaSource = MediaSource(""),
                 thumbnailSource = null,
+                blurHash = null,
             )
         )
     }

@@ -141,6 +141,7 @@ class DefaultMediaViewerEntryPointTest {
                 avatarInfo = AvatarInfo(filename = "avatar.png"),
                 mediaSource = MediaSource(url = "avatarUrl"),
                 thumbnailSource = null,
+                blurHash = null,
             )
         )
         assertThat(result.plugins).contains(callback)
