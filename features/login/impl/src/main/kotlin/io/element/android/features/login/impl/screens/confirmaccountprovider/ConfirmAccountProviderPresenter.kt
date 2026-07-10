@@ -11,20 +11,19 @@ package io.element.android.features.login.impl.screens.confirmaccountprovider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
-import io.element.android.features.login.impl.login.LoginHelper
+import io.element.android.features.login.impl.login.LoginModeEvent
+import io.element.android.features.login.impl.login.LoginModeState
 import io.element.android.libraries.architecture.Presenter
-import kotlinx.coroutines.launch
 
 @AssistedInject
 class ConfirmAccountProviderPresenter(
     @Assisted private val params: Params,
     private val accountProviderDataSource: AccountProviderDataSource,
-    private val loginHelper: LoginHelper,
+    private val loginModePresenter: Presenter<LoginModeState>,
 ) : Presenter<ConfirmAccountProviderState> {
     data class Params(
         val isAccountCreation: Boolean,
@@ -38,28 +37,26 @@ class ConfirmAccountProviderPresenter(
     @Composable
     override fun present(): ConfirmAccountProviderState {
         val accountProvider by accountProviderDataSource.flow.collectAsState()
-        val localCoroutineScope = rememberCoroutineScope()
-
-        val loginMode by loginHelper.collectLoginMode()
+        val loginModeState = loginModePresenter.present()
 
         fun handleEvent(event: ConfirmAccountProviderEvents) {
             when (event) {
-                ConfirmAccountProviderEvents.Continue -> localCoroutineScope.launch {
-                    loginHelper.submit(
+                ConfirmAccountProviderEvents.Continue -> loginModeState.eventSink(
+                    LoginModeEvent.Submit(
                         isAccountCreation = params.isAccountCreation,
                         homeserverUrl = accountProvider.url,
                         resolvedHomeserverUrl = null,
                         loginHint = null,
                     )
-                }
-                ConfirmAccountProviderEvents.ClearError -> loginHelper.clearError()
+                )
+                ConfirmAccountProviderEvents.ClearError -> loginModeState.eventSink(LoginModeEvent.ClearError)
             }
         }
 
         return ConfirmAccountProviderState(
             accountProvider = accountProvider,
             isAccountCreation = params.isAccountCreation,
-            loginMode = loginMode,
+            loginModeState = loginModeState,
             eventSink = ::handleEvent,
         )
     }
