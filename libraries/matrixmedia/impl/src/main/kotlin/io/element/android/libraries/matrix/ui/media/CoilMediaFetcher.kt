@@ -40,7 +40,7 @@ internal class CoilMediaFetcher(
                     onSuccess = { it },
                     onFailure = { error ->
                         if (error.isNetworkError()) {
-                            null
+                            throw error
                         } else {
                             fetchContent(mediaSource)
                         }
@@ -73,7 +73,7 @@ internal class CoilMediaFetcher(
             .onFailure {
                 Timber.e(it)
             }
-            .getOrNull()
+            .getOrThrow()
     }
 
     private suspend fun fetchContent(mediaSource: MediaSource): FetchResult? {
@@ -83,7 +83,7 @@ internal class CoilMediaFetcher(
             byteArray.asSourceResult()
         }.onFailure {
             Timber.e(it)
-        }.getOrNull()
+        }.getOrThrow()
     }
 
     private suspend fun fetchThumbnail(mediaSource: MediaSource, kind: MediaRequestData.Kind.Thumbnail): Result<FetchResult> {
