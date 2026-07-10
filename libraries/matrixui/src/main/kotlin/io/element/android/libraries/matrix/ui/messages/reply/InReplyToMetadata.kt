@@ -111,13 +111,12 @@ internal fun InReplyToDetails.Ready.metadata(hideImage: Boolean): InReplyToMetad
         is GalleryMessageType -> {
             val caption = textContent?.takeIf { it.isNotBlank() }
             val isMediaGallery = type.items.all { it is GalleryItemType.Image || it is GalleryItemType.Video }
-            val countPlural = if (isMediaGallery) {
-                CommonPlurals.common_gallery_reply_media_items
-            } else {
-                CommonPlurals.common_gallery_reply_attachments
-            }
-            val text = caption ?: pluralStringResource(countPlural, type.items.size, type.items.size)
             if (isMediaGallery) {
+                val text = caption ?: pluralStringResource(
+                    CommonPlurals.common_gallery_reply_media_items,
+                    type.items.size,
+                    type.items.size,
+                )
                 val firstMediaItem = type.items.firstOrNull { it is GalleryItemType.Image || it is GalleryItemType.Video }
                 val thumbnailSource = when (firstMediaItem) {
                     is GalleryItemType.Image -> (firstMediaItem.content.info?.thumbnailSource ?: firstMediaItem.content.source).takeUnless { hideImage }
@@ -129,15 +128,24 @@ internal fun InReplyToDetails.Ready.metadata(hideImage: Boolean): InReplyToMetad
                     is GalleryItemType.Video -> firstMediaItem.content.info?.blurhash
                     else -> null
                 }
+                val type = when (firstMediaItem) {
+                    is GalleryItemType.Video -> AttachmentThumbnailType.Video
+                    else -> AttachmentThumbnailType.Image
+                }
                 Thumbnail(
                     AttachmentThumbnailInfo(
                         thumbnailSource = thumbnailSource,
                         textContent = text,
-                        type = AttachmentThumbnailType.Image,
+                        type = type,
                         blurHash = blurHash,
                     )
                 )
             } else {
+                val text = caption ?: pluralStringResource(
+                    CommonPlurals.common_gallery_reply_attachments,
+                    type.items.size,
+                    type.items.size,
+                )
                 Thumbnail(
                     AttachmentThumbnailInfo(
                         textContent = text,
