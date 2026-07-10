@@ -294,7 +294,7 @@ internal enum class ButtonStyle {
 
     @Composable
     fun getColors(destructive: Boolean): ButtonColors = when (this) {
-        Filled -> ButtonDefaults.buttonColors(
+        Filled -> ButtonDefaults.filledTonalButtonColors(
             containerColor = getPrimaryColor(destructive),
             contentColor = ElementTheme.materialColors.onPrimary,
             disabledContainerColor = if (destructive) {
@@ -304,13 +304,13 @@ internal enum class ButtonStyle {
             },
             disabledContentColor = ElementTheme.colors.textOnSolidPrimary
         )
-        Outlined -> ButtonDefaults.buttonColors(
+        Outlined -> ButtonDefaults.outlinedButtonColors(
             containerColor = Color.Transparent,
             contentColor = getPrimaryColor(destructive),
             disabledContainerColor = Color.Transparent,
             disabledContentColor = getDisabledContentColor(destructive),
         )
-        Text -> ButtonDefaults.buttonColors(
+        Text -> ButtonDefaults.textButtonColors(
             containerColor = Color.Transparent,
             contentColor = if (destructive) {
                 ElementTheme.colors.textCriticalPrimary
