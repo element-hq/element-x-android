@@ -176,7 +176,7 @@ fun ElementTheme(
             )
         ),
         // Configure the keyboard focus color.
-        // By default, ColorScheme.secondaryColor is used
+        // By default, ColorScheme.secondary is used
         LocalRippleConfiguration provides
             RippleConfiguration(
                 focus = RippleConfiguration.Focus.InsetRing(
