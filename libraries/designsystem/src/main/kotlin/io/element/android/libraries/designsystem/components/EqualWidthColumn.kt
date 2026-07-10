@@ -29,6 +29,10 @@ fun EqualWidthColumn(
 ) {
     SubcomposeLayout(modifier = modifier) { constraints ->
         val measurables = subcompose(0, content).map { it.measure(constraints) }
+        if (measurables.isEmpty()) {
+            return@SubcomposeLayout layout(0, 0) {}
+        }
+
         val maxWidth = measurables.maxOf { it.width }
         val newConstraints = constraints.copy(minWidth = maxWidth)
         val newMeasurables = if (measurables.all { it.width == maxWidth }) {
