@@ -165,6 +165,7 @@ fun ElementTheme(
         LocalCompoundColors provides currentCompoundColor,
         LocalContentColor provides colorScheme.onSurface,
         // Configure the keyboard focus style: Draw a blue inset ring around the focused component.
+        // Ref: https://www.figma.com/design/hlbsmSekQorGRN1t2R9JEy/Accessibility-checks?node-id=271-42066
         // By default, a semi-transparent black overlay is used
         LocalRippleThemeConfiguration provides RippleThemeConfiguration(
             RippleThemeConfiguration.Focus.InsetRing(
