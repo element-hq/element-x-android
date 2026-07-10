@@ -15,7 +15,7 @@ import io.element.android.features.contentscanner.api.ContentScannerService
 import io.element.android.features.contentscanner.impl.DefaultContentScannerService
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.di.annotations.SessionCoroutineScope
+import io.element.android.libraries.di.annotations.RoomCoroutineScope
 import io.element.android.libraries.matrix.api.scanner.ContentScanner
 import kotlinx.coroutines.CoroutineScope
 
@@ -26,13 +26,13 @@ object ContentScannerModule {
     @SingleIn(RoomScope::class)
     fun providesContentScannerService(
         contentScanner: ContentScanner?,
-        @SessionCoroutineScope sessionCoroutineScope: CoroutineScope,
+        @RoomCoroutineScope coroutineScope: CoroutineScope,
         coroutineDispatchers: CoroutineDispatchers,
     ): ContentScannerService {
         return if (contentScanner != null) {
             DefaultContentScannerService(
                 contentScanner = contentScanner,
-                sessionCoroutineScope = sessionCoroutineScope,
+                coroutineScope = coroutineScope,
                 coroutineDispatchers = coroutineDispatchers,
             )
         } else {

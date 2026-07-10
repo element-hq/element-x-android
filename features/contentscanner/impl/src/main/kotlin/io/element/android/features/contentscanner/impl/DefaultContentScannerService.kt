@@ -9,7 +9,6 @@ package io.element.android.features.contentscanner.impl
 
 import io.element.android.features.contentscanner.api.ContentScannerService
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.scanner.ContentScanner
@@ -24,7 +23,7 @@ import java.io.IOException
  */
 class DefaultContentScannerService(
     private val contentScanner: ContentScanner,
-    @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
+    private val coroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : ContentScannerService {
     override fun scan(eventId: EventId, mediaSources: List<MediaSource>, contentValidationState: ContentValidationState) {
@@ -34,7 +33,7 @@ class DefaultContentScannerService(
             if (currentState != ContentValidationValue.Unknown) continue
             contentValidationState.update(url, ContentValidationValue.Loading)
 
-            sessionCoroutineScope.launch(coroutineDispatchers.io.limitedParallelism(4)) {
+            coroutineScope.launch(coroutineDispatchers.io.limitedParallelism(4)) {
                 contentScanner.scan(mediaSource)
                     .onSuccess { isValid ->
                         val contentValidationValue = if (isValid) ContentValidationValue.Valid else ContentValidationValue.Invalid
