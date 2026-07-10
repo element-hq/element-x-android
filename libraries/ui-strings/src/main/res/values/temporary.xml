@@ -8,10 +8,4 @@
 <resources>
     <string name="action_mark_as_read">"Mark as read"</string>
     <string name="a11y_jump_to_unread_messages">"Jump to first unread message"</string>
-    <plurals name="common_gallery_reply_media_items">
-        <item quantity="other">"%1$d media items…"</item>
-    </plurals>
-    <plurals name="common_gallery_reply_attachments">
-        <item quantity="other">"%1$d attachments…"</item>
-    </plurals>
 </resources>
