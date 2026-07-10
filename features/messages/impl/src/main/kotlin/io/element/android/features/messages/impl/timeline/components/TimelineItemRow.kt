@@ -10,22 +10,13 @@ package io.element.android.features.messages.impl.timeline.components
 
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithCache
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
@@ -37,11 +28,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
-import io.element.android.libraries.designsystem.colors.gradientSubtleColors
 import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
-import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -133,36 +120,12 @@ internal fun TimelineItemRow(
                         )
                     }
                     else -> {
-                        val a11yVoiceMessage = stringResource(CommonStrings.a11y_voice_message)
                         TimelineItemEventRow(
-                            modifier = Modifier
-                                .semantics(mergeDescendants = true) {
-                                    contentDescription = if (timelineItem.content is TimelineItemVoiceContent) {
-                                        val voiceMessageText = String.format(a11yVoiceMessage, timelineItem.content.duration.toString(DurationUnit.MINUTES))
-                                        "${timelineItem.safeSenderName}, $voiceMessageText"
-                                    } else {
-                                        timelineItem.safeSenderName
-                                    }
-                                    // For Polls, allow the answers to be traversed by Talkback
-                                    isTraversalGroup = timelineItem.content is TimelineItemPollContent ||
-                                        timelineItem.failedToSend ||
-                                        timelineItem.messageShield != null
-                                    // TODO Also set to true when the event has link(s)
-                                }
-                                // Custom clickable that applies over the whole item for accessibility
-                                .then(
-                                    if (isTalkbackActive()) {
-                                        Modifier
-                                            .combinedClickable(
-                                                onClick = { onContentClick(timelineItem) },
-                                                onLongClick = { onLongClick(timelineItem) },
-                                                onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
-                                            )
-                                            .onKeyboardContextMenuAction { onLongClick(timelineItem) }
-                                    } else {
-                                        Modifier
-                                    }
-                                ),
+                            modifier = Modifier.timelineItemEventAccessibility(
+                                event = timelineItem,
+                                onClick = { onContentClick(timelineItem) },
+                                onLongClick = { onLongClick(timelineItem) },
+                            ),
                             event = timelineItem,
                             timelineMode = timelineMode,
                             timelineRoomInfo = timelineRoomInfo,
@@ -215,43 +178,44 @@ internal fun TimelineItemRow(
     }
 }
 
+/**
+ * Merges the descendants semantics and sets the proper content description and traversal behaviour
+ * for the event, and makes the whole item clickable when Talkback is active.
+ */
 @Suppress("ModifierComposable")
 @Composable
-private fun Modifier.focusedEvent(
-    focusedEventOffset: Dp,
+private fun Modifier.timelineItemEventAccessibility(
+    event: TimelineItem.Event,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit,
 ): Modifier {
-    val highlightedLineColor = ElementTheme.colors.borderAccentSubtle
-    val gradientColors = gradientSubtleColors()
-    val verticalOffset = focusedEventOffset.toPx()
-    val verticalRatio = 0.7f
-    return drawWithCache {
-        val brush = Brush.verticalGradient(
-            colors = gradientColors,
-            endY = size.height * verticalRatio,
-        )
-        onDrawBehind {
-            drawRect(
-                brush,
-                topLeft = Offset(0f, verticalOffset),
-                size = Size(size.width, size.height * verticalRatio)
-            )
-            drawLine(
-                highlightedLineColor,
-                start = Offset(0f, verticalOffset),
-                end = Offset(size.width, verticalOffset)
-            )
+    val a11yVoiceMessage = stringResource(CommonStrings.a11y_voice_message)
+    return this
+        .semantics(mergeDescendants = true) {
+            contentDescription = if (event.content is TimelineItemVoiceContent) {
+                val voiceMessageText = String.format(a11yVoiceMessage, event.content.duration.toString(DurationUnit.MINUTES))
+                "${event.safeSenderName}, $voiceMessageText"
+            } else {
+                event.safeSenderName
+            }
+            // For Polls, allow the answers to be traversed by Talkback
+            isTraversalGroup = event.content is TimelineItemPollContent ||
+                event.failedToSend ||
+                event.messageShield != null
+            // TODO Also set to true when the event has link(s)
         }
-    }.padding(top = 4.dp)
-}
-
-@PreviewsDayNight
-@Composable
-internal fun FocusedEventPreview() = ElementPreview {
-    Box(
-        modifier = Modifier
-            .padding(16.dp)
-            .fillMaxWidth()
-            .height(160.dp)
-            .focusedEvent(0.dp),
-    )
+        // Custom clickable that applies over the whole item for accessibility
+        .then(
+            if (isTalkbackActive()) {
+                Modifier
+                    .combinedClickable(
+                        onClick = onClick,
+                        onLongClick = onLongClick,
+                        onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
+                    )
+                    .onKeyboardContextMenuAction { onLongClick() }
+            } else {
+                Modifier
+            }
+        )
 }

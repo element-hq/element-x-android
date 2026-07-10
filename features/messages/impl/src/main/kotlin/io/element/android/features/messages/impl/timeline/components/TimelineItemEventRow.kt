@@ -8,57 +8,26 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.platform.LocalViewConfiguration
-import androidx.compose.ui.platform.ViewConfiguration
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.semantics.hideFromAccessibility
-import androidx.compose.ui.semantics.isTraversalGroup
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDirection
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.DpOffset
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -70,7 +39,6 @@ import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
-import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayout
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.components.receipt.ReadReceiptViewState
 import io.element.android.features.messages.impl.timeline.components.receipt.TimelineItemReadReceiptView
@@ -81,33 +49,15 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItemThre
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemGalleryContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
-import io.element.android.features.messages.impl.timeline.model.event.ensureActiveLiveLocation
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.timeline.protection.mustBeProtected
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
-import io.element.android.libraries.designsystem.components.EqualWidthColumn
-import io.element.android.libraries.designsystem.components.avatar.Avatar
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.components.avatar.AvatarType
-import io.element.android.libraries.designsystem.modifiers.niceClickable
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewWithExtraLargeHeight
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
-import io.element.android.libraries.designsystem.swipe.SwipeableActionsState
-import io.element.android.libraries.designsystem.swipe.rememberSwipeableActionsState
-import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
@@ -122,29 +72,15 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
-import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisplayName
-import io.element.android.libraries.matrix.api.timeline.item.event.mediaSources
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.media.contentvalidation.collectOverallState
 import io.element.android.libraries.matrix.ui.media.contentvalidation.rememberEventContentValidationState
-import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
-import io.element.android.libraries.matrix.ui.messages.reply.InReplyToView
 import io.element.android.libraries.matrix.ui.messages.reply.content
 import io.element.android.libraries.matrix.ui.messages.reply.eventId
-import io.element.android.libraries.matrix.ui.messages.sender.SenderName
-import io.element.android.libraries.matrix.ui.messages.sender.SenderNameMode
-import io.element.android.libraries.testtags.TestTags
-import io.element.android.libraries.testtags.testTag
-import io.element.android.libraries.ui.strings.CommonPlurals
 import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
-import io.element.android.libraries.ui.utils.text.detect
 import io.element.android.wysiwyg.link.Link
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.launch
-import kotlin.math.abs
-import kotlin.math.roundToInt
 
 // The bubble has a negative margin to be placed a bit upper regarding the sender
 // information and overlap the avatar.
@@ -196,7 +132,6 @@ fun TimelineItemEventRow(
         )
     },
 ) {
-    val coroutineScope = rememberCoroutineScope()
     val interactionSource = remember { MutableInteractionSource() }
 
     val onContentClick = if (event.mustBeProtected()) {
@@ -227,50 +162,10 @@ fun TimelineItemEventRow(
             Spacer(modifier = Modifier.height(2.dp))
         }
         val canReply = timelineRoomInfo.userHasPermissionToSendMessage && event.canBeRepliedTo
-        if (canReply) {
-            val state: SwipeableActionsState = rememberSwipeableActionsState()
-            val offset = state.offset.floatValue
-            val swipeThresholdPx = 40.dp.toPx()
-            val thresholdCrossed = abs(offset) > swipeThresholdPx
-            SwipeSensitivity(3f) {
-                Box(Modifier.fillMaxWidth()) {
-                    Row(modifier = Modifier.matchParentSize()) {
-                        ReplySwipeIndicator({ offset / 120 })
-                    }
-                    TimelineItemEventRowContent(
-                        event = event,
-                        timelineMode = timelineMode,
-                        timelineProtectionState = timelineProtectionState,
-                        timelineRoomInfo = timelineRoomInfo,
-                        interactionSource = interactionSource,
-                        onContentClick = onContentClick,
-                        onLongClick = onLongClick,
-                        inReplyToClick = ::inReplyToClick,
-                        onUserDataClick = ::onUserDataClick,
-                        onReactionClick = { emoji -> onReactionClick(emoji, event) },
-                        onReactionLongClick = { emoji -> onReactionLongClick(emoji, event) },
-                        onMoreReactionsClick = { onMoreReactionsClick(event) },
-                        modifier = Modifier
-                            .absoluteOffset { IntOffset(x = offset.roundToInt(), y = 0) }
-                            .draggable(
-                                orientation = Orientation.Horizontal,
-                                enabled = !state.isResettingOnRelease,
-                                onDragStopped = {
-                                    coroutineScope.launch {
-                                        if (thresholdCrossed) {
-                                            onSwipeToReply()
-                                        }
-                                        state.resetOffset()
-                                    }
-                                },
-                                state = state.draggableState,
-                            ),
-                        eventSink = eventSink,
-                        eventContentView = eventContentView,
-                    )
-                }
-            }
-        } else {
+        SwipeToReplyContainer(
+            enabled = canReply,
+            onSwipeToReply = onSwipeToReply,
+        ) { contentModifier ->
             TimelineItemEventRowContent(
                 event = event,
                 timelineMode = timelineMode,
@@ -284,6 +179,7 @@ fun TimelineItemEventRow(
                 onReactionClick = { emoji -> onReactionClick(emoji, event) },
                 onReactionLongClick = { emoji -> onReactionLongClick(emoji, event) },
                 onMoreReactionsClick = { onMoreReactionsClick(event) },
+                modifier = contentModifier,
                 eventSink = eventSink,
                 eventContentView = eventContentView,
             )
@@ -319,104 +215,6 @@ fun TimelineItemEventRow(
             onReadReceiptsClick = { onReadReceiptClick(event) },
             modifier = Modifier.padding(top = 4.dp)
         )
-    }
-}
-
-@Composable
-private fun ThreadSummaryView(
-    threadSummary: ThreadSummary,
-    latestEventText: String?,
-    isOutgoing: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    BoxWithConstraints(modifier = modifier) {
-        Row(
-            modifier = Modifier
-                .then(if (!isOutgoing) Modifier.padding(start = 16.dp) else Modifier)
-                .graphicsLayer {
-                    shape = RoundedCornerShape(8.dp)
-                    clip = true
-                }
-                .background(MessageEventBubbleDefaults.backgroundBubbleColor(isOutgoing))
-                .niceClickable(onClick)
-                .padding(horizontal = 12.dp, vertical = 10.dp)
-                .widthIn(max = (maxWidth - 24.dp) * MessageEventBubbleDefaults.BUBBLE_WIDTH_RATIO),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Icon(
-                modifier = Modifier.size(20.dp),
-                imageVector = CompoundIcons.ThreadsSolid(),
-                contentDescription = null,
-                tint = ElementTheme.colors.iconSecondary,
-            )
-            Spacer(modifier = Modifier.width(4.dp))
-            Text(
-                text = pluralStringResource(CommonPlurals.common_replies, threadSummary.numberOfReplies.toInt(), threadSummary.numberOfReplies),
-                style = ElementTheme.typography.fontBodySmMedium,
-                color = ElementTheme.colors.textSecondary,
-            )
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            threadSummary.latestEvent.dataOrNull()?.let { latestEvent ->
-                val avatarData = AvatarData(
-                    id = latestEvent.senderId.value,
-                    name = latestEvent.senderProfile.getDisplayName(),
-                    url = latestEvent.senderProfile.getAvatarUrl(),
-                    size = AvatarSize.TimelineThreadLatestEventSender,
-                )
-                Avatar(
-                    avatarData = avatarData,
-                    avatarType = AvatarType.User,
-                )
-
-                Spacer(modifier = Modifier.width(8.dp))
-
-                Text(
-                    text = latestEvent.senderProfile.getDisambiguatedDisplayName(latestEvent.senderId),
-                    style = ElementTheme.typography.fontBodySmMedium,
-                    color = ElementTheme.colors.textSecondary,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-
-                Spacer(modifier = Modifier.width(4.dp))
-
-                latestEventText?.let {
-                    Text(
-                        text = it,
-                        style = ElementTheme.typography.fontBodySmRegular,
-                        color = ElementTheme.colors.textSecondary,
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 1,
-                    )
-                }
-            }
-        }
-    }
-}
-
-/**
- * Impact ViewConfiguration.touchSlop by [sensitivityFactor].
- * Inspired from https://issuetracker.google.com/u/1/issues/269627294.
- * @param sensitivityFactor the factor to multiply the touchSlop by. The highest value, the more the user will
- * have to drag to start the drag.
- * @param content the content to display.
- */
-@Composable
-private fun SwipeSensitivity(
-    sensitivityFactor: Float,
-    content: @Composable () -> Unit,
-) {
-    val current = LocalViewConfiguration.current
-    CompositionLocalProvider(
-        LocalViewConfiguration provides object : ViewConfiguration by current {
-            override val touchSlop: Float
-                get() = current.touchSlop * sensitivityFactor
-        }
-    ) {
-        content()
     }
 }
 
@@ -476,11 +274,12 @@ private fun TimelineItemEventRowContent(
 
         val currentContentValidationState by rememberEventContentValidationState(eventId = event.eventId, needsValidation = event.content.isMedia)
             .collectOverallState()
+        val hasContentValidationError = currentContentValidationState.hasError()
         val needsInvalidContentCustomisations =
             // Gallery events should not apply the custom bubble color, instead each item will apply some custom color if needed
             event.content !is TimelineItemGalleryContent &&
                 event.content !is TimelineItemAttachmentsContent &&
-                currentContentValidationState.hasError() &&
+                hasContentValidationError &&
                 event.content.isMedia
 
         // If the event has a dangerous media content we need to set custom message bubble background and border colors
@@ -524,7 +323,7 @@ private fun TimelineItemEventRowContent(
                 event = event,
                 timelineMode = timelineMode,
                 timelineProtectionState = timelineProtectionState,
-                onMessageLongClick = onLongClick,
+                hasContentValidationError = hasContentValidationError,
                 inReplyToClick = inReplyToClick,
                 eventSink = eventSink,
                 eventContentView = eventContentView,
@@ -580,325 +379,6 @@ private fun TimelineItemEventRowContent(
             )
         }
     }
-}
-
-@Composable
-private fun MessageSenderInformation(
-    senderId: UserId,
-    senderProfile: ProfileDetails,
-    senderAvatar: AvatarData,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val avatarColors = AvatarColorsProvider.provide(senderAvatar.id)
-    Row(
-        modifier = modifier
-            // Add external clickable modifier with no indicator so the touch target is larger than just the display name
-            .clickable(onClick = onClick, enabled = true, interactionSource = remember { MutableInteractionSource() }, indication = null)
-            .clearAndSetSemantics {
-                hideFromAccessibility()
-            }
-    ) {
-        Avatar(
-            modifier = Modifier
-                .testTag(TestTags.timelineItemSenderAvatar)
-                .clip(CircleShape)
-                .clickable(onClick = onClick),
-            avatarData = senderAvatar,
-            avatarType = AvatarType.User,
-        )
-        SenderName(
-            modifier = Modifier
-                .testTag(TestTags.timelineItemSenderName)
-                .clip(RoundedCornerShape(6.dp))
-                .clickable(onClick = onClick)
-                .padding(horizontal = 4.dp),
-            senderId = senderId,
-            senderProfile = senderProfile,
-            senderNameMode = SenderNameMode.Timeline(avatarColors.foreground),
-        )
-    }
-}
-
-@Suppress("MultipleEmitters") // False positive
-@Composable
-private fun MessageEventBubbleContent(
-    event: TimelineItem.Event,
-    timelineMode: Timeline.Mode,
-    timelineProtectionState: TimelineProtectionState,
-    onMessageLongClick: () -> Unit,
-    inReplyToClick: () -> Unit,
-    eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
-    @SuppressLint("ModifierParameter")
-    // need to rename this modifier to prevent linter false positives
-    @Suppress("ModifierNaming")
-    bubbleModifier: Modifier = Modifier,
-    eventContentView: @Composable (Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit,
-) {
-    // Long clicks are not not automatically propagated from a `clickable`
-    // to its `combinedClickable` parent so we do it manually
-    fun onTimestampLongClick() = onMessageLongClick()
-
-    @Composable
-    fun ThreadDecoration(
-        modifier: Modifier = Modifier
-    ) {
-        Row(
-            modifier = modifier,
-            horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.Start),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Icon(
-                modifier = Modifier.height(14.dp),
-                imageVector = CompoundIcons.Threads(),
-                contentDescription = null,
-                tint = ElementTheme.colors.iconSecondary,
-            )
-            Text(
-                text = stringResource(CommonStrings.common_thread),
-                style = ElementTheme.typography.fontBodyXsRegular,
-                color = ElementTheme.colors.textPrimary,
-                modifier = Modifier.clearAndSetSemantics { }
-            )
-        }
-    }
-
-    @Composable
-    fun WithTimestampLayout(
-        timestampPosition: TimestampPosition,
-        eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
-        modifier: Modifier = Modifier,
-        canShrinkContent: Boolean = false,
-        content: @Composable (onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit) -> Unit,
-    ) {
-        @Suppress("NAME_SHADOWING")
-        val content = remember { movableContentOf(content) }
-        when (timestampPosition) {
-            TimestampPosition.Overlay ->
-                Box(modifier, contentAlignment = Alignment.Center) {
-                    content {}
-                    TimelineEventTimestampView(
-                        event = event,
-                        eventSink = eventSink,
-                        modifier = Modifier
-                            // Outer padding
-                            .padding(horizontal = 4.dp, vertical = 4.dp)
-                            .background(ElementTheme.colors.bgSubtleSecondary, RoundedCornerShape(10.0.dp))
-                            .align(Alignment.BottomEnd)
-                            // Inner padding
-                            .padding(horizontal = 4.dp, vertical = 2.dp)
-                    )
-                }
-            TimestampPosition.Aligned -> @Composable {
-                val originalLayoutDirection = LocalLayoutDirection.current
-                // Detect if the direction of the text content (if any) does not match the layout direction, to place the content and timestamp correctly
-                val contentDirection = if (event.content is TimelineItemTextContent) {
-                    remember(event.content.body) {
-                        when (TextDirection.detect(event.content.body)) {
-                            TextDirection.Ltr, TextDirection.ContentOrLtr -> LayoutDirection.Ltr
-                            TextDirection.Rtl, TextDirection.ContentOrRtl -> LayoutDirection.Rtl
-                            else -> originalLayoutDirection
-                        }
-                    }
-                } else {
-                    originalLayoutDirection
-                }
-
-                CompositionLocalProvider(LocalLayoutDirection provides contentDirection) {
-                    ContentAvoidingLayout(
-                        modifier = modifier,
-                        // The spacing is negative to make the content overlap the empty space at the start of the timestamp
-                        spacing = (-4).dp,
-                        overlayOffset = DpOffset(0.dp, -1.dp),
-                        shrinkContent = canShrinkContent,
-                        content = { content(this::onContentLayoutChange) },
-                        overlay = {
-                            // Use the original layout direction for the timestamp
-                            CompositionLocalProvider(LocalLayoutDirection provides originalLayoutDirection) {
-                                TimelineEventTimestampView(
-                                    event = event,
-                                    eventSink = eventSink,
-                                    isLayoutDirectionMismatched = originalLayoutDirection != contentDirection,
-                                    modifier = Modifier
-                                        .padding(horizontal = 8.dp, vertical = 4.dp)
-                                )
-                            }
-                        }
-                    )
-                }
-            }
-            TimestampPosition.Below ->
-                Column(modifier) {
-                    content {}
-                    TimelineEventTimestampView(
-                        event = event,
-                        eventSink = eventSink,
-                        modifier = Modifier
-                            .align(Alignment.End)
-                            .padding(horizontal = 8.dp, vertical = 4.dp)
-                    )
-                }
-            TimestampPosition.Hidden -> Box(modifier) { content {} }
-        }
-    }
-
-    /** Groups the different components in a Column with some space between them. */
-    @Composable
-    fun CommonLayout(
-        timestampPosition: TimestampPosition,
-        showThreadDecoration: Boolean,
-        paddingBehaviour: ContentPadding,
-        inReplyToDetails: InReplyToDetails?,
-        modifier: Modifier = Modifier,
-        canShrinkContent: Boolean = false,
-    ) {
-        val timestampLayoutModifier =
-            if (inReplyToDetails != null && timestampPosition == TimestampPosition.Overlay) {
-                Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
-            } else {
-                Modifier
-            }
-
-        val topPadding = if (inReplyToDetails != null) 0.dp else 8.dp
-        val contentModifier = when (paddingBehaviour) {
-            ContentPadding.Textual ->
-                Modifier.padding(start = 12.dp, end = 12.dp, top = topPadding, bottom = 8.dp)
-            ContentPadding.Media -> {
-                if (inReplyToDetails == null) {
-                    Modifier
-                } else {
-                    Modifier.clip(RoundedCornerShape(10.dp))
-                }
-            }
-            ContentPadding.CaptionedMedia ->
-                Modifier.padding(start = 8.dp, end = 8.dp, top = topPadding, bottom = 8.dp)
-            ContentPadding.InvalidContent -> Modifier.padding(top = topPadding, bottom = 8.dp)
-        }
-
-        val threadDecoration = @Composable {
-            if (showThreadDecoration) {
-                ThreadDecoration(modifier = Modifier.padding(top = 8.dp, start = 12.dp, end = 12.dp))
-            }
-        }
-        val contentWithTimestamp = @Composable {
-            WithTimestampLayout(
-                timestampPosition = timestampPosition,
-                eventSink = eventSink,
-                canShrinkContent = canShrinkContent,
-                modifier = timestampLayoutModifier.semantics(mergeDescendants = false) {
-                    isTraversalGroup = true
-                    traversalIndex = -1f
-                },
-                content = { onContentLayoutChange ->
-                    eventContentView(contentModifier, onContentLayoutChange)
-                }
-            )
-        }
-
-        val inReplyTo = @Composable { inReplyTo: InReplyToDetails ->
-            val currentContentValidationState by rememberEventContentValidationState(eventId = inReplyTo.eventId(), eventContent = inReplyTo.content())
-                .collectOverallState()
-            val topPadding = if (showThreadDecoration) 0.dp else 8.dp
-            val shape = RoundedCornerShape(6.dp)
-            val inReplyToModifier = Modifier
-                .padding(top = topPadding, start = 8.dp, end = 8.dp)
-                .clip(shape)
-
-            val talkbackCompatModifier = if (isTalkbackActive()) {
-                // Use z-index to make the replied to text being read after the message
-                // Usually, you'd use traversalIndex for that, but it's not working for some reason
-                inReplyToModifier.zIndex(1f)
-            } else {
-                inReplyToModifier.clickable(onClick = inReplyToClick)
-            }
-
-            val contentHasError = currentContentValidationState.hasError()
-            val borderColor = if (contentHasError) ElementTheme.colors.borderCriticalSubtle else ElementTheme.colors.separatorPrimary
-            val backgroundColor = if (contentHasError) ElementTheme.colors.bgCriticalSubtle else ElementTheme.colors.bgCanvasDefault
-            Box(
-                modifier = talkbackCompatModifier
-                    .border(1.dp, borderColor, shape)
-                    .background(backgroundColor, shape)
-                    .padding(4.dp)
-            ) {
-                val contentValidationState = rememberEventContentValidationState(eventId = inReplyTo.eventId(), eventContent = inReplyTo.content())
-                val updatedEventSink by rememberUpdatedState(eventSink)
-                LaunchedEffect(inReplyTo) {
-                    val mediaSources = inReplyTo.content()?.mediaSources() ?: return@LaunchedEffect
-                    updatedEventSink(TimelineEvent.ValidateMedia(inReplyTo.eventId(), mediaSources, contentValidationState))
-                }
-                InReplyToView(
-                    inReplyTo = inReplyTo,
-                    contentValidationValue = currentContentValidationState,
-                    hideImage = timelineProtectionState.hideMediaContent(inReplyTo.eventId()),
-                )
-            }
-        }
-        if (inReplyToDetails != null) {
-            // Use SubComposeLayout only if necessary as it can have consequences on the performance.
-            EqualWidthColumn(spacing = 8.dp) {
-                threadDecoration()
-                inReplyTo(inReplyToDetails)
-                contentWithTimestamp()
-            }
-        } else {
-            Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                threadDecoration()
-                contentWithTimestamp()
-            }
-        }
-    }
-
-    val contentValidationState by rememberEventContentValidationState(eventId = event.eventId, needsValidation = event.content.isMedia).collectOverallState()
-    val needsInvalidContentLayout =
-        // Gallery events should not apply custom paddings or layout dispositions
-        event.content !is TimelineItemGalleryContent &&
-            event.content !is TimelineItemAttachmentsContent &&
-            contentValidationState.hasError()
-
-    val timestampPosition = if (needsInvalidContentLayout) {
-        // The invalid content view will be displayed in all these cases, independent of the event content
-        TimestampPosition.Aligned
-    } else {
-        when (val content = event.content) {
-            is TimelineItemImageContent -> if (content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
-            is TimelineItemVideoContent -> if (content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
-            is TimelineItemGalleryContent -> if (content.showCaption) TimestampPosition.Aligned else TimestampPosition.Below
-            is TimelineItemAttachmentsContent -> if (content.showCaption) TimestampPosition.Aligned else TimestampPosition.Below
-            is TimelineItemStickerContent -> TimestampPosition.Overlay
-            is TimelineItemLocationContent -> {
-                val content = content.ensureActiveLiveLocation()
-                val shouldHide = content.mode is TimelineItemLocationContent.Mode.Live &&
-                    content.mode.isActive &&
-                    content.mode.isOwnUser
-                if (shouldHide) TimestampPosition.Hidden else TimestampPosition.Overlay
-            }
-            is TimelineItemPollContent -> TimestampPosition.Below
-            else -> TimestampPosition.Default
-        }
-    }
-
-    val paddingBehaviour = if (needsInvalidContentLayout) {
-        ContentPadding.InvalidContent
-    } else {
-        when (event.content) {
-            is TimelineItemImageContent -> if (event.content.showCaption) ContentPadding.CaptionedMedia else ContentPadding.Media
-            is TimelineItemVideoContent -> if (event.content.showCaption) ContentPadding.CaptionedMedia else ContentPadding.Media
-            is TimelineItemGalleryContent -> ContentPadding.CaptionedMedia
-            is TimelineItemAttachmentsContent -> ContentPadding.CaptionedMedia
-            is TimelineItemStickerContent,
-            is TimelineItemLocationContent -> ContentPadding.Media
-            else -> ContentPadding.Textual
-        }
-    }
-    CommonLayout(
-        showThreadDecoration = timelineMode !is Timeline.Mode.Thread && event.threadInfo is TimelineItemThreadInfo.ThreadResponse,
-        timestampPosition = timestampPosition,
-        paddingBehaviour = paddingBehaviour,
-        inReplyToDetails = event.inReplyTo,
-        canShrinkContent = event.content is TimelineItemVoiceContent,
-        modifier = bubbleModifier,
-    )
 }
 
 @PreviewsDayNight
@@ -1116,42 +596,5 @@ internal fun TimelineItemEventRowRtlContentPreview() = ElementPreview {
                 )
             }
         }
-    }
-}
-
-@PreviewsDayNight
-@Composable
-internal fun ThreadSummaryViewPreview() {
-    ElementPreview {
-        val body = "This is the latest message in the thread"
-        val threadSummary = ThreadSummary(
-            AsyncData.Success(
-                EmbeddedEventInfo(
-                    eventOrTransactionId = EventOrTransactionId.Event(EventId("\$event-id")),
-                    content = MessageContent(
-                        body = body,
-                        inReplyTo = null,
-                        isEdited = false,
-                        threadInfo = null,
-                        type = TextMessageType(body, null)
-                    ),
-                    senderId = UserId("@user:id"),
-                    senderProfile = ProfileDetails.Ready(
-                        displayName = USER_NAME_ALICE,
-                        avatarUrl = null,
-                        displayNameAmbiguous = true,
-                    ),
-                    timestamp = 0L,
-                )
-            ),
-            numberOfReplies = 12,
-        )
-
-        ThreadSummaryView(
-            threadSummary = threadSummary,
-            latestEventText = "Some event with a very long text that should get clipped",
-            isOutgoing = true,
-            onClick = {},
-        )
     }
 }
