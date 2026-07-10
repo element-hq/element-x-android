@@ -9,6 +9,8 @@
 package io.element.android.libraries.push.impl.notifications
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.ptt.api.PttEnabledSource
+import io.element.android.features.ptt.test.FakePttEnabledSource
 import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.RtcNotificationType
@@ -163,13 +165,59 @@ class DefaultCallNotificationEventResolverTest {
         assertThat(result.getOrNull()).isEqualTo(expectedResult)
     }
 
+    @Test
+    fun `resolve CallNotify - NOTIFY in a PTT-enabled room becomes a full-screen ringing alert`() = runTest {
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
+                sessionId = A_SESSION_ID,
+                roomId = A_ROOM_ID,
+                initialRoomInfo = aRoomInfo(hasRoomCall = true),
+            )
+        )
+        val client = FakeMatrixClient().apply {
+            givenGetRoomResult(A_ROOM_ID, room)
+        }
+
+        val resolver = createDefaultNotifiableEventResolver(
+            clientProvider = FakeMatrixClientProvider(getClient = { Result.success(client) }),
+            pttEnabledSource = FakePttEnabledSource(initialEnabledRoomIds = setOf(A_ROOM_ID)),
+        )
+        val expectedResult = NotifiableRingingCallEvent(
+            sessionId = A_SESSION_ID,
+            roomId = A_ROOM_ID,
+            eventId = AN_EVENT_ID,
+            senderId = A_USER_ID_2,
+            roomName = A_ROOM_NAME,
+            editedEventId = null,
+            description = "📹 Incoming call",
+            timestamp = 567L,
+            canBeReplaced = true,
+            isRedacted = false,
+            isUpdated = false,
+            senderDisambiguatedDisplayName = A_USER_NAME_2,
+            senderAvatarUrl = null,
+            expirationTimestamp = 0L,
+            rtcNotificationType = RtcNotificationType.NOTIFY,
+            callIntent = CallIntent.AUDIO,
+            isPushToTalk = true,
+        )
+
+        val notificationData = aNotificationData(
+            content = NotificationContent.MessageLike.RtcNotification(A_USER_ID_2, RtcNotificationType.NOTIFY, CallIntent.AUDIO, 0)
+        )
+        val result = resolver.resolveEvent(A_SESSION_ID, notificationData)
+        assertThat(result.getOrNull()).isEqualTo(expectedResult)
+    }
+
     private fun createDefaultNotifiableEventResolver(
         stringProvider: FakeStringProvider = FakeStringProvider(defaultResult = "\uD83D\uDCF9 Incoming call"),
         appForegroundStateService: FakeAppForegroundStateService = FakeAppForegroundStateService(),
         clientProvider: FakeMatrixClientProvider = FakeMatrixClientProvider(),
+        pttEnabledSource: PttEnabledSource = FakePttEnabledSource(),
     ) = DefaultCallNotificationEventResolver(
         stringProvider = stringProvider,
         appForegroundStateService = appForegroundStateService,
         clientProvider = clientProvider,
+        pttEnabledSource = pttEnabledSource,
     )
 }

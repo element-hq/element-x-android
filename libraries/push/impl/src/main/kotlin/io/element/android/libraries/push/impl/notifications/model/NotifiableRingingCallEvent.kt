@@ -33,4 +33,6 @@ data class NotifiableRingingCallEvent(
     val callIntent: CallIntent,
     val timestamp: Long,
     val expirationTimestamp: Long,
+    /** When true, this is a Push-to-Talk session going live (not a regular ringing call). */
+    val isPushToTalk: Boolean = false,
 ) : NotifiableEvent

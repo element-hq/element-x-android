@@ -10,6 +10,7 @@ package io.element.android.libraries.push.impl.notifications
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.features.ptt.api.PttEnabledSource
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -52,6 +53,7 @@ class DefaultCallNotificationEventResolver(
     private val stringProvider: StringProvider,
     private val appForegroundStateService: AppForegroundStateService,
     private val clientProvider: MatrixClientProvider,
+    private val pttEnabledSource: PttEnabledSource,
 ) : CallNotificationEventResolver {
     override suspend fun resolveEvent(
         sessionId: SessionId,
@@ -89,9 +91,15 @@ class DefaultCallNotificationEventResolver(
             appForegroundStateService.updateHasRingingCall(previousRingingCallStatus)
         }.getOrDefault(false)
 
+        // PTT-enabled rooms surface a full-screen alert regardless of the RING/NOTIFY type, since a
+        // PTT session going live is a "channel is live" event we want the user to see immediately.
+        val isPtt = runCatchingExceptions {
+            pttEnabledSource.isPttEnabled(sessionId, notificationData.roomId)
+        }.getOrDefault(false)
+
         notificationData.run {
-            if (content.type == RtcNotificationType.RING && isRoomCallActive && !forceNotify) {
-                Timber.d("Ringing call notification intent ${content.callIntent} in room $roomId")
+            if ((isPtt || (content.type == RtcNotificationType.RING && isRoomCallActive)) && !forceNotify) {
+                Timber.d("Ringing call notification intent ${content.callIntent} in room $roomId (ptt=$isPtt)")
                 NotifiableRingingCallEvent(
                     sessionId = sessionId,
                     roomId = roomId,
@@ -117,6 +125,7 @@ class DefaultCallNotificationEventResolver(
                     senderId = content.senderId,
                     senderAvatarUrl = senderAvatarUrl,
                     expirationTimestamp = content.expirationTimestampMillis,
+                    isPushToTalk = isPtt,
                 )
             } else {
                 Timber.d("Event $eventId is call notify but should not ring: $isRoomCallActive, notify: ${content.type}")
