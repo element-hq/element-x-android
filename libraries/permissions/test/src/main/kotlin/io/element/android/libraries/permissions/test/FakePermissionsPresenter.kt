@@ -21,6 +21,7 @@ class FakePermissionsPresenter(
     private fun handleEvent(event: PermissionsEvent) {
         when (event) {
             PermissionsEvent.RequestPermissions -> state.value = state.value.copy(showDialog = true, permissionAlreadyAsked = true)
+            PermissionsEvent.ForceRequestPermissions -> state.value = state.value.copy(permissionAlreadyAsked = true)
             PermissionsEvent.CloseDialog -> state.value = state.value.copy(showDialog = false)
             PermissionsEvent.OpenSystemSettingAndCloseDialog -> state.value = state.value.copy(showDialog = false)
         }

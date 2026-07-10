@@ -56,6 +56,9 @@ import java.util.Optional
 interface MatrixClient {
     val sessionId: SessionId
     val deviceId: DeviceId
+
+    /** Base URL of the homeserver this client is connected to. */
+    val homeserverUrl: String
     val sessionPaths: SessionPaths
     val userProfile: StateFlow<MatrixUser>
     val roomListService: RoomListService
