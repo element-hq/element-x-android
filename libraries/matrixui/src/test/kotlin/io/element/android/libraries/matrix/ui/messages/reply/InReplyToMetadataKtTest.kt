@@ -54,6 +54,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import kotlin.time.Duration.Companion.minutes
 
+@Suppress("LargeClass")
 class InReplyToMetadataKtTest : RobolectricTest() {
     @Test
     fun `any message content`() = runTest {
