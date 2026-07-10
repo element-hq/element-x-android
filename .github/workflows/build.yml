@@ -104,7 +104,18 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Compile release sources
         if: ${{ matrix.variant == 'release' }}
-        run: ./gradlew bundleGplayRelease -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
+        run: |
+          ./gradlew assembleGplayRelease -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
+          ./gradlew bundleGplayRelease -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
+      - name: Run aapt dump
+        if: ${{ matrix.variant == 'release' }}
+        run: |
+          $ANDROID_HOME/build-tools/37.0.0/aapt dump badging \
+            ./app/build/outputs/apk/gplay/release/app-gplay-universal-release.apk \
+            > /tmp/currentAaptDump.txt
+      - name: Check manifest has not changed
+        if: ${{ matrix.variant == 'release' }}
+        run: diff /tmp/currentAaptDump.txt ./tools/manifest/gplay/release/aaptDump.txt
       - name: Compile nightly sources
         if: ${{ matrix.variant == 'nightly' }}
         run: ./gradlew compileGplayNightlySources -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
