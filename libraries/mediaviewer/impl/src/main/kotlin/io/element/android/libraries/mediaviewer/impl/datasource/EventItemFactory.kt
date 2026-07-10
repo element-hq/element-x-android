@@ -116,6 +116,7 @@ class EventItemFactory(
                                         ),
                                         mediaSource = c.source,
                                         thumbnailSource = c.info?.thumbnailSource,
+                                        blurHash = c.info?.blurhash,
                                     )
                                 }
                                 is GalleryItemType.Video -> {
@@ -136,6 +137,7 @@ class EventItemFactory(
                                         ),
                                         mediaSource = c.source,
                                         thumbnailSource = c.info?.thumbnailSource,
+                                        blurHash = c.info?.blurhash,
                                     )
                                 }
                                 is GalleryItemType.Audio -> {
@@ -242,6 +244,7 @@ class EventItemFactory(
                         ),
                         mediaSource = type.source,
                         thumbnailSource = type.info?.thumbnailSource,
+                        blurHash = type.info?.blurhash,
                     ))
                     is StickerMessageType -> listOf(MediaItem.Image(
                         id = currentTimelineItem.uniqueId,
@@ -264,6 +267,7 @@ class EventItemFactory(
                         ),
                         mediaSource = type.source,
                         thumbnailSource = type.info?.thumbnailSource,
+                        blurHash = type.info?.blurhash,
                     ))
                     is VideoMessageType -> listOf(MediaItem.Video(
                         id = currentTimelineItem.uniqueId,
@@ -286,6 +290,7 @@ class EventItemFactory(
                         ),
                         mediaSource = type.source,
                         thumbnailSource = type.info?.thumbnailSource,
+                        blurHash = type.info?.blurhash,
                     ))
                     is VoiceMessageType -> listOf(MediaItem.Voice(
                         id = currentTimelineItem.uniqueId,

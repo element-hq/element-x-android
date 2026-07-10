@@ -63,6 +63,7 @@ class SingleMediaGalleryDataSource(
                         ),
                         mediaSource = params.mediaSource,
                         thumbnailSource = params.thumbnailSource,
+                        blurHash = params.blurHash,
                     )
                 ),
                 fileItems = persistentListOf(),
@@ -79,6 +80,7 @@ fun MediaViewerEntryPoint.Params.RoomMedia.toMediaItem() = when {
             mediaInfo = mediaInfo,
             mediaSource = mediaSource,
             thumbnailSource = thumbnailSource,
+            blurHash = blurHash,
         )
     }
     mediaInfo.mimeType.isMimeTypeVideo() -> {
@@ -88,6 +90,7 @@ fun MediaViewerEntryPoint.Params.RoomMedia.toMediaItem() = when {
             mediaInfo = mediaInfo,
             mediaSource = mediaSource,
             thumbnailSource = thumbnailSource,
+            blurHash = blurHash,
         )
     }
     mediaInfo.mimeType.isMimeTypeAudio() -> {
