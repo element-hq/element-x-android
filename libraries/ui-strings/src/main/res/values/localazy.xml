@@ -268,6 +268,14 @@ Reason: %1$s."</string>
   <string name="common_forward_message">"Forward message"</string>
   <string name="common_frequently_used">"Frequently used"</string>
   <string name="common_gallery">"Gallery"</string>
+  <plurals name="common_gallery_reply_attachments">
+    <item quantity="one">"%1$d attachment…"</item>
+    <item quantity="other">"%1$d attachments…"</item>
+  </plurals>
+  <plurals name="common_gallery_reply_media_items">
+    <item quantity="one">"%1$d media item…"</item>
+    <item quantity="other">"%1$d media items…"</item>
+  </plurals>
   <string name="common_gif">"GIF"</string>
   <string name="common_group_call_in_progress">"Group call in progress"</string>
   <string name="common_image">"Image"</string>
