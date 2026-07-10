@@ -143,18 +143,18 @@ private fun ReplyToModeView(
     val contentValidationState = rememberEventContentValidationState(replyToDetails.eventId(), (replyToDetails as? InReplyToDetails.Ready)?.eventContent)
     val currentValidationState by contentValidationState.collectOverallState()
 
-    val isContentInvalid = currentValidationState.isInvalid()
+    val contentHasErrors = currentValidationState.hasError()
 
     Box(
         modifier
             .clip(shape)
             .background(
-                color = if (isContentInvalid) ElementTheme.colors.bgCriticalSubtle else ElementTheme.colors.bgCanvasDefault,
+                color = if (contentHasErrors) ElementTheme.colors.bgCriticalSubtle else ElementTheme.colors.bgCanvasDefault,
                 shape = shape,
             )
             .border(
                 width = 1.dp,
-                color = if (isContentInvalid) ElementTheme.colors.borderCriticalSubtle else ElementTheme.colors.separatorPrimary,
+                color = if (contentHasErrors) ElementTheme.colors.borderCriticalSubtle else ElementTheme.colors.separatorPrimary,
                 shape = shape,
             )
             .padding(4.dp)
@@ -174,7 +174,7 @@ private fun ReplyToModeView(
         Icon(
             imageVector = CompoundIcons.Close(),
             contentDescription = stringResource(CommonStrings.action_close),
-            tint = if (isContentInvalid) ElementTheme.colors.iconCriticalPrimary else ElementTheme.colors.iconSecondary,
+            tint = if (contentHasErrors) ElementTheme.colors.iconCriticalPrimary else ElementTheme.colors.iconSecondary,
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(end = 4.dp, top = 4.dp, start = 8.dp, bottom = 16.dp)

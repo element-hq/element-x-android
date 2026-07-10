@@ -149,9 +149,43 @@ internal fun TimelineItemScanningContentFailedPreview() = ElementPreview {
 
 @PreviewsDayNight
 @Composable
-internal fun TimelineItemScanningContentWithRepliesFailedPreview() = ElementPreview {
+internal fun TimelineItemScanningContentWithInvalidRepliesPreview() = ElementPreview {
     val cache = remember {
         InMemoryEventContentValidationCache(initial = mapOf(AN_EVENT_ID to NoopContentValidationState(ContentValidationValue.Invalid)))
+    }
+    CompositionLocalProvider(LocalEventContentValidationState provides cache) {
+        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            ATimelineItemEventRow(
+                event = aTimelineItemEvent(
+                    content = aTimelineItemTextContent(),
+                    inReplyTo = inReplyToInvalidContent(),
+                )
+            )
+            ATimelineItemEventRow(
+                event = aTimelineItemEvent(
+                    eventId = AN_EVENT_ID,
+                    content = aTimelineItemImageContent(),
+                    inReplyTo = inReplyToInvalidContent(),
+                )
+            )
+            ATimelineItemEventRow(
+                event = aTimelineItemEvent(
+                    eventId = AN_EVENT_ID,
+                    content = aTimelineItemImageContent(),
+                    inReplyTo = inReplyToTextContent(),
+                )
+            )
+        }
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineItemScanningContentWithRepliesFailedPreview() = ElementPreview {
+    val cache = remember {
+        InMemoryEventContentValidationCache(
+            initial = mapOf(AN_EVENT_ID to NoopContentValidationState(ContentValidationValue.UnrecoverableError(IllegalStateException("BOOM"))))
+        )
     }
     CompositionLocalProvider(LocalEventContentValidationState provides cache) {
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -185,7 +219,13 @@ internal fun TimelineItemGalleryViewScanningContentFailedPreview() = ElementPrev
     val cache = remember {
         InMemoryEventContentValidationCache(
             initial =
-            mapOf(AN_EVENT_ID to DefaultContentValidationState(mapOf("url" to ContentValidationValue.Invalid)))
+                mapOf(
+                    AN_EVENT_ID to DefaultContentValidationState(mapOf(
+                        "invalid" to ContentValidationValue.Invalid,
+                        "error" to ContentValidationValue.UnrecoverableError(IllegalStateException("BOOM")),
+                        "" to ContentValidationValue.Valid
+                    ))
+                )
         )
     }
     CompositionLocalProvider(LocalEventContentValidationState provides cache) {
@@ -195,11 +235,11 @@ internal fun TimelineItemGalleryViewScanningContentFailedPreview() = ElementPrev
                 content = aTimelineItemGalleryContent(
                     items = listOf(
                         aGalleryItem(),
-                        aGalleryItem(mediaSource = MediaSource("url", "{}")),
+                        aGalleryItem(mediaSource = MediaSource("invalid", "{}")),
                         aGalleryItem(),
-                        aGalleryItem(mediaSource = MediaSource("url", "{}")),
-                        aGalleryItem(mediaSource = MediaSource("url", "{}")),
-                        aGalleryItem(mediaSource = MediaSource("url", "{}")),
+                        aGalleryItem(mediaSource = MediaSource("invalid", "{}")),
+                        aGalleryItem(mediaSource = MediaSource("error", "{}")),
+                        aGalleryItem(mediaSource = MediaSource("invalid", "{}")),
                         aGalleryItem(),
                     )
                 )
@@ -214,7 +254,13 @@ internal fun TimelineItemAttachmentsViewScanningContentFailedPreview() = Element
     val cache = remember {
         InMemoryEventContentValidationCache(
             initial =
-            mapOf(AN_EVENT_ID to DefaultContentValidationState(mapOf("url" to ContentValidationValue.Invalid, "" to ContentValidationValue.Valid)))
+            mapOf(
+                AN_EVENT_ID to DefaultContentValidationState(mapOf(
+                    "invalid" to ContentValidationValue.Invalid,
+                    "error" to ContentValidationValue.UnrecoverableError(IllegalStateException("BOOM")),
+                    "" to ContentValidationValue.Valid
+                ))
+            )
         )
     }
     CompositionLocalProvider(LocalEventContentValidationState provides cache) {
@@ -224,11 +270,11 @@ internal fun TimelineItemAttachmentsViewScanningContentFailedPreview() = Element
                 content = aTimelineItemAttachmentsContent(
                     attachments = listOf(
                         anAttachmentItem(),
-                        anAttachmentItem(mediaSource = MediaSource("url", "{}")),
+                        anAttachmentItem(mediaSource = MediaSource("invalid", "{}")),
                         anAttachmentItem(),
                         anAttachmentItem(),
-                        anAttachmentItem(mediaSource = MediaSource("url", "{}")),
-                        anAttachmentItem(mediaSource = MediaSource("url", "{}")),
+                        anAttachmentItem(mediaSource = MediaSource("error", "{}")),
+                        anAttachmentItem(mediaSource = MediaSource("invalid", "{}")),
                     )
                 )
             )

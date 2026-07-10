@@ -47,6 +47,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.getDisambigua
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationValue
 import io.element.android.libraries.matrix.ui.media.contentvalidation.InvalidContentView
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NotFoundContentView
 import io.element.android.libraries.matrix.ui.messages.sender.SenderName
 import io.element.android.libraries.matrix.ui.messages.sender.SenderNameMode
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -72,6 +73,7 @@ fun InReplyToView(
                 modifier = modifier,
             )
             ContentValidationValue.Invalid -> ReplyToInvalidContent()
+            is ContentValidationValue.UnrecoverableError -> ReplyToNotFoundContent()
             else -> ReplyToLoadingContent(modifier = modifier)
         }
         is InReplyToDetails.Error ->
@@ -230,6 +232,17 @@ private fun ReplyToInvalidContent(
     )
 }
 
+@Composable
+private fun ReplyToNotFoundContent(
+    modifier: Modifier = Modifier
+) {
+    NotFoundContentView(
+        modifier = modifier,
+        contentPadding = PaddingValues(horizontal = 8.dp),
+        onTextLayout = null,
+    )
+}
+
 @PreviewsDayNight
 @Composable
 internal fun InReplyToViewPreview(@PreviewParameter(provider = InReplyToDetailsProvider::class) inReplyTo: InReplyToDetails) = ElementPreview {
@@ -245,5 +258,13 @@ internal fun InReplyToViewPreview(@PreviewParameter(provider = InReplyToDetailsP
 internal fun ReplyToInvalidContentPreview() {
     ElementPreview {
         ReplyToInvalidContent(modifier = Modifier.padding(10.dp))
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun ReplyToNotFoundContentPreview() {
+    ElementPreview {
+        ReplyToNotFoundContent(modifier = Modifier.padding(10.dp))
     }
 }

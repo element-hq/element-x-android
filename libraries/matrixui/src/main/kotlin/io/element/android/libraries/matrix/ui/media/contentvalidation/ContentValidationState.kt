@@ -115,8 +115,8 @@ private fun calculateOverallState(states: Map<String, ContentValidationValue>): 
     return when {
         states.values.any { it is ContentValidationValue.Invalid } -> ContentValidationValue.Invalid
         states.values.any { it is ContentValidationValue.Loading } -> ContentValidationValue.Loading
+        states.values.any { it is ContentValidationValue.UnrecoverableError } -> states.values.first { it is ContentValidationValue.UnrecoverableError }
         states.values.all { it is ContentValidationValue.Valid } -> ContentValidationValue.Valid
-        // TODO handle UnrecoverableError?
         else -> ContentValidationValue.Unknown
     }
 }
@@ -161,6 +161,12 @@ sealed interface ContentValidationValue {
 
     /** Returns true if the validation state is [Loading]. */
     fun isLoading(): Boolean = this is Loading
+
+    /** Returns true if the validation state is [UnrecoverableError]. */
+    fun hasUnrecoverableError(): Boolean = this is UnrecoverableError
+
+    /** Returns true if the validation state is either [Invalid] or [UnrecoverableError]. */
+    fun hasError(): Boolean = this is Invalid || this is UnrecoverableError
 }
 
 /**

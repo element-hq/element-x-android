@@ -200,7 +200,7 @@ class DefaultContentScannerServiceTest {
 
         scanLambda.assertions().isCalledOnce().with(value(mediaSource))
         assertThat(contentValidationState.getCurrentMediaState(mediaSource.safeUrl)).isEqualTo(ContentValidationValue.UnrecoverableError(error))
-        assertThat(contentValidationState.getCurrentOverallState()).isEqualTo(ContentValidationValue.Unknown)
+        assertThat(contentValidationState.getCurrentOverallState()).isEqualTo(ContentValidationValue.UnrecoverableError(error))
     }
 
     private fun TestScope.createDefaultContentScannerService(

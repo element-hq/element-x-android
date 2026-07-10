@@ -52,6 +52,7 @@ import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
 import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationValue
 import io.element.android.libraries.matrix.ui.media.contentvalidation.InvalidContentView
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NotFoundContentView
 import io.element.android.libraries.matrix.ui.media.contentvalidation.collectMediaState
 import io.element.android.libraries.matrix.ui.media.contentvalidation.rememberEventContentValidationState
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -91,8 +92,8 @@ fun TimelineItemAttachmentsListView(
                 }
 
                 val needsSeparator = index in 1..max(1, content.attachments.lastIndex)
-                val isPreviousItemInvalid = validationStates.getOrNull(index - 1)?.isInvalid() == true
-                if (needsSeparator && !itemContentValidationState.isInvalid() && !isPreviousItemInvalid) {
+                val isPreviousItemInvalid = validationStates.getOrNull(index - 1)?.hasError() == true
+                if (needsSeparator && !itemContentValidationState.hasError() && !isPreviousItemInvalid) {
                     HorizontalDivider(
                         color = ElementTheme.colors.borderInteractiveSecondary,
                     )
@@ -102,6 +103,16 @@ fun TimelineItemAttachmentsListView(
                     ContentValidationValue.Invalid -> {
                         val shape = RoundedCornerShape(6.dp)
                         InvalidContentView(
+                            modifier = Modifier
+                                .padding(vertical = 6.dp)
+                                .border(width = 1.dp, color = ElementTheme.colors.borderCriticalSubtle, shape = shape)
+                                .clip(shape),
+                            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
+                        )
+                    }
+                    is ContentValidationValue.UnrecoverableError -> {
+                        val shape = RoundedCornerShape(6.dp)
+                        NotFoundContentView(
                             modifier = Modifier
                                 .padding(vertical = 6.dp)
                                 .border(width = 1.dp, color = ElementTheme.colors.borderCriticalSubtle, shape = shape)
@@ -148,6 +159,8 @@ private fun validationStateForAttachment(
 ): ContentValidationValue {
     return if (thumbnailValue.isInvalid() || mediaValue.isInvalid()) {
         ContentValidationValue.Invalid
+    } else if (thumbnailValue.hasUnrecoverableError() || mediaValue.hasUnrecoverableError()) {
+        listOf(thumbnailValue, mediaValue).first { it.hasUnrecoverableError() }
     } else if (thumbnailValue.isLoading() || mediaValue.isLoading()) {
         ContentValidationValue.Loading
     } else {

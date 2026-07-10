@@ -56,6 +56,7 @@ import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
 import io.element.android.libraries.matrix.ui.media.contentvalidation.InvalidContentView
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NotFoundContentView
 import io.element.android.libraries.matrix.ui.media.contentvalidation.collectOverallState
 import io.element.android.libraries.matrix.ui.media.contentvalidation.rememberEventContentValidationState
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
@@ -107,9 +108,19 @@ fun TimelineItemEventContentView(
     }
 
     val displayInvalidContent = overallValidationState.isInvalid() && !needsContentValidationPerItem
+    val displayContentNotFound = overallValidationState.hasUnrecoverableError() && !needsContentValidationPerItem
     EqualWidthColumn(modifier = modifier) {
         if (displayInvalidContent) {
             InvalidContentView(
+                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
+                onTextLayout = ContentAvoidingLayout.measureLastTextLine(
+                    onContentLayoutChange = calculatedOnContentLayoutChange,
+                    // Icon + horizontal paddings
+                    extraWidth = 24.dp + 20.dp,
+                )
+            )
+        } else if (displayContentNotFound) {
+            NotFoundContentView(
                 contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
                 onTextLayout = ContentAvoidingLayout.measureLastTextLine(
                     onContentLayoutChange = calculatedOnContentLayoutChange,

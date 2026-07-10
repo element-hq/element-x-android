@@ -276,6 +276,8 @@ private fun GalleryItemCell(
     val itemContentValidationState = remember(thumbnailContentValidationState, mediaContentValidationState) {
         if (thumbnailContentValidationState.isInvalid() || mediaContentValidationState.isInvalid()) {
             ContentValidationValue.Invalid
+        } else if (thumbnailContentValidationState.hasUnrecoverableError() || mediaContentValidationState.hasUnrecoverableError()) {
+            listOf(thumbnailContentValidationState, mediaContentValidationState).first { it is ContentValidationValue.UnrecoverableError }
         } else if (thumbnailContentValidationState.isLoading() || mediaContentValidationState.isLoading()) {
             ContentValidationValue.Loading
         } else {
@@ -306,7 +308,7 @@ private fun GalleryItemCell(
 
         if (itemContentValidationState.isLoading()) {
             CircularProgressIndicator()
-        } else if (itemContentValidationState.isInvalid()) {
+        } else if (itemContentValidationState.hasError()) {
             Box(
                 modifier = Modifier.fillMaxSize().background(ElementTheme.colors.bgCriticalSubtle)
             ) {

@@ -480,7 +480,7 @@ private fun TimelineItemEventRowContent(
             // Gallery events should not apply the custom bubble color, instead each item will apply some custom color if needed
             event.content !is TimelineItemGalleryContent &&
                 event.content !is TimelineItemAttachmentsContent &&
-                currentContentValidationState.isInvalid() &&
+                currentContentValidationState.hasError() &&
                 event.content.isMedia
 
         // If the event has a dangerous media content we need to set custom message bubble background and border colors
@@ -812,9 +812,9 @@ private fun MessageEventBubbleContent(
                 inReplyToModifier.clickable(onClick = inReplyToClick)
             }
 
-            val isContentInvalid = currentContentValidationState.isInvalid()
-            val borderColor = if (isContentInvalid) ElementTheme.colors.borderCriticalSubtle else ElementTheme.colors.separatorPrimary
-            val backgroundColor = if (isContentInvalid) ElementTheme.colors.bgCriticalSubtle else ElementTheme.colors.bgCanvasDefault
+            val contentHasError = currentContentValidationState.hasError()
+            val borderColor = if (contentHasError) ElementTheme.colors.borderCriticalSubtle else ElementTheme.colors.separatorPrimary
+            val backgroundColor = if (contentHasError) ElementTheme.colors.bgCriticalSubtle else ElementTheme.colors.bgCanvasDefault
             Box(
                 modifier = talkbackCompatModifier
                     .border(1.dp, borderColor, shape)
@@ -854,7 +854,7 @@ private fun MessageEventBubbleContent(
         // Gallery events should not apply custom paddings or layout dispositions
         event.content !is TimelineItemGalleryContent &&
             event.content !is TimelineItemAttachmentsContent &&
-            contentValidationState.isInvalid()
+            contentValidationState.hasError()
 
     val timestampPosition = if (needsInvalidContentLayout) {
         // The invalid content view will be displayed in all these cases, independent of the event content
