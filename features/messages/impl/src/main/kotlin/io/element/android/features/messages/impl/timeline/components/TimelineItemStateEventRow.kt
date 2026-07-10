@@ -21,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
 import io.element.android.features.messages.impl.timeline.components.receipt.ReadReceiptViewState
@@ -46,7 +45,6 @@ fun TimelineItemStateEventRow(
     onLongClick: () -> Unit,
     onReadReceiptsClick: (event: TimelineItem.Event) -> Unit,
     timelineProtectionState: TimelineProtectionState,
-    eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -72,13 +70,9 @@ fun TimelineItemStateEventRow(
                 TimelineItemEventContentView(
                     eventId = event.eventId,
                     content = event.content,
-                    onLinkClick = {},
-                    onLinkLongClick = {},
+                    // State events don't have callback actions
+                    callbacks = remember { TimelineEventContentCallbacks() },
                     timelineProtectionState = timelineProtectionState,
-                    eventSink = eventSink,
-                    onContentClick = null,
-                    onGalleryItemClick = {},
-                    onLongClick = null,
                     modifier = Modifier.defaultTimelineContentPadding()
                 )
             }
@@ -111,6 +105,5 @@ internal fun TimelineItemStateEventRowPreview() = ElementPreview {
         onLongClick = {},
         onReadReceiptsClick = {},
         timelineProtectionState = aTimelineProtectionState(),
-        eventSink = {}
     )
 }

@@ -11,7 +11,6 @@ package io.element.android.features.messages.impl.timeline.components.event
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContentProvider
 import io.element.android.features.poll.api.pollcontent.PollContentView
@@ -23,21 +22,11 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun TimelineItemPollView(
     content: TimelineItemPollContent,
-    eventSink: (TimelineEvent.TimelineItemPollEvent) -> Unit,
+    onSelectPollAnswer: (pollStartId: EventId, answerId: String) -> Unit,
+    onEndPoll: (pollStartId: EventId) -> Unit,
+    onEditPoll: (pollStartId: EventId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    fun onSelectAnswer(pollStartId: EventId, answerId: String) {
-        eventSink(TimelineEvent.SelectPollAnswer(pollStartId, answerId))
-    }
-
-    fun onEndPoll(pollStartId: EventId) {
-        eventSink(TimelineEvent.EndPoll(pollStartId))
-    }
-
-    fun onEditPoll(pollStartId: EventId) {
-        eventSink(TimelineEvent.EditPoll(pollStartId))
-    }
-
     PollContentView(
         eventId = content.eventId,
         question = content.question,
@@ -46,9 +35,9 @@ fun TimelineItemPollView(
         isPollEnded = content.isEnded,
         isPollEditable = content.isEditable,
         isMine = content.isMine,
-        onSelectAnswer = ::onSelectAnswer,
-        onEditPoll = ::onEditPoll,
-        onEndPoll = ::onEndPoll,
+        onSelectAnswer = onSelectPollAnswer,
+        onEditPoll = onEditPoll,
+        onEndPoll = onEndPoll,
         modifier = modifier,
     )
 }
@@ -59,6 +48,8 @@ internal fun TimelineItemPollViewPreview(@PreviewParameter(TimelineItemPollConte
     ElementPreview {
         TimelineItemPollView(
             content = content,
-            eventSink = {},
+            onSelectPollAnswer = { _, _ -> },
+            onEndPoll = {},
+            onEditPoll = {},
         )
     }

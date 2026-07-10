@@ -8,8 +8,8 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -76,10 +76,8 @@ import io.element.android.libraries.matrix.api.timeline.item.event.getDisplayNam
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.media.contentvalidation.collectOverallState
 import io.element.android.libraries.matrix.ui.media.contentvalidation.rememberEventContentValidationState
-import io.element.android.libraries.matrix.ui.messages.reply.content
 import io.element.android.libraries.matrix.ui.messages.reply.eventId
 import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.wysiwyg.link.Link
 import kotlinx.collections.immutable.persistentListOf
 
 // The bubble has a negative margin to be placed a bit upper regarding the sender
@@ -91,6 +89,38 @@ val SENDER_AVATAR_BORDER_WIDTH = 3.dp
 
 private val BUBBLE_INCOMING_OFFSET = 16.dp
 
+typealias EventContentView = @Composable (
+    event: TimelineItem.Event,
+    timelineProtectionState: TimelineProtectionState,
+    modifier: Modifier,
+    onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
+    callbacks: TimelineItemCallbacks,
+) -> Unit
+
+object DefaultEventContentView : EventContentView {
+    @SuppressLint("ComposableNaming")
+    @Composable
+    override fun invoke(
+        event: TimelineItem.Event,
+        timelineProtectionState: TimelineProtectionState,
+        modifier: Modifier,
+        onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
+        callbacks: TimelineItemCallbacks,
+    ) {
+        // Only pass down a custom clickable lambda if the content can be clicked separately
+        val onContentClick = { callbacks.onContentClick(event) }.takeUnless { event.isWholeContentClickable }
+
+        TimelineItemEventContentView(
+            eventId = event.eventId,
+            content = event.content,
+            timelineProtectionState = timelineProtectionState,
+            callbacks = callbacks.toTimelineEventContentCallbacks(event).copy(onContentClick = onContentClick),
+            modifier = modifier,
+            onContentLayoutChange = onContentLayoutChange,
+        )
+    }
+}
+
 @Composable
 fun TimelineItemEventRow(
     event: TimelineItem.Event,
@@ -99,60 +129,20 @@ fun TimelineItemEventRow(
     timelineProtectionState: TimelineProtectionState,
     isLastOutgoingMessage: Boolean,
     displayThreadSummaries: Boolean,
-    onEventClick: () -> Unit,
-    onGalleryItemClick: ((Int) -> Unit),
-    onLongClick: () -> Unit,
-    onLinkClick: (Link) -> Unit,
-    onLinkLongClick: (Link) -> Unit,
-    onUserDataClick: (MatrixUser) -> Unit,
-    inReplyToClick: (EventId) -> Unit,
-    onReactionClick: (emoji: String, eventId: TimelineItem.Event) -> Unit,
-    onReactionLongClick: (emoji: String, eventId: TimelineItem.Event) -> Unit,
-    onMoreReactionsClick: (eventId: TimelineItem.Event) -> Unit,
-    onReadReceiptClick: (event: TimelineItem.Event) -> Unit,
-    onSwipeToReply: () -> Unit,
+    callbacks: TimelineItemCallbacks,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
-    eventContentView: @Composable (Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit = { contentModifier, onContentLayoutChange ->
-        // Only pass down a custom clickable lambda if the content can be clicked separately
-        val onContentClick = onEventClick.takeUnless { event.isWholeContentClickable }
-
-        TimelineItemEventContentView(
-            eventId = event.eventId,
-            content = event.content,
-            timelineProtectionState = timelineProtectionState,
-            onContentClick = onContentClick,
-            onGalleryItemClick = onGalleryItemClick,
-            onLongClick = onLongClick,
-            onLinkClick = onLinkClick,
-            onLinkLongClick = onLinkLongClick,
-            eventSink = eventSink,
-            modifier = contentModifier,
-            onContentLayoutChange = onContentLayoutChange,
-        )
-    },
+    eventContentView: EventContentView = DefaultEventContentView::invoke,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
 
-    val onContentClick = if (event.mustBeProtected()) {
-        // In this case, let the content handle the click
-        {}
-    } else {
-        onEventClick
-    }
-
-    fun onUserDataClick() {
-        val sender = MatrixUser(
-            userId = event.senderId,
-            displayName = event.senderProfile.getDisplayName(),
-            avatarUrl = event.senderProfile.getAvatarUrl(),
-        )
-        onUserDataClick(sender)
-    }
-
-    fun inReplyToClick() {
-        val inReplyToEventId = event.inReplyTo?.eventId() ?: return
-        inReplyToClick(inReplyToEventId)
+    val onContentClick: () -> Unit = remember(callbacks, event.mustBeProtected()) {
+        if (event.mustBeProtected()) {
+            // In this case, let the content handle the click
+            {}
+        } else {
+            { callbacks.onContentClick(event) }
+        }
     }
 
     Column(modifier = modifier.fillMaxWidth()) {
@@ -164,7 +154,7 @@ fun TimelineItemEventRow(
         val canReply = timelineRoomInfo.userHasPermissionToSendMessage && event.canBeRepliedTo
         SwipeToReplyContainer(
             enabled = canReply,
-            onSwipeToReply = onSwipeToReply,
+            onSwipeToReply = { callbacks.onSwipeToReply(event) },
         ) { contentModifier ->
             TimelineItemEventRowContent(
                 event = event,
@@ -172,15 +162,8 @@ fun TimelineItemEventRow(
                 timelineProtectionState = timelineProtectionState,
                 timelineRoomInfo = timelineRoomInfo,
                 interactionSource = interactionSource,
-                onContentClick = onContentClick,
-                onLongClick = onLongClick,
-                inReplyToClick = ::inReplyToClick,
-                onUserDataClick = ::onUserDataClick,
-                onReactionClick = { emoji -> onReactionClick(emoji, event) },
-                onReactionLongClick = { emoji -> onReactionLongClick(emoji, event) },
-                onMoreReactionsClick = { onMoreReactionsClick(event) },
+                callbacks = callbacks.copy(onContentClick = { onContentClick() }),
                 modifier = contentModifier,
-                eventSink = eventSink,
                 eventContentView = eventContentView,
             )
         }
@@ -212,7 +195,7 @@ fun TimelineItemEventRow(
                 isLastOutgoingMessage = isLastOutgoingMessage,
                 receipts = event.readReceiptState.receipts,
             ),
-            onReadReceiptsClick = { onReadReceiptClick(event) },
+            onReadReceiptsClick = { callbacks.onReadReceiptClick(event) },
             modifier = Modifier.padding(top = 4.dp)
         )
     }
@@ -225,16 +208,9 @@ private fun TimelineItemEventRowContent(
     timelineProtectionState: TimelineProtectionState,
     timelineRoomInfo: TimelineRoomInfo,
     interactionSource: MutableInteractionSource,
-    onContentClick: () -> Unit,
-    onLongClick: () -> Unit,
-    inReplyToClick: () -> Unit,
-    onUserDataClick: () -> Unit,
-    onReactionClick: (emoji: String) -> Unit,
-    onReactionLongClick: (emoji: String) -> Unit,
-    onMoreReactionsClick: (event: TimelineItem.Event) -> Unit,
-    eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
+    callbacks: TimelineItemCallbacks,
     modifier: Modifier = Modifier,
-    eventContentView: @Composable (Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit,
+    eventContentView: EventContentView,
 ) {
     fun ConstrainScope.linkStartOrEnd(event: TimelineItem.Event) = if (event.isMine) {
         end.linkTo(parent.end)
@@ -257,11 +233,18 @@ private fun TimelineItemEventRowContent(
         // Sender
         if (event.showSenderInformation && !timelineRoomInfo.isDm) {
             MessageSenderInformation(
-                event.senderId,
-                event.senderProfile,
-                event.senderAvatar,
-                onUserDataClick,
-                Modifier
+                senderId = event.senderId,
+                senderProfile = event.senderProfile,
+                senderAvatar = event.senderAvatar,
+                onClick = {
+                    val matrixUser = MatrixUser(
+                        userId = event.senderId,
+                        displayName = event.senderProfile.getDisplayName(),
+                        avatarUrl = event.senderProfile.getAvatarUrl(),
+                    )
+                    callbacks.onUserDataClick(matrixUser)
+                },
+                modifier = Modifier
                     .constrainAs(sender) {
                         top.linkTo(parent.top)
                         // Required for correct RTL layout
@@ -314,8 +297,8 @@ private fun TimelineItemEventRowContent(
                 },
             state = bubbleState,
             interactionSource = interactionSource,
-            onClick = onContentClick,
-            onLongClick = onLongClick,
+            onClick = { callbacks.onContentClick(event) },
+            onLongClick = { callbacks.onLongClick(event) },
             customBackgroundColor = dangerousContentBubbleColor,
             borderColor = borderColor,
         ) {
@@ -324,8 +307,7 @@ private fun TimelineItemEventRowContent(
                 timelineMode = timelineMode,
                 timelineProtectionState = timelineProtectionState,
                 hasContentValidationError = hasContentValidationError,
-                inReplyToClick = inReplyToClick,
-                eventSink = eventSink,
+                callbacks = callbacks,
                 eventContentView = eventContentView,
             )
         }
@@ -357,9 +339,9 @@ private fun TimelineItemEventRowContent(
                 reactionsState = event.reactionsState,
                 userCanSendReaction = timelineRoomInfo.userHasPermissionToSendReaction,
                 isOutgoing = event.isMine,
-                onReactionClick = onReactionClick,
-                onReactionLongClick = onReactionLongClick,
-                onMoreReactionsClick = { onMoreReactionsClick(event) },
+                onReactionClick = { emoji -> callbacks.onReactionClick(emoji, event) },
+                onReactionLongClick = { emoji -> callbacks.onReactionLongClick(emoji, event) },
+                onMoreReactionsClick = { callbacks.onMoreReactionsClick(event) },
                 modifier = Modifier
                     .constrainAs(reactions) {
                         top.linkTo(message.bottom, margin = (-4).dp)

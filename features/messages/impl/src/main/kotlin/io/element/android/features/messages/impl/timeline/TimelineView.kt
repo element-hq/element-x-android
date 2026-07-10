@@ -76,6 +76,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureView
 import io.element.android.features.messages.impl.timeline.components.FloatingDateBadgeOverlay
+import io.element.android.features.messages.impl.timeline.components.TimelineItemCallbacks
 import io.element.android.features.messages.impl.timeline.components.TimelineItemRow
 import io.element.android.features.messages.impl.timeline.components.toText
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
@@ -182,6 +183,21 @@ fun TimelineView(
         state.eventSink(TimelineEvent.LoadMore(Timeline.PaginationDirection.BACKWARDS))
     }
 
+    val timelineItemCallbacks = TimelineItemCallbacks(
+        onUserDataClick = onUserDataClick,
+        onLinkClick = onLinkClick,
+        onLinkLongClick = ::onLinkLongClick,
+        onContentClick = onContentClick,
+        onGalleryItemClick = onGalleryItemClick,
+        onLongClick = onMessageLongClick,
+        inReplyToClick = ::inReplyToClick,
+        onReactionClick = onReactionClick,
+        onReactionLongClick = onReactionLongClick,
+        onMoreReactionsClick = onMoreReactionsClick,
+        onReadReceiptClick = onReadReceiptClick,
+        onSwipeToReply = onSwipeToReply,
+    )
+
     // Animate alpha when timeline is first displayed, to avoid flashes or glitching when viewing rooms
     AnimatedVisibility(visible = true, enter = fadeIn()) {
         Box(modifier) {
@@ -207,18 +223,7 @@ fun TimelineView(
                         isLastOutgoingMessage = state.isLastOutgoingMessage(timelineItem.identifier()),
                         focusedEventId = state.focusedEventId,
                         displayThreadSummaries = state.displayThreadSummaries,
-                        onUserDataClick = onUserDataClick,
-                        onLinkClick = onLinkClick,
-                        onLinkLongClick = ::onLinkLongClick,
-                        onContentClick = onContentClick,
-                        onGalleryItemClick = onGalleryItemClick,
-                        onLongClick = onMessageLongClick,
-                        inReplyToClick = ::inReplyToClick,
-                        onReactionClick = onReactionClick,
-                        onReactionLongClick = onReactionLongClick,
-                        onMoreReactionsClick = onMoreReactionsClick,
-                        onReadReceiptClick = onReadReceiptClick,
-                        onSwipeToReply = onSwipeToReply,
+                        callbacks = timelineItemCallbacks,
                         eventSink = state.eventSink,
                     )
                 }

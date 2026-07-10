@@ -19,8 +19,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
-import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
-import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
@@ -31,10 +29,8 @@ import io.element.android.features.messages.impl.timeline.protection.TimelinePro
 import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
-import io.element.android.wysiwyg.link.Link
 import kotlin.time.DurationUnit
 
 @Composable
@@ -46,36 +42,10 @@ internal fun TimelineItemRow(
     timelineProtectionState: TimelineProtectionState,
     focusedEventId: EventId?,
     displayThreadSummaries: Boolean,
-    onUserDataClick: (MatrixUser) -> Unit,
-    onLinkClick: (Link) -> Unit,
-    onLinkLongClick: (Link) -> Unit,
-    onContentClick: (TimelineItem.Event) -> Unit,
-    onGalleryItemClick: (TimelineItem.Event, Int) -> Unit,
-    onLongClick: (TimelineItem.Event) -> Unit,
-    inReplyToClick: (EventId) -> Unit,
-    onReactionClick: (key: String, TimelineItem.Event) -> Unit,
-    onReactionLongClick: (key: String, TimelineItem.Event) -> Unit,
-    onMoreReactionsClick: (TimelineItem.Event) -> Unit,
-    onReadReceiptClick: (TimelineItem.Event) -> Unit,
-    onSwipeToReply: (TimelineItem.Event) -> Unit,
+    callbacks: TimelineItemCallbacks,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
-    eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit =
-        { event, contentModifier, onContentLayoutChange ->
-            TimelineItemEventContentView(
-                eventId = event.eventId,
-                content = event.content,
-                timelineProtectionState = timelineProtectionState,
-                onContentClick = { onContentClick(event) },
-                onGalleryItemClick = { index -> onGalleryItemClick(event, index) },
-                onLongClick = { onLongClick(event) },
-                onLinkClick = onLinkClick,
-                onLinkLongClick = onLinkLongClick,
-                eventSink = eventSink,
-                modifier = contentModifier,
-                onContentLayoutChange = onContentLayoutChange,
-            )
-        },
+    eventContentView: EventContentView = DefaultEventContentView::invoke,
 ) {
     val backgroundModifier = if (timelineItem.isEvent(focusedEventId)) {
         val focusedEventOffset = if ((timelineItem as? TimelineItem.Event)?.showSenderInformation == true) {
@@ -102,11 +72,10 @@ internal fun TimelineItemRow(
                         TimelineItemStateEventRow(
                             event = timelineItem,
                             isLastOutgoingMessage = isLastOutgoingMessage,
-                            onClick = { onContentClick(timelineItem) },
-                            onReadReceiptsClick = onReadReceiptClick,
-                            onLongClick = { onLongClick(timelineItem) },
+                            onClick = { callbacks.onContentClick(timelineItem) },
+                            onReadReceiptsClick = callbacks.onReadReceiptClick,
+                            onLongClick = { callbacks.onLongClick(timelineItem) },
                             timelineProtectionState = timelineProtectionState,
-                            eventSink = eventSink,
                         )
                     }
                     is TimelineItemRtcNotificationContent -> {
@@ -115,16 +84,16 @@ internal fun TimelineItemRow(
                             event = timelineItem,
                             content = timelineItem.content,
                             isLastOutgoingMessage = isLastOutgoingMessage,
-                            onLongClick = onLongClick,
-                            onReadReceiptsClick = onReadReceiptClick,
+                            onLongClick = { callbacks.onLongClick(timelineItem) },
+                            onReadReceiptsClick = callbacks.onReadReceiptClick,
                         )
                     }
                     else -> {
                         TimelineItemEventRow(
                             modifier = Modifier.timelineItemEventAccessibility(
                                 event = timelineItem,
-                                onClick = { onContentClick(timelineItem) },
-                                onLongClick = { onLongClick(timelineItem) },
+                                onClick = { callbacks.onContentClick(timelineItem) },
+                                onLongClick = { callbacks.onLongClick(timelineItem) }
                             ),
                             event = timelineItem,
                             timelineMode = timelineMode,
@@ -132,22 +101,9 @@ internal fun TimelineItemRow(
                             timelineProtectionState = timelineProtectionState,
                             isLastOutgoingMessage = isLastOutgoingMessage,
                             displayThreadSummaries = displayThreadSummaries,
-                            onEventClick = { onContentClick(timelineItem) },
-                            onLongClick = { onLongClick(timelineItem) },
-                            onLinkClick = onLinkClick,
-                            onLinkLongClick = onLinkLongClick,
-                            onUserDataClick = onUserDataClick,
-                            inReplyToClick = inReplyToClick,
-                            onReactionClick = onReactionClick,
-                            onReactionLongClick = onReactionLongClick,
-                            onMoreReactionsClick = onMoreReactionsClick,
-                            onReadReceiptClick = onReadReceiptClick,
-                            onSwipeToReply = { onSwipeToReply(timelineItem) },
-                            onGalleryItemClick = { index -> onGalleryItemClick(timelineItem, index) },
+                            callbacks = callbacks,
                             eventSink = eventSink,
-                            eventContentView = { contentModifier, onContentLayoutChange ->
-                                eventContentView(timelineItem, contentModifier, onContentLayoutChange)
-                            },
+                            eventContentView = eventContentView,
                         )
                     }
                 }
@@ -161,16 +117,7 @@ internal fun TimelineItemRow(
                     isLastOutgoingMessage = isLastOutgoingMessage,
                     focusedEventId = focusedEventId,
                     displayThreadSummaries = displayThreadSummaries,
-                    onClick = onContentClick,
-                    onLongClick = onLongClick,
-                    inReplyToClick = inReplyToClick,
-                    onUserDataClick = onUserDataClick,
-                    onLinkClick = onLinkClick,
-                    onLinkLongClick = onLinkLongClick,
-                    onReactionClick = onReactionClick,
-                    onReactionLongClick = onReactionLongClick,
-                    onMoreReactionsClick = onMoreReactionsClick,
-                    onReadReceiptClick = onReadReceiptClick,
+                    callbacks = callbacks,
                     eventSink = eventSink,
                 )
             }

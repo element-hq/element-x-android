@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -31,9 +32,11 @@ import io.element.android.features.messages.impl.actionlist.model.TimelineItemAc
 import io.element.android.features.messages.impl.link.LinkEvent
 import io.element.android.features.messages.impl.link.LinkView
 import io.element.android.features.messages.impl.timeline.TimelineEvent
+import io.element.android.features.messages.impl.timeline.components.TimelineItemCallbacks
 import io.element.android.features.messages.impl.timeline.components.TimelineItemRow
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
+import io.element.android.features.messages.impl.timeline.components.toTimelineEventContentCallbacks
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
@@ -224,40 +227,46 @@ private fun PinnedMessagesListLoaded(
                 timelineProtectionState = state.timelineProtectionState,
                 isLastOutgoingMessage = false,
                 focusedEventId = null,
-                onUserDataClick = onUserDataClick,
-                onLinkClick = { link ->
-                    state.linkState.eventSink(LinkEvent.OnLinkClick(link))
-                },
-                onLinkLongClick = onLinkLongClick,
-                onContentClick = onEventClick,
-                onGalleryItemClick = onGalleryItemClick,
-                onLongClick = ::onMessageLongClick,
                 displayThreadSummaries = displayThreadSummaries,
-                inReplyToClick = {},
-                onReactionClick = { _, _ -> },
-                onReactionLongClick = { _, _ -> },
-                onMoreReactionsClick = {},
-                onReadReceiptClick = {},
-                onSwipeToReply = {},
+                callbacks = remember(timelineItem) {
+                    TimelineItemCallbacks(
+                        onUserDataClick = onUserDataClick,
+                        onLinkClick = { link ->
+                            state.linkState.eventSink(LinkEvent.OnLinkClick(link))
+                        },
+                        onLinkLongClick = onLinkLongClick,
+                        onContentClick = onEventClick,
+                        onGalleryItemClick = onGalleryItemClick,
+                        onLongClick = ::onMessageLongClick,
+                        inReplyToClick = {},
+                        onReactionClick = { _, _ -> },
+                        onReactionLongClick = { _, _ -> },
+                        onMoreReactionsClick = {},
+                        onReadReceiptClick = {},
+                        onSwipeToReply = {},
+                    )
+                },
                 eventSink = { timelineItemEvent ->
                     when (timelineItemEvent) {
                         is TimelineEvent.OpenThread -> state.eventSink(PinnedMessagesListEvent.OpenThread(timelineItemEvent.threadRootEventId))
                         else -> Unit
                     }
                 },
-                eventContentView = { event, contentModifier, onContentLayoutChange ->
+                eventContentView = { event, timelineProtectionState, contentModifier, onContentLayoutChange, _ ->
                     TimelineItemEventContentViewWrapper(
                         event = event,
-                        timelineProtectionState = state.timelineProtectionState,
-                        onContentClick = { onEventClick(event) },
-                        onGalleryItemClick = { index -> onGalleryItemClick(event, index) },
-                        onLongClick = { onMessageLongClick(event) },
-                        onLinkClick = { link ->
-                            state.linkState.eventSink(LinkEvent.OnLinkClick(link))
+                        timelineProtectionState = timelineProtectionState,
+                        timelineItemCallbacks = remember(event) {
+                            TimelineItemCallbacks(
+                                onContentClick = { onEventClick(event) },
+                                onGalleryItemClick = { event, index -> onGalleryItemClick(event, index) },
+                                onLongClick = { onMessageLongClick(event) },
+                                onLinkClick = { link -> state.linkState.eventSink(LinkEvent.OnLinkClick(link)) },
+                                onLinkLongClick = onLinkLongClick,
+                            )
                         },
-                        onLinkLongClick = onLinkLongClick,
                         modifier = contentModifier,
-                        onContentLayoutChange = onContentLayoutChange
+                        onContentLayoutChange = onContentLayoutChange,
                     )
                 },
             )
@@ -273,11 +282,7 @@ private fun PinnedMessagesListLoaded(
 private fun TimelineItemEventContentViewWrapper(
     event: TimelineItem.Event,
     timelineProtectionState: TimelineProtectionState,
-    onContentClick: () -> Unit,
-    onGalleryItemClick: (index: Int) -> Unit,
-    onLinkClick: (Link) -> Unit,
-    onLinkLongClick: (Link) -> Unit,
-    onLongClick: (() -> Unit)?,
+    timelineItemCallbacks: TimelineItemCallbacks,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -292,13 +297,7 @@ private fun TimelineItemEventContentViewWrapper(
             eventId = event.eventId,
             content = event.content,
             timelineProtectionState = timelineProtectionState,
-            onGalleryItemClick = onGalleryItemClick,
-            onLinkClick = onLinkClick,
-            onLinkLongClick = onLinkLongClick,
-            eventSink = { },
-            modifier = modifier,
-            onContentClick = onContentClick,
-            onLongClick = onLongClick,
+            callbacks = timelineItemCallbacks.toTimelineEventContentCallbacks(event),
             onContentLayoutChange = onContentLayoutChange
         )
     }

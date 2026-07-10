@@ -26,7 +26,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.isEdited
 import io.element.android.features.messages.impl.timeline.model.event.isRedacted
@@ -41,7 +40,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun TimelineEventTimestampView(
     event: TimelineItem.Event,
-    eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
+    callbacks: TimelineItemCallbacks,
     modifier: Modifier = Modifier,
     isLayoutDirectionMismatched: Boolean = false,
 ) {
@@ -65,7 +64,7 @@ fun TimelineEventTimestampView(
                 Modifier.clickable(
                     onClickLabel = onClickLabel,
                 ) {
-                    eventSink(TimelineEvent.ShowShieldDialog(shield))
+                    callbacks.onShowMessageShieldInfo(shield)
                 }
             }
             hasError -> Modifier
@@ -73,7 +72,7 @@ fun TimelineEventTimestampView(
                     enabled = isVerifiedUserSendFailure,
                     onClickLabel = onClickLabel,
                 ) {
-                    eventSink(TimelineEvent.ComputeVerifiedUserSendFailure(event))
+                    callbacks.onSendFailureWithUnverifiedSessions(event)
                 }
             else -> Modifier
         }
@@ -137,7 +136,7 @@ fun TimelineEventTimestampView(
 internal fun TimelineEventTimestampViewPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) = ElementPreview {
     TimelineEventTimestampView(
         event = event,
-        eventSink = {},
+        callbacks = TimelineItemCallbacks(),
     )
 }
 

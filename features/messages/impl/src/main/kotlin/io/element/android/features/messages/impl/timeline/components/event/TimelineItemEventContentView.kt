@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.features.messages.impl.timeline.TimelineEvent
+import io.element.android.features.messages.impl.timeline.components.TimelineEventContentCallbacks
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayout
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
@@ -54,6 +54,7 @@ import io.element.android.features.messages.impl.timeline.protection.TimelinePro
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
 import io.element.android.libraries.matrix.ui.media.contentvalidation.InvalidContentView
 import io.element.android.libraries.matrix.ui.media.contentvalidation.NotFoundContentView
@@ -68,13 +69,8 @@ import io.element.android.wysiwyg.link.Link
 fun TimelineItemEventContentView(
     eventId: EventId?,
     content: TimelineItemEventContent,
-    onContentClick: (() -> Unit)?,
-    onGalleryItemClick: ((Int) -> Unit),
     timelineProtectionState: TimelineProtectionState,
-    onLongClick: (() -> Unit)?,
-    onLinkClick: (Link) -> Unit,
-    onLinkLongClick: (Link) -> Unit,
-    eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
+    callbacks: TimelineEventContentCallbacks,
     modifier: Modifier = Modifier,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit = {},
 ) {
@@ -93,7 +89,9 @@ fun TimelineItemEventContentView(
     val needsContentValidationPerItem = remember(content) { content is TimelineItemGalleryContent || content is TimelineItemAttachmentsContent }
 
     if (eventId != null) {
-        ValidateMediaHelper(eventId, content, contentValidationState, eventSink)
+        ValidateMediaHelper(eventId, content, contentValidationState) { eventId, mediaSources, contentValidationState ->
+            timelineProtectionState.eventSink(TimelineProtectionEvent.ValidateContent(eventId, mediaSources, contentValidationState))
+        }
     }
 
     val caption = content.captionOrNull()
@@ -141,8 +139,8 @@ fun TimelineItemEventContentView(
                 )
                 is TimelineItemTextBasedContent -> TimelineItemTextView(
                     content = content,
-                    onLinkClick = onLinkClick,
-                    onLinkLongClick = onLinkLongClick,
+                    onLinkClick = callbacks.onLinkClick,
+                    onLinkLongClick = callbacks.onLinkLongClick,
                     onContentLayoutChange = calculatedOnContentLayoutChange,
                 )
                 is TimelineItemUnknownContent -> TimelineItemUnknownView(
@@ -152,15 +150,15 @@ fun TimelineItemEventContentView(
                 is TimelineItemLocationContent -> {
                     TimelineItemLocationView(
                         content = content.ensureActiveLiveLocation(),
-                        onStopLiveLocationClick = { eventSink(TimelineEvent.StopLiveLocationShare) },
+                        onStopLiveLocationClick = callbacks.onStopSharingLiveLocation,
                     )
                 }
                 is TimelineItemImageContent -> {
                     TimelineItemImageView(
                         content = content,
                         hideMediaContent = hideMediaContent,
-                        onContentClick = onContentClick,
-                        onLongClick = onLongClick,
+                        onContentClick = callbacks.onContentClick,
+                        onLongClick = callbacks.onLongClick,
                         onShowContentClick = onShowContentClick,
                         contentValidationState = contentValidationState,
                     )
@@ -169,8 +167,8 @@ fun TimelineItemEventContentView(
                     TimelineItemStickerView(
                         content = content,
                         hideMediaContent = hideMediaContent,
-                        onContentClick = onContentClick,
-                        onLongClick = onLongClick,
+                        onContentClick = callbacks.onContentClick,
+                        onLongClick = callbacks.onLongClick,
                         onShowClick = onShowContentClick,
                         contentValidationState = contentValidationState,
                     )
@@ -179,8 +177,8 @@ fun TimelineItemEventContentView(
                     TimelineItemVideoView(
                         content = content,
                         hideMediaContent = hideMediaContent,
-                        onContentClick = onContentClick,
-                        onLongClick = onLongClick,
+                        onContentClick = callbacks.onContentClick,
+                        onLongClick = callbacks.onLongClick,
                         onShowContentClick = onShowContentClick,
                         contentValidationState = contentValidationState,
                     )
@@ -188,13 +186,13 @@ fun TimelineItemEventContentView(
                 is TimelineItemGalleryContent -> TimelineItemGalleryView(
                     eventId = eventId,
                     content = content,
-                    onGalleryItemClick = { index -> onGalleryItemClick(index) },
-                    onLongClick = onLongClick,
+                    onGalleryItemClick = callbacks.onGalleryItemClick,
+                    onLongClick = callbacks.onLongClick,
                 )
                 is TimelineItemAttachmentsContent -> TimelineItemAttachmentsListView(
                     eventId = eventId,
                     content = content,
-                    onGalleryItemClick = { index -> onGalleryItemClick(index) },
+                    onGalleryItemClick = callbacks.onGalleryItemClick,
                 )
                 is TimelineItemFileContent -> {
                     TimelineItemFileView(
@@ -216,7 +214,9 @@ fun TimelineItemEventContentView(
                 )
                 is TimelineItemPollContent -> TimelineItemPollView(
                     content = content,
-                    eventSink = eventSink,
+                    onSelectPollAnswer = callbacks.onSelectPollAnswer,
+                    onEndPoll = callbacks.onEndPoll,
+                    onEditPoll = callbacks.onEditPoll,
                 )
                 is TimelineItemVoiceContent -> {
                     val presenter: Presenter<VoiceMessageState> = presenterFactories.rememberPresenter(content)
@@ -247,8 +247,8 @@ fun TimelineItemEventContentView(
                 modifier = Modifier.padding(padding),
                 caption = caption,
                 formattedCaption = content.formattedCaptionOrNull(),
-                onLinkClick = onLinkClick,
-                onLinkLongClick = onLinkLongClick,
+                onLinkClick = callbacks.onLinkClick,
+                onLinkLongClick = callbacks.onLinkLongClick,
                 onContentLayoutChange = onContentLayoutChange,
             )
         }
@@ -290,7 +290,7 @@ private fun ValidateMediaHelper(
     eventId: EventId,
     content: TimelineItemEventContent,
     contentValidationState: ContentValidationState,
-    eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
+    validateContent: (EventId, List<MediaSource>, ContentValidationState) -> Unit,
 ) {
     val mediaSources = when (content) {
         is TimelineItemImageContent -> listOfNotNull(content.thumbnailSource, content.mediaSource)
@@ -303,8 +303,8 @@ private fun ValidateMediaHelper(
         is TimelineItemAttachmentsContent -> content.attachments.flatMap { listOfNotNull(it.thumbnailSource, it.mediaSource) }
         else -> return
     }
-    val updatedEventSink by rememberUpdatedState(eventSink)
+    val updatedValidateContent by rememberUpdatedState(validateContent)
     LaunchedEffect(eventId, mediaSources) {
-        updatedEventSink(TimelineEvent.ValidateMedia(eventId, mediaSources, contentValidationState))
+        updatedValidateContent(eventId, mediaSources, contentValidationState)
     }
 }

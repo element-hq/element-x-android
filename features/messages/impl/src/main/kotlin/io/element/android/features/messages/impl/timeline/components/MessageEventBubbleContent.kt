@@ -28,7 +28,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,7 +45,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayout
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -54,6 +52,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItemThre
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.ensureActiveLiveLocation
+import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -75,13 +74,12 @@ internal fun MessageEventBubbleContent(
     timelineMode: Timeline.Mode,
     timelineProtectionState: TimelineProtectionState,
     hasContentValidationError: Boolean,
-    inReplyToClick: () -> Unit,
-    eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
+    callbacks: TimelineItemCallbacks,
+    eventContentView: EventContentView,
     @SuppressLint("ModifierParameter")
     // need to rename this modifier to prevent linter false positives
     @Suppress("ModifierNaming")
     bubbleModifier: Modifier = Modifier,
-    eventContentView: @Composable (Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit,
 ) {
     // The live location state can change over time, so it must be resolved before computing the layout
     val resolvedContent = when (val content = event.content) {
@@ -100,8 +98,7 @@ internal fun MessageEventBubbleContent(
         inReplyToDetails = event.inReplyTo,
         canShrinkContent = layoutSpec.canShrinkContent,
         timelineProtectionState = timelineProtectionState,
-        inReplyToClick = inReplyToClick,
-        eventSink = eventSink,
+        callbacks = callbacks,
         eventContentView = eventContentView,
         modifier = bubbleModifier,
     )
@@ -116,9 +113,8 @@ private fun CommonLayout(
     paddingBehaviour: ContentPadding,
     inReplyToDetails: InReplyToDetails?,
     timelineProtectionState: TimelineProtectionState,
-    inReplyToClick: () -> Unit,
-    eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
-    eventContentView: @Composable (Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit,
+    callbacks: TimelineItemCallbacks,
+    eventContentView: EventContentView,
     modifier: Modifier = Modifier,
     canShrinkContent: Boolean = false,
 ) {
@@ -154,7 +150,7 @@ private fun CommonLayout(
         WithTimestampLayout(
             timestampPosition = timestampPosition,
             event = event,
-            eventSink = eventSink,
+            callbacks = callbacks,
             canShrinkContent = canShrinkContent,
             modifier = timestampLayoutModifier
                 .semantics(mergeDescendants = false) {
@@ -162,7 +158,7 @@ private fun CommonLayout(
                     traversalIndex = -1f
                 },
             content = { onContentLayoutChange ->
-                eventContentView(contentModifier, onContentLayoutChange)
+                eventContentView(event, timelineProtectionState, contentModifier, onContentLayoutChange, callbacks)
             }
         )
     }
@@ -175,8 +171,7 @@ private fun CommonLayout(
                 inReplyTo = inReplyToDetails,
                 topPadding = if (showThreadDecoration) 0.dp else 8.dp,
                 timelineProtectionState = timelineProtectionState,
-                inReplyToClick = inReplyToClick,
-                eventSink = eventSink,
+                callbacks = callbacks,
             )
         }
         contentWithTimestamp()
@@ -188,8 +183,7 @@ private fun InReplyToBox(
     inReplyTo: InReplyToDetails,
     topPadding: Dp,
     timelineProtectionState: TimelineProtectionState,
-    inReplyToClick: () -> Unit,
-    eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
+    callbacks: TimelineItemCallbacks,
     modifier: Modifier = Modifier,
 ) {
     val currentContentValidationState by rememberEventContentValidationState(eventId = inReplyTo.eventId(), eventContent = inReplyTo.content())
@@ -204,7 +198,7 @@ private fun InReplyToBox(
         // Usually, you'd use traversalIndex for that, but it's not working for some reason
         inReplyToModifier.zIndex(1f)
     } else {
-        inReplyToModifier.clickable(onClick = inReplyToClick)
+        inReplyToModifier.clickable(onClick = { callbacks.inReplyToClick(inReplyTo.eventId()) })
     }
 
     val contentHasError = currentContentValidationState.hasError()
@@ -217,10 +211,9 @@ private fun InReplyToBox(
             .padding(4.dp)
     ) {
         val contentValidationState = rememberEventContentValidationState(eventId = inReplyTo.eventId(), eventContent = inReplyTo.content())
-        val updatedEventSink by rememberUpdatedState(eventSink)
         LaunchedEffect(inReplyTo) {
             val mediaSources = inReplyTo.content()?.mediaSources() ?: return@LaunchedEffect
-            updatedEventSink(TimelineEvent.ValidateMedia(inReplyTo.eventId(), mediaSources, contentValidationState))
+            timelineProtectionState.eventSink(TimelineProtectionEvent.ValidateContent(inReplyTo.eventId(), mediaSources, contentValidationState))
         }
         InReplyToView(
             inReplyTo = inReplyTo,
@@ -234,7 +227,7 @@ private fun InReplyToBox(
 private fun WithTimestampLayout(
     timestampPosition: TimestampPosition,
     event: TimelineItem.Event,
-    eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
+    callbacks: TimelineItemCallbacks,
     modifier: Modifier = Modifier,
     canShrinkContent: Boolean = false,
     content: @Composable (onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit) -> Unit,
@@ -247,7 +240,7 @@ private fun WithTimestampLayout(
                 content {}
                 TimelineEventTimestampView(
                     event = event,
-                    eventSink = eventSink,
+                    callbacks = callbacks,
                     modifier = Modifier
                         // Outer padding
                         .padding(horizontal = 4.dp, vertical = 4.dp)
@@ -285,7 +278,7 @@ private fun WithTimestampLayout(
                         CompositionLocalProvider(LocalLayoutDirection provides originalLayoutDirection) {
                             TimelineEventTimestampView(
                                 event = event,
-                                eventSink = eventSink,
+                                callbacks = callbacks,
                                 isLayoutDirectionMismatched = originalLayoutDirection != contentDirection,
                                 modifier = Modifier
                                     .padding(horizontal = 8.dp, vertical = 4.dp)
@@ -300,7 +293,7 @@ private fun WithTimestampLayout(
                 content {}
                 TimelineEventTimestampView(
                     event = event,
-                    eventSink = eventSink,
+                    callbacks = callbacks,
                     modifier = Modifier
                         .align(Alignment.End)
                         .padding(horizontal = 8.dp, vertical = 4.dp)
