@@ -176,12 +176,12 @@ fun TimelineItemEventRow(
         val onContentClick = onEventClick.takeUnless { event.isWholeContentClickable }
 
         TimelineItemEventContentView(
+            eventId = event.eventId,
             content = event.content,
-            hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId),
+            timelineProtectionState = timelineProtectionState,
             onContentClick = onContentClick,
             onGalleryItemClick = onGalleryItemClick,
             onLongClick = onLongClick,
-            onShowContentClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
             onLinkClick = onLinkClick,
             onLinkLongClick = onLinkLongClick,
             eventSink = eventSink,

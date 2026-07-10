@@ -8,20 +8,15 @@
 
 package io.element.android.features.messages.impl.timeline.components.event
 
-import android.text.SpannedString
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -40,8 +34,6 @@ import coil3.compose.AsyncImagePainter
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.components.ATimelineItemEventRow
-import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayout
-import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContentProvider
@@ -55,20 +47,14 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
-import io.element.android.wysiwyg.compose.EditorStyledText
-import io.element.android.wysiwyg.link.Link
 
-private const val TALL_IMAGE_RATIO_DIVISOR = 3
 @Composable
 fun TimelineItemImageView(
     content: TimelineItemImageContent,
     hideMediaContent: Boolean,
     onContentClick: (() -> Unit)?,
     onLongClick: (() -> Unit)?,
-    onLinkClick: (Link) -> Unit,
-    onLinkLongClick: (Link) -> Unit,
     onShowContentClick: () -> Unit,
-    onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val a11yLabel = stringResource(CommonStrings.common_image)
@@ -79,8 +65,9 @@ fun TimelineItemImageView(
         } else {
             Modifier
         }
+
         TimelineItemAspectRatioBox(
-            modifier = containerModifier.blurHashBackground(content.blurhash, alpha = 0.9f).align(Alignment.CenterHorizontally),
+            modifier = containerModifier.blurHashBackground(content.blurhash, alpha = 0.9f),
             aspectRatio = coerceRatioWhenHidingContent(content.aspectRatio, hideMediaContent),
         ) {
             ProtectedView(
@@ -112,39 +99,6 @@ fun TimelineItemImageView(
                 )
             }
         }
-
-        if (content.showCaption) {
-            Spacer(modifier = Modifier.height(8.dp))
-            val caption = if (LocalInspectionMode.current) {
-                SpannedString(content.caption)
-            } else {
-                content.formattedCaption ?: SpannedString(content.caption)
-            }
-            CompositionLocalProvider(
-                LocalContentColor provides ElementTheme.colors.textPrimary,
-                LocalTextStyle provides ElementTheme.typography.fontBodyLgRegular
-            ) {
-                val width = content.width ?: 0
-                val height = content.height ?: 0
-                // if image is narrow and tall use DEFAULT_ASPECT_RATIO
-                val aspectRatio = if (width < height / TALL_IMAGE_RATIO_DIVISOR) {
-                    DEFAULT_ASPECT_RATIO
-                } else {
-                    content.aspectRatio ?: DEFAULT_ASPECT_RATIO
-                }
-                EditorStyledText(
-                    modifier = Modifier
-                        .padding(horizontal = 4.dp) // This is (12.dp - 8.dp) contentPadding from CommonLayout
-                        .widthIn(min = MIN_HEIGHT_IN_DP.dp * aspectRatio, max = MAX_HEIGHT_IN_DP.dp * aspectRatio),
-                    text = caption,
-                    style = ElementRichTextEditorStyle.textStyle(),
-                    onLinkClickedListener = onLinkClick,
-                    onLinkLongClickedListener = onLinkLongClick,
-                    releaseOnDetach = false,
-                    onTextLayout = ContentAvoidingLayout.measureLegacyLastTextLine(onContentLayoutChange = onContentLayoutChange),
-                )
-            }
-        }
     }
 }
 
@@ -157,9 +111,6 @@ internal fun TimelineItemImageViewPreview(@PreviewParameter(TimelineItemImageCon
         onShowContentClick = {},
         onContentClick = {},
         onLongClick = {},
-        onLinkClick = {},
-        onLinkLongClick = {},
-        onContentLayoutChange = {},
     )
 }
 
@@ -172,41 +123,7 @@ internal fun TimelineItemImageViewHideMediaContentPreview() = ElementPreview {
         onShowContentClick = {},
         onContentClick = {},
         onLongClick = {},
-        onLinkClick = {},
-        onLinkLongClick = {},
-        onContentLayoutChange = {},
     )
-}
-
-@PreviewsDayNight
-@Composable
-internal fun TimelineImageWithCaptionRowPreview() = ElementPreview {
-    Column {
-        sequenceOf(false, true).forEach { isMine ->
-            ATimelineItemEventRow(
-                event = aTimelineItemEvent(
-                    isMine = isMine,
-                    content = aTimelineItemImageContent(
-                        filename = "image.jpg",
-                        caption = "A long caption that may wrap into several lines",
-                        aspectRatio = 2.5f,
-                    ),
-                    groupPosition = TimelineItemGroupPosition.Last,
-                ),
-            )
-        }
-        ATimelineItemEventRow(
-            event = aTimelineItemEvent(
-                isMine = false,
-                content = aTimelineItemImageContent(
-                    filename = "image.jpg",
-                    caption = "Image with null aspectRatio",
-                    aspectRatio = null,
-                ),
-                groupPosition = TimelineItemGroupPosition.Last,
-            ),
-        )
-    }
 }
 
 @PreviewsDayNight

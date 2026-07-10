@@ -38,7 +38,6 @@ fun TimelineItemAttachmentView(
     iconContentDescription: String?,
     filename: String,
     fileExtensionAndSize: String,
-    caption: String?,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -107,32 +106,11 @@ private fun TimelineItemAttachmentHeaderView(
                 style = ElementTheme.typography.fontBodySmRegular,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                onTextLayout = if (hasCaption) {
-                    {}
-                } else {
-                    ContentAvoidingLayout.measureLastTextLine(
-                        onContentLayoutChange = onContentLayoutChange,
-                        extraWidth = iconSize + spacing
-                    )
-                },
+                onTextLayout = ContentAvoidingLayout.measureLastTextLine(
+                    onContentLayoutChange = onContentLayoutChange,
+                    extraWidth = iconSize + spacing
+                ),
             )
         }
     }
-}
-
-@Composable
-private fun TimelineItemAttachmentCaptionView(
-    caption: String,
-    onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Text(
-        modifier = modifier,
-        text = caption,
-        color = ElementTheme.colors.textPrimary,
-        style = ElementTheme.typography.fontBodyLgRegular,
-        onTextLayout = ContentAvoidingLayout.measureLastTextLine(
-            onContentLayoutChange = onContentLayoutChange,
-        )
-    )
 }

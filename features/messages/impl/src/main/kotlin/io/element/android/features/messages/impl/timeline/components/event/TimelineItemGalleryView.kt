@@ -7,7 +7,6 @@
 
 package io.element.android.features.messages.impl.timeline.components.event
 
-import android.text.SpannedString
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,28 +20,21 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayout
-import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.GalleryItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemGalleryContent
 import io.element.android.libraries.designsystem.components.blurhash.blurHashBackground
@@ -50,10 +42,8 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.bgSubtleTertiary
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.ui.utils.time.formatShort
-import io.element.android.wysiwyg.compose.EditorStyledText
-import io.element.android.wysiwyg.link.Link
 import kotlinx.collections.immutable.ImmutableList
 
 private const val MAX_TILES = 5
@@ -67,12 +57,10 @@ private val THREE_IMAGE_ROW_HEIGHT = 85.dp
 
 @Composable
 fun TimelineItemGalleryView(
+    eventId: EventId?,
     content: TimelineItemGalleryContent,
     onGalleryItemClick: (Int) -> Unit,
     onLongClick: (() -> Unit)?,
-    onLinkClick: (Link) -> Unit,
-    onLinkLongClick: (Link) -> Unit,
-    onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val totalItems = content.items.size
@@ -87,21 +75,25 @@ fun TimelineItemGalleryView(
             when (totalItems) {
                 0 -> Unit
                 1 -> SingleItemLayout(
+                    eventId = eventId,
                     item = content.items[0],
                     onClick = { onGalleryItemClick(0) },
                     onLongClick = onLongClick,
                 )
                 2 -> TwoItemLayout(
+                    eventId = eventId,
                     items = content.items,
                     onItemClick = onGalleryItemClick,
                     onLongClick = onLongClick,
                 )
                 3 -> ThreeItemLayout(
+                    eventId = eventId,
                     items = content.items,
                     onItemClick = onGalleryItemClick,
                     onLongClick = onLongClick,
                 )
                 else -> FourPlusItemLayout(
+                    eventId = eventId,
                     items = content.items,
                     showOverflow = showOverflow,
                     overflowCount = overflowCount,
@@ -110,40 +102,18 @@ fun TimelineItemGalleryView(
                 )
             }
         }
-        if (content.showCaption) {
-            Spacer(modifier = Modifier.height(8.dp))
-            val caption = if (LocalInspectionMode.current) {
-                SpannedString(content.caption)
-            } else {
-                content.formattedCaption ?: SpannedString(content.caption)
-            }
-            CompositionLocalProvider(
-                LocalContentColor provides ElementTheme.colors.textPrimary,
-                LocalTextStyle provides ElementTheme.typography.fontBodyLgRegular
-            ) {
-                EditorStyledText(
-                    modifier = Modifier
-                        .padding(horizontal = 4.dp)
-                        .widthIn(min = 120.dp),
-                    text = caption,
-                    style = ElementRichTextEditorStyle.textStyle(),
-                    onLinkClickedListener = onLinkClick,
-                    onLinkLongClickedListener = onLinkLongClick,
-                    releaseOnDetach = false,
-                    onTextLayout = ContentAvoidingLayout.measureLegacyLastTextLine(onContentLayoutChange = onContentLayoutChange),
-                )
-            }
-        }
     }
 }
 
 @Composable
 private fun SingleItemLayout(
+    eventId: EventId?,
     item: GalleryItem,
     onClick: () -> Unit,
     onLongClick: (() -> Unit)?,
 ) {
     GalleryItemCell(
+        eventId = eventId,
         item = item,
         isLast = false,
         remainingCount = 0,
@@ -157,6 +127,7 @@ private fun SingleItemLayout(
 
 @Composable
 private fun TwoItemLayout(
+    eventId: EventId?,
     items: ImmutableList<GalleryItem>,
     onItemClick: (Int) -> Unit,
     onLongClick: (() -> Unit)?,
@@ -167,6 +138,7 @@ private fun TwoItemLayout(
     ) {
         items.forEachIndexed { index, item ->
             GalleryItemCell(
+                eventId = eventId,
                 item = item,
                 isLast = false,
                 remainingCount = 0,
@@ -182,6 +154,7 @@ private fun TwoItemLayout(
 
 @Composable
 private fun ThreeItemLayout(
+    eventId: EventId?,
     items: ImmutableList<GalleryItem>,
     onItemClick: (Int) -> Unit,
     onLongClick: (() -> Unit)?,
@@ -191,6 +164,7 @@ private fun ThreeItemLayout(
         verticalArrangement = Arrangement.spacedBy(GRID_SPACING),
     ) {
         GalleryItemCell(
+            eventId = eventId,
             item = items[0],
             isLast = false,
             remainingCount = 0,
@@ -206,6 +180,7 @@ private fun ThreeItemLayout(
         ) {
             for (it in 1..2) {
                 GalleryItemCell(
+                    eventId = eventId,
                     item = items[it],
                     isLast = false,
                     remainingCount = 0,
@@ -222,6 +197,7 @@ private fun ThreeItemLayout(
 
 @Composable
 private fun FourPlusItemLayout(
+    eventId: EventId?,
     items: ImmutableList<GalleryItem>,
     showOverflow: Boolean,
     overflowCount: Int,
@@ -238,6 +214,7 @@ private fun FourPlusItemLayout(
         ) {
             for (it in 0..1) {
                 GalleryItemCell(
+                    eventId = eventId,
                     item = items[it],
                     isLast = false,
                     remainingCount = 0,
@@ -260,6 +237,7 @@ private fun FourPlusItemLayout(
                 if (itemIndex < items.size) {
                     val isOverflowItem = showOverflow && i == bottomRowItems - 1
                     GalleryItemCell(
+                        eventId = eventId,
                         item = items[itemIndex],
                         isLast = isOverflowItem,
                         remainingCount = if (isOverflowItem) overflowCount else 0,
@@ -277,6 +255,7 @@ private fun FourPlusItemLayout(
 
 @Composable
 private fun GalleryItemCell(
+    eventId: EventId?,
     item: GalleryItem,
     isLast: Boolean,
     remainingCount: Int,
@@ -374,11 +353,9 @@ internal fun TimelineItemGalleryViewPreview(
     @PreviewParameter(TimelineItemGalleryContentProvider::class) content: TimelineItemGalleryContent,
 ) = ElementPreview {
     TimelineItemGalleryView(
+        eventId = null,
         content = content,
         onGalleryItemClick = {},
         onLongClick = {},
-        onLinkClick = {},
-        onLinkLongClick = {},
-        onContentLayoutChange = {},
     )
 }
