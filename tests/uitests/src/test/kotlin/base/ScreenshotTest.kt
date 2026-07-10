@@ -26,6 +26,8 @@ import com.android.resources.Density.DEFAULT_DENSITY
 import com.android.resources.NightMode
 import com.android.resources.ScreenOrientation
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.matrix.ui.media.contentvalidation.LocalEventContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopEventContentValidationCache
 import sergio.sastre.composable.preview.scanner.android.AndroidPreviewInfo
 import sergio.sastre.composable.preview.scanner.core.preview.ComposablePreview
 import java.util.Locale
@@ -55,6 +57,7 @@ object ScreenshotTest {
                     setLocales(LocaleList(locale))
                     uiMode = preview.previewInfo.uiMode
                 },
+                LocalEventContentValidationState provides NoopEventContentValidationCache(),
             ) {
                 ElementTheme {
                     Box(

@@ -17,6 +17,7 @@ import io.element.android.features.messages.impl.timeline.components.layout.Cont
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContentProvider
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationValue
 import io.element.android.libraries.ui.strings.CommonStrings
 
 /**
@@ -27,15 +28,16 @@ fun TimelineItemFileView(
     content: TimelineItemFileContent,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
+    contentValidationValue: ContentValidationValue = ContentValidationValue.Valid,
 ) {
     TimelineItemAttachmentView(
         icon = CompoundIcons.Attachment(),
         iconContentDescription = stringResource(CommonStrings.common_file),
         filename = content.filename,
         fileExtensionAndSize = content.fileExtensionAndSize,
-        caption = content.caption,
         onContentLayoutChange = onContentLayoutChange,
         modifier = modifier,
+        contentValidationValue = contentValidationValue,
     )
 }
 

@@ -8,17 +8,24 @@
 package io.element.android.features.messages.impl.timeline.components.event
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,6 +49,11 @@ import io.element.android.libraries.designsystem.theme.components.HorizontalDivi
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationValue
+import io.element.android.libraries.matrix.ui.media.contentvalidation.InvalidContentView
+import io.element.android.libraries.matrix.ui.media.contentvalidation.collectMediaState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.rememberEventContentValidationState
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlin.math.max
 
@@ -52,22 +64,94 @@ fun TimelineItemAttachmentsListView(
     onGalleryItemClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val contentValidationState = rememberEventContentValidationState(
+        eventId = eventId,
+        needsValidation = content.isMedia,
+    )
+
     Column(modifier = modifier.fillMaxWidth()) {
+        val validationStates = remember(content.attachments) {
+            buildList {
+                for (attachment in content.attachments) {
+                    add(validationStateForAttachment(attachment, contentValidationState))
+                }
+            }.toMutableStateList()
+        }
         content.attachments.forEachIndexed { index, attachment ->
             Column(modifier = Modifier.fillMaxWidth()) {
+                val thumbnailContentValidationState by contentValidationState.collectMediaState(attachment.thumbnailSource?.safeUrl)
+                val mediaContentValidationState by contentValidationState.collectMediaState(attachment.mediaSource.safeUrl)
+
+                val itemContentValidationState = remember(thumbnailContentValidationState, mediaContentValidationState) {
+                    validationStateForAttachment(attachment, contentValidationState)
+                }
+
+                LaunchedEffect(itemContentValidationState) {
+                    validationStates[index] = itemContentValidationState
+                }
+
                 val needsSeparator = index in 1..max(1, content.attachments.lastIndex)
-                if (needsSeparator) {
+                val isPreviousItemInvalid = validationStates.getOrNull(index - 1)?.isInvalid() == true
+                if (needsSeparator && !itemContentValidationState.isInvalid() && !isPreviousItemInvalid) {
                     HorizontalDivider(
                         color = ElementTheme.colors.borderInteractiveSecondary,
                     )
                 }
 
-                AttachmentListItem(
-                    attachment = attachment,
-                    onClick = { onGalleryItemClick(index) },
-                )
+                when (itemContentValidationState) {
+                    ContentValidationValue.Invalid -> {
+                        val shape = RoundedCornerShape(6.dp)
+                        InvalidContentView(
+                            modifier = Modifier
+                                .padding(vertical = 6.dp)
+                                .border(width = 1.dp, color = ElementTheme.colors.borderCriticalSubtle, shape = shape)
+                                .clip(shape),
+                            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
+                        )
+                    }
+                    ContentValidationValue.Loading -> {
+                        CircularProgressIndicator(modifier = Modifier.padding(8.dp).align(Alignment.CenterHorizontally))
+                    }
+                    ContentValidationValue.Valid -> {
+                        AttachmentListItem(
+                            attachment = attachment,
+                            onClick = { onGalleryItemClick(index) },
+                        )
+                    }
+                    else -> {
+                        // TODO handle cases where either the content hasn't started validation or it failed to do so
+                    }
+                }
+
+                if (index == content.attachments.lastIndex && content.showCaption && !itemContentValidationState.isInvalid()) {
+                    HorizontalDivider(
+                        color = ElementTheme.colors.borderInteractiveSecondary,
+                    )
+                }
             }
         }
+    }
+}
+
+private fun validationStateForAttachment(
+    attachment: AttachmentItem,
+    contentValidationState: ContentValidationState,
+): ContentValidationValue {
+    val thumbnailValue = attachment.thumbnailSource?.safeUrl?.let { contentValidationState.getCurrentMediaState(it) } ?: ContentValidationValue.Unknown
+    val mediaValue = contentValidationState.getCurrentMediaState(attachment.mediaSource.safeUrl)
+    return validationStateForAttachment(thumbnailValue, mediaValue)
+}
+
+private fun validationStateForAttachment(
+    thumbnailValue: ContentValidationValue,
+    mediaValue: ContentValidationValue,
+): ContentValidationValue {
+    return if (thumbnailValue.isInvalid() || mediaValue.isInvalid()) {
+        ContentValidationValue.Invalid
+    } else if (thumbnailValue.isLoading() || mediaValue.isLoading()) {
+        ContentValidationValue.Loading
+    } else {
+        mediaValue
     }
 }
 

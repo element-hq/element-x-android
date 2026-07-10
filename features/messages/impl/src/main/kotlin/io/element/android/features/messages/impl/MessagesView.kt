@@ -123,6 +123,8 @@ import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationValue
+import io.element.android.libraries.matrix.ui.media.contentvalidation.LocalEventContentValidationState
 import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.link.Link
@@ -148,6 +150,8 @@ fun MessagesView(
     forceJumpToBottomVisibility: Boolean = false,
     knockRequestsBannerView: @Composable () -> Unit,
 ) {
+    val eventContentValidationState = LocalEventContentValidationState.current
+
     OnLifecycleEvent { _, event ->
         state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvent.LifecycleEvent(event))
     }
@@ -170,6 +174,9 @@ fun MessagesView(
 
     fun onContentClick(event: TimelineItem.Event) {
         Timber.v("onMessageClick= ${event.id}")
+        val eventId = event.eventId ?: return
+        if (eventContentValidationState[eventId].getCurrentOverallState() != ContentValidationValue.Valid) return
+
         val hideKeyboard = onEventContentClick(state.timelineState.isLive, event)
         if (hideKeyboard) {
             localView.hideKeyboard()

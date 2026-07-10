@@ -12,9 +12,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,8 +28,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import coil3.compose.AsyncImagePainter
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.components.ATimelineItemEventRow
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
@@ -40,11 +36,15 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.protection.ProtectedView
 import io.element.android.features.messages.impl.timeline.protection.coerceRatioWhenHidingContent
+import io.element.android.features.messages.impl.timeline.util.handleAsyncImageStateChange
 import io.element.android.libraries.designsystem.components.blurhash.blurHashBackground
 import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.DefaultContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.collectOverallState
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 
@@ -56,47 +56,65 @@ fun TimelineItemImageView(
     onLongClick: (() -> Unit)?,
     onShowContentClick: () -> Unit,
     modifier: Modifier = Modifier,
+    contentValidationState: ContentValidationState = remember { DefaultContentValidationState() },
 ) {
     val a11yLabel = stringResource(CommonStrings.common_image)
     val description = content.caption?.let { "$a11yLabel: $it" } ?: a11yLabel
-    Column(modifier = modifier) {
+    Column(modifier = modifier.wrapContentWidth(Alignment.CenterHorizontally)) {
         val containerModifier = if (content.showCaption) {
             Modifier.clip(RoundedCornerShape(10.dp))
         } else {
             Modifier
         }
 
+        val eventContentValidation by contentValidationState.collectOverallState()
+        val isContentBeingValidated = !eventContentValidation.isValidated()
         TimelineItemAspectRatioBox(
-            modifier = containerModifier.blurHashBackground(content.blurhash, alpha = 0.9f),
+            modifier = containerModifier
+                .blurHashBackground(content.blurhash, alpha = 0.9f)
+                .align(Alignment.CenterHorizontally),
             aspectRatio = coerceRatioWhenHidingContent(content.aspectRatio, hideMediaContent),
         ) {
-            ProtectedView(
-                hideContent = hideMediaContent,
-                onShowClick = onShowContentClick,
-            ) {
-                var isLoaded by remember { mutableStateOf(false) }
-                AsyncImage(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .then(if (isLoaded) Modifier.background(Color.White) else Modifier)
-                        .then(
-                            if (!isTalkbackActive() && onContentClick != null) {
-                                Modifier
-                                    .combinedClickable(
-                                        onClick = onContentClick,
-                                        onLongClick = onLongClick,
-                                    )
-                                    .onKeyboardContextMenuAction(onLongClick)
-                            } else {
-                                Modifier
+            if (isContentBeingValidated) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            } else {
+                ProtectedView(
+                    hideContent = hideMediaContent,
+                    onShowClick = onShowContentClick,
+                ) {
+                    var isLoaded by remember { mutableStateOf(false) }
+                    AsyncImage(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .then(if (isLoaded) Modifier.background(Color.White) else Modifier)
+                            .then(
+                                if (!isTalkbackActive() && onContentClick != null) {
+                                    Modifier
+                                        .combinedClickable(
+                                            onClick = onContentClick,
+                                            onLongClick = onLongClick,
+                                        )
+                                        .onKeyboardContextMenuAction(onLongClick)
+                                } else {
+                                    Modifier
+                                }
+                            ),
+                        model = content.thumbnailMediaRequestData,
+                        contentScale = ContentScale.Crop,
+                        alignment = Alignment.Center,
+                        contentDescription = description,
+                        onState = { state ->
+                            val url = content.thumbnailMediaRequestData.source?.safeUrl
+                            if (url != null) {
+                                handleAsyncImageStateChange(
+                                    state = state,
+                                    onLoaded = { isLoaded = true },
+                                    updateContentValidationState = { contentValidationState.update(url, it) },
+                                )
                             }
-                        ),
-                    model = content.thumbnailMediaRequestData,
-                    contentScale = ContentScale.Crop,
-                    alignment = Alignment.Center,
-                    contentDescription = description,
-                    onState = { isLoaded = it is AsyncImagePainter.State.Success },
-                )
+                        },
+                    )
+                }
             }
         }
     }
@@ -137,9 +155,9 @@ internal fun ATimelineItemEventRowPreview() = ElementPreview {
                     content = aTimelineItemImageContent(
                         filename = "image.jpg",
                         caption = "A long caption that may wrap into several lines",
-                        width = 80,
-                        height = 300,
-                        aspectRatio = 80f / 300f,
+                        width = 40,
+                        height = 20,
+                        aspectRatio = 40f / 20f,
                     ),
                     groupPosition = TimelineItemGroupPosition.Last,
                 ),
@@ -152,7 +170,7 @@ internal fun ATimelineItemEventRowPreview() = ElementPreview {
                     filename = "image.jpg",
                     caption = "Narrow image with null aspectRatio",
                     width = 80,
-                    height = 300,
+                    height = 150,
                     aspectRatio = null,
                 ),
                 groupPosition = TimelineItemGroupPosition.Last,

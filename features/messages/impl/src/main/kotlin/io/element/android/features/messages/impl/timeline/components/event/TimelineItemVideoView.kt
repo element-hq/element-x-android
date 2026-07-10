@@ -8,13 +8,16 @@
 
 package io.element.android.features.messages.impl.timeline.components.event
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,24 +27,32 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.hideFromAccessibility
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import coil3.compose.AsyncImagePainter
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContentProvider
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.protection.ProtectedView
 import io.element.android.features.messages.impl.timeline.protection.coerceRatioWhenHidingContent
+import io.element.android.features.messages.impl.timeline.util.handleAsyncImageStateChange
 import io.element.android.libraries.designsystem.components.blurhash.blurHashBackground
 import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
+import io.element.android.libraries.designsystem.modifiers.roundedBackground
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.ui.media.MAX_THUMBNAIL_HEIGHT
 import io.element.android.libraries.matrix.ui.media.MAX_THUMBNAIL_WIDTH
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.DefaultContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.collectOverallState
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 
@@ -53,6 +64,7 @@ fun TimelineItemVideoView(
     onLongClick: (() -> Unit)?,
     onShowContentClick: () -> Unit,
     modifier: Modifier = Modifier,
+    contentValidationState: ContentValidationState = remember { DefaultContentValidationState() },
 ) {
     val isTalkbackActive = isTalkbackActive()
     val a11yLabel = stringResource(CommonStrings.common_video)
@@ -66,6 +78,8 @@ fun TimelineItemVideoView(
             Modifier
         }
 
+        val eventContentValidation by contentValidationState.collectOverallState()
+        val isContentBeingValidated = !eventContentValidation.isValidated()
         TimelineItemAspectRatioBox(
             modifier = containerModifier.blurHashBackground(content.blurHash, alpha = 0.9f),
             aspectRatio = coerceRatioWhenHidingContent(content.aspectRatio, hideMediaContent),
@@ -105,10 +119,30 @@ fun TimelineItemVideoView(
                     onState = { state ->
                         val url = content.thumbnailSource?.safeUrl
                         if (url != null) {
-                            isLoaded = state is AsyncImagePainter.State.Success
+                            handleAsyncImageStateChange(
+                                state = state,
+                                onLoaded = { isLoaded = true },
+                                updateContentValidationState = { contentValidationState.update(url, it) },
+                            )
                         }
                     },
                 )
+
+                if (!isContentBeingValidated) {
+                    Box(
+                        modifier = Modifier.roundedBackground(),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Image(
+                            imageVector = CompoundIcons.PlaySolid(),
+                            contentDescription = stringResource(id = CommonStrings.a11y_play),
+                            colorFilter = ColorFilter.tint(Color.White),
+                            modifier = Modifier.semantics { hideFromAccessibility() }
+                        )
+                    }
+                } else {
+                    CircularProgressIndicator()
+                }
             }
         }
     }

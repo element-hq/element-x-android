@@ -21,8 +21,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,6 +46,9 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.bgSubtleTertiary
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationValue
+import io.element.android.libraries.matrix.ui.media.contentvalidation.collectMediaState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.rememberEventContentValidationState
 import io.element.android.libraries.ui.utils.time.formatShort
 import kotlinx.collections.immutable.ImmutableList
 
@@ -263,6 +269,20 @@ private fun GalleryItemCell(
     onLongClick: (() -> Unit)?,
     modifier: Modifier = Modifier,
 ) {
+    val eventContentValidationState = rememberEventContentValidationState(eventId, needsValidation = true)
+    val thumbnailContentValidationState by eventContentValidationState.collectMediaState(item.thumbnailSource?.safeUrl)
+    val mediaContentValidationState by eventContentValidationState.collectMediaState(item.mediaSource.safeUrl)
+
+    val itemContentValidationState = remember(thumbnailContentValidationState, mediaContentValidationState) {
+        if (thumbnailContentValidationState.isInvalid() || mediaContentValidationState.isInvalid()) {
+            ContentValidationValue.Invalid
+        } else if (thumbnailContentValidationState.isLoading() || mediaContentValidationState.isLoading()) {
+            ContentValidationValue.Loading
+        } else {
+            mediaContentValidationState
+        }
+    }
+
     Box(
         modifier = modifier
             .blurHashBackground(item.blurhash, alpha = 0.9f)
@@ -284,7 +304,20 @@ private fun GalleryItemCell(
             VideoOverlay(duration = item.duration)
         }
 
-        if (isLast && remainingCount > 0) {
+        if (itemContentValidationState.isLoading()) {
+            CircularProgressIndicator()
+        } else if (itemContentValidationState.isInvalid()) {
+            Box(
+                modifier = Modifier.fillMaxSize().background(ElementTheme.colors.bgCriticalSubtle)
+            ) {
+                Icon(
+                    modifier = Modifier.align(Alignment.Center),
+                    imageVector = CompoundIcons.Error(),
+                    tint = ElementTheme.colors.iconCriticalPrimary,
+                    contentDescription = null,
+                )
+            }
+        } else if (isLast && remainingCount > 0) {
             RemainingCountOverlay(count = remainingCount)
         }
     }
