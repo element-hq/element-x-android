@@ -15,9 +15,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -52,7 +55,6 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.ensureActiveLiveLocation
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
-import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -145,7 +147,7 @@ private fun CommonLayout(
 
     val threadDecoration = @Composable {
         if (showThreadDecoration) {
-            ThreadDecoration(modifier = Modifier.padding(top = 8.dp, start = 12.dp, end = 12.dp))
+            ThreadDecoration(modifier = Modifier.fillMaxWidth().padding(top = 8.dp, start = 12.dp, end = 12.dp))
         }
     }
     val contentWithTimestamp = @Composable {
@@ -154,34 +156,30 @@ private fun CommonLayout(
             event = event,
             eventSink = eventSink,
             canShrinkContent = canShrinkContent,
-            modifier = timestampLayoutModifier.semantics(mergeDescendants = false) {
-                isTraversalGroup = true
-                traversalIndex = -1f
-            },
+            modifier = timestampLayoutModifier
+                .semantics(mergeDescendants = false) {
+                    isTraversalGroup = true
+                    traversalIndex = -1f
+                },
             content = { onContentLayoutChange ->
                 eventContentView(contentModifier, onContentLayoutChange)
             }
         )
     }
 
-    if (inReplyToDetails != null) {
-        // Use SubComposeLayout only if necessary as it can have consequences on the performance.
-        EqualWidthColumn(spacing = 8.dp) {
-            threadDecoration()
+    Column(modifier = modifier.width(IntrinsicSize.Max), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        threadDecoration()
+        if (inReplyToDetails != null) {
             InReplyToBox(
+                modifier = Modifier.fillMaxWidth(),
                 inReplyTo = inReplyToDetails,
                 topPadding = if (showThreadDecoration) 0.dp else 8.dp,
                 timelineProtectionState = timelineProtectionState,
                 inReplyToClick = inReplyToClick,
                 eventSink = eventSink,
             )
-            contentWithTimestamp()
         }
-    } else {
-        Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            threadDecoration()
-            contentWithTimestamp()
-        }
+        contentWithTimestamp()
     }
 }
 
@@ -276,9 +274,9 @@ private fun WithTimestampLayout(
 
             CompositionLocalProvider(LocalLayoutDirection provides contentDirection) {
                 ContentAvoidingLayout(
-                    modifier = modifier,
+                    modifier = modifier.fillMaxWidth(),
                     // The spacing is negative to make the content overlap the empty space at the start of the timestamp
-                    spacing = (-4).dp,
+                    spacing = (-8).dp,
                     overlayOffset = DpOffset(0.dp, -1.dp),
                     shrinkContent = canShrinkContent,
                     content = { content(this::onContentLayoutChange) },

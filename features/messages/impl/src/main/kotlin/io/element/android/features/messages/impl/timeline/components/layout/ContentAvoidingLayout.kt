@@ -15,7 +15,13 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.IntrinsicMeasurable
+import androidx.compose.ui.layout.IntrinsicMeasureScope
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.Measurable
+import androidx.compose.ui.layout.MeasurePolicy
+import androidx.compose.ui.layout.MeasureResult
+import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.style.ResolvedTextDirection
 import androidx.compose.ui.unit.Constraints
@@ -69,51 +75,62 @@ fun ContentAvoidingLayout(
         content = {
             scope.content()
             overlay()
-        }
-    ) { measurables, constraints ->
+        },
+        measurePolicy = object : MeasurePolicy {
+            override fun MeasureScope.measure(measurables: List<Measurable>, constraints: Constraints): MeasureResult {
+                // Measure the `overlay` view first, in case we need to shrink the `content`
+                val overlayPlaceable = measurables.last().measure(Constraints(minWidth = 0, maxWidth = constraints.maxWidth))
+                val contentConstraints = if (shrinkContent) {
+                    Constraints(minWidth = 0, maxWidth = constraints.maxWidth - overlayPlaceable.width)
+                } else {
+                    Constraints(minWidth = 0, maxWidth = constraints.maxWidth)
+                }
+                println(
+                    "Constraints: max width: ${constraints.maxWidth}, overlay width: ${overlayPlaceable.width}, content max width: ${contentConstraints.maxWidth}"
+                )
+                val contentPlaceable = measurables.first().measure(contentConstraints)
 
-        // Measure the `overlay` view first, in case we need to shrink the `content`
-        val overlayPlaceable = measurables.last().measure(Constraints(minWidth = 0, maxWidth = constraints.maxWidth))
-        val contentConstraints = if (shrinkContent) {
-            Constraints(minWidth = 0, maxWidth = constraints.maxWidth - overlayPlaceable.width)
-        } else {
-            Constraints(minWidth = 0, maxWidth = constraints.maxWidth)
-        }
-        val contentPlaceable = measurables.first().measure(contentConstraints)
+                var layoutWidth = contentPlaceable.width
+                var layoutHeight = contentPlaceable.height
 
-        var layoutWidth = contentPlaceable.width
-        var layoutHeight = contentPlaceable.height
+                val data = scope.data.value
 
-        val data = scope.data.value
+                // Free space = width of the whole component - width of its non overlapping contents
+                val freeSpace = max(contentPlaceable.width - data.nonOverlappingContentWidth, 0)
 
-        // Free space = width of the whole component - width of its non overlapping contents
-        val freeSpace = max(contentPlaceable.width - data.nonOverlappingContentWidth, 0)
+                when {
+                    // When the content + the overlay don't fit in the available max width, we need to move the overlay to a new row
+                    !shrinkContent && data.nonOverlappingContentWidth + overlayPlaceable.width > constraints.maxWidth -> {
+                        layoutHeight += overlayPlaceable.height + overlayOffset.y.roundToPx()
+                    }
+                    // If the content is smaller than the available max width, we can move the overlay to the right of the content
+                    contentPlaceable.width < constraints.maxWidth -> {
+                        // If both the content and the overlay plus the padding can fit inside the current layoutWidth, there is no need to increase it
+                        if (freeSpace < overlayPlaceable.width + spacing.roundToPx()) {
+                            // Otherwise, we need to increase it by the width of the overlay + some padding adjustments
+                            val calculatedWidth = max(data.nonOverlappingContentWidth + overlayPlaceable.width + spacing.roundToPx(), contentPlaceable.width)
+                            layoutWidth = min(calculatedWidth, constraints.maxWidth)
+                        }
+                    }
+                    else -> Unit
+                }
 
-        when {
-            // When the content + the overlay don't fit in the available max width, we need to move the overlay to a new row
-            !shrinkContent && data.nonOverlappingContentWidth + overlayPlaceable.width > constraints.maxWidth -> {
-                layoutHeight += overlayPlaceable.height + overlayOffset.y.roundToPx()
-            }
-            // If the content is smaller than the available max width, we can move the overlay to the right of the content
-            contentPlaceable.width < constraints.maxWidth -> {
-                // If both the content and the overlay plus the padding can fit inside the current layoutWidth, there is no need to increase it
-                if (freeSpace < overlayPlaceable.width + spacing.roundToPx()) {
-                    // Otherwise, we need to increase it by the width of the overlay + some padding adjustments
-                    val calculatedWidth = max(data.nonOverlappingContentWidth + overlayPlaceable.width + spacing.roundToPx(), contentPlaceable.width)
-                    layoutWidth = min(calculatedWidth, constraints.maxWidth)
+                layoutWidth = max(layoutWidth, constraints.minWidth)
+                layoutHeight = max(layoutHeight, constraints.minHeight)
+
+                return layout(layoutWidth, layoutHeight) {
+                    contentPlaceable.placeRelative(0, 0)
+                    overlayPlaceable.placeRelative(layoutWidth - overlayPlaceable.width, layoutHeight - overlayPlaceable.height + overlayOffset.y.roundToPx())
                 }
             }
-            else -> Unit
-        }
 
-        layoutWidth = max(layoutWidth, constraints.minWidth)
-        layoutHeight = max(layoutHeight, constraints.minHeight)
-
-        layout(layoutWidth, layoutHeight) {
-            contentPlaceable.placeRelative(0, 0)
-            overlayPlaceable.placeRelative(layoutWidth - overlayPlaceable.width, layoutHeight - overlayPlaceable.height + overlayOffset.y.roundToPx())
+            override fun IntrinsicMeasureScope.maxIntrinsicWidth(measurables: List<IntrinsicMeasurable>, height: Int): Int {
+                val overlayIntrinsicWidth = measurables.last().minIntrinsicWidth(height)
+                val contentIntrinsicWidth = measurables.first().maxIntrinsicWidth(height)
+                return contentIntrinsicWidth + overlayIntrinsicWidth + spacing.roundToPx()
+            }
         }
-    }
+    )
 }
 
 /**

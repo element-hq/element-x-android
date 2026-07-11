@@ -9,6 +9,7 @@
 package io.element.android.features.messages.impl.timeline.components.event
 
 import android.text.SpannedString
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.LocalContentColor
@@ -52,7 +53,6 @@ import io.element.android.features.messages.impl.timeline.model.event.formattedC
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
 import io.element.android.libraries.matrix.ui.media.contentvalidation.InvalidContentView
@@ -109,7 +109,7 @@ fun TimelineItemEventContentView(
 
     val displayInvalidContent = overallValidationState.isInvalid() && !needsContentValidationPerItem
     val displayContentNotFound = overallValidationState.hasUnrecoverableError() && !needsContentValidationPerItem
-    EqualWidthColumn(modifier = modifier) {
+    Column(modifier = modifier) {
         if (displayInvalidContent) {
             InvalidContentView(
                 contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),

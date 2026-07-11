@@ -10,7 +10,6 @@ package io.element.android.features.messages.impl.timeline.components.event
 
 import android.text.SpannedString
 import androidx.annotation.VisibleForTesting
-import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
@@ -58,16 +57,15 @@ fun TimelineItemTextView(
         LocalTextStyle provides textStyle
     ) {
         val text = getTextWithResolvedMentions(content)
-        Box(modifier.semantics { contentDescription = content.plainText }) {
-            EditorStyledText(
-                text = text,
-                onLinkClickedListener = onLinkClick,
-                onLinkLongClickedListener = onLinkLongClick,
-                style = ElementRichTextEditorStyle.textStyle(),
-                onTextLayout = ContentAvoidingLayout.measureLegacyLastTextLine(onContentLayoutChange = onContentLayoutChange),
-                releaseOnDetach = false,
-            )
-        }
+        EditorStyledText(
+            modifier = modifier.semantics { contentDescription = content.plainText },
+            text = text,
+            onLinkClickedListener = onLinkClick,
+            onLinkLongClickedListener = onLinkLongClick,
+            style = ElementRichTextEditorStyle.textStyle(),
+            onTextLayout = ContentAvoidingLayout.measureLegacyLastTextLine(onContentLayoutChange = onContentLayoutChange),
+            releaseOnDetach = false,
+        )
     }
 }
 
