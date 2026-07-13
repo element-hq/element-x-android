@@ -44,7 +44,6 @@
     <item quantity="other">"Přečetl(a) %1$s a %2$d dalších"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"%1$s přečetl(a)"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Klepnutím zobrazíte vše"</string>
   <string name="a11y_remove_reaction">"Odstraňit reakci s %1$s"</string>
   <string name="a11y_remove_reaction_with">"Odstranit reakci pomocí %1$s"</string>
   <string name="a11y_room_avatar">"Avatar místnosti"</string>

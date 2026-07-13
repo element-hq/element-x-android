@@ -10,6 +10,14 @@
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL tidak valid, pastikan Anda menyertakan protokol (http/https) dan alamat yang benar."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Sembunyikan avatar dalam permintaan undangan ruangan"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Sembunyikan pratinjau media pada lini masa"</string>
+  <string name="screen_advanced_settings_labs">"Uji Coba"</string>
+  <string name="screen_advanced_settings_live_location_section_description">"Jarak yang harus Anda tempuh untuk memicu pembaruan."</string>
+  <string name="screen_advanced_settings_live_location_section_footer">"Pastikan \"Lokasi Tepat\" diaktifkan untuk aplikasi ini. Untuk mengubah izin tersebut, buka %1$s."</string>
+  <string name="screen_advanced_settings_live_location_section_footer_link">"Pengaturan aplikasi"</string>
+  <string name="screen_advanced_settings_live_location_section_title">"Pembaruan lokasi secara langsung"</string>
+  <plurals name="screen_advanced_settings_live_location_update_distance">
+    <item quantity="other">"Setiap %1$d meter"</item>
+  </plurals>
   <string name="screen_advanced_settings_media_compression_description">"Unggah foto dan video lebih cepat dan kurangi penggunaan data"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimalkan kualitas media"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderasi dan Keamanan"</string>
@@ -43,6 +51,11 @@
   <string name="screen_edit_profile_error_title">"Tidak dapat memperbarui profil"</string>
   <string name="screen_edit_profile_title">"Edit profil"</string>
   <string name="screen_edit_profile_updating_details">"Memperbarui profil…"</string>
+  <string name="screen_labs_enable_threads">"Aktifkan balasan utas"</string>
+  <string name="screen_labs_enable_threads_description">"Aplikasi akan dimulai ulang untuk menerapkan perubahan ini."</string>
+  <string name="screen_labs_header_description">"Cobalah ide-ide terbaru kami yang sedang dikembangkan. Fitur-fitur ini belum final; mungkin masih tidak stabil dan dapat berubah."</string>
+  <string name="screen_labs_header_title">"Merasa ingin bereksperimen?"</string>
+  <string name="screen_labs_title">"Uji Coba"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Pengaturan tambahan"</string>
   <string name="screen_notification_settings_calls_label">"Panggilan audio dan video"</string>
   <string name="screen_notification_settings_configuration_mismatch">"Ketidakcocokan pengaturan"</string>
@@ -68,10 +81,12 @@ Jika Anda melanjutkan, beberapa pengaturan Anda dapat berubah."</string>
   <string name="screen_notification_settings_mode_mentions">"Sebutan"</string>
   <string name="screen_notification_settings_notification_section_title">"Beri tahu saya tentang"</string>
   <string name="screen_notification_settings_room_mention_label">"Beri tahu saya pada @room"</string>
+  <string name="screen_notification_settings_sound_element_default">"Pengaturan Default Element"</string>
   <string name="screen_notification_settings_system_notifications_action_required">"Untuk menerima pemberitahuan, silakan ubah %1$s Anda."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"pengaturan sistem"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Pemberitahuan sistem dimatikan"</string>
   <string name="screen_notification_settings_title">"Notifikasi"</string>
+  <string name="theme_black">"Hitam"</string>
   <string name="theme_dark">"Gelap"</string>
   <string name="theme_light">"Terang"</string>
   <string name="theme_system">"Sistem"</string>

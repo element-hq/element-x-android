@@ -4,6 +4,7 @@
   <string name="a11y_add_reaction">"Додати реакцію: %1$s"</string>
   <string name="a11y_address">"Адреса"</string>
   <string name="a11y_avatar">"Аватар"</string>
+  <string name="a11y_clear_search_field">"Очистити поле пошуку"</string>
   <string name="a11y_collapse_message_text_field">"Згорнути поле тексту повідомлення"</string>
   <string name="a11y_create_poll_votes_allowed_decrease">"Зменшити кількість голосів, дозволених на одну особу"</string>
   <string name="a11y_create_poll_votes_allowed_increase">"Збільшити кількість голосів, дозволених на одну особу"</string>
@@ -44,14 +45,14 @@
   <string name="a11y_qr_code">"QR-код"</string>
   <string name="a11y_react_with">"Реагувати з%1$s"</string>
   <string name="a11y_react_with_other_emojis">"Відреагувати іншими смайликами"</string>
-  <string name="a11y_read_receipts_multiple">"Прочитано %1$s та %2$s"</string>
+  <string name="a11y_read_receipts_multiple">"Попереднє повідомлення прочитали %1$s та %2$s"</string>
   <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="one">"Прочитано %1$s та %2$d іншим"</item>
-    <item quantity="few">"Прочитано %1$s та %2$d іншими"</item>
-    <item quantity="many">"Прочитано %1$s та %2$d іншими"</item>
+    <item quantity="one">"Попереднє повідомлення прочитали %1$s та ще %2$d користувач"</item>
+    <item quantity="few">"Попереднє повідомлення прочитали %1$s та ще %2$d користувачі"</item>
+    <item quantity="many">"Попереднє повідомлення прочитали %1$s та ще %2$d користувачів"</item>
   </plurals>
-  <string name="a11y_read_receipts_single">"Прочитано %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Натисніть, щоб показати все"</string>
+  <string name="a11y_read_receipts_single">"Попереднє повідомлення прочитано користувачем %1$s"</string>
+  <string name="a11y_read_receipts_tap_to_show_all_android">"показати всі підтвердження прочитання"</string>
   <string name="a11y_remove_reaction">"Видалити реакцію з %1$s"</string>
   <string name="a11y_remove_reaction_with">"Прибрати реакцію %1$s"</string>
   <string name="a11y_room_avatar">"Аватар кімнати"</string>
@@ -441,6 +442,10 @@
   <string name="common_waiting_live_location">"Очікування геолокації…"</string>
   <string name="common_world_readable_history">"Будь-хто може переглянути історію"</string>
   <string name="common_you">"Ви"</string>
+  <string name="content_scanner_not_found">"Завантаження недоступне."</string>
+  <string name="content_scanner_not_found_title">"Файл не знайдено"</string>
+  <string name="content_scanner_unsafe_message">"Попередній перегляд і завантаження вимкнено."</string>
+  <string name="content_scanner_unsafe_title">"Файл не є безпечним"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) поділився цим повідомленням, оскільки вас не було в кімнаті, коли його надіслали."</string>
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s поділився цим повідомленням, оскільки вас не було в кімнаті, коли його надіслали."</string>
   <string name="crypto_history_visible">"Згідно із налаштувань цієї кімнати, нові учасники можуть переглядати історію. %1$s"</string>
@@ -557,11 +562,6 @@
   <string name="screen_space_list_title">"Простори"</string>
   <string name="screen_static_location_sheet_timestamp_description">"Надано доступ %1$s"</string>
   <string name="screen_static_location_sheet_title">"На карті"</string>
-  <plurals name="screen_timeline_active_call_extra_joined_count">
-    <item quantity="one">"+ %1$d приєднується"</item>
-    <item quantity="few">"+ %1$d приєднуються"</item>
-    <item quantity="many">"+ %1$d приєднуються"</item>
-  </plurals>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Повідомлення не надіслано, оскільки звірена цифрова ідентичність %1$s була скинута."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Повідомлення не надіслано, оскільки %1$s перевірив не всі пристрої."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Повідомлення не надіслано, оскільки ви не звірили один або кілька своїх пристроїв."</string>

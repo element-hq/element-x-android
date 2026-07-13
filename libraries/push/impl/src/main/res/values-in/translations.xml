@@ -11,7 +11,12 @@
   <plurals name="notification_compat_summary_title">
     <item quantity="other">"%d pemberitahuan"</item>
   </plurals>
+  <string name="notification_error_unified_push_unregistered_android">"Distributor notifikasi UnifiedPush tidak dapat didaftarkan, sehingga Anda tidak akan lagi menerima notifikasi. Silakan periksa pengaturan notifikasi aplikasi dan status distributor push."</string>
   <string name="notification_fallback_content">"Anda memiliki pesan baru."</string>
+  <plurals name="notification_fallback_n_content">
+    <item quantity="other">"Anda memiliki %d pesan baru."</item>
+  </plurals>
+  <string name="notification_incoming_audio_call">"Panggilan masuk"</string>
   <string name="notification_incoming_call">"📹 Panggilan masuk"</string>
   <string name="notification_inline_reply_failed">"** Gagal mengirim — silakan buka ruangan"</string>
   <string name="notification_invitation_action_join">"Gabung"</string>
@@ -33,7 +38,10 @@
   <string name="notification_room_invite_body_with_sender">"%1$s mengundang Anda untuk bergabung dengan ruangan"</string>
   <string name="notification_sender_me">"Saya"</string>
   <string name="notification_sender_mention_reply">"%1$s disebut atau dibalas"</string>
+  <string name="notification_space_invite_body">"Kami mengundang Anda untuk bergabung di ruang ini."</string>
+  <string name="notification_space_invite_body_with_sender">"%1$s mengundang Anda untuk bergabung ke ruang ini."</string>
   <string name="notification_test_push_notification_content">"Anda sedang melihat pemberitahuan ini! Klik saya!"</string>
+  <string name="notification_thread_in_room">"Diskusi di %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
@@ -49,11 +57,18 @@
   <string name="push_distributor_firebase_android">"Layanan Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Tidak ditemukan Layanan Google Play yang valid. Pemberitahuan mungkin tidak berfungsi dengan baik."</string>
   <string name="troubleshoot_notifications_test_blocked_users_description">"Memeriksa pengguna yang diblokir"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_quick_fix">"Lihat pengguna yang diblokir"</string>
   <string name="troubleshoot_notifications_test_blocked_users_result_none">"Tidak ada pengguna yang diblokir."</string>
+  <plurals name="troubleshoot_notifications_test_blocked_users_result_some">
+    <item quantity="other">"Anda telah memblokir pengguna %1$d. Anda tidak akan menerima notifikasi dari pengguna tersebut."</item>
+  </plurals>
   <string name="troubleshoot_notifications_test_blocked_users_title">"Pengguna yang diblokir"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Dapatkan nama penyedia saat ini."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Tidak ada penyedia notifikasi dorongan yang dipilih."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found">"Penyedia notifikasi dorongan saat ini: %1$s dan distributor saat ini: %2$s. Namun, distributor %3$s tidak ditemukan. Mungkin aplikasinya sudah dihapus?"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_no_distributor">"Penyedia notifikasi dorongan saat ini: %1$s, tetapi belum ada distributor yang dikonfigurasi."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Penyedia notifikasi dorongan saat ini: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success_with_distributor">"Penyedia notifikasi dorongan saat ini: %1$s (%2$s)"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Penyedia notifikasi dorongan saat ini"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Pastikan aplikasi memiliki setidaknya satu penyedia notifikasi dorongan."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Tidak ada penyedia notifikasi dorongan yang ditemukan."</string>
