@@ -38,8 +38,6 @@ appId: ${MAESTRO_APP_ID}
           id: "confirm_invite_unknown"
 # Hide keyboard in case it's displayed, otherwise it will 'eat' the back button press
 - hideKeyboard
-# Go back to the room details screen
-- tapOn: "Back"
 - scrollUntilVisible:
     direction: DOWN
     element:
