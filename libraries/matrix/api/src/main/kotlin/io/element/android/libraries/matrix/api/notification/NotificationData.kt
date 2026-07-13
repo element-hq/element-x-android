@@ -48,6 +48,7 @@ data class NotificationData(
 
 sealed interface NotificationContent {
     sealed interface MessageLike : NotificationContent {
+        data object Beacon : MessageLike
         data object CallAnswer : MessageLike
         data class CallInvite(
             val senderId: UserId,
@@ -92,6 +93,14 @@ sealed interface NotificationContent {
     }
 
     sealed interface StateEvent : NotificationContent {
+        /**
+         * The start of a live location share (`org.matrix.msc3672.beacon_info`).
+         * The sender of the state event is the user sharing their live location.
+         */
+        data class BeaconInfo(
+            val senderId: UserId,
+        ) : StateEvent
+
         data object PolicyRuleRoom : StateEvent
         data object PolicyRuleServer : StateEvent
         data object PolicyRuleUser : StateEvent

@@ -30,8 +30,10 @@ import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import org.matrix.rustcomponents.sdk.MessageLikeEventContent
 import org.matrix.rustcomponents.sdk.NotificationClient
 import org.matrix.rustcomponents.sdk.NotificationStatus
+import org.matrix.rustcomponents.sdk.StateEventContent
 import org.matrix.rustcomponents.sdk.TimelineEventContent
 
 class RustNotificationServiceTest {
@@ -54,6 +56,58 @@ class RustNotificationServiceTest {
                 )
             )
         )
+    }
+
+    @Test
+    fun `beacon info state event is mapped to a live location share start`() = runTest {
+        val notificationClient = FakeFfiNotificationClient(
+            notificationItemResult = mapOf(
+                AN_EVENT_ID.value to aRustBatchNotificationResultOk(
+                    notificationStatus = NotificationStatus.Event(
+                        aRustNotificationItem(
+                            aRustNotificationEventTimeline(
+                                FakeFfiTimelineEvent(
+                                    timelineEventContent = TimelineEventContent.State(StateEventContent.BeaconInfo),
+                                )
+                            )
+                        )
+                    )
+                ),
+            ),
+        )
+        val sut = createRustNotificationService(
+            notificationClient = notificationClient,
+        )
+        val result = sut.getNotifications(mapOf(A_ROOM_ID to listOf(AN_EVENT_ID))).getOrThrow()[AN_EVENT_ID]!!.getOrThrow()
+        assertThat(result.content).isEqualTo(
+            NotificationContent.StateEvent.BeaconInfo(
+                senderId = A_USER_ID_2,
+            )
+        )
+    }
+
+    @Test
+    fun `beacon message like event is mapped to Beacon`() = runTest {
+        val notificationClient = FakeFfiNotificationClient(
+            notificationItemResult = mapOf(
+                AN_EVENT_ID.value to aRustBatchNotificationResultOk(
+                    notificationStatus = NotificationStatus.Event(
+                        aRustNotificationItem(
+                            aRustNotificationEventTimeline(
+                                FakeFfiTimelineEvent(
+                                    timelineEventContent = TimelineEventContent.MessageLike(MessageLikeEventContent.Beacon),
+                                )
+                            )
+                        )
+                    )
+                ),
+            ),
+        )
+        val sut = createRustNotificationService(
+            notificationClient = notificationClient,
+        )
+        val result = sut.getNotifications(mapOf(A_ROOM_ID to listOf(AN_EVENT_ID))).getOrThrow()[AN_EVENT_ID]!!.getOrThrow()
+        assertThat(result.content).isEqualTo(NotificationContent.MessageLike.Beacon)
     }
 
     @Test

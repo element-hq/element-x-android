@@ -417,6 +417,27 @@ class DefaultNotifiableEventResolverTest : RobolectricTest() {
     }
 
     @Test
+    fun `resolve live location share start`() = runTest {
+        val sut = createDefaultNotifiableEventResolver(
+            notificationResult = Result.success(
+                mapOf(
+                    AN_EVENT_ID to Result.success(aNotificationData(
+                        content = NotificationContent.StateEvent.BeaconInfo(
+                            senderId = A_USER_ID_2,
+                        ),
+                    ))
+                )
+            )
+        )
+        val request = aPushRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
+        val expectedResult = ResolvedPushEvent.Event(
+            aNotifiableMessageEvent(body = "Started sharing their live location")
+        )
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
+    }
+
+    @Test
     fun `resolve RoomMemberContent invite room`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
@@ -829,6 +850,7 @@ class DefaultNotifiableEventResolverTest : RobolectricTest() {
         testNoResults(NotificationContent.MessageLike.KeyVerificationDone)
         testNoResults(NotificationContent.MessageLike.ReactionContent(relatedEventId = AN_EVENT_ID_2.value))
         testNoResults(NotificationContent.MessageLike.Sticker)
+        testNoResults(NotificationContent.MessageLike.Beacon)
         testNoResults(NotificationContent.StateEvent.PolicyRuleRoom)
         testNoResults(NotificationContent.StateEvent.PolicyRuleServer)
         testNoResults(NotificationContent.StateEvent.PolicyRuleUser)
