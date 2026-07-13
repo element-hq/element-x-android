@@ -28,7 +28,7 @@
   <string name="screen_change_server_subtitle">"Mikä on palvelimesi osoite?"</string>
   <string name="screen_change_server_title">"Valitse palvelimesi"</string>
   <string name="screen_create_account_title">"Luo tili"</string>
-  <string name="screen_login_error_deactivated_account">"Tämä tili on deaktivoitu."</string>
+  <string name="screen_login_error_deactivated_account">"Tämä tili on poistettu."</string>
   <string name="screen_login_error_invalid_credentials">"Väärä käyttäjänimi ja/tai salasana"</string>
   <string name="screen_login_error_invalid_user_id">"Tämä ei ole kelvollinen käyttäjätunnus. Odotettu muoto: \'@käyttäjä:kotipalvelin.fi\'"</string>
   <string name="screen_login_error_refresh_tokens">"Tämä palvelin on määritetty käyttämään refresh tokeneja. Näitä ei tueta salasanapohjaisen kirjautumisen kanssa."</string>

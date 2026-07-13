@@ -51,14 +51,15 @@ import kotlin.random.Random
 fun aTimelineState(
     timelineItems: ImmutableList<TimelineItem> = persistentListOf(),
     timelineMode: Timeline.Mode = Timeline.Mode.Live,
-    renderReadReceipts: Boolean = false,
     timelineRoomInfo: TimelineRoomInfo = aTimelineRoomInfo(),
     focusedEventIndex: Int = -1,
     isLive: Boolean = true,
     messageShield: MessageShield? = null,
     resolveVerifiedUserSendFailureState: ResolveVerifiedUserSendFailureState = aResolveVerifiedUserSendFailureState(),
     displayThreadSummaries: Boolean = false,
-    displayFloatingDateBadge: Boolean = false,
+    displayJumpToUnread: Boolean = false,
+    jumpToUnread: JumpToUnreadState = JumpToUnreadState.Hidden,
+    newEventState: NewEventState = NewEventState.None,
     eventSink: (TimelineEvent) -> Unit = {},
 ): TimelineState {
     val focusedEventId = timelineItems.filterIsInstance<TimelineItem.Event>().getOrNull(focusedEventIndex)?.eventId
@@ -71,14 +72,14 @@ fun aTimelineState(
         timelineItems = timelineItems,
         timelineMode = timelineMode,
         timelineRoomInfo = timelineRoomInfo,
-        renderReadReceipts = renderReadReceipts,
-        newEventState = NewEventState.None,
+        newEventState = newEventState,
         isLive = isLive,
         focusRequestState = focusRequestState,
         messageShieldDialogData = messageShield?.let { MessageShieldData(it) },
         resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailureState,
         displayThreadSummaries = displayThreadSummaries,
-        displayFloatingDateBadge = displayFloatingDateBadge,
+        displayJumpToUnread = displayJumpToUnread,
+        jumpToUnread = jumpToUnread,
         eventSink = eventSink,
     )
 }

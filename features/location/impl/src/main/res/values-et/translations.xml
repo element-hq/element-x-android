@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_share_location_live_location_disclaimer_title">"Sinu reaalajas jagatud asukoha ajalugu salvestub siin jututoas ja see on liikmetele nähtav ka pärast jagamissessiooni lõppu."</string>
   <string name="screen_share_location_live_location_duration_picker_title">"Vali, kui kaua tahad oma reaalajas jagada."</string>
+  <string name="screen_share_location_live_location_missing_permissions">"Sul pole õigust jagada selles jututoas oma asukohta reaalajas"</string>
 </resources>

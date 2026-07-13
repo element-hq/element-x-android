@@ -14,5 +14,7 @@
   <string name="screen_bug_report_include_screenshot">"Kirim tangkapan layar"</string>
   <string name="screen_bug_report_logs_description">"Log akan disertakan dengan pesan Anda untuk memastikan bahwa semuanya berfungsi dengan baik. Untuk mengirimkan pesan Anda tanpa log, matikan pengaturan ini."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s mengalami kemogokan saat terakhir kali digunakan. Apakah Anda ingin berbagi laporan kerusakan dengan kami?"</string>
+  <string name="screen_bug_report_send_notification_settings_description">"Jika Anda mengalami masalah dengan notifikasi, mengunggah aturan push notifikasi dapat membantu kami menemukan penyebab utamanya. Perlu diingat bahwa aturan ini dapat berisi informasi pribadi, seperti nama tampilan Anda atau kata kunci yang ingin Anda terima notifikasinya."</string>
+  <string name="screen_bug_report_send_notification_settings_title">"Pengaturan notifikasi pengiriman"</string>
   <string name="screen_bug_report_view_logs">"Tampilkan catatan"</string>
 </resources>

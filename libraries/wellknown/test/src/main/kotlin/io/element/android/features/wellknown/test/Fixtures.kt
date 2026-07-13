@@ -8,6 +8,7 @@
 
 package io.element.android.features.wellknown.test
 
+import io.element.android.libraries.wellknown.api.CustomRecoveryPassphrase
 import io.element.android.libraries.wellknown.api.ElementWellKnown
 
 fun anElementWellKnown(
@@ -17,6 +18,8 @@ fun anElementWellKnown(
     brandColor: String? = null,
     notificationSound: String? = null,
     identityProviderAppScheme: String? = null,
+    customRecoveryPassphrase: CustomRecoveryPassphrase? = null,
+    contentScannerUrl: String? = null,
 ) = ElementWellKnown(
     registrationHelperUrl = registrationHelperUrl,
     enforceElementPro = enforceElementPro,
@@ -24,4 +27,12 @@ fun anElementWellKnown(
     brandColor = brandColor,
     notificationSound = notificationSound,
     identityProviderAppScheme = identityProviderAppScheme,
+    customRecoveryPassphrase = customRecoveryPassphrase,
+    contentScannerUrl = contentScannerUrl,
+)
+
+fun aCustomRecoveryPassphrase(
+    minCharacterCount: Int = 8,
+) = CustomRecoveryPassphrase(
+    minCharacterCount = minCharacterCount,
 )

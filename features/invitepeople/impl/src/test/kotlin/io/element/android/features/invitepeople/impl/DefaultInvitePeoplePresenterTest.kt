@@ -831,6 +831,54 @@ internal class DefaultInvitePeoplePresenterTest {
         }
     }
 
+    @Test
+    fun `present - inviting someone to a DM creates a new room`() = runTest {
+        val alice = aMatrixUser("@alice:example.com")
+
+        val matrixClient = FakeMatrixClient(
+            encryptionService = FakeEncryptionService(
+                getUserIdentityResult = lambdaRecorder { userId: UserId ->
+                    Result.success(IdentityState.Pinned)
+                }
+            )
+        )
+        val presenter = createDefaultInvitePeoplePresenter(
+            coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
+            matrixClient = matrixClient,
+            joinedRoom = FakeJoinedRoom(
+                baseRoom = FakeBaseRoom(
+                    initialRoomInfo = aRoomInfo(isDm = true),
+                    getMembersResult = { Result.success(listOf(aRoomMember(userId = alice.userId, membership = RoomMembershipState.JOIN))) },
+                )
+            )
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            skipItems(1)
+
+            // We want to add a new user to a DM
+            initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(alice))
+
+            // And we send the invites
+            initialState.eventSink(InvitePeopleEvents.SendInvites)
+
+            skipItems(1)
+
+            awaitItemAsDefault().run {
+                assertThat(canInvite).isTrue()
+                assertThat(sendInvitesAction.isUninitialized()).isTrue()
+                // Inviting to a DM should trigger the creation of a new room
+                assertThat(createRoomFromDmAction.isLoading()).isTrue()
+            }
+
+            awaitItemAsDefault().run {
+                assertThat(sendInvitesAction.isUninitialized()).isTrue()
+                // Once the room is created, the action should be successful
+                assertThat(createRoomFromDmAction.isSuccess()).isTrue()
+            }
+        }
+    }
+
     private suspend fun FakeUserRepository.emitStateWithUsers(
         users: List<MatrixUser>,
         isSearching: Boolean = false

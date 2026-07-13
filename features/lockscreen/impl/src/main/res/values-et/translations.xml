@@ -34,5 +34,5 @@ Vali midagi, mis hästi meelde jääb. Kui unustad selle PIN-koodi, siis turvaka
   </plurals>
   <string name="screen_app_lock_use_biometric_android">"Kasuta biomeetriat"</string>
   <string name="screen_app_lock_use_pin_android">"Kasuta PIN-koodi"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Logime välja…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Eemaldan seadet…"</string>
 </resources>

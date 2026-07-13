@@ -176,6 +176,10 @@ class RoomDetailsFlowNode(
         return when (navTarget) {
             NavTarget.RoomDetails -> {
                 val roomDetailsCallback = object : RoomDetailsNode.Callback {
+                    override fun navigateBack() {
+                        callback.onDone()
+                    }
+
                     override fun navigateToRoomMemberList() {
                         backstack.push(NavTarget.RoomMemberList)
                     }
@@ -254,6 +258,10 @@ class RoomDetailsFlowNode(
                     override fun navigateToInviteMembers() {
                         backstack.push(NavTarget.InviteMembers)
                     }
+
+                    override fun navigateToAvatarPreview(username: String, avatarUrl: String) {
+                        overlay.show(NavTarget.AvatarPreview(username, avatarUrl))
+                    }
                 }
                 createNode<RoomMemberListNode>(buildContext, listOf(roomMemberListCallback))
             }
@@ -263,7 +271,20 @@ class RoomDetailsFlowNode(
             }
 
             NavTarget.InviteMembers -> {
-                createNode<RoomInviteMembersNode>(buildContext)
+                val callback = object : RoomInviteMembersNode.Callback {
+                    override fun openCreatedRoom(roomId: RoomId) {
+                        navigateUp()
+                        room.roomCoroutineScope.launch {
+                            callback.navigateToRoom(
+                                roomId = roomId,
+                                serverNames = emptyList(),
+                                // Remove the invite screen from the backstack to avoid navigating back to it after the new room has been created
+                                clearBackStack = true,
+                            )
+                        }
+                    }
+                }
+                createNode<RoomInviteMembersNode>(buildContext, plugins = listOf(callback))
             }
 
             is NavTarget.RoomNotificationSettings -> {

@@ -16,25 +16,25 @@ import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
 internal fun RoomListEntriesUpdate.describe(): String {
     return when (this) {
         is RoomListEntriesUpdate.Set -> {
-            "Set #$index to '${value.displayName()}'"
+            "Set #$index to '${value.id()}'"
         }
         is RoomListEntriesUpdate.Append -> {
-            "Append ${values.map { "'" + it.displayName() + "'" }}"
+            "Append ${values.map { "'" + it.id() + "'" }}"
         }
         is RoomListEntriesUpdate.PushBack -> {
-            "PushBack '${value.displayName()}'"
+            "PushBack '${value.id()}'"
         }
         is RoomListEntriesUpdate.PushFront -> {
-            "PushFront '${value.displayName()}'"
+            "PushFront '${value.id()}'"
         }
         is RoomListEntriesUpdate.Insert -> {
-            "Insert at #$index: '${value.displayName()}'"
+            "Insert at #$index: '${value.id()}'"
         }
         is RoomListEntriesUpdate.Remove -> {
             "Remove #$index"
         }
         is RoomListEntriesUpdate.Reset -> {
-            "Reset all to ${values.map { "'" + it.displayName() + "'" }}"
+            "Reset all to ${values.map { "'" + it.id() + "'" }}"
         }
         RoomListEntriesUpdate.PopBack -> {
             "PopBack"

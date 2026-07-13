@@ -31,6 +31,7 @@ dependencies {
     implementation(libs.coroutines.core)
     implementation(libs.coil.compose)
     implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.exoplayer.midi)
     implementation(libs.androidx.media3.ui)
     implementation(libs.telephoto.zoomableimage)
     implementation(libs.vanniktech.blurhash)
@@ -49,6 +50,7 @@ dependencies {
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixmedia.api)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.uiUtils)
     implementation(projects.libraries.voiceplayer.api)
     implementation(projects.services.toolbox.api)
 

@@ -9,6 +9,7 @@
 package io.element.android.libraries.matrix.impl
 
 import dev.zacsweers.metro.Inject
+import io.element.android.libraries.androidutils.crypto.ClientSecret
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.data.ByteUnit
 import io.element.android.libraries.core.data.megaBytes
@@ -16,12 +17,14 @@ import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.paths.SessionPaths
+import io.element.android.libraries.matrix.api.scanner.ContentScannerUrlProvider
 import io.element.android.libraries.matrix.impl.analytics.UtdTracker
-import io.element.android.libraries.matrix.impl.certificates.UserCertificatesProvider
-import io.element.android.libraries.matrix.impl.paths.SessionPaths
 import io.element.android.libraries.matrix.impl.paths.getSessionPaths
 import io.element.android.libraries.matrix.impl.proxy.ProxyProvider
 import io.element.android.libraries.matrix.impl.room.TimelineEventFilterFactory
+import io.element.android.libraries.matrix.impl.scanner.RustContentScanner
 import io.element.android.libraries.matrix.impl.storage.SqliteStoreBuilderProvider
 import io.element.android.libraries.matrix.impl.util.anonymizedTokens
 import io.element.android.libraries.network.useragent.UserAgentProvider
@@ -34,6 +37,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientBuilder
+import org.matrix.rustcomponents.sdk.ContentScanner
 import org.matrix.rustcomponents.sdk.CrossProcessLockConfig
 import org.matrix.rustcomponents.sdk.RequestConfig
 import org.matrix.rustcomponents.sdk.Session
@@ -59,7 +63,6 @@ class RustMatrixClientFactory(
     private val sessionStore: SessionStore,
     private val userAgentProvider: UserAgentProvider,
     private val proxyProvider: ProxyProvider,
-    private val userCertificatesProvider: UserCertificatesProvider,
     private val clock: SystemClock,
     private val analyticsService: AnalyticsService,
     private val featureFlagService: FeatureFlagService,
@@ -67,18 +70,20 @@ class RustMatrixClientFactory(
     private val clientBuilderProvider: ClientBuilderProvider,
     private val sqliteStoreBuilderProvider: SqliteStoreBuilderProvider,
     private val workManagerScheduler: WorkManagerScheduler,
+    private val contentScannerUrlProvider: ContentScannerUrlProvider,
 ) {
     private val sessionDelegate = RustClientSessionDelegate(
         sessionStore = sessionStore,
         appCoroutineScope = appCoroutineScope,
         analyticsService = analyticsService,
-        coroutineDispatchers = coroutineDispatchers
     )
 
     suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
+        // This secret is called 'passphrase' for historical reasons, but it can be a raw key or an actual passphrase
+        val clientSecret = sessionData.passphrase?.let(ClientSecret::fromString)
         val client = getBaseClientBuilder(
             sessionPaths = sessionData.getSessionPaths(),
-            passphrase = sessionData.passphrase,
+            clientSecret = clientSecret,
             slidingSyncType = ClientBuilderSlidingSync.Restored,
         )
             .homeserverUrl(sessionData.homeserverUrl)
@@ -100,10 +105,10 @@ class RustMatrixClientFactory(
 
         client.restoreSession(sessionData.toSession())
 
-        create(client)
+        create(client, sessionData)
     }
 
-    suspend fun create(client: Client): RustMatrixClient {
+    suspend fun create(client: Client, sessionData: SessionData): RustMatrixClient {
         val (anonymizedAccessToken, anonymizedRefreshToken) = client.session().anonymizedTokens()
 
         // Must be called before creating the sync service, timelines etc.
@@ -113,12 +118,30 @@ class RustMatrixClientFactory(
 
         client.setUtdDelegate(UtdTracker(analyticsService))
 
+        val domainName = UserId(client.userId()).domainName
+        // If a content scanner URL is available for the homeserver, create a RustContentScanner and set it on the client.
+        // This allows the SDK to use the content scanner for automatic media scanning.
+        // If no content scanner URL is available, the contentScanner will be null.
+        val contentScanner = domainName?.let {
+            contentScannerUrlProvider.getContentScannerUrl(domainName)
+                .getOrNull()
+                ?.let { contentScannerUrl ->
+                    val contentScanner = ContentScanner(contentScannerUrl)
+                    client.setContentScanner(contentScanner)
+                    RustContentScanner(
+                        client = client,
+                        rustScanner = contentScanner,
+                    )
+                }
+        }
+
         val syncService = client.syncService()
             .withSharePos(true)
             .withOfflineMode()
             .finish()
 
         return RustMatrixClient(
+            sessionPaths = sessionData.getSessionPaths(),
             innerClient = client,
             sessionStore = sessionStore,
             appCoroutineScope = appCoroutineScope,
@@ -131,25 +154,25 @@ class RustMatrixClientFactory(
             featureFlagService = featureFlagService,
             analyticsService = analyticsService,
             workManagerScheduler = workManagerScheduler,
+            contentScanner = contentScanner,
         ).also {
-            Timber.tag(it.toString()).d("Creating Client with access token '$anonymizedAccessToken' and refresh token '$anonymizedRefreshToken'")
+            Timber.tag("RustMatrixClient").i("Creating Client with access token '$anonymizedAccessToken' and refresh token '$anonymizedRefreshToken'")
         }
     }
 
     internal suspend fun getBaseClientBuilder(
         sessionPaths: SessionPaths,
-        passphrase: String?,
+        clientSecret: ClientSecret?,
         slidingSyncType: ClientBuilderSlidingSync,
     ): ClientBuilder {
         return clientBuilderProvider.provide()
             .run {
                 sqliteStoreBuilderProvider.provide(sessionPaths)
-                    .passphrase(passphrase)
+                    .secret(clientSecret)
                     .setupClientBuilder(this)
             }
             .setSessionDelegate(sessionDelegate)
             .userAgent(userAgentProvider.provide())
-            .addRootCertificates(userCertificatesProvider.provides())
             .autoEnableBackups(true)
             .autoEnableCrossSigning(true)
             .roomKeyRecipientStrategy(

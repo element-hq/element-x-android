@@ -17,7 +17,7 @@
   <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"是，拒绝"</string>
   <string name="screen_knock_requests_list_decline_alert_description">"你确定要拒绝 %1$s 加入此房间的申请？"</string>
   <string name="screen_knock_requests_list_decline_alert_title">"拒绝访问"</string>
-  <string name="screen_knock_requests_list_decline_and_ban_action_title">"拒绝和禁止"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"拒绝并封禁"</string>
   <string name="screen_knock_requests_list_decline_failed_alert_description">"我们无法拒绝此申请。是否重试？"</string>
   <string name="screen_knock_requests_list_decline_failed_alert_title">"拒绝申请失败"</string>
   <string name="screen_knock_requests_list_decline_loading_title">"拒绝加入申请"</string>

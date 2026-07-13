@@ -34,11 +34,15 @@ import kotlinx.coroutines.launch
 @AssistedInject
 class RoomSelectPresenter(
     @Assisted private val mode: RoomSelectMode,
+    @Assisted private val maxNumberOfRooms: Int,
     private val dataSourceFactory: RoomSelectSearchDataSource.Factory,
 ) : Presenter<RoomSelectState> {
     @AssistedFactory
     fun interface Factory {
-        fun create(mode: RoomSelectMode): RoomSelectPresenter
+        fun create(
+            mode: RoomSelectMode,
+            maxNumberOfRooms: Int,
+        ): RoomSelectPresenter
     }
 
     @Composable
@@ -67,21 +71,18 @@ class RoomSelectPresenter(
             }
         }
 
-        fun handleEvent(event: RoomSelectEvents) {
+        fun handleEvent(event: RoomSelectEvent) {
             when (event) {
-                is RoomSelectEvents.SetSelectedRoom -> {
-                    selectedRooms = persistentListOf(event.room)
-                    // Restore for multi-selection
-//                    val index = selectedRooms.indexOfFirst { it.roomId == event.room.roomId }
-//                    selectedRooms = if (index >= 0) {
-//                        selectedRooms.removeAt(index)
-//                    } else {
-//                        selectedRooms.add(event.room)
-//                    }
+                is RoomSelectEvent.ToggleSelectedRoom -> {
+                    val index = selectedRooms.indexOfFirst { it.roomId == event.room.roomId }
+                    selectedRooms = if (index >= 0) {
+                        selectedRooms.removingAt(index)
+                    } else {
+                        selectedRooms.adding(event.room)
+                    }
                 }
-                RoomSelectEvents.RemoveSelectedRoom -> selectedRooms = persistentListOf()
-                RoomSelectEvents.ToggleSearchActive -> isSearchActive = !isSearchActive
-                is RoomSelectEvents.UpdateVisibleRange -> coroutineScope.launch {
+                RoomSelectEvent.ToggleSearchActive -> isSearchActive = !isSearchActive
+                is RoomSelectEvent.UpdateVisibleRange -> coroutineScope.launch {
                     dataSource.updateVisibleRange(event.range)
                 }
             }
@@ -89,6 +90,7 @@ class RoomSelectPresenter(
 
         return RoomSelectState(
             mode = mode,
+            maxNumberOfRooms = maxNumberOfRooms,
             resultState = searchResults,
             searchQuery = queryState,
             isSearchActive = isSearchActive,

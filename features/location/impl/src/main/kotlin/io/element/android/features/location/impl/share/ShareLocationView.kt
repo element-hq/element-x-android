@@ -20,12 +20,13 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetScaffoldState
-import androidx.compose.material3.rememberStandardBottomSheetState
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,7 +43,7 @@ import io.element.android.features.location.impl.common.ui.LocationConstraintsDi
 import io.element.android.features.location.impl.common.ui.LocationFloatingActionButton
 import io.element.android.features.location.impl.common.ui.MapBottomSheetScaffold
 import io.element.android.features.location.impl.common.ui.UserLocationPuck
-import io.element.android.features.location.impl.common.ui.rememberUserLocationState
+import io.element.android.features.location.impl.common.userlocation.UserLocationTrackingEffect
 import io.element.android.features.location.impl.share.ShareLocationEvent.StartLiveLocationShare
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.LocationPin
@@ -68,7 +69,6 @@ import kotlinx.collections.immutable.ImmutableList
 import org.maplibre.compose.camera.CameraMoveReason
 import org.maplibre.compose.camera.CameraState
 import org.maplibre.compose.camera.rememberCameraState
-import org.maplibre.compose.location.UserLocationState
 import kotlin.time.Duration
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -105,10 +105,11 @@ fun ShareLocationView(
     }
 
     val scaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = rememberStandardBottomSheetState(initialValue = SheetValue.Expanded)
+        bottomSheetState = rememberBottomSheetState(
+            initialValue = SheetValue.Expanded,
+        )
     )
     val cameraState = rememberCameraState(firstPosition = MapDefaults.defaultCameraPosition)
-    val userLocationState = rememberUserLocationState(state.hasLocationPermission)
 
     LaunchedEffect(cameraState.isCameraMoving) {
         if (cameraState.moveReason == CameraMoveReason.GESTURE) {
@@ -117,6 +118,7 @@ fun ShareLocationView(
     }
 
     MapBottomSheetScaffold(
+        customMapStyleUrl = state.customMapStyleUrl,
         cameraState = cameraState,
         modifier = modifier,
         scaffoldState = scaffoldState,
@@ -134,15 +136,18 @@ fun ShareLocationView(
             BottomSheetContent(
                 cameraState = cameraState,
                 state = state,
-                userLocationState = userLocationState,
                 navigateUp = navigateUp
             )
         },
         mapContent = {
+            UserLocationTrackingEffect(
+                cameraState = cameraState,
+                locationState = state.userLocationState,
+                enabled = state.trackUserLocation,
+            )
             UserLocationPuck(
                 cameraState = cameraState,
-                locationState = userLocationState,
-                trackUserLocation = state.trackUserLocation
+                location = state.userLocationState.location,
             )
         },
         overlayContent = { sheetPadding ->
@@ -179,6 +184,7 @@ private fun StartLiveLocationActionView(
     onActionSuccess: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val updatedOnActionSuccess by rememberUpdatedState(onActionSuccess)
     Box(modifier = modifier) {
         val asyncIndicatorState = rememberAsyncIndicatorState()
         AsyncIndicatorHost(state = asyncIndicatorState)
@@ -201,7 +207,7 @@ private fun StartLiveLocationActionView(
                 }
             }
             is AsyncAction.Success -> {
-                LaunchedEffect(action) { onActionSuccess() }
+                LaunchedEffect(action) { updatedOnActionSuccess() }
             }
             else -> Unit
         }
@@ -212,18 +218,17 @@ private fun StartLiveLocationActionView(
 private fun BottomSheetContent(
     cameraState: CameraState,
     state: ShareLocationState,
-    userLocationState: UserLocationState,
     navigateUp: () -> Unit,
 ) {
     Spacer(Modifier.height(20.dp))
-    val userLocation = userLocationState.location
+    val userLocation = state.userLocationState.location
     if (state.trackUserLocation && userLocation != null) {
         ShareCurrentLocationItem {
             state.eventSink(
                 ShareLocationEvent.ShareStaticLocation(
                     location = Location(
-                        lat = userLocation.position.latitude,
-                        lon = userLocation.position.longitude
+                        lat = userLocation.position.value.latitude,
+                        lon = userLocation.position.value.longitude
                     ),
                     isPinned = false
                 )

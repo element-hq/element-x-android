@@ -94,7 +94,9 @@ class MediaGalleryPresenter(
                     mode = event.mode
                 }
                 is MediaGalleryEvent.LoadMore -> coroutineScope.launch {
-                    mediaGalleryDataSource.loadMore(event.direction)
+                    if (mediaGalleryDataSource.isReady) {
+                        mediaGalleryDataSource.loadMore(event.direction)
+                    }
                 }
                 is MediaGalleryEvent.Delete -> coroutineScope.launch {
                     mediaGalleryDataSource.deleteItem(event.eventId)
@@ -127,6 +129,7 @@ class MediaGalleryPresenter(
                 }
                 is MediaGalleryEvent.OpenInfo -> coroutineScope.launch {
                     mediaBottomSheetState = MediaBottomSheetState.Details(
+                        fromGallery = true,
                         eventId = event.mediaItem.eventId(),
                         canDelete = when (event.mediaItem.mediaInfo().senderId) {
                             null -> false

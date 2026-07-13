@@ -245,19 +245,25 @@ private fun RoomsViewList(
                     )
                 }
             }
-            SecurityBannerState.None -> if (state.fullScreenIntentPermissionsState.shouldDisplayBanner) {
-                item {
-                    FullScreenIntentPermissionBanner(state = state.fullScreenIntentPermissionsState)
+            // Banner precedence (top-to-bottom): full-screen-intent > battery-optimization >
+            // new-notification-sound > sound-unavailable. At most one renders at a time.
+            SecurityBannerState.None -> when {
+                state.fullScreenIntentPermissionsState.shouldDisplayBanner -> {
+                    item {
+                        FullScreenIntentPermissionBanner(state = state.fullScreenIntentPermissionsState)
+                    }
                 }
-            } else if (state.batteryOptimizationState.shouldDisplayBanner) {
-                item {
-                    BatteryOptimizationBanner(state = state.batteryOptimizationState)
+                state.batteryOptimizationState.shouldDisplayBanner -> {
+                    item {
+                        BatteryOptimizationBanner(state = state.batteryOptimizationState)
+                    }
                 }
-            } else if (state.showNewNotificationSoundBanner) {
-                item {
-                    NewNotificationSoundBanner(
-                        onDismissClick = { eventSink(RoomListEvent.DismissNewNotificationSoundBanner) },
-                    )
+                state.showNewNotificationSoundBanner -> {
+                    item {
+                        NewNotificationSoundBanner(
+                            onDismissClick = { eventSink(RoomListEvent.DismissNewNotificationSoundBanner) },
+                        )
+                    }
                 }
             }
         }
@@ -273,6 +279,7 @@ private fun RoomsViewList(
                 hideInviteAvatars = hideInvitesAvatars,
                 isInviteSeen = room.displayType == RoomSummaryDisplayType.INVITE &&
                     state.seenRoomInvites.contains(room.roomId),
+                showUnreadCount = state.showUnreadCount,
                 onClick = onRoomClick,
                 eventSink = eventSink,
             )

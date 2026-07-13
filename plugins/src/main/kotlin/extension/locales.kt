@@ -5,6 +5,7 @@ package extension
 val locales = setOf(
     "be",
     "bg",
+    "ca",
     "cs",
     "cy",
     "da",

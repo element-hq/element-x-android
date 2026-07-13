@@ -83,8 +83,8 @@ class RoomListDataSource(
 
     val loadingState = roomList.loadingState
 
-    fun launchIn(coroutineScope: CoroutineScope) {
-        roomList
+    fun launchIn(coroutineScope: CoroutineScope): Job {
+        return roomList
             .summaries
             .onEach { roomSummaries ->
                 replaceWith(roomSummaries)
@@ -212,6 +212,7 @@ class RoomListDataSource(
     private suspend fun rebuildAllRoomSummaries() {
         lock.withLock {
             roomList.summaries.replayCache.firstOrNull()?.let { roomSummaries ->
+                diffCacheUpdater.updateWith(roomSummaries)
                 buildAndEmitAllRooms(roomSummaries, useCache = false)
             }
         }

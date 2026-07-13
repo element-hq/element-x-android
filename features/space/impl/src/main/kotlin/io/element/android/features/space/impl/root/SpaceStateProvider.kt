@@ -140,6 +140,7 @@ private fun aSpaceInfo(
         privilegedCreatorRole = false,
         isLowPriority = false,
         activeCallIntentConsensus = CallIntentConsensus.None,
+        fullyReadEventId = null,
     )
 }
 

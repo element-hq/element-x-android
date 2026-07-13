@@ -28,6 +28,7 @@ fun Throwable.mapAuthenticationException(): AuthenticationException {
             }
             is ClientBuildException.WellKnownLookupFailed -> AuthenticationException.Generic(message)
             is ClientBuildException.EventCache -> AuthenticationException.Generic(message)
+            is ClientBuildException.InvalidRawKey -> AuthenticationException.Generic(message)
         }
         is OAuthException -> when (this) {
             is OAuthException.Generic -> AuthenticationException.OAuth(message)

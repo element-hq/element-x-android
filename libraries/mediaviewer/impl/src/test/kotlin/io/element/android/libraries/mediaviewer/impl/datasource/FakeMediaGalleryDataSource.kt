@@ -15,18 +15,20 @@ import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
 import io.element.android.tests.testutils.lambda.lambdaError
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class FakeMediaGalleryDataSource(
+    initialData: AsyncData<GroupedMediaItems> = AsyncData.Uninitialized,
+    private val isReadyResult: () -> Boolean = { true },
     private val startLambda: () -> Unit = { lambdaError() },
     private val loadMoreLambda: (Timeline.PaginationDirection) -> Unit = { lambdaError() },
     private val deleteItemLambda: (EventId) -> Unit = { lambdaError() },
-    ) : MediaGalleryDataSource {
+) : MediaGalleryDataSource {
     override fun start(coroutineScope: CoroutineScope) = startLambda()
 
-    private val groupedMediaItemsFlow = MutableSharedFlow<AsyncData<GroupedMediaItems>>(
-        replay = 1
-    )
+    private val groupedMediaItemsFlow = MutableStateFlow(initialData)
+
+    override val isReady: Boolean get() = isReadyResult()
 
     override fun groupedMediaItemsFlow(): Flow<AsyncData<GroupedMediaItems>> {
         return groupedMediaItemsFlow

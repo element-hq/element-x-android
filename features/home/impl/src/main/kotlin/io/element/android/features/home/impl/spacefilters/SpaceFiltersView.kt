@@ -24,7 +24,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetValue
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -48,6 +48,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.spaces.SpaceServiceFilter
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,8 +57,9 @@ fun SpaceFiltersView(
     modifier: Modifier = Modifier
 ) {
     val isSelecting by rememberUpdatedState(state is SpaceFiltersState.Selecting)
-    val sheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = true,
+    val sheetState = rememberBottomSheetState(
+        initialValue = SheetValue.Hidden,
+        enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
         confirmValueChange = { sheetValueTarget ->
             // This ensures the hide animation is not cancelled
             when (sheetValueTarget) {
@@ -93,7 +95,7 @@ fun SpaceFiltersView(
                     SpaceFiltersBottomSheetContent(
                         filters = state.visibleFilters,
                         searchQuery = state.searchQuery,
-                        onFilterSelected = { filter ->
+                        onSelectFilter = { filter ->
                             state.eventSink(SpaceFiltersEvent.Selecting.SelectFilter(filter))
                         }
                     )
@@ -105,9 +107,9 @@ fun SpaceFiltersView(
 
 @Composable
 private fun SpaceFiltersBottomSheetContent(
-    filters: List<SpaceServiceFilter>,
+    filters: ImmutableList<SpaceServiceFilter>,
     searchQuery: TextFieldState,
-    onFilterSelected: (SpaceServiceFilter) -> Unit,
+    onSelectFilter: (SpaceServiceFilter) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -133,7 +135,7 @@ private fun SpaceFiltersBottomSheetContent(
             items(filters) { filter ->
                 SpaceFilterItem(
                     filter = filter,
-                    onClick = { onFilterSelected(filter) }
+                    onClick = { onSelectFilter(filter) }
                 )
             }
         }
@@ -186,6 +188,6 @@ private fun SpaceFilterItem(
 
 @PreviewsDayNight
 @Composable
-internal fun SpaceFiltersViewPreview(@PreviewParameter(SpaceFiltersStateProvider::class) state: SpaceFiltersState) = ElementPreview {
+internal fun SpaceFiltersViewPreview(@PreviewParameter(SpaceFiltersStateProvider::class) state: SpaceFiltersState) = ElementPreview(fillMaxSize = true) {
     SpaceFiltersView(state = state)
 }

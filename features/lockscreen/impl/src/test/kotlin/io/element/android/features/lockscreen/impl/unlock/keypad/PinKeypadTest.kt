@@ -28,12 +28,10 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EventsRecorder
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class PinKeypadTest {
+class PinKeypadTest : RobolectricTest() {
     @Test
     fun `clicking on a number emits the expected event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<PinKeypadModel>()

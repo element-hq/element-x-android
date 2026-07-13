@@ -11,6 +11,7 @@ package io.element.android.features.roomdetails.impl.invite
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
@@ -19,10 +20,16 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.annotations.ContributesNode
+import io.element.android.features.invitepeople.api.InvitePeopleEvents
 import io.element.android.features.invitepeople.api.InvitePeoplePresenter
 import io.element.android.features.invitepeople.api.InvitePeopleRenderer
+import io.element.android.libraries.architecture.callback
+import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
 
 @ContributesNode(RoomScope::class)
@@ -35,6 +42,10 @@ class RoomInviteMembersNode(
     room: JoinedRoom,
     invitePeoplePresenterFactory: InvitePeoplePresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
+    interface Callback : Plugin {
+        fun openCreatedRoom(roomId: RoomId)
+    }
+
     init {
         lifecycle.subscribe(
             onResume = {
@@ -48,6 +59,8 @@ class RoomInviteMembersNode(
         roomId = room.roomId,
     )
 
+    private val callback = plugins.callback<Callback>()
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = invitePeoplePresenter.present()
@@ -58,6 +71,19 @@ class RoomInviteMembersNode(
                 navigateUp()
             }
         }
+
+        AsyncActionView(
+            async = state.createRoomFromDmAction,
+            onSuccess = { roomId ->
+                callback.openCreatedRoom(roomId)
+            },
+            progressDialog = {
+                ProgressDialog(text = stringResource(CommonStrings.common_creating_room))
+            },
+            onErrorDismiss = {
+                state.eventSink(InvitePeopleEvents.ClearError)
+            }
+        )
 
         RoomInviteMembersView(
             state = state,

@@ -6,6 +6,7 @@
   <string name="screen_room_change_permissions_delete_messages">"Odstranit zprávy"</string>
   <string name="screen_room_change_permissions_everyone">"Člen"</string>
   <string name="screen_room_change_permissions_invite_people">"Pozvat přátele"</string>
+  <string name="screen_room_change_permissions_live_location">"Sdílet aktuální polohu"</string>
   <string name="screen_room_change_permissions_manage_space">"Správa prostoru"</string>
   <string name="screen_room_change_permissions_manage_space_rooms">"Spravovat místnosti"</string>
   <string name="screen_room_change_permissions_member_moderation">"Spravovat členy"</string>

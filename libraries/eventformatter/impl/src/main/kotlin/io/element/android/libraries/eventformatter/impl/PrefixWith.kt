@@ -20,6 +20,10 @@ internal fun CharSequence.prefixWith(prefix: String): AnnotatedString {
             append(prefix)
         }
         append(": ")
-        append(this@prefixWith)
+        if (this@prefixWith is AnnotatedString) {
+            append(this@prefixWith)
+        } else {
+            append(this@prefixWith.toString())
+        }
     }
 }

@@ -50,6 +50,7 @@ Nu aveți mesaje necitite!"</string>
   <string name="screen_roomlist_mark_as_read">"Marcați ca citită"</string>
   <string name="screen_roomlist_mark_as_unread">"Marcați ca necitită"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Această cameră a fost modernizată."</string>
+  <string name="screen_roomlist_your_spaces">"Spațiile dumneavoastră"</string>
   <string name="session_verification_banner_message">"Se pare că folosiți un dispozitiv nou. Verificați-vă identitatea cu un alt dispozitiv pentru a accesa mesajele dumneavoastră criptate."</string>
   <string name="session_verification_banner_title">"Verificați că sunteți dumneavoastră"</string>
 </resources>

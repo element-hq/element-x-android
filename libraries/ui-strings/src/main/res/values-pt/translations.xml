@@ -37,7 +37,6 @@
     <item quantity="other">"Lida por %1$s e %2$d outros"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Lida por %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Toca para mostrar tudo"</string>
   <string name="a11y_remove_reaction">"Remover reação com %1$s"</string>
   <string name="a11y_remove_reaction_with">"Remover reação com %1$s"</string>
   <string name="a11y_room_avatar">"Ícone da sala"</string>

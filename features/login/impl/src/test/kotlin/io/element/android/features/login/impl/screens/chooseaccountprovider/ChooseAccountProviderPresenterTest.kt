@@ -12,8 +12,8 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.accountprovider.AccountProvider
-import io.element.android.features.login.impl.login.LoginHelper
-import io.element.android.features.login.impl.screens.onboarding.createLoginHelper
+import io.element.android.features.login.impl.login.LoginModePresenter
+import io.element.android.features.login.impl.screens.onboarding.createLoginModePresenter
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.matrix.test.AN_ACCOUNT_PROVIDER_2
@@ -81,7 +81,7 @@ class ChooseAccountProviderPresenterTest {
             enterpriseService = FakeEnterpriseService(
                 defaultHomeserverListResult = { listOf(ACCOUNT_PROVIDER_FROM_CONFIG_1, ACCOUNT_PROVIDER_FROM_CONFIG_2) },
             ),
-            loginHelper = createLoginHelper(
+            loginModePresenter = createLoginModePresenter(
                 authenticationService = authenticationService,
             ),
         )
@@ -105,7 +105,7 @@ class ChooseAccountProviderPresenterTest {
             enterpriseService = FakeEnterpriseService(
                 defaultHomeserverListResult = { listOf(ACCOUNT_PROVIDER_FROM_CONFIG_1, ACCOUNT_PROVIDER_FROM_CONFIG_2) },
             ),
-            loginHelper = createLoginHelper(
+            loginModePresenter = createLoginModePresenter(
                 authenticationService = authenticationService,
             ),
         )
@@ -121,12 +121,12 @@ class ChooseAccountProviderPresenterTest {
 
                 // Check an error was returned
                 val submittedState = awaitItem()
-                assertThat(submittedState.loginMode).isInstanceOf(AsyncData.Failure::class.java)
+                assertThat(submittedState.loginModeState.loginMode).isInstanceOf(AsyncData.Failure::class.java)
 
                 // Assert the error is then cleared
                 submittedState.eventSink(ChooseAccountProviderEvents.ClearError)
                 val clearedState = awaitItem()
-                assertThat(clearedState.loginMode).isEqualTo(AsyncData.Uninitialized)
+                assertThat(clearedState.loginModeState.loginMode).isEqualTo(AsyncData.Uninitialized)
             }
         }
     }
@@ -138,7 +138,7 @@ class ChooseAccountProviderPresenterTest {
             enterpriseService = FakeEnterpriseService(
                 defaultHomeserverListResult = { listOf(ACCOUNT_PROVIDER_FROM_CONFIG_1, ACCOUNT_PROVIDER_FROM_CONFIG_2) },
             ),
-            loginHelper = createLoginHelper(
+            loginModePresenter = createLoginModePresenter(
                 authenticationService = authenticationService,
             ),
         )
@@ -152,7 +152,7 @@ class ChooseAccountProviderPresenterTest {
                 it.eventSink(ChooseAccountProviderEvents.Continue)
             }
             awaitItem().also {
-                assertThat(it.loginMode.isLoading()).isTrue()
+                assertThat(it.loginModeState.loginMode.isLoading()).isTrue()
                 it.eventSink(ChooseAccountProviderEvents.SelectAccountProvider(accountProvider2))
             }
             expectNoEvents()
@@ -162,8 +162,8 @@ class ChooseAccountProviderPresenterTest {
 
 private fun createPresenter(
     enterpriseService: EnterpriseService = FakeEnterpriseService(),
-    loginHelper: LoginHelper = createLoginHelper(),
+    loginModePresenter: LoginModePresenter = createLoginModePresenter(),
 ) = ChooseAccountProviderPresenter(
     enterpriseService = enterpriseService,
-    loginHelper = loginHelper,
+    loginModePresenter = loginModePresenter,
 )

@@ -16,6 +16,11 @@
   <string name="emoji_picker_category_places">"여행 &amp; 장소"</string>
   <string name="emoji_picker_category_recent">"최근 이모지"</string>
   <string name="emoji_picker_category_symbols">"상징"</string>
+  <string name="screen_image_edition_a11y_rotate_to_the_left">"이미지를 왼쪽으로 회전"</string>
+  <plurals name="screen_image_edition_a11y_rotation_state">
+    <item quantity="other">"%1$d도"</item>
+  </plurals>
+  <string name="screen_image_edition_title">"사진 편집"</string>
   <string name="screen_media_upload_preview_caption_warning">"캡션은 오래된 앱을 사용하는 사용자에게 표시되지 않을 수 있습니다."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"비디오 업로드 품질을 변경하려면 탭하세요"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"파일을 업로드할 수 없습니다."</string>
@@ -26,6 +31,7 @@
   <string name="screen_media_upload_preview_item_count">"전체 %2$d개 중 %1$d번째 파일"</string>
   <string name="screen_media_upload_preview_optimize_image_quality_title">"이미지 품질 최적화"</string>
   <string name="screen_media_upload_preview_processing">"처리 중…"</string>
+  <string name="screen_media_upload_preview_title">"미디어 추가"</string>
   <string name="screen_report_content_block_user">"사용자 차단하기"</string>
   <string name="screen_report_content_block_user_hint">"이 사용자의 현재 및 향후 모든 메시지를 숨기려면 확인하세요."</string>
   <string name="screen_report_content_explanation">"이 메시지는 홈서버의 관리자에게 보고되었습니다. 암호화된 메시지는 읽을 수 없습니다."</string>

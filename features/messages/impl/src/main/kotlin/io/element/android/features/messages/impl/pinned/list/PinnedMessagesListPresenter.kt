@@ -208,7 +208,8 @@ class PinnedMessagesListPresenter(
                     combine(timelineItemsFlow, room.membersStateFlow) { items, membersState ->
                         timelineItemsFactory.replaceWith(
                             timelineItems = items,
-                            roomMembers = membersState.roomMembers().orEmpty()
+                            roomMembers = membersState.roomMembers().orEmpty(),
+                            renderReadReceipts = false,
                         )
                     }.launchIn(this)
 

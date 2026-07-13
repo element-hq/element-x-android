@@ -108,6 +108,18 @@ class BugReportPresenterTest {
     }
 
     @Test
+    fun `present - set GitHub issue number`() = runTest {
+        val presenter = createPresenter()
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink.invoke(BugReportEvents.SetGhIssueNumber(1))
+            assertThat(awaitItem().formState).isEqualTo(BugReportFormState.Default.copy(ghIssueNumber = 1))
+            initialState.eventSink.invoke(BugReportEvents.SetGhIssueNumber(null))
+            assertThat(awaitItem().formState).isEqualTo(BugReportFormState.Default.copy(ghIssueNumber = null))
+        }
+    }
+
+    @Test
     fun `present - reset all`() = runTest {
         val presenter = createPresenter(
             crashDataStore = FakeCrashDataStore(crashData = A_CRASH_DATA, appHasCrashed = true),

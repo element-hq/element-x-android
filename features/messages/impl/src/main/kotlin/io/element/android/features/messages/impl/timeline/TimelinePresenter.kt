@@ -33,6 +33,7 @@ import io.element.android.features.messages.impl.timeline.factories.TimelineItem
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactoryConfig
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemReadMarkerModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemTypingNotificationModel
 import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.features.messages.impl.userEventPermissions
@@ -66,6 +67,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -95,6 +97,7 @@ class TimelinePresenter(
     private val featureFlagService: FeatureFlagService,
     private val analyticsService: AnalyticsService,
     private val liveLocationShareManager: ActiveLiveLocationShareManager,
+    private val markAsFullyRead: MarkAsFullyRead,
 ) : Presenter<TimelineState> {
     private val tag = "TimelinePresenter"
 
@@ -133,16 +136,16 @@ class TimelinePresenter(
 
         val prevMostRecentItemId = rememberSaveable { mutableStateOf<UniqueId?>(null) }
 
-        val newEventState = remember { mutableStateOf(NewEventState.None) }
+        val newEventState = remember { mutableStateOf<NewEventState>(NewEventState.None) }
         val messageShieldDialogData: MutableState<MessageShieldData?> = remember { mutableStateOf(null) }
 
+        // Forces [JumpToUnreadState.Hidden] until the next RoomInfo push. Set after a
+        // [TimelineEvent.MarkAllAsRead] await completes so the FAB hides without waiting for
+        // the SDK to push a refreshed fully-read marker; the after-await ordering means any
+        // RoomInfo update racing the mark-as-read call has already landed and can't undo this.
+        val suppressJumpToUnread = remember { mutableStateOf(false) }
+
         val resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailurePresenter.present()
-        val isSendPublicReadReceiptsEnabled by remember {
-            sessionPreferencesStore.isSendPublicReadReceiptsEnabled()
-        }.collectAsState(initial = true)
-        val renderReadReceipts by remember {
-            sessionPreferencesStore.isRenderReadReceiptsEnabled()
-        }.collectAsState(initial = true)
         val isLive by remember {
             timelineController.isLive()
         }.collectAsState(initial = true)
@@ -150,8 +153,8 @@ class TimelinePresenter(
         val displayThreadSummaries by produceState(false) {
             value = featureFlagService.isFeatureEnabled(FeatureFlags.Threads)
         }
-        val displayFloatingDateBadge by produceState(false) {
-            value = featureFlagService.isFeatureEnabled(FeatureFlags.FloatingDateBadge)
+        val displayJumpToUnread by produceState(false) {
+            value = featureFlagService.isFeatureEnabled(FeatureFlags.JumpToUnread)
         }
 
         fun handleEvent(event: TimelineEvent) {
@@ -171,12 +174,15 @@ class TimelinePresenter(
                             newEventState.value = NewEventState.None
                         }
                         Timber.tag(tag).d("## sendReadReceiptIfNeeded firstVisibleIndex: ${event.firstIndex}")
-                        sessionCoroutineScope.sendReadReceiptIfNeeded(
-                            firstVisibleIndex = event.firstIndex,
-                            timelineItems = timelineItems,
-                            lastReadReceiptId = lastReadReceiptId,
-                            readReceiptType = if (isSendPublicReadReceiptsEnabled) ReceiptType.READ else ReceiptType.READ_PRIVATE,
-                        )
+                        sessionCoroutineScope.launch {
+                            val sendPublicReadReceipts = sessionPreferencesStore.isSendPublicReadReceiptsEnabled().first()
+                            sendReadReceiptIfNeeded(
+                                firstVisibleIndex = event.firstIndex,
+                                timelineItems = timelineItems,
+                                lastReadReceiptId = lastReadReceiptId,
+                                readReceiptType = if (sendPublicReadReceipts) ReceiptType.READ else ReceiptType.READ_PRIVATE,
+                            )
+                        }
                     } else {
                         newEventState.value = NewEventState.None
                     }
@@ -223,6 +229,14 @@ class TimelinePresenter(
                     timelineController.focusOnLive()
                 }
                 TimelineEvent.HideShieldDialog -> messageShieldDialogData.value = null
+                TimelineEvent.MarkAllAsRead -> sessionCoroutineScope.launch {
+                    val latestEventId = room.liveTimeline.getLatestEventId().getOrElse {
+                        Timber.tag(tag).w(it, "Failed to get latest event id to mark as fully read")
+                        null
+                    } ?: return@launch
+                    markAsFullyRead(room.roomId, latestEventId)
+                    suppressJumpToUnread.value = true
+                }
                 is TimelineEvent.ShowShieldDialog -> messageShieldDialogData.value = event.messageShieldData
                 is TimelineEvent.ComputeVerifiedUserSendFailure -> {
                     resolveVerifiedUserSendFailureState.eventSink(ResolveVerifiedUserSendFailureEvent.ComputeForMessage(event.event))
@@ -254,13 +268,18 @@ class TimelinePresenter(
                 }
                 .launchIn(this)
 
-            combine(timelineController.timelineItems(), room.membersStateFlow) { items, membersState ->
+            combine(
+                timelineController.timelineItems(),
+                room.membersStateFlow,
+                sessionPreferencesStore.isRenderReadReceiptsEnabled(),
+            ) { items, membersState, renderReadReceipts ->
                 val parent = analyticsService.getLongRunningTransaction(DisplayFirstTimelineItems)
                 val transaction = parent?.startChild("timelineItemsFactory.replaceWith", "Processing timeline items")
                 transaction?.putExtraData(AnalyticsUserData.TIMELINE_ITEM_COUNT, items.count().toString())
                 timelineItemsFactory.replaceWith(
                     timelineItems = items,
-                    roomMembers = membersState.roomMembers().orEmpty()
+                    roomMembers = membersState.roomMembers().orEmpty(),
+                    renderReadReceipts = renderReadReceipts,
                 )
                 transaction?.finish()
                 items
@@ -274,7 +293,67 @@ class TimelinePresenter(
             computeNewItemState(timelineItems, prevMostRecentItemId, newEventState)
         }
 
-        LaunchedEffect(timelineItems.size, focusRequestState.value) {
+        // Keyed on the full [timelineItems] reference (not just .size) so we re-scan when the
+        // read marker advances in place — the SDK swaps the marker virtual item to a new position
+        // without changing the list length, e.g. when [markRoomAsFullyRead] is sent while at the
+        // bottom of the room.
+        //
+        // The state has three shapes:
+        //  - InWindow: the SDK has materialised a virtual ReadMarker item in the loaded window;
+        //    tapping the FAB smoothly scrolls to its index.
+        //  - OutOfWindow: the marker event is older than the loaded window, so the SDK gives us
+        //    only the event id via RoomInfo.fullyReadEventId; tapping triggers a focused-event
+        //    load via the existing TimelineEvent.FocusOnEvent path.
+        //  - Hidden: feature flag off, no marker, caught-up (marker loaded but no virtual item),
+        //    or initial load (no items yet).
+        val jumpToUnread = remember { mutableStateOf<JumpToUnreadState>(JumpToUnreadState.Hidden) }
+        // The SDK is authoritative again once it pushes a new fully-read marker, so drop the
+        // post-mark-as-read suppression and let the recompute below pick up the new value.
+        LaunchedEffect(roomInfo.fullyReadEventId) {
+            suppressJumpToUnread.value = false
+        }
+        LaunchedEffect(
+            timelineItems.map { it.identifier() },
+            displayJumpToUnread,
+            roomInfo.fullyReadEventId,
+            roomInfo.numUnreadMessages,
+            suppressJumpToUnread.value,
+        ) {
+            if (!displayJumpToUnread || suppressJumpToUnread.value) {
+                jumpToUnread.value = JumpToUnreadState.Hidden
+                return@LaunchedEffect
+            }
+            val items = timelineItems
+            val fullyReadEventId = roomInfo.fullyReadEventId
+            val hasUnreadMessages = roomInfo.numUnreadMessages > 0
+            val markerIndex = withContext(dispatchers.computation) {
+                items.indexOfFirst {
+                    (it as? TimelineItem.Virtual)?.model is TimelineItemReadMarkerModel
+                }
+            }
+            jumpToUnread.value = when {
+                markerIndex >= 0 -> JumpToUnreadState.InWindow(markerIndex)
+                // Out-of-window only when there is genuinely unread *displayable* content
+                // (numUnreadMessages counts "interesting" messages, never state/hidden events) AND
+                // the marker event isn't merely an in-window item we don't render. isKnown is the
+                // cheap display-index check; isEventLoaded falls back to the SDK to tell
+                // "in window but not displayed" apart from "genuinely out of window".
+                fullyReadEventId != null &&
+                    hasUnreadMessages &&
+                    items.isNotEmpty() &&
+                    !timelineItemIndexer.isKnown(fullyReadEventId) &&
+                    !timelineController.activeTimelineFlow().value.isEventLoaded(fullyReadEventId) ->
+                    JumpToUnreadState.OutOfWindow(fullyReadEventId)
+                else -> JumpToUnreadState.Hidden
+            }
+        }
+
+        // Keyed on the full [timelineItems] reference (not just .size) so we re-resolve the index
+        // when a focused timeline loads with the same item count as the window it replaced — e.g.
+        // jumping to an out-of-window read marker in a busy room, where both windows fill to the
+        // same page size. With .size as the key the effect wouldn't re-run, the focused event's
+        // index would stay unresolved, and the scroll would never fire until a second tap.
+        LaunchedEffect(timelineItems.map { it.identifier() }, focusRequestState.value) {
             val currentFocusRequestState = focusRequestState.value
             if (currentFocusRequestState is FocusRequestState.Success && !currentFocusRequestState.rendered) {
                 val eventId = currentFocusRequestState.eventId
@@ -315,14 +394,14 @@ class TimelinePresenter(
             timelineItems = timelineItems,
             timelineMode = timelineMode,
             timelineRoomInfo = timelineRoomInfo,
-            renderReadReceipts = renderReadReceipts,
             newEventState = newEventState.value,
             isLive = isLive,
             focusRequestState = focusRequestState.value,
             messageShieldDialogData = messageShieldDialogData.value,
             resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailureState,
             displayThreadSummaries = displayThreadSummaries,
-            displayFloatingDateBadge = displayFloatingDateBadge,
+            displayJumpToUnread = displayJumpToUnread,
+            jumpToUnread = jumpToUnread.value,
             eventSink = ::handleEvent,
         )
     }
@@ -384,7 +463,7 @@ class TimelinePresenter(
     private suspend fun computeNewItemState(
         timelineItems: ImmutableList<TimelineItem>,
         prevMostRecentItemId: MutableState<UniqueId?>,
-        newEventState: MutableState<NewEventState>
+        newEventState: MutableState<NewEventState>,
     ) = withContext(dispatchers.computation) {
         // FromMe is prioritized over FromOther, so skip if we already have a FromMe
         if (newEventState.value == NewEventState.FromMe) {
@@ -403,12 +482,7 @@ class TimelinePresenter(
 
         if (hasNewEvent) {
             // Scroll to bottom if the new event is from me, even if sent from another device
-            val fromMe = newMostRecentItem.isMine
-            newEventState.value = if (fromMe) {
-                NewEventState.FromMe
-            } else {
-                NewEventState.FromOther
-            }
+            newEventState.value = if (newMostRecentItem.isMine) NewEventState.FromMe else NewEventState.FromOther
         }
         prevMostRecentItemId.value = newMostRecentItemId
     }

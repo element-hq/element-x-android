@@ -9,7 +9,7 @@
   <string name="screen_link_new_device_enter_number_notice">"输入两位数字的代码"</string>
   <string name="screen_link_new_device_enter_number_subtitle">"这将验证你与其它设备的连接是否安全。"</string>
   <string name="screen_link_new_device_enter_number_title">"请输入另一台设备上显示的数字"</string>
-  <string name="screen_link_new_device_error_app_not_supported_subtitle">"账户提供方不支持 %1$s."</string>
+  <string name="screen_link_new_device_error_app_not_supported_subtitle">"账户提供者不支持 %1$s."</string>
   <string name="screen_link_new_device_error_app_not_supported_title">"不支持 %1$s."</string>
   <string name="screen_link_new_device_error_not_supported_subtitle">"你的账户提供者不支持使用二维码登录到新设备。"</string>
   <string name="screen_link_new_device_error_not_supported_title">"二维码不受支持"</string>
@@ -48,7 +48,7 @@
 
 尝试手动或使用另一个设备扫描二维码."</string>
   <string name="screen_qr_code_login_error_linking_not_suported_title">"二维码不受支持"</string>
-  <string name="screen_qr_code_login_error_sliding_sync_not_supported_subtitle">"账户提供方不支持 %1$s."</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_subtitle">"账户提供者不支持 %1$s."</string>
   <string name="screen_qr_code_login_error_sliding_sync_not_supported_title">"不支持 %1$s."</string>
   <string name="screen_qr_code_login_invalid_scan_state_description">"使用其它设备上显示的二维码。"</string>
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"重试"</string>

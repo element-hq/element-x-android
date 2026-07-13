@@ -24,8 +24,16 @@ appId: ${MAESTRO_APP_ID}
     text: ${MAESTRO_INVITEE2_MXID}
     index: 1
 - tapOn: "Invite"
+- runFlow:
+    when:
+      visible: 'Invite new contact to this room?'
+    commands:
+      - tapOn:
+          id: "confirm_invite_unknown"
+# Close the keyboard if it's still open
 - tapOn: "Back"
-- tapOn: "aRoomName"
+# Go back to the room details screen
+- tapOn: "Back"
 - scrollUntilVisible:
     direction: DOWN
     element:

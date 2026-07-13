@@ -35,7 +35,6 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
 
 @Composable
@@ -44,7 +43,6 @@ fun TimelineItemGroupedEventsRow(
     timelineMode: Timeline.Mode,
     timelineRoomInfo: TimelineRoomInfo,
     timelineProtectionState: TimelineProtectionState,
-    renderReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
     focusedEventId: EventId?,
     displayThreadSummaries: Boolean,
@@ -66,13 +64,14 @@ fun TimelineItemGroupedEventsRow(
         { event, contentModifier, onContentLayoutChange ->
             TimelineItemEventContentView(
                 content = event.content,
-                hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId),
+                hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId, event.isMine),
                 onShowContentClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
                 onLinkClick = onLinkClick,
                 onLinkLongClick = onLinkLongClick,
                 eventSink = eventSink,
                 modifier = contentModifier,
                 onContentClick = null,
+                onGalleryItemClick = {},
                 onLongClick = null,
                 onContentLayoutChange = onContentLayoutChange
             )
@@ -92,7 +91,6 @@ fun TimelineItemGroupedEventsRow(
         timelineRoomInfo = timelineRoomInfo,
         timelineProtectionState = timelineProtectionState,
         focusedEventId = focusedEventId,
-        renderReadReceipts = renderReadReceipts,
         isLastOutgoingMessage = isLastOutgoingMessage,
         displayThreadSummaries = displayThreadSummaries,
         onClick = onClick,
@@ -122,7 +120,6 @@ private fun TimelineItemGroupedEventsRowContent(
     timelineRoomInfo: TimelineRoomInfo,
     timelineProtectionState: TimelineProtectionState,
     focusedEventId: EventId?,
-    renderReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
     displayThreadSummaries: Boolean,
     onClick: (TimelineItem.Event) -> Unit,
@@ -143,13 +140,14 @@ private fun TimelineItemGroupedEventsRowContent(
         { event, contentModifier, onContentLayoutChange ->
             TimelineItemEventContentView(
                 content = event.content,
-                hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId),
+                hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId, event.isMine),
                 onShowContentClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
                 onLinkClick = onLinkClick,
                 onLinkLongClick = onLinkLongClick,
                 eventSink = eventSink,
                 modifier = contentModifier,
                 onContentClick = null,
+                onGalleryItemClick = {},
                 onLongClick = null,
                 onContentLayoutChange = onContentLayoutChange
             )
@@ -168,19 +166,12 @@ private fun TimelineItemGroupedEventsRowContent(
         )
         if (isExpanded) {
             Column {
-                timelineItem.events.let {
-                    if (isTalkbackActive()) {
-                        it.reversed()
-                    } else {
-                        it
-                    }
-                }.forEach { subGroupEvent ->
+                timelineItem.events.forEach { subGroupEvent ->
                     TimelineItemRow(
                         timelineMode = timelineMode,
                         timelineItem = subGroupEvent,
                         timelineRoomInfo = timelineRoomInfo,
                         timelineProtectionState = timelineProtectionState,
-                        renderReadReceipts = renderReadReceipts,
                         isLastOutgoingMessage = isLastOutgoingMessage,
                         focusedEventId = focusedEventId,
                         displayThreadSummaries = displayThreadSummaries,
@@ -188,6 +179,7 @@ private fun TimelineItemGroupedEventsRowContent(
                         onLinkClick = onLinkClick,
                         onLinkLongClick = onLinkLongClick,
                         onContentClick = onClick,
+                        onGalleryItemClick = { _, _ -> },
                         onLongClick = onLongClick,
                         inReplyToClick = inReplyToClick,
                         onReactionClick = onReactionClick,
@@ -203,14 +195,13 @@ private fun TimelineItemGroupedEventsRowContent(
                     )
                 }
             }
-        } else if (renderReadReceipts) {
+        } else if (timelineItem.aggregatedReadReceipts.isNotEmpty()) {
             TimelineItemReadReceiptView(
                 state = ReadReceiptViewState(
                     sendState = null,
                     isLastOutgoingMessage = false,
                     receipts = timelineItem.aggregatedReadReceipts,
                 ),
-                renderReadReceipts = true,
                 onReadReceiptsClick = onExpandGroupClick
             )
         }
@@ -229,7 +220,6 @@ internal fun TimelineItemGroupedEventsRowContentExpandedPreview() = ElementPrevi
         timelineRoomInfo = aTimelineRoomInfo(),
         timelineProtectionState = aTimelineProtectionState(),
         focusedEventId = events.events.first().eventId,
-        renderReadReceipts = true,
         isLastOutgoingMessage = false,
         displayThreadSummaries = false,
         onClick = {},
@@ -259,7 +249,6 @@ internal fun TimelineItemGroupedEventsRowContentCollapsePreview() = ElementPrevi
         timelineRoomInfo = aTimelineRoomInfo(),
         timelineProtectionState = aTimelineProtectionState(),
         focusedEventId = null,
-        renderReadReceipts = true,
         isLastOutgoingMessage = false,
         displayThreadSummaries = false,
         onClick = {},

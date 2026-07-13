@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.rageshake.impl.R
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
@@ -155,6 +156,48 @@ fun BugReportView(
                 title = stringResource(R.string.screen_bug_report_send_notification_settings_title),
                 subtitle = stringResource(R.string.screen_bug_report_send_notification_settings_description),
             )
+            PreferenceRow {
+                var ghIssueNumberState by textFieldState(
+                    stateValue = state.formState.ghIssueNumber?.toString() ?: ""
+                )
+                TextField(
+                    value = ghIssueNumberState,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onTabOrEnterKeyFocusNext(LocalFocusManager.current),
+                    enabled = isFormEnabled,
+                    label = stringResource(id = R.string.screen_bug_report_github_issue_label),
+                    placeholder = "1234",
+                    supportingText = stringResource(id = R.string.screen_bug_report_github_issue_description),
+                    leadingIcon = {
+                        Text(
+                            text = "#",
+                            style = ElementTheme.typography.fontBodyLgMedium,
+                            color = ElementTheme.colors.textSecondary,
+                        )
+                    },
+                    onValueChange = {
+                        if (it.isEmpty()) {
+                            ghIssueNumberState = ""
+                            eventSink(BugReportEvents.SetGhIssueNumber(null))
+                        } else {
+                            val number = it.toIntOrNull()?.takeIf { ghInt -> ghInt in 1..99_999 }
+                            number?.let { ghIssueNumber ->
+                                ghIssueNumberState = ghIssueNumber.toString()
+                                eventSink(BugReportEvents.SetGhIssueNumber(ghIssueNumber))
+                            }
+                        }
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Next,
+                    ),
+                    keyboardActions = KeyboardActions(onNext = {
+                        keyboardController?.hide()
+                    }),
+                    singleLine = true,
+                )
+            }
             // Submit
             PreferenceRow {
                 Button(

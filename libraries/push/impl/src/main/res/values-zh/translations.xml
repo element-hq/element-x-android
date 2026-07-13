@@ -65,7 +65,7 @@
   <string name="troubleshoot_notifications_test_blocked_users_title">"已屏蔽用户"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"获取当前推送提供者的名称。"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"未选择任何推送提供者。"</string>
-  <string name="troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found">"当前推送提供这：%1$s 及当前分发器：%2$s . 但未找到分发器 %3$s。该 app 可能已被卸载？"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found">"当前推送提供者：%1$s 及当前分发器：%2$s。但未找到分发器 %3$s。该 app 可能已被卸载？"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure_no_distributor">"当前推送提供者：%1$s ，但尚未配置分发器。"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"当前推送提供者：%1$s。"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success_with_distributor">"当前推送提供者：%1$s（%2$s）"</string>

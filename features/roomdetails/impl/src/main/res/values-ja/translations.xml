@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="crypto_history_sharing_room_info_hidden_badge_content">"新しいメンバーは過去の内容を確認できない"</string>
-  <string name="crypto_history_sharing_room_info_shared_badge_content">"新しいメンバーは過去の内容を確認できる"</string>
-  <string name="crypto_history_sharing_room_info_world_readable_badge_content">"すべてのユーザーが過去の内容を確認できる"</string>
+  <string name="crypto_history_sharing_room_info_shared_badge_content">"新規メンバーも過去の内容を確認できます"</string>
+  <string name="crypto_history_sharing_room_info_world_readable_badge_content">"すべてのユーザーが過去の内容を確認できます"</string>
   <string name="screen_edit_room_address_room_address_section_footer">"公開ディレクトリで自分を見つけられるようにするには、アドレスが必要です。"</string>
   <string name="screen_edit_room_address_title">"アドレスの編集"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"通知設定の更新中に問題が発生しました。"</string>
@@ -129,6 +129,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"役割"</string>
   <string name="screen_room_roles_and_permissions_room_details">"ルームの詳細"</string>
   <string name="screen_room_roles_and_permissions_title">"役割と権限"</string>
+  <string name="screen_roomlist_mark_as_read">"既読にする"</string>
+  <string name="screen_roomlist_mark_as_unread">"未読にする"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"アドレスを追加"</string>
   <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"認証済みのスペースに所属するユーザーのみが参加できます。それ以外のユーザーは参加へのリクエストが必要です。"</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"参加のリクエストが必須です。"</string>

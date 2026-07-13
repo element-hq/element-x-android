@@ -12,6 +12,7 @@ import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.linknewdevice.ErrorType
 import io.element.android.libraries.matrix.api.linknewdevice.LinkMobileHandler
 import io.element.android.libraries.matrix.api.linknewdevice.LinkMobileStep
 import io.element.android.libraries.matrix.api.logs.LoggerTags
@@ -42,12 +43,15 @@ class LinkNewMobileHandler(
     val stepFlow: StateFlow<LinkMobileStep>
         get() = linkMobileStepFlow.asStateFlow()
 
-    fun createAndStartNewHandler() {
+    fun createAndStartNewHandler(forRotating: Boolean = false) {
         Timber.tag(loggerTag.value).d("createAndStartNewHandler()")
         currentJob?.cancel()
         handler = matrixClient.createLinkMobileHandler().getOrNull()
         handler?.let { h ->
             currentJob = sessionScope.launch {
+                if (!forRotating) {
+                    linkMobileStepFlow.emit(LinkMobileStep.CreatingQrCode)
+                }
                 h.linkMobileStep
                     .onEach {
                         linkMobileStepFlow.emit(it)
@@ -63,6 +67,17 @@ class LinkNewMobileHandler(
         currentJob = null
         sessionScope.launch {
             linkMobileStepFlow.emit(LinkMobileStep.Uninitialized)
+        }
+    }
+
+    fun rotateQrCode() {
+        createAndStartNewHandler(forRotating = true)
+    }
+
+    fun onTooManyRotation() {
+        reset()
+        sessionScope.launch {
+            linkMobileStepFlow.emit(LinkMobileStep.Error(ErrorType.Expired("Too many QR code rotations")))
         }
     }
 }

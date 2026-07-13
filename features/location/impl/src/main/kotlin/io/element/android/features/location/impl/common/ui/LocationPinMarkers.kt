@@ -14,6 +14,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.location.api.Location
 import io.element.android.libraries.designsystem.components.PinVariant
 import io.element.android.libraries.designsystem.components.rememberLocationPinBitmap
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.serialization.json.JsonPrimitive
 import org.maplibre.compose.expressions.dsl.and
 import org.maplibre.compose.expressions.dsl.asString
@@ -66,7 +67,7 @@ data class LocationMarkerData(
  */
 @Composable
 fun LocationPinMarkers(
-    markers: List<LocationMarkerData>,
+    markers: ImmutableList<LocationMarkerData>,
     onMarkerClick: ((LocationMarkerData) -> Unit)? = null,
     onClusterClick: ((Position) -> Unit)? = null,
 ) {

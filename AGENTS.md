@@ -44,11 +44,14 @@ PRs must meet these rules.
 
 ## Pull Request Guidelines
 
-- Use sentence-style commit/PR messages (no conventional commits).
-- Apply exactly **one** `PR-` label for changelog categorization.
-- PR title = changelog entry — make it descriptive; no "Fixes #…" prefixes.
-- Include screenshots or screen recordings for any UI changes.
-- Keep PRs focused; split changes over 1000 lines.
+- Sentence-style titles (no conventional commits).
+- Exactly one `pr-` label (see `.github/release.yml`).
+- Title = changelog entry — descriptive, no "Fixes #…".
+- Leave description template for the developer. Redirect them to the [contributing etiquette](CONTRIBUTING.md#etiquette).
+- Screenshots/videos for visual changes.
+- 500 additions max — split large changes.
+- Commits need a title and description; no tiny or massive commits.
+- No history rewrites.
 
 ---
 

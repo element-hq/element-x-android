@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.media.FakeMatrixMediaLoader
@@ -29,6 +30,7 @@ import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
+import io.element.android.libraries.mediaviewer.api.AvatarInfo
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.api.anApkMediaInfo
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
@@ -51,6 +53,8 @@ import io.mockk.mockk
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -97,6 +101,8 @@ class MediaViewerPresenterTest {
             assertThat(initialState.snackbarMessage).isNull()
             assertThat(initialState.canShowInfo).isTrue()
             assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
+
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -104,7 +110,11 @@ class MediaViewerPresenterTest {
     fun `present - initial state cannot show info`() = runTest {
         val presenter = createMediaViewerPresenter(
             localMediaFactory = localMediaFactory,
-            canShowInfo = false,
+            inputs = MediaViewerEntryPoint.Params.Avatar(
+                avatarInfo = AvatarInfo(filename = "avatar.png"),
+                mediaSource = aMediaSource(),
+                thumbnailSource = null,
+            ),
             room = FakeJoinedRoom(
                 baseRoom = FakeBaseRoom(
                     roomPermissions = FakeRoomPermissions(
@@ -120,6 +130,8 @@ class MediaViewerPresenterTest {
             assertThat(initialState.snackbarMessage).isNull()
             assertThat(initialState.canShowInfo).isFalse()
             assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
+
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -143,6 +155,8 @@ class MediaViewerPresenterTest {
             assertThat(initialState.snackbarMessage).isNull()
             assertThat(initialState.canShowInfo).isTrue()
             assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
+
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -167,6 +181,8 @@ class MediaViewerPresenterTest {
             assertThat(initialState.snackbarMessage).isNull()
             assertThat(initialState.canShowInfo).isTrue()
             assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
+
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -555,6 +571,8 @@ class MediaViewerPresenterTest {
             )
             val finalState = awaitItem()
             assertThat(finalState.currentIndex).isEqualTo(1)
+
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -578,32 +596,34 @@ class MediaViewerPresenterTest {
         mode: MediaViewerEntryPoint.MediaViewerMode,
         expectedSnackbarResId: Int,
     ) = runTest {
+        val image = anImage.copy(eventId = AN_EVENT_ID)
         val mediaGalleryDataSource = FakeMediaGalleryDataSource(
+            initialData = AsyncData.Success(
+                if (mode is MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios) {
+                    GroupedMediaItems(
+                        imageAndVideoItems = persistentListOf(),
+                        fileItems = persistentListOf(aForwardLoadingIndicator, image, aBackwardLoadingIndicator),
+                    )
+                } else {
+                    GroupedMediaItems(
+                        imageAndVideoItems = persistentListOf(aForwardLoadingIndicator, image, aBackwardLoadingIndicator),
+                        fileItems = persistentListOf(),
+                    )
+                }
+            ),
             startLambda = { },
         )
         val presenter = createMediaViewerPresenter(
+            eventId = AN_EVENT_ID,
             localMediaFactory = localMediaFactory,
             mode = mode,
             mediaGalleryDataSource = mediaGalleryDataSource,
         )
         presenter.test {
-            awaitFirstItem()
-            mediaGalleryDataSource.emitGroupedMediaItems(
-                AsyncData.Success(
-                    if (mode is MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios) {
-                        GroupedMediaItems(
-                            imageAndVideoItems = persistentListOf(),
-                            fileItems = persistentListOf(aForwardLoadingIndicator, anImage, aBackwardLoadingIndicator),
-                        )
-                    } else {
-                        GroupedMediaItems(
-                            imageAndVideoItems = persistentListOf(aForwardLoadingIndicator, anImage, aBackwardLoadingIndicator),
-                            fileItems = persistentListOf(),
-                        )
-                    }
-                )
-            )
-            val updatedState = awaitItem()
+            val updatedState = awaitFirstItem()
+
+            advanceUntilIdle()
+            runCurrent()
             // User navigate to the first item (forward loading indicator)
             updatedState.eventSink(
                 MediaViewerEvent.OnNavigateTo(0)
@@ -614,11 +634,11 @@ class MediaViewerPresenterTest {
                     if (mode is MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios) {
                         GroupedMediaItems(
                             imageAndVideoItems = persistentListOf(),
-                            fileItems = persistentListOf(anImage, aBackwardLoadingIndicator),
+                            fileItems = persistentListOf(image, aBackwardLoadingIndicator),
                         )
                     } else {
                         GroupedMediaItems(
-                            imageAndVideoItems = persistentListOf(anImage, aBackwardLoadingIndicator),
+                            imageAndVideoItems = persistentListOf(image, aBackwardLoadingIndicator),
                             fileItems = persistentListOf(),
                         )
                     }
@@ -707,21 +727,19 @@ class MediaViewerPresenterTest {
     fun `present - no snackbar displayed when there is no more items but not displaying a loading item`() = runTest {
         val mediaGalleryDataSource = FakeMediaGalleryDataSource(
             startLambda = { },
+            initialData = AsyncData.Success(
+                GroupedMediaItems(
+                    imageAndVideoItems = persistentListOf(aForwardLoadingIndicator, anImage, anImage.copy(eventId = AN_EVENT_ID_2), aBackwardLoadingIndicator),
+                    fileItems = persistentListOf(),
+                )
+            )
         )
         val presenter = createMediaViewerPresenter(
+            eventId = AN_EVENT_ID,
             localMediaFactory = localMediaFactory,
             mediaGalleryDataSource = mediaGalleryDataSource,
         )
         presenter.test {
-            awaitFirstItem()
-            mediaGalleryDataSource.emitGroupedMediaItems(
-                AsyncData.Success(
-                    GroupedMediaItems(
-                        imageAndVideoItems = persistentListOf(aForwardLoadingIndicator, anImage, aBackwardLoadingIndicator),
-                        fileItems = persistentListOf(),
-                    )
-                )
-            )
             val updatedState = awaitItem()
             // User navigate to the media
             updatedState.eventSink(
@@ -775,6 +793,51 @@ class MediaViewerPresenterTest {
     }
 
     @Test
+    fun `present - receiving loading items with different timestamps emits different items too`() = runTest {
+        val loadMoreLambda = lambdaRecorder<Timeline.PaginationDirection, Unit> { }
+        val mediaGalleryDataSource = FakeMediaGalleryDataSource(
+            startLambda = { },
+            loadMoreLambda = loadMoreLambda,
+        )
+        val presenter = createMediaViewerPresenter(
+            localMediaFactory = localMediaFactory,
+            mediaGalleryDataSource = mediaGalleryDataSource,
+        )
+        val anImage = aMediaItemImage(
+            mediaSourceUrl = aUrl,
+        )
+        presenter.test {
+            awaitFirstItem()
+            mediaGalleryDataSource.emitGroupedMediaItems(
+                AsyncData.Success(
+                    GroupedMediaItems(
+                        imageAndVideoItems = persistentListOf(aForwardLoadingIndicator, anImage, aBackwardLoadingIndicator),
+                        fileItems = persistentListOf(),
+                    )
+                )
+            )
+            val updatedState = awaitItem()
+
+            // Get the exact same items, but with new timestamps for the loading indicators
+            mediaGalleryDataSource.emitGroupedMediaItems(
+                AsyncData.Success(
+                    GroupedMediaItems(
+                        imageAndVideoItems = persistentListOf(
+                            aForwardLoadingIndicator.copy(timestamp = 1234L),
+                            anImage,
+                            aBackwardLoadingIndicator.copy(timestamp = 1234L),
+                        ),
+                        fileItems = persistentListOf(),
+                    )
+                )
+            )
+
+            // We should get a new list of items, which should not be equal to the previous one
+            assertThat(updatedState.listData).isNotEqualTo(awaitItem().listData)
+        }
+    }
+
+    @Test
     fun `present - view in timeline hides the bottom sheet and invokes the navigator`() = runTest {
         val onViewInTimelineClickLambda = lambdaRecorder<EventId, Unit> { }
         val navigator = FakeMediaViewerNavigator(
@@ -794,6 +857,7 @@ class MediaViewerPresenterTest {
         presenter.test {
             val initialState = awaitItem()
             initialState.eventSink(MediaViewerEvent.OpenInfo(aMediaViewerPageData()))
+            skipItems(1)
             val withBottomSheetState = awaitItem()
             assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.Details::class.java)
             initialState.eventSink(MediaViewerEvent.ViewInTimeline(AN_EVENT_ID))
@@ -823,6 +887,7 @@ class MediaViewerPresenterTest {
         presenter.test {
             val initialState = awaitItem()
             initialState.eventSink(MediaViewerEvent.OpenInfo(aMediaViewerPageData()))
+            skipItems(1)
             val withBottomSheetState = awaitItem()
             assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.Details::class.java)
             initialState.eventSink(MediaViewerEvent.Forward(AN_EVENT_ID))
@@ -854,6 +919,7 @@ class MediaViewerPresenterTest {
         presenter.test {
             val initialState = awaitItem()
             initialState.eventSink(MediaViewerEvent.OpenInfo(aMediaViewerPageData()))
+            skipItems(1)
             val withBottomSheetState = awaitItem()
             assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.Details::class.java)
             initialState.eventSink(MediaViewerEvent.Forward(AN_EVENT_ID))
@@ -871,28 +937,31 @@ class MediaViewerPresenterTest {
 
 internal fun TestScope.createMediaViewerPresenter(
     localMediaFactory: LocalMediaFactory,
+    inputs: MediaViewerEntryPoint.Params? = null,
     eventId: EventId? = null,
-    mode: MediaViewerEntryPoint.MediaViewerMode = MediaViewerEntryPoint.MediaViewerMode.SingleMedia,
+    mode: MediaViewerEntryPoint.MediaViewerMode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(Timeline.Mode.Media),
     matrixMediaLoader: FakeMatrixMediaLoader = FakeMatrixMediaLoader(),
     localMediaActions: FakeLocalMediaActions = FakeLocalMediaActions(),
     mediaGalleryDataSource: MediaGalleryDataSource = FakeMediaGalleryDataSource(
         startLambda = { },
     ),
-    canShowInfo: Boolean = true,
     mediaViewerNavigator: MediaViewerNavigator = FakeMediaViewerNavigator(),
     room: JoinedRoom = FakeJoinedRoom(
         liveTimeline = FakeTimeline(),
     ),
 ): MediaViewerPresenter {
+    val actualInputs = inputs ?: createMediaViewerEntryPointParams(eventId = eventId, mode = mode)
+    val actualMode = when (actualInputs) {
+        is MediaViewerEntryPoint.Params.Avatar -> MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(Timeline.Mode.Media)
+        is MediaViewerEntryPoint.Params.EventGallery -> MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(Timeline.Mode.Media)
+        is MediaViewerEntryPoint.Params.RoomMedia -> actualInputs.mode
+    }
     return MediaViewerPresenter(
-        inputs = createMediaViewerEntryPointParams(
-            eventId = eventId,
-            mode = mode,
-            canShowInfo = canShowInfo,
-        ),
+        inputs = actualInputs,
         navigator = mediaViewerNavigator,
         dataSource = MediaViewerDataSource(
-            mode = mode,
+            coroutineScope = backgroundScope,
+            mode = actualMode,
             dispatcher = testCoroutineDispatchers().computation,
             galleryDataSource = mediaGalleryDataSource,
             mediaLoader = matrixMediaLoader,
@@ -907,13 +976,11 @@ internal fun TestScope.createMediaViewerPresenter(
 
 internal fun createMediaViewerEntryPointParams(
     eventId: EventId? = null,
-    mode: MediaViewerEntryPoint.MediaViewerMode = MediaViewerEntryPoint.MediaViewerMode.SingleMedia,
-    canShowInfo: Boolean = true,
-) = MediaViewerEntryPoint.Params(
+    mode: MediaViewerEntryPoint.MediaViewerMode = MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios(timelineMode = Timeline.Mode.Media),
+) = MediaViewerEntryPoint.Params.RoomMedia(
     mode = mode,
     eventId = eventId,
     mediaInfo = TESTED_MEDIA_INFO,
     mediaSource = aMediaSource(),
     thumbnailSource = null,
-    canShowInfo = canShowInfo,
 )

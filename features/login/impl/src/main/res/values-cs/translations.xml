@@ -28,7 +28,7 @@
   <string name="screen_change_server_subtitle">"Jaká je adresa vašeho serveru?"</string>
   <string name="screen_change_server_title">"Vyberte váš server"</string>
   <string name="screen_create_account_title">"Vytvořit účet"</string>
-  <string name="screen_login_error_deactivated_account">"Tento účet byl deaktivován."</string>
+  <string name="screen_login_error_deactivated_account">"Tento účet byl smazán."</string>
   <string name="screen_login_error_invalid_credentials">"Nesprávné uživatelské jméno nebo heslo"</string>
   <string name="screen_login_error_invalid_user_id">"Toto není platný identifikátor uživatele. Očekávaný formát: \'@user:homeserver.org\'"</string>
   <string name="screen_login_error_refresh_tokens">"Tento server je nakonfigurován tak, aby používal obnovovací tokeny. Ty nejsou podporovány při použití přihlašovacích údajů založených na hesle."</string>

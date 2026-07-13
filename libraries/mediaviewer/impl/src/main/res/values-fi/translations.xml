@@ -16,6 +16,7 @@
   <string name="screen_media_details_filename">"Tiedostonimi"</string>
   <string name="screen_media_details_no_more_files_to_show">"Ei enää näytettäviä tiedostoja"</string>
   <string name="screen_media_details_no_more_media_to_show">"Ei enää näytettävää mediaa"</string>
+  <string name="screen_media_details_title">"Tiedoston tiedot"</string>
   <string name="screen_media_details_uploaded_by">"Lähettäjä"</string>
   <string name="screen_media_details_uploaded_on">"Lähetetty"</string>
 </resources>

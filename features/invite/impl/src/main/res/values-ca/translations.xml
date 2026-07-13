@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_decline_and_block_block_user_option_description">"No veuràs cap missatge ni invitacions a sales d\'aquest usuari."</string>
+  <string name="screen_decline_and_block_block_user_option_title">"Bloqueja usuari"</string>
+  <string name="screen_decline_and_block_report_user_option_description">"Denuncia aquesta sala al teu proveïdor de compte."</string>
+  <string name="screen_decline_and_block_report_user_reason_placeholder">"Descriu el motiu de la denúncia…"</string>
+  <string name="screen_decline_and_block_title">"Rebutja i bloqueja"</string>
+  <string name="screen_invites_decline_chat_message">"Segur que vols rebutjar la invitació per unir-te a %1$s?"</string>
+  <string name="screen_invites_decline_chat_title">"Rebutja invitació"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Segur que vols rebutjar el xat privat amb %1$s?"</string>
+  <string name="screen_invites_decline_direct_chat_title">"Rebutja xat"</string>
+  <string name="screen_invites_empty_list">"Sense invitacions"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) t\'ha convidat"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Sí, rebutja i bloqueja"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Segur que vols rebutjar la invitació d\'unió a aquesta sala? Això també evitarà que %1$s et contacti i et convidi a sales."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Rebutja la invitació i bloqueja"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Rebutja i bloqueja"</string>
+</resources>

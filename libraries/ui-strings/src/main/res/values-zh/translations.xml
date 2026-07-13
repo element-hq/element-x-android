@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_avatar">"添加头像"</string>
   <string name="a11y_add_reaction">"添加反应：%1$s"</string>
   <string name="a11y_address">"地址"</string>
   <string name="a11y_avatar">"头像"</string>
+  <string name="a11y_clear_search_field">"清除搜索框"</string>
   <string name="a11y_collapse_message_text_field">"最小化消息文本框"</string>
+  <string name="a11y_create_poll_votes_allowed_decrease">"减少每人允许的投票数"</string>
+  <string name="a11y_create_poll_votes_allowed_increase">"增加每人允许的投票数"</string>
   <string name="a11y_delete">"删除"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="other">"已输入 %1$d 个数字"</item>
   </plurals>
+  <string name="a11y_duration">"持续时间：%1$s"</string>
   <string name="a11y_edit_avatar">"编辑头像"</string>
   <string name="a11y_edit_room_address_hint">"完整地址为 %1$s"</string>
   <string name="a11y_encryption_details">"加密详情"</string>
@@ -16,6 +21,7 @@
   <string name="a11y_info">"信息"</string>
   <string name="a11y_join_call">"加入通话"</string>
   <string name="a11y_jump_to_bottom">"跳转到底部"</string>
+  <string name="a11y_jump_to_unread">"跳转到未读"</string>
   <string name="a11y_move_the_map_to_my_location">"将地图移动到我的位置"</string>
   <string name="a11y_notifications_mentions_only">"仅提及"</string>
   <string name="a11y_notifications_muted">"通知已关闭"</string>
@@ -26,34 +32,41 @@
   <string name="a11y_page_n">"第 %1$d 页"</string>
   <string name="a11y_pause">"暂停"</string>
   <string name="a11y_paused_voice_message">"语音消息，时长：%1$s，当前位置：%2$s"</string>
+  <string name="a11y_photo_preview">"照片预览"</string>
   <string name="a11y_pin_field">"PIN 字段"</string>
   <string name="a11y_pinned_location">"已钉住的位置"</string>
   <string name="a11y_play">"播放"</string>
   <string name="a11y_playback_speed">"播放速度"</string>
   <string name="a11y_poll">"投票"</string>
   <string name="a11y_poll_end">"投票已结束"</string>
+  <string name="a11y_position">"位置：%1$s"</string>
   <string name="a11y_qr_code">"二维码"</string>
   <string name="a11y_react_with">"使用 %1$s 反应"</string>
   <string name="a11y_react_with_other_emojis">"使用其它 Emoji 做出反应"</string>
-  <string name="a11y_read_receipts_multiple">"%1$s 和 %2$s 已读"</string>
+  <string name="a11y_read_receipts_multiple">"上一个消息已被 %1$s 与 %2$s 阅读"</string>
   <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="other">"%1$s 及其他 %2$d 人已读"</item>
+    <item quantity="other">"上一个消息已被 %1$s 与 %2$d 及其他人阅读"</item>
   </plurals>
-  <string name="a11y_read_receipts_single">"%1$s 已读"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"点击以显示全部"</string>
+  <string name="a11y_read_receipts_single">"上一个消息已被 %1$s 阅读"</string>
+  <string name="a11y_read_receipts_tap_to_show_all_android">"显示所有已读回执"</string>
   <string name="a11y_remove_reaction">"移除反应：%1$s"</string>
   <string name="a11y_remove_reaction_with">"移除反应：%1$s"</string>
   <string name="a11y_room_avatar">"房间头像"</string>
   <string name="a11y_send_files">"发送文件"</string>
   <string name="a11y_sender_location">"发送方位置"</string>
+  <string name="a11y_sent_by_sender_at_date">"由 %1$s 发送于 %2$s"</string>
   <string name="a11y_session_verification_time_limited_action_required">"请求的操作有时间限制，你有 1 分钟的时间来验证"</string>
+  <string name="a11y_settings_with_required_action">"设置，需要操作"</string>
   <string name="a11y_show_password">"显示密码"</string>
   <string name="a11y_start_call">"开始通话"</string>
   <string name="a11y_start_video_call">"开始视频通话"</string>
   <string name="a11y_start_voice_call">"开始语音通话"</string>
+  <string name="a11y_thread_in_room">"位于 %1$s 中的消息列"</string>
+  <string name="a11y_threads_in_room">"位于 %1$s 中的消息列"</string>
   <string name="a11y_tombstoned_room">"已封存的房间"</string>
   <string name="a11y_user_avatar">"用户头像"</string>
   <string name="a11y_user_menu">"用户菜单"</string>
+  <string name="a11y_video_preview">"视频预览"</string>
   <string name="a11y_view_avatar">"查看头像"</string>
   <string name="a11y_view_details">"查看详情"</string>
   <string name="a11y_voice_message">"语音消息，时长：%1$s"</string>
@@ -90,6 +103,7 @@
   <string name="action_decline_and_block">"拒绝并屏蔽"</string>
   <string name="action_delete">"删除"</string>
   <string name="action_delete_account">"删除账户"</string>
+  <string name="action_delete_file">"删除文件"</string>
   <string name="action_delete_poll">"删除投票"</string>
   <string name="action_deselect_all">"取消全选"</string>
   <string name="action_disable">"禁用"</string>
@@ -181,9 +195,11 @@
   <string name="action_translate">"翻译"</string>
   <string name="action_try_again">"重试"</string>
   <string name="action_unpin">"取消置顶"</string>
+  <string name="action_video_call">"视频通话"</string>
   <string name="action_view">"查看"</string>
   <string name="action_view_in_timeline">"在时间线上查看"</string>
   <string name="action_view_source">"查看源码"</string>
+  <string name="action_voice_call">"语音通话"</string>
   <string name="action_yes">"是"</string>
   <string name="action_yes_try_again">"是，重试"</string>
   <string name="banner_migrate_to_native_sliding_sync_description">"你的服务器现在支持更快的新协议。现在注销并重新登录以升级。立即这样做可以避免你在以后删除旧协议时被强制注销。"</string>
@@ -192,7 +208,7 @@
   <string name="common_acceptable_use_policy">"可接受的使用政策"</string>
   <string name="common_add_account">"添加账户"</string>
   <string name="common_add_another_account">"添加账户"</string>
-  <string name="common_adding_caption">"添加标题"</string>
+  <string name="common_adding_caption">"正在添加标题"</string>
   <string name="common_advanced_settings">"高级设置"</string>
   <string name="common_an_image">"一张图片"</string>
   <string name="common_analytics">"分析"</string>
@@ -204,6 +220,7 @@
   <string name="common_blocked_users">"已屏蔽用户"</string>
   <string name="common_bubbles">"气泡"</string>
   <string name="common_call_declined">"来电被拒接"</string>
+  <string name="common_call_in_progress">"通话进行中"</string>
   <string name="common_call_started">"通话已开始"</string>
   <string name="common_call_you_declined">"你已拒接来电"</string>
   <string name="common_chat_backup">"聊天记录备份"</string>
@@ -211,8 +228,8 @@
   <string name="common_copyright">"版权"</string>
   <string name="common_creating_room">"正在创建房间…"</string>
   <string name="common_creating_space">"正在创建空间…"</string>
-  <string name="common_current_user_canceled_knock">"请求已取消"</string>
-  <string name="common_current_user_left_room">"离开房间"</string>
+  <string name="common_current_user_canceled_knock">"申请已取消"</string>
+  <string name="common_current_user_left_room">"已离开房间"</string>
   <string name="common_current_user_left_space">"离开空间"</string>
   <string name="common_current_user_rejected_invite">"邀请已拒绝"</string>
   <string name="common_decryption_error">"解密错误"</string>
@@ -225,7 +242,7 @@
   <string name="common_downloading">"正在下载"</string>
   <string name="common_edited_suffix">"（已编辑）"</string>
   <string name="common_editing">"正在编辑"</string>
-  <string name="common_editing_caption">"编辑标题"</string>
+  <string name="common_editing_caption">"正在编辑标题"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_empty_file">"空文件"</string>
   <string name="common_encryption">"加密"</string>
@@ -247,7 +264,15 @@
   <string name="common_file_saved_on_disk_android">"文件已保存到“下载”"</string>
   <string name="common_forward_message">"转发消息"</string>
   <string name="common_frequently_used">"常用"</string>
+  <string name="common_gallery">"图库"</string>
+  <plurals name="common_gallery_reply_attachments">
+    <item quantity="other">"%1$d 个附件…"</item>
+  </plurals>
+  <plurals name="common_gallery_reply_media_items">
+    <item quantity="other">"%1$d 个媒体项目…"</item>
+  </plurals>
   <string name="common_gif">"GIF"</string>
+  <string name="common_group_call_in_progress">"群组通话进行中"</string>
   <string name="common_image">"图片"</string>
   <string name="common_in_reply_to">"回复 %1$s"</string>
   <string name="common_install_apk_android">"安装 APK"</string>
@@ -281,6 +306,7 @@
   <string name="common_no_space_name">"未命名空间"</string>
   <string name="common_not_encrypted">"未加密"</string>
   <string name="common_offline">"离线"</string>
+  <string name="common_on_a_call">"通话中"</string>
   <string name="common_open_source_licenses">"开源许可证"</string>
   <string name="common_or">"或"</string>
   <string name="common_other_options">"其它选项"</string>
@@ -293,6 +319,7 @@
   <string name="common_please_wait">"请稍候…"</string>
   <string name="common_poll_end_confirmation">"确定要结束这个投票吗？"</string>
   <string name="common_poll_summary">"投票：%1$s"</string>
+  <string name="common_poll_summary_prefix">"投票"</string>
   <string name="common_poll_total_votes">"总票数：%1$s"</string>
   <string name="common_poll_undisclosed_text">"结果将在投票结束后显示"</string>
   <plurals name="common_poll_votes_count">
@@ -382,6 +409,7 @@
   <string name="common_unmute">"解除静音"</string>
   <string name="common_unsupported_call">"不受支持的通话"</string>
   <string name="common_unsupported_event">"不支持的事件"</string>
+  <string name="common_user_started_a_call">"%1$s 已开始通话"</string>
   <string name="common_username">"用户名"</string>
   <string name="common_verification_cancelled">"验证已取消"</string>
   <string name="common_verification_complete">"验证完成"</string>
@@ -403,14 +431,19 @@
   <string name="common_waiting_live_location">"正在等待实时位置…"</string>
   <string name="common_world_readable_history">"任何人都可以看到历史"</string>
   <string name="common_you">"你"</string>
+  <string name="content_scanner_not_found">"无法下载。"</string>
+  <string name="content_scanner_not_found_title">"文件未找到"</string>
+  <string name="content_scanner_scanning">"正在扫描…"</string>
+  <string name="content_scanner_unsafe_message">"预览与下载功能已被禁用。"</string>
+  <string name="content_scanner_unsafe_title">"此文件不安全"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"由于你当时不在房间内，%1$s（%2$s）已将消息向你共享。"</string>
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"由于你当时不在房间内，%1$s 已将消息向你共享。"</string>
   <string name="crypto_history_visible">"此房间已配置为允许新成员阅读历史。%1$s"</string>
   <string name="crypto_identity_change_pin_violation">"%1$s 的数字身份已重置。%2$s"</string>
-  <string name="crypto_identity_change_pin_violation_new">"%1$s %2$s 的数字身份已重置。%3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"%1$s（%2$s）的数字身份已重置。%3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
   <string name="crypto_identity_change_profile_pin_violation">"%1$s 的数字身份已重置。"</string>
-  <string name="crypto_identity_change_verification_violation_new">"%1$s %2$s 的数字身份已重置。%3$s"</string>
+  <string name="crypto_identity_change_verification_violation_new">"%1$s（%2$s）的数字身份已重置。%3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"撤回验证"</string>
   <string name="dialog_allow_access">"允许访问"</string>
   <string name="dialog_confirm_link_message">"链接 %1$s 将跳转至外部网站 %2$s
@@ -422,7 +455,7 @@
   <string name="dialog_file_too_large_to_upload_subtitle">"允许的最大文件大小为：%1$s"</string>
   <string name="dialog_file_too_large_to_upload_title">"文件太大，无法上传"</string>
   <string name="dialog_room_reported">"已举报房间"</string>
-  <string name="dialog_room_reported_and_left">"举报并离开房间"</string>
+  <string name="dialog_room_reported_and_left">"已举报并离开房间"</string>
   <string name="dialog_title_confirmation">"确认"</string>
   <string name="dialog_title_error">"错误"</string>
   <string name="dialog_title_success">"成功"</string>
@@ -456,6 +489,7 @@
   <string name="invite_friends_text">"嗨！请通过 %1$s 与我联系：%2$s"</string>
   <string name="live_location_sharing_foreground_service_channel_title_android">"正在共享实时位置"</string>
   <string name="live_location_sharing_foreground_service_message_android">"位置共享正在进行"</string>
+  <string name="live_location_sharing_foreground_service_title_android">"%1$s 实时位置"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"摇一摇以报告 bug"</string>
   <string name="screen_bug_report_a11y_screenshot">"屏幕截图"</string>
@@ -463,6 +497,7 @@
   <string name="screen_create_poll_options_section_title">"选项"</string>
   <string name="screen_create_poll_remove_accessibility_label">"移除 %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"设置"</string>
+  <string name="screen_create_poll_votes_allowed_per_person">"每人允许的投票数"</string>
   <string name="screen_live_location_sheet_nobody_sharing">"目前无人分享其位置"</string>
   <string name="screen_live_location_sheet_sharing_live_location">"共享实时位置"</string>
   <plurals name="screen_live_location_sheet_subtitle">
@@ -513,15 +548,20 @@
   <string name="screen_space_list_title">"空间"</string>
   <string name="screen_static_location_sheet_timestamp_description">"已共享 %1$s"</string>
   <string name="screen_static_location_sheet_title">"在地图上"</string>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="other">"%1$d 已加入"</item>
+  </plurals>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"消息未能发送，因为 %1$s 的已验证数字身份已被重置。"</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"消息未能发送，因为 %1$s 尚未验证所有设备。"</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"消息未能发送，因为你有尚未验证的设备。"</string>
   <string name="screen_view_location_title">"位置"</string>
-  <string name="settings_version_number">"版本：%1$s (%2$s)"</string>
+  <string name="settings_version_number">"版本：%1$s（%2$s）"</string>
   <string name="test_language_identifier">"zh-Hans"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"历史消息在此设备上不可用"</string>
   <string name="timeline_decryption_failure_historical_event_unverified_device">"你需要验证此设备才能访问历史消息"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"无权访问此消息"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"无法解密消息"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"此消息已被阻止，因为你未验证你的设备，或发送者需要验证你的数字身份。"</string>
+  <string name="vulkan_not_supported_dialog_content_android">"你的设备过旧，需要 Android 8 或更高版本的设备。"</string>
+  <string name="vulkan_not_supported_dialog_title_android">"地图渲染不受支持。"</string>
 </resources>

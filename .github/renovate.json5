@@ -35,6 +35,13 @@
       ],
     },
     {
+      // Keep Guava on the Android variant and ignore jre-only upgrades.
+      "matchPackageNames": [
+        "com.google.guava:guava",
+      ],
+      "allowedVersions": "/-android$/",
+    },
+    {
       // Limit PostHog Android upgrade to one PR per month, the first day of the month
       "matchPackageNames": [
         "com.posthog:posthog-android",

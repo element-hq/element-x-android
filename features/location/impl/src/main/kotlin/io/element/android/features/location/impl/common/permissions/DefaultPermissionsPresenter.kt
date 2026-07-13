@@ -9,6 +9,10 @@
 package io.element.android.features.location.impl.common.permissions
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -32,11 +36,16 @@ class DefaultPermissionsPresenter(
     @OptIn(ExperimentalPermissionsApi::class)
     @Composable
     override fun present(): PermissionsState {
-        val multiplePermissionsState = rememberMultiplePermissionsState(permissions = permissions)
+        var permissionsRequested by remember { mutableStateOf(false) }
+        val multiplePermissionsState = rememberMultiplePermissionsState(permissions = permissions) {
+            permissionsRequested = true
+        }
 
         fun handleEvent(event: PermissionsEvents) {
             when (event) {
-                PermissionsEvents.RequestPermissions -> multiplePermissionsState.launchMultiplePermissionRequest()
+                PermissionsEvents.RequestPermissions -> {
+                    multiplePermissionsState.launchMultiplePermissionRequest()
+                }
             }
         }
 
@@ -47,6 +56,7 @@ class DefaultPermissionsPresenter(
                 else -> PermissionsState.Permissions.NoneGranted
             },
             shouldShowRationale = multiplePermissionsState.shouldShowRationale,
+            permissionsAlreadyRequested = permissionsRequested,
             eventSink = ::handleEvent,
         )
     }

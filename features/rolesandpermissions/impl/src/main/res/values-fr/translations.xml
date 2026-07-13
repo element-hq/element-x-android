@@ -6,6 +6,7 @@
   <string name="screen_room_change_permissions_delete_messages">"Supprimer des messages"</string>
   <string name="screen_room_change_permissions_everyone">"Membre"</string>
   <string name="screen_room_change_permissions_invite_people">"Inviter des personnes"</string>
+  <string name="screen_room_change_permissions_live_location">"Partager la position en continu"</string>
   <string name="screen_room_change_permissions_manage_space">"Gérer l’espace"</string>
   <string name="screen_room_change_permissions_manage_space_rooms">"Gérer les salons"</string>
   <string name="screen_room_change_permissions_member_moderation">"Gérer les membres"</string>

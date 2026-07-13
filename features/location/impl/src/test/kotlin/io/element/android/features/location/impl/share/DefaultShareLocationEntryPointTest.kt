@@ -11,13 +11,13 @@ package io.element.android.features.location.impl.share
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bumble.appyx.core.modality.BuildContext
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.location.impl.common.FakeUserLocationStateFactory
 import io.element.android.features.location.impl.common.actions.FakeLocationActions
 import io.element.android.features.location.impl.common.permissions.FakePermissionsPresenter
 import io.element.android.features.location.impl.live.LiveLocationStore
 import io.element.android.features.location.test.FakeActiveLiveLocationShareManager
 import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.libraries.dateformatter.test.FakeDurationFormatter
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.core.aBuildMeta
@@ -50,7 +50,6 @@ class DefaultShareLocationEntryPointTest {
                         messageComposerContext = FakeMessageComposerContext(),
                         locationActions = FakeLocationActions(),
                         buildMeta = aBuildMeta(),
-                        featureFlagService = FakeFeatureFlagService(),
                         client = FakeMatrixClient(),
                         durationFormatter = FakeDurationFormatter(),
                         liveLocationShareManager = FakeActiveLiveLocationShareManager(),
@@ -58,6 +57,7 @@ class DefaultShareLocationEntryPointTest {
                             preferenceDataStoreFactory = FakePreferenceDataStoreFactory(),
                             sessionId = room.sessionId,
                         ),
+                        userLocationStateFactory = FakeUserLocationStateFactory(),
                     )
                 },
                 analyticsService = FakeAnalyticsService(),

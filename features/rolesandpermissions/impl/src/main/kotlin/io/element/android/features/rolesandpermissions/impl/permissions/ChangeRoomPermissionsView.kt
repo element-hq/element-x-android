@@ -127,6 +127,7 @@ private fun titleForType(type: RoomPermissionType): String = when (type) {
     RoomPermissionType.ROOM_AVATAR -> stringResource(R.string.screen_room_change_permissions_room_avatar)
     RoomPermissionType.ROOM_TOPIC -> stringResource(R.string.screen_room_change_permissions_room_topic)
     RoomPermissionType.SPACE_MANAGE_ROOMS -> stringResource(R.string.screen_room_change_permissions_manage_space_rooms)
+    RoomPermissionType.SHARE_LIVE_LOCATION -> stringResource(R.string.screen_room_change_permissions_live_location)
 }
 
 @PreviewsDayNight

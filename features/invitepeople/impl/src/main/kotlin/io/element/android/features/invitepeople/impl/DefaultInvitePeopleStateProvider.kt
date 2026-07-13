@@ -18,6 +18,7 @@ import io.element.android.libraries.designsystem.preview.USER_NAME_CAROL
 import io.element.android.libraries.designsystem.preview.USER_NAME_EVE
 import io.element.android.libraries.designsystem.preview.USER_NAME_JUSTIN
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
@@ -119,6 +120,7 @@ private fun aDefaultInvitePeopleState(
     isSearchActive: Boolean = false,
     showSearchLoader: Boolean = false,
     sendInvitesAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    createRoomFromDmAction: AsyncAction<RoomId> = AsyncAction.Uninitialized,
     suggestions: List<InvitableUser> = aMatrixUserList()
         .take(5)
         .map { user -> anInvitableUser(matrixUser = user, isSelected = user in selectedUsers) },
@@ -132,6 +134,7 @@ private fun aDefaultInvitePeopleState(
         isSearchActive = isSearchActive,
         showSearchLoader = showSearchLoader,
         sendInvitesAction = sendInvitesAction,
+        createRoomFromDmAction = createRoomFromDmAction,
         suggestions = suggestions.toImmutableList(),
         eventSink = {},
     )

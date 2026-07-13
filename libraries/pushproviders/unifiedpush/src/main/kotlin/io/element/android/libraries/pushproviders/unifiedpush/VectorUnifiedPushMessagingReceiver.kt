@@ -31,7 +31,6 @@ private val loggerTag = LoggerTag("VectorUnifiedPushMessagingReceiver", LoggerTa
 class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
     @Inject lateinit var pushParser: UnifiedPushParser
     @Inject lateinit var pushHandler: PushHandler
-    @Inject lateinit var guardServiceStarter: GuardServiceStarter
     @Inject lateinit var unifiedPushStore: UnifiedPushStore
     @Inject lateinit var unifiedPushGatewayResolver: UnifiedPushGatewayResolver
     @Inject lateinit var unifiedPushGatewayUrlResolver: UnifiedPushGatewayUrlResolver
@@ -112,7 +111,6 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
                 )
             )
         }
-        guardServiceStarter.stop()
     }
 
     /**

@@ -609,6 +609,7 @@ private fun JoinRoomTopBar(
                 val roundedCornerShape = RoundedCornerShape(8.dp)
                 val titleModifier = Modifier
                     .clip(roundedCornerShape)
+                    .semantics { heading() }
                 if (contentState.name != null) {
                     Row(
                         modifier = titleModifier,
@@ -621,10 +622,7 @@ private fun JoinRoomTopBar(
                         )
                         Text(
                             modifier = Modifier
-                                .padding(horizontal = 8.dp)
-                                .semantics {
-                                    heading()
-                                },
+                                .padding(horizontal = 8.dp),
                             text = contentState.name,
                             style = ElementTheme.typography.fontBodyLgMedium,
                             maxLines = 1,

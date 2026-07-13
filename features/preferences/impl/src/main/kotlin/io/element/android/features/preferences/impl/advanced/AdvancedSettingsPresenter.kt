@@ -25,11 +25,8 @@ import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 
 @Inject
@@ -56,17 +53,8 @@ class AdvancedSettingsPresenter(
             appPreferencesStore.getThemeFlow().mapToTheme(isBlackThemeAllowed)
         }.collectAsState(initial = Theme.System)
 
-        @OptIn(ExperimentalCoroutinesApi::class)
         val liveLocationMinimumDistanceUpdate by produceState<Int?>(null) {
-            featureFlagService.isFeatureEnabledFlow(FeatureFlags.LiveLocationSharing)
-                .flatMapLatest { isEnabled ->
-                    if (isEnabled) {
-                        appPreferencesStore.getLiveLocationMinimumDistanceInMetersUpdateFlow()
-                    } else {
-                        emptyFlow()
-                    }
-                }
-                .collect { value = it }
+            appPreferencesStore.getLiveLocationMinimumDistanceInMetersUpdateFlow().collect { value = it }
         }
 
         val mediaPreviewConfigState = mediaPreviewConfigStateStore.state()

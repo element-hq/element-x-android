@@ -35,8 +35,9 @@ class DefaultAnnouncementStore(
 
     override fun announcementStatusFlow(announcement: Announcement): Flow<AnnouncementStatus> {
         val key = announcement.toKey()
-        // Announcement.Fullscreen.Space is disabled, consider it's shown
-        // For NewNotificationSound, a migration will set it to Show on application upgrade (see AppMigration08)
+        // Default-status convention: Shown for one-shot intro/feature announcements that should
+        // NOT replay on first launch (Fullscreen.Space is disabled; NewNotificationSound is opted
+        // in by AppMigration08).
         val defaultStatus = when (announcement) {
             Announcement.Fullscreen.Space -> AnnouncementStatus.Shown
             Announcement.NewNotificationSound -> AnnouncementStatus.Shown

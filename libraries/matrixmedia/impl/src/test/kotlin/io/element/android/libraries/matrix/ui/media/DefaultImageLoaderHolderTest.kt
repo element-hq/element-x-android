@@ -19,13 +19,11 @@ import io.element.android.libraries.sessionstorage.test.observer.FakeSessionObse
 import io.element.android.libraries.sessionstorage.test.observer.NoOpSessionObserver
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class DefaultImageLoaderHolderTest {
+class DefaultImageLoaderHolderTest : RobolectricTest() {
     @Test
     fun `get - returns the same ImageLoader for the same client`() {
         val context = InstrumentationRegistry.getInstrumentation().context
