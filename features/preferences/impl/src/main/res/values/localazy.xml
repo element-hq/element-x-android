@@ -68,7 +68,7 @@ If you proceed, some of your settings may change."</string>
   <string name="screen_notification_settings_edit_custom_settings_section_title">"Custom setting per chat"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"An error occurred while updating the notification setting."</string>
   <string name="screen_notification_settings_edit_mode_all_messages">"All messages"</string>
-  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Mentions and Keywords only"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Mentions and replies only"</string>
   <string name="screen_notification_settings_edit_screen_direct_section_header">"On direct chats, notify me for"</string>
   <string name="screen_notification_settings_edit_screen_group_section_header">"On group chats, notify me for"</string>
   <string name="screen_notification_settings_enable_notifications">"Enable notifications on this device"</string>

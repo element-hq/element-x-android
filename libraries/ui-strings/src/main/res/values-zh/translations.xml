@@ -4,6 +4,7 @@
   <string name="a11y_add_reaction">"添加反应：%1$s"</string>
   <string name="a11y_address">"地址"</string>
   <string name="a11y_avatar">"头像"</string>
+  <string name="a11y_clear_search_field">"清除搜索框"</string>
   <string name="a11y_collapse_message_text_field">"最小化消息文本框"</string>
   <string name="a11y_create_poll_votes_allowed_decrease">"减少每人允许的投票数"</string>
   <string name="a11y_create_poll_votes_allowed_increase">"增加每人允许的投票数"</string>
@@ -42,12 +43,12 @@
   <string name="a11y_qr_code">"二维码"</string>
   <string name="a11y_react_with">"使用 %1$s 反应"</string>
   <string name="a11y_react_with_other_emojis">"使用其它 Emoji 做出反应"</string>
-  <string name="a11y_read_receipts_multiple">"%1$s 和 %2$s 已读"</string>
+  <string name="a11y_read_receipts_multiple">"上一个消息已被 %1$s 与 %2$s 阅读"</string>
   <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="other">"%1$s 及其他 %2$d 人已读"</item>
+    <item quantity="other">"上一个消息已被 %1$s 与 %2$d 及其他人阅读"</item>
   </plurals>
-  <string name="a11y_read_receipts_single">"%1$s 已读"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"点击以显示全部"</string>
+  <string name="a11y_read_receipts_single">"上一个消息已被 %1$s 阅读"</string>
+  <string name="a11y_read_receipts_tap_to_show_all_android">"显示所有已读回执"</string>
   <string name="a11y_remove_reaction">"移除反应：%1$s"</string>
   <string name="a11y_remove_reaction_with">"移除反应：%1$s"</string>
   <string name="a11y_room_avatar">"房间头像"</string>
@@ -55,6 +56,7 @@
   <string name="a11y_sender_location">"发送方位置"</string>
   <string name="a11y_sent_by_sender_at_date">"由 %1$s 发送于 %2$s"</string>
   <string name="a11y_session_verification_time_limited_action_required">"请求的操作有时间限制，你有 1 分钟的时间来验证"</string>
+  <string name="a11y_settings_with_required_action">"设置，需要操作"</string>
   <string name="a11y_show_password">"显示密码"</string>
   <string name="a11y_start_call">"开始通话"</string>
   <string name="a11y_start_video_call">"开始视频通话"</string>
@@ -263,6 +265,12 @@
   <string name="common_forward_message">"转发消息"</string>
   <string name="common_frequently_used">"常用"</string>
   <string name="common_gallery">"图库"</string>
+  <plurals name="common_gallery_reply_attachments">
+    <item quantity="other">"%1$d 个附件…"</item>
+  </plurals>
+  <plurals name="common_gallery_reply_media_items">
+    <item quantity="other">"%1$d 个媒体项目…"</item>
+  </plurals>
   <string name="common_gif">"GIF"</string>
   <string name="common_group_call_in_progress">"群组通话进行中"</string>
   <string name="common_image">"图片"</string>
@@ -298,6 +306,7 @@
   <string name="common_no_space_name">"未命名空间"</string>
   <string name="common_not_encrypted">"未加密"</string>
   <string name="common_offline">"离线"</string>
+  <string name="common_on_a_call">"通话中"</string>
   <string name="common_open_source_licenses">"开源许可证"</string>
   <string name="common_or">"或"</string>
   <string name="common_other_options">"其它选项"</string>
@@ -422,6 +431,11 @@
   <string name="common_waiting_live_location">"正在等待实时位置…"</string>
   <string name="common_world_readable_history">"任何人都可以看到历史"</string>
   <string name="common_you">"你"</string>
+  <string name="content_scanner_not_found">"无法下载。"</string>
+  <string name="content_scanner_not_found_title">"文件未找到"</string>
+  <string name="content_scanner_scanning">"正在扫描…"</string>
+  <string name="content_scanner_unsafe_message">"预览与下载功能已被禁用。"</string>
+  <string name="content_scanner_unsafe_title">"此文件不安全"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"由于你当时不在房间内，%1$s（%2$s）已将消息向你共享。"</string>
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"由于你当时不在房间内，%1$s 已将消息向你共享。"</string>
   <string name="crypto_history_visible">"此房间已配置为允许新成员阅读历史。%1$s"</string>
@@ -534,8 +548,8 @@
   <string name="screen_space_list_title">"空间"</string>
   <string name="screen_static_location_sheet_timestamp_description">"已共享 %1$s"</string>
   <string name="screen_static_location_sheet_title">"在地图上"</string>
-  <plurals name="screen_timeline_active_call_extra_joined_count">
-    <item quantity="other">"+ %1$d 人已加入"</item>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="other">"%1$d 已加入"</item>
   </plurals>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"消息未能发送，因为 %1$s 的已验证数字身份已被重置。"</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"消息未能发送，因为 %1$s 尚未验证所有设备。"</string>

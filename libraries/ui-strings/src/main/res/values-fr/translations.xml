@@ -4,6 +4,7 @@
   <string name="a11y_add_reaction">"Ajouter une réaction: %1$s"</string>
   <string name="a11y_address">"Adresse"</string>
   <string name="a11y_avatar">"Avatar"</string>
+  <string name="a11y_clear_search_field">"Effacer le champ de recherche"</string>
   <string name="a11y_collapse_message_text_field">"Réduire la taille du composeur"</string>
   <string name="a11y_delete">"Supprimer"</string>
   <plurals name="a11y_digits_entered">
@@ -46,7 +47,6 @@
     <item quantity="other">"Lu par %1$s et %2$d autres"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Lu par %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Taper pour voir toute la liste"</string>
   <string name="a11y_remove_reaction">"Supprimer la réaction avec %1$s"</string>
   <string name="a11y_remove_reaction_with">"Supprimer la réaction avec %1$s"</string>
   <string name="a11y_room_avatar">"Avatar du salon"</string>

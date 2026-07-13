@@ -4,6 +4,7 @@
   <string name="a11y_add_reaction">"Reageeri: %1$s"</string>
   <string name="a11y_address">"Aadress"</string>
   <string name="a11y_avatar">"Tunnuspilt"</string>
+  <string name="a11y_clear_search_field">"Tühjenda otsinguväli"</string>
   <string name="a11y_collapse_message_text_field">"Vähenda tekstivälja"</string>
   <string name="a11y_create_poll_votes_allowed_decrease">"Vähenda kasutaja kohta lubatud hääletuskordi"</string>
   <string name="a11y_create_poll_votes_allowed_increase">"Suurenda kasutaja kohta lubatud hääletuskordi"</string>
@@ -43,13 +44,13 @@
   <string name="a11y_qr_code">"QR-kood"</string>
   <string name="a11y_react_with">"Reageeri emotikoniga %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Reageeri mõne muu emotikoniga"</string>
-  <string name="a11y_read_receipts_multiple">"Seda lugesid %1$s ja %2$s"</string>
+  <string name="a11y_read_receipts_multiple">"Eelmist sõnumit lugesid %1$s ja %2$s"</string>
   <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="one">"Seda lugesid %1$s ja veel %2$d kasutaja"</item>
-    <item quantity="other">"Seda lugesid %1$s ja veel %2$d kasutajat"</item>
+    <item quantity="one">"Eelmist sõnumit luges %1$s ja veel %2$d kasutaja"</item>
+    <item quantity="other">"Eelmist sõnumit lugesid %1$s ja veel %2$d kasutajat"</item>
   </plurals>
-  <string name="a11y_read_receipts_single">"Seda luges %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Vaata kõiki"</string>
+  <string name="a11y_read_receipts_single">"Eelmist sõnumit luges %1$s inimest"</string>
+  <string name="a11y_read_receipts_tap_to_show_all_android">"näita kõiki lugemiskinnitusi"</string>
   <string name="a11y_remove_reaction">"Eemalda reageerimine %1$s emotikoniga"</string>
   <string name="a11y_remove_reaction_with">"Eemalda reageerimine: %1$s"</string>
   <string name="a11y_room_avatar">"Jututoa tunnuspilt"</string>
@@ -266,6 +267,14 @@ Põhjus: %1$s."</string>
   <string name="common_forward_message">"Edasta sõnum"</string>
   <string name="common_frequently_used">"Sagedasti kasutatud"</string>
   <string name="common_gallery">"Galerii"</string>
+  <plurals name="common_gallery_reply_attachments">
+    <item quantity="one">"%1$d manus…"</item>
+    <item quantity="other">"%1$d manust…"</item>
+  </plurals>
+  <plurals name="common_gallery_reply_media_items">
+    <item quantity="one">"%1$d multimeediaobjekt…"</item>
+    <item quantity="other">"%1$d multimeediaobjekti…"</item>
+  </plurals>
   <string name="common_gif">"GIF"</string>
   <string name="common_group_call_in_progress">"Rühmakõne on pooleli"</string>
   <string name="common_image">"Pilt"</string>
@@ -303,6 +312,7 @@ Põhjus: %1$s."</string>
   <string name="common_no_space_name">"Kogukonnal pole nime"</string>
   <string name="common_not_encrypted">"Krüptimata"</string>
   <string name="common_offline">"Võrgust väljas"</string>
+  <string name="common_on_a_call">"Kõne on pooleli"</string>
   <string name="common_open_source_licenses">"Avatud lähtekoodiga litsentsid"</string>
   <string name="common_or">"või"</string>
   <string name="common_other_options">"Muud valikud"</string>
@@ -432,6 +442,11 @@ Põhjus: %1$s."</string>
   <string name="common_waiting_live_location">"Ootan asukoha jagamist reaalajas…"</string>
   <string name="common_world_readable_history">"Kõik võivad ajalugu näha"</string>
   <string name="common_you">"Sina"</string>
+  <string name="content_scanner_not_found">"Allalaadimist pole saadaval."</string>
+  <string name="content_scanner_not_found_title">"Faili ei leidu"</string>
+  <string name="content_scanner_scanning">"Skaneerin…"</string>
+  <string name="content_scanner_unsafe_message">"Eelvaade ja allalaadimine on lülitatud välja."</string>
+  <string name="content_scanner_unsafe_title">"See fail pole ohutu"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"Kuna sind polnud saatmise ajal jututoas, siis %1$s (%2$s) jagas seda sõnumit sinuga."</string>
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s jagas seda sõnumit, kuna sind ei olnud selle algse saatmise ajal jututoas."</string>
   <string name="crypto_history_visible">"See jututuba on seadistatud sedaviisi, et ka uued liikmed saavad lugeda varasemat ajalugu. %1$s"</string>
@@ -546,7 +561,7 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="screen_space_list_title">"Kogukonnad"</string>
   <string name="screen_static_location_sheet_timestamp_description">"Jagatud %1$s"</string>
   <string name="screen_static_location_sheet_title">"Kaardil"</string>
-  <plurals name="screen_timeline_active_call_extra_joined_count">
+  <plurals name="screen_timeline_active_call_joined_count">
     <item quantity="one">"%1$d liitus"</item>
     <item quantity="other">"%1$d liitusid"</item>
   </plurals>

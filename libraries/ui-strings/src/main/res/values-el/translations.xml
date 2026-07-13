@@ -41,7 +41,6 @@
     <item quantity="other">"Διαβάστηκε από %1$s και %2$d ακόμη"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Διαβάστηκε από %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Πάτα για εμφάνιση όλων"</string>
   <string name="a11y_remove_reaction">"Αφαίρεση αντίδρασης με %1$s"</string>
   <string name="a11y_remove_reaction_with">"Αφαιρέστε την αντίδραση με %1$s"</string>
   <string name="a11y_room_avatar">"Άβαταρ αίθουσας"</string>

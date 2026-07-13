@@ -3,6 +3,8 @@
   <string name="banner_battery_optimization_content_android">"Nonaktifkan pengoptimalan baterai untuk aplikasi ini, untuk memastikan semua notifikasi diterima."</string>
   <string name="banner_battery_optimization_submit_android">"Nonaktifkan optimasi"</string>
   <string name="banner_battery_optimization_title_android">"Notifikasi tidak masuk?"</string>
+  <string name="banner_new_sound_message">"Pemberitahuan Anda telah diperbarui—lebih jelas, lebih cepat, dan tidak mengganggu."</string>
+  <string name="banner_new_sound_title">"Kami telah memperbarui suara Anda."</string>
   <string name="banner_set_up_recovery_content">"Buat kunci pemulihan baru yang dapat digunakan untuk memulihkan riwayat pesan terenkripsi Anda jika Anda kehilangan akses ke perangkat Anda."</string>
   <string name="banner_set_up_recovery_submit">"Siapkan Kunci pemulihan"</string>
   <string name="banner_set_up_recovery_title">"Cadangkan obrolan Anda"</string>
@@ -48,6 +50,7 @@ Anda tidak memiliki pesan yang belum dibaca!"</string>
   <string name="screen_roomlist_mark_as_read">"Tandai sebagai dibaca"</string>
   <string name="screen_roomlist_mark_as_unread">"Tandai sebagai belum dibaca"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Ruangan ini telah ditingkatkan"</string>
+  <string name="screen_roomlist_your_spaces">"Ruang Anda"</string>
   <string name="session_verification_banner_message">"Sepertinya Anda menggunakan perangkat baru. Verifikasi dengan perangkat lain untuk mengakses pesan terenkripsi Anda selanjutnya."</string>
   <string name="session_verification_banner_title">"Verifikasi bahwa ini Anda"</string>
 </resources>
