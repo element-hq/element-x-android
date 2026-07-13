@@ -49,7 +49,10 @@ enum class FeatureFlags(
         key = "feature.knock",
         title = "Ask to join",
         description = "Allow creating rooms which users can request access to.",
-        defaultValue = { false },
+        // RIG PATCH (flow 9): default ON so the CREATE/CONFIGURE side of knocking is reachable
+        // (Security & privacy -> "Ask to join", create-room access options). Knocking on rooms and
+        // handling knock requests are already ungated upstream; only this authoring half is flagged.
+        defaultValue = { true },
         isFinished = false,
     ),
     PrintLogsToLogcat(
@@ -90,7 +93,9 @@ enum class FeatureFlags(
         key = "feature.qr_code_login",
         title = "QR Code Login",
         description = "Allow logging in on other devices using a QR code.",
-        defaultValue = { false },
+        // RIG PATCH (flow 4): default ON so Settings shows "Link new device" (existing device → scan a new
+        // device's QR). Needed for the mobile→Web QR-login combos; additive (only surfaces QR-login UI).
+        defaultValue = { true },
         isFinished = false,
     ),
     AllowBlackTheme(

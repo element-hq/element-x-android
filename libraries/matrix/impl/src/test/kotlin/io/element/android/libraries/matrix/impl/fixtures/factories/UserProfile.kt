@@ -19,4 +19,6 @@ internal fun aRustUserProfile(
     userId = userId,
     displayName = displayName,
     avatarUrl = avatarUrl,
+    status = null,
+    call = null,
 )

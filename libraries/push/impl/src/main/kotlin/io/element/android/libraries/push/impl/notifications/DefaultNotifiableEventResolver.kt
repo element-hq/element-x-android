@@ -300,6 +300,28 @@ class DefaultNotifiableEventResolver(
                 Timber.tag(loggerTag.value).d("Ignoring notification for sticker")
                 throw NotificationResolverException.EventFilteredOut
             }
+NotificationContent.MessageLike.Beacon -> {
+                Timber.tag(loggerTag.value).d("Ignoring notification for beacon location update")
+                throw NotificationResolverException.EventFilteredOut
+            }
+            is NotificationContent.StateEvent.BeaconInfo -> {
+                val notifiableEventMessage = buildNotifiableMessageEvent(
+                    sessionId = userId,
+                    senderId = content.senderId,
+                    roomId = roomId,
+                    eventId = eventId,
+                    noisy = isNoisy,
+                    timestamp = this.timestamp,
+                    senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId),
+                    body = stringProvider.getString(R.string.notification_live_location_start_body),
+                    imageUriString = null,
+                    roomName = roomDisplayName,
+                    roomIsDm = isDm,
+                    roomAvatarPath = roomAvatarUrl,
+                    senderAvatarPath = senderAvatarUrl,
+                )
+                ResolvedPushEvent.Event(notifiableEventMessage)
+            }
             is NotificationContent.StateEvent.RoomMemberContent -> {
                 // MSCxxxx: the homeserver pushes knocks to users who can act on them.
                 if (content.membershipState == RoomMembershipState.KNOCK) {

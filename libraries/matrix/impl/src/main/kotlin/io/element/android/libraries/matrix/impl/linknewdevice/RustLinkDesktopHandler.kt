@@ -48,7 +48,17 @@ class RustLinkDesktopHandler(
                     override fun onUpdate(state: GrantQrLoginProgress) {
                         sessionCoroutineScope.launch {
                             val mappedState = state.map()
-                            Timber.tag(tag.value).d("Emit ${mappedState::class.java.simpleName}")
+                            // RIG PATCH (flow 4, mobile→Web QR login): when this existing/scanner device
+                            // establishes the secure channel it DISPLAYS a 2-digit check code that the new
+                            // (Web) device must enter. Surface it to logcat (matching the new-device login
+                            // path's `QrLoginProgress` logging in RustMatrixAuthenticationService) so the rig
+                            // can transcribe it onto the Web device. It's a transient channel-confirmation
+                            // value, logged for test automation only.
+                            if (mappedState is LinkDesktopStep.EstablishingSecureChannel) {
+                                Timber.tag(tag.value).d("Emit EstablishingSecureChannel checkCodeString=${mappedState.checkCodeString}")
+                            } else {
+                                Timber.tag(tag.value).d("Emit ${mappedState::class.java.simpleName}")
+                            }
                             _linkDesktopStep.emit(mappedState)
                         }
                     }

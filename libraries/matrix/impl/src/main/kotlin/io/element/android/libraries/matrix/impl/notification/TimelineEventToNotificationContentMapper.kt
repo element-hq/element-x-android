@@ -40,12 +40,14 @@ class TimelineEventToNotificationContentMapper {
 private fun TimelineEventContent.toContent(senderId: UserId): NotificationContent {
     return when (this) {
         is TimelineEventContent.MessageLike -> content.toContent(senderId)
-        is TimelineEventContent.State -> content.toContent()
+        is TimelineEventContent.State -> content.toContent(senderId)
     }
 }
 
-private fun StateEventContent.toContent(): NotificationContent.StateEvent {
+private fun StateEventContent.toContent(senderId: UserId): NotificationContent.StateEvent {
     return when (this) {
+        // The sender of a beacon_info state event is the user sharing their live location.
+        StateEventContent.BeaconInfo -> NotificationContent.StateEvent.BeaconInfo(senderId)
         StateEventContent.PolicyRuleRoom -> NotificationContent.StateEvent.PolicyRuleRoom
         StateEventContent.PolicyRuleServer -> NotificationContent.StateEvent.PolicyRuleServer
         StateEventContent.PolicyRuleUser -> NotificationContent.StateEvent.PolicyRuleUser
@@ -77,6 +79,7 @@ private fun StateEventContent.toContent(): NotificationContent.StateEvent {
 private fun MessageLikeEventContent.toContent(senderId: UserId): NotificationContent.MessageLike {
     return use {
         when (this) {
+            MessageLikeEventContent.Beacon -> NotificationContent.MessageLike.Beacon
             MessageLikeEventContent.CallAnswer -> NotificationContent.MessageLike.CallAnswer
             MessageLikeEventContent.CallCandidates -> NotificationContent.MessageLike.CallCandidates
             MessageLikeEventContent.CallHangup -> NotificationContent.MessageLike.CallHangup
