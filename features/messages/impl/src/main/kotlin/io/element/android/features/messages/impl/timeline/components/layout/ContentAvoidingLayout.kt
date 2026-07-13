@@ -81,7 +81,12 @@ fun ContentAvoidingLayout(
                 // Measure the `overlay` view first, in case we need to shrink the `content`
                 val overlayPlaceable = measurables.last().measure(Constraints(minWidth = 0, maxWidth = constraints.maxWidth))
                 val contentConstraints = if (shrinkContent) {
-                    Constraints(minWidth = 0, maxWidth = constraints.maxWidth - overlayPlaceable.width)
+                    val maxWidth = if (constraints.maxWidth != Constraints.Infinity) {
+                        constraints.maxWidth - overlayPlaceable.width
+                    } else {
+                        constraints.maxWidth
+                    }
+                    Constraints(minWidth = 0, maxWidth = maxWidth)
                 } else {
                     Constraints(minWidth = 0, maxWidth = constraints.maxWidth)
                 }
@@ -125,6 +130,7 @@ fun ContentAvoidingLayout(
             }
 
             override fun IntrinsicMeasureScope.maxIntrinsicWidth(measurables: List<IntrinsicMeasurable>, height: Int): Int {
+                if (height == 0) return 0
                 val overlayIntrinsicWidth = measurables.last().minIntrinsicWidth(height)
                 val contentIntrinsicWidth = measurables.first().maxIntrinsicWidth(height)
                 return contentIntrinsicWidth + overlayIntrinsicWidth + spacing.roundToPx()
