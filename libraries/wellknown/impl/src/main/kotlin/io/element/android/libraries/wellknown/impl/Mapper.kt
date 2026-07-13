@@ -31,6 +31,7 @@ fun InternalElementWellKnown.map() = ElementWellKnown(
     identityProviderAppScheme = identityProviderAppScheme,
     customRecoveryPassphrase = customRecoveryPassphrase?.toPublic(),
     contentScannerUrl = contentScannerUrl,
+    forceDisableE2EE = forceDisableE2EE,
 )
 
 private fun InternalCustomRecoveryPassphrase.toPublic(): CustomRecoveryPassphrase {

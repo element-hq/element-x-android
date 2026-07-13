@@ -50,6 +50,7 @@ class DefaultSessionWellknownRetrieverTest {
                     identityProviderAppScheme = null,
                     customRecoveryPassphrase = null,
                     contentScannerUrl = null,
+                    forceDisableE2EE = null,
                 )
             )
         )
@@ -77,6 +78,7 @@ class DefaultSessionWellknownRetrieverTest {
                     identityProviderAppScheme = "an_app_scheme",
                     customRecoveryPassphrase = null,
                     contentScannerUrl = "https://content-scanner.example.com",
+                    forceDisableE2EE = false,
                 )
             )
         )
@@ -108,6 +110,7 @@ class DefaultSessionWellknownRetrieverTest {
                     identityProviderAppScheme = null,
                     contentScannerUrl = null,
                     customRecoveryPassphrase = null,
+                    forceDisableE2EE = null,
                 )
             )
         )
@@ -255,6 +258,7 @@ class DefaultSessionWellknownRetrieverTest {
                     identityProviderAppScheme = "an_app_scheme",
                     customRecoveryPassphrase = null,
                     contentScannerUrl = "https://content-scanner.example.com",
+                    forceDisableE2EE = false,
                 )
             )
         )
@@ -303,6 +307,7 @@ class DefaultSessionWellknownRetrieverTest {
                     identityProviderAppScheme = "an_app_scheme",
                     customRecoveryPassphrase = null,
                     contentScannerUrl = "https://content-scanner.example.com",
+                    forceDisableE2EE = false,
                 )
             )
         )
@@ -340,7 +345,8 @@ class DefaultSessionWellknownRetrieverTest {
                 "brand_color": "#FF0000",
                 "notification_sound": "a_notification_sound.flac",
                 "idp_app_scheme": "an_app_scheme",
-                "content_scanner_url": "https://content-scanner.example.com"
+                "content_scanner_url": "https://content-scanner.example.com",
+                "force_disable_e2ee": false,
             }"""
     }
 }
