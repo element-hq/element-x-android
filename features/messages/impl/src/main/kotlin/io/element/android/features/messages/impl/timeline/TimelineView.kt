@@ -652,6 +652,7 @@ private fun TimelineViewWithReadMarker(
             onReadReceiptClick = {},
             forceJumpToBottomVisibility = true,
             forceJumpToReadMarkerVisibility = true,
+            onJoinCallClick = { },
         )
     }
 }
