@@ -56,6 +56,7 @@ import io.element.android.libraries.push.impl.db.PushRequest
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEvent
+import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEvent.*
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import timber.log.Timber
@@ -320,6 +321,11 @@ class DefaultNotifiableEventResolver(
             NotificationContent.StateEvent.SpaceChild,
             NotificationContent.StateEvent.SpaceParent -> {
                 Timber.tag(loggerTag.value).d("Ignoring notification for state event ${content.javaClass.simpleName}")
+                throw NotificationResolverException.EventFilteredOut
+            }
+            NotificationContent.MessageLike.Beacon,
+            NotificationContent.StateEvent.Beacon -> {
+                Timber.tag(loggerTag.value).d("Beacon - Not yet implemented")
                 throw NotificationResolverException.EventFilteredOut
             }
         }
