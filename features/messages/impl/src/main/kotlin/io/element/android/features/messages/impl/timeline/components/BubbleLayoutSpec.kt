@@ -46,7 +46,7 @@ internal fun bubbleLayoutSpec(
         return BubbleLayoutSpec(
             timestampPosition = TimestampPosition.Aligned,
             contentPadding = ContentPadding.InvalidContent,
-            canShrinkContent = content is TimelineItemVoiceContent,
+            canShrinkContent = content is TimelineItemVoiceContent
         )
     }
     val timestampPosition = when (content) {

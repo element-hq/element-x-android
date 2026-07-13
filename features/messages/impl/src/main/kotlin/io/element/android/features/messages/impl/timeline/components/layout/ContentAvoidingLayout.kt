@@ -82,6 +82,7 @@ fun ContentAvoidingLayout(
                 val overlayPlaceable = measurables.last().measure(Constraints(minWidth = 0, maxWidth = constraints.maxWidth))
                 val contentConstraints = if (shrinkContent) {
                     val maxWidth = if (constraints.maxWidth != Constraints.Infinity) {
+                        // This will crash if maxWidth is infinity
                         constraints.maxWidth - overlayPlaceable.width
                     } else {
                         constraints.maxWidth
@@ -90,9 +91,6 @@ fun ContentAvoidingLayout(
                 } else {
                     Constraints(minWidth = 0, maxWidth = constraints.maxWidth)
                 }
-                println(
-                    "Constraints: max width: ${constraints.maxWidth}, overlay width: ${overlayPlaceable.width}, content max width: ${contentConstraints.maxWidth}"
-                )
                 val contentPlaceable = measurables.first().measure(contentConstraints)
 
                 var layoutWidth = contentPlaceable.width

@@ -13,10 +13,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidth
+import androidx.compose.foundation.layout.requiredWidthIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
@@ -37,7 +41,9 @@ import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.times
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
@@ -83,6 +89,7 @@ fun TimelineItemVoiceView(
     )
     Row(
         modifier = modifier
+            .fillMaxWidth()
             .clearAndSetSemantics {
                 contentDescription = a11y
                 if (state.buttonType == VoiceMessageState.ButtonType.Disabled) {
@@ -135,14 +142,20 @@ fun TimelineItemVoiceView(
             )
         }
         Spacer(Modifier.width(8.dp))
+        val lineWidth = 2.dp
+        val linePadding = 2.dp
+        val waveFormWidth = remember(content.waveform.size) { content.waveform.size * (lineWidth + linePadding) }
         WaveformPlaybackView(
             showCursor = state.showCursor,
             playbackProgress = state.progress,
             waveform = content.waveform,
             modifier = Modifier
                 .weight(1f)
+                .widthIn(min = waveFormWidth)
                 .height(34.dp),
             seekEnabled = !isTalkbackActive(),
+            lineWidth = lineWidth,
+            linePadding = linePadding,
             onSeek = { state.eventSink(VoiceMessageEvent.Seek(it)) },
         )
     }
