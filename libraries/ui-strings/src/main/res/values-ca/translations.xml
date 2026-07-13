@@ -26,7 +26,6 @@
     <item quantity="other">"Llegit per %1$s i %2$d més"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Llegit per %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Toca per mostrar-los tots"</string>
   <string name="a11y_remove_reaction">"Elimina la reacció: %1$s"</string>
   <string name="a11y_send_files">"Envia fitxers"</string>
   <string name="a11y_show_password">"Mostra contrasenya"</string>

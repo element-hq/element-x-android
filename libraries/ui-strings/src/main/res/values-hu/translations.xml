@@ -4,7 +4,10 @@
   <string name="a11y_add_reaction">"Reakció hozzáadása: %1$s"</string>
   <string name="a11y_address">"Cím"</string>
   <string name="a11y_avatar">"Profilkép"</string>
+  <string name="a11y_clear_search_field">"Keresőmező törlése"</string>
   <string name="a11y_collapse_message_text_field">"Üzenet szövegmezőjének minimalizálása"</string>
+  <string name="a11y_create_poll_votes_allowed_decrease">"Személyenként engedélyezett szavazatok számának csökkentése"</string>
+  <string name="a11y_create_poll_votes_allowed_increase">"Személyenként engedélyezett szavazatok számának növelése"</string>
   <string name="a11y_delete">"Törlés"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d megadott számjegy"</item>
@@ -30,6 +33,7 @@
   <string name="a11y_page_n">"%1$d. oldal"</string>
   <string name="a11y_pause">"Szüneteltetés"</string>
   <string name="a11y_paused_voice_message">"Hangüzenet, időtartam:%1$s, jelenlegi pozíció:%2$s"</string>
+  <string name="a11y_photo_preview">"Fénykép előnézete"</string>
   <string name="a11y_pin_field">"PIN-mező"</string>
   <string name="a11y_pinned_location">"Rögzített hely"</string>
   <string name="a11y_play">"Lejátszás"</string>
@@ -40,13 +44,13 @@
   <string name="a11y_qr_code">"QR-kód"</string>
   <string name="a11y_react_with">"Reagálás a következővel: %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Reagálás más emodzsikkal"</string>
-  <string name="a11y_read_receipts_multiple">"Olvasta: %1$s és %2$s"</string>
+  <string name="a11y_read_receipts_multiple">"Az előző üzenetet olvasta: %1$s és %2$s"</string>
   <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="one">"Olvasta: %1$s és még %2$d felhasználó"</item>
-    <item quantity="other">"Olvasta: %1$s és még %2$d felhasználó"</item>
+    <item quantity="one">"Az előző üzenetet olvasta: %1$s és még %2$d felhasználó"</item>
+    <item quantity="other">"Az előző üzenetet olvasta: %1$s és még %2$d felhasználó"</item>
   </plurals>
-  <string name="a11y_read_receipts_single">"Olvasta: %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Koppintson az összes megjelenítéséhez"</string>
+  <string name="a11y_read_receipts_single">"Az előző üzenetet olvasta: %1$s"</string>
+  <string name="a11y_read_receipts_tap_to_show_all_android">"összes olvasási visszajelzés megjelenítése"</string>
   <string name="a11y_remove_reaction">"Reakció eltávolítása: %1$s"</string>
   <string name="a11y_remove_reaction_with">"Reakció eltávolítása: %1$s"</string>
   <string name="a11y_room_avatar">"Szoba profilképe"</string>
@@ -64,6 +68,7 @@
   <string name="a11y_tombstoned_room">"Elévült szoba"</string>
   <string name="a11y_user_avatar">"Felhasználói profilkép"</string>
   <string name="a11y_user_menu">"Felhasználói menü"</string>
+  <string name="a11y_video_preview">"Videó előnézete"</string>
   <string name="a11y_view_avatar">"Profilkép megtekintése"</string>
   <string name="a11y_view_details">"Részletek megtekintése"</string>
   <string name="a11y_voice_message">"Hangüzenet, időtartam: %1$s"</string>
@@ -192,9 +197,11 @@
   <string name="action_translate">"Fordítás"</string>
   <string name="action_try_again">"Próbálja újra"</string>
   <string name="action_unpin">"Kitűzés feloldása"</string>
+  <string name="action_video_call">"Videóhívás"</string>
   <string name="action_view">"Megtekintés"</string>
   <string name="action_view_in_timeline">"Megtekintés az idővonalon"</string>
   <string name="action_view_source">"Forrás megtekintése"</string>
+  <string name="action_voice_call">"Hanghívás"</string>
   <string name="action_yes">"Igen"</string>
   <string name="action_yes_try_again">"Igen, újrapróbálkozás"</string>
   <string name="banner_migrate_to_native_sliding_sync_description">"A kiszolgálója mostantól egy új, gyorsabb protokollt támogat. A frissítéshez jelentkezzen ki, majd jelentkezzen be újra. Ha ezt most megteszi, elkerülheti a kényszerített kijelentkeztetést a régi protokollt eltávolításakor."</string>
@@ -215,6 +222,7 @@
   <string name="common_blocked_users">"Letiltott felhasználók"</string>
   <string name="common_bubbles">"Buborékok"</string>
   <string name="common_call_declined">"Hívás elutasítva"</string>
+  <string name="common_call_in_progress">"Hívás folyamatban"</string>
   <string name="common_call_started">"A hívás elindult"</string>
   <string name="common_call_you_declined">"Elutasított egy hívást"</string>
   <string name="common_chat_backup">"Csevegés biztonsági mentése"</string>
@@ -258,7 +266,9 @@ Ok: %1$s."</string>
   <string name="common_file_saved_on_disk_android">"A fájl a Letöltések mappába mentve"</string>
   <string name="common_forward_message">"Üzenet továbbítása"</string>
   <string name="common_frequently_used">"Gyakran használt"</string>
+  <string name="common_gallery">"Galéria"</string>
   <string name="common_gif">"GIF"</string>
+  <string name="common_group_call_in_progress">"Csoportos hívás folyamatban"</string>
   <string name="common_image">"Kép"</string>
   <string name="common_in_reply_to">"Válasz erre: %1$s"</string>
   <string name="common_install_apk_android">"APK telepítése"</string>
@@ -400,6 +410,7 @@ Ok: %1$s."</string>
   <string name="common_unmute">"Némítás feloldása"</string>
   <string name="common_unsupported_call">"Nem támogatott hívás"</string>
   <string name="common_unsupported_event">"Nem támogatott esemény"</string>
+  <string name="common_user_started_a_call">"%1$s hívást indított"</string>
   <string name="common_username">"Felhasználónév"</string>
   <string name="common_verification_cancelled">"Az ellenőrzés megszakítva"</string>
   <string name="common_verification_complete">"Az ellenőrzés befejeződött"</string>
@@ -421,6 +432,11 @@ Ok: %1$s."</string>
   <string name="common_waiting_live_location">"Várakozás az élő helymeghatározásra…"</string>
   <string name="common_world_readable_history">"Bárki láthatja az előzményeket"</string>
   <string name="common_you">"Ön"</string>
+  <string name="content_scanner_not_found">"A letöltés nem érhető el."</string>
+  <string name="content_scanner_not_found_title">"A fájl nem található"</string>
+  <string name="content_scanner_scanning">"Keresés…"</string>
+  <string name="content_scanner_unsafe_message">"Az előnézet és a letöltés le van tiltva."</string>
+  <string name="content_scanner_unsafe_title">"A fájl nem biztonságos"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) megosztotta ezt az üzenetet, mivel Ön nem volt a szobában, amikor elküldték."</string>
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s megosztotta ezt az üzenetet, mivel Ön nem volt a szobában, amikor elküldték."</string>
   <string name="crypto_history_visible">"Az elküldött üzenetek megosztásra kerülnek a szobába meghívott új tagokkal.%1$s"</string>
@@ -482,6 +498,7 @@ Biztos, hogy folytatja?"</string>
   <string name="screen_create_poll_options_section_title">"Lehetőségek"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Eltávolítás: %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Beállítások"</string>
+  <string name="screen_create_poll_votes_allowed_per_person">"Személyenként engedélyezett szavazatok száma"</string>
   <string name="screen_live_location_sheet_nobody_sharing">"Senki sem osztja meg a tartózkodási helyét"</string>
   <string name="screen_live_location_sheet_sharing_live_location">"Élő helymegosztás"</string>
   <plurals name="screen_live_location_sheet_subtitle">
@@ -534,6 +551,10 @@ Biztos, hogy folytatja?"</string>
   <string name="screen_space_list_title">"Terek"</string>
   <string name="screen_static_location_sheet_timestamp_description">"Megosztva %1$s"</string>
   <string name="screen_static_location_sheet_title">"A térképen"</string>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="one">"%1$d csatlakozott"</item>
+    <item quantity="other">"%1$d csatlakozott"</item>
+  </plurals>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Az üzenet nem lett elküldve, mert %1$s ellenőrzött digitális személyazonossága alaphelyzetbe lett állítva."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Az üzenet nem lett elküldve, mert %1$s nem ellenőrizte az összes eszközét."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Az üzenet nem lett elküldve, mert egy vagy több eszközét nem ellenőrizte."</string>

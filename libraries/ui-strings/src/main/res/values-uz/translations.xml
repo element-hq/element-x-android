@@ -9,13 +9,16 @@
     <item quantity="one">"%1$d ta raqam kiritildi"</item>
     <item quantity="other">"%1$d ta raqam kiritildi"</item>
   </plurals>
+  <string name="a11y_duration">"Davomiyligi: %1$s"</string>
   <string name="a11y_edit_avatar">"Avatarni tahrirlash"</string>
   <string name="a11y_edit_room_address_hint">"To\'liq manzil %1$s bo\'ladi"</string>
   <string name="a11y_encryption_details">"Shifrlash tafsilotlari"</string>
   <string name="a11y_expand_message_text_field">"Xabar matni maydonini kengaytirish"</string>
   <string name="a11y_hide_password">"Parolni yashirish"</string>
+  <string name="a11y_info">"Maʻlumot"</string>
   <string name="a11y_join_call">"Qoʻngʻiroqga qoʻshilish"</string>
   <string name="a11y_jump_to_bottom">"Pastga o\'tish"</string>
+  <string name="a11y_jump_to_unread">"Oʻqilmaganlarga oʻtish"</string>
   <string name="a11y_move_the_map_to_my_location">"Xaritani mening joylashuvimga o\'tkazish"</string>
   <string name="a11y_notifications_mentions_only">"Faqat eslatmalar"</string>
   <string name="a11y_notifications_muted">"Ovozsiz"</string>
@@ -32,6 +35,7 @@
   <string name="a11y_playback_speed">"Ijro tezligi"</string>
   <string name="a11y_poll">"So\'ro\'vnoma"</string>
   <string name="a11y_poll_end">"So‘rovnoma yakunlandi"</string>
+  <string name="a11y_position">"Lavozimi: %1$s"</string>
   <string name="a11y_qr_code">"QR kodi"</string>
   <string name="a11y_react_with">"%1$s bilan munosabat bildiring"</string>
   <string name="a11y_react_with_other_emojis">"Boshqa hisbelgilar bilan munosabat bildiring"</string>
@@ -41,17 +45,20 @@
     <item quantity="other">"%1$s va %2$d boshqa kishilar tomonidan oʻqildi"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Muallif: %1$s bilan oʻqish"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Hammasini ko\'rsatish uchun bosing"</string>
   <string name="a11y_remove_reaction">"Reaktsiyani olib tashlang: %1$s"</string>
   <string name="a11y_remove_reaction_with">"%1$s bilan reaktsiyani olib tashlang"</string>
   <string name="a11y_room_avatar">"Xona avatari"</string>
   <string name="a11y_send_files">"Fayllarni yuborish"</string>
   <string name="a11y_sender_location">"Yuboruvchining joylashuvi"</string>
+  <string name="a11y_sent_by_sender_at_date">"%1$s tomonidan %2$s da yuborildi"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Amal bajarish vaqti cheklangan, tasdiqlash uchun bir daqiqa vaqtingiz bor"</string>
+  <string name="a11y_settings_with_required_action">"Sozlamalar, harakat talab qilinadi"</string>
   <string name="a11y_show_password">"Parolni ko\'rsatish"</string>
   <string name="a11y_start_call">"Qoʻngʻiroqni boshlash"</string>
   <string name="a11y_start_video_call">"Video chaqiruvni boshlash"</string>
   <string name="a11y_start_voice_call">"Ovozli qo‘ng‘iroq qilish"</string>
+  <string name="a11y_thread_in_room">"%1$s ichidagi mavzu"</string>
+  <string name="a11y_threads_in_room">"%1$s ichidagi mavzular"</string>
   <string name="a11y_tombstoned_room">"Arxivlangan xona"</string>
   <string name="a11y_user_avatar">"Foydalanuvchi avatari"</string>
   <string name="a11y_user_menu">"Foydalanuvchi menyusi"</string>
@@ -69,6 +76,7 @@
   <string name="action_call">"Qoʻngʻiroq"</string>
   <string name="action_cancel">"Bekor qilish"</string>
   <string name="action_cancel_for_now">"Hozircha bekor qilish"</string>
+  <string name="action_choose_file">"Faylni tanlang"</string>
   <string name="action_choose_photo">"Fotosuratni tanlang"</string>
   <string name="action_clear">"Tozalash"</string>
   <string name="action_close">"Yopish"</string>
@@ -88,12 +96,16 @@
   <string name="action_deactivate_account">"Hisobni faolsizlantirish"</string>
   <string name="action_decline">"Rad etish"</string>
   <string name="action_decline_and_block">"Rad etish va bloklash"</string>
+  <string name="action_delete">"Oʻchirish"</string>
+  <string name="action_delete_account">"Akkauntni oʻchirish"</string>
+  <string name="action_delete_file">"Faylni oʻchirish"</string>
   <string name="action_delete_poll">"So‘rovnomani o‘chirish"</string>
   <string name="action_deselect_all">"Hammasini bekor qilish"</string>
   <string name="action_disable">"Oʻchirish"</string>
   <string name="action_discard">"Bekor qilish"</string>
   <string name="action_dismiss">"Bekor qilish"</string>
   <string name="action_done">"Bajarildi"</string>
+  <string name="action_download">"Yuklab olish"</string>
   <string name="action_edit">"Tahrirlash"</string>
   <string name="action_edit_caption">"Sarlavhani tahrirlash"</string>
   <string name="action_edit_poll">"So‘rovnomani tahrirlash"</string>
@@ -200,7 +212,9 @@
   <string name="common_beta">"Beta"</string>
   <string name="common_blocked_users">"Bloklangan foydalanuvchilar"</string>
   <string name="common_bubbles">"Pufakchalar"</string>
+  <string name="common_call_declined">"Qoʻngʻiroq rad etildi"</string>
   <string name="common_call_started">"Qoʻngʻiroq boshlandi"</string>
+  <string name="common_call_you_declined">"Siz qoʻngʻiroqni rad etdingiz"</string>
   <string name="common_chat_backup">"Chatning zaxira nusxasi"</string>
   <string name="common_copied_to_clipboard">"Buferga nusxa koʻchirildi"</string>
   <string name="common_copyright">"Mualliflik huquqi"</string>
@@ -290,6 +304,7 @@ Sababi:%1$s."</string>
   <string name="common_please_wait">"Iltimos kuting…"</string>
   <string name="common_poll_end_confirmation">"Haqiqatan ham bu soʻrovnomani tugatmoqchimisiz?"</string>
   <string name="common_poll_summary">"So‘rov:%1$s"</string>
+  <string name="common_poll_summary_prefix">"Soʻroʻvnoma"</string>
   <string name="common_poll_total_votes">"Jami ovozlar:%1$s"</string>
   <string name="common_poll_undisclosed_text">"Natijalar soʻrovnoma tugagandan soʻng koʻrsatiladi"</string>
   <plurals name="common_poll_votes_count">
@@ -456,6 +471,9 @@ Davom etasizmi?"</string>
   <string name="error_unknown">"Kechirasiz, xatolik yuz berdi"</string>
   <string name="invite_friends_rich_title">"🔐️ Menga qo\'shiling%1$s"</string>
   <string name="invite_friends_text">"Hey, men bilan gaplash%1$s :%2$s"</string>
+  <string name="live_location_sharing_foreground_service_channel_title_android">"Jonli joylashuvni ulashish"</string>
+  <string name="live_location_sharing_foreground_service_message_android">"Joylashuvni ulashish jarayoni davom etmoqda"</string>
+  <string name="live_location_sharing_foreground_service_title_android">"%1$s jonli joylashuvi"</string>
   <string name="login_initial_device_name_android">"%1$sAndroid"</string>
   <string name="preference_rageshake">"Xato haqida xabar berish uchun G\'azablanish"</string>
   <string name="screen_bug_report_a11y_screenshot">"Skrinshot"</string>
@@ -464,6 +482,12 @@ Davom etasizmi?"</string>
   <string name="screen_create_poll_remove_accessibility_label">"%1$sni olib tashlash"</string>
   <string name="screen_create_poll_settings_section_title">"Sozlamalar"</string>
   <string name="screen_live_location_sheet_nobody_sharing">"Hech kim joylashuvini ulashmayapti"</string>
+  <string name="screen_live_location_sheet_sharing_live_location">"Jonli joylashuvni ulashish"</string>
+  <plurals name="screen_live_location_sheet_subtitle">
+    <item quantity="one">"%1$d kishi"</item>
+    <item quantity="other">"%1$d odamlar"</item>
+  </plurals>
+  <string name="screen_live_location_sheet_title">"Xaritada"</string>
   <string name="screen_media_picker_error_failed_selection">"Media tanlash jarayonida xatolik yuz berdi, qayta urinib ko\'ring"</string>
   <string name="screen_pinned_timeline_empty_state_description">"Xabarni bosib, bu yerga kiritish uchun \"%1$s\"-ni tanlang."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Muhim xabarlarni osongina topish uchun qadang"</string>
@@ -520,4 +544,6 @@ Davom etasizmi?"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Sizni ushbu xabarga ruxsatingiz yoʻq"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Xabarni shifrini ochib bo‘lmadi"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Qurilmangizni tasdiqlamaganingiz yoki yuboruvchi raqamli shaxsingizni tasdiqlashi kerakligi sababli bu xabar bloklandi."</string>
+  <string name="vulkan_not_supported_dialog_content_android">"Qurilmangiz juda eski, Android 8 yoki undan keyingi versiyadagi qurilma talab qilinadi."</string>
+  <string name="vulkan_not_supported_dialog_title_android">"Xaritalarni renderlash qoʻllab-quvvatlanmaydi"</string>
 </resources>

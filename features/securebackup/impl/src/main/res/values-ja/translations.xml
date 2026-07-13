@@ -20,6 +20,26 @@
   <string name="screen_create_new_recovery_key_list_item_4">"指示に従って回復鍵を作成してください"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"生成された回復鍵をパスワードマネージャや暗号化に対応するメモアプリに保存してください。"</string>
   <string name="screen_create_new_recovery_key_title">"他の端末を使用して暗号化をリセット"</string>
+  <string name="screen_custom_recovery_key_confirm_error_mismatch">"入力した回復鍵が一致しません"</string>
+  <string name="screen_custom_recovery_key_confirm_submit">"設定完了"</string>
+  <string name="screen_custom_recovery_key_confirm_subtitle">"回復鍵を再度入力してください。"</string>
+  <string name="screen_custom_recovery_key_confirm_title">"回復鍵の確認"</string>
+  <plurals name="screen_custom_recovery_key_input_notice">
+    <item quantity="other">"%1$d字以上でアカウントのパスワードとは異なるものを設定してください。"</item>
+  </plurals>
+  <string name="screen_custom_recovery_key_input_strength">"強度"</string>
+  <string name="screen_custom_recovery_key_input_strength_a11y">"パスフレーズの強度: %1$s"</string>
+  <string name="screen_custom_recovery_key_input_strength_moderate">"中程度"</string>
+  <string name="screen_custom_recovery_key_input_strength_strong">"強い"</string>
+  <string name="screen_custom_recovery_key_input_strength_very_strong">"とても強い"</string>
+  <string name="screen_custom_recovery_key_input_strength_very_weak">"とても弱い"</string>
+  <string name="screen_custom_recovery_key_input_strength_weak">"弱い"</string>
+  <string name="screen_custom_recovery_key_input_subtitle">"思い出せる回復鍵を作成してください。"</string>
+  <string name="screen_custom_recovery_key_input_title">"回復鍵の入力"</string>
+  <string name="screen_custom_recovery_key_loading_a11y">"回復鍵の要件を読み込み中"</string>
+  <string name="screen_custom_recovery_key_success_notice">"回復鍵を変更するには、「設定 - 暗号化 - バックアップ」を開いてください。"</string>
+  <string name="screen_custom_recovery_key_success_subtitle">"回復鍵は他の端末をすべて使用できない場合に、新しい端末を承認したり暗号化された会話を復元したりするために使用します。"</string>
+  <string name="screen_custom_recovery_key_success_title">"バックアップの設定完了"</string>
   <string name="screen_encryption_reset_action_continue_reset">"リセットを続行"</string>
   <string name="screen_encryption_reset_bullet_1">"アカウントの情報や連絡先, 設定などは残ります"</string>
   <string name="screen_encryption_reset_bullet_2">"サーバー上にのみ存在する過去のメッセージは確認できなくなります"</string>
