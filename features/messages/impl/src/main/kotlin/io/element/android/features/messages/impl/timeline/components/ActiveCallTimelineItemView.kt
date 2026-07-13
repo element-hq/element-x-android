@@ -130,7 +130,8 @@ internal fun ActiveCallTimelineItemView(
                 GroupCallBody(
                     event,
                     state,
-                    Modifier.weight(1f)
+                    Modifier
+                        .weight(1f)
                         .padding(top = 12.dp, bottom = 12.dp)
                 )
             }
@@ -169,7 +170,7 @@ internal fun ActiveCallTimelineItemView(
 }
 
 @Composable
-private fun DirectMessageCallBody(state: RtcNotificationState.Active, modifier: Modifier) {
+private fun DirectMessageCallBody(state: RtcNotificationState.Active, modifier: Modifier = Modifier) {
     Row(
         verticalAlignment = Alignment.Top,
         modifier = modifier
@@ -201,7 +202,8 @@ private fun DirectMessageCallBody(state: RtcNotificationState.Active, modifier: 
                             url = user.avatarUrl,
                             size = AvatarSize.ActiveCallItem
                         )
-                    }.toImmutableList(),
+                    }
+                    .toImmutableList(),
                 avatarType = AvatarType.User,
                 overlapRatio = 0.5f,
                 lastOnTop = true,
@@ -217,7 +219,7 @@ private fun DirectMessageCallBody(state: RtcNotificationState.Active, modifier: 
 }
 
 @Composable
-private fun GroupCallBody(event: TimelineItem.Event, state: RtcNotificationState.Active, modifier: Modifier) {
+private fun GroupCallBody(event: TimelineItem.Event, state: RtcNotificationState.Active, modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         Text(
             text = stringResource(CommonStrings.common_group_call_in_progress),
@@ -261,7 +263,8 @@ private fun GroupCallBody(event: TimelineItem.Event, state: RtcNotificationState
                                 url = user.avatarUrl,
                                 size = AvatarSize.ActiveCallItem
                             )
-                        }.toImmutableList(),
+                        }
+                        .toImmutableList(),
                     avatarType = AvatarType.User,
                     overlapRatio = 0.5f,
                     lastOnTop = true,

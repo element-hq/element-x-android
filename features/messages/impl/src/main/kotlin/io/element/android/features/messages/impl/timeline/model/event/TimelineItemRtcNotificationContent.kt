@@ -14,7 +14,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 
 // State of the call, for now only isDeclined but in the future could be missed, active.
 sealed interface RtcNotificationState {
-    /** Call is currently active **/
+    /** Call is currently active. **/
     data class Active(
         val joinedMembers: List<MatrixUser>,
         val isJoined: Boolean,
