@@ -36,6 +36,7 @@ import io.element.android.libraries.matrix.api.media.isPreviewEnabled
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
+import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
@@ -299,7 +300,29 @@ class DefaultNotifiableEventResolver(
                 Timber.tag(loggerTag.value).d("Ignoring notification for sticker")
                 throw NotificationResolverException.EventFilteredOut
             }
-            is NotificationContent.StateEvent.RoomMemberContent,
+            is NotificationContent.StateEvent.RoomMemberContent -> {
+                // MSCxxxx: the homeserver pushes knocks to users who can act on them.
+                if (content.membershipState == RoomMembershipState.KNOCK) {
+                    val notifiableMessageEvent = buildNotifiableMessageEvent(
+                        sessionId = userId,
+                        senderId = content.userId,
+                        roomId = roomId,
+                        eventId = eventId,
+                        noisy = isNoisy,
+                        timestamp = this.timestamp,
+                        senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.userId),
+                        body = stringProvider.getString(R.string.notification_knock_request_body),
+                        roomName = roomDisplayName,
+                        roomIsDm = isDm,
+                        roomAvatarPath = roomAvatarUrl,
+                        senderAvatarPath = senderAvatarUrl,
+                    )
+                    ResolvedPushEvent.Event(notifiableMessageEvent)
+                } else {
+                    Timber.tag(loggerTag.value).d("Ignoring notification for membership ${content.membershipState}")
+                    throw NotificationResolverException.EventFilteredOut
+                }
+            }
             NotificationContent.StateEvent.PolicyRuleRoom,
             NotificationContent.StateEvent.PolicyRuleServer,
             NotificationContent.StateEvent.PolicyRuleUser,
