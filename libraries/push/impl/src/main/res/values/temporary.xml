@@ -7,6 +7,6 @@
 
 <resources>
     <string name="notification_live_location_start_body">"Started sharing their live location"</string>
-    <!-- Body of the notification shown to users who can act on a knock (MSCxxxx knock push rule). -->
+    <!-- Body of the notification shown to users who can act on a knock (MSC4506 knock push rule). -->
     <string name="notification_knock_request_body">"Requested to join"</string>
 </resources>
