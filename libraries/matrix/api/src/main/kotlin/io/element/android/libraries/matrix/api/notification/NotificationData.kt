@@ -112,6 +112,7 @@ sealed interface NotificationContent {
         data object RoomHistoryVisibility : StateEvent
         data object RoomJoinRules : StateEvent
         data class RoomMemberContent(
+            val senderId: UserId,
             val userId: UserId,
             val membershipState: RoomMembershipState
         ) : StateEvent

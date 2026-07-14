@@ -60,6 +60,7 @@ private fun StateEventContent.toContent(senderId: UserId): NotificationContent.S
         StateEventContent.RoomJoinRules -> NotificationContent.StateEvent.RoomJoinRules
         is StateEventContent.RoomMemberContent -> {
             NotificationContent.StateEvent.RoomMemberContent(
+                senderId = senderId,
                 userId = UserId(userId),
                 membershipState = RoomMemberMapper.mapMembership(membershipState),
             )

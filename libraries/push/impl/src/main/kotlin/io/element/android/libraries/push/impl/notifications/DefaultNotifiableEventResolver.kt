@@ -340,6 +340,33 @@ NotificationContent.MessageLike.Beacon -> {
                         senderAvatarPath = senderAvatarUrl,
                     )
                     ResolvedPushEvent.Event(notifiableMessageEvent)
+                } else if (content.membershipState == RoomMembershipState.INVITE && content.userId == userId) {
+                    // An invite for us can resolve as a timeline member event rather than a stripped
+                    // invite when the room has already advanced past the invited state — e.g. the
+                    // server auto-joined us because our knock was accepted (synapse#16307).
+                    val inviteNotifiableEvent = InviteNotifiableEvent(
+                        sessionId = userId,
+                        roomId = roomId,
+                        eventId = eventId,
+                        editedEventId = null,
+                        canBeReplaced = true,
+                        roomName = roomDisplayName,
+                        noisy = isNoisy,
+                        timestamp = this.timestamp,
+                        soundName = null,
+                        isRedacted = false,
+                        isUpdated = false,
+                        description = descriptionFromRoomMembershipInvite(
+                            senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId),
+                            isDirectRoom = isDirect,
+                            isSpace = isSpace
+                        ),
+                        // TODO check if type is needed anymore
+                        type = null,
+                        // TODO check if title is needed anymore
+                        title = null,
+                    )
+                    ResolvedPushEvent.Event(inviteNotifiableEvent)
                 } else {
                     Timber.tag(loggerTag.value).d("Ignoring notification for membership ${content.membershipState}")
                     throw NotificationResolverException.EventFilteredOut
