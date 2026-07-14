@@ -29,6 +29,10 @@ appId: ${MAESTRO_APP_ID}
 - tapOn:
     text: ${MAESTRO_INVITEE2_MXID}
     index: 1
+# Hide keyboard by tapping on an external element in case it's displayed, otherwise it will 'eat' the back button press
+- tapOn:
+    # Navigation title
+    text: "Invite people"
 - tapOn: "Invite"
 - runFlow:
     when:
@@ -36,8 +40,6 @@ appId: ${MAESTRO_APP_ID}
     commands:
       - tapOn:
           id: "confirm_invite_unknown"
-# Hide keyboard in case it's displayed, otherwise it will 'eat' the back button press
-- hideKeyboard
 - scrollUntilVisible:
     direction: DOWN
     element:
