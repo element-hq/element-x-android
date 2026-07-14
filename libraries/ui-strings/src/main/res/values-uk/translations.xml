@@ -51,7 +51,6 @@
     <item quantity="many">"Прочитано %1$s та %2$d іншими"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Прочитано %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Натисніть, щоб показати все"</string>
   <string name="a11y_remove_reaction">"Видалити реакцію з %1$s"</string>
   <string name="a11y_remove_reaction_with">"Прибрати реакцію %1$s"</string>
   <string name="a11y_room_avatar">"Аватар кімнати"</string>
@@ -557,11 +556,6 @@
   <string name="screen_space_list_title">"Простори"</string>
   <string name="screen_static_location_sheet_timestamp_description">"Надано доступ %1$s"</string>
   <string name="screen_static_location_sheet_title">"На карті"</string>
-  <plurals name="screen_timeline_active_call_extra_joined_count">
-    <item quantity="one">"+ %1$d приєднується"</item>
-    <item quantity="few">"+ %1$d приєднуються"</item>
-    <item quantity="many">"+ %1$d приєднуються"</item>
-  </plurals>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Повідомлення не надіслано, оскільки звірена цифрова ідентичність %1$s була скинута."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Повідомлення не надіслано, оскільки %1$s перевірив не всі пристрої."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Повідомлення не надіслано, оскільки ви не звірили один або кілька своїх пристроїв."</string>

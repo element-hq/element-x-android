@@ -35,7 +35,6 @@
     <item quantity="other">"Dibaca oleh %1$s dan %2$d lainnya"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Dibaca oleh %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Ketuk untuk melihat semua"</string>
   <string name="a11y_remove_reaction">"Hapus reaksi dengan %1$s"</string>
   <string name="a11y_remove_reaction_with">"Hapus reaksi dengan %1$s"</string>
   <string name="a11y_room_avatar">"Avatar ruangan"</string>

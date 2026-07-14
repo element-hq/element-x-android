@@ -47,7 +47,6 @@
     <item quantity="other">"%1$s 及其他 %2$d 人已读"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"%1$s 已读"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"点击以显示全部"</string>
   <string name="a11y_remove_reaction">"移除反应：%1$s"</string>
   <string name="a11y_remove_reaction_with">"移除反应：%1$s"</string>
   <string name="a11y_room_avatar">"房间头像"</string>
@@ -534,9 +533,6 @@
   <string name="screen_space_list_title">"空间"</string>
   <string name="screen_static_location_sheet_timestamp_description">"已共享 %1$s"</string>
   <string name="screen_static_location_sheet_title">"在地图上"</string>
-  <plurals name="screen_timeline_active_call_extra_joined_count">
-    <item quantity="other">"+ %1$d 人已加入"</item>
-  </plurals>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"消息未能发送，因为 %1$s 的已验证数字身份已被重置。"</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"消息未能发送，因为 %1$s 尚未验证所有设备。"</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"消息未能发送，因为你有尚未验证的设备。"</string>

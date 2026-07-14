@@ -43,7 +43,6 @@
     <item quantity="other">"既読: %1$s ほか %2$d 人"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"%1$s 既読"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"タップしてすべて表示"</string>
   <string name="a11y_remove_reaction">"%1$s リアクションを削除"</string>
   <string name="a11y_remove_reaction_with">"%1$s リアクションを削除"</string>
   <string name="a11y_room_avatar">"ルームのアバター"</string>

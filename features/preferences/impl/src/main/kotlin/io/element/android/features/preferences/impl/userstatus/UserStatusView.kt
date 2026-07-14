@@ -135,7 +135,7 @@ private fun CurrentStatusRow(
 ) {
     val (emoji, text) = when (displayedStatus) {
         is DisplayedStatus.UserSet -> displayedStatus.status.emoji to displayedStatus.status.text
-        is DisplayedStatus.InCall -> "🎧" to stringResource(R.string.common_user_status_on_a_call)
+        is DisplayedStatus.InCall -> "🎧" to stringResource(CommonStrings.common_user_status_on_a_call)
     }
     ListItem(
         headlineContent = { Text(text = text, modifier = Modifier.padding(vertical = 16.dp)) },
@@ -210,7 +210,7 @@ private fun UserStatusPickerBottomSheet(
         }
         ListItem(
             headlineContent = {
-                Text(text = stringResource(R.string.common_user_status_custom))
+                Text(text = stringResource(CommonStrings.common_user_status_custom))
             },
             leadingContent = ListItemContent.Custom { EmojiText("✏️") },
             onClick = {

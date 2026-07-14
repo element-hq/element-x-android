@@ -44,7 +44,6 @@
     <item quantity="other">"Pročitalo %1$s i ostalih %2$d"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Pročitao korisnik %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Dodirnite za prikaz svih"</string>
   <string name="a11y_remove_reaction">"Ukloni reakciju: %1$s"</string>
   <string name="a11y_remove_reaction_with">"Ukloni reakciju s %1$s"</string>
   <string name="a11y_room_avatar">"Avatar sobe"</string>

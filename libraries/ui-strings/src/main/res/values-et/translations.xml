@@ -49,7 +49,6 @@
     <item quantity="other">"Seda lugesid %1$s ja veel %2$d kasutajat"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Seda luges %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Vaata kõiki"</string>
   <string name="a11y_remove_reaction">"Eemalda reageerimine %1$s emotikoniga"</string>
   <string name="a11y_remove_reaction_with">"Eemalda reageerimine: %1$s"</string>
   <string name="a11y_room_avatar">"Jututoa tunnuspilt"</string>
@@ -546,10 +545,6 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="screen_space_list_title">"Kogukonnad"</string>
   <string name="screen_static_location_sheet_timestamp_description">"Jagatud %1$s"</string>
   <string name="screen_static_location_sheet_title">"Kaardil"</string>
-  <plurals name="screen_timeline_active_call_extra_joined_count">
-    <item quantity="one">"%1$d liitus"</item>
-    <item quantity="other">"%1$d liitusid"</item>
-  </plurals>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Sõnum on saatmata, kuna kasutaja %1$s digitaalse identiteet on lähtestatud."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Sõnum on saatmata, kuna %1$s pole verifitseerinud kõiki oma seadmeid."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Kuna sa pole üks või enamgi oma seadet verifitseerinud, siis sinu sõnum on saatmata."</string>

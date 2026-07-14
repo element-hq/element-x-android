@@ -336,7 +336,8 @@
         "full_screen_intent_banner_.*",
         "troubleshoot_notifications_entry_point_.*",
         "theme\\..*",
-        "screen\\.labs\\..*"
+        "screen\\.labs\\..*",
+        "screen\\.preferences\\..*"
       ]
     },
     {

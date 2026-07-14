@@ -23,6 +23,7 @@
   <string name="a11y_join_call">"Join call"</string>
   <string name="a11y_jump_to_bottom">"Jump to bottom"</string>
   <string name="a11y_jump_to_unread">"Jump to unread"</string>
+  <string name="a11y_jump_to_unread_messages">"Jump to first unread message"</string>
   <string name="a11y_move_the_map_to_my_location">"Move the map to my location"</string>
   <string name="a11y_notifications_mentions_only">"Mentions only"</string>
   <string name="a11y_notifications_muted">"Muted"</string>
@@ -50,7 +51,6 @@
     <item quantity="other">"Previous message read by %1$s and %2$d others"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Previous message read by %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Tap to show all"</string>
   <string name="a11y_read_receipts_tap_to_show_all_android">"show all read receipts"</string>
   <string name="a11y_remove_reaction">"Remove reaction: %1$s"</string>
   <string name="a11y_remove_reaction_with">"Remove reaction with %1$s"</string>
@@ -144,6 +144,7 @@
   <string name="action_manage_account_and_devices">"Manage account &amp; devices"</string>
   <string name="action_manage_devices">"Manage devices"</string>
   <string name="action_manage_rooms">"Manage rooms"</string>
+  <string name="action_mark_as_read">"Mark as read"</string>
   <string name="action_message">"Message"</string>
   <string name="action_minimize">"Minimise"</string>
   <string name="action_next">"Next"</string>
@@ -313,6 +314,7 @@ Reason: %1$s."</string>
   <string name="common_no_space_name">"No space name"</string>
   <string name="common_not_encrypted">"Not encrypted"</string>
   <string name="common_offline">"Offline"</string>
+  <string name="common_on_a_call">"On a call"</string>
   <string name="common_open_source_licenses">"Open source licenses"</string>
   <string name="common_or">"or"</string>
   <string name="common_other_options">"Other options"</string>
@@ -421,6 +423,13 @@ Reason: %1$s."</string>
   <string name="common_unsupported_call">"Unsupported call"</string>
   <string name="common_unsupported_event">"Unsupported event"</string>
   <string name="common_user_started_a_call">"%1$s started a call"</string>
+  <string name="common_user_status_away">"Away"</string>
+  <string name="common_user_status_be_right_back">"Be right back"</string>
+  <string name="common_user_status_custom">"Custom…"</string>
+  <string name="common_user_status_focus_time">"Focus time"</string>
+  <string name="common_user_status_in_a_meeting">"In a meeting"</string>
+  <string name="common_user_status_on_a_call">"On a call"</string>
+  <string name="common_user_status_on_the_road">"On the road"</string>
   <string name="common_username">"Username"</string>
   <string name="common_verification_cancelled">"Verification cancelled"</string>
   <string name="common_verification_complete">"Verification complete"</string>
@@ -442,6 +451,11 @@ Reason: %1$s."</string>
   <string name="common_waiting_live_location">"Waiting for live location…"</string>
   <string name="common_world_readable_history">"Anyone can see history"</string>
   <string name="common_you">"You"</string>
+  <string name="content_scanner_not_found">"Download not available."</string>
+  <string name="content_scanner_not_found_title">"File not found"</string>
+  <string name="content_scanner_scanning">"Scanning…"</string>
+  <string name="content_scanner_unsafe_message">"Preview and download have been disabled."</string>
+  <string name="content_scanner_unsafe_title">"The file is not safe"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) shared this message since you were not in the room when it was sent."</string>
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s shared this message since you were not in the room when it was sent."</string>
   <string name="crypto_history_visible">"This room has been configured so that new members can read history. %1$s"</string>
@@ -511,6 +525,8 @@ Are you sure you want to continue?"</string>
     <item quantity="other">"%1$d people"</item>
   </plurals>
   <string name="screen_live_location_sheet_title">"On the map"</string>
+  <string name="screen_local_network_opt_in_subtitle">"Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network."</string>
+  <string name="screen_local_network_opt_in_title">"Allow access to local network"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Press on a message and choose “%1$s” to include here."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Pin important messages so that they can be easily discovered"</string>
@@ -541,6 +557,10 @@ Are you sure you want to continue?"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Pinned messages"</string>
   <string name="screen_room_pinned_banner_loading_description">"Loading message…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"View All"</string>
+  <plurals name="screen_room_timeline_redacted_messages">
+    <item quantity="one">"%1$d removed message"</item>
+    <item quantity="other">"%1$d removed messages"</item>
+  </plurals>
   <string name="screen_room_title">"Chat"</string>
   <string name="screen_share_location_title">"Share location"</string>
   <string name="screen_share_my_location_action">"Share my location"</string>
@@ -556,9 +576,9 @@ Are you sure you want to continue?"</string>
   <string name="screen_space_list_title">"Spaces"</string>
   <string name="screen_static_location_sheet_timestamp_description">"Shared %1$s"</string>
   <string name="screen_static_location_sheet_title">"On the map"</string>
-  <plurals name="screen_timeline_active_call_extra_joined_count">
-    <item quantity="one">"+ %1$d joined"</item>
-    <item quantity="other">"+ %1$d joined"</item>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="one">"%1$d joined"</item>
+    <item quantity="other">"%1$d joined"</item>
   </plurals>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Message not sent because %1$s’s verified digital identity was reset."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Message not sent because %1$s has not verified all devices."</string>

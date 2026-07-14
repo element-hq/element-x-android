@@ -46,7 +46,6 @@
     <item quantity="other">"Olvasta: %1$s és még %2$d felhasználó"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Olvasta: %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Koppintson az összes megjelenítéséhez"</string>
   <string name="a11y_remove_reaction">"Reakció eltávolítása: %1$s"</string>
   <string name="a11y_remove_reaction_with">"Reakció eltávolítása: %1$s"</string>
   <string name="a11y_room_avatar">"Szoba profilképe"</string>
