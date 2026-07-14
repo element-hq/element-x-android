@@ -301,7 +301,7 @@ class DefaultNotifiableEventResolver(
                 throw NotificationResolverException.EventFilteredOut
             }
             is NotificationContent.StateEvent.RoomMemberContent -> {
-                // MSCxxxx: the homeserver pushes knocks to users who can act on them.
+                // MSC4506: the homeserver pushes knocks to users who can act on them.
                 if (content.membershipState == RoomMembershipState.KNOCK) {
                     val notifiableMessageEvent = buildNotifiableMessageEvent(
                         sessionId = userId,
