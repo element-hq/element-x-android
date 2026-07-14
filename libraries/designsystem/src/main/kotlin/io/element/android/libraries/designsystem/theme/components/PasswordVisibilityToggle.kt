@@ -7,8 +7,6 @@
 
 package io.element.android.libraries.designsystem.theme.components
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -26,7 +24,7 @@ fun PasswordVisibilityToggle(
     onToggle: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier.clickable(onClick = onToggle)) {
+    IconButton(onClick = onToggle, modifier = modifier) {
         Icon(
             imageVector = if (visible) CompoundIcons.VisibilityOn() else CompoundIcons.VisibilityOff(),
             contentDescription = stringResource(
