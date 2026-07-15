@@ -327,11 +327,6 @@ class DefaultNotifiableEventResolver(
                 Timber.tag(loggerTag.value).d("Ignoring notification for state event ${content.javaClass.simpleName}")
                 throw NotificationResolverException.EventFilteredOut
             }
-            NotificationContent.MessageLike.Beacon,
-            NotificationContent.StateEvent.Beacon -> {
-                Timber.tag(loggerTag.value).d("Beacon - Not yet implemented")
-                throw NotificationResolverException.EventFilteredOut
-            }
         }
     }
 
