@@ -141,6 +141,18 @@ class DefaultActiveLiveLocationShareManager(
     }
 
     override suspend fun onLocationUpdate(location: Location) {
+        val active = stopExpiredShares()
+        Timber.d("ActiveLiveLocationShareManager received location update for ${active.size} active share(s)")
+        active.forEach { roomId ->
+            Timber.d("ActiveLiveLocationShareManager sending location to room $roomId")
+            sendLiveLocation(roomId, location)
+                .onFailure {
+                    Timber.e(it, "ActiveLiveLocationShareManager failed to send location to room $roomId")
+                }
+        }
+    }
+
+    private suspend fun stopExpiredShares(): List<RoomId> {
         val nowMillis = clock.epochMillis()
         val (expired, active) = localSharingRoomIds.value.partition { roomId ->
             val timeout = timeouts[roomId] ?: return@partition false
@@ -150,15 +162,7 @@ class DefaultActiveLiveLocationShareManager(
             Timber.d("ActiveLiveLocationShareManager location tick detected expired share for room $roomId, stopping")
             stopShare(roomId)
         }
-        val activeSharesCount = active.size
-        Timber.d("ActiveLiveLocationShareManager received location update for $activeSharesCount active share(s)")
-        active.forEach { roomId ->
-            Timber.d("ActiveLiveLocationShareManager sending location to room $roomId")
-            sendLiveLocation(roomId, location)
-                .onFailure {
-                    Timber.e(it, "ActiveLiveLocationShareManager failed to send location to room $roomId")
-                }
-        }
+        return active
     }
 
     private suspend fun sendLiveLocation(roomId: RoomId, location: Location): Result<Unit> {
