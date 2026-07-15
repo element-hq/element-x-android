@@ -98,7 +98,7 @@ private fun PinnedMessagesBannerRow(
             state.pinnedMessagesCount(),
         ),
     )
-    val currentMessageText = state.formattedMessage()?.text.orEmpty()
+    val currentMessageText = state.formattedMessage().text
     val bannerContentDescription = if (currentMessageText.isNotEmpty()) {
         "$positionDescription. $currentMessageText"
     } else {
