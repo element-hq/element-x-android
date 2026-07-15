@@ -32,7 +32,7 @@ accompanist = "0.37.3"
 
 # Test
 test_core = "1.7.0"
-roborazzi = "1.64.0"
+roborazzi = "1.67.0"
 
 # Jetbrain
 datetime = "0.8.0"
@@ -185,7 +185,7 @@ test_detekt_test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version
 # https://github.com/matrix-org/matrix-rust-components-kotlin/commits/main/sdk/sdk-android/src/main/kotlin/org/matrix/rustcomponents/sdk/matrix_sdk_ffi.kt
 # All new features should not be implemented in the pull request that upgrades the version, developers should
 # only fix API breaks and may add some TODOs.
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.07.13"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.07.15"
 
 # Others
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
