@@ -10,7 +10,12 @@ package io.element.android.features.ftue.impl
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
@@ -33,6 +38,7 @@ import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.ui.common.nodes.emptyNode
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -143,6 +149,12 @@ class FtueFlowNode(
 
     @Composable
     override fun View(modifier: Modifier) {
+        val ftueState by defaultFtueService.ftueStepStateFlow.collectAsState()
+        val view = LocalView.current
+        val stepChangedAnnouncement = stringResource(CommonStrings.a11y_ftue_step_changed)
+        LaunchedEffect(ftueState) {
+            view.announceForAccessibility(stepChangedAnnouncement)
+        }
         BackstackView()
     }
 }
