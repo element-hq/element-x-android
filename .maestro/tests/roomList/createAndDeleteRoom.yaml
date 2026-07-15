@@ -47,9 +47,10 @@ appId: ${MAESTRO_APP_ID}
 - tapOn: "People"
 # assert there's 1 member and 2 invitees
 - tapOn: "Back"
-- scroll
-- scroll
-- tapOn: "Leave room"
+- scrollUntilVisible:
+    direction: DOWN
+    element:
+      text: "Leave room"
 - tapOn: "Leave"
 - runFlow:
     when:

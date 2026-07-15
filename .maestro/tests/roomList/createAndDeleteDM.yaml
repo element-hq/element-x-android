@@ -19,7 +19,10 @@ appId: ${MAESTRO_APP_ID}
       - tapOn: 'Send invite'
 - takeScreenshot: build/maestro/330-createAndDeleteDM
 - tapOn: "maestroelement2"
-- scroll
+- scrollUntilVisible:
+    direction: DOWN
+    element:
+      text: "Leave room"
 - tapOn: "Leave room"
 - tapOn: "Leave"
 - runFlow:
