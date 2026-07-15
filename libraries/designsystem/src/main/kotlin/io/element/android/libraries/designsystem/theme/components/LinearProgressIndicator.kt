@@ -16,9 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.semantics.ProgressBarRangeInfo
-import androidx.compose.ui.semantics.progressBarRangeInfo
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -35,9 +32,7 @@ fun LinearProgressIndicator(
     strokeCap: StrokeCap = ProgressIndicatorDefaults.LinearStrokeCap,
 ) {
     androidx.compose.material3.LinearProgressIndicator(
-        modifier = modifier.semantics {
-            progressBarRangeInfo = ProgressBarRangeInfo(progress(), 0f..1f)
-        },
+        modifier = modifier,
         progress = progress,
         gapSize = gapSize,
         color = color,
@@ -68,9 +63,7 @@ fun LinearProgressIndicator(
         )
     } else {
         androidx.compose.material3.LinearProgressIndicator(
-            modifier = modifier.semantics {
-                progressBarRangeInfo = ProgressBarRangeInfo.Indeterminate
-            },
+            modifier = modifier,
             color = color,
             gapSize = gapSize,
             trackColor = trackColor,
