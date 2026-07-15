@@ -34,6 +34,11 @@ interface EnterpriseService {
     fun firebasePushGateway(): String?
     fun unifiedPushDefaultPushGateway(): String?
 
+    /**
+     * Whether X.509 signing of cross-signing keys is enabled for this device, as reported by the device's MDM restrictions.
+     */
+    fun isX509SigningEnabled(): Boolean
+
     fun bugReportUrlFlow(sessionId: SessionId?): Flow<BugReportUrl>
 
     /**
