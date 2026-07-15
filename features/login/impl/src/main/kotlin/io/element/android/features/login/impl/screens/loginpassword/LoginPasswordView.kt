@@ -233,6 +233,7 @@ private fun LoginForm(
         }
         Spacer(Modifier.height(20.dp))
         TextField(
+            label = stringResource(CommonStrings.common_password),
             value = passwordFieldState,
             enabled = !isLoading,
             modifier = Modifier
