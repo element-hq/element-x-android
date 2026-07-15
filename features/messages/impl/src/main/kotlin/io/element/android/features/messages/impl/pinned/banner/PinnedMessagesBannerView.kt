@@ -37,6 +37,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -86,6 +90,20 @@ private fun PinnedMessagesBannerRow(
 ) {
     val analyticsService = LocalAnalyticsService.current
     val borderColor = ElementTheme.colors.pinnedMessageBannerBorder
+    val positionDescription = stringResource(
+        id = CommonStrings.screen_room_pinned_banner_indicator_description,
+        stringResource(
+            id = CommonStrings.screen_room_pinned_banner_indicator,
+            state.currentPinnedMessageIndex() + 1,
+            state.pinnedMessagesCount(),
+        ),
+    )
+    val currentMessageText = state.formattedMessage()?.text.orEmpty()
+    val bannerContentDescription = if (currentMessageText.isNotEmpty()) {
+        "$positionDescription. $currentMessageText"
+    } else {
+        positionDescription
+    }
     Row(
         modifier = modifier
             .background(color = ElementTheme.colors.bgCanvasDefault)
@@ -98,6 +116,10 @@ private fun PinnedMessagesBannerRow(
                     onClick(state.currentPinnedMessage.eventId)
                     state.eventSink(PinnedMessagesBannerEvent.MoveToNextPinned)
                 }
+            }
+            .semantics {
+                role = Role.Button
+                contentDescription = bannerContentDescription
             },
         verticalAlignment = Alignment.CenterVertically,
     ) {
