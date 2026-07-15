@@ -18,9 +18,9 @@ import io.element.android.libraries.matrix.api.roomlist.RoomListFilter as Matrix
 enum class RoomListFilter(val stringResource: Int) {
     Unread(R.string.screen_roomlist_filter_unreads),
     Mentions(R.string.screen_roomlist_filter_mentions),
+    Favourites(R.string.screen_roomlist_filter_favourites),
     People(R.string.screen_roomlist_filter_people),
     Rooms(R.string.screen_roomlist_filter_rooms),
-    Favourites(R.string.screen_roomlist_filter_favourites),
     Invites(R.string.screen_roomlist_filter_invites);
 
     val incompatibleFilters: Set<RoomListFilter>
