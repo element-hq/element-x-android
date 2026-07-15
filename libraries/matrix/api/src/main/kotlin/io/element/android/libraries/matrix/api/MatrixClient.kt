@@ -38,12 +38,14 @@ import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.room.location.BeaconInfoUpdate
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.scanner.ContentScanner
 import io.element.android.libraries.matrix.api.spaces.SpaceService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.api.user.UserStatus
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -54,6 +56,9 @@ import java.util.Optional
 interface MatrixClient {
     val sessionId: SessionId
     val deviceId: DeviceId
+
+    /** Base URL of the homeserver this client is connected to. */
+    val homeserverUrl: String
     val sessionPaths: SessionPaths
     val userProfile: StateFlow<MatrixUser>
     val roomListService: RoomListService
@@ -71,6 +76,7 @@ interface MatrixClient {
     val ignoredUsersFlow: StateFlow<ImmutableList<UserId>>
     val roomMembershipObserver: RoomMembershipObserver
     val ownBeaconInfoUpdates: Flow<BeaconInfoUpdate>
+    val contentScanner: ContentScanner?
     suspend fun getJoinedRoom(roomId: RoomId): JoinedRoom?
     suspend fun getRoom(roomId: RoomId): BaseRoom?
     suspend fun findDM(userId: UserId): Result<RoomId?>
@@ -84,6 +90,10 @@ interface MatrixClient {
     suspend fun setDisplayName(displayName: String): Result<Unit>
     suspend fun uploadAvatar(mimeType: String, data: ByteArray): Result<Unit>
     suspend fun removeAvatar(): Result<Unit>
+    suspend fun setUserStatus(status: UserStatus): Result<Unit>
+
+    /** Clears both m.status and m.call profile fields (maps to DELETE on the profile endpoint per MSC4426). */
+    suspend fun clearUserStatus(): Result<Unit>
     suspend fun joinRoom(roomId: RoomId): Result<RoomInfo?>
     suspend fun joinRoomByIdOrAlias(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomInfo?>
     suspend fun knockRoom(roomIdOrAlias: RoomIdOrAlias, message: String, serverNames: List<String>): Result<RoomInfo?>

@@ -30,7 +30,7 @@ import androidx.compose.material3.SheetValue
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.rememberBottomSheetScaffoldState
-import androidx.compose.material3.rememberStandardBottomSheetState
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -86,7 +86,9 @@ fun MapBottomSheetScaffold(
     customMapStyleUrl: AsyncData<String?>,
     modifier: Modifier = Modifier,
     scaffoldState: BottomSheetScaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = rememberStandardBottomSheetState(initialValue = SheetValue.PartiallyExpanded)
+        bottomSheetState = rememberBottomSheetState(
+            initialValue = SheetValue.PartiallyExpanded,
+        )
     ),
     cameraState: CameraState = rememberCameraState(),
     mapOptions: MapOptions = MapDefaults.options,

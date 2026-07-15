@@ -35,13 +35,12 @@
   <string name="a11y_qr_code">"QR-kode"</string>
   <string name="a11y_react_with">"Reager med %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Reager med andre emojier"</string>
-  <string name="a11y_read_receipts_multiple">"Lest av %1$s og %2$s"</string>
+  <string name="a11y_read_receipts_multiple">"Forrige melding lest av %1$s og %2$s"</string>
   <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="one">"Lest av %1$s og %2$d andre"</item>
-    <item quantity="other">"Lest av %1$s og %2$d andre"</item>
+    <item quantity="one">"Forrige melding lest av %1$s og %2$d annen"</item>
+    <item quantity="other">"Forrige melding lest av %1$s og %2$d andre"</item>
   </plurals>
-  <string name="a11y_read_receipts_single">"Lest av %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Trykk for å vise alle"</string>
+  <string name="a11y_read_receipts_single">"Forrige melding lest av %1$s"</string>
   <string name="a11y_remove_reaction">"Fjern reaksjonen med %1$s"</string>
   <string name="a11y_remove_reaction_with">"Fjern reaksjonen med %1$s"</string>
   <string name="a11y_room_avatar">"Romavatar"</string>
@@ -120,6 +119,7 @@
   <string name="action_leave_space">"Forlat område"</string>
   <string name="action_load_more">"Last inn mer"</string>
   <string name="action_manage_account">"Administrer konto"</string>
+  <string name="action_manage_account_and_devices">"Administrer konto og enheter"</string>
   <string name="action_manage_devices">"Administrer enheter"</string>
   <string name="action_manage_rooms">"Administrer rom"</string>
   <string name="action_message">"Melding"</string>
@@ -170,6 +170,7 @@
   <string name="action_start_over">"Begynn på nytt"</string>
   <string name="action_start_verification">"Start verifisering"</string>
   <string name="action_static_map_load">"Trykk for å laste inn kart"</string>
+  <string name="action_stop">"Stopp"</string>
   <string name="action_take_photo">"Ta bilde"</string>
   <string name="action_tap_for_options">"Trykk for alternativer"</string>
   <string name="action_translate">"Oversett"</string>
@@ -231,6 +232,7 @@
   <string name="common_failed">"Mislyktes"</string>
   <string name="common_favourite">"Favoritt"</string>
   <string name="common_favourited">"Favoritt"</string>
+  <string name="common_fetching_notifications_title_android">"Synkroniserer varsler …"</string>
   <string name="common_file">"Fil"</string>
   <string name="common_file_deleted">"Fil slettet"</string>
   <string name="common_file_saved">"Fil lagret"</string>
@@ -247,6 +249,8 @@
   <string name="common_line_copied_to_clipboard">"Linje kopiert til utklippstavlen"</string>
   <string name="common_link_copied_to_clipboard">"Lenke kopiert til utklippstavlen"</string>
   <string name="common_link_new_device">"Koble til ny enhet"</string>
+  <string name="common_live_location">"Sanntidslokasjon"</string>
+  <string name="common_live_location_ended">"Sanntidslokasjon er avsluttet"</string>
   <string name="common_loading">"Laster inn…"</string>
   <string name="common_loading_more">"Laster inn mer…"</string>
   <plurals name="common_many_members">
@@ -340,6 +344,7 @@
   <string name="common_settings">"Innstillinger"</string>
   <string name="common_share_space">"Del område"</string>
   <string name="common_shared_history">"Nye medlemmer ser historikk"</string>
+  <string name="common_shared_live_location">"Delt lokasjon i sanntid"</string>
   <string name="common_shared_location">"Delt posisjon"</string>
   <string name="common_shared_space">"Delt område"</string>
   <string name="common_signing_out">"Fjerner enheten"</string>
@@ -366,7 +371,7 @@
   <string name="common_unable_to_decrypt">"Kan ikke dekryptere"</string>
   <string name="common_unable_to_decrypt_insecure_device">"Sendt fra en usikker enhet"</string>
   <string name="common_unable_to_decrypt_no_access">"Du har ikke tilgang til denne meldingen"</string>
-  <string name="common_unable_to_decrypt_verification_violation">"Avsenderens verifiserte identitet ble tilbakestilt"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Avsenderens verifiserte digitale identitet ble tilbakestilt"</string>
   <string name="common_unable_to_invite_message">"Invitasjoner kunne ikke sendes til en eller flere brukere."</string>
   <string name="common_unable_to_invite_title">"Kunne ikke sende invitasjon(er)"</string>
   <string name="common_unlock">"Lås opp"</string>
@@ -391,16 +396,17 @@
   <string name="common_voice_message">"Talemelding"</string>
   <string name="common_waiting">"Venter…"</string>
   <string name="common_waiting_for_decryption_key">"Venter på denne meldingen"</string>
+  <string name="common_waiting_live_location">"Venter på sanntidslokasjon…"</string>
   <string name="common_world_readable_history">"Alle kan se historikk"</string>
   <string name="common_you">"Du"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) delte denne meldingen siden du ikke var i rommet da den ble sendt."</string>
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s delte denne meldingen siden du ikke var i rommet da den ble sendt."</string>
   <string name="crypto_history_visible">"Dette rommet er konfigurert slik at nye medlemmer kan lese historikken.%1$s"</string>
-  <string name="crypto_identity_change_pin_violation">"%1$s\'s identitet ble tilbakestilt. %2$s"</string>
-  <string name="crypto_identity_change_pin_violation_new">"%1$ss %2$s-identitet ble tilbakestilt. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation">"%1$ss digitale identitet ble tilbakestilt. %2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"%1$ss digitale identitet %2$s ble tilbakestilt. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
-  <string name="crypto_identity_change_profile_pin_violation">"%1$ss identitet ble tilbakestilt."</string>
-  <string name="crypto_identity_change_verification_violation_new">"%1$ss %2$s identitet ble tilbakestilt. %3$s"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"%1$ss digitale identitet ble tilbakestilt."</string>
+  <string name="crypto_identity_change_verification_violation_new">"%1$ss digitale identitet %2$s ble tilbakestilt. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Trekk tilbake verifisering"</string>
   <string name="dialog_allow_access">"Tillat tilgang"</string>
   <string name="dialog_confirm_link_message">"Lenken %1$s tar deg til et annet nettsted %2$s
@@ -458,11 +464,11 @@ Er du sikker på at du vil fortsette?"</string>
     <item quantity="other">"%1$d Festede meldinger"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Festede meldinger"</string>
-  <string name="screen_reset_identity_confirmation_subtitle">"Du er i ferd med å gå til %1$s kontoen din for å tilbakestille identiteten din. Etterpå blir du tatt tilbake til appen."</string>
-  <string name="screen_reset_identity_confirmation_title">"Kan du ikke bekrefte? Gå til kontoen din for å tilbakestille identiteten din."</string>
+  <string name="screen_reset_identity_confirmation_subtitle">"Du er i ferd med å gå til din %1$s for å tilbakestille din digitale identitet. Etterpå blir du ført tilbake til appen."</string>
+  <string name="screen_reset_identity_confirmation_title">"Kan du ikke bekrefte? Gå til kontoen din for å tilbakestille den digitale identiteten din."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Trekk tilbake verifikasjon og send"</string>
   <string name="screen_resolve_send_failure_changed_identity_subtitle">"Du kan trekke tilbake verifiseringen og sende denne meldingen likevel, eller du kan avbryte for nå og prøve igjen senere etter at du har reverifisert %1$s."</string>
-  <string name="screen_resolve_send_failure_changed_identity_title">"Meldingen din ble ikke sendt fordi %1$ss verifiserte identitet er tilbakestilt"</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Meldingen din ble ikke sendt fordi %1$s verifiserte digitale identitet ble tilbakestilt"</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Send melding uansett"</string>
   <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s bruker én eller flere uverifiserte enheter. Du kan sende meldingen uansett, eller du kan avbryte foreløpig og prøve igjen senere etter at %2$s har verifisert alle enhetene sine."</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Meldingen din ble ikke sendt fordi %1$s ikke har bekreftet alle enhetene"</string>
@@ -486,6 +492,7 @@ Er du sikker på at du vil fortsette?"</string>
   <string name="screen_share_open_google_maps">"Åpne i Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Åpne i OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Del valgt lokasjon"</string>
+  <string name="screen_sharing_location_option_sheet_title">"Delingsalternativer"</string>
   <string name="screen_space_list_description">"Områder du har opprettet eller blitt med i."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_empty_state_title">"Opprett område for å organisere rom"</string>
@@ -493,7 +500,7 @@ Er du sikker på at du vil fortsette?"</string>
   <string name="screen_space_list_title">"Områder"</string>
   <string name="screen_static_location_sheet_timestamp_description">"Delt %1$s"</string>
   <string name="screen_static_location_sheet_title">"På kartet"</string>
-  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Meldingen ble ikke sendt fordi %1$ss verifiserte identitet er tilbakestilt."</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Meldingen ble ikke sendt fordi %1$s verifiserte digitale identitet ble tilbakestilt."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Meldingen ble ikke sendt fordi %1$s ikke har verifisert alle enheter."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Meldingen ble ikke sendt fordi du ikke har verifisert en eller flere av enhetene dine."</string>
   <string name="screen_view_location_title">"Posisjon"</string>
@@ -503,5 +510,5 @@ Er du sikker på at du vil fortsette?"</string>
   <string name="timeline_decryption_failure_historical_event_unverified_device">"Du må verifisere denne enheten for å få tilgang til historiske meldinger"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Du har ikke tilgang til denne meldingen"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Kan ikke dekryptere meldingen"</string>
-  <string name="timeline_decryption_failure_withheld_unverified">"Denne meldingen ble blokkert enten fordi du ikke har bekreftet enheten din, eller fordi avsenderen må bekrefte identiteten din."</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Denne meldingen ble blokkert enten fordi du ikke verifiserte enheten din, eller fordi avsenderen må verifisere din digitale identitet."</string>
 </resources>

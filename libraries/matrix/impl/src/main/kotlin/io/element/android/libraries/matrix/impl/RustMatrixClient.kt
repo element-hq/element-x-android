@@ -45,11 +45,14 @@ import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibilit
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.scanner.ContentScanner
 import io.element.android.libraries.matrix.api.spaces.SpaceService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncState
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.api.user.UserStatus
 import io.element.android.libraries.matrix.impl.encryption.RustEncryptionService
 import io.element.android.libraries.matrix.impl.exception.mapClientException
 import io.element.android.libraries.matrix.impl.linknewdevice.RustLinkDesktopHandler
@@ -136,6 +139,7 @@ import org.matrix.rustcomponents.sdk.CreateRoomParameters as RustCreateRoomParam
 import org.matrix.rustcomponents.sdk.RoomPreset as RustRoomPreset
 import org.matrix.rustcomponents.sdk.SyncService as ClientSyncService
 
+@Suppress("LargeClass")
 class RustMatrixClient(
     override val sessionPaths: SessionPaths,
     private val innerClient: Client,
@@ -150,9 +154,11 @@ class RustMatrixClient(
     private val featureFlagService: FeatureFlagService,
     private val analyticsService: AnalyticsService,
     private val workManagerScheduler: WorkManagerScheduler,
+    override val contentScanner: ContentScanner?,
 ) : MatrixClient {
     override val sessionId: UserId = UserId(innerClient.userId())
     override val deviceId: DeviceId = DeviceId(innerClient.deviceId())
+    override val homeserverUrl: String = innerClient.homeserver()
     override val sessionCoroutineScope = appCoroutineScope.childScope(dispatchers.main, "Session-$sessionId")
     private val sessionDispatcher = dispatchers.io.limitedParallelism(64)
 
@@ -257,6 +263,8 @@ class RustMatrixClient(
     )
 
     private var clientDelegateTaskHandle: TaskHandle? = innerClient.setDelegate(sessionDelegate)
+
+    @Volatile private var localUserStatus: UserStatus? = null
 
     private val _userProfile: MutableStateFlow<MatrixUser> = MutableStateFlow(
         MatrixUser(
@@ -443,7 +451,12 @@ class RustMatrixClient(
 
     override suspend fun getUserProfile(): Result<MatrixUser> = getProfile(sessionId)
         .onSuccess { matrixUser ->
-            _userProfile.emit(matrixUser)
+            _userProfile.emit(
+                matrixUser.copy(
+                    rawStatus = localUserStatus,
+                    displayedStatus = localUserStatus?.let { DisplayedStatus.UserSet(it) },
+                )
+            )
             // Also update our session storage
             sessionStore.updateUserProfile(
                 sessionId = sessionId.value,
@@ -473,6 +486,28 @@ class RustMatrixClient(
         withContext(sessionDispatcher) {
             runCatchingExceptions { innerClient.removeAvatar() }
         }
+
+    override suspend fun setUserStatus(status: UserStatus): Result<Unit> = withContext(sessionDispatcher) {
+        localUserStatus = status
+        _userProfile.emit(
+            _userProfile.value.copy(
+                rawStatus = status,
+                displayedStatus = DisplayedStatus.UserSet(status),
+            )
+        )
+        Result.success(Unit)
+    }
+
+    override suspend fun clearUserStatus(): Result<Unit> = withContext(sessionDispatcher) {
+        localUserStatus = null
+        _userProfile.emit(
+            _userProfile.value.copy(
+                rawStatus = null,
+                displayedStatus = null,
+            )
+        )
+        Result.success(Unit)
+    }
 
     override suspend fun joinRoom(roomId: RoomId): Result<RoomInfo?> = withContext(sessionDispatcher) {
         runCatchingExceptions {

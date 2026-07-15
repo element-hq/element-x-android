@@ -55,9 +55,24 @@
   <string name="push_distributor_firebase_android">"خدمات گوگل"</string>
   <string name="push_no_valid_google_play_services_apk_android">"خدمت پلی گوگل معتبری پیدا نشد. ممکن است آگاهی‌ها به درستی کار نکنند."</string>
   <string name="troubleshoot_notifications_test_blocked_users_title">"کاربران مسدود"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"گرفتن نام فراهم کنندهٔ کنونی."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"هیچ فراهم کنندهٔ ارسالی گزیده نشده."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success">"فراهم کنندهٔ ارسال کنونی: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"فراهم کنندهٔ ارسال کنونی"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"ازمینان از پشتیبانی برنامه از لااقل یک فراهم کنندهٔ ارسال."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"پشتیبانی از هیچ فراهم کنندهٔ ارسالی پیدا نشد."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"پشتیبانی از فراهم‌کنندهٔ ارسال"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"بررسی توانایی برنامه در نمایش آگاهی."</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"روی آگاهی زده نشد."</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"نمی‌توان آگاهی را نشان داد."</string>
   <string name="troubleshoot_notifications_test_display_notification_success">"روی آگاهی کلیک شد!"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"نمایش آگاهی"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"زدن روی آگاهی برای ادامهٔ آزمون"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_description">"اطمینان از این که برنامه ارسال را می‌گیرد."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"خطا: فرستنده درخواست را رد کرد."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"خطا: %1$s."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"خطا. نتوانست فرستادن را بیازماید."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"خطا. مهلت زمانی انتظار برای فرستادن سر رسید."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_success">"باز خورد معکوس ارسال %1$d م‌ث طول کشید."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_title">"بررسی بازخورد معکوس ارسال"</string>
 </resources>
