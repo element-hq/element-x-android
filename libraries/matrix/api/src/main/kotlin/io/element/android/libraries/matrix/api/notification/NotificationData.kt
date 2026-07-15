@@ -90,7 +90,6 @@ sealed interface NotificationContent {
             val question: String,
         ) : MessageLike
 
-        // TODO put real implementation
         data object Beacon : MessageLike
     }
 
@@ -119,9 +118,7 @@ sealed interface NotificationContent {
         data class RoomTopic(val topic: String) : StateEvent
         data object SpaceChild : StateEvent
         data object SpaceParent : StateEvent
-
-        // TODO put real implementation
-        data object Beacon : StateEvent
+        data object BeaconInfo : StateEvent
     }
 
     data class Invite(

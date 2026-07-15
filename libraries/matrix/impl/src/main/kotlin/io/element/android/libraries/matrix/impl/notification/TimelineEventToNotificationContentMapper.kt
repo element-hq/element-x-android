@@ -71,7 +71,7 @@ private fun StateEventContent.toContent(): NotificationContent.StateEvent {
         is StateEventContent.RoomTopic -> NotificationContent.StateEvent.RoomTopic(topic)
         StateEventContent.SpaceChild -> NotificationContent.StateEvent.SpaceChild
         StateEventContent.SpaceParent -> NotificationContent.StateEvent.SpaceParent
-        StateEventContent.BeaconInfo -> NotificationContent.StateEvent.Beacon
+        StateEventContent.BeaconInfo -> NotificationContent.StateEvent.BeaconInfo
     }
 }
 

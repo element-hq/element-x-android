@@ -299,6 +299,10 @@ class DefaultNotifiableEventResolver(
                 Timber.tag(loggerTag.value).d("Ignoring notification for sticker")
                 throw NotificationResolverException.EventFilteredOut
             }
+            NotificationContent.MessageLike.Beacon -> {
+                Timber.tag(loggerTag.value).d("Ignoring notification for beacon")
+                throw NotificationResolverException.EventFilteredOut
+            }
             is NotificationContent.StateEvent.RoomMemberContent,
             NotificationContent.StateEvent.PolicyRuleRoom,
             NotificationContent.StateEvent.PolicyRuleServer,
@@ -318,7 +322,8 @@ class DefaultNotifiableEventResolver(
             NotificationContent.StateEvent.RoomTombstone,
             is NotificationContent.StateEvent.RoomTopic,
             NotificationContent.StateEvent.SpaceChild,
-            NotificationContent.StateEvent.SpaceParent -> {
+            NotificationContent.StateEvent.SpaceParent,
+            NotificationContent.StateEvent.BeaconInfo -> {
                 Timber.tag(loggerTag.value).d("Ignoring notification for state event ${content.javaClass.simpleName}")
                 throw NotificationResolverException.EventFilteredOut
             }
