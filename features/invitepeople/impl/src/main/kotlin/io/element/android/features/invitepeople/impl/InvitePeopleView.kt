@@ -302,13 +302,13 @@ private fun InvitePeopleConfirmModal(
                 text = stringResource(CommonStrings.action_remove),
                 onClick = onRemove,
                 leadingIcon = IconSource.Vector(CompoundIcons.Close()),
-                modifier = Modifier.weight(1f).testTag(TestTags.confirmInviteUnknown),
+                modifier = Modifier.weight(1f),
             )
             Button(
                 text = stringResource(CommonStrings.action_invite),
                 onClick = onInvite,
                 leadingIcon = IconSource.Vector(CompoundIcons.Check()),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f).testTag(TestTags.confirmInviteUnknown),
             )
         }
     }

@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_avatar">"Dodaj avatara"</string>
   <string name="a11y_add_reaction">"Dodaj reakciju: %1$s"</string>
   <string name="a11y_address">"Adresa"</string>
   <string name="a11y_avatar">"Avatar"</string>
+  <string name="a11y_clear_search_field">"Izbriši polje za pretragu"</string>
   <string name="a11y_collapse_message_text_field">"Minimiziraj tekstno polje poruke"</string>
+  <string name="a11y_create_poll_votes_allowed_decrease">"Smanjenje dopuštenih glasova po osobi"</string>
+  <string name="a11y_create_poll_votes_allowed_increase">"Povećanje broja dopuštenih glasova po osobi"</string>
   <string name="a11y_delete">"Izbriši"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d unesena znamenka"</item>
     <item quantity="few">"%1$d unesene znamenke"</item>
     <item quantity="other">"%1$d unesenih znamenaka"</item>
   </plurals>
+  <string name="a11y_duration">"Trajanje: %1$s"</string>
   <string name="a11y_edit_avatar">"Uredi avatar"</string>
   <string name="a11y_edit_room_address_hint">"Potpuna adresa bit će %1$s"</string>
   <string name="a11y_encryption_details">"Pojedinosti o šifriranju"</string>
@@ -18,6 +23,7 @@
   <string name="a11y_info">"Informacije"</string>
   <string name="a11y_join_call">"Pridruži se pozivu"</string>
   <string name="a11y_jump_to_bottom">"Idi na dno"</string>
+  <string name="a11y_jump_to_unread">"Skoči na nepročitano"</string>
   <string name="a11y_move_the_map_to_my_location">"Pomakni kartu na moju lokaciju"</string>
   <string name="a11y_notifications_mentions_only">"Samo spominjanja"</string>
   <string name="a11y_notifications_muted">"Bez zvuka"</string>
@@ -28,37 +34,42 @@
   <string name="a11y_page_n">"Stranica %1$d"</string>
   <string name="a11y_pause">"Pauziraj"</string>
   <string name="a11y_paused_voice_message">"Glasovna poruka, trajanje: %1$s, trenutačno zaustavljeno na: %2$s"</string>
+  <string name="a11y_photo_preview">"Pregled fotografije"</string>
   <string name="a11y_pin_field">"Polje za PIN"</string>
   <string name="a11y_pinned_location">"Prikvačena lokacija"</string>
   <string name="a11y_play">"Reproduciraj"</string>
   <string name="a11y_playback_speed">"Brzina reprodukcije"</string>
   <string name="a11y_poll">"Anketa"</string>
   <string name="a11y_poll_end">"Završena anketa"</string>
+  <string name="a11y_position">"Pozicija: %1$s"</string>
   <string name="a11y_qr_code">"QR kod"</string>
   <string name="a11y_react_with">"Reagiraj s %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Reagiraj s drugim emotikonima"</string>
   <string name="a11y_read_receipts_multiple">"Pročitali %1$s i %2$s"</string>
   <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="one">"Pročitao %1$s i ostalih %2$d"</item>
-    <item quantity="few">"Pročitala %1$s i ostala %2$d"</item>
-    <item quantity="other">"Pročitalo %1$s i ostalih %2$d"</item>
+    <item quantity="one">"Prethodnu poruku pročitali su %1$s i %2$d"</item>
+    <item quantity="other">"Prethodnu poruku pročitali su %1$s i %2$d drugi"</item>
   </plurals>
-  <string name="a11y_read_receipts_single">"Pročitao korisnik %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Dodirnite za prikaz svih"</string>
+  <string name="a11y_read_receipts_single">"Prethodnu poruku pročitao/la %1$s"</string>
+  <string name="a11y_read_receipts_tap_to_show_all_android">"prikaži sve potvrde o čitanju"</string>
   <string name="a11y_remove_reaction">"Ukloni reakciju: %1$s"</string>
   <string name="a11y_remove_reaction_with">"Ukloni reakciju s %1$s"</string>
   <string name="a11y_room_avatar">"Avatar sobe"</string>
   <string name="a11y_send_files">"Pošalji datoteke"</string>
   <string name="a11y_sender_location">"Lokacija pošiljatelja"</string>
+  <string name="a11y_sent_by_sender_at_date">"Poslao %1$s u %2$s"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Potrebna je vremenski ograničena radnja, imate jednu minutu za potvrdu"</string>
   <string name="a11y_settings_with_required_action">"Postavke, potrebna je radnja"</string>
   <string name="a11y_show_password">"Prikaži zaporku"</string>
   <string name="a11y_start_call">"Započni poziv"</string>
   <string name="a11y_start_video_call">"Započni videopoziv"</string>
   <string name="a11y_start_voice_call">"Započni glasovni poziv"</string>
+  <string name="a11y_thread_in_room">"Nit u %1$s"</string>
+  <string name="a11y_threads_in_room">"Teme u %1$s"</string>
   <string name="a11y_tombstoned_room">"Soba označena za uklanjanje"</string>
   <string name="a11y_user_avatar">"Korisnički avatar"</string>
   <string name="a11y_user_menu">"Korisnički izbornik"</string>
+  <string name="a11y_video_preview">"Pretpregled videozapisa"</string>
   <string name="a11y_view_avatar">"Prikaži avatar"</string>
   <string name="a11y_view_details">"Prikaži pojedinosti"</string>
   <string name="a11y_voice_message">"Glasovna poruka, trajanje: %1$s"</string>
@@ -73,6 +84,7 @@
   <string name="action_call">"Poziv"</string>
   <string name="action_cancel">"Odustani"</string>
   <string name="action_cancel_for_now">"Otkaži za sada"</string>
+  <string name="action_choose_file">"Odaberite datoteku"</string>
   <string name="action_choose_photo">"Odaberi fotografiju"</string>
   <string name="action_clear">"Očisti"</string>
   <string name="action_close">"Zatvori"</string>
@@ -94,6 +106,7 @@
   <string name="action_decline_and_block">"Odbij i blokiraj"</string>
   <string name="action_delete">"Izbriši"</string>
   <string name="action_delete_account">"Izbriši račun"</string>
+  <string name="action_delete_file">"Izbriši datoteku"</string>
   <string name="action_delete_poll">"Izbriši anketu"</string>
   <string name="action_deselect_all">"Poništi sve odabire"</string>
   <string name="action_disable">"Onemogući"</string>
@@ -185,9 +198,11 @@
   <string name="action_translate">"Prevedi"</string>
   <string name="action_try_again">"Pokušajte ponovno"</string>
   <string name="action_unpin">"Otkvači"</string>
+  <string name="action_video_call">"Videopoziv"</string>
   <string name="action_view">"Prikaz"</string>
   <string name="action_view_in_timeline">"Prikaži na vremenskoj traci"</string>
   <string name="action_view_source">"Prikaži izvor"</string>
+  <string name="action_voice_call">"Glasovni poziv"</string>
   <string name="action_yes">"Da"</string>
   <string name="action_yes_try_again">"Da, pokušaj ponovno"</string>
   <string name="banner_migrate_to_native_sliding_sync_description">"Vaš poslužitelj sada podržava novi, brži protokol. Odjavite se i ponovno prijavite da biste odmah izvršili nadogradnju. Ako to sada napravite, izbjeći ćete prisilnu odjavu kada se poslije ukloni stari protokol."</string>
@@ -208,6 +223,7 @@
   <string name="common_blocked_users">"Blokirani korisnici"</string>
   <string name="common_bubbles">"Mjehurići"</string>
   <string name="common_call_declined">"Poziv je odbijen"</string>
+  <string name="common_call_in_progress">"Poziv je u tijeku"</string>
   <string name="common_call_started">"Poziv je započeo"</string>
   <string name="common_call_you_declined">"Odbili ste poziv"</string>
   <string name="common_chat_backup">"Sigurnosna kopija razgovora"</string>
@@ -251,7 +267,9 @@ Razlog: %1$s ."</string>
   <string name="common_file_saved_on_disk_android">"Datoteka je spremljena u preuzimanja"</string>
   <string name="common_forward_message">"Proslijedi poruku"</string>
   <string name="common_frequently_used">"Često korišteno"</string>
+  <string name="common_gallery">"Galerija"</string>
   <string name="common_gif">"GIF"</string>
+  <string name="common_group_call_in_progress">"Grupni poziv u tijeku"</string>
   <string name="common_image">"Slika"</string>
   <string name="common_in_reply_to">"Kao odgovor osobi %1$s"</string>
   <string name="common_install_apk_android">"Instaliraj APK"</string>
@@ -301,6 +319,7 @@ Razlog: %1$s ."</string>
   <string name="common_please_wait">"Pričekajte…"</string>
   <string name="common_poll_end_confirmation">"Jeste li sigurni da želite završiti ovu anketu?"</string>
   <string name="common_poll_summary">"Anketa: %1$s"</string>
+  <string name="common_poll_summary_prefix">"Anketa"</string>
   <string name="common_poll_total_votes">"Ukupno glasova: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Rezultati će se objaviti nakon što završi anketa"</string>
   <plurals name="common_poll_votes_count">
@@ -399,6 +418,7 @@ Razlog: %1$s ."</string>
   <string name="common_unmute">"Uključi zvuk"</string>
   <string name="common_unsupported_call">"Nepodržani poziv"</string>
   <string name="common_unsupported_event">"Nepodržani događaj"</string>
+  <string name="common_user_started_a_call">"%1$s je započeo poziv"</string>
   <string name="common_username">"Korisničko ime"</string>
   <string name="common_verification_cancelled">"Provjera je otkazana"</string>
   <string name="common_verification_complete">"Provjera je dovršena"</string>
@@ -420,6 +440,11 @@ Razlog: %1$s ."</string>
   <string name="common_waiting_live_location">"Čekanje lokacije uživo…"</string>
   <string name="common_world_readable_history">"Svatko može vidjeti povijest"</string>
   <string name="common_you">"Vi"</string>
+  <string name="content_scanner_not_found">"Preuzimanje nije dostupno."</string>
+  <string name="content_scanner_not_found_title">"Datoteka nije pronađena"</string>
+  <string name="content_scanner_scanning">"Skeniranje…"</string>
+  <string name="content_scanner_unsafe_message">"Pregled i preuzimanje su onemogućeni."</string>
+  <string name="content_scanner_unsafe_title">"Datoteka nije sigurna"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s(%2$s ) je podijelio/la ovu poruku jer niste bili u sobi kada je poslana."</string>
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$spodijelio/la je ovu poruku jer nisi bio/la u sobi kada je poslana."</string>
   <string name="crypto_history_visible">"Ova je soba konfigurirana tako da novi članovi mogu čitati stare poruke. %1$s"</string>
@@ -471,6 +496,9 @@ Jeste li sigurni da želite nastaviti?"</string>
   <string name="error_unknown">"Žao nam je, došlo je do pogreške"</string>
   <string name="invite_friends_rich_title">"🔐️ Pridruži mi se u %1$s"</string>
   <string name="invite_friends_text">"Hej, razgovaraj sa mnom u aplikaciji %1$s: %2$s"</string>
+  <string name="live_location_sharing_foreground_service_channel_title_android">"Dijeljenje lokacije uživo"</string>
+  <string name="live_location_sharing_foreground_service_message_android">"Dijeljenje lokacije u tijeku"</string>
+  <string name="live_location_sharing_foreground_service_title_android">"%1$s Lokacija uživo"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Snažno protresi za prijavu pogreške"</string>
   <string name="screen_bug_report_a11y_screenshot">"Snimka zaslona"</string>
@@ -478,6 +506,7 @@ Jeste li sigurni da želite nastaviti?"</string>
   <string name="screen_create_poll_options_section_title">"Mogućnosti"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Ukloni %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Postavke"</string>
+  <string name="screen_create_poll_votes_allowed_per_person">"Dozvoljeni glasovi po osobi"</string>
   <string name="screen_live_location_sheet_nobody_sharing">"Nitko ne dijeli svoju lokaciju"</string>
   <string name="screen_live_location_sheet_sharing_live_location">"Dijeljenje lokacije uživo"</string>
   <plurals name="screen_live_location_sheet_subtitle">
@@ -532,6 +561,10 @@ Jeste li sigurni da želite nastaviti?"</string>
   <string name="screen_space_list_title">"Prostori"</string>
   <string name="screen_static_location_sheet_timestamp_description">"Dijeljeno %1$s"</string>
   <string name="screen_static_location_sheet_title">"Na karti"</string>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="one">"%1$d se pridružio"</item>
+    <item quantity="other">"%1$d se pridružio"</item>
+  </plurals>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Poruka nije poslana jer je poništen potvrđeni identitet korisnika %1$s."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Poruka nije poslana jer %1$s nije potvrdio sve uređaje."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Poruka nije poslana jer niste potvrdili jedan svoj uređaj ili više njih."</string>
@@ -543,4 +576,6 @@ Jeste li sigurni da želite nastaviti?"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Nemate pristup ovoj poruci"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Nije moguće dešifrirati poruku"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Ova je poruka blokirana jer niste potvrdili svoj uređaj ili zato što pošiljatelj treba potvrditi vaš identitet."</string>
+  <string name="vulkan_not_supported_dialog_content_android">"Vaš je uređaj prestar, potreban je uređaj s Androidom 8 ili novijim."</string>
+  <string name="vulkan_not_supported_dialog_title_android">"Renderiranje mapa nije podržano"</string>
 </resources>

@@ -39,7 +39,6 @@
     <item quantity="other">"%1$s 與其他 %2$d 個人已讀"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"%1$s 已讀"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"點擊以顯示全部"</string>
   <string name="a11y_remove_reaction">"移除 %1$s 的反應"</string>
   <string name="a11y_remove_reaction_with">"移除反應 %1$s"</string>
   <string name="a11y_room_avatar">"聊天室大頭照"</string>

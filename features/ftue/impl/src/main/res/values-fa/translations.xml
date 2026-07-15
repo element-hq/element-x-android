@@ -2,8 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"نمی‌توانید تأیید کنید؟"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"ایجاد کلید بازیابی جدید"</string>
-  <string name="screen_identity_confirmation_subtitle">"تأیید این افزاره برای برپایی پیام‌رسانی امن."</string>
-  <string name="screen_identity_confirmation_title">"تأیید هویتتان"</string>
+  <string name="screen_identity_confirmation_subtitle">"گزینش چگونگی تأیید برای برپایی پیام‌رسانی امن."</string>
+  <string name="screen_identity_confirmation_title">"تأیید هویت دیجیتالیتان"</string>
   <string name="screen_identity_confirmation_use_another_device">"استفاده از افزاره‌ای دیگر"</string>
   <string name="screen_identity_confirmation_use_recovery_key">"استفاده از کلید بازیابی"</string>
   <string name="screen_identity_confirmed_subtitle">"اکنون می‌توانید پیام‌ها را به صورت امن فرستاده و بگیرید و هرکسی که با او گپ می‌زنید نیز می‌تواند به این افزاره اعتماد کند."</string>

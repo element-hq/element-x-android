@@ -43,7 +43,6 @@
     <item quantity="other">"읽은 사람 %1$s 그리고 %2$d 다른 사람들"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"%1$s 님이 읽음"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"모두 표시하려면 탭하세요"</string>
   <string name="a11y_remove_reaction">"반응 제거: %1$s"</string>
   <string name="a11y_remove_reaction_with">"%1$s 반응을 제거하세요"</string>
   <string name="a11y_room_avatar">"방 아바타"</string>
