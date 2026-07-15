@@ -12,5 +12,7 @@ interface SessionEnterpriseService {
     suspend fun isElementCallAvailable(): Boolean
     suspend fun tweakMasUrl(url: String): String
 
+    suspend fun isEncryptionDisabledByHomeserver(): Boolean
+
     suspend fun init()
 }
