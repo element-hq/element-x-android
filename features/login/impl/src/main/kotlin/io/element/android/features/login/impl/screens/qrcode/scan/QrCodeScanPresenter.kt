@@ -39,7 +39,6 @@ class QrCodeScanPresenter(
     private val qrCodeLoginDataFactory: MatrixQrCodeLoginDataFactory,
     private val qrCodeLoginManager: QrCodeLoginManager,
     private val coroutineDispatchers: CoroutineDispatchers,
-    private val defaultAccountProviderAccessControl: DefaultAccountProviderAccessControl,
 ) : Presenter<QrCodeScanState> {
     private var isScanning by mutableStateOf(true)
 

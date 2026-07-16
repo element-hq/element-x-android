@@ -67,44 +67,6 @@ class QrCodeScanPresenterTest {
     }
 
     @Test
-    fun `present - scanned QR code successfully, but homeserver not allowed`() = runTest {
-        val qrCodeLoginDataFactory = FakeMatrixQrCodeLoginDataFactory(
-            parseQrCodeLoginDataResult = {
-                Result.success(
-                    FakeMatrixQrCodeLoginData(
-                        serverNameResult = { "example.com" }
-                    )
-                )
-            }
-        )
-        val presenter = createQrCodeScanPresenter(
-            qrCodeLoginDataFactory = qrCodeLoginDataFactory,
-            enterpriseService = FakeEnterpriseService(
-                isAllowedToConnectToHomeserverResult = { false },
-                defaultHomeserverListResult = { listOf("element.io") },
-            )
-        )
-        presenter.test {
-            val initialState = awaitItem()
-            initialState.eventSink(QrCodeScanEvents.QrCodeScanned(byteArrayOf()))
-            assertThat(awaitItem().isScanning).isFalse()
-            assertThat(awaitItem().authenticationAction.isLoading()).isTrue()
-            awaitItem().also { state ->
-                assertThat(
-                    (state.authenticationAction
-                        .errorOrNull() as AccountProviderAccessException.UnauthorizedAccountProviderException).unauthorisedAccountProviderTitle
-                )
-                    .isEqualTo("example.com")
-                assertThat(
-                    (state.authenticationAction
-                        .errorOrNull() as AccountProviderAccessException.UnauthorizedAccountProviderException).authorisedAccountProviderTitles
-                )
-                    .containsExactly("element.io")
-            }
-        }
-    }
-
-    @Test
     fun `present - scanned QR code failed and can be retried`() = runTest {
         val qrCodeLoginDataFactory = FakeMatrixQrCodeLoginDataFactory(
             parseQrCodeLoginDataResult = { Result.failure(Exception("Failed to parse QR code")) }
