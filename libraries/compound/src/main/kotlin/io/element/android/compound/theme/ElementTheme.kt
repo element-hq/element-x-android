@@ -16,7 +16,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalRippleConfiguration
+import androidx.compose.material3.LocalRippleThemeConfiguration
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RippleConfiguration
+import androidx.compose.material3.RippleThemeConfiguration
 import androidx.compose.material3.Typography
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -28,6 +32,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.compoundTypography
 import io.element.android.compound.tokens.generated.SemanticColors
 import io.element.android.compound.tokens.generated.TypographyTokens
@@ -159,6 +164,26 @@ fun ElementTheme(
     CompositionLocalProvider(
         LocalCompoundColors provides currentCompoundColor,
         LocalContentColor provides colorScheme.onSurface,
+        // Configure the keyboard focus style: Draw a blue inset ring around the focused component.
+        // Ref: https://www.figma.com/design/hlbsmSekQorGRN1t2R9JEy/Accessibility-checks?node-id=271-42066
+        // By default, a semi-transparent black overlay is used
+        LocalRippleThemeConfiguration provides RippleThemeConfiguration(
+            RippleThemeConfiguration.Focus.InsetRing(
+                outerStrokeInset = 0.dp,
+                outerStrokeWidth = 2.dp,
+                innerStrokeInset = 0.dp,
+                innerStrokeWidth = 0.dp,
+            )
+        ),
+        // Configure the keyboard focus color.
+        // By default, ColorScheme.secondary is used
+        LocalRippleConfiguration provides
+            RippleConfiguration(
+                focus = RippleConfiguration.Focus.InsetRing(
+                    outerStrokeColor = ElementTheme.colors.borderFocused,
+                    innerStrokeColor = Color.Transparent,
+                )
+            ),
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
