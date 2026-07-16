@@ -38,7 +38,9 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
@@ -100,7 +102,7 @@ private fun PinnedMessagesBannerRow(
     )
     val currentMessageText = state.formattedMessage().text
     val bannerContentDescription = if (currentMessageText.isNotEmpty()) {
-        "$positionDescription. $currentMessageText"
+        "$positionDescription: $currentMessageText"
     } else {
         positionDescription
     }
@@ -140,7 +142,13 @@ private fun PinnedMessagesBannerRow(
             index = state.currentPinnedMessageIndex(),
             totalCount = state.pinnedMessagesCount(),
             message = state.formattedMessage(),
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
+                .clearAndSetSemantics {
+                    // Hide from accessibility since the content description is already set on the parent row
+                    // Also it will prevent the formatting to be read by screen readers, it does not add much value.
+                    hideFromAccessibility()
+                },
         )
         ViewAllButton(
             state = state,
