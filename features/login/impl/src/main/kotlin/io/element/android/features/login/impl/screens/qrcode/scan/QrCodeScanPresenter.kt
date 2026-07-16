@@ -97,13 +97,6 @@ class QrCodeScanPresenter(
                 val data = qrCodeLoginDataFactory.parseQrCodeData(code).onFailure {
                     Timber.e(it, "Error parsing QR code data")
                 }.getOrThrow()
-                val serverName = data.serverName()
-                if (serverName != null) {
-                    defaultAccountProviderAccessControl.assertIsAllowedToConnectToAccountProvider(
-                        title = serverName,
-                        accountProviderUrl = serverName,
-                    )
-                }
                 data
             }.runCatchingUpdatingState(codeScannedAction)
         }.invokeOnCompletion {
