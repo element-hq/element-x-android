@@ -268,7 +268,7 @@ class GalleryMediaGalleryDataSourceTest {
         assertThat((data.imageAndVideoItems[1] as MediaItem.File).id).isEqualTo(UniqueId("${AN_EVENT_ID.value}_1"))
         assertThat((data.imageAndVideoItems[2] as MediaItem.Video).id).isEqualTo(UniqueId("${AN_EVENT_ID.value}_2"))
     }
-    
+
     private val noopValidationState = NoopContentValidationState()
 
     private fun aGalleryInfo() = GalleryInfo(

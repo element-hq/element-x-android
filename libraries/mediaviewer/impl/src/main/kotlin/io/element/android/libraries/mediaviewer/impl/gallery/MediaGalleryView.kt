@@ -326,7 +326,7 @@ private fun MediaGalleryFilesList(
             key = { it.id() },
             contentType = { it::class.java },
         ) { item ->
-            val contentValidationState = remember (item is MediaItem.Event) {
+            val contentValidationState = remember(item is MediaItem.Event) {
                 if (item is MediaItem.Event) {
                     item.validationState
                 } else {
