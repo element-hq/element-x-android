@@ -12,7 +12,6 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
-import io.element.android.features.login.impl.changeserver.AccountProviderAccessException
 import io.element.android.features.login.impl.qrcode.FakeQrCodeLoginManager
 import io.element.android.features.wellknown.test.FakeWellknownRetriever
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
