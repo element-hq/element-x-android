@@ -9,17 +9,12 @@
 package io.element.android.features.login.impl.screens.qrcode.scan
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.enterprise.api.EnterpriseService
-import io.element.android.features.enterprise.test.FakeEnterpriseService
-import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
 import io.element.android.features.login.impl.qrcode.FakeQrCodeLoginManager
-import io.element.android.features.wellknown.test.FakeWellknownRetriever
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrLoginException
 import io.element.android.libraries.matrix.test.auth.qrlogin.FakeMatrixQrCodeLoginData
 import io.element.android.libraries.matrix.test.auth.qrlogin.FakeMatrixQrCodeLoginDataFactory
-import io.element.android.libraries.wellknown.api.WellknownRetriever
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -52,9 +47,6 @@ class QrCodeScanPresenterTest {
         )
         val presenter = createQrCodeScanPresenter(
             qrCodeLoginDataFactory = qrCodeLoginDataFactory,
-            enterpriseService = FakeEnterpriseService(
-                isAllowedToConnectToHomeserverResult = { true },
-            )
         )
         presenter.test {
             val initialState = awaitItem()
@@ -114,15 +106,9 @@ class QrCodeScanPresenterTest {
         qrCodeLoginDataFactory: FakeMatrixQrCodeLoginDataFactory = FakeMatrixQrCodeLoginDataFactory(),
         coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         qrCodeLoginManager: FakeQrCodeLoginManager = FakeQrCodeLoginManager(),
-        enterpriseService: EnterpriseService = FakeEnterpriseService(),
-        wellknownRetriever: WellknownRetriever = FakeWellknownRetriever(),
     ) = QrCodeScanPresenter(
         qrCodeLoginDataFactory = qrCodeLoginDataFactory,
         qrCodeLoginManager = qrCodeLoginManager,
         coroutineDispatchers = coroutineDispatchers,
-        defaultAccountProviderAccessControl = DefaultAccountProviderAccessControl(
-            enterpriseService = enterpriseService,
-            wellknownRetriever = wellknownRetriever,
-        ),
     )
 }
