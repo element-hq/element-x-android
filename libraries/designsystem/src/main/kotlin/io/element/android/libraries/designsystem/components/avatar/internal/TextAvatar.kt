@@ -9,6 +9,7 @@
 package io.element.android.libraries.designsystem.components.avatar.internal
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -48,6 +49,7 @@ internal fun TextAvatar(
             .size(size)
             .clip(avatarShape)
             .background(color = colors.background)
+            .border(width = 1.dp, color = ElementTheme.colors.borderInteractivePrimary, shape = avatarShape)
     ) {
         val fontSize = size.toSp() / 2
         val originalFont = ElementTheme.typography.fontHeadingMdBold
