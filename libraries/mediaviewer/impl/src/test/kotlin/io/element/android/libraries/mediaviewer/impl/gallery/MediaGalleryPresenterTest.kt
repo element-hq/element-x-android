@@ -13,6 +13,7 @@ package io.element.android.libraries.mediaviewer.impl.gallery
 import android.net.Uri
 import app.cash.turbine.ReceiveTurbine
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.contentscanner.api.ContentScannerService
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
@@ -534,6 +535,7 @@ class MediaGalleryPresenterTest {
             mediaLoader = matrixMediaLoader,
             localMediaActions = localMediaActions,
             snackbarDispatcher = snackbarDispatcher,
+            contentScannerService = { _, _, _ -> },
         )
     }
 }
