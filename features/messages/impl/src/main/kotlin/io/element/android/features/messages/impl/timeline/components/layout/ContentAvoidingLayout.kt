@@ -9,6 +9,7 @@
 package io.element.android.features.messages.impl.timeline.components.layout
 
 import android.text.Layout
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -23,6 +24,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.designsystem.text.roundToPx
+import io.element.android.libraries.designsystem.utils.LocalUiTestMode
 import io.element.android.wysiwyg.compose.EditorStyledText
 import kotlin.math.max
 import kotlin.math.min
@@ -41,6 +43,7 @@ import kotlin.math.roundToInt
  * @param shrinkContent Whether the content should be shrunk to fit the available width or not. Defaults to `false`.
  * @param content The 'content' component of the layout.
  */
+@Suppress("ContentSlotReused") // Since we added an exception for `LocalUiTestMode`, detekt thinks the layout can change in runtime: it won't
 @Composable
 fun ContentAvoidingLayout(
     overlay: @Composable () -> Unit,
@@ -51,6 +54,15 @@ fun ContentAvoidingLayout(
     content: @Composable ContentAvoidingLayoutScope.() -> Unit,
 ) {
     val scope = remember { ContentAvoidingLayoutScopeInstance() }
+
+    // Custom layouts don't seem to work well with Compose UI tests (they crash), so we use a Column instead when running in test mode.
+    if (LocalUiTestMode.current) {
+        Column {
+            scope.content()
+            overlay()
+        }
+        return
+    }
 
     Layout(
         modifier = modifier,

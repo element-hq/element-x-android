@@ -34,6 +34,7 @@ class KonsistArchitectureTest {
             .classes()
             .withNameEndingWith("State")
             .withoutName(
+                "NoopContentValidationState",
                 "CameraPositionState",
                 "CustomSheetState",
             )

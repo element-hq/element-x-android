@@ -35,6 +35,7 @@ sealed interface MediaItem {
         val mediaInfo: MediaInfo,
         val mediaSource: MediaSource,
         val thumbnailSource: MediaSource?,
+        val blurHash: String?,
     ) : Event {
         val thumbnailMediaRequestData: MediaRequestData
             get() = MediaRequestData(thumbnailSource ?: mediaSource, MediaRequestData.Kind.Thumbnail(100))
@@ -46,6 +47,7 @@ sealed interface MediaItem {
         val mediaInfo: MediaInfo,
         val mediaSource: MediaSource,
         val thumbnailSource: MediaSource?,
+        val blurHash: String?,
     ) : Event {
         val thumbnailMediaRequestData: MediaRequestData
             get() = MediaRequestData(thumbnailSource ?: mediaSource, MediaRequestData.Kind.Thumbnail(100))
@@ -122,5 +124,13 @@ fun MediaItem.Event.thumbnailSource(): MediaSource? {
         is MediaItem.File -> null
         is MediaItem.Audio -> null
         is MediaItem.Voice -> null
+    }
+}
+
+fun MediaItem.Event.blurHash(): String? {
+    return when (this) {
+        is MediaItem.Image -> blurHash
+        is MediaItem.Video -> blurHash
+        else -> null
     }
 }

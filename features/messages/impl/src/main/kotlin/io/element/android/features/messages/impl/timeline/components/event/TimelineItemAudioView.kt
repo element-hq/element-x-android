@@ -16,21 +16,23 @@ import io.element.android.features.messages.impl.timeline.components.layout.Cont
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContentProvider
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationValue
 
 @Composable
 fun TimelineItemAudioView(
     content: TimelineItemAudioContent,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
+    contentValidationValue: ContentValidationValue = ContentValidationValue.Valid,
 ) {
     TimelineItemAttachmentView(
         icon = CompoundIcons.Audio(),
         iconContentDescription = null,
         filename = content.filename,
         fileExtensionAndSize = content.fileExtensionAndSize,
-        caption = content.caption,
         onContentLayoutChange = onContentLayoutChange,
         modifier = modifier,
+        contentValidationValue = contentValidationValue,
     )
 }
 

@@ -89,6 +89,7 @@ class SingleMediaGalleryDataSourceTest {
                     mediaInfo = params.mediaInfo,
                     mediaSource = params.mediaSource,
                     thumbnailSource = params.thumbnailSource,
+                    blurHash = null,
                 )
             }
         )
@@ -105,6 +106,7 @@ class SingleMediaGalleryDataSourceTest {
                     mediaInfo = params.mediaInfo,
                     mediaSource = params.mediaSource,
                     thumbnailSource = params.thumbnailSource,
+                    blurHash = null,
                 )
             }
         )
@@ -175,5 +177,6 @@ class SingleMediaGalleryDataSourceTest {
         mediaInfo = mediaInfo,
         mediaSource = aMediaSource(url = "aUrl"),
         thumbnailSource = aMediaSource(url = "aThumbnailUrl"),
+        blurHash = null,
     )
 }
