@@ -552,7 +552,7 @@ private fun DmHeaderSection(
             textAlign = TextAlign.Center,
         )
         val userStatus = otherMember.displayedStatus?.toText()
-        if(userStatus != null){
+        if (userStatus != null) {
             Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = userStatus,

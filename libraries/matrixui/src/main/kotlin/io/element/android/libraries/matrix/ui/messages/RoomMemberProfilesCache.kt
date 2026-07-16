@@ -36,5 +36,4 @@ class RoomMemberProfilesCache {
     fun getDisplayedStatus(userId: UserId): DisplayedStatus? {
         return cache.value[userId]?.displayedStatus
     }
-
 }

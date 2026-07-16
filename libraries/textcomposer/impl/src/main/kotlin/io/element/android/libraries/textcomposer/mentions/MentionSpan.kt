@@ -86,7 +86,7 @@ class MentionSpan(
         displayText = formatter.formatDisplayText(type)
     }
 
-    fun updateTrailingText(trailingText: String?){
+    fun updateTrailingText(trailingText: String?) {
         this.trailingText = trailingText
     }
 

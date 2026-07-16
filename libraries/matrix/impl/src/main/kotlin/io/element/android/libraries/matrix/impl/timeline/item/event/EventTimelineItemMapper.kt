@@ -75,7 +75,7 @@ fun RustProfileDetails.map(): ProfileDetails {
             displayName = displayName,
             displayNameAmbiguous = displayNameAmbiguous,
             avatarUrl = avatarUrl,
-            //TODO map this value when available
+            // TODO map this value when available
             displayedStatus = null,
         )
     }

@@ -10,10 +10,10 @@ package io.element.android.libraries.matrix.ui.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import io.element.android.compound.theme.ElementTheme
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight

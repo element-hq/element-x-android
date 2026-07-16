@@ -330,6 +330,7 @@
       "includeRegex" : [
         "screen_advanced_settings_.*",
         "screen\\.advanced_settings\\..*",
+        "screen\\.settings\\..*",
         "screen_edit_profile_.*",
         "screen_notification_settings_.*",
         "screen\\.notification_settings\\..*",

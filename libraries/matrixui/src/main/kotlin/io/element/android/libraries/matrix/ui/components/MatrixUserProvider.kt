@@ -29,7 +29,7 @@ open class MatrixUserProvider : PreviewParameterProvider<MatrixUser> {
         get() = sequenceOf(
             aMatrixUser(),
             aMatrixUser(displayName = null),
-            aMatrixUser(displayedStatus = DisplayedStatus.InCall(0L) ),
+            aMatrixUser(displayedStatus = DisplayedStatus.InCall(0L)),
         )
 }
 

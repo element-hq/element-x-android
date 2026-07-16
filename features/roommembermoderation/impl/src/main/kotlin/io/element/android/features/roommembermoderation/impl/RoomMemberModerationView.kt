@@ -269,7 +269,7 @@ private fun RoomMemberActionsBottomSheet(
                     .fillMaxWidth()
             )
             val userStatus = user.displayedStatus?.toText()
-            if(userStatus != null){
+            if (userStatus != null) {
                 Text(
                     text = userStatus,
                     style = ElementTheme.typography.fontBodyLgMedium,
