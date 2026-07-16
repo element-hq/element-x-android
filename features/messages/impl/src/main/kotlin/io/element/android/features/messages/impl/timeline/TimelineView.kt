@@ -365,19 +365,25 @@ private fun BoxScope.TimelineScrollHelper(
      * This fixes the issue where the user is seeing typing notification and so the read receipt is not sent
      * when a new message comes in.
      */
-    fun scrollToBottom(force: Boolean) {
+    fun scrollToBottom(force: Boolean, onComplete: (() -> Unit)? = null) {
         coroutineScope.launch {
             if (lazyListState.firstVisibleItemIndex > 10) {
                 lazyListState.scrollToItem(0)
             } else if (force || lazyListState.firstVisibleItemIndex != 0) {
                 lazyListState.animateScrollToItem(0)
             }
+            onComplete?.invoke()
         }
     }
 
+    val view = LocalView.current
+    val jumpedToBottomAnnouncement = stringResource(CommonStrings.a11y_timeline_jumped_to_bottom)
+
     fun jumpToBottom() {
         if (isLive) {
-            scrollToBottom(force = false)
+            scrollToBottom(force = false) {
+                view.announceForAccessibility(jumpedToBottomAnnouncement)
+            }
         } else {
             jumpToLiveHandled = false
             onJumpToLive()
