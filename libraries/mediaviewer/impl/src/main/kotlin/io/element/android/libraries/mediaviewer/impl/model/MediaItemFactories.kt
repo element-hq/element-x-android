@@ -14,6 +14,8 @@ import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopContentValidationState
 import io.element.android.libraries.mediaviewer.api.aPdfMediaInfo
 import io.element.android.libraries.mediaviewer.api.aVideoMediaInfo
 import io.element.android.libraries.mediaviewer.api.aVoiceMediaInfo
@@ -25,6 +27,7 @@ fun aMediaItemImage(
     eventId: EventId? = null,
     senderId: UserId? = null,
     mediaSourceUrl: String = "",
+    validationState: ContentValidationState = NoopContentValidationState(),
 ): MediaItem.Image {
     return MediaItem.Image(
         id = id,
@@ -35,6 +38,7 @@ fun aMediaItemImage(
         mediaSource = MediaSource(mediaSourceUrl),
         thumbnailSource = null,
         blurHash = null,
+        validationState = validationState,
     )
 }
 
@@ -42,6 +46,7 @@ fun aMediaItemVideo(
     id: UniqueId = UniqueId("videoId"),
     mediaSource: MediaSource = MediaSource(""),
     duration: String? = "1:23",
+    validationState: ContentValidationState = NoopContentValidationState(),
 ): MediaItem.Video {
     return MediaItem.Video(
         id = id,
@@ -52,6 +57,7 @@ fun aMediaItemVideo(
         mediaSource = mediaSource,
         thumbnailSource = null,
         blurHash = null,
+        validationState = validationState,
     )
 }
 
@@ -60,6 +66,7 @@ fun aMediaItemFile(
     eventId: EventId? = null,
     filename: String = "filename",
     caption: String? = null,
+    validationState: ContentValidationState = NoopContentValidationState(),
 ): MediaItem.File {
     return MediaItem.File(
         id = id,
@@ -69,6 +76,7 @@ fun aMediaItemFile(
             caption = caption,
         ),
         mediaSource = MediaSource(""),
+        validationState = validationState,
     )
 }
 
@@ -77,6 +85,7 @@ fun aMediaItemAudio(
     eventId: EventId? = null,
     filename: String = "filename",
     caption: String? = null,
+    validationState: ContentValidationState = NoopContentValidationState(),
 ): MediaItem.Audio {
     return MediaItem.Audio(
         id = id,
@@ -86,6 +95,7 @@ fun aMediaItemAudio(
             caption = caption,
         ),
         mediaSource = MediaSource(""),
+        validationState = validationState,
     )
 }
 
@@ -95,6 +105,7 @@ fun aMediaItemVoice(
     caption: String? = null,
     duration: String? = "1:23",
     waveform: List<Float> = WaveFormSamples.realisticWaveForm,
+    validationState: ContentValidationState = NoopContentValidationState(),
 ): MediaItem.Voice {
     return MediaItem.Voice(
         id = id,
@@ -106,6 +117,7 @@ fun aMediaItemVoice(
             waveForm = waveform,
         ),
         mediaSource = MediaSource(""),
+        validationState = validationState,
     )
 }
 
