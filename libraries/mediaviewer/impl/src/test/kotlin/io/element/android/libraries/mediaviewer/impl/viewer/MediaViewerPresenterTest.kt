@@ -114,6 +114,7 @@ class MediaViewerPresenterTest {
                 avatarInfo = AvatarInfo(filename = "avatar.png"),
                 mediaSource = aMediaSource(),
                 thumbnailSource = null,
+                blurHash = null,
             ),
             room = FakeJoinedRoom(
                 baseRoom = FakeBaseRoom(
@@ -983,4 +984,5 @@ internal fun createMediaViewerEntryPointParams(
     mediaInfo = TESTED_MEDIA_INFO,
     mediaSource = aMediaSource(),
     thumbnailSource = null,
+    blurHash = null,
 )

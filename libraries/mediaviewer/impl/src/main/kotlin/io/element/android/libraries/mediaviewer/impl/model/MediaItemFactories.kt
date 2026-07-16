@@ -34,6 +34,7 @@ fun aMediaItemImage(
         ),
         mediaSource = MediaSource(mediaSourceUrl),
         thumbnailSource = null,
+        blurHash = null,
     )
 }
 
@@ -50,6 +51,7 @@ fun aMediaItemVideo(
         ),
         mediaSource = mediaSource,
         thumbnailSource = null,
+        blurHash = null,
     )
 }
 

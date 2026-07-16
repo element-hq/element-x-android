@@ -91,6 +91,7 @@ class GalleryMediaGalleryDataSourceTest {
                     mediaSource = MediaSource("image_url"),
                     thumbnailSource = MediaSource("thumbnail_url"),
                     type = GalleryItemData.Type.Image,
+                    blurHash = null,
                 )
             ),
             galleryInfo = aGalleryInfo(),
@@ -104,6 +105,7 @@ class GalleryMediaGalleryDataSourceTest {
                 mediaInfo = expectedMediaInfo("image.jpg", MimeTypes.Jpeg),
                 mediaSource = MediaSource("image_url"),
                 thumbnailSource = MediaSource("thumbnail_url"),
+                blurHash = null,
             )
         )
     }
@@ -119,6 +121,7 @@ class GalleryMediaGalleryDataSourceTest {
                     mediaSource = MediaSource("video_url"),
                     thumbnailSource = MediaSource("thumbnail_url"),
                     type = GalleryItemData.Type.Video,
+                    blurHash = null,
                 )
             ),
             galleryInfo = aGalleryInfo(),
@@ -132,6 +135,7 @@ class GalleryMediaGalleryDataSourceTest {
                 mediaInfo = expectedMediaInfo("video.mp4", MimeTypes.Mp4),
                 mediaSource = MediaSource("video_url"),
                 thumbnailSource = MediaSource("thumbnail_url"),
+                blurHash = null,
             )
         )
     }
@@ -147,6 +151,7 @@ class GalleryMediaGalleryDataSourceTest {
                     mediaSource = MediaSource("audio_url"),
                     thumbnailSource = null,
                     type = GalleryItemData.Type.Audio,
+                    blurHash = null,
                 )
             ),
             galleryInfo = aGalleryInfo(),
@@ -174,6 +179,7 @@ class GalleryMediaGalleryDataSourceTest {
                     mediaSource = MediaSource("file_url"),
                     thumbnailSource = null,
                     type = GalleryItemData.Type.File,
+                    blurHash = null,
                 )
             ),
             galleryInfo = aGalleryInfo(),
@@ -201,6 +207,7 @@ class GalleryMediaGalleryDataSourceTest {
                     mediaSource = MediaSource("image_url"),
                     thumbnailSource = null,
                     type = GalleryItemData.Type.Image,
+                    blurHash = null,
                 )
             ),
             galleryInfo = aGalleryInfo(),
@@ -222,6 +229,7 @@ class GalleryMediaGalleryDataSourceTest {
                     mediaSource = MediaSource("image_url"),
                     thumbnailSource = null,
                     type = GalleryItemData.Type.Image,
+                    blurHash = null,
                 ),
                 GalleryItemData(
                     filename = "document.pdf",
@@ -229,6 +237,7 @@ class GalleryMediaGalleryDataSourceTest {
                     mediaSource = MediaSource("file_url"),
                     thumbnailSource = null,
                     type = GalleryItemData.Type.File,
+                    blurHash = null,
                 ),
                 GalleryItemData(
                     filename = "video.mp4",
@@ -236,6 +245,7 @@ class GalleryMediaGalleryDataSourceTest {
                     mediaSource = MediaSource("video_url"),
                     thumbnailSource = null,
                     type = GalleryItemData.Type.Video,
+                    blurHash = null,
                 ),
             ),
             galleryInfo = aGalleryInfo(),

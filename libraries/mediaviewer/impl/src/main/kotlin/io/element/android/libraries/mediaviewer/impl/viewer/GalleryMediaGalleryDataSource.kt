@@ -63,6 +63,7 @@ class GalleryMediaGalleryDataSource(
                         mediaInfo = itemMediaInfo,
                         mediaSource = galleryItem.mediaSource,
                         thumbnailSource = galleryItem.thumbnailSource,
+                        blurHash = galleryItem.blurHash,
                     )
                     GalleryItemData.Type.Audio -> MediaItem.Audio(
                         id = id,
@@ -82,6 +83,7 @@ class GalleryMediaGalleryDataSource(
                         mediaInfo = itemMediaInfo,
                         mediaSource = galleryItem.mediaSource,
                         thumbnailSource = galleryItem.thumbnailSource,
+                        blurHash = galleryItem.blurHash,
                     )
                 }
                 mixedItems.add(mediaItem)

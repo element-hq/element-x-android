@@ -12,6 +12,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,16 +27,20 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import coil3.compose.AsyncImage
-import coil3.compose.AsyncImagePainter
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContentProvider
 import io.element.android.features.messages.impl.timeline.protection.ProtectedView
 import io.element.android.features.messages.impl.timeline.protection.coerceRatioWhenHidingContent
+import io.element.android.features.messages.impl.timeline.util.handleAsyncImageStateChange
 import io.element.android.libraries.designsystem.components.blurhash.blurHashBackground
 import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.DefaultContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.collectOverallState
 import io.element.android.libraries.ui.strings.CommonStrings
 
 private const val STICKER_SIZE_IN_DP = 128
@@ -48,10 +53,14 @@ fun TimelineItemStickerView(
     onLongClick: (() -> Unit)?,
     onShowClick: () -> Unit,
     modifier: Modifier = Modifier,
+    contentValidationState: ContentValidationState = remember { DefaultContentValidationState() },
 ) {
     val description = content.bestDescription.takeIf { it.isNotEmpty() } ?: stringResource(CommonStrings.common_image)
+
+    val eventContentValidation by contentValidationState.collectOverallState()
+    val isContentBeingValidated = !eventContentValidation.isValidated()
     Column(
-        modifier = modifier.semantics { contentDescription = description },
+        modifier = modifier.semantics { contentDescription = description }.wrapContentWidth(Alignment.CenterHorizontally),
     ) {
         TimelineItemAspectRatioBox(
             modifier = Modifier.blurHashBackground(content.blurhash, alpha = 0.9f),
@@ -63,11 +72,12 @@ fun TimelineItemStickerView(
                 hideContent = hideMediaContent,
                 onShowClick = onShowClick,
             ) {
-                var isLoaded by remember { mutableStateOf(false) }
+                var isThumbnailLoaded by remember { mutableStateOf(false) }
+
                 AsyncImage(
                     modifier = Modifier
                         .fillMaxSize()
-                        .then(if (isLoaded) Modifier.background(Color.White) else Modifier)
+                        .then(if (isThumbnailLoaded) Modifier.background(Color.White) else Modifier)
                         .then(
                             if (onContentClick != null) {
                                 Modifier
@@ -91,8 +101,21 @@ fun TimelineItemStickerView(
                     contentScale = ContentScale.Crop,
                     alignment = Alignment.Center,
                     contentDescription = description,
-                    onState = { isLoaded = it is AsyncImagePainter.State.Success },
+                    onState = { state ->
+                        val url = content.preferredMediaSource?.safeUrl
+                        if (url != null) {
+                            handleAsyncImageStateChange(
+                                state = state,
+                                onLoaded = { isThumbnailLoaded = true },
+                                updateContentValidationState = { contentValidationState.update(url, it) },
+                            )
+                        }
+                    },
                 )
+            }
+
+            if (isContentBeingValidated) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
         }
     }

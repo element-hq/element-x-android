@@ -62,6 +62,7 @@ dependencies {
     implementation(projects.libraries.uiUtils)
     implementation(projects.libraries.testtags)
     implementation(projects.features.networkmonitor.api)
+    implementation(projects.features.contentscanner.api)
     implementation(projects.services.analytics.compose)
     implementation(projects.services.appnavstate.api)
     implementation(projects.services.toolbox.api)
