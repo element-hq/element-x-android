@@ -18,7 +18,7 @@ import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentVal
  *
  * This is used when the content scanner feature is not enabled or available.
  */
-class NoopContentScannerService : ContentScannerService {
+class AlwaysValidContentScannerService : ContentScannerService {
     override fun scan(eventId: EventId, mediaSources: List<MediaSource>, contentValidationState: ContentValidationState) {
         // Always return success for the noop implementation
         for (mediaSource in mediaSources) {

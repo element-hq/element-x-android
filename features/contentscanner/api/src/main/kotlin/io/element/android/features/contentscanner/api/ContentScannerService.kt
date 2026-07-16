@@ -15,7 +15,8 @@ import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentVal
 /**
  * Service to perform security scans in the contents for a given event and media source.
  *
- * The default implementation (FOSS) does nothing. This will only process media when a [ContentScanner] is provided when building the client in Pro.
+ * The default implementation (FOSS) always returns a valid state.
+ * This will only process media when a [ContentScanner] is provided when building the client in Pro.
  */
 fun interface ContentScannerService {
     fun scan(eventId: EventId, mediaSources: List<MediaSource>, contentValidationState: ContentValidationState)

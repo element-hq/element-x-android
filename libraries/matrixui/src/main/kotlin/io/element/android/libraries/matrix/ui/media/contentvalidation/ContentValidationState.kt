@@ -17,7 +17,9 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.update
 
 /**
  * Wrapper for the content validation state of an event.
@@ -86,7 +88,7 @@ class DefaultContentValidationState(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getMediaStateFlow(url: String): Flow<ContentValidationValue> {
-        return states.mapLatest { states ->
+        return states.map { states ->
             states[url] ?: ContentValidationValue.Unknown
         }.distinctUntilChanged()
     }
@@ -100,14 +102,15 @@ class DefaultContentValidationState(
     }
 
     override fun update(url: String, newValue: ContentValidationValue) {
-        val current = states.value[url]
-        if (current != null && current.isValidated() && newValue.isLoading()) {
-            return
+        states.update { current ->
+            if (current[url]?.isValidated() == true && newValue.isLoading()) {
+                // If the current state is already validated and the new value is loading, we keep the current validated state
+                current
+            } else {
+                // Otherwise, we update the state for the given URL with the new value
+                current + (url to newValue)
+            }
         }
-
-        val updated = states.value.toMutableMap()
-        updated[url] = newValue
-        states.value = updated
     }
 }
 

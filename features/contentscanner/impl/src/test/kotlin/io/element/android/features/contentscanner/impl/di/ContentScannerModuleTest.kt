@@ -31,7 +31,7 @@ class ContentScannerModuleTest {
         )
 
         // Then
-        assertThat(contentScannerService).isInstanceOf(NoopContentScannerService::class.java)
+        assertThat(contentScannerService).isInstanceOf(AlwaysValidContentScannerService::class.java)
     }
 
     @Test

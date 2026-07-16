@@ -16,6 +16,7 @@ import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentVal
 import io.element.android.libraries.matrix.ui.media.contentvalidation.DefaultContentValidationState
 import io.element.android.libraries.matrix.ui.media.contentvalidation.EventContentValidationCache
 import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopContentValidationState
+import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
 
 @SingleIn(RoomScope::class)
@@ -27,7 +28,12 @@ class DefaultEventContentValidationCache(
 
     override operator fun get(eventId: EventId): ContentValidationState {
         return cache.getOrPut(eventId) {
-            if (contentScanner != null) DefaultContentValidationState() else NoopContentValidationState()
+            if (contentScanner != null) {
+                DefaultContentValidationState()
+            } else {
+                Timber.v("Content scanner is not available, returning NoopContentValidationState for eventId: $eventId")
+                NoopContentValidationState()
+            }
         }
     }
 }

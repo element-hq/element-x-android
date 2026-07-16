@@ -24,8 +24,10 @@ import java.io.IOException
 class DefaultContentScannerService(
     private val contentScanner: ContentScanner,
     private val coroutineScope: CoroutineScope,
-    private val coroutineDispatchers: CoroutineDispatchers,
+    coroutineDispatchers: CoroutineDispatchers,
 ) : ContentScannerService {
+    private val context = coroutineDispatchers.io.limitedParallelism(4)
+
     override fun scan(eventId: EventId, mediaSources: List<MediaSource>, contentValidationState: ContentValidationState) {
         for (mediaSource in mediaSources) {
             val url = mediaSource.safeUrl
@@ -33,7 +35,7 @@ class DefaultContentScannerService(
             if (currentState != ContentValidationValue.Unknown) continue
             contentValidationState.update(url, ContentValidationValue.Loading)
 
-            coroutineScope.launch(coroutineDispatchers.io.limitedParallelism(4)) {
+            coroutineScope.launch(context) {
                 contentScanner.scan(mediaSource)
                     .onSuccess { isValid ->
                         val contentValidationValue = if (isValid) ContentValidationValue.Valid else ContentValidationValue.Invalid

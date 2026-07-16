@@ -36,7 +36,7 @@ object ContentScannerModule {
                 coroutineDispatchers = coroutineDispatchers,
             )
         } else {
-            NoopContentScannerService()
+            AlwaysValidContentScannerService()
         }
     }
 }
