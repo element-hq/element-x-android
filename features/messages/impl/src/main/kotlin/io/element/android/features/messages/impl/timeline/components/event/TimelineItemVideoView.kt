@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,6 +53,9 @@ import io.element.android.libraries.matrix.ui.media.MAX_THUMBNAIL_WIDTH
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
 import io.element.android.libraries.matrix.ui.media.contentvalidation.DefaultContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.LocalEventContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopEventContentValidationCache
 import io.element.android.libraries.matrix.ui.media.contentvalidation.collectOverallState
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
@@ -157,6 +161,7 @@ internal fun TimelineItemVideoViewPreview(@PreviewParameter(TimelineItemVideoCon
         onShowContentClick = {},
         onContentClick = {},
         onLongClick = {},
+        contentValidationState = NoopContentValidationState(),
     )
 }
 
@@ -169,5 +174,6 @@ internal fun TimelineItemVideoViewHideMediaContentPreview() = ElementPreview {
         onShowContentClick = {},
         onContentClick = {},
         onLongClick = {},
+        contentValidationState = NoopContentValidationState(),
     )
 }
