@@ -10,4 +10,6 @@
     <string name="a11y_jump_to_unread_messages">"Jump to first unread message"</string>
     <string name="screen_local_network_opt_in_title">Allow access to local network</string>
     <string name="screen_local_network_opt_in_subtitle">Your homeserver is on your local network. To connect, Element needs permission to reach other devices on this network.</string>
+    <string name="a11y_active">Active</string>
+    <string name="a11y_inactive">Inactive</string>
 </resources>
