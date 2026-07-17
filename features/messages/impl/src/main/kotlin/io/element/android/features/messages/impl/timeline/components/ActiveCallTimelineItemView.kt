@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -92,9 +93,6 @@ internal fun ActiveCallTimelineItemView(
         }
     }
 
-    val elapsedMillis = (currentTime - state.callStartTsMillis).coerceAtLeast(0)
-    val formattedDuration = elapsedMillis.toHumanReadableDuration()
-
     Column(modifier = modifier) {
         Row(
             modifier = Modifier
@@ -142,18 +140,16 @@ internal fun ActiveCallTimelineItemView(
             ) {
                 if (!state.isJoined) {
                     Button(
-                        text = "Join",
+                        text = stringResource(CommonStrings.action_join),
                         size = ButtonSize.Small,
                         onClick = { onJoinCallClick(state.callIntent == CallIntent.AUDIO) }
                     )
                 }
-                Text(
-                    text = "($formattedDuration)",
-                    style = ElementTheme.typography.fontBodyXsRegular,
-                    color = ElementTheme.colors.textSecondary,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
+                if (state.callStartTsMillis != null) {
+                    CallDurationText(
+                        state.callStartTsMillis,
+                    )
+                }
             }
         }
 
@@ -188,7 +184,7 @@ private fun DirectMessageCallBody(state: RtcNotificationState.Active, modifier: 
             )
             Text(
                 modifier = Modifier.padding(start = 6.dp),
-                text = "${caller.displayName ?: caller.userId} started a call",
+                text = stringResource(CommonStrings.common_user_started_a_call, caller.displayName ?: caller.userId),
                 style = ElementTheme.typography.fontBodyMdMedium,
                 color = ElementTheme.colors.textPrimary,
             )
@@ -282,6 +278,33 @@ private fun GroupCallBody(event: TimelineItem.Event, state: RtcNotificationState
         }
     }
 }
+
+@Composable
+private fun CallDurationText(
+    startTsMillis: Long,
+    modifier: Modifier = Modifier,
+) {
+    val duration by produceState(
+        initialValue = formatElapsed(startTsMillis),
+        startTsMillis,
+    ) {
+        while (true) {
+            delay(1.seconds)
+            value = formatElapsed(startTsMillis)
+        }
+    }
+    Text(
+        modifier = modifier,
+        text = "($duration)",
+        style = ElementTheme.typography.fontBodyXsRegular,
+        color = ElementTheme.colors.textSecondary,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+    )
+}
+
+private fun formatElapsed(startTsMillis: Long): String =
+    (System.currentTimeMillis() - startTsMillis).coerceAtLeast(0).toHumanReadableDuration()
 
 @PreviewsDayNight
 @PreviewWithLargeHeight

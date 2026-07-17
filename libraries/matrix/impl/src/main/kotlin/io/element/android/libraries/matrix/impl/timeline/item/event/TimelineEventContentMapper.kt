@@ -156,7 +156,7 @@ class TimelineEventContentMapper(
                     },
                     declinedBy = it.declinedBy.map(::UserId),
                     activeMembers = it.activeMembers.map(::UserId),
-                    callStartTsMillis = it.callStartTsMillis?.toLong() ?: 0,
+                    callStartTsMillis = it.callStartTsMillis?.toLong(),
                     isJoined = it.isJoined
                 )
             }

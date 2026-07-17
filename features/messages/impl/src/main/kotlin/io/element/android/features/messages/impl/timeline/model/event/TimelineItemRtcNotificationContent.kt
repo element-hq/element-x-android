@@ -18,7 +18,7 @@ sealed interface RtcNotificationState {
     data class Active(
         val joinedMembers: List<MatrixUser>,
         val isJoined: Boolean,
-        val callStartTsMillis: Long,
+        val callStartTsMillis: Long?,
         val callIntent: CallIntent,
     ) : RtcNotificationState
 

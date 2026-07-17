@@ -123,7 +123,7 @@ data class CallNotifyContent(
     val declinedBy: List<UserId>,
     val activeMembers: List<UserId>,
     val isJoined: Boolean,
-    val callStartTsMillis: Long,
+    val callStartTsMillis: Long?,
 ) : EventContent
 
 data object UnknownContent : EventContent

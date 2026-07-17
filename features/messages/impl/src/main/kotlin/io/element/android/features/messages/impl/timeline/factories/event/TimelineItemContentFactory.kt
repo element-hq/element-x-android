@@ -111,22 +111,25 @@ class TimelineItemContentFactory(
             is UnableToDecryptContent -> utdFactory.create(itemContent)
             is CallNotifyContent -> TimelineItemRtcNotificationContent(
                 callIntent = itemContent.callIntent,
-                state = if (itemContent.activeMembers.isNotEmpty()) {
-                    RtcNotificationState.Active(
-                        joinedMembers = itemContent.activeMembers.map { active ->
-                            roomMembers.find {
-                                it.userId == active
-                            }?.toMatrixUser() ?: MatrixUser(active)
-                        },
-                        isJoined = itemContent.isJoined,
-                        callStartTsMillis = itemContent.callStartTsMillis,
-                        callIntent = itemContent.callIntent
-                    )
-                } else {
-                    if (itemContent.declinedBy.isEmpty()) {
-                        RtcNotificationState.Started
-                    } else {
-                        RtcNotificationState.Declined(itemContent.declinedBy.any { it == sessionId })
+                state = when {
+                    itemContent.activeMembers.isNotEmpty() -> {
+                        RtcNotificationState.Active(
+                            joinedMembers = itemContent.activeMembers.map { active ->
+                                roomMembers.find {
+                                    it.userId == active
+                                }?.toMatrixUser() ?: MatrixUser(active)
+                            },
+                            isJoined = itemContent.isJoined,
+                            callStartTsMillis = itemContent.callStartTsMillis,
+                            callIntent = itemContent.callIntent
+                        )
+                    }
+                    else -> {
+                        if (itemContent.declinedBy.isEmpty()) {
+                            RtcNotificationState.Started
+                        } else {
+                            RtcNotificationState.Declined(itemContent.declinedBy.any { it == sessionId })
+                        }
                     }
                 }
             )
