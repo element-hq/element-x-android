@@ -46,6 +46,7 @@ internal fun UserRow(
                 text = name,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
+                color = if (enabled) ElementTheme.colors.textPrimary else ElementTheme.colors.textDisabled,
                 style = ElementTheme.typography.fontBodyLgRegular,
             )
         },
