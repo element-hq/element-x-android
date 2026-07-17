@@ -20,7 +20,6 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.getBestName
-import io.element.android.libraries.matrix.ui.model.toEmojiText
 
 @Composable
 fun MatrixUserRow(
@@ -34,7 +33,7 @@ fun MatrixUserRow(
     nameContent = {
         DisplayNameWithStatus(
             name = matrixUser.getBestName(),
-            status = matrixUser.displayedStatus?.toEmojiText(),
+            status = matrixUser.displayedStatus,
             nameColor = ElementTheme.colors.textPrimary,
             style = ElementTheme.typography.fontBodyLgRegular,
         )

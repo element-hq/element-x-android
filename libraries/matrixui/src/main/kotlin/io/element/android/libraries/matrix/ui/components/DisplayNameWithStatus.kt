@@ -21,6 +21,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
+import io.element.android.libraries.matrix.ui.model.toEmojiText
 
 /**
  * Component to display side by side a display name and an optional status.
@@ -28,7 +30,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 @Composable
 fun DisplayNameWithStatus(
     name: String,
-    status: String?,
+    status: DisplayedStatus?,
     style: TextStyle,
     modifier: Modifier = Modifier,
     nameColor: Color = Color.Unspecified,
@@ -52,7 +54,7 @@ fun DisplayNameWithStatus(
         if (status != null) {
             Spacer(Modifier.width(4.dp))
             Text(
-                text = status,
+                text = status.toEmojiText(),
                 style = style,
                 color = ElementTheme.colors.textSecondary,
             )

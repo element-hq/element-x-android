@@ -43,7 +43,6 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.ui.components.DisplayNameWithStatus
 import io.element.android.libraries.matrix.ui.model.getAvatarData
-import io.element.android.libraries.matrix.ui.model.toEmojiText
 import io.element.android.libraries.slashcommands.api.SlashCommandSuggestion
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import kotlinx.collections.immutable.ImmutableList
@@ -120,8 +119,8 @@ private fun SuggestionItemView(
             is ResolvedSuggestion.Alias -> suggestion.roomName
             is ResolvedSuggestion.Command -> suggestion.command.command
         }
-        val statusEmoji = when (suggestion) {
-            is ResolvedSuggestion.Member -> suggestion.roomMember.displayedStatus?.toEmojiText()
+        val status = when (suggestion) {
+            is ResolvedSuggestion.Member -> suggestion.roomMember.displayedStatus
             else -> null
         }
         val details = when (suggestion) {
@@ -156,7 +155,7 @@ private fun SuggestionItemView(
                 title?.let {
                     DisplayNameWithStatus(
                         name = title,
-                        status = statusEmoji,
+                        status = status,
                         style = ElementTheme.typography.fontBodyLgRegular,
                         nameColor = ElementTheme.colors.textPrimary,
                     )

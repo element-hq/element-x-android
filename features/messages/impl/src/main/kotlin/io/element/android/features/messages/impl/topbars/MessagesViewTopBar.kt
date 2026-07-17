@@ -51,7 +51,6 @@ import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.ui.components.DisplayNameWithStatus
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.matrix.ui.model.getAvatarData
-import io.element.android.libraries.matrix.ui.model.toEmojiText
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -163,7 +162,7 @@ private fun RoomAvatarAndNameRow(
         )
         DisplayNameWithStatus(
             name = roomName ?: stringResource(CommonStrings.common_no_room_name),
-            status = dmUserStatus?.toEmojiText(),
+            status = dmUserStatus,
             modifier = Modifier.padding(start = 8.dp),
             style = ElementTheme.typography.fontBodyLgMedium,
             nameColor = ElementTheme.colors.textPrimary,

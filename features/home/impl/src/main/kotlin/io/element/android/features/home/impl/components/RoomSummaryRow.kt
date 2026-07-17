@@ -67,7 +67,6 @@ import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.ui.components.DisplayNameWithStatus
 import io.element.android.libraries.matrix.ui.components.InviteSenderView
 import io.element.android.libraries.matrix.ui.model.InviteSender
-import io.element.android.libraries.matrix.ui.model.toEmojiText
 import io.element.android.libraries.ui.strings.CommonStrings
 import timber.log.Timber
 
@@ -233,7 +232,7 @@ private fun NameAndTimestampRow(
         val displayName = name?.toSafeLength(ellipsize = true) ?: stringResource(id = CommonStrings.common_no_room_name)
         DisplayNameWithStatus(
             name = displayName,
-            status = dmUserStatus?.toEmojiText(),
+            status = dmUserStatus,
             modifier = Modifier.weight(1f),
             style = ElementTheme.typography.fontBodyLgMedium,
             nameColor = ElementTheme.colors.roomListRoomName,
