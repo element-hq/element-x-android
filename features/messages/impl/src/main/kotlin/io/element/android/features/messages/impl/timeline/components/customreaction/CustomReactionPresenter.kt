@@ -18,8 +18,8 @@ import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.recentemojis.api.EmojibaseProvider
-import io.element.android.libraries.recentemojis.api.GetRecentEmojis
+import io.element.android.libraries.emoji.api.EmojibaseProvider
+import io.element.android.libraries.emoji.api.recentemojis.GetRecentEmojis
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableSet
