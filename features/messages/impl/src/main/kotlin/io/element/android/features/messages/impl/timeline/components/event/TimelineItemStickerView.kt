@@ -39,7 +39,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
-import io.element.android.libraries.matrix.ui.media.contentvalidation.DefaultContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopContentValidationState
 import io.element.android.libraries.matrix.ui.media.contentvalidation.collectOverallState
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -52,8 +52,8 @@ fun TimelineItemStickerView(
     onContentClick: (() -> Unit)?,
     onLongClick: (() -> Unit)?,
     onShowClick: () -> Unit,
+    contentValidationState: ContentValidationState,
     modifier: Modifier = Modifier,
-    contentValidationState: ContentValidationState = remember { DefaultContentValidationState() },
 ) {
     val description = content.bestDescription.takeIf { it.isNotEmpty() } ?: stringResource(CommonStrings.common_image)
 
@@ -130,5 +130,6 @@ internal fun TimelineItemStickerViewPreview(@PreviewParameter(TimelineItemSticke
         onContentClick = {},
         onLongClick = {},
         onShowClick = {},
+        contentValidationState = NoopContentValidationState(),
     )
 }

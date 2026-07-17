@@ -51,7 +51,7 @@ import io.element.android.libraries.matrix.ui.media.MAX_THUMBNAIL_HEIGHT
 import io.element.android.libraries.matrix.ui.media.MAX_THUMBNAIL_WIDTH
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
-import io.element.android.libraries.matrix.ui.media.contentvalidation.DefaultContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopContentValidationState
 import io.element.android.libraries.matrix.ui.media.contentvalidation.collectOverallState
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
@@ -63,8 +63,8 @@ fun TimelineItemVideoView(
     onContentClick: (() -> Unit)?,
     onLongClick: (() -> Unit)?,
     onShowContentClick: () -> Unit,
+    contentValidationState: ContentValidationState,
     modifier: Modifier = Modifier,
-    contentValidationState: ContentValidationState = remember { DefaultContentValidationState() },
 ) {
     val isTalkbackActive = isTalkbackActive()
     val a11yLabel = stringResource(CommonStrings.common_video)
@@ -157,6 +157,7 @@ internal fun TimelineItemVideoViewPreview(@PreviewParameter(TimelineItemVideoCon
         onShowContentClick = {},
         onContentClick = {},
         onLongClick = {},
+        contentValidationState = NoopContentValidationState(),
     )
 }
 
@@ -169,5 +170,6 @@ internal fun TimelineItemVideoViewHideMediaContentPreview() = ElementPreview {
         onShowContentClick = {},
         onContentClick = {},
         onLongClick = {},
+        contentValidationState = NoopContentValidationState(),
     )
 }

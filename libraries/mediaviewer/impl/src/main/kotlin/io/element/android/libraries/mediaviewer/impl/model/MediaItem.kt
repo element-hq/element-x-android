@@ -13,6 +13,8 @@ import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationValue
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 
 sealed interface MediaItem {
@@ -27,7 +29,9 @@ sealed interface MediaItem {
         val timestamp: Long,
     ) : MediaItem
 
-    sealed interface Event : MediaItem
+    sealed interface Event : MediaItem {
+        val validationState: ContentValidationState
+    }
 
     data class Image(
         val id: UniqueId,
@@ -36,6 +40,7 @@ sealed interface MediaItem {
         val mediaSource: MediaSource,
         val thumbnailSource: MediaSource?,
         val blurHash: String?,
+        override val validationState: ContentValidationState,
     ) : Event {
         val thumbnailMediaRequestData: MediaRequestData
             get() = MediaRequestData(thumbnailSource ?: mediaSource, MediaRequestData.Kind.Thumbnail(100))
@@ -48,6 +53,7 @@ sealed interface MediaItem {
         val mediaSource: MediaSource,
         val thumbnailSource: MediaSource?,
         val blurHash: String?,
+        override val validationState: ContentValidationState,
     ) : Event {
         val thumbnailMediaRequestData: MediaRequestData
             get() = MediaRequestData(thumbnailSource ?: mediaSource, MediaRequestData.Kind.Thumbnail(100))
@@ -58,6 +64,7 @@ sealed interface MediaItem {
         val eventId: EventId?,
         val mediaInfo: MediaInfo,
         val mediaSource: MediaSource,
+        override val validationState: ContentValidationState,
     ) : Event
 
     data class Voice(
@@ -65,6 +72,7 @@ sealed interface MediaItem {
         val eventId: EventId?,
         val mediaInfo: MediaInfo,
         val mediaSource: MediaSource,
+        override val validationState: ContentValidationState,
     ) : Event
 
     data class File(
@@ -72,6 +80,7 @@ sealed interface MediaItem {
         val eventId: EventId?,
         val mediaInfo: MediaInfo,
         val mediaSource: MediaSource,
+        override val validationState: ContentValidationState,
     ) : Event
 }
 
@@ -133,4 +142,9 @@ fun MediaItem.Event.blurHash(): String? {
         is MediaItem.Video -> blurHash
         else -> null
     }
+}
+
+fun MediaItem.isMediaValid(): Boolean? = when (this) {
+    is MediaItem.Event -> validationState.getCurrentOverallState() == ContentValidationValue.Valid
+    else -> null
 }

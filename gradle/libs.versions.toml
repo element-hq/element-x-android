@@ -7,7 +7,7 @@ android_gradle_plugin = "9.2.1"
 # When updating this, please also update the version in the file ./idea/kotlinc.xml
 kotlin = "2.4.0"
 kotlinpoet = "2.3.0"
-ksp = "2.3.9"
+ksp = "2.3.10"
 firebaseAppDistribution = "5.3.0"
 
 # AndroidX
@@ -88,7 +88,7 @@ google_firebase_bom = "com.google.firebase:firebase-bom:34.15.0"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 ksp_plugin = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
-google_tink = "com.google.crypto.tink:tink-android:1.22.0"
+google_tink = "com.google.crypto.tink:tink-android:1.23.0"
 jna = "net.java.dev.jna:jna:5.19.1"
 
 # AndroidX
@@ -208,7 +208,7 @@ matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose",
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-driver-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
-sqlcipher = "net.zetetic:sqlcipher-android:4.16.0"
+sqlcipher = "net.zetetic:sqlcipher-android:4.17.0"
 sqlite = "androidx.sqlite:sqlite-ktx:2.7.0"
 unifiedpush = "org.unifiedpush.android:connector:3.3.3"
 vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"

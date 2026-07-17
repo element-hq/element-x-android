@@ -16,6 +16,7 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopContentValidationState
 import io.element.android.libraries.mediaviewer.api.GalleryInfo
 import io.element.android.libraries.mediaviewer.api.GalleryItemData
 import io.element.android.libraries.mediaviewer.api.MediaInfo
@@ -95,6 +96,7 @@ class GalleryMediaGalleryDataSourceTest {
                 )
             ),
             galleryInfo = aGalleryInfo(),
+            contentValidationState = noopValidationState,
         )
         val data = (result.getLastData() as AsyncData.Success).data
         assertThat(data.fileItems).isEmpty()
@@ -106,6 +108,7 @@ class GalleryMediaGalleryDataSourceTest {
                 mediaSource = MediaSource("image_url"),
                 thumbnailSource = MediaSource("thumbnail_url"),
                 blurHash = null,
+                validationState = noopValidationState,
             )
         )
     }
@@ -125,6 +128,7 @@ class GalleryMediaGalleryDataSourceTest {
                 )
             ),
             galleryInfo = aGalleryInfo(),
+            contentValidationState = noopValidationState,
         )
         val data = (result.getLastData() as AsyncData.Success).data
         assertThat(data.fileItems).isEmpty()
@@ -136,6 +140,7 @@ class GalleryMediaGalleryDataSourceTest {
                 mediaSource = MediaSource("video_url"),
                 thumbnailSource = MediaSource("thumbnail_url"),
                 blurHash = null,
+                validationState = noopValidationState,
             )
         )
     }
@@ -155,6 +160,7 @@ class GalleryMediaGalleryDataSourceTest {
                 )
             ),
             galleryInfo = aGalleryInfo(),
+            contentValidationState = noopValidationState,
         )
         val data = (result.getLastData() as AsyncData.Success).data
         assertThat(data.fileItems).isEmpty()
@@ -164,6 +170,7 @@ class GalleryMediaGalleryDataSourceTest {
                 eventId = AN_EVENT_ID,
                 mediaInfo = expectedMediaInfo("audio.mp3", MimeTypes.Mp3),
                 mediaSource = MediaSource("audio_url"),
+                validationState = noopValidationState,
             )
         )
     }
@@ -183,6 +190,7 @@ class GalleryMediaGalleryDataSourceTest {
                 )
             ),
             galleryInfo = aGalleryInfo(),
+            contentValidationState = noopValidationState,
         )
         val data = (result.getLastData() as AsyncData.Success).data
         assertThat(data.fileItems).isEmpty()
@@ -192,6 +200,7 @@ class GalleryMediaGalleryDataSourceTest {
                 eventId = AN_EVENT_ID,
                 mediaInfo = expectedMediaInfo("document.pdf", MimeTypes.Pdf),
                 mediaSource = MediaSource("file_url"),
+                validationState = noopValidationState,
             )
         )
     }
@@ -211,6 +220,7 @@ class GalleryMediaGalleryDataSourceTest {
                 )
             ),
             galleryInfo = aGalleryInfo(),
+            contentValidationState = noopValidationState,
         )
         val data = (result.getLastData() as AsyncData.Success).data
         val item = data.imageAndVideoItems.single() as MediaItem.Image
@@ -249,6 +259,7 @@ class GalleryMediaGalleryDataSourceTest {
                 ),
             ),
             galleryInfo = aGalleryInfo(),
+            contentValidationState = noopValidationState,
         )
         val data = (result.getLastData() as AsyncData.Success).data
         assertThat(data.fileItems).isEmpty()
@@ -257,6 +268,8 @@ class GalleryMediaGalleryDataSourceTest {
         assertThat((data.imageAndVideoItems[1] as MediaItem.File).id).isEqualTo(UniqueId("${AN_EVENT_ID.value}_1"))
         assertThat((data.imageAndVideoItems[2] as MediaItem.Video).id).isEqualTo(UniqueId("${AN_EVENT_ID.value}_2"))
     }
+
+    private val noopValidationState = NoopContentValidationState()
 
     private fun aGalleryInfo() = GalleryInfo(
         caption = "A caption",
