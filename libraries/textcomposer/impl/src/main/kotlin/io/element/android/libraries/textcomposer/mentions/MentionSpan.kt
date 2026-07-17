@@ -46,9 +46,7 @@ class MentionSpan(
         private set
 
     var trailingText: String? = null
-        set(value) {
-            field = value?.let { " $it" }
-        }
+        private set
 
     /**
      * Updates the visual properties of this span.
@@ -101,7 +99,7 @@ class MentionSpan(
         textPaint.typeface = typeface
         // Measure the full text width without truncation
         measuredTextWidth = textPaint.measureText(displayText, 0, displayText.length).roundToInt()
-        measuredTrailingWidth = trailingText?.let { textPaint.measureText(it).roundToInt() } ?: 0
+        measuredTrailingWidth = trailingText?.let { textPaint.measureText(" $it").roundToInt() } ?: 0
         return measuredTextWidth + measuredTrailingWidth + startPadding + endPadding
     }
 
@@ -140,7 +138,7 @@ class MentionSpan(
 
         trailingText?.let {
             val drawnTextWidth = minOf(availableWidthForText, measuredTextWidth.toFloat())
-            canvas.drawText(it, x + startPadding + drawnTextWidth, y.toFloat(), textPaint)
+            canvas.drawText(" $it", x + startPadding + drawnTextWidth, y.toFloat(), textPaint)
         }
     }
 }
