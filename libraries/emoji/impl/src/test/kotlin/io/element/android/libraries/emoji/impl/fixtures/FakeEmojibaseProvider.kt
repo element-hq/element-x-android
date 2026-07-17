@@ -6,18 +6,18 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.emoji.test
+package io.element.android.libraries.emoji.impl.fixtures
 
 import io.element.android.emojibasebindings.Emoji
 import io.element.android.emojibasebindings.EmojibaseCategory
 import io.element.android.emojibasebindings.EmojibaseStore
-import io.element.android.libraries.emoji.api.EmojibaseProvider
+import io.element.android.libraries.emoji.impl.EmojibaseProvider
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentMap
 
-class FakeEmojibaseProvider(
-    val emojis: Map<EmojibaseCategory, ImmutableList<Emoji>> = mapOf(),
+internal class FakeEmojibaseProvider(
+    emojis: Map<EmojibaseCategory, ImmutableList<Emoji>> = mapOf(),
 ) : EmojibaseProvider {
-    override val emojibaseStore: EmojibaseStore
-        get() = EmojibaseStore(emojis.toPersistentMap())
+    private val store = EmojibaseStore(emojis.toPersistentMap())
+    override suspend fun getStore(): EmojibaseStore = store
 }

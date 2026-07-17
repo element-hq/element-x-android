@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.messages.impl.timeline.components.customreaction
+package io.element.android.libraries.emoji.impl.picker
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
@@ -20,10 +20,10 @@ import androidx.compose.material.icons.outlined.EmojiSymbols
 import androidx.compose.material.icons.outlined.EmojiTransportation
 import androidx.compose.ui.graphics.vector.ImageVector
 import io.element.android.emojibasebindings.EmojibaseCategory
-import io.element.android.features.messages.impl.R
+import io.element.android.libraries.emoji.impl.R
 
 @get:StringRes
-val EmojibaseCategory.title: Int
+internal val EmojibaseCategory.title: Int
     get() = when (this) {
         EmojibaseCategory.People -> R.string.emoji_picker_category_people
         EmojibaseCategory.Nature -> R.string.emoji_picker_category_nature
@@ -35,7 +35,7 @@ val EmojibaseCategory.title: Int
         EmojibaseCategory.Flags -> R.string.emoji_picker_category_flags
     }
 
-val EmojibaseCategory.icon: ImageVector
+internal val EmojibaseCategory.icon: ImageVector
     get() = when (this) {
         EmojibaseCategory.People -> Icons.Outlined.EmojiPeople
         EmojibaseCategory.Nature -> Icons.Outlined.EmojiNature

@@ -11,8 +11,8 @@ package io.element.android.libraries.emoji.impl.recentemojis
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.emoji.api.EmojibaseProvider
 import io.element.android.libraries.emoji.api.recentemojis.GetRecentEmojis
+import io.element.android.libraries.emoji.impl.EmojibaseProvider
 import io.element.android.libraries.matrix.api.MatrixClient
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -25,7 +25,7 @@ class DefaultGetRecentEmojis(
     private val emojibaseProvider: EmojibaseProvider,
 ) : GetRecentEmojis {
     override suspend operator fun invoke(): Result<ImmutableList<String>> = withContext(dispatchers.io) {
-        val allEmojis = emojibaseProvider.emojibaseStore.allEmojis
+        val allEmojis = emojibaseProvider.getStore().allEmojis
         client.getRecentEmojis()
             .map { emojis ->
                 // Remove any possible duplicates

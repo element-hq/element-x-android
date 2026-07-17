@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.messages.impl.timeline.components.customreaction.picker
+package io.element.android.libraries.emoji.impl.picker
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -36,12 +36,12 @@ import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 
-val SkinToneSlotSize = 48.dp
-val SkinToneSlotSpacing = 2.dp
-val SkinTonePadding = 4.dp
+internal val SkinToneSlotSize = 48.dp
+internal val SkinToneSlotSpacing = 2.dp
+internal val SkinTonePadding = 4.dp
 
 @Composable
-fun SkinTonePicker(
+internal fun SkinTonePicker(
     emoji: Emoji,
     hoveredIndex: Int,
     selectedUnicodes: ImmutableSet<String>,

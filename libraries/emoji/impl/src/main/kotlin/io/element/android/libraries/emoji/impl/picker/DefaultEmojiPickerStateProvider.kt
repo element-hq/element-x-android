@@ -6,41 +6,32 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.messages.impl.timeline.components.customreaction.picker
+package io.element.android.libraries.emoji.impl.picker
 
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.emojibasebindings.Emoji
 import io.element.android.emojibasebindings.EmojibaseCategory
-import io.element.android.features.messages.impl.R
-import io.element.android.features.messages.impl.timeline.components.customreaction.icon
-import io.element.android.features.messages.impl.timeline.components.customreaction.title
-import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
+import io.element.android.libraries.emoji.api.picker.EmojiPickerState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
-class EmojiPickerStateProvider : PreviewParameterProvider<EmojiPickerState> {
-    override val values: Sequence<EmojiPickerState>
+internal class DefaultEmojiPickerStateProvider : PreviewParameterProvider<DefaultEmojiPickerState> {
+    override val values: Sequence<DefaultEmojiPickerState>
         get() = sequenceOf(
-            anEmojiPickerState(),
-            anEmojiPickerState(isSearchActive = true),
-            anEmojiPickerState(isSearchActive = true, searchQuery = "smile"),
-            anEmojiPickerState(
+            aDefaultEmojiPickerState(),
+            aDefaultEmojiPickerState(isSearchActive = true),
+            aDefaultEmojiPickerState(isSearchActive = true, searchQuery = "smile"),
+            aDefaultEmojiPickerState(
                 isSearchActive = true,
                 searchQuery = "smile",
                 searchResults = SearchBarResultState.Results(emojiList())
             ),
         )
 }
-
-private fun recentEmojisCategory() = EmojiCategory(
-    titleId = R.string.emoji_picker_category_recent,
-    icon = IconSource.Resource(CompoundDrawables.ic_compound_history),
-    emojis = emojiList(),
-)
 
 private fun emojiList(): ImmutableList<Emoji> = persistentListOf(
     Emoji(
@@ -56,29 +47,46 @@ private fun emojiList(): ImmutableList<Emoji> = persistentListOf(
         "crying face",
         persistentListOf("crying"),
         persistentListOf("smile, crying"),
-        "\uD83E\uDD72",
+        "🥲",
         null
     )
 )
 
-internal fun anEmojiPickerState(
-    categories: ImmutableList<EmojiCategory> = (listOf(recentEmojisCategory()) + EmojibaseCategory.entries.map {
+internal fun aDefaultEmojiPickerState(
+    categories: ImmutableList<EmojiCategory> = EmojibaseCategory.entries.map {
         EmojiCategory(
             titleId = it.title,
             icon = IconSource.Vector(it.icon),
             emojis = emojiList(),
         )
-    }).toImmutableList(),
-    allEmojis: ImmutableList<Emoji> = categories.flatMap { it.emojis }.toImmutableList(),
+    }.toImmutableList(),
     searchQuery: String = "",
     isSearchActive: Boolean = false,
     searchResults: SearchBarResultState<ImmutableList<Emoji>> = SearchBarResultState.Initial(),
     eventSink: (EmojiPickerEvent) -> Unit = {},
-) = EmojiPickerState(
+) = DefaultEmojiPickerState(
     categories = categories,
-    allEmojis = allEmojis,
     searchQuery = TextFieldState(initialText = searchQuery),
     isSearchActive = isSearchActive,
     searchResults = searchResults,
     eventSink = eventSink,
+)
+
+/**
+ * Public helper for external tests that need an [EmojiPickerState] instance the impl's
+ * [DefaultEmojiPickerRenderer] will accept. The no-arg overload returns a ready state
+ * (see [EmojiPickerState.isReady]); use the [emojis] overload to inject specific categories.
+ */
+fun anEmojiPickerState(): EmojiPickerState = aDefaultEmojiPickerState()
+
+fun anEmojiPickerState(
+    emojis: Map<EmojibaseCategory, ImmutableList<Emoji>>,
+): EmojiPickerState = aDefaultEmojiPickerState(
+    categories = emojis.map { (category, list) ->
+        EmojiCategory(
+            titleId = category.title,
+            icon = IconSource.Vector(category.icon),
+            emojis = list,
+        )
+    }.toImmutableList(),
 )

@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.messages.impl.timeline.components.customreaction.picker
+package io.element.android.libraries.emoji.impl.picker
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,7 +35,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.emojibasebindings.Emoji
-import io.element.android.features.messages.impl.timeline.components.customreaction.EmojiItem
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toSp
@@ -50,11 +49,12 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EmojiPicker(
+internal fun EmojiPickerView(
+    state: DefaultEmojiPickerState,
     onSelectEmoji: (Emoji) -> Unit,
-    state: EmojiPickerState,
     selectedEmojis: ImmutableSet<String>,
     modifier: Modifier = Modifier,
+    contentDescription: @Composable (emoji: Emoji, isSelected: Boolean) -> String = { emoji, _ -> emoji.unicode },
 ) {
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = { state.categories.size })
@@ -78,6 +78,7 @@ fun EmojiPicker(
                 skinPickerEmoji = skinPickerEmoji,
                 onDismissSkinPicker = { skinPickerEmoji = null },
                 selectedEmojis = selectedEmojis,
+                contentDescription = contentDescription,
             )
         }
 
@@ -120,6 +121,7 @@ fun EmojiPicker(
                     skinPickerEmoji = skinPickerEmoji,
                     onDismissSkinPicker = { skinPickerEmoji = null },
                     selectedEmojis = selectedEmojis,
+                    contentDescription = contentDescription,
                 )
             }
         }
@@ -135,6 +137,7 @@ private fun EmojiResults(
     skinPickerEmoji: Emoji?,
     onDismissSkinPicker: () -> Unit,
     selectedEmojis: ImmutableSet<String>,
+    contentDescription: @Composable (emoji: Emoji, isSelected: Boolean) -> String,
 ) {
     LazyVerticalGrid(
         modifier = Modifier.fillMaxSize(),
@@ -155,6 +158,7 @@ private fun EmojiResults(
                 emojiSize = 32.dp.toSp(),
                 selectedSkinUnicodes = selectedEmojis,
                 hasSelectedSkin = item.skins?.any { skin -> skin.unicode in selectedEmojis } == true,
+                contentDescription = contentDescription,
             )
         }
     }
@@ -162,10 +166,10 @@ private fun EmojiResults(
 
 @PreviewsDayNight
 @Composable
-internal fun EmojiPickerPreview(@PreviewParameter(EmojiPickerStateProvider::class) state: EmojiPickerState) = ElementPreview {
-    EmojiPicker(
-        onSelectEmoji = {},
+internal fun EmojiPickerViewPreview(@PreviewParameter(DefaultEmojiPickerStateProvider::class) state: DefaultEmojiPickerState) = ElementPreview {
+    EmojiPickerView(
         state = state,
+        onSelectEmoji = {},
         selectedEmojis = persistentSetOf("😀", "😄", "😃"),
         modifier = Modifier.fillMaxWidth(),
     )

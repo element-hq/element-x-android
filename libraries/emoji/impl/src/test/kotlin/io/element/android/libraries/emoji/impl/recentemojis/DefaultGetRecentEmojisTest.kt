@@ -12,7 +12,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.emojibasebindings.Emoji
 import io.element.android.emojibasebindings.EmojibaseCategory
 import io.element.android.emojibasebindings.EmojibaseCategory.People
-import io.element.android.libraries.emoji.test.FakeEmojibaseProvider
+import io.element.android.libraries.emoji.impl.fixtures.FakeEmojibaseProvider
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.ImmutableList

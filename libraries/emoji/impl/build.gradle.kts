@@ -35,7 +35,6 @@ dependencies {
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.matrix.emojibase.bindings)
 
-    testImplementation(projects.libraries.emoji.test)
     testImplementation(projects.libraries.matrix.test)
     testCommonDependencies(libs)
 }

@@ -28,8 +28,6 @@ import io.element.android.libraries.di.BaseDirectory
 import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.di.annotations.ApplicationContext
-import io.element.android.libraries.emoji.api.EmojibaseProvider
-import io.element.android.libraries.emoji.impl.DefaultEmojibaseProvider
 import io.element.android.x.BuildConfig
 import io.element.android.x.R
 import kotlinx.coroutines.CoroutineName
