@@ -51,7 +51,6 @@ import io.element.android.libraries.matrix.ui.media.MAX_THUMBNAIL_HEIGHT
 import io.element.android.libraries.matrix.ui.media.MAX_THUMBNAIL_WIDTH
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
-import io.element.android.libraries.matrix.ui.media.contentvalidation.DefaultContentValidationState
 import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopContentValidationState
 import io.element.android.libraries.matrix.ui.media.contentvalidation.collectOverallState
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -65,7 +64,7 @@ fun TimelineItemVideoView(
     onLongClick: (() -> Unit)?,
     onShowContentClick: () -> Unit,
     modifier: Modifier = Modifier,
-    contentValidationState: ContentValidationState = remember { DefaultContentValidationState() },
+    contentValidationState: ContentValidationState,
 ) {
     val isTalkbackActive = isTalkbackActive()
     val a11yLabel = stringResource(CommonStrings.common_video)

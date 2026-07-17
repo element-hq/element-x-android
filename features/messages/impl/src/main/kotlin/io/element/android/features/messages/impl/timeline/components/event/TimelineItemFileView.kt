@@ -28,7 +28,7 @@ fun TimelineItemFileView(
     content: TimelineItemFileContent,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
-    contentValidationValue: ContentValidationValue = ContentValidationValue.Valid,
+    contentValidationValue: ContentValidationValue,
 ) {
     TimelineItemAttachmentView(
         icon = CompoundIcons.Attachment(),
@@ -48,6 +48,7 @@ internal fun TimelineItemFileViewPreview(@PreviewParameter(TimelineItemFileConte
         TimelineItemFileView(
             content,
             onContentLayoutChange = {},
+            contentValidationValue = ContentValidationValue.Valid,
         )
     }
 }

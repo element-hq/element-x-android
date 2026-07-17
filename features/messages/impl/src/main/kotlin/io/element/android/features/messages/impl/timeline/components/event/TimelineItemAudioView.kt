@@ -23,7 +23,7 @@ fun TimelineItemAudioView(
     content: TimelineItemAudioContent,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
-    contentValidationValue: ContentValidationValue = ContentValidationValue.Valid,
+    contentValidationValue: ContentValidationValue,
 ) {
     TimelineItemAttachmentView(
         icon = CompoundIcons.Audio(),
@@ -43,5 +43,6 @@ internal fun TimelineItemAudioViewPreview(@PreviewParameter(TimelineItemAudioCon
         TimelineItemAudioView(
             content,
             onContentLayoutChange = {},
+            contentValidationValue = ContentValidationValue.Valid,
         )
     }

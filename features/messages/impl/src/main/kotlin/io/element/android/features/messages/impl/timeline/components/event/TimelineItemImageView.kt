@@ -44,7 +44,6 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
-import io.element.android.libraries.matrix.ui.media.contentvalidation.DefaultContentValidationState
 import io.element.android.libraries.matrix.ui.media.contentvalidation.LocalEventContentValidationState
 import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopContentValidationState
 import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopEventContentValidationCache
@@ -60,7 +59,7 @@ fun TimelineItemImageView(
     onLongClick: (() -> Unit)?,
     onShowContentClick: () -> Unit,
     modifier: Modifier = Modifier,
-    contentValidationState: ContentValidationState = remember { DefaultContentValidationState() },
+    contentValidationState: ContentValidationState,
 ) {
     val a11yLabel = stringResource(CommonStrings.common_image)
     val description = content.caption?.let { "$a11yLabel: $it" } ?: a11yLabel
