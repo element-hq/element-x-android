@@ -52,8 +52,8 @@ fun TimelineItemStickerView(
     onContentClick: (() -> Unit)?,
     onLongClick: (() -> Unit)?,
     onShowClick: () -> Unit,
-    modifier: Modifier = Modifier,
     contentValidationState: ContentValidationState,
+    modifier: Modifier = Modifier,
 ) {
     val description = content.bestDescription.takeIf { it.isNotEmpty() } ?: stringResource(CommonStrings.common_image)
 

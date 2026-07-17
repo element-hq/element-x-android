@@ -58,8 +58,8 @@ fun TimelineItemImageView(
     onContentClick: (() -> Unit)?,
     onLongClick: (() -> Unit)?,
     onShowContentClick: () -> Unit,
-    modifier: Modifier = Modifier,
     contentValidationState: ContentValidationState,
+    modifier: Modifier = Modifier,
 ) {
     val a11yLabel = stringResource(CommonStrings.common_image)
     val description = content.caption?.let { "$a11yLabel: $it" } ?: a11yLabel

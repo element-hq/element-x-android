@@ -22,8 +22,8 @@ import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentVal
 fun TimelineItemAudioView(
     content: TimelineItemAudioContent,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
-    modifier: Modifier = Modifier,
     contentValidationValue: ContentValidationValue,
+    modifier: Modifier = Modifier,
 ) {
     TimelineItemAttachmentView(
         icon = CompoundIcons.Audio(),

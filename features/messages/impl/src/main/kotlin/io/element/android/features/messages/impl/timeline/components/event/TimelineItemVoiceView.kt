@@ -64,8 +64,8 @@ fun TimelineItemVoiceView(
     state: VoiceMessageState,
     content: TimelineItemVoiceContent,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
-    modifier: Modifier = Modifier,
     contentValidationValue: ContentValidationValue,
+    modifier: Modifier = Modifier,
 ) {
     fun playPause() {
         state.eventSink(VoiceMessageEvent.PlayPause)

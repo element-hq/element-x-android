@@ -63,8 +63,8 @@ fun TimelineItemVideoView(
     onContentClick: (() -> Unit)?,
     onLongClick: (() -> Unit)?,
     onShowContentClick: () -> Unit,
-    modifier: Modifier = Modifier,
     contentValidationState: ContentValidationState,
+    modifier: Modifier = Modifier,
 ) {
     val isTalkbackActive = isTalkbackActive()
     val a11yLabel = stringResource(CommonStrings.common_video)

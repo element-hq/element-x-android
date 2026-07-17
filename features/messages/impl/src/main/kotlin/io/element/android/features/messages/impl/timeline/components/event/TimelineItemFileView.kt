@@ -27,8 +27,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun TimelineItemFileView(
     content: TimelineItemFileContent,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
-    modifier: Modifier = Modifier,
     contentValidationValue: ContentValidationValue,
+    modifier: Modifier = Modifier,
 ) {
     TimelineItemAttachmentView(
         icon = CompoundIcons.Attachment(),
