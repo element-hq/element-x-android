@@ -55,18 +55,13 @@ internal fun GalleryFileListItem(
     ) {
         Spacer(modifier = Modifier.height(20.dp))
 
-        val invalidContentModifier = Modifier
-            .border(width = 1.dp, color = ElementTheme.colors.borderCriticalSubtle, shape = RoundedCornerShape(12.dp))
-            .clip(RoundedCornerShape(12.dp))
-            .background(ElementTheme.colors.bgCriticalSubtle)
-
         when (contentValidationValue) {
             ContentValidationValue.Invalid -> InvalidContentView(
-                modifier = invalidContentModifier,
+                modifier = invalidContentModifier(),
                 contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
             )
             is ContentValidationValue.UnrecoverableError -> NotFoundContentView(
-                modifier = invalidContentModifier,
+                modifier = invalidContentModifier(),
                 contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
             )
             else -> {
@@ -74,7 +69,6 @@ internal fun GalleryFileListItem(
             }
         }
 
-        val caption = caption
         if (caption != null) {
             CaptionView(caption)
         } else {
@@ -82,6 +76,14 @@ internal fun GalleryFileListItem(
         }
         HorizontalDivider()
     }
+}
+
+@Composable
+private fun invalidContentModifier(): Modifier {
+    return Modifier
+        .border(width = 1.dp, color = ElementTheme.colors.borderCriticalSubtle, shape = RoundedCornerShape(12.dp))
+        .clip(RoundedCornerShape(12.dp))
+        .background(ElementTheme.colors.bgCriticalSubtle)
 }
 
 @Composable
