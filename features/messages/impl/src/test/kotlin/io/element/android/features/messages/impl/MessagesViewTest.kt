@@ -588,7 +588,10 @@ class MessagesViewTest : RobolectricTest() {
         // Clear initial 'LoadMore' event emitted when setting the state
         eventsRecorder.clear()
 
-        onNodeWithText("This is a pinned message").performClick()
+        onNodeWithText(
+            text = "This is a pinned message",
+            useUnmergedTree = true,
+        ).performClick()
         eventsRecorder.assertSingle(TimelineEvent.FocusOnEvent(AN_EVENT_ID, debounce = FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS.milliseconds))
     }
 
