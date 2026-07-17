@@ -429,7 +429,10 @@ private fun MediaGalleryImageGrid(
             when (item) {
                 is MediaItem.Event if !currentValidationState.isValidated() -> {
                     Box(modifier = blurHashBackgroundModifier.aspectRatio(1f), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator()
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp),
+                            strokeWidth = 2.dp,
+                        )
                     }
                 }
                 is MediaItem.Event if currentValidationState.isInvalid() -> {
@@ -441,7 +444,7 @@ private fun MediaGalleryImageGrid(
                         contentAlignment = Alignment.Center,
                     ) {
                         Icon(
-                            modifier = Modifier.size(20.dp),
+                            modifier = Modifier.size(24.dp),
                             imageVector = CompoundIcons.Error(),
                             tint = ElementTheme.colors.iconCriticalPrimary,
                             contentDescription = null,

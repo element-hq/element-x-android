@@ -28,6 +28,7 @@ fun aMediaItemImage(
     senderId: UserId? = null,
     mediaSourceUrl: String = "",
     validationState: ContentValidationState = NoopContentValidationState(),
+    blurHash: String? = null,
 ): MediaItem.Image {
     return MediaItem.Image(
         id = id,
@@ -37,7 +38,7 @@ fun aMediaItemImage(
         ),
         mediaSource = MediaSource(mediaSourceUrl),
         thumbnailSource = null,
-        blurHash = null,
+        blurHash = blurHash,
         validationState = validationState,
     )
 }
