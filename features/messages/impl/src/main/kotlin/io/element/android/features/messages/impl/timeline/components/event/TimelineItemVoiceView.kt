@@ -64,8 +64,8 @@ fun TimelineItemVoiceView(
     state: VoiceMessageState,
     content: TimelineItemVoiceContent,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
+    contentValidationValue: ContentValidationValue,
     modifier: Modifier = Modifier,
-    contentValidationValue: ContentValidationValue = ContentValidationValue.Valid,
 ) {
     fun playPause() {
         state.eventSink(VoiceMessageEvent.PlayPause)
@@ -289,6 +289,7 @@ internal fun TimelineItemVoiceViewPreview(
         state = timelineItemVoiceViewParameters.state,
         content = timelineItemVoiceViewParameters.content,
         onContentLayoutChange = {},
+        contentValidationValue = ContentValidationValue.Valid,
     )
 }
 
@@ -302,6 +303,7 @@ internal fun TimelineItemVoiceViewUnifiedPreview() = ElementPreview {
                 state = it.state,
                 content = it.content,
                 onContentLayoutChange = {},
+                contentValidationValue = ContentValidationValue.Valid,
             )
         }
     }

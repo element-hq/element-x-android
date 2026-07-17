@@ -32,7 +32,7 @@ import java.io.FileNotFoundException
 @OptIn(ExperimentalCoroutinesApi::class)
 class DefaultContentScannerServiceTest {
     @Test
-    fun `scan with no media sources returns valid`() = runTest {
+    fun `scan with no media sources returns unknown`() = runTest {
         val scanLambda = lambdaRecorder<MediaSource, Result<Boolean>> { Result.success(true) }
         val scanner = FakeContentScanner(scan = scanLambda)
         val contentValidationState = DefaultContentValidationState()
@@ -45,7 +45,7 @@ class DefaultContentScannerServiceTest {
         )
 
         scanLambda.assertions().isNeverCalled()
-        assertThat(contentValidationState.getCurrentOverallState()).isEqualTo(ContentValidationValue.Valid)
+        assertThat(contentValidationState.getCurrentOverallState()).isEqualTo(ContentValidationValue.Unknown)
     }
 
     @Test

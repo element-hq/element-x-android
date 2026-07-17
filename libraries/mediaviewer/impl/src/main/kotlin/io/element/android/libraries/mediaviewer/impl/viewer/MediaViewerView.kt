@@ -12,11 +12,14 @@ package io.element.android.libraries.mediaviewer.impl.viewer
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -73,7 +76,10 @@ import io.element.android.libraries.androidutils.text.safeLinkify
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
+import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
+import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.async.AsyncFailure
+import io.element.android.libraries.designsystem.components.async.AsyncIndicator
 import io.element.android.libraries.designsystem.components.async.AsyncLoading
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
@@ -176,7 +182,7 @@ fun MediaViewerView(
             }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
-    ) {
+    ) { padding ->
         val pagerState = rememberPagerState(state.currentIndex, 0f) {
             state.listData.size
         }
@@ -211,17 +217,33 @@ fun MediaViewerView(
                     )
                 }
                 is MediaViewerPageData.MediaViewerData -> {
+                    val eventId = dataForPage.eventId
+
+                    val isMediaValid = dataForPage.validationState.getCurrentMediaState(dataForPage.mediaSource.safeUrl).isValid()
+
+                    // Check if the media to display is valid or dangerous
+                    LaunchedEffect(eventId) {
+                        if (eventId != null) {
+                            state.eventSink(MediaViewerEvent.ValidateMedia(eventId, dataForPage.mediaSource))
+                        }
+                    }
+
                     var bottomPaddingInPixels by remember { mutableIntStateOf(defaultBottomPaddingInPixels) }
-                    Box(
-                        modifier = Modifier
-                            .onVisibilityChanged(minDurationMs = 200L) { isVisible ->
+                    val loadMediaOnVisibilityChangedModifier = remember(isMediaValid) {
+                        if (isMediaValid == true) {
+                            Modifier.onVisibilityChanged(minDurationMs = 200L) { isVisible ->
                                 if (isVisible) {
                                     state.eventSink(MediaViewerEvent.LoadMedia(dataForPage))
                                 } else {
                                     state.eventSink(MediaViewerEvent.CancelLoadingMedia(dataForPage))
                                 }
                             }
-                            .fillMaxSize()
+                        } else {
+                            Modifier
+                        }
+                    }
+                    Box(
+                        modifier = loadMediaOnVisibilityChangedModifier.fillMaxSize()
                     ) {
                         val isDisplayed = remember(pagerState.settledPage) {
                             // This 'item provider' lambda will be called when the data source changes with an outdated `settlePage` value
@@ -232,6 +254,7 @@ fun MediaViewerView(
                         MediaViewerPage(
                             isDisplayed = isDisplayed,
                             showOverlay = showOverlay,
+                            containerPadding = padding,
                             bottomPaddingInPixels = (bottomPaddingInPixels - navigationBarPadding).coerceAtLeast(0),
                             data = dataForPage,
                             textFileViewer = textFileViewer,
@@ -333,6 +356,7 @@ private fun MediaViewerPage(
     isDisplayed: Boolean,
     showOverlay: Boolean,
     bottomPaddingInPixels: Int,
+    containerPadding: PaddingValues,
     data: MediaViewerPageData.MediaViewerData,
     textFileViewer: TextFileViewer,
     isUserSelected: Boolean,
@@ -365,6 +389,25 @@ private fun MediaViewerPage(
                 .fillMaxSize()
                 .navigationBarsPadding()
         ) {
+            AnimatedVisibility(
+                visible = data.validationState.getCurrentMediaState(data.mediaSource.safeUrl).isLoading(),
+                modifier = Modifier.padding(top = containerPadding.calculateTopPadding()).align(Alignment.TopCenter),
+                enter = fadeIn(spring(stiffness = 500F)),
+                exit = fadeOut(spring(stiffness = 500F)),
+            ) {
+                AsyncIndicator.Loading(
+                    text = stringResource(CommonStrings.content_scanner_scanning),
+                )
+            }
+
+            if (showProgress) {
+                LinearProgressIndicator(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(2.dp)
+                )
+            }
+
             Box(contentAlignment = Alignment.Center) {
                 val zoomableState = rememberZoomableState(
                     zoomSpec = ZoomSpec(maxZoomFactor = 4f, overzoomEffect = OverzoomEffect.NoLimits)
@@ -380,29 +423,44 @@ private fun MediaViewerPage(
                     }
                 }
 
-                LocalMediaView(
-                    modifier = Modifier.fillMaxSize(),
-                    isDisplayed = isDisplayed,
-                    bottomPaddingInPixels = bottomPaddingInPixels,
-                    localMediaViewState = localMediaViewState,
-                    localMedia = downloadedMedia.dataOrNull(),
-                    mediaInfo = data.mediaInfo,
-                    textFileViewer = textFileViewer,
-                    onClick = {
-                        if (playableState is PlayableState.NotPlayable) {
-                            currentOnShowOverlayChange(!currentShowOverlay)
-                        }
-                    },
-                    onOpenWith = onOpenWith,
-                    isUserSelected = isUserSelected,
-                    audioFocus = audioFocus,
-                    forPreview = false,
-                )
-                if (showThumbnail) {
-                    ThumbnailView(
+                val isMediaValid = data.validationState.getCurrentMediaState(data.mediaSource.safeUrl).isValid()
+
+                if (isMediaValid == false) {
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                    ) {
+                        IconTitleSubtitleMolecule(
+                            iconStyle = BigIcon.Style.AlertSolid,
+                            title = "The file is not safe",
+                            subTitle = "Preview and download have been disabled.",
+                        )
+                    }
+                } else {
+                    LocalMediaView(
+                        modifier = Modifier.fillMaxSize(),
+                        isDisplayed = isDisplayed,
+                        bottomPaddingInPixels = bottomPaddingInPixels,
+                        localMediaViewState = localMediaViewState,
+                        localMedia = downloadedMedia.dataOrNull(),
                         mediaInfo = data.mediaInfo,
-                        thumbnailSource = data.thumbnailSource,
+                        textFileViewer = textFileViewer,
+                        onClick = {
+                            if (playableState is PlayableState.NotPlayable) {
+                                currentOnShowOverlayChange(!currentShowOverlay)
+                            }
+                        },
+                        onOpenWith = onOpenWith,
+                        isUserSelected = isUserSelected,
+                        audioFocus = audioFocus,
+                        forPreview = false,
                     )
+                    if (showThumbnail) {
+                        ThumbnailView(
+                            mediaInfo = data.mediaInfo,
+                            thumbnailSource = data.thumbnailSource,
+                        )
+                    }
                 }
                 if (showError) {
                     ErrorView(
@@ -411,13 +469,6 @@ private fun MediaViewerPage(
                         onDismiss = onDismissError
                     )
                 }
-            }
-            if (showProgress) {
-                LinearProgressIndicator(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(2.dp)
-                )
             }
         }
     }

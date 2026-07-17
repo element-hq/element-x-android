@@ -288,9 +288,15 @@ private fun GalleryItemCell(
     Box(
         modifier = modifier
             .blurHashBackground(item.blurhash, alpha = 0.9f)
-            .combinedClickable(
-                onClick = onClick,
-                onLongClick = onLongClick,
+            .then(
+                if (itemContentValidationState.isValid()) {
+                    Modifier.combinedClickable(
+                        onClick = onClick,
+                        onLongClick = onLongClick,
+                    )
+                } else {
+                    Modifier
+                }
             ),
         contentAlignment = Alignment.Center,
     ) {

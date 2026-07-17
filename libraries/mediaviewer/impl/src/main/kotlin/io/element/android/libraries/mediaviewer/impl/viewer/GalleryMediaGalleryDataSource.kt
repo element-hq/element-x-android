@@ -11,6 +11,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
 import io.element.android.libraries.mediaviewer.api.GalleryInfo
 import io.element.android.libraries.mediaviewer.api.GalleryItemData
 import io.element.android.libraries.mediaviewer.api.MediaInfo
@@ -37,6 +38,7 @@ class GalleryMediaGalleryDataSource(
             eventId: EventId?,
             galleryItems: List<GalleryItemData>,
             galleryInfo: GalleryInfo,
+            contentValidationState: ContentValidationState,
         ): GalleryMediaGalleryDataSource {
             val mixedItems = mutableListOf<MediaItem.Event>()
             galleryItems.forEachIndexed { index, galleryItem ->
@@ -64,18 +66,21 @@ class GalleryMediaGalleryDataSource(
                         mediaSource = galleryItem.mediaSource,
                         thumbnailSource = galleryItem.thumbnailSource,
                         blurHash = galleryItem.blurHash,
+                        validationState = contentValidationState,
                     )
                     GalleryItemData.Type.Audio -> MediaItem.Audio(
                         id = id,
                         eventId = eventId,
                         mediaInfo = itemMediaInfo,
                         mediaSource = galleryItem.mediaSource,
+                        validationState = contentValidationState,
                     )
                     GalleryItemData.Type.File -> MediaItem.File(
                         id = id,
                         eventId = eventId,
                         mediaInfo = itemMediaInfo,
                         mediaSource = galleryItem.mediaSource,
+                        validationState = contentValidationState,
                     )
                     GalleryItemData.Type.Image -> MediaItem.Image(
                         id = id,
@@ -84,6 +89,7 @@ class GalleryMediaGalleryDataSource(
                         mediaSource = galleryItem.mediaSource,
                         thumbnailSource = galleryItem.thumbnailSource,
                         blurHash = galleryItem.blurHash,
+                        validationState = contentValidationState,
                     )
                 }
                 mixedItems.add(mediaItem)

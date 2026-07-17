@@ -26,7 +26,7 @@ class DefaultContentScannerService(
     private val coroutineScope: CoroutineScope,
     coroutineDispatchers: CoroutineDispatchers,
 ) : ContentScannerService {
-    private val context = coroutineDispatchers.io.limitedParallelism(4)
+    private val dispatcher = coroutineDispatchers.io.limitedParallelism(4)
 
     override fun scan(eventId: EventId, mediaSources: List<MediaSource>, contentValidationState: ContentValidationState) {
         for (mediaSource in mediaSources) {
@@ -35,7 +35,7 @@ class DefaultContentScannerService(
             if (currentState != ContentValidationValue.Unknown) continue
             contentValidationState.update(url, ContentValidationValue.Loading)
 
-            coroutineScope.launch(context) {
+            coroutineScope.launch(dispatcher) {
                 contentScanner.scan(mediaSource)
                     .onSuccess { isValid ->
                         val contentValidationValue = if (isValid) ContentValidationValue.Valid else ContentValidationValue.Invalid

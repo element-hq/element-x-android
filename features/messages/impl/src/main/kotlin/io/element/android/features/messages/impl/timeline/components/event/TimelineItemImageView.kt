@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,7 +44,9 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
-import io.element.android.libraries.matrix.ui.media.contentvalidation.DefaultContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.LocalEventContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopEventContentValidationCache
 import io.element.android.libraries.matrix.ui.media.contentvalidation.collectOverallState
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
@@ -55,8 +58,8 @@ fun TimelineItemImageView(
     onContentClick: (() -> Unit)?,
     onLongClick: (() -> Unit)?,
     onShowContentClick: () -> Unit,
+    contentValidationState: ContentValidationState,
     modifier: Modifier = Modifier,
-    contentValidationState: ContentValidationState = remember { DefaultContentValidationState() },
 ) {
     val a11yLabel = stringResource(CommonStrings.common_image)
     val description = content.caption?.let { "$a11yLabel: $it" } ?: a11yLabel
@@ -129,52 +132,56 @@ internal fun TimelineItemImageViewPreview(@PreviewParameter(TimelineItemImageCon
         onShowContentClick = {},
         onContentClick = {},
         onLongClick = {},
+        contentValidationState = NoopContentValidationState(),
     )
 }
 
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemImageViewHideMediaContentPreview() = ElementPreview {
-    TimelineItemImageView(
-        content = aTimelineItemImageContent(),
-        hideMediaContent = true,
-        onShowContentClick = {},
-        onContentClick = {},
-        onLongClick = {},
-    )
+        TimelineItemImageView(
+            content = aTimelineItemImageContent(),
+            hideMediaContent = true,
+            onShowContentClick = {},
+            onContentClick = {},
+            onLongClick = {},
+            contentValidationState = NoopContentValidationState(),
+        )
 }
 
 @PreviewsDayNight
 @Composable
 internal fun ATimelineItemEventRowPreview() = ElementPreview {
-    Column {
-        sequenceOf(false, true).forEach { isMine ->
+    CompositionLocalProvider(LocalEventContentValidationState provides NoopEventContentValidationCache()) {
+        Column {
+            sequenceOf(false, true).forEach { isMine ->
+                ATimelineItemEventRow(
+                    event = aTimelineItemEvent(
+                        isMine = isMine,
+                        content = aTimelineItemImageContent(
+                            filename = "image.jpg",
+                            caption = "A long caption that may wrap into several lines",
+                            width = 40,
+                            height = 20,
+                            aspectRatio = 40f / 20f,
+                        ),
+                        groupPosition = TimelineItemGroupPosition.Last,
+                    ),
+                )
+            }
             ATimelineItemEventRow(
                 event = aTimelineItemEvent(
-                    isMine = isMine,
+                    isMine = false,
                     content = aTimelineItemImageContent(
                         filename = "image.jpg",
-                        caption = "A long caption that may wrap into several lines",
-                        width = 40,
-                        height = 20,
-                        aspectRatio = 40f / 20f,
+                        caption = "Narrow image with null aspectRatio",
+                        width = 80,
+                        height = 150,
+                        aspectRatio = null,
                     ),
                     groupPosition = TimelineItemGroupPosition.Last,
                 ),
             )
         }
-        ATimelineItemEventRow(
-            event = aTimelineItemEvent(
-                isMine = false,
-                content = aTimelineItemImageContent(
-                    filename = "image.jpg",
-                    caption = "Narrow image with null aspectRatio",
-                    width = 80,
-                    height = 150,
-                    aspectRatio = null,
-                ),
-                groupPosition = TimelineItemGroupPosition.Last,
-            ),
-        )
     }
 }

@@ -26,8 +26,10 @@ val LocalEventContentValidationState = staticCompositionLocalOf<EventContentVali
 /**
  * A noop implementation of the [EventContentValidationCache] that immediately returns a successful validation state. This will be used in FOSS.
  */
-class NoopEventContentValidationCache : EventContentValidationCache {
-    override operator fun get(eventId: EventId): ContentValidationState = noopValue
+class NoopEventContentValidationCache(
+    private val provided: ContentValidationState = noopValue,
+) : EventContentValidationCache {
+    override operator fun get(eventId: EventId): ContentValidationState = provided
 }
 
 /**

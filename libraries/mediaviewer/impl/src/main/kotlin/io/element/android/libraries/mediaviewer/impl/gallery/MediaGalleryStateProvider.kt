@@ -13,6 +13,8 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.media.WaveFormSamples
 import io.element.android.libraries.designsystem.preview.ROOM_NAME
 import io.element.android.libraries.matrix.api.core.UniqueId
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationValue
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopContentValidationState
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.details.aMediaBottomSheetStateDetails
 import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
@@ -47,9 +49,20 @@ open class MediaGalleryStateProvider : PreviewParameterProvider<MediaGalleryStat
                             aMediaItemImage(id = UniqueId("3")),
                             aMediaItemVideo(id = UniqueId("4")),
                             aMediaItemImage(id = UniqueId("5")),
-                            aMediaItemImage(id = UniqueId("6")),
-                            aMediaItemImage(id = UniqueId("7")),
-                            aMediaItemImage(id = UniqueId("8")),
+                            aMediaItemImage(
+                                id = UniqueId("6"),
+                                validationState = NoopContentValidationState(ContentValidationValue.Loading),
+                                blurHash = "LKO2?U%2Tw=w]~RBVZRi};RPxuwH"
+                            ),
+                            aMediaItemImage(id = UniqueId("7"), validationState = NoopContentValidationState(ContentValidationValue.Invalid)),
+                            aMediaItemImage(
+                                id = UniqueId("8"),
+                                validationState = NoopContentValidationState(
+                                    ContentValidationValue.UnrecoverableError(
+                                        IllegalStateException("Failed to validate media item")
+                                    )
+                                )
+                            ),
                             aMediaItemImage(id = UniqueId("9")),
                             aMediaItemLoadingIndicator(),
                         ).toImmutableList()
@@ -65,7 +78,7 @@ open class MediaGalleryStateProvider : PreviewParameterProvider<MediaGalleryStat
                     aGroupedMediaItems(
                         fileItems = listOf(
                             aMediaItemDateSeparator(id = UniqueId("0")),
-                            aMediaItemFile(id = UniqueId("1")),
+                            aMediaItemFile(id = UniqueId("1"), validationState = NoopContentValidationState(ContentValidationValue.Loading)),
                             aMediaItemDateSeparator(
                                 id = UniqueId("2"),
                                 formattedDate = "September 2004",
@@ -74,6 +87,15 @@ open class MediaGalleryStateProvider : PreviewParameterProvider<MediaGalleryStat
                             aMediaItemVoice(
                                 id = UniqueId("5"),
                                 waveform = WaveFormSamples.realisticWaveForm,
+                            ),
+                            aMediaItemAudio(id = UniqueId("6"), validationState = NoopContentValidationState(ContentValidationValue.Invalid)),
+                            aMediaItemAudio(
+                                id = UniqueId("7"),
+                                validationState = NoopContentValidationState(
+                                    ContentValidationValue.UnrecoverableError(
+                                        IllegalStateException("Failed to validate media item")
+                                    )
+                                )
                             ),
                             aMediaItemLoadingIndicator(),
                         ).toImmutableList()

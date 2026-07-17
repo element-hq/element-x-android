@@ -116,6 +116,7 @@ class DefaultContentValidationState(
 
 private fun calculateOverallState(states: Map<String, ContentValidationValue>): ContentValidationValue {
     return when {
+        states.values.isEmpty() -> ContentValidationValue.Unknown
         states.values.any { it is ContentValidationValue.Invalid } -> ContentValidationValue.Invalid
         states.values.any { it is ContentValidationValue.Loading } -> ContentValidationValue.Loading
         states.values.any { it is ContentValidationValue.UnrecoverableError } -> states.values.first { it is ContentValidationValue.UnrecoverableError }
