@@ -64,6 +64,7 @@ class PttSessionHostService : Service() {
     @Inject lateinit var sessionController: PttSessionController
 
     private var mediaButtonController: PttMediaButtonController? = null
+    private var overlayButton: PttOverlayButton? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -91,6 +92,14 @@ class PttSessionHostService : Service() {
                 onKeyDown = { sessionController.pressToTalk() },
                 onKeyUp = { sessionController.releaseToTalk() },
             )
+        }
+        // Floating on-screen PTT button, for transmit while backgrounded without an accessory.
+        if (overlayButton == null) {
+            overlayButton = PttOverlayButton(
+                context = this,
+                onPressStart = { sessionController.pressToTalk() },
+                onPressEnd = { sessionController.releaseToTalk() },
+            ).also { it.show() }
         }
         return START_STICKY
     }
@@ -129,6 +138,8 @@ class PttSessionHostService : Service() {
     override fun onDestroy() {
         mediaButtonController?.release()
         mediaButtonController = null
+        overlayButton?.hide()
+        overlayButton = null
         ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
         super.onDestroy()
     }
