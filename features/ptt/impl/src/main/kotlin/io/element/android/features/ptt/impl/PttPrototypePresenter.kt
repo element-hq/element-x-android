@@ -7,6 +7,7 @@
 
 package io.element.android.features.ptt.impl
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -17,7 +18,9 @@ import io.element.android.features.ptt.api.PttConnectionState
 import io.element.android.features.ptt.api.PttFloorState
 import io.element.android.features.ptt.api.PttRoomService
 import io.element.android.features.ptt.api.PttTransportType
+import io.element.android.features.ptt.impl.services.PttSessionHostService
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -32,6 +35,7 @@ import kotlinx.coroutines.launch
  */
 @Inject
 class PttPrototypePresenter(
+    @ApplicationContext private val context: Context,
     private val room: JoinedRoom,
     private val pttRoomService: PttRoomService,
     private val pttSessionController: PttSessionController,
@@ -49,12 +53,10 @@ class PttPrototypePresenter(
 
         fun handleEvent(event: PttPrototypeEvent) {
             when (event) {
-                PttPrototypeEvent.JoinPttChannel -> coroutineScope.launch {
-                    pttSessionController.start(interimMumbleConfig(room.sessionId, room.roomId))
-                }
-                PttPrototypeEvent.LeavePttChannel -> coroutineScope.launch {
-                    pttSessionController.stop()
-                }
+                PttPrototypeEvent.JoinPttChannel ->
+                    PttSessionHostService.start(context, interimMumbleConfig(room.sessionId, room.roomId))
+                PttPrototypeEvent.LeavePttChannel ->
+                    PttSessionHostService.hangup(context)
                 PttPrototypeEvent.StartTransmitting -> coroutineScope.launch {
                     pttSessionController.startTransmitting()
                 }
