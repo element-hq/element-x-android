@@ -63,6 +63,8 @@ class PttSessionHostService : Service() {
 
     @Inject lateinit var sessionController: PttSessionController
 
+    private var mediaButtonController: PttMediaButtonController? = null
+
     override fun onCreate() {
         super.onCreate()
         bindings<PttSessionHostBindings>().inject(this)
@@ -82,6 +84,14 @@ class PttSessionHostService : Service() {
             return START_NOT_STICKY
         }
         sessionController.startSession(config)
+        // Catch Bluetooth / wired PTT-accessory buttons for the life of the session.
+        if (mediaButtonController == null) {
+            mediaButtonController = PttMediaButtonController(
+                context = this,
+                onKeyDown = { sessionController.pressToTalk() },
+                onKeyUp = { sessionController.releaseToTalk() },
+            )
+        }
         return START_STICKY
     }
 
@@ -117,6 +127,8 @@ class PttSessionHostService : Service() {
     }
 
     override fun onDestroy() {
+        mediaButtonController?.release()
+        mediaButtonController = null
         ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
         super.onDestroy()
     }
