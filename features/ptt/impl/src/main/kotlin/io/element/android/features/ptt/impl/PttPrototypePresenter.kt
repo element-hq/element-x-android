@@ -9,7 +9,11 @@ package io.element.android.features.ptt.impl
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -17,6 +21,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import dev.zacsweers.metro.Inject
 import io.element.android.features.ptt.api.PttChannelConfig
 import io.element.android.features.ptt.api.PttConnectionState
@@ -58,6 +65,20 @@ class PttPrototypePresenter(
         val permissionsState = recordAudioPermissionPresenter.present()
         var pendingJoin by remember { mutableStateOf(false) }
 
+        // "Draw over other apps" is a special permission granted via a settings screen — re-check on
+        // resume so the UI updates after the user returns from it.
+        val lifecycleOwner = LocalLifecycleOwner.current
+        var canDrawOverlays by remember { mutableStateOf(Settings.canDrawOverlays(context)) }
+        DisposableEffect(lifecycleOwner) {
+            val observer = LifecycleEventObserver { _, event ->
+                if (event == Lifecycle.Event.ON_RESUME) {
+                    canDrawOverlays = Settings.canDrawOverlays(context)
+                }
+            }
+            lifecycleOwner.lifecycle.addObserver(observer)
+            onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+        }
+
         val isPttEnabled by pttRoomService.isPttEnabledFlow().collectAsState(initial = false)
         val sessionState by pttSessionController.sessionState.collectAsState()
 
@@ -90,6 +111,13 @@ class PttPrototypePresenter(
                 is PttPrototypeEvent.SetPttEnabled -> coroutineScope.launch {
                     pttRoomService.setPttEnabled(event.enabled)
                 }
+                PttPrototypeEvent.GrantOverlayPermission -> {
+                    val intent = Intent(
+                        Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:${context.packageName}"),
+                    ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    context.startActivity(intent)
+                }
             }
         }
 
@@ -101,6 +129,7 @@ class PttPrototypePresenter(
             isUserInChannel = isUserInChannel,
             isTransmitting = isTransmitting,
             permissionsState = permissionsState,
+            canDrawOverlays = canDrawOverlays,
             eventSink = ::handleEvent,
         )
     }

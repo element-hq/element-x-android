@@ -68,6 +68,15 @@ fun PttPrototypeView(
                 ),
                 onClick = { state.eventSink(PttPrototypeEvent.SetPttEnabled(!state.isPttEnabled)) },
             )
+            if (!state.canDrawOverlays) {
+                ListItem(
+                    headlineContent = { Text("Allow floating PTT button") },
+                    supportingContent = {
+                        Text("Draw a talk button over other apps to transmit while Element is in the background.")
+                    },
+                    onClick = { state.eventSink(PttPrototypeEvent.GrantOverlayPermission) },
+                )
+            }
             PttChannelStatus(state = state)
         }
         // Shows a rationale / go-to-settings dialog when the mic permission is denied.

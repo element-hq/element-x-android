@@ -24,5 +24,7 @@ data class PttPrototypeState(
     val isTransmitting: Boolean = false,
     /** Microphone permission state — gates joining and drives the rationale dialog. */
     val permissionsState: PermissionsState,
+    /** Whether the "draw over other apps" permission is granted (needed for the floating button). */
+    val canDrawOverlays: Boolean = true,
     val eventSink: (PttPrototypeEvent) -> Unit,
 )

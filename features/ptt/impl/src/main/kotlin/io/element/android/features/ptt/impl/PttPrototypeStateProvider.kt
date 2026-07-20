@@ -25,6 +25,7 @@ open class PttPrototypeStateProvider : PreviewParameterProvider<PttPrototypeStat
                 isUserInChannel = true,
                 isTransmitting = true,
             ),
+            aPttPrototypeState(isPttEnabled = true, canDrawOverlays = false),
             aPttPrototypeState(isPttAvailable = false),
         )
 }
@@ -37,6 +38,7 @@ fun aPttPrototypeState(
     isUserInChannel: Boolean = false,
     isTransmitting: Boolean = false,
     permissionsState: PermissionsState = createDummyPostNotificationPermissionsState(),
+    canDrawOverlays: Boolean = true,
     eventSink: (PttPrototypeEvent) -> Unit = {},
 ) = PttPrototypeState(
     isPttAvailable = isPttAvailable,
@@ -46,5 +48,6 @@ fun aPttPrototypeState(
     isUserInChannel = isUserInChannel,
     isTransmitting = isTransmitting,
     permissionsState = permissionsState,
+    canDrawOverlays = canDrawOverlays,
     eventSink = eventSink,
 )
