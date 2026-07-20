@@ -8,6 +8,8 @@
 package io.element.android.features.ptt.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.permissions.api.PermissionsState
+import io.element.android.libraries.permissions.api.createDummyPostNotificationPermissionsState
 
 open class PttPrototypeStateProvider : PreviewParameterProvider<PttPrototypeState> {
     override val values: Sequence<PttPrototypeState>
@@ -34,6 +36,7 @@ fun aPttPrototypeState(
     participantCount: Int = 0,
     isUserInChannel: Boolean = false,
     isTransmitting: Boolean = false,
+    permissionsState: PermissionsState = createDummyPostNotificationPermissionsState(),
     eventSink: (PttPrototypeEvent) -> Unit = {},
 ) = PttPrototypeState(
     isPttAvailable = isPttAvailable,
@@ -42,5 +45,6 @@ fun aPttPrototypeState(
     participantCount = participantCount,
     isUserInChannel = isUserInChannel,
     isTransmitting = isTransmitting,
+    permissionsState = permissionsState,
     eventSink = eventSink,
 )

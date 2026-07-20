@@ -7,6 +7,8 @@
 
 package io.element.android.features.ptt.impl
 
+import io.element.android.libraries.permissions.api.PermissionsState
+
 data class PttPrototypeState(
     /** Whether a PTT transport is available in this build for this room. */
     val isPttAvailable: Boolean,
@@ -20,5 +22,7 @@ data class PttPrototypeState(
     val isUserInChannel: Boolean,
     /** Whether the local user currently holds the floor and is transmitting. */
     val isTransmitting: Boolean = false,
+    /** Microphone permission state — gates joining and drives the rationale dialog. */
+    val permissionsState: PermissionsState,
     val eventSink: (PttPrototypeEvent) -> Unit,
 )

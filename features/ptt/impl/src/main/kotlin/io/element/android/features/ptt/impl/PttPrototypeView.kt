@@ -34,6 +34,7 @@ import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.permissions.api.PermissionsView
 
 // NOTE: strings are hard-coded — this is a debug-only Stage 1 prototype screen and is not localised.
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,6 +70,8 @@ fun PttPrototypeView(
             )
             PttChannelStatus(state = state)
         }
+        // Shows a rationale / go-to-settings dialog when the mic permission is denied.
+        PermissionsView(state = state.permissionsState)
     }
 }
 

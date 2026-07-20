@@ -36,6 +36,7 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.designsystem)
+    implementation(projects.libraries.permissions.api)
     implementation(projects.features.call.api)
     implementation(projects.features.enterprise.api)
 
