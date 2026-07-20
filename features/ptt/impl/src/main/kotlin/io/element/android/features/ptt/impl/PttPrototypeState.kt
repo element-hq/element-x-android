@@ -8,15 +8,17 @@
 package io.element.android.features.ptt.impl
 
 data class PttPrototypeState(
-    /** Whether Element Call (LiveKit) is available on this server — PTT rides on it. */
+    /** Whether a PTT transport is available in this build for this room. */
     val isPttAvailable: Boolean,
     /** Whether PTT is enabled in this room (drives the in-room header/banner/composer UI). */
     val isPttEnabled: Boolean,
-    /** Whether there is a live Element Call session in this room (the "channel" is live). */
+    /** Whether the transport session is joined/live (the "channel" is live). */
     val hasLiveChannel: Boolean,
-    /** Number of participants currently live in the channel. */
+    /** Number of participants currently in the channel. */
     val participantCount: Int,
-    /** Whether the current user is one of the live participants. */
+    /** Whether the current user is connected to the channel. */
     val isUserInChannel: Boolean,
+    /** Whether the local user currently holds the floor and is transmitting. */
+    val isTransmitting: Boolean = false,
     val eventSink: (PttPrototypeEvent) -> Unit,
 )

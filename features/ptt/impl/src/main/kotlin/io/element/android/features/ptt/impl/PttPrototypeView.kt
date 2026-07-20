@@ -7,14 +7,21 @@
 
 package io.element.android.features.ptt.impl
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -79,29 +86,71 @@ private fun PttChannelStatus(
     ) {
         val statusText = when {
             !state.isPttAvailable ->
-                "Element Call (LiveKit) is not available on this homeserver — PTT cannot run here."
+                "No push-to-talk transport is available in this build."
+            state.isTransmitting ->
+                "Transmitting… (you hold the floor)"
             state.isUserInChannel ->
-                "You are live in this PTT channel (${state.participantCount} participant(s))."
+                "Connected to the PTT channel (${state.participantCount} participant(s)). Hold to talk."
             state.hasLiveChannel ->
-                "PTT channel is live with ${state.participantCount} participant(s)."
+                "Connecting to the PTT channel…"
             else ->
-                "No one is live in this PTT channel yet."
+                "Not connected. Join the channel to start."
         }
         Text(
             text = statusText,
             style = ElementTheme.typography.fontBodyLgRegular,
             color = ElementTheme.colors.textPrimary,
         )
-        Button(
-            text = if (state.isUserInChannel) "Re-open PTT channel" else "Join PTT channel",
-            onClick = { state.eventSink(PttPrototypeEvent.JoinPttChannel) },
-            enabled = state.isPttAvailable,
-            modifier = Modifier.fillMaxWidth(),
-        )
+
+        if (state.isUserInChannel) {
+            // Press-and-hold: take the floor on press, release it on lift (half-duplex PTT).
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(28.dp))
+                    .background(
+                        if (state.isTransmitting) {
+                            ElementTheme.colors.bgActionPrimaryPressed
+                        } else {
+                            ElementTheme.colors.bgActionPrimaryRest
+                        }
+                    )
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onPress = {
+                                state.eventSink(PttPrototypeEvent.StartTransmitting)
+                                tryAwaitRelease()
+                                state.eventSink(PttPrototypeEvent.StopTransmitting)
+                            }
+                        )
+                    }
+                    .padding(vertical = 24.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    text = if (state.isTransmitting) "Transmitting…" else "Hold to talk",
+                    style = ElementTheme.typography.fontBodyLgMedium,
+                    color = ElementTheme.colors.textOnSolidPrimary,
+                )
+            }
+            Button(
+                text = "Leave PTT channel",
+                onClick = { state.eventSink(PttPrototypeEvent.LeavePttChannel) },
+                modifier = Modifier.fillMaxWidth(),
+            )
+        } else {
+            Button(
+                text = "Join PTT channel",
+                onClick = { state.eventSink(PttPrototypeEvent.JoinPttChannel) },
+                enabled = state.isPttAvailable && !state.hasLiveChannel,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
+
         Text(
-            text = "Stage 1 prototype: joins the room's Element Call audio session as an always-on PTT " +
-                "channel (instant audio, survives backgrounding/lock via the call foreground service). " +
-                "The mic stays full-duplex until Element Call's controls expose a microphone toggle (Stage 2).",
+            text = "Stage 1 prototype: joins the room's PTT transport (Mumble) via the session host and " +
+                "seam. Press and hold to transmit; release to stop — real half-duplex floor control " +
+                "since the transport owns the microphone.",
             style = ElementTheme.typography.fontBodySmRegular,
             color = ElementTheme.colors.textSecondary,
         )

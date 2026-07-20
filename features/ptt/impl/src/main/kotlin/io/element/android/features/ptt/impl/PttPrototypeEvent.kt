@@ -8,8 +8,17 @@
 package io.element.android.features.ptt.impl
 
 sealed interface PttPrototypeEvent {
-    /** Join (or re-open) the room's Element Call audio session as the live PTT channel. */
+    /** Create the transport for this room's channel and join it (via [PttSessionController]). */
     data object JoinPttChannel : PttPrototypeEvent
+
+    /** Leave and release the channel. */
+    data object LeavePttChannel : PttPrototypeEvent
+
+    /** Take the floor and start transmitting (talk button / hardware-key down). */
+    data object StartTransmitting : PttPrototypeEvent
+
+    /** Release the floor and stop transmitting (talk button / hardware-key up). */
+    data object StopTransmitting : PttPrototypeEvent
 
     /** Enable/disable PTT in this room (interim gate; see PttRoomService). */
     data class SetPttEnabled(val enabled: Boolean) : PttPrototypeEvent

@@ -16,6 +16,13 @@ open class PttPrototypeStateProvider : PreviewParameterProvider<PttPrototypeStat
             aPttPrototypeState(isPttEnabled = true),
             aPttPrototypeState(isPttEnabled = true, hasLiveChannel = true, participantCount = 3),
             aPttPrototypeState(isPttEnabled = true, hasLiveChannel = true, participantCount = 4, isUserInChannel = true),
+            aPttPrototypeState(
+                isPttEnabled = true,
+                hasLiveChannel = true,
+                participantCount = 4,
+                isUserInChannel = true,
+                isTransmitting = true,
+            ),
             aPttPrototypeState(isPttAvailable = false),
         )
 }
@@ -26,6 +33,7 @@ fun aPttPrototypeState(
     hasLiveChannel: Boolean = false,
     participantCount: Int = 0,
     isUserInChannel: Boolean = false,
+    isTransmitting: Boolean = false,
     eventSink: (PttPrototypeEvent) -> Unit = {},
 ) = PttPrototypeState(
     isPttAvailable = isPttAvailable,
@@ -33,5 +41,6 @@ fun aPttPrototypeState(
     hasLiveChannel = hasLiveChannel,
     participantCount = participantCount,
     isUserInChannel = isUserInChannel,
+    isTransmitting = isTransmitting,
     eventSink = eventSink,
 )
