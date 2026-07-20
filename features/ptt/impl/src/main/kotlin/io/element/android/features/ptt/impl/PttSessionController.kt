@@ -35,6 +35,7 @@ import kotlinx.coroutines.sync.withLock
 @Inject
 class PttSessionController(
     private val transportFactory: PttTransportFactory,
+    private val tones: PttTones,
     @AppCoroutineScope private val coroutineScope: CoroutineScope,
 ) {
     private val mutex = Mutex()
@@ -76,13 +77,23 @@ class PttSessionController(
         }
     }
 
-    /** Take the floor and begin transmitting (button / hardware-key down). */
-    suspend fun startTransmitting(): PttTransmitResult =
-        transport?.startTransmitting()
-            ?: PttTransmitResult.Failed(IllegalStateException("No PTT session is active"))
+    /**
+     * Take the floor and begin transmitting (talk button / hardware-key down), playing the go/deny
+     * cue. Fire-and-forget so both the UI and hardware-button callbacks can call it directly.
+     */
+    fun pressToTalk() {
+        coroutineScope.launch {
+            val result = transport?.startTransmitting()
+                ?: PttTransmitResult.Failed(IllegalStateException("No PTT session is active"))
+            when (result) {
+                PttTransmitResult.Granted -> tones.playFloorGranted()
+                is PttTransmitResult.Denied, is PttTransmitResult.Failed -> tones.playFloorDenied()
+            }
+        }
+    }
 
-    /** Release the floor and stop transmitting (button / hardware-key up). */
-    suspend fun stopTransmitting() {
-        transport?.stopTransmitting()
+    /** Release the floor and stop transmitting (talk button / hardware-key up). Fire-and-forget. */
+    fun releaseToTalk() {
+        coroutineScope.launch { transport?.stopTransmitting() }
     }
 }

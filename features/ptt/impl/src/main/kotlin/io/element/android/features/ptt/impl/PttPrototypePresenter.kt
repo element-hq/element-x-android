@@ -22,7 +22,6 @@ import io.element.android.features.ptt.api.PttChannelConfig
 import io.element.android.features.ptt.api.PttConnectionState
 import io.element.android.features.ptt.api.PttFloorState
 import io.element.android.features.ptt.api.PttRoomService
-import io.element.android.features.ptt.api.PttTransmitResult
 import io.element.android.features.ptt.api.PttTransportType
 import io.element.android.features.ptt.impl.services.PttSessionHostService
 import io.element.android.libraries.architecture.Presenter
@@ -48,7 +47,6 @@ class PttPrototypePresenter(
     private val room: JoinedRoom,
     private val pttRoomService: PttRoomService,
     private val pttSessionController: PttSessionController,
-    private val tones: PttTones,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
 ) : Presenter<PttPrototypeState> {
     private val recordAudioPermissionPresenter =
@@ -87,16 +85,8 @@ class PttPrototypePresenter(
                     }
                 }
                 PttPrototypeEvent.LeavePttChannel -> PttSessionHostService.hangup(context)
-                PttPrototypeEvent.StartTransmitting -> coroutineScope.launch {
-                    when (pttSessionController.startTransmitting()) {
-                        PttTransmitResult.Granted -> tones.playFloorGranted()
-                        is PttTransmitResult.Denied -> tones.playFloorDenied()
-                        is PttTransmitResult.Failed -> tones.playFloorDenied()
-                    }
-                }
-                PttPrototypeEvent.StopTransmitting -> coroutineScope.launch {
-                    pttSessionController.stopTransmitting()
-                }
+                PttPrototypeEvent.StartTransmitting -> pttSessionController.pressToTalk()
+                PttPrototypeEvent.StopTransmitting -> pttSessionController.releaseToTalk()
                 is PttPrototypeEvent.SetPttEnabled -> coroutineScope.launch {
                     pttRoomService.setPttEnabled(event.enabled)
                 }
