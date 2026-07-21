@@ -26,5 +26,7 @@ data class PttPrototypeState(
     val permissionsState: PermissionsState,
     /** Whether the "draw over other apps" permission is granted (needed for the floating button). */
     val canDrawOverlays: Boolean = true,
+    /** Whether full-screen-intent notifications are allowed (needed for the lock-screen alert). */
+    val canUseFullScreenIntent: Boolean = true,
     val eventSink: (PttPrototypeEvent) -> Unit,
 )

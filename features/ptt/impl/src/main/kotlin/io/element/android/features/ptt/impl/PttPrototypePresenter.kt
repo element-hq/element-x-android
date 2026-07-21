@@ -21,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -69,10 +70,14 @@ class PttPrototypePresenter(
         // resume so the UI updates after the user returns from it.
         val lifecycleOwner = LocalLifecycleOwner.current
         var canDrawOverlays by remember { mutableStateOf(Settings.canDrawOverlays(context)) }
+        var canUseFullScreenIntent by remember {
+            mutableStateOf(NotificationManagerCompat.from(context).canUseFullScreenIntent())
+        }
         DisposableEffect(lifecycleOwner) {
             val observer = LifecycleEventObserver { _, event ->
                 if (event == Lifecycle.Event.ON_RESUME) {
                     canDrawOverlays = Settings.canDrawOverlays(context)
+                    canUseFullScreenIntent = NotificationManagerCompat.from(context).canUseFullScreenIntent()
                 }
             }
             lifecycleOwner.lifecycle.addObserver(observer)
@@ -123,6 +128,13 @@ class PttPrototypePresenter(
                     delay(LOCK_SCREEN_ALERT_DELAY_MS)
                     PttLockScreenAlert.post(context, room.sessionId, room.roomId, room.roomId.value)
                 }
+                PttPrototypeEvent.GrantFullScreenIntent -> {
+                    val intent = Intent(
+                        Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT,
+                        Uri.parse("package:${context.packageName}"),
+                    ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    context.startActivity(intent)
+                }
             }
         }
 
@@ -135,6 +147,7 @@ class PttPrototypePresenter(
             isTransmitting = isTransmitting,
             permissionsState = permissionsState,
             canDrawOverlays = canDrawOverlays,
+            canUseFullScreenIntent = canUseFullScreenIntent,
             eventSink = ::handleEvent,
         )
     }

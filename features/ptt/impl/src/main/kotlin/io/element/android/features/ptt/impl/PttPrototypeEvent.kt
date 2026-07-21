@@ -28,4 +28,7 @@ sealed interface PttPrototypeEvent {
 
     /** DEBUG: fire a full-screen "join push-to-talk" alert after a short delay (to test lock-screen). */
     data object SimulateLockScreenAlert : PttPrototypeEvent
+
+    /** Open settings to allow full-screen-intent notifications (the lock-screen alert). */
+    data object GrantFullScreenIntent : PttPrototypeEvent
 }

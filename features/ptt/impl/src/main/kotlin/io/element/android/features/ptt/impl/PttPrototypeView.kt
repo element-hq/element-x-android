@@ -77,6 +77,15 @@ fun PttPrototypeView(
                     onClick = { state.eventSink(PttPrototypeEvent.GrantOverlayPermission) },
                 )
             }
+            if (!state.canUseFullScreenIntent) {
+                ListItem(
+                    headlineContent = { Text("Allow full-screen PTT alerts") },
+                    supportingContent = {
+                        Text("Show the join screen over the lock screen when a session goes live.")
+                    },
+                    onClick = { state.eventSink(PttPrototypeEvent.GrantFullScreenIntent) },
+                )
+            }
             PttChannelStatus(state = state)
         }
         // Shows a rationale / go-to-settings dialog when the mic permission is denied.
