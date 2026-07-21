@@ -12,9 +12,11 @@ import android.content.Context
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import timber.log.Timber
 
 /**
  * Posts a high-priority, full-screen-intent notification announcing a live PTT session, which
@@ -24,11 +26,18 @@ import io.element.android.libraries.matrix.api.core.SessionId
  * live" push signal delivered to room members (tasks #14-16).
  */
 object PttLockScreenAlert {
+    private val loggerTag = LoggerTag("PttLockScreenAlert")
     private const val CHANNEL_ID = "ptt_incoming_alert_channel"
     private const val NOTIFICATION_ID = 90_211
 
     fun post(context: Context, sessionId: SessionId, roomId: RoomId, roomName: String) {
         val notificationManager = NotificationManagerCompat.from(context)
+        Timber.tag(loggerTag.value).d(
+            "posting full-screen PTT alert for room %s (canUseFullScreenIntent=%b, notificationsEnabled=%b)",
+            roomId.value,
+            notificationManager.canUseFullScreenIntent(),
+            notificationManager.areNotificationsEnabled(),
+        )
         val channel = NotificationChannelCompat.Builder(CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_HIGH)
             .setName("Incoming push-to-talk")
             .build()

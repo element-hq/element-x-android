@@ -41,7 +41,9 @@ import io.element.android.libraries.permissions.api.PermissionsPresenter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-private const val LOCK_SCREEN_ALERT_DELAY_MS = 3_000L
+// Long enough to fully lock the device and let the display settle before the alert fires, so the
+// full-screen-intent launch isn't racing the lock animation (which can demote it to a heads-up).
+private const val LOCK_SCREEN_ALERT_DELAY_MS = 6_000L
 
 /**
  * Stage 1 PTT prototype presenter.
