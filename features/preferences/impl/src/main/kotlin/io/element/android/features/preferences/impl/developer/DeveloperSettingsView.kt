@@ -43,6 +43,7 @@ fun DeveloperSettingsView(
     onPushHistoryClick: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
+    extraOptions: @Composable () -> Unit = {},
 ) {
     if (state.showLoader) {
         ProgressDialog()
@@ -97,6 +98,9 @@ fun DeveloperSettingsView(
                 )
             }
         }
+
+        extraOptions()
+
         val cache = state.cacheSize
         PreferenceCategory(title = "Cache") {
             ListItem(

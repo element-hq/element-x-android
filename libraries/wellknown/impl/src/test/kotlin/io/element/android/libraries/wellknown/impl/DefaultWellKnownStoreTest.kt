@@ -13,6 +13,7 @@ import io.element.android.libraries.androidutils.json.DefaultJsonProvider
 import io.element.android.libraries.cachestore.api.CacheData
 import io.element.android.libraries.sessionstorage.test.InMemoryCacheStore
 import io.element.android.libraries.wellknown.api.CustomRecoveryPassphrase
+import io.element.android.libraries.wellknown.api.ElementWellKnownParser
 import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
 import io.element.android.services.toolbox.test.systemclock.A_FAKE_TIMESTAMP
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
@@ -150,9 +151,10 @@ class DefaultWellKnownStoreTest {
     private fun createDefaultWellKnownStore(
         cacheStore: InMemoryCacheStore = InMemoryCacheStore(),
         systemClock: FakeSystemClock = FakeSystemClock(),
+        elementWellKnownParser: ElementWellKnownParser = DefaultElementWellKnownParser(jsonProvider),
     ) = DefaultWellKnownStore(
         cacheStore = cacheStore,
-        json = jsonProvider,
         systemClock = systemClock,
+        elementWellKnownParser = elementWellKnownParser,
     )
 }
