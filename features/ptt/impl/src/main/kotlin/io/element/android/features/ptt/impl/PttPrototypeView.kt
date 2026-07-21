@@ -68,6 +68,15 @@ fun PttPrototypeView(
                 ),
                 onClick = { state.eventSink(PttPrototypeEvent.SetPttEnabled(!state.isPttEnabled)) },
             )
+            // Optional user opt-in — battery for background reliability.
+            ListItem(
+                headlineContent = { Text("Ignore battery optimizations") },
+                supportingContent = {
+                    Text("Improves background alert reliability on some phones. Uses more battery — optional.")
+                },
+                trailingContent = ListItemContent.Switch(checked = state.isIgnoringBatteryOptimizations),
+                onClick = { state.eventSink(PttPrototypeEvent.ToggleBatteryOptimizationExemption) },
+            )
             if (!state.canDrawOverlays) {
                 ListItem(
                     headlineContent = { Text("Allow floating PTT button") },

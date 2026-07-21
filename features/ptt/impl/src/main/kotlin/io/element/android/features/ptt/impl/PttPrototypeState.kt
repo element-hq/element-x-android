@@ -28,5 +28,7 @@ data class PttPrototypeState(
     val canDrawOverlays: Boolean = true,
     /** Whether full-screen-intent notifications are allowed (needed for the lock-screen alert). */
     val canUseFullScreenIntent: Boolean = true,
+    /** Whether the app is exempt from battery optimization (user-opt-in; improves background reliability). */
+    val isIgnoringBatteryOptimizations: Boolean = false,
     val eventSink: (PttPrototypeEvent) -> Unit,
 )

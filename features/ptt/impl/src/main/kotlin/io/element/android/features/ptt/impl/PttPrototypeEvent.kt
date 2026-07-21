@@ -31,4 +31,7 @@ sealed interface PttPrototypeEvent {
 
     /** Open settings to allow full-screen-intent notifications (the lock-screen alert). */
     data object GrantFullScreenIntent : PttPrototypeEvent
+
+    /** User-opt-in toggle for the battery-optimization exemption (request dialog, or settings to revoke). */
+    data object ToggleBatteryOptimizationExemption : PttPrototypeEvent
 }

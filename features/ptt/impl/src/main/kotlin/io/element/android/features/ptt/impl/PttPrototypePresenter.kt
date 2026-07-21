@@ -8,9 +8,11 @@
 package io.element.android.features.ptt.impl
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.PowerManager
 import android.provider.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -73,11 +75,13 @@ class PttPrototypePresenter(
         var canUseFullScreenIntent by remember {
             mutableStateOf(NotificationManagerCompat.from(context).canUseFullScreenIntent())
         }
+        var isIgnoringBatteryOptimizations by remember { mutableStateOf(isIgnoringBatteryOptimizations()) }
         DisposableEffect(lifecycleOwner) {
             val observer = LifecycleEventObserver { _, event ->
                 if (event == Lifecycle.Event.ON_RESUME) {
                     canDrawOverlays = Settings.canDrawOverlays(context)
                     canUseFullScreenIntent = NotificationManagerCompat.from(context).canUseFullScreenIntent()
+                    isIgnoringBatteryOptimizations = isIgnoringBatteryOptimizations()
                 }
             }
             lifecycleOwner.lifecycle.addObserver(observer)
@@ -135,6 +139,17 @@ class PttPrototypePresenter(
                     ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     context.startActivity(intent)
                 }
+                PttPrototypeEvent.ToggleBatteryOptimizationExemption -> {
+                    if (isIgnoringBatteryOptimizations) {
+                        // No API to re-enable optimization directly — send the user to the list to turn it off.
+                        context.startActivity(
+                            Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        )
+                    } else {
+                        requestIgnoreBatteryOptimizations()
+                    }
+                }
             }
         }
 
@@ -148,7 +163,24 @@ class PttPrototypePresenter(
             permissionsState = permissionsState,
             canDrawOverlays = canDrawOverlays,
             canUseFullScreenIntent = canUseFullScreenIntent,
+            isIgnoringBatteryOptimizations = isIgnoringBatteryOptimizations,
             eventSink = ::handleEvent,
+        )
+    }
+
+    private fun isIgnoringBatteryOptimizations(): Boolean {
+        val powerManager = context.getSystemService(PowerManager::class.java)
+        return powerManager?.isIgnoringBatteryOptimizations(context.packageName) == true
+    }
+
+    // Opt-in only, gated behind the user toggle — the direct "ignore battery optimizations" request.
+    @SuppressLint("BatteryLife")
+    private fun requestIgnoreBatteryOptimizations() {
+        context.startActivity(
+            Intent(
+                Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+                Uri.parse("package:${context.packageName}"),
+            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         )
     }
 }

@@ -40,6 +40,7 @@ fun aPttPrototypeState(
     permissionsState: PermissionsState = createDummyPostNotificationPermissionsState(),
     canDrawOverlays: Boolean = true,
     canUseFullScreenIntent: Boolean = true,
+    isIgnoringBatteryOptimizations: Boolean = false,
     eventSink: (PttPrototypeEvent) -> Unit = {},
 ) = PttPrototypeState(
     isPttAvailable = isPttAvailable,
@@ -51,5 +52,6 @@ fun aPttPrototypeState(
     permissionsState = permissionsState,
     canDrawOverlays = canDrawOverlays,
     canUseFullScreenIntent = canUseFullScreenIntent,
+    isIgnoringBatteryOptimizations = isIgnoringBatteryOptimizations,
     eventSink = eventSink,
 )
