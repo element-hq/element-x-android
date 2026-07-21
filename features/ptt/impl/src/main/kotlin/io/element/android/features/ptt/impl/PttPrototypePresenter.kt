@@ -29,12 +29,16 @@ import io.element.android.features.ptt.api.PttConnectionState
 import io.element.android.features.ptt.api.PttFloorState
 import io.element.android.features.ptt.api.PttRoomService
 import io.element.android.features.ptt.api.PttSessionManager
+import io.element.android.features.ptt.impl.lockscreen.PttLockScreenAlert
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.permissions.api.PermissionsEvent
 import io.element.android.libraries.permissions.api.PermissionsPresenter
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
+private const val LOCK_SCREEN_ALERT_DELAY_MS = 3_000L
 
 /**
  * Stage 1 PTT prototype presenter.
@@ -113,6 +117,11 @@ class PttPrototypePresenter(
                         Uri.parse("package:${context.packageName}"),
                     ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     context.startActivity(intent)
+                }
+                PttPrototypeEvent.SimulateLockScreenAlert -> coroutineScope.launch {
+                    // Delay so the tester can lock the screen before the full-screen alert fires.
+                    delay(LOCK_SCREEN_ALERT_DELAY_MS)
+                    PttLockScreenAlert.post(context, room.sessionId, room.roomId, room.roomId.value)
                 }
             }
         }

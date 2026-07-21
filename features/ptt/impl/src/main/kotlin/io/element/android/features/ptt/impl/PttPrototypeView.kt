@@ -166,6 +166,12 @@ private fun PttChannelStatus(
             style = ElementTheme.typography.fontBodySmRegular,
             color = ElementTheme.colors.textSecondary,
         )
+        // DEBUG: fires a full-screen "join push-to-talk" alert after 3s — lock the screen to test it.
+        Button(
+            text = "Simulate lock-screen alert (3s)",
+            onClick = { state.eventSink(PttPrototypeEvent.SimulateLockScreenAlert) },
+            modifier = Modifier.fillMaxWidth(),
+        )
     }
 }
 

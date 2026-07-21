@@ -25,4 +25,7 @@ sealed interface PttPrototypeEvent {
 
     /** Open the system settings screen to grant the "draw over other apps" permission. */
     data object GrantOverlayPermission : PttPrototypeEvent
+
+    /** DEBUG: fire a full-screen "join push-to-talk" alert after a short delay (to test lock-screen). */
+    data object SimulateLockScreenAlert : PttPrototypeEvent
 }
