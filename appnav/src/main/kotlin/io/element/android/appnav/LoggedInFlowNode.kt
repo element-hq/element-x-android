@@ -55,6 +55,7 @@ import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.home.api.HomeEntryPoint
 import io.element.android.features.linknewdevice.api.LinkNewDeviceEntryPoint
 import io.element.android.features.location.api.live.ActiveLiveLocationShareManager
+import io.element.android.features.messagesearch.api.MessageSearchEntryPoint
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorContainer
@@ -135,6 +136,7 @@ class LoggedInFlowNode(
     private val sessionCoroutineScope: CoroutineScope,
     private val ftueService: FtueService,
     private val roomDirectoryEntryPoint: RoomDirectoryEntryPoint,
+    private val messageSearchEntryPoint: MessageSearchEntryPoint,
     private val shareEntryPoint: ShareEntryPoint,
     private val matrixClient: MatrixClient,
     private val sendingQueue: SendQueues,
@@ -310,6 +312,12 @@ class LoggedInFlowNode(
         @Parcelize
         data object RoomDirectory : NavTarget
 
+        /**
+         * Message search. [roomId] scopes the search to a single room; null searches every room.
+         */
+        @Parcelize
+        data class MessageSearch(val roomId: RoomId?) : NavTarget
+
         @Parcelize
         data class IncomingShare(val shareIntentData: ShareIntentData) : NavTarget
 
@@ -433,6 +441,10 @@ class LoggedInFlowNode(
 
                     override fun navigateToDeveloperSettings() {
                         backstack.push(NavTarget.Settings(PreferencesEntryPoint.InitialTarget.DeveloperSettings))
+                    }
+
+                    override fun navigateToMessageSearch(roomId: RoomId) {
+                        backstack.push(NavTarget.MessageSearch(roomId))
                     }
                 }
                 val inputs = RoomFlowNode.Inputs(
@@ -572,6 +584,24 @@ class LoggedInFlowNode(
                                     roomIdOrAlias = roomDescription.roomId.toRoomIdOrAlias(),
                                     roomDescription = roomDescription,
                                     trigger = JoinedRoomAnalyticsEvent.Trigger.RoomDirectory,
+                                )
+                            }
+                        }
+                    },
+                )
+            }
+            is NavTarget.MessageSearch -> {
+                messageSearchEntryPoint.createNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    roomId = navTarget.roomId,
+                    callback = object : MessageSearchEntryPoint.Callback {
+                        override fun navigateToEvent(roomId: RoomId, eventId: EventId) {
+                            lifecycleScope.launch {
+                                attachRoom(
+                                    roomIdOrAlias = roomId.toRoomIdOrAlias(),
+                                    initialElement = RoomNavigationTarget.Root(eventId),
+                                    clearBackstack = false
                                 )
                             }
                         }

@@ -323,6 +323,7 @@ class ThreadedMessagesNode(
                     modifier = modifier,
                     knockRequestsBannerView = {},
                     onThreadsListClick = {},
+                    onSearchClick = {},
                 )
 
                 roomMemberModerationRenderer.Render(

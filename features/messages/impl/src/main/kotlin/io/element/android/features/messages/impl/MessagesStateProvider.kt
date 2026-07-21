@@ -129,6 +129,7 @@ fun aMessagesState(
         hasUnreadThreads = false,
     ),
     isCurrentlySharingLiveLocationInRoom: Boolean = false,
+    canSearch: Boolean = false,
     eventSink: (MessagesEvent) -> Unit = {},
 ) = MessagesState(
     roomId = RoomId("!id:domain"),
@@ -159,6 +160,7 @@ fun aMessagesState(
     successorRoom = successorRoom,
     threads = threads,
     showLiveLocationShareBanner = isCurrentlySharingLiveLocationInRoom,
+    canSearch = canSearch,
     eventSink = eventSink,
 )
 

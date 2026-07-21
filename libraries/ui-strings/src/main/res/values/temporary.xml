@@ -14,4 +14,6 @@
     <string name="screen_local_network_opt_in_subtitle">Your homeserver is on your local network. To connect, Element needs permission to reach other devices on this network.</string>
     <string name="a11y_active">Active</string>
     <string name="a11y_inactive">Inactive</string>
+    <string name="screen_message_search_title">Search messages</string>
+    <string name="screen_message_search_error">Something went wrong while searching. Please try again.</string>
 </resources>
