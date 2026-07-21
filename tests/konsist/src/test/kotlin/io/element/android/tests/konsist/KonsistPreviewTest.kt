@@ -166,6 +166,7 @@ class KonsistPreviewTest {
         "TimelineItemImageViewScanningContentPreview",
         "TimelineItemRedactedMessagesGroupPreview",
         "TimelineItemScanningContentFailedPreview",
+        "TimelineItemScanningContentNotFoundPreview",
         "TimelineItemScanningContentWithInvalidRepliesPreview",
         "TimelineItemScanningContentWithRepliesFailedPreview",
         "TimelineItemStickerViewScanningContentPreview",
