@@ -29,6 +29,7 @@ import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.call.api.CallData
 import io.element.android.features.call.api.ElementCallEntryPoint
+import io.element.android.features.ptt.api.PttSessionManager
 import io.element.android.features.forward.api.ForwardEntryPoint
 import io.element.android.features.knockrequests.api.list.KnockRequestsListEntryPoint
 import io.element.android.features.location.api.LocationService
@@ -112,6 +113,7 @@ class MessagesFlowNode(
     private val showLocationEntryPoint: ShowLocationEntryPoint,
     private val createPollEntryPoint: CreatePollEntryPoint,
     private val elementCallEntryPoint: ElementCallEntryPoint,
+    private val pttSessionManager: PttSessionManager,
     private val mediaViewerEntryPoint: MediaViewerEntryPoint,
     private val forwardEntryPoint: ForwardEntryPoint,
     private val analyticsService: AnalyticsService,
@@ -312,20 +314,13 @@ class MessagesFlowNode(
                     }
 
                     override fun navigateToPttSession(roomId: RoomId) {
-                        // Headless: joins the Element Call audio session without the full-screen call UI,
-                        // and skips the EC lobby so it auto-joins (no "Join now" tap).
-                        elementCallEntryPoint.startPttSession(
-                            CallData(
-                                sessionId = sessionId,
-                                roomId = roomId,
-                                isAudioCall = true,
-                                skipLobby = true,
-                            )
-                        )
+                        // Native Mumble session via the foreground host — no Element Call, no call
+                        // notification. The mic permission is requested on the PTT screen.
+                        pttSessionManager.start(sessionId, roomId)
                     }
 
                     override fun leavePttSession() {
-                        elementCallEntryPoint.stopPttSession()
+                        pttSessionManager.stop()
                     }
 
                     override fun navigateToPinnedMessagesList() {
