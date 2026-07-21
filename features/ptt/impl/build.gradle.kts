@@ -34,6 +34,7 @@ dependencies {
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixui)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.lifecycle.process)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.permissions.api)

@@ -20,6 +20,9 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.ServiceCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.IntentCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.ProcessLifecycleOwner
 import dev.zacsweers.metro.Inject
 import io.element.android.features.ptt.api.PttChannelConfig
 import io.element.android.features.ptt.impl.PttSessionController
@@ -66,10 +69,20 @@ class PttSessionHostService : Service() {
     private var mediaButtonController: PttMediaButtonController? = null
     private var overlayButton: PttOverlayButton? = null
 
+    // Retry the overlay button when the app returns to foreground — e.g. after the user grants the
+    // "draw over other apps" permission in settings. show() is a no-op if it's already up or still
+    // ungranted, so this just makes the grant take effect without leaving and rejoining.
+    private val foregroundObserver = LifecycleEventObserver { _, event ->
+        if (event == Lifecycle.Event.ON_RESUME) {
+            overlayButton?.show()
+        }
+    }
+
     override fun onCreate() {
         super.onCreate()
         bindings<PttSessionHostBindings>().inject(this)
         startAsForeground()
+        ProcessLifecycleOwner.get().lifecycle.addObserver(foregroundObserver)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -136,6 +149,7 @@ class PttSessionHostService : Service() {
     }
 
     override fun onDestroy() {
+        ProcessLifecycleOwner.get().lifecycle.removeObserver(foregroundObserver)
         mediaButtonController?.release()
         mediaButtonController = null
         overlayButton?.hide()
