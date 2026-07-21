@@ -39,6 +39,7 @@ import io.element.android.libraries.matrix.api.room.location.BeaconInfoUpdate
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.scanner.ContentScanner
+import io.element.android.libraries.matrix.api.search.MessageSearchService
 import io.element.android.libraries.matrix.api.spaces.SpaceService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
@@ -55,6 +56,7 @@ import io.element.android.libraries.matrix.test.notificationsettings.FakeNotific
 import io.element.android.libraries.matrix.test.pushers.FakePushersService
 import io.element.android.libraries.matrix.test.roomdirectory.FakeRoomDirectoryService
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
+import io.element.android.libraries.matrix.test.search.FakeMessageSearchService
 import io.element.android.libraries.matrix.test.spaces.FakeSpaceService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
@@ -91,6 +93,8 @@ class FakeMatrixClient(
     override val syncService: SyncService = FakeSyncService(),
     override val encryptionService: EncryptionService = FakeEncryptionService(),
     override val roomDirectoryService: RoomDirectoryService = FakeRoomDirectoryService(),
+    override val isMessageSearchAvailable: Boolean = false,
+    override val messageSearchService: MessageSearchService = FakeMessageSearchService(),
     override val mediaPreviewService: MediaPreviewService = FakeMediaPreviewService(),
     override val roomMembershipObserver: RoomMembershipObserver = RoomMembershipObserver(),
     private val homeserverCapabilitiesProvider: FakeHomeserverCapabilitiesProvider = FakeHomeserverCapabilitiesProvider(),

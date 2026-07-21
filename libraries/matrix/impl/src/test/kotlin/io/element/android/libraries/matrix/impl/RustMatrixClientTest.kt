@@ -160,5 +160,6 @@ class RustMatrixClientTest {
         analyticsService = FakeAnalyticsService(),
         workManagerScheduler = FakeWorkManagerScheduler(submitLambda = {}),
         contentScanner = FakeContentScanner(),
+        isMessageSearchAvailable = false,
     )
 }
