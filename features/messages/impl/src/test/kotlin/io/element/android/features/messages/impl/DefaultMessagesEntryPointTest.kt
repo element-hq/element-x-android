@@ -14,6 +14,7 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.call.test.FakeElementCallEntryPoint
+import io.element.android.features.ptt.test.FakePttSessionManager
 import io.element.android.features.forward.test.FakeForwardEntryPoint
 import io.element.android.features.knockrequests.test.FakeKnockRequestsListEntryPoint
 import io.element.android.features.location.test.FakeLocationService
@@ -68,6 +69,7 @@ class DefaultMessagesEntryPointTest {
                 showLocationEntryPoint = FakeShowLocationEntryPoint(),
                 createPollEntryPoint = FakeCreatePollEntryPoint(),
                 elementCallEntryPoint = FakeElementCallEntryPoint(),
+                pttSessionManager = FakePttSessionManager(),
                 mediaViewerEntryPoint = FakeMediaViewerEntryPoint(),
                 forwardEntryPoint = FakeForwardEntryPoint(),
                 analyticsService = FakeAnalyticsService(),

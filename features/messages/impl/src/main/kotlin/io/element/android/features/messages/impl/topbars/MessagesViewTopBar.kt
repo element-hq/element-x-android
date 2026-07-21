@@ -199,6 +199,7 @@ internal fun MessagesViewTopBarPreview() = ElementPreview {
                 roomCallState = roomCallState,
                 displayThreads = displayThreads,
                 isPttEnabled = false,
+                isPttSessionActive = false,
                 onJoinCallClick = {},
                 onJoinPttSession = {},
                 onLeavePttSession = {},

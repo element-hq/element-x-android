@@ -246,6 +246,7 @@ fun MessagesView(
                                 MessagesMenuActions(
                                     displayThreads = state.timelineState.timelineMode !is Timeline.Mode.Thread && state.threads.hasThreads,
                                     isPttEnabled = state.isPttEnabled,
+                                    isPttSessionActive = state.isPttSessionActive,
                                     roomCallState = state.roomCallState,
                                     onJoinCallClick = onJoinCallClick,
                                     onJoinPttSession = onJoinPttSession,
@@ -424,6 +425,7 @@ fun MessagesView(
 internal fun RowScope.MessagesMenuActions(
     displayThreads: Boolean,
     isPttEnabled: Boolean,
+    isPttSessionActive: Boolean,
     roomCallState: RoomCallState,
     onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     onJoinPttSession: () -> Unit,
@@ -440,8 +442,9 @@ internal fun RowScope.MessagesMenuActions(
     }
     if (isPttEnabled) {
         // In PTT-enabled rooms the PTT control replaces the voice/video call button (audio-only).
+        // Independent of Element Call — always shown, driven by the local Mumble session state.
         PttMenuItem(
-            roomCallState = roomCallState,
+            isInSession = isPttSessionActive,
             onStartOrJoinClick = onJoinPttSession,
             onLeaveClick = onLeavePttSession,
         )

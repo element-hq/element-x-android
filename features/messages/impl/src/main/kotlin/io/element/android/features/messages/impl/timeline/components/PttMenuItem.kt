@@ -7,14 +7,10 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import io.element.android.features.roomcall.api.RoomCallState
-import io.element.android.features.roomcall.api.RoomCallStateProvider
 import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -22,76 +18,51 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 
 /**
- * Push-to-Talk header control that REPLACES the call button in PTT-enabled rooms. Three states,
- * mapped onto [RoomCallState]:
- * - StandBy → start a session (bare walkie-talkie icon)
- * - OnGoing, not locally joined → join (the session banner also offers Join)
- * - OnGoing, locally joined → leave (crossed-out walkie-talkie)
+ * Push-to-Talk header control that REPLACES the call button in PTT-enabled rooms.
  *
- * Audio-only, no video. NOTE: leaving a joined session has no non-UI path yet (see roadmap plan);
- * [onLeaveClick] currently re-opens the call screen so the user can hang up there.
+ * Independent of Element Call: shown whenever PTT is enabled, toggling between "start a session" and
+ * "leave" based on the local session state ([isInSession]) rather than an Element Call room-call
+ * state. Audio-only.
  */
 @Composable
 internal fun PttMenuItem(
-    roomCallState: RoomCallState,
+    isInSession: Boolean,
     onStartOrJoinClick: () -> Unit,
     onLeaveClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    when (roomCallState) {
-        RoomCallState.Unavailable -> {
-            Box(modifier)
+    if (isInSession) {
+        IconButton(
+            onClick = onLeaveClick,
+            modifier = modifier,
+        ) {
+            Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.ic_ptt_off),
+                // TODO localise once the prototype graduates.
+                contentDescription = "Leave push-to-talk session",
+            )
         }
-        is RoomCallState.StandBy -> {
-            IconButton(
-                onClick = onStartOrJoinClick,
-                enabled = roomCallState.canStartCall,
-                modifier = modifier,
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_ptt),
-                    // TODO localise once the prototype graduates.
-                    contentDescription = "Start push-to-talk session",
-                )
-            }
-        }
-        is RoomCallState.OnGoing -> {
-            if (roomCallState.isUserLocallyInTheCall) {
-                // TODO Figma shows a filled pill; leaving needs call-infra (currently re-opens the call).
-                IconButton(
-                    onClick = onLeaveClick,
-                    modifier = modifier,
-                ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_ptt_off),
-                        contentDescription = "Leave push-to-talk session",
-                    )
-                }
-            } else {
-                // TODO Figma shows an outlined pill; the session banner carries the primary Join.
-                IconButton(
-                    onClick = onStartOrJoinClick,
-                    enabled = roomCallState.canJoinCall,
-                    modifier = modifier,
-                ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_ptt),
-                        contentDescription = "Join push-to-talk session",
-                    )
-                }
-            }
+    } else {
+        IconButton(
+            onClick = onStartOrJoinClick,
+            modifier = modifier,
+        ) {
+            Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.ic_ptt),
+                contentDescription = "Start push-to-talk session",
+            )
         }
     }
 }
 
 @PreviewsDayNight
 @Composable
-internal fun PttMenuItemPreview(
-    @PreviewParameter(RoomCallStateProvider::class) roomCallState: RoomCallState
-) = ElementPreview {
-    PttMenuItem(
-        roomCallState = roomCallState,
-        onStartOrJoinClick = {},
-        onLeaveClick = {},
-    )
+internal fun PttMenuItemStartPreview() = ElementPreview {
+    PttMenuItem(isInSession = false, onStartOrJoinClick = {}, onLeaveClick = {})
+}
+
+@PreviewsDayNight
+@Composable
+internal fun PttMenuItemInSessionPreview() = ElementPreview {
+    PttMenuItem(isInSession = true, onStartOrJoinClick = {}, onLeaveClick = {})
 }

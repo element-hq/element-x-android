@@ -54,6 +54,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.voicemessages.composer.DefaultVoiceMessageComposerPresenter
 import io.element.android.features.ptt.api.PttRoomService
+import io.element.android.features.ptt.api.PttSessionManager
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
@@ -117,6 +118,7 @@ class MessagesPresenter(
     private val pinnedMessagesBannerPresenter: Presenter<PinnedMessagesBannerState>,
     private val roomCallStatePresenter: Presenter<RoomCallState>,
     private val pttRoomService: PttRoomService,
+    private val pttSessionManager: PttSessionManager,
     private val roomMemberModerationPresenter: Presenter<RoomMemberModerationState>,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val dispatchers: CoroutineDispatchers,
@@ -170,6 +172,7 @@ class MessagesPresenter(
         val pinnedMessagesBannerState = pinnedMessagesBannerPresenter.present()
         val roomCallState = roomCallStatePresenter.present()
         val isPttEnabled by pttRoomService.isPttEnabledFlow().collectAsState(initial = false)
+        val pttSession by pttSessionManager.sessionState.collectAsState()
         val roomMemberModerationState = roomMemberModerationPresenter.present()
         val threadsList by produceState(persistentListOf()) {
             room.threadsListService.subscribeToItemUpdates()
@@ -332,6 +335,7 @@ class MessagesPresenter(
             ),
             showLiveLocationShareBanner = isCurrentlySharingLiveLocationInRoom && timelineState.timelineMode !is Timeline.Mode.Thread,
             isPttEnabled = isPttEnabled,
+            isPttSessionActive = pttSession != null,
             eventSink = ::handleEvent,
         )
     }
