@@ -13,6 +13,10 @@ import android.media.session.MediaSession
 import android.media.session.PlaybackState
 import android.view.KeyEvent
 import androidx.core.content.IntentCompat
+import io.element.android.libraries.core.log.logger.LoggerTag
+import timber.log.Timber
+
+private val loggerTag = LoggerTag("PttMediaButton")
 
 /**
  * Routes Bluetooth / wired PTT-accessory media-button events to transmit control (Pryme, AINA, and
@@ -35,8 +39,19 @@ class PttMediaButtonController(
                     mediaButtonIntent,
                     Intent.EXTRA_KEY_EVENT,
                     KeyEvent::class.java,
+                ) ?: return super.onMediaButtonEvent(mediaButtonIntent)
+
+                val handled = keyEvent.keyCode in PTT_KEYCODES
+                // Log every media key so an unrecognised PTT accessory's keycode is easy to identify
+                // (add it to PTT_KEYCODES). `adb logcat | grep PttMediaButton`.
+                Timber.tag(loggerTag.value).d(
+                    "media key: keyCode=%d (%s) action=%d handled=%b",
+                    keyEvent.keyCode,
+                    KeyEvent.keyCodeToString(keyEvent.keyCode),
+                    keyEvent.action,
+                    handled,
                 )
-                if (keyEvent == null || keyEvent.keyCode !in PTT_KEYCODES) {
+                if (!handled) {
                     return super.onMediaButtonEvent(mediaButtonIntent)
                 }
                 when (keyEvent.action) {
