@@ -25,16 +25,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import dev.zacsweers.metro.Inject
-import io.element.android.features.ptt.api.PttChannelConfig
 import io.element.android.features.ptt.api.PttConnectionState
 import io.element.android.features.ptt.api.PttFloorState
 import io.element.android.features.ptt.api.PttRoomService
-import io.element.android.features.ptt.api.PttTransportType
-import io.element.android.features.ptt.impl.services.PttSessionHostService
+import io.element.android.features.ptt.api.PttSessionManager
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.annotations.ApplicationContext
-import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.permissions.api.PermissionsEvent
 import io.element.android.libraries.permissions.api.PermissionsPresenter
@@ -43,17 +39,17 @@ import kotlinx.coroutines.launch
 /**
  * Stage 1 PTT prototype presenter.
  *
- * Drives the [PttSessionHostService] (which owns the app-scoped [PttSessionController]) rather than a
- * specific backend: joining requests the microphone permission then starts the foreground session;
- * the talk button takes/releases the half-duplex floor, playing go/deny [PttTones]. State is derived
- * from the transport's live session state.
+ * Drives the [PttSessionManager] (the transport-agnostic session facade) rather than a specific
+ * backend: joining requests the microphone permission then starts the foreground session; the talk
+ * button takes/releases the half-duplex floor (with go/deny tones). State is derived from the live
+ * session state.
  */
 @Inject
 class PttPrototypePresenter(
     @ApplicationContext private val context: Context,
     private val room: JoinedRoom,
     private val pttRoomService: PttRoomService,
-    private val pttSessionController: PttSessionController,
+    private val pttSessionManager: PttSessionManager,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
 ) : Presenter<PttPrototypeState> {
     private val recordAudioPermissionPresenter =
@@ -80,7 +76,7 @@ class PttPrototypePresenter(
         }
 
         val isPttEnabled by pttRoomService.isPttEnabledFlow().collectAsState(initial = false)
-        val sessionState by pttSessionController.sessionState.collectAsState()
+        val sessionState by pttSessionManager.sessionState.collectAsState()
 
         val hasLiveChannel = sessionState != null
         val isUserInChannel = sessionState?.connection is PttConnectionState.Connected
@@ -91,7 +87,7 @@ class PttPrototypePresenter(
         LaunchedEffect(permissionsState.permissionGranted) {
             if (permissionsState.permissionGranted && pendingJoin) {
                 pendingJoin = false
-                startSession()
+                pttSessionManager.start(room.sessionId, room.roomId)
             }
         }
 
@@ -99,15 +95,15 @@ class PttPrototypePresenter(
             when (event) {
                 PttPrototypeEvent.JoinPttChannel -> {
                     if (permissionsState.permissionGranted) {
-                        startSession()
+                        pttSessionManager.start(room.sessionId, room.roomId)
                     } else {
                         pendingJoin = true
                         permissionsState.eventSink(PermissionsEvent.RequestPermissions)
                     }
                 }
-                PttPrototypeEvent.LeavePttChannel -> PttSessionHostService.hangup(context)
-                PttPrototypeEvent.StartTransmitting -> pttSessionController.pressToTalk()
-                PttPrototypeEvent.StopTransmitting -> pttSessionController.releaseToTalk()
+                PttPrototypeEvent.LeavePttChannel -> pttSessionManager.stop()
+                PttPrototypeEvent.StartTransmitting -> pttSessionManager.pressToTalk()
+                PttPrototypeEvent.StopTransmitting -> pttSessionManager.releaseToTalk()
                 is PttPrototypeEvent.SetPttEnabled -> coroutineScope.launch {
                     pttRoomService.setPttEnabled(event.enabled)
                 }
@@ -133,23 +129,4 @@ class PttPrototypePresenter(
             eventSink = ::handleEvent,
         )
     }
-
-    private fun startSession() {
-        PttSessionHostService.start(context, interimMumbleConfig(room.sessionId, room.roomId))
-    }
 }
-
-/**
- * INTERIM channel config until task #8 resolves it from the room's `io.element.ptt.config` state
- * event. `10.0.2.2` is the Android emulator's alias for the host loopback — i.e. the local Murmur.
- */
-private fun interimMumbleConfig(sessionId: SessionId, roomId: RoomId) = PttChannelConfig(
-    sessionId = sessionId,
-    roomId = roomId,
-    transport = PttTransportType.Mumble,
-    transportMetadata = mapOf(
-        "host" to "10.0.2.2",
-        "port" to "64738",
-        "username" to sessionId.value.substringAfter("@").substringBefore(":"),
-    ),
-)
