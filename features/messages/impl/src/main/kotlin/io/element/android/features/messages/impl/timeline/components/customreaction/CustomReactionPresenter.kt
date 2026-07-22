@@ -17,12 +17,15 @@ import dev.zacsweers.metro.Inject
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.emoji.api.picker.EmojiPickerPresenter
+import io.element.android.libraries.emoji.api.recentemojis.GetRecentEmojis
 import kotlinx.collections.immutable.toImmutableSet
 
 @Inject
 class CustomReactionPresenter(
-    private val emojiPickerPresenter: EmojiPickerPresenter,
+    emojiPickerPresenterFactory: EmojiPickerPresenter.Factory,
+    getRecentEmojis: GetRecentEmojis,
 ) : Presenter<CustomReactionState> {
+    private val emojiPickerPresenter = emojiPickerPresenterFactory.create(getRecentEmojis)
     @Composable
     override fun present(): CustomReactionState {
         var internalTarget by remember { mutableStateOf<InternalTarget>(InternalTarget.None) }

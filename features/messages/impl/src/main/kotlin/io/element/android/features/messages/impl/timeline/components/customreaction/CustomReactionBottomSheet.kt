@@ -37,7 +37,6 @@ fun CustomReactionBottomSheet(
         CustomReactionState.Target.None,
         is CustomReactionState.Target.Loading -> Unit
         is CustomReactionState.Target.Success -> {
-
             fun onEmojiSelectedDismiss(emoji: Emoji) {
                 sheetState.hide(coroutineScope) {
                     state.eventSink(CustomReactionEvent.DismissCustomReactionSheet)
@@ -48,7 +47,6 @@ fun CustomReactionBottomSheet(
             fun onDismiss() {
                 state.eventSink(CustomReactionEvent.DismissCustomReactionSheet)
             }
-
 
             ModalBottomSheet(
                 onDismissRequest = ::onDismiss,

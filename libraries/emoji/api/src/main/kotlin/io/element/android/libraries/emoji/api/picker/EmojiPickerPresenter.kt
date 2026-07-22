@@ -8,5 +8,10 @@
 package io.element.android.libraries.emoji.api.picker
 
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.emoji.api.recentemojis.GetRecentEmojis
 
-fun interface EmojiPickerPresenter : Presenter<EmojiPickerState>
+fun interface EmojiPickerPresenter : Presenter<EmojiPickerState> {
+    fun interface Factory {
+        fun create(getRecentEmojis: GetRecentEmojis): EmojiPickerPresenter
+    }
+}

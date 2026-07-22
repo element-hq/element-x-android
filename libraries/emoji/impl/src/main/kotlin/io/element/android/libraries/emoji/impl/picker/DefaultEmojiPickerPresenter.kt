@@ -17,8 +17,10 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalInspectionMode
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.emojibasebindings.Emoji
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.IconSource
@@ -37,13 +39,18 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import kotlin.time.Duration.Companion.milliseconds
 
-@Inject
-@ContributesBinding(SessionScope::class)
+@AssistedInject
 class DefaultEmojiPickerPresenter(
     private val emojibaseProvider: EmojibaseProvider,
-    private val getRecentEmojis: GetRecentEmojis,
+    @Assisted private val getRecentEmojis: GetRecentEmojis,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : EmojiPickerPresenter {
+    @AssistedFactory
+    @ContributesBinding(SessionScope::class)
+    interface Factory : EmojiPickerPresenter.Factory {
+        override fun create(getRecentEmojis: GetRecentEmojis): DefaultEmojiPickerPresenter
+    }
+
     @Composable
     override fun present(): EmojiPickerState {
         val queryState = rememberTextFieldState()
@@ -86,7 +93,9 @@ class DefaultEmojiPickerPresenter(
         val searchQuery = queryState.text.toString()
         LaunchedEffect(searchQuery, data) {
             if (searchQuery.isEmpty() || data.allEmojis.isEmpty()) {
-                emojiResults = SearchBarResultState.Initial()
+                if (emojiResults !is SearchBarResultState.Initial) {
+                    emojiResults = SearchBarResultState.Initial()
+                }
                 return@LaunchedEffect
             }
             delay(100.milliseconds)

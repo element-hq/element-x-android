@@ -18,5 +18,5 @@ dependencies {
     implementation(projects.libraries.matrix.api)
 
     implementation(libs.kotlinx.collections.immutable)
-    implementation(libs.matrix.emojibase.bindings)
+    api(libs.matrix.emojibase.bindings)
 }
