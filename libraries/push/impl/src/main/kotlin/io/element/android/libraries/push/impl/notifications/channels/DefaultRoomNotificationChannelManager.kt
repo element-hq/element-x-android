@@ -14,6 +14,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import androidx.annotation.ChecksSdkIntAtLeast
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
 import dev.zacsweers.metro.AppScope
@@ -179,6 +180,7 @@ class DefaultRoomNotificationChannelManager(
      * sound, vibration and lights on), since a channel is only ever created when `noisy` is true
      * - see the class doc on [RoomNotificationChannelManager].
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun buildRoomChannel(
         id: String,
         sessionId: SessionId,
