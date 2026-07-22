@@ -11,7 +11,7 @@ import io.element.android.libraries.emoji.api.picker.EmojiPickerPresenter
 import io.element.android.libraries.emoji.api.picker.EmojiPickerState
 
 fun fakeEmojiPickerPresenter(
-    state: EmojiPickerState = FakeEmojiPickerState(),
+    state: EmojiPickerState = FakeEmojiPickerState(isReady = true),
 ): EmojiPickerPresenter = EmojiPickerPresenter { state }
 
 fun fakeEmojiPickerPresenterFactory(

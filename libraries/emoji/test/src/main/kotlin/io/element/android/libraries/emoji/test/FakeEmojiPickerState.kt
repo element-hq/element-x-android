@@ -14,5 +14,5 @@ import io.element.android.libraries.emoji.api.picker.EmojiPickerState
  * tests).
  */
 data class FakeEmojiPickerState(
-    override val isReady: Boolean = true,
+    override val isReady: Boolean,
 ) : EmojiPickerState

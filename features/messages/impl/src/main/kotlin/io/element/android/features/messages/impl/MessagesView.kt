@@ -145,9 +145,9 @@ fun MessagesView(
     onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     onViewAllPinnedMessagesClick: () -> Unit,
     onThreadsListClick: () -> Unit,
+    knockRequestsBannerView: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     forceJumpToBottomVisibility: Boolean = false,
-    knockRequestsBannerView: @Composable () -> Unit,
     customReactionBottomSheet: @Composable () -> Unit,
 ) {
     val eventContentValidationState = LocalEventContentValidationState.current

@@ -10,14 +10,12 @@ package io.element.android.libraries.emoji.impl.picker
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.emojibasebindings.Emoji
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.emoji.api.picker.EmojiPickerRenderer
 import io.element.android.libraries.emoji.api.picker.EmojiPickerState
 import kotlinx.collections.immutable.ImmutableSet
 
-@Inject
 @ContributesBinding(SessionScope::class)
 class DefaultEmojiPickerRenderer : EmojiPickerRenderer {
     @Composable

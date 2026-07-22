@@ -69,9 +69,9 @@ internal fun EmojiItem(
     skinPickerEmoji: Emoji?,
     selectedSkinUnicodes: ImmutableSet<String>,
     hasSelectedSkin: Boolean,
-    contentDescription: @Composable (emoji: Emoji, isSelected: Boolean) -> String = { emoji, _ -> emoji.unicode },
     modifier: Modifier = Modifier,
     emojiSize: TextUnit = 20.sp,
+    contentDescription: @Composable (emoji: Emoji, isSelected: Boolean) -> String = { emoji, _ -> emoji.unicode },
 ) {
     val backgroundColor = when {
         isSelected -> ElementTheme.colors.bgActionPrimaryRest

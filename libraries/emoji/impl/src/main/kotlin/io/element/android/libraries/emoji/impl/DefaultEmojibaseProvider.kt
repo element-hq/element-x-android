@@ -11,7 +11,6 @@ package io.element.android.libraries.emoji.impl
 import android.content.Context
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.emojibasebindings.EmojibaseDatasource
 import io.element.android.emojibasebindings.EmojibaseStore
@@ -22,7 +21,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.async
 
-@Inject
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultEmojibaseProvider(
