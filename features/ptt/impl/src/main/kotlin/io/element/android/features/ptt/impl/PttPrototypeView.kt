@@ -68,6 +68,33 @@ fun PttPrototypeView(
                 ),
                 onClick = { state.eventSink(PttPrototypeEvent.SetPttEnabled(!state.isPttEnabled)) },
             )
+            // Silent by default: audio output only exists while this is on (and covert is off).
+            ListItem(
+                headlineContent = { Text("Listen (hear others)") },
+                supportingContent = {
+                    Text(
+                        if (state.isCovert) {
+                            "Overridden by covert mode — the device stays silent."
+                        } else {
+                            "Off by default. When off, incoming audio is received but never played."
+                        }
+                    )
+                },
+                trailingContent = ListItemContent.Switch(
+                    checked = state.isHearingEnabled && !state.isCovert,
+                    enabled = !state.isCovert,
+                ),
+                onClick = { state.eventSink(PttPrototypeEvent.SetHearingEnabled(!state.isHearingEnabled)) },
+            )
+            // Master override — hard-silences all audio output and tones regardless of Listen.
+            ListItem(
+                headlineContent = { Text("Covert (silent) mode") },
+                supportingContent = {
+                    Text("Guarantees the device makes no sound — no audio, no tones — overriding Listen.")
+                },
+                trailingContent = ListItemContent.Switch(checked = state.isCovert),
+                onClick = { state.eventSink(PttPrototypeEvent.SetCovertMode(!state.isCovert)) },
+            )
             // Optional user opt-in — battery for background reliability.
             ListItem(
                 headlineContent = { Text("Ignore battery optimizations") },

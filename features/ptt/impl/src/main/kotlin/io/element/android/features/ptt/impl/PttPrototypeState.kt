@@ -22,6 +22,10 @@ data class PttPrototypeState(
     val isUserInChannel: Boolean,
     /** Whether the local user currently holds the floor and is transmitting. */
     val isTransmitting: Boolean = false,
+    /** Whether the user has opted in to hearing others. Off by default — the device stays silent. */
+    val isHearingEnabled: Boolean = false,
+    /** Whether covert/silent mode is on — hard-silences audio output and all tones. */
+    val isCovert: Boolean = false,
     /** Microphone permission state — gates joining and drives the rationale dialog. */
     val permissionsState: PermissionsState,
     /** Whether the "draw over other apps" permission is granted (needed for the floating button). */

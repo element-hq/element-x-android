@@ -34,4 +34,10 @@ sealed interface PttPrototypeEvent {
 
     /** User-opt-in toggle for the battery-optimization exemption (request dialog, or settings to revoke). */
     data object ToggleBatteryOptimizationExemption : PttPrototypeEvent
+
+    /** Opt in/out of hearing others (audio output). Off by default keeps the device silent. */
+    data class SetHearingEnabled(val enabled: Boolean) : PttPrototypeEvent
+
+    /** Toggle covert/silent mode — hard-silences audio output and all tones. */
+    data class SetCovertMode(val enabled: Boolean) : PttPrototypeEvent
 }

@@ -92,6 +92,8 @@ class PttPrototypePresenter(
 
         val isPttEnabled by pttRoomService.isPttEnabledFlow().collectAsState(initial = false)
         val sessionState by pttSessionManager.sessionState.collectAsState()
+        val isHearingEnabled by pttSessionManager.isHearingEnabled.collectAsState()
+        val isCovert by pttSessionManager.isCovert.collectAsState()
 
         val hasLiveChannel = sessionState != null
         val isUserInChannel = sessionState?.connection is PttConnectionState.Connected
@@ -122,6 +124,8 @@ class PttPrototypePresenter(
                 is PttPrototypeEvent.SetPttEnabled -> coroutineScope.launch {
                     pttRoomService.setPttEnabled(event.enabled)
                 }
+                is PttPrototypeEvent.SetHearingEnabled -> pttSessionManager.setHearingEnabled(event.enabled)
+                is PttPrototypeEvent.SetCovertMode -> pttSessionManager.setCovert(event.enabled)
                 PttPrototypeEvent.GrantOverlayPermission -> {
                     val intent = Intent(
                         Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
@@ -162,6 +166,8 @@ class PttPrototypePresenter(
             participantCount = participantCount,
             isUserInChannel = isUserInChannel,
             isTransmitting = isTransmitting,
+            isHearingEnabled = isHearingEnabled,
+            isCovert = isCovert,
             permissionsState = permissionsState,
             canDrawOverlays = canDrawOverlays,
             canUseFullScreenIntent = canUseFullScreenIntent,
