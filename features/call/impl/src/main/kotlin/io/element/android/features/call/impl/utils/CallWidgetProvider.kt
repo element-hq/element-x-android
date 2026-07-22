@@ -25,5 +25,6 @@ interface CallWidgetProvider {
     data class GetWidgetResult(
         val driver: MatrixWidgetDriver,
         val url: String,
+        val rememberLastMediaState: Boolean = false,
     )
 }

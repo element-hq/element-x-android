@@ -17,6 +17,7 @@ import io.element.android.features.call.api.CallData
 import io.element.android.features.call.impl.ui.CallScreenEvent
 import io.element.android.features.call.impl.ui.CallScreenNavigator
 import io.element.android.features.call.impl.ui.CallScreenPresenter
+import io.element.android.features.call.impl.utils.CallDeviceMuteController
 import io.element.android.features.call.impl.utils.WidgetMessageSerializer
 import io.element.android.features.call.utils.FakeActiveCallManager
 import io.element.android.features.call.utils.FakeCallWidgetProvider
@@ -32,6 +33,7 @@ import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.widget.FakeMatrixWidgetDriver
 import io.element.android.libraries.network.useragent.UserAgentProvider
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.services.analytics.api.ScreenTracker
 import io.element.android.services.analytics.test.FakeScreenTracker
 import io.element.android.services.appnavstate.test.FakeAppForegroundStateService
@@ -318,6 +320,7 @@ class CallScreenPresenterTest {
             }
         }
         val clock = SystemClock { 0 }
+        val jsonProvider = DefaultJsonProvider()
         return CallScreenPresenter(
             callData = callData,
             navigator = navigator,
@@ -331,7 +334,13 @@ class CallScreenPresenterTest {
             languageTagProvider = FakeLanguageTagProvider("en-US"),
             appForegroundStateService = appForegroundStateService,
             appCoroutineScope = backgroundScope,
-            widgetMessageSerializer = WidgetMessageSerializer(DefaultJsonProvider()),
+            callDeviceMuteController = CallDeviceMuteController(
+                appPreferencesStore = InMemoryAppPreferencesStore(),
+                jsonProvider = jsonProvider,
+                widgetMessageSerializer = WidgetMessageSerializer(jsonProvider),
+                clock = clock,
+            ),
+            widgetMessageSerializer = WidgetMessageSerializer(jsonProvider),
         )
     }
 }

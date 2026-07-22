@@ -25,6 +25,7 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.features.call.api.CallData
 import io.element.android.features.call.impl.data.WidgetMessage
 import io.element.android.features.call.impl.utils.ActiveCallManager
+import io.element.android.features.call.impl.utils.CallDeviceMuteController
 import io.element.android.features.call.impl.utils.CallWidgetProvider
 import io.element.android.features.call.impl.utils.WidgetMessageInterceptor
 import io.element.android.features.call.impl.utils.WidgetMessageSerializer
@@ -62,6 +63,7 @@ class CallScreenPresenter(
     private val activeCallManager: ActiveCallManager,
     private val languageTagProvider: LanguageTagProvider,
     private val appForegroundStateService: AppForegroundStateService,
+    private val callDeviceMuteController: CallDeviceMuteController,
     @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,
     private val widgetMessageSerializer: WidgetMessageSerializer,
@@ -98,7 +100,10 @@ class CallScreenPresenter(
                 )
             }
             onDispose {
-                appCoroutineScope.launch { activeCallManager.hangUpCall(callData) }
+                appCoroutineScope.launch {
+                    callDeviceMuteController.persistIfReady()
+                    activeCallManager.hangUpCall(callData)
+                }
             }
         }
         screenTracker.TrackScreen(screen = MobileScreen.ScreenName.RoomCall)
@@ -128,10 +133,25 @@ class CallScreenPresenter(
 
                         val parsedMessage = parseMessage(it)
                         if (parsedMessage?.direction == WidgetMessage.Direction.FromWidget) {
-                            if (parsedMessage.action == WidgetMessage.Action.Close) {
-                                close(callWidgetDriver.value, navigator)
-                            } else if (parsedMessage.action == WidgetMessage.Action.ContentLoaded) {
-                                isWidgetLoaded = true
+                            when (parsedMessage.action) {
+                                WidgetMessage.Action.Close -> {
+                                    callDeviceMuteController.persistIfReady()
+                                    close(callWidgetDriver.value, navigator)
+                                }
+                                WidgetMessage.Action.ContentLoaded -> {
+                                    isWidgetLoaded = true
+                                    callDeviceMuteController.onContentLoaded()
+                                }
+                                WidgetMessage.Action.DeviceMute -> {
+                                    callWidgetDriver.value?.id?.let { widgetId ->
+                                        callDeviceMuteController.onDeviceMuteFromWidget(
+                                            message = parsedMessage,
+                                            widgetId = widgetId,
+                                            messageInterceptor = interceptor,
+                                        )
+                                    }
+                                }
+                                else -> Unit
                             }
                         }
                     }
@@ -156,6 +176,7 @@ class CallScreenPresenter(
                 is CallScreenEvent.Hangup -> {
                     val widgetId = callWidgetDriver.value?.id
                     val interceptor = messageInterceptor.value
+                    coroutineScope.launch { callDeviceMuteController.persistIfReady() }
                     if (widgetId != null && interceptor != null && isWidgetLoaded) {
                         // If the call was joined, we need to hang up first. Then the UI will be dismissed automatically.
                         sendHangupMessage(widgetId, interceptor)
@@ -211,6 +232,7 @@ class CallScreenPresenter(
                 theme = theme,
             ).getOrThrow()
             callWidgetDriver.value = result.driver
+            callDeviceMuteController.setRememberLastMediaState(result.rememberLastMediaState)
             Timber.d("Call widget driver initialized for sessionId: ${callData.sessionId}, roomId: ${callData.roomId}")
             result.url
         }

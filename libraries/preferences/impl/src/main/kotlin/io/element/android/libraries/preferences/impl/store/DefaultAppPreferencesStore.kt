@@ -42,6 +42,8 @@ private val messageSoundDisplayNameKey = stringPreferencesKey("notificationMessa
 private val callRingtoneUriKey = stringPreferencesKey("notificationCallRingtoneUri")
 private val callRingtoneChannelVersionKey = intPreferencesKey("notificationCallRingtoneChannelVersion")
 private val callRingtoneDisplayNameKey = stringPreferencesKey("notificationCallRingtoneDisplayName")
+private val callMicrophoneEnabledKey = booleanPreferencesKey("callMicrophoneEnabled")
+private val callCameraEnabledKey = booleanPreferencesKey("callCameraEnabled")
 
 @ContributesBinding(AppScope::class)
 class DefaultAppPreferencesStore(
@@ -235,6 +237,22 @@ class DefaultAppPreferencesStore(
             callRingtoneVersion = prefs[callRingtoneChannelVersionKey] ?: 0,
             callRingtoneDisplayName = prefs[callRingtoneDisplayNameKey],
         )
+    }
+
+    override suspend fun setCallMicrophoneEnabled(enabled: Boolean) {
+        store.edit { prefs -> prefs[callMicrophoneEnabledKey] = enabled }
+    }
+
+    override fun isCallMicrophoneEnabledFlow(): Flow<Boolean> {
+        return store.data.map { prefs -> prefs[callMicrophoneEnabledKey] ?: true }
+    }
+
+    override suspend fun setCallCameraEnabled(enabled: Boolean) {
+        store.edit { prefs -> prefs[callCameraEnabledKey] = enabled }
+    }
+
+    override fun isCallCameraEnabledFlow(): Flow<Boolean> {
+        return store.data.map { prefs -> prefs[callCameraEnabledKey] ?: true }
     }
 
     override suspend fun reset() {

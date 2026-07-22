@@ -33,6 +33,8 @@ class InMemoryAppPreferencesStore(
     callRingtone: NotificationSound = NotificationSound.SystemDefault,
     callRingtoneChannelVersion: Int = 0,
     callRingtoneDisplayName: String? = null,
+    callMicrophoneEnabled: Boolean = true,
+    callCameraEnabled: Boolean = true,
 ) : AppPreferencesStore {
     private val isDeveloperModeEnabled = MutableStateFlow(isDeveloperModeEnabled)
     private val customElementCallBaseUrl = MutableStateFlow(customElementCallBaseUrl)
@@ -48,6 +50,8 @@ class InMemoryAppPreferencesStore(
     private val callRingtone = MutableStateFlow(callRingtone)
     private val callRingtoneChannelVersion = MutableStateFlow(callRingtoneChannelVersion)
     private val callRingtoneDisplayName = MutableStateFlow(callRingtoneDisplayName)
+    private val callMicrophoneEnabled = MutableStateFlow(callMicrophoneEnabled)
+    private val callCameraEnabled = MutableStateFlow(callCameraEnabled)
 
     override suspend fun setDeveloperModeEnabled(enabled: Boolean) {
         isDeveloperModeEnabled.value = enabled
@@ -154,6 +158,22 @@ class InMemoryAppPreferencesStore(
             callRingtoneVersion = callRingtoneChannelVersion.value,
             callRingtoneDisplayName = callRingtoneDisplayName.value,
         )
+    }
+
+    override suspend fun setCallMicrophoneEnabled(enabled: Boolean) {
+        callMicrophoneEnabled.value = enabled
+    }
+
+    override fun isCallMicrophoneEnabledFlow(): Flow<Boolean> {
+        return callMicrophoneEnabled
+    }
+
+    override suspend fun setCallCameraEnabled(enabled: Boolean) {
+        callCameraEnabled.value = enabled
+    }
+
+    override fun isCallCameraEnabledFlow(): Flow<Boolean> {
+        return callCameraEnabled
     }
 
     override suspend fun reset() {

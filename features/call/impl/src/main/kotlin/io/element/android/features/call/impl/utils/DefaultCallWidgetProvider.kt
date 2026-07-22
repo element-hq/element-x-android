@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.widget.CallWidgetSettingsProvider
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.services.appnavstate.api.ActiveRoomsHolder
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 
 private const val EMBEDDED_CALL_WIDGET_BASE_URL = "https://appassets.androidplatform.net/element-call/index.html"
@@ -41,6 +42,14 @@ class DefaultCallWidgetProvider(
             ?: matrixClient.getJoinedRoom(roomId)
             ?: error("Room not found")
 
+        val isDm = room.isDm()
+        val rememberLastMediaState = !isDm
+        val treatAsAudioCall = if (rememberLastMediaState) {
+            isAudioCall || !appPreferencesStore.isCallCameraEnabledFlow().first()
+        } else {
+            isAudioCall
+        }
+
         val customBaseUrl = appPreferencesStore.getCustomElementCallBaseUrlFlow().firstOrNull()
         val baseUrl = customBaseUrl ?: EMBEDDED_CALL_WIDGET_BASE_URL
 
@@ -49,8 +58,8 @@ class DefaultCallWidgetProvider(
         val widgetSettings = callWidgetSettingsProvider.provide(
             baseUrl = baseUrl,
             encrypted = isEncrypted,
-            direct = room.isDm(),
-            isAudioCall = isAudioCall,
+            direct = isDm,
+            isAudioCall = treatAsAudioCall,
             hasActiveCall = roomInfo.hasRoomCall,
         )
         val callUrl = room.generateWidgetWebViewUrl(
@@ -58,13 +67,36 @@ class DefaultCallWidgetProvider(
             clientId = clientId,
             languageTag = languageTag,
             theme = theme,
-        ).getOrThrow()
+        ).getOrThrow().let { url ->
+            if (treatAsAudioCall && rememberLastMediaState) {
+                url.withNonDmVoiceCallIntent()
+            } else {
+                url
+            }
+        }
 
         val driver = room.getWidgetDriver(widgetSettings).getOrThrow()
 
         CallWidgetProvider.GetWidgetResult(
             driver = driver,
             url = callUrl,
+            rememberLastMediaState = rememberLastMediaState,
         )
+    }
+}
+
+/**
+ * Rewrites non-DM Element Call intents to their voice variants without touching DM intents(`start_call_dm`, `join_existing_dm`, …).
+ * Delete this and linked code when this intents will be added to SDK.
+ */
+internal fun String.withNonDmVoiceCallIntent(): String {
+    return when {
+        contains("intent=start_call_dm") || contains("intent=join_existing_dm") -> this
+        contains("intent=start_call_voice") || contains("intent=join_existing_voice") -> this
+        contains("intent=start_call") ->
+            replace("intent=start_call", "intent=start_call_voice")
+        contains("intent=join_existing") ->
+            replace("intent=join_existing", "intent=join_existing_voice")
+        else -> this
     }
 }

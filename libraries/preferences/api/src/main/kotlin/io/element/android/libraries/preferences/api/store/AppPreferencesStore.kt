@@ -63,5 +63,19 @@ interface AppPreferencesStore {
     /** Single-snapshot read of all sound prefs; used at boot to seed channels without N reads. */
     suspend fun getNotificationSoundChannelConfig(): NotificationSoundChannelConfig
 
+    /**
+     * Whether the microphone should be enabled when joining a call.
+     * Defaults to `true`. Stored on-device (not per Matrix account).
+     */
+    suspend fun setCallMicrophoneEnabled(enabled: Boolean)
+    fun isCallMicrophoneEnabledFlow(): Flow<Boolean>
+
+    /**
+     * Whether the camera should be enabled when joining a call.
+     * Defaults to `true`. Stored on-device (not per Matrix account).
+     */
+    suspend fun setCallCameraEnabled(enabled: Boolean)
+    fun isCallCameraEnabledFlow(): Flow<Boolean>
+
     suspend fun reset()
 }
