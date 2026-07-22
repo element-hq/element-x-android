@@ -11,9 +11,8 @@ package io.element.android.features.messages.impl.timeline.components.customreac
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
-import io.element.android.libraries.emoji.api.picker.EmojiPickerPresenter
 import io.element.android.libraries.emoji.api.recentemojis.EmptyGetRecentEmojis
-import io.element.android.libraries.emoji.impl.picker.anEmojiPickerState
+import io.element.android.libraries.emoji.test.fakeEmojiPickerPresenterFactory
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.test
@@ -26,7 +25,7 @@ class CustomReactionPresenterTest {
     val warmUpRule = WarmUpRule()
 
     private val presenter = CustomReactionPresenter(
-        emojiPickerPresenterFactory = EmojiPickerPresenter.Factory { EmojiPickerPresenter { anEmojiPickerState() } },
+        emojiPickerPresenterFactory = fakeEmojiPickerPresenterFactory(),
         getRecentEmojis = EmptyGetRecentEmojis,
     )
 

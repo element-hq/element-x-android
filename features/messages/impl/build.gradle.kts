@@ -107,5 +107,6 @@ dependencies {
     testImplementation(projects.features.poll.test)
     testImplementation(projects.libraries.eventformatter.test)
     testImplementation(projects.libraries.emoji.impl)
+    testImplementation(projects.libraries.emoji.test)
     testImplementation(projects.libraries.slashcommands.test)
 }
