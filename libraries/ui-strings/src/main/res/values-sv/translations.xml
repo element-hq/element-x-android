@@ -379,7 +379,6 @@ Anledning:%1$s."</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Den maximala tillåtna filstorleken är: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Välj kvaliteten på videon du vill ladda upp."</string>
   <string name="dialog_video_quality_selector_title">"Välj videouppladdningskvalitet"</string>
-  <string name="emoji_picker_search_placeholder">"Sök emojier"</string>
   <string name="error_account_already_logged_in">"Du är redan inloggad på den här enheten som %1$s."</string>
   <string name="error_account_creation_not_possible">"Din hemserver måste uppgraderas för att stödja Matrix Authentication Service och skapande av konto."</string>
   <string name="error_failed_creating_the_permalink">"Misslyckades att skapa permalänken"</string>

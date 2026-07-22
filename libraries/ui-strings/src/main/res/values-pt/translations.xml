@@ -391,7 +391,6 @@ Tens a certeza de que queres continuar?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"O tamanho máximo de ficheiro permitido é: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Seleciona a qualidade do vídeo que pretendes carregar."</string>
   <string name="dialog_video_quality_selector_title">"Seleciona a qualidade de carregamento do vídeo"</string>
-  <string name="emoji_picker_search_placeholder">"Pesquisar emojis"</string>
   <string name="error_account_already_logged_in">"Já tens sessão iniciada como %1$s neste dispositivo."</string>
   <string name="error_account_creation_not_possible">"Seu homeserver precisa ser atualizado para suportar o Matrix Authentication Service e a criação de conta."</string>
   <string name="error_failed_creating_the_permalink">"Falha ao criar ligação permanente"</string>

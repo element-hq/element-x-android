@@ -41,7 +41,7 @@ import io.element.android.libraries.designsystem.text.toSp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.SearchBar
-import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.libraries.emoji.impl.R
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
@@ -68,7 +68,7 @@ internal fun EmojiPickerView(
             active = state.isSearchActive,
             onActiveChange = { state.eventSink(EmojiPickerEvent.ToggleSearchActive(it)) },
             windowInsets = WindowInsets(0, 0, 0, 0),
-            placeHolderTitle = stringResource(CommonStrings.emoji_picker_search_placeholder),
+            placeHolderTitle = stringResource(R.string.emoji_picker_search_placeholder),
         ) { emojis ->
             EmojiResults(
                 emojis = emojis,
