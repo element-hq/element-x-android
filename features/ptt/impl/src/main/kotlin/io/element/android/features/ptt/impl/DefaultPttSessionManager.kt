@@ -34,6 +34,10 @@ class DefaultPttSessionManager(
 ) : PttSessionManager {
     override val sessionState: StateFlow<PttSessionState?> = controller.sessionState
 
+    override val isHearingEnabled: StateFlow<Boolean> = controller.isHearingEnabled
+
+    override val isCovert: StateFlow<Boolean> = controller.isCovert
+
     override fun start(sessionId: SessionId, roomId: RoomId) {
         PttSessionHostService.start(context, interimMumbleConfig(sessionId, roomId))
     }
@@ -45,6 +49,10 @@ class DefaultPttSessionManager(
     override fun pressToTalk() = controller.pressToTalk()
 
     override fun releaseToTalk() = controller.releaseToTalk()
+
+    override fun setHearingEnabled(enabled: Boolean) = controller.setHearingEnabled(enabled)
+
+    override fun setCovert(enabled: Boolean) = controller.setCovert(enabled)
 }
 
 /**

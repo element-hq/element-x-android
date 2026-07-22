@@ -28,9 +28,21 @@ interface PttTransport {
 
     /**
      * Connect and join the channel described by [config]. Suspends until connected; throws on
-     * failure. The transport joins muted — nothing transmits until [startTransmitting] is called.
+     * failure. The transport joins **silent in both directions**: nothing transmits until
+     * [startTransmitting], and incoming audio is not played until [setAudioOutputEnabled] is called
+     * with `true`.
      */
     suspend fun join(config: PttChannelConfig)
+
+    /**
+     * Enable or disable audio output — i.e. whether incoming voice is played out of the speaker.
+     *
+     * The transport joins with output **disabled**: packets are still received, but with no playback
+     * path they produce no sound. Enabling constructs the playback path; disabling tears it down.
+     * Silence is therefore guaranteed by the *absence* of an output path, not by a volume mute — a
+     * safety property the covert/silent mode relies on. Idempotent.
+     */
+    suspend fun setAudioOutputEnabled(enabled: Boolean)
 
     /** Leave the channel and release all resources. Idempotent; safe to call when not joined. */
     suspend fun leave()

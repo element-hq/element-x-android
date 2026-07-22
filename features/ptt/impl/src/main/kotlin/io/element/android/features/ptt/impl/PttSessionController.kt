@@ -49,6 +49,23 @@ class PttSessionController(
     /** The active session's state, or `null` when no channel is joined. */
     val sessionState: StateFlow<PttSessionState?> = _sessionState.asStateFlow()
 
+    private val _isHearingEnabled = MutableStateFlow(false)
+
+    /** Whether the user has opted in to hearing others (audio output). Off by default — silent. */
+    val isHearingEnabled: StateFlow<Boolean> = _isHearingEnabled.asStateFlow()
+
+    private val _isCovert = MutableStateFlow(false)
+
+    /**
+     * Covert/silent master override. When on, audio output is forced off and all cues (go/deny
+     * tones) are suppressed regardless of [isHearingEnabled] — the "my phone must not make a sound"
+     * switch.
+     */
+    val isCovert: StateFlow<Boolean> = _isCovert.asStateFlow()
+
+    // Audio plays only when the user opted in AND covert mode is off.
+    private fun effectiveAudioOutput(): Boolean = _isHearingEnabled.value && !_isCovert.value
+
     /** Create the transport for [config] and join it (fire-and-forget). Idempotent while live. */
     fun startSession(config: PttChannelConfig) {
         coroutineScope.launch {
@@ -60,8 +77,27 @@ class PttSessionController(
                     newTransport.state.collect { _sessionState.value = it }
                 }
                 newTransport.join(config)
+                // Joins silent; apply the current listen preference (still off unless the user opted in).
+                newTransport.setAudioOutputEnabled(effectiveAudioOutput())
             }
         }
+    }
+
+    /** Opt in/out of hearing others. Takes effect immediately on the live session (if any). */
+    fun setHearingEnabled(enabled: Boolean) {
+        _isHearingEnabled.value = enabled
+        applyAudioOutput()
+    }
+
+    /** Toggle covert/silent mode. Enabling it silences output immediately, overriding [isHearingEnabled]. */
+    fun setCovert(enabled: Boolean) {
+        _isCovert.value = enabled
+        applyAudioOutput()
+    }
+
+    private fun applyAudioOutput() {
+        val enabled = effectiveAudioOutput()
+        coroutineScope.launch { mutex.withLock { transport?.setAudioOutputEnabled(enabled) } }
     }
 
     /** Leave and release the channel (fire-and-forget). Idempotent. */
@@ -85,9 +121,12 @@ class PttSessionController(
         coroutineScope.launch {
             val result = transport?.startTransmitting()
                 ?: PttTransmitResult.Failed(IllegalStateException("No PTT session is active"))
-            when (result) {
-                PttTransmitResult.Granted -> tones.playFloorGranted()
-                is PttTransmitResult.Denied, is PttTransmitResult.Failed -> tones.playFloorDenied()
+            // Suppress all audible cues in covert mode — the device must stay silent.
+            if (!_isCovert.value) {
+                when (result) {
+                    PttTransmitResult.Granted -> tones.playFloorGranted()
+                    is PttTransmitResult.Denied, is PttTransmitResult.Failed -> tones.playFloorDenied()
+                }
             }
         }
     }
