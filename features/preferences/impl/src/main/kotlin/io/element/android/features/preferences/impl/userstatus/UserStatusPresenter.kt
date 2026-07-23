@@ -79,6 +79,8 @@ class UserStatusPresenter(
             }
         }
 
+        // In CustomInput mode, override the picker state's `emojiPickerSheetState` with the freshly composed emoji-picker
+        // sub-state so recompositions of the picker propagate up. Other modes pass through unchanged.
         val effectivePickerState = when (val current = pickerState) {
             is UserStatusPickerState.CustomInput -> {
                 val emojiPickerState = presentEmojiPickerSheetState(isEmojiPickerVisible)

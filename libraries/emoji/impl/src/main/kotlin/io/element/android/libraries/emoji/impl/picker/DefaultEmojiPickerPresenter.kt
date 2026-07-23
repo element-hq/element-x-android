@@ -93,6 +93,8 @@ class DefaultEmojiPickerPresenter(
         val searchQuery = queryState.text.toString()
         LaunchedEffect(searchQuery, data) {
             if (searchQuery.isEmpty() || data.allEmojis.isEmpty()) {
+                // `SearchBarResultState.Initial` has no `equals` override, so reassigning a new instance
+                // would trigger a redundant emission each time this effect re-runs while the query is empty.
                 if (emojiResults !is SearchBarResultState.Initial) {
                     emojiResults = SearchBarResultState.Initial()
                 }

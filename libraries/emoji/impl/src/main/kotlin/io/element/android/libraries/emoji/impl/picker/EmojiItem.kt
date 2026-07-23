@@ -91,6 +91,8 @@ internal fun EmojiItem(
             .onPlaced { coordinates ->
                 val position = coordinates.positionInParent()
                 val parentBounds = coordinates.parentLayoutCoordinates?.size ?: return@onPlaced
+                // Calculate the offset of the item inside its parent as a percentage, to be able to set the initial offset
+                // for the selection inside the skin tone picker relative to its size.
                 itemOffsetPercent = if (parentBounds.width > 0) {
                     position.x / parentBounds.width
                 } else {
@@ -102,6 +104,7 @@ internal fun EmojiItem(
             .background(backgroundColor, CircleShape)
             .indication(interactionSource, ripple())
             .pointerInput(item) {
+                // Always detect long press and tap gestures
                 detectTapGestures(
                     onPress = { pressOffset ->
                         val press = PressInteraction.Press(pressOffset)
@@ -119,6 +122,7 @@ internal fun EmojiItem(
                 )
             }
             .then(
+                // Only detect drag after long press for those items which have a skin tone picker
                 if (hasSkinTones) {
                     Modifier.pointerInput(item) {
                         val slotWidthPx = with(density) { SkinToneSlotSize.toPx() }
@@ -135,6 +139,8 @@ internal fun EmojiItem(
                             onDrag = { change, _ ->
                                 if (!dismissed) {
                                     change.consume()
+                                    // It's a valid drag event if it's within ~2 items height above, so, on top of the current one or the skin tone selector,
+                                    // or 1 item below, which should be far enough to not be triggered by mistake
                                     val isValidDrag = if (change.position.y < startOffset.y) {
                                         startOffset.y - change.position.y <= itemSize.height * 2f
                                     } else {
@@ -146,11 +152,15 @@ internal fun EmojiItem(
                                         onDismissSkinPicker()
                                     } else {
                                         val skinItemsCount = item.skins!!.size
+                                        // Original + variants
                                         val totalSlots = 1 + skinItemsCount
+                                        // Calculate the whole size of the skin tone picker
                                         val pickerWidthPx = 2 * paddingPx + totalSlots * slotWidthPx + (totalSlots - 1) * spacingPx
+                                        // Calculate the initial offset inside the picker, given the relative position of the item inside its parent
                                         val initialOffset = pickerWidthPx * itemOffsetPercent
                                         val xInPicker = initialOffset + change.position.x
 
+                                        // If it's a valid offset, calculate the hovered index, otherwise, set it to -1 to indicate that no item is hovered
                                         val index = if (xInPicker in 0f..pickerWidthPx) {
                                             (xInPicker / slotWidthPx).toInt().coerceIn(0, totalSlots - 1)
                                         } else {
