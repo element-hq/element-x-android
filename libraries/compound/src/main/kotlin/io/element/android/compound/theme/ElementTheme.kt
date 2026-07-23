@@ -116,7 +116,6 @@ fun ElementTheme(
         darkTheme -> if (theme == Theme.Black) {
             compoundDark.copy(
                 bgCanvasDefault = Color.Black,
-                // Pending design confirmation from americanrefugee/bmarty.
                 separatorSecondary = DarkColorTokens.colorGray400,
             )
         } else {
