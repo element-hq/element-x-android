@@ -505,6 +505,12 @@ class RustMatrixClient(
         }
     }
 
+    override suspend fun isUserStatusSupported(): Result<Boolean> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.isUserStatusSupported()
+        }
+    }
+
     override suspend fun joinRoom(roomId: RoomId): Result<RoomInfo?> = withContext(sessionDispatcher) {
         runCatchingExceptions {
             innerClient.joinRoomById(roomId.value).destroy()
