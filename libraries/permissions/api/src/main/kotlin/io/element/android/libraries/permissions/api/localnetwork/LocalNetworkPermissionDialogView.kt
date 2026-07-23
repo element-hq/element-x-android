@@ -15,6 +15,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun LocalNetworkPermissionDialogView(
+    appName: String,
     dialog: LocalNetworkPermissionDialog,
     onSubmit: () -> Unit,
     onDismiss: () -> Unit,
@@ -27,7 +28,7 @@ fun LocalNetworkPermissionDialogView(
     }
     ConfirmationDialog(
         title = stringResource(CommonStrings.screen_local_network_opt_in_title),
-        content = stringResource(CommonStrings.screen_local_network_opt_in_subtitle),
+        content = stringResource(CommonStrings.screen_local_network_opt_in_subtitle, appName),
         submitText = stringResource(submitTextRes),
         cancelText = stringResource(CommonStrings.action_not_now),
         onSubmitClick = onSubmit,
