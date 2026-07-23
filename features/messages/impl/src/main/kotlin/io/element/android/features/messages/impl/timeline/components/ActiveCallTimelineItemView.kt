@@ -22,11 +22,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.produceState
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -84,15 +81,6 @@ internal fun ActiveCallTimelineItemView(
     onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var currentTime by remember { mutableLongStateOf(System.currentTimeMillis()) }
-
-    LaunchedEffect(Unit) {
-        while (true) {
-            delay(1.seconds)
-            currentTime = System.currentTimeMillis()
-        }
-    }
-
     Column(modifier = modifier) {
         Row(
             modifier = Modifier
@@ -284,6 +272,9 @@ private fun CallDurationText(
     startTsMillis: Long,
     modifier: Modifier = Modifier,
 ) {
+    fun formatElapsed(startTsMillis: Long): String =
+        (System.currentTimeMillis() - startTsMillis).coerceAtLeast(0).toHumanReadableDuration()
+
     val duration by produceState(
         initialValue = formatElapsed(startTsMillis),
         startTsMillis,
@@ -302,9 +293,6 @@ private fun CallDurationText(
         overflow = TextOverflow.Ellipsis,
     )
 }
-
-private fun formatElapsed(startTsMillis: Long): String =
-    (System.currentTimeMillis() - startTsMillis).coerceAtLeast(0).toHumanReadableDuration()
 
 @PreviewsDayNight
 @PreviewWithLargeHeight
