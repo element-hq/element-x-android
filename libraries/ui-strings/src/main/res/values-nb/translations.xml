@@ -429,7 +429,6 @@ Er du sikker på at du vil fortsette?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Maksimal tillatt filstørrelse er: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Velg kvaliteten på videoen du vil laste opp."</string>
   <string name="dialog_video_quality_selector_title">"Velg kvalitet for videoopplasting"</string>
-  <string name="emoji_picker_search_placeholder">"Søk etter emojier"</string>
   <string name="error_account_already_logged_in">"Du er allerede logget inn på denne enheten som %1$s."</string>
   <string name="error_account_creation_not_possible">"Hjemmeserveren din må oppgraderes for å støtte Matrix Authentication Service og kontooppretting."</string>
   <string name="error_failed_creating_the_permalink">"Opprettelse av permalenken mislyktes"</string>

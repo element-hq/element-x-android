@@ -433,7 +433,6 @@ Möchtest du wirklich fortfahren?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Die maximal erlaubte Dateigröße ist: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Wähle die Qualität des Videos, das du hochladen möchtest."</string>
   <string name="dialog_video_quality_selector_title">"Wähle die Video-Upload-Qualität"</string>
-  <string name="emoji_picker_search_placeholder">"Emojis suchen"</string>
   <string name="error_account_already_logged_in">"Du bist auf diesem Gerät bereits als %1$s angemeldet."</string>
   <string name="error_account_creation_not_possible">"Dein Homeserver muss aktualisiert werden, um den Matrix Authentication Services und die Erstellung von Konten zu unterstützen."</string>
   <string name="error_failed_creating_the_permalink">"Fehler beim Erstellen des Permalinks"</string>

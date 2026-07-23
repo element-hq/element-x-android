@@ -476,7 +476,6 @@
   <string name="dialog_video_quality_selector_subtitle_file_size">"Максимально дозволений розмір файлу: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Виберіть якість відео, яке ви хочете вивантажити."</string>
   <string name="dialog_video_quality_selector_title">"Виберіть якість вивантажуваного відео"</string>
-  <string name="emoji_picker_search_placeholder">"Пошук емоджі"</string>
   <string name="error_account_already_logged_in">"Ви вже ввійшли на цьому пристрої як %1$s."</string>
   <string name="error_account_creation_not_possible">"Ваш домашній сервер потрібно оновити, щоб він підтримував службу автентифікації Matrix і створення облікових записів."</string>
   <string name="error_failed_creating_the_permalink">"Не вдалося створити постійне посилання"</string>

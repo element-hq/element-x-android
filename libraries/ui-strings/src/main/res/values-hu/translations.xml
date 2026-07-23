@@ -467,7 +467,6 @@ Biztos, hogy folytatja?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"A legnagyobb megengedett fájlméret: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Válassza ki a feltöltendő videó minőségét."</string>
   <string name="dialog_video_quality_selector_title">"Feltöltött videó minőségének kiválasztása"</string>
-  <string name="emoji_picker_search_placeholder">"Emodzsik keresése"</string>
   <string name="error_account_already_logged_in">"Már bejelentkezett erre az eszközre, mint %1$s."</string>
   <string name="error_account_creation_not_possible">"A Matrix-kiszolgálót frissíteni kell a Matrix Authentication Service és a fióklétrehozás támogatásához."</string>
   <string name="error_failed_creating_the_permalink">"Nem sikerült létrehozni az állandó hivatkozást"</string>

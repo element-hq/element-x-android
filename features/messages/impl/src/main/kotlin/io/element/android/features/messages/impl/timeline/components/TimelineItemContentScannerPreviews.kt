@@ -315,7 +315,12 @@ private fun inReplyToInvalidContent(): InReplyToDetails.Ready = InReplyToDetails
         )
     ),
     textContent = "A text content",
-    senderProfile = ProfileDetails.Ready(displayName = "Sender", displayNameAmbiguous = false, avatarUrl = null)
+    senderProfile = ProfileDetails.Ready(
+        displayName = "Sender",
+        displayNameAmbiguous = false,
+        avatarUrl = null,
+        displayedStatus = null
+    )
 )
 
 private fun inReplyToTextContent(): InReplyToDetails.Ready = InReplyToDetails.Ready(
@@ -332,5 +337,10 @@ private fun inReplyToTextContent(): InReplyToDetails.Ready = InReplyToDetails.Re
         )
     ),
     textContent = "A text content",
-    senderProfile = ProfileDetails.Ready(displayName = "Sender", displayNameAmbiguous = false, avatarUrl = null)
+    senderProfile = ProfileDetails.Ready(
+        displayName = "Sender",
+        displayNameAmbiguous = false,
+        avatarUrl = null,
+        displayedStatus = null
+    )
 )

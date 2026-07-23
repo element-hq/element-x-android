@@ -7,15 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"削除されたまたは不明な端末により暗号化されています。"</string>
   <string name="crypto_event_authenticity_unsigned_device">"所有者に検証されていない端末により暗号化されています。"</string>
   <string name="crypto_event_authenticity_unverified_identity">"未検証のユーザーにより暗号化されています。"</string>
-  <string name="emoji_picker_category_activity">"アクティビティ"</string>
-  <string name="emoji_picker_category_flags">"旗"</string>
-  <string name="emoji_picker_category_foods">"食べ物"</string>
-  <string name="emoji_picker_category_nature">"動物・自然"</string>
-  <string name="emoji_picker_category_objects">"物"</string>
-  <string name="emoji_picker_category_people">"顔・人"</string>
-  <string name="emoji_picker_category_places">"旅・場所"</string>
-  <string name="emoji_picker_category_recent">"最近使用"</string>
-  <string name="emoji_picker_category_symbols">"記号"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"水平に反転"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"垂直に反転"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"元画像"</string>

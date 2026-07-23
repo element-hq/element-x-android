@@ -7,15 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"Encrypted by an unknown or deleted device."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Encrypted by a device not verified by its owner."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Encrypted by an unverified user."</string>
-  <string name="emoji_picker_category_activity">"Activities"</string>
-  <string name="emoji_picker_category_flags">"Flags"</string>
-  <string name="emoji_picker_category_foods">"Food &amp; Drink"</string>
-  <string name="emoji_picker_category_nature">"Animals &amp; Nature"</string>
-  <string name="emoji_picker_category_objects">"Objects"</string>
-  <string name="emoji_picker_category_people">"Smileys &amp; People"</string>
-  <string name="emoji_picker_category_places">"Travel &amp; Places"</string>
-  <string name="emoji_picker_category_recent">"Recent emojis"</string>
-  <string name="emoji_picker_category_symbols">"Symbols"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"Flip image horizontally"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Flipped horizontally"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Original"</string>

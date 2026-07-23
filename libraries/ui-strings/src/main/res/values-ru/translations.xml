@@ -476,7 +476,6 @@
   <string name="dialog_video_quality_selector_subtitle_file_size">"Максимально допустимый размер файла: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Выберите качество видео, которое Вы хотите загрузить."</string>
   <string name="dialog_video_quality_selector_title">"Выберите качество загружаемого видео"</string>
-  <string name="emoji_picker_search_placeholder">"Поиск эмодзи"</string>
   <string name="error_account_already_logged_in">"Вы уже вошли на данном устройстве как %1$s."</string>
   <string name="error_account_creation_not_possible">"Домашний сервер необходимо обновить, чтобы он поддерживал Matrix Authentication Service и создание учётных записей."</string>
   <string name="error_failed_creating_the_permalink">"Не удалось создать постоянную ссылку"</string>

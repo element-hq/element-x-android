@@ -128,6 +128,7 @@ class RoomMemberDetailsPresenter(
         return userProfileState.copy(
             userName = roomUserName ?: userProfileState.userName,
             avatarUrl = roomUserAvatar ?: userProfileState.avatarUrl,
+            displayedStatus = roomMember?.displayedStatus ?: userProfileState.displayedStatus,
             verificationState = verificationState,
             snackbarMessage = snackbarMessage,
             eventSink = ::handleEvent,
