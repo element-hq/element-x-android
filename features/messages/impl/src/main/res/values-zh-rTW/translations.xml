@@ -7,15 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"由未知或已刪除的裝置加密。"</string>
   <string name="crypto_event_authenticity_unsigned_device">"由未經其擁有者驗證的裝置加密。"</string>
   <string name="crypto_event_authenticity_unverified_identity">"由未經驗證的使用者加密。"</string>
-  <string name="emoji_picker_category_activity">"活動"</string>
-  <string name="emoji_picker_category_flags">"旗幟"</string>
-  <string name="emoji_picker_category_foods">"食物與飲料"</string>
-  <string name="emoji_picker_category_nature">"動物與大自然"</string>
-  <string name="emoji_picker_category_objects">"物品"</string>
-  <string name="emoji_picker_category_people">"表情與人物"</string>
-  <string name="emoji_picker_category_places">"旅行與景點"</string>
-  <string name="emoji_picker_category_recent">"最近使用的表情符號"</string>
-  <string name="emoji_picker_category_symbols">"標誌"</string>
   <string name="screen_media_upload_preview_caption_warning">"使用舊應用程式的使用者可能看不到標題。"</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"輕點即可變更影片上傳品質"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"無法上傳檔案。"</string>

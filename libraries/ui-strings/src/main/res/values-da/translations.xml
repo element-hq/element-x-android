@@ -440,7 +440,6 @@ Er du sikker på, at du vil fortsætte?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Den maksimalt tilladte filstørrelse er: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Vælg den kvalitet, du ønsker at uploade videoen i."</string>
   <string name="dialog_video_quality_selector_title">"Vælg kvalitet for video-overførsel"</string>
-  <string name="emoji_picker_search_placeholder">"Søg emojis"</string>
   <string name="error_account_already_logged_in">"Du er allerede logget ind på denne enhed som %1$s."</string>
   <string name="error_account_creation_not_possible">"Din hjemmeserver skal opgraderes for at understøtte Matrix Authentication Service og kontooprettelse."</string>
   <string name="error_failed_creating_the_permalink">"Oprettelse af permalink mislykkedes"</string>

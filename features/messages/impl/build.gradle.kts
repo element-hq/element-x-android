@@ -51,7 +51,7 @@ dependencies {
     implementation(projects.libraries.mediaupload.api)
     implementation(projects.libraries.permissions.api)
     implementation(projects.libraries.preferences.api)
-    implementation(projects.libraries.recentemojis.api)
+    implementation(projects.libraries.emoji.api)
     implementation(projects.libraries.roomselect.api)
     implementation(projects.libraries.slashcommands.api)
     implementation(projects.libraries.audio.api)
@@ -106,6 +106,7 @@ dependencies {
     testImplementation(projects.libraries.testtags)
     testImplementation(projects.features.poll.test)
     testImplementation(projects.libraries.eventformatter.test)
-    testImplementation(projects.libraries.recentemojis.test)
+    testImplementation(projects.libraries.emoji.impl)
+    testImplementation(projects.libraries.emoji.test)
     testImplementation(projects.libraries.slashcommands.test)
 }

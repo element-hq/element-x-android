@@ -7,15 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"Ismeretlen vagy törölt eszköz által titkosítva."</string>
   <string name="crypto_event_authenticity_unsigned_device">"A tulajdonos által nem ellenőrzött eszköz által titkosítva."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Nem ellenőrzött felhasználó által titkosítva."</string>
-  <string name="emoji_picker_category_activity">"Tevékenységek"</string>
-  <string name="emoji_picker_category_flags">"Zászlók"</string>
-  <string name="emoji_picker_category_foods">"Étel és ital"</string>
-  <string name="emoji_picker_category_nature">"Állatok és természet"</string>
-  <string name="emoji_picker_category_objects">"Tárgyak"</string>
-  <string name="emoji_picker_category_people">"Mosolyok és emberek"</string>
-  <string name="emoji_picker_category_places">"Utazás és helyek"</string>
-  <string name="emoji_picker_category_recent">"Legutóbbi emodzsik"</string>
-  <string name="emoji_picker_category_symbols">"Szimbólumok"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"Kép vízszintes tükrözése"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Vízszintesen tükrözve"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Eredeti"</string>

@@ -53,7 +53,6 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.aTextEditorStateMarkdown
 import io.element.android.libraries.textcomposer.model.aTextEditorStateRich
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 
@@ -193,11 +192,9 @@ fun aReactionSummaryState(
 
 fun aCustomReactionState(
     target: CustomReactionState.Target = CustomReactionState.Target.None,
-    recentEmojis: ImmutableList<String> = persistentListOf(),
     eventSink: (CustomReactionEvent) -> Unit = {},
 ) = CustomReactionState(
     target = target,
-    recentEmojis = recentEmojis,
     selectedEmoji = persistentSetOf(),
     eventSink = eventSink,
 )
