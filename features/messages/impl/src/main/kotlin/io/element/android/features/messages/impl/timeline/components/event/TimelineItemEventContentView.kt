@@ -232,7 +232,7 @@ fun TimelineItemEventContentView(
         }
 
         if (showCaption) {
-            val padding = if (displayInvalidContent) {
+            val padding = if (displayInvalidContent || displayContentNotFound) {
                 PaddingValues(start = 12.dp, end = 12.dp, top = 4.dp, bottom = 0.dp)
             } else {
                 when (content) {
