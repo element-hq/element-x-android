@@ -13,6 +13,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 
 data class UserProfileState(
     val userId: UserId,
@@ -26,6 +27,7 @@ data class UserProfileState(
     val dmRoomId: RoomId?,
     val canCall: Boolean,
     val snackbarMessage: SnackbarMessage?,
+    val displayedStatus: DisplayedStatus?,
     val eventSink: (UserProfileEvents) -> Unit
 ) {
     enum class ConfirmationDialog {

@@ -132,7 +132,7 @@ private fun EmptyStatusRow(
     ListItem(
         headlineContent = {
             Text(
-                text = stringResource(R.string.screen_preferences_user_status_placeholder),
+                text = stringResource(R.string.screen_settings_user_status_placeholder),
                 modifier = Modifier.padding(vertical = 16.dp),
             )
         },
@@ -150,7 +150,7 @@ private fun CurrentStatusRow(
 ) {
     val (emoji, text) = when (displayedStatus) {
         is DisplayedStatus.UserSet -> displayedStatus.status.emoji to displayedStatus.status.text
-        is DisplayedStatus.InCall -> "🎧" to stringResource(R.string.common_user_status_on_a_call)
+        is DisplayedStatus.InCall -> "🎧" to stringResource(CommonStrings.common_on_a_call)
     }
     ListItem(
         headlineContent = { Text(text = text, modifier = Modifier.padding(vertical = 16.dp)) },
@@ -225,7 +225,7 @@ private fun UserStatusPickerBottomSheet(
         }
         ListItem(
             headlineContent = {
-                Text(text = stringResource(R.string.common_user_status_custom))
+                Text(text = stringResource(R.string.screen_settings_user_status_custom))
             },
             leadingContent = ListItemContent.Custom { EmojiText("✏️") },
             onClick = {
@@ -265,7 +265,7 @@ private fun CustomStatusInputRow(
             TextField(
                 modifier = Modifier.focusRequester(focusRequester),
                 state = textFieldState,
-                placeholder = stringResource(R.string.screen_preferences_user_status_custom_hint),
+                placeholder = stringResource(R.string.screen_settings_user_status_custom_hint),
                 inputTransformation = InputTransformation.maxLength(CUSTOM_STATUS_TEXT_MAX_LENGTH),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 onKeyboardAction = { if (hasChanges) onConfirm() },

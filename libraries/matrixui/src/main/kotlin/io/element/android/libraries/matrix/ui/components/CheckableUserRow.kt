@@ -19,6 +19,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -50,7 +51,7 @@ fun CheckableUserRow(
                 UserRow(
                     modifier = rowModifier,
                     avatarData = data.avatarData,
-                    name = data.name,
+                    name = AnnotatedString(data.name),
                     subtext = data.subtext,
                     enabled = enabled,
                 )

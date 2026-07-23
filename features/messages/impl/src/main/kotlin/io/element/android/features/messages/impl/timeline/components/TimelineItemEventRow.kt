@@ -962,6 +962,7 @@ internal fun TimelineItemEventRowWithThreadSummaryPreview() = ElementPreview {
                                         displayName = USER_NAME_ALICE,
                                         avatarUrl = null,
                                         displayNameAmbiguous = false,
+                                        displayedStatus = null,
                                     ),
                                     timestamp = 0L,
                                 )
@@ -1140,6 +1141,7 @@ internal fun ThreadSummaryViewPreview() {
                         displayName = USER_NAME_ALICE,
                         avatarUrl = null,
                         displayNameAmbiguous = true,
+                        displayedStatus = null,
                     ),
                     timestamp = 0L,
                 )
