@@ -81,6 +81,7 @@ import io.element.android.libraries.matrix.impl.roomdirectory.map
 import io.element.android.libraries.matrix.impl.roomlist.RoomListFactory
 import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
 import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
+import io.element.android.libraries.matrix.impl.search.RustMessageSearchService
 import io.element.android.libraries.matrix.impl.spaces.RustSpaceService
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import io.element.android.libraries.matrix.impl.sync.map
@@ -155,6 +156,7 @@ class RustMatrixClient(
     private val analyticsService: AnalyticsService,
     private val workManagerScheduler: WorkManagerScheduler,
     override val contentScanner: ContentScanner?,
+    override val isMessageSearchAvailable: Boolean,
 ) : MatrixClient {
     override val sessionId: UserId = UserId(innerClient.userId())
     override val deviceId: DeviceId = DeviceId(innerClient.deviceId())
@@ -190,6 +192,11 @@ class RustMatrixClient(
     )
 
     override val roomDirectoryService = RustRoomDirectoryService(
+        client = innerClient,
+        sessionDispatcher = sessionDispatcher,
+    )
+
+    override val messageSearchService = RustMessageSearchService(
         client = innerClient,
         sessionDispatcher = sessionDispatcher,
     )
@@ -876,7 +883,11 @@ class RustMatrixClient(
                 File(sessionPaths.fileDirectory, fileName)
             }.sumOf { file ->
                 file.length()
-            }
+            } +
+                // The message search index. Like the state database above it lives in the file
+                // directory and so survives a cache clear, but it can grow without bound and must
+                // not be invisible in the storage figures. Returns 0 when the index is disabled.
+                File(sessionPaths.fileDirectory, SEARCH_INDEX_DIRECTORY).getSizeOfFiles()
         }
     }
 

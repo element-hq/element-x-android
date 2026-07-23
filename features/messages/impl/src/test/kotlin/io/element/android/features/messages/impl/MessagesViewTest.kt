@@ -712,6 +712,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setMessagesView(
                 onViewAllPinnedMessagesClick = onViewAllPinnedMessagesClick,
                 knockRequestsBannerView = {},
                 onThreadsListClick = onThreadsListClicked,
+                onSearchClick = {},
             )
         }
     }
