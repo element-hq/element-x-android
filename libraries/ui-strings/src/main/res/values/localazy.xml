@@ -520,7 +520,7 @@ Are you sure you want to continue?"</string>
     <item quantity="other">"%1$d people"</item>
   </plurals>
   <string name="screen_live_location_sheet_title">"On the map"</string>
-  <string name="screen_local_network_opt_in_subtitle">"Your homeserver is on your local network. To connect, Element needs permission to reach devices on this network."</string>
+  <string name="screen_local_network_opt_in_subtitle">"Your homeserver is on your local network. To connect, %1$s needs permission to reach devices on this network."</string>
   <string name="screen_local_network_opt_in_title">"Allow access to local network"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Press on a message and choose “%1$s” to include here."</string>

@@ -47,6 +47,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.BitmapAvatar
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.LocalBuildMeta
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -207,6 +208,7 @@ fun LoginWithClassicView(
         onCreateAccountContinue = onCreateAccountContinue,
     )
     LocalNetworkPermissionDialogView(
+        appName = LocalBuildMeta.current.applicationName,
         dialog = state.loginModeState.localNetworkPermissionDialog,
         onSubmit = {
             state.loginModeState.eventSink(LoginModeEvent.RequestLocalNetworkPermission)
