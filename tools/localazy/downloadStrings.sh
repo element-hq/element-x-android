@@ -33,16 +33,46 @@ localazy download --config ./tools/localazy/localazy.json
 echo "Removing the generated config"
 rm ./tools/localazy/localazy.json
 
+formatXmlFiles() {
+  local xml="$1"
+  echo "Formatting $xml"
+  ./tools/localazy/formatXmlResourcesFile.py "$xml"
+}
+
+checkForbiddenTerms() {
+  local xml="$1"
+  echo "Checking forbidden terms in $xml"
+  ./tools/localazy/checkForbiddenTerms.py "$xml"
+}
+
+export -f formatXmlFiles
+export -f checkForbiddenTerms
+
 echo "Formatting the resources files..."
-find . -name 'localazy.xml' -exec ./tools/localazy/formatXmlResourcesFile.py {} \;
+localazyXmlFiles=$(find . \
+  -type d \( -name build -o -name .git \) -prune -o \
+  -type f -path '*/src/*/res/values/localazy.xml' -print | sort)
+
+translationXmlFiles=""
+
+echo "Formatting original localazy.xml files..."
+# Format the original localazy.xml files in parallel
+echo "$localazyXmlFiles" | xargs -L1 -P0 bash -c 'formatXmlFiles "$@"' _
+
 if [[ $allFiles == 1 ]]; then
-  find . -name 'translations.xml' -exec ./tools/localazy/formatXmlResourcesFile.py {} \;
+  echo "Formatting translation files..."
+  translationXmlFiles=$(find . \
+    -type d \( -name build -o -name .git \) -prune -o \
+    -type f -path '*/src/*/res/values-*/translations.xml' -print | sort)
+
+    echo "$translationXmlFiles" | xargs -L1 -P0 bash -c 'formatXmlFiles "$@"' _
 fi
 
 echo "Checking forbidden terms..."
-find . -name 'localazy.xml' -exec ./tools/localazy/checkForbiddenTerms.py {} \;
+echo "$localazyXmlFiles" | xargs -L1 -P0 bash -c 'checkForbiddenTerms "$@"' _
+
 if [[ $allFiles == 1 ]]; then
-  find . -name 'translations.xml' -exec ./tools/localazy/checkForbiddenTerms.py {} \;
+  echo "$translationXmlFiles" | xargs -L1 -P0 bash -c 'checkForbiddenTerms "$@"' _
 fi
 
 echo "Success!"
