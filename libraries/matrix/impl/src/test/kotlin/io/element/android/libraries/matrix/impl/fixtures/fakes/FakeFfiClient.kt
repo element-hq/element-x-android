@@ -26,6 +26,7 @@ import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.NotificationClient
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.NotificationSettings
+import org.matrix.rustcomponents.sdk.ProfileListener
 import org.matrix.rustcomponents.sdk.PusherIdentifiers
 import org.matrix.rustcomponents.sdk.PusherKind
 import org.matrix.rustcomponents.sdk.RoomDirectorySearch
@@ -55,6 +56,8 @@ class FakeFfiClient(
     private val getStoreSizesResult: () -> StoreSizes = { lambdaError() },
     private val createRoomResult: (CreateRoomParameters) -> String = { lambdaError() },
     private val homeserverCapabilities: HomeserverCapabilities = FakeFfiHomeserverCapabilities(),
+    private val isUserStatusSupportedResult: () -> Boolean = { false },
+    private val subscribeToOwnProfileResult: (ProfileListener) -> Unit = {},
     private val closeResult: () -> Unit = {},
 ) : Client(NoHandle) {
     override fun userId(): String = userId
@@ -89,6 +92,13 @@ class FakeFfiClient(
     }
 
     override fun subscribeToIgnoredUsers(listener: IgnoredUsersListener): TaskHandle {
+        return FakeFfiTaskHandle()
+    }
+
+    override suspend fun isUserStatusSupported(): Boolean = isUserStatusSupportedResult()
+
+    override fun subscribeToOwnProfile(listener: ProfileListener): TaskHandle {
+        subscribeToOwnProfileResult(listener)
         return FakeFfiTaskHandle()
     }
 

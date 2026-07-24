@@ -57,8 +57,6 @@ import io.element.android.libraries.matrix.impl.exception.mapClientException
 import io.element.android.libraries.matrix.impl.linknewdevice.RustLinkDesktopHandler
 import io.element.android.libraries.matrix.impl.linknewdevice.RustLinkMobileHandler
 import io.element.android.libraries.matrix.impl.linknewdevice.RustQrCodeDataParser
-import io.element.android.libraries.matrix.impl.user.into
-import io.element.android.libraries.matrix.impl.user.map
 import io.element.android.libraries.matrix.impl.media.RustMediaLoader
 import io.element.android.libraries.matrix.impl.media.RustMediaPreviewService
 import io.element.android.libraries.matrix.impl.notification.RustNotificationService
@@ -86,6 +84,8 @@ import io.element.android.libraries.matrix.impl.spaces.RustSpaceService
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import io.element.android.libraries.matrix.impl.sync.map
 import io.element.android.libraries.matrix.impl.user.UserSearchResultMapper
+import io.element.android.libraries.matrix.impl.user.into
+import io.element.android.libraries.matrix.impl.user.map
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
@@ -126,9 +126,11 @@ import org.matrix.rustcomponents.sdk.IgnoredUsersListener
 import org.matrix.rustcomponents.sdk.Membership
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.PowerLevels
+import org.matrix.rustcomponents.sdk.ProfileListener
 import org.matrix.rustcomponents.sdk.RoomInfoListener
 import org.matrix.rustcomponents.sdk.SendQueueRoomErrorListener
 import org.matrix.rustcomponents.sdk.TaskHandle
+import org.matrix.rustcomponents.sdk.UserProfile
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
@@ -281,6 +283,14 @@ class RustMatrixClient(
 
     override val userProfile: StateFlow<MatrixUser> = _userProfile
 
+    private var ownProfileTaskHandle: TaskHandle? = null
+
+    private val ownProfileListener = object : ProfileListener {
+        override fun onUpdate(profile: UserProfile) {
+            _userProfile.tryEmit(profile.map())
+        }
+    }
+
     override val ignoredUsersFlow = mxCallbackFlow<ImmutableList<UserId>> {
         // Fetch the initial value manually, the SDK won't return it automatically
         channel.trySend(innerClient.ignoredUsers().map(::UserId).toImmutableList())
@@ -301,8 +311,21 @@ class RustMatrixClient(
         sessionCoroutineScope.launch {
             // Start notification settings
             notificationSettingsService.start()
+            // Setup user profile logic
+            setupUserProfile()
+        }
 
-            // Update the user profile in the session store if needed
+        // Schedule regular database vacuuming to ensure DB performance remains optimal
+        scheduleDatabaseVacuum()
+    }
+
+    private suspend fun setupUserProfile() {
+        val supported = isUserStatusSupported().getOrDefault(false)
+        if (supported) {
+            // No need to seed the data here, it's already stored by the sdk.
+            ownProfileTaskHandle = innerClient.subscribeToOwnProfile(ownProfileListener)
+        } else {
+            // Seed from the session store so cold-start UI has something to render before the network fetch.
             sessionStore.getSession(sessionId.value)?.let { sessionData ->
                 _userProfile.emit(
                     MatrixUser(
@@ -312,12 +335,8 @@ class RustMatrixClient(
                     )
                 )
             }
-            // Force a refresh of the profile
             getUserProfile()
         }
-
-        // Schedule regular database vacuuming to ensure DB performance remains optimal
-        scheduleDatabaseVacuum()
     }
 
     override fun userIdServerName(): String {
@@ -491,8 +510,8 @@ class RustMatrixClient(
         runCatchingExceptions {
             innerClient.setUserStatus(status.into())
         }.onSuccess {
-            // try to refresh data once it's updated
-            getUserProfile()
+            // The subscription pushes the update on supported servers; only refresh manually as a fallback.
+            if (ownProfileTaskHandle == null) getUserProfile()
         }
     }
 
@@ -500,8 +519,8 @@ class RustMatrixClient(
         runCatchingExceptions {
             innerClient.clearUserStatus()
         }.onSuccess {
-            // try to refresh data once it's updated
-            getUserProfile()
+            // The subscription pushes the update on supported servers; only refresh manually as a fallback.
+            if (ownProfileTaskHandle == null) getUserProfile()
         }
     }
 
@@ -616,6 +635,7 @@ class RustMatrixClient(
 
         sessionCoroutineScope.cancel()
         clientDelegateTaskHandle?.cancelAndDestroy()
+        ownProfileTaskHandle?.cancelAndDestroy()
         sessionVerificationService.destroy()
 
         sessionDelegate.clearCurrentClient()
