@@ -47,7 +47,7 @@ open class UserListStateProvider : PreviewParameterProvider<UserListState> {
             aUserListState(
                 isSearchActive = true,
                 searchQuery = "something-with-no-results",
-                searchResults = SearchBarResultState.NoResultsFound()
+                searchResults = SearchBarResultState.NoResultsFound
             ),
             aUserListState(
                 isSearchActive = true,
@@ -63,7 +63,7 @@ open class UserListStateProvider : PreviewParameterProvider<UserListState> {
 fun aUserListState(
     searchQuery: String = "",
     isSearchActive: Boolean = false,
-    searchResults: SearchBarResultState<ImmutableList<UserSearchResult>> = SearchBarResultState.Initial(),
+    searchResults: SearchBarResultState<ImmutableList<UserSearchResult>> = SearchBarResultState.Initial,
     selectedUsers: List<MatrixUser> = emptyList(),
     showSearchLoader: Boolean = false,
     selectionMode: SelectionMode = SelectionMode.Single,
