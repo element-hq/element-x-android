@@ -35,6 +35,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.login.impl.R
+import io.element.android.features.login.impl.login.LoginModeEvent
 import io.element.android.features.login.impl.login.LoginModeView
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
@@ -46,10 +47,12 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.BitmapAvatar
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.LocalBuildMeta
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.auth.OAuthDetails
+import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialogView
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -65,9 +68,9 @@ fun LoginWithClassicView(
     onCreateAccountContinue: (url: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val isLoading by remember(state.loginMode) {
+    val isLoading by remember(state.loginModeState.loginMode) {
         derivedStateOf {
-            state.loginMode is AsyncData.Loading
+            state.loginModeState.loginMode is AsyncData.Loading
         }
     }
 
@@ -195,7 +198,7 @@ fun LoginWithClassicView(
         }
     )
     LoginModeView(
-        loginMode = state.loginMode,
+        loginMode = state.loginModeState.loginMode,
         onClearError = {
             state.eventSink(LoginWithClassicEvent.ClearError)
         },
@@ -203,6 +206,16 @@ fun LoginWithClassicView(
         onOAuthDetails = onOAuthDetails,
         onNeedLoginPassword = onNeedLoginPassword,
         onCreateAccountContinue = onCreateAccountContinue,
+    )
+    LocalNetworkPermissionDialogView(
+        appName = LocalBuildMeta.current.applicationName,
+        dialog = state.loginModeState.localNetworkPermissionDialog,
+        onSubmit = {
+            state.loginModeState.eventSink(LoginModeEvent.RequestLocalNetworkPermission)
+        },
+        onDismiss = {
+            state.loginModeState.eventSink(LoginModeEvent.DismissLocalNetworkPermission)
+        }
     )
 }
 

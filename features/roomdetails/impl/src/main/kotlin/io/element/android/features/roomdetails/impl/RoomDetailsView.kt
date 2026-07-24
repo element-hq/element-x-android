@@ -37,6 +37,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import im.vector.app.features.analytics.plan.Interaction
@@ -88,6 +89,7 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.getBestName
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getAvatarData
+import io.element.android.libraries.matrix.ui.model.toText
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -489,11 +491,23 @@ private fun RoomHeaderSection(
                 }
                 .testTag(TestTags.roomDetailAvatar)
         )
-        TitleAndSubtitle(
-            title = roomName,
-            subtitle = roomAlias?.value,
-            onSubtitleClick = onSubtitleClick,
+        Spacer(modifier = Modifier.height(24.dp))
+        Text(
+            text = roomName,
+            style = ElementTheme.typography.fontHeadingLgBold,
+            textAlign = TextAlign.Center,
         )
+        if (roomAlias != null) {
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                modifier = Modifier.niceClickable { onSubtitleClick(roomAlias.value) },
+                text = roomAlias.value,
+                style = ElementTheme.typography.fontBodyLgRegular,
+                color = ElementTheme.colors.textSecondary,
+                textAlign = TextAlign.Center,
+            )
+        }
+        Spacer(modifier = Modifier.height(12.dp))
     }
 }
 
@@ -531,37 +545,34 @@ private fun DmHeaderSection(
                 }
                 .testTag(TestTags.roomDetailAvatar)
         )
-        TitleAndSubtitle(
-            title = roomName,
-            subtitle = otherMember.userId.value,
-            onSubtitleClick = onSubtitleClick,
-        )
-    }
-}
-
-@Composable
-private fun TitleAndSubtitle(
-    title: String,
-    subtitle: String?,
-    onSubtitleClick: (String) -> Unit,
-) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(modifier = Modifier.height(24.dp))
         Text(
-            text = title,
+            text = roomName,
             style = ElementTheme.typography.fontHeadingLgBold,
             textAlign = TextAlign.Center,
         )
-        if (subtitle != null) {
-            Spacer(modifier = Modifier.height(6.dp))
+        val userStatus = otherMember.displayedStatus?.toText()
+        if (userStatus != null) {
+            Spacer(modifier = Modifier.height(12.dp))
             Text(
-                modifier = Modifier.niceClickable { onSubtitleClick(subtitle) },
-                text = subtitle,
-                style = ElementTheme.typography.fontBodyLgRegular,
+                text = userStatus,
+                style = ElementTheme.typography.fontBodyLgMedium,
+                maxLines = 1,
                 color = ElementTheme.colors.textSecondary,
+                overflow = TextOverflow.Ellipsis,
                 textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
             )
         }
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(
+            modifier = Modifier.niceClickable { onSubtitleClick(otherMember.userId.value) },
+            text = otherMember.userId.value,
+            style = ElementTheme.typography.fontBodyLgRegular,
+            color = ElementTheme.colors.textSecondary,
+            textAlign = TextAlign.Center,
+        )
+        Spacer(modifier = Modifier.height(12.dp))
     }
 }
 

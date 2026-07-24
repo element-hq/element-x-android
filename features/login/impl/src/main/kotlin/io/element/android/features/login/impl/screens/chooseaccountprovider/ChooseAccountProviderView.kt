@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.accountprovider.AccountProviderView
+import io.element.android.features.login.impl.login.LoginModeEvent
 import io.element.android.features.login.impl.login.LoginModeView
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
@@ -40,10 +41,12 @@ import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.LocalBuildMeta
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.auth.OAuthDetails
+import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialogView
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -56,9 +59,9 @@ fun ChooseAccountProviderView(
     onCreateAccountContinue: (url: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val isLoading by remember(state.loginMode) {
+    val isLoading by remember(state.loginModeState.loginMode) {
         derivedStateOf {
-            state.loginMode is AsyncData.Loading
+            state.loginModeState.loginMode is AsyncData.Loading
         }
     }
 
@@ -124,7 +127,7 @@ fun ChooseAccountProviderView(
                 Spacer(modifier = Modifier.height(48.dp))
             }
             LoginModeView(
-                loginMode = state.loginMode,
+                loginMode = state.loginModeState.loginMode,
                 onClearError = {
                     state.eventSink(ChooseAccountProviderEvents.ClearError)
                 },
@@ -135,6 +138,16 @@ fun ChooseAccountProviderView(
             )
         }
     }
+    LocalNetworkPermissionDialogView(
+        appName = LocalBuildMeta.current.applicationName,
+        dialog = state.loginModeState.localNetworkPermissionDialog,
+        onSubmit = {
+            state.loginModeState.eventSink(LoginModeEvent.RequestLocalNetworkPermission)
+        },
+        onDismiss = {
+            state.loginModeState.eventSink(LoginModeEvent.DismissLocalNetworkPermission)
+        }
+    )
 }
 
 @PreviewsDayNight

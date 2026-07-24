@@ -14,6 +14,8 @@ import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.ContributesTo
 import io.element.android.features.login.impl.changeserver.ChangeServerPresenter
 import io.element.android.features.login.impl.changeserver.ChangeServerState
+import io.element.android.features.login.impl.login.LoginModePresenter
+import io.element.android.features.login.impl.login.LoginModeState
 import io.element.android.libraries.architecture.Presenter
 
 @ContributesTo(AppScope::class)
@@ -21,4 +23,7 @@ import io.element.android.libraries.architecture.Presenter
 interface LoginModule {
     @Binds
     fun bindChangeServerPresenter(presenter: ChangeServerPresenter): Presenter<ChangeServerState>
+
+    @Binds
+    fun bindLoginModePresenter(presenter: LoginModePresenter): Presenter<LoginModeState>
 }

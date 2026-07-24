@@ -11,8 +11,8 @@ package io.element.android.libraries.matrix.impl
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.scanner.ContentScannerUrlProvider
 import io.element.android.libraries.matrix.impl.auth.FakeProxyProvider
-import io.element.android.libraries.matrix.impl.auth.FakeUserCertificatesProvider
 import io.element.android.libraries.matrix.impl.room.FakeTimelineEventFilterFactory
 import io.element.android.libraries.matrix.impl.storage.FakeSqliteStoreBuilderProvider
 import io.element.android.libraries.network.useragent.SimpleUserAgentProvider
@@ -52,13 +52,13 @@ fun TestScope.createRustMatrixClientFactory(
     ),
     clientBuilderProvider: ClientBuilderProvider = FakeClientBuilderProvider(),
     workManagerScheduler: FakeWorkManagerScheduler = FakeWorkManagerScheduler(),
+    contentScannerUrlProvider: ContentScannerUrlProvider = { Result.success(null) },
 ) = RustMatrixClientFactory(
     cacheDirectory = cacheDirectory,
     appCoroutineScope = backgroundScope,
     coroutineDispatchers = testCoroutineDispatchers(),
     sessionStore = sessionStore,
     userAgentProvider = SimpleUserAgentProvider(),
-    userCertificatesProvider = FakeUserCertificatesProvider(),
     proxyProvider = FakeProxyProvider(),
     clock = FakeSystemClock(),
     analyticsService = FakeAnalyticsService(),
@@ -67,4 +67,5 @@ fun TestScope.createRustMatrixClientFactory(
     clientBuilderProvider = clientBuilderProvider,
     sqliteStoreBuilderProvider = FakeSqliteStoreBuilderProvider(),
     workManagerScheduler = workManagerScheduler,
+    contentScannerUrlProvider = contentScannerUrlProvider,
 )

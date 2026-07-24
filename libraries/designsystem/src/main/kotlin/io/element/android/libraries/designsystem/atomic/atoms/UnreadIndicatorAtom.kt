@@ -8,7 +8,9 @@
 
 package io.element.android.libraries.designsystem.atomic.atoms
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
@@ -34,14 +36,17 @@ fun UnreadIndicatorAtom(
     color: Color = ElementTheme.colors.unreadIndicator,
     isVisible: Boolean = true,
     contentDescription: String? = null,
+    border: BorderStroke? = null,
 ) {
     when {
         !isVisible -> Spacer(modifier = modifier.size(size))
         count != null && count >= 1 -> CounterAtom(
             count = count.toInt(),
-            modifier = modifier.semantics {
-                contentDescription?.let { this.contentDescription = it }
-            },
+            modifier = modifier
+                .semantics {
+                    contentDescription?.let { this.contentDescription = it }
+                }
+                .then(if (border != null) Modifier.border(border, CircleShape) else Modifier),
             containerColor = color,
             contentColor = ElementTheme.colors.bgCanvasDefault,
             textStyle = ElementTheme.typography.fontBodySmMedium,
@@ -53,7 +58,8 @@ fun UnreadIndicatorAtom(
                 }
                 .size(size)
                 .clip(CircleShape)
-                .background(color),
+                .background(color)
+                .then(if (border != null) Modifier.border(border, CircleShape) else Modifier),
         )
     }
 }

@@ -34,6 +34,8 @@ import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.libraries.matrix.ui.components.A_BLUR_HASH
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopEventContentValidationCache
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
@@ -249,6 +251,8 @@ class TimelineMediaGalleryDataSourceTest {
                                 ),
                                 mediaSource = MediaSource("url"),
                                 thumbnailSource = MediaSource("url_thumbnail"),
+                                blurHash = A_BLUR_HASH,
+                                validationState = noopValidationState,
                             )
                         ),
                         fileItems = persistentListOf()
@@ -258,6 +262,8 @@ class TimelineMediaGalleryDataSourceTest {
         }
     }
 }
+
+private val noopValidationState = NoopContentValidationState()
 
 internal fun TestScope.createTimelineMediaGalleryDataSource(
     room: JoinedRoom = FakeJoinedRoom(
@@ -281,5 +287,6 @@ fun TestScope.createTimelineMediaItemsFactory() = TimelineMediaItemsFactory(
         fileSizeFormatter = FakeFileSizeFormatter(),
         fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
         dateFormatter = FakeDateFormatter(),
-    ),
+        contentValidationCache = NoopEventContentValidationCache(noopValidationState),
+    )
 )

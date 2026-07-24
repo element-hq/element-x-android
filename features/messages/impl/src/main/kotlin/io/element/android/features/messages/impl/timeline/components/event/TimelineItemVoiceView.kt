@@ -51,6 +51,7 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationValue
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import io.element.android.libraries.voiceplayer.api.VoiceMessageEvent
@@ -63,6 +64,7 @@ fun TimelineItemVoiceView(
     state: VoiceMessageState,
     content: TimelineItemVoiceContent,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
+    contentValidationValue: ContentValidationValue,
     modifier: Modifier = Modifier,
 ) {
     fun playPause() {
@@ -103,12 +105,16 @@ fun TimelineItemVoiceView(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (!isTalkbackActive()) {
-            when (state.buttonType) {
-                VoiceMessageState.ButtonType.Play -> PlayButton(onClick = ::playPause)
-                VoiceMessageState.ButtonType.Pause -> PauseButton(onClick = ::playPause)
-                VoiceMessageState.ButtonType.Downloading -> ProgressButton()
-                VoiceMessageState.ButtonType.Retry -> RetryButton(onClick = ::playPause)
-                VoiceMessageState.ButtonType.Disabled -> PlayButton(onClick = {}, enabled = false)
+            if (contentValidationValue.isValid()) {
+                when (state.buttonType) {
+                    VoiceMessageState.ButtonType.Play -> PlayButton(onClick = ::playPause)
+                    VoiceMessageState.ButtonType.Pause -> PauseButton(onClick = ::playPause)
+                    VoiceMessageState.ButtonType.Downloading -> ProgressButton()
+                    VoiceMessageState.ButtonType.Retry -> RetryButton(onClick = ::playPause)
+                    VoiceMessageState.ButtonType.Disabled -> PlayButton(onClick = {}, enabled = false)
+                }
+            } else {
+                ProgressButton(displayImmediately = true)
             }
         }
         Spacer(Modifier.width(8.dp))
@@ -283,6 +289,7 @@ internal fun TimelineItemVoiceViewPreview(
         state = timelineItemVoiceViewParameters.state,
         content = timelineItemVoiceViewParameters.content,
         onContentLayoutChange = {},
+        contentValidationValue = ContentValidationValue.Valid,
     )
 }
 
@@ -296,6 +303,7 @@ internal fun TimelineItemVoiceViewUnifiedPreview() = ElementPreview {
                 state = it.state,
                 content = it.content,
                 onContentLayoutChange = {},
+                contentValidationValue = ContentValidationValue.Valid,
             )
         }
     }

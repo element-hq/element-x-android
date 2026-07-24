@@ -7,15 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"Tuntemattoman tai poistetun laitteen salaama."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Salattu laitteella, jota sen omistaja ei ole vahvistanut."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Vahvistamattoman käyttäjän salaama."</string>
-  <string name="emoji_picker_category_activity">"Aktiviteetit"</string>
-  <string name="emoji_picker_category_flags">"Liput"</string>
-  <string name="emoji_picker_category_foods">"Ruoka ja juoma"</string>
-  <string name="emoji_picker_category_nature">"Eläimet ja luonto"</string>
-  <string name="emoji_picker_category_objects">"Esineet"</string>
-  <string name="emoji_picker_category_people">"Hymiöt ja ihmiset"</string>
-  <string name="emoji_picker_category_places">"Matkustaminen ja paikat"</string>
-  <string name="emoji_picker_category_recent">"Viimeaikaiset emojit"</string>
-  <string name="emoji_picker_category_symbols">"Symbolit"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"Käännä kuva vaakasuunnassa"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Käännetty vaakasuunnassa"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Alkuperäinen"</string>

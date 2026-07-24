@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Activitats"</string>
+  <string name="emoji_picker_category_flags">"Banderes"</string>
+  <string name="emoji_picker_category_foods">"Menjar &amp; begudes"</string>
+  <string name="emoji_picker_category_nature">"Animals i naturalesa"</string>
+  <string name="emoji_picker_category_objects">"Objectes"</string>
+  <string name="emoji_picker_category_people">"Cares i persones"</string>
+  <string name="emoji_picker_category_places">"Viatges i llocs"</string>
+  <string name="emoji_picker_category_recent">"Emoticones recents"</string>
+  <string name="emoji_picker_category_symbols">"Símbols"</string>
+  <string name="emoji_picker_search_placeholder">"Cerca emoticones"</string>
+</resources>

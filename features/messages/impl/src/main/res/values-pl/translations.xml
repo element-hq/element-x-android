@@ -7,15 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"Zaszyfrowana przez nieznane lub usunięte urządzenie."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Zaszyfrowana przez urządzenie niezweryfikowane przez jego właściciela."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Zaszyfrowana przez niezweryfikowanego użytkownika."</string>
-  <string name="emoji_picker_category_activity">"Aktywności"</string>
-  <string name="emoji_picker_category_flags">"Flagi"</string>
-  <string name="emoji_picker_category_foods">"Jedzenie i napoje"</string>
-  <string name="emoji_picker_category_nature">"Zwierzęta i natura"</string>
-  <string name="emoji_picker_category_objects">"Obiekty"</string>
-  <string name="emoji_picker_category_people">"Buźki i osoby"</string>
-  <string name="emoji_picker_category_places">"Podróż i miejsca"</string>
-  <string name="emoji_picker_category_recent">"Ostatnie emoji"</string>
-  <string name="emoji_picker_category_symbols">"Symbole"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"Odwróć obraz w poziomie"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Odwrócono w poziomie"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Oryginalny"</string>

@@ -35,6 +35,7 @@ import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import java.util.concurrent.CopyOnWriteArrayList
 
@@ -70,6 +71,12 @@ class DefaultBiometricAuthenticatorManager(
             biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS
 
     /**
+     * Returns true if a device credential method (i.e.: pattern, pin) can be used.
+     */
+    private val canUseDeviceCredentialAuth: Boolean
+        get() = biometricManager.canAuthenticate(BiometricManager.Authenticators.DEVICE_CREDENTIAL) == BiometricManager.BIOMETRIC_SUCCESS
+
+    /**
      * Returns true if any biometric method (weak or strong) can be used.
      */
     override val hasAvailableAuthenticator: Boolean
@@ -77,6 +84,9 @@ class DefaultBiometricAuthenticatorManager(
 
     override val isDeviceSecured: Boolean
         get() = keyguardManager.isDeviceSecure
+
+    override val canUseDeviceUnlock: Boolean
+        get() = isDeviceSecured && (canUseWeakBiometricAuth || canUseStrongBiometricAuth || canUseDeviceCredentialAuth)
 
     private val internalCallback = object : DefaultBiometricUnlockCallback() {
         override fun onBiometricSetupError() {
@@ -99,6 +109,28 @@ class DefaultBiometricAuthenticatorManager(
             isAvailable = isAvailable,
             promptTitle = promptTitle,
             promptNegative = promptNegative,
+            forDeviceUnlock = false,
+        )
+    }
+
+    @Composable
+    override fun rememberUnlockDeviceBiometricAuthenticator(): BiometricAuthenticator {
+        val isAvailableTrigger by remember {
+            // Need to trigger the creation of BiometricAuthenticator twice, else the callback will not be ready.
+            // (the issue already exists in [rememberUnlockBiometricAuthenticator])
+            flowOf(false, true)
+        }.collectAsState(initial = false)
+        val lifecycleState by LocalLifecycleOwner.current.lifecycle.currentStateFlow.collectAsState()
+        val isAvailable by remember(lifecycleState) {
+            derivedStateOf { isAvailableTrigger && canUseDeviceUnlock }
+        }
+        val promptTitle = stringResource(id = R.string.screen_app_lock_biometric_unlock_title_android)
+        val promptNegative = null
+        return rememberBiometricAuthenticator(
+            isAvailable = isAvailable,
+            promptTitle = promptTitle,
+            promptNegative = promptNegative,
+            forDeviceUnlock = true,
         )
     }
 
@@ -114,6 +146,7 @@ class DefaultBiometricAuthenticatorManager(
             isAvailable = isAvailable,
             promptTitle = promptTitle,
             promptNegative = promptNegative,
+            forDeviceUnlock = false,
         )
     }
 
@@ -126,7 +159,8 @@ class DefaultBiometricAuthenticatorManager(
     private fun rememberBiometricAuthenticator(
         isAvailable: Boolean,
         promptTitle: String,
-        promptNegative: String,
+        promptNegative: String?,
+        forDeviceUnlock: Boolean,
     ): BiometricAuthenticator {
         val activity = LocalContext.current.findFragmentActivity()
         return remember(isAvailable) {
@@ -136,11 +170,21 @@ class DefaultBiometricAuthenticatorManager(
                     canUseWeakBiometricAuth -> BiometricManager.Authenticators.BIOMETRIC_WEAK
                     else -> 0
                 }
-                val promptInfo = BiometricPrompt.PromptInfo.Builder().apply {
-                    setTitle(promptTitle)
-                    setNegativeButtonText(promptNegative)
-                    setAllowedAuthenticators(authenticators)
-                }.build()
+                val promptInfo = BiometricPrompt.PromptInfo.Builder()
+                    .setTitle(promptTitle)
+                    .apply {
+                        if (promptNegative != null) {
+                            setNegativeButtonText(promptNegative)
+                        }
+                        if (forDeviceUnlock) {
+                            setAllowedAuthenticators(
+                                authenticators or if (canUseDeviceCredentialAuth) BiometricManager.Authenticators.DEVICE_CREDENTIAL else 0
+                            )
+                        } else {
+                            setAllowedAuthenticators(authenticators)
+                        }
+                    }
+                    .build()
                 DefaultBiometricAuthentication(
                     activity = activity,
                     promptInfo = promptInfo,

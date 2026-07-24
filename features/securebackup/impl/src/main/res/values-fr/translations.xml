@@ -20,6 +20,27 @@
   <string name="screen_create_new_recovery_key_list_item_4">"Suivez les instructions pour créer une nouvelle clé de récupération"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"Enregistrez votre nouvelle clé dans un gestionnaire de mots de passe ou dans une note chiffrée"</string>
   <string name="screen_create_new_recovery_key_title">"Réinitialisez le chiffrement de votre compte en utilisant un autre appareil"</string>
+  <string name="screen_custom_recovery_key_confirm_error_mismatch">"La clé de récupération ne correspond pas"</string>
+  <string name="screen_custom_recovery_key_confirm_submit">"Terminer la configuration"</string>
+  <string name="screen_custom_recovery_key_confirm_subtitle">"Saisissez à nouveau votre clé de récupération."</string>
+  <string name="screen_custom_recovery_key_confirm_title">"Confirmez votre clé de récupération"</string>
+  <plurals name="screen_custom_recovery_key_input_notice">
+    <item quantity="one">"%1$d caractère minimum. N’utilisez pas le mot de passe de votre compte"</item>
+    <item quantity="other">"%1$d caractères minimum. N’utilisez pas le mot de passe de votre compte"</item>
+  </plurals>
+  <string name="screen_custom_recovery_key_input_strength">"Force"</string>
+  <string name="screen_custom_recovery_key_input_strength_a11y">"Force du mot de passe : %1$s"</string>
+  <string name="screen_custom_recovery_key_input_strength_moderate">"Moyenne"</string>
+  <string name="screen_custom_recovery_key_input_strength_strong">"Forte"</string>
+  <string name="screen_custom_recovery_key_input_strength_very_strong">"Très forte"</string>
+  <string name="screen_custom_recovery_key_input_strength_very_weak">"Très faible"</string>
+  <string name="screen_custom_recovery_key_input_strength_weak">"Faible"</string>
+  <string name="screen_custom_recovery_key_input_subtitle">"Choisissez une clé de récupération que vous pouvez mémoriser."</string>
+  <string name="screen_custom_recovery_key_input_title">"Saisissez une clé de récupération"</string>
+  <string name="screen_custom_recovery_key_loading_a11y">"Chargement des exigences relatives à la clé de récupération"</string>
+  <string name="screen_custom_recovery_key_success_notice">"Pour modifier votre clé de récupération, accédez à Paramètres → Chiffrement → Changer la clé de récupération"</string>
+  <string name="screen_custom_recovery_key_success_subtitle">"Vous pouvez utiliser votre clé de récupération pour vérifier de nouveaux appareils ou restaurer vos conversations chiffrées si vous perdez l’accès à tous vos appareils."</string>
+  <string name="screen_custom_recovery_key_success_title">"Votre sauvegarde est maintenant entièrement configurée."</string>
   <string name="screen_encryption_reset_action_continue_reset">"Continuer la réinitialisation"</string>
   <string name="screen_encryption_reset_bullet_1">"Les détails de votre compte, vos contacts, vos préférences et votre liste de discussions seront conservés"</string>
   <string name="screen_encryption_reset_bullet_2">"Vous perdrez l’historique de vos messages"</string>

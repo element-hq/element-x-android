@@ -7,15 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"Kryptert av en ukjent eller slettet enhet."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Kryptert med en enhet som ikke er verifisert av eieren."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Kryptert av en ubekreftet bruker."</string>
-  <string name="emoji_picker_category_activity">"Aktiviteter"</string>
-  <string name="emoji_picker_category_flags">"Flagg"</string>
-  <string name="emoji_picker_category_foods">"Mat og drikke"</string>
-  <string name="emoji_picker_category_nature">"Dyr og natur"</string>
-  <string name="emoji_picker_category_objects">"Gjenstander"</string>
-  <string name="emoji_picker_category_people">"Smilefjes og mennesker"</string>
-  <string name="emoji_picker_category_places">"Reising og steder"</string>
-  <string name="emoji_picker_category_recent">"Nylige emojier"</string>
-  <string name="emoji_picker_category_symbols">"Symboler"</string>
   <string name="screen_media_upload_preview_caption_warning">"Teksting er kanskje ikke synlig for personer som bruker eldre apper."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Trykk for å endre kvaliteten på videoopplastingen"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Filen kunne ikke lastes opp."</string>
