@@ -51,6 +51,7 @@ fun HeaderFooterLayout(
     val movableContent = remember { movableContentOf(content) }
     Column(modifier = modifier) {
         if (isScrollable) {
+            // This is a hack to make the content at least 1px high, otherwise the layout will crash
             var newHeight by remember { mutableIntStateOf(1) }
             Box(
                 modifier = Modifier
@@ -68,9 +69,9 @@ fun HeaderFooterLayout(
                     modifier = Modifier.verticalScroll(rememberScrollState()),
                     measurePolicy = { measurables, constraints ->
                         val actualConstraints = constraints.copy(minWidth = 0, minHeight = 0, maxHeight = newHeight)
-                        val headerPlaceable = measurables[0].measure(actualConstraints)
+                        val headerPlaceable = measurables.firstOrNull()?.measure(actualConstraints)
 
-                        val contentPlaceable = if (measurables.size > 1) {
+                        val contentPlaceable = if (headerPlaceable != null && measurables.size > 1) {
                             val availableContentHeight = max(1, actualConstraints.maxHeight - headerPlaceable.height)
                             val contentConstraints = actualConstraints.copy(minHeight = availableContentHeight, maxHeight = Constraints.Infinity)
                             measurables[1].measure(contentConstraints)
@@ -78,11 +79,15 @@ fun HeaderFooterLayout(
                             null
                         }
 
-                        layout(actualConstraints.maxWidth, headerPlaceable.height + (contentPlaceable?.height ?: 0)) {
+                        val headerHeight = headerPlaceable?.height ?: 0
+                        val contentHeight = contentPlaceable?.height ?: 0
+                        layout(actualConstraints.maxWidth, headerHeight + contentHeight) {
                             var yPosition = 0
 
-                            headerPlaceable.placeRelative(0, yPosition)
-                            yPosition += headerPlaceable.height
+                            headerPlaceable?.let {
+                                it.placeRelative(0, yPosition)
+                                yPosition += it.height
+                            }
 
                             contentPlaceable?.placeRelative(0, yPosition)
                         }
