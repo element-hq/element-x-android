@@ -13,11 +13,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectableGroup
@@ -78,14 +82,16 @@ fun SecurityAndPrivacyView(
                     state.eventSink(SecurityAndPrivacyEvent.Save)
                 },
             )
-        }
+        },
+        contentWindowInsets = WindowInsets.statusBars,
     ) { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)
                 .imePadding()
                 .verticalScroll(rememberScrollState())
-                .consumeWindowInsets(padding),
+                .consumeWindowInsets(padding)
+                .padding(WindowInsets.navigationBars.asPaddingValues()),
             verticalArrangement = Arrangement.spacedBy(32.dp),
         ) {
             if (state.showRoomAccessSection) {

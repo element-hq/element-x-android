@@ -14,10 +14,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
@@ -78,7 +82,8 @@ fun RoomMemberListView(
                 onBackClick = navigator::exitRoomMemberList,
                 onInviteClick = navigator::openInviteMembers,
             )
-        }
+        },
+        contentWindowInsets = WindowInsets.statusBars,
     ) { padding ->
         Column(
             modifier = Modifier
@@ -115,7 +120,11 @@ private fun RoomMemberList(
     onSelectedSectionChange: (SelectedSection) -> Unit,
     onSelectUser: (RoomMember) -> Unit,
 ) {
-    LazyColumn(modifier = Modifier.fillMaxWidth(), state = rememberLazyListState()) {
+    LazyColumn(
+        modifier = Modifier.fillMaxWidth(),
+        state = rememberLazyListState(),
+        contentPadding = WindowInsets.navigationBars.asPaddingValues(),
+    ) {
         stickyHeader {
             Column {
                 AnimatedVisibility(visible = showBannedSection) {

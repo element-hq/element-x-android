@@ -10,7 +10,10 @@ package io.element.android.features.startchat.impl.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -76,7 +79,9 @@ fun UserListView(
             )
         }
         if (!state.isSearchActive && state.recentDirectRooms.isNotEmpty()) {
-            LazyColumn {
+            LazyColumn(
+                contentPadding = WindowInsets.navigationBars.asPaddingValues(),
+            ) {
                 item {
                     ListSectionHeader(
                         title = stringResource(id = CommonStrings.common_suggestions),

@@ -15,11 +15,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -133,7 +137,8 @@ fun RoomSelectView(
                     )
                 }
             )
-        }
+        },
+        contentWindowInsets = WindowInsets.statusBars,
     ) { paddingValues ->
         Column(
             Modifier
@@ -149,7 +154,10 @@ fun RoomSelectView(
                 resultState = state.resultState,
                 showBackButton = false,
             ) { summaries ->
-                LazyColumn(state = lazyListState) {
+                LazyColumn(
+                    state = lazyListState,
+                    contentPadding = WindowInsets.navigationBars.asPaddingValues()
+                ) {
                     item {
                         SelectedRoomsHelper(
                             selectedRooms = state.selectedRooms,

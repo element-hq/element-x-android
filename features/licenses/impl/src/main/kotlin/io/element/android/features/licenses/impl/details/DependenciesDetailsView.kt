@@ -9,7 +9,12 @@
 package io.element.android.features.licenses.impl.details
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.plus
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -41,9 +46,10 @@ fun DependenciesDetailsView(
                 navigationIcon = { BackButton(onClick = onBack) },
             )
         },
+        contentWindowInsets = WindowInsets.statusBars,
     ) { contentPadding ->
         LazyColumn(
-            modifier = Modifier.padding(contentPadding),
+            contentPadding = contentPadding + WindowInsets.navigationBars.asPaddingValues(),
         ) {
             val licenses = licenseItem.licenses.orEmpty() +
                 licenseItem.unknownLicenses.orEmpty()

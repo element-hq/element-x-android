@@ -10,8 +10,12 @@ package io.element.android.features.licenses.impl.list
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -52,6 +56,7 @@ fun DependencyLicensesListView(
                 navigationIcon = { BackButton(onClick = onBackClick) },
             )
         },
+        contentWindowInsets = WindowInsets.statusBars,
     ) { contentPadding ->
         Column(
             modifier = Modifier
@@ -72,7 +77,9 @@ fun DependencyLicensesListView(
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
-            LazyColumn {
+            LazyColumn(
+                contentPadding = WindowInsets.navigationBars.asPaddingValues(),
+            ) {
                 when (state.licenses) {
                     is AsyncData.Failure -> item {
                         Text(

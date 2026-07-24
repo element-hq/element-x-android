@@ -10,9 +10,14 @@ package io.element.android.features.messages.impl.pinned.list
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.plus
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -90,7 +95,8 @@ fun PinnedMessagesListView(
                     .padding(padding)
                     .consumeWindowInsets(padding),
             )
-        }
+        },
+        contentWindowInsets = WindowInsets.statusBars,
     )
 }
 
@@ -210,7 +216,7 @@ private fun PinnedMessagesListLoaded(
         modifier = modifier.fillMaxSize(),
         state = rememberLazyListState(),
         reverseLayout = true,
-        contentPadding = PaddingValues(vertical = 8.dp),
+        contentPadding = WindowInsets.navigationBars.asPaddingValues() + PaddingValues(vertical = 8.dp),
     ) {
         items(
             items = state.timelineItems,
