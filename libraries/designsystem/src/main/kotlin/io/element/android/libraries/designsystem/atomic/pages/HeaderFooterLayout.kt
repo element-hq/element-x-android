@@ -55,11 +55,11 @@ fun HeaderFooterLayout(
             var newHeight by remember { mutableIntStateOf(1) }
             Box(
                 modifier = Modifier
-                .weight(1f, fill = true)
-                .padding(contentInsetsPadding)
-                .onSizeChanged {
-                    newHeight = it.height
-                }
+                    .padding(contentInsetsPadding)
+                    .weight(1f, fill = true)
+                    .onSizeChanged {
+                        newHeight = it.height
+                    }
             ) {
                 Layout(
                     content = {
@@ -95,7 +95,9 @@ fun HeaderFooterLayout(
                 )
             }
         } else {
-            movableHeader()
+            Box(Modifier.padding(contentInsetsPadding)) {
+                movableHeader()
+            }
             Box(Modifier.weight(1f, fill = true)) {
                 movableContent()
             }
