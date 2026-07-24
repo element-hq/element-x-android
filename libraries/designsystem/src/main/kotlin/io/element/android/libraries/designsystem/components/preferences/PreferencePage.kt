@@ -11,12 +11,14 @@ package io.element.android.libraries.designsystem.components.preferences
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.plus
 import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -46,7 +48,6 @@ fun PreferencePage(
     Scaffold(
         modifier = modifier
             .fillMaxSize()
-            .systemBarsPadding()
             .imePadding(),
         contentWindowInsets = WindowInsets.statusBars,
         topBar = {
@@ -56,12 +57,12 @@ fun PreferencePage(
             )
         },
         snackbarHost = snackbarHost,
-        content = {
+        content = { contentPadding ->
             Column(
                 modifier = Modifier
-                    .padding(it)
-                    .consumeWindowInsets(it)
                     .verticalScroll(state = rememberScrollState())
+                    .padding(contentPadding + WindowInsets.navigationBars.asPaddingValues())
+                    .consumeWindowInsets(contentPadding + WindowInsets.navigationBars.asPaddingValues())
             ) {
                 content()
             }
