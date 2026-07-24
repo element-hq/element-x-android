@@ -12,12 +12,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -75,9 +77,7 @@ fun SpaceFiltersView(
     }
     if (sheetState.isVisible || isSelecting) {
         ModalBottomSheet(
-            modifier = modifier
-                .systemBarsPadding()
-                .navigationBarsPadding(),
+            modifier = modifier,
             sheetState = sheetState,
             onDismissRequest = {
                 if (state is SpaceFiltersState.Selecting) {
@@ -85,6 +85,7 @@ fun SpaceFiltersView(
                 }
             },
             scrollable = false,
+            contentWindowInsets = { WindowInsets.statusBars },
         ) {
             Box(
                 modifier = Modifier
@@ -113,7 +114,7 @@ private fun SpaceFiltersBottomSheetContent(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.padding(vertical = 16.dp)
+        modifier = modifier.padding(top = 16.dp)
     ) {
         Text(
             text = stringResource(R.string.screen_roomlist_your_spaces),
@@ -131,7 +132,9 @@ private fun SpaceFiltersBottomSheetContent(
             placeholder = stringResource(CommonStrings.action_search),
         )
         Spacer(modifier = Modifier.height(16.dp))
-        LazyColumn {
+        LazyColumn(
+            contentPadding = WindowInsets.navigationBars.asPaddingValues(),
+        ) {
             items(filters) { filter ->
                 SpaceFilterItem(
                     filter = filter,
