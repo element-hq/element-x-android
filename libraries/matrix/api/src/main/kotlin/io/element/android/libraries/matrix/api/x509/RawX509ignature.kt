@@ -8,8 +8,8 @@
 package io.element.android.libraries.matrix.api.x509
 
 /**
- * The object we receive from [`X509Sign`], and pass to
- * [`X509Verify`].
+ * The object we receive from [`RawX509Signer`], and pass to
+ * [`RawX509Verifier`].
  *
  * A simplified representation of the data in the signature object.
  */

@@ -7,12 +7,12 @@
 
 package io.element.android.libraries.matrix.impl.x509
 
-import io.element.android.libraries.matrix.api.x509.X509Verify
+import io.element.android.libraries.matrix.api.x509.RawX509Verifier
 import uniffi.matrix_sdk_crypto.RawX509Signature
 import uniffi.matrix_sdk_crypto.X509SignatureScheme
 
-/** A shim which maps from our own [X509Verify] interface to the rust-sdk's interface of the same name */
-class X509VerifyWrapper(private val x509Verify: X509Verify): org.matrix.rustcomponents.sdk.X509Verify {
+/** A shim which maps from our own [RawX509Verifier] interface to the rust-sdk's interface of the same name */
+class RawX509VerifierWrapper(private val rawX509Verifier: RawX509Verifier): org.matrix.rustcomponents.sdk.RawX509Verifier {
     override fun verify(message: ByteArray, sig: RawX509Signature): Boolean {
         val signatureScheme = when(sig.signatureScheme) {
             X509SignatureScheme.RSA_PSS_SHA512 -> io.element.android.libraries.matrix.api.x509.X509SignatureScheme.RSA_PSS_SHA512
@@ -23,6 +23,6 @@ class X509VerifyWrapper(private val x509Verify: X509Verify): org.matrix.rustcomp
             sig.signatureBytes,
             signatureScheme
         )
-        return x509Verify.verify(message, sig)
+        return rawX509Verifier.verify(message, sig)
     }
 }

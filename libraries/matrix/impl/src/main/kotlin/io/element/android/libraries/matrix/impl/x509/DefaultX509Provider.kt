@@ -12,8 +12,8 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.x509.X509Provider
-import io.element.android.libraries.matrix.api.x509.X509Sign
-import io.element.android.libraries.matrix.api.x509.X509Verify
+import io.element.android.libraries.matrix.api.x509.RawX509Signer
+import io.element.android.libraries.matrix.api.x509.RawX509Verifier
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
@@ -21,11 +21,11 @@ class DefaultX509Provider: X509Provider {
     override suspend fun onAppStartup(parentActivity: Activity) {
     }
 
-    override suspend fun getX509Sign(): X509Sign? {
+    override suspend fun getRawX509Signer(): RawX509Signer? {
         return null
     }
 
-    override suspend fun getX509Verify(): X509Verify? {
+    override suspend fun getRawX509Verifier(): RawX509Verifier? {
         return null
     }
 }

@@ -25,8 +25,8 @@ import io.element.android.libraries.matrix.impl.room.TimelineEventFilterFactory
 import io.element.android.libraries.matrix.impl.storage.SqliteStoreBuilderProvider
 import io.element.android.libraries.matrix.impl.util.anonymizedTokens
 import io.element.android.libraries.matrix.api.x509.X509Provider
-import io.element.android.libraries.matrix.impl.x509.X509SignWrapper
-import io.element.android.libraries.matrix.impl.x509.X509VerifyWrapper
+import io.element.android.libraries.matrix.impl.x509.RawX509SignerWrapper
+import io.element.android.libraries.matrix.impl.x509.RawX509VerifierWrapper
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -188,14 +188,14 @@ class RustMatrixClientFactory(
             // Make sure all built clients use the single process cross-process lock config
             .crossProcessLockConfig(CrossProcessLockConfig.SingleProcess)
 
-        val x509sign = x509Provider.getX509Sign()
-        if (x509sign != null) {
-            builder = builder.withX509Sign(X509SignWrapper(x509sign))
+        val rawX509signer = x509Provider.getRawX509Signer()
+        if (rawX509signer != null) {
+            builder = builder.withRawX509Signer(RawX509SignerWrapper(rawX509signer))
         }
 
-        val x509verify = x509Provider.getX509Verify()
-        if (x509verify != null) {
-            builder = builder.withX509Verify(X509VerifyWrapper(x509verify))
+        val rawX509verifier = x509Provider.getRawX509Verifier()
+        if (rawX509verifier != null) {
+            builder = builder.withRawX509Verifier(RawX509VerifierWrapper(rawX509verifier))
         }
 
         return builder.run {

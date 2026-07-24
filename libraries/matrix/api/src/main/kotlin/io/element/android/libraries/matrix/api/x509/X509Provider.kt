@@ -11,6 +11,6 @@ import android.app.Activity
 
 interface X509Provider {
     suspend fun onAppStartup(parentActivity: Activity)
-    suspend fun getX509Sign(): X509Sign?
-    suspend fun getX509Verify(): X509Verify?
+    suspend fun getRawX509Signer(): RawX509Signer?
+    suspend fun getRawX509Verifier(): RawX509Verifier?
 }

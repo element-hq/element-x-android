@@ -7,6 +7,6 @@
 
 package io.element.android.libraries.matrix.api.x509
 
-interface X509Sign {
+interface RawX509Signer {
     fun sign(message: ByteArray): RawX509Signature
 }
