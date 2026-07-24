@@ -14,11 +14,13 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -234,7 +236,15 @@ private fun HomeScaffold(
             )
         },
         floatingActionButtonPosition = FabPosition.Center,
+        contentWindowInsets = WindowInsets.statusBars,
         content = { padding ->
+            val outerPadding = PaddingValues(
+                start = padding.calculateStartPadding(LocalLayoutDirection.current),
+                end = padding.calculateEndPadding(LocalLayoutDirection.current),
+                // Remove these two lines once https://issuetracker.google.com/issues/436432313 has been fixed
+                bottom = padding.calculateBottomPadding(),
+                top = padding.calculateTopPadding()
+            )
             val contentPadding = PaddingValues(
                 bottom = 96.dp,
             )
@@ -253,16 +263,8 @@ private fun HomeScaffold(
                         onCreateRoomClick = onStartChatClick,
                         contentPadding = contentPadding,
                         modifier = Modifier
-                            .padding(
-                                PaddingValues(
-                                    start = padding.calculateStartPadding(LocalLayoutDirection.current),
-                                    end = padding.calculateEndPadding(LocalLayoutDirection.current),
-                                    // Remove these two lines once https://issuetracker.google.com/issues/436432313 has been fixed
-                                    bottom = padding.calculateBottomPadding(),
-                                    top = padding.calculateTopPadding()
-                                )
-                            )
-                            .consumeWindowInsets(padding)
+                            .padding(outerPadding)
+                            .consumeWindowInsets(outerPadding)
                             .hazeSource(state = hazeState)
                     )
                     SpaceFiltersView(roomListState.spaceFiltersState)
@@ -271,8 +273,8 @@ private fun HomeScaffold(
                     HomeSpacesView(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(padding)
-                            .consumeWindowInsets(padding)
+                            .padding(outerPadding)
+                            .consumeWindowInsets(outerPadding)
                             .hazeSource(state = hazeState),
                         contentPadding = contentPadding,
                         state = state.homeSpacesState,
