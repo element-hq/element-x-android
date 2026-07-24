@@ -17,9 +17,11 @@ import android.provider.Settings
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewConfiguration
 import android.view.WindowManager
 import android.widget.Button
 import io.element.android.libraries.core.extensions.runCatchingExceptions
+import kotlin.math.abs
 
 /**
  * A floating press-and-hold PTT button drawn over other apps via a [WindowManager] overlay
@@ -42,27 +44,8 @@ class PttOverlayButton(
     fun show() {
         if (view != null || !Settings.canDrawOverlays(context)) return
         val density = context.resources.displayMetrics.density
-        val button = Button(context).apply {
-            text = "PTT"
-            setTextColor(Color.WHITE)
-            background = ovalDrawable(COLOR_IDLE)
-            setOnTouchListener { _, event ->
-                when (event.actionMasked) {
-                    MotionEvent.ACTION_DOWN -> {
-                        background = ovalDrawable(COLOR_ACTIVE)
-                        onPressStart()
-                        true
-                    }
-                    MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                        background = ovalDrawable(COLOR_IDLE)
-                        onPressEnd()
-                        true
-                    }
-                    else -> false
-                }
-            }
-        }
         val sizePx = (BUTTON_SIZE_DP * density).toInt()
+        val metrics = context.resources.displayMetrics
         val params = WindowManager.LayoutParams(
             sizePx,
             sizePx,
@@ -70,12 +53,87 @@ class PttOverlayButton(
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
             PixelFormat.TRANSLUCENT,
         ).apply {
-            gravity = Gravity.BOTTOM or Gravity.END
-            x = (MARGIN_DP * density).toInt()
-            y = (BOTTOM_MARGIN_DP * density).toInt()
+            // TOP|START so a drag delta maps directly onto x/y; seed near the bottom-right corner.
+            gravity = Gravity.TOP or Gravity.START
+            x = metrics.widthPixels - sizePx - (MARGIN_DP * density).toInt()
+            y = metrics.heightPixels - sizePx - (BOTTOM_MARGIN_DP * density).toInt()
+        }
+        val touchSlop = ViewConfiguration.get(context).scaledTouchSlop
+        val button = Button(context).apply {
+            text = "PTT"
+            setTextColor(Color.WHITE)
+            background = ovalDrawable(COLOR_IDLE)
+            setOnTouchListener(
+                DragToMoveTouchListener(
+                    params = params,
+                    touchSlop = touchSlop,
+                    onMove = { updatePosition(params) },
+                )
+            )
         }
         runCatchingExceptions { windowManager.addView(button, params) }
             .onSuccess { view = button }
+    }
+
+    private fun updatePosition(params: WindowManager.LayoutParams) {
+        view?.let { current -> runCatchingExceptions { windowManager.updateViewLayout(current, params) } }
+    }
+
+    /**
+     * Distinguishes a press-and-hold (transmit) from a drag (reposition). A touch that stays within
+     * [touchSlop] is a normal hold-to-talk; once it moves past the slop it becomes a drag, which
+     * cancels any in-progress transmit so the user never broadcasts while moving the button.
+     */
+    @SuppressLint("ClickableViewAccessibility")
+    private inner class DragToMoveTouchListener(
+        private val params: WindowManager.LayoutParams,
+        private val touchSlop: Int,
+        private val onMove: () -> Unit,
+    ) : View.OnTouchListener {
+        private var initialX = 0
+        private var initialY = 0
+        private var touchStartRawX = 0f
+        private var touchStartRawY = 0f
+        private var dragging = false
+
+        override fun onTouch(v: View, event: MotionEvent): Boolean {
+            when (event.actionMasked) {
+                MotionEvent.ACTION_DOWN -> {
+                    initialX = params.x
+                    initialY = params.y
+                    touchStartRawX = event.rawX
+                    touchStartRawY = event.rawY
+                    dragging = false
+                    v.background = ovalDrawable(COLOR_ACTIVE)
+                    onPressStart()
+                    return true
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    val dx = event.rawX - touchStartRawX
+                    val dy = event.rawY - touchStartRawY
+                    if (!dragging && (abs(dx) > touchSlop || abs(dy) > touchSlop)) {
+                        // Crossed the slop: this is a move, not a talk — abort the transmit.
+                        dragging = true
+                        onPressEnd()
+                        v.background = ovalDrawable(COLOR_IDLE)
+                    }
+                    if (dragging) {
+                        params.x = initialX + dx.toInt()
+                        params.y = initialY + dy.toInt()
+                        onMove()
+                    }
+                    return true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    if (!dragging) {
+                        v.background = ovalDrawable(COLOR_IDLE)
+                        onPressEnd()
+                    }
+                    return true
+                }
+                else -> return false
+            }
+        }
     }
 
     fun hide() {
