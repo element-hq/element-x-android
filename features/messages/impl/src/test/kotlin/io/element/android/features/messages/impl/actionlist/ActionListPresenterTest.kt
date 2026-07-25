@@ -27,6 +27,7 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVoiceContent
 import io.element.android.features.poll.api.pollcontent.aPollAnswerItemList
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
+import io.element.android.libraries.emoji.api.recentemojis.GetRecentEmojis
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.notification.CallIntent
@@ -42,7 +43,6 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
-import io.element.android.libraries.recentemojis.api.GetRecentEmojis
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.test
 import kotlinx.collections.immutable.persistentListOf

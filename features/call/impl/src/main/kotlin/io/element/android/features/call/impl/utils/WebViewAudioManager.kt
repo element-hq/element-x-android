@@ -207,7 +207,6 @@ class WebViewAudioManager(
         }
 
         audioManager.mode = AudioManager.MODE_NORMAL
-
         if (!hasRegisteredCallbacks) {
             Timber.w("Audio: tried to disable webview in-call audio mode without registering callbacks")
             return
@@ -265,8 +264,8 @@ class WebViewAudioManager(
     private fun setWebViewAndroidNativeBridge() {
         Timber.d("Adding callback in controls.onAudioPlaybackStarted")
         webView.evaluateJavascript("controls.onAudioPlaybackStarted = () => { androidNativeBridge.onTrackReady(); };", null)
-        Timber.d("Adding callback in controls.onOutputDeviceSelect")
-        webView.evaluateJavascript("controls.onOutputDeviceSelect = (id) => { androidNativeBridge.setOutputDevice(id); };", null)
+        Timber.d("Adding callback in controls.onAudioDeviceSelect")
+        webView.evaluateJavascript("controls.onAudioDeviceSelect = (id) => { androidNativeBridge.setAudioDevice(id); };", null)
     }
 
     /**
@@ -293,8 +292,8 @@ class WebViewAudioManager(
     ) {
         Timber.d("Updating available audio devices")
         val deviceList = json.encodeToString(devices)
-        webView.evaluateJavascript("controls.setAvailableOutputDevices($deviceList);", {
-            Timber.d("Audio: setAvailableOutputDevices result: $it")
+        webView.evaluateJavascript("controls.setAvailableAudioDevices($deviceList);", {
+            Timber.d("Audio: setAvailableAudioDevices result: $it")
         })
     }
 
@@ -342,6 +341,7 @@ class WebViewAudioManager(
         } else {
             // On Android 11 and lower, we don't have the concept of communication devices
             // We have to call the right methods based on the device type
+            @Suppress("DEPRECATION")
             if (device != null) {
                 if (device.type == AudioDeviceInfo.TYPE_BLUETOOTH_SCO && disableBluetoothAudioDevices) {
                     Timber.w("Bluetooth audio devices are disabled on this Android version")
@@ -350,11 +350,9 @@ class WebViewAudioManager(
                     return
                 }
                 setAudioEnabled(true)
-                @Suppress("DEPRECATION")
                 isSpeakerphoneOn = device.type == AudioDeviceInfo.TYPE_BUILTIN_SPEAKER
                 isBluetoothScoOn = device.type == AudioDeviceInfo.TYPE_BLUETOOTH_SCO
             } else {
-                @Suppress("DEPRECATION")
                 isSpeakerphoneOn = false
                 isBluetoothScoOn = false
             }
@@ -399,7 +397,7 @@ private class AndroidWebViewAudioBridge(
     private val onAudioPlaybackStarted: () -> Unit,
 ) {
     @JavascriptInterface
-    fun setOutputDevice(id: String) {
+    fun setAudioDevice(id: String) {
         Timber.d("Audio device selected in webview, id: $id")
         onAudioDeviceSelected(id)
     }

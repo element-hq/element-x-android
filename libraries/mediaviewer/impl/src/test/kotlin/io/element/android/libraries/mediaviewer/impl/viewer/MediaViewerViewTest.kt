@@ -26,7 +26,6 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeDown
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaviewer.impl.details.aMediaBottomSheetStateDetails
@@ -37,16 +36,15 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBack
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.setSafeContent
 import io.mockk.mockk
 import kotlinx.coroutines.delay
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import kotlin.time.Duration.Companion.milliseconds
 
-@RunWith(AndroidJUnit4::class)
-class MediaViewerViewTest {
+class MediaViewerViewTest : RobolectricTest() {
     private val mockMediaUrl: Uri = mockk("localMediaUri")
 
     @Test

@@ -10,6 +10,7 @@ package io.element.android.libraries.matrix.api.timeline.item.event
 
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 
 @Immutable
 sealed interface ProfileDetails {
@@ -20,7 +21,8 @@ sealed interface ProfileDetails {
     data class Ready(
         val displayName: String?,
         val displayNameAmbiguous: Boolean,
-        val avatarUrl: String?
+        val avatarUrl: String?,
+        val displayedStatus: DisplayedStatus?,
     ) : ProfileDetails
 
     data class Error(

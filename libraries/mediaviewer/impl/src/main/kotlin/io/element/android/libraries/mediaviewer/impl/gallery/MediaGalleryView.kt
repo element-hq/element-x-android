@@ -9,14 +9,18 @@
 package io.element.android.libraries.mediaviewer.impl.gallery
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -31,6 +35,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,11 +55,13 @@ import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubti
 import io.element.android.libraries.designsystem.background.OnboardingBackground
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.async.AsyncFailure
+import io.element.android.libraries.designsystem.components.blurhash.blurHashBackground
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.LinearProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.SegmentedButton
@@ -62,6 +70,9 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationValue
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.collectOverallState
 import io.element.android.libraries.mediaviewer.impl.R
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.details.MediaDeleteConfirmationBottomSheet
@@ -315,6 +326,14 @@ private fun MediaGalleryFilesList(
             key = { it.id() },
             contentType = { it::class.java },
         ) { item ->
+            val contentValidationState = remember(item is MediaItem.Event) {
+                if (item is MediaItem.Event) {
+                    item.validationState
+                } else {
+                    NoopContentValidationState()
+                }
+            }
+            val contentValidationValue by contentValidationState.collectOverallState()
             when (item) {
                 is MediaItem.File -> FileItemView(
                     modifier = Modifier.animateItem(),
@@ -323,6 +342,7 @@ private fun MediaGalleryFilesList(
                     onLongClick = {
                         eventSink(MediaGalleryEvent.OpenInfo(item))
                     },
+                    contentValidationState = contentValidationValue,
                 )
                 is MediaItem.Audio -> AudioItemView(
                     modifier = Modifier.animateItem(),
@@ -331,6 +351,7 @@ private fun MediaGalleryFilesList(
                     onLongClick = {
                         eventSink(MediaGalleryEvent.OpenInfo(item))
                     },
+                    contentValidationValue = contentValidationValue,
                 )
                 is MediaItem.Voice -> {
                     val presenter: Presenter<VoiceMessageState> = presenterFactories.rememberPresenter(item)
@@ -341,16 +362,17 @@ private fun MediaGalleryFilesList(
                         onLongClick = {
                             eventSink(MediaGalleryEvent.OpenInfo(item))
                         },
+                        contentValidationValue = contentValidationValue,
                     )
+                }
+                is MediaItem.Image,
+                is MediaItem.Video -> {
+                    // Should not happen
                 }
                 is MediaItem.DateSeparator -> DateItemView(
                     modifier = Modifier.animateItem(),
                     item = item
                 )
-                is MediaItem.Image,
-                is MediaItem.Video -> {
-                    // Should not happen
-                }
                 is MediaItem.LoadingIndicator -> LoadingMoreIndicator(
                     modifier = Modifier.animateItem(),
                     item = item,
@@ -387,11 +409,48 @@ private fun MediaGalleryImageGrid(
             key = { it.id() },
             contentType = { it::class.java },
         ) { item ->
+            val blurHash = when (item) {
+                is MediaItem.Image -> item.blurHash
+                is MediaItem.Video -> item.blurHash
+                else -> null
+            }
+
+            val blurHashBackgroundModifier = if (blurHash != null) {
+                Modifier.blurHashBackground(blurHash)
+            } else {
+                Modifier
+            }
+
+            val currentValidationState by when (item) {
+                is MediaItem.Event -> item.validationState.collectOverallState()
+                else -> remember { mutableStateOf(ContentValidationValue.Unknown) }
+            }
+
             when (item) {
-                is MediaItem.DateSeparator -> DateItemView(
-                    modifier = Modifier.animateItem(),
-                    item = item,
-                )
+                is MediaItem.Event if !currentValidationState.isValidated() -> {
+                    Box(modifier = blurHashBackgroundModifier.aspectRatio(1f), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp),
+                            strokeWidth = 2.dp,
+                        )
+                    }
+                }
+                is MediaItem.Event if currentValidationState.isInvalid() -> {
+                    Box(
+                        modifier = Modifier
+                            .clickable { onItemClick(item) }
+                            .background(ElementTheme.colors.bgCriticalSubtle)
+                            .aspectRatio(1f),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(24.dp),
+                            imageVector = CompoundIcons.Error(),
+                            tint = ElementTheme.colors.iconCriticalPrimary,
+                            contentDescription = null,
+                        )
+                    }
+                }
                 is MediaItem.Audio -> {
                     // Should not happen
                 }
@@ -402,7 +461,7 @@ private fun MediaGalleryImageGrid(
                     // Should not happen
                 }
                 is MediaItem.Image -> ImageItemView(
-                    modifier = Modifier.animateItem(),
+                    modifier = blurHashBackgroundModifier.animateItem(),
                     image = item,
                     onClick = { onItemClick(item) },
                     onLongClick = {
@@ -410,12 +469,16 @@ private fun MediaGalleryImageGrid(
                     },
                 )
                 is MediaItem.Video -> VideoItemView(
-                    modifier = Modifier.animateItem(),
+                    modifier = blurHashBackgroundModifier.animateItem(),
                     video = item,
                     onClick = { onItemClick(item) },
                     onLongClick = {
                         eventSink(MediaGalleryEvent.OpenInfo(item))
                     },
+                )
+                is MediaItem.DateSeparator -> DateItemView(
+                    modifier = Modifier.animateItem(),
+                    item = item,
                 )
                 is MediaItem.LoadingIndicator -> LoadingMoreIndicator(
                     modifier = Modifier.animateItem(),

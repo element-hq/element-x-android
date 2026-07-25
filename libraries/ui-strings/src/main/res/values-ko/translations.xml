@@ -43,7 +43,6 @@
     <item quantity="other">"읽은 사람 %1$s 그리고 %2$d 다른 사람들"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"%1$s 님이 읽음"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"모두 표시하려면 탭하세요"</string>
   <string name="a11y_remove_reaction">"반응 제거: %1$s"</string>
   <string name="a11y_remove_reaction_with">"%1$s 반응을 제거하세요"</string>
   <string name="a11y_room_avatar">"방 아바타"</string>
@@ -444,7 +443,6 @@
 "</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"업로드할 비디오의 품질을 선택하세요."</string>
   <string name="dialog_video_quality_selector_title">"비디오 업로드 품질 선택"</string>
-  <string name="emoji_picker_search_placeholder">"이모지 검색"</string>
   <string name="error_account_already_logged_in">"이 기기에서 이미 %1$s님으로 로그인되어 있습니다."</string>
   <string name="error_account_creation_not_possible">"Matrix Authentication Service 및 계정 생성을 지원하려면 홈서버를 업그레이드해야 합니다."</string>
   <string name="error_failed_creating_the_permalink">"퍼머링크 생성 실패"</string>

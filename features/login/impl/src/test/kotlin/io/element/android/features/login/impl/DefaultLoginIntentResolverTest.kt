@@ -8,14 +8,12 @@
 
 package io.element.android.features.login.impl
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.login.api.LoginParams
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class DefaultLoginIntentResolverTest {
+class DefaultLoginIntentResolverTest : RobolectricTest() {
     @Test
     fun `nominal case`() {
         val sut = DefaultLoginIntentResolver()

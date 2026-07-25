@@ -67,6 +67,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageTy
 import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 
@@ -102,7 +103,10 @@ fun ThreadsListView(
                                 url = state.roomAvatarUrl,
                                 size = AvatarSize.CurrentUserTopBar,
                             ),
-                            avatarType = AvatarType.Room(isTombstoned = state.isRoomTombstoned),
+                            avatarType = AvatarType.Room(
+                                heroes = state.heroes,
+                                isTombstoned = state.isRoomTombstoned,
+                            ),
                             contentDescription = null,
                         )
                         Column {
@@ -162,14 +166,14 @@ private fun ScrollHelper(
     val lastVisibleItemIndex by remember {
         derivedStateOf { listState.firstVisibleItemIndex + listState.layoutInfo.visibleItemsInfo.size - 1 }
     }
-    val needsPagination by remember {
+    val shouldPaginate by remember {
         derivedStateOf {
-            val canLoadNewItems = listState.isScrollInProgress || listState.firstVisibleItemScrollOffset == 0
-            canLoadNewItems && lastVisibleItemIndex == listState.layoutInfo.totalItemsCount - 1
+            val canLoadNewItems = listState.isScrollInProgress || listState.layoutInfo.totalItemsCount == 0
+            canLoadNewItems && lastVisibleItemIndex >= listState.layoutInfo.totalItemsCount - 1
         }
     }
-    LaunchedEffect(needsPagination, lastVisibleItemIndex) {
-        if (needsPagination) {
+    LaunchedEffect(shouldPaginate, lastVisibleItemIndex) {
+        if (shouldPaginate) {
             updatedOnPaginate()
             delay(400L)
         }
@@ -323,6 +327,7 @@ internal fun ThreadsListViewPreview() {
                 roomId = RoomId("!room-id:server"),
                 roomName = ROOM_NAME,
                 roomAvatarUrl = null,
+                heroes = persistentListOf(),
                 threads = List(10) { aThreadListRowItem(threadId = ThreadId("\$thread-$it")) }.toImmutableList(),
                 isRoomTombstoned = false,
                 eventSink = {},
@@ -378,7 +383,12 @@ fun aThreadListItem(
 fun aThreadListItemEvent(
     threadId: ThreadId = ThreadId("\$a-thread-id"),
     senderId: UserId = UserId("@a-user-id:server"),
-    senderProfile: ProfileDetails = ProfileDetails.Ready(displayName = USER_NAME_ALICE, displayNameAmbiguous = false, avatarUrl = null),
+    senderProfile: ProfileDetails = ProfileDetails.Ready(
+        displayName = USER_NAME_ALICE,
+        displayNameAmbiguous = false,
+        avatarUrl = null,
+        displayedStatus = null,
+    ),
     isOwn: Boolean = false,
     content: EventContent = MessageContent(
         body = "Hello world!",

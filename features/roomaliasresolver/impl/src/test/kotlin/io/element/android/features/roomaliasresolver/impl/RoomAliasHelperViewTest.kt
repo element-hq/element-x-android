@@ -14,7 +14,6 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -25,11 +24,10 @@ import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBack
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class RoomAliasHelperViewTest {
+class RoomAliasHelperViewTest : RobolectricTest() {
     @Test
     fun `clicking on back invokes the expected callback`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<RoomAliasResolverEvents>(expectEvents = false)

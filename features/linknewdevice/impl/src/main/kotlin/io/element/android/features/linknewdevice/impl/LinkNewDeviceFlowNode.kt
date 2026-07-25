@@ -13,8 +13,10 @@ import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
+import com.bumble.appyx.core.composable.PermanentChild
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.navigation.model.permanent.PermanentNavModel
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
@@ -34,8 +36,10 @@ import io.element.android.features.linknewdevice.impl.screens.error.ErrorNode
 import io.element.android.features.linknewdevice.impl.screens.error.ErrorScreenType
 import io.element.android.features.linknewdevice.impl.screens.number.EnterNumberNode
 import io.element.android.features.linknewdevice.impl.screens.qrcode.ShowQrCodeNode
+import io.element.android.features.linknewdevice.impl.screens.root.LinkDeviceType
 import io.element.android.features.linknewdevice.impl.screens.root.LinkNewDeviceRootNode
 import io.element.android.features.linknewdevice.impl.screens.scan.ScanQrCodeNode
+import io.element.android.features.lockscreen.api.DeviceUnlockEntryPoint
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
@@ -67,9 +71,14 @@ class LinkNewDeviceFlowNode(
     private val linkNewMobileHandler: LinkNewMobileHandler,
     private val linkNewDesktopHandler: LinkNewDesktopHandler,
     private val sessionEnterpriseService: SessionEnterpriseService,
+    private val deviceUnlockEntryPoint: DeviceUnlockEntryPoint,
 ) : BaseFlowNode<LinkNewDeviceFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
+        savedStateMap = buildContext.savedStateMap,
+    ),
+    permanentNavModel = PermanentNavModel(
+        navTargets = setOf(NavTarget.LockScreen),
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -125,6 +134,9 @@ class LinkNewDeviceFlowNode(
         data object DesktopScanQrCode : NavTarget
 
         @Parcelize
+        data object LockScreen : NavTarget
+
+        @Parcelize
         data class Error(
             val errorScreenType: ErrorScreenType,
         ) : NavTarget
@@ -137,6 +149,9 @@ class LinkNewDeviceFlowNode(
                 Timber.tag(tag.value).d("step: ${linkMobileStep::class.java.simpleName}")
                 when (linkMobileStep) {
                     LinkMobileStep.Uninitialized -> Unit
+                    LinkMobileStep.CreatingQrCode -> {
+                        // This step is handled in LinkNewDeviceRootPresenter
+                    }
                     LinkMobileStep.Done -> {
                         callback.onDone()
                     }
@@ -224,12 +239,27 @@ class LinkNewDeviceFlowNode(
                         callback.onDone()
                     }
 
-                    override fun linkDesktopDevice() {
-                        linkNewDesktopHandler.reset()
-                        backstack.push(NavTarget.DesktopNotice)
+                    override fun onUnlockDevice(type: LinkDeviceType) {
+                        val callback = object : DeviceUnlockEntryPoint.Callback {
+                            override fun onCancel() = Unit
+                            override fun onUnlock() = when (type) {
+                                LinkDeviceType.Mobile -> {
+                                    linkNewMobileHandler.reset()
+                                    linkNewMobileHandler.createAndStartNewHandler()
+                                }
+                                LinkDeviceType.Desktop -> {
+                                    linkNewDesktopHandler.reset()
+                                    backstack.push(NavTarget.DesktopNotice)
+                                }
+                            }
+                        }
+                        deviceUnlockEntryPoint.requestUnlock(callback)
                     }
                 }
                 createNode<LinkNewDeviceRootNode>(buildContext, listOf(callback))
+            }
+            is NavTarget.LockScreen -> {
+                deviceUnlockEntryPoint.createNode(this, buildContext)
             }
             NavTarget.DesktopNotice -> {
                 val callback = object : DesktopNoticeNode.Callback {
@@ -324,5 +354,6 @@ class LinkNewDeviceFlowNode(
             }
         }
         BackstackView()
+        PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LockScreen)
     }
 }

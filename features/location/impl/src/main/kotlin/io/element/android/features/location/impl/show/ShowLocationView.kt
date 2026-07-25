@@ -21,7 +21,7 @@ import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetScaffoldState
-import androidx.compose.material3.rememberStandardBottomSheetState
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -92,7 +92,9 @@ fun ShowLocationView(
     }
 
     val scaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = rememberStandardBottomSheetState(SheetValue.Expanded)
+        bottomSheetState = rememberBottomSheetState(
+            initialValue = SheetValue.Expanded,
+        )
     )
     LaunchedEffect(state.isSheetDraggable) {
         if (!state.isSheetDraggable) {

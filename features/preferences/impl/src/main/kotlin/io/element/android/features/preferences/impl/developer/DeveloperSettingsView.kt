@@ -18,9 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.preferences.impl.R
 import io.element.android.features.preferences.impl.developer.appsettings.AppDeveloperSettingsView
 import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
@@ -41,9 +43,19 @@ fun DeveloperSettingsView(
     onPushHistoryClick: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
+    extraOptions: @Composable () -> Unit = {},
 ) {
     if (state.showLoader) {
         ProgressDialog()
+    }
+    if (state.markAllRoomsAsReadAction.isConfirming()) {
+        ConfirmationDialog(
+            title = "Are you sure you want to mark all the rooms as read?",
+            content = "",
+            submitText = stringResource(CommonStrings.action_yes),
+            onSubmitClick = { state.eventSink(DeveloperSettingsEvents.MarkAllRoomsAsRead(needsConfirmation = false)) },
+            onDismiss = { state.eventSink(DeveloperSettingsEvents.DismissMarkAllRoomsAsReadConfirmation) },
+        )
     }
     BackHandler(
         enabled = !state.showLoader,
@@ -64,6 +76,7 @@ fun DeveloperSettingsView(
             onOpenShowkase = onOpenShowkase,
         )
         NotificationCategory(onPushHistoryClick)
+        MarkAllRoomsAsReadCategory(state)
 
         if (state.isEnterpriseBuild) {
             PreferenceCategory(title = "Theme") {
@@ -85,6 +98,9 @@ fun DeveloperSettingsView(
                 )
             }
         }
+
+        extraOptions()
+
         val cache = state.cacheSize
         PreferenceCategory(title = "Cache") {
             ListItem(
@@ -150,6 +166,32 @@ fun DeveloperSettingsView(
             state.eventSink(DeveloperSettingsEvents.ChangeBrandColor(it))
         },
     )
+}
+
+@Composable
+private fun MarkAllRoomsAsReadCategory(state: DeveloperSettingsState) {
+    PreferenceCategory(title = "Room list") {
+        ListItem(
+            headlineContent = {
+                Text("Mark all rooms as read")
+            },
+            supportingContent = {
+                Text(
+                    text = """
+                        This will send a private read receipt and a read marker in every room you are part of. 
+                        It's a long running operation that might get rate limited.
+                        It will run in the background but the app must be alive for it to finish.
+                        """.trimIndent(),
+                    style = ElementTheme.typography.fontBodySmRegular,
+                    color = ElementTheme.colors.textSecondary,
+                )
+            },
+            enabled = !state.showLoader,
+            onClick = {
+                state.eventSink(DeveloperSettingsEvents.MarkAllRoomsAsRead(needsConfirmation = true))
+            },
+        )
+    }
 }
 
 @Composable

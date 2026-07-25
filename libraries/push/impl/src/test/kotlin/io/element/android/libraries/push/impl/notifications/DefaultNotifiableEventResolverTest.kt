@@ -59,16 +59,14 @@ import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEv
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
 import io.element.android.services.toolbox.test.systemclock.A_FAKE_TIMESTAMP
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
 @Suppress("LargeClass")
-@RunWith(RobolectricTestRunner::class)
-class DefaultNotifiableEventResolverTest {
+class DefaultNotifiableEventResolverTest : RobolectricTest() {
     @Test
     fun `resolve event no session`() = runTest {
         val sut = createDefaultNotifiableEventResolver(notificationService = null)

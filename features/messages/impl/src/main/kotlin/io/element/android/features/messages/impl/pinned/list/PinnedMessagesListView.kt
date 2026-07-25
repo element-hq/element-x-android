@@ -36,7 +36,6 @@ import io.element.android.features.messages.impl.timeline.components.event.Timel
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
-import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.poll.api.pollcontent.PollTitleView
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
@@ -60,6 +59,7 @@ fun PinnedMessagesListView(
     state: PinnedMessagesListState,
     onBackClick: () -> Unit,
     onEventClick: (event: TimelineItem.Event) -> Unit,
+    onGalleryItemClick: (event: TimelineItem.Event, index: Int) -> Unit,
     onUserDataClick: (MatrixUser) -> Unit,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
@@ -81,6 +81,7 @@ fun PinnedMessagesListView(
             PinnedMessagesListContent(
                 state = state,
                 onEventClick = onEventClick,
+                onGalleryItemClick = onGalleryItemClick,
                 onUserDataClick = onUserDataClick,
                 onLinkClick = onLinkClick,
                 onLinkLongClick = onLinkLongClick,
@@ -111,6 +112,7 @@ private fun PinnedMessagesListTopBar(
 private fun PinnedMessagesListContent(
     state: PinnedMessagesListState,
     onEventClick: (event: TimelineItem.Event) -> Unit,
+    onGalleryItemClick: (event: TimelineItem.Event, index: Int) -> Unit,
     onUserDataClick: (MatrixUser) -> Unit,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
@@ -131,6 +133,7 @@ private fun PinnedMessagesListContent(
                 state = state,
                 displayThreadSummaries = state.displayThreadSummaries,
                 onEventClick = onEventClick,
+                onGalleryItemClick = onGalleryItemClick,
                 onUserDataClick = onUserDataClick,
                 onLinkClick = onLinkClick,
                 onLinkLongClick = onLinkLongClick,
@@ -169,6 +172,7 @@ private fun PinnedMessagesListLoaded(
     state: PinnedMessagesListState.Filled,
     displayThreadSummaries: Boolean,
     onEventClick: (event: TimelineItem.Event) -> Unit,
+    onGalleryItemClick: (event: TimelineItem.Event, index: Int) -> Unit,
     onUserDataClick: (MatrixUser) -> Unit,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
@@ -226,6 +230,7 @@ private fun PinnedMessagesListLoaded(
                 },
                 onLinkLongClick = onLinkLongClick,
                 onContentClick = onEventClick,
+                onGalleryItemClick = onGalleryItemClick,
                 onLongClick = ::onMessageLongClick,
                 displayThreadSummaries = displayThreadSummaries,
                 inReplyToClick = {},
@@ -234,6 +239,7 @@ private fun PinnedMessagesListLoaded(
                 onMoreReactionsClick = {},
                 onReadReceiptClick = {},
                 onSwipeToReply = {},
+                onJoinCallClick = {},
                 eventSink = { timelineItemEvent ->
                     when (timelineItemEvent) {
                         is TimelineEvent.OpenThread -> state.eventSink(PinnedMessagesListEvent.OpenThread(timelineItemEvent.threadRootEventId))
@@ -245,6 +251,7 @@ private fun PinnedMessagesListLoaded(
                         event = event,
                         timelineProtectionState = state.timelineProtectionState,
                         onContentClick = { onEventClick(event) },
+                        onGalleryItemClick = { index -> onGalleryItemClick(event, index) },
                         onLongClick = { onMessageLongClick(event) },
                         onLinkClick = { link ->
                             state.linkState.eventSink(LinkEvent.OnLinkClick(link))
@@ -268,6 +275,7 @@ private fun TimelineItemEventContentViewWrapper(
     event: TimelineItem.Event,
     timelineProtectionState: TimelineProtectionState,
     onContentClick: () -> Unit,
+    onGalleryItemClick: (index: Int) -> Unit,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
     onLongClick: (() -> Unit)?,
@@ -282,9 +290,10 @@ private fun TimelineItemEventContentViewWrapper(
         )
     } else {
         TimelineItemEventContentView(
+            eventId = event.eventId,
             content = event.content,
-            hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId, event.isMine),
-            onShowContentClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
+            timelineProtectionState = timelineProtectionState,
+            onGalleryItemClick = onGalleryItemClick,
             onLinkClick = onLinkClick,
             onLinkLongClick = onLinkLongClick,
             eventSink = { },
@@ -304,6 +313,7 @@ internal fun PinnedMessagesListViewPreview(@PreviewParameter(PinnedMessagesListS
             state = state,
             onBackClick = {},
             onEventClick = { },
+            onGalleryItemClick = { _, _ -> },
             onUserDataClick = {},
             onLinkClick = {},
             onLinkLongClick = {},

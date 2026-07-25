@@ -18,18 +18,16 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class RoomDirectoryViewTest {
+class RoomDirectoryViewTest : RobolectricTest() {
     @Test
     fun `typing text in search field emits the expected Event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<RoomDirectoryEvents>()

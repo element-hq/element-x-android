@@ -71,6 +71,7 @@ private fun StateEventContent.toContent(): NotificationContent.StateEvent {
         is StateEventContent.RoomTopic -> NotificationContent.StateEvent.RoomTopic(topic)
         StateEventContent.SpaceChild -> NotificationContent.StateEvent.SpaceChild
         StateEventContent.SpaceParent -> NotificationContent.StateEvent.SpaceParent
+        StateEventContent.BeaconInfo -> NotificationContent.StateEvent.BeaconInfo
     }
 }
 
@@ -97,7 +98,10 @@ private fun MessageLikeEventContent.toContent(senderId: UserId): NotificationCon
             is MessageLikeEventContent.ReactionContent -> NotificationContent.MessageLike.ReactionContent(relatedEventId)
             MessageLikeEventContent.RoomEncrypted -> NotificationContent.MessageLike.RoomEncrypted
             is MessageLikeEventContent.RoomMessage -> {
-                NotificationContent.MessageLike.RoomMessage(senderId, EventMessageMapper().mapMessageType(messageType))
+                NotificationContent.MessageLike.RoomMessage(
+                    senderId,
+                    EventMessageMapper().mapMessageType(messageType)
+                )
             }
             is MessageLikeEventContent.RoomRedaction -> NotificationContent.MessageLike.RoomRedaction(
                 redactedEventId = redactedEventId?.let(::EventId),
@@ -105,6 +109,7 @@ private fun MessageLikeEventContent.toContent(senderId: UserId): NotificationCon
             )
             MessageLikeEventContent.Sticker -> NotificationContent.MessageLike.Sticker
             is MessageLikeEventContent.Poll -> NotificationContent.MessageLike.Poll(senderId, question)
+            MessageLikeEventContent.Beacon -> NotificationContent.MessageLike.Beacon
         }
     }
 }

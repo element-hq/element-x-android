@@ -65,6 +65,8 @@ import io.element.android.libraries.designsystem.theme.roomListRoomName
 import io.element.android.libraries.designsystem.theme.unreadIndicator
 import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
+import io.element.android.libraries.matrix.ui.components.DisplayNameWithStatus
 import io.element.android.libraries.matrix.ui.components.InviteSenderView
 import io.element.android.libraries.matrix.ui.model.InviteSender
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -131,6 +133,7 @@ internal fun RoomSummaryRow(
                         timestamp = room.timestamp,
                         isHighlighted = room.isHighlighted,
                         spaceAvatarData = spaceAvatarData,
+                        dmUserStatus = room.dmUserStatus,
                     )
                     MessagePreviewAndIndicatorRow(room = room, showUnreadCount = showUnreadCount)
                 }
@@ -148,6 +151,7 @@ internal fun RoomSummaryRow(
                         timestamp = null,
                         isHighlighted = room.isHighlighted,
                         spaceAvatarData = spaceAvatarData,
+                        dmUserStatus = null,
                     )
                     if (room.canonicalAlias != null) {
                         Text(
@@ -224,6 +228,7 @@ private fun NameAndTimestampRow(
     timestamp: String?,
     isHighlighted: Boolean,
     spaceAvatarData: AvatarData?,
+    dmUserStatus: DisplayedStatus?,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -234,16 +239,14 @@ private fun NameAndTimestampRow(
             modifier = Modifier.weight(1f),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(
-                modifier = Modifier
-                    .weight(1f)
-                    .clipToBounds(),
+            val displayName = name?.toSafeLength(ellipsize = true) ?: stringResource(id = CommonStrings.common_no_room_name)
+            DisplayNameWithStatus(
+                name = displayName,
+                status = dmUserStatus,
+                modifier = Modifier.weight(1f),
                 style = ElementTheme.typography.fontBodyLgMedium,
-                text = name?.toSafeLength(ellipsize = true) ?: stringResource(id = CommonStrings.common_no_room_name),
-                fontStyle = FontStyle.Italic.takeIf { name == null },
-                color = ElementTheme.colors.roomListRoomName,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                nameColor = ElementTheme.colors.roomListRoomName,
+                nameFontStyle = FontStyle.Italic.takeIf { name == null },
             )
             if (spaceAvatarData != null) {
                 Spacer(modifier = Modifier.width(8.dp))

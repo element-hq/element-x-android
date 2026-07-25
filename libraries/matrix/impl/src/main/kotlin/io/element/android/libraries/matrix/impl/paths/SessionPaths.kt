@@ -8,18 +8,9 @@
 
 package io.element.android.libraries.matrix.impl.paths
 
+import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.sessionstorage.api.SessionData
 import java.io.File
-
-data class SessionPaths(
-    val fileDirectory: File,
-    val cacheDirectory: File,
-) {
-    fun deleteRecursively() {
-        fileDirectory.deleteRecursively()
-        cacheDirectory.deleteRecursively()
-    }
-}
 
 internal fun SessionData.getSessionPaths(): SessionPaths {
     return SessionPaths(

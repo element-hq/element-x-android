@@ -20,7 +20,7 @@
   <string name="screen_room_change_permissions_send_messages">"Отправлять сообщения"</string>
   <string name="screen_room_change_permissions_title">"Разрешения"</string>
   <string name="screen_room_change_role_administrators_title">"Редактировать администраторов"</string>
-  <string name="screen_room_change_role_confirm_add_admin_description">"Вы не сможете отменить это действие. Вы даете пользователю такой же уровень прав, как и у вас"</string>
+  <string name="screen_room_change_role_confirm_add_admin_description">"Вы не сможете отменить это действие. Вы даете пользователю такой же уровень прав, как и у Вас"</string>
   <string name="screen_room_change_role_confirm_add_admin_title">"Добавить администратора?"</string>
   <string name="screen_room_change_role_confirm_change_owners_description">"Отменить данное действие будет невозможно. Права передадутся выбранным пользователям. После вашего выхода действие станет необратимым."</string>
   <string name="screen_room_change_role_confirm_change_owners_title">"Передать владение?"</string>
@@ -36,7 +36,7 @@
   <string name="screen_room_change_role_section_administrators">"Администраторы"</string>
   <string name="screen_room_change_role_section_moderators">"Модераторы"</string>
   <string name="screen_room_change_role_section_users">"Участники"</string>
-  <string name="screen_room_change_role_unsaved_changes_description">"У вас есть несохраненные изменения."</string>
+  <string name="screen_room_change_role_unsaved_changes_description">"У Вас есть несохраненные изменения."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Сохранить изменения?"</string>
   <string name="screen_room_member_list_banned_empty">"В этой комнате нет заблокированных пользователей."</string>
   <plurals name="screen_room_member_list_banned_header_title">

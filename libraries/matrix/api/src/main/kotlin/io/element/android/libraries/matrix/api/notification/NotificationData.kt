@@ -89,6 +89,8 @@ sealed interface NotificationContent {
             val senderId: UserId,
             val question: String,
         ) : MessageLike
+
+        data object Beacon : MessageLike
     }
 
     sealed interface StateEvent : NotificationContent {
@@ -116,6 +118,7 @@ sealed interface NotificationContent {
         data class RoomTopic(val topic: String) : StateEvent
         data object SpaceChild : StateEvent
         data object SpaceParent : StateEvent
+        data object BeaconInfo : StateEvent
     }
 
     data class Invite(

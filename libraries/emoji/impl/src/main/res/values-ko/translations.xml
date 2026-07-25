@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"활동"</string>
+  <string name="emoji_picker_category_flags">"깃발"</string>
+  <string name="emoji_picker_category_foods">"음식 &amp; 음료"</string>
+  <string name="emoji_picker_category_nature">"동물 &amp; 자연"</string>
+  <string name="emoji_picker_category_objects">"사물"</string>
+  <string name="emoji_picker_category_people">"표정 &amp; 사람"</string>
+  <string name="emoji_picker_category_places">"여행 &amp; 장소"</string>
+  <string name="emoji_picker_category_recent">"최근 이모지"</string>
+  <string name="emoji_picker_category_symbols">"상징"</string>
+  <string name="emoji_picker_search_placeholder">"이모지 검색"</string>
+</resources>

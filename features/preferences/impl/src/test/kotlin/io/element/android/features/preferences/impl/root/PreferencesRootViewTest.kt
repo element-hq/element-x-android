@@ -12,11 +12,14 @@ package io.element.android.features.preferences.impl.root
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.preferences.impl.R
+import io.element.android.libraries.emoji.api.picker.NoOpEmojiPickerRenderer
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
@@ -28,11 +31,10 @@ import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBack
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class PreferencesRootViewTest {
+class PreferencesRootViewTest : RobolectricTest() {
     @Test
     fun `clicking on back invokes back callback`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<PreferencesRootEvent>(expectEvents = false)
@@ -201,7 +203,8 @@ class PreferencesRootViewTest {
                 ),
                 onOpenAnalytics = callback,
             )
-            clickOn(CommonStrings.common_analytics)
+            val text = activity!!.getString(CommonStrings.common_analytics)
+            onNode(hasText(text) and hasClickAction()).performScrollTo().performClick()
         }
     }
 
@@ -228,7 +231,8 @@ class PreferencesRootViewTest {
                 ),
                 onOpenRageShake = callback,
             )
-            clickOn(CommonStrings.common_report_a_problem)
+            val text = activity!!.getString(CommonStrings.common_report_a_problem)
+            onNode(hasText(text) and hasClickAction()).performScrollTo().performClick()
         }
     }
 
@@ -283,7 +287,8 @@ class PreferencesRootViewTest {
                 ),
                 onOpenDeveloperSettings = callback,
             )
-            clickOn(CommonStrings.common_developer_options)
+            val text = activity!!.getString(CommonStrings.common_developer_options)
+            onNode(hasText(text) and hasClickAction()).performScrollTo().performClick()
         }
     }
 
@@ -391,7 +396,8 @@ class PreferencesRootViewTest {
                 ),
                 onSignOutClick = callback,
             )
-            clickOn(CommonStrings.action_signout)
+            val text = activity!!.getString(CommonStrings.action_signout)
+            onNode(hasText(text) and hasClickAction()).performScrollTo().performClick()
         }
     }
 
@@ -406,7 +412,8 @@ class PreferencesRootViewTest {
                 ),
                 onDeactivateClick = callback,
             )
-            clickOn(CommonStrings.action_delete_account)
+            val text = activity!!.getString(CommonStrings.action_delete_account)
+            onNode(hasText(text) and hasClickAction()).performScrollTo().performClick()
         }
     }
 
@@ -432,7 +439,7 @@ class PreferencesRootViewTest {
                 eventSink = eventsRecorder,
             ),
         )
-        onNodeWithText(version).performClick()
+        onNodeWithText(version).performScrollTo().performClick()
         eventsRecorder.assertSingle(PreferencesRootEvent.OnVersionInfoClick)
     }
 }
@@ -460,6 +467,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setView(
     setContent {
         PreferencesRootView(
             state = state,
+            emojiPickerRenderer = NoOpEmojiPickerRenderer,
             onBackClick = onBackClick,
             onAddAccountClick = onAddAccountClick,
             onSecureBackupClick = onSecureBackupClick,
