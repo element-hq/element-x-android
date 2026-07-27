@@ -50,6 +50,8 @@ import io.element.android.libraries.designsystem.theme.components.SegmentedButto
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.room.RoomMember
@@ -78,7 +80,8 @@ fun RoomMemberListView(
                 onBackClick = navigator::exitRoomMemberList,
                 onInviteClick = navigator::openInviteMembers,
             )
-        }
+        },
+        contentWindowInsets = scaffoldScrollableContentInsets,
     ) { padding ->
         Column(
             modifier = Modifier
@@ -115,7 +118,11 @@ private fun RoomMemberList(
     onSelectedSectionChange: (SelectedSection) -> Unit,
     onSelectUser: (RoomMember) -> Unit,
 ) {
-    LazyColumn(modifier = Modifier.fillMaxWidth(), state = rememberLazyListState()) {
+    LazyColumn(
+        modifier = Modifier.fillMaxWidth(),
+        state = rememberLazyListState(),
+        contentPadding = lazyColumnContentPadding,
+    ) {
         stickyHeader {
             Column {
                 AnimatedVisibility(visible = showBannedSection) {

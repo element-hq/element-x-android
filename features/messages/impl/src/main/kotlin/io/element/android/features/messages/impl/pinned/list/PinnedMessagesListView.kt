@@ -10,9 +10,13 @@ package io.element.android.features.messages.impl.pinned.list
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.plus
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -47,6 +51,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -90,7 +95,8 @@ fun PinnedMessagesListView(
                     .padding(padding)
                     .consumeWindowInsets(padding),
             )
-        }
+        },
+        contentWindowInsets = scaffoldScrollableContentInsets,
     )
 }
 
@@ -206,11 +212,12 @@ private fun PinnedMessagesListLoaded(
         onEmojiReactionClick = { _, _ -> },
         onVerifiedUserSendFailureClick = {}
     )
+
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         state = rememberLazyListState(),
         reverseLayout = true,
-        contentPadding = PaddingValues(vertical = 8.dp),
+        contentPadding = WindowInsets.navigationBars.asPaddingValues() + PaddingValues(vertical = 8.dp),
     ) {
         items(
             items = state.timelineItems,

@@ -43,6 +43,8 @@ import io.element.android.libraries.designsystem.theme.components.ListItemStyle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -62,11 +64,13 @@ fun SpaceSettingsView(
         topBar = {
             SpaceSettingsTopBar(onBackClick = onBackClick)
         },
+        contentWindowInsets = scaffoldScrollableContentInsets,
     ) { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)
                 .verticalScroll(rememberScrollState())
+                .padding(lazyColumnContentPadding)
         ) {
             SpaceInfoSection(
                 roomId = state.roomId,

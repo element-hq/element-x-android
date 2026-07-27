@@ -78,6 +78,8 @@ import io.element.android.libraries.designsystem.theme.components.ListItemStyle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -135,12 +137,14 @@ fun RoomDetailsView(
             )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
+        contentWindowInsets = scaffoldScrollableContentInsets,
     ) { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)
                 .verticalScroll(rememberScrollState())
                 .consumeWindowInsets(padding)
+                .padding(lazyColumnContentPadding)
         ) {
             leaveRoomView()
 

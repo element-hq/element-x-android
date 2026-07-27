@@ -14,11 +14,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -67,6 +70,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.SegmentedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -125,6 +129,7 @@ fun MediaGalleryView(
                 },
             )
         },
+        contentWindowInsets = scaffoldScrollableContentInsets,
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -320,6 +325,7 @@ private fun MediaGalleryFilesList(
     val presenterFactories = LocalMediaItemPresenterFactories.current
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
+        contentPadding = WindowInsets.navigationBars.asPaddingValues(),
     ) {
         items(
             items = files,
@@ -396,6 +402,7 @@ private fun MediaGalleryImageGrid(
         columns = GridCells.Adaptive(80.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
+        contentPadding = WindowInsets.navigationBars.asPaddingValues(),
     ) {
         items(
             items = imagesAndVideos,
