@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.plus
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -52,6 +51,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -96,7 +96,7 @@ fun PinnedMessagesListView(
                     .consumeWindowInsets(padding),
             )
         },
-        contentWindowInsets = WindowInsets.statusBars,
+        contentWindowInsets = scaffoldScrollableContentInsets,
     )
 }
 
@@ -212,6 +212,7 @@ private fun PinnedMessagesListLoaded(
         onEmojiReactionClick = { _, _ -> },
         onVerifiedUserSendFailureClick = {}
     )
+
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         state = rememberLazyListState(),

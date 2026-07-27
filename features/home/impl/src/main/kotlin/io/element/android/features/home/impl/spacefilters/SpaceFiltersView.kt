@@ -12,14 +12,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -47,6 +43,8 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.SearchField
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.matrix.api.spaces.SpaceServiceFilter
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -85,7 +83,7 @@ fun SpaceFiltersView(
                 }
             },
             scrollable = false,
-            contentWindowInsets = { WindowInsets.statusBars },
+            contentWindowInsets = { scaffoldScrollableContentInsets },
         ) {
             Box(
                 modifier = Modifier
@@ -133,7 +131,7 @@ private fun SpaceFiltersBottomSheetContent(
         )
         Spacer(modifier = Modifier.height(16.dp))
         LazyColumn(
-            contentPadding = WindowInsets.navigationBars.asPaddingValues(),
+            contentPadding = lazyColumnContentPadding,
         ) {
             items(filters) { filter ->
                 SpaceFilterItem(

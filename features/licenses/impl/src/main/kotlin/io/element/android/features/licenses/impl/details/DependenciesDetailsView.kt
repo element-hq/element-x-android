@@ -9,11 +9,7 @@
 package io.element.android.features.licenses.impl.details
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.plus
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,6 +25,8 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,10 +43,10 @@ fun DependenciesDetailsView(
                 navigationIcon = { BackButton(onClick = onBack) },
             )
         },
-        contentWindowInsets = WindowInsets.statusBars,
+        contentWindowInsets = scaffoldScrollableContentInsets,
     ) { contentPadding ->
         LazyColumn(
-            contentPadding = contentPadding + WindowInsets.navigationBars.asPaddingValues(),
+            contentPadding = contentPadding + lazyColumnContentPadding,
         ) {
             val licenses = licenseItem.licenses.orEmpty() +
                 licenseItem.unknownLicenses.orEmpty()

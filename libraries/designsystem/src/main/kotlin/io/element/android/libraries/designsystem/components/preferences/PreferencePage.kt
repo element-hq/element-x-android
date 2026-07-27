@@ -10,15 +10,11 @@ package io.element.android.libraries.designsystem.components.preferences
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.plus
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,6 +32,8 @@ import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 
 @Composable
 fun PreferencePage(
@@ -49,7 +47,7 @@ fun PreferencePage(
         modifier = modifier
             .fillMaxSize()
             .imePadding(),
-        contentWindowInsets = WindowInsets.statusBars,
+        contentWindowInsets = scaffoldScrollableContentInsets,
         topBar = {
             PreferenceTopAppBar(
                 title = title,
@@ -61,8 +59,8 @@ fun PreferencePage(
             Column(
                 modifier = Modifier
                     .verticalScroll(state = rememberScrollState())
-                    .padding(contentPadding + WindowInsets.navigationBars.asPaddingValues())
-                    .consumeWindowInsets(contentPadding + WindowInsets.navigationBars.asPaddingValues())
+                    .padding(contentPadding + lazyColumnContentPadding)
+                    .consumeWindowInsets(contentPadding + lazyColumnContentPadding)
             ) {
                 content()
             }

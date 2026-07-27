@@ -12,14 +12,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -51,6 +47,8 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.OnVisibleRangeChangeEffect
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.matrix.ui.components.SelectedRoom
 import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
 import io.element.android.libraries.matrix.ui.model.getAvatarData
@@ -106,7 +104,7 @@ fun AddRoomToSpaceView(
                 }
             )
         },
-        contentWindowInsets = WindowInsets.statusBars,
+        contentWindowInsets = scaffoldScrollableContentInsets,
     ) { paddingValues ->
         Column(
             Modifier
@@ -136,7 +134,7 @@ fun AddRoomToSpaceView(
                     state.eventSink(AddRoomToSpaceEvent.UpdateSearchVisibleRange(visibleRange))
                 }
                 LazyColumn(
-                    contentPadding = WindowInsets.navigationBars.asPaddingValues(),
+                    contentPadding = lazyColumnContentPadding,
                 ) {
                     items(rooms, key = { it.roomId }) { roomInfo ->
                         RoomListItem(
