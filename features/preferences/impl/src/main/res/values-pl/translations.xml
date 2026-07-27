@@ -102,6 +102,14 @@ Niektóre ustawienia mogą ulec zmianie, jeśli kontynuujesz."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"ustawienia systemowe"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Powiadomienia systemowe wyłączone"</string>
   <string name="screen_notification_settings_title">"Powiadomienia"</string>
+  <string name="screen_settings_user_status_away">"Z dala od urządzenia"</string>
+  <string name="screen_settings_user_status_be_right_back">"Zaraz wracam"</string>
+  <string name="screen_settings_user_status_custom">"Własny"</string>
+  <string name="screen_settings_user_status_custom_hint">"Własny status…"</string>
+  <string name="screen_settings_user_status_focus_time">"Skupia się"</string>
+  <string name="screen_settings_user_status_in_a_meeting">"Na spotkaniu"</string>
+  <string name="screen_settings_user_status_on_the_road">"W trasie"</string>
+  <string name="screen_settings_user_status_placeholder">"Jaki jest Twój status?"</string>
   <string name="theme_black">"Czarny"</string>
   <string name="theme_dark">"Ciemny"</string>
   <string name="theme_light">"Jasny"</string>

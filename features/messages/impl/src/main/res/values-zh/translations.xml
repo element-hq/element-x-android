@@ -67,6 +67,9 @@
   <string name="screen_room_timeline_reactions_show_more">"展开"</string>
   <string name="screen_room_timeline_reactions_show_reactions_summary">"显示反应摘要"</string>
   <string name="screen_room_timeline_read_marker_title">"新消息"</string>
+  <plurals name="screen_room_timeline_redacted_messages">
+    <item quantity="other">"%1$d 个已移除的消息"</item>
+  </plurals>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="other">"%1$d 个房间变化"</item>
   </plurals>

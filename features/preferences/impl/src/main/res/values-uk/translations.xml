@@ -101,6 +101,9 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"системні налаштування"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Системні сповіщення вимкнені"</string>
   <string name="screen_notification_settings_title">"Сповіщення"</string>
+  <string name="screen_settings_user_status_in_a_meeting">"На зустрічі"</string>
+  <string name="screen_settings_user_status_on_the_road">"У дорозі"</string>
+  <string name="screen_settings_user_status_placeholder">"Який у вас статус?"</string>
   <string name="theme_black">"Темна"</string>
   <string name="theme_dark">"Темна"</string>
   <string name="theme_light">"Світла"</string>

@@ -72,6 +72,10 @@
   <string name="screen_room_timeline_reactions_show_more">"Prikaži više"</string>
   <string name="screen_room_timeline_reactions_show_reactions_summary">"Prikaži sažetak reakcija"</string>
   <string name="screen_room_timeline_read_marker_title">"Novo"</string>
+  <plurals name="screen_room_timeline_redacted_messages">
+    <item quantity="one">"%1$d uklonjena poruka"</item>
+    <item quantity="other">"%1$d uklonjene poruke"</item>
+  </plurals>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d promjena sobe"</item>
     <item quantity="few">"%1$d promjene sobe"</item>
