@@ -28,13 +28,13 @@ class RustPasswordStrengthEstimator : PasswordStrengthEstimator {
     }
 }
 
-private fun SdkPasswordStrengthEstimate.toApiModel() = PasswordStrengthEstimate(
+internal fun SdkPasswordStrengthEstimate.toApiModel() = PasswordStrengthEstimate(
     ranking = ranking.toApiModel(),
     score = score,
     normalScore = normalScore,
 )
 
-private fun SdkPasswordStrengthRanking.toApiModel() = when (this) {
+internal fun SdkPasswordStrengthRanking.toApiModel() = when (this) {
     SdkPasswordStrengthRanking.VERY_WEAK -> PasswordStrengthRanking.VeryWeak
     SdkPasswordStrengthRanking.WEAK -> PasswordStrengthRanking.Weak
     SdkPasswordStrengthRanking.FAIR -> PasswordStrengthRanking.Fair
