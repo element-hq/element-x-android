@@ -218,6 +218,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setTimelineView(
     onReadReceiptClick: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
     onGalleryItemClick: (TimelineItem.Event, Int) -> Unit = EnsureNeverCalledWithTwoParams(),
     forceJumpToBottomVisibility: Boolean = false,
+    onJoinCallClick: (isAudioCall: Boolean) -> Unit = EnsureNeverCalledWithParam(),
 ) {
     setSafeContent(clearAndroidUiDispatcher = true) {
         TimelineView(
@@ -234,6 +235,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setTimelineView(
             onReadReceiptClick = onReadReceiptClick,
             onGalleryItemClick = onGalleryItemClick,
             forceJumpToBottomVisibility = forceJumpToBottomVisibility,
+            onJoinCallClick = onJoinCallClick,
         )
     }
 }

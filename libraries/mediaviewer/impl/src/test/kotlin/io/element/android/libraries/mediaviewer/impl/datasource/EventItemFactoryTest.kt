@@ -68,7 +68,13 @@ class EventItemFactoryTest {
     fun `create check all null cases`() {
         val factory = createEventItemFactory()
         val contents = listOf(
-            CallNotifyContent(callIntent = CallIntent.VIDEO, emptyList()),
+            CallNotifyContent(
+                callIntent = CallIntent.VIDEO,
+                declinedBy = emptyList(),
+                activeMembers = emptyList(),
+                isJoined = false,
+                callStartTsMillis = null,
+            ),
             FailedToParseMessageLikeContent("", ""),
             FailedToParseStateContent("", "", ""),
             LegacyCallInviteContent,

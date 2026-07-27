@@ -55,7 +55,7 @@ class DefaultEmojiPickerPresenter(
     override fun present(): EmojiPickerState {
         val queryState = rememberTextFieldState()
         var isSearchActive by remember { mutableStateOf(false) }
-        var emojiResults by remember { mutableStateOf<SearchBarResultState<ImmutableList<Emoji>>>(SearchBarResultState.Initial()) }
+        var emojiResults by remember { mutableStateOf<SearchBarResultState<ImmutableList<Emoji>>>(SearchBarResultState.Initial) }
 
         val data by produceState(EmojiPickerData.Empty) {
             val storeDeferred = async { emojibaseProvider.getStore() }
@@ -93,11 +93,7 @@ class DefaultEmojiPickerPresenter(
         val searchQuery = queryState.text.toString()
         LaunchedEffect(searchQuery, data) {
             if (searchQuery.isEmpty() || data.allEmojis.isEmpty()) {
-                // `SearchBarResultState.Initial` has no `equals` override, so reassigning a new instance
-                // would trigger a redundant emission each time this effect re-runs while the query is empty.
-                if (emojiResults !is SearchBarResultState.Initial) {
-                    emojiResults = SearchBarResultState.Initial()
-                }
+                emojiResults = SearchBarResultState.Initial
                 return@LaunchedEffect
             }
             delay(100.milliseconds)
