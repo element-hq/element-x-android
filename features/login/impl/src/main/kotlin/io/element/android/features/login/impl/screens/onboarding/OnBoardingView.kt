@@ -87,7 +87,6 @@ fun OnBoardingView(
             onCreateAccountContinue = onCreateAccountContinue,
         )
         LocalNetworkPermissionDialogView(
-            appName = state.productionApplicationName,
             dialog = state.loginModeState.localNetworkPermissionDialog,
             onSubmit = {
                 state.loginModeState.eventSink(LoginModeEvent.RequestLocalNetworkPermission)
