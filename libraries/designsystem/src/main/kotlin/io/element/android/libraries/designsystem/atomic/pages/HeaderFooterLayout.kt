@@ -63,33 +63,27 @@ fun HeaderFooterLayout(
             ) {
                 Layout(
                     content = {
-                        movableHeader()
-                        movableContent()
+                        Box { movableHeader() }
+                        Box { movableContent() }
                     },
                     modifier = Modifier.verticalScroll(rememberScrollState()),
                     measurePolicy = { measurables, constraints ->
                         val actualConstraints = constraints.copy(minWidth = 0, minHeight = 0, maxHeight = newHeight)
-                        val headerPlaceable = measurables.firstOrNull()?.measure(actualConstraints)
+                        val headerPlaceable = measurables[0].measure(actualConstraints)
 
-                        val contentPlaceable = if (headerPlaceable != null && measurables.size > 1) {
-                            val availableContentHeight = max(1, actualConstraints.maxHeight - headerPlaceable.height)
-                            val contentConstraints = actualConstraints.copy(minHeight = availableContentHeight, maxHeight = Constraints.Infinity)
-                            measurables[1].measure(contentConstraints)
-                        } else {
-                            null
-                        }
+                        val availableContentHeight = max(1, actualConstraints.maxHeight - headerPlaceable.height)
+                        val contentConstraints = actualConstraints.copy(minHeight = availableContentHeight, maxHeight = Constraints.Infinity)
+                        val contentPlaceable = measurables[1].measure(contentConstraints)
 
-                        val headerHeight = headerPlaceable?.height ?: 0
-                        val contentHeight = contentPlaceable?.height ?: 0
+                        val headerHeight = headerPlaceable.height
+                        val contentHeight = contentPlaceable.height
                         layout(actualConstraints.maxWidth, headerHeight + contentHeight) {
                             var yPosition = 0
 
-                            headerPlaceable?.let {
-                                it.placeRelative(0, yPosition)
-                                yPosition += it.height
-                            }
+                            headerPlaceable.placeRelative(0, yPosition)
+                            yPosition += headerPlaceable.height
 
-                            contentPlaceable?.placeRelative(0, yPosition)
+                            contentPlaceable.placeRelative(0, yPosition)
                         }
                     }
                 )
