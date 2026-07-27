@@ -11,11 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
+import io.element.android.libraries.designsystem.theme.LocalBuildMeta
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun LocalNetworkPermissionDialogView(
-    appName: String,
     dialog: LocalNetworkPermissionDialog,
     onSubmit: () -> Unit,
     onDismiss: () -> Unit,
@@ -28,7 +28,7 @@ fun LocalNetworkPermissionDialogView(
     }
     ConfirmationDialog(
         title = stringResource(CommonStrings.screen_local_network_opt_in_title),
-        content = stringResource(CommonStrings.screen_local_network_opt_in_subtitle, appName),
+        content = stringResource(CommonStrings.screen_local_network_opt_in_subtitle, LocalBuildMeta.current.applicationName),
         submitText = stringResource(submitTextRes),
         cancelText = stringResource(CommonStrings.action_not_now),
         onSubmitClick = onSubmit,

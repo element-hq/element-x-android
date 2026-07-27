@@ -123,7 +123,6 @@ fun ChangeServerView(
         AsyncData.Uninitialized -> Unit
     }
     LocalNetworkPermissionDialogView(
-        appName = LocalBuildMeta.current.applicationName,
         dialog = state.localNetworkPermissionDialog,
         onSubmit = {
             eventSink.invoke(ChangeServerEvents.RequestLocalNetworkPermission)
