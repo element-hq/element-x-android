@@ -95,6 +95,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
+import io.element.android.libraries.matrix.ui.media.contentvalidation.collectMediaState
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
@@ -217,20 +218,24 @@ fun MediaViewerView(
                     )
                 }
                 is MediaViewerPageData.MediaViewerData -> {
-                    val eventId = dataForPage.eventId
-
-                    val isMediaValid = dataForPage.validationState.getCurrentMediaState(dataForPage.mediaSource.safeUrl).isValid()
+                    // We need to check the 2 validation states and can't use the overall state because these might be part of a gallery event
+                    // If that was the case, the overall state would be invalid if any of the sources for any media in the gallery was invalid, e.g.:
+                    // Media 1: mediaSource = valid, thumbnailSource = valid
+                    // Media 2: mediaSource = invalid, thumbnailSource = valid
+                    // The overall state would be invalid, so the whole gallery event and all its medias would be considered invalid.
+                    val mediaValidationState by dataForPage.validationState.collectMediaState(dataForPage.mediaSource.safeUrl)
+                    val thumbnailValidationState by dataForPage.validationState.collectMediaState(dataForPage.thumbnailSource?.safeUrl)
 
                     // Check if the media to display is valid or dangerous
-                    LaunchedEffect(eventId) {
-                        if (eventId != null) {
-                            state.eventSink(MediaViewerEvent.ValidateMedia(eventId, dataForPage.mediaSource))
-                        }
+                    LaunchedEffect(Unit) {
+                        state.eventSink(
+                            MediaViewerEvent.ValidateMedia(mediaSource = dataForPage.mediaSource, thumbnailMediaSource = dataForPage.thumbnailSource)
+                        )
                     }
 
                     var bottomPaddingInPixels by remember { mutableIntStateOf(defaultBottomPaddingInPixels) }
-                    val loadMediaOnVisibilityChangedModifier = remember(isMediaValid) {
-                        if (isMediaValid == true) {
+                    val loadMediaOnVisibilityChangedModifier = remember(mediaValidationState) {
+                        if (mediaValidationState.isValid() && thumbnailValidationState.isValid()) {
                             Modifier.onVisibilityChanged(minDurationMs = 200L) { isVisible ->
                                 if (isVisible) {
                                     state.eventSink(MediaViewerEvent.LoadMedia(dataForPage))
@@ -383,6 +388,8 @@ private fun MediaViewerPage(
     ) {
         val downloadedMedia by data.downloadedMedia
         val showProgress = rememberShowProgress(downloadedMedia)
+        val mediaValidationState by data.validationState.collectMediaState(data.mediaSource.safeUrl)
+        val thumbnailValidationState by data.validationState.collectMediaState(data.thumbnailSource?.safeUrl)
 
         Box(
             modifier = Modifier
@@ -390,7 +397,7 @@ private fun MediaViewerPage(
                 .navigationBarsPadding()
         ) {
             AnimatedVisibility(
-                visible = data.validationState.getCurrentMediaState(data.mediaSource.safeUrl).isLoading(),
+                visible = mediaValidationState.isLoading(),
                 modifier = Modifier.padding(top = containerPadding.calculateTopPadding()).align(Alignment.TopCenter),
                 enter = fadeIn(spring(stiffness = 500F)),
                 exit = fadeOut(spring(stiffness = 500F)),
@@ -423,20 +430,18 @@ private fun MediaViewerPage(
                     }
                 }
 
-                val isMediaValid = data.validationState.getCurrentMediaState(data.mediaSource.safeUrl).isValid()
-
-                if (isMediaValid == false) {
+                if (mediaValidationState.isInvalid() || thumbnailValidationState.isInvalid()) {
                     Column(
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.Center,
                     ) {
                         IconTitleSubtitleMolecule(
                             iconStyle = BigIcon.Style.AlertSolid,
-                            title = "The file is not safe",
-                            subTitle = "Preview and download have been disabled.",
+                            title = stringResource(CommonStrings.content_scanner_unsafe_title),
+                            subTitle = stringResource(CommonStrings.content_scanner_unsafe_message),
                         )
                     }
-                } else {
+                } else if (mediaValidationState.isValid() && thumbnailValidationState.isValid()) {
                     LocalMediaView(
                         modifier = Modifier.fillMaxSize(),
                         isDisplayed = isDisplayed,
@@ -462,6 +467,7 @@ private fun MediaViewerPage(
                         )
                     }
                 }
+
                 if (showError) {
                     ErrorView(
                         errorMessage = stringResource(id = CommonStrings.error_unknown),

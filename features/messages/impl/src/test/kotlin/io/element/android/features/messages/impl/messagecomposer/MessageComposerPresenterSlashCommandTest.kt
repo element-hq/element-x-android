@@ -316,7 +316,7 @@ class MessageComposerPresenterSlashCommandTest {
         notificationConversationService = notificationConversationService,
         slashCommandService = slashCommandService,
         featureFlagService = featureFlagService,
-        contentScannerService = { _, _, _ -> },
+        contentScannerService = { _, _ -> },
         contentValidationCache = InMemoryEventContentValidationCache(),
     ).apply {
         isTesting = true

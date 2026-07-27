@@ -858,7 +858,7 @@ class MessageComposerPresenter(
                 if (currentComposerMode is MessageComposerMode.Reply) {
                     val mediaSources = currentComposerMode.replyToDetails.content()?.mediaSources() ?: return@launch
                     val contentValidationState = contentValidationCache[currentComposerMode.replyToDetails.eventId()]
-                    contentScannerService.scan(currentComposerMode.replyToDetails.eventId(), mediaSources, contentValidationState)
+                    contentScannerService.scan(mediaSources, contentValidationState)
                 }
                 // When coming from edit, just clear the composer as it'd be weird to reset a volatile draft in this scenario.
                 if (currentComposerMode.isEditing) {
