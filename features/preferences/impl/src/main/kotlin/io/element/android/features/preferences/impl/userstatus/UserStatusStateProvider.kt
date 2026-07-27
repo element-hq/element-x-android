@@ -23,8 +23,20 @@ internal class UserStatusStateProvider : PreviewParameterProvider<UserStatusStat
             rawStatus = UserStatus("🌴", "Away"),
             pickerState = UserStatusPickerState.ShowingPicker,
         ),
-        aUserStatusState(pickerState = UserStatusPickerState.CustomInput(emoji = "😀", textFieldState = TextFieldState())),
-        aUserStatusState(pickerState = UserStatusPickerState.CustomInput(emoji = "🚀", textFieldState = TextFieldState("Working on something"))),
+        aUserStatusState(
+            pickerState = UserStatusPickerState.CustomInput(
+                emoji = "😀",
+                textFieldState = TextFieldState(),
+                emojiPickerSheetState = EmojiPickerSheetState.Hidden
+            )
+        ),
+        aUserStatusState(
+            pickerState = UserStatusPickerState.CustomInput(
+                emoji = "🚀",
+                textFieldState = TextFieldState("Working on something"),
+                emojiPickerSheetState = EmojiPickerSheetState.Hidden
+            )
+        ),
     )
 }
 

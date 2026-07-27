@@ -475,7 +475,6 @@ Jeste li sigurni da želite nastaviti?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Maksimalna dopuštena veličina datoteke je: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Odaberite kvalitetu videozapisa koji želite prenijeti."</string>
   <string name="dialog_video_quality_selector_title">"Odaberi kvalitetu prijenosa videozapisa"</string>
-  <string name="emoji_picker_search_placeholder">"Pretraživanje emotikona"</string>
   <string name="error_account_already_logged_in">"Već ste prijavljeni na ovom uređaju kao %1$s."</string>
   <string name="error_account_creation_not_possible">"Vaš matični poslužitelj potrebno je nadograditi kako bi podržavao uslugu Matrix Authentication Service i stvaranje računa."</string>
   <string name="error_failed_creating_the_permalink">"Nije uspjelo stvaranje trajne poveznice"</string>

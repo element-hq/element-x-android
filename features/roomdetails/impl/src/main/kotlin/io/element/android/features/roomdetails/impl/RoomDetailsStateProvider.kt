@@ -26,6 +26,7 @@ import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import kotlinx.collections.immutable.toImmutableList
@@ -75,6 +76,7 @@ fun aDmRoomMember(
     role: RoomMember.Role = RoomMember.Role.User,
     membershipChangeReason: String? = null,
     isServiceMember: Boolean = false,
+    displayedStatus: DisplayedStatus? = null,
 ) = RoomMember(
     userId = userId,
     displayName = displayName,
@@ -86,6 +88,7 @@ fun aDmRoomMember(
     role = role,
     membershipChangeReason = membershipChangeReason,
     isServiceMember = isServiceMember,
+    displayedStatus = displayedStatus,
 )
 
 fun aRoomDetailsState(
@@ -178,12 +181,13 @@ fun aDmRoomDetailsState(
     roomName: String = "Daniel",
     isEncrypted: Boolean = true,
     dmRoomMemberVerificationState: UserProfileVerificationState = UserProfileVerificationState.UNKNOWN,
+    displayedStatus: DisplayedStatus? = null,
 ) = aRoomDetailsState(
     roomName = roomName,
     isPublic = false,
     isEncrypted = isEncrypted,
     canInvite = true,
-    roomType = RoomDetailsType.Dm(otherMember = aDmRoomMember(isIgnored = isDmMemberIgnored)),
+    roomType = RoomDetailsType.Dm(otherMember = aDmRoomMember(isIgnored = isDmMemberIgnored, displayedStatus = displayedStatus)),
     dmOtherMemberDetailsState = aUserProfileState(
         isBlocked = AsyncData.Success(isDmMemberIgnored),
         verificationState = dmRoomMemberVerificationState,

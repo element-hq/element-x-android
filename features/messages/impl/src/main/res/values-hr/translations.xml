@@ -7,15 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"Šifrirano nepoznatim ili izbrisanim uređajem."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Šifrirano uređajem koji vlasnik nije potvrdio."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Šifrirao neprovjereni korisnik."</string>
-  <string name="emoji_picker_category_activity">"Aktivnosti"</string>
-  <string name="emoji_picker_category_flags">"Zastave"</string>
-  <string name="emoji_picker_category_foods">"Hrana i piće"</string>
-  <string name="emoji_picker_category_nature">"Životinje i priroda"</string>
-  <string name="emoji_picker_category_objects">"Objekti"</string>
-  <string name="emoji_picker_category_people">"Emotikoni i osobe"</string>
-  <string name="emoji_picker_category_places">"Putovanja i mjesta"</string>
-  <string name="emoji_picker_category_recent">"Nedavni emotikoni"</string>
-  <string name="emoji_picker_category_symbols">"Simboli"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"Okreni sliku vodoravno"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Okrenuto vodoravno"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Izvornik"</string>

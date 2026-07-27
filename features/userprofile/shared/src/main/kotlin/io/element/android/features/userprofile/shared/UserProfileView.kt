@@ -78,6 +78,7 @@ fun UserProfileView(
                 userId = state.userId,
                 userName = state.userName,
                 verificationState = state.verificationState,
+                displayedStatus = state.displayedStatus,
                 openAvatarPreview = { avatarUrl ->
                     openAvatarPreview(state.userName ?: state.userId.value, avatarUrl)
                 },

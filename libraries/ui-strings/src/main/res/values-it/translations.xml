@@ -467,7 +467,6 @@ Sei sicuro di voler continuare?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"La dimensione massima consentita per il file è: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Seleziona la qualità del video che vuoi caricare."</string>
   <string name="dialog_video_quality_selector_title">"Seleziona la qualità di caricamento del video"</string>
-  <string name="emoji_picker_search_placeholder">"Cerca emoji"</string>
   <string name="error_account_already_logged_in">"Hai già effettuato l\'accesso su questo dispositivo come %1$s ."</string>
   <string name="error_account_creation_not_possible">"Il tuo homeserver deve essere aggiornato per supportare il Matrix Authentication Service e la creazione di account."</string>
   <string name="error_failed_creating_the_permalink">"Impossibile creare il collegamento permanente"</string>

@@ -41,6 +41,7 @@ import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.LocalBuildMeta
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -138,6 +139,7 @@ fun ChooseAccountProviderView(
         }
     }
     LocalNetworkPermissionDialogView(
+        appName = LocalBuildMeta.current.applicationName,
         dialog = state.loginModeState.localNetworkPermissionDialog,
         onSubmit = {
             state.loginModeState.eventSink(LoginModeEvent.RequestLocalNetworkPermission)

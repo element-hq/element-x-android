@@ -383,7 +383,12 @@ fun aThreadListItem(
 fun aThreadListItemEvent(
     threadId: ThreadId = ThreadId("\$a-thread-id"),
     senderId: UserId = UserId("@a-user-id:server"),
-    senderProfile: ProfileDetails = ProfileDetails.Ready(displayName = USER_NAME_ALICE, displayNameAmbiguous = false, avatarUrl = null),
+    senderProfile: ProfileDetails = ProfileDetails.Ready(
+        displayName = USER_NAME_ALICE,
+        displayNameAmbiguous = false,
+        avatarUrl = null,
+        displayedStatus = null,
+    ),
     isOwn: Boolean = false,
     content: EventContent = MessageContent(
         body = "Hello world!",

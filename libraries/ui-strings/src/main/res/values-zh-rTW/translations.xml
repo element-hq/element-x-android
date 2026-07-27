@@ -425,7 +425,6 @@
   <string name="dialog_video_quality_selector_subtitle_file_size">"最大允許的檔案大小為：%1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"選取您要上傳的視訊的品質。"</string>
   <string name="dialog_video_quality_selector_title">"選取視訊上傳品質"</string>
-  <string name="emoji_picker_search_placeholder">"搜尋表情符號"</string>
   <string name="error_account_already_logged_in">"您已在此裝置上以 %1$s 的身份登入。"</string>
   <string name="error_account_creation_not_possible">"您的家伺服器需要升級才能支援 Matrix Authentication Service 與帳號建立。"</string>
   <string name="error_failed_creating_the_permalink">"無法建立永久連結"</string>

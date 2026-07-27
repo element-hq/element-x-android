@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Aktiviteetit"</string>
+  <string name="emoji_picker_category_flags">"Liput"</string>
+  <string name="emoji_picker_category_foods">"Ruoka ja juoma"</string>
+  <string name="emoji_picker_category_nature">"Eläimet ja luonto"</string>
+  <string name="emoji_picker_category_objects">"Esineet"</string>
+  <string name="emoji_picker_category_people">"Hymiöt ja ihmiset"</string>
+  <string name="emoji_picker_category_places">"Matkustaminen ja paikat"</string>
+  <string name="emoji_picker_category_recent">"Viimeaikaiset emojit"</string>
+  <string name="emoji_picker_category_symbols">"Symbolit"</string>
+  <string name="emoji_picker_search_placeholder">"Etsi emojeja"</string>
+</resources>

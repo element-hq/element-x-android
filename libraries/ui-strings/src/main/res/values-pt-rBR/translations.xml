@@ -410,7 +410,6 @@ Você tem certeza de que deseja continuar?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"O tamanho máximo permitido de arquivos é: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Selecione a qualidade do video que quer enviar."</string>
   <string name="dialog_video_quality_selector_title">"Selecione a qualidade de envio dos vídeos"</string>
-  <string name="emoji_picker_search_placeholder">"Pesquisar emojis"</string>
   <string name="error_account_already_logged_in">"Você já está conectado neste dispositivo como %1$s ."</string>
   <string name="error_account_creation_not_possible">"Seu servidor-casa precisa ser atualizado para oferecer suporte ao Matrix Authentication Service e à criação de contas."</string>
   <string name="error_failed_creating_the_permalink">"Falha ao criar o link permanente"</string>

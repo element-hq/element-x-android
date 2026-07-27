@@ -7,15 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"Wedi\'i amgryptio gan ddyfais anhysbys neu wedi\'i dileu."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Wedi\'i amgryptio gan ddyfais nad yw wedi\'i wirio gan ei pherchennog."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Wedi\'i amgryptio gan ddefnyddiwr heb ei wirio."</string>
-  <string name="emoji_picker_category_activity">"Gweithgareddau"</string>
-  <string name="emoji_picker_category_flags">"Baneri"</string>
-  <string name="emoji_picker_category_foods">"Bwyd a Diod"</string>
-  <string name="emoji_picker_category_nature">"Anifeiliaid a Natur"</string>
-  <string name="emoji_picker_category_objects">"Gwrthrychau"</string>
-  <string name="emoji_picker_category_people">"Wynebau Hapus a Phobl"</string>
-  <string name="emoji_picker_category_places">"Teithio a Llefydd"</string>
-  <string name="emoji_picker_category_recent">"Emojis diweddar"</string>
-  <string name="emoji_picker_category_symbols">"Symbolau"</string>
   <string name="screen_media_upload_preview_caption_warning">"Efallai na fydd capsiynau yn weladwy i bobl sy\'n defnyddio apiau hŷn."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Tapiwch i newid ansawdd llwytho\'r fideo"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Nid oedd modd llwytho\'r ffeil."</string>

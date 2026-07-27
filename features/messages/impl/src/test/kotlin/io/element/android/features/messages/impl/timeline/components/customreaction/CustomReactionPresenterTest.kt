@@ -11,11 +11,11 @@ package io.element.android.features.messages.impl.timeline.components.customreac
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
+import io.element.android.libraries.emoji.api.recentemojis.EmptyGetRecentEmojis
+import io.element.android.libraries.emoji.test.fakeEmojiPickerPresenterFactory
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
-import io.element.android.libraries.recentemojis.test.FakeEmojibaseProvider
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.test
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -25,8 +25,8 @@ class CustomReactionPresenterTest {
     val warmUpRule = WarmUpRule()
 
     private val presenter = CustomReactionPresenter(
-        emojibaseProvider = FakeEmojibaseProvider(),
-        getRecentEmojis = { Result.success(persistentListOf()) },
+        emojiPickerPresenterFactory = fakeEmojiPickerPresenterFactory(),
+        getRecentEmojis = EmptyGetRecentEmojis,
     )
 
     @Test
@@ -37,8 +37,6 @@ class CustomReactionPresenterTest {
             assertThat(initialState.target).isEqualTo(CustomReactionState.Target.None)
 
             initialState.eventSink(CustomReactionEvent.ShowCustomReactionSheet(event))
-
-            assertThat(awaitItem().target).isEqualTo(CustomReactionState.Target.Loading(event))
 
             val eventId = (awaitItem().target as? CustomReactionState.Target.Success)?.event?.eventId
             assertThat(eventId).isEqualTo(AN_EVENT_ID)
@@ -58,8 +56,6 @@ class CustomReactionPresenterTest {
 
             val key = reactions.reactions.first().key
             initialState.eventSink(CustomReactionEvent.ShowCustomReactionSheet(event))
-
-            assertThat(awaitItem().target).isEqualTo(CustomReactionState.Target.Loading(event))
 
             val stateWithSelectedEmojis = awaitItem()
             val eventId = (stateWithSelectedEmojis.target as? CustomReactionState.Target.Success)?.event?.eventId

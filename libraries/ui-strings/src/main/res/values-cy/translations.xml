@@ -416,7 +416,6 @@ Ydych chi\'n siŵr eich bod am barhau?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Y maint ffeil mwyaf sy\'n cael ei ganiatáu yw: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Dewiswch ansawdd y fideo rydych chi am ei llwytho."</string>
   <string name="dialog_video_quality_selector_title">"Dewiswch ansawdd llwytho fideo"</string>
-  <string name="emoji_picker_search_placeholder">"Chwilio emojis"</string>
   <string name="error_account_already_logged_in">"Rydych chi eisoes wedi mewngofnodi ar y ddyfais hon fel %1$s ."</string>
   <string name="error_account_creation_not_possible">"Mae angen uwchraddio eich gweinydd cartref i gefnogi Gwasanaeth Dilysu Matrix a chreu cyfrif."</string>
   <string name="error_failed_creating_the_permalink">"Wedi methu creu\'r ddolen barhaol"</string>
