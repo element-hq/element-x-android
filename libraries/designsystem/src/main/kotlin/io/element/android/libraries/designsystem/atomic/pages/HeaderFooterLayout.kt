@@ -15,7 +15,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -38,6 +37,7 @@ import kotlin.math.max
  * @param modifier Compose modifier.
  * @param content the main content composable.
  */
+@Suppress("ContentSlotReused")
 @Composable
 fun HeaderFooterLayout(
     header: @Composable () -> Unit,
@@ -47,8 +47,6 @@ fun HeaderFooterLayout(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
-    val movableHeader = remember { movableContentOf(header) }
-    val movableContent = remember { movableContentOf(content) }
     Column(modifier = modifier) {
         if (isScrollable) {
             // This is a hack to make the content at least 1px high, otherwise the layout will crash
@@ -63,8 +61,8 @@ fun HeaderFooterLayout(
             ) {
                 Layout(
                     content = {
-                        Box { movableHeader() }
-                        Box { movableContent() }
+                        Box { header() }
+                        Box { content() }
                     },
                     modifier = Modifier.verticalScroll(rememberScrollState()),
                     measurePolicy = { measurables, constraints ->
@@ -90,10 +88,10 @@ fun HeaderFooterLayout(
             }
         } else {
             Box(Modifier.padding(contentInsetsPadding)) {
-                movableHeader()
+                header()
             }
             Box(Modifier.weight(1f, fill = true)) {
-                movableContent()
+                content()
             }
         }
 
