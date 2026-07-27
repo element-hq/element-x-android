@@ -9,7 +9,6 @@ package io.element.android.features.contentscanner.impl
 
 import io.element.android.features.contentscanner.api.ContentScannerService
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.scanner.ContentScanner
@@ -29,7 +28,7 @@ class DefaultContentScannerService(
 ) : ContentScannerService {
     private val dispatcher = coroutineDispatchers.io.limitedParallelism(4)
 
-    override fun scan(eventId: EventId, mediaSources: List<MediaSource>, contentValidationState: ContentValidationState) {
+    override fun scan(mediaSources: List<MediaSource>, contentValidationState: ContentValidationState) {
         for (mediaSource in mediaSources) {
             val url = mediaSource.safeUrl
             val currentState = contentValidationState.getCurrentMediaState(url)

@@ -242,10 +242,7 @@ class MediaViewerDataSource(
             }
     }
 
-    fun validateMedia(
-        eventId: EventId,
-        mediaSource: MediaSource,
-    ) {
+    fun validateMedia(mediaSource: MediaSource) {
         val validationState = mediaValidationState[mediaSource.safeUrl] ?: return
         val currentState = validationState.getCurrentMediaState(mediaSource.safeUrl)
 
@@ -253,7 +250,7 @@ class MediaViewerDataSource(
             return
         }
 
-        contentScannerService.scan(eventId, listOf(mediaSource), validationState)
+        contentScannerService.scan(listOfNotNull(mediaSource), validationState)
     }
 
     fun cancelLoadingMedia(data: MediaViewerPageData.MediaViewerData) {

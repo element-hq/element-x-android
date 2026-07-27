@@ -534,7 +534,7 @@ class MediaGalleryPresenterTest {
             mediaLoader = matrixMediaLoader,
             localMediaActions = localMediaActions,
             snackbarDispatcher = snackbarDispatcher,
-            contentScannerService = { _, _, _ -> },
+            contentScannerService = { _, _ -> },
         )
     }
 }
