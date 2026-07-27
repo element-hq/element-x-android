@@ -16,7 +16,6 @@ import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun LocalNetworkPermissionDialogView(
-    appName: String,
     dialog: LocalNetworkPermissionDialog,
     onSubmit: () -> Unit,
     onDismiss: () -> Unit,
