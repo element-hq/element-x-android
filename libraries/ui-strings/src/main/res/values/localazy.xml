@@ -552,14 +552,6 @@ Are you sure you want to continue?"</string>
   <string name="screen_room_pinned_banner_loading_description">"Loading message…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"View All"</string>
   <string name="screen_room_title">"Chat"</string>
-  <string name="screen_settings_user_status_away">"Away"</string>
-  <string name="screen_settings_user_status_be_right_back">"Be right back"</string>
-  <string name="screen_settings_user_status_custom">"Custom…"</string>
-  <string name="screen_settings_user_status_custom_hint">"Custom status…"</string>
-  <string name="screen_settings_user_status_focus_time">"Focus time"</string>
-  <string name="screen_settings_user_status_in_a_meeting">"In a meeting"</string>
-  <string name="screen_settings_user_status_on_the_road">"On the road"</string>
-  <string name="screen_settings_user_status_placeholder">"What\'s your status?"</string>
   <string name="screen_share_location_title">"Share location"</string>
   <string name="screen_share_my_location_action">"Share my location"</string>
   <string name="screen_share_open_apple_maps">"Open in Apple Maps"</string>
