@@ -10,6 +10,7 @@ package io.element.android.libraries.wellknown.impl
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.libraries.androidutils.json.JsonProvider
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.uri.ensureProtocol
@@ -28,8 +29,14 @@ class DefaultWellknownRetriever(
     private val retrofitFactory: RetrofitFactory,
     private val elementWellknownStore: ElementWellknownStore,
     private val jsonProvider: JsonProvider,
+    private val enterpriseService: EnterpriseService,
 ) : WellknownRetriever {
     override suspend fun getElementWellKnown(baseUrl: String): WellknownRetrieverResult<ElementWellKnown> {
+        val overriddenElementWellKnown = enterpriseService.overriddenElementWellKnown()
+        if (overriddenElementWellKnown != null) {
+            return WellknownRetrieverResult.Success(overriddenElementWellKnown)
+        }
+
         val domain = URL(baseUrl).host
         return buildWellknownApi(baseUrl)
             .map { wellknownApi ->

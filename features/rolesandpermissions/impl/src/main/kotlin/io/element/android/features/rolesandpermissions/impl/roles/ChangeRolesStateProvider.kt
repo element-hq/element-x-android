@@ -68,7 +68,7 @@ internal fun aChangeRolesState(
     role: RoomMember.Role = RoomMember.Role.Admin,
     searchQuery: String = "",
     isSearchActive: Boolean = false,
-    searchResults: SearchBarResultState<MembersByRole> = SearchBarResultState.NoResultsFound(),
+    searchResults: SearchBarResultState<MembersByRole> = SearchBarResultState.NoResultsFound,
     selectedUsers: ImmutableList<MatrixUser> = persistentListOf(),
     hasPendingChanges: Boolean = false,
     savingState: AsyncAction<Boolean> = AsyncAction.Uninitialized,

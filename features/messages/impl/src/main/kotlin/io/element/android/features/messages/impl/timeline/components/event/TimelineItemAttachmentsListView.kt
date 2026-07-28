@@ -7,31 +7,30 @@
 
 package io.element.android.features.messages.impl.timeline.components.event
 
-import android.text.SpannedString
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -39,8 +38,6 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayout
-import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.AttachmentItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeAudio
@@ -50,66 +47,124 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
-import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationValue
+import io.element.android.libraries.matrix.ui.media.contentvalidation.InvalidContentView
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NotFoundContentView
+import io.element.android.libraries.matrix.ui.media.contentvalidation.collectMediaState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.rememberEventContentValidationState
 import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.wysiwyg.compose.EditorStyledText
-import io.element.android.wysiwyg.link.Link
+import kotlin.math.max
 
 @Composable
 fun TimelineItemAttachmentsListView(
+    eventId: EventId?,
     content: TimelineItemAttachmentsContent,
     onGalleryItemClick: (Int) -> Unit,
-    onLinkClick: (Link) -> Unit,
-    onLinkLongClick: (Link) -> Unit,
-    onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            content.attachments.forEachIndexed { index, attachment ->
-                Column {
-                    if (index > 0) {
-                        HorizontalDivider(
-                            color = ElementTheme.colors.borderInteractiveSecondary,
+    val contentValidationState = rememberEventContentValidationState(
+        eventId = eventId,
+        needsValidation = content.isMedia,
+    )
+
+    Column(modifier = modifier.fillMaxWidth()) {
+        val validationStates = remember(content.attachments) {
+            buildList {
+                for (attachment in content.attachments) {
+                    add(validationStateForAttachment(attachment, contentValidationState))
+                }
+            }.toMutableStateList()
+        }
+        content.attachments.forEachIndexed { index, attachment ->
+            Column(modifier = Modifier.fillMaxWidth()) {
+                val thumbnailContentValidationState by contentValidationState.collectMediaState(attachment.thumbnailSource?.safeUrl)
+                val mediaContentValidationState by contentValidationState.collectMediaState(attachment.mediaSource.safeUrl)
+
+                val itemContentValidationState = remember(thumbnailContentValidationState, mediaContentValidationState) {
+                    validationStateForAttachment(attachment, contentValidationState)
+                }
+
+                LaunchedEffect(itemContentValidationState) {
+                    validationStates[index] = itemContentValidationState
+                }
+
+                val needsSeparator = index in 1..max(1, content.attachments.lastIndex)
+                val isPreviousItemInvalid = validationStates.getOrNull(index - 1)?.hasError() == true
+                if (needsSeparator && !itemContentValidationState.hasError() && !isPreviousItemInvalid) {
+                    HorizontalDivider(
+                        color = ElementTheme.colors.borderInteractiveSecondary,
+                    )
+                }
+
+                when (itemContentValidationState) {
+                    ContentValidationValue.Invalid -> {
+                        val shape = RoundedCornerShape(6.dp)
+                        InvalidContentView(
+                            modifier = Modifier
+                                .padding(vertical = 6.dp)
+                                .border(width = 1.dp, color = ElementTheme.colors.borderCriticalSubtle, shape = shape)
+                                .clip(shape),
+                            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
                         )
                     }
-                    AttachmentListItem(
-                        attachment = attachment,
-                        onClick = { onGalleryItemClick(index) },
+                    is ContentValidationValue.UnrecoverableError -> {
+                        val shape = RoundedCornerShape(6.dp)
+                        NotFoundContentView(
+                            modifier = Modifier
+                                .padding(vertical = 6.dp)
+                                .border(width = 1.dp, color = ElementTheme.colors.borderCriticalSubtle, shape = shape)
+                                .clip(shape),
+                            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
+                        )
+                    }
+                    ContentValidationValue.Loading -> {
+                        CircularProgressIndicator(modifier = Modifier.padding(8.dp).align(Alignment.CenterHorizontally))
+                    }
+                    ContentValidationValue.Valid -> {
+                        AttachmentListItem(
+                            attachment = attachment,
+                            onClick = { onGalleryItemClick(index) },
+                        )
+                    }
+                    else -> {
+                        // TODO handle cases where either the content hasn't started validation or it failed to do so
+                    }
+                }
+
+                if (index == content.attachments.lastIndex && content.showCaption && !itemContentValidationState.isInvalid()) {
+                    HorizontalDivider(
+                        color = ElementTheme.colors.borderInteractiveSecondary,
                     )
                 }
             }
         }
-        if (content.showCaption) {
-            HorizontalDivider(
-                color = ElementTheme.colors.borderInteractiveSecondary,
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            val caption = if (LocalInspectionMode.current) {
-                SpannedString(content.caption)
-            } else {
-                content.formattedCaption ?: SpannedString(content.caption)
-            }
-            CompositionLocalProvider(
-                LocalContentColor provides ElementTheme.colors.textPrimary,
-                LocalTextStyle provides ElementTheme.typography.fontBodyLgRegular
-            ) {
-                EditorStyledText(
-                    modifier = Modifier
-                        .padding(horizontal = 4.dp)
-                        .widthIn(min = 120.dp),
-                    text = caption,
-                    style = ElementRichTextEditorStyle.textStyle(),
-                    onLinkClickedListener = onLinkClick,
-                    onLinkLongClickedListener = onLinkLongClick,
-                    releaseOnDetach = false,
-                    onTextLayout = ContentAvoidingLayout.measureLegacyLastTextLine(onContentLayoutChange = onContentLayoutChange),
-                )
-            }
-        }
+    }
+}
+
+private fun validationStateForAttachment(
+    attachment: AttachmentItem,
+    contentValidationState: ContentValidationState,
+): ContentValidationValue {
+    val thumbnailValue = attachment.thumbnailSource?.safeUrl?.let { contentValidationState.getCurrentMediaState(it) } ?: ContentValidationValue.Unknown
+    val mediaValue = contentValidationState.getCurrentMediaState(attachment.mediaSource.safeUrl)
+    return validationStateForAttachment(thumbnailValue, mediaValue)
+}
+
+private fun validationStateForAttachment(
+    thumbnailValue: ContentValidationValue,
+    mediaValue: ContentValidationValue,
+): ContentValidationValue {
+    return if (thumbnailValue.isInvalid() || mediaValue.isInvalid()) {
+        ContentValidationValue.Invalid
+    } else if (thumbnailValue.hasUnrecoverableError() || mediaValue.hasUnrecoverableError()) {
+        listOf(thumbnailValue, mediaValue).first { it.hasUnrecoverableError() }
+    } else if (thumbnailValue.isLoading() || mediaValue.isLoading()) {
+        ContentValidationValue.Loading
+    } else {
+        mediaValue
     }
 }
 
@@ -213,10 +268,8 @@ internal fun TimelineItemAttachmentsListViewPreview(
     @PreviewParameter(TimelineItemAttachmentsContentProvider::class) content: TimelineItemAttachmentsContent
 ) = ElementPreview {
     TimelineItemAttachmentsListView(
+        eventId = EventId("\$eventId"),
         content = content,
         onGalleryItemClick = {},
-        onLinkClick = {},
-        onLinkLongClick = {},
-        onContentLayoutChange = {},
     )
 }

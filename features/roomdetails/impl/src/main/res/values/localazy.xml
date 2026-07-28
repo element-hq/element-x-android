@@ -114,7 +114,7 @@
   <string name="screen_room_notification_settings_error_setting_mode">"Failed setting the mode, please try again."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Your homeserver does not support this option in encrypted rooms, you won\'t get notified in this room."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"All messages"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Mentions and Keywords only"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Mentions and replies only"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"In this room, notify me for"</string>
   <string name="screen_room_roles_and_permissions_admins">"Admins"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"Admins and owners"</string>

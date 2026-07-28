@@ -53,10 +53,10 @@ import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.aTextEditorStateMarkdown
 import io.element.android.libraries.textcomposer.model.aTextEditorStateRich
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableSet
@@ -152,6 +152,7 @@ fun aMessagesState(
         hasUnreadThreads = false,
     ),
     isCurrentlySharingLiveLocationInRoom: Boolean = false,
+    dmUserStatus: DisplayedStatus? = null,
     selectionState: TimelineSelectionState = TimelineSelectionState.Empty,
     isMultiSelectEnabled: Boolean = false,
     eventSink: (MessagesEvent) -> Unit = {},
@@ -184,6 +185,7 @@ fun aMessagesState(
     successorRoom = successorRoom,
     threads = threads,
     showLiveLocationShareBanner = isCurrentlySharingLiveLocationInRoom,
+    dmUserStatus = dmUserStatus,
     selectionState = selectionState,
     isMultiSelectEnabled = isMultiSelectEnabled,
     eventSink = eventSink,
@@ -220,11 +222,9 @@ fun aReactionSummaryState(
 
 fun aCustomReactionState(
     target: CustomReactionState.Target = CustomReactionState.Target.None,
-    recentEmojis: ImmutableList<String> = persistentListOf(),
     eventSink: (CustomReactionEvent) -> Unit = {},
 ) = CustomReactionState(
     target = target,
-    recentEmojis = recentEmojis,
     selectedEmoji = persistentSetOf(),
     eventSink = eventSink,
 )

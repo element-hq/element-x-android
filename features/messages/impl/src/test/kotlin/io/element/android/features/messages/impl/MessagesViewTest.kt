@@ -31,7 +31,6 @@ import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import androidx.compose.ui.text.AnnotatedString
 import io.element.android.emojibasebindings.Emoji
 import io.element.android.emojibasebindings.EmojibaseCategory
-import io.element.android.emojibasebindings.EmojibaseStore
 import io.element.android.features.messages.impl.actionlist.ActionListEvent
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.anActionListState
@@ -48,6 +47,7 @@ import io.element.android.features.messages.impl.timeline.aTimelineItemList
 import io.element.android.features.messages.impl.timeline.aTimelineItemReadReceipts
 import io.element.android.features.messages.impl.timeline.aTimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.aTimelineState
+import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionBottomSheet
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionEvent
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryEvent
@@ -56,6 +56,8 @@ import io.element.android.features.messages.impl.timeline.components.receipt.bot
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.roomcall.api.aStandByCallState
+import io.element.android.libraries.emoji.impl.picker.DefaultEmojiPickerRenderer
+import io.element.android.libraries.emoji.impl.picker.anEmojiPickerState
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
@@ -538,24 +540,23 @@ class MessagesViewTest : RobolectricTest() {
             eventSink = eventsRecorder,
         )
         val timelineItem = state.timelineState.timelineItems.first() as TimelineItem.Event
+        val emojisByCategory = persistentMapOf(
+            EmojibaseCategory.People to persistentListOf(
+                Emoji(
+                    hexcode = "",
+                    label = "",
+                    tags = persistentListOf(),
+                    shortcodes = persistentListOf(),
+                    unicode = aUnicode,
+                    skins = null,
+                )
+            )
+        )
         val stateWithCustomReactionState = state.copy(
             customReactionState = aCustomReactionState(
                 target = CustomReactionState.Target.Success(
                     event = timelineItem,
-                    emojibaseStore = EmojibaseStore(
-                        categories = persistentMapOf(
-                            EmojibaseCategory.People to persistentListOf(
-                                Emoji(
-                                    hexcode = "",
-                                    label = "",
-                                    tags = persistentListOf(),
-                                    shortcodes = persistentListOf(),
-                                    unicode = aUnicode,
-                                    skins = null,
-                                )
-                            )
-                        )
-                    ),
+                    emojiPickerState = anEmojiPickerState(emojis = emojisByCategory),
                 ),
                 eventSink = customReactionStateEventsRecorder
             ),
@@ -695,6 +696,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setMessagesView(
     onViewAllPinnedMessagesClick: () -> Unit = EnsureNeverCalled(),
     onThreadsListClicked: () -> Unit = EnsureNeverCalled(),
 ) {
+    val emojiPickerRenderer = DefaultEmojiPickerRenderer()
     setSafeContent {
         // Cannot use the RichTextEditor, so simulate a LocalInspectionMode
         CompositionLocalProvider(LocalInspectionMode provides true) {
@@ -711,6 +713,15 @@ private fun AndroidComposeUiTest<ComponentActivity>.setMessagesView(
                 onJoinCallClick = onJoinCallClick,
                 onViewAllPinnedMessagesClick = onViewAllPinnedMessagesClick,
                 knockRequestsBannerView = {},
+                customReactionBottomSheet = {
+                    CustomReactionBottomSheet(
+                        state = state.customReactionState,
+                        onSelectEmoji = { uniqueId, emoji ->
+                            state.eventSink(MessagesEvent.ToggleReaction(emoji.unicode, uniqueId))
+                        },
+                        emojiPickerRenderer = emojiPickerRenderer,
+                    )
+                },
                 onThreadsListClick = onThreadsListClicked,
             )
         }

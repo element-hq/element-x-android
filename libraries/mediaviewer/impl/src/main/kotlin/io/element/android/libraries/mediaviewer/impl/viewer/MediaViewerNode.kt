@@ -22,6 +22,7 @@ import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.compound.colors.SemanticColorsLightDark
 import io.element.android.compound.theme.ForcedDarkElementTheme
+import io.element.android.features.contentscanner.api.ContentScannerService
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.viewfolder.api.TextFileViewer
 import io.element.android.libraries.architecture.callback
@@ -33,6 +34,8 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.ui.media.contentvalidation.EventContentValidationCache
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopContentValidationState
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.mediaviewer.impl.datasource.FocusedTimelineMediaGalleryDataSourceFactory
@@ -57,6 +60,8 @@ class MediaViewerNode(
     private val audioFocus: AudioFocus,
     private val sessionId: SessionId,
     private val enterpriseService: EnterpriseService,
+    private val contentScannerService: ContentScannerService,
+    private val contentValidationCache: EventContentValidationCache,
 ) : Node(buildContext, plugins = plugins),
     MediaViewerNavigator {
     private val callback: MediaViewerEntryPoint.Callback = callback()
@@ -76,12 +81,13 @@ class MediaViewerNode(
 
     private val mediaGallerySource = when (inputs) {
         is MediaViewerEntryPoint.Params.Avatar ->
-            SingleMediaGalleryDataSource.createFrom(inputs)
+            SingleMediaGalleryDataSource.createFrom(inputs, contentValidationCache)
         is MediaViewerEntryPoint.Params.EventGallery ->
             GalleryMediaGalleryDataSource.createFrom(
                 eventId = inputs.eventId,
                 galleryItems = inputs.galleryItems,
                 galleryInfo = inputs.galleryInfo,
+                contentValidationState = inputs.eventId?.let { contentValidationCache[it] } ?: NoopContentValidationState(),
             )
         is MediaViewerEntryPoint.Params.RoomMedia -> {
             val eventId = inputs.eventId
@@ -103,7 +109,7 @@ class MediaViewerNode(
                         } else {
                             focusedTimelineMediaGalleryDataSourceFactory.createFor(
                                 eventId = eventId,
-                                mediaItem = inputs.toMediaItem(),
+                                mediaItem = inputs.toMediaItem(contentValidationCache[eventId]),
                                 onlyPinnedEvents = false,
                             )
                         }
@@ -111,7 +117,7 @@ class MediaViewerNode(
                     Timeline.Mode.PinnedEvents -> {
                         focusedTimelineMediaGalleryDataSourceFactory.createFor(
                             eventId = eventId,
-                            mediaItem = inputs.toMediaItem(),
+                            mediaItem = inputs.toMediaItem(contentValidationCache[eventId]),
                             onlyPinnedEvents = true,
                         )
                     }
@@ -142,6 +148,8 @@ class MediaViewerNode(
             localMediaFactory = localMediaFactory,
             systemClock = systemClock,
             pagerKeysHandler = pagerKeysHandler,
+            contentScannerService = contentScannerService,
+            contentValidationCache = contentValidationCache,
         )
     )
 

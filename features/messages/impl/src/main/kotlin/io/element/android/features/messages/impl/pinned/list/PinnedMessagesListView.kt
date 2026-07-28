@@ -36,7 +36,6 @@ import io.element.android.features.messages.impl.timeline.components.event.Timel
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
-import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.poll.api.pollcontent.PollTitleView
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
@@ -240,6 +239,7 @@ private fun PinnedMessagesListLoaded(
                 onMoreReactionsClick = {},
                 onReadReceiptClick = {},
                 onSwipeToReply = {},
+                onJoinCallClick = {},
                 eventSink = { timelineItemEvent ->
                     when (timelineItemEvent) {
                         is TimelineEvent.OpenThread -> state.eventSink(PinnedMessagesListEvent.OpenThread(timelineItemEvent.threadRootEventId))
@@ -290,9 +290,9 @@ private fun TimelineItemEventContentViewWrapper(
         )
     } else {
         TimelineItemEventContentView(
+            eventId = event.eventId,
             content = event.content,
-            hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId, event.isMine),
-            onShowContentClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
+            timelineProtectionState = timelineProtectionState,
             onGalleryItemClick = onGalleryItemClick,
             onLinkClick = onLinkClick,
             onLinkLongClick = onLinkLongClick,

@@ -11,6 +11,7 @@
 package io.element.android.libraries.wellknown.impl
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.wellknown.test.FakeElementWellknownStore
 import io.element.android.features.wellknown.test.anElementWellKnown
 import io.element.android.libraries.androidutils.json.DefaultJsonProvider
@@ -19,6 +20,7 @@ import io.element.android.libraries.network.RetrofitFactory
 import io.element.android.libraries.wellknown.api.CustomRecoveryPassphrase
 import io.element.android.libraries.wellknown.api.ElementWellKnown
 import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -50,6 +52,7 @@ class DefaultWellknownRetrieverTest {
                     identityProviderAppScheme = null,
                     customRecoveryPassphrase = null,
                     contentScannerUrl = null,
+                    forceDisableE2EE = null,
                 )
             )
         )
@@ -72,6 +75,7 @@ class DefaultWellknownRetrieverTest {
                     identityProviderAppScheme = "an_app_scheme",
                     customRecoveryPassphrase = null,
                     contentScannerUrl = "https://content-scanner.example.com",
+                    forceDisableE2EE = false,
                 )
             )
         )
@@ -101,6 +105,7 @@ class DefaultWellknownRetrieverTest {
                     identityProviderAppScheme = null,
                     contentScannerUrl = null,
                     customRecoveryPassphrase = null,
+                    forceDisableE2EE = null,
                 )
             )
         )
@@ -233,6 +238,27 @@ class DefaultWellknownRetrieverTest {
         assertThat(cacheStore.get(WELLKNOWN_URL)).isEqualTo(WellknownRetrieverResult.NotFound)
     }
 
+    @Test
+    fun `get element wellknown was overridden`() = runTest {
+        val getLambda = lambdaRecorder<Request, Call> { mockCall() }
+        val wellKnown = anElementWellKnown()
+
+        val sut = createDefaultWellknownRetriever(
+            callFactory = getLambda,
+            enterpriseService = FakeEnterpriseService(
+                overrideWellKnownResult = { wellKnown }
+            )
+        )
+
+        // The overridden value is returned
+        assertThat(sut.getElementWellKnown(WELLKNOWN_URL)).isEqualTo(
+            WellknownRetrieverResult.Success(wellKnown)
+        )
+
+        // And the endpoint is never hit
+        getLambda.assertions().isNeverCalled()
+    }
+
     private fun defaultResponse(
         body: String = WELLKNOWN_CONTENT,
         status: Int = 200,
@@ -248,6 +274,7 @@ class DefaultWellknownRetrieverTest {
         callFactory: Call.Factory = Call.Factory { _: Request -> mockCall(defaultResponse()) },
         cacheStore: FakeElementWellknownStore = FakeElementWellknownStore(),
         jsonProvider: JsonProvider = DefaultJsonProvider(),
+        enterpriseService: FakeEnterpriseService = FakeEnterpriseService(overrideWellKnownResult = { null }),
     ) = DefaultWellknownRetriever(
         retrofitFactory = RetrofitFactory(
             callFactory = { callFactory },
@@ -255,6 +282,7 @@ class DefaultWellknownRetrieverTest {
         ),
         jsonProvider = jsonProvider,
         elementWellknownStore = cacheStore,
+        enterpriseService = enterpriseService,
     )
 
     companion object {
@@ -266,7 +294,8 @@ class DefaultWellknownRetrieverTest {
                 "brand_color": "#FF0000",
                 "notification_sound": "a_notification_sound.flac",
                 "idp_app_scheme": "an_app_scheme",
-                "content_scanner_url": "https://content-scanner.example.com"
+                "content_scanner_url": "https://content-scanner.example.com",
+                "force_disable_e2ee": false
             }"""
     }
 }

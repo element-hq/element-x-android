@@ -135,6 +135,7 @@ fun anAttachmentItem(
     fileSize: Long? = 1_000_000L,
     formattedFileSize: String = "1MB",
     mimeType: String? = null,
+    mediaSource: MediaSource = MediaSource(url = "", json = ""),
     thumbnailSource: MediaSource? = null,
     hasThumbnail: Boolean = false,
 ) = AttachmentItem(
@@ -143,7 +144,7 @@ fun anAttachmentItem(
         hasThumbnail -> "image/jpeg"
         else -> "application/$fileExtension"
     },
-    mediaSource = MediaSource(url = "", json = ""),
+    mediaSource = mediaSource,
     thumbnailSource = thumbnailSource ?: if (hasThumbnail) MediaSource(url = "", json = "") else null,
     fileSize = fileSize,
     formattedFileSize = formattedFileSize,

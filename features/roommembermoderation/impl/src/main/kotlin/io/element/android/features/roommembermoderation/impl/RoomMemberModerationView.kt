@@ -57,6 +57,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.getBestName
+import io.element.android.libraries.matrix.ui.model.toText
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
@@ -264,9 +265,23 @@ private fun RoomMemberActionsBottomSheet(
                 overflow = TextOverflow.Ellipsis,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+                    .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
                     .fillMaxWidth()
             )
+            val userStatus = user.displayedStatus?.toText()
+            if (userStatus != null) {
+                Text(
+                    text = userStatus,
+                    style = ElementTheme.typography.fontBodyLgMedium,
+                    maxLines = 1,
+                    color = ElementTheme.colors.textSecondary,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
+                        .fillMaxWidth()
+                )
+            }
             // Show user ID only if it's different from the display name
             if (bestName != user.userId.value) {
                 Text(

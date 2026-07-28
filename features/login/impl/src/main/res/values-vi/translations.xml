@@ -27,7 +27,7 @@
   <string name="screen_change_server_subtitle">"Địa chỉ máy chủ của bạn là gì?"</string>
   <string name="screen_change_server_title">"Chọn máy chủ của bạn"</string>
   <string name="screen_create_account_title">"Tạo tài khoản"</string>
-  <string name="screen_login_error_deactivated_account">"Tài khoản này đã bị vô hiệu hóa."</string>
+  <string name="screen_login_error_deactivated_account">"Tài khoản này đã bị xóa."</string>
   <string name="screen_login_error_invalid_credentials">"Tên người dùng và/hoặc mật khẩu không chính xác"</string>
   <string name="screen_login_error_invalid_user_id">"Đây không phải là mã nhận dạng người dùng hợp lệ. Định dạng mong đợi: ‘@user:homeserver.org’"</string>
   <string name="screen_login_error_refresh_tokens">"Máy chủ này được cấu hình sử dụng refresh token. Điều này không được hỗ trợ khi đăng nhập bằng mật khẩu."</string>

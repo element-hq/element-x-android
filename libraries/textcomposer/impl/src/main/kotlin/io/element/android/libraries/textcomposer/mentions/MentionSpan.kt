@@ -39,9 +39,13 @@ class MentionSpan(
     private var typeface: Typeface = Typeface.DEFAULT
 
     private var measuredTextWidth = 0
+    private var measuredTrailingWidth = 0
 
     // The formatted display text, will be set by the formatter
     var displayText: CharSequence = ""
+        private set
+
+    var trailingText: String? = null
         private set
 
     /**
@@ -80,6 +84,10 @@ class MentionSpan(
         displayText = formatter.formatDisplayText(type)
     }
 
+    fun updateTrailingText(trailingText: String?) {
+        this.trailingText = trailingText
+    }
+
     override fun getSize(
         paint: Paint,
         text: CharSequence?,
@@ -91,7 +99,8 @@ class MentionSpan(
         textPaint.typeface = typeface
         // Measure the full text width without truncation
         measuredTextWidth = textPaint.measureText(displayText, 0, displayText.length).roundToInt()
-        return measuredTextWidth + startPadding + endPadding
+        measuredTrailingWidth = trailingText?.let { textPaint.measureText(" $it").roundToInt() } ?: 0
+        return measuredTextWidth + measuredTrailingWidth + startPadding + endPadding
     }
 
     override fun draw(
@@ -106,7 +115,8 @@ class MentionSpan(
         paint: Paint
     ) {
         val availableWidth = (canvas.width - x).coerceAtLeast(0f)
-        val measuredWidth = measuredTextWidth + startPadding + endPadding
+
+        val measuredWidth = measuredTextWidth + measuredTrailingWidth + startPadding + endPadding
         val pillWidth = minOf(availableWidth, measuredWidth.toFloat())
 
         backgroundPaint.color = backgroundColor
@@ -118,18 +128,18 @@ class MentionSpan(
         textPaint.color = textColor
         textPaint.typeface = typeface
 
-        val availableWidthForText = availableWidth - startPadding - endPadding
+        val availableWidthForText = availableWidth - startPadding - endPadding - measuredTrailingWidth
         val textToDraw = if (measuredTextWidth > availableWidthForText) {
-            TextUtils.ellipsize(
-                displayText,
-                textPaint,
-                availableWidthForText,
-                TextUtils.TruncateAt.END
-            )
+            TextUtils.ellipsize(displayText, textPaint, availableWidthForText, TextUtils.TruncateAt.END)
         } else {
             displayText
         }
         canvas.drawText(textToDraw, 0, textToDraw.length, x + startPadding, y.toFloat(), textPaint)
+
+        trailingText?.let {
+            val drawnTextWidth = minOf(availableWidthForText, measuredTextWidth.toFloat())
+            canvas.drawText(" $it", x + startPadding + drawnTextWidth, y.toFloat(), textPaint)
+        }
     }
 }
 

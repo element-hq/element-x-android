@@ -16,6 +16,9 @@ import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.DefaultContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.EventContentValidationCache
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.impl.datasource.MediaGalleryDataSource
@@ -27,6 +30,7 @@ import kotlinx.coroutines.flow.flowOf
 
 class SingleMediaGalleryDataSource(
     private val data: GroupedMediaItems,
+    private val contentValidationCache: EventContentValidationCache,
 ) : MediaGalleryDataSource {
     override fun start(coroutineScope: CoroutineScope) = Unit
     override fun groupedMediaItemsFlow() = flowOf(AsyncData.Success(data))
@@ -38,7 +42,10 @@ class SingleMediaGalleryDataSource(
     override suspend fun deleteItem(eventId: EventId) = Unit
 
     companion object {
-        fun createFrom(params: MediaViewerEntryPoint.Params.Avatar) = SingleMediaGalleryDataSource(
+        fun createFrom(
+            params: MediaViewerEntryPoint.Params.Avatar,
+            contentValidationCache: EventContentValidationCache,
+        ) = SingleMediaGalleryDataSource(
             data = GroupedMediaItems(
                 // Always use imageAndVideoItems, in Single mode, this is the data that will be used
                 imageAndVideoItems = persistentListOf(
@@ -63,15 +70,20 @@ class SingleMediaGalleryDataSource(
                         ),
                         mediaSource = params.mediaSource,
                         thumbnailSource = params.thumbnailSource,
+                        blurHash = params.blurHash,
+                        validationState = DefaultContentValidationState(),
                     )
                 ),
                 fileItems = persistentListOf(),
-            )
+            ),
+            contentValidationCache = contentValidationCache,
         )
     }
 }
 
-fun MediaViewerEntryPoint.Params.RoomMedia.toMediaItem() = when {
+fun MediaViewerEntryPoint.Params.RoomMedia.toMediaItem(
+    contentValidationState: ContentValidationState,
+) = when {
     mediaInfo.mimeType.isMimeTypeImage() -> {
         MediaItem.Image(
             id = UniqueId("dummy"),
@@ -79,6 +91,8 @@ fun MediaViewerEntryPoint.Params.RoomMedia.toMediaItem() = when {
             mediaInfo = mediaInfo,
             mediaSource = mediaSource,
             thumbnailSource = thumbnailSource,
+            blurHash = null,
+            validationState = contentValidationState,
         )
     }
     mediaInfo.mimeType.isMimeTypeVideo() -> {
@@ -88,6 +102,8 @@ fun MediaViewerEntryPoint.Params.RoomMedia.toMediaItem() = when {
             mediaInfo = mediaInfo,
             mediaSource = mediaSource,
             thumbnailSource = thumbnailSource,
+            blurHash = null,
+            validationState = contentValidationState,
         )
     }
     mediaInfo.mimeType.isMimeTypeAudio() -> {
@@ -97,6 +113,7 @@ fun MediaViewerEntryPoint.Params.RoomMedia.toMediaItem() = when {
                 eventId = eventId,
                 mediaInfo = mediaInfo,
                 mediaSource = mediaSource,
+                validationState = contentValidationState,
             )
         } else {
             MediaItem.Voice(
@@ -104,6 +121,7 @@ fun MediaViewerEntryPoint.Params.RoomMedia.toMediaItem() = when {
                 eventId = eventId,
                 mediaInfo = mediaInfo,
                 mediaSource = mediaSource,
+                validationState = contentValidationState,
             )
         }
     }
@@ -113,6 +131,7 @@ fun MediaViewerEntryPoint.Params.RoomMedia.toMediaItem() = when {
             eventId = eventId,
             mediaInfo = mediaInfo,
             mediaSource = mediaSource,
+            validationState = contentValidationState,
         )
     }
 }

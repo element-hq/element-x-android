@@ -13,6 +13,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 
 fun RoomInfo.getAvatarData(size: AvatarSize) = AvatarData(
     id = id.value,
@@ -44,4 +45,15 @@ fun RoomInfo.powerLevelOf(userId: UserId): Long {
 fun RoomInfo.roleOf(userId: UserId): RoomMember.Role {
     val powerLevel = powerLevelOf(userId = userId)
     return RoomMember.Role.forPowerLevel(powerLevel)
+}
+
+/**
+ * Return the [DisplayedStatus] of the other member in a DM.
+ */
+fun RoomInfo.dmUserStatus(): DisplayedStatus? {
+    return if (isDm) {
+        heroes.firstOrNull()?.displayedStatus
+    } else {
+        null
+    }
 }

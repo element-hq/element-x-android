@@ -34,6 +34,7 @@ import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.designsystem.components.blurhash.blurHashBackground
 import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -51,6 +52,7 @@ fun VideoItemView(
 ) {
     Box(
         modifier = modifier
+            .blurHashBackground(blurHash = video.blurHash)
             .aspectRatio(1f)
             .combinedClickable(
                 onClick = onClick,

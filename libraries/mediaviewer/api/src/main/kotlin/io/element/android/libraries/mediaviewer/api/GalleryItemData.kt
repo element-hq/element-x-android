@@ -18,6 +18,7 @@ data class GalleryItemData(
     val mediaSource: MediaSource,
     val thumbnailSource: MediaSource?,
     val type: Type,
+    val blurHash: String?,
 ) : Parcelable {
     enum class Type {
         Image,

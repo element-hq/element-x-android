@@ -90,6 +90,8 @@ class RustMatrixClientTest {
                         userId = userId,
                         displayName = A_USER_NAME,
                         avatarUrl = AN_AVATAR_URL,
+                        status = null,
+                        call = null,
                     )
                 },
             ),

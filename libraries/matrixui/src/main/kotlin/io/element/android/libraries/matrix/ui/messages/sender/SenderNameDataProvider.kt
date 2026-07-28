@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 
 data class SenderNameData(
     val userId: UserId,
@@ -47,12 +48,14 @@ open class SenderNameDataProvider : PreviewParameterProvider<SenderNameData> {
 private fun aSenderNameData(
     senderNameMode: SenderNameMode,
     displayNameAmbiguous: Boolean = false,
+    displayedStatus: DisplayedStatus? = null,
 ) = SenderNameData(
     userId = UserId("@alice:${senderNameMode.javaClass.simpleName.lowercase()}"),
     profileDetails = ProfileDetails.Ready(
         displayName = "Alice ${senderNameMode.javaClass.simpleName}",
         displayNameAmbiguous = displayNameAmbiguous,
-        avatarUrl = null
+        avatarUrl = null,
+        displayedStatus = displayedStatus,
     ),
     senderNameMode = senderNameMode,
 )

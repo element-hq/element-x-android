@@ -52,6 +52,8 @@ import io.element.android.libraries.matrix.test.timeline.aProfileChangeMessageCo
 import io.element.android.libraries.matrix.test.timeline.aStickerContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.libraries.matrix.test.timeline.item.event.aRoomMembershipContent
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopEventContentValidationCache
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 import io.element.android.libraries.mediaviewer.test.util.FileExtensionExtractorWithoutValidation
@@ -66,7 +68,13 @@ class EventItemFactoryTest {
     fun `create check all null cases`() {
         val factory = createEventItemFactory()
         val contents = listOf(
-            CallNotifyContent(callIntent = CallIntent.VIDEO, emptyList()),
+            CallNotifyContent(
+                callIntent = CallIntent.VIDEO,
+                declinedBy = emptyList(),
+                activeMembers = emptyList(),
+                isJoined = false,
+                callStartTsMillis = null,
+            ),
             FailedToParseMessageLikeContent("", ""),
             FailedToParseStateContent("", "", ""),
             LegacyCallInviteContent,
@@ -174,6 +182,7 @@ class EventItemFactoryTest {
                     duration = null,
                 ),
                 mediaSource = MediaSource(""),
+                validationState = noopValidationState,
             )
         )
     }
@@ -226,6 +235,8 @@ class EventItemFactoryTest {
                 ),
                 mediaSource = MediaSource(""),
                 thumbnailSource = null,
+                blurHash = null,
+                validationState = noopValidationState,
             )
         )
     }
@@ -273,6 +284,7 @@ class EventItemFactoryTest {
                     duration = null,
                 ),
                 mediaSource = MediaSource(""),
+                validationState = noopValidationState,
             )
         )
     }
@@ -326,6 +338,8 @@ class EventItemFactoryTest {
                 ),
                 mediaSource = MediaSource(""),
                 thumbnailSource = null,
+                blurHash = null,
+                validationState = noopValidationState,
             )
         )
     }
@@ -377,6 +391,7 @@ class EventItemFactoryTest {
                     duration = "7:36",
                 ),
                 mediaSource = MediaSource(""),
+                validationState = noopValidationState,
             )
         )
     }
@@ -437,6 +452,8 @@ class EventItemFactoryTest {
                 ),
                 mediaSource = MediaSource("image_url"),
                 thumbnailSource = MediaSource("thumbnail_url"),
+                blurHash = null,
+                validationState = noopValidationState,
             )
         )
     }
@@ -498,6 +515,8 @@ class EventItemFactoryTest {
                 ),
                 mediaSource = MediaSource("video_url"),
                 thumbnailSource = MediaSource("thumbnail_url"),
+                blurHash = null,
+                validationState = noopValidationState,
             )
         )
     }
@@ -553,6 +572,7 @@ class EventItemFactoryTest {
                     duration = null,
                 ),
                 mediaSource = MediaSource("audio_url"),
+                validationState = noopValidationState,
             )
         )
     }
@@ -609,6 +629,7 @@ class EventItemFactoryTest {
                     duration = null,
                 ),
                 mediaSource = MediaSource("file_url"),
+                validationState = noopValidationState,
             )
         )
     }
@@ -744,13 +765,17 @@ class EventItemFactoryTest {
                 ),
                 mediaSource = MediaSource(""),
                 thumbnailSource = null,
+                blurHash = null,
+                validationState = noopValidationState,
             )
         )
     }
 }
 
+private val noopValidationState = NoopContentValidationState()
 private fun createEventItemFactory() = EventItemFactory(
     fileSizeFormatter = FakeFileSizeFormatter(),
     fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
     dateFormatter = FakeDateFormatter(),
+    contentValidationCache = NoopEventContentValidationCache(noopValidationState),
 )

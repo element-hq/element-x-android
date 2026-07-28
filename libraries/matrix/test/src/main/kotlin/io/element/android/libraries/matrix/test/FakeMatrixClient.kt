@@ -126,7 +126,7 @@ class FakeMatrixClient(
     private val getMapStyleUrlResult: () -> Result<String?> = { lambdaError() },
     private val getDatabaseSizesLambda: () -> Result<SdkStoreSizes> = { lambdaError() },
     private val resetWellKnownConfigLambda: () -> Result<Unit> = { lambdaError() },
-    override val contentScanner: ContentScanner? = null
+    override val contentScanner: ContentScanner? = null,
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
         private set
@@ -144,7 +144,7 @@ class FakeMatrixClient(
     private val _userProfile: MutableStateFlow<MatrixUser> = MutableStateFlow(MatrixUser(sessionId, userDisplayName, userAvatarUrl))
     override val userProfile: StateFlow<MatrixUser> = _userProfile
 
-    private var createRoomResult: Result<RoomId> = Result.success(A_ROOM_ID)
+    var createRoomResult: (CreateRoomParameters) -> Result<RoomId> = { Result.success(A_ROOM_ID) }
     private var createDmResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var findDmResult: Result<RoomId?> = Result.success(A_ROOM_ID)
     private val getRoomResults = mutableMapOf<RoomId, BaseRoom>()
@@ -193,7 +193,7 @@ class FakeMatrixClient(
     }
 
     override suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId> = simulateLongTask {
-        return createRoomResult
+        return createRoomResult(createRoomParams)
     }
 
     override suspend fun createDM(userId: UserId): Result<RoomId> = simulateLongTask {
@@ -297,7 +297,7 @@ class FakeMatrixClient(
     // Mocks
 
     fun givenCreateRoomResult(result: Result<RoomId>) {
-        createRoomResult = result
+        createRoomResult = { result }
     }
 
     fun givenCreateDmResult(result: Result<RoomId>) {

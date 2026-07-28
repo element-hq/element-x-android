@@ -86,7 +86,6 @@ import io.element.android.features.messages.impl.timeline.aTimelineItemDaySepara
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.aTimelineState
 import io.element.android.features.messages.impl.timeline.components.CallMenuItem
-import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionBottomSheet
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionEvent
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryEvent
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryView
@@ -130,6 +129,8 @@ import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationValue
+import io.element.android.libraries.matrix.ui.media.contentvalidation.LocalEventContentValidationState
 import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.link.Link
@@ -151,10 +152,13 @@ fun MessagesView(
     onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     onViewAllPinnedMessagesClick: () -> Unit,
     onThreadsListClick: () -> Unit,
+    knockRequestsBannerView: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     forceJumpToBottomVisibility: Boolean = false,
-    knockRequestsBannerView: @Composable () -> Unit,
+    customReactionBottomSheet: @Composable () -> Unit,
 ) {
+    val eventContentValidationState = LocalEventContentValidationState.current
+
     OnLifecycleEvent { _, event ->
         state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvent.LifecycleEvent(event))
     }
@@ -201,6 +205,12 @@ fun MessagesView(
     // snapshot, so reading a rememberUpdatedState value here avoids re-toggling on the next tap.
     val selectionActive by rememberUpdatedState(state.selectionState.isActive)
 
+    // The content scanner gates opening an event until its content has been validated.
+    fun canOpenContent(event: TimelineItem.Event): Boolean {
+        val eventId = event.eventId ?: return false
+        return eventContentValidationState[eventId].getCurrentOverallState() == ContentValidationValue.Valid
+    }
+
     fun showContextMenu(event: TimelineItem.Event) {
         hidingKeyboard {
             state.actionListState.eventSink(
@@ -224,7 +234,7 @@ fun MessagesView(
             // content when it has its own viewer (image/video/file/audio/location ->
             // onEventContentClick returns true). When there is nothing to open (text and
             // friends -> false) it falls back to the context menu instead.
-            val opened = onEventContentClick(state.timelineState.isLive, event)
+            val opened = canOpenContent(event) && onEventContentClick(state.timelineState.isLive, event)
             if (opened) {
                 localView.hideKeyboard()
             } else {
@@ -232,6 +242,7 @@ fun MessagesView(
             }
             return
         }
+        if (!canOpenContent(event)) return
         val hideKeyboard = onEventContentClick(state.timelineState.isLive, event)
         if (hideKeyboard) {
             localView.hideKeyboard()
@@ -320,6 +331,7 @@ fun MessagesView(
                             heroes = state.heroes,
                             dmUserIdentityState = state.dmUserVerificationState,
                             sharedHistoryIcon = state.topBarSharedHistoryIcon,
+                            dmUserStatus = state.dmUserStatus,
                             onBackClick = { hidingKeyboard { onBackClick() } },
                             onRoomDetailsClick = { hidingKeyboard { onRoomDetailsClick() } },
                             menuActions = {
@@ -383,6 +395,7 @@ fun MessagesView(
                             onSwipeToReply = { targetEvent ->
                                 state.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Reply, targetEvent))
                             },
+                            onJoinCallClick = onJoinCallClick,
                             forceJumpToBottomVisibility = forceJumpToBottomVisibility,
                             onViewAllPinnedMessagesClick = onViewAllPinnedMessagesClick,
                             knockRequestsBannerView = knockRequestsBannerView,
@@ -491,12 +504,7 @@ fun MessagesView(
         },
     )
 
-    CustomReactionBottomSheet(
-        state = state.customReactionState,
-        onSelectEmoji = { uniqueId, emoji ->
-            state.eventSink(MessagesEvent.ToggleReaction(emoji.unicode, uniqueId))
-        }
-    )
+    customReactionBottomSheet()
 
     ReactionSummaryView(state = state.reactionSummaryState)
     ReadReceiptBottomSheet(
@@ -563,6 +571,7 @@ private fun MessagesViewContent(
     onSendLocationClick: () -> Unit,
     onCreatePollClick: () -> Unit,
     onViewAllPinnedMessagesClick: () -> Unit,
+    onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     forceJumpToBottomVisibility: Boolean,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
@@ -620,6 +629,7 @@ private fun MessagesViewContent(
                 onReactionLongClick = onReactionLongClick,
                 onMoreReactionsClick = onMoreReactionsClick,
                 onReadReceiptClick = onReadReceiptClick,
+                onJoinCallClick = onJoinCallClick,
                 forceJumpToBottomVisibility = forceJumpToBottomVisibility,
                 nestedScrollConnection = scrollBehavior.nestedScrollConnection,
                 floatingDateTopOffset = topBannersHeightDp,
@@ -752,6 +762,7 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class)
         onViewAllPinnedMessagesClick = { },
         forceJumpToBottomVisibility = true,
         knockRequestsBannerView = {},
+        customReactionBottomSheet = {},
         onThreadsListClick = {},
     )
 }
@@ -809,5 +820,6 @@ internal fun MessagesViewA11yPreview() = ElementPreview {
         onThreadsListClick = {},
         forceJumpToBottomVisibility = true,
         knockRequestsBannerView = {},
+        customReactionBottomSheet = {},
     )
 }

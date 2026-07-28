@@ -52,6 +52,7 @@ internal fun TimelineItemCallNotifyView(
     timelineRoomInfo: TimelineRoomInfo,
     event: TimelineItem.Event,
     content: TimelineItemRtcNotificationContent,
+    state: RtcNotificationState.Tombstoned,
     isLastOutgoingMessage: Boolean,
     onLongClick: (TimelineItem.Event) -> Unit,
     onReadReceiptsClick: (TimelineItem.Event) -> Unit,
@@ -83,7 +84,7 @@ internal fun TimelineItemCallNotifyView(
 
             Text(
                 modifier = Modifier.weight(1f),
-                text = stringResource(getTextRes(timelineRoomInfo, content)),
+                text = stringResource(getTextRes(timelineRoomInfo, state)),
                 style = ElementTheme.typography.fontBodyMdRegular,
                 color = ElementTheme.colors.textSecondary,
                 maxLines = 1,
@@ -114,13 +115,13 @@ internal fun TimelineItemCallNotifyView(
 @StringRes
 private fun getTextRes(
     timelineRoomInfo: TimelineRoomInfo,
-    content: TimelineItemRtcNotificationContent
+    state: RtcNotificationState.Tombstoned
 ): Int = if (timelineRoomInfo.isDm) {
-    when (content.state) {
+    when (state) {
         is RtcNotificationState.Declined -> {
-            if (content.state.byMe) CommonStrings.common_call_you_declined else CommonStrings.common_call_declined
+            if (state.byMe) CommonStrings.common_call_you_declined else CommonStrings.common_call_declined
         }
-        RtcNotificationState.Started -> CommonStrings.common_call_started
+        else -> CommonStrings.common_call_started
     }
 } else {
     // In Rooms, do not show declined info.
@@ -166,6 +167,7 @@ internal fun TimelineItemCallNotifyViewPreview() = ElementPreview {
                             readReceiptState = readReceiptState.removeFirstOrNull() ?: aTimelineItemReadReceipts(),
                         ),
                         content = content,
+                        state,
                         isLastOutgoingMessage = false,
                         onLongClick = {},
                         onReadReceiptsClick = {},
