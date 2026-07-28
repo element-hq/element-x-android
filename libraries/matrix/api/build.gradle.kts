@@ -24,6 +24,11 @@ android {
     }
 
     defaultConfig {
+        buildConfigField(
+            name = "OAUTH_CLIENT_URI_PATH",
+            type = "String",
+            value = BuildTimeConfig.OAUTH_CLIENT_URL_PATH?.let { "\"$it\"" } ?: "null",
+        )
         buildConfigFieldStr(
             name = "CLIENT_URI",
             value = BuildTimeConfig.URL_WEBSITE ?: "https://element.io"
