@@ -50,6 +50,7 @@ class DefaultNotificationConversationServiceTest : RobolectricTest() {
 
         val shortcuts = ShortcutManagerCompat.getDynamicShortcuts(context)
         assertThat(shortcuts).isNotEmpty()
+        assertThat(shortcuts.first().categories).contains("android.shortcut.conversation")
     }
 
     @Test

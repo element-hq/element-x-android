@@ -9,6 +9,7 @@
 package io.element.android.features.share.impl
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import dev.zacsweers.metro.Assisted
@@ -55,6 +56,13 @@ class SharePresenter(
 
     @Composable
     override fun present(): ShareState {
+        val targetRoomId = shareIntentData.targetRoomId
+        LaunchedEffect(shareIntentData) {
+            if (targetRoomId != null && shareActionState.value is AsyncAction.Uninitialized) {
+                onRoomSelected(listOf(targetRoomId))
+            }
+        }
+
         fun handleEvent(event: ShareEvents) {
             when (event) {
                 ShareEvents.ClearError -> shareActionState.value = AsyncAction.Uninitialized

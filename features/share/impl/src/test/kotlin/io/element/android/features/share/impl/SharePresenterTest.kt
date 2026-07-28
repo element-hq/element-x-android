@@ -162,6 +162,35 @@ class SharePresenterTest : RobolectricTest() {
             sendMediaResult.assertions().isCalledOnce()
         }
     }
+
+    @Test
+    fun `present - auto-selects targetRoomId when present in shareIntentData`() = runTest {
+        val joinedRoom = FakeJoinedRoom(
+            liveTimeline = FakeTimeline().apply {
+                sendMessageLambda = { _, _, _, _, _ -> Result.success(Unit) }
+            },
+        )
+        val matrixClient = FakeMatrixClient().apply {
+            givenGetRoomResult(A_ROOM_ID, joinedRoom)
+        }
+        val presenter = createSharePresenter(
+            matrixClient = matrixClient,
+            shareIntentData = ShareIntentData.PlainText(
+                content = A_MESSAGE,
+                targetSessionId = io.element.android.libraries.matrix.test.A_SESSION_ID,
+                targetRoomId = A_ROOM_ID,
+            ),
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val nextState = if (initialState.shareAction.isUninitialized()) awaitItem() else initialState
+            val success = if (nextState.shareAction.isLoading()) awaitItem() else nextState
+            assertThat(success.shareAction.isSuccess()).isTrue()
+            assertThat(success.shareAction).isEqualTo(AsyncAction.Success(listOf(A_ROOM_ID)))
+        }
+    }
 }
 
 internal fun TestScope.createSharePresenter(

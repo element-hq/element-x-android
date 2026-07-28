@@ -11,21 +11,36 @@ import android.net.Uri
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+
 /**
  * Share intent data, mapped from the original [android.content.Intent].
  */
 sealed interface ShareIntentData : Parcelable {
+    val targetSessionId: SessionId?
+    val targetRoomId: RoomId?
+
     /**
      * A list of [Uri]s to share and their mime types, with an optional [text] to be used as caption.
      */
     @Parcelize
-    data class Uris(val text: String?, val uris: List<UriToShare>) : ShareIntentData
+    data class Uris(
+        val text: String?,
+        val uris: List<UriToShare>,
+        override val targetSessionId: SessionId? = null,
+        override val targetRoomId: RoomId? = null,
+    ) : ShareIntentData
 
     /**
      * A plain text to share.
      */
     @Parcelize
-    data class PlainText(val content: String) : ShareIntentData
+    data class PlainText(
+        val content: String,
+        override val targetSessionId: SessionId? = null,
+        override val targetRoomId: RoomId? = null,
+    ) : ShareIntentData
 }
 
 /**

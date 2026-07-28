@@ -58,6 +58,11 @@
             android:launchMode="singleTask"
             android:theme="@style/Theme.ElementX.Splash"
             android:windowSoftInputMode="adjustResize">
+
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

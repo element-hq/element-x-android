@@ -11,6 +11,7 @@ package io.element.android.libraries.push.impl.notifications.conversations
 import android.content.Context
 import android.content.pm.ShortcutInfo
 import android.os.Build
+import androidx.core.app.Person
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
@@ -86,7 +87,8 @@ class DefaultNotificationConversationService(
         }
 
         val categories = setOfNotNull(
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) ShortcutInfo.SHORTCUT_CATEGORY_CONVERSATION else null
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) ShortcutInfo.SHORTCUT_CATEGORY_CONVERSATION else null,
+            "android.shortcut.conversation",
         )
 
         val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return
@@ -105,9 +107,17 @@ class DefaultNotificationConversationService(
             targetSize = defaultShortcutIconSize.toLong()
         )?.let(IconCompat::createWithBitmap)
 
+        val person = Person.Builder()
+            .setName(roomName)
+            .setIcon(icon)
+            .setKey(createShortcutId(sessionId, roomId))
+            .build()
+
         val shortcutInfo = ShortcutInfoCompat.Builder(context, createShortcutId(sessionId, roomId))
             .setShortLabel(name)
             .setIcon(icon)
+            .setPerson(person)
+            .setIsConversation()
             .setIntent(intentProvider.getViewRoomIntent(sessionId, roomId, threadId = null, eventId = null))
             .setCategories(categories)
             .setLongLived(true)

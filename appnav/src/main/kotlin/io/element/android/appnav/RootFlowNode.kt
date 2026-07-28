@@ -426,25 +426,25 @@ class RootFlowNode(
     }
 
     private suspend fun onIncomingShare(shareIntentData: ShareIntentData) {
-        // Is there a session already?
-        val latestSessionId = sessionStore.getLatestSessionId()
-        if (latestSessionId == null) {
+        val targetSessionId = shareIntentData.targetSessionId
+        val sessionIdToUse = targetSessionId ?: sessionStore.getLatestSessionId()
+        if (sessionIdToUse == null) {
             // No session, open login
             switchToNotLoggedInFlow(null)
         } else {
             // wait for the current session to be restored
-            val loggedInFlowNode = attachSession(latestSessionId)
-            if (sessionStore.numberOfSessions() > 1) {
+            val loggedInFlowNode = attachSession(sessionIdToUse)
+            if (sessionStore.numberOfSessions() > 1 && targetSessionId == null) {
                 // Several accounts, let the user choose which one to use
                 backstack.push(
                     NavTarget.AccountSelect(
-                        currentSessionId = latestSessionId,
+                        currentSessionId = sessionIdToUse,
                         shareIntentData = shareIntentData,
                         permalinkData = null,
                     )
                 )
             } else {
-                // Only one account, directly attach the incoming share node.
+                // Directly attach the incoming share node.
                 loggedInFlowNode.attachIncomingShare(shareIntentData)
             }
         }

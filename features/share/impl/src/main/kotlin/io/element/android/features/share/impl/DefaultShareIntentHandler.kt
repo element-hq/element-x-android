@@ -31,6 +31,10 @@ import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.di.annotations.ApplicationContext
 import timber.log.Timber
 
+import androidx.core.content.pm.ShortcutManagerCompat
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+
 @ContributesBinding(AppScope::class)
 class DefaultShareIntentHandler(
     @ApplicationContext private val context: Context,
@@ -40,8 +44,9 @@ class DefaultShareIntentHandler(
     ): ShareIntentData? {
         val type = intent.resolveType(context) ?: return null
         val uris = getIncomingUris(intent, type)
+        val (targetSessionId, targetRoomId) = extractTargetShortcut(intent)
         return when {
-            uris.isEmpty() && type == MimeTypes.PlainText -> handlePlainText(intent)
+            uris.isEmpty() && type == MimeTypes.PlainText -> handlePlainText(intent, targetSessionId, targetRoomId)
             type.isMimeTypeImage() ||
                 type.isMimeTypeVideo() ||
                 type.isMimeTypeAudio() ||
@@ -52,18 +57,40 @@ class DefaultShareIntentHandler(
                 ShareIntentData.Uris(
                     text = intent.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString()?.takeIf { it.isNotEmpty() },
                     uris = uris,
+                    targetSessionId = targetSessionId,
+                    targetRoomId = targetRoomId,
                 )
             }
             else -> null
         }
     }
 
-    private fun handlePlainText(intent: Intent): ShareIntentData.PlainText? {
+    private fun handlePlainText(
+        intent: Intent,
+        targetSessionId: SessionId?,
+        targetRoomId: RoomId?,
+    ): ShareIntentData.PlainText? {
         val content = intent.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString()
         return if (content?.isNotEmpty() == true) {
-            ShareIntentData.PlainText(content)
+            ShareIntentData.PlainText(
+                content = content,
+                targetSessionId = targetSessionId,
+                targetRoomId = targetRoomId,
+            )
         } else {
             null
+        }
+    }
+
+    private fun extractTargetShortcut(intent: Intent): Pair<SessionId?, RoomId?> {
+        val shortcutId = intent.getStringExtra(ShortcutManagerCompat.EXTRA_SHORTCUT_ID)
+            ?: intent.getStringExtra("android.intent.extra.shortcut.ID")
+            ?: return null to null
+        val parts = shortcutId.split("-", limit = 2)
+        return if (parts.size == 2) {
+            SessionId(parts[0]) to RoomId(parts[1])
+        } else {
+            null to null
         }
     }
 
