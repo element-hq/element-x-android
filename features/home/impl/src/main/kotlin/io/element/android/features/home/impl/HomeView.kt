@@ -277,7 +277,7 @@ private fun HomeScaffold(
                             .padding(outerPadding)
                             .consumeWindowInsets(outerPadding)
                             .hazeSource(state = hazeState),
-                        contentPadding = contentPadding,
+                        contentPadding = lazyColumnContentPadding + contentPadding,
                         state = state.homeSpacesState,
                         lazyListState = spacesLazyListState,
                         onSpaceClick = { spaceId ->
