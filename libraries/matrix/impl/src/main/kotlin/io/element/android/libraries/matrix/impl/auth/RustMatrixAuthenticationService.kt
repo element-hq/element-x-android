@@ -16,6 +16,8 @@ import io.element.android.libraries.androidutils.crypto.ClientSecret
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.extensions.runCatchingExceptions
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.auth.AuthenticationException
 import io.element.android.libraries.matrix.api.auth.ElementClassicSession
@@ -69,6 +71,7 @@ class RustMatrixAuthenticationService(
     private val secretGenerator: SecretGenerator,
     private val oAuthConfigurationProvider: OAuthConfigurationProvider,
     private val enterpriseService: EnterpriseService,
+    private val featureFlagService: FeatureFlagService,
 ) : MatrixAuthenticationService {
     // Any existing Element Classic session that we want to try to import secrets from during login.
     private var elementClassicSession: ElementClassicSession? = null
@@ -81,7 +84,6 @@ class RustMatrixAuthenticationService(
     // Ideally it would be possible to get the sessionPath from the Client to avoid doing this.
     private var sessionPaths: SessionPaths? = null
     private var currentClient: Client? = null
-    private var currentClientIsMessageSearchAvailable = false
 
     private val newMatrixClientObservers = mutableListOf<(MatrixClient) -> Unit>()
     override fun listenToNewMatrixClients(lambda: (MatrixClient) -> Unit) {
@@ -161,7 +163,7 @@ class RustMatrixAuthenticationService(
                         passphrase = pendingKey.formattedAsString(),
                         sessionPaths = currentSessionPaths,
                     )
-                val matrixClient = rustMatrixClientFactory.create(client, sessionData, currentClientIsMessageSearchAvailable)
+                val matrixClient = rustMatrixClientFactory.create(client, sessionData, isMessageSearchAvailable())
                 newMatrixClientObservers.forEach { it.invoke(matrixClient) }
                 sessionStore.addSession(sessionData)
 
@@ -236,7 +238,7 @@ class RustMatrixAuthenticationService(
 
                 // We restore the client using the just retrieved session data
                 client.restoreSession(sessionData.toSession())
-                val matrixClient = rustMatrixClientFactory.create(client, sessionData, currentClientIsMessageSearchAvailable)
+                val matrixClient = rustMatrixClientFactory.create(client, sessionData, isMessageSearchAvailable())
 
                 // We wait for the verification state to be known
                 matrixClient.waitForKnownVerificationState()
@@ -326,7 +328,7 @@ class RustMatrixAuthenticationService(
                     passphrase = pendingKey.formattedAsString(),
                     sessionPaths = currentSessionPaths,
                 )
-                val matrixClient = rustMatrixClientFactory.create(client, sessionData, currentClientIsMessageSearchAvailable)
+                val matrixClient = rustMatrixClientFactory.create(client, sessionData, isMessageSearchAvailable())
                 matrixClient.waitForKnownVerificationState()
 
                 newMatrixClientObservers.forEach { it.invoke(matrixClient) }
@@ -391,7 +393,7 @@ class RustMatrixAuthenticationService(
                         passphrase = pendingKey.formattedAsString(),
                         sessionPaths = emptySessionPaths,
                     )
-                val matrixClient = rustMatrixClientFactory.create(client, sessionData, currentClientIsMessageSearchAvailable)
+                val matrixClient = rustMatrixClientFactory.create(client, sessionData, isMessageSearchAvailable())
                 newMatrixClientObservers.forEach { it.invoke(matrixClient) }
                 sessionStore.addSession(sessionData)
 
@@ -418,13 +420,13 @@ class RustMatrixAuthenticationService(
         config: suspend ClientBuilder.() -> ClientBuilder,
     ): Client {
         Timber.d("Creating client with simplified sliding sync")
-        val baseClientBuilder = rustMatrixClientFactory.getBaseClientBuilder(
-            sessionPaths = sessionPaths,
-            clientSecret = pendingKey,
-            slidingSyncType = ClientBuilderSlidingSync.Discovered,
-        )
-        currentClientIsMessageSearchAvailable = baseClientBuilder.isMessageSearchAvailable
-        return baseClientBuilder.clientBuilder
+        return rustMatrixClientFactory
+            .getBaseClientBuilder(
+                sessionPaths = sessionPaths,
+                clientSecret = pendingKey,
+                slidingSyncType = ClientBuilderSlidingSync.Discovered,
+                isMessageSearchAvailable = isMessageSearchAvailable(),
+            )
             .config()
             .build()
     }
@@ -451,13 +453,13 @@ class RustMatrixAuthenticationService(
             throw HumanQrLoginException.Unknown()
         }
 
-        val baseClientBuilder = rustMatrixClientFactory.getBaseClientBuilder(
-            sessionPaths = sessionPaths,
-            clientSecret = pendingKey,
-            slidingSyncType = ClientBuilderSlidingSync.Discovered,
-        )
-        currentClientIsMessageSearchAvailable = baseClientBuilder.isMessageSearchAvailable
-        return baseClientBuilder.clientBuilder
+        return rustMatrixClientFactory
+            .getBaseClientBuilder(
+                sessionPaths = sessionPaths,
+                clientSecret = pendingKey,
+                slidingSyncType = ClientBuilderSlidingSync.Discovered,
+                isMessageSearchAvailable = isMessageSearchAvailable(),
+            )
             .serverNameOrHomeserverUrl(baseUrlOrServerName)
             .build()
     }
@@ -465,8 +467,10 @@ class RustMatrixAuthenticationService(
     private fun clear() {
         currentClient?.close()
         currentClient = null
-        currentClientIsMessageSearchAvailable = false
     }
+
+    private suspend fun isMessageSearchAvailable(): Boolean =
+        featureFlagService.isFeatureEnabled(FeatureFlags.MessageSearch)
 
     private suspend fun MatrixClient.waitForKnownVerificationState() {
         withTimeoutOrNull(10.seconds) {

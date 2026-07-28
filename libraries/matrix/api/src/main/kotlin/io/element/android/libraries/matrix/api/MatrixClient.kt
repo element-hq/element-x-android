@@ -72,7 +72,7 @@ interface MatrixClient {
     val encryptionService: EncryptionService
     val roomDirectoryService: RoomDirectoryService
 
-    /** Whether this live client was built with an encrypted message search index. */
+    /** Whether this live client was built with a message search index attached. */
     val isMessageSearchAvailable: Boolean
     val messageSearchService: MessageSearchService
     val mediaPreviewService: MediaPreviewService
