@@ -77,7 +77,6 @@ import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBan
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerView
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerViewDefaults
 import io.element.android.features.messages.impl.selection.MessagesSelectionTopBar
-import io.element.android.features.messages.impl.selection.canDeleteSelection
 import io.element.android.features.messages.impl.timeline.FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.TimelineView
@@ -171,7 +170,6 @@ fun MessagesView(
 
     var showBulkDeleteConfirm by remember { mutableStateOf(false) }
 
-    // Back press while selecting should exit selection mode rather than the room.
     BackHandler(enabled = state.selectionState.isActive) {
         state.eventSink(MessagesEvent.ClearSelection)
     }
@@ -179,7 +177,7 @@ fun MessagesView(
     if (showBulkDeleteConfirm) {
         ConfirmationDialog(
             title = stringResource(CommonStrings.action_remove),
-            content = pluralStringResource(R.plurals.screen_messages_selection_delete_confirm, state.selectionState.count, state.selectionState.count),
+            content = pluralStringResource(R.plurals.screen_room_selection_delete_confirm, state.selectionState.count, state.selectionState.count),
             submitText = stringResource(CommonStrings.action_remove),
             destructiveSubmit = true,
             onSubmitClick = {
@@ -200,12 +198,10 @@ fun MessagesView(
         block()
     }
 
-    // Live view of selection mode, read by the row click handlers below. They get captured by
-    // LazyColumn rows; a row retained across a selection-clear (a small scroll) keeps a stale
-    // snapshot, so reading a rememberUpdatedState value here avoids re-toggling on the next tap.
+    // The click handlers below are captured by the timeline rows, which can outlive a selection
+    // change, so the value has to be read through rememberUpdatedState to not go stale.
     val selectionActive by rememberUpdatedState(state.selectionState.isActive)
 
-    // The content scanner gates opening an event until its content has been validated.
     fun canOpenContent(event: TimelineItem.Event): Boolean {
         val eventId = event.eventId ?: return false
         return eventContentValidationState[eventId].getCurrentOverallState() == ContentValidationValue.Valid
@@ -225,15 +221,12 @@ fun MessagesView(
     fun onContentClick(event: TimelineItem.Event) {
         Timber.v("onMessageClick= ${event.id}")
         if (selectionActive) {
-            // In selection mode a tap toggles membership instead of opening the item.
             state.eventSink(MessagesEvent.ToggleSelection(event))
             return
         }
-        if (state.isMultiSelectEnabled) {
-            // Long-press enters selection (see onMessageLongClick). A single tap opens the
-            // content when it has its own viewer (image/video/file/audio/location ->
-            // onEventContentClick returns true). When there is nothing to open (text and
-            // friends -> false) it falls back to the context menu instead.
+        if (state.selectionState.isEnabled) {
+            // Long press is taken by the selection, so a tap has to open the context menu when
+            // there is no content to open.
             val opened = canOpenContent(event) && onEventContentClick(state.timelineState.isLive, event)
             if (opened) {
                 localView.hideKeyboard()
@@ -255,13 +248,11 @@ fun MessagesView(
             state.eventSink(MessagesEvent.ToggleSelection(event))
             return
         }
-        if (state.isMultiSelectEnabled && event.content.isBulkSelectable()) {
+        if (state.selectionState.isEnabled && event.content.isBulkSelectable()) {
             if (event.content.opensMediaViewer()) {
-                // Media: tap already opens the viewer, so long-press surfaces the context menu
-                // (details, edit caption, forward, react, and "Select" to start mass-selection).
+                // A tap already opens the viewer, so selection is entered from the context menu.
                 showContextMenu(event)
             } else {
-                // Text & friends: long-press enters selection directly.
                 state.eventSink(MessagesEvent.EnterSelection(event))
             }
             return
@@ -305,11 +296,6 @@ fun MessagesView(
                     if (state.selectionState.isActive) {
                         MessagesSelectionTopBar(
                             state = state.selectionState,
-                            canDeleteSelection = canDeleteSelection(
-                                timelineItems = state.timelineState.timelineItems,
-                                selectedIds = state.selectionState.selectedIds,
-                                userEventPermissions = state.userEventPermissions,
-                            ),
                             onCancelClick = { state.eventSink(MessagesEvent.ClearSelection) },
                             onCopyClick = { state.eventSink(MessagesEvent.BulkCopySelected) },
                             onForwardClick = { state.eventSink(MessagesEvent.BulkForwardSelected) },
@@ -356,8 +342,6 @@ fun MessagesView(
                             onContentClick = ::onContentClick,
                             onGalleryItemClick = { event, index ->
                                 if (selectionActive) {
-                                    // In selection mode a tap on a gallery item toggles the whole
-                                    // message like any other tap, instead of opening the viewer.
                                     state.eventSink(MessagesEvent.ToggleSelection(event))
                                 } else {
                                     val hideKeyboard = onGalleryEventItemClick(

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright (c) 2026 Element Creations Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
@@ -80,11 +80,8 @@ class MessagesPresenterSelectionTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
-    // --- Selection cap ---
-
     @Test
-    fun `ToggleSelection stops adding at maxSelection`() = runTest {
-        // Tapping more events than the cap keeps the selection at the limit; the extra taps are ignored.
+    fun `ToggleSelection stops adding once the cap is reached`() = runTest {
         val cap = TimelineSelectionState.MAX_SELECTION
         val events = (0 until cap + 5).map { aTimelineItemEvent(eventId = EventId("\$E-$it")) }
         val presenter = createMessagesPresenter(
@@ -100,12 +97,8 @@ class MessagesPresenterSelectionTest {
         }
     }
 
-    // --- Non-selectable events ---
-
     @Test
     fun `ToggleSelection ignores events that are not bulk-selectable`() = runTest {
-        // State changes / redacted / call notifications are noise and must never enter the
-        // selection. m1 + m2 are real messages, redacted is not selectable: final count is 2.
         val m1 = aTimelineItemEvent(eventId = EventId("\$M1"))
         val redacted = aTimelineItemEvent(eventId = EventId("\$RED"), content = TimelineItemRedactedContent)
         val m2 = aTimelineItemEvent(eventId = EventId("\$M2"))
@@ -133,17 +126,13 @@ class MessagesPresenterSelectionTest {
         )
         presenter.testWithLifecycleOwner {
             val initial = awaitItem()
-            // A non-selectable anchor must not enter selection...
             initial.eventSink(MessagesEvent.EnterSelection(redacted))
-            // ...while a real message does.
             initial.eventSink(MessagesEvent.EnterSelection(msg))
             val state = consumeItemsUntilPredicate { it.selectionState.isActive }.last()
             assertThat(state.selectionState.selectedIds).containsExactly(msg.eventId)
             cancelAndIgnoreRemainingEvents()
         }
     }
-
-    // --- BulkRedact ---
 
     @Test
     fun `BulkRedact - all success - no snackbar fires`() = runTest {
@@ -165,10 +154,7 @@ class MessagesPresenterSelectionTest {
             val readied = consumeItemsUntilPredicate { it.selectionState.count == targetEvents.size }.last()
             assertThat(readied.selectionState.count).isEqualTo(targetEvents.size)
             readied.eventSink(MessagesEvent.BulkRedactSelected)
-            // Drain emissions for ~1s real-time which also lets the background launch
-            // through its delay-throttled loop (advanceUntilIdle is unreliable here
-            // because the background coroutine plus snackbar dispatch arrive on
-            // separate scheduler ticks the predicate-loop is the proven driver).
+            // The redactions run in the background with a delay between each of them.
             val finalState = consumeItemsUntilTimeout(2.seconds).last()
             assertThat(redactCalls).hasSize(targetEvents.size)
             assertThat(finalState.selectionState.selectedIds).isEmpty()
@@ -179,9 +165,7 @@ class MessagesPresenterSelectionTest {
 
     @Test
     fun `BulkRedact also redacts selected messages that scrolled out of the loaded window`() = runTest {
-        // A selection can outlive the loaded window: a selected message may no longer be in
-        // timelineItems. It must still be redacted, not silently dropped. Here only `loaded` is
-        // in the window while `evicted` is selected but absent, and both must be redacted.
+        // Only `loaded` is in the timeline, `evicted` is selected but no longer loaded.
         val loaded = aTimelineItemEvent(eventId = EventId("\$LOADED"))
         val evicted = aTimelineItemEvent(eventId = EventId("\$EVICTED"))
         val redactCalls = mutableListOf<EventOrTransactionId>()
@@ -238,16 +222,12 @@ class MessagesPresenterSelectionTest {
         }
     }
 
-    // --- BulkForward ---
-
     @Test
     fun `BulkForward orders by sentTimeMillis ASC regardless of tap order`() = runTest {
-        // Three messages whose sentTimeMillis order (1000, 2000, 3000) differs from both the
-        // timelineItems order and the user's tap order, so the test fails if the sort is removed.
+        // sentTimeMillis order differs from both the timeline order and the tap order.
         val e1 = aTimelineItemEvent(eventId = EventId("\$E1")).copy(sentTimeMillis = 1000L)
         val e2 = aTimelineItemEvent(eventId = EventId("\$E2")).copy(sentTimeMillis = 2000L)
         val e3 = aTimelineItemEvent(eventId = EventId("\$E3")).copy(sentTimeMillis = 3000L)
-        // timelineItems in a different order than sentTime: e2, e3, e1.
         val items = persistentListOf<TimelineItem>(e2, e3, e1)
         val forwarded = mutableListOf<EventId>()
         val navigator = FakeMessagesNavigator(
@@ -270,11 +250,8 @@ class MessagesPresenterSelectionTest {
         }
     }
 
-    // --- BulkCopy ---
-
     @Test
     fun `BulkCopySelected joins bodies in chronological order and clears selection`() = runTest {
-        // Bodies are copied in sentTime order, not tap order, joined by a blank line.
         val e1 = aTimelineItemEvent(eventId = EventId("\$C1"), content = aTimelineItemTextContent(body = "first")).copy(sentTimeMillis = 1000L)
         val e2 = aTimelineItemEvent(eventId = EventId("\$C2"), content = aTimelineItemTextContent(body = "second")).copy(sentTimeMillis = 2000L)
         val items = persistentListOf<TimelineItem>(e2, e1)
@@ -319,9 +296,7 @@ class MessagesPresenterSelectionTest {
 
     @Test
     fun `BulkCopySelected with nothing to copy keeps the selection`() = runTest {
-        // Copying a caption-less media selection has nothing to write to the clipboard. The
-        // selection must survive so the user can still Forward or Delete, rather than silently
-        // losing it.
+        // Nothing to copy, so the selection must survive for Forward or Delete.
         val image = aTimelineItemEvent(eventId = EventId("\$IMG"), content = aTimelineItemImageContent())
         val other = aTimelineItemEvent(eventId = EventId("\$IMG2"), content = aTimelineItemImageContent())
         val clipboardHelper = FakeClipboardHelper()
@@ -334,8 +309,7 @@ class MessagesPresenterSelectionTest {
             initial.eventSink(MessagesEvent.ToggleSelection(image))
             val readied = consumeItemsUntilPredicate { it.selectionState.count == 1 }.last()
             readied.eventSink(MessagesEvent.BulkCopySelected)
-            // Copy writes nothing and emits no new state, so toggle a second message to force an
-            // emission. If the copy had cleared the selection the count would be 1 here, not 2.
+            // Copy emits no new state, so toggle a second message to force an emission.
             readied.eventSink(MessagesEvent.ToggleSelection(other))
             val state = consumeItemsUntilPredicate { it.selectionState.count == 2 }.last()
             assertThat(clipboardHelper.clipboardContents).isNull()
@@ -343,8 +317,6 @@ class MessagesPresenterSelectionTest {
             cancelAndIgnoreRemainingEvents()
         }
     }
-
-    // --- ClearSelection ---
 
     @Test
     fun `ClearSelection exits selection mode`() = runTest {
@@ -362,8 +334,6 @@ class MessagesPresenterSelectionTest {
         }
     }
 
-    // --- Select action intercept ---
-
     @Test
     fun `HandleAction Select enters selection mode`() = runTest {
         val msg = aTimelineItemEvent(eventId = EventId("\$SEL"))
@@ -376,8 +346,6 @@ class MessagesPresenterSelectionTest {
             cancelAndIgnoreRemainingEvents()
         }
     }
-
-    // --- Selection cap ---
 
     @Test
     fun `ToggleSelection silently rejects beyond the cap - no snackbar, the counter shows the limit`() = runTest {
@@ -392,8 +360,7 @@ class MessagesPresenterSelectionTest {
             val full = consumeItemsUntilPredicate { it.selectionState.count == cap }.last()
             assertThat(full.selectionState.isAtCap).isTrue()
             assertThat(full.snackbarMessage).isNull()
-            // The 31st tap is rejected silently (no state change, no snackbar). Deselect an
-            // existing one to force an observable emission and prove the 31st never made it in.
+            // The extra tap emits no new state, so deselect one to force an emission.
             full.eventSink(MessagesEvent.ToggleSelection(items.last()))
             full.eventSink(MessagesEvent.ToggleSelection(items.first()))
             val after = consumeItemsUntilPredicate { it.selectionState.count == cap - 1 }.last()
@@ -402,8 +369,6 @@ class MessagesPresenterSelectionTest {
             cancelAndIgnoreRemainingEvents()
         }
     }
-
-    // --- Helpers (mirrors MessagesPresenterTest.createMessagesPresenter, with timelineItems pass-through) ---
 
     private fun TestScope.createMessagesPresenter(
         coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),

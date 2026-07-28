@@ -94,10 +94,8 @@ fun TimelineItemEventContent.canReact(): Boolean =
     }
 
 /**
- * Whether a tap on this content opens its own media viewer (image/video/file/audio/location).
- * For these, a long-press should surface the context menu (details, edit caption, forward,
- * react...) rather than entering selection - tap already "consumes" the content. Mirrors the
- * navigation in MessagesFlowNode.processEventClick.
+ * Return true if a tap on the event content opens a media viewer.
+ * Mirrors the navigation done in MessagesFlowNode.processEventClick.
  */
 fun TimelineItemEventContent.opensMediaViewer(): Boolean =
     when (this) {
@@ -106,22 +104,42 @@ fun TimelineItemEventContent.opensMediaViewer(): Boolean =
         is TimelineItemFileContent,
         is TimelineItemAudioContent,
         is TimelineItemLocationContent -> true
-        else -> false
-    }
-
-/**
- * Whether this event can take part in bulk (multi/drag) selection. State changes ("joined",
- * "left room", avatar/name changes), redacted messages and call notifications are noise that
- * should never be swept into a copy/forward/delete selection.
- */
-fun TimelineItemEventContent.isBulkSelectable(): Boolean =
-    when (this) {
+        is TimelineItemTextBasedContent,
+        is TimelineItemEncryptedContent,
+        is TimelineItemStickerContent,
+        is TimelineItemPollContent,
+        is TimelineItemVoiceContent,
+        is TimelineItemGalleryContent,
+        is TimelineItemAttachmentsContent,
         is TimelineItemStateContent,
         is TimelineItemRedactedContent,
         is TimelineItemLegacyCallInviteContent,
         is TimelineItemRtcNotificationContent,
         TimelineItemUnknownContent -> false
-        else -> true
+    }
+
+/**
+ * Return true if the event content can be part of a bulk selection.
+ */
+fun TimelineItemEventContent.isBulkSelectable(): Boolean =
+    when (this) {
+        is TimelineItemTextBasedContent,
+        is TimelineItemAudioContent,
+        is TimelineItemEncryptedContent,
+        is TimelineItemFileContent,
+        is TimelineItemImageContent,
+        is TimelineItemStickerContent,
+        is TimelineItemLocationContent,
+        is TimelineItemPollContent,
+        is TimelineItemVoiceContent,
+        is TimelineItemVideoContent,
+        is TimelineItemGalleryContent,
+        is TimelineItemAttachmentsContent -> true
+        is TimelineItemStateContent,
+        is TimelineItemRedactedContent,
+        is TimelineItemLegacyCallInviteContent,
+        is TimelineItemRtcNotificationContent,
+        TimelineItemUnknownContent -> false
     }
 
 /**

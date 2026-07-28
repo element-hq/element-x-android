@@ -7,13 +7,13 @@
 
 <resources>
     <string name="action_select_messages">Select</string>
-    <plurals name="screen_messages_selection_count_short">
+    <plurals name="screen_room_selection_count">
         <item quantity="one">%1$d message selected</item>
         <item quantity="other">%1$d messages selected</item>
     </plurals>
-    <plurals name="screen_messages_selection_delete_confirm">
+    <plurals name="screen_room_selection_delete_confirm">
         <item quantity="one">Remove %1$d message?</item>
         <item quantity="other">Remove %1$d messages?</item>
     </plurals>
-    <string name="screen_messages_selection_cap_reached">Maximum messages selected</string>
+    <string name="screen_room_selection_cap_reached">Maximum messages selected</string>
 </resources>

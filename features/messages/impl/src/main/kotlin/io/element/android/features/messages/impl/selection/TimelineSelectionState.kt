@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright (c) 2026 Element Creations Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
@@ -16,53 +16,33 @@ import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableSet
 
 /**
- * State of the optional bulk-message selection mode.
- * `isActive` is true while the user is multi-selecting; tap on a message in this mode
- * toggles its membership in [selectedIds] instead of opening the single-message action sheet.
+ * State of the bulk-message selection mode, active as soon as [selectedIds] is not empty.
  */
 @Immutable
 data class TimelineSelectionState(
-    val isActive: Boolean,
+    val isEnabled: Boolean,
     val selectedIds: ImmutableSet<EventId>,
-    val maxSelection: Int,
+    val canDelete: Boolean,
 ) {
+    val isActive: Boolean get() = selectedIds.isNotEmpty()
     val count: Int get() = selectedIds.size
-    val isAtCap: Boolean get() = count >= maxSelection
+    val isAtCap: Boolean get() = count >= MAX_SELECTION
 
     companion object {
         const val MAX_SELECTION = 30
 
-        /** Inactive selection with nothing selected. */
         val Empty = TimelineSelectionState(
-            isActive = false,
+            isEnabled = false,
             selectedIds = persistentSetOf(),
-            maxSelection = MAX_SELECTION,
-        )
-
-        /**
-         * Persists isActive + maxSelection + the selected event-id strings so a large in-progress
-         * selection survives configuration changes and process death.
-         */
-        val Saver: Saver<TimelineSelectionState, Any> = listSaver(
-            save = { state ->
-                buildList {
-                    add(state.isActive.toString())
-                    add(state.maxSelection.toString())
-                    state.selectedIds.forEach { add(it.value) }
-                }
-            },
-            restore = { stored ->
-                // Defensive: a malformed payload restores an empty selection rather than crashing.
-                if (stored.size < 2) {
-                    Empty
-                } else {
-                    TimelineSelectionState(
-                        isActive = stored[0].toBoolean(),
-                        maxSelection = stored[1].toIntOrNull() ?: MAX_SELECTION,
-                        selectedIds = stored.drop(2).map(::EventId).toImmutableSet(),
-                    )
-                }
-            },
+            canDelete = false,
         )
     }
 }
+
+/**
+ * Persists the selection across configuration changes and process death.
+ */
+val TimelineSelectionSaver: Saver<ImmutableSet<EventId>, Any> = listSaver(
+    save = { selectedIds -> selectedIds.map { it.value } },
+    restore = { stored -> stored.map(::EventId).toImmutableSet() },
+)

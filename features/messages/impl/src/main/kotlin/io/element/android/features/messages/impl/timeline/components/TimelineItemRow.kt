@@ -117,20 +117,18 @@ internal fun TimelineItemRow(
     } else {
         Modifier
     }
-    val ids = selectedEventIds
     val selectableEvent = (timelineItem as? TimelineItem.Event)?.takeIf {
-        it.eventId != null && ids != null && it.content.isBulkSelectable()
+        selectedEventIds != null && it.eventId != null && it.content.isBulkSelectable()
     }
-    val isSelected = selectableEvent != null && ids != null && selectableEvent.eventId in ids
+    val isSelected = selectableEvent != null && selectableEvent.eventId in selectedEventIds.orEmpty()
     val selectionTint = if (isSelected) {
         Modifier.background(ElementTheme.colors.bgAccentSelected)
     } else {
         Modifier
     }
     val selectionClick = if (selectableEvent != null) {
-        // While selecting, the whole row is the toggle surface: Role.Checkbox makes TalkBack
-        // announce the selected state, and the content semantics below merge up into this node
-        // (mergeDescendants is disabled there in selection mode) so the row is read as one item.
+        // The whole row is the toggle surface, so that Talkback announces the selected state
+        // once for the row and not for each of its parts.
         Modifier.toggleable(
             value = isSelected,
             role = Role.Checkbox,
@@ -254,9 +252,6 @@ private fun TimelineItemRowContent(
                         val a11yVoiceMessage = stringResource(CommonStrings.a11y_voice_message)
                         TimelineItemEventRow(
                             modifier = Modifier
-                                // In selection mode the row's toggleable owns a single Checkbox node;
-                                // letting this flow up (mergeDescendants = false) folds the message into
-                                // it instead of exposing a second TalkBack node for the same row.
                                 .semantics(mergeDescendants = !selectionMode) {
                                     contentDescription = if (timelineItem.content is TimelineItemVoiceContent) {
                                         val voiceMessageText = String.format(a11yVoiceMessage, timelineItem.content.duration.toString(DurationUnit.MINUTES))
@@ -264,8 +259,7 @@ private fun TimelineItemRowContent(
                                     } else {
                                         timelineItem.safeSenderName
                                     }
-                                    // For Polls, allow the answers to be traversed by Talkback (but not
-                                    // while selecting, where the row is a single toggle).
+                                    // For Polls, allow the answers to be traversed by Talkback
                                     isTraversalGroup = !selectionMode && (
                                         timelineItem.content is TimelineItemPollContent ||
                                             timelineItem.failedToSend ||
@@ -273,8 +267,7 @@ private fun TimelineItemRowContent(
                                         )
                                     // TODO Also set to true when the event has link(s)
                                 }
-                                // Custom clickable that applies over the whole item for accessibility.
-                                // Suppressed while selecting: the row's toggleable is the single action.
+                                // Custom clickable that applies over the whole item for accessibility
                                 .then(
                                     if (isTalkbackActive() && !selectionMode) {
                                         Modifier

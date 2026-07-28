@@ -63,7 +63,6 @@ data class MessagesState(
     val threads: Threads,
     val showLiveLocationShareBanner: Boolean,
     val selectionState: TimelineSelectionState,
-    val isMultiSelectEnabled: Boolean,
     val eventSink: (MessagesEvent) -> Unit
 ) {
     val isTombstoned = successorRoom != null

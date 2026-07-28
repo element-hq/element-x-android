@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright (c) 2026 Element Creations Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
@@ -22,19 +22,16 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 
-/** Visual size of the selection indicator. */
 private val INDICATOR_SIZE = 40.dp
-
-/** Size of the check/circle icon drawn inside the indicator. */
 private val INDICATOR_ICON_SIZE = 22.dp
 
 @Composable
-fun SelectionIndicator(
+internal fun SelectionIndicator(
     checked: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Box(
-        // Purely decorative: the row is the toggle surface, so this is not a second focus stop.
+        // The row itself is the toggle surface, so this must not be a second focus stop.
         modifier = modifier
             .size(INDICATOR_SIZE)
             .clearAndSetSemantics {},

@@ -38,7 +38,9 @@ import io.element.android.features.messages.impl.link.LinkState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvent
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
+import io.element.android.features.messages.impl.selection.TimelineSelectionSaver
 import io.element.android.features.messages.impl.selection.TimelineSelectionState
+import io.element.android.features.messages.impl.selection.canDeleteSelection
 import io.element.android.features.messages.impl.timeline.MarkAsFullyRead
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineEvent
@@ -74,6 +76,7 @@ import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.emoji.api.recentemojis.AddRecentEmoji
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.toThreadId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
@@ -93,7 +96,9 @@ import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.CoroutineScope
@@ -185,9 +190,8 @@ class MessagesPresenter(
         val canOpenThreadList by featureFlagService.isFeatureEnabledFlow(FeatureFlags.RoomThreadList).collectAsState(initial = false)
         val isMultiSelectEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.MessageMultiSelect)
             .collectAsState(initial = false)
-        // rememberSaveable so a large in-progress selection survives rotation / process death.
-        var selectionState by rememberSaveable(stateSaver = TimelineSelectionState.Saver) {
-            mutableStateOf(TimelineSelectionState.Empty)
+        var selectedEventIds: ImmutableSet<EventId> by rememberSaveable(stateSaver = TimelineSelectionSaver) {
+            mutableStateOf(persistentSetOf())
         }
         val isCurrentlySharingLiveLocationInRoom by remember { liveLocationShareManager.isCurrentlySharing(room.roomId) }.collectAsState()
 
@@ -255,14 +259,9 @@ class MessagesPresenter(
 
         fun handleEvent(event: MessagesEvent) {
             when (event) {
-                is MessagesEvent.HandleAction -> {
-                    if (event.action == TimelineItemAction.Select) {
-                        // Intercept the "Select" action and route to selection-mode bookkeeping
-                        // instead of the per-event handler chain.
-                        handleEvent(MessagesEvent.EnterSelection(event.event))
-                        return@handleEvent
-                    }
-                    localCoroutineScope.handleTimelineAction(
+                is MessagesEvent.HandleAction -> when (event.action) {
+                    TimelineItemAction.Select -> handleEvent(MessagesEvent.EnterSelection(event.event))
+                    else -> localCoroutineScope.handleTimelineAction(
                         action = event.action,
                         targetEvent = event.event,
                         composerState = composerState,
@@ -272,104 +271,42 @@ class MessagesPresenter(
                     )
                 }
                 is MessagesEvent.EnterSelection -> {
-                    val anchorEventId = event.anchor.eventId
-                    // Mirror the ToggleSelection guards so this canonical entry point can't add
-                    // noise (state changes / redacted) or push past the cap, whatever the caller.
-                    val alreadySelected = anchorEventId != null && anchorEventId in selectionState.selectedIds
-                    val underCap = selectionState.selectedIds.size < selectionState.maxSelection
-                    val canSelectAnchor = anchorEventId != null &&
-                        event.anchor.content.isBulkSelectable() &&
-                        (alreadySelected || underCap)
-                    if (canSelectAnchor) {
-                        selectionState = selectionState.copy(
-                            isActive = true,
-                            selectedIds = (selectionState.selectedIds + anchorEventId).toImmutableSet(),
-                        )
+                    val anchorEventId = event.anchor.eventId ?: return@handleEvent
+                    if (!event.anchor.content.isBulkSelectable()) return@handleEvent
+                    val alreadySelected = anchorEventId in selectedEventIds
+                    if (!alreadySelected && selectedEventIds.size >= TimelineSelectionState.MAX_SELECTION) {
+                        return@handleEvent
                     }
+                    selectedEventIds = (selectedEventIds + anchorEventId).toImmutableSet()
                 }
                 is MessagesEvent.ToggleSelection -> {
                     val targetId = event.event.eventId ?: return@handleEvent
                     if (!event.event.content.isBulkSelectable()) return@handleEvent
-                    val current = selectionState.selectedIds
-                    val next = if (targetId in current) current - targetId else current + targetId
-                    if (next.size > selectionState.maxSelection) {
-                        // At the cap: ignore the extra tap. The top bar already shows the limit.
-                        return@handleEvent
-                    }
-                    selectionState = selectionState.copy(
-                        isActive = next.isNotEmpty(),
-                        selectedIds = next.toImmutableSet(),
-                    )
+                    val next = if (targetId in selectedEventIds) selectedEventIds - targetId else selectedEventIds + targetId
+                    if (next.size > TimelineSelectionState.MAX_SELECTION) return@handleEvent
+                    selectedEventIds = next.toImmutableSet()
                 }
                 MessagesEvent.ClearSelection -> {
-                    selectionState = TimelineSelectionState.Empty
+                    selectedEventIds = persistentSetOf()
                 }
                 MessagesEvent.BulkRedactSelected -> {
-                    // Redact every selected message, not only the ones currently in the loaded
-                    // window. For loaded messages we skip the ones the user clearly cannot redact,
-                    // to avoid firing requests that are bound to fail. Messages that have scrolled
-                    // out of the window are still attempted, since the homeserver is the final
-                    // authority on permissions, so a large selection is never silently truncated.
-                    val loadedById = timelineState.timelineItems
-                        .asSequence()
-                        .filterIsInstance<TimelineItem.Event>()
-                        .mapNotNull { event -> event.eventId?.let { it to event } }
-                        .toMap()
-                    val targets = selectionState.selectedIds.filter { id ->
-                        val loaded = loadedById[id]
-                        loaded == null || if (loaded.isMine) userEventPermissions.canRedactOwn else userEventPermissions.canRedactOther
-                    }
-                    if (targets.isEmpty()) return@handleEvent
-                    selectionState = TimelineSelectionState.Empty
-                    sessionCoroutineScope.launch {
-                        var failures = 0
-                        targets.forEachIndexed { index, id ->
-                            timelineController.invokeOnCurrentTimeline {
-                                redactEvent(eventOrTransactionId = id.toEventOrTransactionId(), reason = null)
-                                    .onFailure { failures += 1 }
-                            }
-                            // Throttle against the homeserver per-room redact rate limit.
-                            if (index < targets.lastIndex) delay(BULK_REDACT_THROTTLE_MS)
-                        }
-                        if (failures > 0) {
-                            Timber.w("BulkRedact: $failures of ${targets.size} redact requests failed")
-                            snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_error))
-                        }
+                    val targets = redactableSelection(timelineState.timelineItems, selectedEventIds, userEventPermissions)
+                    if (targets.isNotEmpty()) {
+                        selectedEventIds = persistentSetOf()
+                        sessionCoroutineScope.bulkRedact(targets)
                     }
                 }
                 MessagesEvent.BulkCopySelected -> {
-                    // Ordered by sentTime so the pasted block reads chronologically. Media
-                    // contributes its caption, so an annotated photo is not silently dropped.
-                    val text = timelineState.timelineItems
-                        .asSequence()
-                        .filterIsInstance<TimelineItem.Event>()
-                        .filter { it.eventId in selectionState.selectedIds }
-                        .sortedBy { it.sentTimeMillis }
-                        .mapNotNull { (it.content as? TimelineItemTextBasedContent)?.body ?: it.content.captionOrNull() }
-                        .joinToString("\n\n")
-                    // Keep the selection if there is nothing to copy (for example caption-less
-                    // media), so a tap on Copy that does nothing visible does not also drop the
-                    // selection.
-                    if (text.isNotEmpty()) {
-                        clipboardHelper.copyPlainText(text)
-                        snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_copied_to_clipboard))
-                        selectionState = TimelineSelectionState.Empty
+                    if (handleBulkCopy(timelineState.timelineItems, selectedEventIds)) {
+                        selectedEventIds = persistentSetOf()
                     }
                 }
                 MessagesEvent.BulkForwardSelected -> {
-                    val selected = selectionState.selectedIds
-                    if (selected.isEmpty()) return@handleEvent
-                    // Order by sentTime where the event is in the loaded window, then append any
-                    // selected ids scrolled out of the window so nothing is silently dropped.
-                    val sentTimeById = timelineState.timelineItems
-                        .asSequence()
-                        .filterIsInstance<TimelineItem.Event>()
-                        .filter { it.eventId in selected }
-                        .mapNotNull { event -> event.eventId?.let { it to event.sentTimeMillis } }
-                        .toMap()
-                    val orderedTargets = selected.sortedBy { sentTimeById[it] ?: Long.MAX_VALUE }
-                    selectionState = TimelineSelectionState.Empty
-                    navigator.forwardEvents(orderedTargets)
+                    val targets = selectionInSentTimeOrder(timelineState.timelineItems, selectedEventIds)
+                    if (targets.isNotEmpty()) {
+                        selectedEventIds = persistentSetOf()
+                        navigator.forwardEvents(targets)
+                    }
                 }
                 is MessagesEvent.ToggleReaction -> {
                     localCoroutineScope.toggleReaction(event.emoji, event.eventOrTransactionId)
@@ -415,6 +352,16 @@ class MessagesPresenter(
             }
         }
 
+        val selectionState = TimelineSelectionState(
+            isEnabled = isMultiSelectEnabled,
+            selectedIds = selectedEventIds,
+            canDelete = canDeleteSelection(
+                timelineItems = timelineState.timelineItems,
+                selectedIds = selectedEventIds,
+                userEventPermissions = userEventPermissions,
+            ),
+        )
+
         return MessagesState(
             roomId = room.roomId,
             roomName = roomInfo.name,
@@ -450,7 +397,6 @@ class MessagesPresenter(
             ),
             showLiveLocationShareBanner = isCurrentlySharingLiveLocationInRoom && timelineState.timelineMode !is Timeline.Mode.Thread,
             selectionState = selectionState,
-            isMultiSelectEnabled = isMultiSelectEnabled,
             eventSink = ::handleEvent,
         )
     }
@@ -521,7 +467,7 @@ class MessagesPresenter(
             TimelineItemAction.Pin -> handlePinAction(targetEvent)
             TimelineItemAction.Unpin -> handleUnpinAction(targetEvent)
             TimelineItemAction.ViewInTimeline -> Unit
-            // Handled in handleEvent(HandleAction) before reaching here.
+            // Handled by handleEvent(HandleAction) before reaching here.
             TimelineItemAction.Select -> Unit
         }
     }
@@ -736,5 +682,65 @@ class MessagesPresenter(
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_copied_to_clipboard))
         }
+    }
+
+    /**
+     * Selected events which are no longer loaded are kept: the homeserver is the final authority
+     * on permissions, so the selection is never truncated.
+     */
+    private fun redactableSelection(
+        timelineItems: List<TimelineItem>,
+        selectedIds: Set<EventId>,
+        userEventPermissions: UserEventPermissions,
+    ): List<EventId> {
+        val loadedEvents = timelineItems
+            .filterIsInstance<TimelineItem.Event>()
+            .mapNotNull { event -> event.eventId?.let { it to event } }
+            .toMap()
+        return selectedIds.filter { eventId ->
+            val event = loadedEvents[eventId]
+            event == null || if (event.isMine) userEventPermissions.canRedactOwn else userEventPermissions.canRedactOther
+        }
+    }
+
+    private fun CoroutineScope.bulkRedact(eventIds: List<EventId>) = launch {
+        var failures = 0
+        eventIds.forEachIndexed { index, eventId ->
+            timelineController.invokeOnCurrentTimeline {
+                redactEvent(eventOrTransactionId = eventId.toEventOrTransactionId(), reason = null)
+                    .onFailure { failures++ }
+            }
+            // Stay below the per-room redact rate limit.
+            if (index < eventIds.lastIndex) delay(BULK_REDACT_THROTTLE_MS)
+        }
+        if (failures > 0) {
+            Timber.w("Failed to redact $failures event(s) out of ${eventIds.size}")
+            snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_error))
+        }
+    }
+
+    /** Returns false when there was nothing to copy, so that the selection can be kept. */
+    private fun handleBulkCopy(timelineItems: List<TimelineItem>, selectedIds: Set<EventId>): Boolean {
+        val content = timelineItems
+            .filterIsInstance<TimelineItem.Event>()
+            .filter { it.eventId in selectedIds }
+            .sortedBy { it.sentTimeMillis }
+            .mapNotNull { (it.content as? TimelineItemTextBasedContent)?.body ?: it.content.captionOrNull() }
+            .joinToString("\n\n")
+        if (content.isEmpty()) return false
+        clipboardHelper.copyPlainText(content)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_copied_to_clipboard))
+        }
+        return true
+    }
+
+    private fun selectionInSentTimeOrder(timelineItems: List<TimelineItem>, selectedIds: Set<EventId>): List<EventId> {
+        val sentTimeByEventId = timelineItems
+            .filterIsInstance<TimelineItem.Event>()
+            .filter { it.eventId in selectedIds }
+            .mapNotNull { event -> event.eventId?.let { it to event.sentTimeMillis } }
+            .toMap()
+        return selectedIds.sortedBy { sentTimeByEventId[it] ?: Long.MAX_VALUE }
     }
 }

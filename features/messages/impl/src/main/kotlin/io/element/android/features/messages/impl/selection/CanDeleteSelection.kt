@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright (c) 2026 Element Creations Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
@@ -13,11 +13,8 @@ import io.element.android.libraries.matrix.api.core.EventId
 
 /**
  * Whether the bulk Delete action should be enabled for the current selection.
- *
- * True when the selection is non-empty and none of the loaded selected events is one the user
- * is not allowed to redact (own message without canRedactOwn, or someone else's without
- * canRedactOther). Window-evicted selected ids that are not in [timelineItems] do not force-disable;
- * the per-event filter in BulkRedactSelected stays the backstop for those.
+ * Selected events that are no longer in [timelineItems] are not taken into account, the per-event
+ * filter in BulkRedactSelected handles those.
  */
 fun canDeleteSelection(
     timelineItems: List<TimelineItem>,

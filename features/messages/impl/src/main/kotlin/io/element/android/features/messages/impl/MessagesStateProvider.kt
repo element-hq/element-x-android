@@ -24,6 +24,7 @@ import io.element.android.features.messages.impl.messagecomposer.aMessageCompose
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
 import io.element.android.features.messages.impl.pinned.banner.aLoadedPinnedMessagesBannerState
 import io.element.android.features.messages.impl.selection.TimelineSelectionState
+import io.element.android.features.messages.impl.selection.aTimelineSelectionState
 import io.element.android.features.messages.impl.timeline.TimelineState
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemList
@@ -59,7 +60,6 @@ import io.element.android.libraries.textcomposer.model.aTextEditorStateMarkdown
 import io.element.android.libraries.textcomposer.model.aTextEditorStateRich
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
-import kotlinx.collections.immutable.toImmutableSet
 
 open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
     override val values: Sequence<MessagesState>
@@ -101,7 +101,7 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
 }
 
 private fun aSelectionMessagesState(): MessagesState {
-    val selected = listOf(EventId("\$selected-0"), EventId("\$selected-1"))
+    val selected = listOf(EventId("\$selected-1"), EventId("\$selected-2"))
     val timelineItems = persistentListOf<TimelineItem>(
         aTimelineItemEvent(eventId = selected[0], content = aTimelineItemTextContent(body = "First selected message")),
         aTimelineItemEvent(eventId = EventId("\$other"), content = aTimelineItemTextContent(body = "Not selected")),
@@ -109,12 +109,7 @@ private fun aSelectionMessagesState(): MessagesState {
     )
     return aMessagesState(
         timelineState = aTimelineState(timelineItems = timelineItems),
-        isMultiSelectEnabled = true,
-        selectionState = TimelineSelectionState(
-            isActive = true,
-            selectedIds = selected.toImmutableSet(),
-            maxSelection = TimelineSelectionState.MAX_SELECTION,
-        ),
+        selectionState = aTimelineSelectionState(count = selected.size),
     )
 }
 
@@ -154,7 +149,6 @@ fun aMessagesState(
     isCurrentlySharingLiveLocationInRoom: Boolean = false,
     dmUserStatus: DisplayedStatus? = null,
     selectionState: TimelineSelectionState = TimelineSelectionState.Empty,
-    isMultiSelectEnabled: Boolean = false,
     eventSink: (MessagesEvent) -> Unit = {},
 ) = MessagesState(
     roomId = RoomId("!id:domain"),
@@ -187,7 +181,6 @@ fun aMessagesState(
     showLiveLocationShareBanner = isCurrentlySharingLiveLocationInRoom,
     dmUserStatus = dmUserStatus,
     selectionState = selectionState,
-    isMultiSelectEnabled = isMultiSelectEnabled,
     eventSink = eventSink,
 )
 

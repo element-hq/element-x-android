@@ -108,7 +108,6 @@ class KonsistPreviewTest {
         "MessageComposerViewVoicePreview",
         "MessagesReactionButtonAddPreview",
         "MessagesReactionButtonExtraPreview",
-        "MessagesSelectionTopBarAtCapPreview",
         "MessagesViewWithIdentityChangePreview",
         "PendingMemberRowWithLongNamePreview",
         "PinUnlockViewInAppPreview",

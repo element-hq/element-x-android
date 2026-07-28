@@ -78,10 +78,10 @@ class ForwardMessagesPresenter(
                     lastError = result.exceptionOrNull()
                     Timber.e(lastError, "Error forwarding event $eventId ($failures failed so far)")
                 }
-                // Throttle between sends so a large batch stays under the homeserver rate limit.
+                // Stay below the rate limit when forwarding a large selection.
                 if (index < eventIds.lastIndex) delay(FORWARD_THROTTLE_MS)
             }
-            // Only surface an error if every forward failed; partial success still closes the screen.
+            // A partial success still closes the screen.
             if (failures == eventIds.size && lastError != null) throw lastError
             roomIds
         }.runCatchingUpdatingState(forwardingActionState)
