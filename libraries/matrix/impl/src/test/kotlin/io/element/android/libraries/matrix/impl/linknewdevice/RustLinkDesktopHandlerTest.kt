@@ -13,6 +13,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.linknewdevice.ErrorType
 import io.element.android.libraries.matrix.api.linknewdevice.LinkDesktopStep
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiContinuationMessageSender
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiGrantLoginWithQrCodeHandler
 import io.element.android.libraries.matrix.test.QR_CODE_DATA
 import kotlinx.coroutines.CompletableDeferred
@@ -51,7 +52,7 @@ class RustLinkDesktopHandlerTest {
             listOf(
                 GrantQrLoginProgress.Starting to LinkDesktopStep.Starting,
                 GrantQrLoginProgress.SyncingSecrets to LinkDesktopStep.SyncingSecrets,
-                GrantQrLoginProgress.WaitingForAuth("aVerificationUri")
+                GrantQrLoginProgress.WaitingForAuth("aVerificationUri", FakeFfiContinuationMessageSender())
                     to LinkDesktopStep.WaitingForAuth("aVerificationUri"),
                 GrantQrLoginProgress.EstablishingSecureChannel(1.toUByte(), "1")
                     to LinkDesktopStep.EstablishingSecureChannel(1.toUByte(), "1"),
