@@ -273,6 +273,16 @@
   <string name="common_forward_message">"Переслати повідомлення"</string>
   <string name="common_frequently_used">"Частовживані"</string>
   <string name="common_gallery">"Галерея"</string>
+  <plurals name="common_gallery_reply_attachments">
+    <item quantity="one">"%1$d вкладення…"</item>
+    <item quantity="few">"%1$d вкладення…"</item>
+    <item quantity="many">"%1$d вкладень…"</item>
+  </plurals>
+  <plurals name="common_gallery_reply_media_items">
+    <item quantity="one">"%1$d медіаелемент…"</item>
+    <item quantity="few">"%1$d медіаелементи…"</item>
+    <item quantity="many">"%1$d медіаелементів…"</item>
+  </plurals>
   <string name="common_gif">"GIF"</string>
   <string name="common_group_call_in_progress">"Триває груповий виклик"</string>
   <string name="common_image">"Зображення"</string>
@@ -521,6 +531,8 @@
     <item quantity="many">"%1$d осіб"</item>
   </plurals>
   <string name="screen_live_location_sheet_title">"На карті"</string>
+  <string name="screen_local_network_opt_in_subtitle">"Ваш домашній сервер перебуває у вашій локальній мережі. Щоб приєднатися, %1$s повинен мати право доступу до пристроїв у цій мережі."</string>
+  <string name="screen_local_network_opt_in_title">"Дозволити доступ до локальної мережі"</string>
   <string name="screen_media_picker_error_failed_selection">"Не вдалося вибрати медіафайл, спробуйте ще раз."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Натисніть на повідомлення і виберіть \"%1$s\", щоб додати його сюди."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Закріпіть важливі повідомлення, щоб їх можна було легко знайти"</string>
@@ -567,6 +579,11 @@
   <string name="screen_space_list_title">"Простори"</string>
   <string name="screen_static_location_sheet_timestamp_description">"Надано доступ %1$s"</string>
   <string name="screen_static_location_sheet_title">"На карті"</string>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="one">"%1$d приєднується"</item>
+    <item quantity="few">"%1$d приєдналися"</item>
+    <item quantity="many">"%1$d приєдналися"</item>
+  </plurals>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Повідомлення не надіслано, оскільки звірена цифрова ідентичність %1$s була скинута."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Повідомлення не надіслано, оскільки %1$s перевірив не всі пристрої."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Повідомлення не надіслано, оскільки ви не звірили один або кілька своїх пристроїв."</string>

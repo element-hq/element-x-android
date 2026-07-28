@@ -29,7 +29,7 @@
   <string name="screen_media_upload_preview_item_count">"Fil %1$d av %2$d"</string>
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Optimaliser bildekvaliteten"</string>
   <string name="screen_media_upload_preview_processing">"Behandler…"</string>
-  <string name="screen_media_upload_preview_title">"Legg til media"</string>
+  <string name="screen_media_upload_preview_title">"Legg til medier"</string>
   <string name="screen_report_content_block_user">"Blokker bruker"</string>
   <string name="screen_report_content_block_user_hint">"Kryss av for om du vil skjule alle nåværende og fremtidige meldinger fra denne brukeren"</string>
   <string name="screen_report_content_explanation">"Denne meldingen vil bli rapportert til hjemmeserverens administratorer. De vil ikke kunne lese noen krypterte meldinger."</string>
