@@ -45,6 +45,7 @@ import io.element.android.libraries.designsystem.theme.components.ListSectionHea
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
 import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.components.CreateDmConfirmationBottomSheet
@@ -170,7 +171,9 @@ private fun CreateRoomActionButtonsList(
     onRoomDirectorySearchClick: () -> Unit,
     onDmClick: (RoomId) -> Unit,
 ) {
-    LazyColumn {
+    LazyColumn(
+        contentPadding = lazyColumnContentPadding,
+    ) {
         item {
             CreateRoomActionButton(
                 iconRes = CompoundDrawables.ic_compound_plus,
