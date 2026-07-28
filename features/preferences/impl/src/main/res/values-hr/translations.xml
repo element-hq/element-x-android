@@ -102,6 +102,14 @@ Ako nastavite, neke od vaših postavki mogu se promijeniti."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"postavke sustava"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Obavijesti sustava su isključene"</string>
   <string name="screen_notification_settings_title">"Obavijesti"</string>
+  <string name="screen_settings_user_status_away">"Odsutan/na"</string>
+  <string name="screen_settings_user_status_be_right_back">"Odmah se vraćam"</string>
+  <string name="screen_settings_user_status_custom">"Prilagođeno"</string>
+  <string name="screen_settings_user_status_custom_hint">"Prilagođeni status…"</string>
+  <string name="screen_settings_user_status_focus_time">"Vrijeme za fokusiranje"</string>
+  <string name="screen_settings_user_status_in_a_meeting">"Na sastanku"</string>
+  <string name="screen_settings_user_status_on_the_road">"Na putu"</string>
+  <string name="screen_settings_user_status_placeholder">"Kakav je tvoj status?"</string>
   <string name="theme_black">"Crna"</string>
   <string name="theme_dark">"Tamno"</string>
   <string name="theme_light">"Svijetlo"</string>

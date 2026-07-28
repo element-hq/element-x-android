@@ -34,6 +34,7 @@
   </plurals>
   <string name="notification_invite_body">"Запрошує вас до бесіди"</string>
   <string name="notification_invite_body_with_sender">"%1$s запрошує вас до бесіди"</string>
+  <string name="notification_live_location_started_body">"Починає ділитися своїм поточним місцем розташування"</string>
   <string name="notification_mentioned_you_body">"Вас згадує: %1$s"</string>
   <string name="notification_new_messages">"Нові повідомлення"</string>
   <plurals name="notification_new_messages_for_room">

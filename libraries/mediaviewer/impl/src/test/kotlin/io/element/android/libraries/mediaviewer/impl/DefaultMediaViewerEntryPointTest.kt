@@ -74,7 +74,7 @@ class DefaultMediaViewerEntryPointTest {
                 sessionId = A_SESSION_ID,
                 enterpriseService = FakeEnterpriseService(),
                 contentValidationCache = NoopEventContentValidationCache(),
-                contentScannerService = ContentScannerService { _, _, _ -> },
+                contentScannerService = ContentScannerService { _, _ -> },
             )
         }
         val callback = object : MediaViewerEntryPoint.Callback {
@@ -123,7 +123,7 @@ class DefaultMediaViewerEntryPointTest {
                 sessionId = A_SESSION_ID,
                 enterpriseService = FakeEnterpriseService(),
                 contentValidationCache = NoopEventContentValidationCache(),
-                contentScannerService = ContentScannerService { _, _, _ -> },
+                contentScannerService = ContentScannerService { _, _ -> },
             )
         }
         val callback = object : MediaViewerEntryPoint.Callback {

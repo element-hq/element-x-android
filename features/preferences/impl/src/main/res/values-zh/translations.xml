@@ -100,6 +100,14 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"系统设置"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"系统通知已关闭"</string>
   <string name="screen_notification_settings_title">"通知"</string>
+  <string name="screen_settings_user_status_away">"离开"</string>
+  <string name="screen_settings_user_status_be_right_back">"马上回来"</string>
+  <string name="screen_settings_user_status_custom">"自定义…"</string>
+  <string name="screen_settings_user_status_custom_hint">"自定义状态…"</string>
+  <string name="screen_settings_user_status_focus_time">"专注时间"</string>
+  <string name="screen_settings_user_status_in_a_meeting">"正在开会"</string>
+  <string name="screen_settings_user_status_on_the_road">"在路上"</string>
+  <string name="screen_settings_user_status_placeholder">"你的当前状态？"</string>
   <string name="theme_black">"纯黑"</string>
   <string name="theme_dark">"深色"</string>
   <string name="theme_light">"浅色"</string>

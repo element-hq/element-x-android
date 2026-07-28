@@ -38,7 +38,7 @@
   <string name="screen_room_attachment_source_camera_photo">"Scatta foto"</string>
   <string name="screen_room_attachment_source_camera_video">"Registra video"</string>
   <string name="screen_room_attachment_source_files">"Allegato"</string>
-  <string name="screen_room_attachment_source_gallery">"Libreria di foto e video"</string>
+  <string name="screen_room_attachment_source_gallery">"Libreria foto e video"</string>
   <string name="screen_room_attachment_source_location">"Condividi posizione"</string>
   <string name="screen_room_attachment_source_poll">"Sondaggio"</string>
   <string name="screen_room_attachment_text_formatting">"Formattazione del testo"</string>

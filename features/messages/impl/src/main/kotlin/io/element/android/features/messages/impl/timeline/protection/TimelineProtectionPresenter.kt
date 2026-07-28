@@ -59,7 +59,7 @@ class TimelineProtectionPresenter(
                     allowedEvents += setOfNotNull(event.eventId)
                 }
                 is TimelineProtectionEvent.ValidateContent -> {
-                    contentScannerService.scan(event.eventId, event.mediaSources, event.validationState)
+                    contentScannerService.scan(event.mediaSources, event.validationState)
                 }
             }
         }

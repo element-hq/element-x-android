@@ -73,6 +73,11 @@
   <string name="screen_room_timeline_reactions_show_more">"Показати більше"</string>
   <string name="screen_room_timeline_reactions_show_reactions_summary">"Показати підсумок реакцій"</string>
   <string name="screen_room_timeline_read_marker_title">"Нове"</string>
+  <plurals name="screen_room_timeline_redacted_messages">
+    <item quantity="one">"%1$d вилучене повідомлення"</item>
+    <item quantity="few">"%1$d вилучені повідомлення"</item>
+    <item quantity="many">"%1$d вилучених повідомлень"</item>
+  </plurals>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d зміна в кімнаті"</item>
     <item quantity="few">"%1$d зміни в кімнаті"</item>

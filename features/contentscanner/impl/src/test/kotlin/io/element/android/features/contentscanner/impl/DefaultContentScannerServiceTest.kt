@@ -11,7 +11,6 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.scanner.ContentScanner
-import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.media.aMediaSource
 import io.element.android.libraries.matrix.test.scanner.FakeContentScanner
 import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationValue
@@ -39,7 +38,6 @@ class DefaultContentScannerServiceTest {
         createDefaultContentScannerService(
             contentScanner = scanner,
         ).scan(
-            eventId = AN_EVENT_ID,
             mediaSources = emptyList(),
             contentValidationState = contentValidationState,
         )
@@ -58,7 +56,6 @@ class DefaultContentScannerServiceTest {
         createDefaultContentScannerService(
             contentScanner = scanner,
         ).scan(
-            eventId = AN_EVENT_ID,
             mediaSources = listOf(mediaSource),
             contentValidationState = contentValidationState,
         )
@@ -87,7 +84,6 @@ class DefaultContentScannerServiceTest {
         createDefaultContentScannerService(
             contentScanner = scanner,
         ).scan(
-            eventId = AN_EVENT_ID,
             mediaSources = listOf(mediaSourceA, mediaSourceB),
             contentValidationState = contentValidationState,
         )
@@ -113,14 +109,12 @@ class DefaultContentScannerServiceTest {
 
         // First scan attempt
         service.scan(
-            eventId = AN_EVENT_ID,
             mediaSources = listOf(mediaSource),
             contentValidationState = contentValidationState,
         )
 
         // Immediately after, a new scan attempt is made for the same media source
         service.scan(
-            eventId = AN_EVENT_ID,
             mediaSources = listOf(mediaSource),
             contentValidationState = contentValidationState,
         )
@@ -144,7 +138,6 @@ class DefaultContentScannerServiceTest {
         )
 
         service.scan(
-            eventId = AN_EVENT_ID,
             mediaSources = listOf(mediaSource),
             contentValidationState = contentValidationState,
         )
@@ -166,7 +159,6 @@ class DefaultContentScannerServiceTest {
         )
 
         service.scan(
-            eventId = AN_EVENT_ID,
             mediaSources = listOf(mediaSource),
             contentValidationState = contentValidationState,
         )
@@ -191,7 +183,6 @@ class DefaultContentScannerServiceTest {
         )
 
         service.scan(
-            eventId = AN_EVENT_ID,
             mediaSources = listOf(mediaSource),
             contentValidationState = contentValidationState,
         )
