@@ -14,12 +14,14 @@ import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.Uri
 import androidx.core.content.IntentCompat
+import androidx.core.content.pm.ShortcutManagerCompat
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.share.api.ShareIntentData
 import io.element.android.features.share.api.ShareIntentHandler
 import io.element.android.features.share.api.UriToShare
 import io.element.android.libraries.androidutils.compat.queryIntentActivitiesCompat
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeAny
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeApplication
@@ -29,11 +31,9 @@ import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeImage
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeText
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.di.annotations.ApplicationContext
-import timber.log.Timber
-
-import androidx.core.content.pm.ShortcutManagerCompat
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import timber.log.Timber
 
 @ContributesBinding(AppScope::class)
 class DefaultShareIntentHandler(
@@ -126,7 +126,7 @@ class DefaultShareIntentHandler(
         return uriList.map { uri ->
             // The value in fallbackMimeType can be wrong, especially if several uris were received
             // in the same intent (i.e. 'image/*'). We need to check the mime type of each uri.
-            val mimeType = runCatching { context.contentResolver.getType(uri) }.getOrNull() ?: fallbackMimeType
+            val mimeType = runCatchingExceptions { context.contentResolver.getType(uri) }.getOrNull() ?: fallbackMimeType
             UriToShare(
                 uri = uri,
                 mimeType = mimeType,

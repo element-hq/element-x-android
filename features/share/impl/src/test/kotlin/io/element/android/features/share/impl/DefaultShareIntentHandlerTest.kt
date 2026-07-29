@@ -18,11 +18,9 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
-class DefaultShareIntentHandlerTest: RobolectricTest() {
+class DefaultShareIntentHandlerTest : RobolectricTest() {
     private val context: Context = RuntimeEnvironment.getApplication()
     private val handler = DefaultShareIntentHandler(context)
 

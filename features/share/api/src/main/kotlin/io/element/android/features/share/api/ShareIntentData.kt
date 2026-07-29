@@ -9,10 +9,9 @@ package io.element.android.features.share.api
 
 import android.net.Uri
 import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import kotlinx.parcelize.Parcelize
 
 /**
  * Share intent data, mapped from the original [android.content.Intent].
