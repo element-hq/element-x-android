@@ -126,7 +126,7 @@ class DefaultShareIntentHandler(
         return uriList.map { uri ->
             // The value in fallbackMimeType can be wrong, especially if several uris were received
             // in the same intent (i.e. 'image/*'). We need to check the mime type of each uri.
-            val mimeType = context.contentResolver.getType(uri) ?: fallbackMimeType
+            val mimeType = runCatching { context.contentResolver.getType(uri) }.getOrNull() ?: fallbackMimeType
             UriToShare(
                 uri = uri,
                 mimeType = mimeType,

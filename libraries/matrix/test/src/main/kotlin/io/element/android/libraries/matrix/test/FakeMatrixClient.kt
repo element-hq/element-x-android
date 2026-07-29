@@ -145,7 +145,7 @@ class FakeMatrixClient(
     override val userProfile: StateFlow<MatrixUser> = _userProfile
 
     var createRoomResult: (CreateRoomParameters) -> Result<RoomId> = { Result.success(A_ROOM_ID) }
-    private var createDmResult: Result<RoomId> = Result.success(A_ROOM_ID)
+    var createDmResult: (UserId, Boolean) -> Result<RoomId> = { _, _ -> Result.success(A_ROOM_ID) }
     private var findDmResult: Result<RoomId?> = Result.success(A_ROOM_ID)
     private val getRoomResults = mutableMapOf<RoomId, BaseRoom>()
     private val searchUserResults = mutableMapOf<String, Result<MatrixSearchUserResults>>()
@@ -196,8 +196,8 @@ class FakeMatrixClient(
         return createRoomResult(createRoomParams)
     }
 
-    override suspend fun createDM(userId: UserId): Result<RoomId> = simulateLongTask {
-        return createDmResult
+    override suspend fun createDM(userId: UserId, isEncrypted: Boolean): Result<RoomId> = simulateLongTask {
+        return createDmResult(userId, isEncrypted)
     }
 
     override suspend fun getProfile(userId: UserId): Result<MatrixUser> {
@@ -301,7 +301,7 @@ class FakeMatrixClient(
     }
 
     fun givenCreateDmResult(result: Result<RoomId>) {
-        createDmResult = result
+        createDmResult = { _, _ -> result }
     }
 
     fun givenFindDmResult(result: Result<RoomId?>) {
