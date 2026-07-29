@@ -13,7 +13,7 @@ import io.element.android.libraries.matrix.api.BuildConfig
 object OAuthConfig {
     val CLIENT_URI = BuildConfig.OAUTH_CLIENT_URI_PATH?.let {
         // Concatenate the base URI and the path, ensuring there is exactly one '/' between them
-        listOf(BuildConfig.CLIENT_URI.trimEnd('/'), it.trimStart('/')).joinToString(separator = "/")
+        "${BuildConfig.CLIENT_URI.trimEnd('/')}/${it.trimStart('/')}"
     } ?: BuildConfig.CLIENT_URI
 
     // Note: host must match with the host of CLIENT_URI
