@@ -322,6 +322,7 @@ class ThreadedMessagesNode(
                     onViewAllPinnedMessagesClick = {},
                     modifier = modifier,
                     knockRequestsBannerView = {},
+                    customReactionBottomSheet = {},
                     onThreadsListClick = {},
                 )
 

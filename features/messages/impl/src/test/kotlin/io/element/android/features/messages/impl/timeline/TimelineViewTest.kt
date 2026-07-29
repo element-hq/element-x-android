@@ -21,7 +21,7 @@ import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import io.element.android.features.messages.impl.timeline.components.MessageShieldData
 import io.element.android.features.messages.impl.timeline.components.aCriticalShield
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingIndicatorModel
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
@@ -67,7 +67,7 @@ class TimelineViewTest : RobolectricTest() {
         val eventsRecorder = EventsRecorder<TimelineEvent>()
         setTimelineView(
             state = aTimelineState(
-                timelineItems = persistentListOf(aTimelineItemEvent(content = aTimelineItemImageContent())),
+                timelineItems = persistentListOf(aTimelineItemEvent(content = aTimelineItemTextContent())),
                 eventSink = eventsRecorder,
             ),
         )
@@ -79,7 +79,7 @@ class TimelineViewTest : RobolectricTest() {
         val eventsRecorder = EventsRecorder<TimelineEvent>()
         setTimelineView(
             state = aTimelineState(
-                timelineItems = persistentListOf(aTimelineItemEvent(content = aTimelineItemImageContent())),
+                timelineItems = persistentListOf(aTimelineItemEvent(content = aTimelineItemTextContent())),
                 isLive = true,
                 eventSink = eventsRecorder,
             ),
@@ -98,7 +98,7 @@ class TimelineViewTest : RobolectricTest() {
         val eventsRecorder = EventsRecorder<TimelineEvent>()
         setTimelineView(
             state = aTimelineState(
-                timelineItems = persistentListOf(aTimelineItemEvent(content = aTimelineItemImageContent())),
+                timelineItems = persistentListOf(aTimelineItemEvent(content = aTimelineItemTextContent())),
                 isLive = false,
                 eventSink = eventsRecorder,
             ),
@@ -133,7 +133,7 @@ class TimelineViewTest : RobolectricTest() {
                 timelineItems = persistentListOf<TimelineItem>(
                     aTimelineItemEvent(
                         // Do not use a Text because EditorStyledText cannot be used in UI test.
-                        content = aTimelineItemImageContent(),
+                        content = aTimelineItemTextContent(),
                         messageShield = MessageShield.UnverifiedIdentity(true),
                     ),
                 ),
@@ -155,7 +155,7 @@ class TimelineViewTest : RobolectricTest() {
         val eventsRecorder = EventsRecorder<TimelineEvent>()
         setTimelineView(
             state = aTimelineState(
-                timelineItems = persistentListOf(aTimelineItemEvent(content = aTimelineItemImageContent())),
+                timelineItems = persistentListOf(aTimelineItemEvent(content = aTimelineItemTextContent())),
                 isLive = false,
                 eventSink = eventsRecorder,
                 messageShield = aCriticalShield(),
@@ -218,6 +218,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setTimelineView(
     onReadReceiptClick: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
     onGalleryItemClick: (TimelineItem.Event, Int) -> Unit = EnsureNeverCalledWithTwoParams(),
     forceJumpToBottomVisibility: Boolean = false,
+    onJoinCallClick: (isAudioCall: Boolean) -> Unit = EnsureNeverCalledWithParam(),
 ) {
     setSafeContent(clearAndroidUiDispatcher = true) {
         TimelineView(
@@ -234,6 +235,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setTimelineView(
             onReadReceiptClick = onReadReceiptClick,
             onGalleryItemClick = onGalleryItemClick,
             forceJumpToBottomVisibility = forceJumpToBottomVisibility,
+            onJoinCallClick = onJoinCallClick,
         )
     }
 }

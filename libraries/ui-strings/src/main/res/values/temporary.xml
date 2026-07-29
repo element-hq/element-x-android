@@ -6,6 +6,8 @@
   -->
 
 <resources>
-    <string name="action_mark_as_read">"Mark as read"</string>
-    <string name="a11y_jump_to_unread_messages">"Jump to first unread message"</string>
+    <string name="a11y_state_expanded">"Expanded"</string>
+    <string name="a11y_state_collapsed">"Collapsed"</string>
+    <string name="a11y_active">Active</string>
+    <string name="a11y_inactive">Inactive</string>
 </resources>

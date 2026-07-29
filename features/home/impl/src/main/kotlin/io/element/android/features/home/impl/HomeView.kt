@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.plus
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -65,6 +66,8 @@ import io.element.android.libraries.designsystem.theme.components.HorizontalFloa
 import io.element.android.libraries.designsystem.theme.components.HorizontalFloatingToolbarSeparator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -234,7 +237,15 @@ private fun HomeScaffold(
             )
         },
         floatingActionButtonPosition = FabPosition.Center,
+        contentWindowInsets = scaffoldScrollableContentInsets,
         content = { padding ->
+            val outerPadding = PaddingValues(
+                start = padding.calculateStartPadding(LocalLayoutDirection.current),
+                end = padding.calculateEndPadding(LocalLayoutDirection.current),
+                // Remove these two lines once https://issuetracker.google.com/issues/436432313 has been fixed
+                bottom = padding.calculateBottomPadding(),
+                top = padding.calculateTopPadding()
+            )
             val contentPadding = PaddingValues(
                 bottom = 96.dp,
             )
@@ -251,18 +262,10 @@ private fun HomeScaffold(
                         onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
                         onRoomClick = ::onRoomClick,
                         onCreateRoomClick = onStartChatClick,
-                        contentPadding = contentPadding,
+                        contentPadding = lazyColumnContentPadding + contentPadding,
                         modifier = Modifier
-                            .padding(
-                                PaddingValues(
-                                    start = padding.calculateStartPadding(LocalLayoutDirection.current),
-                                    end = padding.calculateEndPadding(LocalLayoutDirection.current),
-                                    // Remove these two lines once https://issuetracker.google.com/issues/436432313 has been fixed
-                                    bottom = padding.calculateBottomPadding(),
-                                    top = padding.calculateTopPadding()
-                                )
-                            )
-                            .consumeWindowInsets(padding)
+                            .padding(outerPadding)
+                            .consumeWindowInsets(outerPadding)
                             .hazeSource(state = hazeState)
                     )
                     SpaceFiltersView(roomListState.spaceFiltersState)
@@ -271,10 +274,10 @@ private fun HomeScaffold(
                     HomeSpacesView(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(padding)
-                            .consumeWindowInsets(padding)
+                            .padding(outerPadding)
+                            .consumeWindowInsets(outerPadding)
                             .hazeSource(state = hazeState),
-                        contentPadding = contentPadding,
+                        contentPadding = lazyColumnContentPadding + contentPadding,
                         state = state.homeSpacesState,
                         lazyListState = spacesLazyListState,
                         onSpaceClick = { spaceId ->

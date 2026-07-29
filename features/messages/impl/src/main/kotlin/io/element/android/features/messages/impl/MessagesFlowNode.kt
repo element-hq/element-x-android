@@ -57,6 +57,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
+import io.element.android.features.messages.impl.timeline.model.event.blurHash
 import io.element.android.features.messages.impl.timeline.model.event.duration
 import io.element.android.features.poll.api.create.CreatePollEntryPoint
 import io.element.android.features.poll.api.create.CreatePollMode
@@ -155,6 +156,7 @@ class MessagesFlowNode(
             val mediaSource: MediaSource,
             val thumbnailSource: MediaSource?,
             val canUseOverlay: Boolean,
+            val blurHash: String?,
         ) : NavTarget
 
         @Parcelize
@@ -377,6 +379,7 @@ class MessagesFlowNode(
                     mediaInfo = navTarget.mediaInfo,
                     mediaSource = navTarget.mediaSource,
                     thumbnailSource = navTarget.thumbnailSource,
+                    blurHash = navTarget.blurHash,
                 )
                 val callback = object : MediaViewerEntryPoint.Callback {
                     override fun onDone() {
@@ -828,6 +831,7 @@ class MessagesFlowNode(
                         mediaSource = galleryItem.mediaSource,
                         thumbnailSource = galleryItem.thumbnailSource,
                         type = galleryItem.type.toMediaViewerType(),
+                        blurHash = galleryItem.blurhash,
                     )
                 }.reversed()
                 NavTarget.GalleryViewer(
@@ -861,6 +865,7 @@ class MessagesFlowNode(
                         mediaSource = attachment.mediaSource,
                         thumbnailSource = attachment.thumbnailSource,
                         type = GalleryItemData.Type.File,
+                        blurHash = null,
                     )
                 }.reversed()
                 NavTarget.GalleryViewer(
@@ -920,6 +925,7 @@ class MessagesFlowNode(
             mediaSource = mediaSource,
             thumbnailSource = thumbnailSource,
             canUseOverlay = canUseOverlay,
+            blurHash = content.blurHash(),
         )
     }
 

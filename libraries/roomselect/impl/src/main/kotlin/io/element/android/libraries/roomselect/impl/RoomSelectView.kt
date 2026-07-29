@@ -53,6 +53,8 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.OnVisibleRangeChangeEffect
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.components.SelectedRoom
 import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
@@ -133,7 +135,8 @@ fun RoomSelectView(
                     )
                 }
             )
-        }
+        },
+        contentWindowInsets = scaffoldScrollableContentInsets,
     ) { paddingValues ->
         Column(
             Modifier
@@ -149,7 +152,10 @@ fun RoomSelectView(
                 resultState = state.resultState,
                 showBackButton = false,
             ) { summaries ->
-                LazyColumn(state = lazyListState) {
+                LazyColumn(
+                    state = lazyListState,
+                    contentPadding = lazyColumnContentPadding,
+                ) {
                     item {
                         SelectedRoomsHelper(
                             selectedRooms = state.selectedRooms,

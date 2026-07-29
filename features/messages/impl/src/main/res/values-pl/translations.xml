@@ -7,15 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"Zaszyfrowana przez nieznane lub usunięte urządzenie."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Zaszyfrowana przez urządzenie niezweryfikowane przez jego właściciela."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Zaszyfrowana przez niezweryfikowanego użytkownika."</string>
-  <string name="emoji_picker_category_activity">"Aktywności"</string>
-  <string name="emoji_picker_category_flags">"Flagi"</string>
-  <string name="emoji_picker_category_foods">"Jedzenie i napoje"</string>
-  <string name="emoji_picker_category_nature">"Zwierzęta i natura"</string>
-  <string name="emoji_picker_category_objects">"Obiekty"</string>
-  <string name="emoji_picker_category_people">"Buźki i osoby"</string>
-  <string name="emoji_picker_category_places">"Podróż i miejsca"</string>
-  <string name="emoji_picker_category_recent">"Ostatnie emoji"</string>
-  <string name="emoji_picker_category_symbols">"Symbole"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"Odwróć obraz w poziomie"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Odwrócono w poziomie"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Oryginalny"</string>
@@ -82,6 +73,11 @@
   <string name="screen_room_timeline_reactions_show_more">"Pokaż więcej"</string>
   <string name="screen_room_timeline_reactions_show_reactions_summary">"Pokaż podsumowanie reakcji"</string>
   <string name="screen_room_timeline_read_marker_title">"Nowe"</string>
+  <plurals name="screen_room_timeline_redacted_messages">
+    <item quantity="one">"%1$d usunięta wiadomość"</item>
+    <item quantity="few">"%1$d usunięte wiadomości"</item>
+    <item quantity="many">"%1$d usuniętych wiadomości"</item>
+  </plurals>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d zmiana pokoju"</item>
     <item quantity="few">"%1$d zmiany pokoju"</item>

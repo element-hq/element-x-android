@@ -13,6 +13,7 @@ import io.element.android.compound.colors.SemanticColorsLightDark
 import io.element.android.features.enterprise.api.BugReportUrl
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.wellknown.api.ElementWellKnown
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.coroutines.flow.Flow
@@ -31,6 +32,7 @@ class FakeEnterpriseService(
     private val unifiedPushDefaultPushGatewayResult: () -> String? = { lambdaError() },
     private val getNoisyNotificationChannelIdResult: (SessionId?) -> String? = { lambdaError() },
     private val tweakMasUrlResult: (String, String) -> String = { _, _ -> lambdaError() },
+    private val overrideWellKnownResult: () -> ElementWellKnown? = { lambdaError() },
 ) : EnterpriseService {
     private val brandColorState = MutableStateFlow(initialBrandColor)
     private val semanticColorsState = MutableStateFlow(initialSemanticColors)
@@ -78,5 +80,9 @@ class FakeEnterpriseService(
 
     override fun getNoisyNotificationChannelId(sessionId: SessionId): String? {
         return getNoisyNotificationChannelIdResult(sessionId)
+    }
+
+    override fun overriddenElementWellKnown(): ElementWellKnown? {
+        return overrideWellKnownResult()
     }
 }

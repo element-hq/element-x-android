@@ -254,29 +254,31 @@ private fun ExoPlayerMediaVideoView(
                 },
             )
         }
-        MediaPlayerControllerView(
-            state = mediaPlayerControllerState,
-            onTogglePlay = {
-                autoHideController++
-                exoPlayer.togglePlay()
-            },
-            onSeekChange = {
-                autoHideController++
-                mediaPlayerControllerState = mediaPlayerControllerState.copy(
-                    seekingToMillis = it.toLong(),
-                )
-                exoPlayer.seekToEnsurePlaying(it.toLong())
-            },
-            onToggleMute = {
-                autoHideController++
-                exoPlayer.volume = if (exoPlayer.volume == 1f) 0f else 1f
-            },
-            audioFocus = audioFocus,
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-                .padding(bottom = bottomPaddingInPixels.toDp()),
-        )
+        if (localMedia != null) {
+            MediaPlayerControllerView(
+                state = mediaPlayerControllerState,
+                onTogglePlay = {
+                    autoHideController++
+                    exoPlayer.togglePlay()
+                },
+                onSeekChange = {
+                    autoHideController++
+                    mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                        seekingToMillis = it.toLong(),
+                    )
+                    exoPlayer.seekToEnsurePlaying(it.toLong())
+                },
+                onToggleMute = {
+                    autoHideController++
+                    exoPlayer.volume = if (exoPlayer.volume == 1f) 0f else 1f
+                },
+                audioFocus = audioFocus,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = bottomPaddingInPixels.toDp()),
+            )
+        }
     }
 
     LaunchedEffect(exoPlayer.isPlaying) {

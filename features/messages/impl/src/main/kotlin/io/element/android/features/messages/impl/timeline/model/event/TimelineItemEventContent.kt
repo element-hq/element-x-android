@@ -15,6 +15,9 @@ import kotlin.time.Duration
 @Immutable
 sealed interface TimelineItemEventContent {
     val type: String
+
+    val isMedia: Boolean
+        get() = this is TimelineItemEventContentWithAttachment || this is TimelineItemGalleryContent || this is TimelineItemAttachmentsContent
 }
 
 interface TimelineItemEventMutableContent {
@@ -115,11 +118,27 @@ fun TimelineItemEventContent.captionOrNull(): String? = when (this) {
     else -> null
 }
 
+fun TimelineItemEventContent.formattedCaptionOrNull(): CharSequence? = when (this) {
+    is TimelineItemEventContentWithAttachment -> formattedCaption
+    is TimelineItemGalleryContent -> formattedCaption
+    is TimelineItemAttachmentsContent -> formattedCaption
+    else -> null
+}
+
 fun TimelineItemEventContentWithAttachment.duration(): Duration? {
     return when (this) {
         is TimelineItemAudioContent -> duration
         is TimelineItemVideoContent -> duration
         is TimelineItemVoiceContent -> duration
+        else -> null
+    }
+}
+
+fun TimelineItemEventContentWithAttachment.blurHash(): String? {
+    return when (this) {
+        is TimelineItemImageContent -> blurhash
+        is TimelineItemVideoContent -> blurHash
+        is TimelineItemStickerContent -> blurhash
         else -> null
     }
 }

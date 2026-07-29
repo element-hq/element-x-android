@@ -15,9 +15,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -45,6 +43,8 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.SearchField
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.matrix.api.spaces.SpaceServiceFilter
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -75,9 +75,7 @@ fun SpaceFiltersView(
     }
     if (sheetState.isVisible || isSelecting) {
         ModalBottomSheet(
-            modifier = modifier
-                .systemBarsPadding()
-                .navigationBarsPadding(),
+            modifier = modifier,
             sheetState = sheetState,
             onDismissRequest = {
                 if (state is SpaceFiltersState.Selecting) {
@@ -85,6 +83,7 @@ fun SpaceFiltersView(
                 }
             },
             scrollable = false,
+            contentWindowInsets = { scaffoldScrollableContentInsets },
         ) {
             Box(
                 modifier = Modifier
@@ -113,7 +112,7 @@ private fun SpaceFiltersBottomSheetContent(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.padding(vertical = 16.dp)
+        modifier = modifier.padding(top = 16.dp)
     ) {
         Text(
             text = stringResource(R.string.screen_roomlist_your_spaces),
@@ -131,7 +130,9 @@ private fun SpaceFiltersBottomSheetContent(
             placeholder = stringResource(CommonStrings.action_search),
         )
         Spacer(modifier = Modifier.height(16.dp))
-        LazyColumn {
+        LazyColumn(
+            contentPadding = lazyColumnContentPadding,
+        ) {
             items(filters) { filter ->
                 SpaceFilterItem(
                     filter = filter,

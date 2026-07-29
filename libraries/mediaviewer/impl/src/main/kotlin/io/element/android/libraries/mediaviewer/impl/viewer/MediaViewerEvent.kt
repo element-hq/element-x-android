@@ -9,6 +9,7 @@
 package io.element.android.libraries.mediaviewer.impl.viewer
 
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.Timeline
 
 sealed interface MediaViewerEvent {
@@ -30,4 +31,5 @@ sealed interface MediaViewerEvent {
     data class OnNavigateTo(val index: Int) : MediaViewerEvent
     data class LoadMore(val direction: Timeline.PaginationDirection) : MediaViewerEvent
     data class CancelLoadingMedia(val data: MediaViewerPageData.MediaViewerData) : MediaViewerEvent
+    data class ValidateMedia(val mediaSource: MediaSource, val thumbnailMediaSource: MediaSource?) : MediaViewerEvent
 }

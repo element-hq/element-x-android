@@ -7,15 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"Зашифровано невідомим або видаленим пристроєм."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Зашифровано пристроєм, який не звірено його власником."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Зашифровано не звіреним користувачем."</string>
-  <string name="emoji_picker_category_activity">"Дії"</string>
-  <string name="emoji_picker_category_flags">"Прапори"</string>
-  <string name="emoji_picker_category_foods">"Їжа та напої"</string>
-  <string name="emoji_picker_category_nature">"Тварини та природа"</string>
-  <string name="emoji_picker_category_objects">"Об\'єкти"</string>
-  <string name="emoji_picker_category_people">"Смайлики та люди"</string>
-  <string name="emoji_picker_category_places">"Подорожі та місця"</string>
-  <string name="emoji_picker_category_recent">"Нещодавні емодзі"</string>
-  <string name="emoji_picker_category_symbols">"Символи"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"Повернути зображення по горизонталі"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Перевернуто по горизонталі"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Оригінал"</string>
@@ -82,6 +73,11 @@
   <string name="screen_room_timeline_reactions_show_more">"Показати більше"</string>
   <string name="screen_room_timeline_reactions_show_reactions_summary">"Показати підсумок реакцій"</string>
   <string name="screen_room_timeline_read_marker_title">"Нове"</string>
+  <plurals name="screen_room_timeline_redacted_messages">
+    <item quantity="one">"%1$d вилучене повідомлення"</item>
+    <item quantity="few">"%1$d вилучені повідомлення"</item>
+    <item quantity="many">"%1$d вилучених повідомлень"</item>
+  </plurals>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d зміна в кімнаті"</item>
     <item quantity="few">"%1$d зміни в кімнаті"</item>

@@ -52,7 +52,7 @@ open class RoomSelectStateProvider : PreviewParameterProvider<RoomSelectState> {
 internal fun aRoomSelectState(
     mode: RoomSelectMode = RoomSelectMode.Forward,
     maxNumberOfRooms: Int = 10,
-    resultState: SearchBarResultState<ImmutableList<SelectRoomInfo>> = SearchBarResultState.Initial(),
+    resultState: SearchBarResultState<ImmutableList<SelectRoomInfo>> = SearchBarResultState.Initial,
     searchQuery: String = "",
     isSearchActive: Boolean = false,
     selectedRooms: ImmutableList<SelectRoomInfo> = persistentListOf(),
