@@ -111,6 +111,18 @@ class UserStatusPresenterTest {
     }
 
     @Test
+    fun `OpenCustomInputWithValues pre-fills values and opens emoji picker`() = runTest {
+        createPresenter().test {
+            awaitItem().eventSink(UserStatusEvent.OpenCustomInputWithValues("🚀", "My custom text"))
+            val state = awaitItem()
+            val pickerState = state.pickerState as UserStatusPickerState.CustomInput
+            assertThat(pickerState.emoji).isEqualTo("🚀")
+            assertThat(pickerState.textFieldState.text.toString()).isEqualTo("My custom text")
+            assertThat(pickerState.emojiPickerSheetState).isInstanceOf(EmojiPickerSheetState.Shown::class.java)
+        }
+    }
+
+    @Test
     fun `Clear event calls clearUserStatus and clears displayed status`() = runTest {
         val client = FakeMatrixClient()
         createPresenter(client).test {

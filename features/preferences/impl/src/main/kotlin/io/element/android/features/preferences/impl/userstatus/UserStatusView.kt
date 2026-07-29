@@ -94,6 +94,9 @@ fun UserStatusView(
                     onDismiss = { state.eventSink(UserStatusEvent.DismissPicker) },
                     onSelectPredefinedStatus = { status -> state.eventSink(UserStatusEvent.SetStatus(status)) },
                     onSelectCustomStatus = { state.eventSink(UserStatusEvent.OpenCustomInput) },
+                    onCustomizePredefinedStatusEmoji = { emoji, text ->
+                        state.eventSink(UserStatusEvent.OpenCustomInputWithValues(emoji, text))
+                    },
                 )
             }
         }
@@ -191,6 +194,7 @@ private fun UserStatusPickerBottomSheet(
     onDismiss: () -> Unit,
     onSelectPredefinedStatus: (UserStatus) -> Unit,
     onSelectCustomStatus: () -> Unit,
+    onCustomizePredefinedStatusEmoji: (emoji: String, text: String) -> Unit = { _, _ -> },
     modifier: Modifier = Modifier,
 ) {
     val sheetState = rememberBottomSheetState(
@@ -210,7 +214,15 @@ private fun UserStatusPickerBottomSheet(
             val isSelected = currentRawStatus == predefinedUserStatus
             ListItem(
                 headlineContent = { Text(text = label) },
-                leadingContent = ListItemContent.Custom { EmojiText(predefined.emoji) },
+                leadingContent = ListItemContent.Custom({
+                    Box(modifier = Modifier.clickable {
+                        sheetState.hide(coroutineScope) {
+                            onCustomizePredefinedStatusEmoji(predefined.emoji, label)
+                        }
+                    }) {
+                        EmojiText(predefined.emoji)
+                    }
+                }),
                 trailingContent = if (isSelected) {
                     ListItemContent.Icon(IconSource.Vector(CompoundIcons.Check()), tintColor = ElementTheme.colors.iconAccentPrimary)
                 } else {

@@ -19,4 +19,5 @@ sealed interface UserStatusEvent {
     data object OpenEmojiPicker : UserStatusEvent
     data object DismissEmojiPicker : UserStatusEvent
     data object ClearStatus : UserStatusEvent
+    data class OpenCustomInputWithValues(val emoji: String, val text: String) : UserStatusEvent
 }

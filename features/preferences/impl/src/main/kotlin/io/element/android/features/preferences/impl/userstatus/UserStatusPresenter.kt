@@ -67,6 +67,15 @@ class UserStatusPresenter(
                         emojiPickerSheetState = EmojiPickerSheetState.Hidden,
                     )
                 }
+                is UserStatusEvent.OpenCustomInputWithValues -> {
+                    customTextFieldState.setTextAndPlaceCursorAtEnd(event.text)
+                    isEmojiPickerVisible = true
+                    pickerState = UserStatusPickerState.CustomInput(
+                        emoji = event.emoji,
+                        textFieldState = customTextFieldState,
+                        emojiPickerSheetState = EmojiPickerSheetState.Hidden,
+                    )
+                }
                 // Custom-input mutations
                 is UserStatusEvent.UpdateCustomEmoji -> {
                     isEmojiPickerVisible = false
