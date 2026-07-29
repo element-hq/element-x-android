@@ -87,7 +87,7 @@ jobs:
         with:
           name: kover-error-report
           path: |
-            app/build/reports/kover
+            build/reports/kover
 
       - name: ✅ Upload kover report (disabled)
         if: always()
