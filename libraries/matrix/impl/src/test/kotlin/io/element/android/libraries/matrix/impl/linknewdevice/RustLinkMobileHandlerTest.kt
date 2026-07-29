@@ -14,6 +14,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.linknewdevice.ErrorType
 import io.element.android.libraries.matrix.api.linknewdevice.LinkMobileStep
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiCheckCodeSender
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiContinuationMessageSender
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiGrantLoginWithQrCodeHandler
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiQrCodeData
 import io.element.android.libraries.matrix.test.QR_CODE_DATA_RECIPROCATE
@@ -52,7 +53,7 @@ class RustLinkMobileHandlerTest {
             listOf(
                 GrantGeneratedQrLoginProgress.Starting to LinkMobileStep.Starting::class.java,
                 GrantGeneratedQrLoginProgress.SyncingSecrets to LinkMobileStep.SyncingSecrets::class.java,
-                GrantGeneratedQrLoginProgress.WaitingForAuth("aVerificationUri")
+                GrantGeneratedQrLoginProgress.WaitingForAuth("aVerificationUri", FakeFfiContinuationMessageSender())
                     to LinkMobileStep.WaitingForAuth::class.java,
                 GrantGeneratedQrLoginProgress.QrScanned(FakeFfiCheckCodeSender())
                     to LinkMobileStep.QrScanned::class.java,

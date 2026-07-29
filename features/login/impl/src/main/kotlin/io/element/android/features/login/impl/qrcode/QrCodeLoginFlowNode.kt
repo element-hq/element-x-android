@@ -141,6 +141,8 @@ class QrCodeLoginFlowNode(
                                 }
                                 QrLoginException.CheckCodeAlreadySent,
                                 QrLoginException.CheckCodeCannotBeSent,
+                                QrLoginException.ContinuationAlreadySent,
+                                QrLoginException.ContinuationCannotBeSent,
                                 QrLoginException.UnsupportedQrCodeType,
                                 QrLoginException.Unknown -> {
                                     Timber.e(error, "Unknown error found")
