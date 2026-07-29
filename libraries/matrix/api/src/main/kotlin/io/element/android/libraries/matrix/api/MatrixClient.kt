@@ -84,7 +84,7 @@ interface MatrixClient {
     suspend fun ignoreUser(userId: UserId): Result<Unit>
     suspend fun unignoreUser(userId: UserId): Result<Unit>
     suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId>
-    suspend fun createDM(userId: UserId): Result<RoomId>
+    suspend fun createDM(userId: UserId, isEncrypted: Boolean): Result<RoomId>
     suspend fun getProfile(userId: UserId): Result<MatrixUser>
     suspend fun searchUsers(searchTerm: String, limit: Long): Result<MatrixSearchUserResults>
     suspend fun setDisplayName(displayName: String): Result<Unit>
