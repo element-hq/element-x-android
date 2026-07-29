@@ -73,7 +73,7 @@ jobs:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
 
       - name: ⚙️ Run unit tests
-        run: ./gradlew testDebugUnitTest $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew :app:testGplayDebugUnitTest testDebugUnitTest -x :tests:konsist:testDebugUnitTest $CI_GRADLE_ARG_PROPERTIES
 
       - name: ⚙️ Run screenshot tests
         run: ./gradlew :tests:uitests:verifyPaparazziDebug $CI_GRADLE_ARG_PROPERTIES
