@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.plus
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -54,6 +55,8 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -129,14 +132,15 @@ fun ThreadsListView(
                 },
                 navigationIcon = {
                     BackButton(onBackClick)
-                }
+                },
+                windowInsets = scaffoldScrollableContentInsets,
             )
         }
     ) { padding ->
         val lazyListState = rememberLazyListState()
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = padding,
+            contentPadding = padding + lazyColumnContentPadding,
             state = lazyListState,
         ) {
             itemsIndexed(state.threads, key = { _, row -> row.item.threadId }) { index, row ->
@@ -383,7 +387,12 @@ fun aThreadListItem(
 fun aThreadListItemEvent(
     threadId: ThreadId = ThreadId("\$a-thread-id"),
     senderId: UserId = UserId("@a-user-id:server"),
-    senderProfile: ProfileDetails = ProfileDetails.Ready(displayName = USER_NAME_ALICE, displayNameAmbiguous = false, avatarUrl = null),
+    senderProfile: ProfileDetails = ProfileDetails.Ready(
+        displayName = USER_NAME_ALICE,
+        displayNameAmbiguous = false,
+        avatarUrl = null,
+        displayedStatus = null,
+    ),
     isOwn: Boolean = false,
     content: EventContent = MessageContent(
         body = "Hello world!",

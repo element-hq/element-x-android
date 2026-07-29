@@ -38,7 +38,6 @@ class TimelineItemAttachmentsContentProvider : PreviewParameterProvider<Timeline
             ),
             aTimelineItemAttachmentsContent(
                 body = "Files",
-                caption = "Files mixed with media",
                 attachments = listOf(
                     anAttachmentItem(
                         filename = "report.pdf",

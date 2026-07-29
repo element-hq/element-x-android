@@ -11,15 +11,16 @@
 package io.element.android.libraries.wellknown.impl
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.wellknown.test.FakeElementWellknownStore
 import io.element.android.features.wellknown.test.anElementWellKnown
 import io.element.android.libraries.androidutils.json.DefaultJsonProvider
-import io.element.android.libraries.androidutils.json.JsonProvider
 import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.wellknown.api.CustomRecoveryPassphrase
 import io.element.android.libraries.wellknown.api.ElementWellKnown
+import io.element.android.libraries.wellknown.api.ElementWellKnownParser
 import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -276,7 +277,7 @@ class DefaultSessionWellknownRetrieverTest {
                 Result.success("{}".toByteArray())
             },
             cacheStore = cacheStore,
-            jsonProvider = JsonProvider { error("Failed to parse JSON") }
+            elementWellKnownParser = { Result.failure(IllegalStateException("Failed to parse JSON")) }
         )
         assertThat(sut.getElementWellKnown()).isInstanceOf(WellknownRetrieverResult.Error::class.java)
         // Ensure that the cache is deleted after the failure to parse it
@@ -320,20 +321,43 @@ class DefaultSessionWellknownRetrieverTest {
         )
     }
 
+    @Test
+    fun `get element wellknown was overridden`() = runTest {
+        val getLambda = lambdaRecorder<String, Result<ByteArray>> { Result.failure(IllegalStateException("BOOM")) }
+        val wellKnown = anElementWellKnown()
+
+        val sut = createDefaultSessionWellknownRetriever(
+            getUrlLambda = getLambda,
+            enterpriseService = FakeEnterpriseService(
+                overrideWellKnownResult = { wellKnown }
+            )
+        )
+
+        // The overridden value is returned
+        assertThat(sut.getElementWellKnown()).isEqualTo(
+            WellknownRetrieverResult.Success(wellKnown)
+        )
+
+        // And the endpoint is never hit
+        getLambda.assertions().isNeverCalled()
+    }
+
     private fun parsedWellKnownContent() = DefaultJsonProvider().invoke().decodeFromString<InternalElementWellKnown>(WELLKNOWN_CONTENT).map()
 
     private fun TestScope.createDefaultSessionWellknownRetriever(
         cacheStore: FakeElementWellknownStore = FakeElementWellknownStore(),
         getUrlLambda: (String) -> Result<ByteArray>,
-        jsonProvider: JsonProvider = DefaultJsonProvider(),
+        elementWellKnownParser: ElementWellKnownParser = DefaultElementWellKnownParser(DefaultJsonProvider()),
+        enterpriseService: FakeEnterpriseService = FakeEnterpriseService(overrideWellKnownResult = { null }),
     ) = DefaultSessionWellknownRetriever(
         matrixClient = FakeMatrixClient(
             userIdServerNameLambda = { "user.domain.org" },
             getUrlLambda = getUrlLambda,
         ),
-        json = jsonProvider,
         sessionCoroutineScope = backgroundScope,
         elementWellknownStore = cacheStore,
+        elementWellKnownParser = elementWellKnownParser,
+        enterpriseService = enterpriseService,
     )
 
     companion object {

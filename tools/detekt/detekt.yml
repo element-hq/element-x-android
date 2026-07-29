@@ -227,6 +227,7 @@ Compose:
     # You can optionally define a list of CompositionLocals that are allowed here
     allowedCompositionLocals:
       - LocalCompoundColors
+      - LocalEventContentValidationState
       - LocalSnackbarDispatcher
       - LocalCameraPositionState
       - LocalMediaItemPresenterFactories

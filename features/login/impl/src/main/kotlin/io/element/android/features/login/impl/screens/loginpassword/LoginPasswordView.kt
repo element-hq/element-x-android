@@ -36,6 +36,7 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalAutofillManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
@@ -211,10 +212,15 @@ private fun LoginForm(
             singleLine = true,
             trailingIcon = if (loginFieldState.isNotEmpty()) {
                 {
-                    Box(Modifier.clickable {
-                        loginFieldState = ""
-                        eventSink(LoginPasswordEvents.SetLogin(""))
-                    }) {
+                    Box(
+                        Modifier.clickable(
+                            onClickLabel = stringResource(CommonStrings.action_clear),
+                            role = Role.Button,
+                        ) {
+                            loginFieldState = ""
+                            eventSink(LoginPasswordEvents.SetLogin(""))
+                        }
+                    ) {
                         Icon(
                             imageVector = CompoundIcons.Close(),
                             contentDescription = stringResource(CommonStrings.action_clear),

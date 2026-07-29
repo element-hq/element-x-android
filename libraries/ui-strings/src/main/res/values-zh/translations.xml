@@ -8,6 +8,7 @@
   <string name="a11y_collapse_message_text_field">"最小化消息文本框"</string>
   <string name="a11y_create_poll_votes_allowed_decrease">"减少每人允许的投票数"</string>
   <string name="a11y_create_poll_votes_allowed_increase">"增加每人允许的投票数"</string>
+  <string name="a11y_custom_emoji">"自定义 Emoji"</string>
   <string name="a11y_delete">"删除"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="other">"已输入 %1$d 个数字"</item>
@@ -22,6 +23,7 @@
   <string name="a11y_join_call">"加入通话"</string>
   <string name="a11y_jump_to_bottom">"跳转到底部"</string>
   <string name="a11y_jump_to_unread">"跳转到未读"</string>
+  <string name="a11y_jump_to_unread_messages">"跳转到首个未读消息"</string>
   <string name="a11y_move_the_map_to_my_location">"将地图移动到我的位置"</string>
   <string name="a11y_notifications_mentions_only">"仅提及"</string>
   <string name="a11y_notifications_muted">"通知已关闭"</string>
@@ -61,6 +63,7 @@
   <string name="a11y_start_call">"开始通话"</string>
   <string name="a11y_start_video_call">"开始视频通话"</string>
   <string name="a11y_start_voice_call">"开始语音通话"</string>
+  <string name="a11y_status">"状态"</string>
   <string name="a11y_thread_in_room">"位于 %1$s 中的消息列"</string>
   <string name="a11y_threads_in_room">"位于 %1$s 中的消息列"</string>
   <string name="a11y_tombstoned_room">"已封存的房间"</string>
@@ -141,6 +144,7 @@
   <string name="action_manage_account_and_devices">"管理账户与设备"</string>
   <string name="action_manage_devices">"管理设备"</string>
   <string name="action_manage_rooms">"管理房间"</string>
+  <string name="action_mark_as_read">"设为已读"</string>
   <string name="action_message">"发送消息"</string>
   <string name="action_minimize">"最小化"</string>
   <string name="action_next">"下一步"</string>
@@ -375,7 +379,7 @@
   <string name="common_settings">"设置"</string>
   <string name="common_share_space">"共享空间"</string>
   <string name="common_shared_history">"新成员可以看到历史"</string>
-  <string name="common_shared_live_location">"共享实时位置"</string>
+  <string name="common_shared_live_location">"已共享实时位置"</string>
   <string name="common_shared_location">"共享位置"</string>
   <string name="common_shared_space">"已共享的空间"</string>
   <string name="common_signing_out">"正在移除设备"</string>
@@ -466,7 +470,6 @@
   <string name="dialog_video_quality_selector_subtitle_file_size">"允许的最大文件大小为：%1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"选择你要上传的视频的质量。"</string>
   <string name="dialog_video_quality_selector_title">"选择视频上传质量"</string>
-  <string name="emoji_picker_search_placeholder">"搜索 Emoji"</string>
   <string name="error_account_already_logged_in">"你已在此设备以 %1$s 的身份登录。"</string>
   <string name="error_account_creation_not_possible">"你的主服务器需要升级，以支持 Matrix 认证服务和账户创建。"</string>
   <string name="error_failed_creating_the_permalink">"永久链接创建失败"</string>
@@ -487,7 +490,7 @@
   <string name="error_unknown">"抱歉，发生了错误"</string>
   <string name="invite_friends_rich_title">"🔐️ 在 %1$s 中与我一起"</string>
   <string name="invite_friends_text">"嗨！请通过 %1$s 与我联系：%2$s"</string>
-  <string name="live_location_sharing_foreground_service_channel_title_android">"正在共享实时位置"</string>
+  <string name="live_location_sharing_foreground_service_channel_title_android">"实时位置共享"</string>
   <string name="live_location_sharing_foreground_service_message_android">"位置共享正在进行"</string>
   <string name="live_location_sharing_foreground_service_title_android">"%1$s 实时位置"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
@@ -499,11 +502,13 @@
   <string name="screen_create_poll_settings_section_title">"设置"</string>
   <string name="screen_create_poll_votes_allowed_per_person">"每人允许的投票数"</string>
   <string name="screen_live_location_sheet_nobody_sharing">"目前无人分享其位置"</string>
-  <string name="screen_live_location_sheet_sharing_live_location">"共享实时位置"</string>
+  <string name="screen_live_location_sheet_sharing_live_location">"正在共享实时位置"</string>
   <plurals name="screen_live_location_sheet_subtitle">
     <item quantity="other">"%1$d 个人"</item>
   </plurals>
   <string name="screen_live_location_sheet_title">"在地图上"</string>
+  <string name="screen_local_network_opt_in_subtitle">"你的主服务器位于本地网络。%1$s 需要获得此网络上设备的访问权才能连接。"</string>
+  <string name="screen_local_network_opt_in_title">"允许访问本地网络"</string>
   <string name="screen_media_picker_error_failed_selection">"选择媒体失败，请重试。"</string>
   <string name="screen_pinned_timeline_empty_state_description">"按下消息并选择 “%1$s” 将其包含在此处。"</string>
   <string name="screen_pinned_timeline_empty_state_headline">"置顶重要的消息以便于发现"</string>
@@ -527,7 +532,7 @@
   <string name="screen_room_event_pill">"%1$s 中的消息"</string>
   <string name="screen_room_grouped_state_events_expand">"展开"</string>
   <string name="screen_room_grouped_state_events_reduce">"折叠"</string>
-  <string name="screen_room_live_location_banner">"共享实时位置"</string>
+  <string name="screen_room_live_location_banner">"正在共享实时位置"</string>
   <string name="screen_room_permalink_same_room_android">"已经位于此房间！"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s / %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s 个已置顶的消息"</string>

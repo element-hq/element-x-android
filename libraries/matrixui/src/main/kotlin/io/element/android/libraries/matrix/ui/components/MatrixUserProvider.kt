@@ -21,6 +21,7 @@ import io.element.android.libraries.designsystem.preview.USER_NAME_SUSIE
 import io.element.android.libraries.designsystem.preview.USER_NAME_VICTOR
 import io.element.android.libraries.designsystem.preview.USER_NAME_WALTER
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.MatrixUser
 
 open class MatrixUserProvider : PreviewParameterProvider<MatrixUser> {
@@ -28,6 +29,7 @@ open class MatrixUserProvider : PreviewParameterProvider<MatrixUser> {
         get() = sequenceOf(
             aMatrixUser(),
             aMatrixUser(displayName = null),
+            aMatrixUser(displayedStatus = DisplayedStatus.InCall(0L)),
         )
 }
 
@@ -43,10 +45,12 @@ fun aMatrixUser(
     id: String? = null,
     displayName: String? = USER_NAME_ALICE,
     avatarUrl: String? = null,
+    displayedStatus: DisplayedStatus? = null,
 ) = MatrixUser(
     userId = UserId(id ?: "@${displayName?.lowercase()?.replace(" ", "_") ?: "id"}:server.org"),
     displayName = displayName,
     avatarUrl = avatarUrl,
+    displayedStatus = displayedStatus,
 )
 
 fun aMatrixUserList() = listOf(

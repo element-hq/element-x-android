@@ -11,6 +11,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.Immutable
 import io.element.android.features.preferences.impl.R
+import io.element.android.libraries.emoji.api.picker.EmojiPickerState
 import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.UserStatus
 
@@ -28,13 +29,21 @@ sealed interface UserStatusPickerState {
     data class CustomInput(
         val emoji: String,
         val textFieldState: TextFieldState,
+        val emojiPickerSheetState: EmojiPickerSheetState,
     ) : UserStatusPickerState
 }
 
+@Immutable
+sealed interface EmojiPickerSheetState {
+    data object Hidden : EmojiPickerSheetState
+    data object Loading : EmojiPickerSheetState
+    data class Shown(val state: EmojiPickerState) : EmojiPickerSheetState
+}
+
 enum class PredefinedUserStatus(val emoji: String, @StringRes val labelRes: Int) {
-    IN_A_MEETING("💬", R.string.common_user_status_in_a_meeting),
-    FOCUS_TIME("💡", R.string.common_user_status_focus_time),
-    ON_THE_ROAD("🚙", R.string.common_user_status_on_the_road),
-    BE_RIGHT_BACK("☕", R.string.common_user_status_be_right_back),
-    AWAY("🌴", R.string.common_user_status_away),
+    IN_A_MEETING("💬", R.string.screen_settings_user_status_in_a_meeting),
+    FOCUS_TIME("💡", R.string.screen_settings_user_status_focus_time),
+    ON_THE_ROAD("🚙", R.string.screen_settings_user_status_on_the_road),
+    BE_RIGHT_BACK("☕", R.string.screen_settings_user_status_be_right_back),
+    AWAY("🌴", R.string.screen_settings_user_status_away),
 }

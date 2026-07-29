@@ -42,6 +42,7 @@ interface MediaViewerEntryPoint : FeatureEntryPoint {
             val mediaInfo: MediaInfo,
             val mediaSource: MediaSource,
             val thumbnailSource: MediaSource?,
+            val blurHash: String?,
         ) : Params
 
         data class EventGallery(
@@ -55,6 +56,7 @@ interface MediaViewerEntryPoint : FeatureEntryPoint {
             val avatarInfo: AvatarInfo,
             val mediaSource: MediaSource,
             val thumbnailSource: MediaSource?,
+            val blurHash: String?,
         ) : Params
     }
 

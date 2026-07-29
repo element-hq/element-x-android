@@ -7,15 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"Šifrirano nepoznatim ili izbrisanim uređajem."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Šifrirano uređajem koji vlasnik nije potvrdio."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Šifrirao neprovjereni korisnik."</string>
-  <string name="emoji_picker_category_activity">"Aktivnosti"</string>
-  <string name="emoji_picker_category_flags">"Zastave"</string>
-  <string name="emoji_picker_category_foods">"Hrana i piće"</string>
-  <string name="emoji_picker_category_nature">"Životinje i priroda"</string>
-  <string name="emoji_picker_category_objects">"Objekti"</string>
-  <string name="emoji_picker_category_people">"Emotikoni i osobe"</string>
-  <string name="emoji_picker_category_places">"Putovanja i mjesta"</string>
-  <string name="emoji_picker_category_recent">"Nedavni emotikoni"</string>
-  <string name="emoji_picker_category_symbols">"Simboli"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"Okreni sliku vodoravno"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Okrenuto vodoravno"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Izvornik"</string>
@@ -81,6 +72,10 @@
   <string name="screen_room_timeline_reactions_show_more">"Prikaži više"</string>
   <string name="screen_room_timeline_reactions_show_reactions_summary">"Prikaži sažetak reakcija"</string>
   <string name="screen_room_timeline_read_marker_title">"Novo"</string>
+  <plurals name="screen_room_timeline_redacted_messages">
+    <item quantity="one">"%1$d uklonjena poruka"</item>
+    <item quantity="other">"%1$d uklonjene poruke"</item>
+  </plurals>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d promjena sobe"</item>
     <item quantity="few">"%1$d promjene sobe"</item>

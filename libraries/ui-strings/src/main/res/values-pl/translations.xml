@@ -8,6 +8,7 @@
   <string name="a11y_collapse_message_text_field">"Zmniejsz pole tekstowe wiadomości"</string>
   <string name="a11y_create_poll_votes_allowed_decrease">"Zmniejsz liczbę głosów dozwolonych na osobę"</string>
   <string name="a11y_create_poll_votes_allowed_increase">"Zwiększ liczbę głosów dozwolonych na osobę"</string>
+  <string name="a11y_custom_emoji">"Własne emoji"</string>
   <string name="a11y_delete">"Usuń"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"Wprowadzono %1$d cyfrę"</item>
@@ -24,6 +25,7 @@
   <string name="a11y_join_call">"Dołącz do połączenia"</string>
   <string name="a11y_jump_to_bottom">"Przejdź na dół"</string>
   <string name="a11y_jump_to_unread">"Skocz do nieprzeczytanych"</string>
+  <string name="a11y_jump_to_unread_messages">"Skocz do pierwszej nieprzeczytanej wiadomości"</string>
   <string name="a11y_move_the_map_to_my_location">"Przesuń mapę do mojej lokalizacji"</string>
   <string name="a11y_notifications_mentions_only">"Tylko wzmianki"</string>
   <string name="a11y_notifications_muted">"Wyciszone"</string>
@@ -65,6 +67,7 @@
   <string name="a11y_start_call">"Rozpocznij rozmowę"</string>
   <string name="a11y_start_video_call">"Rozpocznij rozmowę wideo"</string>
   <string name="a11y_start_voice_call">"Rozpocznij połączenie głosowe"</string>
+  <string name="a11y_status">"Status"</string>
   <string name="a11y_thread_in_room">"Wątek w %1$s"</string>
   <string name="a11y_threads_in_room">"Wątki w %1$s"</string>
   <string name="a11y_tombstoned_room">"Pokój nagrobkowy"</string>
@@ -145,6 +148,7 @@
   <string name="action_manage_account_and_devices">"Zarządzaj kontem i urządzeniami"</string>
   <string name="action_manage_devices">"Zarządzaj urządzeniami"</string>
   <string name="action_manage_rooms">"Zarządzaj pokojami"</string>
+  <string name="action_mark_as_read">"Oznacz jako przeczytane"</string>
   <string name="action_message">"Wiadomość"</string>
   <string name="action_minimize">"Minimalizuj"</string>
   <string name="action_next">"Dalej"</string>
@@ -269,6 +273,16 @@ Powód: %1$s."</string>
   <string name="common_forward_message">"Przekaż wiadomość"</string>
   <string name="common_frequently_used">"Często używane"</string>
   <string name="common_gallery">"Galeria"</string>
+  <plurals name="common_gallery_reply_attachments">
+    <item quantity="one">"%1$d załącznik…"</item>
+    <item quantity="few">"%1$d załączniki…"</item>
+    <item quantity="many">"%1$d załączników…"</item>
+  </plurals>
+  <plurals name="common_gallery_reply_media_items">
+    <item quantity="one">"%1$d przedmiot medialny…"</item>
+    <item quantity="few">"%1$d przedmioty medialne…"</item>
+    <item quantity="many">"%1$d przedmiotów medialnych…"</item>
+  </plurals>
   <string name="common_gif">"GIF"</string>
   <string name="common_group_call_in_progress">"Trwa połączenie grupowe"</string>
   <string name="common_image">"Zdjęcie"</string>
@@ -308,6 +322,7 @@ Powód: %1$s."</string>
   <string name="common_no_space_name">"Brak nazwy przestrzeni"</string>
   <string name="common_not_encrypted">"Nieszyfrowane"</string>
   <string name="common_offline">"Offline"</string>
+  <string name="common_on_a_call">"W trakcie rozmowy"</string>
   <string name="common_open_source_licenses">"Licencje open-source"</string>
   <string name="common_or">"lub"</string>
   <string name="common_other_options">"Inne opcje"</string>
@@ -477,7 +492,6 @@ Czy na pewno chcesz kontynuować?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Maksymalny dozwolony rozmiar pliku to: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Wybierz jakość filmu, który chcesz przesłać."</string>
   <string name="dialog_video_quality_selector_title">"Wybierz jakość przesyłania wideo"</string>
-  <string name="emoji_picker_search_placeholder">"Wyszukaj emoji"</string>
   <string name="error_account_already_logged_in">"Jesteś już zalogowany na tym urządzeniu jako %1$s."</string>
   <string name="error_account_creation_not_possible">"Twój serwer domowy wymaga aktualizacji, aby uzyskać wsparcie usługi Matrix Authentication Service i tworzenia kont."</string>
   <string name="error_failed_creating_the_permalink">"Nie udało się utworzyć linku bezpośredniego"</string>
@@ -517,6 +531,8 @@ Czy na pewno chcesz kontynuować?"</string>
     <item quantity="many">"%1$d osób"</item>
   </plurals>
   <string name="screen_live_location_sheet_title">"Na mapie"</string>
+  <string name="screen_local_network_opt_in_subtitle">"Twój serwer domowy znajduje się w sieci lokalnej. Aby się połączyć, %1$s potrzebuje uprawnień dostępu do urządzeń w tej sieci."</string>
+  <string name="screen_local_network_opt_in_title">"Zezwól na dostęp do sieci lokalnej"</string>
   <string name="screen_media_picker_error_failed_selection">"Nie udało się wybrać multimediów. Spróbuj ponownie."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Przytrzymaj wiadomość i wybierz “%1$s”, aby umieścić ją tutaj."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Przypinaj ważne wiadomości, by łatwo je później odnaleźć"</string>

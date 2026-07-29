@@ -8,6 +8,7 @@
   <string name="a11y_collapse_message_text_field">"Minimise message text field"</string>
   <string name="a11y_create_poll_votes_allowed_decrease">"Decrease votes allowed per person"</string>
   <string name="a11y_create_poll_votes_allowed_increase">"Increase votes allowed per person"</string>
+  <string name="a11y_custom_emoji">"Custom emoji"</string>
   <string name="a11y_delete">"Delete"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d digit entered"</item>
@@ -23,6 +24,7 @@
   <string name="a11y_join_call">"Join call"</string>
   <string name="a11y_jump_to_bottom">"Jump to bottom"</string>
   <string name="a11y_jump_to_unread">"Jump to unread"</string>
+  <string name="a11y_jump_to_unread_messages">"Jump to first unread message"</string>
   <string name="a11y_move_the_map_to_my_location">"Move the map to my location"</string>
   <string name="a11y_notifications_mentions_only">"Mentions only"</string>
   <string name="a11y_notifications_muted">"Muted"</string>
@@ -63,6 +65,7 @@
   <string name="a11y_start_call">"Start a call"</string>
   <string name="a11y_start_video_call">"Start a video call"</string>
   <string name="a11y_start_voice_call">"Start a voice call"</string>
+  <string name="a11y_status">"Status"</string>
   <string name="a11y_thread_in_room">"Thread in %1$s"</string>
   <string name="a11y_threads_in_room">"Threads in %1$s"</string>
   <string name="a11y_tombstoned_room">"Tombstoned room"</string>
@@ -143,6 +146,7 @@
   <string name="action_manage_account_and_devices">"Manage account &amp; devices"</string>
   <string name="action_manage_devices">"Manage devices"</string>
   <string name="action_manage_rooms">"Manage rooms"</string>
+  <string name="action_mark_as_read">"Mark as read"</string>
   <string name="action_message">"Message"</string>
   <string name="action_minimize">"Minimise"</string>
   <string name="action_next">"Next"</string>
@@ -443,7 +447,7 @@ Reason: %1$s."</string>
   <string name="common_world_readable_history">"Anyone can see history"</string>
   <string name="common_you">"You"</string>
   <string name="content_scanner_not_found">"Download not available."</string>
-  <string name="content_scanner_not_found_title">"File not found"</string>
+  <string name="content_scanner_not_found_title">"Something went wrong"</string>
   <string name="content_scanner_scanning">"Scanning…"</string>
   <string name="content_scanner_unsafe_message">"Preview and download have been disabled."</string>
   <string name="content_scanner_unsafe_title">"The file is not safe"</string>
@@ -477,7 +481,6 @@ Are you sure you want to continue?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"The max file size allowed is: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Select the quality of the video you want to upload."</string>
   <string name="dialog_video_quality_selector_title">"Select video upload quality"</string>
-  <string name="emoji_picker_search_placeholder">"Search emojis"</string>
   <string name="error_account_already_logged_in">"You\'re already logged in on this device as %1$s."</string>
   <string name="error_account_creation_not_possible">"Your homeserver needs to be upgraded to support Matrix Authentication Service and account creation."</string>
   <string name="error_failed_creating_the_permalink">"Failed creating the permalink"</string>
@@ -516,6 +519,8 @@ Are you sure you want to continue?"</string>
     <item quantity="other">"%1$d people"</item>
   </plurals>
   <string name="screen_live_location_sheet_title">"On the map"</string>
+  <string name="screen_local_network_opt_in_subtitle">"Your homeserver is on your local network. To connect, %1$s needs permission to reach devices on this network."</string>
+  <string name="screen_local_network_opt_in_title">"Allow access to local network"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Press on a message and choose “%1$s” to include here."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Pin important messages so that they can be easily discovered"</string>

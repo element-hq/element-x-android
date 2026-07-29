@@ -139,7 +139,7 @@ private fun SearchFieldContainer(
         border = BorderStroke(
             width = 1.dp,
             color = if (isFocused) {
-                ElementTheme.colors.borderInteractiveHovered
+                ElementTheme.colors.borderFocused
             } else {
                 ElementTheme.colors.borderInteractiveSecondary
             }

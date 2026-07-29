@@ -24,6 +24,7 @@
   <string name="a11y_join_call">"Pridruži se pozivu"</string>
   <string name="a11y_jump_to_bottom">"Idi na dno"</string>
   <string name="a11y_jump_to_unread">"Skoči na nepročitano"</string>
+  <string name="a11y_jump_to_unread_messages">"Skoči na prvu nepročitanu poruku."</string>
   <string name="a11y_move_the_map_to_my_location">"Pomakni kartu na moju lokaciju"</string>
   <string name="a11y_notifications_mentions_only">"Samo spominjanja"</string>
   <string name="a11y_notifications_muted">"Bez zvuka"</string>
@@ -144,6 +145,7 @@
   <string name="action_manage_account_and_devices">"Upravljanje računom i uređajima"</string>
   <string name="action_manage_devices">"Upravljanje uređajima"</string>
   <string name="action_manage_rooms">"Upravljaj sobama"</string>
+  <string name="action_mark_as_read">"Označi kao pročitano"</string>
   <string name="action_message">"Poruka"</string>
   <string name="action_minimize">"Minimiziraj"</string>
   <string name="action_next">"Dalje"</string>
@@ -268,6 +270,14 @@ Razlog: %1$s ."</string>
   <string name="common_forward_message">"Proslijedi poruku"</string>
   <string name="common_frequently_used">"Često korišteno"</string>
   <string name="common_gallery">"Galerija"</string>
+  <plurals name="common_gallery_reply_attachments">
+    <item quantity="one">"%1$d prilog…"</item>
+    <item quantity="other">"%1$d prilozi…"</item>
+  </plurals>
+  <plurals name="common_gallery_reply_media_items">
+    <item quantity="one">"%1$d medijska stavka…"</item>
+    <item quantity="other">"%1$d medijske stavke…"</item>
+  </plurals>
   <string name="common_gif">"GIF"</string>
   <string name="common_group_call_in_progress">"Grupni poziv u tijeku"</string>
   <string name="common_image">"Slika"</string>
@@ -307,6 +317,7 @@ Razlog: %1$s ."</string>
   <string name="common_no_space_name">"Nema naziva prostora"</string>
   <string name="common_not_encrypted">"Nije šifrirano"</string>
   <string name="common_offline">"Izvan mreže"</string>
+  <string name="common_on_a_call">"Na pozivu"</string>
   <string name="common_open_source_licenses">"Licencije otvorenog koda"</string>
   <string name="common_or">"ili"</string>
   <string name="common_other_options">"Ostale opcije"</string>
@@ -475,7 +486,6 @@ Jeste li sigurni da želite nastaviti?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Maksimalna dopuštena veličina datoteke je: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Odaberite kvalitetu videozapisa koji želite prenijeti."</string>
   <string name="dialog_video_quality_selector_title">"Odaberi kvalitetu prijenosa videozapisa"</string>
-  <string name="emoji_picker_search_placeholder">"Pretraživanje emotikona"</string>
   <string name="error_account_already_logged_in">"Već ste prijavljeni na ovom uređaju kao %1$s."</string>
   <string name="error_account_creation_not_possible">"Vaš matični poslužitelj potrebno je nadograditi kako bi podržavao uslugu Matrix Authentication Service i stvaranje računa."</string>
   <string name="error_failed_creating_the_permalink">"Nije uspjelo stvaranje trajne poveznice"</string>
@@ -515,6 +525,8 @@ Jeste li sigurni da želite nastaviti?"</string>
     <item quantity="other">"%1$d ljudi"</item>
   </plurals>
   <string name="screen_live_location_sheet_title">"Na karti"</string>
+  <string name="screen_local_network_opt_in_subtitle">"Vaš kućni poslužitelj je na vašoj lokalnoj mreži. Za povezivanje, %1$s je potrebno dopuštenje za pristup uređajima na ovoj mreži."</string>
+  <string name="screen_local_network_opt_in_title">"Dopusti pristup lokalnoj mreži"</string>
   <string name="screen_media_picker_error_failed_selection">"Odabir medija nije uspio, pokušajte ponovno."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Pritisnite poruku i odaberite “%1$s” kako biste uključili ovdje."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Prikvačite važne poruke kako bi ih se lakše moglo pronaći"</string>

@@ -8,6 +8,7 @@
   <string name="a11y_collapse_message_text_field">"Згорнути поле тексту повідомлення"</string>
   <string name="a11y_create_poll_votes_allowed_decrease">"Зменшити кількість голосів, дозволених на одну особу"</string>
   <string name="a11y_create_poll_votes_allowed_increase">"Збільшити кількість голосів, дозволених на одну особу"</string>
+  <string name="a11y_custom_emoji">"Власні емоджі"</string>
   <string name="a11y_delete">"Видалити"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"Введена %1$d цифра"</item>
@@ -24,6 +25,7 @@
   <string name="a11y_join_call">"Приєднатися до виклику"</string>
   <string name="a11y_jump_to_bottom">"Перейти вниз"</string>
   <string name="a11y_jump_to_unread">"Перейти до непрочитаних"</string>
+  <string name="a11y_jump_to_unread_messages">"Перейти до першого непрочитаного повідомлення"</string>
   <string name="a11y_move_the_map_to_my_location">"Перемістити карту до мого місця перебування"</string>
   <string name="a11y_notifications_mentions_only">"Тільки згадки"</string>
   <string name="a11y_notifications_muted">"Звук вимкнено"</string>
@@ -65,6 +67,7 @@
   <string name="a11y_start_call">"Розпочати виклик"</string>
   <string name="a11y_start_video_call">"Розпочати відеовиклик"</string>
   <string name="a11y_start_voice_call">"Розпочати голосовий виклик"</string>
+  <string name="a11y_status">"Статус"</string>
   <string name="a11y_thread_in_room">"Гілка в %1$s"</string>
   <string name="a11y_threads_in_room">"Гілки в %1$s"</string>
   <string name="a11y_tombstoned_room">"Кімната більше не використовується"</string>
@@ -145,6 +148,7 @@
   <string name="action_manage_account_and_devices">"Керування обліковим записом і пристроями"</string>
   <string name="action_manage_devices">"Керування пристроями"</string>
   <string name="action_manage_rooms">"Керувати кімнатами"</string>
+  <string name="action_mark_as_read">"Позначити прочитаним"</string>
   <string name="action_message">"Написати"</string>
   <string name="action_minimize">"Згорнути"</string>
   <string name="action_next">"Далі"</string>
@@ -269,6 +273,16 @@
   <string name="common_forward_message">"Переслати повідомлення"</string>
   <string name="common_frequently_used">"Частовживані"</string>
   <string name="common_gallery">"Галерея"</string>
+  <plurals name="common_gallery_reply_attachments">
+    <item quantity="one">"%1$d вкладення…"</item>
+    <item quantity="few">"%1$d вкладення…"</item>
+    <item quantity="many">"%1$d вкладень…"</item>
+  </plurals>
+  <plurals name="common_gallery_reply_media_items">
+    <item quantity="one">"%1$d медіаелемент…"</item>
+    <item quantity="few">"%1$d медіаелементи…"</item>
+    <item quantity="many">"%1$d медіаелементів…"</item>
+  </plurals>
   <string name="common_gif">"GIF"</string>
   <string name="common_group_call_in_progress">"Триває груповий виклик"</string>
   <string name="common_image">"Зображення"</string>
@@ -308,6 +322,7 @@
   <string name="common_no_space_name">"Без назви простору"</string>
   <string name="common_not_encrypted">"Не зашифровано"</string>
   <string name="common_offline">"Не в мережі"</string>
+  <string name="common_on_a_call">"Розмовляє"</string>
   <string name="common_open_source_licenses">"Ліцензії відкритого коду"</string>
   <string name="common_or">"або"</string>
   <string name="common_other_options">"Інші варіанти"</string>
@@ -444,6 +459,7 @@
   <string name="common_you">"Ви"</string>
   <string name="content_scanner_not_found">"Завантаження недоступне."</string>
   <string name="content_scanner_not_found_title">"Файл не знайдено"</string>
+  <string name="content_scanner_scanning">"Сканування…"</string>
   <string name="content_scanner_unsafe_message">"Попередній перегляд і завантаження вимкнено."</string>
   <string name="content_scanner_unsafe_title">"Файл не є безпечним"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) поділився цим повідомленням, оскільки вас не було в кімнаті, коли його надіслали."</string>
@@ -476,7 +492,6 @@
   <string name="dialog_video_quality_selector_subtitle_file_size">"Максимально дозволений розмір файлу: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Виберіть якість відео, яке ви хочете вивантажити."</string>
   <string name="dialog_video_quality_selector_title">"Виберіть якість вивантажуваного відео"</string>
-  <string name="emoji_picker_search_placeholder">"Пошук емоджі"</string>
   <string name="error_account_already_logged_in">"Ви вже ввійшли на цьому пристрої як %1$s."</string>
   <string name="error_account_creation_not_possible">"Ваш домашній сервер потрібно оновити, щоб він підтримував службу автентифікації Matrix і створення облікових записів."</string>
   <string name="error_failed_creating_the_permalink">"Не вдалося створити постійне посилання"</string>
@@ -516,6 +531,8 @@
     <item quantity="many">"%1$d осіб"</item>
   </plurals>
   <string name="screen_live_location_sheet_title">"На карті"</string>
+  <string name="screen_local_network_opt_in_subtitle">"Ваш домашній сервер перебуває у вашій локальній мережі. Щоб приєднатися, %1$s повинен мати право доступу до пристроїв у цій мережі."</string>
+  <string name="screen_local_network_opt_in_title">"Дозволити доступ до локальної мережі"</string>
   <string name="screen_media_picker_error_failed_selection">"Не вдалося вибрати медіафайл, спробуйте ще раз."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Натисніть на повідомлення і виберіть \"%1$s\", щоб додати його сюди."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Закріпіть важливі повідомлення, щоб їх можна було легко знайти"</string>
@@ -562,6 +579,11 @@
   <string name="screen_space_list_title">"Простори"</string>
   <string name="screen_static_location_sheet_timestamp_description">"Надано доступ %1$s"</string>
   <string name="screen_static_location_sheet_title">"На карті"</string>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="one">"%1$d приєднується"</item>
+    <item quantity="few">"%1$d приєдналися"</item>
+    <item quantity="many">"%1$d приєдналися"</item>
+  </plurals>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Повідомлення не надіслано, оскільки звірена цифрова ідентичність %1$s була скинута."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Повідомлення не надіслано, оскільки %1$s перевірив не всі пристрої."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Повідомлення не надіслано, оскільки ви не звірили один або кілька своїх пристроїв."</string>

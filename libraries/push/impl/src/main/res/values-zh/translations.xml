@@ -26,6 +26,7 @@
   </plurals>
   <string name="notification_invite_body">"已邀请你聊天"</string>
   <string name="notification_invite_body_with_sender">"%1$s 已邀请你聊天"</string>
+  <string name="notification_live_location_started_body">"已开始共享其实时位置"</string>
   <string name="notification_mentioned_you_body">"提到了你：%1$s"</string>
   <string name="notification_new_messages">"新消息"</string>
   <plurals name="notification_new_messages_for_room">

@@ -434,7 +434,6 @@
   <string name="dialog_video_quality_selector_subtitle_file_size">"Το μέγιστο επιτρεπόμενο μέγεθος αρχείου είναι: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Επιλέξτε την ποιότητα του βίντεο που θέλετε να ανεβάσετε."</string>
   <string name="dialog_video_quality_selector_title">"Επιλέξτε την ποιότητα μεταφόρτωσης βίντεο"</string>
-  <string name="emoji_picker_search_placeholder">"Αναζήτηση emoji"</string>
   <string name="error_account_already_logged_in">"Έχετε ήδη συνδεθεί σε αυτή τη συσκευή ως %1$s."</string>
   <string name="error_account_creation_not_possible">"Ο οικιακός διακομιστής σου πρέπει να αναβαθμιστεί για να υποστηρίζει το Matrix Authentication Service και τη δημιουργία λογαριασμού."</string>
   <string name="error_failed_creating_the_permalink">"Αποτυχία δημιουργίας του μόνιμου συνδέσμου"</string>

@@ -10,6 +10,7 @@ package io.element.android.features.preferences.impl.userstatus
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -58,13 +59,17 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.hide
+import io.element.android.libraries.emoji.api.picker.EmojiPickerRenderer
+import io.element.android.libraries.emoji.api.picker.NoOpEmojiPickerRenderer
 import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.UserStatus
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.persistentSetOf
 
 @Composable
 fun UserStatusView(
     state: UserStatusState,
+    emojiPickerRenderer: EmojiPickerRenderer,
     modifier: Modifier = Modifier,
 ) {
     when (val pickerState = state.pickerState) {
@@ -103,8 +108,18 @@ fun UserStatusView(
                     )
                 },
                 onCancel = { state.eventSink(UserStatusEvent.CancelCustomInput) },
+                onEmojiClick = { state.eventSink(UserStatusEvent.OpenEmojiPicker) },
                 modifier = modifier,
             )
+            when (val sheet = pickerState.emojiPickerSheetState) {
+                EmojiPickerSheetState.Hidden, EmojiPickerSheetState.Loading -> Unit
+                is EmojiPickerSheetState.Shown -> EmojiPickerBottomSheet(
+                    pickerState = sheet.state,
+                    emojiPickerRenderer = emojiPickerRenderer,
+                    onSelectEmoji = { emoji -> state.eventSink(UserStatusEvent.UpdateCustomEmoji(emoji.unicode)) },
+                    onDismiss = { state.eventSink(UserStatusEvent.DismissEmojiPicker) },
+                )
+            }
         }
     }
 }
@@ -117,7 +132,7 @@ private fun EmptyStatusRow(
     ListItem(
         headlineContent = {
             Text(
-                text = stringResource(R.string.screen_preferences_user_status_placeholder),
+                text = stringResource(R.string.screen_settings_user_status_placeholder),
                 modifier = Modifier.padding(vertical = 16.dp),
             )
         },
@@ -135,7 +150,7 @@ private fun CurrentStatusRow(
 ) {
     val (emoji, text) = when (displayedStatus) {
         is DisplayedStatus.UserSet -> displayedStatus.status.emoji to displayedStatus.status.text
-        is DisplayedStatus.InCall -> "🎧" to stringResource(R.string.common_user_status_on_a_call)
+        is DisplayedStatus.InCall -> "🎧" to stringResource(CommonStrings.common_on_a_call)
     }
     ListItem(
         headlineContent = { Text(text = text, modifier = Modifier.padding(vertical = 16.dp)) },
@@ -210,7 +225,7 @@ private fun UserStatusPickerBottomSheet(
         }
         ListItem(
             headlineContent = {
-                Text(text = stringResource(R.string.common_user_status_custom))
+                Text(text = stringResource(R.string.screen_settings_user_status_custom))
             },
             leadingContent = ListItemContent.Custom { EmojiText("✏️") },
             onClick = {
@@ -231,6 +246,7 @@ private fun CustomStatusInputRow(
     rawStatus: UserStatus?,
     onConfirm: () -> Unit,
     onCancel: () -> Unit,
+    onEmojiClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val hasText by remember { derivedStateOf { textFieldState.text.isNotEmpty() } }
@@ -249,7 +265,7 @@ private fun CustomStatusInputRow(
             TextField(
                 modifier = Modifier.focusRequester(focusRequester),
                 state = textFieldState,
-                placeholder = stringResource(R.string.screen_preferences_user_status_custom_hint),
+                placeholder = stringResource(R.string.screen_settings_user_status_custom_hint),
                 inputTransformation = InputTransformation.maxLength(CUSTOM_STATUS_TEXT_MAX_LENGTH),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 onKeyboardAction = { if (hasChanges) onConfirm() },
@@ -297,7 +313,7 @@ private fun CustomStatusInputRow(
                 modifier = Modifier
                     .size(50.dp)
                     .clip(CircleShape)
-                    .clickable { },
+                    .clickable(onClick = onEmojiClick),
             ) {
                 Box(contentAlignment = Alignment.Center) {
                     EmojiText(emoji)
@@ -308,8 +324,39 @@ private fun CustomStatusInputRow(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun EmojiPickerBottomSheet(
+    pickerState: io.element.android.libraries.emoji.api.picker.EmojiPickerState,
+    emojiPickerRenderer: EmojiPickerRenderer,
+    onSelectEmoji: (io.element.android.emojibasebindings.Emoji) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    val sheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden)
+    val coroutineScope = rememberCoroutineScope()
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+        scrollable = false,
+    ) {
+        emojiPickerRenderer.Render(
+            state = pickerState,
+            onSelectEmoji = { emoji ->
+                sheetState.hide(coroutineScope) {
+                    onSelectEmoji(emoji)
+                }
+            },
+            selectedEmojis = persistentSetOf(),
+            modifier = Modifier.fillMaxSize(),
+        )
+    }
+}
+
 @PreviewsDayNight
 @Composable
 internal fun UserStatusViewPreview(@PreviewParameter(UserStatusStateProvider::class) state: UserStatusState) = ElementPreview {
-    UserStatusView(state = state)
+    UserStatusView(
+        state = state,
+        emojiPickerRenderer = NoOpEmojiPickerRenderer,
+    )
 }

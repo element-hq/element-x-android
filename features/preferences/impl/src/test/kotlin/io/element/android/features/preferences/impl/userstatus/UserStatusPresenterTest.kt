@@ -8,6 +8,7 @@
 package io.element.android.features.preferences.impl.userstatus
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.emoji.test.fakeEmojiPickerPresenterFactory
 import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.UserStatus
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -17,7 +18,10 @@ import org.junit.Test
 
 class UserStatusPresenterTest {
     private fun createPresenter(client: FakeMatrixClient = FakeMatrixClient()) =
-        UserStatusPresenter(matrixClient = client)
+        UserStatusPresenter(
+            matrixClient = client,
+            emojiPickerPresenterFactory = fakeEmojiPickerPresenterFactory(),
+        )
 
     @Test
     fun `initial state - no status set`() = runTest {

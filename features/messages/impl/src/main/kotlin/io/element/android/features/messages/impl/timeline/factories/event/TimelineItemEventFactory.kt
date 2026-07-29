@@ -108,7 +108,7 @@ class TimelineItemEventFactory(
             senderId = currentSender,
             senderProfile = senderProfile,
             senderAvatar = senderAvatarData,
-            content = contentFactory.create(currentTimelineItem.event),
+            content = contentFactory.create(currentTimelineItem.event, roomMembers),
             isMine = currentTimelineItem.event.isOwn,
             isEditable = currentTimelineItem.event.isEditable,
             canBeRepliedTo = currentTimelineItem.event.canBeRepliedTo,

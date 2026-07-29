@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.ui.model.InviteSender
 import kotlinx.collections.immutable.toImmutableList
 
@@ -182,6 +183,7 @@ internal fun aRoomListRoomSummary(
     heroes: List<AvatarData> = emptyList(),
     isTombstoned: Boolean = false,
     isSpace: Boolean = false,
+    dmUserStatus: DisplayedStatus? = null,
 ) = RoomListRoomSummary(
     id = id,
     roomId = RoomId(id),
@@ -204,5 +206,6 @@ internal fun aRoomListRoomSummary(
     canonicalAlias = canonicalAlias,
     heroes = heroes.toImmutableList(),
     isTombstoned = isTombstoned,
-    isSpace = isSpace
+    isSpace = isSpace,
+    dmUserStatus = dmUserStatus,
 )

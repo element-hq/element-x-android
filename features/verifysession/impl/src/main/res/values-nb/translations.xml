@@ -42,7 +42,7 @@
   <string name="screen_session_verification_use_another_device_title">"Åpne appen på en annen bekreftet enhet"</string>
   <string name="screen_session_verification_user_initiator_subtitle">"For ekstra sikkerhet, verifiser denne brukeren ved å sammenligne et sett med emojier på enhetene dine. Gjør dette ved å bruke en pålitelig måte å kommunisere på."</string>
   <string name="screen_session_verification_user_initiator_title">"Vil du verifisere denne brukeren?"</string>
-  <string name="screen_session_verification_user_responder_subtitle">"For ekstra sikkerhet vil en annen bruker bekrefte identiteten din. Du får se et sett med emojier som du må sammenligne."</string>
+  <string name="screen_session_verification_user_responder_subtitle">"For ekstra sikkerhet ønsker en annen bruker å bekrefte din digitale identitet. Du vil se et sett med emojier du kan sammenligne."</string>
   <string name="screen_session_verification_waiting_another_device_subtitle">"Du skal se en popup på den andre enheten. Start bekreftelsen derfra nå."</string>
   <string name="screen_session_verification_waiting_another_device_title">"Start verifiseringen på den andre enheten"</string>
   <string name="screen_session_verification_waiting_other_device_title">"Start verifiseringen på den andre enheten"</string>
