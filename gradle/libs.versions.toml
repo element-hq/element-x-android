@@ -3,7 +3,7 @@
 
 [versions]
 # Project
-android_gradle_plugin = "9.3.0"
+android_gradle_plugin = "9.3.1"
 # When updating this, please also update the version in the file ./idea/kotlinc.xml
 kotlin = "2.4.10"
 kotlinpoet = "2.3.0"
