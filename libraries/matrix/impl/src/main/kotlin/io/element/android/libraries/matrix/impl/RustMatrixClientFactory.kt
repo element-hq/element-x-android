@@ -81,10 +81,23 @@ class RustMatrixClientFactory(
     suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
         // This secret is called 'passphrase' for historical reasons, but it can be a raw key or an actual passphrase
         val clientSecret = sessionData.passphrase?.let(ClientSecret::fromString)
+        val sessionPaths = sessionData.getSessionPaths()
+        val isMessageSearchAvailable = featureFlagService.isFeatureEnabled(FeatureFlags.MessageSearch)
+        val indexDirectory = File(sessionPaths.fileDirectory, SEARCH_INDEX_DIRECTORY)
+
+        if (!isMessageSearchAvailable && indexDirectory.exists()) {
+            // With search off, events reach the event cache unindexed and the index can never
+            // catch up on them. Delete it so the next enable rebuilds it from a state where
+            // coverage can actually be guaranteed, instead of resuming a silently stale index.
+            Timber.tag("RustMatrixClient").i("Message search is disabled, deleting the stale search index")
+            indexDirectory.deleteRecursively()
+        }
+
         val client = getBaseClientBuilder(
-            sessionPaths = sessionData.getSessionPaths(),
+            sessionPaths = sessionPaths,
             clientSecret = clientSecret,
             slidingSyncType = ClientBuilderSlidingSync.Restored,
+            isMessageSearchAvailable = isMessageSearchAvailable,
         )
             .homeserverUrl(sessionData.homeserverUrl)
             .username(sessionData.userId)
@@ -105,10 +118,14 @@ class RustMatrixClientFactory(
 
         client.restoreSession(sessionData.toSession())
 
-        create(client, sessionData)
+        create(client, sessionData, isMessageSearchAvailable)
     }
 
-    suspend fun create(client: Client, sessionData: SessionData): RustMatrixClient {
+    suspend fun create(
+        client: Client,
+        sessionData: SessionData,
+        isMessageSearchAvailable: Boolean,
+    ): RustMatrixClient {
         val (anonymizedAccessToken, anonymizedRefreshToken) = client.session().anonymizedTokens()
 
         // Must be called before creating the sync service, timelines etc.
@@ -155,6 +172,7 @@ class RustMatrixClientFactory(
             analyticsService = analyticsService,
             workManagerScheduler = workManagerScheduler,
             contentScanner = contentScanner,
+            isMessageSearchAvailable = isMessageSearchAvailable,
         ).also {
             Timber.tag("RustMatrixClient").i("Creating Client with access token '$anonymizedAccessToken' and refresh token '$anonymizedRefreshToken'")
         }
@@ -164,6 +182,7 @@ class RustMatrixClientFactory(
         sessionPaths: SessionPaths,
         clientSecret: ClientSecret?,
         slidingSyncType: ClientBuilderSlidingSync,
+        isMessageSearchAvailable: Boolean,
     ): ClientBuilder {
         return clientBuilderProvider.provide()
             .run {
@@ -193,6 +212,18 @@ class RustMatrixClientFactory(
             )
             .enableShareHistoryOnInvite(true)
             .threadsEnabled(featureFlagService.isFeatureEnabled(FeatureFlags.Threads), threadSubscriptions = false)
+            .run {
+                if (isMessageSearchAvailable) {
+                    // The index is encrypted at rest with the same secret the SDK's SQLite stores
+                    // use, or left unencrypted for sessions without one, matching those stores.
+                    withSearchIndexStore(
+                        path = File(sessionPaths.fileDirectory, SEARCH_INDEX_DIRECTORY).absolutePath,
+                        password = clientSecret?.formattedAsString(),
+                    )
+                } else {
+                    this
+                }
+            }
             .dmRoomDefinition(DmRoomDefinition.TWO_MEMBERS)
             .requestConfig(
                 RequestConfig(
@@ -220,6 +251,12 @@ class RustMatrixClientFactory(
             }
     }
 }
+
+/**
+ * Directory holding the local message search index, under the session's file directory.
+ * Not the cache directory: the index is not disposable, and a cache wipe should not destroy it.
+ */
+internal const val SEARCH_INDEX_DIRECTORY = "search-index"
 
 sealed interface ClientBuilderSlidingSync {
     // The proxy will be supplied when restoring the Session.

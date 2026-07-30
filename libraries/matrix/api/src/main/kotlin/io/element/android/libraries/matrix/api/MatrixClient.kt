@@ -39,6 +39,7 @@ import io.element.android.libraries.matrix.api.room.location.BeaconInfoUpdate
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.scanner.ContentScanner
+import io.element.android.libraries.matrix.api.search.MessageSearchService
 import io.element.android.libraries.matrix.api.spaces.SpaceService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
@@ -70,6 +71,10 @@ interface MatrixClient {
     val notificationSettingsService: NotificationSettingsService
     val encryptionService: EncryptionService
     val roomDirectoryService: RoomDirectoryService
+
+    /** Whether this live client was built with a message search index attached. */
+    val isMessageSearchAvailable: Boolean
+    val messageSearchService: MessageSearchService
     val mediaPreviewService: MediaPreviewService
     val matrixMediaLoader: MatrixMediaLoader
     val sessionCoroutineScope: CoroutineScope
