@@ -159,4 +159,11 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
+    MessageSearch(
+        key = "feature.message_search",
+        title = "Message search",
+        description = "Index messages locally so they can be searched. Enabling this rebuilds the index once, which re-fetches recent history.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
 }

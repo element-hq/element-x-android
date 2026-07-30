@@ -20,6 +20,7 @@ import uniffi.matrix_sdk.BackupDownloadStrategy
 import uniffi.matrix_sdk_base.DmRoomDefinition
 import uniffi.matrix_sdk_crypto.CollectStrategy
 import uniffi.matrix_sdk_crypto.DecryptionSettings
+import java.io.File
 
 class FakeFfiClientBuilder(
     val buildResult: () -> Client = { FakeFfiClient(withUtdHook = {}) }
@@ -49,5 +50,11 @@ class FakeFfiClientBuilder(
     override fun inMemoryStore(): ClientBuilder = this
     override fun crossProcessLockConfig(crossProcessLockConfig: CrossProcessLockConfig): ClientBuilder = this
     override fun dmRoomDefinition(dmRoomDefinition: DmRoomDefinition): ClientBuilder = this
+    override fun withSearchIndexStore(path: String, password: String?): ClientBuilder {
+        // The real SDK creates the index directory when the client is built; tests that assert on
+        // the coverage bookkeeping rely on that side effect.
+        File(path).mkdirs()
+        return this
+    }
     override suspend fun build() = buildResult()
 }

@@ -13,6 +13,7 @@ import io.element.android.libraries.androidutils.crypto.ClientSecret
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.data.ByteUnit
 import io.element.android.libraries.core.data.megaBytes
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -81,11 +82,82 @@ class RustMatrixClientFactory(
     suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
         // This secret is called 'passphrase' for historical reasons, but it can be a raw key or an actual passphrase
         val clientSecret = sessionData.passphrase?.let(ClientSecret::fromString)
-        val client = getBaseClientBuilder(
+        val sessionPaths = sessionData.getSessionPaths()
+        val isMessageSearchAvailable = isMessageSearchAvailable(clientSecret)
+        val indexDirectory = File(sessionPaths.fileDirectory, SEARCH_INDEX_DIRECTORY)
+        val coverageMarker = File(sessionPaths.fileDirectory, SEARCH_INDEX_COVERAGE_MARKER)
+
+        if (!isMessageSearchAvailable && indexDirectory.exists()) {
+            // With search off, events reach the event cache unindexed and the index can never
+            // catch up on them. Delete it so the next enable rebuilds it from a state where
+            // coverage can actually be guaranteed, instead of resuming a silently stale index.
+            // The marker goes first: if this is interrupted after a partial directory deletion,
+            // a surviving marker would let a later restore trust the broken index.
+            Timber.tag("RustMatrixClient").i("Message search is unavailable, deleting the stale search index")
+            if (!coverageMarker.exists() || coverageMarker.delete()) {
+                indexDirectory.deleteRecursively()
+            } else {
+                Timber.tag("RustMatrixClient").w("Could not invalidate the search index coverage marker, keeping the index for now")
+            }
+        }
+
+        // Events already in the event cache store when the index is created are re-hydrated from
+        // disk on pagination, and the SDK drops those updates before the indexer — they would stay
+        // unsearchable forever. Deleting the store once forces that history back through the
+        // network, where indexing genuinely happens.
+        val needsCoverageBootstrap = isMessageSearchAvailable &&
+            !(indexDirectory.exists() && coverageMarker.exists()) &&
+            File(sessionPaths.cacheDirectory, EVENT_CACHE_STORE_NAME).exists()
+
+        var coverageEstablished = !needsCoverageBootstrap
+        if (needsCoverageBootstrap) {
+            Timber.tag("RustMatrixClient").i("The event cache predates the search index, deleting the event cache store so history gets re-fetched and indexed")
+            // The files are deleted before the client exists, so no SQLite handle is open, and
+            // only the event cache is touched: the state store and the sliding-sync position stay
+            // valid, sync resumes incrementally and the room list is unaffected. The SDK's
+            // clearCaches() is deliberately NOT used here — it wipes the state store while the
+            // sliding-sync position survives in the crypto store, which strands the client on a
+            // server connection that never re-sends the room data; and discarding the
+            // contractually-unstable client afterwards aborts in a native finalizer.
+            coverageEstablished = deleteEventCacheStore(sessionPaths)
+            if (!coverageEstablished) {
+                Timber.tag("RustMatrixClient").w("Could not delete the event cache store, will retry on the next start")
+            }
+        }
+
+        val client = buildAndRestoreClient(sessionData, clientSecret, isMessageSearchAvailable)
+        if (isMessageSearchAvailable && coverageEstablished && !coverageMarker.exists()) {
+            // Failing to record coverage must never fail the session restore; without the marker
+            // the bootstrap simply runs again on the next start.
+            runCatchingExceptions { coverageMarker.createNewFile() }
+                .onFailure { Timber.tag("RustMatrixClient").w(it, "Failed to write the search index coverage marker") }
+        }
+
+        create(client, sessionData, isMessageSearchAvailable)
+    }
+
+    /**
+     * Deletes the event cache store files. The WAL and SHM sidecars go first: if this is
+     * interrupted, a database without its WAL is merely stale, while a fresh database next to a
+     * leftover WAL is corruption waiting to be replayed.
+     */
+    private fun deleteEventCacheStore(sessionPaths: SessionPaths): Boolean =
+        listOf("$EVENT_CACHE_STORE_NAME-wal", "$EVENT_CACHE_STORE_NAME-shm", EVENT_CACHE_STORE_NAME)
+            .map { File(sessionPaths.cacheDirectory, it) }
+            .all { !it.exists() || it.delete() }
+
+    private suspend fun buildAndRestoreClient(
+        sessionData: SessionData,
+        clientSecret: ClientSecret?,
+        isMessageSearchAvailable: Boolean,
+    ): Client {
+        val baseClientBuilder = getBaseClientBuilder(
             sessionPaths = sessionData.getSessionPaths(),
             clientSecret = clientSecret,
             slidingSyncType = ClientBuilderSlidingSync.Restored,
+            isMessageSearchAvailable = isMessageSearchAvailable,
         )
+        val client = baseClientBuilder.clientBuilder
             .homeserverUrl(sessionData.homeserverUrl)
             .username(sessionData.userId)
             .use { it.build() }
@@ -104,11 +176,25 @@ class RustMatrixClientFactory(
         )
 
         client.restoreSession(sessionData.toSession())
-
-        create(client, sessionData)
+        return client
     }
 
-    suspend fun create(client: Client, sessionData: SessionData): RustMatrixClient {
+    suspend fun create(
+        client: Client,
+        sessionData: SessionData,
+        isMessageSearchAvailable: Boolean,
+    ): RustMatrixClient {
+        if (isMessageSearchAvailable) {
+            val sessionPaths = sessionData.getSessionPaths()
+            val coverageMarker = File(sessionPaths.fileDirectory, SEARCH_INDEX_COVERAGE_MARKER)
+            if (!coverageMarker.exists() && !File(sessionPaths.cacheDirectory, EVENT_CACHE_STORE_NAME).exists()) {
+                // Nothing has been cached yet — a fresh login, or a heal that just cleared the
+                // caches — so the index covers everything by construction. Recording that here
+                // spares fresh sessions a pointless cache clear on their first restart.
+                runCatchingExceptions { coverageMarker.createNewFile() }
+                    .onFailure { Timber.tag("RustMatrixClient").w(it, "Failed to write the search index coverage marker") }
+            }
+        }
         val (anonymizedAccessToken, anonymizedRefreshToken) = client.session().anonymizedTokens()
 
         // Must be called before creating the sync service, timelines etc.
@@ -155,17 +241,26 @@ class RustMatrixClientFactory(
             analyticsService = analyticsService,
             workManagerScheduler = workManagerScheduler,
             contentScanner = contentScanner,
+            isMessageSearchAvailable = isMessageSearchAvailable,
         ).also {
             Timber.tag("RustMatrixClient").i("Creating Client with access token '$anonymizedAccessToken' and refresh token '$anonymizedRefreshToken'")
         }
     }
 
+    private suspend fun isMessageSearchAvailable(clientSecret: ClientSecret?): Boolean =
+        featureFlagService.isFeatureEnabled(FeatureFlags.MessageSearch) && clientSecret != null
+
     internal suspend fun getBaseClientBuilder(
         sessionPaths: SessionPaths,
         clientSecret: ClientSecret?,
         slidingSyncType: ClientBuilderSlidingSync,
-    ): ClientBuilder {
-        return clientBuilderProvider.provide()
+        // Null reads the live flag; the restore path passes its own snapshot instead, so a flag
+        // flipped mid-restore cannot make the coverage bookkeeping and the built client disagree
+        // about whether an index exists.
+        isMessageSearchAvailable: Boolean? = null,
+    ): BaseClientBuilder {
+        val messageSearchAvailable = isMessageSearchAvailable ?: isMessageSearchAvailable(clientSecret)
+        val clientBuilder = clientBuilderProvider.provide()
             .run {
                 sqliteStoreBuilderProvider.provide(sessionPaths)
                     .secret(clientSecret)
@@ -193,6 +288,22 @@ class RustMatrixClientFactory(
             )
             .enableShareHistoryOnInvite(true)
             .threadsEnabled(featureFlagService.isFeatureEnabled(FeatureFlags.Threads), threadSubscriptions = false)
+            .run {
+                // Note: every ClientBuilder call returns a NEW reference, so this must stay in
+                // expression position — using `if (flag) withSearchIndexStore(...)` as a statement
+                // would silently drop the result and leave the index disabled.
+                if (messageSearchAvailable) {
+                    // The index is encrypted at rest with the session secret, reusing the exact
+                    // string the SDK's SQLite stores already use. When there is no secret we skip
+                    // indexing entirely rather than writing message bodies to disk in plaintext.
+                    withSearchIndexStore(
+                        path = File(sessionPaths.fileDirectory, SEARCH_INDEX_DIRECTORY).absolutePath,
+                        password = checkNotNull(clientSecret).formattedAsString(),
+                    )
+                } else {
+                    this
+                }
+            }
             .dmRoomDefinition(DmRoomDefinition.TWO_MEMBERS)
             .requestConfig(
                 RequestConfig(
@@ -218,8 +329,37 @@ class RustMatrixClientFactory(
                 // Workaround for non-nullable proxy parameter in the SDK, since each call to the ClientBuilder returns a new reference we need to keep
                 proxyProvider.provides()?.let { proxy(it) } ?: this
             }
+        return BaseClientBuilder(
+            clientBuilder = clientBuilder,
+            isMessageSearchAvailable = messageSearchAvailable,
+        )
     }
 }
+
+internal data class BaseClientBuilder(
+    val clientBuilder: ClientBuilder,
+    val isMessageSearchAvailable: Boolean,
+)
+
+/**
+ * Directory holding the local message search index, under the session's file directory.
+ * Not the cache directory: the index is not disposable, and a cache wipe should not destroy it.
+ */
+internal const val SEARCH_INDEX_DIRECTORY = "search-index"
+
+/**
+ * Marker file recording that the search index has seen every event since the event cache was last
+ * empty. Events already in the cache store when the index is created are re-hydrated from disk on
+ * pagination and never reach the indexer, so an index without this guarantee silently misses them.
+ * Sibling of [SEARCH_INDEX_DIRECTORY] rather than inside it: the SDK owns that directory's layout.
+ */
+internal const val SEARCH_INDEX_COVERAGE_MARKER = "search-index.covered"
+
+/**
+ * The SDK's event cache store inside the session's cache directory. The name is fixed by the SDK's
+ * SQLite store; its presence is how we detect that events were cached before the index existed.
+ */
+internal const val EVENT_CACHE_STORE_NAME = "matrix-sdk-event-cache.sqlite3"
 
 sealed interface ClientBuilderSlidingSync {
     // The proxy will be supplied when restoring the Session.
