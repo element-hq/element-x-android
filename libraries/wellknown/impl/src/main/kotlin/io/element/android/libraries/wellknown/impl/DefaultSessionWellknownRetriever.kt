@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.wellknown.api.ElementWellKnown
 import io.element.android.libraries.wellknown.api.ElementWellKnownParser
+import io.element.android.libraries.wellknown.api.ElementWellKnownSource
 import io.element.android.libraries.wellknown.api.ElementWellknownStore
 import io.element.android.libraries.wellknown.api.SessionWellknownRetriever
 import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
@@ -29,20 +30,27 @@ class DefaultSessionWellknownRetriever(
     private val matrixClient: MatrixClient,
     @SessionCoroutineScope
     private val sessionCoroutineScope: CoroutineScope,
-    private val elementWellknownStore: ElementWellknownStore,
+    private val elementWellknownStoreFactory: ElementWellknownStore.Factory,
     private val elementWellKnownParser: ElementWellKnownParser,
     private val enterpriseService: EnterpriseService,
 ) : SessionWellknownRetriever {
     private val domain by lazy { matrixClient.userIdServerName() }
 
-    override suspend fun getElementWellKnown(): WellknownRetrieverResult<ElementWellKnown> {
+    override suspend fun getElementWellKnown(source: ElementWellKnownSource): WellknownRetrieverResult<ElementWellKnown> {
         val overriddenElementWellKnown = enterpriseService.overriddenElementWellKnown()
         if (overriddenElementWellKnown != null) {
             return WellknownRetrieverResult.Success(overriddenElementWellKnown)
         }
 
-        val cacheData = elementWellknownStore.get(domain)
-        return when (cacheData) {
+        // We instantiate different stores for different sources, so that we can cache them separately.
+        // The ESS_CONFIG source is cached with a prefix to differentiate it from the WELLKNOWN_ENDPOINT.
+        val prefix = when (source) {
+            ElementWellKnownSource.ESS_CONFIG -> "ess_config"
+            ElementWellKnownSource.WELLKNOWN_ENDPOINT -> null
+        }
+        val store = elementWellknownStoreFactory.create(prefix = prefix)
+
+        return when (val cacheData = store.get(domain)) {
             is WellknownRetrieverResult.Success -> {
                 Timber.d("Using cached well-known for domain $domain")
                 cacheData
@@ -51,17 +59,13 @@ class DefaultSessionWellknownRetriever(
                 // Return the outdated data but refresh in the background
                 // If the cache is missing or outdated, trigger a refresh in background but still return the cached value
                 Timber.d("Outdated cached well-known for domain $domain, returning existing value and fetching new one from network")
-                sessionCoroutineScope.launch {
-                    val url = "https://$domain/.well-known/element/element.json"
-                    fetchElementWellKnown(url)
-                }
+                sessionCoroutineScope.launch { fetchElementWellKnown(url(source), store) }
                 cacheData
             }
             is WellknownRetrieverResult.NotFound -> {
                 // Try to fetch from the server
                 Timber.d("No cached well-known for domain $domain, fetching from network")
-                val url = "https://$domain/.well-known/element/element.json"
-                fetchElementWellKnown(url)
+                fetchElementWellKnown(url(source), store)
             }
             is WellknownRetrieverResult.Error -> {
                 // Return the error
@@ -71,17 +75,17 @@ class DefaultSessionWellknownRetriever(
         }
     }
 
-    private suspend fun fetchElementWellKnown(url: String): WellknownRetrieverResult<ElementWellKnown> {
+    private suspend fun fetchElementWellKnown(url: String, store: ElementWellknownStore): WellknownRetrieverResult<ElementWellKnown> {
         return matrixClient
             .getUrl(url)
             .mapCatchingExceptions {
                 val data = String(it)
                 val parsed = elementWellKnownParser.parse(data).getOrThrow()
                 // Also store in cache, if valid
-                elementWellknownStore.update(domain, data)
+                store.update(domain, data)
                     .onFailure { exception ->
                         Timber.e(exception, "Failed to parse cached Element .well-known data for $domain, deleting cache")
-                        elementWellknownStore.delete(domain)
+                        store.delete(domain)
                     }
                 parsed
             }
@@ -104,6 +108,14 @@ class DefaultSessionWellknownRetriever(
             WellknownRetrieverResult.NotFound
         } else {
             WellknownRetrieverResult.Error(this as Exception)
+        }
+    }
+
+    private fun url(source: ElementWellKnownSource): String {
+        val elementWellKnownUrl = "https://$domain/.well-known/element/element.json"
+        return when (source) {
+            ElementWellKnownSource.ESS_CONFIG -> enterpriseService.essConfigEndpointUrl(domain) ?: elementWellKnownUrl
+            ElementWellKnownSource.WELLKNOWN_ENDPOINT -> elementWellKnownUrl
         }
     }
 }

@@ -21,6 +21,8 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.wellknown.api.CustomRecoveryPassphrase
 import io.element.android.libraries.wellknown.api.ElementWellKnown
 import io.element.android.libraries.wellknown.api.ElementWellKnownParser
+import io.element.android.libraries.wellknown.api.ElementWellKnownSource
+import io.element.android.libraries.wellknown.api.ElementWellknownStore
 import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -32,6 +34,8 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class DefaultSessionWellknownRetrieverTest {
+    private val source = ElementWellKnownSource.WELLKNOWN_ENDPOINT
+
     @Test
     fun `get empty element wellknown`() = runTest {
         val getUrlLambda = lambdaRecorder<String, Result<ByteArray>> {
@@ -40,7 +44,7 @@ class DefaultSessionWellknownRetrieverTest {
         val sut = createDefaultSessionWellknownRetriever(
             getUrlLambda = getUrlLambda,
         )
-        assertThat(sut.getElementWellKnown()).isEqualTo(
+        assertThat(sut.getElementWellKnown(source)).isEqualTo(
             WellknownRetrieverResult.Success(
                 ElementWellKnown(
                     registrationHelperUrl = null,
@@ -68,7 +72,7 @@ class DefaultSessionWellknownRetrieverTest {
                 )
             }
         )
-        assertThat(sut.getElementWellKnown()).isEqualTo(
+        assertThat(sut.getElementWellKnown(source)).isEqualTo(
             WellknownRetrieverResult.Success(
                 ElementWellKnown(
                     registrationHelperUrl = "a_registration_url",
@@ -100,7 +104,7 @@ class DefaultSessionWellknownRetrieverTest {
                 )
             },
         )
-        assertThat(sut.getElementWellKnown()).isEqualTo(
+        assertThat(sut.getElementWellKnown(source)).isEqualTo(
             WellknownRetrieverResult.Success(
                 ElementWellKnown(
                     registrationHelperUrl = "a_registration_url",
@@ -130,7 +134,7 @@ class DefaultSessionWellknownRetrieverTest {
                 )
             },
         )
-        assertThat(sut.getElementWellKnown()).isEqualTo(
+        assertThat(sut.getElementWellKnown(source)).isEqualTo(
             WellknownRetrieverResult.Success(
                 anElementWellKnown(
                     customRecoveryPassphrase = CustomRecoveryPassphrase(minCharacterCount = 8)
@@ -150,7 +154,7 @@ class DefaultSessionWellknownRetrieverTest {
                 )
             },
         )
-        assertThat(sut.getElementWellKnown()).isEqualTo(
+        assertThat(sut.getElementWellKnown(source)).isEqualTo(
             WellknownRetrieverResult.Success(
                 anElementWellKnown(
                     customRecoveryPassphrase = CustomRecoveryPassphrase(minCharacterCount = 1)
@@ -172,7 +176,7 @@ class DefaultSessionWellknownRetrieverTest {
                 )
             },
         )
-        assertThat(sut.getElementWellKnown()).isEqualTo(
+        assertThat(sut.getElementWellKnown(source)).isEqualTo(
             WellknownRetrieverResult.Success(
                 anElementWellKnown(
                     customRecoveryPassphrase = CustomRecoveryPassphrase(minCharacterCount = 1)
@@ -194,7 +198,7 @@ class DefaultSessionWellknownRetrieverTest {
                 )
             },
         )
-        assertThat(sut.getElementWellKnown()).isEqualTo(
+        assertThat(sut.getElementWellKnown(source)).isEqualTo(
             WellknownRetrieverResult.Success(
                 anElementWellKnown(
                     customRecoveryPassphrase = CustomRecoveryPassphrase(minCharacterCount = 1)
@@ -215,7 +219,7 @@ class DefaultSessionWellknownRetrieverTest {
                 )
             }
         )
-        assertThat(sut.getElementWellKnown()).isInstanceOf(WellknownRetrieverResult.Error::class.java)
+        assertThat(sut.getElementWellKnown(source)).isInstanceOf(WellknownRetrieverResult.Error::class.java)
     }
 
     @Test
@@ -225,7 +229,7 @@ class DefaultSessionWellknownRetrieverTest {
                 Result.failure(AN_EXCEPTION)
             }
         )
-        assertThat(sut.getElementWellKnown()).isInstanceOf(WellknownRetrieverResult.Error::class.java)
+        assertThat(sut.getElementWellKnown(source)).isInstanceOf(WellknownRetrieverResult.Error::class.java)
     }
 
     @Test
@@ -235,20 +239,22 @@ class DefaultSessionWellknownRetrieverTest {
                 Result.failure(ClientException.Generic("Not Found: 404 status code", "The file could not be found"))
             }
         )
-        assertThat(sut.getElementWellKnown()).isInstanceOf(WellknownRetrieverResult.NotFound::class.java)
+        assertThat(sut.getElementWellKnown(source)).isInstanceOf(WellknownRetrieverResult.NotFound::class.java)
     }
 
     @Test
     fun `get element wellknown hitting cache`() = runTest {
         val sut = createDefaultSessionWellknownRetriever(
             getUrlLambda = { lambdaError() },
-            cacheStore = FakeElementWellknownStore(
-                initialData = mapOf(
-                    WELLKNOWN_URL to WellknownRetrieverResult.Success(parsedWellKnownContent())
+            cacheStoreFactory = {
+                FakeElementWellknownStore(
+                    initialData = mapOf(
+                        WELLKNOWN_URL to WellknownRetrieverResult.Success(parsedWellKnownContent())
+                    )
                 )
-            )
+            }
         )
-        assertThat(sut.getElementWellKnown()).isEqualTo(
+        assertThat(sut.getElementWellKnown(source)).isEqualTo(
             WellknownRetrieverResult.Success(
                 ElementWellKnown(
                     registrationHelperUrl = "a_registration_url",
@@ -276,10 +282,10 @@ class DefaultSessionWellknownRetrieverTest {
             getUrlLambda = {
                 Result.success("{}".toByteArray())
             },
-            cacheStore = cacheStore,
+            cacheStoreFactory = { cacheStore },
             elementWellKnownParser = { Result.failure(IllegalStateException("Failed to parse JSON")) }
         )
-        assertThat(sut.getElementWellKnown()).isInstanceOf(WellknownRetrieverResult.Error::class.java)
+        assertThat(sut.getElementWellKnown(source)).isInstanceOf(WellknownRetrieverResult.Error::class.java)
         // Ensure that the cache is deleted after the failure to parse it
         assertThat(cacheStore.get(WELLKNOWN_URL)).isEqualTo(WellknownRetrieverResult.NotFound)
     }
@@ -295,9 +301,9 @@ class DefaultSessionWellknownRetrieverTest {
             getUrlLambda = {
                 Result.success("{}".toByteArray())
             },
-            cacheStore = cacheStore,
+            cacheStoreFactory = { cacheStore },
         )
-        assertThat(sut.getElementWellKnown()).isEqualTo(
+        assertThat(sut.getElementWellKnown(source)).isEqualTo(
             WellknownRetrieverResult.Outdated(
                 ElementWellKnown(
                     registrationHelperUrl = "a_registration_url",
@@ -314,7 +320,7 @@ class DefaultSessionWellknownRetrieverTest {
         )
         // Next call returns the updated value
         runCurrent()
-        assertThat(sut.getElementWellKnown()).isEqualTo(
+        assertThat(sut.getElementWellKnown(source)).isEqualTo(
             WellknownRetrieverResult.Success(
                 anElementWellKnown()
             )
@@ -334,7 +340,7 @@ class DefaultSessionWellknownRetrieverTest {
         )
 
         // The overridden value is returned
-        assertThat(sut.getElementWellKnown()).isEqualTo(
+        assertThat(sut.getElementWellKnown(source)).isEqualTo(
             WellknownRetrieverResult.Success(wellKnown)
         )
 
@@ -345,7 +351,7 @@ class DefaultSessionWellknownRetrieverTest {
     private fun parsedWellKnownContent() = DefaultJsonProvider().invoke().decodeFromString<InternalElementWellKnown>(WELLKNOWN_CONTENT).map()
 
     private fun TestScope.createDefaultSessionWellknownRetriever(
-        cacheStore: FakeElementWellknownStore = FakeElementWellknownStore(),
+        cacheStoreFactory: ElementWellknownStore.Factory = { FakeElementWellknownStore() },
         getUrlLambda: (String) -> Result<ByteArray>,
         elementWellKnownParser: ElementWellKnownParser = DefaultElementWellKnownParser(DefaultJsonProvider()),
         enterpriseService: FakeEnterpriseService = FakeEnterpriseService(overrideWellKnownResult = { null }),
@@ -355,7 +361,7 @@ class DefaultSessionWellknownRetrieverTest {
             getUrlLambda = getUrlLambda,
         ),
         sessionCoroutineScope = backgroundScope,
-        elementWellknownStore = cacheStore,
+        elementWellknownStoreFactory = cacheStoreFactory,
         elementWellKnownParser = elementWellKnownParser,
         enterpriseService = enterpriseService,
     )
@@ -370,7 +376,7 @@ class DefaultSessionWellknownRetrieverTest {
                 "notification_sound": "a_notification_sound.flac",
                 "idp_app_scheme": "an_app_scheme",
                 "content_scanner_url": "https://content-scanner.example.com",
-                "force_disable_e2ee": false,
+                "force_disable_e2ee": false
             }"""
     }
 }

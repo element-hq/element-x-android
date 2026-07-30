@@ -8,6 +8,30 @@
 
 package io.element.android.libraries.wellknown.api
 
+/**
+ * Retrieves the well-known configuration for a given session, either from a local cache or from a remote source.
+ *
+ * Note: This should only be used from an implementation of `SessionRemoteEnterpriseConfigProvider`, and be moved in the future to
+ * the `features/enterprise/api` module.
+ */
 interface SessionWellknownRetriever {
-    suspend fun getElementWellKnown(): WellknownRetrieverResult<ElementWellKnown>
+    /**
+     * Retrieves the well-known configuration for the given [source].
+     */
+    suspend fun getElementWellKnown(source: ElementWellKnownSource): WellknownRetrieverResult<ElementWellKnown>
+}
+
+/**
+ * The source from which the well-known configuration is retrieved.
+ */
+enum class ElementWellKnownSource {
+    /**
+     * Retrieve the well-known configuration from the Element Server Suite configuration (ESS_CONFIG) endpoint.
+     */
+    ESS_CONFIG,
+
+    /**
+     * Retrieve the well-known configuration from the Element server's well-known endpoint.
+     */
+    WELLKNOWN_ENDPOINT,
 }
