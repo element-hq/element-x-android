@@ -48,4 +48,6 @@ class DefaultEnterpriseService : EnterpriseService {
     override fun getNoisyNotificationChannelId(sessionId: SessionId): String? = null
 
     override fun overriddenElementWellKnown(): ElementWellKnown? = null
+
+    override fun essConfigEndpointUrl(domain: String): String? = null
 }

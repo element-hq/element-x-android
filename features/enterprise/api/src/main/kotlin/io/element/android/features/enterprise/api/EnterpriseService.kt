@@ -47,6 +47,11 @@ interface EnterpriseService {
      */
     fun overriddenElementWellKnown(): ElementWellKnown?
 
+    /**
+     * Gets the Element Server Suite (ESS) config endpoint URL for the given domain.
+     */
+    fun essConfigEndpointUrl(domain: String): String?
+
     companion object {
         const val ANY_ACCOUNT_PROVIDER = "*"
     }

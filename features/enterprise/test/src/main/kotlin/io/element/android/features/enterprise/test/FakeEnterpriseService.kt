@@ -33,6 +33,7 @@ class FakeEnterpriseService(
     private val getNoisyNotificationChannelIdResult: (SessionId?) -> String? = { lambdaError() },
     private val tweakMasUrlResult: (String, String) -> String = { _, _ -> lambdaError() },
     private val overrideWellKnownResult: () -> ElementWellKnown? = { lambdaError() },
+    private val essConfigEndpointUrlResult: (String) -> String = { lambdaError() },
 ) : EnterpriseService {
     private val brandColorState = MutableStateFlow(initialBrandColor)
     private val semanticColorsState = MutableStateFlow(initialSemanticColors)
@@ -84,5 +85,9 @@ class FakeEnterpriseService(
 
     override fun overriddenElementWellKnown(): ElementWellKnown? {
         return overrideWellKnownResult()
+    }
+
+    override fun essConfigEndpointUrl(domain: String): String {
+        return essConfigEndpointUrlResult(domain)
     }
 }
