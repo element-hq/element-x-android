@@ -227,7 +227,7 @@ private fun ReplyToInvalidContent(
 ) {
     InvalidContentView(
         modifier = modifier,
-        contentPadding = PaddingValues(horizontal = 8.dp),
+        contentPadding = PaddingValues(vertical = 4.dp, horizontal = 8.dp),
         onTextLayout = null,
     )
 }
@@ -238,7 +238,7 @@ private fun ReplyToNotFoundContent(
 ) {
     NotFoundContentView(
         modifier = modifier,
-        contentPadding = PaddingValues(horizontal = 8.dp),
+        contentPadding = PaddingValues(vertical = 4.dp, horizontal = 8.dp),
         onTextLayout = null,
     )
 }
