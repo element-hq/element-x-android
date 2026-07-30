@@ -47,6 +47,7 @@ class ChangeRoomPermissionsPresenter(
             RoomPermissionsSection.MessagesAndContent -> persistentListOf(
                 RoomPermissionType.SEND_EVENTS,
                 RoomPermissionType.REDACT_EVENTS,
+                RoomPermissionType.SHARE_LIVE_LOCATION,
             )
             RoomPermissionsSection.ManageMembers -> persistentListOf(
                 RoomPermissionType.INVITE,
@@ -114,6 +115,7 @@ class ChangeRoomPermissionsPresenter(
                         RoomPermissionType.ROOM_AVATAR -> currentPermissions?.copy(roomAvatar = powerLevel)
                         RoomPermissionType.ROOM_TOPIC -> currentPermissions?.copy(roomTopic = powerLevel)
                         RoomPermissionType.SPACE_MANAGE_ROOMS -> currentPermissions?.copy(spaceChild = powerLevel)
+                        RoomPermissionType.SHARE_LIVE_LOCATION -> currentPermissions?.copy(beaconInfo = powerLevel, beacon = powerLevel)
                     }
                 }
                 is ChangeRoomPermissionsEvent.Save -> coroutineScope.save()

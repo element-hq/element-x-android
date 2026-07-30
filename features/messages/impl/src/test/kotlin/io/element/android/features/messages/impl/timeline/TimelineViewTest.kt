@@ -18,11 +18,10 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.messages.impl.timeline.components.MessageShieldData
 import io.element.android.features.messages.impl.timeline.components.aCriticalShield
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingIndicatorModel
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
@@ -37,16 +36,15 @@ import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EnsureNeverCalledWithTwoParams
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.setSafeContent
 import io.element.android.wysiwyg.link.Link
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import org.junit.Ignore
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class TimelineViewTest {
+class TimelineViewTest : RobolectricTest() {
     @Test
     fun `reaching the end of the timeline with more events to load emits a LoadMore event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<TimelineEvent>()
@@ -69,7 +67,7 @@ class TimelineViewTest {
         val eventsRecorder = EventsRecorder<TimelineEvent>()
         setTimelineView(
             state = aTimelineState(
-                timelineItems = persistentListOf(aTimelineItemEvent(content = aTimelineItemImageContent())),
+                timelineItems = persistentListOf(aTimelineItemEvent(content = aTimelineItemTextContent())),
                 eventSink = eventsRecorder,
             ),
         )
@@ -81,7 +79,7 @@ class TimelineViewTest {
         val eventsRecorder = EventsRecorder<TimelineEvent>()
         setTimelineView(
             state = aTimelineState(
-                timelineItems = persistentListOf(aTimelineItemEvent(content = aTimelineItemImageContent())),
+                timelineItems = persistentListOf(aTimelineItemEvent(content = aTimelineItemTextContent())),
                 isLive = true,
                 eventSink = eventsRecorder,
             ),
@@ -100,7 +98,7 @@ class TimelineViewTest {
         val eventsRecorder = EventsRecorder<TimelineEvent>()
         setTimelineView(
             state = aTimelineState(
-                timelineItems = persistentListOf(aTimelineItemEvent(content = aTimelineItemImageContent())),
+                timelineItems = persistentListOf(aTimelineItemEvent(content = aTimelineItemTextContent())),
                 isLive = false,
                 eventSink = eventsRecorder,
             ),
@@ -135,7 +133,7 @@ class TimelineViewTest {
                 timelineItems = persistentListOf<TimelineItem>(
                     aTimelineItemEvent(
                         // Do not use a Text because EditorStyledText cannot be used in UI test.
-                        content = aTimelineItemImageContent(),
+                        content = aTimelineItemTextContent(),
                         messageShield = MessageShield.UnverifiedIdentity(true),
                     ),
                 ),
@@ -157,7 +155,7 @@ class TimelineViewTest {
         val eventsRecorder = EventsRecorder<TimelineEvent>()
         setTimelineView(
             state = aTimelineState(
-                timelineItems = persistentListOf(aTimelineItemEvent(content = aTimelineItemImageContent())),
+                timelineItems = persistentListOf(aTimelineItemEvent(content = aTimelineItemTextContent())),
                 isLive = false,
                 eventSink = eventsRecorder,
                 messageShield = aCriticalShield(),
@@ -218,7 +216,9 @@ private fun AndroidComposeUiTest<ComponentActivity>.setTimelineView(
     onReactionLongClick: (emoji: String, TimelineItem.Event) -> Unit = EnsureNeverCalledWithTwoParams(),
     onMoreReactionsClick: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
     onReadReceiptClick: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
+    onGalleryItemClick: (TimelineItem.Event, Int) -> Unit = EnsureNeverCalledWithTwoParams(),
     forceJumpToBottomVisibility: Boolean = false,
+    onJoinCallClick: (isAudioCall: Boolean) -> Unit = EnsureNeverCalledWithParam(),
 ) {
     setSafeContent(clearAndroidUiDispatcher = true) {
         TimelineView(
@@ -233,7 +233,9 @@ private fun AndroidComposeUiTest<ComponentActivity>.setTimelineView(
             onReactionLongClick = onReactionLongClick,
             onMoreReactionsClick = onMoreReactionsClick,
             onReadReceiptClick = onReadReceiptClick,
+            onGalleryItemClick = onGalleryItemClick,
             forceJumpToBottomVisibility = forceJumpToBottomVisibility,
+            onJoinCallClick = onJoinCallClick,
         )
     }
 }

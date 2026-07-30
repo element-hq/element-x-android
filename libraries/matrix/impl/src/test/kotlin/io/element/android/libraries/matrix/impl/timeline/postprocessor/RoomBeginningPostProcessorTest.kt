@@ -9,7 +9,6 @@
 package io.element.android.libraries.matrix.impl.timeline.postprocessor
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.A_USER_ID
 import org.junit.Test
@@ -22,8 +21,6 @@ class RoomBeginningPostProcessorTest {
             items = emptyList(),
             isDm = true,
             roomCreator = A_USER_ID,
-            joinRule = null,
-            isEncrypted = null,
             hasMoreToLoadBackwards = false,
         )
         assertThat(processedItems).isEmpty()
@@ -36,8 +33,6 @@ class RoomBeginningPostProcessorTest {
             items = listOf(messageEvent),
             isDm = true,
             roomCreator = A_USER_ID,
-            joinRule = null,
-            isEncrypted = null,
             hasMoreToLoadBackwards = false,
         )
         assertThat(processedItems).isEqualTo(listOf(messageEvent))
@@ -50,8 +45,6 @@ class RoomBeginningPostProcessorTest {
             items = listOf(messageEvent),
             isDm = true,
             roomCreator = null,
-            joinRule = null,
-            isEncrypted = null,
             hasMoreToLoadBackwards = false,
         )
         assertThat(processedItems).isEqualTo(listOf(messageEvent))
@@ -69,8 +62,6 @@ class RoomBeginningPostProcessorTest {
             items = timelineItems,
             isDm = true,
             roomCreator = A_USER_ID,
-            joinRule = null,
-            isEncrypted = null,
             hasMoreToLoadBackwards = false,
         )
         assertThat(processedItems).containsExactly(timelineStartEvent)
@@ -87,8 +78,6 @@ class RoomBeginningPostProcessorTest {
             items = timelineItems,
             isDm = true,
             roomCreator = A_USER_ID,
-            joinRule = null,
-            isEncrypted = null,
             hasMoreToLoadBackwards = false,
         )
         assertThat(processedItems).isEqualTo(timelineItems)
@@ -111,8 +100,6 @@ class RoomBeginningPostProcessorTest {
             timelineItems,
             isDm = true,
             roomCreator = A_USER_ID,
-            joinRule = null,
-            isEncrypted = null,
             hasMoreToLoadBackwards = false
         )
         assertThat(processedItems).isEqualTo(expected)
@@ -129,8 +116,6 @@ class RoomBeginningPostProcessorTest {
             timelineItems,
             isDm = true,
             roomCreator = A_USER_ID,
-            joinRule = null,
-            isEncrypted = null,
             hasMoreToLoadBackwards = true
         )
         assertThat(processedItems).isEmpty()
@@ -146,8 +131,6 @@ class RoomBeginningPostProcessorTest {
             timelineItems,
             isDm = true,
             roomCreator = A_USER_ID,
-            joinRule = null,
-            isEncrypted = null,
             hasMoreToLoadBackwards = true
         )
         assertThat(processedItems).isEmpty()
@@ -164,80 +147,8 @@ class RoomBeginningPostProcessorTest {
             timelineItems,
             isDm = true,
             roomCreator = A_USER_ID,
-            joinRule = null,
-            isEncrypted = null,
             hasMoreToLoadBackwards = true
         )
         assertThat(processedItems).isEqualTo(listOf(otherMemberJoinEvent))
-    }
-
-    @Test
-    fun `processor removes join, leave, and profile events in unencrypted public rooms`() {
-        val timelineItems = listOf(
-            roomCreateEvent,
-            roomCreatorJoinEvent,
-            otherMemberJoinEvent,
-            messageEvent,
-            otherMemberLeaveEvent,
-            profileChangeEvent,
-        )
-        val expected = listOf(
-            roomCreateEvent,
-            messageEvent,
-        )
-        val processor = RoomBeginningPostProcessor(Timeline.Mode.Live)
-        val processedItems = processor.process(
-            timelineItems,
-            isDm = false,
-            roomCreator = A_USER_ID,
-            joinRule = JoinRule.Public,
-            isEncrypted = false,
-            hasMoreToLoadBackwards = false
-        )
-        assertThat(processedItems).isEqualTo(expected)
-    }
-
-    @Test
-    fun `processor keeps all events in encrypted public rooms`() {
-        val timelineItems = listOf(
-            roomCreateEvent,
-            roomCreatorJoinEvent,
-            otherMemberJoinEvent,
-            messageEvent,
-            otherMemberLeaveEvent,
-            profileChangeEvent,
-        )
-        val processor = RoomBeginningPostProcessor(Timeline.Mode.Live)
-        val processedItems = processor.process(
-            timelineItems,
-            isDm = false,
-            roomCreator = A_USER_ID,
-            joinRule = JoinRule.Public,
-            isEncrypted = true,
-            hasMoreToLoadBackwards = false
-        )
-        assertThat(processedItems).isEqualTo(timelineItems)
-    }
-
-    @Test
-    fun `processor keeps membership events in invite-only rooms`() {
-        val timelineItems = listOf(
-            roomCreateEvent,
-            roomCreatorJoinEvent,
-            otherMemberJoinEvent,
-            messageEvent,
-            otherMemberLeaveEvent,
-            profileChangeEvent,
-        )
-        val processor = RoomBeginningPostProcessor(Timeline.Mode.Live)
-        val processedItems = processor.process(
-            timelineItems,
-            isDm = false,
-            roomCreator = A_USER_ID,
-            joinRule = JoinRule.Invite,
-            isEncrypted = null,
-            hasMoreToLoadBackwards = false
-        )
-        assertThat(processedItems).isEqualTo(timelineItems)
     }
 }

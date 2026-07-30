@@ -14,6 +14,23 @@ import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
+data class GalleryInfo(
+    val caption: String?,
+    val formattedCaption: CharSequence? = null,
+    val senderId: UserId?,
+    val senderName: String?,
+    val senderAvatar: String?,
+    val dateSent: String?,
+    val dateSentFull: String?,
+    val initialIndex: Int,
+) : Parcelable
+
+@Parcelize
+data class AvatarInfo(
+    val filename: String,
+) : Parcelable
+
+@Parcelize
 data class MediaInfo(
     val filename: String,
     val caption: String?,
@@ -94,6 +111,30 @@ fun aPdfMediaInfo(
     mimeType = MimeTypes.Pdf,
     formattedFileSize = "23MB",
     fileExtension = "pdf",
+    senderId = UserId("@alice:server.org"),
+    senderName = senderName,
+    senderAvatar = null,
+    dateSent = dateSent,
+    dateSentFull = dateSentFull,
+    waveform = null,
+    duration = null,
+)
+
+fun aZipMediaInfo(
+    filename: String = "a zip file.zip",
+    caption: String? = null,
+    formattedCaption: CharSequence? = null,
+    senderName: String? = null,
+    dateSent: String? = null,
+    dateSentFull: String? = null,
+): MediaInfo = MediaInfo(
+    filename = filename,
+    fileSize = 12 * 1024 * 1024,
+    caption = caption,
+    formattedCaption = formattedCaption,
+    mimeType = MimeTypes.Pdf,
+    formattedFileSize = "45MB",
+    fileExtension = "zip",
     senderId = UserId("@alice:server.org"),
     senderName = senderName,
     senderAvatar = null,

@@ -22,6 +22,7 @@ object BuildTimeConfig {
     val URL_ACCEPTABLE_USE: String? = null
     val URL_PRIVACY: String? = null
     val URL_POLICY: String? = null
+    val OAUTH_CLIENT_URL_PATH: String? = null
     val SERVICES_MAPTILER_BASE_URL: String? = null
     val SERVICES_MAPTILER_APIKEY: String? = null
     val SERVICES_MAPTILER_LIGHT_MAPID: String? = null

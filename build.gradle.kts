@@ -30,7 +30,7 @@ tasks.register<Delete>("clean").configure {
     delete(rootProject.layout.buildDirectory)
 }
 
-private val ktLintVersion = the<LibrariesForLibs>().versions.ktlint.get()
+private val catalog = the<LibrariesForLibs>()
 
 allprojects {
     // Detekt
@@ -46,7 +46,7 @@ allprojects {
         config.from(files("$rootDir/tools/detekt/detekt.yml"))
     }
     dependencies {
-        detektPlugins("io.nlopez.compose.rules:detekt:0.5.8")
+        detektPlugins(catalog.detekt.compose.rules)
         detektPlugins(project(":tests:detekt-rules"))
     }
 
@@ -64,7 +64,7 @@ allprojects {
 
     // See https://github.com/JLLeitschuh/ktlint-gradle#configuration
     configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
-        version = ktLintVersion
+        version = catalog.versions.ktlint.get()
         android = true
         ignoreFailures = false
         enableExperimentalRules = true
@@ -106,8 +106,6 @@ allprojects {
             // Fix compilation warning for annotations
             // See https://youtrack.jetbrains.com/issue/KT-73255/Change-defaulting-rule-for-annotations for more details
             freeCompilerArgs.add("-Xannotation-default-target=first-only")
-            // Opt-in to context receivers
-            freeCompilerArgs.add("-Xcontext-parameters")
         }
     }
 }

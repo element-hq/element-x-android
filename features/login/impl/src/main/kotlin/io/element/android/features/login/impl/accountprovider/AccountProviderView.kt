@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -45,7 +46,7 @@ fun AccountProviderView(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onClick() }
+            .clickable(role = Role.Button) { onClick() }
     ) {
         HorizontalDivider()
         Column(

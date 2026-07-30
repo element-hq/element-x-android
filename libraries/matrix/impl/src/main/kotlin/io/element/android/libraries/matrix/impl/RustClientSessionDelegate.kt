@@ -8,7 +8,7 @@
 
 package io.element.android.libraries.matrix.impl
 
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.impl.core.SdkBackgroundTaskError
 import io.element.android.libraries.matrix.impl.mapper.toSessionData
@@ -19,6 +19,7 @@ import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.ClientSessionDelegate
 import org.matrix.rustcomponents.sdk.Session
@@ -41,13 +42,9 @@ class RustClientSessionDelegate(
     private val sessionStore: SessionStore,
     private val appCoroutineScope: CoroutineScope,
     private val analyticsService: AnalyticsService,
-    coroutineDispatchers: CoroutineDispatchers,
 ) : ClientSessionDelegate, ClientDelegate {
     // Used to ensure several calls to `didReceiveAuthError` don't trigger multiple logouts
     private val isLoggingOut = AtomicBoolean(false)
-
-    // To make sure only one coroutine affecting the token persistence can run at a time
-    private val updateTokensDispatcher = coroutineDispatchers.io.limitedParallelism(1)
 
     // This Client needs to be set up as soon as possible so `didReceiveAuthError` can work properly.
     private var client: WeakReference<RustMatrixClient> = WeakReference(null)
@@ -66,11 +63,24 @@ class RustClientSessionDelegate(
         this.client.clear()
     }
 
+    // This always runs on a background thread, so we *can* do blocking calls here, although we should avoid doing heavy work
     override fun saveSessionInKeychain(session: Session) {
-        appCoroutineScope.launch(updateTokensDispatcher) {
-            val existingData = sessionStore.getSession(session.userId) ?: return@launch
+        Timber.tag(loggerTag.value).i("Saving new session info for user ${session.userId} after a token refresh")
+        runCatchingExceptions {
+            val existingData = runBlocking { sessionStore.getSession(session.userId) } ?: return
+
+            if (existingData.accessToken == session.accessToken) {
+                Timber.tag(loggerTag.value).e("Access token is the same as the one already stored, this should not happen after a token refresh!")
+                return
+            }
+
+            if (existingData.refreshToken == session.refreshToken) {
+                Timber.tag(loggerTag.value).e("Refresh token is the same as the one already stored, this should not happen after a token refresh!")
+                return
+            }
+
             val (anonymizedAccessToken, anonymizedRefreshToken) = session.anonymizedTokens()
-            Timber.tag(loggerTag.value).d(
+            Timber.tag(loggerTag.value).i(
                 "Saving new session data with token: access token '$anonymizedAccessToken' and refresh token '$anonymizedRefreshToken'. " +
                     "Was token valid: ${existingData.isTokenValid}"
             )
@@ -80,28 +90,27 @@ class RustClientSessionDelegate(
                 passphrase = existingData.passphrase,
                 sessionPaths = existingData.getSessionPaths(),
             )
-            sessionStore.updateData(newData)
-            Timber.tag(loggerTag.value).d("Saved new session data with access token: '$anonymizedAccessToken'.")
-        }.invokeOnCompletion {
-            if (it != null) {
-                Timber.tag(loggerTag.value).e(it, "Failed to save new session data.")
-            }
+            runBlocking { sessionStore.updateData(newData) }
+            Timber.tag(loggerTag.value).i("Saved new session data.")
+        }.onFailure {
+            Timber.tag(loggerTag.value).e(it, "Failed to save new session data.")
         }
     }
 
+    // This always runs on a background thread, so we *can* do blocking calls here, although we should avoid doing heavy work
     override fun didReceiveAuthError(isSoftLogout: Boolean) {
-        Timber.tag(loggerTag.value).w("didReceiveAuthError(isSoftLogout=$isSoftLogout)")
-        if (isLoggingOut.getAndSet(true).not()) {
-            Timber.tag(loggerTag.value).v("didReceiveAuthError -> do the cleanup")
-            // TODO handle isSoftLogout parameter.
-            appCoroutineScope.launch(updateTokensDispatcher) {
+        runCatchingExceptions {
+            Timber.tag(loggerTag.value).w("didReceiveAuthError(isSoftLogout=$isSoftLogout)")
+            if (isLoggingOut.getAndSet(true).not()) {
+                Timber.tag(loggerTag.value).v("didReceiveAuthError -> do the cleanup")
+                // TODO handle isSoftLogout parameter.
                 val currentClient = client.get()
                 if (currentClient == null) {
                     Timber.tag(loggerTag.value).w("didReceiveAuthError -> no client, exiting")
                     isLoggingOut.set(false)
-                    return@launch
+                    return
                 }
-                val existingData = sessionStore.getSession(currentClient.sessionId.value)
+                val existingData = runBlocking { sessionStore.getSession(currentClient.sessionId.value) }
                 val (anonymizedAccessToken, anonymizedRefreshToken) = existingData.anonymizedTokens()
                 Timber.tag(loggerTag.value).d(
                     "Removing session data with access token '$anonymizedAccessToken' " +
@@ -110,19 +119,17 @@ class RustClientSessionDelegate(
                 if (existingData != null) {
                     // Set isTokenValid to false
                     val newData = existingData.copy(isTokenValid = false)
-                    sessionStore.updateData(newData)
+                    runBlocking { sessionStore.updateData(newData) }
                     Timber.tag(loggerTag.value).d("Invalidated session data with access token: '$anonymizedAccessToken'.")
                 } else {
                     Timber.tag(loggerTag.value).d("No session data found.")
                 }
-                currentClient.logout(userInitiated = false, ignoreSdkError = true)
-            }.invokeOnCompletion {
-                if (it != null) {
-                    Timber.tag(loggerTag.value).e(it, "Failed to remove session data.")
-                }
+                appCoroutineScope.launch { currentClient.logout(userInitiated = false, ignoreSdkError = true) }
+            } else {
+                Timber.tag(loggerTag.value).v("didReceiveAuthError -> already cleaning up")
             }
-        } else {
-            Timber.tag(loggerTag.value).v("didReceiveAuthError -> already cleaning up")
+        }.onFailure {
+            Timber.tag(loggerTag.value).e(it, "Failed to remove session data.")
         }
     }
 

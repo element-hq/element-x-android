@@ -106,6 +106,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Vai trò"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Chi tiết phòng"</string>
   <string name="screen_room_roles_and_permissions_title">"Vai trò và quyền hạn"</string>
+  <string name="screen_roomlist_mark_as_read">"Đánh dấu đã đọc"</string>
+  <string name="screen_roomlist_mark_as_unread">"Đánh dấu chưa đọc"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Sau khi được kích hoạt, mã hóa cho một phòng chat không thể tắt được. Lịch sử tin nhắn chỉ hiển thị cho các thành viên phòng chat kể từ khi họ được mời hoặc kể từ khi họ tham gia phòng chat.
 Không ai ngoài các thành viên phòng chat có thể đọc tin nhắn. Điều này có thể ngăn chặn bot và các thiết bị kết nối hoạt động đúng cách.
 Chúng tôi không khuyến khích bật mã hóa cho các phòng chat mà bất kỳ ai cũng có thể tìm thấy và tham gia."</string>

@@ -30,13 +30,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.media3.common.MediaItem
+import androidx.media3.common.ParserException
+import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.Player.STATE_READY
 import androidx.media3.common.Timeline
 import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.ExoPlaybackException
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
@@ -57,6 +61,7 @@ import io.element.android.libraries.mediaviewer.impl.local.player.rememberExoPla
 import io.element.android.libraries.mediaviewer.impl.local.player.seekToEnsurePlaying
 import io.element.android.libraries.mediaviewer.impl.local.player.togglePlay
 import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaViewState
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import kotlinx.coroutines.delay
 import me.saket.telephoto.zoomable.zoomable
@@ -72,6 +77,7 @@ fun MediaVideoView(
     localMedia: LocalMedia?,
     autoplay: Boolean,
     audioFocus: AudioFocus?,
+    forPreview: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val exoPlayer = rememberExoPlayer(forAudioOnly = false)
@@ -83,6 +89,7 @@ fun MediaVideoView(
         localMedia = localMedia,
         autoplay = autoplay,
         audioFocus = audioFocus,
+        forPreview = forPreview,
         modifier = modifier,
     )
 }
@@ -97,6 +104,7 @@ private fun ExoPlayerMediaVideoView(
     localMedia: LocalMedia?,
     autoplay: Boolean,
     audioFocus: AudioFocus?,
+    forPreview: Boolean,
     modifier: Modifier = Modifier,
 ) {
     var mediaPlayerControllerState: MediaPlayerControllerState by remember {
@@ -158,6 +166,19 @@ private fun ExoPlayerMediaVideoView(
                     isReady = playbackState == STATE_READY,
                 )
             }
+
+            override fun onPlayerError(error: PlaybackException) {
+                super.onPlayerError(error)
+                Timber.w(error, "Player error")
+                if (error is ExoPlaybackException && error.cause is ParserException) {
+                    // The cause can be:
+                    // androidx.media3.common.ParserException: Invalid NAL length {contentIsMalformed=true, dataType=1}
+                    // This has been observed when the user wants to play a second time a recorded video.
+                    // Workaround the issue #6956, start the playback again
+                    exoPlayer.prepare()
+                    exoPlayer.play()
+                }
+            }
         }
     }
 
@@ -202,6 +223,11 @@ private fun ExoPlayerMediaVideoView(
                 text = "A Video Player will render here",
             )
         } else {
+            val videoDescription = if (forPreview) {
+                stringResource(CommonStrings.a11y_video_preview)
+            } else {
+                stringResource(CommonStrings.common_video)
+            }
             AndroidView(
                 modifier = Modifier
                     .fillMaxSize()
@@ -220,6 +246,7 @@ private fun ExoPlayerMediaVideoView(
                         resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
                         layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
                         useController = false
+                        contentDescription = videoDescription
                     }
                 },
                 onRelease = { playerView ->
@@ -227,29 +254,31 @@ private fun ExoPlayerMediaVideoView(
                 },
             )
         }
-        MediaPlayerControllerView(
-            state = mediaPlayerControllerState,
-            onTogglePlay = {
-                autoHideController++
-                exoPlayer.togglePlay()
-            },
-            onSeekChange = {
-                autoHideController++
-                mediaPlayerControllerState = mediaPlayerControllerState.copy(
-                    seekingToMillis = it.toLong(),
-                )
-                exoPlayer.seekToEnsurePlaying(it.toLong())
-            },
-            onToggleMute = {
-                autoHideController++
-                exoPlayer.volume = if (exoPlayer.volume == 1f) 0f else 1f
-            },
-            audioFocus = audioFocus,
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-                .padding(bottom = bottomPaddingInPixels.toDp()),
-        )
+        if (localMedia != null) {
+            MediaPlayerControllerView(
+                state = mediaPlayerControllerState,
+                onTogglePlay = {
+                    autoHideController++
+                    exoPlayer.togglePlay()
+                },
+                onSeekChange = {
+                    autoHideController++
+                    mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                        seekingToMillis = it.toLong(),
+                    )
+                    exoPlayer.seekToEnsurePlaying(it.toLong())
+                },
+                onToggleMute = {
+                    autoHideController++
+                    exoPlayer.volume = if (exoPlayer.volume == 1f) 0f else 1f
+                },
+                audioFocus = audioFocus,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = bottomPaddingInPixels.toDp()),
+            )
+        }
     }
 
     LaunchedEffect(exoPlayer.isPlaying) {
@@ -339,5 +368,6 @@ internal fun MediaVideoViewPreview() = ElementPreview {
         localMedia = null,
         audioFocus = null,
         autoplay = false,
+        forPreview = false,
     )
 }

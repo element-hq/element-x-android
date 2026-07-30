@@ -15,6 +15,9 @@ import kotlin.time.Duration
 @Immutable
 sealed interface TimelineItemEventContent {
     val type: String
+
+    val isMedia: Boolean
+        get() = this is TimelineItemEventContentWithAttachment || this is TimelineItemGalleryContent || this is TimelineItemAttachmentsContent
 }
 
 interface TimelineItemEventMutableContent {
@@ -56,7 +59,9 @@ fun TimelineItemEventContent.canBeForwarded(): Boolean =
         is TimelineItemAudioContent,
         is TimelineItemVideoContent,
         is TimelineItemLocationContent,
-        is TimelineItemVoiceContent -> true
+        is TimelineItemVoiceContent,
+        is TimelineItemGalleryContent,
+        is TimelineItemAttachmentsContent -> true
         // Stickers can't be forwarded (yet) so we don't show the option
         // See https://github.com/element-hq/element-x-android/issues/2161
         is TimelineItemStickerContent -> false
@@ -78,7 +83,9 @@ fun TimelineItemEventContent.canReact(): Boolean =
         is TimelineItemLocationContent,
         is TimelineItemPollContent,
         is TimelineItemVoiceContent,
-        is TimelineItemVideoContent -> true
+        is TimelineItemVideoContent,
+        is TimelineItemGalleryContent,
+        is TimelineItemAttachmentsContent -> true
         is TimelineItemStateContent,
         is TimelineItemRedactedContent,
         is TimelineItemLegacyCallInviteContent,
@@ -99,11 +106,39 @@ fun TimelineItemEventContent.isEdited(): Boolean = when (this) {
  */
 fun TimelineItemEventContent.isRedacted(): Boolean = this is TimelineItemRedactedContent
 
+/**
+ * Returns the caption text for content types that support captions.
+ * Gallery and attachments content types have captions but don't implement
+ * [TimelineItemEventContentWithAttachment].
+ */
+fun TimelineItemEventContent.captionOrNull(): String? = when (this) {
+    is TimelineItemEventContentWithAttachment -> caption
+    is TimelineItemGalleryContent -> caption
+    is TimelineItemAttachmentsContent -> caption
+    else -> null
+}
+
+fun TimelineItemEventContent.formattedCaptionOrNull(): CharSequence? = when (this) {
+    is TimelineItemEventContentWithAttachment -> formattedCaption
+    is TimelineItemGalleryContent -> formattedCaption
+    is TimelineItemAttachmentsContent -> formattedCaption
+    else -> null
+}
+
 fun TimelineItemEventContentWithAttachment.duration(): Duration? {
     return when (this) {
         is TimelineItemAudioContent -> duration
         is TimelineItemVideoContent -> duration
         is TimelineItemVoiceContent -> duration
+        else -> null
+    }
+}
+
+fun TimelineItemEventContentWithAttachment.blurHash(): String? {
+    return when (this) {
+        is TimelineItemImageContent -> blurhash
+        is TimelineItemVideoContent -> blurHash
+        is TimelineItemStickerContent -> blurhash
         else -> null
     }
 }

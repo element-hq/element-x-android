@@ -17,7 +17,6 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_FORMATTED_DATE
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -26,11 +25,10 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class PushHistoryViewTest {
+class PushHistoryViewTest : RobolectricTest() {
     @Test
     fun `clicking on Reset sends a PushHistoryEvents`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<PushHistoryEvents>()

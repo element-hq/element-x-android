@@ -16,7 +16,8 @@ private val sha256 by lazy { MessageDigest.getInstance("SHA-256") }
 
 @OptIn(ExperimentalStdlibApi::class)
 private fun anonymizeToken(token: String): String {
-    return sha256.digest(token.toByteArray()).toHexString()
+    // Only keep the first 32 chars (16 bytes) of the hashed token to avoid displaying too much information.
+    return sha256.digest(token.toByteArray()).toHexString().take(32)
 }
 
 fun SessionData?.anonymizedTokens(): Pair<String?, String?> {

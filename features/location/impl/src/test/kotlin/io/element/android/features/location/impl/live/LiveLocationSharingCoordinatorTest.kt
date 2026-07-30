@@ -27,7 +27,7 @@ class LiveLocationSharingCoordinatorTest {
             nowMillis = { 0L },
         )
 
-        coordinator.register(A_SESSION_ID, LiveLocationReceiver { })
+        coordinator.register(A_SESSION_ID, liveLocationReceiver())
         coordinator.unregister(A_SESSION_ID)
 
         assertThat(startCount).isEqualTo(1)
@@ -43,8 +43,8 @@ class LiveLocationSharingCoordinatorTest {
             nowMillis = { 4_000L },
         )
 
-        coordinator.register(A_SESSION_ID) { error("boom") }
-        coordinator.register(A_SESSION_ID_2) { location -> delivered += location }
+        coordinator.register(A_SESSION_ID, liveLocationReceiver { error("boom") })
+        coordinator.register(A_SESSION_ID_2, liveLocationReceiver { delivered += it })
         coordinator.dispatch(Location(lat = 1.0, lon = 2.0, accuracy = 3f))
 
         assertThat(delivered).containsExactly(Location(lat = 1.0, lon = 2.0, accuracy = 3f))
@@ -60,7 +60,7 @@ class LiveLocationSharingCoordinatorTest {
             nowMillis = { nowMillis },
         )
 
-        coordinator.register(A_SESSION_ID) { location -> delivered += location }
+        coordinator.register(A_SESSION_ID, liveLocationReceiver { delivered += it })
 
         val firstLocation = Location(lat = 1.0, lon = 2.0, accuracy = 3f)
 
@@ -79,7 +79,7 @@ class LiveLocationSharingCoordinatorTest {
             nowMillis = { nowMillis },
         )
 
-        coordinator.register(A_SESSION_ID) { location -> delivered += location }
+        coordinator.register(A_SESSION_ID, liveLocationReceiver { delivered += it })
 
         val firstLocation = Location(lat = 1.0, lon = 2.0, accuracy = 3f)
         val secondLocation = Location(lat = 4.0, lon = 5.0, accuracy = 6f)
@@ -101,7 +101,7 @@ class LiveLocationSharingCoordinatorTest {
             nowMillis = { nowMillis },
         )
 
-        coordinator.register(A_SESSION_ID) { location -> delivered += location }
+        coordinator.register(A_SESSION_ID, liveLocationReceiver { delivered += it })
 
         val firstLocation = Location(lat = 1.0, lon = 2.0, accuracy = 3f)
         val secondLocation = Location(lat = 4.0, lon = 5.0, accuracy = 6f)
@@ -112,4 +112,11 @@ class LiveLocationSharingCoordinatorTest {
 
         assertThat(delivered).containsExactly(firstLocation, secondLocation).inOrder()
     }
+}
+
+private fun liveLocationReceiver(
+    onLocation: suspend (Location) -> Unit = {},
+) = object : LiveLocationReceiver {
+    override suspend fun onLocationUpdate(location: Location) = onLocation(location)
+    override suspend fun onUnrecoverableError() = Unit
 }

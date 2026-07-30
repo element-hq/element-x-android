@@ -15,16 +15,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetValue
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -45,9 +43,12 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.SearchField
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.matrix.api.spaces.SpaceServiceFilter
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,8 +57,9 @@ fun SpaceFiltersView(
     modifier: Modifier = Modifier
 ) {
     val isSelecting by rememberUpdatedState(state is SpaceFiltersState.Selecting)
-    val sheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = true,
+    val sheetState = rememberBottomSheetState(
+        initialValue = SheetValue.Hidden,
+        enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
         confirmValueChange = { sheetValueTarget ->
             // This ensures the hide animation is not cancelled
             when (sheetValueTarget) {
@@ -73,9 +75,7 @@ fun SpaceFiltersView(
     }
     if (sheetState.isVisible || isSelecting) {
         ModalBottomSheet(
-            modifier = modifier
-                .systemBarsPadding()
-                .navigationBarsPadding(),
+            modifier = modifier,
             sheetState = sheetState,
             onDismissRequest = {
                 if (state is SpaceFiltersState.Selecting) {
@@ -83,6 +83,7 @@ fun SpaceFiltersView(
                 }
             },
             scrollable = false,
+            contentWindowInsets = { scaffoldScrollableContentInsets },
         ) {
             Box(
                 modifier = Modifier
@@ -93,7 +94,7 @@ fun SpaceFiltersView(
                     SpaceFiltersBottomSheetContent(
                         filters = state.visibleFilters,
                         searchQuery = state.searchQuery,
-                        onFilterSelected = { filter ->
+                        onSelectFilter = { filter ->
                             state.eventSink(SpaceFiltersEvent.Selecting.SelectFilter(filter))
                         }
                     )
@@ -105,13 +106,13 @@ fun SpaceFiltersView(
 
 @Composable
 private fun SpaceFiltersBottomSheetContent(
-    filters: List<SpaceServiceFilter>,
+    filters: ImmutableList<SpaceServiceFilter>,
     searchQuery: TextFieldState,
-    onFilterSelected: (SpaceServiceFilter) -> Unit,
+    onSelectFilter: (SpaceServiceFilter) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.padding(vertical = 16.dp)
+        modifier = modifier.padding(top = 16.dp)
     ) {
         Text(
             text = stringResource(R.string.screen_roomlist_your_spaces),
@@ -129,11 +130,13 @@ private fun SpaceFiltersBottomSheetContent(
             placeholder = stringResource(CommonStrings.action_search),
         )
         Spacer(modifier = Modifier.height(16.dp))
-        LazyColumn {
+        LazyColumn(
+            contentPadding = lazyColumnContentPadding,
+        ) {
             items(filters) { filter ->
                 SpaceFilterItem(
                     filter = filter,
-                    onClick = { onFilterSelected(filter) }
+                    onClick = { onSelectFilter(filter) }
                 )
             }
         }
@@ -186,6 +189,6 @@ private fun SpaceFilterItem(
 
 @PreviewsDayNight
 @Composable
-internal fun SpaceFiltersViewPreview(@PreviewParameter(SpaceFiltersStateProvider::class) state: SpaceFiltersState) = ElementPreview {
+internal fun SpaceFiltersViewPreview(@PreviewParameter(SpaceFiltersStateProvider::class) state: SpaceFiltersState) = ElementPreview(fillMaxSize = true) {
     SpaceFiltersView(state = state)
 }

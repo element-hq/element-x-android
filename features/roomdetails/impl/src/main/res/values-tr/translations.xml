@@ -113,6 +113,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Roller"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Oda bilgileri"</string>
   <string name="screen_room_roles_and_permissions_title">"Roller ve izinler"</string>
+  <string name="screen_roomlist_mark_as_read">"Okundu olarak işaretle"</string>
+  <string name="screen_roomlist_mark_as_unread">"Okunmamış olarak işaretle"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Oda adresi ekle"</string>
   <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Yetkilendirilmiş alanlardaki herkes katılabilir, diğer herkes erişim talep etmelidir."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Herkes odaya katılma isteğinde bulunabilir ancak bir yönetici veya moderatörün isteği kabul etmesi gerekir."</string>

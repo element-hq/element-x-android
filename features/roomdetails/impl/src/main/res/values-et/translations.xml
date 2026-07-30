@@ -132,6 +132,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Rollid"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Jututoa üksikasjad"</string>
   <string name="screen_room_roles_and_permissions_title">"Rollid ja õigused"</string>
+  <string name="screen_roomlist_mark_as_read">"Märgi loetuks"</string>
+  <string name="screen_roomlist_mark_as_unread">"Märgi mitteloetuks"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Lisa aadress"</string>
   <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Liituda saavad kõik volitatud kogukondade liikmed, kuid kõik teised peavad küsima võimalust ligipääsuks."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Kõik võivad paluda jututoaga liitumist."</string>

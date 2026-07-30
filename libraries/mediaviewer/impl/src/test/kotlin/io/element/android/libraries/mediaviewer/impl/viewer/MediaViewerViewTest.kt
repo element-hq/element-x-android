@@ -26,7 +26,6 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeDown
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaviewer.impl.details.aMediaBottomSheetStateDetails
@@ -37,17 +36,34 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBack
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.setSafeContent
 import io.mockk.mockk
 import kotlinx.coroutines.delay
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import kotlin.time.Duration.Companion.milliseconds
 
-@RunWith(AndroidJUnit4::class)
-class MediaViewerViewTest {
+class MediaViewerViewTest : RobolectricTest() {
     private val mockMediaUrl: Uri = mockk("localMediaUri")
+
+    @Test
+    fun `displaying a media will automatically validate it`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<MediaViewerEvent>()
+        val pagerData = aMediaViewerPageData(downloadedMedia = AsyncData.Success(aLocalMedia(uri = mockMediaUrl)))
+        val state = aMediaViewerState(
+            listData = listOf(pagerData),
+            eventSink = eventsRecorder
+        )
+        setMediaViewerView(
+            state = state,
+        )
+        eventsRecorder.assertList(
+            listOf(
+                MediaViewerEvent.ValidateMedia(mediaSource = pagerData.mediaSource, thumbnailMediaSource = pagerData.thumbnailSource),
+            )
+        )
+    }
 
     @Test
     fun `clicking on back invokes expected callback`() = runAndroidComposeUiTest {
@@ -60,6 +76,9 @@ class MediaViewerViewTest {
                 state = state,
                 onBackClick = callback,
             )
+
+            // Remove the `ValidateMedia` event that is emitted when the media is loaded, since we are not testing it here.
+            eventsRecorder.clear()
 
             // Wait for enough time for the onVisibilityChanged modifier to trigger
             mainClock.advanceTimeBy(200)
@@ -122,6 +141,9 @@ class MediaViewerViewTest {
             ),
         )
 
+        // Remove the `ValidateMedia` event that is emitted when the media is loaded, since we are not testing it here.
+        eventsRecorder.clear()
+
         // Wait for enough time for the onVisibilityChanged modifier to trigger
         mainClock.advanceTimeBy(200)
 
@@ -132,28 +154,6 @@ class MediaViewerViewTest {
                 MediaViewerEvent.LoadMedia(data),
                 expectedEvent,
             )
-        )
-    }
-
-    @Test
-    @Config(qualifiers = "h1024dp")
-    fun `clicking on download emits expected Event`() {
-        val data = aMediaViewerPageData()
-        testBottomSheetAction(
-            data,
-            CommonStrings.action_download,
-            MediaViewerEvent.SaveOnDisk(data),
-        )
-    }
-
-    @Test
-    @Config(qualifiers = "h1024dp")
-    fun `clicking on share emits expected Event`() {
-        val data = aMediaViewerPageData()
-        testBottomSheetAction(
-            data,
-            CommonStrings.action_share,
-            MediaViewerEvent.Share(data),
         )
     }
 
@@ -181,9 +181,11 @@ class MediaViewerViewTest {
                 eventSink = eventsRecorder
             ),
         )
+
         clickOn(textRes)
         eventsRecorder.assertList(
             listOf(
+                MediaViewerEvent.ValidateMedia(mediaSource = data.mediaSource, thumbnailMediaSource = data.thumbnailSource),
                 MediaViewerEvent.LoadMedia(data),
                 expectedEvent,
             )
@@ -199,6 +201,10 @@ class MediaViewerViewTest {
         setMediaViewerView(
             state = state,
         )
+
+        // Remove the `ValidateMedia` event that is emitted when the media is loaded, since we are not testing it here.
+        eventsRecorder.clear()
+
         // Ensure that the action are visible
         val resources = activity!!.resources
         val contentDescription = resources.getString(CommonStrings.action_share)
@@ -229,6 +235,10 @@ class MediaViewerViewTest {
                 state = state,
                 onBackClick = callback,
             )
+
+            // Remove the `ValidateMedia` event that is emitted when the media is loaded, since we are not testing it here.
+            eventsRecorder.clear()
+
             val imageContentDescription = activity!!.getString(CommonStrings.common_image)
             onNodeWithContentDescription(imageContentDescription).performTouchInput { swipeDown(startY = centerY) }
             mainClock.advanceTimeBy(1_000)
@@ -252,6 +262,9 @@ class MediaViewerViewTest {
                 eventSink = eventsRecorder
             ),
         )
+
+        // Remove the `ValidateMedia` event that is emitted when the media is loaded, since we are not testing it here.
+        eventsRecorder.clear()
 
         // Wait for enough time for the onVisibilityChanged modifier to trigger
         mainClock.advanceTimeBy(200)
@@ -277,6 +290,9 @@ class MediaViewerViewTest {
                 eventSink = eventsRecorder
             ),
         )
+
+        // Remove the `ValidateMedia` event that is emitted when the media is loaded, since we are not testing it here.
+        eventsRecorder.clear()
 
         // Wait for enough time for the onVisibilityChanged modifier to trigger
         mainClock.advanceTimeBy(200)

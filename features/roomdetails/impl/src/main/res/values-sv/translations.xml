@@ -116,6 +116,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Roller"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Rumsdetaljer"</string>
   <string name="screen_room_roles_and_permissions_title">"Roller och behörigheter"</string>
+  <string name="screen_roomlist_mark_as_read">"Markera som läst"</string>
+  <string name="screen_roomlist_mark_as_unread">"Markera som oläst"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Lägg till adress"</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Alla måste begära åtkomst."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_title">"Be om att gå med"</string>

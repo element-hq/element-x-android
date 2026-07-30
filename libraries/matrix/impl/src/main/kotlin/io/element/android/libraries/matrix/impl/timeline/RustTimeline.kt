@@ -15,6 +15,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
+import io.element.android.libraries.matrix.api.media.GalleryItemInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
@@ -30,6 +31,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
+import io.element.android.libraries.matrix.impl.media.GalleryMediaUploadHandlerImpl
 import io.element.android.libraries.matrix.impl.media.MediaUploadHandlerImpl
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.poll.toInner
@@ -67,6 +69,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.EditedContent
 import org.matrix.rustcomponents.sdk.FormattedBody
+import org.matrix.rustcomponents.sdk.GalleryUploadParameters
 import org.matrix.rustcomponents.sdk.MessageFormat
 import org.matrix.rustcomponents.sdk.PollData
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
@@ -84,7 +87,7 @@ private const val PAGINATION_SIZE = 50
 class RustTimeline(
     private val inner: InnerTimeline,
     override val mode: Timeline.Mode,
-    private val systemClock: SystemClock,
+    systemClock: SystemClock,
     private val joinedRoom: JoinedRoom,
     private val coroutineScope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
@@ -245,8 +248,6 @@ class RustTimeline(
                         items = items,
                         isDm = isDm,
                         roomCreator = roomCreators.firstOrNull(),
-                        joinRule = joinRule,
-                        isEncrypted = isEncrypted,
                         hasMoreToLoadBackwards = backwardPaginationStatus.hasMoreToLoad,
                     )
                 }
@@ -537,6 +538,42 @@ class RustTimeline(
         }
     }
 
+    override suspend fun sendGallery(
+        items: List<GalleryItemInfo>,
+        caption: String?,
+        formattedCaption: String?,
+        inReplyToEventId: EventId?,
+    ): Result<MediaUploadHandler> {
+        Timber.d("Sending gallery with ${items.size} items")
+        val allFiles = items.flatMap { item ->
+            when (item) {
+                is GalleryItemInfo.Image -> listOfNotNull(item.file, item.thumbnailFile)
+                is GalleryItemInfo.Video -> listOfNotNull(item.file, item.thumbnailFile)
+                is GalleryItemInfo.Audio -> listOf(item.file)
+                is GalleryItemInfo.MediaFile -> listOf(item.file)
+            }
+        }
+        return sendGalleryAttachment(allFiles) {
+            inner.sendGallery(
+                params = GalleryUploadParameters(
+                    caption = caption,
+                    formattedCaption = formattedCaption?.let {
+                        FormattedBody(body = it, format = MessageFormat.Html)
+                    },
+                    mentions = null,
+                    inReplyTo = inReplyToEventId?.value,
+                ),
+                itemInfos = items.map { it.map() },
+            )
+        }
+    }
+
+    private fun sendGalleryAttachment(files: List<File>, handle: () -> org.matrix.rustcomponents.sdk.SendGalleryJoinHandle): Result<MediaUploadHandler> {
+        return runCatchingExceptions {
+            GalleryMediaUploadHandlerImpl(files, handle())
+        }
+    }
+
     override suspend fun createPoll(
         question: String,
         answers: List<String>,
@@ -620,6 +657,24 @@ class RustTimeline(
             )
         } else {
             inner.loadReplyDetails(eventId.value).use(inReplyToMapper::map)
+        }
+    }
+
+    override suspend fun isEventLoaded(eventId: EventId): Boolean = withContext(dispatcher) {
+        val isInLoadedItems = _timelineItems.replayCache.firstOrNull().orEmpty().any { timelineItem ->
+            timelineItem is MatrixTimelineItem.Event && timelineItem.eventId == eventId
+        }
+        if (isInLoadedItems) {
+            // Displayed events are caught above. The SDK-level list still holds events the display
+            // layer later drops, so this avoids the FFI call for in-window-but-not-rendered events.
+            true
+        } else {
+            // getEventTimelineItemByEventId throws when the event isn't in the loaded window.
+            // EventTimelineItem is a Disposable wrapping a native handle, so release it once we've
+            // confirmed presence — otherwise the handle lingers until the GC cleaner runs.
+            runCatchingExceptions {
+                inner.getEventTimelineItemByEventId(eventId.value).use { /* presence is all we need */ }
+            }.isSuccess
         }
     }
 

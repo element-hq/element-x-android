@@ -20,6 +20,7 @@ interface BugReporter {
      * @param problemDescription the bug description
      * @param canContact true if the user opt in to be contacted directly
      * @param sendPushRules true to include the push rules
+     * @param ghIssueNumber it not null, the GitHub issue number to link the bug report to.
      * @param listener the listener
      */
     suspend fun sendBugReport(
@@ -29,6 +30,7 @@ interface BugReporter {
         problemDescription: String,
         canContact: Boolean = false,
         sendPushRules: Boolean = false,
+        ghIssueNumber: Int? = null,
         listener: BugReporterListener
     )
 

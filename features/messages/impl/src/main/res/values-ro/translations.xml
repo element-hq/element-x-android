@@ -7,15 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"Criptat de un dispozitiv necunoscut sau șters."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Criptat de un dispozitiv care nu este verificat de proprietarul său."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Criptat de un utilizator neverificat."</string>
-  <string name="emoji_picker_category_activity">"Activități"</string>
-  <string name="emoji_picker_category_flags">"Steaguri"</string>
-  <string name="emoji_picker_category_foods">"Mâncare &amp; Băutură"</string>
-  <string name="emoji_picker_category_nature">"Animale și Natură"</string>
-  <string name="emoji_picker_category_objects">"Obiecte"</string>
-  <string name="emoji_picker_category_people">"Fețe zâmbitoare &amp; Oameni"</string>
-  <string name="emoji_picker_category_places">"Călătorii &amp; Locuri"</string>
-  <string name="emoji_picker_category_recent">"Emoticoane recente"</string>
-  <string name="emoji_picker_category_symbols">"Simboluri"</string>
   <string name="screen_media_upload_preview_caption_warning">"Este posibil ca descrierile să nu fie vizibile pentru persoanele care folosesc aplicații mai vechi."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Atingeți pentru a modifica calitatea încărcării videoclipului"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Fișierul nu a putut fi încărcat."</string>

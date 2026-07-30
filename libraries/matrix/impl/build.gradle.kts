@@ -44,7 +44,7 @@ dependencies {
     implementation(projects.services.toolbox.api)
     api(projects.libraries.matrix.api)
     implementation(projects.libraries.core)
-    implementation("net.java.dev.jna:jna:5.18.1@aar")
+    implementation(variantOf(libs.jna) { artifactType("aar") })
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.serialization.json)
     implementation(libs.kotlinx.collections.immutable)

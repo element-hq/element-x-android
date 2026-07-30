@@ -36,6 +36,7 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalAutofillManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
@@ -60,6 +61,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.PasswordVisibilityToggle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -210,10 +212,15 @@ private fun LoginForm(
             singleLine = true,
             trailingIcon = if (loginFieldState.isNotEmpty()) {
                 {
-                    Box(Modifier.clickable {
-                        loginFieldState = ""
-                        eventSink(LoginPasswordEvents.SetLogin(""))
-                    }) {
+                    Box(
+                        Modifier.clickable(
+                            onClickLabel = stringResource(CommonStrings.action_clear),
+                            role = Role.Button,
+                        ) {
+                            loginFieldState = ""
+                            eventSink(LoginPasswordEvents.SetLogin(""))
+                        }
+                    ) {
                         Icon(
                             imageVector = CompoundIcons.Close(),
                             contentDescription = stringResource(CommonStrings.action_clear),
@@ -249,16 +256,10 @@ private fun LoginForm(
             placeholder = stringResource(CommonStrings.common_password),
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
-                val image =
-                    if (passwordVisible) CompoundIcons.VisibilityOn() else CompoundIcons.VisibilityOff()
-                val description =
-                    if (passwordVisible) stringResource(CommonStrings.a11y_hide_password) else stringResource(CommonStrings.a11y_show_password)
-                Box(Modifier.clickable { passwordVisible = !passwordVisible }) {
-                    Icon(
-                        imageVector = image,
-                        contentDescription = description,
-                    )
-                }
+                PasswordVisibilityToggle(
+                    visible = passwordVisible,
+                    onToggle = { passwordVisible = !passwordVisible },
+                )
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,

@@ -21,14 +21,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
-import io.element.android.libraries.designsystem.atomic.organisms.InfoListItem
-import io.element.android.libraries.designsystem.atomic.organisms.InfoListOrganism
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.BigIcon
+import io.element.android.libraries.designsystem.components.visuallist.VisualList
+import io.element.android.libraries.designsystem.components.visuallist.VisualListItemData
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -75,23 +74,21 @@ private fun SignedOutContent() {
             verticalBias = -0.4f
         )
     ) {
-        InfoListOrganism(
+        VisualList(
             items = persistentListOf(
-                InfoListItem(
+                VisualListItemData(
                     message = stringResource(id = R.string.screen_signed_out_reason_1),
                     iconVector = CompoundIcons.Lock(),
                 ),
-                InfoListItem(
+                VisualListItemData(
                     message = stringResource(id = R.string.screen_signed_out_reason_2),
                     iconVector = CompoundIcons.Devices(),
                 ),
-                InfoListItem(
+                VisualListItemData(
                     message = stringResource(id = R.string.screen_signed_out_reason_3),
                     iconVector = CompoundIcons.Block(),
                 ),
             ),
-            textStyle = ElementTheme.typography.fontBodyMdMedium,
-            iconTint = ElementTheme.colors.iconSecondary,
         )
     }
 }

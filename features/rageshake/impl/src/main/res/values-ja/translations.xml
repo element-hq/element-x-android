@@ -8,6 +8,8 @@
   <string name="screen_bug_report_editor_placeholder">"問題の説明…"</string>
   <string name="screen_bug_report_editor_supporting">"可能であれば英語で記入してください。"</string>
   <string name="screen_bug_report_error_description_too_short">"説明が過度に短いです。問題についてより詳細にご記入ください。"</string>
+  <string name="screen_bug_report_github_issue_description">"関連したGitHubのissueがある場合はIDを記入してください。"</string>
+  <string name="screen_bug_report_github_issue_label">"GitHub issue"</string>
   <string name="screen_bug_report_include_crash_logs">"クラッシュログを送信"</string>
   <string name="screen_bug_report_include_logs">"ログの記録を許可"</string>
   <string name="screen_bug_report_include_logs_error">"ログのサイズが大きく、報告に添付することができません。ログは別の方法で送信してください。"</string>

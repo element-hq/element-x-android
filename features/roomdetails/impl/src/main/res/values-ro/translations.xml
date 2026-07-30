@@ -135,6 +135,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Roluri"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Detaliile camerei"</string>
   <string name="screen_room_roles_and_permissions_title">"Roluri și permisiuni"</string>
+  <string name="screen_roomlist_mark_as_read">"Marcați ca citită"</string>
+  <string name="screen_roomlist_mark_as_unread">"Marcați ca necitită"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Adăugați o adresă"</string>
   <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Oricine se află în spațiile autorizate se poate alătura, dar toți ceilalți trebuie să solicite accesul."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Toată lumea trebuie să solicite acces."</string>

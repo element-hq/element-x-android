@@ -14,24 +14,23 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.roommembermoderation.api.ModerationAction
 import io.element.android.features.roommembermoderation.api.ModerationActionState
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.testtags.TestTags
+import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EnsureNeverCalledWithTwoParams
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnceWithTwoParams
 import io.element.android.tests.testutils.pressTag
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.setSafeContent
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class RoomMemberModerationViewTest {
+class RoomMemberModerationViewTest : RobolectricTest() {
     @Test
     fun `clicking on display profile action calls onSelectAction`() = runAndroidComposeUiTest {
         val user = anAlice()
@@ -48,6 +47,8 @@ class RoomMemberModerationViewTest {
                 onSelectAction = callback
             )
             clickOn(R.string.screen_bottom_sheet_manage_room_member_member_user_info)
+            // Gives time for bottomsheet to hide
+            mainClock.advanceTimeBy(1_000)
         }
     }
 
@@ -217,11 +218,13 @@ class RoomMemberModerationViewTest {
 private fun AndroidComposeUiTest<ComponentActivity>.setRoomMemberModerationView(
     state: InternalRoomMemberModerationState,
     onSelectAction: (ModerationAction, MatrixUser) -> Unit = EnsureNeverCalledWithTwoParams(),
+    onAvatarClick: ((MatrixUser) -> Unit)? = EnsureNeverCalledWithParam(),
 ) {
     setSafeContent {
         RoomMemberModerationView(
             state = state,
             onSelectAction = onSelectAction,
+            onAvatarClick = onAvatarClick,
         )
     }
 }

@@ -120,6 +120,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Rolau"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Manylion yr ystafell"</string>
   <string name="screen_room_roles_and_permissions_title">"Rolau a chaniatâd"</string>
+  <string name="screen_roomlist_mark_as_read">"Marcio fel wedi\'i ddarllen"</string>
+  <string name="screen_roomlist_mark_as_unread">"Marcio fel heb ei ddarllen"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Ychwanegu cyfeiriad ystafell"</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Gall unrhyw un ofyn am gael ymuno â\'r ystafell ond bydd rhaid i weinyddwr neu gymedrolwr dderbyn y cais."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_title">"Gofyn i gael ymuno"</string>

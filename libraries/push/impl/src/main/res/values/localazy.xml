@@ -30,6 +30,7 @@
   </plurals>
   <string name="notification_invite_body">"Invited you to chat"</string>
   <string name="notification_invite_body_with_sender">"%1$s invited you to chat"</string>
+  <string name="notification_live_location_started_body">"Started sharing their live location"</string>
   <string name="notification_mentioned_you_body">"Mentioned you: %1$s"</string>
   <string name="notification_new_messages">"New Messages"</string>
   <plurals name="notification_new_messages_for_room">

@@ -7,15 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"Được mã hóa bởi một thiết bị không xác định hoặc đã bị xóa."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Được mã hóa bởi một thiết bị chưa được chủ sở hữu xác minh."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Được mã hóa bởi một người dùng chưa được xác minh."</string>
-  <string name="emoji_picker_category_activity">"Hoạt động"</string>
-  <string name="emoji_picker_category_flags">"Cờ"</string>
-  <string name="emoji_picker_category_foods">"Thực phẩm và đồ uống"</string>
-  <string name="emoji_picker_category_nature">"Động vật và thiên nhiên"</string>
-  <string name="emoji_picker_category_objects">"Đồ vật"</string>
-  <string name="emoji_picker_category_people">"Mặt cười &amp; mọi người"</string>
-  <string name="emoji_picker_category_places">"Du lịch và địa danh"</string>
-  <string name="emoji_picker_category_recent">"Biểu tượng cảm xúc gần đây"</string>
-  <string name="emoji_picker_category_symbols">"Biểu tượng"</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Xử lý phương tiện tải lên không thành công, vui lòng thử lại."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Không thể tải lên tệp phương tiện. Vui lòng thử lại."</string>
   <string name="screen_report_content_block_user">"Chặn người dùng"</string>

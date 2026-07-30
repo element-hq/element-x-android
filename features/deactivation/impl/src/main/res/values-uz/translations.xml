@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_deactivate_account_confirmation_dialog_content">"Iltimos, hisobingizni o‘chirishni xohlayotganingizni tasdiqlang. Bu amalni qaytarib bo‘lmaydi."</string>
+  <string name="screen_deactivate_account_confirmation_dialog_content">"Iltimos, hisobingizni oʻchirishni xohlayotganingizni tasdiqlang. Bu amalni qaytarib boʻlmaydi."</string>
   <string name="screen_deactivate_account_delete_all_messages">"Barcha xabarlarimni o‘chirib tashlang"</string>
   <string name="screen_deactivate_account_delete_all_messages_notice">"Ogohlantirish: Kelgusi foydalanuvchilar chala suhbatlarni ko‘rishi mumkin."</string>
   <string name="screen_deactivate_account_description">"Hisobingiz %1$s faolsizlantirilmoqda, u quyidagilarni bajaradi:"</string>

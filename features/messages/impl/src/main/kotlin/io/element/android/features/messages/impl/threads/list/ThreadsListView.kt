@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.plus
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,6 +29,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -53,6 +55,8 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -66,6 +70,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageTy
 import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 
@@ -101,7 +106,10 @@ fun ThreadsListView(
                                 url = state.roomAvatarUrl,
                                 size = AvatarSize.CurrentUserTopBar,
                             ),
-                            avatarType = AvatarType.Room(isTombstoned = state.isRoomTombstoned),
+                            avatarType = AvatarType.Room(
+                                heroes = state.heroes,
+                                isTombstoned = state.isRoomTombstoned,
+                            ),
                             contentDescription = null,
                         )
                         Column {
@@ -124,14 +132,15 @@ fun ThreadsListView(
                 },
                 navigationIcon = {
                     BackButton(onBackClick)
-                }
+                },
+                windowInsets = scaffoldScrollableContentInsets,
             )
         }
     ) { padding ->
         val lazyListState = rememberLazyListState()
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = padding,
+            contentPadding = padding + lazyColumnContentPadding,
             state = lazyListState,
         ) {
             itemsIndexed(state.threads, key = { _, row -> row.item.threadId }) { index, row ->
@@ -157,18 +166,19 @@ private fun ScrollHelper(
     listState: LazyListState,
     onPaginate: () -> Unit,
 ) {
+    val updatedOnPaginate by rememberUpdatedState(onPaginate)
     val lastVisibleItemIndex by remember {
         derivedStateOf { listState.firstVisibleItemIndex + listState.layoutInfo.visibleItemsInfo.size - 1 }
     }
-    val needsPagination by remember {
+    val shouldPaginate by remember {
         derivedStateOf {
-            val canLoadNewItems = listState.isScrollInProgress || listState.firstVisibleItemScrollOffset == 0
-            canLoadNewItems && lastVisibleItemIndex == listState.layoutInfo.totalItemsCount - 1
+            val canLoadNewItems = listState.isScrollInProgress || listState.layoutInfo.totalItemsCount == 0
+            canLoadNewItems && lastVisibleItemIndex >= listState.layoutInfo.totalItemsCount - 1
         }
     }
-    LaunchedEffect(needsPagination, lastVisibleItemIndex) {
-        if (needsPagination) {
-            onPaginate()
+    LaunchedEffect(shouldPaginate, lastVisibleItemIndex) {
+        if (shouldPaginate) {
+            updatedOnPaginate()
             delay(400L)
         }
     }
@@ -321,6 +331,7 @@ internal fun ThreadsListViewPreview() {
                 roomId = RoomId("!room-id:server"),
                 roomName = ROOM_NAME,
                 roomAvatarUrl = null,
+                heroes = persistentListOf(),
                 threads = List(10) { aThreadListRowItem(threadId = ThreadId("\$thread-$it")) }.toImmutableList(),
                 isRoomTombstoned = false,
                 eventSink = {},
@@ -376,7 +387,12 @@ fun aThreadListItem(
 fun aThreadListItemEvent(
     threadId: ThreadId = ThreadId("\$a-thread-id"),
     senderId: UserId = UserId("@a-user-id:server"),
-    senderProfile: ProfileDetails = ProfileDetails.Ready(displayName = USER_NAME_ALICE, displayNameAmbiguous = false, avatarUrl = null),
+    senderProfile: ProfileDetails = ProfileDetails.Ready(
+        displayName = USER_NAME_ALICE,
+        displayNameAmbiguous = false,
+        avatarUrl = null,
+        displayedStatus = null,
+    ),
     isOwn: Boolean = false,
     content: EventContent = MessageContent(
         body = "Hello world!",

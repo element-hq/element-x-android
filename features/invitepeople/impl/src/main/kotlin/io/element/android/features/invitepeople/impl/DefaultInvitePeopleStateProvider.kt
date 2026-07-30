@@ -33,7 +33,7 @@ internal class DefaultInvitePeopleStateProvider : PreviewParameterProvider<Defau
             aDefaultInvitePeopleState(canInvite = true, selectedUsers = aMatrixUserList().toImmutableList()),
             aDefaultInvitePeopleState(isSearchActive = true, searchQuery = "some query"),
             aDefaultInvitePeopleState(isSearchActive = true, searchQuery = "some query", selectedUsers = aMatrixUserList().toImmutableList()),
-            aDefaultInvitePeopleState(isSearchActive = true, searchQuery = "some query", searchResults = SearchBarResultState.NoResultsFound()),
+            aDefaultInvitePeopleState(isSearchActive = true, searchQuery = "some query", searchResults = SearchBarResultState.NoResultsFound),
             aDefaultInvitePeopleState(
                 isSearchActive = true,
                 canInvite = true,
@@ -115,7 +115,7 @@ private fun aDefaultInvitePeopleState(
     room: AsyncData<Unit> = AsyncData.Success(Unit),
     canInvite: Boolean = false,
     searchQuery: String = "",
-    searchResults: SearchBarResultState<ImmutableList<InvitableUser>> = SearchBarResultState.Initial(),
+    searchResults: SearchBarResultState<ImmutableList<InvitableUser>> = SearchBarResultState.Initial,
     selectedUsers: ImmutableList<MatrixUser> = persistentListOf(),
     isSearchActive: Boolean = false,
     showSearchLoader: Boolean = false,

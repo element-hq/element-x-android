@@ -22,7 +22,7 @@ class MediaItemFileProvider : PreviewParameterProvider<MediaItem.File> {
                 caption = "A caption",
             ),
             aMediaItemFile(
-                caption = loremIpsum,
+                caption = loremIpsum.take(80),
             ),
         )
 }

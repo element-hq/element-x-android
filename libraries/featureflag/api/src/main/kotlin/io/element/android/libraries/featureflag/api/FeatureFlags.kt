@@ -108,10 +108,11 @@ enum class FeatureFlags(
         defaultValue = { true },
         isFinished = false,
     ),
-    FloatingDateBadge(
-        key = "feature.floating_date_badge",
-        title = "Display sticky date headers in the timeline",
-        description = "When scrolling, a sticky date badge will be displayed so you can easily know on which date the messages you're seeing were sent.",
+    JumpToUnread(
+        key = "feature.jump_to_unread",
+        title = "Jump to unread messages",
+        description = "Show a button to jump to the read marker, plus a count badge on the scroll-to-bottom button " +
+            "when new messages arrive while scrolled away.",
         defaultValue = { false },
         isFinished = false,
     ),
@@ -134,6 +135,34 @@ enum class FeatureFlags(
         title = "Automatic back pagination of rooms",
         description = "Allow the app to automatically back paginate in rooms to pre-fetch older messages in background." +
             "\nRequires an app restart to take effect.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    UnreadIndicatorCount(
+        key = "feature.unread_indicator_count",
+        title = "Unread indicator count",
+        description = "Show the number of unread messages on the unread indicator in the room list.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    SendGalleryMessages(
+        key = "feature.send_gallery_messages",
+        title = "Send gallery messages",
+        description = "Allow sending multiple media items in a single message.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    UserStatus(
+        key = "feature.user_status",
+        title = "User status",
+        description = "Allow users to set a status (e.g. In a meeting, Away) visible to their contacts.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    MessageSearch(
+        key = "feature.message_search",
+        title = "Message search",
+        description = "Index messages locally so they can be searched. Only messages received while enabled are indexed.",
         defaultValue = { false },
         isFinished = false,
     ),

@@ -31,7 +31,9 @@ fun LocalMediaView(
     bottomPaddingInPixels: Int,
     audioFocus: AudioFocus?,
     onClick: () -> Unit,
+    onOpenWith: (() -> Unit)?,
     textFileViewer: TextFileViewer,
+    forPreview: Boolean,
     modifier: Modifier = Modifier,
     isDisplayed: Boolean = true,
     isUserSelected: Boolean = false,
@@ -44,6 +46,7 @@ fun LocalMediaView(
             localMediaViewState = localMediaViewState,
             localMedia = localMedia,
             modifier = modifier,
+            forPreview = forPreview,
             onClick = onClick,
         )
         mimeType.isMimeTypeVideo() -> MediaVideoView(
@@ -53,6 +56,7 @@ fun LocalMediaView(
             localMedia = localMedia,
             autoplay = isUserSelected,
             audioFocus = audioFocus,
+            forPreview = forPreview,
             modifier = modifier,
         )
         mimeType == MimeTypes.PlainText -> TextFileView(
@@ -80,7 +84,7 @@ fun LocalMediaView(
             uri = localMedia?.uri,
             info = mediaInfo,
             modifier = modifier,
-            onClick = onClick,
+            onOpenWith = onOpenWith,
         )
     }
 }

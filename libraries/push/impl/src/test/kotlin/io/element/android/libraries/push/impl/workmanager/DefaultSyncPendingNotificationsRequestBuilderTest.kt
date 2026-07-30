@@ -8,7 +8,6 @@
 package io.element.android.libraries.push.impl.workmanager
 
 import android.net.NetworkCapabilities
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.work.OneTimeWorkRequest
 import androidx.work.hasKeyWithValueOfType
 import com.google.common.truth.Truth.assertThat
@@ -21,14 +20,13 @@ import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.WorkManagerWorkerType
 import io.element.android.libraries.workmanager.api.workManagerTag
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
 @Config(sdk = [33])
-@RunWith(AndroidJUnit4::class)
-class DefaultSyncPendingNotificationsRequestBuilderTest {
+class DefaultSyncPendingNotificationsRequestBuilderTest : RobolectricTest() {
     @Test
     fun `build - success API 33`() = runTest {
         val request = createSyncPendingNotificationsRequestBuilder(

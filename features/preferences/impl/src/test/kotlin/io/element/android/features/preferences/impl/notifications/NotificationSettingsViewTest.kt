@@ -13,10 +13,10 @@ package io.element.android.features.preferences.impl.notifications
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
@@ -28,12 +28,11 @@ import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBack
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
-@RunWith(AndroidJUnit4::class)
-class NotificationSettingsViewTest {
+class NotificationSettingsViewTest : RobolectricTest() {
     @Test
     fun `clicking on back invokes the expected callback`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
@@ -49,7 +48,7 @@ class NotificationSettingsViewTest {
         eventsRecorder.assertSingle(NotificationSettingsEvents.RefreshSystemNotificationsEnabled)
     }
 
-    @Config(qualifiers = "h1024dp")
+    @Config(qualifiers = "h1280dp")
     @Test
     fun `clicking on troubleshoot notification invokes the expected callback`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
@@ -241,7 +240,7 @@ class NotificationSettingsViewTest {
         )
     }
 
-    @Config(qualifiers = "h1024dp")
+    @Config(qualifiers = "h1280dp")
     @Test
     fun `clicking on Push notification provider emits the expected event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
@@ -274,6 +273,43 @@ class NotificationSettingsViewTest {
             listOf(
                 NotificationSettingsEvents.RefreshSystemNotificationsEnabled,
                 NotificationSettingsEvents.SetPushProvider(1),
+            )
+        )
+    }
+
+    @Config(qualifiers = "h1280dp")
+    @Test
+    fun `sounds preference category renders rows with current display names`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
+        setNotificationSettingsView(
+            state = aValidNotificationSettingsState(
+                eventSink = eventsRecorder,
+                messageSoundDisplayName = "Pixel notification",
+                callRingtoneDisplayName = "Pixel ringtone",
+            ),
+        )
+        onNodeWithText("Sound").assertIsDisplayed()
+        onNodeWithText("Message sound").assertIsDisplayed()
+        onNodeWithText("Call ringtone").assertIsDisplayed()
+        onNodeWithText("Pixel notification").assertIsDisplayed()
+        onNodeWithText("Pixel ringtone").assertIsDisplayed()
+    }
+
+    @Config(qualifiers = "h1280dp")
+    @Test
+    fun `clicking the message sound row opens the preset dialog`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
+        setNotificationSettingsView(
+            state = aValidNotificationSettingsState(eventSink = eventsRecorder),
+        )
+        // The click now opens the in-app preset dialog instead of launching the system picker
+        // directly; the picker only fires from the dialog's "Choose another sound..." option
+        // (covered by Presenter tests + NotificationSoundPickerTest).
+        onNodeWithText("Message sound").performClick()
+        eventsRecorder.assertList(
+            listOf(
+                NotificationSettingsEvents.RefreshSystemNotificationsEnabled,
+                NotificationSettingsEvents.ShowMessageSoundDialog,
             )
         )
     }

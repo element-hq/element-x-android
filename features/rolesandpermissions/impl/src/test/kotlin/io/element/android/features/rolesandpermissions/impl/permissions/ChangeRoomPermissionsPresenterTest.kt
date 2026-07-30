@@ -66,6 +66,7 @@ class ChangeRoomPermissionsPresenterTest {
             assertThat(itemsBySection[RoomPermissionsSection.MessagesAndContent]).containsExactly(
                 RoomPermissionType.SEND_EVENTS,
                 RoomPermissionType.REDACT_EVENTS,
+                RoomPermissionType.SHARE_LIVE_LOCATION,
             )
             assertThat(itemsBySection[RoomPermissionsSection.ManageMembers]).containsExactly(
                 RoomPermissionType.INVITE,

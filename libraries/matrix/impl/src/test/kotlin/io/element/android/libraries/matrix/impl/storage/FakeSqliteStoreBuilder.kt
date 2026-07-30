@@ -7,10 +7,11 @@
 
 package io.element.android.libraries.matrix.impl.storage
 
+import io.element.android.libraries.androidutils.crypto.ClientSecret
 import org.matrix.rustcomponents.sdk.ClientBuilder
 
 class FakeSqliteStoreBuilder : SqliteStoreBuilder {
-    override fun passphrase(passphrase: String?): SqliteStoreBuilder = this
+    override fun secret(clientSecret: ClientSecret?): SqliteStoreBuilder = this
 
     override fun setupClientBuilder(clientBuilder: ClientBuilder): ClientBuilder {
         return clientBuilder

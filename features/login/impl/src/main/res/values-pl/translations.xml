@@ -97,7 +97,7 @@ Spróbuj zalogować się ręcznie lub zeskanuj kod QR na innym urządzeniu."</st
   <string name="screen_qr_code_login_start_over_button">"Zacznij od nowa"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Wystąpił nieoczekiwany błąd. Spróbuj ponownie."</string>
   <string name="screen_qr_code_login_verify_code_loading">"Oczekiwanie na drugie urządzenie"</string>
-  <string name="screen_qr_code_login_verify_code_subtitle">"Twój dostawca konta może poprosić o podany kod, aby zweryfikować logowanie."</string>
+  <string name="screen_qr_code_login_verify_code_subtitle">"Twój dostawca konta może poprosić o podany kod w celu weryfikacji logowania."</string>
   <string name="screen_qr_code_login_verify_code_title">"Twój kod weryfikacyjny"</string>
   <string name="screen_server_confirmation_change_server">"Zmień dostawcę konta"</string>
   <string name="screen_server_confirmation_message_login_element_dot_io">"Serwer prywatny dla pracowników Element."</string>

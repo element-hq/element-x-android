@@ -132,6 +132,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Ruoli"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Dettagli della stanza"</string>
   <string name="screen_room_roles_and_permissions_title">"Ruoli e autorizzazioni"</string>
+  <string name="screen_roomlist_mark_as_read">"Segna come letto"</string>
+  <string name="screen_roomlist_mark_as_unread">"Segna come non letto"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Aggiungi indirizzo"</string>
   <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Chiunque si trovi in spazi autorizzati può partecipare, ma tutti gli altri devono richiedere l\'accesso."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Chiunque deve richiedere l\'accesso."</string>

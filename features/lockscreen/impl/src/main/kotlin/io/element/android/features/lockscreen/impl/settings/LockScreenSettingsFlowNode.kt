@@ -103,8 +103,15 @@ class LockScreenSettingsFlowNode(
                     override fun onUnlock() {
                         backstack.newRoot(NavTarget.Settings)
                     }
+
+                    override fun onCancel() {
+                        // Should not happen in this context.
+                    }
                 }
-                createNode<PinUnlockNode>(buildContext, plugins = listOf(callback))
+                val inputs = PinUnlockNode.Inputs(
+                    forDeviceUnlock = false,
+                )
+                createNode<PinUnlockNode>(buildContext, plugins = listOf(callback, inputs))
             }
             NavTarget.SetupPin -> {
                 createNode<SetupPinNode>(buildContext)

@@ -129,6 +129,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"역할"</string>
   <string name="screen_room_roles_and_permissions_room_details">"방 세부 정보"</string>
   <string name="screen_room_roles_and_permissions_title">"역할 및 권한"</string>
+  <string name="screen_roomlist_mark_as_read">"읽음으로 표시"</string>
+  <string name="screen_roomlist_mark_as_unread">"읽지 않음으로 표시"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"주소 추가"</string>
   <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"승인된 스페이스의 멤버는 누구나 참여할 수 있지만, 그 외의 인원은 액세스 요청을 해야 합니다."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"모든 사용자가 액세스 권한을 요청해야 합니다."</string>
