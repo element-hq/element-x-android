@@ -22,6 +22,14 @@ import timber.log.Timber
 
 private const val ELEMENT_X_TARGET = "elementx"
 
+// The SDK sets no global log level, and `matrix_sdk_search` is absent from its default target list,
+// so without this directive every log line from the message search index is silently dropped.
+// The indexing task itself lives under `matrix_sdk::event_cache`, so enable the Event Cache trace
+// log pack as well to follow a message from sync into the index.
+// Debuggable builds only: the SDK logs the full message body at debug level, and release logs can be
+// uploaded via rageshake.
+private const val MATRIX_SDK_SEARCH_TARGET = "matrix_sdk_search"
+
 class PlatformInitializer : Initializer<Unit> {
     override fun create(context: Context) {
         val appBindings = context.bindings<AppBindings>()
@@ -36,7 +44,12 @@ class PlatformInitializer : Initializer<Unit> {
             writesToLogcat = runBlocking { featureFlagService.isFeatureEnabled(FeatureFlags.PrintLogsToLogcat) },
             writesToFilesConfiguration = bugReporter.createWriteToFilesConfiguration(),
             logLevel = logLevel,
-            extraTargets = listOf(ELEMENT_X_TARGET),
+            extraTargets = buildList {
+                add(ELEMENT_X_TARGET)
+                if (appBindings.buildMeta().isDebuggable) {
+                    add(MATRIX_SDK_SEARCH_TARGET)
+                }
+            },
             traceLogPacks = runBlocking { preferencesStore.getTracingLogPacksFlow().first() },
             sdkSentryDsn = appBindings.sentrySdkDsn()?.value?.takeIf { it.isNotBlank() },
         )

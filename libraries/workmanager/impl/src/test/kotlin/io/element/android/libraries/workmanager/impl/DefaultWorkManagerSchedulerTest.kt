@@ -49,6 +49,31 @@ class DefaultWorkManagerSchedulerTest {
 
         // The session is now gone and work associated with the session is cancelled
         verify { workManager.cancelAllWorkByTag("notifications-$sessionId") }
+        // Search backfill keeps fetching room history in the background, so leaving it running after
+        // logout would keep pulling a signed-out user's messages down. Pinned explicitly rather than
+        // relying on the enum loop, because nothing else fails if the tag stops matching.
+        verify { workManager.cancelAllWorkByTag("search_backfill-$sessionId") }
+    }
+
+    @Test
+    fun `every request type is cancelled when a session is deleted`() = runTest {
+        // Guards the enum loop in cancel(): a new WorkManagerRequestType that is never cancelled on
+        // logout would leak background work for a signed-out session, and no other test would notice.
+        val sessionId = "@session1:matrix.org"
+        val sessionObserver = FakeSessionObserver()
+        val workManager = spyk<WorkManager>()
+
+        DefaultWorkManagerScheduler(
+            lazyWorkManager = lazy { workManager },
+            sessionObserver = sessionObserver,
+        )
+
+        sessionObserver.onSessionDeleted(sessionId)
+        runCurrent()
+
+        for (requestType in WorkManagerRequestType.entries) {
+            verify { workManager.cancelAllWorkByTag(workManagerTag(SessionId(sessionId), requestType)) }
+        }
     }
 
     @Test
