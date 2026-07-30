@@ -281,7 +281,7 @@ class DefaultWellknownRetrieverTest {
             json = { jsonProvider }
         ),
         jsonProvider = jsonProvider,
-        elementWellknownStore = cacheStore,
+        elementWellknownStoreFactory = { cacheStore },
         enterpriseService = enterpriseService,
     )
 

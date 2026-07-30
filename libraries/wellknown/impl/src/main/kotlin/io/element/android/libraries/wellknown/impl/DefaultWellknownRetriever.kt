@@ -27,10 +27,12 @@ import java.net.URL
 @ContributesBinding(AppScope::class)
 class DefaultWellknownRetriever(
     private val retrofitFactory: RetrofitFactory,
-    private val elementWellknownStore: ElementWellknownStore,
+    elementWellknownStoreFactory: ElementWellknownStore.Factory,
     private val jsonProvider: JsonProvider,
     private val enterpriseService: EnterpriseService,
 ) : WellknownRetriever {
+    private val elementWellknownStore: ElementWellknownStore = elementWellknownStoreFactory.create(null)
+
     override suspend fun getElementWellKnown(baseUrl: String): WellknownRetrieverResult<ElementWellKnown> {
         val overriddenElementWellKnown = enterpriseService.overriddenElementWellKnown()
         if (overriddenElementWellKnown != null) {
