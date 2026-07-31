@@ -11,17 +11,20 @@ package io.element.android.x.di
 import android.content.Context
 import androidx.work.ListenableWorker
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Multibinds
 import dev.zacsweers.metro.Provides
 import io.element.android.libraries.architecture.NodeFactoriesBindings
+import io.element.android.libraries.di.DependencyInjectionGraphOwner
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.workmanager.api.di.MetroWorkerFactory
 import kotlin.reflect.KClass
 
 @DependencyGraph(AppScope::class)
 interface AppGraph : NodeFactoriesBindings {
-    val sessionGraphFactory: SessionGraph.Factory
+    @Binds
+    fun owner(@ApplicationContext context: Context): DependencyInjectionGraphOwner
 
     @Multibinds
     val workerProviders:

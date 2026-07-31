@@ -8,10 +8,13 @@
 
 package io.element.android.appnav.di
 
+import dev.zacsweers.metro.ContributesTo
 import io.element.android.features.messages.api.pinned.PinnedEventsTimelineProvider
+import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import io.element.android.services.analytics.api.watchers.AnalyticsSendMessageWatcher
 
+@ContributesTo(RoomScope::class)
 interface TimelineBindings {
     val timelineProvider: TimelineProvider
     val pinnedEventsTimelineProvider: PinnedEventsTimelineProvider

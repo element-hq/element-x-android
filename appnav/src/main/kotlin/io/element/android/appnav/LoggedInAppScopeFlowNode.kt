@@ -26,7 +26,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
-import io.element.android.appnav.di.SessionGraphFactory
+import io.element.android.appnav.di.SessionGraph
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.createNode
@@ -46,7 +46,7 @@ import kotlinx.parcelize.Parcelize
 class LoggedInAppScopeFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    sessionGraphFactory: SessionGraphFactory,
+    dependencyInjectionGraphOwner: DependencyInjectionGraphOwner,
     private val imageLoaderHolder: ImageLoaderHolder,
 ) : ParentNode<LoggedInAppScopeFlowNode.NavTarget>(
     navModel = PermanentNavModel(
@@ -71,7 +71,7 @@ class LoggedInAppScopeFlowNode(
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
-    override val graph = sessionGraphFactory.create(inputs.matrixClient)
+    override val graph = (dependencyInjectionGraphOwner.graph as SessionGraph.Factory).create(inputs.matrixClient)
 
     override fun onBuilt() {
         super.onBuilt()

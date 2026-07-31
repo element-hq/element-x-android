@@ -18,30 +18,26 @@ import com.bumble.appyx.navmodel.backstack.activeElement
 import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
 import com.bumble.appyx.testing.unit.common.helper.parentNodeTestHelper
 import com.google.common.truth.Truth.assertThat
-import io.element.android.appnav.di.RoomGraphFactory
-import io.element.android.appnav.di.TimelineBindings
+import io.element.android.appnav.di.RoomGraph
+import io.element.android.appnav.di.SessionGraph
 import io.element.android.appnav.room.RoomNavigationTarget
 import io.element.android.appnav.room.joined.FakeJoinedRoomLoadedFlowNodeCallback
 import io.element.android.appnav.room.joined.JoinedRoomLoadedFlowNode
 import io.element.android.features.forward.api.ForwardEntryPoint
 import io.element.android.features.forward.test.FakeForwardEntryPoint
 import io.element.android.features.messages.api.MessagesEntryPoint
-import io.element.android.features.messages.api.pinned.PinnedEventsTimelineProvider
-import io.element.android.features.messages.test.pinned.FakePinnedEventsTimelineProvider
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
 import io.element.android.features.space.api.SpaceEntryPoint
+import io.element.android.libraries.architecture.AssistedNodeFactory
 import io.element.android.libraries.architecture.childNode
+import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.JoinedRoom
-import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
-import io.element.android.libraries.matrix.test.timeline.FakeTimelineProvider
-import io.element.android.services.analytics.api.watchers.AnalyticsSendMessageWatcher
 import io.element.android.services.analytics.test.FakeAnalyticsService
-import io.element.android.services.analytics.test.watchers.FakeAnalyticsSendMessageWatcher
 import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.appnavstate.test.FakeActiveRoomsHolder
 import io.element.android.services.appnavstate.test.FakeAppNavigationStateService
@@ -50,6 +46,7 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import kotlin.reflect.KClass
 
 class JoinedRoomLoadedFlowNodeTest : RobolectricTest() {
     @get:Rule
@@ -73,23 +70,6 @@ class JoinedRoomLoadedFlowNodeTest : RobolectricTest() {
             this.callback = callback
             return node(buildContext) {}.also {
                 nodeId = it.id
-            }
-        }
-    }
-
-    private class FakeRoomGraphFactory(
-        private val timelineProvider: FakeTimelineProvider = FakeTimelineProvider(),
-        private val pinnedEventsTimelineProvider: FakePinnedEventsTimelineProvider = FakePinnedEventsTimelineProvider(),
-        private val analyticsSendMessageWatcher: FakeAnalyticsSendMessageWatcher = FakeAnalyticsSendMessageWatcher(),
-    ) : RoomGraphFactory {
-        override fun create(room: JoinedRoom): Any {
-            return object : TimelineBindings {
-                override val timelineProvider: TimelineProvider
-                    get() = this@FakeRoomGraphFactory.timelineProvider
-                override val pinnedEventsTimelineProvider: PinnedEventsTimelineProvider
-                    get() = this@FakeRoomGraphFactory.pinnedEventsTimelineProvider
-                override val analyticsSendMessageWatcher: AnalyticsSendMessageWatcher
-                    get() = this@FakeRoomGraphFactory.analyticsSendMessageWatcher
             }
         }
     }
@@ -137,10 +117,26 @@ class JoinedRoomLoadedFlowNodeTest : RobolectricTest() {
         forwardEntryPoint = forwardEntryPoint,
         appNavigationStateService = FakeAppNavigationStateService(),
         sessionCoroutineScope = backgroundScope,
-        roomGraphFactory = FakeRoomGraphFactory(),
         matrixClient = matrixClient,
         activeRoomsHolder = activeRoomsHolder,
         analyticsService = FakeAnalyticsService(),
+        sessionGraph = object : SessionGraph, RoomGraph.Factory {
+            override fun nodeFactories(): Map<KClass<out Node>, AssistedNodeFactory<*>> {
+                return emptyMap()
+            }
+
+            override fun create(joinedRoom: JoinedRoom): RoomGraph {
+                return object : RoomGraph {
+                    override fun baseRoom(joinedRoom: JoinedRoom): BaseRoom {
+                        return joinedRoom
+                    }
+
+                    override fun nodeFactories(): Map<KClass<out Node>, AssistedNodeFactory<*>> {
+                        return emptyMap()
+                    }
+                }
+            }
+        },
     )
 
     @Test

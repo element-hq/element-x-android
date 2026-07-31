@@ -9,13 +9,20 @@
 package io.element.android.features.rolesandpermissions.impl.roles
 
 import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
 import com.google.common.truth.Truth.assertThat
+import io.element.android.appnav.di.RoomGraph
+import io.element.android.appnav.di.SessionGraph
 import io.element.android.features.rolesandpermissions.api.ChangeRoomMemberRolesListType
+import io.element.android.libraries.architecture.AssistedNodeFactory
+import io.element.android.libraries.matrix.api.room.BaseRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.tests.testutils.node.TestParentNode
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import kotlin.reflect.KClass
 
 class DefaultChangeRoomMemberRolesEntyPointTest : RobolectricTest() {
     @Test
@@ -25,7 +32,23 @@ class DefaultChangeRoomMemberRolesEntyPointTest : RobolectricTest() {
             ChangeRoomMemberRolesRootNode(
                 buildContext = buildContext,
                 plugins = plugins,
-                roomGraphFactory = { },
+                sessionGraph = object : SessionGraph, RoomGraph.Factory {
+                    override fun nodeFactories(): Map<KClass<out Node>, AssistedNodeFactory<*>> {
+                        val graph = this
+                        val assistedNodeFactory = AssistedNodeFactory { buildContext, plugins ->
+                            ChangeRoomMemberRolesRootNode(buildContext, plugins, graph)
+                        }
+                        return mapOf(ChangeRoomMemberRolesRootNode::class to assistedNodeFactory)
+                    }
+
+                    override fun create(joinedRoom: JoinedRoom): RoomGraph = object : RoomGraph {
+                        override fun baseRoom(joinedRoom: JoinedRoom): BaseRoom = joinedRoom
+
+                        override fun nodeFactories(): Map<KClass<out Node>, AssistedNodeFactory<*>> {
+                            return emptyMap()
+                        }
+                    }
+                }
             )
         }
         val room = FakeJoinedRoom()

@@ -24,7 +24,8 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
-import io.element.android.appnav.di.RoomGraphFactory
+import io.element.android.appnav.di.RoomGraph
+import io.element.android.appnav.di.SessionGraph
 import io.element.android.appnav.di.TimelineBindings
 import io.element.android.appnav.room.RoomNavigationTarget
 import io.element.android.features.forward.api.ForwardEntryPoint
@@ -72,7 +73,7 @@ class JoinedRoomLoadedFlowNode(
     private val matrixClient: MatrixClient,
     private val activeRoomsHolder: ActiveRoomsHolder,
     private val analyticsService: AnalyticsService,
-    roomGraphFactory: RoomGraphFactory,
+    sessionGraph: SessionGraph,
 ) : BaseFlowNode<JoinedRoomLoadedFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = initialElement(plugins),
@@ -96,7 +97,7 @@ class JoinedRoomLoadedFlowNode(
 
     private val inputs: Inputs = inputs()
     private val callback: Callback = callback()
-    override val graph = roomGraphFactory.create(inputs.room)
+    override val graph = (sessionGraph as RoomGraph.Factory).create(inputs.room)
 
     private val sendMessageWatcher = (graph as? TimelineBindings)?.analyticsSendMessageWatcher
 
