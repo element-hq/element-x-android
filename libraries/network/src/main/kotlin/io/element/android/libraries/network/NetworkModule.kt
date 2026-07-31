@@ -13,6 +13,7 @@ import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
+import io.element.android.libraries.matrix.api.GetUrlResolver
 import io.element.android.libraries.network.interceptors.DynamicHttpLoggingInterceptor
 import io.element.android.libraries.network.interceptors.FormattedJsonHttpLogger
 import io.element.android.libraries.network.interceptors.UserAgentInterceptor
@@ -46,4 +47,8 @@ object NetworkModule {
         val logger = FormattedJsonHttpLogger(HttpLoggingInterceptor.Level.BODY)
         return HttpLoggingInterceptor(logger)
     }
+
+    @Provides
+    @SingleIn(AppScope::class)
+    fun providesGetUrlResolver(okHttpClient: OkHttpClient): GetUrlResolver = AndroidGetUrlResolver(okHttpClient)
 }
