@@ -34,7 +34,10 @@ import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationSer
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.oauth.api.OAuthActionFlow
 import io.element.android.libraries.oauth.test.customtab.FakeOAuthActionFlow
+import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionAdvisor
+import io.element.android.libraries.permissions.test.FakeLocalNetworkPermissionAdvisor
+import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
@@ -318,9 +321,9 @@ fun createLoginModePresenter(
     authenticationService: MatrixAuthenticationService = FakeMatrixAuthenticationService(),
     webClientUrlForAuthenticationRetriever: WebClientUrlForAuthenticationRetriever = FakeWebClientUrlForAuthenticationRetriever(),
     localNetworkPermissionAdvisor: LocalNetworkPermissionAdvisor =
-        io.element.android.libraries.permissions.test.FakeLocalNetworkPermissionAdvisor(),
-    permissionsPresenterFactory: io.element.android.libraries.permissions.api.PermissionsPresenter.Factory =
-        io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory(),
+        FakeLocalNetworkPermissionAdvisor(),
+    permissionsPresenterFactory: PermissionsPresenter.Factory =
+        FakePermissionsPresenterFactory(),
 ): LoginModePresenter = LoginModePresenter(
     oAuthActionFlow = oAuthActionFlow,
     authenticationService = authenticationService,

@@ -13,6 +13,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.features.login.impl.screens.createaccount.AccountCreationNotSupported
+import io.element.android.libraries.wellknown.api.ElementWellKnownSource
 import io.element.android.libraries.wellknown.api.WellknownRetriever
 import timber.log.Timber
 
@@ -29,8 +30,12 @@ class DefaultWebClientUrlForAuthenticationRetriever(
             Timber.w("Temporary account creation flow is only supported on matrix.org")
             throw AccountCreationNotSupported()
         }
-        val wellknown = wellknownRetriever.getElementWellKnown(homeServerUrl).dataOrNull()
+        val wellknown = wellknownRetriever.getElementWellKnown(
+            host = homeServerUrl,
+            source = ElementWellKnownSource.WELLKNOWN_ENDPOINT
+        ).dataOrNull()
             ?: throw AccountCreationNotSupported()
+
         val registrationHelperUrl = wellknown.registrationHelperUrl
         return if (registrationHelperUrl != null) {
             registrationHelperUrl.toUri()

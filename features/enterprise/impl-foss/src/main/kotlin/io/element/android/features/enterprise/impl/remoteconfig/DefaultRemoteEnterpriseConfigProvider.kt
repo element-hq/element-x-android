@@ -7,15 +7,16 @@
 
 package io.element.android.features.enterprise.impl.remoteconfig
 
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.enterprise.api.remoteconfig.RemoteEnterpriseConfig
-import io.element.android.features.enterprise.api.remoteconfig.SessionRemoteEnterpriseConfigProvider
-import io.element.android.libraries.di.SessionScope
+import io.element.android.features.enterprise.api.remoteconfig.RemoteEnterpriseConfigProvider
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
 
-@ContributesBinding(SessionScope::class)
-class DefaultSessionRemoteEnterpriseConfigProvider : SessionRemoteEnterpriseConfigProvider {
-    override suspend fun get(): WellknownRetrieverResult<RemoteEnterpriseConfig> {
+@ContributesBinding(AppScope::class)
+class DefaultRemoteEnterpriseConfigProvider : RemoteEnterpriseConfigProvider {
+    override suspend fun get(sessionId: SessionId): WellknownRetrieverResult<RemoteEnterpriseConfig> {
         return WellknownRetrieverResult.NotFound
     }
 }

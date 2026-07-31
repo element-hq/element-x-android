@@ -130,9 +130,10 @@ class RustMatrixAuthenticationService(
                 }
 
                 currentClient = client
+
                 client.homeserverLoginDetails().map()
             }.onFailure {
-                clear()
+                clear(destroyClient = true)
             }.mapFailure { failure ->
                 Timber.e(failure, "Failed to set homeserver to $homeserver")
                 failure.mapAuthenticationException()
@@ -165,7 +166,7 @@ class RustMatrixAuthenticationService(
                 sessionStore.addSession(sessionData)
 
                 // Clean up the strong reference held here since it's no longer necessary
-                currentClient = null
+                clear(destroyClient = false)
 
                 SessionId(sessionData.userId)
             }.mapFailure { failure ->
@@ -245,7 +246,7 @@ class RustMatrixAuthenticationService(
                 sessionStore.addSession(sessionData)
 
                 // Clean up the strong reference held here since it's no longer necessary
-                currentClient = null
+                clear(destroyClient = false)
 
                 SessionId(sessionData.userId)
             }
@@ -332,7 +333,7 @@ class RustMatrixAuthenticationService(
                 sessionStore.addSession(sessionData)
 
                 // Clean up the strong reference held here since it's no longer necessary
-                currentClient = null
+                clear(destroyClient = false)
 
                 SessionId(sessionData.userId)
             }.mapFailure { failure ->
@@ -395,7 +396,7 @@ class RustMatrixAuthenticationService(
                 sessionStore.addSession(sessionData)
 
                 // Clean up the strong reference held here since it's no longer necessary
-                currentClient = null
+                clear(destroyClient = false)
 
                 SessionId(sessionData.userId)
             }.mapFailure {
@@ -459,8 +460,10 @@ class RustMatrixAuthenticationService(
             .build()
     }
 
-    private fun clear() {
-        currentClient?.close()
+    private fun clear(destroyClient: Boolean) {
+        if (destroyClient) {
+            currentClient?.close()
+        }
         currentClient = null
     }
 

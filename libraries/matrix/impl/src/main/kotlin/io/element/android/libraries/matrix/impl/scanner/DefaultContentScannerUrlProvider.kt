@@ -9,6 +9,7 @@ package io.element.android.libraries.matrix.impl.scanner
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.scanner.ContentScannerUrlProvider
 
 /**
@@ -16,5 +17,5 @@ import io.element.android.libraries.matrix.api.scanner.ContentScannerUrlProvider
  */
 @ContributesBinding(AppScope::class)
 class DefaultContentScannerUrlProvider : ContentScannerUrlProvider {
-    override suspend fun getContentScannerUrl(homeserver: String): Result<String?> = Result.success(null)
+    override suspend fun getContentScannerUrl(sessionId: SessionId): Result<String?> = Result.success(null)
 }

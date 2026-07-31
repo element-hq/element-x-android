@@ -157,7 +157,7 @@ class DefaultAccountProviderAccessControlTest {
             defaultHomeserverListResult = { allowedAccountProviders },
         ),
         wellknownRetriever = FakeWellknownRetriever(
-            getElementWellKnownResult = {
+            getElementWellKnownResult = { _, _ ->
                 if (elementWellKnown == null) {
                     WellknownRetrieverResult.NotFound
                 } else {
