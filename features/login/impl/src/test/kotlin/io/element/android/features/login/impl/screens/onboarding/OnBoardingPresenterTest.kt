@@ -20,6 +20,7 @@ import io.element.android.features.login.impl.login.LoginModePresenter
 import io.element.android.features.login.impl.web.FakeWebClientUrlForAuthenticationRetriever
 import io.element.android.features.login.impl.web.WebClientUrlForAuthenticationRetriever
 import io.element.android.features.wellknown.test.FakeWellknownRetriever
+import io.element.android.features.wellknown.test.FakeWellknownRetrieverFactory
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
@@ -30,6 +31,7 @@ import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL_2
 import io.element.android.libraries.matrix.test.A_LOGIN_HINT
+import io.element.android.libraries.matrix.test.FakeTemporaryMatrixClientFactory
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.oauth.api.OAuthActionFlow
@@ -307,7 +309,8 @@ private fun createPresenter(
     enterpriseService = enterpriseService,
     defaultAccountProviderAccessControl = DefaultAccountProviderAccessControl(
         enterpriseService = enterpriseService,
-        wellknownRetriever = wellknownRetriever,
+        wellknownRetrieverFactory = FakeWellknownRetrieverFactory(wellknownRetriever = wellknownRetriever),
+        temporaryMatrixClientFactory = FakeTemporaryMatrixClientFactory(),
     ),
     rageshakeFeatureAvailability = rageshakeFeatureAvailability,
     loginModePresenter = loginModePresenter,

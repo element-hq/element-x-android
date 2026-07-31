@@ -17,10 +17,12 @@ import io.element.android.features.login.impl.accountprovider.AccountProviderDat
 import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.features.login.impl.localnetwork.LocalNetworkPermissionGate
 import io.element.android.features.wellknown.test.FakeWellknownRetriever
+import io.element.android.features.wellknown.test.FakeWellknownRetrieverFactory
 import io.element.android.features.wellknown.test.anElementWellKnown
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
+import io.element.android.libraries.matrix.test.FakeTemporaryMatrixClientFactory
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.auth.aMatrixHomeServerDetails
 import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialog
@@ -265,7 +267,8 @@ class ChangeServerPresenterTest {
         accountProviderDataSource = accountProviderDataSource,
         defaultAccountProviderAccessControl = DefaultAccountProviderAccessControl(
             enterpriseService = enterpriseService,
-            wellknownRetriever = wellknownRetriever,
+            wellknownRetrieverFactory = FakeWellknownRetrieverFactory(wellknownRetriever = wellknownRetriever),
+            temporaryMatrixClientFactory = FakeTemporaryMatrixClientFactory(),
         ),
         localNetworkPermissionGate = LocalNetworkPermissionGate(
             advisor = localNetworkPermissionAdvisor,
