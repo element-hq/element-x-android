@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.preferences.api.store
 
+import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.coroutines.flow.Flow
 
 interface SessionPreferencesStore {
@@ -34,6 +35,25 @@ interface SessionPreferencesStore {
 
     suspend fun setVideoCompressionPreset(preset: VideoCompressionPreset)
     fun getVideoCompressionPreset(): Flow<VideoCompressionPreset>
+
+    /**
+     * Records "now" as the last time [roomId]'s auto-created per-room notification channel
+     * handled a notification. Used to retire long-inactive channels.
+     */
+    suspend fun recordRoomChannelNotified(roomId: RoomId)
+
+    /** Clears [roomId]'s recorded channel last-notified timestamp, if any. */
+    suspend fun clearRoomChannelLastNotified(roomId: RoomId)
+
+    /**
+     * Every recorded channel last-notified timestamp, keyed by the same room-id hash embedded in
+     * that room's channel id. Channel ids only carry a one-way hash of the room id, not the id
+     * itself, so a caller enumerating system channels can only look this up by that hash.
+     */
+    suspend fun getRoomChannelLastNotifiedByHash(): Map<String, Long>
+
+    /** Clears a channel last-notified timestamp by the room-id hash embedded in its channel id. */
+    suspend fun clearRoomChannelLastNotifiedByHash(roomHash: String)
 
     suspend fun clear()
 }

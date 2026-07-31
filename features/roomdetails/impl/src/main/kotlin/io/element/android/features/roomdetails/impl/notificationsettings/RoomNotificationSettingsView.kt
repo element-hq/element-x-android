@@ -31,7 +31,9 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.buildAnnotatedStringWithStyledPart
+import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Scaffold
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -40,6 +42,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun RoomNotificationSettingsView(
     state: RoomNotificationSettingsState,
     onShowGlobalNotifications: () -> Unit,
+    onShowAndroidRoomNotificationSettings: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -47,6 +50,7 @@ fun RoomNotificationSettingsView(
         UserDefinedRoomNotificationSettingsView(
             state = state,
             modifier = modifier,
+            onShowAndroidRoomNotificationSettings = onShowAndroidRoomNotificationSettings,
             onBackClick = onBackClick,
         )
     } else {
@@ -54,6 +58,7 @@ fun RoomNotificationSettingsView(
             state = state,
             modifier = modifier,
             onShowGlobalNotifications = onShowGlobalNotifications,
+            onShowAndroidRoomNotificationSettings = onShowAndroidRoomNotificationSettings,
             onBackClick = onBackClick,
         )
     }
@@ -63,6 +68,7 @@ fun RoomNotificationSettingsView(
 private fun RoomSpecificNotificationSettingsView(
     state: RoomNotificationSettingsState,
     onShowGlobalNotifications: () -> Unit,
+    onShowAndroidRoomNotificationSettings: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -144,6 +150,10 @@ private fun RoomSpecificNotificationSettingsView(
                 }
             }
 
+            AndroidRoomNotificationSettingsItem(
+                onClick = onShowAndroidRoomNotificationSettings,
+            )
+
             AsyncActionView(
                 async = state.setNotificationSettingAction,
                 onSuccess = {},
@@ -180,6 +190,18 @@ internal fun RoomNotificationSettingsViewPreview(
     RoomNotificationSettingsView(
         state = state,
         onShowGlobalNotifications = {},
+        onShowAndroidRoomNotificationSettings = {},
         onBackClick = {},
+    )
+}
+
+@Composable
+internal fun AndroidRoomNotificationSettingsItem(
+    onClick: () -> Unit,
+) {
+    ListItem(
+        headlineContent = { Text(stringResource(R.string.screen_room_notification_settings_android_settings_title)) },
+        supportingContent = { Text(stringResource(R.string.screen_room_notification_settings_android_settings_subtitle)) },
+        onClick = onClick,
     )
 }

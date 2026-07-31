@@ -8,8 +8,11 @@
 
 package io.element.android.features.roomdetails.impl.notificationsettings
 
+import android.content.ActivityNotFoundException
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
@@ -18,11 +21,16 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.annotations.ContributesNode
+import io.element.android.libraries.androidutils.system.toast
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.di.annotations.ApplicationContext
+import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.push.api.notifications.RoomNotificationSettingsIntentProvider
 import io.element.android.services.analytics.api.AnalyticsService
+import kotlinx.coroutines.launch
 
 @ContributesNode(RoomScope::class)
 @AssistedInject
@@ -30,6 +38,9 @@ class RoomNotificationSettingsNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: RoomNotificationSettingsPresenter.Factory,
+    @ApplicationContext private val context: Context,
+    private val room: JoinedRoom,
+    private val roomNotificationSettingsIntentProvider: RoomNotificationSettingsIntentProvider,
     private val analyticsService: AnalyticsService,
 ) : Node(buildContext, plugins = plugins) {
     data class RoomNotificationSettingInput(
@@ -60,7 +71,27 @@ class RoomNotificationSettingsNode(
             state = state,
             modifier = modifier,
             onShowGlobalNotifications = callback::navigateToGlobalNotificationSettings,
+            onShowAndroidRoomNotificationSettings = ::openAndroidRoomNotificationSettings,
             onBackClick = ::navigateUp,
         )
+    }
+
+    private fun openAndroidRoomNotificationSettings() {
+        lifecycleScope.launch {
+            val roomInfo = room.info()
+            val roomDisplayName = roomInfo.name?.takeIf { it.isNotBlank() } ?: room.roomId.value
+            val intent = roomNotificationSettingsIntentProvider.getIntent(
+                sessionId = room.sessionId,
+                roomId = room.roomId,
+                roomDisplayName = roomDisplayName,
+                isDm = room.isDm(),
+                roomAvatarUrl = roomInfo.avatarUrl,
+            )
+            try {
+                context.startActivity(intent)
+            } catch (_: ActivityNotFoundException) {
+                context.toast(io.element.android.libraries.androidutils.R.string.error_no_compatible_app_found)
+            }
+        }
     }
 }

@@ -19,6 +19,7 @@ import android.os.Build
 import android.provider.Settings
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.core.app.NotificationChannelCompat
+import androidx.core.app.NotificationChannelGroupCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.net.toUri
 import dev.zacsweers.metro.AppScope
@@ -47,6 +48,12 @@ internal const val SILENT_NOTIFICATION_CHANNEL_ID = "DEFAULT_SILENT_NOTIFICATION
 internal const val NOISY_NOTIFICATION_CHANNEL_ID_BASE = "DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID_V2"
 internal const val CALL_NOTIFICATION_CHANNEL_ID = "CALL_NOTIFICATION_CHANNEL_ID_V3"
 internal const val RINGING_CALL_NOTIFICATION_CHANNEL_ID_BASE = "RINGING_CALL_NOTIFICATION_CHANNEL_ID"
+
+/* ==========================================================================================
+ * IDs for channel groups
+ * ========================================================================================== */
+internal const val PRIVATE_CHATS_CHANNEL_GROUP_ID = "private_chats"
+internal const val ROOMS_CHANNEL_GROUP_ID = "rooms"
 
 private fun versionedChannelId(base: String, version: Int): String =
     if (version <= 0) base else "${base}_v$version"
@@ -110,12 +117,37 @@ class DefaultNotificationChannels(
     }
 
     /**
+     * Creates the 2 channel groups Settings organizes per-room conversation channels under:
+     * "Private chats" (DM rooms) and "Rooms" (everything else Matrix-side). Deliberately not
+     * called "Conversations", to avoid confusion with Android's own Conversation / Priority
+     * Conversation feature. The shared silent/noisy/call channels are left ungrouped, same as
+     * every other non-conversation channel in the app: Android already buckets ungrouped
+     * channels under its own generic "Other" heading, and they serve both DM and non-DM rooms so
+     * they can't be filed under either group. Idempotent: creating a group that already exists is
+     * a no-op.
+     */
+    private fun ensureChannelGroups() {
+        notificationManager.createNotificationChannelGroupsCompat(
+            listOf(
+                NotificationChannelGroupCompat.Builder(PRIVATE_CHATS_CHANNEL_GROUP_ID)
+                    .setName(stringProvider.getString(R.string.notification_channel_group_private_chats).ifEmpty { "Private chats" })
+                    .build(),
+                NotificationChannelGroupCompat.Builder(ROOMS_CHANNEL_GROUP_ID)
+                    .setName(stringProvider.getString(R.string.notification_channel_group_rooms).ifEmpty { "Rooms" })
+                    .build(),
+            )
+        )
+    }
+
+    /**
      * Create notification channels.
      */
     private fun createNotificationChannels() {
         if (!supportNotificationChannels()) {
             return
         }
+
+        ensureChannelGroups()
 
         val accentColor = NotificationConfig.NOTIFICATION_ACCENT_COLOR
 

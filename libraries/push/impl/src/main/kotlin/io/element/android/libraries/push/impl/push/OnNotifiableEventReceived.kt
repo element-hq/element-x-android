@@ -11,8 +11,10 @@ package io.element.android.libraries.push.impl.push
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.di.annotations.AppCoroutineScope
+import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
 import io.element.android.libraries.push.impl.notifications.DefaultNotificationDrawerManager
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
+import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableRingingCallEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -24,12 +26,37 @@ interface OnNotifiableEventReceived {
 @ContributesBinding(AppScope::class)
 class DefaultOnNotifiableEventReceived(
     private val defaultNotificationDrawerManager: DefaultNotificationDrawerManager,
+    private val notificationConversationService: NotificationConversationService,
     @AppCoroutineScope
     private val coroutineScope: CoroutineScope,
 ) : OnNotifiableEventReceived {
     override fun onNotifiableEventsReceived(notifiableEvents: List<NotifiableEvent>) {
         coroutineScope.launch {
+            notificationConversationService.pushShortcutsForIncomingMessages(notifiableEvents)
             defaultNotificationDrawerManager.onNotifiableEventsReceived(notifiableEvents.filter { it !is NotifiableRingingCallEvent })
         }
     }
+}
+
+/**
+ * Otherwise, a room's conversation shortcut would only ever be refreshed from the message
+ * composer (see [NotificationConversationService.onMessageSent]), so a room you've only ever
+ * received messages in never gets one - and without one, its per-room notification channel has no
+ * icon/avatar to show in system Settings until you reply.
+ */
+internal suspend fun NotificationConversationService.pushShortcutsForIncomingMessages(notifiableEvents: List<NotifiableEvent>) {
+    notifiableEvents
+        .asSequence()
+        .filterIsInstance<NotifiableMessageEvent>()
+        .filter { !it.outGoingMessage && it.threadId == null }
+        .distinctBy { it.sessionId to it.roomId }
+        .forEach { event ->
+            onMessageReceived(
+                sessionId = event.sessionId,
+                roomId = event.roomId,
+                roomName = event.roomName ?: event.roomId.value,
+                roomIsDirect = event.roomIsDm,
+                roomAvatarUrl = event.roomAvatarPath,
+            )
+        }
 }

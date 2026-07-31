@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_room_notification_settings_android_settings_subtitle">Change sound, vibration, priority and lock screen behaviour for this room in Android settings.</string>
+    <string name="screen_room_notification_settings_android_settings_title">Android notification settings</string>
+</resources>
