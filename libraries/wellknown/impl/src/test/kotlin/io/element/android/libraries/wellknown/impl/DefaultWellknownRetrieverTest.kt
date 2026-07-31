@@ -14,275 +14,93 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.wellknown.test.FakeElementWellknownStore
 import io.element.android.features.wellknown.test.anElementWellKnown
-import io.element.android.libraries.androidutils.json.DefaultJsonProvider
-import io.element.android.libraries.androidutils.json.JsonProvider
-import io.element.android.libraries.network.RetrofitFactory
-import io.element.android.libraries.wellknown.api.CustomRecoveryPassphrase
+import io.element.android.libraries.matrix.api.GetUrlResolver
+import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.wellknown.api.ElementWellKnown
+import io.element.android.libraries.wellknown.api.ElementWellKnownParser
+import io.element.android.libraries.wellknown.api.ElementWellKnownSource
 import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
 import io.element.android.tests.testutils.lambda.lambdaRecorder
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
+import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
-import okhttp3.Call
-import okhttp3.Request
-import okhttp3.Response
-import okhttp3.ResponseBody.Companion.toResponseBody
-import okio.IOException
 import org.junit.Test
-import java.net.PortUnreachableException
 
 class DefaultWellknownRetrieverTest {
     @Test
-    fun `get empty element wellknown`() = runTest {
-        val mockCall = mockCall(defaultResponse(body = "{}"))
+    fun `get element wellknown calls resolver and parser`() = runTest {
+        val parser = lambdaRecorder<String, Result<ElementWellKnown>> { Result.success(anElementWellKnown()) }
+        val resolver = SpyGetUrlResolver { Result.success(WELLKNOWN_CONTENT.toByteArray()) }
         val sut = createDefaultWellknownRetriever(
-            callFactory = { mockCall },
+            elementWellKnownParser = parser,
+            urlResolver = resolver,
         )
-        assertThat(sut.getElementWellKnown(WELLKNOWN_URL)).isEqualTo(
-            WellknownRetrieverResult.Success(
-                ElementWellKnown(
-                    registrationHelperUrl = null,
-                    enforceElementPro = null,
-                    rageshakeUrl = null,
-                    brandColor = null,
-                    notificationSound = null,
-                    identityProviderAppScheme = null,
-                    customRecoveryPassphrase = null,
-                    contentScannerUrl = null,
-                    forceDisableE2EE = null,
-                )
-            )
-        )
-        verify(exactly = 1) { mockCall.enqueue(any()) }
+
+        sut.getElementWellKnown(WELLKNOWN_URL, ElementWellKnownSource.WELLKNOWN_ENDPOINT)
+
+        resolver.assertions().isCalledOnce().with(value(WELLKNOWN_URL))
+        parser.assertions().isCalledOnce().with(value(WELLKNOWN_CONTENT))
     }
 
     @Test
-    fun `get element wellknown with full content`() = runTest {
+    fun `get element wellknown parser error`() = runTest {
         val sut = createDefaultWellknownRetriever(
-            callFactory = { mockCall(defaultResponse()) }
+            elementWellKnownParser = { Result.failure(IllegalStateException("Invalid JSON")) },
         )
-        assertThat(sut.getElementWellKnown(WELLKNOWN_URL)).isEqualTo(
-            WellknownRetrieverResult.Success(
-                ElementWellKnown(
-                    registrationHelperUrl = "a_registration_url",
-                    enforceElementPro = true,
-                    rageshakeUrl = "a_rageshake_url",
-                    brandColor = "#FF0000",
-                    notificationSound = "a_notification_sound.flac",
-                    identityProviderAppScheme = "an_app_scheme",
-                    customRecoveryPassphrase = null,
-                    contentScannerUrl = "https://content-scanner.example.com",
-                    forceDisableE2EE = false,
-                )
-            )
-        )
-    }
-
-    @Test
-    fun `get element wellknown with unknown key`() = runTest {
-        val sut = createDefaultWellknownRetriever(
-            callFactory = {
-                mockCall(defaultResponse(body = """{
-                    "registration_helper_url": "a_registration_url",
-                    "enforce_element_pro": true,
-                    "rageshake_url": "a_rageshake_url",
-                    // Note the trailing comma, and the comment!
-                    "other": true,
-                }""".trimIndent()))
-            }
-        )
-        assertThat(sut.getElementWellKnown(WELLKNOWN_URL)).isEqualTo(
-            WellknownRetrieverResult.Success(
-                ElementWellKnown(
-                    registrationHelperUrl = "a_registration_url",
-                    enforceElementPro = true,
-                    rageshakeUrl = "a_rageshake_url",
-                    brandColor = null,
-                    notificationSound = null,
-                    identityProviderAppScheme = null,
-                    contentScannerUrl = null,
-                    customRecoveryPassphrase = null,
-                    forceDisableE2EE = null,
-                )
-            )
-        )
-    }
-
-    @Test
-    fun `get element wellknown with custom recovery passphrase settings`() = runTest {
-        val sut = createDefaultWellknownRetriever(
-            callFactory = {
-                mockCall(defaultResponse(body = """{
-                    "custom_recovery_passphrase": {
-                        "min_character_count": 8
-                    }
-                }""".trimIndent()))
-            }
-        )
-        assertThat(sut.getElementWellKnown(WELLKNOWN_URL)).isEqualTo(
-            WellknownRetrieverResult.Success(
-                anElementWellKnown(
-                    customRecoveryPassphrase = CustomRecoveryPassphrase(minCharacterCount = 8)
-                )
-            )
-        )
-    }
-
-    @Test
-    fun `get element wellknown with custom recovery passphrase settings missing min character count floors to 1`() = runTest {
-        val sut = createDefaultWellknownRetriever(
-            callFactory = {
-                mockCall(defaultResponse(body = """{
-                    "custom_recovery_passphrase": {}
-                }""".trimIndent()))
-            }
-        )
-        assertThat(sut.getElementWellKnown(WELLKNOWN_URL)).isEqualTo(
-            WellknownRetrieverResult.Success(
-                anElementWellKnown(
-                    customRecoveryPassphrase = CustomRecoveryPassphrase(minCharacterCount = 1)
-                )
-            )
-        )
-    }
-
-    @Test
-    fun `get element wellknown with zero min character count floors to 1`() = runTest {
-        val sut = createDefaultWellknownRetriever(
-            callFactory = {
-                mockCall(
-                    defaultResponse(
-                        body = """{
-                            "custom_recovery_passphrase": {
-                                "min_character_count": 0
-                            }
-                        }""".trimIndent()
-                    )
-                )
-            }
-        )
-        assertThat(sut.getElementWellKnown(WELLKNOWN_URL)).isEqualTo(
-            WellknownRetrieverResult.Success(
-                anElementWellKnown(
-                    customRecoveryPassphrase = CustomRecoveryPassphrase(minCharacterCount = 1)
-                )
-            )
-        )
-    }
-
-    @Test
-    fun `get element wellknown with negative min character count floors to 1`() = runTest {
-        val sut = createDefaultWellknownRetriever(
-            callFactory = {
-                mockCall(
-                    defaultResponse(
-                        body = """{
-                            "custom_recovery_passphrase": {
-                                "min_character_count": -5
-                            }
-                        }""".trimIndent()
-                    )
-                )
-            }
-        )
-        assertThat(sut.getElementWellKnown(WELLKNOWN_URL)).isEqualTo(
-            WellknownRetrieverResult.Success(
-                anElementWellKnown(
-                    customRecoveryPassphrase = CustomRecoveryPassphrase(minCharacterCount = 1)
-                )
-            )
-        )
-    }
-
-    @Test
-    fun `get element wellknown json error`() = runTest {
-        val sut = createDefaultWellknownRetriever(
-            callFactory = { mockCall(defaultResponse(status = 500)) }
-        )
-        assertThat(sut.getElementWellKnown(WELLKNOWN_URL)).isInstanceOf(WellknownRetrieverResult.Error::class.java)
+        assertThat(sut.getElementWellKnown(WELLKNOWN_URL, ElementWellKnownSource.WELLKNOWN_ENDPOINT))
+            .isInstanceOf(WellknownRetrieverResult.Error::class.java)
     }
 
     @Test
     fun `get element wellknown network error`() = runTest {
-        val sut = createDefaultWellknownRetriever(
-            callFactory = { mockCall(error = PortUnreachableException()) }
-        )
-        assertThat(sut.getElementWellKnown(WELLKNOWN_URL)).isInstanceOf(WellknownRetrieverResult.Error::class.java)
+        val resolver = SpyGetUrlResolver { Result.failure(IllegalStateException("Network error")) }
+        val sut = createDefaultWellknownRetriever(urlResolver = resolver)
+        assertThat(sut.getElementWellKnown(WELLKNOWN_URL, ElementWellKnownSource.WELLKNOWN_ENDPOINT))
+            .isInstanceOf(WellknownRetrieverResult.Error::class.java)
     }
 
     @Test
     fun `get element wellknown 404 http error counts as not found`() = runTest {
-        val sut = createDefaultWellknownRetriever(
-            callFactory = { mockCall(defaultResponse(status = 404)) }
-        )
-        assertThat(sut.getElementWellKnown(WELLKNOWN_URL)).isInstanceOf(WellknownRetrieverResult.NotFound::class.java)
-    }
-
-    @Test
-    fun `get element wellknown hitting cache containing invalid json`() = runTest {
-        val cacheStore = FakeElementWellknownStore(
-            initialData = mapOf(
-                WELLKNOWN_URL to WellknownRetrieverResult.Error(IllegalStateException("Invalid JSON"))
-            )
-        )
-        val sut = createDefaultWellknownRetriever(
-            callFactory = { mockCall(defaultResponse(body = "invalid json")) },
-            cacheStore = cacheStore,
-            jsonProvider = JsonProvider { error("Failed to parse JSON") }
-        )
-        assertThat(sut.getElementWellKnown(WELLKNOWN_URL)).isInstanceOf(WellknownRetrieverResult.Error::class.java)
-        // Ensure that the cache is deleted after the failure to parse it
-        assertThat(cacheStore.get(WELLKNOWN_URL)).isEqualTo(WellknownRetrieverResult.NotFound)
+        val resolver = SpyGetUrlResolver { Result.failure(ClientException.Generic("Http error: 404", null)) }
+        val sut = createDefaultWellknownRetriever(urlResolver = resolver)
+        assertThat(sut.getElementWellKnown(WELLKNOWN_URL, ElementWellKnownSource.WELLKNOWN_ENDPOINT))
+            .isInstanceOf(WellknownRetrieverResult.NotFound::class.java)
     }
 
     @Test
     fun `get element wellknown was overridden`() = runTest {
-        val getLambda = lambdaRecorder<Request, Call> { mockCall() }
         val wellKnown = anElementWellKnown()
 
+        val resolver = SpyGetUrlResolver { Result.success(WELLKNOWN_CONTENT.toByteArray()) }
+
         val sut = createDefaultWellknownRetriever(
-            callFactory = getLambda,
             enterpriseService = FakeEnterpriseService(
-                overrideWellKnownResult = { wellKnown }
-            )
+                overrideWellKnownResult = { wellKnown },
+            ),
+            urlResolver = resolver,
         )
 
         // The overridden value is returned
-        assertThat(sut.getElementWellKnown(WELLKNOWN_URL)).isEqualTo(
+        assertThat(sut.getElementWellKnown(WELLKNOWN_URL, ElementWellKnownSource.WELLKNOWN_ENDPOINT)).isEqualTo(
             WellknownRetrieverResult.Success(wellKnown)
         )
 
         // And the endpoint is never hit
-        getLambda.assertions().isNeverCalled()
+        resolver.assertions().isNeverCalled()
     }
 
-    private fun defaultResponse(
-        body: String = WELLKNOWN_CONTENT,
-        status: Int = 200,
-    ) = Response.Builder()
-        .code(status)
-        .message("OK")
-        .protocol(okhttp3.Protocol.HTTP_1_1)
-        .request(Request.Builder().url(WELLKNOWN_URL).build())
-        .body(body.toByteArray().toResponseBody())
-        .build()
-
-    private fun createDefaultWellknownRetriever(
-        callFactory: Call.Factory = Call.Factory { _: Request -> mockCall(defaultResponse()) },
+    private fun TestScope.createDefaultWellknownRetriever(
         cacheStore: FakeElementWellknownStore = FakeElementWellknownStore(),
-        jsonProvider: JsonProvider = DefaultJsonProvider(),
+        elementWellKnownParser: ElementWellKnownParser = { Result.success(expectedElementWellKnown) },
         enterpriseService: FakeEnterpriseService = FakeEnterpriseService(overrideWellKnownResult = { null }),
+        urlResolver: GetUrlResolver = SpyGetUrlResolver { Result.success(WELLKNOWN_CONTENT.toByteArray()) },
     ) = DefaultWellknownRetriever(
-        retrofitFactory = RetrofitFactory(
-            callFactory = { callFactory },
-            json = { jsonProvider }
-        ),
-        jsonProvider = jsonProvider,
         elementWellknownStoreFactory = { cacheStore },
         enterpriseService = enterpriseService,
+        elementWellKnownParser = elementWellKnownParser,
+        getUrlResolver = urlResolver,
+        coroutineScope = backgroundScope,
     )
 
     companion object {
@@ -297,24 +115,27 @@ class DefaultWellknownRetrieverTest {
                 "content_scanner_url": "https://content-scanner.example.com",
                 "force_disable_e2ee": false
             }"""
+
+        private val expectedElementWellKnown = ElementWellKnown(
+            registrationHelperUrl = "a_registration_url",
+            enforceElementPro = true,
+            rageshakeUrl = "a_rageshake_url",
+            brandColor = "#FF0000",
+            notificationSound = "a_notification_sound.flac",
+            identityProviderAppScheme = "an_app_scheme",
+            contentScannerUrl = "https://content-scanner.example.com",
+            customRecoveryPassphrase = null,
+            forceDisableE2EE = false,
+        )
     }
 }
 
-private fun mockCall(
-    response: Response? = null,
-    error: IOException? = null,
-): Call = mockk<Call> {
-    if (error != null) {
-        every { enqueue(any()) } answers {
-            val callback = firstArg<okhttp3.Callback>()
-            callback.onFailure(this@mockk, error)
-        }
-    } else if (response != null) {
-        every { enqueue(any()) } answers {
-            val callback = firstArg<okhttp3.Callback>()
-            callback.onResponse(this@mockk, response)
-        }
-    } else {
-        error("Either response or error must be provided")
+private class SpyGetUrlResolver(lambda: (String) -> Result<ByteArray>) : GetUrlResolver {
+    private val spy = lambdaRecorder<String, Result<ByteArray>> { lambda(it) }
+
+    override suspend fun getUrl(url: String): Result<ByteArray> {
+        return spy(url)
     }
+
+    fun assertions() = spy.assertions()
 }
