@@ -11,6 +11,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.enterprise.api.remoteconfig.RemoteEnterpriseConfig
 import io.element.android.features.enterprise.api.remoteconfig.RemoteEnterpriseConfigProvider
+import io.element.android.libraries.matrix.api.GetUrlResolver
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
 
@@ -18,5 +19,12 @@ import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
 class DefaultRemoteEnterpriseConfigProvider : RemoteEnterpriseConfigProvider {
     override suspend fun get(sessionId: SessionId): WellknownRetrieverResult<RemoteEnterpriseConfig> {
         return WellknownRetrieverResult.NotFound
+    }
+
+    @ContributesBinding(AppScope::class)
+    class Factory : RemoteEnterpriseConfigProvider.Factory {
+        override fun create(getUrlResolver: GetUrlResolver): RemoteEnterpriseConfigProvider {
+            return DefaultRemoteEnterpriseConfigProvider()
+        }
     }
 }

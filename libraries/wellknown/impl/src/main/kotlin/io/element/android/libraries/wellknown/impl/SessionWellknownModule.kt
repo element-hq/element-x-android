@@ -7,40 +7,17 @@
 
 package io.element.android.libraries.wellknown.impl
 
-import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.GetUrlResolver
 import io.element.android.libraries.wellknown.api.ElementWellKnownParser
 import io.element.android.libraries.wellknown.api.ElementWellknownStore
 import io.element.android.libraries.wellknown.api.WellknownRetriever
 import kotlinx.coroutines.CoroutineScope
-
-@BindingContainer
-@ContributesTo(AppScope::class)
-object WellknownModule {
-    @Provides
-    fun provideWellKnownRetriever(
-        elementWellknownStoreFactory: ElementWellknownStore.Factory,
-        enterpriseService: EnterpriseService,
-        elementWellKnownParser: ElementWellKnownParser,
-        getUrlResolver: GetUrlResolver,
-        @AppCoroutineScope coroutineScope: CoroutineScope,
-    ): WellknownRetriever {
-        return DefaultWellknownRetriever(
-            elementWellknownStoreFactory = elementWellknownStoreFactory,
-            enterpriseService = enterpriseService,
-            elementWellKnownParser = elementWellKnownParser,
-            getUrlResolver = getUrlResolver,
-            coroutineScope = coroutineScope
-        )
-    }
-}
 
 @BindingContainer
 @ContributesTo(SessionScope::class)

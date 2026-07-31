@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.matrix.api.scanner
 
+import io.element.android.libraries.matrix.api.GetUrlResolver
 import io.element.android.libraries.matrix.api.core.SessionId
 
 /**
@@ -17,4 +18,8 @@ fun interface ContentScannerUrlProvider {
      * Returns the URL of the content scanner service for the given [sessionId], or `null` if no content scanner is set up.
      */
     suspend fun getContentScannerUrl(sessionId: SessionId): Result<String?>
+
+    fun interface Factory {
+        fun create(getUrlResolver: GetUrlResolver): ContentScannerUrlProvider
+    }
 }

@@ -8,9 +8,15 @@
 
 package io.element.android.libraries.wellknown.impl
 
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.libraries.core.extensions.mapCatchingExceptions
 import io.element.android.libraries.core.uri.ensureProtocol
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.GetUrlResolver
 import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.wellknown.api.ElementWellKnown
@@ -24,13 +30,20 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.net.URL
 
+@AssistedInject
 class DefaultWellknownRetriever(
     private val elementWellknownStoreFactory: ElementWellknownStore.Factory,
     private val enterpriseService: EnterpriseService,
     private val elementWellKnownParser: ElementWellKnownParser,
-    private val getUrlResolver: GetUrlResolver,
-    private val coroutineScope: CoroutineScope,
+    @Assisted private val getUrlResolver: GetUrlResolver,
+    @AppCoroutineScope private val coroutineScope: CoroutineScope,
 ) : WellknownRetriever {
+    @ContributesBinding(AppScope::class)
+    @AssistedFactory
+    fun interface Factory : WellknownRetriever.Factory {
+        override fun create(getUrlResolver: GetUrlResolver): DefaultWellknownRetriever
+    }
+
     override suspend fun getElementWellKnown(
         host: String,
         source: ElementWellKnownSource
@@ -52,6 +65,7 @@ class DefaultWellknownRetriever(
         return when (val cacheData = store.get(checkedHost)) {
             is WellknownRetrieverResult.Success -> {
                 Timber.d("Using cached well-known for domain $checkedHost")
+                fetchElementWellKnown(checkedHost, source, store)
                 cacheData
             }
             is WellknownRetrieverResult.Outdated -> {

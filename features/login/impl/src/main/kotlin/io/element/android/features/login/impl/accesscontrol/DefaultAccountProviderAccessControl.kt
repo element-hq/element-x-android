@@ -13,13 +13,15 @@ import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.login.api.accesscontrol.AccountProviderAccessControl
 import io.element.android.features.login.impl.changeserver.AccountProviderAccessException
+import io.element.android.libraries.matrix.api.TemporaryMatrixClientFactory
 import io.element.android.libraries.wellknown.api.ElementWellKnownSource
 import io.element.android.libraries.wellknown.api.WellknownRetriever
 
 @ContributesBinding(AppScope::class)
 class DefaultAccountProviderAccessControl(
     private val enterpriseService: EnterpriseService,
-    private val wellknownRetriever: WellknownRetriever,
+    private val wellknownRetrieverFactory: WellknownRetriever.Factory,
+    private val temporaryMatrixClientFactory: TemporaryMatrixClientFactory,
 ) : AccountProviderAccessControl {
     override suspend fun isAllowedToConnectToAccountProvider(accountProviderUrl: String) = try {
         assertIsAllowedToConnectToAccountProvider(
@@ -38,15 +40,20 @@ class DefaultAccountProviderAccessControl(
     ) {
         if (enterpriseService.isEnterpriseBuild.not()) {
             // Ensure that Element Pro is not required for this account provider
-            val wellKnown = wellknownRetriever.getElementWellKnown(
-                host = accountProviderUrl,
-                source = ElementWellKnownSource.WELLKNOWN_ENDPOINT,
-            ).dataOrNull()
-            if (wellKnown?.enforceElementPro == true) {
-                throw AccountProviderAccessException.NeedElementProException(
-                    unauthorisedAccountProviderTitle = title,
-                    applicationId = ELEMENT_PRO_APPLICATION_ID,
-                )
+            val temporaryMatrixClient = temporaryMatrixClientFactory.createTemporaryMatrixClient(accountProviderUrl).getOrThrow()
+            temporaryMatrixClient.use {
+                val wellknownRetriever = wellknownRetrieverFactory.create(temporaryMatrixClient)
+                val wellKnown = wellknownRetriever.getElementWellKnown(
+                    host = accountProviderUrl,
+                    source = ElementWellKnownSource.WELLKNOWN_ENDPOINT,
+                ).dataOrNull()
+
+                if (wellKnown?.enforceElementPro == true) {
+                    throw AccountProviderAccessException.NeedElementProException(
+                        unauthorisedAccountProviderTitle = title,
+                        applicationId = ELEMENT_PRO_APPLICATION_ID,
+                    )
+                }
             }
         }
         if (enterpriseService.isAllowedToConnectToHomeserver(accountProviderUrl).not()) {

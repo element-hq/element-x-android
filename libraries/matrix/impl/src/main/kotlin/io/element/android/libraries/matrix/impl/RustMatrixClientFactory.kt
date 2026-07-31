@@ -70,7 +70,7 @@ class RustMatrixClientFactory(
     private val clientBuilderProvider: ClientBuilderProvider,
     private val sqliteStoreBuilderProvider: SqliteStoreBuilderProvider,
     private val workManagerScheduler: WorkManagerScheduler,
-    private val contentScannerUrlProvider: ContentScannerUrlProvider,
+    private val contentScannerUrlProviderFactory: ContentScannerUrlProvider.Factory,
 ) {
     private val sessionDelegate = RustClientSessionDelegate(
         sessionStore = sessionStore,
@@ -121,6 +121,7 @@ class RustMatrixClientFactory(
         // If a content scanner URL is available for the homeserver, create a RustContentScanner and set it on the client.
         // This allows the SDK to use the content scanner for automatic media scanning.
         // If no content scanner URL is available, the contentScanner will be null.
+        val contentScannerUrlProvider = contentScannerUrlProviderFactory.create(RustUnauthenticatedMatrixClient(client, null))
         val contentScanner = contentScannerUrlProvider.getContentScannerUrl(SessionId(client.userId()))
             .getOrNull()
             ?.let { contentScannerUrl ->
