@@ -38,6 +38,20 @@ interface AppPreferencesStore {
     suspend fun setTracingLogLevel(logLevel: LogLevel)
     fun getTracingLogLevelFlow(): Flow<LogLevel>
 
+    /**
+     * The list of account providers (homeserver URLs) the user has previously authenticated
+     * against, most recent first. Used to default the account provider and to power autocomplete
+     * suggestions during sign-in. Stored locally only; never synced across devices.
+     */
+    fun getHomeserverHistoryFlow(): Flow<List<String>>
+
+    /**
+     * Add [url] to the front of the account provider history (see [getHomeserverHistoryFlow]).
+     * The value is normalised (trimmed + lowercased); existing case-insensitive duplicates are
+     * moved to the front rather than duplicated, and the list is capped in size. No-op for blanks.
+     */
+    suspend fun addHomeserverToHistory(url: String)
+
     suspend fun setTracingLogPacks(targets: Set<TraceLogPack>)
     fun getTracingLogPacksFlow(): Flow<Set<TraceLogPack>>
 
