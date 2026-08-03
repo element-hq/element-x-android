@@ -13,6 +13,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import dev.zacsweers.metro.Inject
+import io.element.android.features.login.impl.accountprovider.SaveAccountProviderToHistory
 import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.features.login.impl.localnetwork.LocalNetworkPermissionGate
 import io.element.android.features.login.impl.screens.chooseaccountprovider.ChooseAccountProviderPresenter
@@ -41,6 +42,7 @@ class LoginModePresenter(
     private val authenticationService: MatrixAuthenticationService,
     private val webClientUrlForAuthenticationRetriever: WebClientUrlForAuthenticationRetriever,
     private val localNetworkPermissionGate: LocalNetworkPermissionGate,
+    private val saveAccountProviderToHistory: SaveAccountProviderToHistory,
 ) : Presenter<LoginModeState> {
     @Composable
     override fun present(): LoginModeState {
@@ -120,6 +122,7 @@ class LoginModePresenter(
                 .onSuccess { loginMode.value = AsyncData.Uninitialized }
                 .onFailure { loginMode.value = AsyncData.Failure(it) }
             is OAuthAction.Success -> authenticationService.loginWithOAuth(action.url)
+                .onSuccess { saveAccountProviderToHistory() }
                 .onFailure { loginMode.value = AsyncData.Failure(it) }
         }
         oAuthActionFlow.reset()

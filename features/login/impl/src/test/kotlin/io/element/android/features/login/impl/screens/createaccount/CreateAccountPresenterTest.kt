@@ -9,6 +9,10 @@
 package io.element.android.features.login.impl.screens.createaccount
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.appconfig.AuthenticationConfig
+import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
+import io.element.android.features.login.impl.accountprovider.SaveAccountProviderToHistory
+import io.element.android.features.login.impl.accountprovider.anAccountProviderDataSource
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
@@ -19,10 +23,13 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -95,6 +102,26 @@ class CreateAccountPresenterTest {
     }
 
     @Test
+    fun `present - successful account creation saves the account provider to history`() = runTest {
+        val appPreferencesStore = InMemoryAppPreferencesStore()
+        val presenter = createPresenter(
+            authenticationService = FakeMatrixAuthenticationService(
+                importCreatedSessionLambda = { Result.success(A_SESSION_ID) }
+            ),
+            messageParser = FakeMessageParser { anExternalSession() },
+            appPreferencesStore = appPreferencesStore,
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(CreateAccountEvents.OnMessageReceived("aMessage"))
+            assertThat(awaitItem().createAction.isLoading()).isTrue()
+            assertThat(awaitItem().createAction.dataOrNull()).isEqualTo(A_SESSION_ID)
+            assertThat(appPreferencesStore.getHomeserverHistoryFlow().first())
+                .containsExactly(AuthenticationConfig.MATRIX_ORG_URL)
+        }
+    }
+
+    @Test
     fun `present - receiving a message able to be parsed but error in importing change the state to error`() = runTest {
         val presenter = createPresenter(
             authenticationService = FakeMatrixAuthenticationService(
@@ -115,10 +142,13 @@ class CreateAccountPresenterTest {
         authenticationService: MatrixAuthenticationService = FakeMatrixAuthenticationService(),
         messageParser: MessageParser = FakeMessageParser(),
         buildMeta: BuildMeta = aBuildMeta(),
+        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
+        accountProviderDataSource: AccountProviderDataSource = anAccountProviderDataSource(),
     ) = CreateAccountPresenter(
         url = url,
         authenticationService = authenticationService,
         messageParser = messageParser,
         buildMeta = buildMeta,
+        saveAccountProviderToHistory = SaveAccountProviderToHistory(accountProviderDataSource, appPreferencesStore),
     )
 }

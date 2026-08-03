@@ -15,6 +15,7 @@ import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
+import io.element.android.features.login.impl.accountprovider.SaveAccountProviderToHistory
 import io.element.android.features.login.impl.accountprovider.anAccountProviderDataSource
 import io.element.android.features.login.impl.localnetwork.LocalNetworkPermissionGate
 import io.element.android.features.login.impl.login.LoginModePresenter
@@ -36,6 +37,7 @@ import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.oauth.api.OAuthActionFlow
 import io.element.android.libraries.oauth.test.customtab.FakeOAuthActionFlow
 import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionAdvisor
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
@@ -322,6 +324,8 @@ fun createLoginModePresenter(
         io.element.android.libraries.permissions.test.FakeLocalNetworkPermissionAdvisor(),
     permissionsPresenterFactory: io.element.android.libraries.permissions.api.PermissionsPresenter.Factory =
         io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory(),
+    saveAccountProviderToHistory: SaveAccountProviderToHistory =
+        SaveAccountProviderToHistory(anAccountProviderDataSource(), InMemoryAppPreferencesStore()),
 ): LoginModePresenter = LoginModePresenter(
     oAuthActionFlow = oAuthActionFlow,
     authenticationService = authenticationService,
@@ -330,4 +334,5 @@ fun createLoginModePresenter(
         advisor = localNetworkPermissionAdvisor,
         permissionsPresenterFactory = permissionsPresenterFactory,
     ),
+    saveAccountProviderToHistory = saveAccountProviderToHistory,
 )

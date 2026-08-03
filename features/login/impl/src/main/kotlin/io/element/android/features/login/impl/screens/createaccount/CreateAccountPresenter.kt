@@ -17,6 +17,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import io.element.android.features.login.impl.accountprovider.SaveAccountProviderToHistory
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.extensions.flatMap
@@ -33,6 +34,7 @@ class CreateAccountPresenter(
     private val authenticationService: MatrixAuthenticationService,
     private val messageParser: MessageParser,
     private val buildMeta: BuildMeta,
+    private val saveAccountProviderToHistory: SaveAccountProviderToHistory,
 ) : Presenter<CreateAccountState> {
     @AssistedFactory
     interface Factory {
@@ -74,6 +76,7 @@ class CreateAccountPresenter(
         }.flatMap { externalSession ->
             authenticationService.importCreatedSession(externalSession)
         }.onSuccess { sessionId ->
+            saveAccountProviderToHistory()
             loggedInState.value = AsyncAction.Success(sessionId)
         }.onFailure { failure ->
             loggedInState.value = AsyncAction.Failure(failure)
