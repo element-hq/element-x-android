@@ -14,6 +14,7 @@ import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
 import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
+import io.element.android.features.login.impl.accountprovider.anAccountProviderDataSource
 import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.features.login.impl.localnetwork.LocalNetworkPermissionGate
 import io.element.android.features.wellknown.test.FakeWellknownRetriever
@@ -259,7 +260,7 @@ class ChangeServerPresenterTest {
 
     private fun createPresenter(
         authenticationService: FakeMatrixAuthenticationService = FakeMatrixAuthenticationService(),
-        accountProviderDataSource: AccountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
+        accountProviderDataSource: AccountProviderDataSource = anAccountProviderDataSource(),
         enterpriseService: EnterpriseService = FakeEnterpriseService(),
         wellknownRetriever: WellknownRetriever = FakeWellknownRetriever(),
         localNetworkPermissionAdvisor: FakeLocalNetworkPermissionAdvisor = FakeLocalNetworkPermissionAdvisor(),

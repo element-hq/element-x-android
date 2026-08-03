@@ -10,8 +10,8 @@ package io.element.android.features.login.impl.screens.confirmaccountprovider
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.appconfig.AuthenticationConfig
-import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
+import io.element.android.features.login.impl.accountprovider.anAccountProviderDataSource
 import io.element.android.features.login.impl.login.LoginMode
 import io.element.android.features.login.impl.screens.createaccount.AccountCreationNotSupported
 import io.element.android.features.login.impl.screens.onboarding.createLoginModePresenter
@@ -378,7 +378,7 @@ class ConfirmAccountProviderPresenterTest {
 
     private fun createConfirmAccountProviderPresenter(
         params: ConfirmAccountProviderPresenter.Params = ConfirmAccountProviderPresenter.Params(isAccountCreation = false),
-        accountProviderDataSource: AccountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
+        accountProviderDataSource: AccountProviderDataSource = anAccountProviderDataSource(),
         matrixAuthenticationService: MatrixAuthenticationService = FakeMatrixAuthenticationService(),
         defaultOAuthActionFlow: OAuthActionFlow = FakeOAuthActionFlow(),
         webClientUrlForAuthenticationRetriever: WebClientUrlForAuthenticationRetriever = FakeWebClientUrlForAuthenticationRetriever(),

@@ -10,8 +10,8 @@ package io.element.android.features.login.impl.screens.loginpassword
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.appconfig.AuthenticationConfig
-import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
+import io.element.android.features.login.impl.accountprovider.anAccountProviderDataSource
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
@@ -157,7 +157,7 @@ class LoginPasswordPresenterTest {
     private fun createLoginPasswordPresenter(
         initialLogin: String = "",
         authenticationService: FakeMatrixAuthenticationService = FakeMatrixAuthenticationService(),
-        accountProviderDataSource: AccountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
+        accountProviderDataSource: AccountProviderDataSource = anAccountProviderDataSource(),
     ): LoginPasswordPresenter = LoginPasswordPresenter(
         initialLogin = initialLogin,
         authenticationService = authenticationService,

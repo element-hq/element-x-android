@@ -15,6 +15,7 @@ import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
+import io.element.android.features.login.impl.accountprovider.anAccountProviderDataSource
 import io.element.android.features.login.impl.localnetwork.LocalNetworkPermissionGate
 import io.element.android.features.login.impl.login.LoginModePresenter
 import io.element.android.features.login.impl.web.FakeWebClientUrlForAuthenticationRetriever
@@ -247,7 +248,7 @@ class OnBoardingPresenterTest {
                 Result.failure(AN_EXCEPTION)
             },
         )
-        val accountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService())
+        val accountProviderDataSource = anAccountProviderDataSource()
         val presenter = createPresenter(
             params = OnBoardingNode.Params(
                 accountProvider = A_HOMESERVER_URL,
@@ -297,7 +298,7 @@ private fun createPresenter(
     loginModePresenter: LoginModePresenter = createLoginModePresenter(),
     onBoardingLogoResIdProvider: OnBoardingLogoResIdProvider = OnBoardingLogoResIdProvider { null },
     sessionStore: SessionStore = InMemorySessionStore(),
-    accountProviderDataSource: AccountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
+    accountProviderDataSource: AccountProviderDataSource = anAccountProviderDataSource(),
 ) = OnBoardingPresenter(
     params = params,
     buildMeta = buildMeta,
