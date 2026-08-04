@@ -24,6 +24,9 @@ data class SecureBackupRootState(
     val snackbarMessage: SnackbarMessage?,
     val eventSink: (SecureBackupRootEvents) -> Unit,
 ) {
+    val shouldEnterRecoveryKeyWhenDisabled: Boolean
+        get() = recoveryState == RecoveryState.DISABLED && doesBackupExistOnServer.dataOrNull() == true
+
     val isKeyStorageEnabled: Boolean
         get() = when (backupState) {
             BackupState.UNKNOWN -> doesBackupExistOnServer.dataOrNull() == true

@@ -11,10 +11,31 @@ package io.element.android.features.securebackup.impl.root
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.encryption.BackupState
+import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import org.junit.Test
 
 class SecureBackupRootStateTest {
+    @Test
+    fun `shouldEnterRecoveryKeyWhenDisabled is true when recovery is disabled and a backup exists on the server`() {
+        assertThat(
+            aSecureBackupRootState(
+                recoveryState = RecoveryState.DISABLED,
+                doesBackupExistOnServer = AsyncData.Success(true),
+            ).shouldEnterRecoveryKeyWhenDisabled
+        ).isTrue()
+    }
+
+    @Test
+    fun `shouldEnterRecoveryKeyWhenDisabled is false when recovery is disabled and no backup exists on the server`() {
+        assertThat(
+            aSecureBackupRootState(
+                recoveryState = RecoveryState.DISABLED,
+                doesBackupExistOnServer = AsyncData.Success(false),
+            ).shouldEnterRecoveryKeyWhenDisabled
+        ).isFalse()
+    }
+
     @Test
     fun `isKeyStorageEnabled should be true for all these backup states`() {
         listOf(

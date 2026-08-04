@@ -139,12 +139,22 @@ fun SecureBackupRootView(
                 ListItem(
                     headlineContent = {
                         Text(
-                            text = stringResource(id = R.string.screen_chat_backup_recovery_action_setup),
+                            text = stringResource(
+                                id = if (state.shouldEnterRecoveryKeyWhenDisabled) {
+                                    R.string.screen_chat_backup_recovery_action_confirm
+                                } else {
+                                    R.string.screen_chat_backup_recovery_action_setup
+                                }
+                            ),
                         )
                     },
                     supportingContent = {
                         Text(
-                            text = stringResource(id = R.string.screen_chat_backup_recovery_action_setup_description, state.appName),
+                            text = if (state.shouldEnterRecoveryKeyWhenDisabled) {
+                                stringResource(id = R.string.screen_chat_backup_recovery_action_confirm_description)
+                            } else {
+                                stringResource(id = R.string.screen_chat_backup_recovery_action_setup_description, state.appName)
+                            },
                         )
                     },
                     trailingContent = ListItemContent.Badge,
@@ -152,7 +162,11 @@ fun SecureBackupRootView(
                     alwaysClickable = true,
                     onClick = {
                         if (state.isKeyStorageEnabled) {
-                            onSetupClick()
+                            if (state.shouldEnterRecoveryKeyWhenDisabled) {
+                                onConfirmRecoveryKeyClick()
+                            } else {
+                                onSetupClick()
+                            }
                         } else {
                             state.eventSink.invoke(SecureBackupRootEvents.DisplayKeyStorageDisabledError)
                         }
