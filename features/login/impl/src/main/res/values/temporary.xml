@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2026 Element Creations Ltd.
+  ~
+  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+  ~ Please see LICENSE files in the repository root for full details.
+  -->
+
+<resources>
+    <string name="screen_login_subtitle">"Connect is a secure messaging app for private communication."</string>
+    <string name="screen_change_account_provider_matrix_org_subtitle">"The default Connect server for secure, private messaging."</string>
+    <string name="screen_server_confirmation_message_login_matrix_dot_org">"Connect is a secure messaging app for private communication."</string>
+    <string name="screen_onboarding_welcome_title">"Welcome to Connect"</string>
+    <string name="screen_onboarding_welcome_subtitle">"Secure messaging, supercharged for speed and simplicity."</string>
+    <string name="screen_onboarding_welcome_message">"Welcome to Connect. Supercharged for speed and simplicity."</string>
+</resources>
