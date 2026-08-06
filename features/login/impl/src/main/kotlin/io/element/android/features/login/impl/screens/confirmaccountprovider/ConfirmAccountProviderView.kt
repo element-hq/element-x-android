@@ -8,29 +8,38 @@
 
 package io.element.android.features.login.impl.screens.confirmaccountprovider
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.login.impl.R
+import io.element.android.features.login.impl.changeserver.ChangeServerView
 import io.element.android.features.login.impl.login.LoginModeEvent
 import io.element.android.features.login.impl.login.LoginModeView
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.BigIcon
+import io.element.android.libraries.designsystem.components.form.textFieldState
+import io.element.android.libraries.designsystem.modifiers.onTabOrEnterKeyFocusNext
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.matrix.api.auth.OAuthDetails
 import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialogView
 import io.element.android.libraries.testtags.TestTags
@@ -44,14 +53,8 @@ fun ConfirmAccountProviderView(
     onNeedLoginPassword: () -> Unit,
     onLearnMoreClick: () -> Unit,
     onCreateAccountContinue: (url: String) -> Unit,
-    onChange: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val isLoading by remember(state.loginModeState.loginMode) {
-        derivedStateOf {
-            state.loginModeState.loginMode is AsyncData.Loading
-        }
-    }
     val eventSink = state.eventSink
 
     HeaderFooterPage(
@@ -62,54 +65,96 @@ fun ConfirmAccountProviderView(
                 iconStyle = BigIcon.Style.Default(CompoundIcons.UserProfileSolid()),
                 title = stringResource(
                     id = if (state.isAccountCreation) {
-                        R.string.screen_account_provider_signup_title
+                        CommonStrings.screen_select_server_title_register
                     } else {
-                        R.string.screen_account_provider_signin_title
-                    },
-                    state.accountProvider.title
+                        CommonStrings.screen_select_server_title_login
+                    }
                 ),
-                subTitle = stringResource(
-                    id = if (state.isAccountCreation) {
-                        R.string.screen_account_provider_signup_subtitle
-                    } else {
-                        R.string.screen_account_provider_signin_subtitle
-                    },
-                )
+                subTitle = null,
             )
         },
         footer = {
             ButtonColumnMolecule {
                 Button(
                     text = stringResource(id = CommonStrings.action_continue),
-                    showProgress = isLoading,
-                    onClick = { eventSink.invoke(ConfirmAccountProviderEvents.Continue) },
-                    enabled = state.submitEnabled || isLoading,
+                    showProgress = state.isLoading,
+                    onClick = { eventSink(ConfirmAccountProviderEvents.Continue) },
+                    enabled = state.submitEnabled && !state.isLoading,
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag(TestTags.loginContinue)
                 )
-                TextButton(
-                    text = stringResource(id = R.string.screen_account_provider_change),
-                    onClick = onChange,
-                    enabled = !isLoading,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag(TestTags.loginChangeServer)
-                )
             }
         }
     ) {
-        LoginModeView(
-            loginMode = state.loginModeState.loginMode,
-            onClearError = {
-                eventSink(ConfirmAccountProviderEvents.ClearError)
+        var input by textFieldState(stateValue = state.accountProviderInput)
+        val focusManager = LocalFocusManager.current
+        TextField(
+            value = input,
+            onValueChange = {
+                input = it
+                eventSink(ConfirmAccountProviderEvents.UserInputChanged(it))
             },
-            onLearnMoreClick = onLearnMoreClick,
-            onOAuthDetails = onOAuthDetails,
-            onNeedLoginPassword = onNeedLoginPassword,
-            onCreateAccountContinue = onCreateAccountContinue,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 40.dp)
+                .onTabOrEnterKeyFocusNext(focusManager)
+                .testTag(TestTags.changeServerServer),
+            label = stringResource(id = CommonStrings.screen_select_server_textfield_header),
+            supportingText = stringResource(
+                id = if (state.isAccountCreation) {
+                    CommonStrings.screen_select_server_textfield_footer_register
+                } else {
+                    CommonStrings.screen_select_server_textfield_footer_login
+                }
+            ),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Uri,
+                imeAction = ImeAction.Done,
+            ),
+            keyboardActions = KeyboardActions(onDone = {
+                eventSink(ConfirmAccountProviderEvents.Continue)
+            }),
+            singleLine = true,
+            trailingIcon = if (input.isNotEmpty()) {
+                {
+                    Box(
+                        Modifier.clickable(
+                            onClickLabel = stringResource(CommonStrings.action_clear),
+                            role = Role.Button,
+                        ) {
+                            input = ""
+                            eventSink(ConfirmAccountProviderEvents.UserInputChanged(""))
+                        }
+                    ) {
+                        Icon(
+                            imageVector = CompoundIcons.Close(),
+                            contentDescription = stringResource(CommonStrings.action_clear)
+                        )
+                    }
+                }
+            } else {
+                null
+            },
         )
     }
+
+    // Renders the account-provider validation errors, progress and permission dialogs.
+    // The successful validation itself is observed by the presenter, which then proceeds with the login flow.
+    ChangeServerView(
+        state = state.changeServerState,
+        onLearnMoreClick = onLearnMoreClick,
+        onSuccess = {},
+    )
+
+    LoginModeView(
+        loginMode = state.loginModeState.loginMode,
+        onClearError = { eventSink(ConfirmAccountProviderEvents.ClearError) },
+        onLearnMoreClick = onLearnMoreClick,
+        onOAuthDetails = onOAuthDetails,
+        onNeedLoginPassword = onNeedLoginPassword,
+        onCreateAccountContinue = onCreateAccountContinue,
+    )
 
     LocalNetworkPermissionDialogView(
         dialog = state.loginModeState.localNetworkPermissionDialog,
@@ -133,6 +178,5 @@ internal fun ConfirmAccountProviderViewPreview(
         onNeedLoginPassword = {},
         onCreateAccountContinue = {},
         onLearnMoreClick = {},
-        onChange = {},
     )
 }

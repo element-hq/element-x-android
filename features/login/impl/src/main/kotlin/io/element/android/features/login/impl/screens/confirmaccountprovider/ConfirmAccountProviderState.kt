@@ -8,17 +8,23 @@
 
 package io.element.android.features.login.impl.screens.confirmaccountprovider
 
-import io.element.android.features.login.impl.accountprovider.AccountProvider
+import io.element.android.features.login.impl.changeserver.ChangeServerState
 import io.element.android.features.login.impl.login.LoginModeState
 import io.element.android.libraries.architecture.AsyncData
 
 data class ConfirmAccountProviderState(
-    val accountProvider: AccountProvider,
+    val accountProviderInput: String,
     val isAccountCreation: Boolean,
     val loginModeState: LoginModeState,
+    val changeServerState: ChangeServerState,
     val eventSink: (ConfirmAccountProviderEvents) -> Unit
 ) {
     val submitEnabled: Boolean
-        get() = accountProvider.url.isNotEmpty() &&
-            (loginModeState.loginMode is AsyncData.Uninitialized || loginModeState.loginMode is AsyncData.Loading)
+        get() = accountProviderInput.isNotBlank() &&
+            loginModeState.loginMode is AsyncData.Uninitialized &&
+            changeServerState.changeServerAction is AsyncData.Uninitialized
+
+    val isLoading: Boolean
+        get() = loginModeState.loginMode is AsyncData.Loading ||
+            changeServerState.changeServerAction is AsyncData.Loading
 }
