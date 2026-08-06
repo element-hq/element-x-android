@@ -530,6 +530,10 @@ class RustMatrixClient(
         }
     }
 
+    override fun enableAutomaticCallStatus(enabled: Boolean) {
+        innerClient.enableAutomaticCallStatus(enabled)
+    }
+
     override suspend fun joinRoom(roomId: RoomId): Result<RoomInfo?> = withContext(sessionDispatcher) {
         runCatchingExceptions {
             innerClient.joinRoomById(roomId.value).destroy()
