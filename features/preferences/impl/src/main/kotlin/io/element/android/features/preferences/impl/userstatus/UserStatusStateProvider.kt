@@ -9,6 +9,7 @@ package io.element.android.features.preferences.impl.userstatus
 
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.UserStatus
 
@@ -44,10 +45,12 @@ fun aUserStatusState(
     displayedStatus: DisplayedStatus? = null,
     rawStatus: UserStatus? = null,
     pickerState: UserStatusPickerState = UserStatusPickerState.Hidden,
+    updateStatusAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     eventSink: (UserStatusEvent) -> Unit = {},
 ) = UserStatusState(
     displayedStatus = displayedStatus,
     rawStatus = rawStatus,
     pickerState = pickerState,
+    updateStatusAction = updateStatusAction,
     eventSink = eventSink,
 )
