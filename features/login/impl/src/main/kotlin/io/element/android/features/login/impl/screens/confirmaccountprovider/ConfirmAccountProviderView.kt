@@ -16,15 +16,25 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.OffsetMapping
+import androidx.compose.ui.text.input.TransformedText
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.login.impl.changeserver.ChangeServerView
 import io.element.android.features.login.impl.login.LoginModeEvent
@@ -89,6 +99,15 @@ fun ConfirmAccountProviderView(
     ) {
         var input by textFieldState(stateValue = state.accountProviderInput)
         val focusManager = LocalFocusManager.current
+        // Inline autocomplete: render the un-typed remainder of the suggested account provider in grey.
+        val suggestionSuffix = state.accountProviderSuggestion
+            ?.takeIf { it.length > input.length && it.startsWith(input, ignoreCase = true) }
+            ?.substring(input.length)
+            .orEmpty()
+        val ghostColor = ElementTheme.colors.textSecondary
+        val ghostTransformation = remember(suggestionSuffix, ghostColor) {
+            GhostSuffixVisualTransformation(suggestionSuffix, ghostColor)
+        }
         TextField(
             value = input,
             onValueChange = {
@@ -101,6 +120,7 @@ fun ConfirmAccountProviderView(
                 .onTabOrEnterKeyFocusNext(focusManager)
                 .testTag(TestTags.changeServerServer),
             label = stringResource(id = CommonStrings.screen_select_server_textfield_header),
+            placeholder = stringResource(id = CommonStrings.screen_select_server_textfield_placeholder),
             supportingText = stringResource(
                 id = if (state.isAccountCreation) {
                     CommonStrings.screen_select_server_textfield_footer_register
@@ -108,6 +128,7 @@ fun ConfirmAccountProviderView(
                     CommonStrings.screen_select_server_textfield_footer_login
                 }
             ),
+            visualTransformation = ghostTransformation,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Uri,
                 imeAction = ImeAction.Done,
@@ -165,6 +186,29 @@ fun ConfirmAccountProviderView(
             state.loginModeState.eventSink(LoginModeEvent.DismissLocalNetworkPermission)
         }
     )
+}
+
+/**
+ * Appends [suffix] (in [color]) after the user's text as a non-editable inline autocomplete hint.
+ * The underlying field value stays limited to what the user actually typed, so the cursor can never
+ * enter the suggested region.
+ */
+private class GhostSuffixVisualTransformation(
+    private val suffix: String,
+    private val color: Color,
+) : VisualTransformation {
+    override fun filter(text: AnnotatedString): TransformedText {
+        if (suffix.isEmpty()) return TransformedText(text, OffsetMapping.Identity)
+        val transformed = buildAnnotatedString {
+            append(text)
+            withStyle(SpanStyle(color = color)) { append(suffix) }
+        }
+        val offsetMapping = object : OffsetMapping {
+            override fun originalToTransformed(offset: Int) = offset
+            override fun transformedToOriginal(offset: Int) = offset.coerceAtMost(text.length)
+        }
+        return TransformedText(transformed, offsetMapping)
+    }
 }
 
 @PreviewsDayNight

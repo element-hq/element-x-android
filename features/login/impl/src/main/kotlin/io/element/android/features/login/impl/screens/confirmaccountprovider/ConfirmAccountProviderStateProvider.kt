@@ -21,6 +21,10 @@ open class ConfirmAccountProviderStateProvider : PreviewParameterProvider<Confir
         get() = sequenceOf(
             aConfirmAccountProviderState(),
             aConfirmAccountProviderState(
+                accountProviderInput = "element",
+                accountProviderSuggestion = "element.io",
+            ),
+            aConfirmAccountProviderState(
                 isAccountCreation = true,
             ),
             aConfirmAccountProviderState(
@@ -32,12 +36,14 @@ open class ConfirmAccountProviderStateProvider : PreviewParameterProvider<Confir
 
 private fun aConfirmAccountProviderState(
     accountProviderInput: String = "matrix.org",
+    accountProviderSuggestion: String? = null,
     isAccountCreation: Boolean = false,
     loginModeState: LoginModeState = aLoginModeState(),
     changeServerState: ChangeServerState = aChangeServerState(),
     eventSink: (ConfirmAccountProviderEvents) -> Unit = {},
 ) = ConfirmAccountProviderState(
     accountProviderInput = accountProviderInput,
+    accountProviderSuggestion = accountProviderSuggestion,
     isAccountCreation = isAccountCreation,
     loginModeState = loginModeState,
     changeServerState = changeServerState,

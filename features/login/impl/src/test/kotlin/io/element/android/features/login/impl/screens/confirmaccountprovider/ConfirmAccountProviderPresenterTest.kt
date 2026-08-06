@@ -34,6 +34,8 @@ import io.element.android.libraries.oauth.test.customtab.FakeOAuthActionFlow
 import io.element.android.libraries.permissions.test.FakeLocalNetworkPermissionAdvisor
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.test.runTest
@@ -353,6 +355,48 @@ class ConfirmAccountProviderPresenterTest {
         }
     }
 
+    @Test
+    fun `present - offers an autocomplete suggestion from the account provider history`() = runTest {
+        val presenter = createConfirmAccountProviderPresenter(
+            appPreferencesStore = InMemoryAppPreferencesStore(
+                homeserverHistory = listOf("https://randomcommunity.org"),
+            ),
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            assertThat(initialState.accountProviderSuggestion).isNull()
+            initialState.eventSink(ConfirmAccountProviderEvents.UserInputChanged("https://random"))
+            val suggestionState = awaitState { it.accountProviderInput == "https://random" }
+            assertThat(suggestionState.accountProviderSuggestion).isEqualTo("https://randomcommunity.org")
+        }
+    }
+
+    @Test
+    fun `present - continue accepts the autocomplete suggestion rather than the typed prefix`() = runTest {
+        val submittedUrls = mutableListOf<String>()
+        val authenticationService = FakeMatrixAuthenticationService(
+            setHomeserverResult = { url ->
+                submittedUrls.add(url)
+                Result.success(aMatrixHomeServerDetails(supportsPasswordLogin = true))
+            },
+        )
+        val presenter = createConfirmAccountProviderPresenter(
+            matrixAuthenticationService = authenticationService,
+            appPreferencesStore = InMemoryAppPreferencesStore(
+                homeserverHistory = listOf("https://randomcommunity.org"),
+            ),
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(ConfirmAccountProviderEvents.UserInputChanged("https://random"))
+            val suggestionState = awaitState { it.accountProviderSuggestion != null }
+            suggestionState.eventSink(ConfirmAccountProviderEvents.Continue)
+            awaitLoginMode { it is AsyncData.Success }
+            assertThat(submittedUrls.first()).isEqualTo("https://randomcommunity.org")
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
     /**
      * Awaits until the emitted state's login mode matches [predicate], skipping the intermediate
      * account-provider validation states, and returns that state.
@@ -376,9 +420,11 @@ class ConfirmAccountProviderPresenterTest {
         matrixAuthenticationService: MatrixAuthenticationService = FakeMatrixAuthenticationService(),
         defaultOAuthActionFlow: OAuthActionFlow = FakeOAuthActionFlow(),
         webClientUrlForAuthenticationRetriever: WebClientUrlForAuthenticationRetriever = FakeWebClientUrlForAuthenticationRetriever(),
+        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
     ) = ConfirmAccountProviderPresenter(
         params = params,
         accountProviderDataSource = accountProviderDataSource,
+        appPreferencesStore = appPreferencesStore,
         loginModePresenter = createLoginModePresenter(
             authenticationService = matrixAuthenticationService,
             oAuthActionFlow = defaultOAuthActionFlow,

@@ -14,6 +14,8 @@ import io.element.android.libraries.architecture.AsyncData
 
 data class ConfirmAccountProviderState(
     val accountProviderInput: String,
+    // The full account provider from history that the current input is a prefix of, offered as inline autocomplete.
+    val accountProviderSuggestion: String?,
     val isAccountCreation: Boolean,
     val loginModeState: LoginModeState,
     val changeServerState: ChangeServerState,

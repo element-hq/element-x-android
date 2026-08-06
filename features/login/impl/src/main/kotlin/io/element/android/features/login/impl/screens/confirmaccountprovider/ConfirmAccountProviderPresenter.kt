@@ -13,6 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -27,6 +28,7 @@ import io.element.android.features.login.impl.login.LoginModeEvent
 import io.element.android.features.login.impl.login.LoginModeState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 
 @AssistedInject
 class ConfirmAccountProviderPresenter(
@@ -34,6 +36,7 @@ class ConfirmAccountProviderPresenter(
     private val accountProviderDataSource: AccountProviderDataSource,
     private val loginModePresenter: Presenter<LoginModeState>,
     private val changeServerPresenter: Presenter<ChangeServerState>,
+    private val appPreferencesStore: AppPreferencesStore,
 ) : Presenter<ConfirmAccountProviderState> {
     data class Params(
         val isAccountCreation: Boolean,
@@ -49,11 +52,24 @@ class ConfirmAccountProviderPresenter(
         val accountProvider by accountProviderDataSource.flow.collectAsState()
         val loginModeState = loginModePresenter.present()
         val changeServerState = changeServerPresenter.present()
+        val homeserverHistory by appPreferencesStore.getHomeserverHistoryFlow().collectAsState(emptyList())
 
         // Editable input, seeded from the current (history-defaulted) account provider until the user edits it.
         var userInput by rememberSaveable { mutableStateOf<String?>(null) }
         val accountProviderInput = userInput ?: accountProvider.url
-        val latestAccountProviderInput by rememberUpdatedState(accountProviderInput)
+
+        // Offer the most recent previously-used account provider that the current input is a prefix of.
+        val accountProviderSuggestion = remember(accountProviderInput, homeserverHistory) {
+            val input = accountProviderInput.trim()
+            input.takeIf { it.isNotEmpty() }
+                ?.let { prefix ->
+                    homeserverHistory.firstOrNull { it.length > prefix.length && it.startsWith(prefix, ignoreCase = true) }
+                }
+        }
+
+        // Continue accepts the suggestion when one is offered, otherwise the raw input.
+        val accountProviderToSubmit = accountProviderSuggestion ?: accountProviderInput
+        val latestAccountProviderToSubmit by rememberUpdatedState(accountProviderToSubmit)
 
         // Once the chosen account provider has been validated and persisted, proceed with the actual sign in / sign up.
         LaunchedEffect(changeServerState.changeServerAction) {
@@ -61,7 +77,7 @@ class ConfirmAccountProviderPresenter(
                 loginModeState.eventSink(
                     LoginModeEvent.Submit(
                         isAccountCreation = params.isAccountCreation,
-                        homeserverUrl = latestAccountProviderInput.trim(),
+                        homeserverUrl = latestAccountProviderToSubmit.trim(),
                         resolvedHomeserverUrl = null,
                         loginHint = null,
                     )
@@ -77,7 +93,7 @@ class ConfirmAccountProviderPresenter(
                 // Validate (and persist) the chosen account provider before proceeding. This also enforces the
                 // enterprise account-provider access control, which the login submit does not do on its own.
                 ConfirmAccountProviderEvents.Continue -> changeServerState.eventSink(
-                    ChangeServerEvents.ChangeServer(AccountProvider(url = accountProviderInput.trim()))
+                    ChangeServerEvents.ChangeServer(AccountProvider(url = accountProviderToSubmit.trim()))
                 )
                 ConfirmAccountProviderEvents.ClearError -> {
                     loginModeState.eventSink(LoginModeEvent.ClearError)
@@ -88,6 +104,7 @@ class ConfirmAccountProviderPresenter(
 
         return ConfirmAccountProviderState(
             accountProviderInput = accountProviderInput,
+            accountProviderSuggestion = accountProviderSuggestion,
             isAccountCreation = params.isAccountCreation,
             loginModeState = loginModeState,
             changeServerState = changeServerState,
