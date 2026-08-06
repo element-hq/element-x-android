@@ -178,7 +178,7 @@ private fun SessionCategory(deviceId: DeviceId) {
         val toastMessage = stringResource(CommonStrings.common_copied_to_clipboard)
         val context = LocalContext.current
         ListItem(
-            headlineContent = { Text("DeviceId") },
+            content = { Text("DeviceId") },
             supportingContent = { Text(text = deviceId.value) },
             onClick = {
                 context.copyToClipboard(
