@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -43,7 +42,6 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.emoji.api.picker.EmojiPickerRenderer
 import io.element.android.libraries.emoji.api.picker.NoOpEmojiPickerRenderer
-import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -129,7 +127,6 @@ fun PreferencesRootView(
         // Version
         Footer(
             version = state.version,
-            deviceId = state.deviceId,
             onClick = if (!state.showDeveloperSettings) {
                 { state.eventSink(PreferencesRootEvent.OnVersionInfoClick) }
             } else {
@@ -326,25 +323,15 @@ private fun ColumnScope.GeneralSection(
 @Composable
 private fun ColumnScope.Footer(
     version: String,
-    deviceId: DeviceId?,
     onClick: (() -> Unit)?,
 ) {
-    val text = remember(version, deviceId) {
-        buildString {
-            append(version)
-            if (deviceId != null) {
-                append("\n")
-                append(deviceId)
-            }
-        }
-    }
     Text(
         modifier = Modifier
             .align(Alignment.CenterHorizontally)
             .clickable(enabled = onClick != null, onClick = onClick ?: {})
             .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 24.dp),
         textAlign = TextAlign.Center,
-        text = text,
+        text = version,
         style = ElementTheme.typography.fontBodySmRegular,
         color = ElementTheme.colors.textSecondary,
     )
