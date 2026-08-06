@@ -13,7 +13,6 @@ import kotlinx.parcelize.Parcelize
 
 @Immutable
 sealed interface DisplayedStatus : Parcelable {
-
     /** Useful for adding extension methods. */
     companion object
 

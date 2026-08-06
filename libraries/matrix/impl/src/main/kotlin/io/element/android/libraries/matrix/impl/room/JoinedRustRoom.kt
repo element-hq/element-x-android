@@ -42,7 +42,6 @@ import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import io.element.android.libraries.matrix.impl.core.RustSendHandle
 import io.element.android.libraries.matrix.impl.mapper.map
-import io.element.android.libraries.matrix.impl.user.map
 import io.element.android.libraries.matrix.impl.room.history.map
 import io.element.android.libraries.matrix.impl.room.join.map
 import io.element.android.libraries.matrix.impl.room.knock.RustKnockRequest
@@ -54,6 +53,7 @@ import io.element.android.libraries.matrix.impl.room.threads.RustThreadsListServ
 import io.element.android.libraries.matrix.impl.roomdirectory.map
 import io.element.android.libraries.matrix.impl.timeline.RustTimeline
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
+import io.element.android.libraries.matrix.impl.user.map
 import io.element.android.libraries.matrix.impl.util.MessageEventContent
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.widget.RustWidgetDriver
