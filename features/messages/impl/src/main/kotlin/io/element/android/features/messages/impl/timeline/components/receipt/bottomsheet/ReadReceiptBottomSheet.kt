@@ -86,7 +86,7 @@ private fun ReadReceiptBottomSheetContent(
     LazyColumn {
         item {
             ListItem(
-                headlineContent = {
+                content = {
                     Text(text = stringResource(id = CommonStrings.common_seen_by))
                 }
             )

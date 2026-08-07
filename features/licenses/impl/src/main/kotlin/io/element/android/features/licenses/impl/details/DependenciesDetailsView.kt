@@ -62,7 +62,7 @@ fun DependenciesDetailsView(
                     }
                 }
                 ListItem(
-                    headlineContent = {
+                    content = {
                         ClickableLinkText(
                             text = text,
                             interactionSource = remember { MutableInteractionSource() },

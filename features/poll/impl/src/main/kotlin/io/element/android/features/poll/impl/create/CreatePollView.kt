@@ -107,7 +107,7 @@ fun CreatePollView(
             item {
                 Column {
                     ListItem(
-                        headlineContent = {
+                        content = {
                             TextField(
                                 label = stringResource(id = R.string.screen_create_poll_question_desc),
                                 value = state.question,
@@ -127,7 +127,7 @@ fun CreatePollView(
             itemsIndexed(state.answers) { index, answer ->
                 val isLastItem = index == state.answers.size - 1
                 ListItem(
-                    headlineContent = {
+                    content = {
                         TextField(
                             value = answer.text,
                             onValueChange = {
@@ -155,7 +155,7 @@ fun CreatePollView(
             if (state.canAddAnswer) {
                 item {
                     ListItem(
-                        headlineContent = { Text(text = stringResource(id = R.string.screen_create_poll_add_option_btn)) },
+                        content = { Text(text = stringResource(id = R.string.screen_create_poll_add_option_btn)) },
                         leadingContent = ListItemContent.Icon(
                             iconSource = IconSource.Vector(CompoundIcons.Plus()),
                         ),
@@ -174,7 +174,7 @@ fun CreatePollView(
                 Column {
                     HorizontalDivider()
                     ListItem(
-                        headlineContent = { Text(text = stringResource(id = R.string.screen_create_poll_anonymous_headline)) },
+                        content = { Text(text = stringResource(id = R.string.screen_create_poll_anonymous_headline)) },
                         supportingContent = { Text(text = stringResource(id = R.string.screen_create_poll_anonymous_desc)) },
                         trailingContent = ListItemContent.Switch(
                             checked = state.pollKind == PollKind.Undisclosed,
@@ -189,7 +189,7 @@ fun CreatePollView(
                     )
                     if (state.canDelete) {
                         ListItem(
-                            headlineContent = { Text(text = stringResource(id = CommonStrings.action_delete_poll)) },
+                            content = { Text(text = stringResource(id = CommonStrings.action_delete_poll)) },
                             style = ListItemStyle.Destructive,
                             onClick = { state.eventSink(CreatePollEvent.Delete(confirmed = false)) },
                         )

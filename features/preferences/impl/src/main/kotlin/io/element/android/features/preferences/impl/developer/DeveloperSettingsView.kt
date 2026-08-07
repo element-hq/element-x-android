@@ -85,7 +85,7 @@ fun DeveloperSettingsView(
         if (state.isEnterpriseBuild) {
             PreferenceCategory(title = "Theme") {
                 ListItem(
-                    headlineContent = {
+                    content = {
                         Text("Change brand color")
                     },
                     onClick = {
@@ -93,7 +93,7 @@ fun DeveloperSettingsView(
                     }
                 )
                 ListItem(
-                    headlineContent = {
+                    content = {
                         Text("Reset brand color")
                     },
                     onClick = {
@@ -108,7 +108,7 @@ fun DeveloperSettingsView(
         val cache = state.cacheSize
         PreferenceCategory(title = "Cache") {
             ListItem(
-                headlineContent = { Text("Database sizes") },
+                content = { Text("Database sizes") },
                 supportingContent = {
                     if (state.databaseSizes.isLoading()) {
                         Text("Computing...")
@@ -127,7 +127,7 @@ fun DeveloperSettingsView(
                 }
             )
             ListItem(
-                headlineContent = {
+                content = {
                     Text("Vacuum stores")
                 },
                 onClick = {
@@ -135,7 +135,7 @@ fun DeveloperSettingsView(
                 }
             )
             ListItem(
-                headlineContent = {
+                content = {
                     Text("Clear cache")
                 },
                 trailingContent = if (state.cacheSize.isLoading() || state.clearCacheAction.isLoading()) {
@@ -178,7 +178,7 @@ private fun SessionCategory(deviceId: DeviceId) {
         val toastMessage = stringResource(CommonStrings.common_copied_to_clipboard)
         val context = LocalContext.current
         ListItem(
-            headlineContent = { Text("DeviceId") },
+            content = { Text("DeviceId") },
             supportingContent = { Text(text = deviceId.value) },
             onClick = {
                 context.copyToClipboard(
@@ -194,7 +194,7 @@ private fun SessionCategory(deviceId: DeviceId) {
 private fun MarkAllRoomsAsReadCategory(state: DeveloperSettingsState) {
     PreferenceCategory(title = "Room list") {
         ListItem(
-            headlineContent = {
+            content = {
                 Text("Mark all rooms as read")
             },
             supportingContent = {
@@ -220,7 +220,7 @@ private fun MarkAllRoomsAsReadCategory(state: DeveloperSettingsState) {
 private fun NotificationCategory(onPushHistoryClick: () -> Unit) {
     PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_title)) {
         ListItem(
-            headlineContent = {
+            content = {
                 Text(stringResource(R.string.troubleshoot_notifications_entry_point_push_history_title))
             },
             onClick = onPushHistoryClick,

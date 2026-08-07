@@ -156,7 +156,7 @@ private fun PushHistoryContent(
         modifier = modifier.fillMaxWidth()
     ) {
         ListItem(
-            headlineContent = { Text("Total number of received push") },
+            content = { Text("Total number of received push") },
             trailingContent = ListItemContent.Text(state.pushCounter.toString()),
         )
         LazyColumn(

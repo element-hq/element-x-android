@@ -84,7 +84,7 @@ fun AppDeveloperSettingsView(
         }
         PreferenceCategory(title = "Showkase") {
             ListItem(
-                headlineContent = {
+                content = {
                     Text("Open Showkase browser")
                 },
                 onClick = onOpenShowkase
@@ -95,7 +95,7 @@ fun AppDeveloperSettingsView(
         )
         PreferenceCategory(title = "Crash") {
             ListItem(
-                headlineContent = {
+                content = {
                     Text("Crash the app 💥")
                 },
                 onClick = { error("This crash is a test.") }
@@ -117,7 +117,7 @@ private fun GitCategory(
         val toastMessage = stringResource(CommonStrings.common_copied_to_clipboard)
         val context = LocalContext.current
         ListItem(
-            headlineContent = { Text("Git branch") },
+            content = { Text("Git branch") },
             supportingContent = { Text(text = gitBranch) },
             onClick = {
                 context.copyToClipboard(
@@ -127,7 +127,7 @@ private fun GitCategory(
             }
         )
         ListItem(
-            headlineContent = { Text("Git SHA") },
+            content = { Text("Git SHA") },
             supportingContent = { Text(text = gitSha) },
             onClick = {
                 context.copyToClipboard(
