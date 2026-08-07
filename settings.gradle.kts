@@ -17,6 +17,17 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        // Mumble PTT core AAR (enterprise only). Needs a GitHub token with
+        // read:packages — set gpr.user/gpr.token in ~/.gradle/gradle.properties
+        // (or GITHUB_ACTOR/GITHUB_TOKEN env). See element-mumble-android/PUBLISHING.md.
+        maven {
+            url = uri("https://maven.pkg.github.com/ridgelineinternational/element-mumble-android")
+            content { includeGroup("com.ridgelineinternational.mumble") }
+            credentials {
+                username = providers.gradleProperty("gpr.user").orNull ?: System.getenv("GITHUB_ACTOR")
+                password = providers.gradleProperty("gpr.token").orNull ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
         maven {
             url = uri("https://www.jitpack.io")
             content {
