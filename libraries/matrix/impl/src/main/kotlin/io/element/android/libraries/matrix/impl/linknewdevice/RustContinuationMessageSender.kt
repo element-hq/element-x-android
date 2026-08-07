@@ -11,6 +11,7 @@ import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.linknewdevice.ContinuationMessageSender
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import org.matrix.rustcomponents.sdk.ContinuationMessageSender as FfiContinuationMessageSender
 
 class RustContinuationMessageSender(
@@ -20,12 +21,16 @@ class RustContinuationMessageSender(
     override suspend fun cancel(): Result<Unit> = withContext(sessionDispatcher) {
         runCatchingExceptions {
             inner.cancel()
+        }.onFailure {
+            Timber.e(it, "Error cancelling continuation message")
         }
     }
 
     override suspend fun confirm(): Result<Unit> = withContext(sessionDispatcher) {
         runCatchingExceptions {
             inner.confirm()
+        }.onFailure {
+            Timber.e(it, "Error confirming continuation message")
         }
     }
 }
