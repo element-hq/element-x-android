@@ -46,8 +46,6 @@ data class PollFormState(
      * Create a copy of the [PollFormState] with a new blank answer added.
      *
      * If the maximum number of answers has already been reached an answer is not added.
-     *
-     * Also clamps [maxSelections] to the new answer count to keep state consistent.
      */
     fun withNewAnswer(): PollFormState {
         if (!canAddAnswer) {
@@ -55,8 +53,7 @@ data class PollFormState(
         }
 
         val newAnswers = (answers + "").toImmutableList()
-        val clampedMaxSelections = maxSelections.coerceIn(1, newAnswers.size)
-        return copy(answers = newAnswers, maxSelections = clampedMaxSelections)
+        return copy(answers = newAnswers)
     }
 
     /**
@@ -102,11 +99,6 @@ data class PollFormState(
      * Whether any answer can be deleted.
      */
     val canDeleteAnswer get() = answers.size > MIN_ANSWERS
-
-    /**
-     * The effective max selections, clamped to the number of answers.
-     */
-    val effectiveMaxSelections get() = maxSelections.coerceIn(1, answers.size)
 
     /**
      * Whether the form is currently valid.

@@ -259,7 +259,7 @@ private fun MaxSelectionsStepper(
     ) {
         Icon(
             imageVector = CompoundIcons.Minus(),
-            contentDescription = null,
+            contentDescription = stringResource(id = CommonStrings.a11y_create_poll_votes_allowed_decrease),
             modifier = Modifier
                 .clickable(enabled = current > 1) { onDecrement() }
                 .size(32.dp)
@@ -277,7 +277,7 @@ private fun MaxSelectionsStepper(
         )
         Icon(
             imageVector = CompoundIcons.Plus(),
-            contentDescription = null,
+            contentDescription = stringResource(id = CommonStrings.a11y_create_poll_votes_allowed_increase),
             modifier = Modifier
                 .clickable(enabled = current < max) { onIncrement() }
                 .size(32.dp)
