@@ -29,4 +29,8 @@ data class ConfirmAccountProviderState(
     val isLoading: Boolean
         get() = loginModeState.loginMode is AsyncData.Loading ||
             changeServerState.changeServerAction is AsyncData.Loading
+
+    val isShowingError: Boolean
+        get() = loginModeState.loginMode is AsyncData.Failure ||
+            changeServerState.changeServerAction is AsyncData.Failure
 }

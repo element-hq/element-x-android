@@ -15,12 +15,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.AnnotatedString
@@ -72,6 +77,26 @@ fun ConfirmAccountProviderView(
     modifier: Modifier = Modifier,
 ) {
     val eventSink = state.eventSink
+    val focusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    fun submit() {
+        // Dismiss the keyboard and release focus while the account provider is being validated.
+        focusManager.clearFocus(force = true)
+        eventSink(ConfirmAccountProviderEvents.Continue)
+    }
+
+    // Once a validation / login error has been dismissed, return focus and the keyboard to the field so
+    // the user can correct the account provider and retry.
+    var wasShowingError by remember { mutableStateOf(false) }
+    LaunchedEffect(state.isShowingError) {
+        if (wasShowingError && !state.isShowingError) {
+            focusRequester.requestFocus()
+            keyboardController?.show()
+        }
+        wasShowingError = state.isShowingError
+    }
 
     HeaderFooterPage(
         modifier = modifier,
@@ -94,7 +119,7 @@ fun ConfirmAccountProviderView(
                 Button(
                     text = stringResource(id = CommonStrings.action_continue),
                     showProgress = state.isLoading,
-                    onClick = { eventSink(ConfirmAccountProviderEvents.Continue) },
+                    onClick = ::submit,
                     enabled = state.submitEnabled && !state.isLoading,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -104,7 +129,6 @@ fun ConfirmAccountProviderView(
         }
     ) {
         var input by textFieldState(stateValue = state.accountProviderInput)
-        val focusManager = LocalFocusManager.current
         // Inline autocomplete: render the un-typed remainder of the suggested account provider in grey.
         val suggestionSuffix = state.accountProviderSuggestion
             ?.takeIf { it.length > input.length && it.startsWith(input, ignoreCase = true) }
@@ -123,6 +147,7 @@ fun ConfirmAccountProviderView(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 40.dp)
+                .focusRequester(focusRequester)
                 .onTabOrEnterKeyFocusNext(focusManager)
                 .testTag(TestTags.changeServerServer),
             label = stringResource(id = CommonStrings.screen_select_server_textfield_header),
@@ -139,9 +164,7 @@ fun ConfirmAccountProviderView(
                 keyboardType = KeyboardType.Uri,
                 imeAction = ImeAction.Done,
             ),
-            keyboardActions = KeyboardActions(onDone = {
-                eventSink(ConfirmAccountProviderEvents.Continue)
-            }),
+            keyboardActions = KeyboardActions(onDone = { submit() }),
             singleLine = true,
             trailingIcon = if (input.isNotEmpty()) {
                 {
