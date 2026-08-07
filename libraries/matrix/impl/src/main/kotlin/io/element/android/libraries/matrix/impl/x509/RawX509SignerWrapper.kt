@@ -20,4 +20,9 @@ class RawX509SignerWrapper(private val rawX509Signer: RawX509Signer): org.matrix
         };
         return RawX509Signature(sig.signatureBytes, sig.certificateChain, signatureScheme)
     }
+
+    override fun validityNotAfter(): ULong {
+        return rawX509Signer.validityNotAfter()
+    }
+
 }

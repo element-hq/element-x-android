@@ -9,4 +9,6 @@ package io.element.android.libraries.matrix.api.x509
 
 interface RawX509Signer {
     fun sign(message: ByteArray): RawX509Signature
+
+    fun validityNotAfter(): ULong
 }
