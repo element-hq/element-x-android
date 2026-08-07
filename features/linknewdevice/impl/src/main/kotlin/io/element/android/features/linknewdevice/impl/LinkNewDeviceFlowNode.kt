@@ -54,7 +54,6 @@ import io.element.android.libraries.matrix.api.linknewdevice.LinkMobileStep
 import io.element.android.libraries.matrix.api.logs.LoggerTags
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -214,7 +213,7 @@ class LinkNewDeviceFlowNode(
 
     private fun onResume() = sessionCoroutineScope.launch {
         // Application is resumed, if the step is waiting for auth, send the confirmation
-        (linkNewMobileHandler.stepFlow.first() as? LinkMobileStep.WaitingForAuth)?.let {
+        (linkNewMobileHandler.stepFlow.value as? LinkMobileStep.WaitingForAuth)?.let {
             Timber.tag(tag.value).d("Resuming while waiting for auth on mobile, sending confirmation")
             it.continuationMessageSender.confirm()
         }
