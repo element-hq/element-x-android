@@ -56,6 +56,12 @@ import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
 
+/**
+ * Account provider entry screen, shared by sign in and account creation.
+ * Figma (Compound Android Templates):
+ * - Sign in: https://www.figma.com/design/pDlJZGBsri47FNTXMnEdXB/Compound-Android-Templates?node-id=41-10251
+ * - Create account: https://www.figma.com/design/pDlJZGBsri47FNTXMnEdXB/Compound-Android-Templates?node-id=41-10239
+ */
 @Composable
 fun ConfirmAccountProviderView(
     state: ConfirmAccountProviderState,

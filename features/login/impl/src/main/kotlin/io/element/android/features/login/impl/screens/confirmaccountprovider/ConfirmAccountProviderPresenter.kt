@@ -91,7 +91,7 @@ class ConfirmAccountProviderPresenter(
                     userInput = event.accountProvider
                 }
                 // Validate (and persist) the chosen account provider before proceeding. This also enforces the
-                // enterprise account-provider access control, which the login submit does not do on its own.
+                // account-provider access control, which the login submit does not run on its own.
                 ConfirmAccountProviderEvents.Continue -> changeServerState.eventSink(
                     ChangeServerEvents.ChangeServer(AccountProvider(url = accountProviderToSubmit.trim()))
                 )
