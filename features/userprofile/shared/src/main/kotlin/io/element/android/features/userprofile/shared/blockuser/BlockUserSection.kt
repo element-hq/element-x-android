@@ -80,14 +80,14 @@ private fun PreferenceBlockUser(
     }
     if (isBlocked.orFalse()) {
         ListItem(
-            headlineContent = { Text(stringResource(R.string.screen_dm_details_unblock_user)) },
+            content = { Text(stringResource(R.string.screen_dm_details_unblock_user)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block())),
             onClick = { if (!isLoading) eventSink(UserProfileEvents.UnblockUser(needsConfirmation = true)) },
             trailingContent = if (isLoading) ListItemContent.Custom(loadingCurrentValue) else null,
         )
     } else {
         ListItem(
-            headlineContent = { Text(stringResource(R.string.screen_dm_details_block_user)) },
+            content = { Text(stringResource(R.string.screen_dm_details_block_user)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block())),
             style = ListItemStyle.Destructive,
             onClick = { if (!isLoading) eventSink(UserProfileEvents.BlockUser(needsConfirmation = true)) },

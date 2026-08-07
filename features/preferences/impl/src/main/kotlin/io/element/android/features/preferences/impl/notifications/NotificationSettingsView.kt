@@ -130,7 +130,7 @@ private fun NotificationSettingsContentView(
     if (systemSettings.appNotificationsEnabled && !systemSettings.systemNotificationsEnabled) {
         ListItem(
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.NotificationsOffSolid())),
-            headlineContent = {
+            content = {
                 Text(stringResource(id = R.string.screen_notification_settings_system_notifications_turned_off))
             },
             supportingContent = {
@@ -158,7 +158,7 @@ private fun NotificationSettingsContentView(
             PreferenceCategory {
                 ListItem(
                     leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.VoiceCallSolid())),
-                    headlineContent = {
+                    content = {
                         Text(stringResource(id = R.string.full_screen_intent_banner_title))
                     },
                     supportingContent = {
@@ -172,7 +172,7 @@ private fun NotificationSettingsContentView(
         }
         PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_notification_section_title)) {
             ListItem(
-                headlineContent = {
+                content = {
                     Text(stringResource(id = R.string.screen_notification_settings_group_chats))
                 },
                 supportingContent = {
@@ -181,7 +181,7 @@ private fun NotificationSettingsContentView(
                 onClick = onGroupChatsClick
             )
             ListItem(
-                headlineContent = {
+                content = {
                     Text(stringResource(id = R.string.screen_notification_settings_direct_chats))
                 },
                 supportingContent = {
@@ -218,7 +218,7 @@ private fun NotificationSettingsContentView(
         }
         PreferenceCategory(title = stringResource(id = R.string.troubleshoot_notifications_entry_point_section)) {
             ListItem(
-                headlineContent = {
+                content = {
                     Text(stringResource(id = R.string.troubleshoot_notifications_entry_point_title))
                 },
                 onClick = onTroubleshootNotificationsClick
@@ -227,7 +227,7 @@ private fun NotificationSettingsContentView(
         if (state.showAdvancedSettings) {
             PreferenceCategory(title = stringResource(id = CommonStrings.common_advanced_settings)) {
                 ListItem(
-                    headlineContent = {
+                    content = {
                         Text(text = stringResource(id = R.string.screen_advanced_settings_push_provider_android))
                     },
                     trailingContent = when (state.currentPushDistributor) {
@@ -296,7 +296,7 @@ private fun SoundsPreferenceCategory(state: NotificationSettingsState) {
             }
         }
         ListItem(
-            headlineContent = { Text(stringResource(id = R.string.screen_notification_settings_message_sound_label)) },
+            content = { Text(stringResource(id = R.string.screen_notification_settings_message_sound_label)) },
             supportingContent = { Text(state.messageSound.displayName) },
             onClick = { state.eventSink(NotificationSettingsEvents.ShowMessageSoundDialog) },
         )
@@ -323,7 +323,7 @@ private fun SoundsPreferenceCategory(state: NotificationSettingsState) {
             }
         }
         ListItem(
-            headlineContent = { Text(stringResource(id = R.string.screen_notification_settings_call_ringtone_label)) },
+            content = { Text(stringResource(id = R.string.screen_notification_settings_call_ringtone_label)) },
             supportingContent = { Text(state.callRingtone.displayName) },
             onClick = { state.eventSink(NotificationSettingsEvents.ShowCallRingtoneDialog) },
         )
@@ -418,7 +418,7 @@ private fun SoundCopyErrorRow(
         modifier = Modifier
             .background(ElementTheme.colors.bgSubtleSecondary)
             .semantics { liveRegion = LiveRegionMode.Polite },
-        headlineContent = {
+        content = {
             Text(
                 text = stringResource(R.string.screen_notification_settings_sound_set_sound_error_title),
                 style = ElementTheme.typography.fontBodyMdRegular,

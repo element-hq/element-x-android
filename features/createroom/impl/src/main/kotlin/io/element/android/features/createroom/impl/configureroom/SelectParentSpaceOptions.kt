@@ -58,7 +58,7 @@ internal fun SelectParentSpaceOptions(
         modifier = modifier
     ) {
         ListItem(
-            headlineContent = {
+            content = {
                 Text(
                     text = selectedSpace?.displayName
                         ?: stringResource(R.string.screen_create_room_space_selection_no_space_title),
@@ -126,7 +126,7 @@ private fun SelectParentSpaceBottomSheet(
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
         item {
             ListItem(
-                headlineContent = {
+                content = {
                     Text(
                         text = stringResource(R.string.screen_create_room_space_selection_no_space_option),
                         maxLines = 1
@@ -141,7 +141,7 @@ private fun SelectParentSpaceBottomSheet(
         for (space in spaces) {
             item {
                 ListItem(
-                    headlineContent = {
+                    content = {
                         Text(
                             text = space.displayName,
                             maxLines = 1
