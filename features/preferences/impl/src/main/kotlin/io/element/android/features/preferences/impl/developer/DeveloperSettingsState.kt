@@ -11,6 +11,7 @@ package io.element.android.features.preferences.impl.developer
 import io.element.android.features.preferences.impl.developer.appsettings.AppDeveloperSettingsState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.matrix.api.core.DeviceId
 import kotlinx.collections.immutable.ImmutableMap
 
 data class DeveloperSettingsState(
@@ -21,6 +22,7 @@ data class DeveloperSettingsState(
     val markAllRoomsAsReadAction: AsyncAction<Unit>,
     val isEnterpriseBuild: Boolean,
     val showColorPicker: Boolean,
+    val deviceId: DeviceId,
     val eventSink: (DeveloperSettingsEvents) -> Unit
 ) {
     val showLoader = clearCacheAction is AsyncAction.Loading || markAllRoomsAsReadAction is AsyncAction.Loading

@@ -148,7 +148,6 @@ class PreferencesRootPresenter(
             myUser = matrixUser.value,
             userStatusState = userStatusState,
             version = remember { versionFormatter.get() },
-            deviceId = matrixClient.deviceId,
             isMultiAccountEnabled = isMultiAccountEnabled,
             otherSessions = otherSessions,
             showSecureBackup = !canVerifyUserSession,
