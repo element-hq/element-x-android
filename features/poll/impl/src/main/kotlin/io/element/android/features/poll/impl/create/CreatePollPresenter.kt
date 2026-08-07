@@ -109,7 +109,7 @@ class CreatePollPresenter(
                             question = poll.question,
                             answers = poll.answers,
                             pollKind = poll.pollKind,
-                            maxSelections = poll.effectiveMaxSelections,
+                            maxSelections = poll.maxSelections,
                         ).onSuccess {
                             analyticsService.capturePollSaved(
                                 isUndisclosed = poll.pollKind == PollKind.Undisclosed,
@@ -185,7 +185,7 @@ class CreatePollPresenter(
             question = poll.question,
             answers = immutableAnswers,
             pollKind = poll.pollKind,
-            maxSelections = poll.effectiveMaxSelections,
+            maxSelections = poll.maxSelections,
             maxAllowedSelections = poll.answers.size,
             showBackConfirmation = showBackConfirmation,
             showDeleteConfirmation = showDeleteConfirmation,
