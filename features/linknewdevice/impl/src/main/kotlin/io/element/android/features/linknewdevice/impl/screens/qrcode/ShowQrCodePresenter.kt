@@ -26,6 +26,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import kotlin.time.Duration.Companion.seconds
 
 private val tag = LoggerTag("ShowQrCodePresenter", LoggerTags.linkNewDevice)
 
@@ -63,7 +64,7 @@ class ShowQrCodePresenter(
                             linkNewMobileHandler.rotateQrCode()
                             // Ensure that outdated data is not rendered too long while rotating QR code
                             loadingJob = launch {
-                                delay(1000)
+                                delay(1.seconds)
                                 value = ShowQrCodeState(
                                     data = AsyncData.Loading(),
                                 )
