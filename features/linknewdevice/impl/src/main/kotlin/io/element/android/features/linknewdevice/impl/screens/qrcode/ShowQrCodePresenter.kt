@@ -33,18 +33,22 @@ private val tag = LoggerTag("ShowQrCodePresenter", LoggerTags.linkNewDevice)
 @AssistedInject
 class ShowQrCodePresenter(
     @Assisted private val initialData: String,
+    @Assisted private val maxQrCodeRotation: Int,
     private val linkNewMobileHandler: LinkNewMobileHandler,
 ) : Presenter<ShowQrCodeState> {
     @AssistedFactory
     interface Factory {
-        fun create(initialData: String): ShowQrCodePresenter
+        fun create(
+            initialData: String,
+            maxQrCodeRotation: Int,
+        ): ShowQrCodePresenter
     }
 
     private var loadingJob: Job? = null
 
     @Composable
     override fun present(): ShowQrCodeState {
-        var qrCodeRotationCounter by remember { mutableIntStateOf(MAX_QR_CODE_ROTATION) }
+        var qrCodeRotationCounter by remember { mutableIntStateOf(maxQrCodeRotation) }
         val state by produceState(
             initialValue = ShowQrCodeState(
                 data = AsyncData.Success(initialData),
@@ -80,9 +84,5 @@ class ShowQrCodePresenter(
         }
 
         return state
-    }
-
-    companion object {
-        const val MAX_QR_CODE_ROTATION = 10
     }
 }

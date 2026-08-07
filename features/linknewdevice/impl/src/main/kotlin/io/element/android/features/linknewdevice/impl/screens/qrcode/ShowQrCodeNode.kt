@@ -39,6 +39,7 @@ class ShowQrCodeNode(
     private val callback: Callback = callback()
     private val showQrCodePresenter: ShowQrCodePresenter = showQrCodePresenterFactory.create(
         initialData = inputs.data,
+        maxQrCodeRotation = MAX_QR_CODE_ROTATION,
     )
 
     @Composable
@@ -49,5 +50,14 @@ class ShowQrCodeNode(
             modifier = modifier,
             onBackClick = callback::navigateBack,
         )
+    }
+
+    companion object {
+        /**
+         * Max number of QrCode rotation.
+         * When QrCode is rotated this number of time, a TimeOut error is emitted.
+         * Set to 0 to disable QrCode rotation.
+         */
+        const val MAX_QR_CODE_ROTATION = 0
     }
 }
