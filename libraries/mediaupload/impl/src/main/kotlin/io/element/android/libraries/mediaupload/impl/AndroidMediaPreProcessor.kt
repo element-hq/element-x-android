@@ -67,7 +67,7 @@ class AndroidMediaPreProcessor(
          */
         private const val IMAGE_SCALE_REF_SIZE = 640
 
-        private val notCompressibleImageTypes = listOf(MimeTypes.Gif, MimeTypes.WebP, MimeTypes.Svg)
+        private val notCompressibleImageTypes = listOf(MimeTypes.Gif, MimeTypes.WebP)
     }
 
     private val contentResolver = context.contentResolver
@@ -83,10 +83,7 @@ class AndroidMediaPreProcessor(
     ): Result<MediaUploadInfo> = withContext(coroutineDispatchers.computation) {
         runCatchingExceptions {
             val result = when {
-                // Special case for SVG, since Android can't read its metadata or create a thumbnail, it must be sent as a file
-                mimeType == MimeTypes.Svg -> {
-                    processFile(uri, mimeType)
-                }
+                mimeType == MimeTypes.Svg -> processSvgImage(uri, mimeType)
                 mimeType.isMimeTypeImage() -> {
                     val shouldBeCompressed = mediaOptimizationConfig.compressImages && mimeType !in notCompressibleImageTypes
                     processImage(uri, mimeType, shouldBeCompressed)
@@ -160,6 +157,7 @@ class AndroidMediaPreProcessor(
 
     private suspend fun processImage(uri: Uri, mimeType: String, shouldBeCompressed: Boolean): MediaUploadInfo {
         Timber.d("Processing image ${uri.path.orEmpty().hash()}")
+
         suspend fun processImageWithCompression(): MediaUploadInfo {
             // Read the orientation metadata from its own stream. Trying to reuse this stream for compression will fail.
             val orientation = contentResolver.openInputStream(uri).use { input ->
@@ -195,18 +193,16 @@ class AndroidMediaPreProcessor(
                 file = file,
                 mimeType = mimeType,
             )
-            val imageInfo = contentResolver.openInputStream(uri).use { input ->
-                val bitmap = BitmapFactory.decodeStream(input, null, null)!!
-                ImageInfo(
-                    width = bitmap.width.toLong(),
-                    height = bitmap.height.toLong(),
-                    mimetype = mimeType,
-                    size = file.length(),
-                    thumbnailInfo = thumbnailResult?.info,
-                    thumbnailSource = null,
-                    blurhash = thumbnailResult?.blurhash,
-                )
-            }
+            val (width, height) = extractOrientedImageDimensions(file)
+            val imageInfo = ImageInfo(
+                width = width,
+                height = height,
+                mimetype = mimeType,
+                size = file.length(),
+                thumbnailInfo = thumbnailResult?.info,
+                thumbnailSource = null,
+                blurhash = thumbnailResult?.blurhash,
+            )
             removeSensitiveImageMetadata(file)
             return MediaUploadInfo.Image(
                 file = file,
@@ -220,6 +216,28 @@ class AndroidMediaPreProcessor(
         } else {
             processImageWithoutCompression()
         }
+    }
+
+    private val svgDimensionExtractor = SvgDimensionExtractor()
+
+    private suspend fun processSvgImage(uri: Uri, mimeType: String): MediaUploadInfo {
+        Timber.d("Processing SVG image ${uri.path.orEmpty().hash()}")
+        val file = copyToTmpFile(uri)
+        val size = svgDimensionExtractor.extractDimensions(file)
+        val imageInfo = ImageInfo(
+            width = size.width.toLong(),
+            height = size.height.toLong(),
+            mimetype = mimeType,
+            size = file.length(),
+            thumbnailInfo = null,
+            thumbnailSource = null,
+            blurhash = null,
+        )
+        return MediaUploadInfo.Image(
+            file = file,
+            imageInfo = imageInfo,
+            thumbnailFile = null,
+        )
     }
 
     private suspend fun processVideo(uri: Uri, mimeType: String?, videoCompressionPreset: VideoCompressionPreset): MediaUploadInfo {
@@ -354,6 +372,23 @@ class AndroidMediaPreProcessor(
         return contentResolver.openInputStream(uri)?.use { createTmpFileWithInput(it) }
             ?: error("Could not copy the contents of $uri to a temporary file")
     }
+
+    private fun extractOrientedImageDimensions(file: File): Pair<Long, Long> {
+        val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        BitmapFactory.decodeFile(file.path, options)
+
+        val rawWidth = options.outWidth.toLong()
+        val rawHeight = options.outHeight.toLong()
+        val orientation = tryOrNull {
+            ExifInterface(file).getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
+        } ?: ExifInterface.ORIENTATION_UNDEFINED
+
+        return orientedImageDimensions(
+            rawWidth = rawWidth,
+            rawHeight = rawHeight,
+            orientation = orientation,
+        )
+    }
 }
 
 private fun ImageCompressionResult.toImageInfo(mimeType: String, thumbnailResult: ThumbnailResult?) = ImageInfo(
@@ -370,4 +405,19 @@ private fun ImageCompressionResult.toImageInfo(mimeType: String, thumbnailResult
 private fun MediaMetadataRetriever.extractDuration(): Duration {
     val durationInMs = extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong() ?: 0L
     return durationInMs.milliseconds
+}
+
+internal fun orientedImageDimensions(rawWidth: Long, rawHeight: Long, orientation: Int): Pair<Long, Long> {
+    return if (orientation.rotatesRightAngle()) {
+        rawHeight to rawWidth
+    } else {
+        rawWidth to rawHeight
+    }
+}
+
+private fun Int.rotatesRightAngle(): Boolean {
+    return this == ExifInterface.ORIENTATION_ROTATE_90 ||
+        this == ExifInterface.ORIENTATION_ROTATE_270 ||
+        this == ExifInterface.ORIENTATION_TRANSPOSE ||
+        this == ExifInterface.ORIENTATION_TRANSVERSE
 }

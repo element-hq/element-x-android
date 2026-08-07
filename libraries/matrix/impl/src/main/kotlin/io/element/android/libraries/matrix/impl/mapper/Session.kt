@@ -9,7 +9,7 @@
 package io.element.android.libraries.matrix.impl.mapper
 
 import io.element.android.libraries.matrix.api.auth.external.ExternalSession
-import io.element.android.libraries.matrix.impl.paths.SessionPaths
+import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.sessionstorage.api.LoginType
 import io.element.android.libraries.sessionstorage.api.SessionData
 import org.matrix.rustcomponents.sdk.Session
@@ -27,7 +27,7 @@ internal fun Session.toSessionData(
     accessToken = accessToken,
     refreshToken = refreshToken,
     homeserverUrl = homeserverUrl ?: this.homeserverUrl,
-    oidcData = oidcData,
+    oAuthData = oauthData,
     loginTimestamp = Date(),
     isTokenValid = isTokenValid,
     loginType = loginType,
@@ -52,7 +52,7 @@ internal fun ExternalSession.toSessionData(
     accessToken = accessToken,
     refreshToken = refreshToken,
     homeserverUrl = homeserverUrl,
-    oidcData = null,
+    oAuthData = null,
     loginTimestamp = Date(),
     isTokenValid = isTokenValid,
     loginType = loginType,

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.plus
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -30,12 +31,12 @@ import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.link.LinkEvent
 import io.element.android.features.messages.impl.link.LinkView
+import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.components.TimelineItemRow
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
-import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.poll.api.pollcontent.PollTitleView
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
@@ -47,6 +48,8 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -59,6 +62,7 @@ fun PinnedMessagesListView(
     state: PinnedMessagesListState,
     onBackClick: () -> Unit,
     onEventClick: (event: TimelineItem.Event) -> Unit,
+    onGalleryItemClick: (event: TimelineItem.Event, index: Int) -> Unit,
     onUserDataClick: (MatrixUser) -> Unit,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
@@ -80,6 +84,7 @@ fun PinnedMessagesListView(
             PinnedMessagesListContent(
                 state = state,
                 onEventClick = onEventClick,
+                onGalleryItemClick = onGalleryItemClick,
                 onUserDataClick = onUserDataClick,
                 onLinkClick = onLinkClick,
                 onLinkLongClick = onLinkLongClick,
@@ -88,7 +93,8 @@ fun PinnedMessagesListView(
                     .padding(padding)
                     .consumeWindowInsets(padding),
             )
-        }
+        },
+        contentWindowInsets = scaffoldScrollableContentInsets,
     )
 }
 
@@ -110,6 +116,7 @@ private fun PinnedMessagesListTopBar(
 private fun PinnedMessagesListContent(
     state: PinnedMessagesListState,
     onEventClick: (event: TimelineItem.Event) -> Unit,
+    onGalleryItemClick: (event: TimelineItem.Event, index: Int) -> Unit,
     onUserDataClick: (MatrixUser) -> Unit,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
@@ -130,6 +137,7 @@ private fun PinnedMessagesListContent(
                 state = state,
                 displayThreadSummaries = state.displayThreadSummaries,
                 onEventClick = onEventClick,
+                onGalleryItemClick = onGalleryItemClick,
                 onUserDataClick = onUserDataClick,
                 onLinkClick = onLinkClick,
                 onLinkLongClick = onLinkLongClick,
@@ -168,6 +176,7 @@ private fun PinnedMessagesListLoaded(
     state: PinnedMessagesListState.Filled,
     displayThreadSummaries: Boolean,
     onEventClick: (event: TimelineItem.Event) -> Unit,
+    onGalleryItemClick: (event: TimelineItem.Event, index: Int) -> Unit,
     onUserDataClick: (MatrixUser) -> Unit,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
@@ -201,11 +210,12 @@ private fun PinnedMessagesListLoaded(
         onEmojiReactionClick = { _, _ -> },
         onVerifiedUserSendFailureClick = {}
     )
+
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         state = rememberLazyListState(),
         reverseLayout = true,
-        contentPadding = PaddingValues(vertical = 8.dp),
+        contentPadding = lazyColumnContentPadding + PaddingValues(vertical = 8.dp),
     ) {
         items(
             items = state.timelineItems,
@@ -216,7 +226,6 @@ private fun PinnedMessagesListLoaded(
                 timelineItem = timelineItem,
                 timelineMode = Timeline.Mode.PinnedEvents,
                 timelineRoomInfo = state.timelineRoomInfo,
-                renderReadReceipts = false,
                 timelineProtectionState = state.timelineProtectionState,
                 isLastOutgoingMessage = false,
                 focusedEventId = null,
@@ -226,6 +235,7 @@ private fun PinnedMessagesListLoaded(
                 },
                 onLinkLongClick = onLinkLongClick,
                 onContentClick = onEventClick,
+                onGalleryItemClick = onGalleryItemClick,
                 onLongClick = ::onMessageLongClick,
                 displayThreadSummaries = displayThreadSummaries,
                 inReplyToClick = {},
@@ -235,12 +245,18 @@ private fun PinnedMessagesListLoaded(
                 onReadReceiptClick = {},
                 onSwipeToReply = {},
                 onJoinCallClick = {},
-                eventSink = {},
+                eventSink = { timelineItemEvent ->
+                    when (timelineItemEvent) {
+                        is TimelineEvent.OpenThread -> state.eventSink(PinnedMessagesListEvent.OpenThread(timelineItemEvent.threadRootEventId))
+                        else -> Unit
+                    }
+                },
                 eventContentView = { event, contentModifier, onContentLayoutChange ->
                     TimelineItemEventContentViewWrapper(
                         event = event,
                         timelineProtectionState = state.timelineProtectionState,
                         onContentClick = { onEventClick(event) },
+                        onGalleryItemClick = { index -> onGalleryItemClick(event, index) },
                         onLongClick = { onMessageLongClick(event) },
                         onLinkClick = { link ->
                             state.linkState.eventSink(LinkEvent.OnLinkClick(link))
@@ -264,6 +280,7 @@ private fun TimelineItemEventContentViewWrapper(
     event: TimelineItem.Event,
     timelineProtectionState: TimelineProtectionState,
     onContentClick: () -> Unit,
+    onGalleryItemClick: (index: Int) -> Unit,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
     onLongClick: (() -> Unit)?,
@@ -278,9 +295,10 @@ private fun TimelineItemEventContentViewWrapper(
         )
     } else {
         TimelineItemEventContentView(
+            eventId = event.eventId,
             content = event.content,
-            hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId),
-            onShowContentClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
+            timelineProtectionState = timelineProtectionState,
+            onGalleryItemClick = onGalleryItemClick,
             onLinkClick = onLinkClick,
             onLinkLongClick = onLinkLongClick,
             eventSink = { },
@@ -300,6 +318,7 @@ internal fun PinnedMessagesListViewPreview(@PreviewParameter(PinnedMessagesListS
             state = state,
             onBackClick = {},
             onEventClick = { },
+            onGalleryItemClick = { _, _ -> },
             onUserDataClick = {},
             onLinkClick = {},
             onLinkLongClick = {},

@@ -8,8 +8,11 @@
 
 package io.element.android.features.location.api
 
+import android.graphics.Bitmap
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -22,11 +25,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.createBitmap
 import coil3.Extras
+import coil3.asImage
 import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
 import coil3.request.ImageRequest
+import coil3.request.SuccessResult
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.location.api.internal.StaticMapPlaceholder
 import io.element.android.features.location.api.internal.StaticMapUrlBuilder
@@ -35,14 +44,20 @@ import io.element.android.libraries.designsystem.components.LocationPin
 import io.element.android.libraries.designsystem.components.PinVariant
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 /**
  * Shows a static map image downloaded via a third party service's static maps API.
+ *
+ * Handles 4 distinct cases:
+ * 1. Stale location (pinVariant is StaleLocation) - shows stale map with stale pin, no fetching
+ * 2. Null location - shows blurred placeholder, no pin, no loading
+ * 3. Loading (location != null, fetching) - shows blurred placeholder with loading indicator
+ * 4. Success (location != null, loaded) - shows actual map with pin
  */
 @Composable
 fun StaticMapView(
-    lat: Double,
-    lon: Double,
+    location: Location?,
     zoom: Double,
     pinVariant: PinVariant,
     contentDescription: String?,
@@ -56,19 +71,90 @@ fun StaticMapView(
         modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
-        val context = LocalContext.current
-        var retryHash by remember { mutableIntStateOf(0) }
-        val builder = remember { StaticMapUrlBuilder() }
+        // Case 1: Stale location - show stale map with stale pin, no fetching
+        when {
+            pinVariant is PinVariant.StaleLocation -> {
+                StaleMapContent(
+                    pinVariant = pinVariant,
+                    contentDescription = contentDescription,
+                    width = maxWidth,
+                    height = maxHeight,
+                )
+            }
+            // Case 2: Null location - show blurred placeholder, no pin, no loading
+            location == null -> {
+                StaticMapPlaceholder(
+                    painter = painterResource(R.drawable.blurred_map),
+                    canReload = false,
+                    contentDescription = contentDescription,
+                    width = maxWidth,
+                    height = maxHeight,
+                    onLoadMapClick = {}
+                )
+            }
+            // Cases 3 & 4: Non-null location - fetch map
+            else -> LoadableMapContent(
+                location = location,
+                zoom = zoom,
+                pinVariant = pinVariant,
+                contentDescription = contentDescription,
+                darkMode = darkMode,
+            )
+        }
+    }
+}
+
+@Composable
+private fun BoxWithConstraintsScope.StaleMapContent(
+    pinVariant: PinVariant,
+    contentDescription: String?,
+    width: Dp,
+    height: Dp,
+) {
+    Box(contentAlignment = Alignment.Center) {
+        Image(
+            painter = painterResource(R.drawable.stale_map),
+            contentDescription = contentDescription,
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.size(width = width, height = height)
+        )
+        LocationPin(variant = pinVariant, modifier = Modifier.centerBottomEdge(this@StaleMapContent))
+    }
+}
+
+@Composable
+private fun BoxWithConstraintsScope.LoadableMapContent(
+    location: Location,
+    zoom: Double,
+    pinVariant: PinVariant,
+    contentDescription: String?,
+    darkMode: Boolean,
+) {
+    val context = LocalContext.current
+    var retryHash by remember { mutableIntStateOf(0) }
+    val builder = remember { StaticMapUrlBuilder() }
+
+    val (painter, state, contentScale) = if (LocalInspectionMode.current) {
+        val painter = painterResource(CommonDrawables.sample_map)
+        val state = AsyncImagePainter.State.Success(
+            painter = painter,
+            result = SuccessResult(
+                image = createBitmap(1, 1, Bitmap.Config.ALPHA_8).asImage(),
+                request = ImageRequest.Builder(context).build()
+            )
+        )
+        Triple(painter, state, ContentScale.Crop)
+    } else {
         val painter = rememberAsyncImagePainter(
             model = if (constraints.isZero) {
-                // Avoid building a URL if any of the size constraints is zero (else it will thrown an exception).
+                // Avoid building a URL if any of the size constraints is zero
                 null
             } else {
                 ImageRequest.Builder(context)
                     .data(
                         builder.build(
-                            lat = lat,
-                            lon = lon,
+                            lat = location.lat,
+                            lon = location.lon,
                             zoom = zoom,
                             darkMode = darkMode,
                             width = constraints.maxWidth,
@@ -84,22 +170,26 @@ fun StaticMapView(
             }
         )
 
-        val collectedState = painter.state.collectAsState()
-        if (collectedState.value is AsyncImagePainter.State.Success) {
+        val state by painter.state.collectAsState()
+        Triple(painter, state, ContentScale.Fit)
+    }
+
+    when (state) {
+        is AsyncImagePainter.State.Success -> {
             Image(
                 painter = painter,
                 contentDescription = contentDescription,
                 modifier = Modifier.size(width = maxWidth, height = maxHeight),
                 // The returned image can be smaller than the requested size due to the static maps API having
-                // a max width and height of 2048 px. See buildStaticMapsApiUrl() for more details.
-                // We apply ContentScale.Fit to scale the image to fill the AsyncImage should this be the case.
-                contentScale = ContentScale.Fit,
+                // a max width and height of 2048 px. We apply ContentScale.Fit to handle this.
+                contentScale = contentScale,
             )
             LocationPin(variant = pinVariant, modifier = Modifier.centerBottomEdge(this))
-        } else {
+        }
+        else -> {
             StaticMapPlaceholder(
-                showProgress = collectedState.value.isLoading(),
-                canReload = builder.isServiceAvailable(),
+                painter = painterResource(R.drawable.blurred_map),
+                canReload = builder.isServiceAvailable() && state is AsyncImagePainter.State.Error,
                 contentDescription = contentDescription,
                 width = maxWidth,
                 height = maxHeight,
@@ -109,17 +199,11 @@ fun StaticMapView(
     }
 }
 
-private fun AsyncImagePainter.State.isLoading(): Boolean {
-    return this is AsyncImagePainter.State.Empty ||
-        this is AsyncImagePainter.State.Loading
-}
-
 @PreviewsDayNight
 @Composable
 internal fun StaticMapViewPreview() = ElementPreview {
     StaticMapView(
-        lat = 0.0,
-        lon = 0.0,
+        location = Location(0.0, 0.0),
         zoom = 0.0,
         contentDescription = null,
         pinVariant = PinVariant.PinnedLocation,

@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.GalleryMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.LegacyCallInviteContent
 import io.element.android.libraries.matrix.api.timeline.item.event.LiveLocationContent
@@ -54,6 +55,7 @@ class DefaultRoomLatestEventFormatter(
     private val roomMembershipContentFormatter: RoomMembershipContentFormatter,
     private val profileChangeContentFormatter: ProfileChangeContentFormatter,
     private val stateContentFormatter: StateContentFormatter,
+    private val rtcNotificationContentFormatter: RtcNotificationContentFormatter,
     private val permalinkParser: PermalinkParser,
 ) : RoomLatestEventFormatter {
     override fun format(
@@ -92,8 +94,8 @@ class DefaultRoomLatestEventFormatter(
                 message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is StickerContent -> {
-                val message = sp.getString(CommonStrings.common_sticker) + " (" + content.bestDescription + ")"
-                message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
+                content.bestDescription.prefixWith(sp.getString(CommonStrings.common_sticker))
+                    .prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is UnableToDecryptContent -> {
                 val message = sp.getString(CommonStrings.common_waiting_for_decryption_key)
@@ -109,19 +111,19 @@ class DefaultRoomLatestEventFormatter(
                 stateContentFormatter.format(content, senderDisambiguatedDisplayName, isOutgoing, RenderingMode.RoomList)
             }
             is PollContent -> {
-                val message = sp.getString(CommonStrings.common_poll_summary, content.question)
-                message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
+                content.question.prefixWith(sp.getString(CommonStrings.common_poll_summary_prefix))
+                    .prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is FailedToParseMessageLikeContent, is FailedToParseStateContent, is UnknownContent -> {
                 val message = sp.getString(CommonStrings.common_unsupported_event)
                 message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is LiveLocationContent -> {
-                val message = sp.getString(CommonStrings.common_shared_location)
+                val message = sp.getString(CommonStrings.common_shared_live_location)
                 message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is LegacyCallInviteContent -> sp.getString(CommonStrings.common_unsupported_call)
-            is CallNotifyContent -> sp.getString(CommonStrings.common_call_started)
+            is CallNotifyContent -> rtcNotificationContentFormatter.format(content, isDmRoom)
         }?.take(DEFAULT_SAFE_LENGTH)
     }
 
@@ -139,30 +141,35 @@ class DefaultRoomLatestEventFormatter(
                 messageType.toPlainText(permalinkParser)
             }
             is VideoMessageType -> {
-                messageType.bestDescription.prefixWith(sp.getString(CommonStrings.common_video))
+                messageType.toPlainText(permalinkParser).prefixWith(sp.getString(CommonStrings.common_video))
             }
             is ImageMessageType -> {
-                messageType.bestDescription.prefixWith(sp.getString(CommonStrings.common_image))
+                messageType.toPlainText(permalinkParser).prefixWith(sp.getString(CommonStrings.common_image))
             }
             is StickerMessageType -> {
-                messageType.bestDescription.prefixWith(sp.getString(CommonStrings.common_sticker))
+                messageType.toPlainText(permalinkParser).prefixWith(sp.getString(CommonStrings.common_sticker))
             }
             is LocationMessageType -> {
                 sp.getString(CommonStrings.common_shared_location)
             }
             is FileMessageType -> {
-                messageType.bestDescription.prefixWith(sp.getString(CommonStrings.common_file))
+                messageType.toPlainText(permalinkParser).prefixWith(sp.getString(CommonStrings.common_file))
             }
             is AudioMessageType -> {
-                messageType.bestDescription.prefixWith(sp.getString(CommonStrings.common_audio))
+                messageType.toPlainText(permalinkParser).prefixWith(sp.getString(CommonStrings.common_audio))
             }
             is VoiceMessageType -> {
-                // In this case, do not use bestDescription, because the filename is useless, only use the caption if available.
-                messageType.caption?.prefixWith(sp.getString(CommonStrings.common_voice_message))
+                messageType
+                    .toPlainText(permalinkParser, "")
+                    .takeIf { it.isNotEmpty() }
+                    ?.prefixWith(sp.getString(CommonStrings.common_voice_message))
                     ?: sp.getString(CommonStrings.common_voice_message)
             }
             is OtherMessageType -> {
                 messageType.body
+            }
+            is GalleryMessageType -> {
+                messageType.body.prefixWith(sp.getString(CommonStrings.common_gallery))
             }
             is NoticeMessageType -> {
                 messageType.body

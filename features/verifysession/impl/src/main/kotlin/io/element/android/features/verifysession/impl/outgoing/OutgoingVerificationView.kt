@@ -24,8 +24,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.focused
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -64,7 +66,8 @@ fun OutgoingVerificationView(
     fun cancelOrResetFlow() {
         when (step) {
             is Step.Canceled -> state.eventSink(OutgoingVerificationViewEvents.Reset)
-            Step.Initial, Step.Completed -> onBack()
+            Step.Initial -> onBack()
+            Step.Completed -> onFinish()
             Step.Ready, is Step.AwaitingOtherDeviceResponse -> state.eventSink(OutgoingVerificationViewEvents.Cancel)
             is Step.Verifying -> {
                 if (!step.state.isLoading()) {
@@ -94,7 +97,9 @@ fun OutgoingVerificationView(
                 TopAppBar(
                     title = {},
                     navigationIcon = {
-                        BackButton(onClick = ::cancelOrResetFlow)
+                        if (step !is Step.Completed) {
+                            BackButton(onClick = ::cancelOrResetFlow)
+                        }
                     },
                     colors = topAppBarColors(containerColor = Color.Transparent),
                 )
@@ -106,7 +111,7 @@ fun OutgoingVerificationView(
                 OutgoingVerificationBottomMenu(
                     state = state,
                     onCancelClick = ::cancelOrResetFlow,
-                    onContinueClick = onFinish,
+                    onDoneClick = onFinish,
                 )
             },
             isScrollable = true,
@@ -227,7 +232,11 @@ private fun ContentInitial(
         Text(
             modifier = Modifier
                 .clickable { onLearnMoreClick() }
-                .padding(vertical = 4.dp, horizontal = 16.dp),
+                .padding(vertical = 4.dp, horizontal = 16.dp)
+                .semantics {
+                    // Note: there is no Role.Link, so we use Role.Button for better accessibility support
+                    role = Role.Button
+                },
             text = stringResource(CommonStrings.action_learn_more),
             style = ElementTheme.typography.fontBodyLgMedium
         )
@@ -238,7 +247,7 @@ private fun ContentInitial(
 private fun OutgoingVerificationBottomMenu(
     state: OutgoingVerificationState,
     onCancelClick: () -> Unit,
-    onContinueClick: () -> Unit,
+    onDoneClick: () -> Unit,
 ) {
     val eventSink = state.eventSink
     when (val step = state.step) {
@@ -307,8 +316,8 @@ private fun OutgoingVerificationBottomMenu(
             VerificationBottomMenu {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(CommonStrings.action_continue),
-                    onClick = onContinueClick,
+                    text = stringResource(CommonStrings.action_done),
+                    onClick = onDoneClick,
                 )
                 InvisibleButton()
             }

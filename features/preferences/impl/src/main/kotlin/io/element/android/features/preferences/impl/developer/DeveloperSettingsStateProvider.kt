@@ -9,14 +9,12 @@
 package io.element.android.features.preferences.impl.developer
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.preferences.impl.developer.tracing.LogLevelItem
-import io.element.android.features.rageshake.api.preferences.aRageshakePreferencesState
+import io.element.android.features.preferences.impl.developer.appsettings.AppDeveloperSettingsState
+import io.element.android.features.preferences.impl.developer.appsettings.anAppDeveloperSettingsState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.featureflag.ui.model.aFeatureUiModelList
-import io.element.android.libraries.matrix.api.tracing.TraceLogPack
+import io.element.android.libraries.matrix.api.core.DeviceId
 import kotlinx.collections.immutable.persistentMapOf
-import kotlinx.collections.immutable.toImmutableList
 
 open class DeveloperSettingsStateProvider : PreviewParameterProvider<DeveloperSettingsState> {
     override val values: Sequence<DeveloperSettingsState>
@@ -24,11 +22,6 @@ open class DeveloperSettingsStateProvider : PreviewParameterProvider<DeveloperSe
             aDeveloperSettingsState(),
             aDeveloperSettingsState(
                 clearCacheAction = AsyncAction.Loading
-            ),
-            aDeveloperSettingsState(
-                customElementCallBaseUrlState = aCustomElementCallBaseUrlState(
-                    baseUrl = "https://call.element.ahoy",
-                )
             ),
             aDeveloperSettingsState(
                 isEnterpriseBuild = true,
@@ -43,30 +36,21 @@ open class DeveloperSettingsStateProvider : PreviewParameterProvider<DeveloperSe
 }
 
 fun aDeveloperSettingsState(
+    appDeveloperSettingsState: AppDeveloperSettingsState = anAppDeveloperSettingsState(),
     clearCacheAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
-    customElementCallBaseUrlState: CustomElementCallBaseUrlState = aCustomElementCallBaseUrlState(),
-    traceLogPacks: List<TraceLogPack> = emptyList(),
+    markAllRoomsAsReadAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     isEnterpriseBuild: Boolean = false,
     showColorPicker: Boolean = false,
+    deviceId: DeviceId = DeviceId("ILAKNDNASDLK"),
     eventSink: (DeveloperSettingsEvents) -> Unit = {},
 ) = DeveloperSettingsState(
-    features = aFeatureUiModelList(),
-    rageshakeState = aRageshakePreferencesState(),
+    appDeveloperSettingsState = appDeveloperSettingsState,
     cacheSize = AsyncData.Success("1.2 MB"),
     databaseSizes = AsyncData.Success(persistentMapOf("state_store" to "1.2MB")),
     clearCacheAction = clearCacheAction,
-    customElementCallBaseUrlState = customElementCallBaseUrlState,
-    tracingLogLevel = AsyncData.Success(LogLevelItem.INFO),
-    tracingLogPacks = traceLogPacks.toImmutableList(),
+    markAllRoomsAsReadAction = markAllRoomsAsReadAction,
     isEnterpriseBuild = isEnterpriseBuild,
     showColorPicker = showColorPicker,
+    deviceId = deviceId,
     eventSink = eventSink,
-)
-
-fun aCustomElementCallBaseUrlState(
-    baseUrl: String? = null,
-    validator: (String?) -> Boolean = { true },
-) = CustomElementCallBaseUrlState(
-    baseUrl = baseUrl,
-    validator = validator,
 )

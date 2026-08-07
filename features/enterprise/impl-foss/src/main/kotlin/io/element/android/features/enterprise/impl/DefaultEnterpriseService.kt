@@ -15,6 +15,7 @@ import io.element.android.compound.colors.SemanticColorsLightDark
 import io.element.android.features.enterprise.api.BugReportUrl
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.wellknown.api.ElementWellKnown
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -23,7 +24,7 @@ class DefaultEnterpriseService : EnterpriseService {
     override val isEnterpriseBuild = false
 
     override suspend fun isEnterpriseUser(sessionId: SessionId) = false
-
+    override suspend fun tweakMasUrl(url: String, homeserver: String) = url
     override fun defaultHomeserverList(): List<String> = emptyList()
     override suspend fun isAllowedToConnectToHomeserver(homeserverUrl: String) = true
 
@@ -45,4 +46,6 @@ class DefaultEnterpriseService : EnterpriseService {
     }
 
     override fun getNoisyNotificationChannelId(sessionId: SessionId): String? = null
+
+    override fun overriddenElementWellKnown(): ElementWellKnown? = null
 }

@@ -17,8 +17,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.spaces.SpaceServiceFilter
 import kotlinx.collections.immutable.persistentListOf
@@ -27,20 +25,15 @@ import kotlinx.coroutines.flow.map
 
 @Inject
 class SpaceFiltersPresenter(
-    private val featureFlagService: FeatureFlagService,
     private val matrixClient: MatrixClient,
 ) : Presenter<SpaceFiltersState> {
     @Composable
     override fun present(): SpaceFiltersState {
-        val isFeatureEnabled by featureFlagService
-            .isFeatureEnabledFlow(FeatureFlags.RoomListSpaceFilters)
-            .collectAsState(initial = false)
-
         val availableFilters by remember {
             matrixClient.spaceService.spaceFiltersFlow.map { it.toImmutableList() }
         }.collectAsState(initial = persistentListOf())
 
-        if (!isFeatureEnabled || availableFilters.isEmpty()) {
+        if (availableFilters.isEmpty()) {
             return SpaceFiltersState.Disabled
         }
 

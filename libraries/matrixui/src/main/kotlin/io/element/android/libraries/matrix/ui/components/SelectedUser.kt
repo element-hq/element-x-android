@@ -18,6 +18,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.USER_NAME_JOHN_DOE
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.getBestName
@@ -58,7 +59,7 @@ internal fun SelectedUserRtlPreview() = CompositionLocalProvider(
 ) {
     ElementPreview {
         SelectedUser(
-            matrixUser = aMatrixUser(displayName = "John Doe"),
+            matrixUser = aMatrixUser(displayName = USER_NAME_JOHN_DOE),
             canRemove = true,
             onUserRemove = {},
         )

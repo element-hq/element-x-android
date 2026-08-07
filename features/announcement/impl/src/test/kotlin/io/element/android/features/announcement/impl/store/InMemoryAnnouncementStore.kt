@@ -14,10 +14,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class InMemoryAnnouncementStore(
-    initialSpaceAnnouncementStatus: AnnouncementStatus = AnnouncementStatus.NeverShown,
+    initialFullscreenAnnouncementStatus: AnnouncementStatus = AnnouncementStatus.NeverShown,
     initialNewNotificationSoundAnnouncementStatus: AnnouncementStatus = AnnouncementStatus.NeverShown,
 ) : AnnouncementStore {
-    private val spaceAnnouncement = MutableStateFlow(initialSpaceAnnouncementStatus)
+    private val fullScreenAnnouncement = MutableStateFlow(initialFullscreenAnnouncementStatus)
     private val newNotificationSoundAnnouncement = MutableStateFlow(initialNewNotificationSoundAnnouncementStatus)
 
     override suspend fun setAnnouncementStatus(announcement: Announcement, status: AnnouncementStatus) {
@@ -29,12 +29,12 @@ class InMemoryAnnouncementStore(
     }
 
     override suspend fun reset() {
-        spaceAnnouncement.value = AnnouncementStatus.NeverShown
+        fullScreenAnnouncement.value = AnnouncementStatus.NeverShown
         newNotificationSoundAnnouncement.value = AnnouncementStatus.NeverShown
     }
 
     private fun Announcement.toMutableStateFlow() = when (this) {
-        Announcement.Space -> spaceAnnouncement
+        is Announcement.Fullscreen -> fullScreenAnnouncement
         Announcement.NewNotificationSound -> newNotificationSoundAnnouncement
     }
 }

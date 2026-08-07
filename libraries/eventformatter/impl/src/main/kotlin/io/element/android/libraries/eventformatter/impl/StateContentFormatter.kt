@@ -118,15 +118,6 @@ class StateContentFormatter(
                     "PolicyRuleUser"
                 }
             }
-            OtherState.RoomAliases -> when (renderingMode) {
-                RenderingMode.RoomList -> {
-                    Timber.v("Filtering timeline item for room state change: $content")
-                    null
-                }
-                RenderingMode.Timeline -> {
-                    "RoomAliases"
-                }
-            }
             OtherState.RoomCanonicalAlias -> when (renderingMode) {
                 RenderingMode.RoomList -> {
                     Timber.v("Filtering timeline item for room state change: $content")

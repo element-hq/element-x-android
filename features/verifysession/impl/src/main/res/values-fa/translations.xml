@@ -2,8 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"نمی‌توانید تأیید کنید؟"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"ایجاد کلید بازیابی جدید"</string>
-  <string name="screen_identity_confirmation_subtitle">"تأیید این افزاره برای برپایی پیام‌رسانی امن."</string>
-  <string name="screen_identity_confirmation_title">"تأیید هویتتان"</string>
+  <string name="screen_identity_confirmation_subtitle">"گزینش چگونگی تأیید برای برپایی پیام‌رسانی امن."</string>
+  <string name="screen_identity_confirmation_title">"تأیید هویت دیجیتالیتان"</string>
   <string name="screen_identity_confirmation_use_another_device">"استفاده از افزاره‌ای دیگر"</string>
   <string name="screen_identity_confirmation_use_recovery_key">"استفاده از کلید بازیابی"</string>
   <string name="screen_identity_confirmed_subtitle">"اکنون می‌توانید پیام‌ها را به صورت امن فرستاده و بگیرید و هرکسی که با او گپ می‌زنید نیز می‌تواند به این افزاره اعتماد کند."</string>
@@ -13,6 +13,7 @@
   <string name="screen_session_verification_cancelled_subtitle">"يه چيزي درست به نظر نمياد یا زمان درخواست به پایان رسید یا درخواست رد شد."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"تأیید تطابق شکلک‌های زیر با شکلک‌های نشان داده شده روی افزارهٔ دیگرتان."</string>
   <string name="screen_session_verification_compare_emojis_title">"مقایسهٔ شکلک‌ها"</string>
+  <string name="screen_session_verification_compare_numbers_subtitle">"تأیید کنید که اعداد زیر با اعداد نشان داده شده در جلسه دیگر شما مطابقت دارند."</string>
   <string name="screen_session_verification_compare_numbers_title">"مقایسهٔ اعداد"</string>
   <string name="screen_session_verification_complete_subtitle">"اکنون می‌توانید روی افزارهٔ دیگرتان با امنیت پیام فرستاده و بخوانید."</string>
   <string name="screen_session_verification_device_verified">"افزاره تأیید شده"</string>
@@ -32,5 +33,5 @@
   <string name="screen_session_verification_they_match">"مطابقند"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"برای ادامه، درخواست شروع فرآیند تأیید را در جلسه دیگر خود بپذیرید."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"منظر پذیرش درخواست"</string>
-  <string name="screen_signout_in_progress_dialog_content">"خارج شدن…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"برداشتن افزاره…"</string>
 </resources>

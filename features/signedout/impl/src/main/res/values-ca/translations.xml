@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signed_out_reason_1">"Has canviat la contrasenya en una altra sessió"</string>
+  <string name="screen_signed_out_reason_2">"Has eliminat la sessió des d\'una altra sessió"</string>
+  <string name="screen_signed_out_reason_3">"L\'administrador del teu servidor t\'ha invalidat l\'accés"</string>
+  <string name="screen_signed_out_subtitle">"S\'ha tancat la sessió per algun dels motius enumerats a continuació. Torna a iniciar sessió per continuar utilitzant %s."</string>
+  <string name="screen_signed_out_title">"Has tancat sessió"</string>
+</resources>

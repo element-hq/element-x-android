@@ -6,15 +6,17 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.tests.testutils
 
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
+import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
 import io.element.android.libraries.designsystem.utils.LocalUiTestMode
 import org.junit.Assert.assertFalse
-import org.junit.rules.TestRule
 import kotlin.coroutines.CoroutineContext
 
 object RobolectricDispatcherCleaner {
@@ -52,7 +54,7 @@ object RobolectricDispatcherCleaner {
     }
 }
 
-fun <R : TestRule, A : ComponentActivity> AndroidComposeTestRule<R, A>.setSafeContent(
+fun AndroidComposeUiTest<ComponentActivity>.setSafeContent(
     clearAndroidUiDispatcher: Boolean = false,
     content: @Composable () -> Unit,
 ) {

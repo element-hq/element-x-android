@@ -38,6 +38,7 @@ interface MessagesEntryPoint : FeatureEntryPoint {
         fun handlePermalinkClick(data: PermalinkData, pushToBackstack: Boolean)
         fun forwardEvent(eventId: EventId, fromPinnedEvents: Boolean)
         fun navigateToRoom(roomId: RoomId)
+        fun navigateToDeveloperSettings()
     }
 
     data class Params(val initialTarget: InitialTarget) : NodeInputs

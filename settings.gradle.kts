@@ -21,6 +21,8 @@ dependencyResolutionManagement {
             url = uri("https://www.jitpack.io")
             content {
                 includeModule("com.github.matrix-org", "matrix-analytics-events")
+                // Required transitively by androidx.media3:media3-exoplayer-midi for MIDI playback.
+                includeModule("com.github.philburk", "jsyn")
             }
         }
         google()

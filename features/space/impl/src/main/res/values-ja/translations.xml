@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_leave_space_choose_owners_action">"所有者を選択"</string>
+  <string name="screen_leave_space_last_admin_info">"%1$s (管理者)"</string>
+  <plurals name="screen_leave_space_submit">
+    <item quantity="other">"%1$d 個のルームとスペースを退出"</item>
+  </plurals>
+  <string name="screen_leave_space_subtitle">"あなたが唯一の管理者であるルーム以外を選択してください。"</string>
+  <string name="screen_leave_space_subtitle_last_admin">"このスペースを退出する前に、新しく管理者を設定してください。"</string>
+  <string name="screen_leave_space_subtitle_last_owner">"あなたは %1$s の唯一の所有者です。退出する前に所有権を譲与する必要があります。"</string>
+  <string name="screen_leave_space_subtitle_only_last_admin">"あなたが唯一の管理者であるため、以下のルームからは退出しません。"</string>
+  <string name="screen_leave_space_title">"%1$s を退出しますか？"</string>
+  <string name="screen_leave_space_title_last_admin">"あなたが唯一の %1$s の管理者です。"</string>
+  <string name="screen_leave_space_title_last_owner">"所有権の譲渡"</string>
+  <string name="screen_space_add_room_action">"ルーム"</string>
+  <string name="screen_space_add_rooms_room_access_description">"ルームの追加はルームへのアクセスに影響しません。アクセスの設定は、ルームの設定 &gt; セキュリティーとプライバシー から変更できます。"</string>
+  <string name="screen_space_empty_state_title">"最初のルームを追加しましょう"</string>
+  <string name="screen_space_menu_action_members">"メンバーを表示"</string>
+  <string name="screen_space_remove_rooms_confirmation_content">"ルームの削除はルームへのアクセスに影響しません。アクセスの設定は、ルームの設定 &gt; セキュリティーとプライバシー から変更できます。"</string>
+  <plurals name="screen_space_remove_rooms_confirmation_title">
+    <item quantity="other">"%2$s から%1$d 個のルームを削除"</item>
+  </plurals>
+  <string name="screen_space_settings_leave_space">"スペースを退出"</string>
+  <string name="screen_space_settings_roles_and_permissions">"役割と権限"</string>
+  <string name="screen_space_settings_security_and_privacy">"セキュリティとプライバシー"</string>
+</resources>

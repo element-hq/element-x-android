@@ -24,9 +24,15 @@ interface EncryptionService {
     suspend fun enableBackups(): Result<Unit>
 
     /**
-     * Enable recovery. Observe enableProgressStateFlow to get progress and recovery key.
+     * Enable recovery and return the SDK-generated recovery key on success.
+     * Observe [enableRecoveryProgressStateFlow] for in-progress UI updates.
+     *
+     * @param waitForBackupsToUpload when true, suspends until existing room keys finish uploading.
+     * @param passphrase optional user-supplied passphrase. When set, the SDK derives the
+     *   secret-storage key from it instead of a random base58 key; the passphrase can later be
+     *   passed to [recover], and the returned base58 key should not be surfaced to the user.
      */
-    suspend fun enableRecovery(waitForBackupsToUpload: Boolean): Result<Unit>
+    suspend fun enableRecovery(waitForBackupsToUpload: Boolean, passphrase: String? = null): Result<String>
 
     /**
      * Change the recovery and return the new recovery key.
@@ -112,19 +118,19 @@ interface IdentityPasswordResetHandle : IdentityResetHandle {
 }
 
 /**
- * A handle to reset the user's identity with an OIDC login type.
+ * A handle to reset the user's identity with an OAuth login type.
  */
-interface IdentityOidcResetHandle : IdentityResetHandle {
+interface IdentityOAuthResetHandle : IdentityResetHandle {
     /**
      * The URL to open in a webview/custom tab to reset the identity.
      */
     val url: String
 
     /**
-     * Reset the identity using the OIDC flow.
+     * Reset the identity using the OAuth flow.
      *
      * This method will block the coroutine it's running on and keep polling indefinitely until either the coroutine is cancelled, the [cancel] method is
      * called, or the identity is reset.
      */
-    suspend fun resetOidc(): Result<Unit>
+    suspend fun resetOAuth(): Result<Unit>
 }

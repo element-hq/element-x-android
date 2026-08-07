@@ -11,6 +11,7 @@ package io.element.android.features.messages.impl.crypto.sendfailure.resolve
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailure
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 
 open class ResolveVerifiedUserSendFailureStateProvider : PreviewParameterProvider<ResolveVerifiedUserSendFailureState> {
     override val values: Sequence<ResolveVerifiedUserSendFailureState>
@@ -37,10 +38,10 @@ fun aResolveVerifiedUserSendFailureState(
     eventSink = eventSink
 )
 
-fun anUnsignedDeviceSendFailure(userDisplayName: String = "Alice") = VerifiedUserSendFailure.UnsignedDevice.FromOther(
+fun anUnsignedDeviceSendFailure(userDisplayName: String = USER_NAME_ALICE) = VerifiedUserSendFailure.UnsignedDevice.FromOther(
     userDisplayName = userDisplayName,
 )
 
-fun aChangedIdentitySendFailure(userDisplayName: String = "Alice") = VerifiedUserSendFailure.ChangedIdentity(
+fun aChangedIdentitySendFailure(userDisplayName: String = USER_NAME_ALICE) = VerifiedUserSendFailure.ChangedIdentity(
     userDisplayName = userDisplayName,
 )

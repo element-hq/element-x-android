@@ -36,13 +36,13 @@ interface BiometricAuthenticator {
     }
 
     val isActive: Boolean
-    fun setup()
+    suspend fun setup()
     suspend fun authenticate(): AuthenticationResult
 }
 
 class NoopBiometricAuthentication : BiometricAuthenticator {
     override val isActive: Boolean = false
-    override fun setup() = Unit
+    override suspend fun setup() = Unit
     override suspend fun authenticate() = BiometricAuthenticator.AuthenticationResult.Failure()
 }
 
@@ -58,7 +58,8 @@ class DefaultBiometricAuthentication(
 
     private var cryptoObject: CryptoObject? = null
 
-    override fun setup() {
+    override suspend fun setup() {
+        if (cryptoObject != null) return
         try {
             val secretKey = ensureKey()
             val cipher = encryptionDecryptionService.createEncryptionCipher(secretKey)
@@ -86,7 +87,7 @@ class DefaultBiometricAuthentication(
     }
 
     @Throws(KeyPermanentlyInvalidatedException::class)
-    private fun ensureKey() = secretKeyRepository.getOrCreateKey(keyAlias, true).also {
+    private suspend fun ensureKey() = secretKeyRepository.getOrCreateKey(keyAlias, true).also {
         encryptionDecryptionService.createEncryptionCipher(it)
     }
 }
@@ -109,7 +110,9 @@ private class AuthenticationCallback(
 
     override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
         super.onAuthenticationSucceeded(result)
-        if (result.cryptoObject?.cipher.isValid()) {
+        if (result.authenticationType == BiometricPrompt.AUTHENTICATION_RESULT_TYPE_BIOMETRIC &&
+            result.cryptoObject?.cipher.isValid() ||
+            result.authenticationType == BiometricPrompt.AUTHENTICATION_RESULT_TYPE_DEVICE_CREDENTIAL) {
             callbacks.forEach { it.onBiometricAuthenticationSuccess() }
             deferredAuthenticationResult.complete(BiometricAuthenticator.AuthenticationResult.Success)
         } else {

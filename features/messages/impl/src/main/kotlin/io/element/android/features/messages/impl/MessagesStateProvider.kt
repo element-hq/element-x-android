@@ -44,15 +44,16 @@ import io.element.android.features.roommembermoderation.api.RoomMemberModeration
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.preview.ROOM_NAME
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.aTextEditorStateMarkdown
 import io.element.android.libraries.textcomposer.model.aTextEditorStateRich
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 
@@ -79,6 +80,7 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
                     currentPinnedMessageIndex = 0,
                 ),
             ),
+            aMessagesState(isCurrentlySharingLiveLocationInRoom = true),
             aMessagesState(successorRoom = SuccessorRoom(RoomId("!id:domain"), null)),
             aMessagesState(
                 timelineState = aTimelineState(
@@ -94,8 +96,8 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
 }
 
 fun aMessagesState(
-    roomName: String? = "Room name",
-    roomAvatar: AvatarData = AvatarData("!id:domain", "Room name", size = AvatarSize.TimelineRoom),
+    roomName: String? = ROOM_NAME,
+    roomAvatar: AvatarData = AvatarData("!id:domain", ROOM_NAME, size = AvatarSize.TimelineRoom),
     userEventPermissions: UserEventPermissions = aUserEventPermissions(),
     composerState: MessageComposerState = aMessageComposerState(
         textEditorState = aTextEditorStateRich(initialText = "Hello", initialFocus = true),
@@ -122,6 +124,12 @@ fun aMessagesState(
     roomMemberModerationState: RoomMemberModerationState = aRoomMemberModerationState(),
     topBarSharedHistoryIcon: SharedHistoryIcon = SharedHistoryIcon.NONE,
     successorRoom: SuccessorRoom? = null,
+    threads: MessagesState.Threads = MessagesState.Threads(
+        hasThreads = false,
+        hasUnreadThreads = false,
+    ),
+    isCurrentlySharingLiveLocationInRoom: Boolean = false,
+    dmUserStatus: DisplayedStatus? = null,
     eventSink: (MessagesEvent) -> Unit = {},
 ) = MessagesState(
     roomId = RoomId("!id:domain"),
@@ -150,6 +158,9 @@ fun aMessagesState(
     roomMemberModerationState = roomMemberModerationState,
     topBarSharedHistoryIcon = topBarSharedHistoryIcon,
     successorRoom = successorRoom,
+    threads = threads,
+    showLiveLocationShareBanner = isCurrentlySharingLiveLocationInRoom,
+    dmUserStatus = dmUserStatus,
     eventSink = eventSink,
 )
 
@@ -184,11 +195,9 @@ fun aReactionSummaryState(
 
 fun aCustomReactionState(
     target: CustomReactionState.Target = CustomReactionState.Target.None,
-    recentEmojis: ImmutableList<String> = persistentListOf(),
     eventSink: (CustomReactionEvent) -> Unit = {},
 ) = CustomReactionState(
     target = target,
-    recentEmojis = recentEmojis,
     selectedEmoji = persistentSetOf(),
     eventSink = eventSink,
 )

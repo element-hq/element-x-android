@@ -14,6 +14,7 @@ import io.element.android.libraries.matrix.api.auth.external.ExternalSession
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.UserId
 
 interface MatrixAuthenticationService {
     /**
@@ -36,26 +37,40 @@ interface MatrixAuthenticationService {
     suspend fun importCreatedSession(externalSession: ExternalSession): Result<SessionId>
 
     /*
-     * OIDC part.
+     * OAuth part.
      */
 
     /**
-     * Get the Oidc url to display to the user.
+     * Get the OAuth url to display to the user.
      */
-    suspend fun getOidcUrl(
-        prompt: OidcPrompt,
+    suspend fun getOAuthUrl(
+        prompt: OAuthPrompt,
         loginHint: String?,
-    ): Result<OidcDetails>
+    ): Result<OAuthDetails>
 
     /**
-     * Cancel Oidc login sequence.
+     * Cancel OAuth login sequence.
      */
-    suspend fun cancelOidcLogin(): Result<Unit>
+    suspend fun cancelOAuthLogin(): Result<Unit>
 
     /**
-     * Attempt to login using the [callbackUrl] provided by the Oidc page.
+     * Set the existing data about Element Classic session, if any.
      */
-    suspend fun loginWithOidc(callbackUrl: String): Result<SessionId>
+    fun setElementClassicSession(session: ElementClassicSession?)
+
+    /**
+     * Check if the provided secrets from Element Classic session contain a key backup.
+     */
+    fun doSecretsContainBackupKey(
+        userId: UserId,
+        secrets: String,
+        backupInfo: String,
+    ): Boolean
+
+    /**
+     * Attempt to log in using the [callbackUrl] provided by the OAuth page.
+     */
+    suspend fun loginWithOAuth(callbackUrl: String): Result<SessionId>
 
     suspend fun loginWithQrCode(qrCodeData: MatrixQrCodeLoginData, progress: (QrCodeLoginStep) -> Unit): Result<SessionId>
 

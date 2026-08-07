@@ -13,6 +13,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -21,6 +22,7 @@ import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.compound.colors.SemanticColorsLightDark
 import io.element.android.compound.theme.ForcedDarkElementTheme
+import io.element.android.features.contentscanner.api.ContentScannerService
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.viewfolder.api.TextFileViewer
 import io.element.android.libraries.architecture.callback
@@ -32,6 +34,8 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.ui.media.contentvalidation.EventContentValidationCache
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopContentValidationState
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.mediaviewer.impl.datasource.FocusedTimelineMediaGalleryDataSourceFactory
@@ -56,6 +60,8 @@ class MediaViewerNode(
     private val audioFocus: AudioFocus,
     private val sessionId: SessionId,
     private val enterpriseService: EnterpriseService,
+    private val contentScannerService: ContentScannerService,
+    private val contentValidationCache: EventContentValidationCache,
 ) : Node(buildContext, plugins = plugins),
     MediaViewerNavigator {
     private val callback: MediaViewerEntryPoint.Callback = callback()
@@ -73,42 +79,52 @@ class MediaViewerNode(
         callback.onDone()
     }
 
-    private val mediaGallerySource = if (inputs.mode == MediaViewerEntryPoint.MediaViewerMode.SingleMedia) {
-        SingleMediaGalleryDataSource.createFrom(inputs)
-    } else {
-        val eventId = inputs.eventId
-        if (eventId == null) {
-            // Should not happen
-            timelineMediaGalleryDataSource
-        } else {
-            // Can we use a specific timeline?
-            val timelineMode = inputs.mode.getTimelineMode()
-            when (timelineMode) {
-                null -> timelineMediaGalleryDataSource
-                Timeline.Mode.Live,
-                is Timeline.Mode.FocusedOnEvent,
-                is Timeline.Mode.Thread -> {
-                    // Does timelineMediaGalleryDataSource knows the eventId?
-                    val lastData = timelineMediaGalleryDataSource.getLastData().dataOrNull()
-                    val isEventKnown = lastData?.hasEvent(eventId) == true
-                    if (isEventKnown) {
-                        timelineMediaGalleryDataSource
-                    } else {
+    private val mediaGallerySource = when (inputs) {
+        is MediaViewerEntryPoint.Params.Avatar ->
+            SingleMediaGalleryDataSource.createFrom(inputs, contentValidationCache)
+        is MediaViewerEntryPoint.Params.EventGallery ->
+            GalleryMediaGalleryDataSource.createFrom(
+                eventId = inputs.eventId,
+                galleryItems = inputs.galleryItems,
+                galleryInfo = inputs.galleryInfo,
+                contentValidationState = inputs.eventId?.let { contentValidationCache[it] } ?: NoopContentValidationState(),
+            )
+        is MediaViewerEntryPoint.Params.RoomMedia -> {
+            val eventId = inputs.eventId
+            if (eventId == null) {
+                // Should not happen
+                timelineMediaGalleryDataSource
+            } else {
+                // Can we use a specific timeline?
+                val timelineMode = inputs.mode.getTimelineMode()
+                when (timelineMode) {
+                    Timeline.Mode.Live,
+                    is Timeline.Mode.FocusedOnEvent,
+                    is Timeline.Mode.Thread -> {
+                        // Does timelineMediaGalleryDataSource knows the eventId?
+                        val lastData = timelineMediaGalleryDataSource.getLastData().dataOrNull()
+                        val isEventKnown = lastData?.hasEvent(eventId) == true
+                        if (isEventKnown) {
+                            timelineMediaGalleryDataSource
+                        } else {
+                            focusedTimelineMediaGalleryDataSourceFactory.createFor(
+                                eventId = eventId,
+                                mediaItem = inputs.toMediaItem(contentValidationCache[eventId]),
+                                onlyPinnedEvents = false,
+                            )
+                        }
+                    }
+                    Timeline.Mode.PinnedEvents -> {
                         focusedTimelineMediaGalleryDataSourceFactory.createFor(
                             eventId = eventId,
-                            mediaItem = inputs.toMediaItem(),
-                            onlyPinnedEvents = false,
+                            mediaItem = inputs.toMediaItem(contentValidationCache[eventId]),
+                            onlyPinnedEvents = true,
                         )
                     }
+                    Timeline.Mode.Media -> timelineMediaGalleryDataSource
+                    // null should not happen, input should be MediaViewerEntryPoint.Params.EventGallery in this case
+                    null -> timelineMediaGalleryDataSource
                 }
-                Timeline.Mode.PinnedEvents -> {
-                    focusedTimelineMediaGalleryDataSourceFactory.createFor(
-                        eventId = eventId,
-                        mediaItem = inputs.toMediaItem(),
-                        onlyPinnedEvents = true,
-                    )
-                }
-                Timeline.Mode.Media -> timelineMediaGalleryDataSource
             }
         }
     }
@@ -117,13 +133,23 @@ class MediaViewerNode(
         inputs = inputs,
         navigator = this,
         dataSource = MediaViewerDataSource(
-            mode = inputs.mode,
+            mode = when (inputs) {
+                is MediaViewerEntryPoint.Params.Avatar ->
+                    MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(Timeline.Mode.Media)
+                is MediaViewerEntryPoint.Params.EventGallery ->
+                    MediaViewerEntryPoint.MediaViewerMode.EventGallery(fromPinnedMessages = inputs.fromPinnedMessages)
+                is MediaViewerEntryPoint.Params.RoomMedia ->
+                    inputs.mode
+            },
+            coroutineScope = lifecycleScope,
             dispatcher = coroutineDispatchers.computation,
             galleryDataSource = mediaGallerySource,
             mediaLoader = mediaLoader,
             localMediaFactory = localMediaFactory,
             systemClock = systemClock,
             pagerKeysHandler = pagerKeysHandler,
+            contentScannerService = contentScannerService,
+            contentValidationCache = contentValidationCache,
         )
     )
 
@@ -151,6 +177,6 @@ internal fun MediaViewerEntryPoint.MediaViewerMode.getTimelineMode(): Timeline.M
     return when (this) {
         is MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos -> timelineMode
         is MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios -> timelineMode
-        else -> null
+        is MediaViewerEntryPoint.MediaViewerMode.EventGallery -> null
     }
 }

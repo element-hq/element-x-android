@@ -23,6 +23,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -45,6 +47,8 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.OnVisibleRangeChangeEffect
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.matrix.ui.components.SelectedRoom
 import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
 import io.element.android.libraries.matrix.ui.model.getAvatarData
@@ -57,9 +61,10 @@ import kotlinx.collections.immutable.toImmutableList
 fun AddRoomToSpaceView(
     state: AddRoomToSpaceState,
     onBackClick: () -> Unit,
-    onRoomsAdded: () -> Unit,
+    onAddRoom: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val updatedOnAddRoom by rememberUpdatedState(onAddRoom)
     fun onRoomToggled(room: SelectRoomInfo) {
         state.eventSink(AddRoomToSpaceEvent.ToggleRoom(room))
     }
@@ -78,7 +83,7 @@ fun AddRoomToSpaceView(
     // Navigate back on success
     LaunchedEffect(state.saveAction) {
         if (state.saveAction is AsyncAction.Success) {
-            onRoomsAdded()
+            updatedOnAddRoom()
         }
     }
 
@@ -98,7 +103,8 @@ fun AddRoomToSpaceView(
                     )
                 }
             )
-        }
+        },
+        contentWindowInsets = scaffoldScrollableContentInsets,
     ) { paddingValues ->
         Column(
             Modifier
@@ -127,7 +133,9 @@ fun AddRoomToSpaceView(
                 OnVisibleRangeChangeEffect(lazyListState) { visibleRange ->
                     state.eventSink(AddRoomToSpaceEvent.UpdateSearchVisibleRange(visibleRange))
                 }
-                LazyColumn {
+                LazyColumn(
+                    contentPadding = lazyColumnContentPadding,
+                ) {
                     items(rooms, key = { it.roomId }) { roomInfo ->
                         RoomListItem(
                             roomInfo = roomInfo,
@@ -247,6 +255,6 @@ internal fun AddRoomToSpaceViewPreview(
     AddRoomToSpaceView(
         state = state,
         onBackClick = {},
-        onRoomsAdded = {},
+        onAddRoom = {},
     )
 }

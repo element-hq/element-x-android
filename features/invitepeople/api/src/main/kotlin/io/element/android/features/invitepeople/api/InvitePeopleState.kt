@@ -9,10 +9,12 @@
 package io.element.android.features.invitepeople.api
 
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.matrix.api.core.RoomId
 
 interface InvitePeopleState {
     val canInvite: Boolean
     val isSearchActive: Boolean
     val sendInvitesAction: AsyncAction<Unit>
+    val createRoomFromDmAction: AsyncAction<RoomId>
     val eventSink: (InvitePeopleEvents) -> Unit
 }

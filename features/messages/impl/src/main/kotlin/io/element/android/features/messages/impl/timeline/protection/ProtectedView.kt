@@ -26,6 +26,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.theme.Theme
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemAspectRatioBox
 import io.element.android.libraries.designsystem.components.blurhash.blurHashBackground
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -49,7 +50,7 @@ fun ProtectedView(
                 .background(Color(0x99000000)),
             contentAlignment = Alignment.Center,
         ) {
-            ElementTheme(darkTheme = false, applySystemBarsUpdate = false) {
+            ElementTheme(theme = Theme.Light, applySystemBarsUpdate = false) {
                 // Not using a button to be able to have correct size
                 Text(
                     modifier = Modifier

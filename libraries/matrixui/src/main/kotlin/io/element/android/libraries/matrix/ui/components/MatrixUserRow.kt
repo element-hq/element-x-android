@@ -11,6 +11,9 @@ package io.element.android.libraries.matrix.ui.components
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -23,12 +26,21 @@ fun MatrixUserRow(
     matrixUser: MatrixUser,
     modifier: Modifier = Modifier,
     avatarSize: AvatarSize = AvatarSize.UserListItem,
+    verticalSpaceWidth: Dp = 12.dp,
     trailingContent: @Composable (() -> Unit)? = null,
 ) = UserRow(
     avatarData = matrixUser.getAvatarData(avatarSize),
-    name = matrixUser.getBestName(),
+    nameContent = {
+        DisplayNameWithStatus(
+            name = matrixUser.getBestName(),
+            status = matrixUser.displayedStatus,
+            nameColor = ElementTheme.colors.textPrimary,
+            style = ElementTheme.typography.fontBodyLgRegular,
+        )
+    },
     subtext = if (matrixUser.displayName.isNullOrEmpty()) null else matrixUser.userId.value,
     modifier = modifier,
+    verticalSpaceWidth = verticalSpaceWidth,
     trailingContent = trailingContent,
 )
 

@@ -19,8 +19,6 @@ open class TimelineItemAudioContentProvider : PreviewParameterProvider<TimelineI
             aTimelineItemAudioContent("A sound.mp3"),
             aTimelineItemAudioContent("A bigger name sound.mp3"),
             aTimelineItemAudioContent("An even bigger bigger bigger bigger bigger bigger bigger sound name which doesn't fit.mp3"),
-            aTimelineItemAudioContent(caption = "A caption"),
-            aTimelineItemAudioContent(caption = "An even bigger bigger bigger bigger bigger bigger bigger caption"),
         )
 }
 

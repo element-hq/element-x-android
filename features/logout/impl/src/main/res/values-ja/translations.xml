@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signout_confirmation_dialog_content">"本当にこの端末を削除しますか？"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"この端末を削除"</string>
+  <string name="screen_signout_confirmation_dialog_title">"この端末を削除"</string>
+  <string name="screen_signout_in_progress_dialog_content">"削除中…"</string>
+  <string name="screen_signout_key_backup_disabled_subtitle">"この端末が唯一の端末です。削除を続行すると次回のログインの際に、デジタルIDと暗号化された会話を復元するために、回復鍵を入力する必要があります。"</string>
+  <string name="screen_signout_key_backup_disabled_title">"暗号化された会話は見られなくなります"</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"鍵のバックアップ中にオフライン状態になりました。この端末を削除する前に、オンラインに復旧してバックアップを完了させてください。"</string>
+  <string name="screen_signout_key_backup_offline_title">"鍵のバックアップは継続しています"</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"端末の削除の前に、処理の完了をお待ち下さい。"</string>
+  <string name="screen_signout_key_backup_ongoing_title">"鍵のバックアップは継続しています"</string>
+  <string name="screen_signout_preference_item">"この端末を削除"</string>
+  <string name="screen_signout_recovery_disabled_subtitle">"この端末が唯一の端末です。削除を続行すると次回のログインの際に、デジタルIDと暗号化された会話を復元するために、回復鍵を入力する必要があります。"</string>
+  <string name="screen_signout_recovery_disabled_title">"暗号化された会話は見られなくなります"</string>
+  <string name="screen_signout_save_recovery_key_subtitle">"この端末が唯一の端末です。削除を続行すると次回のログインの際に、デジタルIDと暗号化された会話を復元するために、回復鍵を入力する必要があります。"</string>
+  <string name="screen_signout_save_recovery_key_title">"この端末を削除する前に、回復鍵が手元にあることを確認してください。"</string>
+</resources>

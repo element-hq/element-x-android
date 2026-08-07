@@ -17,7 +17,9 @@ import com.bumble.appyx.core.plugin.Plugin
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
+import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.callback
+import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 
 @ContributesNode(SessionScope::class)
@@ -25,13 +27,23 @@ import io.element.android.libraries.di.SessionScope
 class PinUnlockNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: PinUnlockPresenter,
+    presenterFactory: PinUnlockPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
     interface Callback : Plugin {
         fun onUnlock()
+
+        // For feature unlock
+        fun onCancel()
     }
 
+    data class Inputs(
+        val forDeviceUnlock: Boolean,
+    ) : NodeInputs
+
     private val callback: Callback = callback()
+    private val inputs: Inputs = inputs()
+
+    private val presenter: PinUnlockPresenter = presenterFactory.create(inputs.forDeviceUnlock)
 
     @Composable
     override fun View(modifier: Modifier) {
@@ -46,6 +58,7 @@ class PinUnlockNode(
             // UnlockNode is only used for in-app unlock, so we can safely set isInAppUnlock to true.
             // It's set to false in PinUnlockActivity.
             isInAppUnlock = true,
+            onCancel = callback::onCancel,
             modifier = modifier
         )
     }

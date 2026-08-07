@@ -15,6 +15,7 @@
   <string name="screen_join_room_fail_reason">"Вам потрібно отримати запрошення, щоб приєднатися, інакше доступ може бути обмежений."</string>
   <string name="screen_join_room_forget_action">"Забути"</string>
   <string name="screen_join_room_invite_required_message">"Вам потрібне запрошення, щоб приєднатися"</string>
+  <string name="screen_join_room_invited_by">"Запрошено користувачем"</string>
   <string name="screen_join_room_join_action">"Доєднатися"</string>
   <string name="screen_join_room_join_restricted_message">"Можливо, вам знадобиться отримати запрошення або стати учасником простору, щоб приєднатися."</string>
   <string name="screen_join_room_knock_action">"Постукати, щоб приєднатися"</string>

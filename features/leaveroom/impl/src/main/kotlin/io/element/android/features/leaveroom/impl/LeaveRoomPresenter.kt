@@ -24,7 +24,6 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.powerlevels.usersWithRole
 import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
 import kotlinx.coroutines.CoroutineScope

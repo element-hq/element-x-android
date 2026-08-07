@@ -28,7 +28,10 @@ object RoomMemberMapper {
             powerLevel = powerLevel,
             isIgnored = roomMember.isIgnored,
             role = mapRole(roomMember.suggestedRoleForPowerLevel, powerLevel),
-            membershipChangeReason = roomMember.membershipChangeReason
+            membershipChangeReason = roomMember.membershipChangeReason,
+            isServiceMember = roomMember.isServiceMember,
+            // TODO map this value when available
+            displayedStatus = null,
         )
     }
 

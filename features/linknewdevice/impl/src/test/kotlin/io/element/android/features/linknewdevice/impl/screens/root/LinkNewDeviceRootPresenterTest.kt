@@ -75,15 +75,48 @@ class LinkNewDeviceRootPresenterTest {
             sessionCoroutineScope = backgroundScope,
             createLinkMobileHandlerResult = { Result.success(linkMobileHandler) }
         )
+        val linkNewMobileHandler = LinkNewMobileHandler(matrixClient)
         createPresenter(
             matrixClient = matrixClient,
+            linkNewMobileHandler = linkNewMobileHandler,
         ).test {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.isSupported.dataOrNull()).isTrue()
-            initialState.eventSink(LinkNewDeviceRootEvent.LinkMobileDevice)
+            linkNewMobileHandler.createAndStartNewHandler()
+            skipItems(1)
             val loadingState = awaitItem()
             assertThat(loadingState.qrCodeData.isLoading()).isTrue()
+            skipItems(1)
+        }
+    }
+
+    @Test
+    fun `present - close dialog resets qrCodeData`() = runTest {
+        val fakeLinkMobileHandler = FakeLinkMobileHandler(startResult = {})
+        val matrixClient = FakeMatrixClient(
+            canLinkNewDeviceResult = { Result.success(true) },
+            sessionCoroutineScope = backgroundScope,
+            createLinkMobileHandlerResult = { Result.success(fakeLinkMobileHandler) }
+        )
+        val linkNewMobileHandler = LinkNewMobileHandler(matrixClient)
+        createPresenter(
+            matrixClient = matrixClient,
+            linkNewMobileHandler = linkNewMobileHandler,
+        ).test {
+            skipItems(1)
+            linkNewMobileHandler.onTooManyRotation()
+            var errorState = awaitItem()
+            while (!errorState.qrCodeData.isFailure()) {
+                errorState = awaitItem()
+            }
+            assertThat(errorState.qrCodeData.isFailure()).isTrue()
+            errorState.eventSink(LinkNewDeviceRootEvent.CloseDialog)
+            var resetState = awaitItem()
+            while (!resetState.qrCodeData.isUninitialized()) {
+                resetState = awaitItem()
+            }
+            assertThat(resetState.qrCodeData.isUninitialized()).isTrue()
         }
     }
 

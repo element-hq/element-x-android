@@ -24,4 +24,9 @@ class InstrumentationStringProvider : StringProvider {
     override fun getQuantityString(resId: Int, quantity: Int, vararg formatArgs: Any?): String {
         return resource.getQuantityString(resId, quantity, *formatArgs)
     }
+
+    override fun getSimpleQuantityString(resIdForOne: Int, resIdForOthers: Int, quantity: Int, vararg formatArgs: Any?): String {
+        val resId = if (quantity == 1) resIdForOne else resIdForOthers
+        return resource.getString(resId, *formatArgs)
+    }
 }

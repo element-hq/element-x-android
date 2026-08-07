@@ -74,6 +74,9 @@ Devam ederseniz, bazı ayarlarınız değişebilir."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"si̇stem ayarları"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Sistem bildirimleri kapalı"</string>
   <string name="screen_notification_settings_title">"Bildirimler"</string>
+  <string name="theme_dark">"Koyu"</string>
+  <string name="theme_light">"Aydınlık"</string>
+  <string name="theme_system">"Sistem"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Sorun gider"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Sorun Giderme Bildirimleri"</string>
 </resources>

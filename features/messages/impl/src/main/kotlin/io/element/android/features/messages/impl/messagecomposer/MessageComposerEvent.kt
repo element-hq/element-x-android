@@ -36,4 +36,5 @@ sealed interface MessageComposerEvent {
     data class SuggestionReceived(val suggestion: Suggestion?) : MessageComposerEvent
     data class InsertSuggestion(val resolvedSuggestion: ResolvedSuggestion) : MessageComposerEvent
     data object SaveDraft : MessageComposerEvent
+    data object ClearSlashError : MessageComposerEvent
 }

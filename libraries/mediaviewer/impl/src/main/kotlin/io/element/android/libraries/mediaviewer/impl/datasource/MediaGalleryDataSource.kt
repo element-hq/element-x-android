@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -27,10 +28,12 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
 interface MediaGalleryDataSource {
-    fun start()
+    val isReady: Boolean
+    fun start(coroutineScope: CoroutineScope)
     fun groupedMediaItemsFlow(): Flow<AsyncData<GroupedMediaItems>>
     fun getLastData(): AsyncData<GroupedMediaItems>
     suspend fun loadMore(direction: Timeline.PaginationDirection)
@@ -47,7 +50,7 @@ class TimelineMediaGalleryDataSource(
 ) : MediaGalleryDataSource {
     private var timeline: Timeline? = null
 
-    private val groupedMediaItemsFlow = MutableSharedFlow<AsyncData<GroupedMediaItems>>(replay = 1)
+    private val groupedMediaItemsFlow = MutableSharedFlow<AsyncData<GroupedMediaItems>>(replay = 1, extraBufferCapacity = 10)
 
     override fun groupedMediaItemsFlow(): Flow<AsyncData<GroupedMediaItems>> = groupedMediaItemsFlow
 
@@ -57,9 +60,12 @@ class TimelineMediaGalleryDataSource(
 
     private val isStarted = AtomicBoolean(false)
 
+    override val isReady: Boolean get() = isStarted.get() && timeline != null
+
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun start() {
+    override fun start(coroutineScope: CoroutineScope) {
         if (!isStarted.compareAndSet(false, true)) {
+            Timber.w("MediaGalleryDataSource for room ${room.roomId} is already started, ignoring subsequent start call")
             return
         }
         flow {
@@ -71,10 +77,12 @@ class TimelineMediaGalleryDataSource(
             }
             mediaTimeline.getTimeline().fold(
                 {
+                    Timber.d("Timeline media data source flow started for room ${room.roomId}")
                     timeline = it
                     emit(it)
                 },
                 {
+                    Timber.e(it, "Failed to get media timeline for room ${room.roomId}")
                     groupedMediaItemsFlow.emit(AsyncData.Failure(it))
                 },
             )
@@ -96,19 +104,22 @@ class TimelineMediaGalleryDataSource(
             groupedMediaItemsFlow.emit(AsyncData.Success(groupedMediaItems))
         }
             .onCompletion {
-                timeline?.close()
+                timeline?.let {
+                    Timber.d("Timeline media gallery data source flow completed for room ${room.roomId}, closing timeline")
+                    it.close()
+                }
             }
-            .launchIn(room.roomCoroutineScope)
+            .launchIn(coroutineScope)
     }
 
     override suspend fun loadMore(direction: Timeline.PaginationDirection) {
-        timeline?.paginate(direction)
+        timeline?.paginate(direction) ?: Timber.w("Timeline is not ready yet, cannot load more media items for room ${room.roomId}")
     }
 
     override suspend fun deleteItem(eventId: EventId) {
         timeline?.redactEvent(
             eventOrTransactionId = eventId.toEventOrTransactionId(),
             reason = null,
-        )
+        ) ?: Timber.w("Timeline is not ready yet, cannot delete media item with eventId $eventId for room ${room.roomId}")
     }
 }

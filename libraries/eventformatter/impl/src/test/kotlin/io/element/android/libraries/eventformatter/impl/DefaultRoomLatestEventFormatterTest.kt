@@ -10,6 +10,7 @@ package io.element.android.libraries.eventformatter.impl
 
 import android.content.Context
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import com.google.common.truth.Truth.assertThat
 import com.google.common.truth.Truth.assertWithMessage
 import io.element.android.libraries.matrix.api.core.UserId
@@ -22,6 +23,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.GalleryMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
@@ -50,16 +52,14 @@ import io.element.android.libraries.matrix.test.timeline.aProfileDetails
 import io.element.android.libraries.matrix.test.timeline.aStickerContent
 import io.element.android.libraries.matrix.test.timeline.item.event.aRoomMembershipContent
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
 @Suppress("LargeClass")
-@RunWith(RobolectricTestRunner::class)
-class DefaultRoomLatestEventFormatterTest {
+class DefaultRoomLatestEventFormatterTest : RobolectricTest() {
     private lateinit var context: Context
     private lateinit var fakeMatrixClient: FakeMatrixClient
     private lateinit var formatter: DefaultRoomLatestEventFormatter
@@ -74,7 +74,8 @@ class DefaultRoomLatestEventFormatterTest {
             roomMembershipContentFormatter = RoomMembershipContentFormatter(fakeMatrixClient, stringProvider),
             profileChangeContentFormatter = ProfileChangeContentFormatter(stringProvider),
             stateContentFormatter = StateContentFormatter(stringProvider),
-            permalinkParser = FakePermalinkParser(),
+            rtcNotificationContentFormatter = RtcNotificationContentFormatter(fakeMatrixClient, stringProvider),
+            permalinkParser = FakePermalinkParser()
         )
     }
 
@@ -102,7 +103,14 @@ class DefaultRoomLatestEventFormatterTest {
         val info = ImageInfo(null, null, null, null, null, null, null)
         val message = createLatestEvent(false, null, aStickerContent(body, info, aMediaSource(url = "url")))
         val result = formatter.format(message, false)
-        val expectedBody = someoneElseId.value + ": Sticker (a sticker body)"
+        val expectedBody = someoneElseId.value + ": Sticker: a sticker body"
+        // Check we have formatting
+        assertThat(result is AnnotatedString).isTrue()
+        // And there is a bold span for the 'Sticker' part
+        val boldSpanStyle = (result as AnnotatedString).spanStyles.lastOrNull { it.item.fontWeight == FontWeight.Bold }
+        assertThat(boldSpanStyle).isNotNull()
+        val spanStart = someoneElseId.value.length + 2
+        assertThat(boldSpanStyle!!.start..boldSpanStyle.end).isEqualTo(spanStart..spanStart + 7)
         assertThat(result.toString()).isEqualTo(expectedBody)
     }
 
@@ -188,6 +196,7 @@ class DefaultRoomLatestEventFormatterTest {
             AudioMessageType(body, null, null, MediaSource("url"), null),
             VoiceMessageType(body, null, null, MediaSource("url"), null, null),
             ImageMessageType(body, null, null, MediaSource("url"), null),
+            GalleryMessageType(body, null, emptyList()),
             StickerMessageType(body, null, null, MediaSource("url"), null),
             FileMessageType(body, null, null, MediaSource("url"), null),
             LocationMessageType(body, "geo:1,2", null, null),
@@ -220,6 +229,7 @@ class DefaultRoomLatestEventFormatterTest {
                 is AudioMessageType -> "Audio: Shared body"
                 is VoiceMessageType -> "Voice message"
                 is ImageMessageType -> "Image: Shared body"
+                is GalleryMessageType -> "Gallery: Shared body"
                 is StickerMessageType -> "Sticker: Shared body"
                 is FileMessageType -> "File: Shared body"
                 is LocationMessageType -> "Shared location"
@@ -240,6 +250,7 @@ class DefaultRoomLatestEventFormatterTest {
                 is TextMessageType -> false
                 is NoticeMessageType -> false
                 is OtherMessageType -> false
+                is GalleryMessageType -> true
             }
             if (shouldCreateAnnotatedString) {
                 assertWithMessage("$type doesn't produce an AnnotatedString")
@@ -257,6 +268,7 @@ class DefaultRoomLatestEventFormatterTest {
                 is AudioMessageType -> "$expectedPrefix: Audio: Shared body"
                 is VoiceMessageType -> "$expectedPrefix: Voice message"
                 is ImageMessageType -> "$expectedPrefix: Image: Shared body"
+                is GalleryMessageType -> "$expectedPrefix: Gallery: Shared body"
                 is StickerMessageType -> "$expectedPrefix: Sticker: Shared body"
                 is FileMessageType -> "$expectedPrefix: File: Shared body"
                 is LocationMessageType -> "$expectedPrefix: Shared location"
@@ -277,6 +289,7 @@ class DefaultRoomLatestEventFormatterTest {
                 is TextMessageType -> true
                 is NoticeMessageType -> true
                 is OtherMessageType -> true
+                is GalleryMessageType -> true
             }
             if (shouldCreateAnnotatedString) {
                 assertWithMessage("$type doesn't produce an AnnotatedString")
@@ -746,7 +759,6 @@ class DefaultRoomLatestEventFormatterTest {
             OtherState.PolicyRuleRoom,
             OtherState.PolicyRuleServer,
             OtherState.PolicyRuleUser,
-            OtherState.RoomAliases,
             OtherState.RoomCanonicalAlias,
             OtherState.RoomGuestAccess,
             OtherState.RoomHistoryVisibility,
@@ -909,10 +921,18 @@ class DefaultRoomLatestEventFormatterTest {
         val pollContent = aPollContent()
 
         val mineContentEvent = createLatestEvent(sentByYou = true, senderDisplayName = "Alice", content = pollContent)
-        assertThat(formatter.format(mineContentEvent, true)).isEqualTo("Poll: Do you like polls?")
+        assertThat(formatter.format(mineContentEvent, true).toString()).isEqualTo("Poll: Do you like polls?")
 
         val contentEvent = createLatestEvent(sentByYou = false, senderDisplayName = "Bob", content = pollContent)
-        assertThat(formatter.format(contentEvent, true)).isEqualTo("Poll: Do you like polls?")
+        assertThat(formatter.format(contentEvent, true).toString()).isEqualTo("Poll: Do you like polls?")
+
+        val result = formatter.format(contentEvent, true)
+        // Check we have formatting
+        assertThat(result is AnnotatedString).isTrue()
+        // And there is a bold span for the 'Poll' part
+        val boldSpanStyle = (result as AnnotatedString).spanStyles.lastOrNull { it.item.fontWeight == FontWeight.Bold }
+        assertThat(boldSpanStyle).isNotNull()
+        assertThat(boldSpanStyle!!.start..boldSpanStyle.end).isEqualTo(0..4)
     }
 
     @Test
@@ -925,6 +945,15 @@ class DefaultRoomLatestEventFormatterTest {
 
         val contentEvent = createLatestEvent(sentByYou = false, senderDisplayName = "Bob", content = pollContent)
         assertThat(formatter.format(contentEvent, false).toString()).isEqualTo("Bob: Poll: Do you like polls?")
+
+        val result = formatter.format(contentEvent, false)
+        // Check we have formatting
+        assertThat(result is AnnotatedString).isTrue()
+        // And there is a bold span for the 'Poll' part
+        val boldSpanStyle = (result as AnnotatedString).spanStyles.lastOrNull { it.item.fontWeight == FontWeight.Bold }
+        assertThat(boldSpanStyle).isNotNull()
+        val spanStart = "Bob".length + 2
+        assertThat(boldSpanStyle!!.start..boldSpanStyle.end).isEqualTo(spanStart..spanStart + 4)
     }
 
     // endregion

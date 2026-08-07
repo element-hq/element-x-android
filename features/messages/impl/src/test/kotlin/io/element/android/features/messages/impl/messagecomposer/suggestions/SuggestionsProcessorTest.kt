@@ -17,6 +17,8 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.room.aRoomSummary
+import io.element.android.libraries.slashcommands.api.SlashCommandSuggestion
+import io.element.android.libraries.slashcommands.test.FakeSlashCommandService
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.SuggestionType
@@ -27,10 +29,13 @@ import org.junit.Test
 class SuggestionsProcessorTest {
     private fun aMentionSuggestion(text: String) = Suggestion(0, 1, SuggestionType.Mention, text)
     private fun aRoomSuggestion(text: String) = Suggestion(0, 1, SuggestionType.Room, text)
-    private val aCommandSuggestion = Suggestion(0, 1, SuggestionType.Command, "")
     private val aCustomSuggestion = Suggestion(0, 1, SuggestionType.Custom("*"), "")
 
-    private val suggestionsProcessor = SuggestionsProcessor()
+    private val suggestionsProcessor = SuggestionsProcessor(
+        slashCommandService = FakeSlashCommandService(
+            getSuggestionsResult = { _, _ -> emptyList() },
+        ),
+    )
 
     @Test
     fun `processing null suggestion will return empty suggestion`() = runTest {
@@ -40,18 +45,59 @@ class SuggestionsProcessorTest {
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEmpty()
     }
 
     @Test
-    fun `processing Command will return empty suggestion`() = runTest {
-        val result = suggestionsProcessor.process(
-            suggestion = aCommandSuggestion,
+    fun `processing Command will return suggestions from the slash service`() = runTest {
+        val suggestionsProcessorWithCommand = SuggestionsProcessor(
+            slashCommandService = FakeSlashCommandService(
+                getSuggestionsResult = { _, _ ->
+                    listOf(
+                        SlashCommandSuggestion(
+                            command = "aCommand",
+                            parameters = null,
+                            description = "A description",
+                        ),
+                    )
+                },
+            ),
+        )
+        val result = suggestionsProcessorWithCommand.process(
+            suggestion = Suggestion(0, 1, SuggestionType.Command, ""),
             roomMembersState = RoomMembersState.Ready(persistentListOf(aRoomMember())),
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
+            isInThread = false,
+        )
+        assertThat(result).isNotEmpty()
+    }
+
+    @Test
+    fun `processing Command will return empty list if start of suggestion is not 0`() = runTest {
+        val suggestionsProcessorWithCommand = SuggestionsProcessor(
+            slashCommandService = FakeSlashCommandService(
+                getSuggestionsResult = { _, _ ->
+                    listOf(
+                        SlashCommandSuggestion(
+                            command = "aCommand",
+                            parameters = null,
+                            description = "A description",
+                        ),
+                    )
+                },
+            ),
+        )
+        val result = suggestionsProcessorWithCommand.process(
+            suggestion = Suggestion(1, 2, SuggestionType.Command, ""),
+            roomMembersState = RoomMembersState.Ready(persistentListOf(aRoomMember())),
+            roomAliasSuggestions = emptyList(),
+            currentUserId = A_USER_ID,
+            canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEmpty()
     }
@@ -64,6 +110,7 @@ class SuggestionsProcessorTest {
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEmpty()
     }
@@ -76,6 +123,7 @@ class SuggestionsProcessorTest {
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEmpty()
     }
@@ -88,6 +136,7 @@ class SuggestionsProcessorTest {
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEmpty()
     }
@@ -100,6 +149,7 @@ class SuggestionsProcessorTest {
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEmpty()
     }
@@ -120,6 +170,7 @@ class SuggestionsProcessorTest {
             ),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEqualTo(
             listOf(
@@ -149,6 +200,7 @@ class SuggestionsProcessorTest {
             ),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEqualTo(
             listOf(
@@ -178,6 +230,7 @@ class SuggestionsProcessorTest {
             ),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEmpty()
     }
@@ -198,6 +251,7 @@ class SuggestionsProcessorTest {
             ),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEqualTo(
             listOf(
@@ -227,6 +281,7 @@ class SuggestionsProcessorTest {
             ),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEmpty()
     }
@@ -240,6 +295,7 @@ class SuggestionsProcessorTest {
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID_2,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEqualTo(
             listOf(
@@ -257,6 +313,7 @@ class SuggestionsProcessorTest {
             roomAliasSuggestions = emptyList(),
             currentUserId = UserId("@alice:server.org"),
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEmpty()
     }
@@ -270,6 +327,7 @@ class SuggestionsProcessorTest {
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID_2,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEmpty()
     }
@@ -283,6 +341,7 @@ class SuggestionsProcessorTest {
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID_2,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEmpty()
     }
@@ -296,6 +355,7 @@ class SuggestionsProcessorTest {
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID_2,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEqualTo(
             listOf(
@@ -313,6 +373,7 @@ class SuggestionsProcessorTest {
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID_2,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEqualTo(
             listOf(
@@ -331,6 +392,7 @@ class SuggestionsProcessorTest {
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID_2,
             canSendRoomMention = { false },
+            isInThread = false,
         )
         assertThat(result).isEqualTo(
             listOf(

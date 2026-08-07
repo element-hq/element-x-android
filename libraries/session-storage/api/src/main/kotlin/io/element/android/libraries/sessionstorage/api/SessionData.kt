@@ -24,8 +24,8 @@ data class SessionData(
     val refreshToken: String?,
     /** The homeserver URL of the session. */
     val homeserverUrl: String,
-    /** The Open ID Connect info for this session, if any. */
-    val oidcData: String?,
+    /** The Open Authorization info for this session, if any. */
+    val oAuthData: String?,
     /** The timestamp of the last login. May be `null` in very old sessions. */
     val loginTimestamp: Date?,
     /** Whether the [accessToken] is valid or not. */

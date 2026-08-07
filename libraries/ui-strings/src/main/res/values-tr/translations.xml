@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Tepki ekle:%1$s"</string>
+  <string name="a11y_address">"Adres"</string>
   <string name="a11y_avatar">"Profil resmi"</string>
   <string name="a11y_collapse_message_text_field">"Mesaj metin alanını küçült"</string>
   <string name="a11y_delete">"Sil"</string>
@@ -8,13 +9,16 @@
     <item quantity="one">"%1$d basamak girildi"</item>
     <item quantity="other">"%1$d basamak girildi"</item>
   </plurals>
+  <string name="a11y_duration">"Süre: %1$s"</string>
   <string name="a11y_edit_avatar">"Fotoğrafı düzenle"</string>
   <string name="a11y_edit_room_address_hint">"Tam adres %1$s olacaktır"</string>
   <string name="a11y_encryption_details">"Şifreleme ayrıntıları"</string>
   <string name="a11y_expand_message_text_field">"Mesaj metin alanını genişlet"</string>
   <string name="a11y_hide_password">"Şifreyi gizle"</string>
+  <string name="a11y_info">"Bilgi"</string>
   <string name="a11y_join_call">"Aramaya katıl"</string>
   <string name="a11y_jump_to_bottom">"Aşağıya atla"</string>
+  <string name="a11y_jump_to_unread">"Okunmamış olana atla"</string>
   <string name="a11y_move_the_map_to_my_location">"Haritayı konumuma taşı"</string>
   <string name="a11y_notifications_mentions_only">"Yalnızca bahsetmeler"</string>
   <string name="a11y_notifications_muted">"Sessiz"</string>
@@ -37,7 +41,6 @@
     <item quantity="other">"%1$s ve %2$d diğer kişi tarafından okundu"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Okuyan %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Tümünü göstermek için dokunun"</string>
   <string name="a11y_remove_reaction">"Tepkimeyi kaldır %1$s"</string>
   <string name="a11y_remove_reaction_with">"%1$s ile verilen tepkiyi kaldır"</string>
   <string name="a11y_room_avatar">"Oda avatarı"</string>
@@ -175,7 +178,6 @@
   <string name="common_current_user_canceled_knock">"İstek iptal edildi"</string>
   <string name="common_current_user_left_room">"Sol oda"</string>
   <string name="common_current_user_rejected_invite">"Davet reddedildi"</string>
-  <string name="common_dark">"Koyu"</string>
   <string name="common_decryption_error">"Şifre çözme hatası"</string>
   <string name="common_developer_options">"Geliştirici seçenekleri"</string>
   <string name="common_device_id">"Cihaz Kimliği"</string>
@@ -211,7 +213,6 @@ Neden: %1$s."</string>
   <string name="common_install_apk_android">"APK\'yı yükleyin"</string>
   <string name="common_invite_unknown_profile">"Bu Matrix Kimliği bulunamıyor, bu nedenle davet alınmayabilir."</string>
   <string name="common_leaving_room">"Odadan ayrılma"</string>
-  <string name="common_light">"Aydınlık"</string>
   <string name="common_line_copied_to_clipboard">"Metin panoya kopyalandı"</string>
   <string name="common_link_copied_to_clipboard">"Bağlantı panoya kopyalandı"</string>
   <string name="common_loading">"Yükleniyor…"</string>
@@ -264,7 +265,6 @@ Neden: %1$s."</string>
   <string name="common_recovery_key">"Kurtarma anahtarı"</string>
   <string name="common_refreshing">"Yenileniyor…"</string>
   <string name="common_replying_to">"Cevaplamak için %1$s"</string>
-  <string name="common_report_a_bug">"Hata bildir"</string>
   <string name="common_report_a_problem">"Sorun bildir"</string>
   <string name="common_report_submitted">"Rapor gönderildi"</string>
   <string name="common_rich_text_editor">"Zengin metin editörü"</string>
@@ -296,7 +296,6 @@ Neden: %1$s."</string>
   <string name="common_success">"Başarılı"</string>
   <string name="common_suggestions">"Öneriler"</string>
   <string name="common_syncing">"Senkronizasyon"</string>
-  <string name="common_system">"Sistem"</string>
   <string name="common_text">"Metin"</string>
   <string name="common_third_party_notices">"Üçüncü taraf bildirimleri"</string>
   <string name="common_thread">"Konu"</string>

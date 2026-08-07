@@ -8,16 +8,16 @@
 
 package io.element.android.libraries.matrix.test.encryption
 
-import io.element.android.libraries.matrix.api.encryption.IdentityOidcResetHandle
+import io.element.android.libraries.matrix.api.encryption.IdentityOAuthResetHandle
 import io.element.android.libraries.matrix.api.encryption.IdentityPasswordResetHandle
 
-class FakeIdentityOidcResetHandle(
+class FakeIdentityOAuthResetHandle(
     override val url: String = "",
-    var resetOidcLambda: () -> Result<Unit> = { error("Not implemented") },
+    var resetOAuthLambda: () -> Result<Unit> = { error("Not implemented") },
     var cancelLambda: () -> Unit = { error("Not implemented") },
-) : IdentityOidcResetHandle {
-    override suspend fun resetOidc(): Result<Unit> {
-        return resetOidcLambda()
+) : IdentityOAuthResetHandle {
+    override suspend fun resetOAuth(): Result<Unit> {
+        return resetOAuthLambda()
     }
 
     override suspend fun cancel() {

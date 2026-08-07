@@ -16,6 +16,7 @@
   <string name="screen_media_details_filename">"Naziv datoteke"</string>
   <string name="screen_media_details_no_more_files_to_show">"Nema više datoteka za prikaz"</string>
   <string name="screen_media_details_no_more_media_to_show">"Nema više medijskih sadržaja za prikaz"</string>
+  <string name="screen_media_details_title">"Informacije o datoteci"</string>
   <string name="screen_media_details_uploaded_by">"Prenio/la"</string>
   <string name="screen_media_details_uploaded_on">"Preneseno na"</string>
 </resources>

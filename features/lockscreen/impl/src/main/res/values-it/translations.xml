@@ -23,7 +23,7 @@ Scegli un PIN facile da ricordare. Se lo dimentichi, verrai disconnesso dall’a
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Inserisci lo stesso PIN due volte"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"I PIN non corrispondono"</string>
   <string name="screen_app_lock_signout_alert_message">"Dovrai effettuare nuovamente l\'accesso e creare un nuovo PIN per procedere"</string>
-  <string name="screen_app_lock_signout_alert_title">"Stai per essere disconnesso"</string>
+  <string name="screen_app_lock_signout_alert_title">"Questo dispositivo verrà rimosso"</string>
   <plurals name="screen_app_lock_subtitle">
     <item quantity="one">"Hai %1$d tentativo di sblocco"</item>
     <item quantity="other">"Hai %1$d tentativi di sblocco"</item>
@@ -34,5 +34,5 @@ Scegli un PIN facile da ricordare. Se lo dimentichi, verrai disconnesso dall’a
   </plurals>
   <string name="screen_app_lock_use_biometric_android">"Usa la biometria"</string>
   <string name="screen_app_lock_use_pin_android">"Usa il PIN"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Disconnessione in corso…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Rimozione del dispositivo…"</string>
 </resources>

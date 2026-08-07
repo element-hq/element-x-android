@@ -5,9 +5,9 @@
   <string name="banner_battery_optimization_title_android">"Powiadomienia nie dochodzą?"</string>
   <string name="banner_new_sound_message">"Sygnał powiadomień został zaktualizowany — jest wyraźniejszy, szybszy i mniej uciążliwy."</string>
   <string name="banner_new_sound_title">"Odświeżyliśmy Twoje dźwięki"</string>
-  <string name="banner_set_up_recovery_content">"Wygeneruj nowy klucz przywracania, którego można użyć do przywrócenia historii wiadomości szyfrowanych w przypadku utraty dostępu do swoich urządzeń."</string>
-  <string name="banner_set_up_recovery_submit">"Skonfiguruj przywracanie"</string>
-  <string name="banner_set_up_recovery_title">"Skonfiguruj przywracanie"</string>
+  <string name="banner_set_up_recovery_content">"Twoje czaty są automatycznie archiwizowane za pomocą szyfrowania end-to-end. Aby przywrócić tę kopię zapasową i swoją tożsamość cyfrową, wymagany będzie klucz przywracania."</string>
+  <string name="banner_set_up_recovery_submit">"Uzyskaj klucz przywracania"</string>
+  <string name="banner_set_up_recovery_title">"Utwórz kopię zapasową swoich czatów"</string>
   <string name="confirm_recovery_key_banner_message">"Potwierdź klucz przywracania, aby zachować dostęp do magazynu kluczy i historii wiadomości."</string>
   <string name="confirm_recovery_key_banner_primary_button_title">"Wprowadź klucz przywracania"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Zapomniałeś klucza przywracania?"</string>
@@ -50,6 +50,7 @@ Nie masz żadnych nieprzeczytanych wiadomości!"</string>
   <string name="screen_roomlist_mark_as_read">"Oznacz jako przeczytane"</string>
   <string name="screen_roomlist_mark_as_unread">"Oznacz jako nieprzeczytane"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Ten pokój został ulepszony"</string>
+  <string name="screen_roomlist_your_spaces">"Twoje przestrzenie"</string>
   <string name="session_verification_banner_message">"Wygląda na to, że używasz nowego urządzenia. Zweryfikuj się innym urządzeniem, aby uzyskać dostęp do zaszyfrowanych wiadomości."</string>
   <string name="session_verification_banner_title">"Potwierdź, że to Ty"</string>
 </resources>

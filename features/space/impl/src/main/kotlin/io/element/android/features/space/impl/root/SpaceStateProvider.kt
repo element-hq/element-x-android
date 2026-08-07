@@ -109,6 +109,7 @@ private fun aSpaceInfo(
         avatarUrl = null,
         isPublic = true,
         isDirect = false,
+        isDm = false,
         isEncrypted = false,
         joinRule = joinRule,
         isSpace = true,
@@ -139,6 +140,7 @@ private fun aSpaceInfo(
         privilegedCreatorRole = false,
         isLowPriority = false,
         activeCallIntentConsensus = CallIntentConsensus.None,
+        fullyReadEventId = null,
     )
 }
 

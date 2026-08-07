@@ -4,14 +4,15 @@
   <string name="screen_chat_backup_key_backup_action_enable">"백업 활성화"</string>
   <string name="screen_chat_backup_key_backup_description">"이 설정을 통해 새로운 기기에서도 대화 기록을 확인할 수 있으며, 대화 및 디지털 신원 백업을 위해 반드시 필요합니다. %1$s."</string>
   <string name="screen_chat_backup_key_backup_title">"키 저장소"</string>
-  <string name="screen_chat_backup_key_storage_disabled_error">"복구 설정을 하려면 키 저장을 켜야 합니다."</string>
+  <string name="screen_chat_backup_key_storage_disabled_error">"대화 내용을 백업하려면 키 저장소를 켜야 합니다."</string>
   <string name="screen_chat_backup_key_storage_toggle_description">"이 장치에서 키 업로드"</string>
   <string name="screen_chat_backup_key_storage_toggle_title">"키 저장 허용"</string>
   <string name="screen_chat_backup_recovery_action_change">"복구 키 변경"</string>
-  <string name="screen_chat_backup_recovery_action_change_description">"기존의 모든 기기를 분실한 경우, 복구 키를 사용하여 암호화 ID와 메시지 기록을 복구할 수 있습니다."</string>
+  <string name="screen_chat_backup_recovery_action_change_description">"대화 내용은 종단간 암호화 기술로 자동 백업됩니다. 모든 기기를 사용할 수 없는 상황에서 백업을 복구하고 디지털 신원을 유지하려면 복구 키가 반드시 필요합니다."</string>
   <string name="screen_chat_backup_recovery_action_confirm">"복구 키를 입력하세요"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"현재 키 저장소가 동기화되지 않았습니다."</string>
   <string name="screen_chat_backup_recovery_action_setup">"복구 키 가져오기"</string>
+  <string name="screen_chat_backup_recovery_action_setup_description">"대화 내용은 종단간 암호화로 자동 백업됩니다. 모든 기기를 사용할 수 없는 상황에서 백업을 복구하고 디지털 신원을 유지하려면 복구 키가 반드시 필요합니다."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"데스크톱 장치에서 %1$s 을 엽니다."</string>
   <string name="screen_create_new_recovery_key_list_item_2">"계정에 다시 로그인하세요"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"장치를 확인하라는 메시지가 표시되면, %1$s 을 선택하세요"</string>

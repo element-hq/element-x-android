@@ -8,18 +8,16 @@
 
 package io.element.android.features.rolesandpermissions.impl.roles
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.bumble.appyx.core.modality.BuildContext
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.rolesandpermissions.api.ChangeRoomMemberRolesListType
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.tests.testutils.node.TestParentNode
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class DefaultChangeRoomMemberRolesEntyPointTest {
+class DefaultChangeRoomMemberRolesEntyPointTest : RobolectricTest() {
     @Test
     fun `test node builder`() = runTest {
         val entryPoint = DefaultChangeRoomMemberRolesEntyPoint()

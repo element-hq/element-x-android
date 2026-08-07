@@ -43,6 +43,7 @@
   <string name="screen_room_details_error_muting">"اس کمرے کو خاموش کرنے میں ناکام، برائے مہربانی دوبارہ کوشش کریں۔"</string>
   <string name="screen_room_details_error_unmuting">"اس کمرے کو غیر خاموش کرنے میں ناکام، برائے مہربانی دوبارہ کوشش کریں۔"</string>
   <string name="screen_room_details_invite_people_title">"لوگوں کو مدعو کریں"</string>
+  <string name="screen_room_details_invite_title">"مدعو کریں"</string>
   <string name="screen_room_details_leave_conversation_title">"گفتگو چھوڑیں"</string>
   <string name="screen_room_details_leave_room_title">"کمرہ چھوڑ دیں"</string>
   <string name="screen_room_details_notification_mode_custom">"حسب ضرورت"</string>
@@ -98,4 +99,6 @@
   <string name="screen_room_roles_and_permissions_roles_header">"کردارہا"</string>
   <string name="screen_room_roles_and_permissions_room_details">"کمرے کی تفصیلات"</string>
   <string name="screen_room_roles_and_permissions_title">"کردارہا اور اجازتیں"</string>
+  <string name="screen_roomlist_mark_as_read">"بطور مقروءہ نشانزد کریں"</string>
+  <string name="screen_roomlist_mark_as_unread">"بطور غیر مقروءہ نشانزد کریں"</string>
 </resources>

@@ -13,7 +13,6 @@ sealed interface StateEventType {
     data object PolicyRuleServer : StateEventType
     data object PolicyRuleUser : StateEventType
     data object CallMember : StateEventType
-    data object RoomAliases : StateEventType
     data object RoomAvatar : StateEventType
     data object RoomCanonicalAlias : StateEventType
     data object RoomCreate : StateEventType
@@ -35,6 +34,7 @@ sealed interface StateEventType {
     data object MemberHints : StateEventType
     data object RoomImagePack : StateEventType
     data object RoomLanguage : StateEventType
+    data object RoomPolicy : StateEventType
 
     data class Custom(val type: String) : StateEventType
 }

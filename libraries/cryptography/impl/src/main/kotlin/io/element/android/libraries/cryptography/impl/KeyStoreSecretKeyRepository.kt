@@ -13,11 +13,16 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.cryptography.api.AESEncryptionSpecs
 import io.element.android.libraries.cryptography.api.SecretKeyRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import timber.log.Timber
 import java.security.KeyStore
 import java.security.KeyStoreException
+import java.util.concurrent.ConcurrentHashMap
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 
@@ -25,13 +30,23 @@ import javax.crypto.SecretKey
  * Default implementation of [SecretKeyRepository] that uses the Android Keystore to store the keys.
  * The generated key uses AES algorithm, with a key size of 128 bits, and the GCM block mode.
  */
+@SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class KeyStoreSecretKeyRepository(
     private val keyStore: KeyStore,
 ) : SecretKeyRepository {
+    private val hasKeyMap = ConcurrentHashMap<String, MutableStateFlow<Boolean>>()
+
+    @Suppress("RunCatchingNotAllowed")
+    override fun hasKey(alias: String): Flow<Boolean> {
+        return hasKeyMap.getOrPut(alias) {
+            MutableStateFlow(runCatching { keyStore.containsAlias(alias) }.getOrDefault(false))
+        }.asStateFlow()
+    }
+
     // False positive lint issue
     @SuppressLint("WrongConstant")
-    override fun getOrCreateKey(alias: String, requiresUserAuthentication: Boolean): SecretKey {
+    override suspend fun getOrCreateKey(alias: String, requiresUserAuthentication: Boolean): SecretKey {
         val secretKeyEntry = (keyStore.getEntry(alias, null) as? KeyStore.SecretKeyEntry)
             ?.secretKey
         return if (secretKeyEntry == null) {
@@ -46,15 +61,22 @@ class KeyStoreSecretKeyRepository(
                 .setUserAuthenticationRequired(requiresUserAuthentication)
                 .build()
             generator.init(keyGenSpec)
-            generator.generateKey()
+            generator.generateKey().also {
+                hasKeyMap.getOrPut(alias) {
+                    MutableStateFlow(true)
+                }.emit(true)
+            }
         } else {
             secretKeyEntry
         }
     }
 
-    override fun deleteKey(alias: String) {
+    override suspend fun deleteKey(alias: String) {
         try {
             keyStore.deleteEntry(alias)
+            hasKeyMap.getOrPut(alias) {
+                MutableStateFlow(false)
+            }.emit(false)
         } catch (e: KeyStoreException) {
             Timber.e(e)
         }

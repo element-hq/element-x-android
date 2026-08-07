@@ -140,7 +140,7 @@ private fun CheckableSpaceListItem(
     enabled: Boolean = true,
 ) {
     ListItem(
-        headlineContent = {
+        content = {
             Text(text = headlineText)
         },
         supportingContent = supportingText?.let {

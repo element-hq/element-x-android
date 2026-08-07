@@ -2,8 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"Non puoi confermare?"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"Crea una nuova chiave di recupero"</string>
-  <string name="screen_identity_confirmation_subtitle">"Verifica questo dispositivo per segnare i tuoi messaggi come sicuri."</string>
-  <string name="screen_identity_confirmation_title">"Conferma la tua identità"</string>
+  <string name="screen_identity_confirmation_subtitle">"Scegli come effettuare la verifica per configurare la messaggistica sicura."</string>
+  <string name="screen_identity_confirmation_title">"Conferma la tua identità digitale"</string>
   <string name="screen_identity_confirmation_use_another_device">"Usa un altro dispositivo"</string>
   <string name="screen_identity_confirmation_use_recovery_key">"Usa la chiave di recupero"</string>
   <string name="screen_identity_confirmed_subtitle">"Ora puoi leggere o inviare messaggi in tutta sicurezza e anche chi chatta con te può fidarsi di questo dispositivo."</string>
@@ -17,7 +17,7 @@
   <string name="screen_session_verification_compare_numbers_subtitle">"Conferma che i numeri seguenti corrispondano a quelli mostrati nell\'altra sessione."</string>
   <string name="screen_session_verification_compare_numbers_title">"Confronta i numeri"</string>
   <string name="screen_session_verification_complete_subtitle">"Ora puoi leggere o inviare messaggi in modo sicuro sul tuo altro dispositivo."</string>
-  <string name="screen_session_verification_complete_user_subtitle">"Ora puoi fidarti dell\'identità di questo utente quando invii o ricevi messaggi."</string>
+  <string name="screen_session_verification_complete_user_subtitle">"Ora puoi fidarti dell\'identità digitale di questo utente quando invii o ricevi messaggi."</string>
   <string name="screen_session_verification_device_verified">"Dispositivo verificato"</string>
   <string name="screen_session_verification_enter_recovery_key">"Inserisci la chiave di recupero"</string>
   <string name="screen_session_verification_failed_subtitle">"La richiesta è scaduta, è stata rifiutata o c\'è stata una mancata corrispondenza nella verifica."</string>
@@ -42,7 +42,7 @@
   <string name="screen_session_verification_use_another_device_title">"Apri l\'app su un altro dispositivo verificato"</string>
   <string name="screen_session_verification_user_initiator_subtitle">"Per una maggiore sicurezza, verifica questo utente confrontando un set di emoji sui tuoi dispositivi. A tale scopo, utilizza un metodo di comunicazione affidabile."</string>
   <string name="screen_session_verification_user_initiator_title">"Verificare questo utente?"</string>
-  <string name="screen_session_verification_user_responder_subtitle">"Per una maggiore sicurezza, un altro utente desidera verificare la tua identità. Ti verrà mostrato un set di emoji da confrontare."</string>
+  <string name="screen_session_verification_user_responder_subtitle">"Per maggiore sicurezza, un altro utente vuole verificare la tua identità digitale. Ti verrà mostrata una serie di emoji da confrontare."</string>
   <string name="screen_session_verification_waiting_another_device_subtitle">"Dovresti vedere un popup sull\'altro dispositivo. Inizia subito la verifica da lì."</string>
   <string name="screen_session_verification_waiting_another_device_title">"Avvia la verifica sull\'altro dispositivo"</string>
   <string name="screen_session_verification_waiting_other_device_title">"Avvia la verifica sull\'altro dispositivo"</string>
@@ -50,5 +50,5 @@
   <string name="screen_session_verification_waiting_subtitle">"Una volta accettata, potrai proseguire con la verifica."</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Accetta la richiesta di avviare il processo di verifica nell\'altra sessione per continuare."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"In attesa di accettare la richiesta"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Disconnessione in corso…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Rimozione del dispositivo…"</string>
 </resources>

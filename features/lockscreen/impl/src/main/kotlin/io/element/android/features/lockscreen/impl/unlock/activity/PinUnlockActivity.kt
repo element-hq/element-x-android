@@ -30,6 +30,7 @@ import io.element.android.features.lockscreen.impl.unlock.di.PinUnlockBindings
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.theme.ElementThemeApp
+import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.coroutines.launch
 
@@ -40,9 +41,10 @@ class PinUnlockActivity : AppCompatActivity() {
         }
     }
 
-    @Inject lateinit var presenter: PinUnlockPresenter
+    @Inject lateinit var presenterFactory: PinUnlockPresenter.Factory
     @Inject lateinit var lockScreenService: LockScreenService
     @Inject lateinit var appPreferencesStore: AppPreferencesStore
+    @Inject lateinit var featureFlagService: FeatureFlagService
     @Inject lateinit var enterpriseService: EnterpriseService
     @Inject lateinit var buildMeta: BuildMeta
 
@@ -50,12 +52,14 @@ class PinUnlockActivity : AppCompatActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         bindings<PinUnlockBindings>().inject(this)
+        val presenter = presenterFactory.create(forDeviceUnlock = false)
         setContent {
             val colors by remember {
                 enterpriseService.semanticColorsFlow(sessionId = null)
             }.collectAsState(SemanticColorsLightDark.default)
             ElementThemeApp(
                 appPreferencesStore = appPreferencesStore,
+                featureFlagService = featureFlagService,
                 compoundLight = colors.light,
                 compoundDark = colors.dark,
                 buildMeta = buildMeta,
@@ -64,6 +68,9 @@ class PinUnlockActivity : AppCompatActivity() {
                 PinUnlockView(
                     state = state,
                     isInAppUnlock = false,
+                    onCancel = {
+                        // Should not happen
+                    },
                 )
             }
         }

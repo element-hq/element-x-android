@@ -16,7 +16,7 @@ android {
 
 dependencies {
     api(projects.features.location.api)
+    implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
-    implementation(libs.appyx.core)
     implementation(projects.tests.testutils)
 }

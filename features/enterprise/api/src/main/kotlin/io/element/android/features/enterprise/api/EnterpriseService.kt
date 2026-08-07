@@ -11,11 +11,13 @@ package io.element.android.features.enterprise.api
 import androidx.compose.ui.graphics.Color
 import io.element.android.compound.colors.SemanticColorsLightDark
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.wellknown.api.ElementWellKnown
 import kotlinx.coroutines.flow.Flow
 
 interface EnterpriseService {
     val isEnterpriseBuild: Boolean
     suspend fun isEnterpriseUser(sessionId: SessionId): Boolean
+    suspend fun tweakMasUrl(url: String, homeserver: String): String
     fun defaultHomeserverList(): List<String>
     suspend fun isAllowedToConnectToHomeserver(homeserverUrl: String): Boolean
 
@@ -39,6 +41,11 @@ interface EnterpriseService {
      * Gets Notification Channel to use for the noisy notifications of the provided session.
      */
     fun getNoisyNotificationChannelId(sessionId: SessionId): String?
+
+    /**
+     * Gets the overridden Element Well-Known data if it has been set, or null if not set.
+     */
+    fun overriddenElementWellKnown(): ElementWellKnown?
 
     companion object {
         const val ANY_ACCOUNT_PROVIDER = "*"

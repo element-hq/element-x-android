@@ -76,7 +76,7 @@ class DefaultNotificationConversationService(
     override suspend fun onSendMessage(
         sessionId: SessionId,
         roomId: RoomId,
-        roomName: String,
+        roomName: String?,
         roomIsDirect: Boolean,
         roomAvatarUrl: String?,
     ) {
@@ -93,10 +93,11 @@ class DefaultNotificationConversationService(
         val imageLoader = imageLoaderHolder.get(client)
 
         val defaultShortcutIconSize = ShortcutManagerCompat.getIconMaxWidth(context)
+        val name = roomName?.takeIf { it.isNotBlank() } ?: roomId.value
         val icon = bitmapLoader.getRoomBitmap(
             avatarData = AvatarData(
                 id = roomId.value,
-                name = roomName,
+                name = name,
                 url = roomAvatarUrl,
                 size = AvatarSize.RoomDetailsHeader,
             ),
@@ -105,7 +106,7 @@ class DefaultNotificationConversationService(
         )?.let(IconCompat::createWithBitmap)
 
         val shortcutInfo = ShortcutInfoCompat.Builder(context, createShortcutId(sessionId, roomId))
-            .setShortLabel(roomName)
+            .setShortLabel(name)
             .setIcon(icon)
             .setIntent(intentProvider.getViewRoomIntent(sessionId, roomId, threadId = null, eventId = null))
             .setCategories(categories)

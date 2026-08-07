@@ -19,4 +19,6 @@ data class RoomPowerLevelsValues(
     val roomAvatar: Long,
     val roomTopic: Long,
     val spaceChild: Long,
+    val beacon: Long,
+    val beaconInfo: Long,
 )

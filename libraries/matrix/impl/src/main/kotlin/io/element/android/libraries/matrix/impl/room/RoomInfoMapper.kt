@@ -43,6 +43,7 @@ class RoomInfoMapper {
             avatarUrl = it.avatarUrl,
             isPublic = it.isPublic,
             isDirect = it.isDirect,
+            isDm = it.isDm,
             isEncrypted = when (it.encryptionState) {
                 EncryptionState.ENCRYPTED -> true
                 EncryptionState.NOT_ENCRYPTED -> false
@@ -76,6 +77,7 @@ class RoomInfoMapper {
             privilegedCreatorRole = it.privilegedCreatorsRole,
             isLowPriority = it.isLowPriority,
             activeCallIntentConsensus = it.activeRoomCallConsensusIntent.map(),
+            fullyReadEventId = it.fullyReadEventId?.let(::EventId)
         )
     }
 }

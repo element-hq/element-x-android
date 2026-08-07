@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_migrate_to_native_sliding_sync_action">"ログアウトしてアップグレード"</string>
+  <string name="banner_migrate_to_native_sliding_sync_app_force_logout_title">"%1$s は古いプロトコルに非対応になりました。アプリを引き続き使用するには、ログアウトしてから再度ログインしてください。"</string>
+  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"使用しているホームサーバーは古いプロトコルに非対応になりました。アプリケーションを引き続き使用するには、ログアウトしてから再度ログインしてください。"</string>
+</resources>

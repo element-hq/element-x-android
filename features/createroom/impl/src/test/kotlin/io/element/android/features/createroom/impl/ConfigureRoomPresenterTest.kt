@@ -20,11 +20,13 @@ import io.element.android.features.createroom.impl.configureroom.CreateRoomConfi
 import io.element.android.features.createroom.impl.configureroom.JoinRuleItem
 import io.element.android.features.createroom.impl.configureroom.RoomAddress
 import io.element.android.features.createroom.impl.configureroom.RoomVisibilityState
+import io.element.android.features.enterprise.test.FakeSessionEnterpriseService
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.room.alias.RoomAliasHelper
@@ -56,6 +58,8 @@ import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.matching
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.test
 import io.mockk.mockk
 import kotlinx.collections.immutable.persistentMapOf
@@ -66,8 +70,6 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import java.io.File
 import java.util.Optional
 
@@ -75,8 +77,7 @@ private const val AN_URI_FROM_CAMERA = "content://uri_from_camera"
 private const val AN_URI_FROM_CAMERA_2 = "content://uri_from_camera_2"
 private const val AN_URI_FROM_GALLERY = "content://uri_from_gallery"
 
-@RunWith(RobolectricTestRunner::class)
-class ConfigureRoomPresenterTest {
+class ConfigureRoomPresenterTest : RobolectricTest() {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -301,7 +302,9 @@ class ConfigureRoomPresenterTest {
                     roomName = 0,
                     roomAvatar = 0,
                     roomTopic = 0,
-                    spaceChild = 0
+                    spaceChild = 0,
+                    beacon = 0,
+                    beaconInfo = 0,
                 ),
                 users = persistentMapOf(),
             )
@@ -517,6 +520,30 @@ class ConfigureRoomPresenterTest {
         }
     }
 
+    @Test
+    fun `present - creating a private room when encryption is disabled by the HS creates it unencrypted`() = runTest {
+        val sessionEnterpriseService = FakeSessionEnterpriseService(isEncryptionDisabledResult = { true })
+        val createRoomLambda = lambdaRecorder<CreateRoomParameters, Result<RoomId>> { Result.success(A_ROOM_ID) }
+        val matrixClient = createMatrixClient().apply {
+            createRoomResult = createRoomLambda
+        }
+        val presenter = createConfigureRoomPresenter(
+            matrixClient = matrixClient,
+            sessionEnterpriseService = sessionEnterpriseService,
+        )
+        presenter.test {
+            val initialState = initialState()
+
+            initialState.eventSink(ConfigureRoomEvents.JoinRuleChanged(JoinRuleItem.PrivateVisibility.Private))
+            initialState.eventSink(ConfigureRoomEvents.CreateRoom)
+
+            assertThat(awaitItem().createRoomAction.isLoading()).isTrue()
+            assertThat(awaitItem().createRoomAction.isSuccess()).isTrue()
+
+            createRoomLambda.assertions().isCalledOnce().with(matching<CreateRoomParameters> { !it.isEncrypted })
+        }
+    }
+
     private suspend fun TurbineTestContext<ConfigureRoomState>.initialState(): ConfigureRoomState {
         skipItems(1)
         return awaitItem()
@@ -552,6 +579,7 @@ class ConfigureRoomPresenterTest {
         permissionsPresenter: PermissionsPresenter = FakePermissionsPresenter(),
         isKnockFeatureEnabled: Boolean = true,
         mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
+        sessionEnterpriseService: FakeSessionEnterpriseService = FakeSessionEnterpriseService(isEncryptionDisabledResult = { false }),
     ) = ConfigureRoomPresenter(
         isSpace = isSpace,
         initialParentSpaceId = initialParenSpaceId,
@@ -566,5 +594,6 @@ class ConfigureRoomPresenterTest {
             mapOf(FeatureFlags.Knock.key to isKnockFeatureEnabled)
         ),
         mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
+        sessionEnterpriseService = sessionEnterpriseService,
     )
 }

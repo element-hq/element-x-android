@@ -16,11 +16,14 @@ class FakeAppForegroundStateService(
     initialIsInCallValue: Boolean = false,
     initialIsSyncingNotificationEventValue: Boolean = false,
     initialHasRingingCall: Boolean = false,
+    initialIsSharingLiveLocation: Boolean = false,
 ) : AppForegroundStateService {
     override val isInForeground = MutableStateFlow(initialForegroundValue)
     override val isInCall = MutableStateFlow(initialIsInCallValue)
     override val isSyncingNotificationEvent = MutableStateFlow(initialIsSyncingNotificationEventValue)
     override val hasRingingCall = MutableStateFlow(initialHasRingingCall)
+
+    override val isSharingLiveLocation = MutableStateFlow<Boolean>(initialIsSharingLiveLocation)
 
     override fun startObservingForeground() {
         // No-op
@@ -40,5 +43,9 @@ class FakeAppForegroundStateService(
 
     override fun updateHasRingingCall(hasRingingCall: Boolean) {
         this.hasRingingCall.value = hasRingingCall
+    }
+
+    override fun updateIsSharingLiveLocation(isSharingLiveLocation: Boolean) {
+        this.isSharingLiveLocation.value = isSharingLiveLocation
     }
 }

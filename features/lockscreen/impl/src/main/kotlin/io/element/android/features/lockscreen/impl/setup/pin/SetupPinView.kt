@@ -107,7 +107,7 @@ private fun SetupPinContent(
         pinEntry = state.activePinEntry,
         isSecured = true,
         onValueChange = { entry ->
-            state.eventSink(SetupPinEvents.OnPinEntryChanged(entry, state.isConfirmationStep))
+            state.eventSink(SetupPinEvent.OnPinEntryChanged(entry, state.isConfirmationStep))
         },
         modifier = Modifier
             .focusRequester(focusRequester)
@@ -119,7 +119,7 @@ private fun SetupPinContent(
             title = state.setupPinFailure.title(),
             content = state.setupPinFailure.content(),
             onSubmit = {
-                state.eventSink(SetupPinEvents.ClearFailure)
+                state.eventSink(SetupPinEvent.ClearFailure)
             }
         )
     }

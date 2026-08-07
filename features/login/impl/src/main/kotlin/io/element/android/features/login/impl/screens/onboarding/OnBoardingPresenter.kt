@@ -25,11 +25,12 @@ import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.api.canConnectToAnyHomeserver
 import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
-import io.element.android.features.login.impl.login.LoginHelper
-import io.element.android.features.login.impl.screens.onboarding.classic.LoginWithClassicState
+import io.element.android.features.login.impl.login.LoginModeEvent
+import io.element.android.features.login.impl.login.LoginModeState
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.ui.utils.MultipleTapToUnlock
 import kotlinx.coroutines.launch
@@ -41,11 +42,10 @@ class OnBoardingPresenter(
     private val enterpriseService: EnterpriseService,
     private val defaultAccountProviderAccessControl: DefaultAccountProviderAccessControl,
     private val rageshakeFeatureAvailability: RageshakeFeatureAvailability,
-    private val loginHelper: LoginHelper,
+    private val loginModePresenter: Presenter<LoginModeState>,
     private val onBoardingLogoResIdProvider: OnBoardingLogoResIdProvider,
     private val sessionStore: SessionStore,
     private val accountProviderDataSource: AccountProviderDataSource,
-    private val loginWithClassicPresenter: Presenter<LoginWithClassicState>,
 ) : Presenter<OnBoardingState> {
     @AssistedFactory
     interface Factory {
@@ -99,22 +99,23 @@ class OnBoardingPresenter(
             value = sessionStore.numberOfSessions() > 0
         }
 
-        val loginMode by loginHelper.collectLoginMode()
-
-        val loginWithClassicState = loginWithClassicPresenter.present()
+        val loginModeState = loginModePresenter.present()
 
         fun handleEvent(event: OnBoardingEvents) {
             when (event) {
                 is OnBoardingEvents.OnSignIn -> localCoroutineScope.launch {
                     // Ensure that the current account provider is set
                     accountProviderDataSource.setUrl(event.defaultAccountProvider)
-                    loginHelper.submit(
-                        isAccountCreation = false,
-                        homeserverUrl = event.defaultAccountProvider,
-                        loginHint = params.loginHint?.takeIf { forcedAccountProvider == null },
+                    loginModeState.eventSink(
+                        LoginModeEvent.Submit(
+                            isAccountCreation = false,
+                            homeserverUrl = event.defaultAccountProvider,
+                            resolvedHomeserverUrl = null,
+                            loginHint = params.loginHint?.takeIf { forcedAccountProvider == null },
+                        )
                     )
                 }
-                OnBoardingEvents.ClearError -> loginHelper.clearError()
+                OnBoardingEvents.ClearError -> loginModeState.eventSink(LoginModeEvent.ClearError)
                 OnBoardingEvents.OnVersionClick -> {
                     if (canReportBug) {
                         if (multipleTapToUnlock.unlock(localCoroutineScope)) {
@@ -127,16 +128,17 @@ class OnBoardingPresenter(
 
         return OnBoardingState(
             isAddingAccount = isAddingAccount,
+            showBackButton = params.showBackButton,
+            showDeveloperSettings = buildMeta.buildType != BuildType.RELEASE,
             productionApplicationName = buildMeta.productionApplicationName,
             defaultAccountProvider = defaultAccountProvider,
             mustChooseAccountProvider = mustChooseAccountProvider,
             canLoginWithQrCode = canLoginWithQrCode,
             canCreateAccount = defaultAccountProvider == null && canConnectToAnyHomeserver && OnBoardingConfig.CAN_CREATE_ACCOUNT,
             canReportBug = canReportBug && showReportBug,
-            loginMode = loginMode,
+            loginModeState = loginModeState,
             version = buildMeta.versionName,
             onBoardingLogoResId = onBoardingLogoResId,
-            loginWithClassicState = loginWithClassicState,
             eventSink = ::handleEvent,
         )
     }

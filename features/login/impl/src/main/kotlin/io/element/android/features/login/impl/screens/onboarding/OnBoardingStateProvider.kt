@@ -10,10 +10,8 @@ package io.element.android.features.login.impl.screens.onboarding
 
 import androidx.annotation.DrawableRes
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.login.impl.login.LoginMode
-import io.element.android.features.login.impl.screens.onboarding.classic.LoginWithClassicState
-import io.element.android.features.login.impl.screens.onboarding.classic.aLoginWithClassicState
-import io.element.android.libraries.architecture.AsyncData
+import io.element.android.features.login.impl.login.LoginModeState
+import io.element.android.features.login.impl.login.aLoginModeState
 import io.element.android.libraries.designsystem.R
 
 open class OnBoardingStateProvider : PreviewParameterProvider<OnBoardingState> {
@@ -31,11 +29,17 @@ open class OnBoardingStateProvider : PreviewParameterProvider<OnBoardingState> {
                 canLoginWithQrCode = true,
                 canCreateAccount = true,
             ),
+            anOnBoardingState(
+                showBackButton = true,
+                showDeveloperSettings = true,
+            ),
         )
 }
 
 fun anOnBoardingState(
     isAddingAccount: Boolean = false,
+    showBackButton: Boolean = false,
+    showDeveloperSettings: Boolean = false,
     productionApplicationName: String = "Element",
     defaultAccountProvider: String? = null,
     mustChooseAccountProvider: Boolean = false,
@@ -45,11 +49,12 @@ fun anOnBoardingState(
     version: String = "1.0.0",
     @DrawableRes
     customLogoResId: Int? = null,
-    loginMode: AsyncData<LoginMode> = AsyncData.Uninitialized,
-    loginWithClassicState: LoginWithClassicState = aLoginWithClassicState(),
+    loginModeState: LoginModeState = aLoginModeState(),
     eventSink: (OnBoardingEvents) -> Unit = {},
 ) = OnBoardingState(
     isAddingAccount = isAddingAccount,
+    showBackButton = showBackButton,
+    showDeveloperSettings = showDeveloperSettings,
     productionApplicationName = productionApplicationName,
     defaultAccountProvider = defaultAccountProvider,
     mustChooseAccountProvider = mustChooseAccountProvider,
@@ -57,8 +62,7 @@ fun anOnBoardingState(
     canCreateAccount = canCreateAccount,
     canReportBug = canReportBug,
     version = version,
-    loginMode = loginMode,
+    loginModeState = loginModeState,
     onBoardingLogoResId = customLogoResId,
-    loginWithClassicState = loginWithClassicState,
     eventSink = eventSink,
 )

@@ -2,8 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"Kan ikke bekræfte?"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"Opret en ny gendannelsesnøgle"</string>
-  <string name="screen_identity_confirmation_subtitle">"Verificér denne enhed for at konfigurere sikre meddelelser."</string>
-  <string name="screen_identity_confirmation_title">"Bekræft din identitet"</string>
+  <string name="screen_identity_confirmation_subtitle">"Vælg, hvordan du vil verificere dig for at konfigurere sikre beskeder."</string>
+  <string name="screen_identity_confirmation_title">"Bekræft din digitale identitet"</string>
   <string name="screen_identity_confirmation_use_another_device">"Brug en anden enhed"</string>
   <string name="screen_identity_confirmation_use_recovery_key">"Brug gendannelsesnøgle"</string>
   <string name="screen_identity_confirmed_subtitle">"Nu kan du læse eller sende beskeder sikkert, og enhver du samtaler med kan også stole på denne enhed."</string>

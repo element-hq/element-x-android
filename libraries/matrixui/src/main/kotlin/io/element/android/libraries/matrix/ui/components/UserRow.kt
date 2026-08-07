@@ -10,13 +10,17 @@ package io.element.android.libraries.matrix.ui.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -27,28 +31,16 @@ import io.element.android.libraries.designsystem.theme.components.Text
 @Composable
 internal fun UserRow(
     avatarData: AvatarData,
-    name: String,
+    name: AnnotatedString,
     subtext: String?,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    verticalSpaceWidth: Dp = 12.dp,
     trailingContent: @Composable (() -> Unit)? = null,
 ) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(start = 16.dp, top = 12.dp, end = 16.dp, bottom = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Avatar(
-            avatarData = avatarData,
-            avatarType = AvatarType.User,
-        )
-        Column(
-            modifier = Modifier
-                .padding(start = 12.dp)
-                .weight(1f),
-        ) {
-            // Name
+    UserRow(
+        avatarData = avatarData,
+        nameContent = {
             Text(
                 modifier = Modifier.clipToBounds(),
                 text = name,
@@ -57,6 +49,41 @@ internal fun UserRow(
                 color = if (enabled) ElementTheme.colors.textPrimary else ElementTheme.colors.textDisabled,
                 style = ElementTheme.typography.fontBodyLgRegular,
             )
+        },
+        subtext = subtext,
+        modifier = modifier,
+        enabled = enabled,
+        verticalSpaceWidth = verticalSpaceWidth,
+        trailingContent = trailingContent,
+    )
+}
+
+@Composable
+internal fun UserRow(
+    avatarData: AvatarData,
+    nameContent: @Composable () -> Unit,
+    subtext: String?,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    verticalSpaceWidth: Dp = 12.dp,
+    trailingContent: @Composable (() -> Unit)? = null,
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Avatar(
+            avatarData = avatarData,
+            avatarType = AvatarType.User,
+        )
+        Spacer(modifier = Modifier.width(verticalSpaceWidth))
+        Column(
+            modifier = Modifier.weight(1f),
+        ) {
+            // Name
+            nameContent()
             // Id
             subtext?.let {
                 Text(

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="notification_channel_call">"通話"</string>
+  <string name="notification_channel_listening_for_events">"イベントを監視中"</string>
+  <string name="notification_channel_noisy">"通常の通知"</string>
+  <string name="notification_channel_ringing_calls">"着信"</string>
+  <string name="notification_channel_silent">"サイレント通知"</string>
+  <plurals name="notification_compat_summary_line_for_room">
+    <item quantity="other">"%1$s: %2$d件のメッセージ"</item>
+  </plurals>
+  <plurals name="notification_compat_summary_title">
+    <item quantity="other">"%d 件の通知"</item>
+  </plurals>
+  <string name="notification_error_unified_push_unregistered_android">"Unified Push の通知配信サービス (notification distributor) を登録できないため、通知を受け取ることができません。通知の設定と通知ディストリビューター (push distributor) の状況を確認してください。"</string>
+  <string name="notification_fallback_content">"新着メッセージがあります。"</string>
+  <plurals name="notification_fallback_n_content">
+    <item quantity="other">"新着のメッセージが%d 件あります。"</item>
+  </plurals>
+  <string name="notification_incoming_audio_call">"📞 着信"</string>
+  <string name="notification_incoming_call">"📹 通話着信"</string>
+  <string name="notification_inline_reply_failed">"** 送信失敗 - ルームを開いてください"</string>
+  <string name="notification_invitation_action_join">"参加"</string>
+  <string name="notification_invitation_action_reject">"拒否"</string>
+  <plurals name="notification_invitations">
+    <item quantity="other">"%d 件の招待"</item>
+  </plurals>
+  <string name="notification_invite_body">"チャットにあなたを招待しました"</string>
+  <string name="notification_invite_body_with_sender">"%1$sがあなたをチャットに招待しました"</string>
+  <string name="notification_mentioned_you_body">"%1$s があなたをメンションしました"</string>
+  <string name="notification_new_messages">"新着メッセージ"</string>
+  <plurals name="notification_new_messages_for_room">
+    <item quantity="other">"%d 件の新着メッセージ"</item>
+  </plurals>
+  <string name="notification_reaction_body">"%1$sへのリアクション"</string>
+  <string name="notification_room_action_mark_as_read">"既読にする"</string>
+  <string name="notification_room_action_quick_reply">"クイック返信"</string>
+  <string name="notification_room_invite_body">"ルームに招待されました"</string>
+  <string name="notification_room_invite_body_with_sender">"%1$s があなたをルームに招待しました"</string>
+  <string name="notification_sender_me">"自分"</string>
+  <string name="notification_sender_mention_reply">"%1$s がメンションまたは返信しました"</string>
+  <string name="notification_space_invite_body">"スペースに招待されました"</string>
+  <string name="notification_space_invite_body_with_sender">"%1$s があなたをスペースに招待しました"</string>
+  <string name="notification_test_push_notification_content">"通知を表示しています。タップしてください。"</string>
+  <string name="notification_thread_in_room">"%1$sのスレッド"</string>
+  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
+  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
+  <plurals name="notification_unread_notified_messages">
+    <item quantity="other">"%d件の未読メッセージ"</item>
+  </plurals>
+  <string name="notification_unread_notified_messages_and_invitation">"%1$sと%2$s"</string>
+  <string name="notification_unread_notified_messages_in_room">"%2$sに%1$s"</string>
+  <string name="notification_unread_notified_messages_in_room_and_invitation">"%2$sに%1$sと%3$s"</string>
+  <plurals name="notification_unread_notified_messages_in_room_rooms">
+    <item quantity="other">"%d 個のルーム"</item>
+  </plurals>
+  <string name="push_distributor_background_sync_android">"バックグラウンド同期"</string>
+  <string name="push_distributor_firebase_android">"Google サービス"</string>
+  <string name="push_no_valid_google_play_services_apk_android">"有効なGoogle Play 開発者サービスがありません。通知が正しく機能しない可能性があります。"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_description">"ブロックしたユーザーを確認中"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_quick_fix">"ブロックしたユーザーを表示"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_result_none">"ブロックしたユーザーはいません。"</string>
+  <plurals name="troubleshoot_notifications_test_blocked_users_result_some">
+    <item quantity="other">"%1$d 人のユーザーをブロックしました。以降の通知を受信しません。"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_blocked_users_title">"ブロックしたユーザー"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"現在のプロバイダーの名前を取得してください。"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"プッシュ通知プロバイダーが選択されていません。"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found">"現在のプッシュ通知プロバイダーは %1$s で、現在のプッシュ通知ディストリビューター は %2$s です。しかし、ディストリビューター %3$s は見つかりませんでした。アンインストールされている可能性があります。"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_no_distributor">"現在のプッシュ通知プロバイダーは %1$s ですが、ディストリビューターが設定されていません。"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success">"現在のプッシュ通知プロバイダー: %1$s"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success_with_distributor">"現在のプッシュ通知プロバイダー: %1$s (%2$s)"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"現在のプッシュ通知プロバイダー"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"少なくとも一つ以上のプッシュ通知プロバイダーに、アプリケーションが対応していることを確認してください。"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"対応しているプッシュ通知プロバイダーが見つかりませんでした。"</string>
+  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
+    <item quantity="other">"%1$d 個の通知プロバイダーを発見: %2$s"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"このアプリケーションは %1$s に対応しています。"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"プッシュ通知プロバイダーへの対応状況"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"アプリケーションが通知を表示できることを確認してください。"</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"通知がタップされていません。"</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"通知を表示できません。"</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"通知がタップされました。"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"通知の表示"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"テストを続行するには、通知にタップしてください。"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_description">"プッシュ通知をアプリケーションが受信していることを確認してください。"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"エラー: プッシュ通知プロバイダーがリクエストを拒否しました。"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"エラー: %1$s"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"エラー: プッシュ通知をテストできません。"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"エラー: 通知の待機がタイムアウトしました。"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_success">"プッシュ通知のループバックに %1$d ms 要しました。"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_title">"プッシュ通知のループバックをテスト"</string>
+</resources>

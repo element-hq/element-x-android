@@ -16,9 +16,13 @@ data class TimelineProtectionState(
     val protectionState: ProtectionState,
     val eventSink: (TimelineProtectionEvent) -> Unit,
 ) {
-    fun hideMediaContent(eventId: EventId?) = when (protectionState) {
-        is ProtectionState.RenderAll -> false
-        is ProtectionState.RenderOnly -> eventId !in protectionState.eventIds
+    fun hideMediaContent(eventId: EventId?, isMine: Boolean = false) = if (isMine) {
+        false
+    } else {
+        when (protectionState) {
+            is ProtectionState.RenderAll -> false
+            is ProtectionState.RenderOnly -> eventId !in protectionState.eventIds
+        }
     }
 }
 

@@ -34,6 +34,8 @@
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"Jos kohtaat saman ongelman, kokeile toista wifi-verkkoa tai käytä mobiilidataa wifi-yhteyden sijaan"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Jos tämä ei auta, kirjaudu sisään manuaalisesti"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Yhteys ei ole turvallinen"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"Sinua pyydetään antamaan tässä laitteessa näkyvät kaksi numeroa."</string>
+  <string name="screen_qr_code_login_device_code_title">"Kirjoita alla oleva numero toisella laitteellasi"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"Kirjautuminen peruutettiin toisella laitteella."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Kirjautumispyyntö peruutettu"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"Kirjautuminen hylättiin toisella laitteella."</string>
@@ -54,4 +56,5 @@ Yritä kirjautua sisään manuaalisesti tai skannaa QR-koodi toisella laitteella
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Jatkaaksesi sinun on annettava lupa %1$s -sovellukselle käyttää laitteesi kameraa."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Salli lupa kameraan QR-koodin skannaamiseksi"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Tapahtui odottamaton virhe. Yritä uudelleen."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"Odotetaan toista laitettasi"</string>
 </resources>

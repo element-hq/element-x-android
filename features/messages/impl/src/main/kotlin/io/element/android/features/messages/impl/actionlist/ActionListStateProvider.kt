@@ -15,6 +15,7 @@ import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUser
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.anUnsignedDeviceSendFailure
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
+import io.element.android.features.messages.impl.timeline.model.event.aStaticLocationMode
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
@@ -127,7 +128,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                 anActionListState(
                     target = ActionListState.Target.Success(
                         event = aTimelineItemEvent(
-                            content = aTimelineItemLocationContent(),
+                            content = aTimelineItemLocationContent(mode = aStaticLocationMode()),
                             timelineItemReactions = reactionsState
                         ),
                         sentTimeFull = "January 1, 1970 at 12:00 AM",
@@ -140,7 +141,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                 anActionListState(
                     target = ActionListState.Target.Success(
                         event = aTimelineItemEvent(
-                            content = aTimelineItemLocationContent(),
+                            content = aTimelineItemLocationContent(mode = aStaticLocationMode()),
                             timelineItemReactions = reactionsState
                         ),
                         sentTimeFull = "January 1, 1970 at 12:00 AM",

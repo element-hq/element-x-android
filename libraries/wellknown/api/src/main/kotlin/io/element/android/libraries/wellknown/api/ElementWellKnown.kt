@@ -14,4 +14,8 @@ data class ElementWellKnown(
     val rageshakeUrl: String?,
     val brandColor: String?,
     val notificationSound: String?,
+    val identityProviderAppScheme: String?,
+    val customRecoveryPassphrase: CustomRecoveryPassphrase?,
+    val contentScannerUrl: String?,
+    val forceDisableE2EE: Boolean?,
 )

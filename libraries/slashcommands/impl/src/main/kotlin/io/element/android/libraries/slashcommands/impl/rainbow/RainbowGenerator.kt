@@ -1,0 +1,113 @@
+/*
+ * Copyright (c) 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+package io.element.android.libraries.slashcommands.impl.rainbow
+
+import dev.zacsweers.metro.Inject
+import kotlin.math.cos
+import kotlin.math.pow
+import kotlin.math.roundToInt
+import kotlin.math.sin
+
+/**
+ * Inspired from React-Sdk
+ * Ref: https://github.com/matrix-org/matrix-react-sdk/blob/develop/src/utils/colour.js
+ */
+@Inject
+class RainbowGenerator {
+    fun generate(text: String): String {
+        val split = text.splitEmoji()
+        val frequency = 2 * Math.PI / split.size
+
+        return split
+            .mapIndexed { idx, letter ->
+                // Do better than React-Sdk: Avoid adding font color for spaces
+                if (letter == " ") {
+                    "$letter"
+                } else {
+                    val (a, b) = generateAB(idx * frequency, 1f)
+                    val dashColor = labToRGB(75, a, b).toDashColor()
+                    "<font color=\"$dashColor\">$letter</font>"
+                }
+            }
+            .joinToString(separator = "")
+    }
+
+    private fun generateAB(hue: Double, chroma: Float): Pair<Double, Double> {
+        val a = chroma * 127 * cos(hue)
+        val b = chroma * 127 * sin(hue)
+
+        return Pair(a, b)
+    }
+
+    private fun labToRGB(l: Int, a: Double, b: Double): RgbColor {
+        // Convert CIELAB to CIEXYZ (D65)
+        var y = (l + 16) / 116.0
+        val x = adjustXYZ(y + a / 500) * 0.9505
+        val z = adjustXYZ(y - b / 200) * 1.0890
+
+        y = adjustXYZ(y)
+
+        // Linear transformation from CIEXYZ to RGB
+        val red = 3.24096994 * x - 1.53738318 * y - 0.49861076 * z
+        val green = -0.96924364 * x + 1.8759675 * y + 0.04155506 * z
+        val blue = 0.05563008 * x - 0.20397696 * y + 1.05697151 * z
+
+        return RgbColor(adjustRGB(red), adjustRGB(green), adjustRGB(blue))
+    }
+
+    private fun adjustXYZ(value: Double): Double {
+        if (value > 0.2069) {
+            return value.pow(3)
+        }
+        return 0.1284 * value - 0.01771
+    }
+
+    private fun gammaCorrection(value: Double): Double {
+        // Non-linear transformation to sRGB
+        if (value <= 0.0031308) {
+            return 12.92 * value
+        }
+        return 1.055 * value.pow(1 / 2.4) - 0.055
+    }
+
+    private fun adjustRGB(value: Double): Int {
+        return (gammaCorrection(value)
+            .coerceIn(0.0, 1.0) * 255)
+            .roundToInt()
+    }
+}
+
+/**
+ * Same as split, but considering emojis.
+ */
+private fun CharSequence.splitEmoji(): List<CharSequence> {
+    val result = mutableListOf<CharSequence>()
+    var index = 0
+    while (index < length) {
+        val firstChar = get(index)
+        if (firstChar.code == 0x200e) {
+            // Left to right mark. What should I do with it?
+        } else if (firstChar.code in 0xD800..0xDBFF && index + 1 < length) {
+            // We have the start of a surrogate pair
+            val secondChar = get(index + 1)
+            if (secondChar.code in 0xDC00..0xDFFF) {
+                // We have an emoji
+                result.add("$firstChar$secondChar")
+                index++
+            } else {
+                // Not sure what we have here...
+                result.add("$firstChar")
+            }
+        } else {
+            // Regular char
+            result.add("$firstChar")
+        }
+        index++
+    }
+    return result
+}

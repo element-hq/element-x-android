@@ -10,6 +10,7 @@
   <string name="screen_security_and_privacy_add_room_address_action">"Dodaj adresu"</string>
   <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Svatko tko se nalazi u ovlaštenim prostorima može se pridružiti, ali svi ostali moraju zatražiti pristup."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Svi moraju zatražiti pristup."</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Zatraži pridruživanje"</string>
   <string name="screen_security_and_privacy_ask_to_join_single_space_members_option_description">"Svatko u %1$s može se pridružiti, ali svi ostali moraju zatražiti pristup."</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Da, omogući šifriranje"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Nakon što se šifriranje za sobu omogući, više se neće moći onemogućiti. Povijest poruka bit će vidljiva samo članovima sobe otkad su pozvani ili otkad su joj se pridružili.
@@ -20,13 +21,15 @@ Ne preporučujemo omogućavanje šifriranja za sobe koje svatko može pronaći i
   <string name="screen_security_and_privacy_encryption_section_header">"Šifriranje"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Omogući sveobuhvatno šifriranje"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Svatko se može pridružiti."</string>
-  <string name="screen_security_and_privacy_room_access_footer">"Odaberite iz kojih se prostora članovi mogu pridružiti ovoj sobi bez pozivnice.  %1$s"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Bilo tko"</string>
+  <string name="screen_security_and_privacy_room_access_footer">"Odaberite iz kojih se prostora članovi mogu pridružiti ovoj sobi bez pozivnice. %1$s"</string>
   <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Upravljaj prostorima"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Samo pozvane osobe mogu se pridružiti."</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Samo s pozivnicom"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Pristup"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_multiple_parents_description">"Svatko tko se nalazi u ovlaštenim prostorima može se pridružiti."</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_single_parent_description">"Svatko u %1$s može se pridružiti."</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_title">"Članovi prostora"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Prostori trenutačno nisu podržani"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Trebat će vam adresa kako bi bila vidljiva u javnom direktoriju."</string>
   <string name="screen_security_and_privacy_room_address_section_header">"Adresa"</string>

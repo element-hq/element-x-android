@@ -34,6 +34,8 @@
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"Ako se problem ponovi, pokušajte s drugom Wi-Fi mrežom ili mobilnim podatcima umjesto Wi-Fi-ja."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Ako to ne uspije, prijavite se ručno"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Veza nije sigurna"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"Od vas će se zatražiti da unesete dvije znamenke prikazane na ovom uređaju."</string>
+  <string name="screen_qr_code_login_device_code_title">"Unesite ispod navedeni broj u svoj drugi uređaj"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"Prijava je otkazana na drugom uređaju."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Zahtjev za prijavu je otkazan"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"Prijava je odbijena na drugom uređaju."</string>
@@ -54,4 +56,5 @@ Pokušajte se prijaviti ručno ili skenirajte QR kod drugim uređajem."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Za nastavak morate dati dopuštenje za %1$s da biste se mogli služiti kamerom svog uređaja."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Dopustite pristup kameri kako biste mogli skenirati QR kod"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Došlo je do neočekivane pogreške. Pokušajte ponovno."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"Čekanje na vaš drugi uređaj"</string>
 </resources>

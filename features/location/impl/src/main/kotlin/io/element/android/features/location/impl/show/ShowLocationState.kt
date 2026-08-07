@@ -11,6 +11,8 @@ package io.element.android.features.location.impl.show
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.features.location.impl.common.ui.LocationMarkerData
+import io.element.android.features.location.impl.common.userlocation.UserLocationState
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.PinVariant
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.UserId
@@ -18,14 +20,18 @@ import io.element.android.libraries.matrix.api.room.location.AssetType
 import kotlinx.collections.immutable.ImmutableList
 
 data class ShowLocationState(
+    val customMapStyleUrl: AsyncData<String?>,
+    val isLive: Boolean,
     val dialogState: LocationConstraintsDialogState,
     val locationShares: ImmutableList<LocationShareItem>,
-    val hasLocationPermission: Boolean,
+    val focusedLocation: LocationShareItem?,
     val isTrackMyLocation: Boolean,
+    val userLocationState: UserLocationState,
     val appName: String,
+    val hideUserLocationPuck: Boolean,
     val eventSink: (ShowLocationEvent) -> Unit,
 ) {
-    val isSheetDraggable = locationShares.any { item -> item.isLive }
+    val isSheetDraggable = isLive && locationShares.isNotEmpty()
 }
 
 data class LocationShareItem(
@@ -36,7 +42,10 @@ data class LocationShareItem(
     val location: Location,
     val isLive: Boolean,
     val assetType: AssetType?,
-)
+    val isOwnUser: Boolean
+) {
+    val canStopSharing = isLive && isOwnUser
+}
 
 fun LocationShareItem.toMarkerData(): LocationMarkerData {
     val pinVariant = if (assetType == AssetType.PIN) {

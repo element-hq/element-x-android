@@ -324,7 +324,7 @@ class UserProfilePresenterTest {
     @Test
     fun `present - start DM action confirmation scenario - cancel`() = runTest {
         val matrixUser = MatrixUser(UserId("@alice:server.org"))
-        val startDMConfirmationResult = ConfirmingStartDmWithMatrixUser(matrixUser)
+        val startDMConfirmationResult = ConfirmingStartDmWithMatrixUser(matrixUser, false)
         val executeResult = lambdaRecorder<MatrixUser, Boolean, MutableState<AsyncAction<RoomId>>, Unit> { _, _, actionState ->
             actionState.value = startDMConfirmationResult
         }
@@ -354,7 +354,7 @@ class UserProfilePresenterTest {
     @Test
     fun `present - start DM action confirmation scenario - confirm`() = runTest {
         val matrixUser = MatrixUser(UserId("@alice:server.org"))
-        val startDMConfirmationResult = ConfirmingStartDmWithMatrixUser(matrixUser)
+        val startDMConfirmationResult = ConfirmingStartDmWithMatrixUser(matrixUser, false)
         val executeResult = lambdaRecorder<MatrixUser, Boolean, MutableState<AsyncAction<RoomId>>, Unit> { _, _, actionState ->
             actionState.value = startDMConfirmationResult
         }

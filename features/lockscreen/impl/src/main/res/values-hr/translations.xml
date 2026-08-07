@@ -23,7 +23,7 @@ Odaberite nešto nezaboravno. Ako zaboravite ovaj PIN, bit ćete odjavljeni iz a
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Unesite dvaput isti PIN"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN-ovi se ne podudaraju"</string>
   <string name="screen_app_lock_signout_alert_message">"Morat ćete se ponovno prijaviti i izraditi novi PIN da biste mogli nastaviti"</string>
-  <string name="screen_app_lock_signout_alert_title">"Odjavit ćete se"</string>
+  <string name="screen_app_lock_signout_alert_title">"Ovaj uređaj se uklanja"</string>
   <plurals name="screen_app_lock_subtitle">
     <item quantity="one">"Imate %1$d pokušaj otključavanja"</item>
     <item quantity="few">"Imate %1$d pokušaja otključavanja"</item>
@@ -36,5 +36,5 @@ Odaberite nešto nezaboravno. Ako zaboravite ovaj PIN, bit ćete odjavljeni iz a
   </plurals>
   <string name="screen_app_lock_use_biometric_android">"Upotrijebi biometriju"</string>
   <string name="screen_app_lock_use_pin_android">"Upotrijebi PIN"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Odjavljivanje…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Uklanjanje uređaja…"</string>
 </resources>

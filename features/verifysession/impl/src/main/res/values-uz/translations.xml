@@ -2,8 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"Tasdiqlay olmayapsizmi?"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"Yangi tiklash kalitini yarating"</string>
-  <string name="screen_identity_confirmation_subtitle">"Xavfsiz xabarlashuvni sozlash uchun ushbu qurilmani tasdiqlang."</string>
-  <string name="screen_identity_confirmation_title">"Shaxsingizni tasdiqlang"</string>
+  <string name="screen_identity_confirmation_subtitle">"Xavfsiz xabar almashinuvni sozlash uchun tasdiqlash usulini tanlang."</string>
+  <string name="screen_identity_confirmation_title">"Raqamli shaxsingizni tasdiqlang"</string>
   <string name="screen_identity_confirmation_use_another_device">"Boshqa qurilmadan foydalanish"</string>
   <string name="screen_identity_confirmation_use_recovery_key">"Qayta tiklash kalitidan foydalaning"</string>
   <string name="screen_identity_confirmed_subtitle">"Endi xabarlarni xavfsiz tarzda o‘qish yoki yuborish imkoniyatiga egasiz, shuningdek, siz bilan muloqot qilayotgan har qanday kishi ham bu qurilmaga ishonch bildirishi mumkin."</string>
@@ -17,7 +17,7 @@
   <string name="screen_session_verification_compare_numbers_subtitle">"Quyidagi raqamlarning boshqa sessiyangizda koʻrsatilgan raqamlarga mos kelishini tasdiqlang."</string>
   <string name="screen_session_verification_compare_numbers_title">"Sonlarni taqqoslash"</string>
   <string name="screen_session_verification_complete_subtitle">"Endi xabarlarni boshqa qurilmangizda xavfsiz o‘qish yoki yuborishingiz mumkin."</string>
-  <string name="screen_session_verification_complete_user_subtitle">"Endi xabarlarni yuborish yoki qabul qilishda bu foydalanuvchining shaxsiga ishonishingiz mumkin."</string>
+  <string name="screen_session_verification_complete_user_subtitle">"Endi xabarlarni yuborish yoki qabul qilishda bu foydalanuvchining raqamli identifikatoriga ishonishingiz mumkin."</string>
   <string name="screen_session_verification_device_verified">"Qurilma tasdiqlandi"</string>
   <string name="screen_session_verification_enter_recovery_key">"Tiklash kalitini kiriting"</string>
   <string name="screen_session_verification_failed_subtitle">"So‘rov vaqti tugab qoldi, so‘rov rad etildi yoki tekshiruv mos kelmadi."</string>

@@ -26,15 +26,13 @@ internal fun aCallScreenState(
     webViewError: String? = null,
     userAgent: String = "",
     isCallActive: Boolean = true,
-    isInWidgetMode: Boolean = false,
-    eventSink: (CallScreenEvents) -> Unit = {},
+    eventSink: (CallScreenEvent) -> Unit = {},
 ): CallScreenState {
     return CallScreenState(
         urlState = urlState,
         webViewError = webViewError,
         userAgent = userAgent,
         isCallActive = isCallActive,
-        isInWidgetMode = isInWidgetMode,
         eventSink = eventSink,
     )
 }

@@ -16,6 +16,7 @@ import io.element.android.features.startchat.impl.userlist.aUserListState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.usersearch.api.UserSearchResult
 import kotlinx.collections.immutable.persistentListOf
@@ -52,24 +53,29 @@ open class StartChatStateProvider : PreviewParameterProvider<StartChatState> {
                 )
             ),
             aCreateRoomRootState(
-                startDmAction = ConfirmingStartDmWithMatrixUser(aMatrixUser()),
-            ),
-            aCreateRoomRootState(
-                isRoomDirectorySearchEnabled = true,
+                startDmAction = aConfirmingStartDmWithMatrixUser()
             ),
         )
+}
+
+fun aConfirmingStartDmWithMatrixUser(
+    matrixUser: MatrixUser = aMatrixUser(),
+    isUserIdentityUnknown: Boolean = false
+): ConfirmingStartDmWithMatrixUser {
+    return ConfirmingStartDmWithMatrixUser(
+        matrixUser,
+        isUserIdentityUnknown
+    )
 }
 
 fun aCreateRoomRootState(
     applicationName: String = "Element X Preview",
     userListState: UserListState = aUserListState(),
     startDmAction: AsyncAction<RoomId> = AsyncAction.Uninitialized,
-    isRoomDirectorySearchEnabled: Boolean = false,
     eventSink: (StartChatEvents) -> Unit = {},
 ) = StartChatState(
     applicationName = applicationName,
     userListState = userListState,
     startDmAction = startDmAction,
-    isRoomDirectorySearchEnabled = isRoomDirectorySearchEnabled,
     eventSink = eventSink,
 )

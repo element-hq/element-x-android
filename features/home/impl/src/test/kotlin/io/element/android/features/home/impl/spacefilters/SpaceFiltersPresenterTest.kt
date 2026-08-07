@@ -8,8 +8,6 @@
 package io.element.android.features.home.impl.spacefilters
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.spaces.FakeSpaceService
@@ -22,25 +20,8 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class SpaceFiltersPresenterTest {
     @Test
-    fun `present - when feature flag is disabled returns Disabled state`() = runTest {
-        val presenter = createSpaceFiltersPresenter(
-            featureFlagService = FakeFeatureFlagService(
-                initialState = mapOf(FeatureFlags.RoomListSpaceFilters.key to false)
-            )
-        )
-        presenter.test {
-            val state = awaitItem()
-            assertThat(state).isEqualTo(SpaceFiltersState.Disabled)
-        }
-    }
-
-    @Test
     fun `present - when available filters is empty returns Disabled state`() = runTest {
-        val presenter = createSpaceFiltersPresenter(
-            featureFlagService = FakeFeatureFlagService(
-                initialState = mapOf(FeatureFlags.RoomListSpaceFilters.key to true)
-            )
-        )
+        val presenter = createSpaceFiltersPresenter()
         presenter.test {
             val state = awaitLastSequentialItem()
             assertThat(state).isEqualTo(SpaceFiltersState.Disabled)
@@ -48,15 +29,12 @@ class SpaceFiltersPresenterTest {
     }
 
     @Test
-    fun `present - when feature flag is enabled and filters exist returns Unselected state`() = runTest {
+    fun `present - when filters exist returns Unselected state`() = runTest {
         val spaceFilter = aSpaceServiceFilter(displayName = "Test Space")
         val spaceService = FakeSpaceService()
         val matrixClient = FakeMatrixClient(spaceService = spaceService)
 
         val presenter = createSpaceFiltersPresenter(
-            featureFlagService = FakeFeatureFlagService(
-                initialState = mapOf(FeatureFlags.RoomListSpaceFilters.key to true)
-            ),
             matrixClient = matrixClient,
         )
         presenter.test {
@@ -75,9 +53,6 @@ class SpaceFiltersPresenterTest {
         val matrixClient = FakeMatrixClient(spaceService = spaceService)
 
         val presenter = createSpaceFiltersPresenter(
-            featureFlagService = FakeFeatureFlagService(
-                initialState = mapOf(FeatureFlags.RoomListSpaceFilters.key to true)
-            ),
             matrixClient = matrixClient,
         )
         presenter.test {
@@ -99,9 +74,6 @@ class SpaceFiltersPresenterTest {
         val matrixClient = FakeMatrixClient(spaceService = spaceService)
 
         val presenter = createSpaceFiltersPresenter(
-            featureFlagService = FakeFeatureFlagService(
-                initialState = mapOf(FeatureFlags.RoomListSpaceFilters.key to true)
-            ),
             matrixClient = matrixClient,
         )
         presenter.test {
@@ -129,9 +101,6 @@ class SpaceFiltersPresenterTest {
         val matrixClient = FakeMatrixClient(spaceService = spaceService)
 
         val presenter = createSpaceFiltersPresenter(
-            featureFlagService = FakeFeatureFlagService(
-                initialState = mapOf(FeatureFlags.RoomListSpaceFilters.key to true)
-            ),
             matrixClient = matrixClient,
         )
         presenter.test {
@@ -159,9 +128,6 @@ class SpaceFiltersPresenterTest {
         val matrixClient = FakeMatrixClient(spaceService = spaceService)
 
         val presenter = createSpaceFiltersPresenter(
-            featureFlagService = FakeFeatureFlagService(
-                initialState = mapOf(FeatureFlags.RoomListSpaceFilters.key to true)
-            ),
             matrixClient = matrixClient,
         )
         presenter.test {
@@ -196,9 +162,6 @@ class SpaceFiltersPresenterTest {
         val matrixClient = FakeMatrixClient(spaceService = spaceService)
 
         val presenter = createSpaceFiltersPresenter(
-            featureFlagService = FakeFeatureFlagService(
-                initialState = mapOf(FeatureFlags.RoomListSpaceFilters.key to true)
-            ),
             matrixClient = matrixClient,
         )
         presenter.test {
@@ -224,9 +187,6 @@ class SpaceFiltersPresenterTest {
         val matrixClient = FakeMatrixClient(spaceService = spaceService)
 
         val presenter = createSpaceFiltersPresenter(
-            featureFlagService = FakeFeatureFlagService(
-                initialState = mapOf(FeatureFlags.RoomListSpaceFilters.key to true)
-            ),
             matrixClient = matrixClient,
         )
         presenter.test {
@@ -271,9 +231,6 @@ class SpaceFiltersPresenterTest {
         val matrixClient = FakeMatrixClient(spaceService = spaceService)
 
         val presenter = createSpaceFiltersPresenter(
-            featureFlagService = FakeFeatureFlagService(
-                initialState = mapOf(FeatureFlags.RoomListSpaceFilters.key to true)
-            ),
             matrixClient = matrixClient,
         )
         presenter.test {
@@ -302,11 +259,9 @@ class SpaceFiltersPresenterTest {
     }
 
     private fun createSpaceFiltersPresenter(
-        featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
         matrixClient: FakeMatrixClient = FakeMatrixClient(),
     ): SpaceFiltersPresenter {
         return SpaceFiltersPresenter(
-            featureFlagService = featureFlagService,
             matrixClient = matrixClient,
         )
     }

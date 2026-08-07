@@ -34,7 +34,9 @@ import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
+import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
+import io.element.android.libraries.matrix.test.room.threads.FakeThreadsListService
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.simulateLongTask
@@ -56,6 +58,7 @@ class FakeJoinedRoom(
     override val roomNotificationSettingsStateFlow: StateFlow<RoomNotificationSettingsState> =
         MutableStateFlow(RoomNotificationSettingsState.Unknown),
     override val knockRequestsFlow: Flow<List<KnockRequest>> = MutableStateFlow(emptyList()),
+    override val threadsListService: FakeThreadsListService = FakeThreadsListService(),
     private val roomNotificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
     private var createTimelineResult: (CreateTimelineParams) -> Result<Timeline> = { lambdaError() },
     private val editMessageLambda: (EventId, String, String?, List<IntentionalMention>) -> Result<Unit> = { _, _, _, _ -> lambdaError() },
@@ -86,9 +89,10 @@ class FakeJoinedRoom(
     private val updateJoinRuleResult: (JoinRule) -> Result<Unit> = { lambdaError() },
     private val setSendQueueEnabledResult: (Boolean) -> Unit = { _: Boolean -> },
     private val liveLocationSharesFlow: Flow<List<LiveLocationShare>> = MutableStateFlow(emptyList()),
-    private val startLiveLocationShareResult: (Long) -> Result<Unit> = { lambdaError() },
+    private val startLiveLocationShareResult: (Long) -> Result<EventId> = { lambdaError() },
     private val stopLiveLocationShareResult: () -> Result<Unit> = { lambdaError() },
     private val sendLiveLocationResult: (String) -> Result<Unit> = { lambdaError() },
+    private val setOwnMemberDisplayNameResult: (String) -> Result<Unit> = { lambdaError() },
 ) : JoinedRoom, BaseRoom by baseRoom {
     private val sendQueueUpdates = MutableSharedFlow<SendQueueUpdate>(extraBufferCapacity = 10)
 
@@ -131,7 +135,11 @@ class FakeJoinedRoom(
     }
 
     override suspend fun updateRoomNotificationSettings(): Result<Unit> = simulateLongTask {
-        val notificationSettings = roomNotificationSettingsService.getRoomNotificationSettings(roomId, info().isEncrypted.orFalse(), isOneToOne).getOrThrow()
+        val notificationSettings = roomNotificationSettingsService.getRoomNotificationSettings(
+            roomId = roomId,
+            isEncrypted = info().isEncrypted.orFalse(),
+            isOneToOne = isDm(),
+        ).getOrThrow()
         (roomNotificationSettingsStateFlow as MutableStateFlow).value = RoomNotificationSettingsState.Ready(notificationSettings)
         return Result.success(Unit)
     }
@@ -236,8 +244,8 @@ class FakeJoinedRoom(
         return liveLocationSharesFlow
     }
 
-    override suspend fun startLiveLocationShare(durationMillis: Long): Result<Unit> = simulateLongTask {
-        startLiveLocationShareResult(durationMillis)
+    override suspend fun startLiveLocationShare(durationMillis: Long): Result<EventId> = simulateLongTask {
+        startLiveLocationShareResult(durationMillis).map { AN_EVENT_ID }
     }
 
     override suspend fun stopLiveLocationShare(): Result<Unit> = simulateLongTask {
@@ -246,6 +254,10 @@ class FakeJoinedRoom(
 
     override suspend fun sendLiveLocation(geoUri: String): Result<Unit> = simulateLongTask {
         sendLiveLocationResult(geoUri)
+    }
+
+    override suspend fun setOwnMemberDisplayName(displayName: String): Result<Unit> = simulateLongTask {
+        setOwnMemberDisplayNameResult(displayName)
     }
 
     private suspend fun simulateSendMediaProgress(progressCallback: ProgressCallback?) {

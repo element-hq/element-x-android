@@ -45,6 +45,8 @@ import io.element.android.libraries.designsystem.theme.components.ListSectionHea
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.components.CreateDmConfirmationBottomSheet
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
@@ -71,7 +73,8 @@ fun StartChatView(
             if (!state.userListState.isSearchActive) {
                 CreateRoomRootViewTopBar(onCloseClick = onCloseClick)
             }
-        }
+        },
+        contentWindowInsets = scaffoldScrollableContentInsets,
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -130,6 +133,7 @@ fun StartChatView(
             if (data is ConfirmingStartDmWithMatrixUser) {
                 CreateDmConfirmationBottomSheet(
                     matrixUser = data.matrixUser,
+                    isUserIdentityUnknown = data.isUserIdentityUnknown,
                     onSendInvite = {
                         state.eventSink(StartChatEvents.StartDM(data.matrixUser))
                     },
@@ -167,7 +171,9 @@ private fun CreateRoomActionButtonsList(
     onRoomDirectorySearchClick: () -> Unit,
     onDmClick: (RoomId) -> Unit,
 ) {
-    LazyColumn {
+    LazyColumn(
+        contentPadding = lazyColumnContentPadding,
+    ) {
         item {
             CreateRoomActionButton(
                 iconRes = CompoundDrawables.ic_compound_plus,
@@ -175,14 +181,12 @@ private fun CreateRoomActionButtonsList(
                 onClick = onNewRoomClick,
             )
         }
-        if (state.isRoomDirectorySearchEnabled) {
-            item {
-                CreateRoomActionButton(
-                    iconRes = CompoundDrawables.ic_compound_list_bulleted,
-                    text = stringResource(id = R.string.screen_room_directory_search_title),
-                    onClick = onRoomDirectorySearchClick,
-                )
-            }
+        item {
+            CreateRoomActionButton(
+                iconRes = CompoundDrawables.ic_compound_list_bulleted,
+                text = stringResource(id = R.string.screen_room_directory_search_title),
+                onClick = onRoomDirectorySearchClick,
+            )
         }
         item {
             CreateRoomActionButton(

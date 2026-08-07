@@ -19,8 +19,7 @@ import io.element.android.libraries.matrix.test.FakeSdkMetadata
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.apperror.api.AppErrorState
 import io.element.android.services.apperror.api.AppErrorStateService
-import io.element.android.services.apperror.impl.DefaultAppErrorStateService
-import io.element.android.services.toolbox.test.strings.FakeStringProvider
+import io.element.android.services.apperror.test.FakeAppErrorStateService
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -44,10 +43,16 @@ class RootPresenterTest {
     @Test
     fun `present - passes app error state`() = runTest {
         val presenter = createRootPresenter(
-            appErrorService = DefaultAppErrorStateService(
-                stringProvider = FakeStringProvider(),
-            ).apply {
-                showError("Bad news", "Something bad happened")
+            appErrorService = FakeAppErrorStateService().apply {
+                setAppErrorState(
+                    AppErrorState.Error(
+                        title = "Bad news",
+                        body = "Something bad happened",
+                        dismiss = {
+                            setAppErrorState(AppErrorState.NoError)
+                        }
+                    )
+                )
             }
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -65,9 +70,7 @@ class RootPresenterTest {
     }
 
     private fun createRootPresenter(
-        appErrorService: AppErrorStateService = DefaultAppErrorStateService(
-            stringProvider = FakeStringProvider(),
-        ),
+        appErrorService: AppErrorStateService = FakeAppErrorStateService(),
     ): RootPresenter {
         return RootPresenter(
             crashDetectionPresenter = { aCrashDetectionState() },

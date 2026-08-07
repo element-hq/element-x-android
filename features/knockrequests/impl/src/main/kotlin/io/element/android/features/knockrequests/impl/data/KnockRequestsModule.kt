@@ -15,8 +15,6 @@ import dev.zacsweers.metro.SingleIn
 import io.element.android.features.knockrequests.api.KnockRequestPermissions
 import io.element.android.features.knockrequests.api.knockRequestPermissions
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.powerlevels.permissionsFlow
 
@@ -25,14 +23,13 @@ import io.element.android.libraries.matrix.api.room.powerlevels.permissionsFlow
 object KnockRequestsModule {
     @Provides
     @SingleIn(RoomScope::class)
-    fun knockRequestsService(room: JoinedRoom, featureFlagService: FeatureFlagService): KnockRequestsService {
+    fun knockRequestsService(room: JoinedRoom): KnockRequestsService {
         return KnockRequestsService(
             knockRequestsFlow = room.knockRequestsFlow,
             permissionsFlow = room.permissionsFlow(KnockRequestPermissions.DEFAULT) { perms ->
                 perms.knockRequestPermissions()
             },
-            isKnockFeatureEnabledFlow = featureFlagService.isFeatureEnabledFlow(FeatureFlags.Knock),
-            coroutineScope = room.roomCoroutineScope
+            coroutineScope = room.roomCoroutineScope,
         )
     }
 }

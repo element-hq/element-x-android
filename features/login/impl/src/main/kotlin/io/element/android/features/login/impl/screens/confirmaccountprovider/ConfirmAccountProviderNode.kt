@@ -22,7 +22,7 @@ import io.element.android.features.login.impl.util.openLearnMorePage
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.inputs
-import io.element.android.libraries.matrix.api.auth.OidcDetails
+import io.element.android.libraries.matrix.api.auth.OAuthDetails
 
 @ContributesNode(AppScope::class)
 @AssistedInject
@@ -44,7 +44,7 @@ class ConfirmAccountProviderNode(
 
     interface Callback : Plugin {
         fun navigateToLoginPassword()
-        fun navigateToOidc(oidcDetails: OidcDetails)
+        fun navigateToOAuth(oAuthDetails: OAuthDetails)
         fun navigateToCreateAccount(url: String)
         fun navigateToChangeAccountProvider()
     }
@@ -58,7 +58,7 @@ class ConfirmAccountProviderNode(
         ConfirmAccountProviderView(
             state = state,
             modifier = modifier,
-            onOidcDetails = callback::navigateToOidc,
+            onOAuthDetails = callback::navigateToOAuth,
             onNeedLoginPassword = callback::navigateToLoginPassword,
             onCreateAccountContinue = callback::navigateToCreateAccount,
             onChange = callback::navigateToChangeAccountProvider,

@@ -13,16 +13,21 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.appconfig.ProtectionConfig
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.home.impl.R
 import io.element.android.features.home.impl.model.RoomListRoomSummary
+import io.element.android.libraries.core.extensions.toSafeLength
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -42,9 +47,14 @@ fun RoomListDeclineInviteMenu(
 ) {
     ModalBottomSheet(
         onDismissRequest = { eventSink(RoomListEvent.HideDeclineInviteMenu) },
+        scrollable = false,
     ) {
         RoomListDeclineInviteMenuContent(
-            roomName = menu.roomSummary.name ?: menu.roomSummary.roomId.value,
+            roomName = menu.roomSummary.name?.toSafeLength(
+                maxLength = ProtectionConfig.MAX_ROOM_NAME_LENGTH,
+                ellipsize = true,
+            )
+                ?: menu.roomSummary.roomId.value,
             onDeclineClick = {
                 eventSink(RoomListEvent.HideDeclineInviteMenu)
                 eventSink(RoomListEvent.DeclineInvite(menu.roomSummary, false))
@@ -74,7 +84,8 @@ private fun RoomListDeclineInviteMenuContent(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(all = 16.dp),
+            .padding(all = 16.dp)
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
@@ -112,16 +123,15 @@ private fun RoomListDeclineInviteMenuContent(
     }
 }
 
-// TODO This component should be seen in [RoomListView] @Preview but it doesn't show up.
-// see: https://issuetracker.google.com/issues/283843380
-// Remove this preview when the issue is fixed.
 @PreviewsDayNight
 @Composable
-internal fun RoomListDeclineInviteMenuContentPreview() = ElementPreview {
-    RoomListDeclineInviteMenuContent(
-        roomName = "Room name",
-        onCancelClick = {},
-        onDeclineClick = {},
+internal fun RoomListDeclineInviteMenuPreview(
+    @PreviewParameter(RoomListStateDeclineInviteMenuShownProvider::class) menu: RoomListState.DeclineInviteMenu.Shown,
+) = ElementPreview {
+    RoomListDeclineInviteMenu(
+        menu = menu,
+        canReportRoom = false,
         onDeclineAndBlockClick = {},
+        eventSink = {},
     )
 }

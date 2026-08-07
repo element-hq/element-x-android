@@ -20,7 +20,7 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
-import io.element.android.features.call.api.CallType
+import io.element.android.features.call.api.CallData
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.userprofile.api.UserProfileEntryPoint
 import io.element.android.features.userprofile.impl.root.UserProfileNode
@@ -86,7 +86,7 @@ class UserProfileFlowNode(
 
                     override fun startCall(dmRoomId: RoomId, callIntent: CallIntent) {
                         elementCallEntryPoint.startCall(
-                            CallType.RoomCall(
+                            CallData(
                                 sessionId = sessionId,
                                 roomId = dmRoomId,
                                 isAudioCall = callIntent == CallIntent.AUDIO

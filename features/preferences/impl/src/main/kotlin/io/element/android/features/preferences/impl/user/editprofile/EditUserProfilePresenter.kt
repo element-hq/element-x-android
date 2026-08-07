@@ -15,6 +15,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -103,6 +104,14 @@ class EditUserProfilePresenter(
             }
         }
 
+        val homeserverCapabilities = matrixClient.homeserverCapabilities()
+        val canChangeDisplayName = produceState(true) {
+            value = homeserverCapabilities.canChangeDisplayName().getOrDefault(true)
+        }
+        val canChangeAvatar = produceState(true) {
+            value = homeserverCapabilities.canChangeAvatarUrl().getOrDefault(true)
+        }
+
         val saveAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val localCoroutineScope = rememberCoroutineScope()
 
@@ -169,6 +178,8 @@ class EditUserProfilePresenter(
             saveButtonEnabled = canSave && saveAction.value !is AsyncAction.Loading,
             saveAction = saveAction.value,
             cameraPermissionState = cameraPermissionState,
+            canChangeDisplayName = canChangeDisplayName.value,
+            canChangeAvatarUrl = canChangeAvatar.value,
             eventSink = ::handleEvent,
         )
     }

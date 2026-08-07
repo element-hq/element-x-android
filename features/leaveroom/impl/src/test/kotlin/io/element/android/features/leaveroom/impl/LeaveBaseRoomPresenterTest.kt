@@ -115,7 +115,7 @@ class LeaveBaseRoomPresenterTest {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
                     result = FakeBaseRoom().apply {
-                        givenRoomInfo(aRoomInfo(isDirect = true, activeMembersCount = 2))
+                        givenRoomInfo(aRoomInfo(isDm = true, activeMembersCount = 2))
                     },
                 )
             }

@@ -18,13 +18,13 @@ import io.element.android.libraries.deeplink.api.DeeplinkData
 import io.element.android.libraries.deeplink.api.DeeplinkParser
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
-import io.element.android.libraries.oidc.api.OidcAction
-import io.element.android.libraries.oidc.api.OidcIntentResolver
+import io.element.android.libraries.oauth.api.OAuthAction
+import io.element.android.libraries.oauth.api.OAuthIntentResolver
 import timber.log.Timber
 
 sealed interface ResolvedIntent {
     data class Navigation(val deeplinkData: DeeplinkData) : ResolvedIntent
-    data class Oidc(val oidcAction: OidcAction) : ResolvedIntent
+    data class OAuth(val oAuthAction: OAuthAction) : ResolvedIntent
     data class Permalink(val permalinkData: PermalinkData) : ResolvedIntent
     data class Login(val params: LoginParams) : ResolvedIntent
     data class IncomingShare(val shareIntentData: ShareIntentData) : ResolvedIntent
@@ -34,7 +34,7 @@ sealed interface ResolvedIntent {
 class IntentResolver(
     private val deeplinkParser: DeeplinkParser,
     private val loginIntentResolver: LoginIntentResolver,
-    private val oidcIntentResolver: OidcIntentResolver,
+    private val oAuthIntentResolver: OAuthIntentResolver,
     private val permalinkParser: PermalinkParser,
     private val shareIntentHandler: ShareIntentHandler,
 ) {
@@ -45,9 +45,9 @@ class IntentResolver(
         val deepLinkData = deeplinkParser.getFromIntent(intent)
         if (deepLinkData != null) return ResolvedIntent.Navigation(deepLinkData)
 
-        // Coming during login using Oidc?
-        val oidcAction = oidcIntentResolver.resolve(intent)
-        if (oidcAction != null) return ResolvedIntent.Oidc(oidcAction)
+        // Coming during login using OAuth?
+        val oAuthAction = oAuthIntentResolver.resolve(intent)
+        if (oAuthAction != null) return ResolvedIntent.OAuth(oAuthAction)
 
         val actionViewData = intent
             .takeIf { it.action == Intent.ACTION_VIEW }

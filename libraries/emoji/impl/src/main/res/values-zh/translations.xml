@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"节假日"</string>
+  <string name="emoji_picker_category_flags">"旗帜"</string>
+  <string name="emoji_picker_category_foods">"饮食"</string>
+  <string name="emoji_picker_category_nature">"动物和自然"</string>
+  <string name="emoji_picker_category_objects">"日常物品"</string>
+  <string name="emoji_picker_category_people">"表情和人物"</string>
+  <string name="emoji_picker_category_places">"文旅景点"</string>
+  <string name="emoji_picker_category_recent">"最近的 Emoji"</string>
+  <string name="emoji_picker_category_symbols">"符号"</string>
+  <string name="emoji_picker_search_placeholder">"搜索 Emoji"</string>
+</resources>

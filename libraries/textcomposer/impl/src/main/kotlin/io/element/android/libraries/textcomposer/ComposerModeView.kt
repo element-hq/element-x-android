@@ -9,21 +9,24 @@
 package io.element.android.libraries.textcomposer
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -34,8 +37,11 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrix.ui.media.contentvalidation.collectOverallState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.rememberEventContentValidationState
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToView
+import io.element.android.libraries.matrix.ui.messages.reply.eventId
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -64,7 +70,7 @@ internal fun ComposerModeView(
         }
         is MessageComposerMode.Reply -> {
             ReplyToModeView(
-                modifier = modifier.padding(8.dp),
+                modifier = modifier.padding(top = 8.dp, start = 8.dp, end = 8.dp),
                 replyToDetails = composerMode.replyToDetails,
                 hideImage = composerMode.hideImage,
                 onResetComposerMode = onResetComposerMode,
@@ -120,6 +126,12 @@ private fun EditingModeView(
     }
 }
 
+// This combination of density DPI and font scale is an approximation to a screen with little space to display the content
+private const val MAX_SCALING_VALUE = 3.5f
+
+/**
+ * https://www.figma.com/design/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?node-id=2019-6286
+ */
 @Composable
 private fun ReplyToModeView(
     replyToDetails: InReplyToDetails,
@@ -127,22 +139,44 @@ private fun ReplyToModeView(
     onResetComposerMode: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Row(
+    val shape = RoundedCornerShape(6.dp)
+    val contentValidationState = rememberEventContentValidationState(replyToDetails.eventId(), (replyToDetails as? InReplyToDetails.Ready)?.eventContent)
+    val currentValidationState by contentValidationState.collectOverallState()
+
+    val contentHasErrors = currentValidationState.hasError()
+
+    Box(
         modifier
-            .clip(RoundedCornerShape(13.dp))
-            .background(MaterialTheme.colorScheme.surface)
+            .clip(shape)
+            .background(
+                color = if (contentHasErrors) ElementTheme.colors.bgCriticalSubtle else ElementTheme.colors.bgCanvasDefault,
+                shape = shape,
+            )
+            .border(
+                width = 1.dp,
+                color = if (contentHasErrors) ElementTheme.colors.borderCriticalSubtle else ElementTheme.colors.separatorPrimary,
+                shape = shape,
+            )
             .padding(4.dp)
     ) {
+        // Larger density DPI and font scale means less space to display the content, so we limit it to 1 line to avoid overflow issues
+        val currentDensity = LocalDensity.current
+        val hasLowResolution = currentDensity.density * currentDensity.fontScale >= MAX_SCALING_VALUE
+        val maxReplyContentLines = if (hasLowResolution) 1 else 2
+
         InReplyToView(
             inReplyTo = replyToDetails,
             hideImage = hideImage,
-            modifier = Modifier.weight(1f),
+            contentValidationValue = currentValidationState,
+            maxLines = maxReplyContentLines,
+            modifier = Modifier.fillMaxWidth(),
         )
         Icon(
             imageVector = CompoundIcons.Close(),
             contentDescription = stringResource(CommonStrings.action_close),
-            tint = ElementTheme.colors.iconSecondary,
+            tint = if (contentHasErrors) ElementTheme.colors.iconCriticalPrimary else ElementTheme.colors.iconSecondary,
             modifier = Modifier
+                .align(Alignment.TopEnd)
                 .padding(end = 4.dp, top = 4.dp, start = 8.dp, bottom = 16.dp)
                 .size(16.dp)
                 .clickable(

@@ -18,6 +18,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 
 open class UserProfileStateProvider : PreviewParameterProvider<UserProfileState> {
@@ -31,7 +32,7 @@ open class UserProfileStateProvider : PreviewParameterProvider<UserProfileState>
             aUserProfileState(isBlocked = AsyncData.Loading(true), verificationState = UserProfileVerificationState.UNKNOWN),
             aUserProfileState(startDmActionState = AsyncAction.Loading),
             aUserProfileState(canCall = true),
-            aUserProfileState(startDmActionState = ConfirmingStartDmWithMatrixUser(aMatrixUser())),
+            aUserProfileState(startDmActionState = ConfirmingStartDmWithMatrixUser(aMatrixUser(), isUserIdentityUnknown = false)),
             aUserProfileState(verificationState = UserProfileVerificationState.VERIFICATION_VIOLATION),
         )
 }
@@ -48,6 +49,7 @@ fun aUserProfileState(
     dmRoomId: RoomId? = null,
     canCall: Boolean = false,
     snackbarMessage: SnackbarMessage? = null,
+    displayedStatus: DisplayedStatus? = null,
     eventSink: (UserProfileEvents) -> Unit = {},
 ) = UserProfileState(
     userId = userId,
@@ -61,5 +63,6 @@ fun aUserProfileState(
     dmRoomId = dmRoomId,
     canCall = canCall,
     snackbarMessage = snackbarMessage,
+    displayedStatus = displayedStatus,
     eventSink = eventSink,
 )

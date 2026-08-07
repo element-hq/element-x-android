@@ -13,6 +13,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
+import io.element.android.libraries.matrix.api.media.GalleryItemInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
@@ -20,6 +21,7 @@ import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.MsgType
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
@@ -64,7 +66,9 @@ class FakeTimeline(
         body: String,
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
-    ) -> Result<Unit> = { _, _, _ ->
+        msgType: MsgType,
+        asPlainText: Boolean,
+    ) -> Result<Unit> = { _, _, _, _, _ ->
         lambdaError()
     }
 
@@ -76,8 +80,10 @@ class FakeTimeline(
         body: String,
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
+        msgType: MsgType,
+        asPlainText: Boolean,
     ): Result<Unit> = simulateLongTask {
-        sendMessageLambda(body, htmlBody, intentionalMentions)
+        sendMessageLambda(body, htmlBody, intentionalMentions, msgType, asPlainText)
     }
 
     var redactEventLambda: (eventOrTransactionId: EventOrTransactionId, reason: String?) -> Result<Unit> = { _, _ ->
@@ -134,7 +140,8 @@ class FakeTimeline(
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
         fromNotification: Boolean,
-    ) -> Result<Unit> = { _, _, _, _, _ ->
+        msgType: MsgType,
+    ) -> Result<Unit> = { _, _, _, _, _, _ ->
         lambdaError()
     }
 
@@ -144,12 +151,14 @@ class FakeTimeline(
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
         fromNotification: Boolean,
+        msgType: MsgType,
     ): Result<Unit> = replyMessageLambda(
         repliedToEventId,
         body,
         htmlBody,
         intentionalMentions,
         fromNotification,
+        msgType,
     )
 
     var sendImageLambda: (
@@ -281,6 +290,29 @@ class FakeTimeline(
             file,
             audioInfo,
             waveform,
+            inReplyToEventId,
+        )
+    }
+
+    var sendGalleryLambda: (
+        items: List<GalleryItemInfo>,
+        caption: String?,
+        formattedCaption: String?,
+        inReplyToEventId: EventId?,
+    ) -> Result<MediaUploadHandler> = { _, _, _, _ ->
+        Result.success(FakeMediaUploadHandler())
+    }
+
+    override suspend fun sendGallery(
+        items: List<GalleryItemInfo>,
+        caption: String?,
+        formattedCaption: String?,
+        inReplyToEventId: EventId?,
+    ): Result<MediaUploadHandler> = simulateLongTask {
+        sendGalleryLambda(
+            items,
+            caption,
+            formattedCaption,
             inReplyToEventId,
         )
     }
@@ -427,6 +459,9 @@ class FakeTimeline(
     }
 
     override suspend fun loadReplyDetails(eventId: EventId) = loadReplyDetailsLambda(eventId)
+
+    var isEventLoadedLambda: (eventId: EventId) -> Boolean = { false }
+    override suspend fun isEventLoaded(eventId: EventId): Boolean = isEventLoadedLambda(eventId)
 
     var pinEventLambda: (eventId: EventId) -> Result<Boolean> = { lambdaError() }
     override suspend fun pinEvent(eventId: EventId): Result<Boolean> {

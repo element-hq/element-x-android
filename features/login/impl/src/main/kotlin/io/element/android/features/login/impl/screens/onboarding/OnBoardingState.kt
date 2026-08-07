@@ -9,12 +9,13 @@
 package io.element.android.features.login.impl.screens.onboarding
 
 import androidx.annotation.DrawableRes
-import io.element.android.features.login.impl.login.LoginMode
-import io.element.android.features.login.impl.screens.onboarding.classic.LoginWithClassicState
+import io.element.android.features.login.impl.login.LoginModeState
 import io.element.android.libraries.architecture.AsyncData
 
 data class OnBoardingState(
     val isAddingAccount: Boolean,
+    val showBackButton: Boolean,
+    val showDeveloperSettings: Boolean,
     val productionApplicationName: String,
     val defaultAccountProvider: String?,
     val mustChooseAccountProvider: Boolean,
@@ -24,10 +25,10 @@ data class OnBoardingState(
     val version: String,
     @DrawableRes
     val onBoardingLogoResId: Int?,
-    val loginMode: AsyncData<LoginMode>,
-    val loginWithClassicState: LoginWithClassicState,
+    val loginModeState: LoginModeState,
     val eventSink: (OnBoardingEvents) -> Unit,
 ) {
     val submitEnabled: Boolean
-        get() = defaultAccountProvider != null && (loginMode is AsyncData.Uninitialized || loginMode is AsyncData.Loading)
+        get() = defaultAccountProvider != null &&
+            (loginModeState.loginMode is AsyncData.Uninitialized || loginModeState.loginMode is AsyncData.Loading)
 }

@@ -29,6 +29,8 @@ object TestTags {
      * Verification screen.
      */
     val recoveryKey = TestTag("verification-recovery_key")
+    val customRecoveryPassphrase = TestTag("verification-custom_recovery_passphrase")
+    val customRecoveryPassphraseConfirm = TestTag("verification-custom_recovery_passphrase_confirm")
 
     /**
      * Sign out screen.
@@ -99,6 +101,12 @@ object TestTags {
     val floatingActionButton = TestTag("floating-action-button")
 
     /**
+     * Timeline jump-to-position buttons (long-press exposes "Mark as read").
+     */
+    val jumpToUnreadButton = TestTag("jump-to-unread-button")
+    val jumpToBottomButton = TestTag("jump-to-bottom-button")
+
+    /**
      * Timeline.
      */
     val timeline = TestTag("timeline")
@@ -124,4 +132,6 @@ object TestTags {
      *
      */
     val roomAddressField = TestTag("room_address_field")
+
+    val confirmInviteUnknown = TestTag("confirm_invite_unknown")
 }

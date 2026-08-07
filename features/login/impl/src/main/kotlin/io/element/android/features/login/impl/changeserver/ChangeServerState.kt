@@ -9,8 +9,10 @@
 package io.element.android.features.login.impl.changeserver
 
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialog
 
 data class ChangeServerState(
     val changeServerAction: AsyncData<Unit>,
+    val localNetworkPermissionDialog: LocalNetworkPermissionDialog,
     val eventSink: (ChangeServerEvents) -> Unit
 )

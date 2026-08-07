@@ -17,6 +17,8 @@
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"Os ydych chi\'n dod ar draws yr un broblem, rhowch gynnig ar rwydwaith wifi gwahanol neu defnyddiwch eich data symudol yn lle wifi"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Os nad yw hynny\'n gweithio, mewngofnodwch â llaw"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Nid yw\'r cysylltiad yn ddiogel"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"Bydd gofyn i chi nodi\'r ddau ddigid sy\'n cael eu dangos ar y ddyfais hon."</string>
+  <string name="screen_qr_code_login_device_code_title">"Rhowch y rhif isod ar eich dyfais arall"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"Cafodd y mewngofnodi ei ddiddymu ar y ddyfais arall."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Cais mewngofnodi wedi\'i ddiddymu"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"Cafodd y mewngofnodi ar y ddyfais arall ei wrthod."</string>
@@ -35,4 +37,5 @@ Ceisiwch fewngofnodi â llaw, neu sganiwch y cod QR gyda dyfais arall."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Mae angen i chi roi caniatâd i %1$s ddefnyddio camera eich dyfais er mwyn parhau."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Caniatáu mynediad camera i sganio\'r cod QR"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Digwyddodd gwall annisgwyl. Ceisiwch eto."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"Yn aros am eich dyfais arall"</string>
 </resources>

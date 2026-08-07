@@ -31,7 +31,7 @@ data class RoomDetailsState(
     val memberCount: Long,
     val isEncrypted: Boolean,
     val roomType: RoomDetailsType,
-    val roomMemberDetailsState: UserProfileState?,
+    val dmOtherMemberDetailsState: UserProfileState?,
     val canEdit: Boolean,
     val canInvite: Boolean,
     val roomCallState: RoomCallState,
@@ -51,8 +51,8 @@ data class RoomDetailsState(
     val isTombstoned: Boolean,
     val showDebugInfo: Boolean,
     val roomVersion: String?,
-    val enableKeyShareOnInvite: Boolean,
     val roomHistoryVisibility: RoomHistoryVisibility,
+    val hasNewContent: Boolean,
     val eventSink: (RoomDetailsEvent) -> Unit
 ) {
     val roomBadges = buildList {
@@ -64,7 +64,7 @@ data class RoomDetailsState(
         if (isPublic) {
             add(RoomBadge.PUBLIC)
         }
-        if (enableKeyShareOnInvite && isEncrypted) {
+        if (isEncrypted) {
             when (roomHistoryVisibility) {
                 RoomHistoryVisibility.Invited, RoomHistoryVisibility.Joined -> add(RoomBadge.SHARED_HISTORY_HIDDEN)
                 RoomHistoryVisibility.Shared -> add(RoomBadge.SHARED_HISTORY_SHARED)
@@ -78,10 +78,7 @@ data class RoomDetailsState(
 @Immutable
 sealed interface RoomDetailsType {
     data object Room : RoomDetailsType
-    data class Dm(
-        val me: RoomMember,
-        val otherMember: RoomMember,
-    ) : RoomDetailsType
+    data class Dm(val otherMember: RoomMember) : RoomDetailsType
 }
 
 @Immutable

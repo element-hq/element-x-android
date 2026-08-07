@@ -23,7 +23,7 @@ Wybierz coś łatwego do zapamiętania. Jeśli zapomnisz ten PIN, zostaniesz wyl
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Wprowadź ten sam kod PIN dwa razy"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN\'y nie pasują do siebie"</string>
   <string name="screen_app_lock_signout_alert_message">"Aby kontynuować, zaloguj się ponownie i utwórz nowy kod PIN"</string>
-  <string name="screen_app_lock_signout_alert_title">"Trwa wylogowywanie"</string>
+  <string name="screen_app_lock_signout_alert_title">"Trwa usuwanie urządzenia"</string>
   <plurals name="screen_app_lock_subtitle">
     <item quantity="one">"Masz %1$d próbę, żeby odblokować"</item>
     <item quantity="few">"Masz %1$d próby, żeby odblokować"</item>
@@ -36,5 +36,5 @@ Wybierz coś łatwego do zapamiętania. Jeśli zapomnisz ten PIN, zostaniesz wyl
   </plurals>
   <string name="screen_app_lock_use_biometric_android">"Użyj biometrii"</string>
   <string name="screen_app_lock_use_pin_android">"Użyj kodu PIN"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Wylogowywanie…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Usuwam urządzenie…"</string>
 </resources>

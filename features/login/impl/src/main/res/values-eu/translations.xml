@@ -21,7 +21,7 @@
   <string name="screen_create_account_title">"Sortu kontua"</string>
   <string name="screen_login_error_deactivated_account">"Kontu hau desaktibatuta dago."</string>
   <string name="screen_login_error_invalid_credentials">"Erabiltzaile-izena edo/eta pasahitza okerrak"</string>
-  <string name="screen_login_error_unsupported_authentication">"Hautatutako zerbitzaria ez da bateragarria pasahitz edo OIDC saio-hasierarekin. Jarri harremanetan administratzailearekin edo aukeratu beste zerbitzari bat."</string>
+  <string name="screen_login_error_unsupported_authentication">"Hautatutako zerbitzaria ez da bateragarria pasahitz edo OAuth saio-hasierarekin. Jarri harremanetan administratzailearekin edo aukeratu beste zerbitzari bat."</string>
   <string name="screen_login_form_header">"Sartu zure datuak"</string>
   <string name="screen_login_subtitle">"Matrix komunikazio seguru eta deszentralizaturako sare irekia da."</string>
   <string name="screen_login_title">"Ongi etorri!"</string>

@@ -14,7 +14,6 @@ import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.widget.CallWidgetSettingsProvider
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.services.appnavstate.api.ActiveRoomsHolder

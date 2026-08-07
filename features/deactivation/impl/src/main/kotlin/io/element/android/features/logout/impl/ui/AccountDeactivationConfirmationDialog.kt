@@ -22,7 +22,7 @@ fun AccountDeactivationConfirmationDialog(
     ConfirmationDialog(
         title = stringResource(id = R.string.screen_deactivate_account_title),
         content = stringResource(R.string.screen_deactivate_account_confirmation_dialog_content),
-        submitText = stringResource(id = CommonStrings.action_deactivate),
+        submitText = stringResource(id = CommonStrings.action_delete),
         onSubmitClick = onSubmitClick,
         onDismiss = onDismiss,
         destructiveSubmit = true,

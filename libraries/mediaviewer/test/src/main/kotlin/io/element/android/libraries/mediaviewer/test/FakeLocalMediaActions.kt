@@ -11,37 +11,29 @@ package io.element.android.libraries.mediaviewer.test
 import androidx.compose.runtime.Composable
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.impl.local.LocalMediaActions
+import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.simulateLongTask
 
-class FakeLocalMediaActions : LocalMediaActions {
-    var shouldFail = false
-
+class FakeLocalMediaActions(
+    val configureResult: () -> Unit = { },
+    val saveOnDiskResult: (LocalMedia) -> Result<Unit> = { lambdaError() },
+    val shareResult: (LocalMedia) -> Result<Unit> = { lambdaError() },
+    val openResult: (LocalMedia) -> Result<Unit> = { lambdaError() },
+) : LocalMediaActions {
     @Composable
     override fun Configure() {
-        // NOOP
+        configureResult()
     }
 
     override suspend fun saveOnDisk(localMedia: LocalMedia): Result<Unit> = simulateLongTask {
-        if (shouldFail) {
-            Result.failure(RuntimeException())
-        } else {
-            Result.success(Unit)
-        }
+        saveOnDiskResult(localMedia)
     }
 
     override suspend fun share(localMedia: LocalMedia): Result<Unit> = simulateLongTask {
-        if (shouldFail) {
-            Result.failure(RuntimeException())
-        } else {
-            Result.success(Unit)
-        }
+        shareResult(localMedia)
     }
 
     override suspend fun open(localMedia: LocalMedia): Result<Unit> = simulateLongTask {
-        if (shouldFail) {
-            Result.failure(RuntimeException())
-        } else {
-            Result.success(Unit)
-        }
+        openResult(localMedia)
     }
 }

@@ -89,16 +89,14 @@ class SyncOrchestrator(
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     internal fun observeStates() = coroutineScope.launch {
         Timber.tag(tag).d("start observing the app and network state")
-
-        val isAppActiveFlow = combine(
+        val isAppActiveFlows = listOf(
             appForegroundStateService.isInForeground,
             appForegroundStateService.isInCall,
             appForegroundStateService.isSyncingNotificationEvent,
             appForegroundStateService.hasRingingCall,
-        ) { isInForeground, isInCall, isSyncingNotificationEvent, hasRingingCall ->
-            isInForeground || isInCall || isSyncingNotificationEvent || hasRingingCall
-        }
-
+            appForegroundStateService.isSharingLiveLocation
+        )
+        val isAppActiveFlow = combine(isAppActiveFlows) { actives -> actives.any { it } }
         combine(
             // small debounce to avoid spamming startSync when the state is changing quickly in case of error.
             syncService.syncState.debounce(100.milliseconds),

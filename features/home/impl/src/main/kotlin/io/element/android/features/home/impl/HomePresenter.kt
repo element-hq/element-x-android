@@ -19,8 +19,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
-import io.element.android.features.announcement.api.Announcement
-import io.element.android.features.announcement.api.AnnouncementService
 import io.element.android.features.home.impl.roomlist.RoomListState
 import io.element.android.features.home.impl.spaces.HomeSpacesState
 import io.element.android.features.logout.api.direct.DirectLogoutState
@@ -47,7 +45,6 @@ class HomePresenter(
     private val logoutPresenter: Presenter<DirectLogoutState>,
     private val rageshakeFeatureAvailability: RageshakeFeatureAvailability,
     private val sessionStore: SessionStore,
-    private val announcementService: AnnouncementService,
 ) : Presenter<HomeState> {
     private val currentUserWithNeighborsBuilder = CurrentUserWithNeighborsBuilder()
 
@@ -82,10 +79,7 @@ class HomePresenter(
 
         fun handleEvent(event: HomeEvent) {
             when (event) {
-                is HomeEvent.SelectHomeNavigationBarItem -> coroutineState.launch {
-                    if (event.item == HomeNavigationBarItem.Spaces) {
-                        announcementService.showAnnouncement(Announcement.Space)
-                    }
+                is HomeEvent.SelectHomeNavigationBarItem -> {
                     currentHomeNavigationBarItemOrdinal = event.item.ordinal
                 }
                 is HomeEvent.SwitchToAccount -> coroutineState.launch {
@@ -94,12 +88,6 @@ class HomePresenter(
             }
         }
 
-        LaunchedEffect(homeSpacesState.canCreateSpaces, homeSpacesState.spaceRooms.isEmpty()) {
-            // If the flag to create spaces is disabled and the last space is left, ensure that the Chat view is rendered.
-            if (!homeSpacesState.canCreateSpaces && homeSpacesState.spaceRooms.isEmpty()) {
-                currentHomeNavigationBarItemOrdinal = HomeNavigationBarItem.Chats.ordinal
-            }
-        }
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
         return HomeState(
             currentUserAndNeighbors = currentUserAndNeighbors,

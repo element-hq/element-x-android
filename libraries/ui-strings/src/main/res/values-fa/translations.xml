@@ -29,13 +29,12 @@
   <string name="a11y_poll_end">"نظرسنجی پایان یافته"</string>
   <string name="a11y_react_with">"واکنش با %1$s"</string>
   <string name="a11y_react_with_other_emojis">"واکنش با شکلک‌های دیگر"</string>
-  <string name="a11y_read_receipts_multiple">"خوانده به دست %1$s و %2$s"</string>
+  <string name="a11y_read_receipts_multiple">"پیام پیشین به دست %1$s و %2$s خوانده شد"</string>
   <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="one">"خوانده شده توسط%1$s و%2$d نفر دیگر"</item>
-    <item quantity="other">"خوانده شده توسط%1$s و%2$d نفر دیگر"</item>
+    <item quantity="one">"پیام پیشین به دست %1$s و %2$d دیگر خوانده شد"</item>
+    <item quantity="other">"پیام پیشین به دست %1$s و %2$d دیگر خوانده شد"</item>
   </plurals>
-  <string name="a11y_read_receipts_single">"خوانده به دست %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"زدن برای نمایش همه"</string>
+  <string name="a11y_read_receipts_single">"پیام قبلی به دست %1$s خوانده شد"</string>
   <string name="a11y_remove_reaction">"برداشتن واکنش با %1$s"</string>
   <string name="a11y_remove_reaction_with">"برداشتن واکنش با %1$s"</string>
   <string name="a11y_room_avatar">"چهرک اتاق"</string>
@@ -145,8 +144,8 @@
   <string name="action_share_link">"هم‌رسانی پیوند"</string>
   <string name="action_show">"نمایش"</string>
   <string name="action_sign_in_again">"ورود دوباره"</string>
-  <string name="action_signout">"خروج"</string>
-  <string name="action_signout_anyway">"خروج به هر صورت"</string>
+  <string name="action_signout">"برداشتن این افزاره"</string>
+  <string name="action_signout_anyway">"به هر حال این دستگاه را حذف کنید"</string>
   <string name="action_skip">"پرش"</string>
   <string name="action_start">"آغاز"</string>
   <string name="action_start_chat">"آغاز گپ"</string>
@@ -185,7 +184,6 @@
   <string name="common_current_user_left_room">"اتاق را ترک کرد"</string>
   <string name="common_current_user_left_space">"فضا را ترک کرد"</string>
   <string name="common_current_user_rejected_invite">"دعوت لغو شد"</string>
-  <string name="common_dark">"تیره"</string>
   <string name="common_decryption_error">"خطای رمزگشایی"</string>
   <string name="common_description">"توضیح"</string>
   <string name="common_developer_options">"گزینه‌های توسعه دهنده"</string>
@@ -220,11 +218,14 @@
   <string name="common_invite_unknown_profile">"شناسهٔ ماتریکس نتوانست پیدا شود. ممکن است دعوت نرسیده باشد."</string>
   <string name="common_leaving_room">"ترک کردن اتاق"</string>
   <string name="common_leaving_space">"ترک کردن فضا"</string>
-  <string name="common_light">"روشن"</string>
   <string name="common_line_copied_to_clipboard">"خط در تخته‌گیره رونوشت شد"</string>
   <string name="common_link_copied_to_clipboard">"پیوند در تخته‌گیره رونوشت شد"</string>
   <string name="common_loading">"بار کردن…"</string>
   <string name="common_loading_more">"بار کردن بیش‌تر…"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"%d دیگر"</item>
+    <item quantity="other">"%d دیگران"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d عضو"</item>
     <item quantity="other">"%1$d عضو"</item>
@@ -270,7 +271,6 @@
   <string name="common_recovery_key">"کلید بازیابی"</string>
   <string name="common_refreshing">"تازه سازی…"</string>
   <string name="common_replying_to">"پاسخ دادن به %1$s"</string>
-  <string name="common_report_a_bug">"گزارش یک اشکال"</string>
   <string name="common_report_a_problem">"گزارش مشکل"</string>
   <string name="common_report_submitted">"گزارش ثبت شد"</string>
   <string name="common_rich_text_editor">"ویرایشگر متن غنی"</string>
@@ -305,7 +305,6 @@
   <string name="common_success">"موفّقیت"</string>
   <string name="common_suggestions">"پیشنهادها"</string>
   <string name="common_syncing">"هم‌گام ساختن"</string>
-  <string name="common_system">"سامانه"</string>
   <string name="common_text">"متن"</string>
   <string name="common_third_party_notices">"تذکّرهای سوم‌شخص"</string>
   <string name="common_thread">"رشته"</string>
@@ -349,7 +348,6 @@
   <string name="dialog_unsaved_changes_description">"تغییراتی ذخیره نشده دارید."</string>
   <string name="dialog_unsaved_changes_description_android">"تغییراتتان ذخیره نشده‌اند. مطمئنید که می‌خواهید برگردید؟"</string>
   <string name="dialog_unsaved_changes_title">"ذخیرهٔ تغییرات؟"</string>
-  <string name="emoji_picker_search_placeholder">"حست‌وجوی شکلک‌ها"</string>
   <string name="error_failed_creating_the_permalink">"شکست در ایجاد پایاپیوند"</string>
   <string name="error_failed_loading_map">"%1$s نتوانست نقشه را بارگیری کند. لطفا بعدا دوباره امتحان کنید."</string>
   <string name="error_failed_loading_messages">"شکست در بار کردن پیام‌ها"</string>
@@ -389,7 +387,7 @@
   <string name="screen_share_open_apple_maps">"گشودن در نقشه‌های اپل"</string>
   <string name="screen_share_open_google_maps">"گشودن در نقشه‌های گوگل"</string>
   <string name="screen_share_open_osm_maps">"گشودن در اوپن‌استریت‌مپ"</string>
-  <string name="screen_share_this_location_action">"هم‌رسانی این مکان"</string>
+  <string name="screen_share_this_location_action">"هم‌رسانی مکان گزیده"</string>
   <string name="screen_space_list_description">"فضاهایی که ساخته یا پیوسته‌اید."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_parent_space">"‏%1$s فضا"</string>

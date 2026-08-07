@@ -32,7 +32,7 @@
   <string name="screen_login_error_invalid_credentials">"Enw defnyddiwr a/neu gyfrinair anghywir"</string>
   <string name="screen_login_error_invalid_user_id">"Nid yw hwn yn ddynodwr defnyddiwr dilys. Fformat disgwyliedig: ‘@user:homeserver.org’"</string>
   <string name="screen_login_error_refresh_tokens">"Mae\'r gweinydd hwn wedi\'i ffurfweddu i ddefnyddio tocynnau adnewyddu. Nid yw\'r rhain yn cael eu cefnogi wrth ddefnyddio mewngofnodi ar sail cyfrinair."</string>
-  <string name="screen_login_error_unsupported_authentication">"Nid yw\'r gweinydd cartref ddewiswyd yn cefnogi cyfrinair na mewngofnodi OIDC. Cysylltwch â\'ch gweinyddwr neu dewis gweinydd cartref arall."</string>
+  <string name="screen_login_error_unsupported_authentication">"Nid yw\'r gweinydd cartref ddewiswyd yn cefnogi cyfrinair na mewngofnodi OAuth. Cysylltwch â\'ch gweinyddwr neu dewis gweinydd cartref arall."</string>
   <string name="screen_login_form_header">"Rhowch eich manylion"</string>
   <string name="screen_login_subtitle">"Mae Matrix yn rhwydwaith agored ar gyfer cyfathrebu diogel, datganoledig."</string>
   <string name="screen_login_title">"Croeso nôl!"</string>

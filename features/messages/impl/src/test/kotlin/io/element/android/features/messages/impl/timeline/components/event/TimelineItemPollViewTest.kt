@@ -6,13 +6,15 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.features.messages.impl.timeline.components.event
 
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasText
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.performClick
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
 import io.element.android.libraries.testtags.TestTags
@@ -20,14 +22,10 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.pressTag
-import org.junit.Rule
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class TimelineItemPollViewTest {
-    @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
-
+class TimelineItemPollViewTest : RobolectricTest() {
     @Test
     fun `answering a poll with first answer should emit a PollAnswerSelected event`() {
         testAnswer(answerIndex = 0)
@@ -38,17 +36,17 @@ class TimelineItemPollViewTest {
         testAnswer(answerIndex = 1)
     }
 
-    private fun testAnswer(answerIndex: Int) {
+    private fun testAnswer(answerIndex: Int) = runAndroidComposeUiTest<ComponentActivity> {
         val eventsRecorder = EventsRecorder<TimelineEvent.TimelineItemPollEvent>()
         val content = aTimelineItemPollContent()
-        rule.setContent {
+        setContent {
             TimelineItemPollView(
                 content = content,
                 eventSink = eventsRecorder
             )
         }
         val answer = content.answerItems[answerIndex].answer
-        rule.onNode(
+        onNode(
             matcher = hasText(answer.text),
             useUnmergedTree = true,
         ).performClick()
@@ -56,38 +54,38 @@ class TimelineItemPollViewTest {
     }
 
     @Test
-    fun `editing a poll should emit a PollEditClicked event`() {
+    fun `editing a poll should emit a PollEditClicked event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<TimelineEvent.TimelineItemPollEvent>()
         val content = aTimelineItemPollContent(
             isMine = true,
             isEditable = true,
         )
-        rule.setContent {
+        setContent {
             TimelineItemPollView(
                 content = content,
                 eventSink = eventsRecorder
             )
         }
-        rule.clickOn(CommonStrings.action_edit_poll)
+        clickOn(CommonStrings.action_edit_poll)
         eventsRecorder.assertSingle(TimelineEvent.EditPoll(content.eventId!!))
     }
 
     @Test
-    fun `closing a poll should emit a PollEndClicked event`() {
+    fun `closing a poll should emit a PollEndClicked event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<TimelineEvent.TimelineItemPollEvent>()
         val content = aTimelineItemPollContent(
             isMine = true,
         )
-        rule.setContent {
+        setContent {
             TimelineItemPollView(
                 content = content,
                 eventSink = eventsRecorder
             )
         }
-        rule.clickOn(CommonStrings.action_end_poll)
+        clickOn(CommonStrings.action_end_poll)
         // A confirmation dialog should be shown
         eventsRecorder.assertEmpty()
-        rule.pressTag(TestTags.dialogPositive.value)
+        pressTag(TestTags.dialogPositive.value)
         eventsRecorder.assertSingle(TimelineEvent.EndPoll(content.eventId!!))
     }
 }

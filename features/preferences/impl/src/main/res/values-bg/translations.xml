@@ -58,6 +58,9 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"системни настройки"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Системните известия са изключени"</string>
   <string name="screen_notification_settings_title">"Известия"</string>
+  <string name="theme_dark">"Тъмен"</string>
+  <string name="theme_light">"Светъл"</string>
+  <string name="theme_system">"Система"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Отстраняване на неизправности"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Отстраняване на неизправности с известията"</string>
 </resources>

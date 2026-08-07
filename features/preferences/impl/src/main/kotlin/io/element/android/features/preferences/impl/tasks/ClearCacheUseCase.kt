@@ -11,9 +11,9 @@ package io.element.android.features.preferences.impl.tasks
 import android.content.Context
 import coil3.SingletonImageLoader
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Provider
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.preferences.impl.DefaultCacheService
+import io.element.android.libraries.cachestore.api.CacheStore
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.ApplicationContext
@@ -33,12 +33,15 @@ class DefaultClearCacheUseCase(
     private val matrixClient: MatrixClient,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val defaultCacheService: DefaultCacheService,
-    private val okHttpClient: Provider<OkHttpClient>,
+    private val okHttpClient: () -> OkHttpClient,
     private val pushService: PushService,
     private val seenInvitesStore: SeenInvitesStore,
     private val activeRoomsHolder: ActiveRoomsHolder,
+    private val cacheStore: CacheStore,
 ) : ClearCacheUseCase {
     override suspend fun invoke() = withContext(coroutineDispatchers.io) {
+        // Clear cache store
+        cacheStore.deleteAll()
         // Active rooms should be disposed of before clearing the cache
         activeRoomsHolder.clear(matrixClient.sessionId)
         // Clear Matrix cache
@@ -51,7 +54,12 @@ class DefaultClearCacheUseCase(
         // Clear OkHttp cache
         okHttpClient().cache?.delete()
         // Clear app cache
-        context.cacheDir.deleteRecursively()
+        context.cacheDir?.listFiles {
+            // But keep the logs
+            it.name != "logs"
+        }?.onEach {
+            it.deleteRecursively()
+        }
         // Clear some settings
         seenInvitesStore.clear()
         // Ensure any error will be displayed again

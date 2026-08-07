@@ -34,6 +34,8 @@
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"Hvis du støder på det samme problem, kan du prøve et andet wifi-netværk eller bruge dine mobildata i stedet for wifi"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Hvis det ikke virker, skal du logge ind manuelt"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Forbindelsen er ikke sikker"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"Du bliver bedt om at indtaste de to cifre, der vises på denne enhed."</string>
+  <string name="screen_qr_code_login_device_code_title">"Indtast nummeret herunder på din anden enhed"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"Login blev annulleret på den anden enhed."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Anmodning om login annulleret"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"Login blev afvist på den anden enhed."</string>
@@ -54,4 +56,5 @@ Prøv at logge ind manuelt, eller scan QR-koden med en anden enhed."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Du skal give tilladelse til at %1$s kan benytte enhedens kamera, for at fortsætte."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Tillad kameraadgang for at scanne QR-koden"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Der opstod en uventet fejl. Prøv venligst igen."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"Venter på din anden enhed"</string>
 </resources>

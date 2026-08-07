@@ -18,7 +18,7 @@ import androidx.core.app.PendingIntentCompat
 import androidx.core.app.Person
 import dev.zacsweers.metro.Inject
 import io.element.android.appconfig.ElementCallConfig
-import io.element.android.features.call.api.CallType
+import io.element.android.features.call.api.CallData
 import io.element.android.features.call.impl.receivers.DeclineCallBroadcastReceiver
 import io.element.android.features.call.impl.ui.IncomingCallActivity
 import io.element.android.features.call.impl.utils.IntentProvider
@@ -89,7 +89,14 @@ class RingingCallNotificationCreator(
             .setImportant(true)
             .build()
 
-        val answerIntent = IntentProvider.getPendingIntent(context, CallType.RoomCall(sessionId, roomId, isAudioCall = audioOnly))
+        val answerIntent = IntentProvider.getPendingIntent(
+            context,
+            CallData(
+                sessionId = sessionId,
+                roomId = roomId,
+                isAudioCall = audioOnly,
+            ),
+        )
         val notificationData = CallNotificationData(
             sessionId = sessionId,
             roomId = roomId,

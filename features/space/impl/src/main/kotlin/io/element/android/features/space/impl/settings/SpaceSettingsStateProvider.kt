@@ -9,6 +9,7 @@
 package io.element.android.features.space.impl.settings
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.designsystem.preview.SPACE_NAME
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 
@@ -24,7 +25,7 @@ open class SpaceSettingsStateProvider : PreviewParameterProvider<SpaceSettingsSt
 
 fun aSpaceSettingsState(
     roomId: RoomId = RoomId("!aRoomId:element.io"),
-    name: String = "Space name",
+    name: String = SPACE_NAME,
     alias: RoomAlias? = RoomAlias("#spacename:element.io"),
     avatarUrl: String? = null,
     memberCount: Long = 100,

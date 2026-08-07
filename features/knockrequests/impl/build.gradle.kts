@@ -33,9 +33,7 @@ dependencies {
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.designsystem)
-    implementation(projects.libraries.featureflag.api)
 
     testCommonDependencies(libs, true)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.libraries.featureflag.test)
 }

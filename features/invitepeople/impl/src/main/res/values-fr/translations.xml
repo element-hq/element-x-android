@@ -2,4 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_invite_users_already_a_member">"Déjà membre"</string>
   <string name="screen_invite_users_already_invited">"Déjà invité(e)"</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_multiple_users">"Vous n’avez actuellement aucune conversation avec ces contacts. Veuillez confirmer leur invitation à rejoindre ce salon avant de continuer."</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_one_user">"Vous n’avez actuellement aucune conversation avec ce contact. Veuillez confirmer son invitation à rejoindre ce salon avant de continuer."</string>
+  <string name="screen_invite_users_confirm_dialog_title_mutiple_users">"Inviter de nouveaux contacts dans ce salon ?"</string>
+  <string name="screen_invite_users_confirm_dialog_title_one_user">"Inviter un nouveau contact dans ce salon ?"</string>
 </resources>

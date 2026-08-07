@@ -31,6 +31,8 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReadReceipts
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
+import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
+import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
 import io.element.android.features.messages.impl.timeline.util.defaultTimelineContentPadding
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -39,11 +41,11 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun TimelineItemStateEventRow(
     event: TimelineItem.Event,
-    renderReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     onReadReceiptsClick: (event: TimelineItem.Event) -> Unit,
+    timelineProtectionState: TimelineProtectionState,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -68,13 +70,14 @@ fun TimelineItemStateEventRow(
                     .widthIn(max = 320.dp)
             ) {
                 TimelineItemEventContentView(
+                    eventId = event.eventId,
                     content = event.content,
                     onLinkClick = {},
                     onLinkLongClick = {},
-                    hideMediaContent = false,
-                    onShowContentClick = {},
+                    timelineProtectionState = timelineProtectionState,
                     eventSink = eventSink,
                     onContentClick = null,
+                    onGalleryItemClick = {},
                     onLongClick = null,
                     modifier = Modifier.defaultTimelineContentPadding()
                 )
@@ -86,7 +89,6 @@ fun TimelineItemStateEventRow(
                 isLastOutgoingMessage = isLastOutgoingMessage,
                 receipts = event.readReceiptState.receipts,
             ),
-            renderReadReceipts = renderReadReceipts,
             onReadReceiptsClick = { onReadReceiptsClick(event) },
         )
     }
@@ -104,11 +106,11 @@ internal fun TimelineItemStateEventRowPreview() = ElementPreview {
                 receipts = persistentListOf(aReadReceiptData(0)),
             )
         ),
-        renderReadReceipts = true,
         isLastOutgoingMessage = false,
         onClick = {},
         onLongClick = {},
         onReadReceiptsClick = {},
+        timelineProtectionState = aTimelineProtectionState(),
         eventSink = {}
     )
 }

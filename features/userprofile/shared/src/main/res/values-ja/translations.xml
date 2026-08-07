@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_dm_details_block_alert_action">"ブロック"</string>
+  <string name="screen_dm_details_block_alert_description">"ブロックしたユーザーのメッセージは非表示になり、新しく送信することもできません。ブロックはいつでも解除することができます。"</string>
+  <string name="screen_dm_details_block_user">"ユーザーをブロック"</string>
+  <string name="screen_dm_details_unblock_alert_action">"ブロックを解除"</string>
+  <string name="screen_dm_details_unblock_alert_description">"すべてのメッセージが再表示されます。"</string>
+  <string name="screen_dm_details_unblock_user">"ユーザーのブロックを解除"</string>
+  <string name="screen_room_member_details_block_alert_action">"ブロック"</string>
+  <string name="screen_room_member_details_block_alert_description">"ブロックしたユーザーのメッセージは非表示になり、新しく送信することもできません。ブロックはいつでも解除することができます。"</string>
+  <string name="screen_room_member_details_block_user">"ユーザーをブロック"</string>
+  <string name="screen_room_member_details_title">"プロフィール"</string>
+  <string name="screen_room_member_details_unblock_alert_action">"ブロックを解除"</string>
+  <string name="screen_room_member_details_unblock_alert_description">"すべてのメッセージが再表示されます。"</string>
+  <string name="screen_room_member_details_unblock_user">"ユーザーのブロックを解除"</string>
+  <string name="screen_room_member_details_verify_button_subtitle">"このユーザーを検証するにはWeb版アプリを使用してください。"</string>
+  <string name="screen_room_member_details_verify_button_title">"%1$s を検証"</string>
+  <string name="screen_start_chat_error_starting_chat">"新しい会話を開始する際に問題が発生しました。"</string>
+</resources>

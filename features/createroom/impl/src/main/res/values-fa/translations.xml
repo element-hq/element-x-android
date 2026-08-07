@@ -3,7 +3,7 @@
   <string name="screen_create_room_action_create_room">"اتاق جدید"</string>
   <string name="screen_create_room_add_people_title">"دعوت افراد"</string>
   <string name="screen_create_room_error_creating_room">"هنگام ایجاد اتاق خطایی رخ داد"</string>
-  <string name="screen_create_room_private_option_description">"تنها افراد دعوت شده می‌توانند به این اتاق دسترسی داشته باشند. همهٔ پیام‌ها رمزنگاری سرتاسری شده‌اند."</string>
+  <string name="screen_create_room_private_option_description">"تنها افراد دعوت شده می‌توانند بپیوندند."</string>
   <string name="screen_create_room_public_option_description">"هرکسی می‌تواند اتاق را بیابد.
 می‌توانید بعداً در تظیمات اتاق عوضش کنید."</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"درخواست دعوت"</string>

@@ -1,13 +1,22 @@
 appId: ${MAESTRO_APP_ID}
 ---
 # Purpose: Test the creation and deletion of a DM room.
-- tapOn: "Create a new conversation or room"
+- tapOn: "Create room"
 - tapOn: "Search for someone"
 - inputText: ${MAESTRO_INVITEE1_MXID}
 - tapOn:
     text: ${MAESTRO_INVITEE1_MXID}
     index: 1
-- tapOn: "Send invite"
+- runFlow:
+    when:
+      visible: 'Start a chat with this new contact?'
+    commands:
+      - tapOn: 'Continue'
+- runFlow:
+    when:
+      visible: 'Send invite?'
+    commands:
+      - tapOn: 'Send invite'
 - takeScreenshot: build/maestro/330-createAndDeleteDM
 - tapOn: "maestroelement2"
 - scroll

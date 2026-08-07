@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_permission_camera">"カメラを使用するには、本体の設定から権限を付与する必要があります。"</string>
+  <string name="dialog_permission_generic">"本体の設定から権限を付与してください。"</string>
+  <string name="dialog_permission_microphone">"マイクを使用するには、本体の設定から権限を付与してください。"</string>
+  <string name="dialog_permission_notification">"通知を表示するには、本体の設定から権限を付与してください。"</string>
+</resources>

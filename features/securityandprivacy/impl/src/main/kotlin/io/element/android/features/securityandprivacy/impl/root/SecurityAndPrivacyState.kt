@@ -27,9 +27,9 @@ data class SecurityAndPrivacyState(
     // the settings the user wants to apply.
     val editedSettings: SecurityAndPrivacySettings,
     val homeserverName: String,
+    val isEncryptionDisabledByHomeserver: Boolean,
     val showEnableEncryptionConfirmation: Boolean,
     private val isKnockEnabled: Boolean,
-    private val isSpaceSettingsEnabled: Boolean,
     val saveAction: AsyncAction<Unit>,
     val isSpace: Boolean,
     private val permissions: SecurityAndPrivacyPermissions,
@@ -37,7 +37,7 @@ data class SecurityAndPrivacyState(
     private val spaceSelectionMode: SpaceSelectionMode,
     val eventSink: (SecurityAndPrivacyEvent) -> Unit
 ) {
-    val isSpaceMemberSelectable = isSpaceSettingsEnabled && spaceSelectionMode != SpaceSelectionMode.None
+    val isSpaceMemberSelectable = spaceSelectionMode != SpaceSelectionMode.None
 
     // Show SpaceMember option in two cases:
     // - SpaceMember is the current saved value
@@ -85,7 +85,7 @@ data class SecurityAndPrivacyState(
         editedSettings.roomAccess.canConfigureRoomVisibility()
 
     val showHistoryVisibilitySection = permissions.canChangeHistoryVisibility && !isSpace
-    val showEncryptionSection = permissions.canChangeEncryption && !isSpace
+    val showEncryptionSection = !isEncryptionDisabledByHomeserver && permissions.canChangeEncryption && !isSpace
 
     @Composable
     fun spaceMemberDescription(): String {

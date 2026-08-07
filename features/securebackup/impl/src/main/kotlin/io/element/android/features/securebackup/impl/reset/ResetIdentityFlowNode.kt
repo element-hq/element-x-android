@@ -25,6 +25,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.enterprise.api.SessionEnterpriseService
 import io.element.android.features.securebackup.impl.reset.password.ResetIdentityPasswordNode
 import io.element.android.features.securebackup.impl.reset.root.ResetIdentityRootNode
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
@@ -36,7 +37,7 @@ import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
-import io.element.android.libraries.matrix.api.encryption.IdentityOidcResetHandle
+import io.element.android.libraries.matrix.api.encryption.IdentityOAuthResetHandle
 import io.element.android.libraries.matrix.api.encryption.IdentityPasswordResetHandle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -53,6 +54,7 @@ class ResetIdentityFlowNode(
     private val resetIdentityFlowManager: ResetIdentityFlowManager,
     @SessionCoroutineScope
     private val sessionCoroutineScope: CoroutineScope,
+    private val sessionEnterpriseService: SessionEnterpriseService,
 ) : BaseFlowNode<ResetIdentityFlowNode.NavTarget>(
     backstack = BackStack(initialElement = NavTarget.Root, savedStateMap = buildContext.savedStateMap),
     buildContext = buildContext,
@@ -123,12 +125,13 @@ class ResetIdentityFlowNode(
                     null -> {
                         Timber.d("No reset handle return, the reset is done.")
                     }
-                    is IdentityOidcResetHandle -> {
+                    is IdentityOAuthResetHandle -> {
                         Timber.d("Launching reset confirmation in MAS")
-                        activity.openUrlInChromeCustomTab(null, darkTheme, handle.url)
-                        Timber.d("Starting resetOidc")
-                        resetJob = launch { handle.resetOidc() }
-                        resetJob?.invokeOnCompletion { Timber.d("resetOidc ended") }
+                        val url = sessionEnterpriseService.tweakMasUrl(handle.url)
+                        activity.openUrlInChromeCustomTab(null, darkTheme, url)
+                        Timber.d("Starting resetOAuth")
+                        resetJob = launch { handle.resetOAuth() }
+                        resetJob?.invokeOnCompletion { Timber.d("resetOAuth ended") }
                     }
                     is IdentityPasswordResetHandle -> backstack.push(NavTarget.ResetPassword)
                 }

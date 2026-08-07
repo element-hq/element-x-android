@@ -23,6 +23,13 @@ fun interface JsonProvider {
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
 class DefaultJsonProvider : JsonProvider {
-    private val json: Json by lazy { Json { ignoreUnknownKeys = true } }
+    private val json: Json by lazy {
+        Json {
+            ignoreUnknownKeys = true
+            allowComments = true
+            allowTrailingComma = true
+        }
+    }
+
     override fun invoke() = json
 }

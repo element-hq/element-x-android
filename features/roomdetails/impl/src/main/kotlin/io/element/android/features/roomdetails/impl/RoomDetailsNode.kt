@@ -42,12 +42,13 @@ import io.element.android.libraries.androidutils.R as AndroidUtilsR
 class RoomDetailsNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: RoomDetailsPresenter,
+    presenterFactory: RoomDetailsPresenter.Factory,
     private val room: BaseRoom,
     private val analyticsService: AnalyticsService,
     private val leaveRoomRenderer: LeaveRoomRenderer,
-) : Node(buildContext, plugins = plugins) {
+) : Node(buildContext, plugins = plugins), RoomDetailsNavigator {
     interface Callback : Plugin {
+        fun navigateBack()
         fun navigateToRoomMemberList()
         fun navigateToInviteMembers()
         fun navigateToRoomDetailsEdit()
@@ -65,6 +66,7 @@ class RoomDetailsNode(
         fun navigateToSelectNewOwnersWhenLeaving()
     }
 
+    private val presenter = presenterFactory.create(this)
     private val callback: Callback = callback()
 
     init {
@@ -143,5 +145,9 @@ class RoomDetailsNode(
                 )
             }
         )
+    }
+
+    override fun onDone() {
+        callback.navigateBack()
     }
 }

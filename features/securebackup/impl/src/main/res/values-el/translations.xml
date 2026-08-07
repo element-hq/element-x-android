@@ -12,6 +12,7 @@
   <string name="screen_chat_backup_recovery_action_confirm">"Εισαγωγή κλειδιού ανάκτησης"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Ο αποθηκευτικός χώρος κλειδιών σου δεν είναι συγχρονισμένος αυτήν τη στιγμή."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Λήψη κλειδιού ανάκτησης"</string>
+  <string name="screen_chat_backup_recovery_action_setup_description">"Οι συνομιλίες σας αποθηκεύονται αυτόματα με κρυπτογράφηση από άκρο σε άκρο. Για να επαναφέρετε αυτό το αντίγραφο ασφαλείας και να διατηρήσετε την ψηφιακή σας ταυτότητα όταν χάσετε την πρόσβαση σε όλες τις συσκευές σας, θα χρειαστείτε το κλειδί ανάκτησης. "</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Άνοιγμα %1$s σε συσκευή υπολογιστή"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Συνδέσου ξανά στο λογαριασμό σου"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Όταν σου ζητηθεί να επαληθεύσεις τη συσκευή σου, επέλεξε %1$s"</string>

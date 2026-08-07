@@ -16,6 +16,8 @@
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_1">"Saiatu berriro QR kodearekin saioa hasten sare-arazo bat izan bada"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Horrek ez badu funtzionatzen, hasi saioa eskuz"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Konexioa ez da segurua"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"Gailu honetan agertzen diren bi digituak sartzeko eskatuko zaizu."</string>
+  <string name="screen_qr_code_login_device_code_title">"Sartu beheko zenbakia beste gailuan"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"Saioa hasteko eskaera bertan behera utzi da beste gailuan"</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Saioa hasteko eskaera bertan behera utzi da"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"Saioa hasteari uko egin zaio beste dispositiboan."</string>
@@ -33,4 +35,5 @@ Saiatu saioa eskuz hasten, edo eskaneatu QR kodea beste gailu batean."</string>
   <string name="screen_qr_code_login_invalid_scan_state_subtitle">"QR kode okerra"</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Baimendu kameraren sarbidea QR kodea eskaneatzeko"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Ustekabeko errore bat gertatu da. Saiatu berriro."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"Beste gailuaren zain"</string>
 </resources>

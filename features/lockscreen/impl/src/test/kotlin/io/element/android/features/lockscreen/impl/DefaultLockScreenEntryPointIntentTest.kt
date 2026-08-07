@@ -8,15 +8,13 @@
 
 package io.element.android.features.lockscreen.impl
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.lockscreen.impl.unlock.activity.PinUnlockActivity
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class DefaultLockScreenEntryPointIntentTest {
+class DefaultLockScreenEntryPointIntentTest : RobolectricTest() {
     @Test
     fun `test pin unlock intent`() {
         val entryPoint = DefaultLockScreenEntryPoint()

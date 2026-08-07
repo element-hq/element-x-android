@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_a11y_add_attachment">"添付ファイルを追加"</string>
+  <string name="rich_text_editor_bullet_list">"箇条リスト"</string>
+  <string name="rich_text_editor_close_formatting_options">"書式設定を中止して閉じる"</string>
+  <string name="rich_text_editor_code_block">"コードブロックを切替"</string>
+  <string name="rich_text_editor_composer_caption_placeholder">"キャプションを追加"</string>
+  <string name="rich_text_editor_composer_encrypted_placeholder">"暗号化されたメッセージ…"</string>
+  <string name="rich_text_editor_composer_placeholder">"メッセージ…"</string>
+  <string name="rich_text_editor_composer_unencrypted_placeholder">"暗号化されていないメッセージ…"</string>
+  <string name="rich_text_editor_create_link">"リンクを作成"</string>
+  <string name="rich_text_editor_edit_link">"リンクを編集"</string>
+  <string name="rich_text_editor_format_action">"%1$s の状態: %2$s"</string>
+  <string name="rich_text_editor_format_bold">"太字"</string>
+  <string name="rich_text_editor_format_italic">"斜体"</string>
+  <string name="rich_text_editor_format_state_disabled">"無効"</string>
+  <string name="rich_text_editor_format_state_off">"オフ"</string>
+  <string name="rich_text_editor_format_state_on">"オン"</string>
+  <string name="rich_text_editor_format_strikethrough">"取り消し線を追加"</string>
+  <string name="rich_text_editor_format_underline">"下線を追加"</string>
+  <string name="rich_text_editor_full_screen_toggle">"全画面モードの切替"</string>
+  <string name="rich_text_editor_indent">"インデント"</string>
+  <string name="rich_text_editor_inline_code">"コード部の書式"</string>
+  <string name="rich_text_editor_link">"リンクを設定"</string>
+  <string name="rich_text_editor_numbered_list">"番号リスト"</string>
+  <string name="rich_text_editor_open_compose_options">"記述設定を開く"</string>
+  <string name="rich_text_editor_quote">"引用の表示切替"</string>
+  <string name="rich_text_editor_remove_link">"リンクを削除"</string>
+  <string name="rich_text_editor_unindent">"インデントを削除"</string>
+  <string name="rich_text_editor_url_placeholder">"リンク"</string>
+  <string name="screen_media_upload_preview_caption_warning">"古いアプリケーションを使用しているユーザーはキャプションを見られない可能性があります。"</string>
+  <string name="screen_room_voice_message_tooltip">"長押しで録音"</string>
+</resources>

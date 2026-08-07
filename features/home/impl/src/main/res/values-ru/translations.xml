@@ -5,7 +5,7 @@
   <string name="banner_battery_optimization_title_android">"Уведомления не приходят?"</string>
   <string name="banner_new_sound_message">"Ваши уведомления были обновлены — теперь они понятнее, быстрее и менее отвлекающие."</string>
   <string name="banner_new_sound_title">"Мы обновили ваши звуки"</string>
-  <string name="banner_set_up_recovery_content">"Создайте новый ключ восстановления, который можно использовать для восстановления зашифрованной истории сообщений в случае потери доступа к своим устройствам."</string>
+  <string name="banner_set_up_recovery_content">"Ваши чаты автоматически резервируются с использованием сквозного шифрования. Для восстановления этой резервной копии и сохранения вашей цифровой личности в случае потери доступа ко всем вашим устройствам вам потребуется ключ восстановления."</string>
   <string name="banner_set_up_recovery_submit">"Получить ключ восстановления"</string>
   <string name="banner_set_up_recovery_title">"Сделайте резервную копию своих чатов."</string>
   <string name="confirm_recovery_key_banner_message">"Подтвердите ключ восстановления, чтобы сохранить доступ к хранилищу ключей и истории сообщений."</string>
@@ -21,7 +21,7 @@
   <string name="screen_invites_decline_direct_chat_message">"Вы уверены, что хотите отказаться от личного общения с %1$s?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Отклонить чат"</string>
   <string name="screen_invites_empty_list">"Нет приглашений"</string>
-  <string name="screen_invites_invited_you">"%1$s (%2$s) пригласил(а) вас"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) пригласил(а) Вас"</string>
   <string name="screen_migration_message">"Это единоразовая процедура, спасибо, что подождали."</string>
   <string name="screen_migration_title">"Настройка Вашего аккаунта."</string>
   <string name="screen_roomlist_a11y_create_message">"Создать новую беседу или комнату"</string>
@@ -31,20 +31,20 @@
   <string name="screen_roomlist_filter_favourites">"Избранные"</string>
   <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Добавить чат в избранное можно в настройках чата.
 На данный момент вы можете убрать фильтры, чтобы увидеть другие ваши чаты."</string>
-  <string name="screen_roomlist_filter_favourites_empty_state_title">"У вас пока нет избранных чатов"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"У Вас пока нет избранных чатов"</string>
   <string name="screen_roomlist_filter_invites">"Приглашения"</string>
-  <string name="screen_roomlist_filter_invites_empty_state_title">"У вас нет приглашений."</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"У Вас нет приглашений."</string>
   <string name="screen_roomlist_filter_low_priority">"Низкий приоритет"</string>
-  <string name="screen_roomlist_filter_low_priority_empty_state_title">"У вас пока нет чатов с низким приоритетом."</string>
+  <string name="screen_roomlist_filter_low_priority_empty_state_title">"У Вас пока нет чатов с низким приоритетом."</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Вы можете убрать фильтры, чтобы увидеть другие ваши чаты."</string>
-  <string name="screen_roomlist_filter_mixed_empty_state_title">"У вас нет чатов, соответствующих фильтрам"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"У Вас нет чатов, соответствующих фильтрам"</string>
   <string name="screen_roomlist_filter_people">"Пользователи"</string>
-  <string name="screen_roomlist_filter_people_empty_state_title">"У вас пока нет личных сообщений"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"У Вас пока нет личных сообщений"</string>
   <string name="screen_roomlist_filter_rooms">"Комнаты"</string>
   <string name="screen_roomlist_filter_rooms_empty_state_title">"Вас пока нет ни в одной комнате"</string>
   <string name="screen_roomlist_filter_unreads">"Новые"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Поздравляем!
-У вас нет непрочитанных сообщений!"</string>
+У Вас нет непрочитанных сообщений!"</string>
   <string name="screen_roomlist_knock_event_sent_description">"Запрос на присоединение отправлен"</string>
   <string name="screen_roomlist_main_space_title">"Чаты"</string>
   <string name="screen_roomlist_mark_as_read">"Пометить как прочитанное"</string>

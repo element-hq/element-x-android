@@ -16,7 +16,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.lockscreen.impl.biometric.BiometricAuthenticator
 import io.element.android.features.lockscreen.impl.biometric.BiometricAuthenticatorManager
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
@@ -32,8 +34,9 @@ import io.element.android.libraries.di.annotations.AppCoroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Inject
+@AssistedInject
 class PinUnlockPresenter(
+    @Assisted private val forDeviceUnlock: Boolean,
     private val pinCodeManager: PinCodeManager,
     private val biometricAuthenticatorManager: BiometricAuthenticatorManager,
     private val logoutUseCase: LogoutUseCase,
@@ -41,6 +44,11 @@ class PinUnlockPresenter(
     private val coroutineScope: CoroutineScope,
     private val pinUnlockHelper: PinUnlockHelper,
 ) : Presenter<PinUnlockState> {
+    @AssistedFactory
+    interface Factory {
+        fun create(forDeviceUnlock: Boolean): PinUnlockPresenter
+    }
+
     @Composable
     override fun present(): PinUnlockState {
         val pinEntryState = remember {
@@ -69,7 +77,13 @@ class PinUnlockPresenter(
         LaunchedEffect(Unit) {
             suspend {
                 val pinCodeSize = pinCodeManager.getPinCodeSize()
-                PinEntry.createEmpty(pinCodeSize)
+                if (pinCodeSize == null) {
+                    // No pin code set, deleted store? Force sign out
+                    showSignOutPrompt = true
+                    error("No pin code size found")
+                } else {
+                    PinEntry.createEmpty(pinCodeSize)
+                }
             }.runCatchingUpdatingState(pinEntryState)
         }
         LaunchedEffect(biometricUnlock) {
@@ -92,36 +106,37 @@ class PinUnlockPresenter(
             }
         }
         pinUnlockHelper.OnUnlockEffect {
-            isUnlocked.value = true
+            isUnlocked.value = it
         }
 
-        fun handleEvent(event: PinUnlockEvents) {
+        fun handleEvent(event: PinUnlockEvent) {
             when (event) {
-                is PinUnlockEvents.OnPinKeypadPressed -> {
+                is PinUnlockEvent.OnPinKeypadPressed -> {
                     pinEntryState.value = pinEntry.process(event.pinKeypadModel)
                 }
-                PinUnlockEvents.OnForgetPin -> showSignOutPrompt = true
-                PinUnlockEvents.ClearSignOutPrompt -> showSignOutPrompt = false
-                PinUnlockEvents.SignOut -> {
+                PinUnlockEvent.OnForgetPin -> showSignOutPrompt = true
+                PinUnlockEvent.ClearSignOutPrompt -> showSignOutPrompt = false
+                PinUnlockEvent.SignOut -> {
                     if (showSignOutPrompt) {
                         showSignOutPrompt = false
                         coroutineScope.signOut(signOutAction)
                     }
                 }
-                PinUnlockEvents.OnUseBiometric -> {
+                PinUnlockEvent.OnUseBiometric -> {
                     coroutineScope.launch {
                         biometricUnlockResult = biometricUnlock.authenticate()
                     }
                 }
-                PinUnlockEvents.ClearBiometricError -> {
+                PinUnlockEvent.ClearBiometricError -> {
                     biometricUnlockResult = null
                 }
-                is PinUnlockEvents.OnPinEntryChanged -> {
+                is PinUnlockEvent.OnPinEntryChanged -> {
                     pinEntryState.value = pinEntry.process(event.entryAsText)
                 }
             }
         }
         return PinUnlockState(
+            canNavigateBack = forDeviceUnlock,
             pinEntry = pinEntry,
             showWrongPinTitle = showWrongPinTitle,
             remainingAttempts = remainingAttempts,

@@ -13,4 +13,6 @@ import io.element.android.features.login.impl.accountprovider.AccountProvider
 sealed interface ChangeServerEvents {
     data class ChangeServer(val accountProvider: AccountProvider) : ChangeServerEvents
     data object ClearError : ChangeServerEvents
+    data object RequestLocalNetworkPermission : ChangeServerEvents
+    data object DismissLocalNetworkPermission : ChangeServerEvents
 }

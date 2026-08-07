@@ -22,8 +22,12 @@ import app.cash.paparazzi.DeviceConfig
 import app.cash.paparazzi.Paparazzi
 import app.cash.paparazzi.RenderExtension
 import app.cash.paparazzi.TestName
+import com.android.resources.Density.DEFAULT_DENSITY
 import com.android.resources.NightMode
+import com.android.resources.ScreenOrientation
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.matrix.ui.media.contentvalidation.LocalEventContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopEventContentValidationCache
 import sergio.sastre.composable.preview.scanner.android.AndroidPreviewInfo
 import sergio.sastre.composable.preview.scanner.core.preview.ComposablePreview
 import java.util.Locale
@@ -41,17 +45,19 @@ object ScreenshotTest {
         Locale.setDefault(locale)
 
         paparazzi.fixScreenshotName(preview, localeStr)
+
         paparazzi.snapshot {
             CompositionLocalProvider(
                 LocalInspectionMode provides true,
                 LocalDensity provides Density(
                     density = LocalDensity.current.density,
-                    fontScale = 1.0f,
+                    fontScale = preview.previewInfo.fontScale,
                 ),
                 LocalConfiguration provides Configuration().apply {
                     setLocales(LocaleList(locale))
                     uiMode = preview.previewInfo.uiMode
                 },
+                LocalEventContentValidationState provides NoopEventContentValidationCache(),
             ) {
                 ElementTheme {
                     Box(
@@ -120,17 +126,22 @@ object PaparazziPreviewRule {
         deviceConfig: DeviceConfig = ScreenshotTest.defaultDeviceConfig,
         renderExtensions: Set<RenderExtension> = setOf(),
     ): Paparazzi {
-        val densityScale = deviceConfig.density.dpiValue / 160f
+        val densityScale = deviceConfig.density.dpiValue.toFloat() / DEFAULT_DENSITY
+        val customScreenWidth = preview.previewInfo.widthDp.takeIf { it >= 0 }?.let { it * densityScale }?.toInt()
         val customScreenHeight = preview.previewInfo.heightDp.takeIf { it >= 0 }?.let { it * densityScale }?.toInt()
+        val isLandscape = preview.previewInfo.device.contains("landscape")
         return Paparazzi(
             deviceConfig = deviceConfig.copy(
+                screenWidth = customScreenWidth ?: deviceConfig.screenWidth,
+                screenHeight = customScreenHeight ?: deviceConfig.screenHeight,
                 nightMode = when (preview.previewInfo.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
                     true -> NightMode.NIGHT
                     false -> NightMode.NOTNIGHT
                 },
                 locale = locale,
                 softButtons = false,
-                screenHeight = customScreenHeight ?: deviceConfig.screenHeight,
+                orientation = if (isLandscape) ScreenOrientation.LANDSCAPE else ScreenOrientation.PORTRAIT,
+                fontScale = preview.previewInfo.fontScale,
             ),
             maxPercentDifference = 0.01,
             renderExtensions = renderExtensions,

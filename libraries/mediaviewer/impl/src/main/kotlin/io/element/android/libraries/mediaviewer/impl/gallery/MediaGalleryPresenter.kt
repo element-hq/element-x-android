@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import io.element.android.features.contentscanner.api.ContentScannerService
 import io.element.android.libraries.androidutils.R
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -43,7 +44,11 @@ import io.element.android.libraries.mediaviewer.impl.model.eventId
 import io.element.android.libraries.mediaviewer.impl.model.mediaInfo
 import io.element.android.libraries.mediaviewer.impl.model.mediaPermissions
 import io.element.android.libraries.mediaviewer.impl.model.mediaSource
+import io.element.android.libraries.mediaviewer.impl.model.thumbnailSource
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @AssistedInject
@@ -55,6 +60,7 @@ class MediaGalleryPresenter(
     private val mediaLoader: MatrixMediaLoader,
     private val localMediaActions: LocalMediaActions,
     private val snackbarDispatcher: SnackbarDispatcher,
+    private val contentScannerService: ContentScannerService,
 ) : Presenter<MediaGalleryState> {
     @AssistedFactory
     interface Factory {
@@ -74,11 +80,21 @@ class MediaGalleryPresenter(
 
         val groupedMediaItems by remember {
             mediaGalleryDataSource.groupedMediaItemsFlow()
+                .onEach { groupedItems ->
+                    if (groupedItems is AsyncData.Success) {
+                        val items = groupedItems.data.getItems(mode)
+                        items.forEach { item ->
+                            if (item is MediaItem.Event && item.eventId() != null) {
+                                coroutineScope.validateMedia(item)
+                            }
+                        }
+                    }
+                }
         }
             .collectAsState(AsyncData.Uninitialized)
 
         LaunchedEffect(Unit) {
-            mediaGalleryDataSource.start()
+            mediaGalleryDataSource.start(this)
         }
 
         val permissions by room.permissionsAsState(MediaPermissions.DEFAULT) { perms ->
@@ -88,39 +104,48 @@ class MediaGalleryPresenter(
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
         localMediaActions.Configure()
 
-        fun handleEvent(event: MediaGalleryEvents) {
+        fun handleEvent(event: MediaGalleryEvent) {
             when (event) {
-                is MediaGalleryEvents.ChangeMode -> {
+                is MediaGalleryEvent.ChangeMode -> {
                     mode = event.mode
                 }
-                is MediaGalleryEvents.LoadMore -> coroutineScope.launch {
-                    mediaGalleryDataSource.loadMore(event.direction)
+                is MediaGalleryEvent.LoadMore -> coroutineScope.launch {
+                    if (mediaGalleryDataSource.isReady) {
+                        mediaGalleryDataSource.loadMore(event.direction)
+                    }
                 }
-                is MediaGalleryEvents.Delete -> coroutineScope.launch {
+                is MediaGalleryEvent.Delete -> coroutineScope.launch {
                     mediaGalleryDataSource.deleteItem(event.eventId)
                 }
-                is MediaGalleryEvents.SaveOnDisk -> coroutineScope.launch {
+                is MediaGalleryEvent.SaveOnDisk -> coroutineScope.launch {
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
                     groupedMediaItems.dataOrNull().find(event.eventId)?.let {
                         saveOnDisk(it)
                     }
                 }
-                is MediaGalleryEvents.Share -> coroutineScope.launch {
+                is MediaGalleryEvent.OpenWith -> coroutineScope.launch {
+                    mediaBottomSheetState = MediaBottomSheetState.Hidden
+                    groupedMediaItems.dataOrNull().find(event.eventId)?.let {
+                        openWith(it)
+                    }
+                }
+                is MediaGalleryEvent.Share -> coroutineScope.launch {
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
                     groupedMediaItems.dataOrNull().find(event.eventId)?.let {
                         share(it)
                     }
                 }
-                is MediaGalleryEvents.Forward -> {
+                is MediaGalleryEvent.Forward -> {
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
                     navigator.onForwardClick(event.eventId)
                 }
-                is MediaGalleryEvents.ViewInTimeline -> {
+                is MediaGalleryEvent.ViewInTimeline -> {
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
                     navigator.onViewInTimelineClick(event.eventId)
                 }
-                is MediaGalleryEvents.OpenInfo -> coroutineScope.launch {
-                    mediaBottomSheetState = MediaBottomSheetState.MediaDetailsBottomSheetState(
+                is MediaGalleryEvent.OpenInfo -> coroutineScope.launch {
+                    mediaBottomSheetState = MediaBottomSheetState.Details(
+                        fromGallery = true,
                         eventId = event.mediaItem.eventId(),
                         canDelete = when (event.mediaItem.mediaInfo().senderId) {
                             null -> false
@@ -137,14 +162,14 @@ class MediaGalleryPresenter(
                         },
                     )
                 }
-                is MediaGalleryEvents.ConfirmDelete -> {
-                    mediaBottomSheetState = MediaBottomSheetState.MediaDeleteConfirmationState(
+                is MediaGalleryEvent.ConfirmDelete -> {
+                    mediaBottomSheetState = MediaBottomSheetState.DeleteConfirmation(
                         eventId = event.eventId,
                         mediaInfo = event.mediaInfo,
                         thumbnailSource = event.thumbnailSource,
                     )
                 }
-                MediaGalleryEvents.CloseBottomSheet -> {
+                MediaGalleryEvent.CloseBottomSheet -> {
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
                 }
             }
@@ -198,6 +223,32 @@ class MediaGalleryPresenter(
                 val snackbarMessage = SnackbarMessage(mediaActionsError(it))
                 snackbarDispatcher.post(snackbarMessage)
             }
+    }
+
+    private suspend fun openWith(mediaItem: MediaItem.Event) {
+        downloadMedia(mediaItem)
+            .mapCatchingExceptions { localMedia ->
+                localMediaActions.open(localMedia)
+            }
+            .onFailure {
+                val snackbarMessage = SnackbarMessage(mediaActionsError(it))
+                snackbarDispatcher.post(snackbarMessage)
+            }
+    }
+
+    private fun CoroutineScope.validateMedia(mediaItem: MediaItem.Event) {
+        launch {
+            val thumbnailSource = mediaItem.thumbnailSource()
+            val mediaSource = mediaItem.mediaSource()
+            val contentValidationState = mediaItem.validationState
+            val currentState = contentValidationState.overallStateFlow.first()
+
+            if (currentState.isLoading() || currentState.isValid()) {
+                return@launch
+            }
+
+            contentScannerService.scan(listOfNotNull(thumbnailSource, mediaSource).distinct(), contentValidationState)
+        }
     }
 
     private fun mediaActionsError(throwable: Throwable): Int {

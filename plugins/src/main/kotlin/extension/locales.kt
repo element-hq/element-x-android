@@ -5,6 +5,7 @@ package extension
 val locales = setOf(
     "be",
     "bg",
+    "ca",
     "cs",
     "cy",
     "da",
@@ -22,6 +23,7 @@ val locales = setOf(
     "hu",
     "in",
     "it",
+    "ja",
     "ka",
     "ko",
     "lt",
@@ -38,6 +40,7 @@ val locales = setOf(
     "uk",
     "ur",
     "uz",
+    "vi",
     "zh-rCN",
     "zh-rTW",
 )

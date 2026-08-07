@@ -44,7 +44,6 @@ import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipDetails
 import io.element.android.libraries.matrix.api.room.RoomType
-import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.join.JoinRoom
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo

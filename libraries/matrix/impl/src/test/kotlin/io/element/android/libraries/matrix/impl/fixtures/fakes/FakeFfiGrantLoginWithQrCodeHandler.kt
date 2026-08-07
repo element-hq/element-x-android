@@ -16,8 +16,8 @@ import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.QrCodeData
 
 class FakeFfiGrantLoginWithQrCodeHandler(
-    private val generateResult: () -> Unit = {},
-    private val scanResult: (QrCodeData) -> Unit = {},
+    private val generateResult: suspend () -> Unit = {},
+    private val scanResult: suspend (QrCodeData) -> Unit = {},
 ) : GrantLoginWithQrCodeHandler(NoHandle) {
     private var generateProgressListener: GrantGeneratedQrLoginProgressListener? = null
     private var scanProgressListener: GrantQrLoginProgressListener? = null

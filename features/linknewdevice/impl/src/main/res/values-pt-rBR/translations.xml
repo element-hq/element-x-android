@@ -34,6 +34,8 @@
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"Se o problema persistir, tente uma rede Wi-Fi diferente ou use seus dados móveis em vez de Wi-Fi"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Se isso não funcionar, entre manualmente"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Conexão insegura"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"Você será solicitado a inserir os dois dígitos mostrados neste dispositivo."</string>
+  <string name="screen_qr_code_login_device_code_title">"Digite o número abaixo no seu outro dispositivo"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"A entrada foi cancelada no outro dispositivo."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Solicitação de entrada foi cancelada"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"A entrada foi recusada no outro dispositivo."</string>
@@ -54,4 +56,5 @@ Tente entrar manualmente ou ler o código QR com outro dispositivo."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Você deve permitir que o %1$s use a câmera do seu dispositivo para continuar."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Permita o acesso à câmera para ler o código QR"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Ocorreu um erro inesperado. Tente novamente."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"Aguardando seu outro dispositivo"</string>
 </resources>

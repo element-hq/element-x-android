@@ -16,7 +16,10 @@ import android.widget.EditText
 import androidx.appcompat.app.ActionBar.LayoutParams
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectVerticalDragGestures
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.awaitVerticalPointerSlopOrCancellation
+import androidx.compose.foundation.gestures.verticalDrag
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -41,10 +44,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.input.pointer.PointerInputChange
+import androidx.compose.ui.input.pointer.PointerInputScope
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
@@ -94,7 +101,7 @@ fun ExpandableBottomSheetLayout(
                 .run {
                     if (isSwipeGestureEnabled) {
                         pointerInput(maxBottomSheetContentHeight) {
-                            detectVerticalDragGestures(
+                            customDetectVerticalDragGestures(
                                 onVerticalDrag = { _, dragAmount ->
                                     val calculatedHeight = max(minBottomContentHeightPx, currentBottomContentHeightPx - dragAmount.roundToInt())
                                     val newHeight = min(calculatedMaxBottomContentHeightPx, calculatedHeight)
@@ -120,7 +127,11 @@ fun ExpandableBottomSheetLayout(
 
                                         animatable.animateTo(destination)
                                     }
-                                }
+                                },
+                                canScroll = {
+                                    // We only consider we can scroll in the contents if the min size matches the max size so it's maximized
+                                    minBottomContentHeightPx == calculatedMaxBottomContentHeightPx
+                                },
                             )
                         }
                     } else {
@@ -187,6 +198,45 @@ fun ExpandableBottomSheetLayout(
             }
         }
     )
+}
+
+// The original detectVerticalDragGestures doesn't allow us to conditionally consume the initial slop event that triggers the drag,
+// which is necessary in our case to allow inner scrollables to work when the sheet is not fully expanded, so we need to re-implement it here
+private suspend fun PointerInputScope.customDetectVerticalDragGestures(
+    onDragStart: (Offset) -> Unit = {},
+    onDragEnd: () -> Unit = {},
+    onDragCancel: () -> Unit = {},
+    canScroll: () -> Boolean = { false },
+    onVerticalDrag: (change: PointerInputChange, dragAmount: Float) -> Unit,
+) {
+    awaitEachGesture {
+        val down = awaitFirstDown(requireUnconsumed = false)
+        var overSlop = 0f
+        val drag =
+            awaitVerticalPointerSlopOrCancellation(down.id, down.type) { change, over ->
+                // Consuming this event is what triggers the dragging instead of the inner content scrolling
+                // We should only consume it if we can't scroll in the inner content so we drag the bottom sheet instead, otherwise we let it pass through
+                // This is the only change compared to the original detectVerticalDragGestures implementation
+                if (!canScroll()) {
+                    change.consume()
+                }
+                overSlop = over
+            }
+        if (drag != null) {
+            onDragStart.invoke(drag.position)
+            onVerticalDrag.invoke(drag, overSlop)
+            if (
+                verticalDrag(drag.id) {
+                    onVerticalDrag(it, it.positionChange().y)
+                    it.consume()
+                }
+            ) {
+                onDragEnd()
+            } else {
+                onDragCancel()
+            }
+        }
+    }
 }
 
 @Preview(showBackground = true)

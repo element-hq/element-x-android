@@ -10,6 +10,6 @@
   <string name="screen_bug_report_include_crash_logs">"Siųsti gedimų žurnalus"</string>
   <string name="screen_bug_report_include_logs">"Leisti žurnalus"</string>
   <string name="screen_bug_report_include_screenshot">"Siųsti ekrano nuotrauką"</string>
-  <string name="screen_bug_report_logs_description">"Prie žinutės bus pridėti žurnalai, kad įsitikintumėme, jog viskas veikia tinkamai. Jei norite išsiųsti savo žinutę be žurnalų, išjunkite šį nustatymą."</string>
+  <string name="screen_bug_report_logs_description">"Žurnalai bus įtraukti į jūsų žinutę, kad būtų užtikrinta, jog viskas veikia tinkamai. Kad išsiųstumėte žinutę be žurnalų, išjunkite šį nustatymą."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s nulūžo paskutinį kartą, kai buvo naudojama. Ar norėtumėte su mumis pasidalyti strigčių ataskaita?"</string>
 </resources>

@@ -6,6 +6,7 @@
   <string name="screen_room_change_permissions_delete_messages">"메시지 삭제"</string>
   <string name="screen_room_change_permissions_everyone">"멤버"</string>
   <string name="screen_room_change_permissions_invite_people">"사람 초대하기"</string>
+  <string name="screen_room_change_permissions_live_location">"실시간 위치 공유"</string>
   <string name="screen_room_change_permissions_manage_space">"스페이스 관리"</string>
   <string name="screen_room_change_permissions_manage_space_rooms">"방 관리"</string>
   <string name="screen_room_change_permissions_member_moderation">"멤버 관리"</string>

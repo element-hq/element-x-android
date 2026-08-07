@@ -63,6 +63,9 @@ Si continúas, es posible que algunos de tus ajustes cambien."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"ajustes del sistema"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Notificaciones del sistema desactivadas"</string>
   <string name="screen_notification_settings_title">"Notificaciones"</string>
+  <string name="theme_dark">"Oscuro"</string>
+  <string name="theme_light">"Claro"</string>
+  <string name="theme_system">"Sistema"</string>
   <string name="troubleshoot_notifications_entry_point_push_history_title">"Historial de notificaciones push"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Solucionar problemas"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Solucionar problemas con las notificaciones"</string>

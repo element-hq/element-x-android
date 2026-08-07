@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_decline_and_block_block_user_option_title">"Заблакіраваць карыстальніка"</string>
+  <string name="screen_decline_and_block_title">"Адхіліць і заблакіраваць"</string>
   <string name="screen_invites_decline_chat_message">"Вы ўпэўненыя, што хочаце адхіліць запрашэнне ў %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Адхіліць запрашэнне"</string>
   <string name="screen_invites_decline_direct_chat_message">"Вы ўпэўненыя, што хочаце адмовіцца ад прыватных зносін з %1$s?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Адхіліць чат"</string>
   <string name="screen_invites_empty_list">"Няма запрашэнняў"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) запрасіў(-ла) вас"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Адхіліць і заблакіраваць"</string>
 </resources>

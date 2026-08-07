@@ -12,6 +12,8 @@ import io.element.android.libraries.matrix.api.core.UserId
 import org.matrix.rustcomponents.sdk.MembershipState
 import org.matrix.rustcomponents.sdk.PowerLevel
 import org.matrix.rustcomponents.sdk.RoomMember
+import org.matrix.rustcomponents.sdk.UserCall
+import org.matrix.rustcomponents.sdk.UserStatus
 import uniffi.matrix_sdk.RoomMemberRole
 
 internal fun aRustRoomMember(
@@ -24,6 +26,9 @@ internal fun aRustRoomMember(
     isIgnored: Boolean = false,
     role: RoomMemberRole = RoomMemberRole.USER,
     membershipChangeReason: String? = null,
+    isServiceMember: Boolean = false,
+    status: UserStatus? = null,
+    call: UserCall? = null,
 ) = RoomMember(
     userId = userId.value,
     displayName = displayName,
@@ -34,4 +39,7 @@ internal fun aRustRoomMember(
     isIgnored = isIgnored,
     suggestedRoleForPowerLevel = role,
     membershipChangeReason = membershipChangeReason,
+    isServiceMember = isServiceMember,
+    status = status,
+    call = call,
 )

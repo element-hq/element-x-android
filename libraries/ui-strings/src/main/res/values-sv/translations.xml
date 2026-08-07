@@ -37,7 +37,6 @@
     <item quantity="other">"Läst av %1$s och %2$d andra"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Läst av %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Tryck för att visa alla"</string>
   <string name="a11y_remove_reaction">"Ta bort reaktionen med %1$s"</string>
   <string name="a11y_remove_reaction_with">"Ta bort reaktion med %1$s"</string>
   <string name="a11y_room_avatar">"Rumsavatar"</string>
@@ -146,8 +145,8 @@
   <string name="action_share_link">"Dela länk"</string>
   <string name="action_show">"Visa"</string>
   <string name="action_sign_in_again">"Logga in igen"</string>
-  <string name="action_signout">"Logga ut"</string>
-  <string name="action_signout_anyway">"Logga ut ändå"</string>
+  <string name="action_signout">"Ta bort den här enheten"</string>
+  <string name="action_signout_anyway">"Ta bort den här enheten ändå"</string>
   <string name="action_skip">"Hoppa över"</string>
   <string name="action_start">"Starta"</string>
   <string name="action_start_chat">"Starta chat"</string>
@@ -187,7 +186,6 @@
   <string name="common_current_user_canceled_knock">"Begäran avbruten"</string>
   <string name="common_current_user_left_room">"Lämnade rummet"</string>
   <string name="common_current_user_rejected_invite">"Inbjudan avvisad"</string>
-  <string name="common_dark">"Mörkt"</string>
   <string name="common_decryption_error">"Avkrypteringsfel"</string>
   <string name="common_description">"Beskrivning"</string>
   <string name="common_developer_options">"Utvecklaralternativ"</string>
@@ -224,7 +222,6 @@ Anledning:%1$s."</string>
   <string name="common_install_apk_android">"Installera APK"</string>
   <string name="common_invite_unknown_profile">"Det här Matrix-ID:t kan inte hittas, så inbjudan kanske inte tas emot."</string>
   <string name="common_leaving_room">"Lämnar rummet"</string>
-  <string name="common_light">"Ljust"</string>
   <string name="common_line_copied_to_clipboard">"Rad kopierad till klippbordet"</string>
   <string name="common_link_copied_to_clipboard">"Länk kopierad till klippbordet"</string>
   <string name="common_loading">"Laddar …"</string>
@@ -281,7 +278,6 @@ Anledning:%1$s."</string>
     <item quantity="other">"%1$d svar"</item>
   </plurals>
   <string name="common_replying_to">"Svarar till %1$s"</string>
-  <string name="common_report_a_bug">"Rapportera en bugg"</string>
   <string name="common_report_a_problem">"Rapportera ett problem"</string>
   <string name="common_report_submitted">"Rapport inskickad"</string>
   <string name="common_rich_text_editor">"Riktextredigerare"</string>
@@ -323,7 +319,6 @@ Anledning:%1$s."</string>
   <string name="common_success">"Lyckades"</string>
   <string name="common_suggestions">"Förslag"</string>
   <string name="common_syncing">"Synkar"</string>
-  <string name="common_system">"System"</string>
   <string name="common_text">"Text"</string>
   <string name="common_third_party_notices">"Meddelanden från tredje part"</string>
   <string name="common_thread">"Tråd"</string>
@@ -384,7 +379,6 @@ Anledning:%1$s."</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Den maximala tillåtna filstorleken är: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Välj kvaliteten på videon du vill ladda upp."</string>
   <string name="dialog_video_quality_selector_title">"Välj videouppladdningskvalitet"</string>
-  <string name="emoji_picker_search_placeholder">"Sök emojier"</string>
   <string name="error_account_already_logged_in">"Du är redan inloggad på den här enheten som %1$s."</string>
   <string name="error_account_creation_not_possible">"Din hemserver måste uppgraderas för att stödja Matrix Authentication Service och skapande av konto."</string>
   <string name="error_failed_creating_the_permalink">"Misslyckades att skapa permalänken"</string>

@@ -36,6 +36,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -50,6 +51,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -65,21 +67,22 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun PinUnlockView(
     state: PinUnlockState,
     isInAppUnlock: Boolean,
+    onCancel: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     OnLifecycleEvent { _, event ->
         when (event) {
-            Lifecycle.Event.ON_RESUME -> state.eventSink.invoke(PinUnlockEvents.OnUseBiometric)
+            Lifecycle.Event.ON_RESUME -> state.eventSink.invoke(PinUnlockEvent.OnUseBiometric)
             else -> Unit
         }
     }
     Surface(modifier) {
-        PinUnlockPage(state = state, isInAppUnlock = isInAppUnlock)
+        PinUnlockPage(state = state, isInAppUnlock = isInAppUnlock, onCancel = onCancel)
         if (state.showSignOutPrompt) {
             SignOutPrompt(
                 isCancellable = state.isSignOutPromptCancellable,
-                onSignOut = { state.eventSink(PinUnlockEvents.SignOut) },
-                onDismiss = { state.eventSink(PinUnlockEvents.ClearSignOutPrompt) },
+                onSignOut = { state.eventSink(PinUnlockEvent.SignOut) },
+                onDismiss = { state.eventSink(PinUnlockEvent.ClearSignOutPrompt) },
             )
         }
         when (state.signOutAction) {
@@ -95,7 +98,7 @@ fun PinUnlockView(
         if (state.showBiometricUnlockError) {
             ErrorDialog(
                 content = state.biometricUnlockErrorMessage ?: "",
-                onSubmit = { state.eventSink(PinUnlockEvents.ClearBiometricError) }
+                onSubmit = { state.eventSink(PinUnlockEvent.ClearBiometricError) }
             )
         }
     }
@@ -105,6 +108,7 @@ fun PinUnlockView(
 private fun PinUnlockPage(
     state: PinUnlockState,
     isInAppUnlock: Boolean,
+    onCancel: () -> Unit,
 ) {
     BoxWithConstraints {
         val commonModifier = Modifier
@@ -125,10 +129,10 @@ private fun PinUnlockPage(
                 modifier = Modifier.padding(top = 24.dp),
                 showBiometricUnlock = state.showBiometricUnlock,
                 onUseBiometric = {
-                    state.eventSink(PinUnlockEvents.OnUseBiometric)
+                    state.eventSink(PinUnlockEvent.OnUseBiometric)
                 },
                 onForgotPin = {
-                    state.eventSink(PinUnlockEvents.OnForgetPin)
+                    state.eventSink(PinUnlockEvent.OnForgetPin)
                 },
             )
         }
@@ -144,7 +148,7 @@ private fun PinUnlockPage(
                         pinEntry = pinEntry,
                         isSecured = true,
                         onValueChange = {
-                            state.eventSink(PinUnlockEvents.OnPinEntryChanged(it))
+                            state.eventSink(PinUnlockEvent.OnPinEntryChanged(it))
                         },
                         modifier = Modifier
                             .focusRequester(focusRequester)
@@ -154,7 +158,7 @@ private fun PinUnlockPage(
             } else {
                 PinKeypad(
                     onClick = {
-                        state.eventSink(PinUnlockEvents.OnPinKeypadPressed(it))
+                        state.eventSink(PinUnlockEvent.OnPinKeypadPressed(it))
                     },
                     maxWidth = constraints.maxWidth,
                     maxHeight = constraints.maxHeight,
@@ -175,6 +179,15 @@ private fun PinUnlockPage(
                 footer = footer,
                 content = content,
                 modifier = commonModifier,
+            )
+        }
+        if (state.canNavigateBack) {
+            BackButton(
+                onClick = onCancel,
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .systemBarsPadding()
+                    .padding(8.dp),
             )
         }
     }
@@ -311,14 +324,26 @@ private fun PinUnlockHeader(
         )
         Spacer(Modifier.height(8.dp))
         val remainingAttempts = state.remainingAttempts.dataOrNull()
-        val subtitle = if (remainingAttempts != null) {
-            if (state.showWrongPinTitle) {
-                pluralStringResource(id = R.plurals.screen_app_lock_subtitle_wrong_pin, count = remainingAttempts, remainingAttempts)
-            } else {
-                pluralStringResource(id = R.plurals.screen_app_lock_subtitle, count = remainingAttempts, remainingAttempts)
+        val subtitle = when {
+            state.isUnlocked -> {
+                // Hide any previous error
+                ""
             }
-        } else {
-            ""
+            remainingAttempts != null ->
+                if (state.showWrongPinTitle) {
+                    pluralStringResource(
+                        id = R.plurals.screen_app_lock_subtitle_wrong_pin,
+                        count = remainingAttempts,
+                        remainingAttempts,
+                    )
+                } else {
+                    pluralStringResource(
+                        id = R.plurals.screen_app_lock_subtitle,
+                        count = remainingAttempts,
+                        remainingAttempts,
+                    )
+                }
+            else -> ""
         }
         val subtitleColor = if (state.showWrongPinTitle) {
             ElementTheme.colors.textCriticalPrimary
@@ -361,6 +386,7 @@ internal fun PinUnlockViewInAppPreview(@PreviewParameter(PinUnlockStateProvider:
         PinUnlockView(
             state = state,
             isInAppUnlock = true,
+            onCancel = {},
         )
     }
 }
@@ -372,6 +398,19 @@ internal fun PinUnlockViewPreview(@PreviewParameter(PinUnlockStateProvider::clas
         PinUnlockView(
             state = state,
             isInAppUnlock = false,
+            onCancel = {},
+        )
+    }
+}
+
+@Composable
+@Preview(heightDp = 480, widthDp = 800)
+internal fun PinUnlockViewCompactPreview(@PreviewParameter(PinUnlockStateCompactProvider::class) state: PinUnlockState) {
+    ElementPreview {
+        PinUnlockView(
+            state = state,
+            isInAppUnlock = false,
+            onCancel = {},
         )
     }
 }

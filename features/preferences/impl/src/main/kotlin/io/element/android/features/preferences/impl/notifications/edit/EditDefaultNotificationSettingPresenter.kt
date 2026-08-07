@@ -42,12 +42,12 @@ import kotlin.time.Duration.Companion.seconds
 @AssistedInject
 class EditDefaultNotificationSettingPresenter(
     private val notificationSettingsService: NotificationSettingsService,
-    @Assisted private val isOneToOne: Boolean,
+    @Assisted private val isDm: Boolean,
     private val roomListService: RoomListService,
 ) : Presenter<EditDefaultNotificationSettingState> {
     @AssistedFactory
     interface Factory {
-        fun create(isOneToOne: Boolean): EditDefaultNotificationSettingPresenter
+        fun create(isDm: Boolean): EditDefaultNotificationSettingPresenter
     }
 
     private val collator = Collator.getInstance().apply {
@@ -86,7 +86,7 @@ class EditDefaultNotificationSettingPresenter(
         }
 
         return EditDefaultNotificationSettingState(
-            isOneToOne = isOneToOne,
+            isOneToOne = isDm,
             mode = mode.value,
             roomsWithUserDefinedMode = roomsWithUserDefinedMode.value.toImmutableList(),
             changeNotificationSettingAction = changeNotificationSettingAction.value,
@@ -96,7 +96,7 @@ class EditDefaultNotificationSettingPresenter(
     }
 
     private fun CoroutineScope.fetchSettings(mode: MutableState<RoomNotificationMode?>) = launch {
-        mode.value = notificationSettingsService.getDefaultRoomNotificationMode(isEncrypted = true, isOneToOne = isOneToOne).getOrThrow()
+        mode.value = notificationSettingsService.getDefaultRoomNotificationMode(isEncrypted = true, isOneToOne = isDm).getOrThrow()
     }
 
     @OptIn(FlowPreview::class)
@@ -129,7 +129,7 @@ class EditDefaultNotificationSettingPresenter(
         val roomWithUserDefinedRules: Set<RoomId> = notificationSettingsService.getRoomsWithUserDefinedRules().getOrDefault(emptyList()).toSet()
         roomsWithUserDefinedMode.value = summaries
             .filter { roomSummary ->
-                roomWithUserDefinedRules.contains(roomSummary.roomId) && roomSummary.isOneToOne == isOneToOne
+                roomWithUserDefinedRules.contains(roomSummary.roomId) && roomSummary.isDm == isDm
             }
             .map { roomSummary ->
                 EditNotificationSettingRoomInfo(
@@ -154,9 +154,9 @@ class EditDefaultNotificationSettingPresenter(
     private fun CoroutineScope.setDefaultNotificationMode(mode: RoomNotificationMode, action: MutableState<AsyncAction<Unit>>) = launch {
         action.runUpdatingStateNoSuccess {
             // On modern clients, we don't have different settings for encrypted and non-encrypted rooms (Legacy clients did).
-            notificationSettingsService.setDefaultRoomNotificationMode(isEncrypted = true, mode = mode, isOneToOne = isOneToOne)
+            notificationSettingsService.setDefaultRoomNotificationMode(isEncrypted = true, mode = mode, isDM = isDm)
                 .map {
-                    notificationSettingsService.setDefaultRoomNotificationMode(isEncrypted = false, mode = mode, isOneToOne = isOneToOne)
+                    notificationSettingsService.setDefaultRoomNotificationMode(isEncrypted = false, mode = mode, isDM = isDm)
                 }
         }
     }

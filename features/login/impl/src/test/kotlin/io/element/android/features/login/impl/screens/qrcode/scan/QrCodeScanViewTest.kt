@@ -6,13 +6,15 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.features.login.impl.screens.qrcode.scan
 
 import androidx.activity.ComponentActivity
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import androidx.test.platform.app.InstrumentationRegistry
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
@@ -22,18 +24,12 @@ import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBackKey
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class QrCodeScanViewTest {
-    @get:Rule
-    val rule = createAndroidComposeRule<ComponentActivity>()
-
+class QrCodeScanViewTest : RobolectricTest() {
     private var provider: ProcessCameraProvider? = null
 
     @Before
@@ -48,28 +44,28 @@ class QrCodeScanViewTest {
     }
 
     @Test
-    fun `on back pressed - calls the expected callback`() {
+    fun `on back pressed - calls the expected callback`() = runAndroidComposeUiTest {
         ensureCalledOnce { callback ->
-            rule.setQrCodeScanView(
+            setQrCodeScanView(
                 state = aQrCodeScanState(),
                 onBackClick = callback
             )
-            rule.pressBackKey()
+            pressBackKey()
         }
     }
 
     @Test
-    fun `on QR code data ready - calls the expected callback`() {
+    fun `on QR code data ready - calls the expected callback`() = runAndroidComposeUiTest {
         val data = FakeMatrixQrCodeLoginData()
         ensureCalledOnceWithParam<MatrixQrCodeLoginData>(data) { callback ->
-            rule.setQrCodeScanView(
+            setQrCodeScanView(
                 state = aQrCodeScanState(authenticationAction = AsyncAction.Success(data)),
                 onQrCodeDataReady = callback
             )
         }
     }
 
-    private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setQrCodeScanView(
+    private fun AndroidComposeUiTest<ComponentActivity>.setQrCodeScanView(
         state: QrCodeScanState,
         onBackClick: () -> Unit = EnsureNeverCalled(),
         onQrCodeDataReady: (MatrixQrCodeLoginData) -> Unit = EnsureNeverCalledWithParam(),

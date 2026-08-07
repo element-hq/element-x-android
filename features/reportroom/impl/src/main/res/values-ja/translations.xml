@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_report_room_leave_failed_alert_message">"報告は正常に送信されましたが、ルームの退出中に問題が発生しました。もう一度試してください。"</string>
+  <string name="screen_report_room_leave_failed_alert_title">"ルームの退出に失敗"</string>
+  <string name="screen_report_room_reason_footer">"管理者にこのルームを報告します。メッセージが暗号化されている場合、管理者は内容を確認することができません。"</string>
+  <string name="screen_report_room_reason_placeholder">"報告の理由を説明してください…"</string>
+  <string name="screen_report_room_title">"ルームを通報"</string>
+</resources>

@@ -10,12 +10,13 @@ package io.element.android.libraries.sessionstorage.test.observer
 
 import io.element.android.libraries.sessionstorage.api.observer.SessionListener
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
+import java.util.concurrent.CopyOnWriteArraySet
 
 class FakeSessionObserver : SessionObserver {
-    private val _listeners = mutableListOf<SessionListener>()
+    private val _listeners = CopyOnWriteArraySet<SessionListener>()
 
     val listeners: List<SessionListener>
-        get() = _listeners
+        get() = _listeners.toList()
 
     override fun addListener(listener: SessionListener) {
         _listeners.add(listener)

@@ -17,25 +17,53 @@ import io.element.android.libraries.matrix.ui.messages.reply.aProfileDetailsRead
 open class TimelineItemLocationContentProvider : PreviewParameterProvider<TimelineItemLocationContent> {
     override val values: Sequence<TimelineItemLocationContent>
         get() = sequenceOf(
-            aTimelineItemLocationContent(),
-            aTimelineItemLocationContent(mode = TimelineItemLocationContent.Mode.Live(isActive = true)),
-            aTimelineItemLocationContent(mode = TimelineItemLocationContent.Mode.Live(isActive = false)),
+            aTimelineItemLocationContent(
+                mode = aStaticLocationMode()
+            ),
+            aTimelineItemLocationContent(
+                mode = aLiveLocationMode(isActive = true)
+            ),
+            aTimelineItemLocationContent(
+                mode = aLiveLocationMode(isActive = true, lastKnownLocation = null)
+            ),
+            aTimelineItemLocationContent(
+                mode = aLiveLocationMode(isActive = true, isOwnUser = false)
+            ),
+            aTimelineItemLocationContent(
+                mode = aLiveLocationMode(isActive = false)
+            ),
         )
 }
+fun aLiveLocationMode(
+    isActive: Boolean,
+    isOwnUser: Boolean = true,
+    lastKnownLocation: Location? = aLocation(),
+    endsAt: String = "Ends at 12:34",
+    endTimestamp: Long = 0L,
+): TimelineItemLocationContent.Mode = TimelineItemLocationContent.Mode.Live(
+    isActive = isActive,
+    endsAt = endsAt,
+    endTimestamp = endTimestamp,
+    isOwnUser = isOwnUser,
+    lastKnownLocation = lastKnownLocation
+)
+
+fun aStaticLocationMode(location: Location = aLocation()) = TimelineItemLocationContent.Mode.Static(location)
 
 fun aTimelineItemLocationContent(
-    body: String = "",
     senderId: UserId = UserId("@sender:matrix.org"),
     senderProfile: ProfileDetails = aProfileDetailsReady(),
-    mode: TimelineItemLocationContent.Mode = TimelineItemLocationContent.Mode.Static,
+    description: String? = null,
+    mode: TimelineItemLocationContent.Mode,
 ) = TimelineItemLocationContent(
-    body = body,
-    location = Location(
-        lat = 52.2445,
-        lon = 0.7186,
-        accuracy = 5000f,
-    ),
     senderId = senderId,
     senderProfile = senderProfile,
-    mode = mode
+    description = description,
+    mode = mode,
+)
+
+fun aLocation() = Location(
+    lat = 52.2445,
+    lon = 0.7186,
+    accuracy = 5000f,
 )

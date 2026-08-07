@@ -138,7 +138,7 @@ fun aSecurityAndPrivacyState(
     isSpace: Boolean = false,
     selectableJoinedSpaces: Set<SpaceRoom> = emptySet(),
     spaceSelectionMode: SpaceSelectionMode = SpaceSelectionMode.None,
-    isSpaceSettingsEnabled: Boolean = true,
+    isEncryptionDisabledByHomeserver: Boolean = false,
     eventSink: (SecurityAndPrivacyEvent) -> Unit = {}
 ) = SecurityAndPrivacyState(
     editedSettings = editedSettings,
@@ -151,6 +151,6 @@ fun aSecurityAndPrivacyState(
     isSpace = isSpace,
     selectableJoinedSpaces = selectableJoinedSpaces.toImmutableSet(),
     spaceSelectionMode = spaceSelectionMode,
-    isSpaceSettingsEnabled = isSpaceSettingsEnabled,
+    isEncryptionDisabledByHomeserver = isEncryptionDisabledByHomeserver,
     eventSink = eventSink,
 )

@@ -3,5 +3,7 @@
   <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"Invia invito"</string>
   <string name="screen_bottom_sheet_create_dm_message">"Vuoi iniziare una conversazione con%1$s?"</string>
   <string name="screen_bottom_sheet_create_dm_title">"Inviare invito?"</string>
+  <string name="screen_bottom_sheet_create_dm_unknown_user_content">"Al momento non hai alcuna conversazione con questa persona. Conferma l\'invito prima di continuare."</string>
+  <string name="screen_bottom_sheet_create_dm_unknown_user_title">"Vuoi avviare una conversazione con questo nuovo contatto?"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) ti ha invitato"</string>
 </resources>

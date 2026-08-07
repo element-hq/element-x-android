@@ -44,7 +44,6 @@ data class RoomListState(
             val isDm: Boolean,
             val isFavorite: Boolean,
             val hasNewContent: Boolean,
-            val displayClearRoomCacheAction: Boolean,
         ) : ContextMenu
     }
 
@@ -72,6 +71,7 @@ sealed interface RoomListContentState {
         val fullScreenIntentPermissionsState: FullScreenIntentPermissionsState,
         val batteryOptimizationState: BatteryOptimizationState,
         val showNewNotificationSoundBanner: Boolean,
+        val showUnreadCount: Boolean,
         val summaries: ImmutableList<RoomListRoomSummary>,
         val seenRoomInvites: ImmutableSet<RoomId>,
     ) : RoomListContentState

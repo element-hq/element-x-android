@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.SubdirectoryArrowLeft
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -99,7 +100,7 @@ private fun ItemRow(
         Item.Parent -> {
             ListItem(
                 leadingContent = ListItemContent.Icon(IconSource.Vector(Icons.Outlined.SubdirectoryArrowLeft)),
-                headlineContent = {
+                content = {
                     Text(
                         text = "..",
                         modifier = Modifier.padding(16.dp),
@@ -111,8 +112,8 @@ private fun ItemRow(
         }
         is Item.Folder -> {
             ListItem(
-                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Folder())),
-                headlineContent = {
+                leadingContent = ListItemContent.Icon(IconSource.Vector(Icons.Outlined.Folder)),
+                content = {
                     Text(
                         text = item.name,
                         modifier = Modifier.padding(16.dp),
@@ -125,7 +126,7 @@ private fun ItemRow(
         is Item.File -> {
             ListItem(
                 leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Document())),
-                headlineContent = {
+                content = {
                     Text(
                         text = item.name,
                         modifier = Modifier.padding(16.dp),

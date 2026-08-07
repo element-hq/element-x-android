@@ -13,10 +13,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -45,18 +48,23 @@ fun JoinRoomByAddressView(
     state: JoinRoomByAddressState,
     modifier: Modifier = Modifier,
 ) {
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val sheetState = rememberBottomSheetState(
+        initialValue = SheetValue.Hidden,
+        enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+    )
     ModalBottomSheet(
         modifier = modifier,
         sheetState = sheetState,
         onDismissRequest = {
             state.eventSink(JoinRoomByAddressEvent.Dismiss)
         },
+        scrollable = false,
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(all = 16.dp),
+                .padding(all = 16.dp)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             RoomAddressField(

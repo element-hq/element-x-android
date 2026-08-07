@@ -25,6 +25,7 @@ import io.element.android.libraries.di.SessionScope
 class ShowQrCodeNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    showQrCodePresenterFactory: ShowQrCodePresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
     class Inputs(
         val data: String,
@@ -36,11 +37,15 @@ class ShowQrCodeNode(
 
     private val inputs: Inputs = inputs<Inputs>()
     private val callback: Callback = callback()
+    private val showQrCodePresenter: ShowQrCodePresenter = showQrCodePresenterFactory.create(
+        initialData = inputs.data,
+    )
 
     @Composable
     override fun View(modifier: Modifier) {
+        val state = showQrCodePresenter.present()
         ShowQrCodeView(
-            data = inputs.data,
+            state = state,
             modifier = modifier,
             onBackClick = callback::navigateBack,
         )

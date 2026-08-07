@@ -74,9 +74,9 @@ class SetupPinPresenter(
             }
         }
 
-        fun handleEvent(event: SetupPinEvents) {
+        fun handleEvent(event: SetupPinEvent) {
             when (event) {
-                is SetupPinEvents.OnPinEntryChanged -> {
+                is SetupPinEvent.OnPinEntryChanged -> {
                     // Use the fromConfirmationStep flag from ui to avoid race condition.
                     if (event.fromConfirmationStep) {
                         confirmPinEntry = confirmPinEntry.fillWith(event.entryAsText)
@@ -84,7 +84,7 @@ class SetupPinPresenter(
                         choosePinEntry = choosePinEntry.fillWith(event.entryAsText)
                     }
                 }
-                SetupPinEvents.ClearFailure -> {
+                SetupPinEvent.ClearFailure -> {
                     when (setupPinFailure) {
                         is SetupPinFailure.PinsDoNotMatch -> {
                             choosePinEntry = choosePinEntry.clear()

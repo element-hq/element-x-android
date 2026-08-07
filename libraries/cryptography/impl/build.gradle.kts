@@ -21,6 +21,7 @@ setupDependencyInjection()
 
 dependencies {
     implementation(projects.libraries.di)
+    implementation(libs.coroutines.core)
     api(projects.libraries.cryptography.api)
 
     testCommonDependencies(libs)

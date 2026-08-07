@@ -14,7 +14,7 @@ jobs:
     if: >
       github.repository == 'element-hq/element-x-android'
     steps:
-      - uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
+      - uses: actions/add-to-project@5afcf98fcd03f1c2f92c3c83f58ae24323cc57fd # v2
         with:
           project-url: https://github.com/orgs/element-hq/projects/43
           github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
@@ -23,7 +23,7 @@ jobs:
     name: Move triaged needs info issues on board
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
+      - uses: actions/add-to-project@5afcf98fcd03f1c2f92c3c83f58ae24323cc57fd # v2
         id: addItem
         with:
           project-url: https://github.com/orgs/element-hq/projects/91
@@ -47,7 +47,7 @@ jobs:
     if: >
       contains(github.event.issue.labels.*.name, 'Team: Element X Feature')
     steps:
-      - uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
+      - uses: actions/add-to-project@5afcf98fcd03f1c2f92c3c83f58ae24323cc57fd # v2
         with:
           project-url: https://github.com/orgs/element-hq/projects/73
           github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
@@ -58,7 +58,7 @@ jobs:
     if: >
       contains(github.event.issue.labels.*.name, 'Team: Verticals Feature')
     steps:
-      - uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
+      - uses: actions/add-to-project@5afcf98fcd03f1c2f92c3c83f58ae24323cc57fd # v2
         with:
           project-url: https://github.com/orgs/element-hq/projects/57
           github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
@@ -70,7 +70,7 @@ jobs:
       contains(github.event.issue.labels.*.name, 'Team: QA') ||
       contains(github.event.issue.labels.*.name, 'X-Needs-Signoff')
     steps:
-      - uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
+      - uses: actions/add-to-project@5afcf98fcd03f1c2f92c3c83f58ae24323cc57fd # v2
         with:
           project-url: https://github.com/orgs/element-hq/projects/69
           github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
@@ -81,7 +81,7 @@ jobs:
     if: >
       contains(github.event.issue.labels.*.name, 'X-Needs-Signoff')
     steps:
-      - uses: actions/add-to-project@244f685bbc3b7adfa8466e08b698b5577571133e # v1.0.2
+      - uses: actions/add-to-project@5afcf98fcd03f1c2f92c3c83f58ae24323cc57fd # v2
         with:
           project-url: https://github.com/orgs/element-hq/projects/89
           github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}

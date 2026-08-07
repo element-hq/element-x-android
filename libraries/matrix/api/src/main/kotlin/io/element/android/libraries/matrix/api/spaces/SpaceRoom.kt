@@ -38,6 +38,7 @@ data class SpaceRoom(
      */
     val via: ImmutableList<String>,
     val isDirect: Boolean?,
+    val isDm: Boolean?,
 ) {
     val isSpace = roomType == RoomType.Space
 

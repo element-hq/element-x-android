@@ -25,7 +25,7 @@ import io.element.android.libraries.matrix.api.auth.SessionRestorationException
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.matrix.api.exception.isNetworkError
-import io.element.android.libraries.push.api.push.PushHandlingWakeLock
+import io.element.android.libraries.push.api.push.FetchPushForegroundServiceManager
 import io.element.android.libraries.push.impl.db.PushRequest
 import io.element.android.libraries.push.impl.history.PushHistoryService
 import io.element.android.libraries.push.impl.notifications.NotifiableEventResolver
@@ -58,7 +58,7 @@ class FetchPendingNotificationsWorker(
     private val resultProcessor: NotificationResultProcessor,
     private val analyticsService: AnalyticsService,
     private val systemClock: SystemClock,
-    private val pushHandlingWakeLock: PushHandlingWakeLock,
+    private val fetchPushForegroundServiceManager: FetchPushForegroundServiceManager,
 ) : CoroutineWorker(context, params) {
     override suspend fun doWork(): Result {
         Timber.d("FetchNotificationsWorker started")
@@ -67,7 +67,8 @@ class FetchPendingNotificationsWorker(
             inputData.getString(SyncPendingNotificationsRequestBuilder.SESSION_ID)?.let(::SessionId)
         }.getOrNull() ?: return Result.failure()
 
-        pushHandlingWakeLock.unlock()
+        // We can stop the foreground service and unlock the wakelock, since the work is now running and the device should be kept awake
+        fetchPushForegroundServiceManager.stop()
 
         // Fetch pending requests in the last 24 hours
         val fetchSince = Instant.fromEpochMilliseconds(systemClock.epochMillis()).minus(1.days)
@@ -152,7 +153,7 @@ class FetchPendingNotificationsWorker(
 
     private suspend fun checkNetworkConnection(requests: List<PushRequest>): Result? {
         val networkTimeoutSpans = requests.mapNotNull { request ->
-            val parent = analyticsService.getLongRunningTransaction(AnalyticsLongRunningTransaction.PushToWorkManager(request.eventId))
+            val parent = analyticsService.getLongRunningTransaction(AnalyticsLongRunningTransaction.PushToNotification(request.eventId))
             parent?.startChild("Waiting for network connectivity", "await_network")
         }
 

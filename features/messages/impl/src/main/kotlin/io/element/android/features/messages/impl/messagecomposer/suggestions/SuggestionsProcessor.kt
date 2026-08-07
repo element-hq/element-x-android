@@ -15,6 +15,7 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.roomMembers
+import io.element.android.libraries.slashcommands.api.SlashCommandService
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.SuggestionType
@@ -23,7 +24,9 @@ import io.element.android.libraries.textcomposer.model.SuggestionType
  * This class is responsible for processing suggestions when `@`, `/` or `#` are type in the composer.
  */
 @Inject
-class SuggestionsProcessor {
+class SuggestionsProcessor(
+    private val slashCommandService: SlashCommandService,
+) {
     /**
      *  Process the suggestion.
      *  @param suggestion The current suggestion input
@@ -31,6 +34,7 @@ class SuggestionsProcessor {
      *  @param roomAliasSuggestions The available room alias suggestions
      *  @param currentUserId The current user id
      *  @param canSendRoomMention Should return true if the current user can send room mentions
+     *  @param isInThread Whether the composer is in a thread or not, used to filter slash commands suggestions
      *  @return The list of suggestions to display
      */
     suspend fun process(
@@ -39,6 +43,7 @@ class SuggestionsProcessor {
         roomAliasSuggestions: List<RoomAliasSuggestion>,
         currentUserId: UserId,
         canSendRoomMention: suspend () -> Boolean,
+        isInThread: Boolean,
     ): List<ResolvedSuggestion> {
         suggestion ?: return emptyList()
         return when (suggestion.type) {
@@ -69,7 +74,16 @@ class SuggestionsProcessor {
                         )
                     }
             }
-            SuggestionType.Command,
+            SuggestionType.Command -> {
+                // Command suggestions are valid only if this is the beginning of the message
+                if (suggestion.start == 0) {
+                    slashCommandService.getSuggestions(suggestion.text, isInThread).map {
+                        ResolvedSuggestion.Command(it)
+                    }
+                } else {
+                    emptyList()
+                }
+            }
             SuggestionType.Emoji,
             is SuggestionType.Custom -> {
                 // Clear suggestions

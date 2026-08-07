@@ -55,4 +55,7 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"sistemaren ezarpenak"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Sistemaren jakinarazpenak desaktibatuta daude"</string>
   <string name="screen_notification_settings_title">"Jakinarazpenak"</string>
+  <string name="theme_dark">"Iluna"</string>
+  <string name="theme_light">"Argia"</string>
+  <string name="theme_system">"Sistema"</string>
 </resources>

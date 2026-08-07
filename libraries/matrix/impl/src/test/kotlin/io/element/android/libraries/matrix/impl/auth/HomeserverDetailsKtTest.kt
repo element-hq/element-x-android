@@ -20,7 +20,7 @@ class HomeserverDetailsKtTest {
         val homeserverLoginDetails = FakeFfiHomeserverLoginDetails(
             url = "https://example.org",
             supportsPasswordLogin = true,
-            supportsOidcLogin = false
+            supportsOAuthLogin = false
         )
 
         // When
@@ -31,7 +31,7 @@ class HomeserverDetailsKtTest {
             MatrixHomeServerDetails(
                 url = "https://example.org",
                 supportsPasswordLogin = true,
-                supportsOidcLogin = false
+                supportsOAuthLogin = false
             )
         )
     }

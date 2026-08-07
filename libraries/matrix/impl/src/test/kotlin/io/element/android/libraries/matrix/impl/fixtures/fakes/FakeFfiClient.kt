@@ -9,7 +9,9 @@
 package io.element.android.libraries.matrix.impl.fixtures.fakes
 
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustSession
+import io.element.android.libraries.matrix.impl.fixtures.factories.aRustUserProfile
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
+import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.simulateLongTask
@@ -17,6 +19,7 @@ import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.CreateRoomParameters
 import org.matrix.rustcomponents.sdk.Encryption
+import org.matrix.rustcomponents.sdk.HomeserverCapabilities
 import org.matrix.rustcomponents.sdk.HomeserverLoginDetails
 import org.matrix.rustcomponents.sdk.IgnoredUsersListener
 import org.matrix.rustcomponents.sdk.NoHandle
@@ -40,20 +43,23 @@ import uniffi.matrix_sdk_base.MediaRetentionPolicy
 class FakeFfiClient(
     private val userId: String = A_USER_ID.value,
     private val deviceId: String = A_DEVICE_ID.value,
+    private val homeserver: String = A_HOMESERVER_URL,
     private val notificationClient: NotificationClient = FakeFfiNotificationClient(),
     private val notificationSettings: NotificationSettings = FakeFfiNotificationSettings(),
     private val encryption: Encryption = FakeFfiEncryption(),
     private val session: Session = aRustSession(),
     private val clearCachesResult: () -> Unit = { lambdaError() },
     private val withUtdHook: (UnableToDecryptDelegate) -> Unit = { lambdaError() },
-    private val getProfileResult: (String) -> UserProfile = { UserProfile(userId = userId, displayName = null, avatarUrl = null) },
+    private val getProfileResult: (String) -> UserProfile = { aRustUserProfile() },
     private val homeserverLoginDetailsResult: () -> HomeserverLoginDetails = { lambdaError() },
     private val getStoreSizesResult: () -> StoreSizes = { lambdaError() },
     private val createRoomResult: (CreateRoomParameters) -> String = { lambdaError() },
+    private val homeserverCapabilities: HomeserverCapabilities = FakeFfiHomeserverCapabilities(),
     private val closeResult: () -> Unit = {},
 ) : Client(NoHandle) {
     override fun userId(): String = userId
     override fun deviceId(): String = deviceId
+    override fun homeserver(): String = homeserver
     override suspend fun notificationClient(processSetup: NotificationProcessSetup) = notificationClient
     override suspend fun getNotificationSettings(): NotificationSettings = notificationSettings
     override fun encryption(): Encryption = encryption
@@ -71,6 +77,7 @@ class FakeFfiClient(
         deviceDisplayName: String,
         profileTag: String?,
         lang: String,
+        append: Boolean,
     ) = Unit
 
     override suspend fun deletePusher(identifiers: PusherIdentifiers) = Unit
@@ -101,6 +108,10 @@ class FakeFfiClient(
 
     override suspend fun createRoom(request: CreateRoomParameters): String {
         return createRoomResult(request)
+    }
+
+    override fun homeserverCapabilities(): HomeserverCapabilities {
+        return homeserverCapabilities
     }
 
     override fun close() = closeResult()

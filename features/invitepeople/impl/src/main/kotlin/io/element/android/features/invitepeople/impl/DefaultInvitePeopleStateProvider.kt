@@ -12,7 +12,13 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
+import io.element.android.libraries.designsystem.preview.USER_NAME_BOB
+import io.element.android.libraries.designsystem.preview.USER_NAME_CAROL
+import io.element.android.libraries.designsystem.preview.USER_NAME_EVE
+import io.element.android.libraries.designsystem.preview.USER_NAME_JUSTIN
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
@@ -27,21 +33,21 @@ internal class DefaultInvitePeopleStateProvider : PreviewParameterProvider<Defau
             aDefaultInvitePeopleState(canInvite = true, selectedUsers = aMatrixUserList().toImmutableList()),
             aDefaultInvitePeopleState(isSearchActive = true, searchQuery = "some query"),
             aDefaultInvitePeopleState(isSearchActive = true, searchQuery = "some query", selectedUsers = aMatrixUserList().toImmutableList()),
-            aDefaultInvitePeopleState(isSearchActive = true, searchQuery = "some query", searchResults = SearchBarResultState.NoResultsFound()),
+            aDefaultInvitePeopleState(isSearchActive = true, searchQuery = "some query", searchResults = SearchBarResultState.NoResultsFound),
             aDefaultInvitePeopleState(
                 isSearchActive = true,
                 canInvite = true,
                 searchQuery = "some query",
                 selectedUsers = persistentListOf(
-                    aMatrixUser("@carol:server.org", "Carol")
+                    aMatrixUser(displayName = USER_NAME_CAROL)
                 ),
                 searchResults = SearchBarResultState.Results(
                     persistentListOf(
-                        anInvitableUser(aMatrixUser("@alice:server.org")),
-                        anInvitableUser(aMatrixUser("@bob:server.org", "Bob")),
-                        anInvitableUser(aMatrixUser("@carol:server.org", "Carol"), isSelected = true),
-                        anInvitableUser(aMatrixUser("@eve:server.org", "Eve"), isSelected = true, isAlreadyJoined = true),
-                        anInvitableUser(aMatrixUser("@justin:server.org", "Justin"), isSelected = true, isAlreadyInvited = true),
+                        anInvitableUser(aMatrixUser(displayName = USER_NAME_ALICE)),
+                        anInvitableUser(aMatrixUser(displayName = USER_NAME_BOB)),
+                        anInvitableUser(aMatrixUser(displayName = USER_NAME_CAROL), isSelected = true),
+                        anInvitableUser(aMatrixUser(displayName = USER_NAME_EVE), isSelected = true, isAlreadyJoined = true),
+                        anInvitableUser(aMatrixUser(displayName = USER_NAME_JUSTIN), isSelected = true, isAlreadyInvited = true),
                     )
                 )
             ),
@@ -50,12 +56,12 @@ internal class DefaultInvitePeopleStateProvider : PreviewParameterProvider<Defau
                 canInvite = true,
                 searchQuery = "@alice:server.org",
                 selectedUsers = persistentListOf(
-                    aMatrixUser("@carol:server.org", "Carol")
+                    aMatrixUser(displayName = USER_NAME_CAROL)
                 ),
                 searchResults = SearchBarResultState.Results(
                     persistentListOf(
-                        anInvitableUser(aMatrixUser("@alice:server.org"), isUnresolved = true),
-                        anInvitableUser(aMatrixUser("@bob:server.org", "Bob")),
+                        anInvitableUser(aMatrixUser(displayName = USER_NAME_ALICE), isUnresolved = true),
+                        anInvitableUser(aMatrixUser(displayName = USER_NAME_BOB)),
                     )
                 )
             ),
@@ -65,7 +71,7 @@ internal class DefaultInvitePeopleStateProvider : PreviewParameterProvider<Defau
                 searchQuery = "@alice:server.org",
                 searchResults = SearchBarResultState.Results(
                     persistentListOf(
-                        anInvitableUser(aMatrixUser("@alice:server.org"), isUnresolved = true),
+                        anInvitableUser(aMatrixUser(displayName = USER_NAME_ALICE), isUnresolved = true),
                     )
                 ),
                 showSearchLoader = true,
@@ -75,6 +81,18 @@ internal class DefaultInvitePeopleStateProvider : PreviewParameterProvider<Defau
                 canInvite = false,
                 selectedUsers = aMatrixUserList().toImmutableList(),
                 sendInvitesAction = AsyncAction.Loading,
+            ),
+            aDefaultInvitePeopleState(
+                sendInvitesAction = ConfirmingUnknownUserInvitation(
+                    persistentListOf(
+                        aMatrixUser(),
+                    )
+                )
+            ),
+            aDefaultInvitePeopleState(
+                sendInvitesAction = ConfirmingUnknownUserInvitation(
+                    aMatrixUserList().toImmutableList()
+                )
             ),
         )
 }
@@ -97,11 +115,12 @@ private fun aDefaultInvitePeopleState(
     room: AsyncData<Unit> = AsyncData.Success(Unit),
     canInvite: Boolean = false,
     searchQuery: String = "",
-    searchResults: SearchBarResultState<ImmutableList<InvitableUser>> = SearchBarResultState.Initial(),
+    searchResults: SearchBarResultState<ImmutableList<InvitableUser>> = SearchBarResultState.Initial,
     selectedUsers: ImmutableList<MatrixUser> = persistentListOf(),
     isSearchActive: Boolean = false,
     showSearchLoader: Boolean = false,
     sendInvitesAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    createRoomFromDmAction: AsyncAction<RoomId> = AsyncAction.Uninitialized,
     suggestions: List<InvitableUser> = aMatrixUserList()
         .take(5)
         .map { user -> anInvitableUser(matrixUser = user, isSelected = user in selectedUsers) },
@@ -115,6 +134,7 @@ private fun aDefaultInvitePeopleState(
         isSearchActive = isSearchActive,
         showSearchLoader = showSearchLoader,
         sendInvitesAction = sendInvitesAction,
+        createRoomFromDmAction = createRoomFromDmAction,
         suggestions = suggestions.toImmutableList(),
         eventSink = {},
     )

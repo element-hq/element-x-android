@@ -5,9 +5,9 @@
   <string name="banner_battery_optimization_title_android">"Nepřicházejí vám oznámení?"</string>
   <string name="banner_new_sound_message">"Váš zvuk oznámení byl aktualizován – je jasnější, rychlejší a méně rušivý."</string>
   <string name="banner_new_sound_title">"Aktualizovali jsme vaše zvuky"</string>
-  <string name="banner_set_up_recovery_content">"Vygenerujte nový klíč pro obnovení, který lze použít k obnovení historie šifrovaných zpráv v případě, že ztratíte přístup ke svým zařízením."</string>
-  <string name="banner_set_up_recovery_submit">"Nastavení obnovy"</string>
-  <string name="banner_set_up_recovery_title">"Nastavení obnovy"</string>
+  <string name="banner_set_up_recovery_content">"Vaše chaty jsou automaticky zálohovány pomocí koncového šifrování. Chcete-li tuto zálohu obnovit a zachovat si svou digitální identitu v případě, že ztratíte přístup ke všem svým zařízením, budete potřebovat svůj klíč pro obnovení."</string>
+  <string name="banner_set_up_recovery_submit">"Získat klíč pro obnovení"</string>
+  <string name="banner_set_up_recovery_title">"Zálohujte své chaty"</string>
   <string name="confirm_recovery_key_banner_message">"Potvrďte klíč pro obnovení, abyste zachovali přístup k úložišti klíčů a historii zpráv."</string>
   <string name="confirm_recovery_key_banner_primary_button_title">"Zadejte klíč pro obnovení"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Zapomněli jste klíč pro obnovení?"</string>

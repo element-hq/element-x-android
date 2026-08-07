@@ -34,6 +34,8 @@ interface AppForegroundStateService {
      */
     val isSyncingNotificationEvent: StateFlow<Boolean>
 
+    val isSharingLiveLocation: StateFlow<Boolean>
+
     /**
      * Start observing the foreground state.
      */
@@ -53,4 +55,6 @@ interface AppForegroundStateService {
      * Update the active state for the syncing notification event flow.
      */
     fun updateIsSyncingNotificationEvent(isSyncingNotificationEvent: Boolean)
+
+    fun updateIsSharingLiveLocation(isSharingLiveLocation: Boolean)
 }

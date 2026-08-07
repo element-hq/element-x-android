@@ -10,11 +10,14 @@ package io.element.android.features.messages.impl.timeline.model
 
 import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.timeline.components.MessageShieldData
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemGalleryContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemDaySeparatorModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemVirtualModel
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.EventId
@@ -59,6 +62,12 @@ sealed interface TimelineItem {
         is GroupedEvents -> "groupedEvent"
     }
 
+    fun formattedDate(): String? = when (this) {
+        is Event -> sentDate.takeIf { it.isNotEmpty() }
+        is Virtual -> (model as? TimelineItemDaySeparatorModel)?.formattedDate?.takeIf { it.isNotEmpty() }
+        is GroupedEvents -> null
+    }
+
     data class Virtual(
         val id: UniqueId,
         val model: TimelineItemVirtualModel
@@ -75,6 +84,7 @@ sealed interface TimelineItem {
         val content: TimelineItemEventContent,
         val sentTimeMillis: Long = 0L,
         val sentTime: String = "",
+        val sentDate: String = "",
         val isMine: Boolean = false,
         val isEditable: Boolean,
         val canBeRepliedTo: Boolean,
@@ -116,6 +126,8 @@ sealed interface TimelineItem {
             is TimelineItemStickerContent -> content.formattedCaption == null && content.caption == null
             is TimelineItemImageContent -> content.formattedCaption == null && content.caption == null
             is TimelineItemVideoContent -> content.formattedCaption == null && content.caption == null
+            is TimelineItemGalleryContent -> false
+            is TimelineItemAttachmentsContent -> false
             else -> true
         }
 

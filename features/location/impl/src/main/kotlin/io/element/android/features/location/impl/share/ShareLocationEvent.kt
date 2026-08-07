@@ -17,7 +17,8 @@ sealed interface ShareLocationEvent {
         val isPinned: Boolean,
     ) : ShareLocationEvent
 
-    data object ShowLiveLocationDurationPicker : ShareLocationEvent
+    data object InitiateLiveLocationShare : ShareLocationEvent
+    data object AcceptLiveLocationDisclaimer : ShareLocationEvent
     data class StartLiveLocationShare(val duration: Duration) : ShareLocationEvent
 
     data object StartTrackingUserLocation : ShareLocationEvent

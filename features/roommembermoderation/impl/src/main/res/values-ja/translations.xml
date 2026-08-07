@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_manage_room_member_ban">"ユーザーを追放"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"追放"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"招待されても再度参加することはできません。"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"このメンバーを本当に追放しますか？"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description">"招待されても再度参加することはできませんが、すべてのルームとスペースにおける権限を維持します。"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"%1$s を追放中"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"削除"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"招待を受け取ると再度参加できます。"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"このメンバーを本当に削除しますか？"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description">"すべてのルームとスペースにおける権限を維持し、招待によって再度参加することができます。"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"プロフィールを表示"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"ユーザーを削除"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"メンバーを削除し、今後の参加を禁止しますか？"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"%1$s を削除中…"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban">"ユーザーの追放を解除"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_action">"追放を解除"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_description">"招待によって再度参加することができます。"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_title">"このメンバーの追放を本当に解除しますか？"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unbanning_user">"%1$s の追放を解除中"</string>
+</resources>

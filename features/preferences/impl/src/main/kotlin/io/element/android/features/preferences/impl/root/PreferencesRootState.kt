@@ -9,29 +9,30 @@
 package io.element.android.features.preferences.impl.root
 
 import io.element.android.features.logout.api.direct.DirectLogoutState
+import io.element.android.features.preferences.impl.userstatus.UserStatusState
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
-import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 
 data class PreferencesRootState(
     val myUser: MatrixUser,
+    val userStatusState: UserStatusState?,
     val version: String,
-    val deviceId: DeviceId?,
     val isMultiAccountEnabled: Boolean,
     val otherSessions: ImmutableList<MatrixUser>,
     val showSecureBackup: Boolean,
     val showSecureBackupBadge: Boolean,
     val accountManagementUrl: String?,
-    val devicesManagementUrl: String?,
     val canReportBug: Boolean,
     val showLinkNewDevice: Boolean,
     val showAnalyticsSettings: Boolean,
     val showDeveloperSettings: Boolean,
     val canDeactivateAccount: Boolean,
-    val showBlockedUsersItem: Boolean,
+    val nbOfBlockedUsers: Int,
     val showLabsItem: Boolean,
     val directLogoutState: DirectLogoutState,
     val snackbarMessage: SnackbarMessage?,
-    val eventSink: (PreferencesRootEvents) -> Unit,
-)
+    val eventSink: (PreferencesRootEvent) -> Unit,
+) {
+    val showBlockedUsersItem = nbOfBlockedUsers > 0
+}
