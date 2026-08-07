@@ -52,6 +52,8 @@ import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
@@ -76,7 +78,8 @@ fun RoomDirectoryView(
                     .padding(padding)
                     .consumeWindowInsets(padding)
             )
-        }
+        },
+        contentWindowInsets = scaffoldScrollableContentInsets,
     )
 }
 
@@ -127,7 +130,10 @@ private fun RoomDirectoryRoomList(
     onReachedLoadMore: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(modifier = modifier) {
+    LazyColumn(
+        modifier = modifier,
+        contentPadding = lazyColumnContentPadding,
+    ) {
         items(roomDescriptions) { roomDescription ->
             RoomDirectoryRoomRow(
                 roomDescription = roomDescription,

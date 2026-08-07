@@ -11,6 +11,8 @@
 import config.BuildTimeConfig
 import extension.setupDependencyInjection
 import extension.testCommonDependencies
+import org.gradle.kotlin.dsl.withType
+import org.sonarqube.gradle.SonarResolverTask
 
 plugins {
     id("io.element.android-library")
@@ -18,6 +20,10 @@ plugins {
 
 android {
     namespace = "io.element.android.libraries.pushproviders.firebase"
+
+    buildFeatures {
+        resValues = true
+    }
 
     buildTypes {
         getByName("release") {
@@ -45,6 +51,11 @@ android {
             )
         }
     }
+}
+
+// Configure the SonarQube plugin to wait for the resource generation tasks to complete before running the analysis.
+tasks.withType<SonarResolverTask>().configureEach {
+    dependsOn("generateDebugResValues", "generateDebugAndroidTestResValues")
 }
 
 setupDependencyInjection()

@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="crypto_event_authenticity_sent_in_clear">"Без шифроване"</string>
-  <string name="emoji_picker_category_activity">"Дейности"</string>
-  <string name="emoji_picker_category_flags">"Знамена"</string>
-  <string name="emoji_picker_category_foods">"Храна &amp; Напитки"</string>
-  <string name="emoji_picker_category_nature">"Животни &amp; Природа"</string>
-  <string name="emoji_picker_category_objects">"Обекти"</string>
-  <string name="emoji_picker_category_people">"Усмивки &amp; Хора"</string>
-  <string name="emoji_picker_category_places">"Пътуване &amp; Места"</string>
-  <string name="emoji_picker_category_symbols">"Символи"</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Докоснете, за да промените качеството на качване на видео"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Файлът не можа да бъде качен."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Неуспешна обработка на мултимедия за качване, моля, опитайте отново."</string>

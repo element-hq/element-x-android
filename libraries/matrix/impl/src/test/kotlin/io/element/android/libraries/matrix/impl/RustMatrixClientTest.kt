@@ -13,6 +13,7 @@ package io.element.android.libraries.matrix.impl
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.data.bytes
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClient
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiSyncService
 import io.element.android.libraries.matrix.impl.room.FakeTimelineEventFilterFactory
@@ -21,6 +22,7 @@ import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
+import io.element.android.libraries.matrix.test.scanner.FakeContentScanner
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
@@ -88,6 +90,8 @@ class RustMatrixClientTest {
                         userId = userId,
                         displayName = A_USER_NAME,
                         avatarUrl = AN_AVATAR_URL,
+                        status = null,
+                        call = null,
                     )
                 },
             ),
@@ -128,7 +132,7 @@ class RustMatrixClientTest {
             client = FakeFfiClient(createRoomResult = createRoomLambda)
         )
 
-        client.createDM(A_USER_ID)
+        client.createDM(userId = A_USER_ID, isEncrypted = true)
 
         createRoomLambda.assertions().isCalledOnce()
         assertThat(createParameters?.historyVisibilityOverride).isEqualTo(RoomHistoryVisibility.Invited)
@@ -141,6 +145,7 @@ class RustMatrixClientTest {
         ),
     ) = RustMatrixClient(
         innerClient = client,
+        sessionPaths = SessionPaths(fileDirectory = File("files"), cacheDirectory = File("cache")),
         sessionStore = sessionStore,
         appCoroutineScope = backgroundScope,
         sessionDelegate = aRustClientSessionDelegate(
@@ -154,5 +159,7 @@ class RustMatrixClientTest {
         featureFlagService = FakeFeatureFlagService(),
         analyticsService = FakeAnalyticsService(),
         workManagerScheduler = FakeWorkManagerScheduler(submitLambda = {}),
+        contentScanner = FakeContentScanner(),
+        isMessageSearchAvailable = false,
     )
 }

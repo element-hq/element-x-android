@@ -27,6 +27,7 @@ import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.LocalBuildMeta
+import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialogView
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -121,6 +122,15 @@ fun ChangeServerView(
         }
         AsyncData.Uninitialized -> Unit
     }
+    LocalNetworkPermissionDialogView(
+        dialog = state.localNetworkPermissionDialog,
+        onSubmit = {
+            eventSink.invoke(ChangeServerEvents.RequestLocalNetworkPermission)
+        },
+        onDismiss = {
+            eventSink.invoke(ChangeServerEvents.DismissLocalNetworkPermission)
+        }
+    )
 }
 
 @PreviewsDayNight

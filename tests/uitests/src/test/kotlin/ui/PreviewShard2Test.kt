@@ -28,7 +28,10 @@ class PreviewShard2Test(
     @TestParameter(valuesProvider = Shard2ComposablePreviewProvider::class)
     val preview: ComposablePreview<AndroidPreviewInfo>,
 ) {
-    @get:Rule
+    @get:Rule(order = 0)
+    val layoutLibErrorFilterStatement = LayoutLibErrorFilterStatement()
+
+    @get:Rule(order = 1)
     val paparazziRule = PaparazziPreviewRule.createFor(preview, locale = "en")
 
     @Test

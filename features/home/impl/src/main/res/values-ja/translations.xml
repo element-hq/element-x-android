@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="banner_battery_optimization_content_android">"すべての通知を確実に受信するために、このアプリのバッテリー最適化を無効にしてください。"</string>
-  <string name="banner_battery_optimization_submit_android">"最適化を無効にする"</string>
+  <string name="banner_battery_optimization_submit_android">"無効にする"</string>
   <string name="banner_battery_optimization_title_android">"通知が届いていませんか？"</string>
   <string name="banner_new_sound_message">"通知音が更新され、より明確で速く、そして邪魔にならなくなりました。"</string>
   <string name="banner_new_sound_title">"サウンドを刷新しました"</string>
@@ -38,7 +38,7 @@
   <string name="screen_roomlist_filter_low_priority_empty_state_title">"低い優先度のチャットはまだありません"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"フィルターを解除して他のチャットを表示できます"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"この選択中にチャットがありません"</string>
-  <string name="screen_roomlist_filter_people">"人々"</string>
+  <string name="screen_roomlist_filter_people">"ユーザー"</string>
   <string name="screen_roomlist_filter_people_empty_state_title">"まだダイレクトメッセージは届いていません"</string>
   <string name="screen_roomlist_filter_rooms">"ルーム"</string>
   <string name="screen_roomlist_filter_rooms_empty_state_title">"まだルームに参加していません"</string>

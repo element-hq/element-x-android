@@ -54,6 +54,8 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
@@ -78,14 +80,16 @@ fun SecurityAndPrivacyView(
                     state.eventSink(SecurityAndPrivacyEvent.Save)
                 },
             )
-        }
+        },
+        contentWindowInsets = scaffoldScrollableContentInsets,
     ) { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)
                 .imePadding()
                 .verticalScroll(rememberScrollState())
-                .consumeWindowInsets(padding),
+                .consumeWindowInsets(padding)
+                .padding(lazyColumnContentPadding),
             verticalArrangement = Arrangement.spacedBy(32.dp),
         ) {
             if (state.showRoomAccessSection) {

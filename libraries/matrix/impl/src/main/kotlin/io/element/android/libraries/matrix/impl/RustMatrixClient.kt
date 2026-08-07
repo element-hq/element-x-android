@@ -32,6 +32,7 @@ import io.element.android.libraries.matrix.api.linknewdevice.LinkDesktopHandler
 import io.element.android.libraries.matrix.api.linknewdevice.LinkMobileHandler
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.oauth.AccountManagementAction
+import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -44,11 +45,14 @@ import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibilit
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.scanner.ContentScanner
 import io.element.android.libraries.matrix.api.spaces.SpaceService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncState
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.api.user.UserStatus
 import io.element.android.libraries.matrix.impl.encryption.RustEncryptionService
 import io.element.android.libraries.matrix.impl.exception.mapClientException
 import io.element.android.libraries.matrix.impl.linknewdevice.RustLinkDesktopHandler
@@ -77,11 +81,11 @@ import io.element.android.libraries.matrix.impl.roomdirectory.map
 import io.element.android.libraries.matrix.impl.roomlist.RoomListFactory
 import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
 import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
+import io.element.android.libraries.matrix.impl.search.RustMessageSearchService
 import io.element.android.libraries.matrix.impl.spaces.RustSpaceService
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import io.element.android.libraries.matrix.impl.sync.map
 import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
-import io.element.android.libraries.matrix.impl.util.SessionPathsProvider
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
@@ -136,7 +140,9 @@ import org.matrix.rustcomponents.sdk.CreateRoomParameters as RustCreateRoomParam
 import org.matrix.rustcomponents.sdk.RoomPreset as RustRoomPreset
 import org.matrix.rustcomponents.sdk.SyncService as ClientSyncService
 
+@Suppress("LargeClass")
 class RustMatrixClient(
+    override val sessionPaths: SessionPaths,
     private val innerClient: Client,
     private val sessionStore: SessionStore,
     private val sessionDelegate: RustClientSessionDelegate,
@@ -149,9 +155,12 @@ class RustMatrixClient(
     private val featureFlagService: FeatureFlagService,
     private val analyticsService: AnalyticsService,
     private val workManagerScheduler: WorkManagerScheduler,
+    override val contentScanner: ContentScanner?,
+    override val isMessageSearchAvailable: Boolean,
 ) : MatrixClient {
     override val sessionId: UserId = UserId(innerClient.userId())
     override val deviceId: DeviceId = DeviceId(innerClient.deviceId())
+    override val homeserverUrl: String = innerClient.homeserver()
     override val sessionCoroutineScope = appCoroutineScope.childScope(dispatchers.main, "Session-$sessionId")
     private val sessionDispatcher = dispatchers.io.limitedParallelism(64)
 
@@ -187,7 +196,10 @@ class RustMatrixClient(
         sessionDispatcher = sessionDispatcher,
     )
 
-    private val sessionPathsProvider = SessionPathsProvider(sessionStore)
+    override val messageSearchService = RustMessageSearchService(
+        client = innerClient,
+        sessionDispatcher = sessionDispatcher,
+    )
 
     private val roomSyncSubscriber: RoomSyncSubscriber = RoomSyncSubscriber(innerRoomListService, dispatchers)
 
@@ -258,6 +270,8 @@ class RustMatrixClient(
     )
 
     private var clientDelegateTaskHandle: TaskHandle? = innerClient.setDelegate(sessionDelegate)
+
+    @Volatile private var localUserStatus: UserStatus? = null
 
     private val _userProfile: MutableStateFlow<MatrixUser> = MutableStateFlow(
         MatrixUser(
@@ -423,10 +437,10 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun createDM(userId: UserId): Result<RoomId> {
+    override suspend fun createDM(userId: UserId, isEncrypted: Boolean): Result<RoomId> {
         val createRoomParams = CreateRoomParameters(
             name = null,
-            isEncrypted = true,
+            isEncrypted = isEncrypted,
             isDirect = true,
             visibility = RoomVisibility.Private,
             preset = RoomPreset.TRUSTED_PRIVATE_CHAT,
@@ -444,7 +458,12 @@ class RustMatrixClient(
 
     override suspend fun getUserProfile(): Result<MatrixUser> = getProfile(sessionId)
         .onSuccess { matrixUser ->
-            _userProfile.emit(matrixUser)
+            _userProfile.emit(
+                matrixUser.copy(
+                    rawStatus = localUserStatus,
+                    displayedStatus = localUserStatus?.let { DisplayedStatus.UserSet(it) },
+                )
+            )
             // Also update our session storage
             sessionStore.updateUserProfile(
                 sessionId = sessionId.value,
@@ -474,6 +493,28 @@ class RustMatrixClient(
         withContext(sessionDispatcher) {
             runCatchingExceptions { innerClient.removeAvatar() }
         }
+
+    override suspend fun setUserStatus(status: UserStatus): Result<Unit> = withContext(sessionDispatcher) {
+        localUserStatus = status
+        _userProfile.emit(
+            _userProfile.value.copy(
+                rawStatus = status,
+                displayedStatus = DisplayedStatus.UserSet(status),
+            )
+        )
+        Result.success(Unit)
+    }
+
+    override suspend fun clearUserStatus(): Result<Unit> = withContext(sessionDispatcher) {
+        localUserStatus = null
+        _userProfile.emit(
+            _userProfile.value.copy(
+                rawStatus = null,
+                displayedStatus = null,
+            )
+        )
+        Result.success(Unit)
+    }
 
     override suspend fun joinRoom(roomId: RoomId): Result<RoomInfo?> = withContext(sessionDispatcher) {
         runCatchingExceptions {
@@ -801,6 +842,12 @@ class RustMatrixClient(
         }
     }
 
+    override suspend fun markAllRoomsAsRead(): Result<Unit> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.markAllRoomsAsRead()
+        }
+    }
+
     override suspend fun performDatabaseVacuum(): Result<Unit> = withContext(sessionDispatcher) {
         runCatchingExceptions {
             Timber.d("Performing database vacuuming for session $sessionId...")
@@ -824,26 +871,29 @@ class RustMatrixClient(
     private suspend fun getCacheSize(
         includeCryptoDb: Boolean = false,
     ): Long = withContext(sessionDispatcher) {
-        val sessionDirectory = sessionPathsProvider.provides(sessionId) ?: return@withContext 0L
-        val cacheSize = sessionDirectory.cacheDirectory.getSizeOfFiles()
+        val cacheSize = sessionPaths.cacheDirectory.getSizeOfFiles()
         if (includeCryptoDb) {
-            cacheSize + sessionDirectory.fileDirectory.getSizeOfFiles()
+            cacheSize + sessionPaths.fileDirectory.getSizeOfFiles()
         } else {
             cacheSize + listOf(
                 "matrix-sdk-state.sqlite3",
                 "matrix-sdk-state.sqlite3-shm",
                 "matrix-sdk-state.sqlite3-wal",
             ).map { fileName ->
-                File(sessionDirectory.fileDirectory, fileName)
+                File(sessionPaths.fileDirectory, fileName)
             }.sumOf { file ->
                 file.length()
-            }
+            } +
+                // The message search index. Like the state database above it lives in the file
+                // directory and so survives a cache clear, but it can grow without bound and must
+                // not be invisible in the storage figures. Returns 0 when the index is disabled.
+                File(sessionPaths.fileDirectory, SEARCH_INDEX_DIRECTORY).getSizeOfFiles()
         }
     }
 
     private suspend fun deleteSessionDirectory() = withContext(sessionDispatcher) {
         // Delete all the files for this session
-        sessionPathsProvider.provides(sessionId)?.deleteRecursively()
+        sessionPaths.deleteRecursively()
     }
 
     private fun scheduleDatabaseVacuum() {

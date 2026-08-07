@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -58,13 +57,11 @@ fun MatrixUserHeader(
             verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             // Name
-            Text(
-                modifier = Modifier.clipToBounds(),
-                text = matrixUser.getBestName(),
-                maxLines = 1,
+            DisplayNameWithStatus(
+                name = matrixUser.getBestName(),
+                status = matrixUser.displayedStatus,
+                nameColor = ElementTheme.colors.textPrimary,
                 style = ElementTheme.typography.fontHeadingMdRegular,
-                overflow = TextOverflow.Ellipsis,
-                color = ElementTheme.colors.textPrimary,
             )
             // Id
             if (matrixUser.displayName.isNullOrEmpty().not()) {

@@ -52,7 +52,7 @@ internal fun TimelineItemCallNotifyView(
     timelineRoomInfo: TimelineRoomInfo,
     event: TimelineItem.Event,
     content: TimelineItemRtcNotificationContent,
-    renderReadReceipts: Boolean,
+    state: RtcNotificationState.Tombstoned,
     isLastOutgoingMessage: Boolean,
     onLongClick: (TimelineItem.Event) -> Unit,
     onReadReceiptsClick: (TimelineItem.Event) -> Unit,
@@ -84,7 +84,7 @@ internal fun TimelineItemCallNotifyView(
 
             Text(
                 modifier = Modifier.weight(1f),
-                text = stringResource(getTextRes(timelineRoomInfo, content)),
+                text = stringResource(getTextRes(timelineRoomInfo, state)),
                 style = ElementTheme.typography.fontBodyMdRegular,
                 color = ElementTheme.colors.textSecondary,
                 maxLines = 1,
@@ -106,7 +106,6 @@ internal fun TimelineItemCallNotifyView(
                 isLastOutgoingMessage = isLastOutgoingMessage,
                 receipts = event.readReceiptState.receipts,
             ),
-            renderReadReceipts = renderReadReceipts,
             onReadReceiptsClick = { onReadReceiptsClick(event) },
             modifier = Modifier.padding(top = 4.dp),
         )
@@ -116,13 +115,13 @@ internal fun TimelineItemCallNotifyView(
 @StringRes
 private fun getTextRes(
     timelineRoomInfo: TimelineRoomInfo,
-    content: TimelineItemRtcNotificationContent
+    state: RtcNotificationState.Tombstoned
 ): Int = if (timelineRoomInfo.isDm) {
-    when (content.state) {
+    when (state) {
         is RtcNotificationState.Declined -> {
-            if (content.state.byMe) CommonStrings.common_call_you_declined else CommonStrings.common_call_declined
+            if (state.byMe) CommonStrings.common_call_you_declined else CommonStrings.common_call_declined
         }
-        RtcNotificationState.Started -> CommonStrings.common_call_started
+        else -> CommonStrings.common_call_started
     }
 } else {
     // In Rooms, do not show declined info.
@@ -146,8 +145,10 @@ private fun getIcon(
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemCallNotifyViewPreview() = ElementPreview {
-    val readReceiptState = aTimelineItemReadReceipts(
-        receipts = List(3) { aReadReceiptData(it) },
+    val readReceiptState = mutableListOf(
+        aTimelineItemReadReceipts(
+            receipts = List(3) { aReadReceiptData(it) },
+        )
     )
     Column(modifier = Modifier.padding(bottom = 16.dp)) {
         listOf(false, true).forEach { isDm ->
@@ -162,13 +163,11 @@ internal fun TimelineItemCallNotifyViewPreview() = ElementPreview {
                         timelineRoomInfo = aTimelineRoomInfo(isDm = isDm),
                         event = aTimelineItemEvent(
                             content = content,
-                            readReceiptState = readReceiptState,
+                            // Only display read receipts for the first item
+                            readReceiptState = readReceiptState.removeFirstOrNull() ?: aTimelineItemReadReceipts(),
                         ),
                         content = content,
-                        // Render read receipts for the first item only
-                        renderReadReceipts = !isDm &&
-                            callIntent == CallIntent.AUDIO &&
-                            state == RtcNotificationState.Started,
+                        state,
                         isLastOutgoingMessage = false,
                         onLongClick = {},
                         onReadReceiptsClick = {},

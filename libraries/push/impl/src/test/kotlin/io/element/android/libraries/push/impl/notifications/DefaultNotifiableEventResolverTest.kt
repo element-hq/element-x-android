@@ -59,16 +59,14 @@ import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEv
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
 import io.element.android.services.toolbox.test.systemclock.A_FAKE_TIMESTAMP
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
 @Suppress("LargeClass")
-@RunWith(RobolectricTestRunner::class)
-class DefaultNotifiableEventResolverTest {
+class DefaultNotifiableEventResolverTest : RobolectricTest() {
     @Test
     fun `resolve event no session`() = runTest {
         val sut = createDefaultNotifiableEventResolver(notificationService = null)
@@ -414,6 +412,27 @@ class DefaultNotifiableEventResolverTest {
         val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
         val expectedResult = ResolvedPushEvent.Event(
             aNotifiableMessageEvent(body = "Poll: A question")
+        )
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
+    }
+
+    @Test
+    fun `resolve live location share start`() = runTest {
+        val sut = createDefaultNotifiableEventResolver(
+            notificationResult = Result.success(
+                mapOf(
+                    AN_EVENT_ID to Result.success(aNotificationData(
+                        content = NotificationContent.StateEvent.BeaconInfo(
+                            senderId = A_USER_ID_2,
+                        ),
+                    ))
+                )
+            )
+        )
+        val request = aPushRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
+        val expectedResult = ResolvedPushEvent.Event(
+            aNotifiableMessageEvent(body = "Started sharing their live location")
         )
         assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
     }
@@ -831,6 +850,7 @@ class DefaultNotifiableEventResolverTest {
         testNoResults(NotificationContent.MessageLike.KeyVerificationDone)
         testNoResults(NotificationContent.MessageLike.ReactionContent(relatedEventId = AN_EVENT_ID_2.value))
         testNoResults(NotificationContent.MessageLike.Sticker)
+        testNoResults(NotificationContent.MessageLike.Beacon)
         testNoResults(NotificationContent.StateEvent.PolicyRuleRoom)
         testNoResults(NotificationContent.StateEvent.PolicyRuleServer)
         testNoResults(NotificationContent.StateEvent.PolicyRuleUser)

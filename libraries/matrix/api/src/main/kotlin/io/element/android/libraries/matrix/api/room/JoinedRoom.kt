@@ -212,4 +212,11 @@ interface JoinedRoom : BaseRoom {
      * @return Result indicating success or failure.
      */
     suspend fun sendLiveLocation(geoUri: String): Result<Unit>
+
+    /**
+     * Sets the display name of the current user within this room.
+     * This is different from the global setDisplayName which updates
+     * the user's display name across all of their rooms.
+     */
+    suspend fun setOwnMemberDisplayName(displayName: String): Result<Unit>
 }

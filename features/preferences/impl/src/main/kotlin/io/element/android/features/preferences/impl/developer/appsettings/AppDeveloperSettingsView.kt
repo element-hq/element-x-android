@@ -14,6 +14,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -22,6 +23,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.preferences.impl.R
 import io.element.android.features.preferences.impl.developer.tracing.LogLevelItem
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesView
+import io.element.android.libraries.androidutils.system.copyToClipboard
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceDropdown
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
@@ -33,6 +35,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.featureflag.ui.FeatureListView
 import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
 import io.element.android.libraries.matrix.api.tracing.TraceLogPack
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.toImmutableList
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -98,6 +101,41 @@ fun AppDeveloperSettingsView(
                 onClick = { error("This crash is a test.") }
             )
         }
+        GitCategory(
+            gitBranch = state.gitBranch,
+            gitSha = state.gitSha,
+        )
+    }
+}
+
+@Composable
+private fun GitCategory(
+    gitBranch: String,
+    gitSha: String,
+) {
+    PreferenceCategory(title = "Git") {
+        val toastMessage = stringResource(CommonStrings.common_copied_to_clipboard)
+        val context = LocalContext.current
+        ListItem(
+            headlineContent = { Text("Git branch") },
+            supportingContent = { Text(text = gitBranch) },
+            onClick = {
+                context.copyToClipboard(
+                    text = gitBranch,
+                    toastMessage = toastMessage,
+                )
+            }
+        )
+        ListItem(
+            headlineContent = { Text("Git SHA") },
+            supportingContent = { Text(text = gitSha) },
+            onClick = {
+                context.copyToClipboard(
+                    text = gitSha,
+                    toastMessage = toastMessage,
+                )
+            }
+        )
     }
 }
 

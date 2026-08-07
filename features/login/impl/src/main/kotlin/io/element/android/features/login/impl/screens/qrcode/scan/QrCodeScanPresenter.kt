@@ -17,7 +17,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
-import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
 import io.element.android.features.login.impl.qrcode.QrCodeLoginManager
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
@@ -39,7 +38,6 @@ class QrCodeScanPresenter(
     private val qrCodeLoginDataFactory: MatrixQrCodeLoginDataFactory,
     private val qrCodeLoginManager: QrCodeLoginManager,
     private val coroutineDispatchers: CoroutineDispatchers,
-    private val defaultAccountProviderAccessControl: DefaultAccountProviderAccessControl,
 ) : Presenter<QrCodeScanState> {
     private var isScanning by mutableStateOf(true)
 
@@ -97,13 +95,6 @@ class QrCodeScanPresenter(
                 val data = qrCodeLoginDataFactory.parseQrCodeData(code).onFailure {
                     Timber.e(it, "Error parsing QR code data")
                 }.getOrThrow()
-                val serverName = data.serverName()
-                if (serverName != null) {
-                    defaultAccountProviderAccessControl.assertIsAllowedToConnectToAccountProvider(
-                        title = serverName,
-                        accountProviderUrl = serverName,
-                    )
-                }
                 data
             }.runCatchingUpdatingState(codeScannedAction)
         }.invokeOnCompletion {

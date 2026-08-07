@@ -10,13 +10,11 @@ package io.element.android.features.migration.impl.migrations
 
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class AppMigration04Test {
+class AppMigration04Test : RobolectricTest() {
     @Test
     fun `test migration`() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().context

@@ -17,6 +17,7 @@ import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.preferences.impl.developer.appsettings.anAppDeveloperSettingsState
 import io.element.android.features.preferences.impl.tasks.FakeClearCacheUseCase
 import io.element.android.features.preferences.impl.tasks.FakeComputeCacheSizeUseCase
+import io.element.android.features.preferences.impl.tasks.FakeMarkAllRoomsAsRead
 import io.element.android.features.preferences.impl.tasks.VacuumStoresUseCase
 import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
 import io.element.android.libraries.architecture.AsyncAction
@@ -24,7 +25,9 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.data.megaBytes
 import io.element.android.libraries.matrix.api.analytics.GetDatabaseSizesUseCase
 import io.element.android.libraries.matrix.api.analytics.SdkStoreSizes
+import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -56,6 +59,7 @@ class DeveloperSettingsPresenterTest {
                 assertThat(state.cacheSize).isEqualTo(AsyncData.Uninitialized)
                 assertThat(state.isEnterpriseBuild).isFalse()
                 assertThat(state.showColorPicker).isFalse()
+                assertThat(state.deviceId).isEqualTo(A_DEVICE_ID)
             }
             awaitItem().also { state ->
                 assertThat(state.cacheSize.isLoading()).isTrue()
@@ -128,6 +132,28 @@ class DeveloperSettingsPresenterTest {
     }
 
     @Test
+    fun `present - confirm mark all rooms as read`() = runTest {
+        val markAllRoomsAsRead = FakeMarkAllRoomsAsRead()
+        val presenter = createDeveloperSettingsPresenter(markAllRoomsAsRead = markAllRoomsAsRead)
+        presenter.test {
+            skipItems(2)
+            val initialState = awaitItem()
+            initialState.eventSink(DeveloperSettingsEvents.MarkAllRoomsAsRead(needsConfirmation = true))
+            val stateWithConfirmation = awaitItem()
+            assertThat(stateWithConfirmation.markAllRoomsAsReadAction.isConfirming()).isTrue()
+            stateWithConfirmation.eventSink(DeveloperSettingsEvents.MarkAllRoomsAsRead(needsConfirmation = false))
+            awaitItem().also { state ->
+                assertThat(state.markAllRoomsAsReadAction.isConfirming()).isFalse()
+                assertThat(state.markAllRoomsAsReadAction).isInstanceOf(AsyncAction.Loading::class.java)
+            }
+            awaitItem().also { state ->
+                assertThat(state.markAllRoomsAsReadAction).isInstanceOf(AsyncAction.Success::class.java)
+                assertThat(markAllRoomsAsRead.invokeCallCount).isEqualTo(1)
+            }
+        }
+    }
+
+    @Test
     fun `present - VacuumStores action invokes the VacuumStoresUseCase`() = runTest {
         var vacuumCalled = false
         val presenter = createDeveloperSettingsPresenter(
@@ -146,21 +172,25 @@ class DeveloperSettingsPresenterTest {
 
     private fun createDeveloperSettingsPresenter(
         sessionId: SessionId = A_SESSION_ID,
+        deviceId: DeviceId = A_DEVICE_ID,
         cacheSizeUseCase: FakeComputeCacheSizeUseCase = FakeComputeCacheSizeUseCase(),
         clearCacheUseCase: FakeClearCacheUseCase = FakeClearCacheUseCase(),
         enterpriseService: EnterpriseService = FakeEnterpriseService(),
         vacuumStoresUseCase: VacuumStoresUseCase = VacuumStoresUseCase {},
         databaseSizesUseCase: GetDatabaseSizesUseCase = GetDatabaseSizesUseCase { Result.success(SdkStoreSizes(null, null, null, null)) },
+        markAllRoomsAsRead: FakeMarkAllRoomsAsRead = FakeMarkAllRoomsAsRead(),
     ): DeveloperSettingsPresenter {
         return DeveloperSettingsPresenter(
             appDeveloperSettingsPresenter = { anAppDeveloperSettingsState() },
             sessionId = sessionId,
+            deviceId = deviceId,
             computeCacheSizeUseCase = cacheSizeUseCase,
             clearCacheUseCase = clearCacheUseCase,
             enterpriseService = enterpriseService,
             vacuumStoresUseCase = vacuumStoresUseCase,
             databaseSizesUseCase = databaseSizesUseCase,
             fileSizeFormatter = FakeFileSizeFormatter(),
+            markAllRoomsAsRead = markAllRoomsAsRead,
         )
     }
 }

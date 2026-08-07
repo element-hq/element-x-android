@@ -11,7 +11,6 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.test.auth.FAKE_REDIRECT_URL
 import io.element.android.libraries.matrix.test.auth.FakeOAuthRedirectUrlProvider
 import io.element.android.libraries.oauth.api.OAuthAction
-import org.junit.Assert
 import org.junit.Test
 
 class DefaultOAuthUrlParserTest {
@@ -45,9 +44,7 @@ class DefaultOAuthUrlParserTest {
     fun `test unknown url`() {
         val sut = createDefaultOAuthUrlParser()
         val anUnknownUrl = "$FAKE_REDIRECT_URL?state=IFF1UETGye2ZA8pO&goat=y6X1GZeqA3xxOWcTeShgv8nkgFJXyzWB"
-        Assert.assertThrows(IllegalStateException::class.java) {
-            assertThat(sut.parse(anUnknownUrl))
-        }
+        assertThat(sut.parse(anUnknownUrl)).isNull()
     }
 
     private fun createDefaultOAuthUrlParser(): DefaultOAuthUrlParser {

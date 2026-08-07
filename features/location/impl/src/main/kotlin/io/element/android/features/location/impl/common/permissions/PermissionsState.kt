@@ -11,6 +11,7 @@ package io.element.android.features.location.impl.common.permissions
 data class PermissionsState(
     val permissions: Permissions,
     val shouldShowRationale: Boolean,
+    val permissionsAlreadyRequested: Boolean,
     val eventSink: (PermissionsEvents) -> Unit,
 ) {
     sealed interface Permissions {

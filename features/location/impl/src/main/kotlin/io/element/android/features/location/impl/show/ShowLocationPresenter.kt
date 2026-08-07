@@ -10,12 +10,14 @@ package io.element.android.features.location.impl.show
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
@@ -23,6 +25,7 @@ import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.ShowLocationMode
 import io.element.android.features.location.api.live.ActiveLiveLocationShareManager
+import io.element.android.features.location.api.live.isCurrentlySharing
 import io.element.android.features.location.impl.common.LocationConstraintsCheck
 import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.SendLiveLocationPermissions
@@ -33,6 +36,8 @@ import io.element.android.features.location.impl.common.permissions.PermissionsP
 import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.features.location.impl.common.toDialogState
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
+import io.element.android.features.location.impl.common.userlocation.UserLocationState
+import io.element.android.features.location.impl.common.userlocation.asMapLibreLocation
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.mapState
@@ -52,8 +57,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
-@AssistedInject
-class ShowLocationPresenter(
+@AssistedInject class ShowLocationPresenter(
     @Assisted private val mode: ShowLocationMode,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
     private val locationActions: LocationActions,
@@ -63,9 +67,9 @@ class ShowLocationPresenter(
     private val client: MatrixClient,
     private val joinedRoom: JoinedRoom,
     private val liveLocationShareManager: ActiveLiveLocationShareManager,
+    private val userLocationStateFactory: UserLocationState.Factory,
 ) : Presenter<ShowLocationState> {
-    @AssistedFactory
-    fun interface Factory {
+    @AssistedFactory fun interface Factory {
         fun create(mode: ShowLocationMode): ShowLocationPresenter
     }
 
@@ -86,10 +90,22 @@ class ShowLocationPresenter(
             value = AsyncData.Success(client.getMapStyleUrl().getOrNull())
         }
 
-        LaunchedEffect(permissionsState.permissions) {
-            if (permissionsState.isAnyGranted) {
-                dialogState = LocationConstraintsDialogState.None
+        fun checkLocationConstraints() {
+            val locationConstraints = checkLocationConstraints(
+                permissionsState = permissionsState,
+                locationActions = locationActions,
+                // No need to check SendLiveLocationPermissions here
+                sendLiveLocationPermissions = SendLiveLocationPermissions.GRANTED
+            )
+            if (locationConstraints is LocationConstraintsCheck.PermissionShouldBeRequested) {
+                permissionsState.eventSink(PermissionsEvents.RequestPermissions)
             }
+            isTrackMyLocation = locationConstraints is LocationConstraintsCheck.Success
+            dialogState = locationConstraints.toDialogState()
+        }
+
+        LaunchedEffect(permissionsState) {
+            checkLocationConstraints()
         }
 
         fun handleEvent(event: ShowLocationEvent) {
@@ -99,9 +115,7 @@ class ShowLocationPresenter(
                 }
                 is ShowLocationEvent.TrackMyLocation -> {
                     if (event.enabled) {
-                        val locationConstraints = checkLocationConstraints(permissionsState, locationActions, SendLiveLocationPermissions.GRANTED)
-                        isTrackMyLocation = locationConstraints is LocationConstraintsCheck.Success
-                        dialogState = locationConstraints.toDialogState()
+                        checkLocationConstraints()
                     } else {
                         isTrackMyLocation = false
                     }
@@ -155,55 +169,66 @@ class ShowLocationPresenter(
                     val liveLocationSharesFlow = joinedRoom.subscribeToLiveLocationShares()
                     val membersStateFlow = joinedRoom.membersStateFlow.mapState { it.joinedRoomMembers() }
                     combine(liveLocationSharesFlow, membersStateFlow) { liveShares, members ->
-                        liveShares
-                            .sortedWith(comparator)
-                            .mapNotNull { share ->
-                                val lastLocation = share.lastLocation ?: return@mapNotNull null
-                                val location = Location.fromGeoUri(lastLocation.geoUri) ?: return@mapNotNull null
-                                val member = members.find { it.userId == share.userId }
-                                val displayName = member?.getBestName() ?: share.userId.value
-                                val avatarUrl = member?.avatarUrl
-                                val relativeTime = dateFormatter.format(timestamp = lastLocation.timestamp, mode = DateFormatterMode.Full, useRelative = true)
-                                val formattedTimestamp = stringProvider.getString(
-                                    CommonStrings.screen_static_location_sheet_timestamp_description,
-                                    relativeTime
-                                )
-                                LocationShareItem(
-                                    userId = share.userId,
-                                    displayName = displayName,
-                                    avatarData = AvatarData(
-                                        id = share.userId.value,
-                                        name = displayName,
-                                        url = avatarUrl,
-                                        size = AvatarSize.UserListItem,
-                                    ),
-                                    formattedTimestamp = formattedTimestamp,
-                                    location = location,
-                                    isLive = true,
-                                    assetType = lastLocation.assetType,
-                                    isOwnUser = share.userId == joinedRoom.sessionId
-                                )
-                            }
-                            .toImmutableList()
+                        liveShares.sortedWith(comparator).mapNotNull { share ->
+                            val lastLocation = share.lastLocation ?: return@mapNotNull null
+                            val location = Location.fromGeoUri(lastLocation.geoUri) ?: return@mapNotNull null
+                            val member = members.find { it.userId == share.userId }
+                            val displayName = member?.getBestName() ?: share.userId.value
+                            val avatarUrl = member?.avatarUrl
+                            val relativeTime = dateFormatter.format(timestamp = lastLocation.timestamp, mode = DateFormatterMode.Full, useRelative = true)
+                            val formattedTimestamp = stringProvider.getString(
+                                CommonStrings.screen_static_location_sheet_timestamp_description,
+                                relativeTime
+                            )
+                            LocationShareItem(
+                                userId = share.userId,
+                                displayName = displayName,
+                                avatarData = AvatarData(
+                                    id = share.userId.value,
+                                    name = displayName,
+                                    url = avatarUrl,
+                                    size = AvatarSize.UserListItem,
+                                ),
+                                formattedTimestamp = formattedTimestamp,
+                                location = location,
+                                isLive = true,
+                                assetType = lastLocation.assetType,
+                                isOwnUser = share.userId == joinedRoom.sessionId
+                            )
+                        }.toImmutableList()
                     }.collect { value = it }
                 }.value
             }
         }
 
-        val focusedLocation = when (mode) {
-            is ShowLocationMode.Static -> locationShares.firstOrNull()
-            is ShowLocationMode.Live -> locationShares.firstOrNull { it.userId == mode.senderId }
+        val updatedLocationShares by rememberUpdatedState(locationShares)
+        val focusedLocation by remember {
+            derivedStateOf {
+                when (mode) {
+                    is ShowLocationMode.Static -> updatedLocationShares.firstOrNull()
+                    is ShowLocationMode.Live -> updatedLocationShares.firstOrNull { it.userId == mode.senderId }
+                }
+            }
         }
-
+        val isCurrentlySharing by liveLocationShareManager.isCurrentlySharing(roomId = joinedRoom.roomId).collectAsState()
+        val hideUserLocationPuck = mode is ShowLocationMode.Live && isCurrentlySharing
+        val userLocationState = if (hideUserLocationPuck) {
+            // When sharing with this device, use the user LocationShareItem as source of data instead of the device.
+            val ownLocationShare by remember { derivedStateOf { updatedLocationShares.find { it.isOwnUser }?.location?.asMapLibreLocation() } }
+            UserLocationState(ownLocationShare)
+        } else {
+            userLocationStateFactory.create(hasLocationPermission = permissionsState.isAnyGranted)
+        }
         return ShowLocationState(
             customMapStyleUrl = customMapStyleUrl,
             dialogState = dialogState,
             locationShares = locationShares,
             focusedLocation = focusedLocation,
-            hasLocationPermission = permissionsState.isAnyGranted,
             isTrackMyLocation = isTrackMyLocation,
+            userLocationState = userLocationState,
             isLive = mode is ShowLocationMode.Live,
             appName = appName,
+            hideUserLocationPuck = hideUserLocationPuck,
             eventSink = ::handleEvent,
         )
     }

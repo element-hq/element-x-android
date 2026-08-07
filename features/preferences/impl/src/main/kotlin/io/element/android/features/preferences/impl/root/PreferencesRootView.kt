@@ -10,9 +10,9 @@ package io.element.android.features.preferences.impl.root
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -23,6 +23,8 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.preferences.impl.R
 import io.element.android.features.preferences.impl.user.UserPreferences
+import io.element.android.features.preferences.impl.userstatus.UserStatusState
+import io.element.android.features.preferences.impl.userstatus.UserStatusView
 import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.list.ListItemContent
@@ -38,7 +40,8 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
-import io.element.android.libraries.matrix.api.core.DeviceId
+import io.element.android.libraries.emoji.api.picker.EmojiPickerRenderer
+import io.element.android.libraries.emoji.api.picker.NoOpEmojiPickerRenderer
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -46,6 +49,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun PreferencesRootView(
     state: PreferencesRootState,
+    emojiPickerRenderer: EmojiPickerRenderer,
     onBackClick: () -> Unit,
     onAddAccountClick: () -> Unit,
     onSecureBackupClick: () -> Unit,
@@ -85,10 +89,14 @@ fun PreferencesRootView(
                 state = state,
                 onAddAccountClick = onAddAccountClick,
             )
-        } else {
-            HorizontalDivider()
         }
-        // User status will be added here
+        if (state.userStatusState != null) {
+            UserStatusSection(
+                userStatusState = state.userStatusState,
+                emojiPickerRenderer = emojiPickerRenderer,
+                showTopDivider = !state.isMultiAccountEnabled,
+            )
+        }
         // 'Account' section
         ManageAccountSection(
             state = state,
@@ -119,7 +127,6 @@ fun PreferencesRootView(
         // Version
         Footer(
             version = state.version,
-            deviceId = state.deviceId,
             onClick = if (!state.showDeveloperSettings) {
                 { state.eventSink(PreferencesRootEvent.OnVersionInfoClick) }
             } else {
@@ -127,6 +134,29 @@ fun PreferencesRootView(
             }
         )
     }
+}
+
+@Composable
+private fun ColumnScope.UserStatusSection(
+    userStatusState: UserStatusState,
+    emojiPickerRenderer: EmojiPickerRenderer,
+    showTopDivider: Boolean,
+) {
+    if (showTopDivider) {
+        HorizontalDivider(
+            thickness = 8.dp,
+            color = ElementTheme.colors.bgSubtleSecondary,
+        )
+    }
+    UserStatusView(
+        state = userStatusState,
+        emojiPickerRenderer = emojiPickerRenderer,
+        modifier = Modifier.fillMaxWidth(),
+    )
+    HorizontalDivider(
+        thickness = 1.dp,
+        color = ElementTheme.colors.bgSubtleSecondary,
+    )
 }
 
 @Composable
@@ -293,25 +323,15 @@ private fun ColumnScope.GeneralSection(
 @Composable
 private fun ColumnScope.Footer(
     version: String,
-    deviceId: DeviceId?,
     onClick: (() -> Unit)?,
 ) {
-    val text = remember(version, deviceId) {
-        buildString {
-            append(version)
-            if (deviceId != null) {
-                append("\n")
-                append(deviceId)
-            }
-        }
-    }
     Text(
         modifier = Modifier
             .align(Alignment.CenterHorizontally)
             .clickable(enabled = onClick != null, onClick = onClick ?: {})
             .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 24.dp),
         textAlign = TextAlign.Center,
-        text = text,
+        text = version,
         style = ElementTheme.typography.fontBodySmRegular,
         color = ElementTheme.colors.textSecondary,
     )
@@ -345,6 +365,7 @@ internal fun PreferencesRootViewDarkPreview(@PreviewParameter(PreferencesRootSta
 private fun ContentToPreview(state: PreferencesRootState) {
     PreferencesRootView(
         state = state,
+        emojiPickerRenderer = NoOpEmojiPickerRenderer,
         onBackClick = {},
         onAddAccountClick = {},
         onOpenAnalytics = {},
