@@ -52,8 +52,7 @@ data class PollFormState(
             return this
         }
 
-        val newAnswers = (answers + "").toImmutableList()
-        return copy(answers = newAnswers)
+        return copy(answers = (answers + "").toImmutableList())
     }
 
     /**
