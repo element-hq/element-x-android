@@ -60,6 +60,55 @@ class ToHtmlDocumentTest : RobolectricTest() {
     }
 
     @Test
+    fun `toHtmlDocument - a s tag is kept and normalised to del`() {
+        val body = FormattedBody(
+            format = MessageFormat.HTML,
+            body = "<s>gone</s>"
+        )
+
+        val document = body.toHtmlDocument(permalinkParser = FakePermalinkParser())
+        assertThat(document?.selectFirst("del")?.text()).isEqualTo("gone")
+        assertThat(document?.text()).isEqualTo("gone")
+    }
+
+    @Test
+    fun `toHtmlDocument - a strike tag is kept and normalised to del`() {
+        val body = FormattedBody(
+            format = MessageFormat.HTML,
+            body = "<strike>gone</strike>"
+        )
+
+        val document = body.toHtmlDocument(permalinkParser = FakePermalinkParser())
+        assertThat(document?.selectFirst("del")?.text()).isEqualTo("gone")
+        assertThat(document?.text()).isEqualTo("gone")
+    }
+
+    @Test
+    fun `toHtmlDocument - a del tag is left as is`() {
+        val body = FormattedBody(
+            format = MessageFormat.HTML,
+            body = "<del>gone</del>"
+        )
+
+        val document = body.toHtmlDocument(permalinkParser = FakePermalinkParser())
+        assertThat(document?.selectFirst("del")?.text()).isEqualTo("gone")
+        assertThat(document?.text()).isEqualTo("gone")
+    }
+
+    @Test
+    fun `toHtmlDocument - a s tag nested in another tag is normalised too`() {
+        val body = FormattedBody(
+            format = MessageFormat.HTML,
+            body = "<p>Hello <s>world</s></p>"
+        )
+
+        val document = body.toHtmlDocument(permalinkParser = FakePermalinkParser())
+        assertThat(document?.select("s, strike")).isEmpty()
+        assertThat(document?.selectFirst("del")?.text()).isEqualTo("world")
+        assertThat(document?.text()).isEqualTo("Hello world")
+    }
+
+    @Test
     fun `toHtmlDocument - if a mention is found without an '@' prefix, it will be added`() {
         val body = FormattedBody(
             format = MessageFormat.HTML,
