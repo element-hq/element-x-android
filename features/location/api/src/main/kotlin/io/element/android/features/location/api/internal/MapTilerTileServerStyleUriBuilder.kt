@@ -29,14 +29,15 @@ internal class MapTilerTileServerStyleUriBuilder(
         customMapStyleUrl: String?,
         darkMode: Boolean,
     ): String {
-        return buildString {
-            if (customMapStyleUrl.isNullOrBlank()) {
-                val mapId = if (darkMode) darkMapId else lightMapId
-                append("$baseUrl/$mapId/style.json")
-            } else {
-                append(customMapStyleUrl)
-            }
-            append("?key=$apiKey")
+        return if (customMapStyleUrl.isNullOrBlank()) {
+            val mapId = if (darkMode) darkMapId else lightMapId
+            "$baseUrl/$mapId/style.json?key=$apiKey"
+        } else {
+            // A custom style url comes from the homeserver .well-known and is expected to be complete:
+            // it already carries the operator's own credentials, if any. Appending our api key to it
+            // adds a second query string and breaks the request.
+            // See https://github.com/element-hq/element-x-android/issues/7289
+            customMapStyleUrl
         }
     }
 }

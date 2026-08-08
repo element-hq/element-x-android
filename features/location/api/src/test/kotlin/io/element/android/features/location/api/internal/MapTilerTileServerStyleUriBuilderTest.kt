@@ -46,7 +46,7 @@ class MapTilerTileServerStyleUriBuilderTest {
                 customMapStyleUrl = "https://custom.url/style.json",
                 darkMode = false,
             )
-        ).isEqualTo("https://custom.url/style.json?key=anApiKey")
+        ).isEqualTo("https://custom.url/style.json")
     }
 
     @Test
@@ -56,6 +56,36 @@ class MapTilerTileServerStyleUriBuilderTest {
                 customMapStyleUrl = "https://custom.url/style.json",
                 darkMode = true,
             )
-        ).isEqualTo("https://custom.url/style.json?key=anApiKey")
+        ).isEqualTo("https://custom.url/style.json")
+    }
+
+    @Test
+    fun `custom map uri with its own api key is not altered`() {
+        assertThat(
+            builder.build(
+                customMapStyleUrl = "https://api.maptiler.com/maps/streets-v2/style.json?key=anOperatorKey",
+                darkMode = false,
+            )
+        ).isEqualTo("https://api.maptiler.com/maps/streets-v2/style.json?key=anOperatorKey")
+    }
+
+    @Test
+    fun `custom map uri with an existing query is not altered`() {
+        assertThat(
+            builder.build(
+                customMapStyleUrl = "https://self.hosted/style.json?foo=bar",
+                darkMode = true,
+            )
+        ).isEqualTo("https://self.hosted/style.json?foo=bar")
+    }
+
+    @Test
+    fun `blank custom map uri falls back to the built-in style`() {
+        assertThat(
+            builder.build(
+                customMapStyleUrl = "  ",
+                darkMode = false,
+            )
+        ).isEqualTo("https://base.url/aLightMapId/style.json?key=anApiKey")
     }
 }
