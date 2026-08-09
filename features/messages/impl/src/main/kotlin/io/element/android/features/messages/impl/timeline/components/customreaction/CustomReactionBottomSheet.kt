@@ -8,11 +8,15 @@
 
 package io.element.android.features.messages.impl.timeline.components.customreaction
 
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import io.element.android.emojibasebindings.Emoji
@@ -22,7 +26,7 @@ import io.element.android.libraries.designsystem.theme.components.hide
 import io.element.android.libraries.emoji.api.picker.EmojiPickerRenderer
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun CustomReactionBottomSheet(
     state: CustomReactionState,
@@ -54,6 +58,12 @@ fun CustomReactionBottomSheet(
                 modifier = modifier,
                 scrollable = false,
             ) {
+                val isImeVisible = WindowInsets.isImeVisible
+                LaunchedEffect(isImeVisible) {
+                    if (isImeVisible) {
+                        sheetState.expand()
+                    }
+                }
                 emojiPickerRenderer.Render(
                     state = state.target.emojiPickerState,
                     onSelectEmoji = ::onEmojiSelectedDismiss,
