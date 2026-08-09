@@ -38,7 +38,6 @@ import io.element.android.libraries.matrix.ui.messages.reply.map
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
-/** Events further apart than this are never grouped together, even when sent by the same person. */
 private const val GROUPING_TIMEOUT_MS = 5 * 60 * 1000L
 
 @AssistedInject
@@ -224,10 +223,6 @@ class TimelineItemEventFactory(
         val previousSender = prevTimelineItem?.event?.sender
         val nextSender = nextTimelineItem?.event?.sender
 
-        // Two events from the same sender are only grouped together if they were sent within
-        // GROUPING_TIMEOUT_MS of each other. The delta is symmetric between a pair of neighbours, so
-        // both items always agree on where the group is split.
-        // See https://github.com/element-hq/element-x-android/issues/4757
         val previousIsGroupable = prevTimelineItem?.let {
             it.canBeDisplayedInBubbleBlock() &&
                 currentTimelineItem.event.timestamp - it.event.timestamp <= GROUPING_TIMEOUT_MS

@@ -106,8 +106,6 @@ class TimelineItemsFactoryTest {
                 roomMembers = emptyList(),
                 renderReadReceipts = false,
             )
-            // The factory emits the timeline newest-first; reverse it so the assertions below read
-            // in the same chronological order as the timestamps that were fed in.
             positions = awaitItem()
                 .filterIsInstance<TimelineItem.Event>()
                 .map { it.groupPosition }
