@@ -135,7 +135,7 @@ class DefaultRoomLatestEventFormatter(
         val message = when (val messageType: MessageType = type) {
             // Doesn't need a prefix
             is EmoteMessageType -> {
-                return "* $senderDisambiguatedDisplayName ${messageType.body}"
+                return "* ${senderDisambiguatedDisplayName.bidiIsolate()} ${messageType.body}"
             }
             is TextMessageType -> {
                 messageType.toPlainText(permalinkParser)
@@ -189,7 +189,9 @@ class DefaultRoomLatestEventFormatter(
             if (isOutgoing) {
                 sp.getString(CommonStrings.common_you)
             } else {
-                senderDisambiguatedDisplayName
+                // The display name is user-provided and may be right-to-left, which would otherwise
+                // reorder the whole preview line.
+                senderDisambiguatedDisplayName.bidiIsolate()
             }
         )
     }

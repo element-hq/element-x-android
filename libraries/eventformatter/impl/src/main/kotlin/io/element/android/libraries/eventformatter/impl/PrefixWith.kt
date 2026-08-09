@@ -14,6 +14,16 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 
+/**
+ * Wraps the string between Unicode isolate characters (FSI … PDI) so its own direction cannot
+ * reorder the text around it.
+ *
+ * A room list preview is rendered as a single paragraph, so a right-to-left display name otherwise
+ * flips the whole line — the message body ends up on the wrong side of the name and the trailing
+ * colon jumps to the front. See https://github.com/element-hq/element-x-android/issues/3338
+ */
+internal fun String.bidiIsolate(): String = "⁨$this⁩"
+
 internal fun CharSequence.prefixWith(prefix: String): AnnotatedString {
     return buildAnnotatedString {
         withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
