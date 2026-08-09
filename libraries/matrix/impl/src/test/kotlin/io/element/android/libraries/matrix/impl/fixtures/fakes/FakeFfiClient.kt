@@ -55,6 +55,8 @@ class FakeFfiClient(
     private val getStoreSizesResult: () -> StoreSizes = { lambdaError() },
     private val createRoomResult: (CreateRoomParameters) -> String = { lambdaError() },
     private val homeserverCapabilities: HomeserverCapabilities = FakeFfiHomeserverCapabilities(),
+    private val accountDataResult: (String) -> String? = { lambdaError() },
+    private val setAccountDataResult: (String, String) -> Unit = { _, _ -> lambdaError() },
     private val closeResult: () -> Unit = {},
 ) : Client(NoHandle) {
     override fun userId(): String = userId
@@ -112,6 +114,14 @@ class FakeFfiClient(
 
     override fun homeserverCapabilities(): HomeserverCapabilities {
         return homeserverCapabilities
+    }
+
+    override suspend fun accountData(eventType: String): String? = simulateLongTask {
+        accountDataResult(eventType)
+    }
+
+    override suspend fun setAccountData(eventType: String, content: String) = simulateLongTask {
+        setAccountDataResult(eventType, content)
     }
 
     override fun close() = closeResult()
