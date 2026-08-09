@@ -39,6 +39,16 @@ class ToPlainTextTest : RobolectricTest() {
     }
 
     @Test
+    fun `FormattedBody toPlainText - keeps a heading on a single preview line`() {
+        val formattedBody = FormattedBody(
+            format = MessageFormat.HTML,
+            body = "<h2>Header</h2>body"
+        )
+
+        assertThat(formattedBody.toPlainText(permalinkParser = FakePermalinkParser())).isEqualTo("Header body")
+    }
+
+    @Test
     fun `FormattedBody toPlainText - returns a plain text version of the HTML body`() {
         val formattedBody = FormattedBody(
             format = MessageFormat.HTML,

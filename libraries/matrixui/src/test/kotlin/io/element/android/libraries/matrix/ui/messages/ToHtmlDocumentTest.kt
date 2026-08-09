@@ -45,6 +45,34 @@ class ToHtmlDocumentTest : RobolectricTest() {
     }
 
     @Test
+    fun `toHtmlDocument - renders heading tags as bold paragraphs`() {
+        val body = FormattedBody(
+            format = MessageFormat.HTML,
+            body = "<h4>Title</h4>submitted by someone"
+        )
+
+        val document = body.toHtmlDocument(permalinkParser = FakePermalinkParser())
+
+        assertThat(document?.select("h1, h2, h3, h4, h5, h6")).isEmpty()
+        assertThat(document?.body()?.html()).contains("<p><b>Title</b></p>")
+        assertThat(document?.text()).isEqualTo("Title submitted by someone")
+    }
+
+    @Test
+    fun `toHtmlDocument - keeps the text of every heading level`() {
+        val body = FormattedBody(
+            format = MessageFormat.HTML,
+            body = "<h1>One</h1><h2>Two</h2><h3>Three</h3><h4>Four</h4><h5>Five</h5><h6>Six</h6>"
+        )
+
+        val document = body.toHtmlDocument(permalinkParser = FakePermalinkParser())
+
+        assertThat(document?.select("h1, h2, h3, h4, h5, h6")).isEmpty()
+        assertThat(document?.select("p")).hasSize(6)
+        assertThat(document?.text()).isEqualTo("One Two Three Four Five Six")
+    }
+
+    @Test
     fun `toHtmlDocument - returns a Document with a prefix if provided`() {
         val body = FormattedBody(
             format = MessageFormat.HTML,
