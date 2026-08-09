@@ -284,10 +284,6 @@ class DefaultNotifiableEventResolver(
                 // Note: this case will be handled below
                 val redactedEventId = content.redactedEventId
                 if (redactedEventId == null) {
-                    // Treat it as filtered out rather than as an error: an unknown error is turned
-                    // into a visible "you have N notifications" fallback plus a battery banner, so a
-                    // redaction we cannot map would notify about a message that was just deleted.
-                    // See https://github.com/element-hq/element-x-android/issues/5766
                     Timber.tag(loggerTag.value).w("Ignoring redaction notification with no redactedEventId.")
                     throw NotificationResolverException.EventFilteredOut
                 } else {
