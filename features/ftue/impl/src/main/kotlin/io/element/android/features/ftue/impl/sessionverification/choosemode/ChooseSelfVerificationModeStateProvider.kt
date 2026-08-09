@@ -11,6 +11,8 @@ package io.element.android.features.ftue.impl.sessionverification.choosemode
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.components.aMatrixUser
 
 class ChooseSelfVerificationModeStateProvider :
     PreviewParameterProvider<ChooseSelfVerificationModeState> {
@@ -38,12 +40,17 @@ class ChooseSelfVerificationModeStateProvider :
         aChooseSelfVerificationModeState(
             buttonsState = AsyncData.Loading(),
         ),
+        aChooseSelfVerificationModeState(
+            currentUser = aMatrixUser(id = "@alice:server.org", displayName = null),
+        ),
     )
 }
 
 fun aChooseSelfVerificationModeState(
+    currentUser: MatrixUser = aMatrixUser(),
     buttonsState: AsyncData<ChooseSelfVerificationModeState.ButtonsState> = AsyncData.Success(aButtonsState()),
 ) = ChooseSelfVerificationModeState(
+    currentUser = currentUser,
     buttonsState = buttonsState,
     directLogoutState = aDirectLogoutState(),
     eventSink = {},

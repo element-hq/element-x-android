@@ -15,6 +15,11 @@ import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
+import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.test.AN_AVATAR_URL
+import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.A_USER_NAME
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -111,6 +116,19 @@ class ChooseSessionVerificationModePresenterTest {
     }
 
     @Test
+    fun `present - exposes the current user profile`() = runTest {
+        val matrixClient = FakeMatrixClient()
+        val presenter = createPresenter(matrixClient = matrixClient)
+        presenter.test {
+            assertThat(awaitItem().currentUser).isEqualTo(MatrixUser(A_USER_ID, A_USER_NAME, AN_AVATAR_URL))
+            val updatedUser = MatrixUser(A_USER_ID, "A new display name", AN_AVATAR_URL)
+            matrixClient.givenGetProfileResult(A_USER_ID, Result.success(updatedUser))
+            matrixClient.getUserProfile()
+            assertThat(awaitItem().currentUser).isEqualTo(updatedUser)
+        }
+    }
+
+    @Test
     fun `sing out action triggers a direct logout`() = runTest {
         val logoutEventRecorder = lambdaRecorder<DirectLogoutEvents, Unit> {}
         val logoutPresenter = Presenter<DirectLogoutState> {
@@ -126,9 +144,11 @@ class ChooseSessionVerificationModePresenterTest {
     }
 
     private fun createPresenter(
+        matrixClient: FakeMatrixClient = FakeMatrixClient(),
         encryptionService: FakeEncryptionService = FakeEncryptionService(),
         directLogoutPresenter: Presenter<DirectLogoutState> = Presenter<DirectLogoutState> { aDirectLogoutState() }
     ) = ChooseSelfVerificationModePresenter(
+        matrixClient = matrixClient,
         encryptionService = encryptionService,
         directLogoutPresenter = directLogoutPresenter,
     )

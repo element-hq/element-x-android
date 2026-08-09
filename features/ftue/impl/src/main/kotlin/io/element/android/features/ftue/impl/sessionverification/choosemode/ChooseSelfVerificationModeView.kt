@@ -12,16 +12,21 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -33,6 +38,9 @@ import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMo
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.BigIcon
+import io.element.android.libraries.designsystem.components.avatar.Avatar
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -40,6 +48,9 @@ import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.model.getAvatarData
+import io.element.android.libraries.matrix.ui.model.getBestName
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,12 +81,17 @@ fun ChooseSelfVerificationModeView(
             )
         },
         header = {
-            IconTitleSubtitleMolecule(
+            Column(
                 modifier = Modifier.padding(bottom = 16.dp),
-                iconStyle = BigIcon.Style.Default(CompoundIcons.LockSolid()),
-                title = stringResource(id = R.string.screen_identity_confirmation_title),
-                subTitle = stringResource(id = R.string.screen_identity_confirmation_subtitle)
-            )
+                verticalArrangement = Arrangement.spacedBy(24.dp),
+            ) {
+                IconTitleSubtitleMolecule(
+                    iconStyle = BigIcon.Style.Default(CompoundIcons.LockSolid()),
+                    title = stringResource(id = R.string.screen_identity_confirmation_title),
+                    subTitle = stringResource(id = R.string.screen_identity_confirmation_subtitle)
+                )
+                CurrentUserRow(user = state.currentUser)
+            }
         },
         footer = {
             ChooseSelfVerificationModeButtons(
@@ -101,6 +117,45 @@ fun ChooseSelfVerificationModeView(
                 text = stringResource(CommonStrings.action_learn_more),
                 style = ElementTheme.typography.fontBodyLgMedium
             )
+        }
+    }
+}
+
+@Composable
+private fun CurrentUserRow(
+    user: MatrixUser,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Avatar(
+            avatarData = user.getAvatarData(AvatarSize.UserVerification),
+            avatarType = AvatarType.User,
+        )
+        Spacer(modifier = Modifier.width(12.dp))
+        Column(
+            modifier = Modifier.weight(1f, fill = false),
+            verticalArrangement = Arrangement.spacedBy(2.dp),
+        ) {
+            Text(
+                text = user.getBestName(),
+                style = ElementTheme.typography.fontBodyLgMedium,
+                color = ElementTheme.colors.textPrimary,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+            if (user.displayName.isNullOrEmpty().not()) {
+                Text(
+                    text = user.userId.value,
+                    style = ElementTheme.typography.fontBodyMdRegular,
+                    color = ElementTheme.colors.textSecondary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
         }
     }
 }

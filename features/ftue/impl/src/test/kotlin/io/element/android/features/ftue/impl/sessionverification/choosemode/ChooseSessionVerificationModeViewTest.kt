@@ -13,9 +13,12 @@ package io.element.android.features.ftue.impl.sessionverification.choosemode
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import io.element.android.features.ftue.impl.R
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.clickOn
@@ -42,7 +45,7 @@ class ChooseSessionVerificationModeViewTest : RobolectricTest() {
     fun `clicking on use another device calls the callback`() = runAndroidComposeUiTest {
         ensureCalledOnce { callback ->
             setChooseSelfVerificationModeView(
-                aChooseSelfVerificationModeState(AsyncData.Success(aButtonsState(canUseAnotherDevice = true))),
+                aChooseSelfVerificationModeState(buttonsState = AsyncData.Success(aButtonsState(canUseAnotherDevice = true))),
                 onUseAnotherDevice = callback,
             )
             clickOn(R.string.screen_identity_use_another_device)
@@ -54,7 +57,7 @@ class ChooseSessionVerificationModeViewTest : RobolectricTest() {
     fun `clicking on enter recovery key calls the callback`() = runAndroidComposeUiTest {
         ensureCalledOnce { callback ->
             setChooseSelfVerificationModeView(
-                aChooseSelfVerificationModeState(AsyncData.Success(aButtonsState(canUseRecoveryKey = true))),
+                aChooseSelfVerificationModeState(buttonsState = AsyncData.Success(aButtonsState(canUseRecoveryKey = true))),
                 onEnterRecoveryKey = callback,
             )
             clickOn(R.string.screen_identity_confirmation_use_recovery_key)
@@ -71,6 +74,29 @@ class ChooseSessionVerificationModeViewTest : RobolectricTest() {
             )
             clickOn(R.string.screen_identity_confirmation_cannot_confirm)
         }
+    }
+
+    @Config(qualifiers = "h1024dp")
+    @Test
+    fun `the current account is displayed`() = runAndroidComposeUiTest {
+        setChooseSelfVerificationModeView(
+            aChooseSelfVerificationModeState(
+                currentUser = aMatrixUser(id = "@alice:server.org", displayName = "Alice"),
+            ),
+        )
+        onNodeWithText("Alice").assertIsDisplayed()
+        onNodeWithText("@alice:server.org").assertIsDisplayed()
+    }
+
+    @Config(qualifiers = "h1024dp")
+    @Test
+    fun `the current account falls back to the user id when there is no display name`() = runAndroidComposeUiTest {
+        setChooseSelfVerificationModeView(
+            aChooseSelfVerificationModeState(
+                currentUser = aMatrixUser(id = "@alice:server.org", displayName = null),
+            ),
+        )
+        onNodeWithText("@alice:server.org").assertIsDisplayed()
     }
 
     private fun AndroidComposeUiTest<ComponentActivity>.setChooseSelfVerificationModeView(
