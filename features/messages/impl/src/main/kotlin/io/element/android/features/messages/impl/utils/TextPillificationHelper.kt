@@ -28,9 +28,6 @@ import io.element.android.libraries.textcomposer.mentions.getMentionSpans
 import io.element.android.wysiwyg.view.spans.CodeBlockSpan
 import io.element.android.wysiwyg.view.spans.InlineCodeSpan
 
-/**
- * Matches a `matrix:` URI as defined by MSC2312, stopping before any trailing sentence punctuation.
- */
 private val MATRIX_URI_REGEX = Regex("""matrix:(?:u|user|r|room|roomid|e|event)/\S*[^\s.,;:!?)]""", RegexOption.IGNORE_CASE)
 
 interface TextPillificationHelper {
@@ -92,8 +89,6 @@ class DefaultTextPillificationHelper(
     }
 
     private fun pillifyPermalinks(text: SpannableStringBuilder) {
-        // Before the web pass: Patterns.WEB_URL matches the bare domain inside a matrix: URI, and
-        // whichever pass runs first wins the range.
         pillifyMatrixUris(text)
         for (match in Patterns.WEB_URL.toRegex().findAll(text)) {
             val start = match.range.first
@@ -107,11 +102,6 @@ class DefaultTextPillificationHelper(
         }
     }
 
-    /**
-     * `Patterns.WEB_URL` cannot match a `matrix:` URI, so those permalinks were left as plain text
-     * even though the parser understands them. See
-     * https://github.com/element-hq/element-x-android/issues/5319
-     */
     private fun pillifyMatrixUris(text: SpannableStringBuilder) {
         for (match in MATRIX_URI_REGEX.findAll(text)) {
             val start = match.range.first
@@ -120,9 +110,6 @@ class DefaultTextPillificationHelper(
             val mentionSpan = mentionSpanProvider.getMentionSpanFor(match.value, match.value)
             if (mentionSpan != null) {
                 text.setSpan(mentionSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                // A `matrix:` URI gets no URLSpan from linkification, and the timeline only reports
-                // URLSpans as clicks, so the pill would otherwise be inert. Adding it here also makes
-                // LinkifyHelper drop the bogus web link it would otherwise find inside the URI.
                 if (text.getSpans<URLSpan>(start, end).isEmpty()) {
                     text.setSpan(URLSpan(match.value), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }

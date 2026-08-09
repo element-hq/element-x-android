@@ -50,7 +50,6 @@ class DefaultTextPillificationHelperTest : RobolectricTest() {
         val spanned = pillified as Spanned
         assertThat(spanned.getSpanStart(mentionSpans.first())).isEqualTo(text.indexOf("matrix:"))
         assertThat(spanned.getSpanEnd(mentionSpans.first())).isEqualTo(text.length)
-        // Without a URLSpan the pill would not be clickable in the timeline.
         val urlSpans = spanned.getSpans<URLSpan>(0, spanned.length)
         assertThat(urlSpans).hasLength(1)
         assertThat(urlSpans.first().url).isEqualTo("matrix:u/someone:example.com")
