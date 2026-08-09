@@ -233,7 +233,6 @@ class MarkdownTextInputTest : RobolectricTest() {
     }
 
     private companion object {
-        // Any device id other than KeyCharacterMap.VIRTUAL_KEYBOARD is a real keyboard.
         const val PHYSICAL_KEYBOARD_DEVICE_ID = 1
     }
 }

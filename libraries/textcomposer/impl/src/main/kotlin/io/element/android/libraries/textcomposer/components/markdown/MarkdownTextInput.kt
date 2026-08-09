@@ -133,7 +133,6 @@ fun MarkdownTextInput(
         update = { editText ->
             editText.contentDescription = placeholder
             editText.applyStyleInCompose(richTextEditorStyle)
-            // Set here rather than in the factory, which runs once and would capture a stale lambda.
             editText.onEnterKeyListener = onSendMessage?.let { send ->
                 {
                     send()
