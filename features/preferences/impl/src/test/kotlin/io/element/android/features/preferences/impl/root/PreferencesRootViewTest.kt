@@ -10,14 +10,18 @@
 package io.element.android.features.preferences.impl.root
 
 import androidx.activity.ComponentActivity
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
+import com.google.common.truth.Truth.assertThat
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.emoji.api.picker.NoOpEmojiPickerRenderer
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -430,6 +434,26 @@ class PreferencesRootViewTest : RobolectricTest() {
     }
 
     @Test
+    fun `when developer settings become visible, the version does not move`() = runAndroidComposeUiTest {
+        val version = "VERSION"
+        val eventsRecorder = EventsRecorder<PreferencesRootEvent>(expectEvents = false)
+        val showDeveloperSettings = mutableStateOf(false)
+        setView(
+            aPreferencesRootState(
+                version = version,
+                eventSink = eventsRecorder,
+            ),
+            showDeveloperSettings = showDeveloperSettings,
+        )
+        onNodeWithText(version).performScrollTo()
+        val versionTop = onNodeWithText(version).getUnclippedBoundsInRoot().top
+        runOnIdle { showDeveloperSettings.value = true }
+        waitForIdle()
+        onNodeWithText(activity!!.getString(CommonStrings.common_developer_options)).assertExists()
+        assertThat(onNodeWithText(version).getUnclippedBoundsInRoot().top).isEqualTo(versionTop)
+    }
+
+    @Test
     fun `clicking on version sends a PreferencesRootEvents`() = runAndroidComposeUiTest {
         val version = "VERSION"
         val eventsRecorder = EventsRecorder<PreferencesRootEvent>()
@@ -463,10 +487,11 @@ private fun AndroidComposeUiTest<ComponentActivity>.setView(
     onOpenBlockedUsers: () -> Unit = EnsureNeverCalled(),
     onSignOutClick: () -> Unit = EnsureNeverCalled(),
     onDeactivateClick: () -> Unit = EnsureNeverCalled(),
+    showDeveloperSettings: State<Boolean> = mutableStateOf(state.showDeveloperSettings),
 ) {
     setContent {
         PreferencesRootView(
-            state = state,
+            state = state.copy(showDeveloperSettings = showDeveloperSettings.value),
             emojiPickerRenderer = NoOpEmojiPickerRenderer,
             onBackClick = onBackClick,
             onAddAccountClick = onAddAccountClick,
