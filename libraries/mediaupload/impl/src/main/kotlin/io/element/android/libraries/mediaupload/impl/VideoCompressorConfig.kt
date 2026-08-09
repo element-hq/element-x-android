@@ -34,11 +34,19 @@ internal object VideoCompressorConfigFactory {
         val newFrameRate = min(originalFrameRate, DEFAULT_FRAME_RATE)
 
         // If we need to resize the video, we also want to recalculate the bitrate
-        val newBitrate = resizer.calculateOptimalBitrate(Size(width, height), newFrameRate)
+        val optimalBitrate = resizer.calculateOptimalBitrate(Size(width, height), newFrameRate).toInt()
+
+        // Never ask the encoder for more than the source already carries: re-encoding a video that is
+        // already efficiently encoded at a low bitrate otherwise inflates it, making the upload both
+        // slower and bigger than sending the original. METADATA_KEY_BITRATE is the container total,
+        // video plus audio, so it is a safe upper bound for the video track alone.
+        // See https://github.com/element-hq/element-x-android/issues/4191
+        val sourceBitrate = metadata?.bitrate?.takeIf { it > 0 }
+        val newBitrate = sourceBitrate?.let { min(optimalBitrate.toLong(), it).toInt() } ?: optimalBitrate
 
         return VideoCompressorConfig(
             videoCompressorHelper = resizer,
-            newBitRate = newBitrate.toInt(),
+            newBitRate = newBitrate,
             newFrameRate = newFrameRate,
         )
     }
