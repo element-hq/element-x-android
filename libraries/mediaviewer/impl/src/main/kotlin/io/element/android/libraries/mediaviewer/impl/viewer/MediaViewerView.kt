@@ -414,6 +414,7 @@ private fun MediaViewerPage(
             if (showProgress) {
                 LinearProgressIndicator(
                     modifier = Modifier
+                        .padding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top).asPaddingValues())
                         .fillMaxWidth()
                         .height(2.dp)
                 )
