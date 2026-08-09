@@ -109,7 +109,6 @@ class DefaultRoomLatestEventFormatterTest : RobolectricTest() {
         // And there is a bold span for the 'Sticker' part
         val boldSpanStyle = (result as AnnotatedString).spanStyles.lastOrNull { it.item.fontWeight == FontWeight.Bold }
         assertThat(boldSpanStyle).isNotNull()
-        // +2 for the isolate characters around the sender name, +2 for the ": " separator
         val spanStart = someoneElseId.value.length + 4
         assertThat(boldSpanStyle!!.start..boldSpanStyle.end).isEqualTo(spanStart..spanStart + 7)
         assertThat(result.toString()).isEqualTo(expectedBody)
@@ -171,7 +170,6 @@ class DefaultRoomLatestEventFormatterTest : RobolectricTest() {
         )
         val result = formatter.format(message, false)
         assertThat(result.toString()).isEqualTo("⁨$senderName⁩: $body")
-        // The bold span still covers exactly the name and its isolates, not the body.
         val boldSpanStyle = (result as AnnotatedString).spanStyles.first { it.item.fontWeight == FontWeight.Bold }
         assertThat(boldSpanStyle.start).isEqualTo(0)
         assertThat(boldSpanStyle.end).isEqualTo(senderName.length + 2)
@@ -971,7 +969,6 @@ class DefaultRoomLatestEventFormatterTest : RobolectricTest() {
         // And there is a bold span for the 'Poll' part
         val boldSpanStyle = (result as AnnotatedString).spanStyles.lastOrNull { it.item.fontWeight == FontWeight.Bold }
         assertThat(boldSpanStyle).isNotNull()
-        // +2 for the isolate characters around the sender name, +2 for the ": " separator
         val spanStart = "Bob".length + 4
         assertThat(boldSpanStyle!!.start..boldSpanStyle.end).isEqualTo(spanStart..spanStart + 4)
     }

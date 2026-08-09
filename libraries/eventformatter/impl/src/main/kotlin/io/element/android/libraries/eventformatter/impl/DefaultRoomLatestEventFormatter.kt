@@ -189,8 +189,6 @@ class DefaultRoomLatestEventFormatter(
             if (isOutgoing) {
                 sp.getString(CommonStrings.common_you)
             } else {
-                // The display name is user-provided and may be right-to-left, which would otherwise
-                // reorder the whole preview line.
                 senderDisambiguatedDisplayName.bidiIsolate()
             }
         )
