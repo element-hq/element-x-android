@@ -16,7 +16,6 @@ import io.element.android.libraries.voicerecorder.impl.audio.AudioReader
 class FakeAudioReaderFactory(
     private val audio: List<Audio>
 ) : AudioReader.Factory {
-    /** Number of readers created so far, to assert that a second recording is never started. */
     var createdCount: Int = 0
         private set
 

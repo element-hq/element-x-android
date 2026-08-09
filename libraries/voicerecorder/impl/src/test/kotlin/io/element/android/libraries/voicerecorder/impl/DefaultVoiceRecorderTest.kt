@@ -116,7 +116,6 @@ class DefaultVoiceRecorderTest {
         voiceRecorder.state.test {
             assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Idle)
 
-            // Two taps landing before the state has flipped away from Idle.
             voiceRecorder.startRecord()
             voiceRecorder.startRecord()
             assertThat(audioReaderFactory.createdCount).isEqualTo(1)
@@ -133,7 +132,6 @@ class DefaultVoiceRecorderTest {
                     duration = 5.seconds,
                 )
             )
-            // An orphaned recording job would keep emitting Recording after the stop.
             expectNoEvents()
         }
     }
