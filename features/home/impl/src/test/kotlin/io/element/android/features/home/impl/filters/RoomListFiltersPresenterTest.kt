@@ -78,8 +78,6 @@ class RoomListFiltersPresenterTest {
         val presenter = createRoomListFiltersPresenter()
         presenter.test {
             awaitItem().let { state ->
-                // Both events are sent on the same state, i.e. before any recomposition, which is what
-                // happens when the two chips are tapped simultaneously.
                 state.eventSink.invoke(RoomListFiltersEvent.ToggleFilter(RoomListFilter.Favourites))
                 state.eventSink.invoke(RoomListFiltersEvent.ToggleFilter(RoomListFilter.Invites))
             }

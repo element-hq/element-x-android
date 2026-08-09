@@ -22,10 +22,6 @@ class DefaultFilterSelectionStrategy : FilterSelectionStrategy {
     override val filterSelectionStates = MutableStateFlow(buildFilters())
 
     override fun select(filter: RoomListFilter) {
-        // Incompatible filters are hidden from the UI rather than disabled, so a filter can still be
-        // selected while its chip is on its way out, typically when two chips are tapped in the same
-        // frame. Ignore it, the currently applied filters win.
-        // See https://github.com/element-hq/element-x-android/issues/5383
         if (selectedFilters.any { it in filter.incompatibleFilters }) return
         selectedFilters.add(filter)
         filterSelectionStates.value = buildFilters()
