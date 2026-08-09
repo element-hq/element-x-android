@@ -69,9 +69,6 @@ private object CustomHtmlToDomParser {
         val outputSettings = OutputSettings().prettyPrint(false).indentAmount(0)
         val cleanHtml = Jsoup.clean(html, "", safeList, outputSettings)
         return Jsoup.parse(cleanHtml).also { document ->
-            // `del` is the only strikethrough tag the renderer knows about, so normalise the two
-            // others to it. Without this the content of the tag is dropped, not just its styling.
-            // See https://github.com/element-hq/element-x-android/issues/4328
             document.select("s, strike").forEach { it.tagName("del") }
         }
     }
@@ -85,7 +82,6 @@ private object CustomHtmlToDomParser {
             "em",
             "u",
             "del",
-            // Strikethrough aliases, normalised to `del` in [document]
             "s",
             "strike",
             "code",
