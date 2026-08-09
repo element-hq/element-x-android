@@ -71,14 +71,22 @@ class DefaultVoiceRecorder(
     override val state: StateFlow<VoiceRecorderState> = _state
 
     @RequiresPermission(Manifest.permission.RECORD_AUDIO)
-    override suspend fun startRecord() {
+    override suspend fun startRecord() = lock.withLock {
+        // The composer can emit a second Start before the first recording has produced its first
+        // buffer, i.e. before the state flips away from Idle. Without this guard the second call
+        // orphans the first job and its AudioReader, which keeps the microphone open and keeps
+        // emitting Recording forever, so Stop and Delete appear to do nothing.
+        // See https://github.com/element-hq/element-x-android/issues/5780
+        if (recordingJob != null) {
+            Timber.w("Voice recorder is already recording, ignoring this start")
+            return@withLock
+        }
+
         Timber.i("Voice recorder started recording")
         outputFile = fileManager.createFile()
             .also(encoder::init)
 
-        lock.withLock {
-            levels.clear()
-        }
+        levels.clear()
 
         val audioRecorder = audioReaderFactory.create(config, dispatchers).also { audioReader = it }
 
