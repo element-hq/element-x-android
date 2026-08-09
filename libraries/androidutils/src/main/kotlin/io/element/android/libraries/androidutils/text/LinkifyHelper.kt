@@ -16,6 +16,7 @@ import androidx.core.text.toSpannable
 import androidx.core.text.util.LinkifyCompat
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import timber.log.Timber
+import java.net.URI
 
 /**
  * Helper class to linkify text while preserving existing URL spans.
@@ -23,11 +24,7 @@ import timber.log.Timber
  * It also checks the linkified results to make sure URLs spans are not including trailing punctuation.
  */
 object LinkifyHelper {
-    /**
-     * Matches a URL whose authority is a bracketed IPv6 address, i.e. `http://[2001:db8::1]:8008/path`.
-     * A scheme and the brackets are both required, so array syntax such as `values[0]:1` is not matched.
-     */
-    private val IPV6_URL_REGEX = Regex("""(?i)\b(?:https?|ftp)://\[[0-9a-f:.]+(?:%25[0-9a-z._-]+)?](?::\d{1,5})?(?:/\S*)?""")
+    private val BRACKETED_AUTHORITY_URL_REGEX = Regex("""(?<![a-zA-Z0-9+.-])[a-zA-Z][a-zA-Z0-9+.-]*://\[\S*""")
 
     fun linkify(
         text: CharSequence,
@@ -73,25 +70,22 @@ object LinkifyHelper {
             }
         }
 
-        // Patterns.WEB_URL, which LinkifyCompat uses, has no production for a bracketed IPv6
-        // authority, so such a URL is never linkified — and worse, the phone-number matcher claims
-        // the digit runs inside the address. Add the links here, after addLinks (which strips any
-        // span set before it) and before the old spans are restored, so real <a href> and pill
-        // spans still win. See https://github.com/element-hq/element-x-android/issues/2614
-        for (match in IPV6_URL_REGEX.findAll(spannable)) {
+        for (match in BRACKETED_AUTHORITY_URL_REGEX.findAll(spannable)) {
             val start = match.range.first
             val end = match.range.last + 1
             val newEnd = runCatchingExceptions {
                 adjustLinkifiedUrlSpanEndIndex(spannable, start, end)
             }.onFailure {
-                Timber.e(it, "Failed to adjust end index for IPv6 link span")
+                Timber.e(it, "Failed to adjust end index for link span")
             }.getOrNull() ?: end
 
-            // Evict whatever Linkify put inside the address, typically a tel: span.
+            val url = spannable.substring(start, newEnd)
+            if (!url.hasBracketedHost()) continue
+
             for (span in spannable.getSpans<URLSpan>(start, newEnd)) {
                 spannable.removeSpan(span)
             }
-            spannable.setSpan(URLSpan(spannable.substring(start, newEnd)), start, newEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannable.setSpan(URLSpan(url), start, newEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
 
         // Restore old spans, remove new ones if there is a conflict
@@ -107,6 +101,11 @@ object LinkifyHelper {
             spannable.setSpan(urlSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
         return spannable
+    }
+
+    private fun String.hasBracketedHost(): Boolean {
+        val host = runCatchingExceptions { URI(this) }.getOrNull()?.host ?: return false
+        return host.startsWith('[') && host.endsWith(']')
     }
 
     private fun adjustLinkifiedUrlSpanEndIndex(spannable: Spannable, start: Int, end: Int): Int {

@@ -66,6 +66,23 @@ class LinkifierHelperTest : RobolectricTest() {
     }
 
     @Test
+    fun `linkification finds an ipv6 URL of any scheme`() {
+        val text = "A url ssh://[2001:db8::1]/path"
+        val result = LinkifyHelper.linkify(text)
+        val urlSpans = result.toSpannable().getSpans<URLSpan>()
+        assertThat(urlSpans.size).isEqualTo(1)
+        assertThat(urlSpans.first().url).isEqualTo("ssh://[2001:db8::1]/path")
+    }
+
+    @Test
+    fun `linkification ignores a bracketed authority which is not an address`() {
+        val text = "A url http://[not-an-address]/path"
+        val result = LinkifyHelper.linkify(text)
+        val urlSpans = result.toSpannable().getSpans<URLSpan>()
+        assertThat(urlSpans).isEmpty()
+    }
+
+    @Test
     fun `linkification ignores bracketed text which is not a URL`() {
         val text = "An array values[0]:1 and a bare [::1]"
         val result = LinkifyHelper.linkify(text)
