@@ -19,8 +19,10 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
 import io.element.android.libraries.matrix.ui.media.contentvalidation.DefaultContentValidationState
 import io.element.android.libraries.matrix.ui.media.contentvalidation.EventContentValidationCache
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopContentValidationState
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
+import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint.MediaViewerMode
 import io.element.android.libraries.mediaviewer.impl.datasource.MediaGalleryDataSource
 import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
@@ -78,6 +80,25 @@ class SingleMediaGalleryDataSource(
             ),
             contentValidationCache = contentValidationCache,
         )
+
+        fun createFrom(
+            params: MediaViewerEntryPoint.Params.RoomMedia,
+            contentValidationCache: EventContentValidationCache,
+        ): SingleMediaGalleryDataSource {
+            val mediaItem = params.toMediaItem(NoopContentValidationState())
+            val belongsToImageAndVideoItems = when (params.mode) {
+                is MediaViewerMode.TimelineImagesAndVideos,
+                is MediaViewerMode.EventGallery -> true
+                is MediaViewerMode.TimelineFilesAndAudios -> false
+            }
+            return SingleMediaGalleryDataSource(
+                data = GroupedMediaItems(
+                    imageAndVideoItems = if (belongsToImageAndVideoItems) persistentListOf(mediaItem) else persistentListOf(),
+                    fileItems = if (belongsToImageAndVideoItems) persistentListOf() else persistentListOf(mediaItem),
+                ),
+                contentValidationCache = contentValidationCache,
+            )
+        }
     }
 }
 

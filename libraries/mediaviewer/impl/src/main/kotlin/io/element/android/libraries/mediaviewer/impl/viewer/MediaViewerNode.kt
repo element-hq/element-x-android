@@ -92,8 +92,7 @@ class MediaViewerNode(
         is MediaViewerEntryPoint.Params.RoomMedia -> {
             val eventId = inputs.eventId
             if (eventId == null) {
-                // Should not happen
-                timelineMediaGalleryDataSource
+                SingleMediaGalleryDataSource.createFrom(inputs, contentValidationCache)
             } else {
                 // Can we use a specific timeline?
                 val timelineMode = inputs.mode.getTimelineMode()
