@@ -160,6 +160,8 @@ fun TextComposer(
     } else {
         stringResource(id = R.string.rich_text_editor_composer_placeholder)
     }
+    val canSendTextMessage = markdown.isNotBlank() || composerMode is MessageComposerMode.Attachment
+
     val textInput: @Composable () -> Unit = when (state) {
         is TextEditorState.Rich -> {
             val coroutineScope = rememberCoroutineScope()
@@ -218,13 +220,12 @@ fun TextComposer(
                         onReceiveSuggestion = onReceiveSuggestion,
                         richTextEditorStyle = style,
                         onSelectRichContent = onSelectRichContent,
+                        onSendMessage = { if (canSendTextMessage) onSendMessage() },
                     )
                 }
             }
         }
     }
-
-    val canSendTextMessage = markdown.isNotBlank() || composerMode is MessageComposerMode.Attachment
 
     val textFormattingOptions: @Composable (() -> Unit)? = (state as? TextEditorState.Rich)?.let {
         @Composable { TextFormatting(state = it.richTextEditorState) }
