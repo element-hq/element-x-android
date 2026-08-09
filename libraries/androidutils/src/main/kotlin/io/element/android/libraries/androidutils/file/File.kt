@@ -55,15 +55,6 @@ fun String.withFileNameSuffix(suffix: String): String {
     }
 }
 
-/**
- * Runs [saveAs] with [fileName], and runs it once more with a suffixed name if the platform failed to
- * build a unique name for it.
- *
- * `MediaStore` de-duplicates the display name of a new file itself, but gives up after 32 conflicts
- * and throws `IllegalStateException("Failed to build unique file")`, which makes saving a file with a
- * common name such as `image.png` fail for good.
- * See https://github.com/element-hq/element-x-android/issues/6371
- */
 fun <T> saveWithUniqueFileName(
     fileName: String,
     uniqueSuffix: () -> String = { "_${System.currentTimeMillis()}" },
