@@ -60,10 +60,18 @@ class RoomCallStatePresenter(
                         isUserLocallyInTheCall = isUserLocallyInTheCall,
                         isAudioCall = roomInfo.activeCallIntentConsensus.isAudio(),
                     )
-                    else -> RoomCallState.StandBy(
-                        canStartCall = canJoinCall,
-                        isDM = roomInfo.isDm
-                    )
+                    else -> {
+                        // Nobody would ever join a call started in a DM whose other member has left,
+                        // and the call screen has no way out of that state.
+                        // activeMembersCount counts joined and invited members, so a DM whose peer
+                        // has been invited but has not joined yet can still start a call.
+                        // See https://github.com/element-hq/element-x-android/issues/6189
+                        val isEmptyDm = roomInfo.isDm && roomInfo.activeMembersCount <= 1
+                        RoomCallState.StandBy(
+                            canStartCall = canJoinCall && !isEmptyDm,
+                            isDM = roomInfo.isDm
+                        )
+                    }
                 }
             }
         }
