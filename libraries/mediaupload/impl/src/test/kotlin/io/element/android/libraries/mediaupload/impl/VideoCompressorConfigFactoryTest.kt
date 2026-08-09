@@ -35,8 +35,6 @@ class VideoCompressorConfigFactoryTest : RobolectricTest() {
 
     @Test
     fun `the bitrate is clamped to the source bitrate when the source is already low`() {
-        // A 720x720 clip encoded at 615 kbps: the calculated optimal is far higher, which would
-        // re-encode it into a much bigger file.
         val metadata = VideoFileMetadata(width = 720, height = 720, bitrate = 615_000, frameRate = 25, rotation = 0)
 
         val videoCompressorConfig = VideoCompressorConfigFactory.create(
