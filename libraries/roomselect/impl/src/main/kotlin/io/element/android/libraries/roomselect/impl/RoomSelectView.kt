@@ -260,10 +260,10 @@ private fun RoomSummaryView(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-            // Alias
-            roomInfo.canonicalAlias?.let { alias ->
+            val subtitle = roomInfo.canonicalAlias?.value ?: roomInfo.heroes.singleOrNull()?.userId?.value
+            if (subtitle != null) {
                 Text(
-                    text = alias.value,
+                    text = subtitle,
                     color = ElementTheme.colors.textSecondary,
                     style = ElementTheme.typography.fontBodySmRegular,
                     maxLines = 1,
