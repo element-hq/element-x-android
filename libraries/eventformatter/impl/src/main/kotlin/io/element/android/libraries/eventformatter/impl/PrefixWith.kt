@@ -14,6 +14,9 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 
+private const val FIRST_STRONG_ISOLATE = 0x2068
+private const val POP_DIRECTIONAL_ISOLATE = 0x2069
+
 /**
  * Wraps the string between Unicode isolate characters (FSI … PDI) so its own direction cannot
  * reorder the text around it.
@@ -22,7 +25,7 @@ import androidx.compose.ui.text.withStyle
  * flips the whole line — the message body ends up on the wrong side of the name and the trailing
  * colon jumps to the front. See https://github.com/element-hq/element-x-android/issues/3338
  */
-internal fun String.bidiIsolate(): String = "⁨$this⁩"
+internal fun String.bidiIsolate(): String = Char(FIRST_STRONG_ISOLATE) + this + Char(POP_DIRECTIONAL_ISOLATE)
 
 internal fun CharSequence.prefixWith(prefix: String): AnnotatedString {
     return buildAnnotatedString {
