@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateSetOf
 import androidx.compose.runtime.remember
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
@@ -20,7 +19,6 @@ import io.element.android.features.contentscanner.api.ContentScannerService
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.mapState
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaPreviewService
 import io.element.android.libraries.matrix.api.media.isPreviewEnabled
 import io.element.android.libraries.matrix.api.room.BaseRoom
@@ -32,9 +30,8 @@ class TimelineProtectionPresenter(
     private val mediaPreviewService: MediaPreviewService,
     private val room: BaseRoom,
     private val contentScannerService: ContentScannerService,
+    private val timelineProtectionStore: TimelineProtectionStore,
 ) : Presenter<TimelineProtectionState> {
-    private val allowedEvents = mutableStateSetOf<EventId>()
-
     @Composable
     override fun present(): TimelineProtectionState {
         val mediaPreviewValue = remember {
@@ -48,7 +45,7 @@ class TimelineProtectionPresenter(
                 if (isPreviewEnabled) {
                     ProtectionState.RenderAll
                 } else {
-                    ProtectionState.RenderOnly(eventIds = allowedEvents.toImmutableSet())
+                    ProtectionState.RenderOnly(eventIds = timelineProtectionStore.allowedEventIds.toImmutableSet())
                 }
             }
         }
@@ -56,7 +53,7 @@ class TimelineProtectionPresenter(
         fun handleEvent(event: TimelineProtectionEvent) {
             when (event) {
                 is TimelineProtectionEvent.ShowContent -> {
-                    allowedEvents += setOfNotNull(event.eventId)
+                    event.eventId?.let(timelineProtectionStore::allowEvent)
                 }
                 is TimelineProtectionEvent.ValidateContent -> {
                     contentScannerService.scan(event.mediaSources, event.validationState)
