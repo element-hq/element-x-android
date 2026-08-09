@@ -34,9 +34,6 @@ class DefaultRegisterUnifiedPushUseCase(
         UnifiedPush.saveDistributor(context, distributor.value)
         // This will trigger the callback
         // VectorUnifiedPushMessagingReceiver.onNewEndpoint
-        // The session id is passed as the message for the distributor, so that its UI can tell one
-        // registration from another when several accounts are registered.
-        // See https://github.com/element-hq/element-x-android/issues/6426
         UnifiedPush.register(context = context, instance = clientSecret, messageForDistributor = sessionId.value)
         // Wait for VectorUnifiedPushMessagingReceiver.onNewEndpoint to proceed
         @Suppress("RunCatchingNotAllowed")
