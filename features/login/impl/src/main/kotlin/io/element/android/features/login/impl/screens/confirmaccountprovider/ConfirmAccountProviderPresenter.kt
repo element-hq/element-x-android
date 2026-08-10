@@ -67,9 +67,10 @@ class ConfirmAccountProviderPresenter(
                 }
         }
 
-        // Continue accepts the suggestion when one is offered, otherwise the raw input.
-        val accountProviderToSubmit = accountProviderSuggestion ?: accountProviderInput
-        val latestAccountProviderToSubmit by rememberUpdatedState(accountProviderToSubmit)
+        // The account provider submitted via Continue (carried by the event, so it reflects the exact field
+        // text at click time); used to actually sign in once validation succeeds.
+        var submittedAccountProvider by remember { mutableStateOf<String?>(null) }
+        val latestSubmittedAccountProvider by rememberUpdatedState(submittedAccountProvider)
 
         // Once the chosen account provider has been validated and persisted, proceed with the actual sign in / sign up.
         LaunchedEffect(changeServerState.changeServerAction) {
@@ -77,7 +78,7 @@ class ConfirmAccountProviderPresenter(
                 loginModeState.eventSink(
                     LoginModeEvent.Submit(
                         isAccountCreation = params.isAccountCreation,
-                        homeserverUrl = latestAccountProviderToSubmit.trim(),
+                        homeserverUrl = latestSubmittedAccountProvider.orEmpty().trim(),
                         resolvedHomeserverUrl = null,
                         loginHint = null,
                     )
@@ -92,9 +93,12 @@ class ConfirmAccountProviderPresenter(
                 }
                 // Validate (and persist) the chosen account provider before proceeding. This also enforces the
                 // account-provider access control, which the login submit does not run on its own.
-                ConfirmAccountProviderEvents.Continue -> changeServerState.eventSink(
-                    ChangeServerEvents.ChangeServer(AccountProvider(url = accountProviderToSubmit.trim()))
-                )
+                is ConfirmAccountProviderEvents.Continue -> {
+                    submittedAccountProvider = event.accountProvider
+                    changeServerState.eventSink(
+                        ChangeServerEvents.ChangeServer(AccountProvider(url = event.accountProvider.trim()))
+                    )
+                }
                 ConfirmAccountProviderEvents.ClearError -> {
                     loginModeState.eventSink(LoginModeEvent.ClearError)
                     changeServerState.eventSink(ChangeServerEvents.ClearError)

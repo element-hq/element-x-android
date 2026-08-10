@@ -81,10 +81,20 @@ fun ConfirmAccountProviderView(
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
 
+    var input by textFieldState(stateValue = state.accountProviderInput)
+    // Inline autocomplete: the un-typed remainder of the suggested account provider (rendered in grey and
+    // accepted on Continue). Only valid while the suggestion still starts with the current input.
+    val suggestionSuffix = state.accountProviderSuggestion
+        ?.takeIf { it.length > input.length && it.startsWith(input, ignoreCase = true) }
+        ?.substring(input.length)
+        .orEmpty()
+
     fun submit() {
         // Dismiss the keyboard and release focus while the account provider is being validated.
         focusManager.clearFocus(force = true)
-        eventSink(ConfirmAccountProviderEvents.Continue)
+        // Submit the exact field text (plus any accepted suggestion), read here so it can't lag behind
+        // fast input such as keyboard autofill.
+        eventSink(ConfirmAccountProviderEvents.Continue(input + suggestionSuffix))
     }
 
     // Once a validation / login error has been dismissed, return focus and the keyboard to the field so
@@ -128,12 +138,6 @@ fun ConfirmAccountProviderView(
             }
         }
     ) {
-        var input by textFieldState(stateValue = state.accountProviderInput)
-        // Inline autocomplete: render the un-typed remainder of the suggested account provider in grey.
-        val suggestionSuffix = state.accountProviderSuggestion
-            ?.takeIf { it.length > input.length && it.startsWith(input, ignoreCase = true) }
-            ?.substring(input.length)
-            .orEmpty()
         val ghostColor = ElementTheme.colors.textSecondary
         val ghostTransformation = remember(suggestionSuffix, ghostColor) {
             GhostSuffixVisualTransformation(suggestionSuffix, ghostColor)
