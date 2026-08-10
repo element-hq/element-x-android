@@ -84,6 +84,7 @@ internal fun aRoomSelectRoomList() = persistentListOf(
         heroes = persistentListOf(
             aMatrixUser(id = "@alice:example.org", displayName = "Alice"),
         ),
+        isDm = true,
     ),
     aSelectRoomInfo(
         roomId = RoomId("!room4:domain"),

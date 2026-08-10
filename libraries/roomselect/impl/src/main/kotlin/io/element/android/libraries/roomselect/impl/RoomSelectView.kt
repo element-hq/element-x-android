@@ -260,7 +260,8 @@ private fun RoomSummaryView(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-            val subtitle = roomInfo.canonicalAlias?.value ?: roomInfo.heroes.singleOrNull()?.userId?.value
+            val otherUserId = roomInfo.heroes.singleOrNull()?.userId?.takeIf { roomInfo.isDm }
+            val subtitle = roomInfo.canonicalAlias?.value ?: otherUserId?.value
             if (subtitle != null) {
                 Text(
                     text = subtitle,
