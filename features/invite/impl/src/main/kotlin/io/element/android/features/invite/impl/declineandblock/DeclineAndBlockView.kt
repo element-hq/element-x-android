@@ -81,7 +81,7 @@ fun DeclineAndBlockView(
         ) {
             ListItem(
                 modifier = Modifier.padding(end = 8.dp),
-                headlineContent = {
+                content = {
                     Text(text = stringResource(R.string.screen_decline_and_block_block_user_option_title))
                 },
                 supportingContent = {
@@ -96,7 +96,7 @@ fun DeclineAndBlockView(
             Spacer(modifier = Modifier.height(24.dp))
             ListItem(
                 modifier = Modifier.padding(end = 8.dp),
-                headlineContent = {
+                content = {
                     Text(text = stringResource(CommonStrings.action_report_room))
                 },
                 supportingContent = {

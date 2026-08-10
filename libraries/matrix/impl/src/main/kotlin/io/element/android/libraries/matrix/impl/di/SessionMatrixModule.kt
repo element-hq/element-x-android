@@ -15,6 +15,7 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.HomeserverCapabilitiesProvider
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
@@ -35,6 +36,11 @@ object SessionMatrixModule {
     @Provides
     fun providesSessionId(matrixClient: MatrixClient): SessionId {
         return matrixClient.sessionId
+    }
+
+    @Provides
+    fun providesDeviceId(matrixClient: MatrixClient): DeviceId {
+        return matrixClient.deviceId
     }
 
     @Provides

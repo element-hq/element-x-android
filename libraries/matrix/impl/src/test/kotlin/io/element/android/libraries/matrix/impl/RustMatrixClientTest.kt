@@ -132,7 +132,7 @@ class RustMatrixClientTest {
             client = FakeFfiClient(createRoomResult = createRoomLambda)
         )
 
-        client.createDM(A_USER_ID)
+        client.createDM(userId = A_USER_ID, isEncrypted = true)
 
         createRoomLambda.assertions().isCalledOnce()
         assertThat(createParameters?.historyVisibilityOverride).isEqualTo(RoomHistoryVisibility.Invited)
@@ -160,5 +160,6 @@ class RustMatrixClientTest {
         analyticsService = FakeAnalyticsService(),
         workManagerScheduler = FakeWorkManagerScheduler(submitLambda = {}),
         contentScanner = FakeContentScanner(),
+        isMessageSearchAvailable = false,
     )
 }

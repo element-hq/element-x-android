@@ -56,7 +56,7 @@ fun RageshakePreferencesView(
                     )
                 } else {
                     ListItem(
-                        headlineContent = {
+                        content = {
                             Text("Rageshaking is not supported by your device")
                         },
                     )

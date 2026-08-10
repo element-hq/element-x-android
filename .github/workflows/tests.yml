@@ -12,7 +12,7 @@ permissions: {}
 # Enrich gradle.properties for CI/CD
 env:
   GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx7g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.daemon.jvm.options=-Xmx2g -XX:+UseG1GC
-  CI_GRADLE_ARG_PROPERTIES: --stacktrace --no-daemon -Dsonar.gradle.skipCompile=true --no-configuration-cache
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace -Dsonar.gradle.skipCompile=true --no-configuration-cache
 
 jobs:
   tests:
@@ -72,8 +72,14 @@ jobs:
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
 
-      - name: ⚙️ Check coverage for debug variant (includes unit & screenshot tests)
-        run: ./gradlew testDebugUnitTest :tests:uitests:verifyPaparazziDebug :koverXmlReportMerged :koverHtmlReportMerged :koverVerifyAll $CI_GRADLE_ARG_PROPERTIES
+      - name: ⚙️ Run unit tests
+        run: ./gradlew :app:testGplayDebugUnitTest testDebugUnitTest -x :tests:konsist:testDebugUnitTest $CI_GRADLE_ARG_PROPERTIES
+
+      - name: ⚙️ Run screenshot tests
+        run: ./gradlew :tests:uitests:verifyPaparazziDebug $CI_GRADLE_ARG_PROPERTIES
+
+      - name: ⚙️ Generate kover coverage report
+        run: ./gradlew :koverXmlReportMerged :koverHtmlReportMerged :koverVerifyAll -x testDebugUnitTest $CI_GRADLE_ARG_PROPERTIES
 
       - name: 🚫 Upload kover failed coverage reports
         if: failure()
@@ -81,7 +87,7 @@ jobs:
         with:
           name: kover-error-report
           path: |
-            app/build/reports/kover
+            build/reports/kover
 
       - name: ✅ Upload kover report (disabled)
         if: always()
