@@ -77,7 +77,7 @@ fun InReplyToView(
             else -> ReplyToLoadingContent(modifier = modifier)
         }
         is InReplyToDetails.Error ->
-            ReplyToErrorContent(data = inReplyTo, maxLines = maxLines, modifier = modifier)
+            ReplyToErrorContent(maxLines = maxLines, modifier = modifier)
         is InReplyToDetails.Loading ->
             ReplyToLoadingContent(modifier = modifier)
     }
@@ -150,7 +150,6 @@ private fun ReplyToLoadingContent(
 
 @Composable
 private fun ReplyToErrorContent(
-    data: InReplyToDetails.Error,
     maxLines: Int,
     modifier: Modifier = Modifier,
 ) {
@@ -161,9 +160,10 @@ private fun ReplyToErrorContent(
             .padding(paddings)
     ) {
         Text(
-            text = data.message,
+            text = stringResource(id = CommonStrings.error_message_not_found),
             style = ElementTheme.typography.fontBodyMdRegular,
-            color = ElementTheme.colors.textCriticalPrimary,
+            fontStyle = FontStyle.Italic,
+            color = ElementTheme.colors.textSecondary,
             maxLines = maxLines,
             overflow = TextOverflow.Ellipsis,
         )
