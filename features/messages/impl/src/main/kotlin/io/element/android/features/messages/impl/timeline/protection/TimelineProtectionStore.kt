@@ -7,7 +7,7 @@
 
 package io.element.android.features.messages.impl.timeline.protection
 
-import androidx.compose.runtime.mutableStateSetOf
+import androidx.compose.runtime.mutableStateOf
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.SessionScope
@@ -21,11 +21,11 @@ interface TimelineProtectionStore {
 @ContributesBinding(SessionScope::class)
 @SingleIn(SessionScope::class)
 class DefaultTimelineProtectionStore : TimelineProtectionStore {
-    private val allowedEvents = mutableStateSetOf<EventId>()
+    private val allowedEvents = mutableStateOf(emptySet<EventId>())
 
-    override val allowedEventIds: Set<EventId> = allowedEvents
+    override val allowedEventIds: Set<EventId> get() = allowedEvents.value
 
     override fun allowEvent(eventId: EventId) {
-        allowedEvents += eventId
+        allowedEvents.value = allowedEvents.value + eventId
     }
 }
