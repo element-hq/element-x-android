@@ -812,7 +812,7 @@ private fun MessageEventBubbleContent(
                 else -> inReplyToModifier.clickable(onClick = inReplyToClick)
             }
 
-            val contentHasError = currentContentValidationState.hasError()
+            val contentHasError = currentContentValidationState.hasError() || inReplyTo is InReplyToDetails.Error
             val borderColor = if (contentHasError) ElementTheme.colors.borderCriticalSubtle else ElementTheme.colors.separatorPrimary
             val backgroundColor = if (contentHasError) ElementTheme.colors.bgCriticalSubtle else ElementTheme.colors.bgCanvasDefault
             Box(
