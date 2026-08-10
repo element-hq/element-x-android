@@ -16,6 +16,7 @@ open class TimelineSelectionStateProvider : PreviewParameterProvider<TimelineSel
         get() = sequenceOf(
             aTimelineSelectionState(),
             aTimelineSelectionState(canDelete = false),
+            aTimelineSelectionState(canSave = true),
             aTimelineSelectionState(count = TimelineSelectionState.MAX_SELECTION),
         )
 }
@@ -23,8 +24,10 @@ open class TimelineSelectionStateProvider : PreviewParameterProvider<TimelineSel
 fun aTimelineSelectionState(
     count: Int = 3,
     canDelete: Boolean = true,
+    canSave: Boolean = false,
 ) = TimelineSelectionState(
     isEnabled = true,
     selectedIds = (1..count).map { EventId("\$selected-$it") }.toImmutableSet(),
     canDelete = canDelete,
+    canSave = canSave,
 )

@@ -19,6 +19,7 @@ import io.element.android.features.messages.impl.link.aLinkState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.aLoadedPinnedMessagesBannerState
+import io.element.android.features.messages.impl.selection.FakeSelectionMediaSaver
 import io.element.android.features.messages.impl.selection.TimelineSelectionState
 import io.element.android.features.messages.impl.timeline.FakeMarkAsFullyRead
 import io.element.android.features.messages.impl.timeline.MarkAsFullyRead
@@ -28,6 +29,7 @@ import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.aTimelineState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
@@ -370,6 +372,80 @@ class MessagesPresenterSelectionTest {
         }
     }
 
+    @Test
+    fun `BulkSaveSelected saves every selected file and clears the selection`() = runTest {
+        val photo = aTimelineItemEvent(eventId = EventId("\$S1"), content = aTimelineItemImageContent(filename = "photo.jpg")).copy(sentTimeMillis = 1000L)
+        val document = aTimelineItemEvent(eventId = EventId("\$S2"), content = aTimelineItemFileContent(fileName = "notes.pdf")).copy(sentTimeMillis = 2000L)
+        val selectionMediaSaver = FakeSelectionMediaSaver()
+        val presenter = createMessagesPresenter(
+            timelineItems = persistentListOf(document, photo),
+            selectionMediaSaver = selectionMediaSaver,
+        )
+        presenter.testWithLifecycleOwner {
+            val initialState = awaitItem()
+            initialState.eventSink(MessagesEvent.ToggleSelection(document))
+            initialState.eventSink(MessagesEvent.ToggleSelection(photo))
+            val state = consumeItemsUntilPredicate { it.selectionState.count == 2 }.last()
+            assertThat(state.selectionState.canSave).isTrue()
+            state.eventSink(MessagesEvent.BulkSaveSelected)
+            val savingState = consumeItemsUntilPredicate { it.selectionSaveProgress != null }.last()
+            assertThat(savingState.selectionState.isActive).isFalse()
+            assertThat(savingState.selectionSaveProgress?.total).isEqualTo(2)
+            advanceUntilIdle()
+            consumeItemsUntilPredicate { it.selectionSaveProgress == null }
+            assertThat(selectionMediaSaver.savedFilenames).containsExactly("photo.jpg", "notes.pdf").inOrder()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `BulkSaveSelected does nothing when the selection contains a text message`() = runTest {
+        val photo = aTimelineItemEvent(eventId = EventId("\$S3"), content = aTimelineItemImageContent())
+        val text = aTimelineItemEvent(eventId = EventId("\$S4"), content = aTimelineItemTextContent(body = "hello"))
+        val selectionMediaSaver = FakeSelectionMediaSaver()
+        val presenter = createMessagesPresenter(
+            timelineItems = persistentListOf(photo, text),
+            selectionMediaSaver = selectionMediaSaver,
+        )
+        presenter.testWithLifecycleOwner {
+            val initialState = awaitItem()
+            initialState.eventSink(MessagesEvent.ToggleSelection(photo))
+            initialState.eventSink(MessagesEvent.ToggleSelection(text))
+            val state = consumeItemsUntilPredicate { it.selectionState.count == 2 }.last()
+            assertThat(state.selectionState.canSave).isFalse()
+            state.eventSink(MessagesEvent.BulkSaveSelected)
+            advanceUntilIdle()
+            assertThat(selectionMediaSaver.savedFilenames).isEmpty()
+            assertThat(state.selectionState.count).isEqualTo(2)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `CancelSelectionSave stops the batch`() = runTest {
+        val first = aTimelineItemEvent(eventId = EventId("\$S5"), content = aTimelineItemImageContent(filename = "one.jpg")).copy(sentTimeMillis = 1000L)
+        val second = aTimelineItemEvent(eventId = EventId("\$S6"), content = aTimelineItemImageContent(filename = "two.jpg")).copy(sentTimeMillis = 2000L)
+        val selectionMediaSaver = FakeSelectionMediaSaver()
+        val presenter = createMessagesPresenter(
+            timelineItems = persistentListOf(first, second),
+            selectionMediaSaver = selectionMediaSaver,
+        )
+        presenter.testWithLifecycleOwner {
+            val initialState = awaitItem()
+            initialState.eventSink(MessagesEvent.ToggleSelection(first))
+            initialState.eventSink(MessagesEvent.ToggleSelection(second))
+            val state = consumeItemsUntilPredicate { it.selectionState.count == 2 }.last()
+            state.eventSink(MessagesEvent.BulkSaveSelected)
+            val savingState = consumeItemsUntilPredicate { it.selectionSaveProgress != null }.last()
+            savingState.eventSink(MessagesEvent.CancelSelectionSave)
+            val cancelledState = consumeItemsUntilPredicate { it.selectionSaveProgress == null }.last()
+            advanceUntilIdle()
+            assertThat(cancelledState.selectionSaveProgress).isNull()
+            assertThat(selectionMediaSaver.savedFilenames.size).isLessThan(2)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
     private fun TestScope.createMessagesPresenter(
         coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         timeline: Timeline = FakeTimeline(),
@@ -401,6 +477,7 @@ class MessagesPresenterSelectionTest {
         ),
         navigator: FakeMessagesNavigator = FakeMessagesNavigator(),
         clipboardHelper: FakeClipboardHelper = FakeClipboardHelper(),
+        selectionMediaSaver: FakeSelectionMediaSaver = FakeSelectionMediaSaver(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
         timelineItems: ImmutableList<TimelineItem> = persistentListOf(),
         timelineEventSink: (TimelineEvent) -> Unit = {},
@@ -439,6 +516,7 @@ class MessagesPresenterSelectionTest {
             snackbarDispatcher = SnackbarDispatcher(),
             dispatchers = coroutineDispatchers,
             clipboardHelper = clipboardHelper,
+            selectionMediaSaver = selectionMediaSaver,
             htmlConverterProvider = FakeHtmlConverterProvider(),
             buildMeta = aBuildMeta(),
             timelineController = TimelineController(joinedRoom, timeline),

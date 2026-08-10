@@ -80,6 +80,7 @@ import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBan
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerView
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerViewDefaults
 import io.element.android.features.messages.impl.selection.MessagesSelectionTopBar
+import io.element.android.features.messages.impl.selection.SelectionSaveBanner
 import io.element.android.features.messages.impl.timeline.FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.TimelineView
@@ -304,6 +305,7 @@ fun MessagesView(
                             onCopyClick = { state.eventSink(MessagesEvent.BulkCopySelected) },
                             onForwardClick = { state.eventSink(MessagesEvent.BulkForwardSelected) },
                             onDeleteClick = { showBulkDeleteConfirm = true },
+                            onSaveClick = { state.eventSink(MessagesEvent.BulkSaveSelected) },
                         )
                     } else if (state.timelineState.timelineMode is Timeline.Mode.Thread) {
                         ThreadTopBar(
@@ -642,6 +644,12 @@ private fun MessagesViewContent(
                             state = state.pinnedMessagesBannerState,
                             onClick = ::focusOnPinnedEvent,
                             onViewAllClick = onViewAllPinnedMessagesClick,
+                        )
+                    }
+                    state.selectionSaveProgress?.let { progress ->
+                        SelectionSaveBanner(
+                            progress = progress,
+                            onCancelClick = { state.eventSink(MessagesEvent.CancelSelectionSave) },
                         )
                     }
                     if (state.showLiveLocationShareBanner) {

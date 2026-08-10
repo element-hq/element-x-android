@@ -25,6 +25,8 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.aLoadedPinnedMessagesBannerState
+import io.element.android.features.messages.impl.selection.FakeSelectionMediaSaver
+import io.element.android.features.messages.impl.selection.SelectionMediaSaver
 import io.element.android.features.messages.impl.threads.list.aThreadListItem
 import io.element.android.features.messages.impl.timeline.FakeMarkAsFullyRead
 import io.element.android.features.messages.impl.timeline.MarkAsFullyRead
@@ -1365,6 +1367,7 @@ class MessagesPresenterTest {
         ),
         navigator: FakeMessagesNavigator = FakeMessagesNavigator(),
         clipboardHelper: FakeClipboardHelper = FakeClipboardHelper(),
+        selectionMediaSaver: SelectionMediaSaver = FakeSelectionMediaSaver(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
         timelineEventSink: (TimelineEvent) -> Unit = {},
         permalinkParser: PermalinkParser = FakePermalinkParser(),
@@ -1403,6 +1406,7 @@ class MessagesPresenterTest {
             snackbarDispatcher = SnackbarDispatcher(),
             dispatchers = coroutineDispatchers,
             clipboardHelper = clipboardHelper,
+            selectionMediaSaver = selectionMediaSaver,
             htmlConverterProvider = FakeHtmlConverterProvider(),
             buildMeta = aBuildMeta(),
             timelineController = TimelineController(joinedRoom, timeline),

@@ -33,6 +33,7 @@ internal fun MessagesSelectionTopBar(
     onCopyClick: () -> Unit,
     onDeleteClick: () -> Unit,
     onForwardClick: () -> Unit,
+    onSaveClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     TopAppBar(
@@ -64,6 +65,15 @@ internal fun MessagesSelectionTopBar(
                     contentDescription = stringResource(CommonStrings.action_copy),
                     tint = ElementTheme.colors.iconPrimary,
                 )
+            }
+            if (state.canSave) {
+                IconButton(onClick = onSaveClick) {
+                    Icon(
+                        imageVector = CompoundIcons.Download(),
+                        contentDescription = stringResource(R.string.screen_room_selection_save),
+                        tint = ElementTheme.colors.iconPrimary,
+                    )
+                }
             }
             IconButton(onClick = onForwardClick) {
                 Icon(
@@ -100,5 +110,6 @@ internal fun MessagesSelectionTopBarPreview(
         onCopyClick = {},
         onDeleteClick = {},
         onForwardClick = {},
+        onSaveClick = {},
     )
 }

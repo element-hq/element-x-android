@@ -23,6 +23,7 @@ data class TimelineSelectionState(
     val isEnabled: Boolean,
     val selectedIds: ImmutableSet<EventId>,
     val canDelete: Boolean,
+    val canSave: Boolean,
 ) {
     val isActive: Boolean get() = selectedIds.isNotEmpty()
     val count: Int get() = selectedIds.size
@@ -35,6 +36,7 @@ data class TimelineSelectionState(
             isEnabled = false,
             selectedIds = persistentSetOf(),
             canDelete = false,
+            canSave = false,
         )
     }
 }

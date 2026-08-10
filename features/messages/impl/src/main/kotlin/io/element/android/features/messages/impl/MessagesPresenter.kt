@@ -38,9 +38,15 @@ import io.element.android.features.messages.impl.link.LinkState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvent
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
+import io.element.android.features.messages.impl.selection.SelectionMediaSaver
+import io.element.android.features.messages.impl.selection.SelectionSaveProgress
 import io.element.android.features.messages.impl.selection.TimelineSelectionSaver
 import io.element.android.features.messages.impl.selection.TimelineSelectionState
+import io.element.android.features.messages.impl.selection.bulkSaveMessage
 import io.element.android.features.messages.impl.selection.canDeleteSelection
+import io.element.android.features.messages.impl.selection.canSaveSelection
+import io.element.android.features.messages.impl.selection.savableSelection
+import io.element.android.features.messages.impl.selection.saveAll
 import io.element.android.features.messages.impl.timeline.MarkAsFullyRead
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineEvent
@@ -102,6 +108,7 @@ import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onStart
@@ -132,6 +139,7 @@ class MessagesPresenter(
     private val snackbarDispatcher: SnackbarDispatcher,
     private val dispatchers: CoroutineDispatchers,
     private val clipboardHelper: ClipboardHelper,
+    private val selectionMediaSaver: SelectionMediaSaver,
     private val htmlConverterProvider: HtmlConverterProvider,
     private val buildMeta: BuildMeta,
     @Assisted private val timelineController: TimelineController,
@@ -190,6 +198,8 @@ class MessagesPresenter(
         val canOpenThreadList by featureFlagService.isFeatureEnabledFlow(FeatureFlags.RoomThreadList).collectAsState(initial = false)
         val isMultiSelectEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.MessageMultiSelect)
             .collectAsState(initial = false)
+        var saveProgress by remember { mutableStateOf<SelectionSaveProgress?>(null) }
+        var saveJob by remember { mutableStateOf<Job?>(null) }
         var selectedEventIds: ImmutableSet<EventId> by rememberSaveable(stateSaver = TimelineSelectionSaver) {
             mutableStateOf(persistentSetOf())
         }
@@ -301,6 +311,27 @@ class MessagesPresenter(
                         selectedEventIds = persistentSetOf()
                     }
                 }
+                MessagesEvent.BulkSaveSelected -> {
+                    if (saveJob?.isActive == true) return@handleEvent
+                    val targets = savableSelection(timelineState.timelineItems, selectedEventIds)
+                    if (targets.isNotEmpty()) {
+                        selectedEventIds = persistentSetOf()
+                        saveProgress = SelectionSaveProgress(saved = 0, total = targets.size)
+                        saveJob = sessionCoroutineScope.launch {
+                            val saved = selectionMediaSaver.saveAll(targets) { count ->
+                                saveProgress = SelectionSaveProgress(count, targets.size)
+                            }
+                            saveProgress = null
+                            saveJob = null
+                            snackbarDispatcher.post(SnackbarMessage(bulkSaveMessage(saved, targets.size)))
+                        }
+                    }
+                }
+                MessagesEvent.CancelSelectionSave -> {
+                    saveJob?.cancel()
+                    saveJob = null
+                    saveProgress = null
+                }
                 MessagesEvent.BulkForwardSelected -> {
                     val targets = selectionInSentTimeOrder(timelineState.timelineItems, selectedEventIds)
                     if (targets.isNotEmpty()) {
@@ -360,6 +391,10 @@ class MessagesPresenter(
                 selectedIds = selectedEventIds,
                 userEventPermissions = userEventPermissions,
             ),
+            canSave = canSaveSelection(
+                timelineItems = timelineState.timelineItems,
+                selectedIds = selectedEventIds,
+            ),
         )
 
         return MessagesState(
@@ -397,6 +432,7 @@ class MessagesPresenter(
             ),
             showLiveLocationShareBanner = isCurrentlySharingLiveLocationInRoom && timelineState.timelineMode !is Timeline.Mode.Thread,
             selectionState = selectionState,
+            selectionSaveProgress = saveProgress,
             eventSink = ::handleEvent,
         )
     }

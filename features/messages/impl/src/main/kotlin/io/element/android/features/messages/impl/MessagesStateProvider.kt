@@ -23,6 +23,7 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
 import io.element.android.features.messages.impl.pinned.banner.aLoadedPinnedMessagesBannerState
+import io.element.android.features.messages.impl.selection.SelectionSaveProgress
 import io.element.android.features.messages.impl.selection.TimelineSelectionState
 import io.element.android.features.messages.impl.selection.aTimelineSelectionState
 import io.element.android.features.messages.impl.timeline.TimelineState
@@ -149,6 +150,7 @@ fun aMessagesState(
     isCurrentlySharingLiveLocationInRoom: Boolean = false,
     dmUserStatus: DisplayedStatus? = null,
     selectionState: TimelineSelectionState = TimelineSelectionState.Empty,
+    selectionSaveProgress: SelectionSaveProgress? = null,
     eventSink: (MessagesEvent) -> Unit = {},
 ) = MessagesState(
     roomId = RoomId("!id:domain"),
@@ -181,6 +183,7 @@ fun aMessagesState(
     showLiveLocationShareBanner = isCurrentlySharingLiveLocationInRoom,
     dmUserStatus = dmUserStatus,
     selectionState = selectionState,
+    selectionSaveProgress = selectionSaveProgress,
     eventSink = eventSink,
 )
 
