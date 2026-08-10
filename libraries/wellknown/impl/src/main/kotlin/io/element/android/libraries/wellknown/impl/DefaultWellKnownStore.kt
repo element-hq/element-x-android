@@ -8,6 +8,9 @@
 package io.element.android.libraries.wellknown.impl
 
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.cachestore.api.CacheData
 import io.element.android.libraries.cachestore.api.CacheStore
@@ -18,12 +21,19 @@ import io.element.android.libraries.wellknown.api.ElementWellknownStore
 import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 
-@ContributesBinding(AppScope::class)
+@AssistedInject
 class DefaultWellKnownStore(
+    @Assisted
+    private val prefix: String?,
     private val cacheStore: CacheStore,
     private val elementWellKnownParser: ElementWellKnownParser,
     private val systemClock: SystemClock,
 ) : ElementWellknownStore {
+    @AssistedFactory
+    @ContributesBinding(AppScope::class)
+    fun interface Factory : ElementWellknownStore.Factory {
+        override fun create(prefix: String?): DefaultWellKnownStore
+    }
     override suspend fun get(domain: String): WellknownRetrieverResult<ElementWellKnown> {
         return runCatchingExceptions {
             val cachedData = cacheStore.getData(key(domain))
@@ -54,7 +64,11 @@ class DefaultWellKnownStore(
         }
     }
 
-    private fun key(domain: String): String = "https://$domain/.well-known/element/element.json"
+    private fun key(domain: String): String = if (prefix != null) {
+        "$prefix-$domain"
+    } else {
+        "https://$domain/.well-known/element/element.json"
+    }
 
     companion object {
         // 1 day
