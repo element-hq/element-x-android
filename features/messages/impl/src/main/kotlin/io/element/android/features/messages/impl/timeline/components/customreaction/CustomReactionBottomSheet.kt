@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
@@ -26,7 +27,7 @@ import io.element.android.libraries.designsystem.theme.components.hide
 import io.element.android.libraries.emoji.api.picker.EmojiPickerRenderer
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 
-@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomReactionBottomSheet(
     state: CustomReactionState,
@@ -58,12 +59,7 @@ fun CustomReactionBottomSheet(
                 modifier = modifier,
                 scrollable = false,
             ) {
-                val isImeVisible = WindowInsets.isImeVisible
-                LaunchedEffect(isImeVisible) {
-                    if (isImeVisible) {
-                        sheetState.expand()
-                    }
-                }
+                ExpandSheetWhenImeIsVisible(sheetState)
                 emojiPickerRenderer.Render(
                     state = state.target.emojiPickerState,
                     onSelectEmoji = ::onEmojiSelectedDismiss,
@@ -74,6 +70,17 @@ fun CustomReactionBottomSheet(
                     },
                 )
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
+@Composable
+internal fun ExpandSheetWhenImeIsVisible(sheetState: SheetState) {
+    val isImeVisible = WindowInsets.isImeVisible
+    LaunchedEffect(isImeVisible) {
+        if (isImeVisible) {
+            sheetState.expand()
         }
     }
 }
