@@ -43,6 +43,12 @@ class AccountProviderDataSource(
 
     val flow: StateFlow<AccountProvider> = accountProvider.asStateFlow()
 
+    // The account provider the user last explicitly selected (via [setAccountProvider] / [setUrl]).
+    // Unlike [flow], this is not recomputed by [reset], so it survives to be persisted to history on a
+    // successful sign-in even when the login flow is torn down in between (e.g. across an OAuth round-trip).
+    var lastSelectedAccountProviderUrl: String? = null
+        private set
+
     init {
         // Seed the default from the last used provider, unless the user has already selected one.
         coroutineScope.launch {
@@ -72,6 +78,7 @@ class AccountProviderDataSource(
     }
 
     suspend fun setAccountProvider(data: AccountProvider) {
+        lastSelectedAccountProviderUrl = data.url
         accountProvider.emit(data)
     }
 

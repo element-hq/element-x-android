@@ -23,6 +23,10 @@ class SaveAccountProviderToHistory(
     private val appPreferencesStore: AppPreferencesStore,
 ) {
     suspend operator fun invoke() {
-        appPreferencesStore.addHomeserverToHistory(accountProviderDataSource.flow.value.url)
+        // Persist the provider the user actually selected, not the currently-exposed default: the latter can be
+        // reset back to the history default while the login flow is torn down across an OAuth round-trip.
+        val url = accountProviderDataSource.lastSelectedAccountProviderUrl
+            ?: accountProviderDataSource.flow.value.url
+        appPreferencesStore.addHomeserverToHistory(url)
     }
 }

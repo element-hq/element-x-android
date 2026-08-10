@@ -31,4 +31,20 @@ class SaveAccountProviderToHistoryTest {
         assertThat(appPreferencesStore.getHomeserverHistoryFlow().first())
             .containsExactly("https://example.com")
     }
+
+    @Test
+    fun `invoke saves the selected provider even after the exposed default has been reset`() = runTest {
+        val appPreferencesStore = InMemoryAppPreferencesStore()
+        val accountProviderDataSource = anAccountProviderDataSource(appPreferencesStore = appPreferencesStore)
+        accountProviderDataSource.setUrl("https://example.com")
+        // Simulate the login flow being torn down (e.g. across an OAuth round-trip), which reverts the
+        // exposed default; the user's selection must still be the one saved to history.
+        accountProviderDataSource.reset()
+        val sut = SaveAccountProviderToHistory(accountProviderDataSource, appPreferencesStore)
+
+        sut()
+
+        assertThat(appPreferencesStore.getHomeserverHistoryFlow().first())
+            .containsExactly("https://example.com")
+    }
 }
