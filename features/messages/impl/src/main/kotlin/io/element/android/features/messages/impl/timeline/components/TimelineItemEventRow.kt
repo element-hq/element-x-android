@@ -804,15 +804,15 @@ private fun MessageEventBubbleContent(
                 .padding(top = topPadding, start = 8.dp, end = 8.dp)
                 .clip(shape)
 
-            val talkbackCompatModifier = if (isTalkbackActive()) {
+            val talkbackCompatModifier = when {
                 // Use z-index to make the replied to text being read after the message
                 // Usually, you'd use traversalIndex for that, but it's not working for some reason
-                inReplyToModifier.zIndex(1f)
-            } else {
-                inReplyToModifier.clickable(onClick = inReplyToClick)
+                isTalkbackActive() -> inReplyToModifier.zIndex(1f)
+                inReplyTo is InReplyToDetails.Error -> inReplyToModifier
+                else -> inReplyToModifier.clickable(onClick = inReplyToClick)
             }
 
-            val contentHasError = currentContentValidationState.hasError()
+            val contentHasError = currentContentValidationState.hasError() || inReplyTo is InReplyToDetails.Error
             val borderColor = if (contentHasError) ElementTheme.colors.borderCriticalSubtle else ElementTheme.colors.separatorPrimary
             val backgroundColor = if (contentHasError) ElementTheme.colors.bgCriticalSubtle else ElementTheme.colors.bgCanvasDefault
             Box(
