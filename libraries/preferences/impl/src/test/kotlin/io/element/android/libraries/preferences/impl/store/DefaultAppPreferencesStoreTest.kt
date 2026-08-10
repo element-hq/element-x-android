@@ -110,13 +110,13 @@ class DefaultAppPreferencesStoreTest {
     fun `homeserver history is capped to the most recent entries`() = runTest {
         val store = createStore()
 
-        repeat(15) { index ->
+        repeat(25) { index ->
             store.addHomeserverToHistory("https://server$index.org")
         }
 
         val history = store.getHomeserverHistoryFlow().first()
-        assertThat(history).hasSize(10)
-        assertThat(history.first()).isEqualTo("https://server14.org")
+        assertThat(history).hasSize(20)
+        assertThat(history.first()).isEqualTo("https://server24.org")
         assertThat(history.last()).isEqualTo("https://server5.org")
     }
 

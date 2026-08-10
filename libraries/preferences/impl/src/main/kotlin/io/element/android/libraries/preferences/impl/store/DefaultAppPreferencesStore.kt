@@ -47,7 +47,7 @@ private val callRingtoneDisplayNameKey = stringPreferencesKey("notificationCallR
 
 // URLs never contain a newline, so it is a safe delimiter to persist an ordered list in a single String.
 private const val HOMESERVER_HISTORY_DELIMITER = "\n"
-private const val MAX_HOMESERVER_HISTORY_SIZE = 10
+private const val MAX_HOMESERVER_HISTORY_SIZE = 20
 
 @ContributesBinding(AppScope::class)
 class DefaultAppPreferencesStore(
