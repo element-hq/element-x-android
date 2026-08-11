@@ -21,7 +21,9 @@ import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetail
 import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
 import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.impl.core.RustSendHandle
+import io.element.android.libraries.matrix.impl.user.from
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -74,7 +76,8 @@ fun RustProfileDetails.map(): ProfileDetails {
         is RustProfileDetails.Ready -> ProfileDetails.Ready(
             displayName = displayName,
             displayNameAmbiguous = displayNameAmbiguous,
-            avatarUrl = avatarUrl
+            avatarUrl = avatarUrl,
+            displayedStatus = DisplayedStatus.from(status, call),
         )
     }
 }

@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
+import io.element.android.libraries.matrix.test.scanner.FakeContentScanner
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
@@ -31,9 +32,9 @@ import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.Client
@@ -71,7 +72,8 @@ class RustMatrixClientTest {
 
     @Test
     fun `retrieving the UserProfile updates the database`() = runTest {
-        val updateUserProfileResult = lambdaRecorder<String, String?, String?, Unit> { _, _, _ -> }
+        val profilePersisted = CompletableDeferred<Unit>()
+        val updateUserProfileResult = lambdaRecorder<String, String?, String?, Unit> { _, _, _ -> profilePersisted.complete(Unit) }
         val sessionStore = InMemorySessionStore(
             initialList = listOf(
                 aSessionData(
@@ -89,12 +91,14 @@ class RustMatrixClientTest {
                         userId = userId,
                         displayName = A_USER_NAME,
                         avatarUrl = AN_AVATAR_URL,
+                        status = null,
+                        call = null,
                     )
                 },
             ),
             sessionStore = sessionStore,
         )
-        advanceUntilIdle()
+        profilePersisted.await()
         updateUserProfileResult.assertions().isCalledOnce()
             .with(
                 value(A_USER_ID.value),
@@ -129,7 +133,7 @@ class RustMatrixClientTest {
             client = FakeFfiClient(createRoomResult = createRoomLambda)
         )
 
-        client.createDM(A_USER_ID)
+        client.createDM(userId = A_USER_ID, isEncrypted = true)
 
         createRoomLambda.assertions().isCalledOnce()
         assertThat(createParameters?.historyVisibilityOverride).isEqualTo(RoomHistoryVisibility.Invited)
@@ -156,5 +160,7 @@ class RustMatrixClientTest {
         featureFlagService = FakeFeatureFlagService(),
         analyticsService = FakeAnalyticsService(),
         workManagerScheduler = FakeWorkManagerScheduler(submitLambda = {}),
+        contentScanner = FakeContentScanner(),
+        isMessageSearchAvailable = false,
     )
 }

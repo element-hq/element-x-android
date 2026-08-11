@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -125,10 +126,15 @@ fun SearchAccountProviderView(
                         singleLine = true,
                         trailingIcon = if (userInputState.isNotEmpty()) {
                             {
-                                Box(Modifier.clickable {
-                                    userInputState = ""
-                                    eventSink(SearchAccountProviderEvents.UserInput(""))
-                                }) {
+                                Box(
+                                    Modifier.clickable(
+                                        onClickLabel = stringResource(CommonStrings.action_clear),
+                                        role = Role.Button,
+                                    ) {
+                                        userInputState = ""
+                                        eventSink(SearchAccountProviderEvents.UserInput(""))
+                                    }
+                                ) {
                                     Icon(
                                         imageVector = CompoundIcons.Close(),
                                         contentDescription = stringResource(CommonStrings.action_clear)

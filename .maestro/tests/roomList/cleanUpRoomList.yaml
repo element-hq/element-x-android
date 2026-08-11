@@ -1,0 +1,21 @@
+appId: ${MAESTRO_APP_ID}
+---
+# Clean up the room list if it was left in a bad state by previous tests
+- runFlow:
+    when:
+      visible: 'aRoomName'
+    commands:
+      - longPressOn: 'aRoomName'
+      - tapOn:
+          text: "Leave room"
+          index: 0
+      - tapOn: "Leave"
+- runFlow:
+    when:
+      visible: ${MAESTRO_INVITEE1_MXID}
+    commands:
+      - longPressOn: ${MAESTRO_INVITEE1_MXID}
+      - tapOn:
+          text: "Leave room"
+          index: 0
+      - tapOn: "Leave"

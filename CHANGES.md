@@ -1,3 +1,156 @@
+Changes in Element X v26.08.0
+=============================
+
+<!-- Release notes generated using configuration in .github/release.yml at v26.08.0 -->
+
+## What's Changed
+### ✨ Features
+* feat(call): Active call timeline rendering by @BillCarsonFr in https://github.com/element-hq/element-x-android/pull/7051
+### 🙌 Improvements
+* Announce expanded/collapsed state on the timeline group header by @unclejay80 in https://github.com/element-hq/element-x-android/pull/7226
+* Allow adding extra elements to the developer settings from external modules by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7230
+* Update keyboard visibility to track hasFocus by @jennaharris7 in https://github.com/element-hq/element-x-android/pull/7284
+### 🐛 Bugfixes
+* Live location sharing timeout by @ganfra in https://github.com/element-hq/element-x-android/pull/7184
+* Fix logging via QR code when using MDM-configured homeserver by @mxandreas in https://github.com/element-hq/element-x-android/pull/7228
+* Fix #7181: Remove back arrow from device verified screen and use 'Done' text by @thirumani-vihaan in https://github.com/element-hq/element-x-android/pull/7222
+* Fix padding for captions of media in 'not found' state by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7247
+* Fix banned mime type errors in `DefaultContentScannerService` by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7255
+* Fix `ContentErrorView` not calculating its text size synchronously by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7281
+* Fix media viewer for medias not related to events displaying invalid state by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7280
+* Try making `HeaderFooterView` more robust by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7267
+* Fix insets in several screens by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7285
+### ⚠️ API Changes
+* Add a password strength estimator wrapping the SDK zxcvbn API by @jennaharris7 in https://github.com/element-hq/element-x-android/pull/7186
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/7277
+### 🧱 Build
+* CI: fix 'Update Gradle Wrapper' by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7238
+* Update Gradle Wrapper from 9.5.1 to 9.6.1 by @ElementBot in https://github.com/element-hq/element-x-android/pull/7240
+* Localazy: improve search, parallelize checks by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7261
+* Run `Konsist` tests sequentially by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7293
+### 📄 Documentation
+* Group Element Pro changes into a dedicated release notes section by @manuroe in https://github.com/element-hq/element-x-android/pull/7236
+### 🚧 In development 🚧
+* Plug emoji picker for custom user status by @ganfra in https://github.com/element-hq/element-x-android/pull/7257
+* WIP : display user status by @ganfra in https://github.com/element-hq/element-x-android/pull/7232
+### Dependency upgrades
+* Update roborazzi to v1.67.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7188
+* Update dependency io.sentry:sentry-android to v8.48.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7217
+* Update dependency com.google.crypto.tink:tink-android to v1.23.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7229
+* Update kotlin to v2.3.10 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7234
+* Update dependency net.zetetic:sqlcipher-android to v4.17.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7218
+* Update dependency com.google.firebase:firebase-bom to v34.16.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7237
+* Update dependencyAnalysis to v3.16.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7212
+* Update actions/setup-java action to v5.5.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7214
+* Update dependency io.element.android:element-call-embedded to v0.22.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7161
+* Update kotlin to v2.4.10 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7244
+* Update roborazzi to v1.68.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7245
+* Update metro to v1.3.2 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7243
+* Update dependency org.matrix.rustcomponents:sdk-android to v26.07.22 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7258
+* Update zizmorcore/zizmor-action action to v0.6.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7256
+* Update dependency org.matrix.rustcomponents:sdk-android to v26.07.23 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7262
+* Update dependency io.sentry:sentry-android to v8.49.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7263
+* Update dependencyAnalysis to v3.17.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7265
+* Update actions/setup-java action to v5.6.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7268
+* Update dependency org.jetbrains.kotlinx:kover-gradle-plugin to v0.9.9 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7273
+* Update actions/setup-python action to v7 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7278
+* Update roborazzi to v1.70.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7274
+* Update actions/checkout action to v7.0.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7282
+* Import Compound tokens from `v10.2.3` by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7272
+* Update dependency org.matrix.rustcomponents:sdk-android to v26.07.28 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7287
+* Update dependency org.maplibre.gl:android-sdk to v13.4.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7290
+### 💼 Element Pro
+* Content scanner (Element Pro): scan timeline events for unsafe content by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7159
+* Add content scanner support to media gallery and viewer (Element Pro) by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7233
+* Enforce HS disabling E2EE in DM creation too (Element Pro) by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7292
+* Allow adding a path suffix to the OAuth client URI by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7286
+### Others
+* [A11y] Improve rendering on focused UI items by @bmarty in https://github.com/element-hq/element-x-android/pull/7182
+* Add a button role to clickable icons and text on the login/onboarding screens by @unclejay80 in https://github.com/element-hq/element-x-android/pull/7225
+* Expose formatting toggle state to TalkBack by @unclejay80 in https://github.com/element-hq/element-x-android/pull/7227
+* Add warning to the 'Scan QR code' screen by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7264
+* Refactor SearchBarResultState.Initial/NoResultsFound to data objects by @ganfra in https://github.com/element-hq/element-x-android/pull/7266
+* Remove no longer temporary strings by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7260
+* Use the right insets in the home screen UI by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7271
+* Make settings section separators visible in black theme by @mvanhorn in https://github.com/element-hq/element-x-android/pull/7039
+
+## New Contributors
+* @thirumani-vihaan made their first contribution in https://github.com/element-hq/element-x-android/pull/7222
+* @mvanhorn made their first contribution in https://github.com/element-hq/element-x-android/pull/7039
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v26.07.1...v26.08.0
+
+Changes in Element X v26.07.1
+=============================
+
+<!-- Release notes generated using configuration in .github/release.yml at v26.07.1 -->
+
+## What's Changed
+### ✨ Features
+* Scroll to unread messages by @bmarty in https://github.com/element-hq/element-x-android/pull/7024
+### 🙌 Improvements
+* Collapse runs of deleted messages in the timeline by @manfrommedan in https://github.com/element-hq/element-x-android/pull/7195
+* Allow homeserver to disable encryption in Element Pro by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7198
+### 🐛 Bugfixes
+* Fix jump-to-unread requiring two taps for an out-of-window read marker by @jennaharris7 in https://github.com/element-hq/element-x-android/pull/6943
+* Add content description to video preview for screen readers by @bmarty in https://github.com/element-hq/element-x-android/pull/7137
+* Fix accessibility for message composer input and read receipts button by @bmarty in https://github.com/element-hq/element-x-android/pull/7135
+* Add accessibility label to search input by @bmarty in https://github.com/element-hq/element-x-android/pull/7133
+* Fix timeline reading order distorted when TalkBack is active by @bmarty in https://github.com/element-hq/element-x-android/pull/7138
+* Add programmatic label and focus indicator to PIN entry field by @bmarty in https://github.com/element-hq/element-x-android/pull/7132
+* Fix timelines not loading after marking a room as read from notification when app was killed by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7202
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/7192
+### 🧱 Build
+* Bump the default Gradle daemon heap to match what CI already uses by @PolynomialDivision in https://github.com/element-hq/element-x-android/pull/7152
+* Update screenshots by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7155
+* Update GitHub templates by @bmarty in https://github.com/element-hq/element-x-android/pull/7170
+* Add check on merged manifest by @bmarty in https://github.com/element-hq/element-x-android/pull/7172
+* Fix AAPT dump missing and reordering some permissions by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7193
+* Try fixing DM creation in Maestro by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7204
+### 🚧 In development 🚧
+* Support gallery messages by @bxdxnn in https://github.com/element-hq/element-x-android/pull/6519
+* Support gallery messages by @bmarty in https://github.com/element-hq/element-x-android/pull/7112
+* Initial content scanner integration by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7139
+* WIP : Set user status by @ganfra in https://github.com/element-hq/element-x-android/pull/7094
+### Dependency upgrades
+* Update dependency io.sentry:sentry-android to v8.44.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7093
+* Update dependency org.maplibre.gl:android-sdk to v13.3.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7129
+* Update actions/setup-java action to v5.4.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7143
+* Update danger/danger-js action to v13.0.10 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7142
+* Update dependency io.sentry:sentry-android to v8.46.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7140
+* Update dependencyAnalysis to v3.16.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7144
+* Update plugin gms_google_services to v4.5.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7086
+* Update dependency androidx.compose.material3:material3 to v1.5.0-alpha21 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7007
+* Update dependency androidx.compose.material3:material3 to v1.5.0-alpha22 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7158
+* Update metro to v1.3.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7168
+* Update dependency io.sentry:sentry-android to v8.47.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7178
+* Update dependency androidx.compose:compose-bom to v2026.06.01 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7174
+* Update dependency org.jetbrains.kotlinx:kotlinx-collections-immutable to v0.5.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7180
+* Update dependency io.github.sergio-sastre.ComposablePreviewScanner:android to v0.9.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7201
+* Update dependency io.github.zxing-cpp:android to v3.1.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7206
+* Update dependency org.matrix.rustcomponents:sdk-android to v26.07.13 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7194
+* Update dependency androidx.sqlite:sqlite-ktx to v2.7.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7177
+* Update dependency org.matrix.rustcomponents:sdk-android to v26.07.15 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7216
+### Others
+* Timeline: jump-to-unread FAB and mark-as-read shortcut by @jennaharris7 in https://github.com/element-hq/element-x-android/pull/6694
+* Iterate on visual list by @bmarty in https://github.com/element-hq/element-x-android/pull/7141
+* Fix wrong avatar shown in the thread list's top bar by @bxdxnn in https://github.com/element-hq/element-x-android/pull/7044
+* Update onboarding screen text style by @bmarty in https://github.com/element-hq/element-x-android/pull/7157
+* Add full SVG support by @bxdxnn in https://github.com/element-hq/element-x-android/pull/7020
+* Add skin tone picker to the emoji picker by @bxdxnn in https://github.com/element-hq/element-x-android/pull/6917
+* Fix the message edit being lost when attaching media by @manfrommedan in https://github.com/element-hq/element-x-android/pull/7090
+* Cleanup AndroidManifest.xml files. by @bmarty in https://github.com/element-hq/element-x-android/pull/7171
+* Handle local network permission - Android 17 by @ganfra in https://github.com/element-hq/element-x-android/pull/7165
+* Add item count text as the placeholder for in reply to box for galleries by @bxdxnn in https://github.com/element-hq/element-x-android/pull/7176
+* Default to dark theme for EC by @toger5 in https://github.com/element-hq/element-x-android/pull/7162
+
+## New Contributors
+* @PolynomialDivision made their first contribution in https://github.com/element-hq/element-x-android/pull/7152
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v26.07.0...v26.07.1
+
 Changes in Element X v26.07.0
 =============================
 

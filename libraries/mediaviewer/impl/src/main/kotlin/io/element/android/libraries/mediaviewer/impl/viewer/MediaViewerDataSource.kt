@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.rememberUpdatedState
+import io.element.android.features.contentscanner.api.ContentScannerService
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.extensions.mapCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
@@ -24,6 +25,9 @@ import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaFile
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.DefaultContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.EventContentValidationCache
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint.MediaViewerMode
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
@@ -57,18 +61,23 @@ class MediaViewerDataSource(
     private val localMediaFactory: LocalMediaFactory,
     private val systemClock: SystemClock,
     private val pagerKeysHandler: PagerKeysHandler,
+    private val contentScannerService: ContentScannerService,
+    private val contentValidationCache: EventContentValidationCache,
 ) {
     // List of media files that are currently being loaded
     private val mediaFiles: ConcurrentHashMap<MediaSource, MediaFile> = ConcurrentHashMap()
 
     private val galleryMode = when (mode) {
-        MediaViewerMode.SingleMedia,
         is MediaViewerMode.TimelineImagesAndVideos -> MediaGalleryMode.Images
         is MediaViewerMode.TimelineFilesAndAudios -> MediaGalleryMode.Files
+        is MediaViewerMode.EventGallery -> MediaGalleryMode.Images
     }
 
     // Map of sourceUrl to local media state
     private val localMediaStates: MutableMap<String, MutableState<AsyncData<LocalMedia>>> =
+        mutableMapOf()
+
+    private val mediaValidationState: MutableMap<String, ContentValidationState> =
         mutableMapOf()
 
     fun setup(coroutineScope: CoroutineScope) {
@@ -98,9 +107,12 @@ class MediaViewerDataSource(
     /**
      * Find the index of the page corresponding to the given eventId, or null if not found.
      */
-    fun findEventIndex(eventId: EventId?): Int? {
+    fun findEventIndex(eventId: EventId?, mediaSource: MediaSource? = null): Int? {
         if (eventId == null) return null
-        return dataFlow.value.indexOfFirst { (it as? MediaViewerPageData.MediaViewerData)?.eventId == eventId }.takeIf { it >= 0 }
+        return dataFlow.value.indexOfFirst {
+            val pageData = it as? MediaViewerPageData.MediaViewerData
+            pageData?.eventId == eventId && (mediaSource == null || pageData.mediaSource == mediaSource)
+        }.takeIf { it >= 0 }
     }
 
     @VisibleForTesting
@@ -159,6 +171,9 @@ class MediaViewerDataSource(
                     val localMedia = localMediaStates.getOrPut(sourceUrl) {
                         mutableStateOf(AsyncData.Uninitialized)
                     }
+                    val validationState = mediaValidationState.getOrPut(sourceUrl) {
+                        mediaItem.eventId()?.let { contentValidationCache[it] } ?: DefaultContentValidationState()
+                    }
                     add(
                         MediaViewerPageData.MediaViewerData(
                             eventId = mediaItem.eventId(),
@@ -167,6 +182,7 @@ class MediaViewerDataSource(
                             thumbnailSource = mediaItem.thumbnailSource(),
                             downloadedMedia = localMedia,
                             pagerKey = pagerKeysHandler.getKey(mediaItem),
+                            validationState = validationState,
                         )
                     )
                 }
@@ -224,6 +240,17 @@ class MediaViewerDataSource(
             .onFailure {
                 localMediaState.value = AsyncData.Failure(it)
             }
+    }
+
+    fun validateMedia(mediaSource: MediaSource, thumbnailMediaSource: MediaSource?) {
+        val validationState = mediaValidationState[mediaSource.safeUrl] ?: return
+        val currentState = validationState.getCurrentOverallState()
+
+        if (currentState.isLoading() || currentState.isValid()) {
+            return
+        }
+
+        contentScannerService.scan(listOfNotNull(mediaSource, thumbnailMediaSource), validationState)
     }
 
     fun cancelLoadingMedia(data: MediaViewerPageData.MediaViewerData) {

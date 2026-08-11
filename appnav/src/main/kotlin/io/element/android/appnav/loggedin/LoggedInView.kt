@@ -25,6 +25,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.matrix.api.exception.isNetworkError
+import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialogView
 import io.element.android.libraries.push.api.PusherRegistrationFailure
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -82,6 +83,12 @@ fun LoggedInView(
             }
         )
     }
+
+    LocalNetworkPermissionDialogView(
+        dialog = state.localNetworkPermissionDialog,
+        onSubmit = { state.eventSink(LoggedInEvents.RequestLocationNetworkPermission) },
+        onDismiss = { state.eventSink(LoggedInEvents.DismissLocalNetworkPermissionPrompt) },
+    )
 }
 
 private fun Throwable.getReason(): String? {

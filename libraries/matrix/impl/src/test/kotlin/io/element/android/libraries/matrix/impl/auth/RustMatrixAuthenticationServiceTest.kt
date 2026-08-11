@@ -11,6 +11,7 @@ package io.element.android.libraries.matrix.impl.auth
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.impl.ClientBuilderProvider
 import io.element.android.libraries.matrix.impl.FakeClientBuilderProvider
 import io.element.android.libraries.matrix.impl.createRustMatrixClientFactory
@@ -72,6 +73,7 @@ class RustMatrixAuthenticationServiceTest {
                 oAuthRedirectUrlProvider = FakeOAuthRedirectUrlProvider(),
             ),
             enterpriseService = enterpriseService,
+            featureFlagService = FakeFeatureFlagService(),
         )
     }
 }

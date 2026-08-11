@@ -18,6 +18,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
+import io.element.android.features.preferences.api.ExtraDeveloperOptionsRenderer
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.designsystem.showkase.getBrowserIntent
@@ -28,6 +29,7 @@ class AppDeveloperSettingsNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: AppDeveloperSettingsPresenter,
+    private val extraDeveloperOptionsRenderer: ExtraDeveloperOptionsRenderer,
 ) : Node(buildContext, plugins = plugins) {
     private val callback: PreferencesEntryPoint.DeveloperSettingsCallback = callback()
 
@@ -45,6 +47,7 @@ class AppDeveloperSettingsNode(
             modifier = modifier,
             onOpenShowkase = ::openShowkase,
             onBackClick = callback::onDone,
+            extraOptions = { extraDeveloperOptionsRenderer.Render(Modifier) },
         )
     }
 }

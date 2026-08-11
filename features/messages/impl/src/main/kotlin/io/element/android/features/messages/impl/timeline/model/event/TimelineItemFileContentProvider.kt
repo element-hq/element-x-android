@@ -18,8 +18,6 @@ open class TimelineItemFileContentProvider : PreviewParameterProvider<TimelineIt
             aTimelineItemFileContent(),
             aTimelineItemFileContent("A bigger name file.pdf"),
             aTimelineItemFileContent("An even bigger bigger bigger bigger bigger bigger bigger file name which doesn't fit.pdf"),
-            aTimelineItemFileContent(caption = "A caption"),
-            aTimelineItemFileContent(caption = "An even bigger bigger bigger bigger bigger bigger bigger caption"),
         )
 }
 

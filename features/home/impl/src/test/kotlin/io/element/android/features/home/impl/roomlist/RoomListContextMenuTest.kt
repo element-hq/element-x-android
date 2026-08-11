@@ -34,7 +34,7 @@ class RoomListContextMenuTest : RobolectricTest() {
             contextMenu = contextMenu,
             eventSink = eventsRecorder,
         )
-        clickOn(R.string.screen_roomlist_mark_as_read)
+        clickOn(CommonStrings.action_mark_as_read)
         eventsRecorder.assertList(
             listOf(
                 RoomListEvent.HideContextMenu,

@@ -33,9 +33,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -76,6 +79,8 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItemGrou
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemGalleryContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
@@ -86,7 +91,6 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.ensureActiveLiveLocation
-import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.timeline.protection.mustBeProtected
 import io.element.android.libraries.architecture.AsyncData
@@ -120,9 +124,14 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageTy
 import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisplayName
+import io.element.android.libraries.matrix.api.timeline.item.event.mediaSources
+import io.element.android.libraries.matrix.api.timeline.item.event.toMatrixUser
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.media.contentvalidation.collectOverallState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.rememberEventContentValidationState
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToView
+import io.element.android.libraries.matrix.ui.messages.reply.content
 import io.element.android.libraries.matrix.ui.messages.reply.eventId
 import io.element.android.libraries.matrix.ui.messages.sender.SenderName
 import io.element.android.libraries.matrix.ui.messages.sender.SenderNameMode
@@ -156,6 +165,7 @@ fun TimelineItemEventRow(
     isLastOutgoingMessage: Boolean,
     displayThreadSummaries: Boolean,
     onEventClick: () -> Unit,
+    onGalleryItemClick: ((Int) -> Unit),
     onLongClick: () -> Unit,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
@@ -173,16 +183,17 @@ fun TimelineItemEventRow(
         val onContentClick = onEventClick.takeUnless { event.isWholeContentClickable }
 
         TimelineItemEventContentView(
+            eventId = event.eventId,
             content = event.content,
-            hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId),
+            timelineProtectionState = timelineProtectionState,
             onContentClick = onContentClick,
+            onGalleryItemClick = onGalleryItemClick,
             onLongClick = onLongClick,
-            onShowContentClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
             onLinkClick = onLinkClick,
             onLinkLongClick = onLinkLongClick,
             eventSink = eventSink,
             modifier = contentModifier,
-            onContentLayoutChange = onContentLayoutChange
+            onContentLayoutChange = onContentLayoutChange,
         )
     },
 ) {
@@ -197,11 +208,7 @@ fun TimelineItemEventRow(
     }
 
     fun onUserDataClick() {
-        val sender = MatrixUser(
-            userId = event.senderId,
-            displayName = event.senderProfile.getDisplayName(),
-            avatarUrl = event.senderProfile.getAvatarUrl(),
-        )
+        val sender = event.senderProfile.toMatrixUser(event.senderId)
         onUserDataClick(sender)
     }
 
@@ -464,6 +471,23 @@ private fun TimelineItemEventRowContent(
             )
         }
 
+        val currentContentValidationState by rememberEventContentValidationState(eventId = event.eventId, needsValidation = event.content.isMedia)
+            .collectOverallState()
+        val needsInvalidContentCustomisations =
+            // Gallery events should not apply the custom bubble color, instead each item will apply some custom color if needed
+            event.content !is TimelineItemGalleryContent &&
+                event.content !is TimelineItemAttachmentsContent &&
+                currentContentValidationState.hasError() &&
+                event.content.isMedia
+
+        // If the event has a dangerous media content we need to set custom message bubble background and border colors
+        val themeColors = ElementTheme.colors
+        val (dangerousContentBubbleColor, borderColor) = remember(themeColors.isLight, needsInvalidContentCustomisations, event.content.type) {
+            val background = themeColors.bgCriticalSubtle.takeIf { needsInvalidContentCustomisations }
+            val border = themeColors.borderCriticalSubtle.takeIf { needsInvalidContentCustomisations }
+            background to border
+        }
+
         // Message bubble
         val bubbleState = BubbleState(
             groupPosition = event.groupPosition,
@@ -490,6 +514,8 @@ private fun TimelineItemEventRowContent(
             interactionSource = interactionSource,
             onClick = onContentClick,
             onLongClick = onLongClick,
+            customBackgroundColor = dangerousContentBubbleColor,
+            borderColor = borderColor,
         ) {
             MessageEventBubbleContent(
                 event = event,
@@ -743,6 +769,7 @@ private fun MessageEventBubbleContent(
             }
             ContentPadding.CaptionedMedia ->
                 Modifier.padding(start = 8.dp, end = 8.dp, top = topPadding, bottom = 8.dp)
+            ContentPadding.InvalidContent -> Modifier.padding(top = topPadding, bottom = 8.dp)
         }
 
         val threadDecoration = @Composable {
@@ -766,26 +793,40 @@ private fun MessageEventBubbleContent(
         }
 
         val inReplyTo = @Composable { inReplyTo: InReplyToDetails ->
+            val currentContentValidationState by rememberEventContentValidationState(eventId = inReplyTo.eventId(), eventContent = inReplyTo.content())
+                .collectOverallState()
             val topPadding = if (showThreadDecoration) 0.dp else 8.dp
+            val shape = RoundedCornerShape(6.dp)
             val inReplyToModifier = Modifier
                 .padding(top = topPadding, start = 8.dp, end = 8.dp)
-                .clip(RoundedCornerShape(6.dp))
+                .clip(shape)
 
-            val talkbackCompatModifier = if (isTalkbackActive()) {
+            val talkbackCompatModifier = when {
                 // Use z-index to make the replied to text being read after the message
                 // Usually, you'd use traversalIndex for that, but it's not working for some reason
-                inReplyToModifier.zIndex(1f)
-            } else {
-                inReplyToModifier.clickable(onClick = inReplyToClick)
+                isTalkbackActive() -> inReplyToModifier.zIndex(1f)
+                inReplyTo is InReplyToDetails.Error -> inReplyToModifier
+                else -> inReplyToModifier.clickable(onClick = inReplyToClick)
             }
+
+            val contentHasError = currentContentValidationState.hasError() || inReplyTo is InReplyToDetails.Error
+            val borderColor = if (contentHasError) ElementTheme.colors.borderCriticalSubtle else ElementTheme.colors.separatorPrimary
+            val backgroundColor = if (contentHasError) ElementTheme.colors.bgCriticalSubtle else ElementTheme.colors.bgCanvasDefault
             Box(
                 modifier = talkbackCompatModifier
-                    .border(1.dp, ElementTheme.colors.separatorPrimary, RoundedCornerShape(6.dp))
-                    .background(ElementTheme.colors.bgCanvasDefault, RoundedCornerShape(6.dp))
+                    .border(1.dp, borderColor, shape)
+                    .background(backgroundColor, shape)
                     .padding(4.dp)
             ) {
+                val contentValidationState = rememberEventContentValidationState(eventId = inReplyTo.eventId(), eventContent = inReplyTo.content())
+                val updatedEventSink by rememberUpdatedState(eventSink)
+                LaunchedEffect(inReplyTo) {
+                    val mediaSources = inReplyTo.content()?.mediaSources() ?: return@LaunchedEffect
+                    updatedEventSink(TimelineEvent.ValidateMedia(inReplyTo.eventId(), mediaSources, contentValidationState))
+                }
                 InReplyToView(
                     inReplyTo = inReplyTo,
+                    contentValidationValue = currentContentValidationState,
                     hideImage = timelineProtectionState.hideMediaContent(inReplyTo.eventId()),
                 )
             }
@@ -805,26 +846,47 @@ private fun MessageEventBubbleContent(
         }
     }
 
-    val timestampPosition = when (val content = event.content) {
-        is TimelineItemImageContent -> if (content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
-        is TimelineItemVideoContent -> if (content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
-        is TimelineItemStickerContent -> TimestampPosition.Overlay
-        is TimelineItemLocationContent -> {
-            val content = content.ensureActiveLiveLocation()
-            val shouldHide = content.mode is TimelineItemLocationContent.Mode.Live &&
-                content.mode.isActive &&
-                content.mode.isOwnUser
-            if (shouldHide) TimestampPosition.Hidden else TimestampPosition.Overlay
+    val contentValidationState by rememberEventContentValidationState(eventId = event.eventId, needsValidation = event.content.isMedia).collectOverallState()
+    val needsInvalidContentLayout =
+        // Gallery events should not apply custom paddings or layout dispositions
+        event.content !is TimelineItemGalleryContent &&
+            event.content !is TimelineItemAttachmentsContent &&
+            contentValidationState.hasError()
+
+    val timestampPosition = if (needsInvalidContentLayout) {
+        // The invalid content view will be displayed in all these cases, independent of the event content
+        TimestampPosition.Aligned
+    } else {
+        when (val content = event.content) {
+            is TimelineItemImageContent -> if (content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
+            is TimelineItemVideoContent -> if (content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
+            is TimelineItemGalleryContent -> if (content.showCaption) TimestampPosition.Aligned else TimestampPosition.Below
+            is TimelineItemAttachmentsContent -> if (content.showCaption) TimestampPosition.Aligned else TimestampPosition.Below
+            is TimelineItemStickerContent -> TimestampPosition.Overlay
+            is TimelineItemLocationContent -> {
+                val content = content.ensureActiveLiveLocation()
+                val shouldHide = content.mode is TimelineItemLocationContent.Mode.Live &&
+                    content.mode.isActive &&
+                    content.mode.isOwnUser
+                if (shouldHide) TimestampPosition.Hidden else TimestampPosition.Overlay
+            }
+            is TimelineItemPollContent -> TimestampPosition.Below
+            else -> TimestampPosition.Default
         }
-        is TimelineItemPollContent -> TimestampPosition.Below
-        else -> TimestampPosition.Default
     }
-    val paddingBehaviour = when (event.content) {
-        is TimelineItemImageContent -> if (event.content.showCaption) ContentPadding.CaptionedMedia else ContentPadding.Media
-        is TimelineItemVideoContent -> if (event.content.showCaption) ContentPadding.CaptionedMedia else ContentPadding.Media
-        is TimelineItemStickerContent,
-        is TimelineItemLocationContent -> ContentPadding.Media
-        else -> ContentPadding.Textual
+
+    val paddingBehaviour = if (needsInvalidContentLayout) {
+        ContentPadding.InvalidContent
+    } else {
+        when (event.content) {
+            is TimelineItemImageContent -> if (event.content.showCaption) ContentPadding.CaptionedMedia else ContentPadding.Media
+            is TimelineItemVideoContent -> if (event.content.showCaption) ContentPadding.CaptionedMedia else ContentPadding.Media
+            is TimelineItemGalleryContent -> ContentPadding.CaptionedMedia
+            is TimelineItemAttachmentsContent -> ContentPadding.CaptionedMedia
+            is TimelineItemStickerContent,
+            is TimelineItemLocationContent -> ContentPadding.Media
+            else -> ContentPadding.Textual
+        }
     }
     CommonLayout(
         showThreadDecoration = timelineMode !is Timeline.Mode.Thread && event.threadInfo is TimelineItemThreadInfo.ThreadResponse,
@@ -897,6 +959,7 @@ internal fun TimelineItemEventRowWithThreadSummaryPreview() = ElementPreview {
                                         displayName = USER_NAME_ALICE,
                                         avatarUrl = null,
                                         displayNameAmbiguous = false,
+                                        displayedStatus = null,
                                     ),
                                     timestamp = 0L,
                                 )
@@ -1075,6 +1138,7 @@ internal fun ThreadSummaryViewPreview() {
                         displayName = USER_NAME_ALICE,
                         avatarUrl = null,
                         displayNameAmbiguous = true,
+                        displayedStatus = null,
                     ),
                     timestamp = 0L,
                 )

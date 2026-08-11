@@ -9,9 +9,11 @@
 package io.element.android.features.messages.impl.timeline.groups
 
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemGalleryContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
@@ -43,6 +45,14 @@ import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecry
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 
 /**
+ * Return true when every event in the group is a redacted (deleted) message, i.e. the group is a
+ * collapsed run of deleted messages rather than the usual run of room state changes. Used to pick
+ * the group header label. An empty group is not considered a redacted group.
+ */
+internal fun TimelineItem.GroupedEvents.isRedactedMessagesGroup(): Boolean =
+    events.isNotEmpty() && events.all { it.content is TimelineItemRedactedContent }
+
+/**
  * Return true if the Event can be grouped in a collapse/expand block
  * When [canBeGrouped] returns a value, [canBeDisplayedInBubbleBlock] MUST return the opposite value.
  * Since the receiving type are not the same, the two functions exist.
@@ -52,6 +62,8 @@ internal fun TimelineItem.Event.canBeGrouped(): Boolean {
         is TimelineItemTextBasedContent,
         is TimelineItemEncryptedContent,
         is TimelineItemImageContent,
+        is TimelineItemGalleryContent,
+        is TimelineItemAttachmentsContent,
         is TimelineItemStickerContent,
         is TimelineItemFileContent,
         is TimelineItemVideoContent,
