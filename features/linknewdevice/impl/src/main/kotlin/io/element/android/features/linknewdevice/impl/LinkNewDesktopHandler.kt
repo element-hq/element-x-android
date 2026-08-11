@@ -46,11 +46,15 @@ class LinkNewDesktopHandler(
     private var timerJob: Job? = null
     private var handler: LinkDesktopHandler? = null
 
-    fun createNewHandler() {
+    private fun resetJobs() {
         currentJob?.cancel()
         currentJob = null
         timerJob?.cancel()
         timerJob = null
+    }
+
+    fun createNewHandler() {
+        resetJobs()
         handler = matrixClient.createLinkDesktopHandler().getOrNull()
         timerJob = sessionScope.launch {
             delay(2.minutes)
@@ -59,20 +63,14 @@ class LinkNewDesktopHandler(
     }
 
     fun reset() {
-        currentJob?.cancel()
-        currentJob = null
-        timerJob?.cancel()
-        timerJob = null
+        resetJobs()
         sessionScope.launch {
             linkDesktopStepFlow.emit(LinkDesktopStep.Uninitialized)
         }
     }
 
     fun onScannedCode(data: ByteArray) {
-        currentJob?.cancel()
-        currentJob = null
-        timerJob?.cancel()
-        timerJob = null
+        resetJobs()
         val currentHandler = handler
         if (currentHandler == null) {
             Timber.tag(loggerTag.value).e("onScannedCode: Handler is not initialized. Call createNewHandler() first.")
