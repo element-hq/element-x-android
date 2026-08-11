@@ -14,7 +14,7 @@ firebaseAppDistribution = "5.3.0"
 core = "1.18.0"
 datastore = "1.2.1"
 constraintlayout = "2.2.2"
-constraintlayout_compose = "1.1.1"
+constraintlayout_compose = "1.1.2"
 lifecycle = "2.11.0"
 activity = "1.13.0"
 media3 = "1.10.1"
@@ -199,7 +199,7 @@ serialization_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-jso
 kotlinx_collections_immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.5.1"
 showkase = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
 showkase_processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }
-jsoup = "org.jsoup:jsoup:1.22.2"
+jsoup = "org.jsoup:jsoup:1.23.1"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:2.2.0"
 timber = "com.jakewharton.timber:timber:5.0.1"
