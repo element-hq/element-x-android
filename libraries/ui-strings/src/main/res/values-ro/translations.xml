@@ -1,23 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_avatar">"Adăugați un avatar"</string>
   <string name="a11y_add_reaction">"Adăugați o reacție: %1$s"</string>
   <string name="a11y_address">"Adresă"</string>
   <string name="a11y_avatar">"Imagine de profil"</string>
+  <string name="a11y_clear_search_field">"Ștergeți câmpul de căutare"</string>
   <string name="a11y_collapse_message_text_field">"Micșorați câmpul mesajului"</string>
+  <string name="a11y_create_poll_votes_allowed_decrease">"Reduceți numărul de voturi permise per persoană"</string>
+  <string name="a11y_create_poll_votes_allowed_increase">"Măriți numărul de voturi permise per persoană"</string>
+  <string name="a11y_custom_emoji">"Emoji personalizat"</string>
   <string name="a11y_delete">"Ștergere"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d cifră introdusă"</item>
     <item quantity="few">"%1$d cifre introduse"</item>
     <item quantity="other">"%1$d cifre introduse"</item>
   </plurals>
+  <string name="a11y_duration">"Durată: %1$s"</string>
   <string name="a11y_edit_avatar">"Editați avatarul"</string>
   <string name="a11y_edit_room_address_hint">"Adresa completă va fi %1$s"</string>
   <string name="a11y_encryption_details">"Detalii privind criptarea"</string>
   <string name="a11y_expand_message_text_field">"Extindeți câmpul mesajului"</string>
+  <string name="a11y_gallery_attachment">"Galerie, atașament %1$d"</string>
+  <string name="a11y_gallery_failed_scan">"Galerie, scanare eșuată %1$d"</string>
+  <string name="a11y_gallery_image">"Galerie, imagine %1$d"</string>
+  <plurals name="a11y_gallery_more_media">
+    <item quantity="one">"Galerie, încă %1$d fișier media"</item>
+    <item quantity="few">"Galerie, încă %1$d fișiere media"</item>
+    <item quantity="other">"Galerie, încă %1$d fișiere media"</item>
+  </plurals>
+  <string name="a11y_gallery_scanning">"Galerie, scanare %1$d"</string>
+  <string name="a11y_gallery_video">"Galerie, videoclip %1$d"</string>
   <string name="a11y_hide_password">"Ascundeți parola"</string>
   <string name="a11y_info">"Informații"</string>
   <string name="a11y_join_call">"Alăturați-vă apelului"</string>
   <string name="a11y_jump_to_bottom">"Mergeți în jos"</string>
+  <string name="a11y_jump_to_unread">"Săriți la necitite"</string>
+  <string name="a11y_jump_to_unread_messages">"Săriți la primul mesaj necitit"</string>
   <string name="a11y_move_the_map_to_my_location">"Mutați harta la locația mea"</string>
   <string name="a11y_notifications_mentions_only">"Doar mențiuni"</string>
   <string name="a11y_notifications_muted">"Notificări dezactivate"</string>
@@ -28,12 +46,14 @@
   <string name="a11y_page_n">"Pagina %1$d"</string>
   <string name="a11y_pause">"Pauză"</string>
   <string name="a11y_paused_voice_message">"Mesaj vocal, durată:%1$s, poziție curentă: %2$s"</string>
+  <string name="a11y_photo_preview">"Previzualizare foto"</string>
   <string name="a11y_pin_field">"Câmp PIN"</string>
   <string name="a11y_pinned_location">"Locație fixată"</string>
   <string name="a11y_play">"Redați"</string>
   <string name="a11y_playback_speed">"Viteză de redare"</string>
   <string name="a11y_poll">"Sondaj"</string>
   <string name="a11y_poll_end">"Sondaj încheiat"</string>
+  <string name="a11y_position">"Poziție: %1$s"</string>
   <string name="a11y_qr_code">"Cod QR"</string>
   <string name="a11y_react_with">"Reacționați cu %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Reacționați cu alte emoji-uri"</string>
@@ -44,20 +64,26 @@
     <item quantity="other">"Citit de %1$s și incă %2$d"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Citit de %1$s"</string>
+  <string name="a11y_read_receipts_tap_to_show_all_android">"afișați toate confirmările de citire"</string>
   <string name="a11y_remove_reaction">"Îndepărtați reacția cu %1$s"</string>
   <string name="a11y_remove_reaction_with">"Îndepărtați reacția %1$s"</string>
   <string name="a11y_room_avatar">"Avatarul camerei"</string>
   <string name="a11y_send_files">"Trimiteți fișiere"</string>
   <string name="a11y_sender_location">"Locația expeditorului"</string>
+  <string name="a11y_sent_by_sender_at_date">"Trimis de %1$s la %2$s"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Acțiune limitată în timp necesară, aveți un minut pentru a verifica"</string>
   <string name="a11y_settings_with_required_action">"Setări, acțiune necesară"</string>
   <string name="a11y_show_password">"Afișați parola"</string>
   <string name="a11y_start_call">"Începeți un apel"</string>
   <string name="a11y_start_video_call">"Inițiați un apel video"</string>
   <string name="a11y_start_voice_call">"Inițiați un apel vocal"</string>
+  <string name="a11y_status">"Statuts"</string>
+  <string name="a11y_thread_in_room">"Fir în: %1$s"</string>
+  <string name="a11y_threads_in_room">"Fire în %1$s"</string>
   <string name="a11y_tombstoned_room">"Cameră terminată"</string>
   <string name="a11y_user_avatar">"Avatar utilizator"</string>
   <string name="a11y_user_menu">"Meniu utilizator"</string>
+  <string name="a11y_video_preview">"Previzualizare video"</string>
   <string name="a11y_view_avatar">"Vizualizați avatarul"</string>
   <string name="a11y_view_details">"Vizualizați detalii"</string>
   <string name="a11y_voice_message">"Mesaj vocal, durată: %1$s"</string>
@@ -94,6 +120,7 @@
   <string name="action_decline_and_block">"Refuzați și blocați"</string>
   <string name="action_delete">"Ștergere"</string>
   <string name="action_delete_account">"Ștergeți contul"</string>
+  <string name="action_delete_file">"Ștergeți fișierul"</string>
   <string name="action_delete_poll">"Ștergeți sondajul"</string>
   <string name="action_deselect_all">"Deselectați tot"</string>
   <string name="action_disable">"Dezactivați"</string>
@@ -131,6 +158,7 @@
   <string name="action_manage_account_and_devices">"Gestionați contul și dispozitivele"</string>
   <string name="action_manage_devices">"Gestionați dispozitivele"</string>
   <string name="action_manage_rooms">"Gestionați camerele"</string>
+  <string name="action_mark_as_read">"Marcați ca citit"</string>
   <string name="action_message">"Contactați"</string>
   <string name="action_minimize">"Minimizați"</string>
   <string name="action_next">"Următorul"</string>
@@ -185,9 +213,11 @@
   <string name="action_translate">"Traduceți"</string>
   <string name="action_try_again">"Încercați din nou"</string>
   <string name="action_unpin">"Defixați"</string>
+  <string name="action_video_call">"Apel video"</string>
   <string name="action_view">"Vizualizați"</string>
   <string name="action_view_in_timeline">"Vedeți în lista de mesaje"</string>
   <string name="action_view_source">"Vedeți sursă"</string>
+  <string name="action_voice_call">"Apel vocal"</string>
   <string name="action_yes">"Da"</string>
   <string name="action_yes_try_again">"Da, încercați din nou"</string>
   <string name="banner_migrate_to_native_sliding_sync_description">"Serverul dvs. acceptă acum un protocol nou, mai rapid. Deconectați-vă și conectați-vă din nou pentru a face upgrade acum. Dacă faceți acest lucru acum, vă va ajuta să evitați o deconectare forțată atunci când vechiul protocol este eliminat ulterior."</string>
@@ -208,6 +238,7 @@
   <string name="common_blocked_users">"Utilizatori blocați"</string>
   <string name="common_bubbles">"Baloane"</string>
   <string name="common_call_declined">"Apel respins"</string>
+  <string name="common_call_in_progress">"Apel în curs"</string>
   <string name="common_call_started">"Apel inițiat"</string>
   <string name="common_call_you_declined">"Ați respins un apel"</string>
   <string name="common_chat_backup">"Backup conversații"</string>
@@ -251,7 +282,19 @@ Motiv:%1$s."</string>
   <string name="common_file_saved_on_disk_android">"Fișier salvat în Descărcări"</string>
   <string name="common_forward_message">"Redirecționați mesajul"</string>
   <string name="common_frequently_used">"Utilizate frecvent"</string>
+  <string name="common_gallery">"Galerie"</string>
+  <plurals name="common_gallery_reply_attachments">
+    <item quantity="one">"%1$d atașament…"</item>
+    <item quantity="few">"%1$d atașamente…"</item>
+    <item quantity="other">"%1$d atașamente…"</item>
+  </plurals>
+  <plurals name="common_gallery_reply_media_items">
+    <item quantity="one">"%1$d element media…"</item>
+    <item quantity="few">"%1$d elemente media…"</item>
+    <item quantity="other">"%1$d elemente media…"</item>
+  </plurals>
   <string name="common_gif">"GIF"</string>
+  <string name="common_group_call_in_progress">"Apel de grup în curs"</string>
   <string name="common_image">"Imagine"</string>
   <string name="common_in_reply_to">"Ca răspuns la %1$s"</string>
   <string name="common_install_apk_android">"Instalați APK"</string>
@@ -289,6 +332,7 @@ Motiv:%1$s."</string>
   <string name="common_no_space_name">"Fără nume de spațiu"</string>
   <string name="common_not_encrypted">"Necriptat"</string>
   <string name="common_offline">"Deconectat"</string>
+  <string name="common_on_a_call">"Într-un apel"</string>
   <string name="common_open_source_licenses">"Licențe open source"</string>
   <string name="common_or">"sau"</string>
   <string name="common_other_options">"Alte opțiuni"</string>
@@ -301,6 +345,7 @@ Motiv:%1$s."</string>
   <string name="common_please_wait">"Va rugam asteptati…"</string>
   <string name="common_poll_end_confirmation">"Sunteți sigur că doriți să încheiați acest sondaj?"</string>
   <string name="common_poll_summary">"Sondajul %1$s"</string>
+  <string name="common_poll_summary_prefix">"Sondaj"</string>
   <string name="common_poll_total_votes">"Total voturi: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Rezultatele vor fi afișate după încheierea sondajului"</string>
   <plurals name="common_poll_votes_count">
@@ -400,6 +445,7 @@ Motiv:%1$s."</string>
   <string name="common_unmute">"Activare sunet"</string>
   <string name="common_unsupported_call">"Apel incompatibil"</string>
   <string name="common_unsupported_event">"Eveniment neacceptat"</string>
+  <string name="common_user_started_a_call">"%1$s a inițiat un apel"</string>
   <string name="common_username">"Utilizator"</string>
   <string name="common_verification_cancelled">"Verificare anulată"</string>
   <string name="common_verification_complete">"Verificare completă"</string>
@@ -421,6 +467,11 @@ Motiv:%1$s."</string>
   <string name="common_waiting_live_location">"Se așteptă localizarea în timp real…"</string>
   <string name="common_world_readable_history">"Oricine poate vedea istoricul"</string>
   <string name="common_you">"Dumneavoastră"</string>
+  <string name="content_scanner_not_found">"Descărcarea nu este disponibilă."</string>
+  <string name="content_scanner_not_found_title">"Ceva nu a mers bine"</string>
+  <string name="content_scanner_scanning">"Se scanează…"</string>
+  <string name="content_scanner_unsafe_message">"Previzualizarea și descărcarea au fost dezactivate."</string>
+  <string name="content_scanner_unsafe_title">"Fișierul nu este sigur"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) a distribuit acest mesaj deoarece nu erați în cameră când a fost trimis."</string>
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s a distribuit acest mesaj deoarece nu erați în cameră când a fost trimis."</string>
   <string name="crypto_history_visible">"Această cameră a fost configurată astfel încât noii membri să poată citi istoricul. %1$s"</string>
@@ -477,10 +528,19 @@ Sunteți sigur că doriți să continuați?"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake pentru a raporta erori"</string>
   <string name="screen_bug_report_a11y_screenshot">"Captură de ecran"</string>
+  <string name="screen_change_server_navigation_title_login">"Autentificare"</string>
+  <string name="screen_change_server_navigation_title_register">"Creați un cont"</string>
+  <string name="screen_change_server_textfield_footer_login">"Dacă contul este furnizat de compania dumneavoastră sau de o comunitate, schimbați furnizorul contului (exemplu: numecompanie.com)."</string>
+  <string name="screen_change_server_textfield_footer_register">"Creați un cont gratuit pe matrix.org. Dacă doriți să creați un cont la un alt furnizor, schimbați-l în consecință (exemplu: numecomunitate.org)."</string>
+  <string name="screen_change_server_textfield_header">"Furnizor de cont"</string>
+  <string name="screen_change_server_textfield_placeholder">"exemplu.ro"</string>
+  <string name="screen_change_server_title_login">"Introduceți furnizorul contului dumneavoastră"</string>
+  <string name="screen_change_server_title_register">"Alegeți un furnizor de cont"</string>
   <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
   <string name="screen_create_poll_options_section_title">"Opțiuni"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Ștergeți %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Setări"</string>
+  <string name="screen_create_poll_votes_allowed_per_person">"Voturi permise per persoană"</string>
   <string name="screen_live_location_sheet_nobody_sharing">"Nimeni nu își partajează locația"</string>
   <string name="screen_live_location_sheet_sharing_live_location">"Se partajează locația în timp real"</string>
   <plurals name="screen_live_location_sheet_subtitle">
@@ -489,6 +549,8 @@ Sunteți sigur că doriți să continuați?"</string>
     <item quantity="other">"%1$d persoane"</item>
   </plurals>
   <string name="screen_live_location_sheet_title">"Pe hartă"</string>
+  <string name="screen_local_network_opt_in_subtitle">"Homeserverul dumneavoastră se află în rețeaua locală. Pentru a se conecta, %1$s are nevoie de permisiunea de a accesa dispozitive din această rețea."</string>
+  <string name="screen_local_network_opt_in_title">"Permiteți accesul la rețeaua locală"</string>
   <string name="screen_media_picker_error_failed_selection">"Selectarea fișierelor media a eșuat, încercați din nou."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Apăsați pe un mesaj și alegeți \"%1$s\" pentru a-l include aici."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Fixați mesajele importante, astfel încât să poată fi descoperite cu ușurință"</string>
@@ -535,6 +597,11 @@ Sunteți sigur că doriți să continuați?"</string>
   <string name="screen_space_list_title">"Spații"</string>
   <string name="screen_static_location_sheet_timestamp_description">"Partajat %1$s"</string>
   <string name="screen_static_location_sheet_title">"Pe hartă"</string>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="one">"%1$d s-a alăturat"</item>
+    <item quantity="few">"%1$d s-au alăturat"</item>
+    <item quantity="other">"%1$d s-au alăturat"</item>
+  </plurals>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Mesajul nu a fost trimis deoarece identitatea digitala verificată a lui %1$s s-a schimbat."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Mesajul nu a fost trimis deoarece %1$s nu a verificat toate dispozitivele."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Mesajul nu a fost trimis deoarece nu ați verificat unul sau mai multe dispozitive."</string>
@@ -546,4 +613,6 @@ Sunteți sigur că doriți să continuați?"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Nu aveți acces la acest mesaj"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Nu s-a putut decripta mesajul"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Acest mesaj a fost blocat fie pentru că nu ați verificat dispozitivul, fie pentru că expeditorul trebuie să vă verifice identitatea digitală."</string>
+  <string name="vulkan_not_supported_dialog_content_android">"Dispozitivul dumneavoastră este prea vechi, este necesar un dispozitiv cu Android 8 sau o versiune mai nouă."</string>
+  <string name="vulkan_not_supported_dialog_title_android">"Afișarea hărților nu este suportată"</string>
 </resources>

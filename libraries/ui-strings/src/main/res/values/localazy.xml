@@ -19,6 +19,15 @@
   <string name="a11y_edit_room_address_hint">"The full address will be %1$s"</string>
   <string name="a11y_encryption_details">"Encryption details"</string>
   <string name="a11y_expand_message_text_field">"Expand message text field"</string>
+  <string name="a11y_gallery_attachment">"Gallery, attachment %1$d"</string>
+  <string name="a11y_gallery_failed_scan">"Gallery, failed scan %1$d"</string>
+  <string name="a11y_gallery_image">"Gallery, image %1$d"</string>
+  <plurals name="a11y_gallery_more_media">
+    <item quantity="one">"Gallery, %1$d more media"</item>
+    <item quantity="other">"Gallery, %1$d more medias"</item>
+  </plurals>
+  <string name="a11y_gallery_scanning">"Gallery, scanning %1$d"</string>
+  <string name="a11y_gallery_video">"Gallery, video %1$d"</string>
   <string name="a11y_hide_password">"Hide password"</string>
   <string name="a11y_info">"Info"</string>
   <string name="a11y_join_call">"Join call"</string>
@@ -507,6 +516,14 @@ Are you sure you want to continue?"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake to report bug"</string>
   <string name="screen_bug_report_a11y_screenshot">"Screenshot"</string>
+  <string name="screen_change_server_navigation_title_login">"Sign in"</string>
+  <string name="screen_change_server_navigation_title_register">"Create account"</string>
+  <string name="screen_change_server_textfield_footer_login">"If your account is provided by your company or a community, then change the account provider (example: companyname.com)."</string>
+  <string name="screen_change_server_textfield_footer_register">"Create an account on matrix.org for free. If you want to create an account with a different provider, then change it accordingly (example: communityname.org)."</string>
+  <string name="screen_change_server_textfield_header">"Account provider"</string>
+  <string name="screen_change_server_textfield_placeholder">"example.com"</string>
+  <string name="screen_change_server_title_login">"Enter your account provider"</string>
+  <string name="screen_change_server_title_register">"Choose an account provider"</string>
   <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
   <string name="screen_create_poll_options_section_title">"Options"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Remove %1$s"</string>
