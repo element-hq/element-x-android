@@ -13,6 +13,9 @@ import kotlinx.parcelize.Parcelize
 
 @Immutable
 sealed interface DisplayedStatus : Parcelable {
+    /** Useful for adding extension methods. */
+    companion object
+
     /** Status set manually by the user via m.status. */
     @Parcelize
     data class UserSet(val status: UserStatus) : DisplayedStatus
@@ -21,6 +24,6 @@ sealed interface DisplayedStatus : Parcelable {
     @Parcelize
     data class InCall(
         /** Unix timestamp in seconds when the call was joined (from m.call.call_joined_ts). */
-        val callJoinedTs: Long,
+        val callJoinedTs: Long?,
     ) : DisplayedStatus
 }

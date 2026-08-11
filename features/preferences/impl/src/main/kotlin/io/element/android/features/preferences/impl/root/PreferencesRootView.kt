@@ -9,9 +9,12 @@
 package io.element.android.features.preferences.impl.root
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,7 +28,10 @@ import io.element.android.features.preferences.impl.R
 import io.element.android.features.preferences.impl.user.UserPreferences
 import io.element.android.features.preferences.impl.userstatus.UserStatusState
 import io.element.android.features.preferences.impl.userstatus.UserStatusView
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
+import io.element.android.libraries.designsystem.components.async.AsyncActionIndicator
+import io.element.android.libraries.designsystem.components.async.AsyncIndicator
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
@@ -71,69 +77,85 @@ fun PreferencesRootView(
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
 
-    // Include pref from other modules
-    PreferencePage(
-        modifier = modifier,
-        onBackClick = onBackClick,
-        title = stringResource(id = CommonStrings.common_settings),
-        snackbarHost = { SnackbarHost(snackbarHostState) }
-    ) {
-        UserPreferences(
-            modifier = Modifier.clickable {
-                onOpenUserProfile(state.myUser)
-            },
-            matrixUser = state.myUser,
-        )
-        if (state.isMultiAccountEnabled) {
-            MultiAccountSection(
-                state = state,
-                onAddAccountClick = onAddAccountClick,
+    Box(modifier = modifier) {
+        // Include pref from other modules
+        PreferencePage(
+            onBackClick = onBackClick,
+            title = stringResource(id = CommonStrings.common_settings),
+            snackbarHost = { SnackbarHost(snackbarHostState) }
+        ) {
+            UserPreferences(
+                modifier = Modifier.clickable {
+                    onOpenUserProfile(state.myUser)
+                },
+                matrixUser = state.myUser,
             )
-        }
-        if (state.userStatusState != null) {
-            UserStatusSection(
-                userStatusState = state.userStatusState,
-                emojiPickerRenderer = emojiPickerRenderer,
-                showTopDivider = !state.isMultiAccountEnabled,
-            )
-        }
-        // 'Account' section
-        ManageAccountSection(
-            state = state,
-            onManageAccountClick = onManageAccountClick,
-            onLinkNewDeviceClick = onLinkNewDeviceClick,
-            onOpenBlockedUsers = onOpenBlockedUsers
-        )
-        // 'Manage my app' section
-        ManageAppSection(
-            state = state,
-            onOpenNotificationSettings = onOpenNotificationSettings,
-            onOpenLockScreenSettings = onOpenLockScreenSettings,
-            onSecureBackupClick = onSecureBackupClick,
-        )
-
-        // General section
-        GeneralSection(
-            state = state,
-            onOpenAbout = onOpenAbout,
-            onOpenAnalytics = onOpenAnalytics,
-            onOpenRageShake = onOpenRageShake,
-            onOpenAdvancedSettings = onOpenAdvancedSettings,
-            onOpenDeveloperSettings = onOpenDeveloperSettings,
-            onOpenLabs = onOpenLabs,
-            onSignOutClick = onSignOutClick,
-            onDeactivateClick = onDeactivateClick,
-        )
-        // Version
-        Footer(
-            version = state.version,
-            onClick = if (!state.showDeveloperSettings) {
-                { state.eventSink(PreferencesRootEvent.OnVersionInfoClick) }
-            } else {
-                null
+            if (state.isMultiAccountEnabled) {
+                MultiAccountSection(
+                    state = state,
+                    onAddAccountClick = onAddAccountClick,
+                )
             }
-        )
+            if (state.userStatusState != null) {
+                UserStatusSection(
+                    userStatusState = state.userStatusState,
+                    emojiPickerRenderer = emojiPickerRenderer,
+                    showTopDivider = !state.isMultiAccountEnabled,
+                )
+            }
+            // 'Account' section
+            ManageAccountSection(
+                state = state,
+                onManageAccountClick = onManageAccountClick,
+                onLinkNewDeviceClick = onLinkNewDeviceClick,
+                onOpenBlockedUsers = onOpenBlockedUsers
+            )
+            // 'Manage my app' section
+            ManageAppSection(
+                state = state,
+                onOpenNotificationSettings = onOpenNotificationSettings,
+                onOpenLockScreenSettings = onOpenLockScreenSettings,
+                onSecureBackupClick = onSecureBackupClick,
+            )
+
+            // General section
+            GeneralSection(
+                state = state,
+                onOpenAbout = onOpenAbout,
+                onOpenAnalytics = onOpenAnalytics,
+                onOpenRageShake = onOpenRageShake,
+                onOpenAdvancedSettings = onOpenAdvancedSettings,
+                onOpenDeveloperSettings = onOpenDeveloperSettings,
+                onOpenLabs = onOpenLabs,
+                onSignOutClick = onSignOutClick,
+                onDeactivateClick = onDeactivateClick,
+            )
+            // Version
+            Footer(
+                version = state.version,
+                onClick = if (!state.showDeveloperSettings) {
+                    { state.eventSink(PreferencesRootEvent.OnVersionInfoClick) }
+                } else {
+                    null
+                }
+            )
+        }
+        state.userStatusState?.let {
+            UserStatusUpdateIndicator(it.updateStatusAction)
+        }
     }
+}
+
+@Composable
+private fun BoxScope.UserStatusUpdateIndicator(updateStatusAction: AsyncAction<Unit>) {
+    AsyncActionIndicator(
+        asyncAction = updateStatusAction,
+        modifier = Modifier
+            .align(Alignment.TopCenter)
+            .statusBarsPadding(),
+        loading = { AsyncIndicator.Loading(text = stringResource(CommonStrings.common_saving)) },
+        failure = { _ -> AsyncIndicator.Failure(text = stringResource(CommonStrings.common_failed)) },
+    )
 }
 
 @Composable

@@ -8,6 +8,7 @@
   <string name="a11y_collapse_message_text_field">"Üzenet szövegmezőjének minimalizálása"</string>
   <string name="a11y_create_poll_votes_allowed_decrease">"Személyenként engedélyezett szavazatok számának csökkentése"</string>
   <string name="a11y_create_poll_votes_allowed_increase">"Személyenként engedélyezett szavazatok számának növelése"</string>
+  <string name="a11y_custom_emoji">"Egyéni emoji"</string>
   <string name="a11y_delete">"Törlés"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d megadott számjegy"</item>
@@ -23,6 +24,7 @@
   <string name="a11y_join_call">"Csatlakozás a híváshoz"</string>
   <string name="a11y_jump_to_bottom">"Ugrás az aljára"</string>
   <string name="a11y_jump_to_unread">"Ugrás az olvasatlanhoz"</string>
+  <string name="a11y_jump_to_unread_messages">"Ugrás az első olvasatlan üzenetre"</string>
   <string name="a11y_move_the_map_to_my_location">"Térkép áthelyezése a jelenlegi helyre"</string>
   <string name="a11y_notifications_mentions_only">"Csak megemlítések"</string>
   <string name="a11y_notifications_muted">"Némítva"</string>
@@ -63,6 +65,7 @@
   <string name="a11y_start_call">"Hanghívás indítása"</string>
   <string name="a11y_start_video_call">"Videohívás indítása"</string>
   <string name="a11y_start_voice_call">"Hanghívás indítása"</string>
+  <string name="a11y_status">"Állapot"</string>
   <string name="a11y_thread_in_room">"Üzenetszál itt: %1$s"</string>
   <string name="a11y_threads_in_room">"Üzenetszálak itt: %1$s"</string>
   <string name="a11y_tombstoned_room">"Elévült szoba"</string>
@@ -143,6 +146,7 @@
   <string name="action_manage_account_and_devices">"Fiók és eszközök kezelése"</string>
   <string name="action_manage_devices">"Eszközök kezelése"</string>
   <string name="action_manage_rooms">"Szobák kezelése"</string>
+  <string name="action_mark_as_read">"Megjelölés olvasottként"</string>
   <string name="action_message">"Üzenet"</string>
   <string name="action_minimize">"Minimalizálás"</string>
   <string name="action_next">"Következő"</string>
@@ -267,6 +271,14 @@ Ok: %1$s."</string>
   <string name="common_forward_message">"Üzenet továbbítása"</string>
   <string name="common_frequently_used">"Gyakran használt"</string>
   <string name="common_gallery">"Galéria"</string>
+  <plurals name="common_gallery_reply_attachments">
+    <item quantity="one">"%1$d melléklet…"</item>
+    <item quantity="other">"%1$d melléklet…"</item>
+  </plurals>
+  <plurals name="common_gallery_reply_media_items">
+    <item quantity="one">"%1$d média…"</item>
+    <item quantity="other">"%1$d média…"</item>
+  </plurals>
   <string name="common_gif">"GIF"</string>
   <string name="common_group_call_in_progress">"Csoportos hívás folyamatban"</string>
   <string name="common_image">"Kép"</string>
@@ -304,6 +316,7 @@ Ok: %1$s."</string>
   <string name="common_no_space_name">"Nincs térnév"</string>
   <string name="common_not_encrypted">"Nincs titkosítva"</string>
   <string name="common_offline">"Kapcsolat nélkül"</string>
+  <string name="common_on_a_call">"Hívásban"</string>
   <string name="common_open_source_licenses">"Nyílt forráskódú licencek"</string>
   <string name="common_or">"vagy"</string>
   <string name="common_other_options">"További lehetőségek"</string>
@@ -505,6 +518,8 @@ Biztos, hogy folytatja?"</string>
     <item quantity="other">"%1$d személy"</item>
   </plurals>
   <string name="screen_live_location_sheet_title">"A térképen"</string>
+  <string name="screen_local_network_opt_in_subtitle">"A Matrix-kiszolgáló helyi hálózaton található. A csatlakozáshoz engedélyre van szüksége ennek: %1$s , hogy elérje a hálózaton lévő eszközöket."</string>
+  <string name="screen_local_network_opt_in_title">"Hozzáférés engedélyezése a helyi hálózathoz"</string>
   <string name="screen_media_picker_error_failed_selection">"Nem sikerült kiválasztani a médiát, próbálja újra."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Nyomjon hosszan az üzenetre, és válassza a „%1$s” lehetőséget, hogy itt szerepeljen."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Tűzze ki a fontos üzeneteket, hogy könnyen felfedezhetők legyenek"</string>
