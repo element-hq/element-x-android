@@ -68,7 +68,6 @@ class DefaultWellknownRetriever(
         return when (val cacheData = store.get(checkedHost)) {
             is WellknownRetrieverResult.Success -> {
                 Timber.d("Using cached well-known for domain $checkedHost")
-                fetchElementWellKnown(checkedHost, source, store)
                 cacheData
             }
             is WellknownRetrieverResult.Outdated -> {
