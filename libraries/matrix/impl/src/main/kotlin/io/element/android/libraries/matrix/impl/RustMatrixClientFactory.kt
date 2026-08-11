@@ -20,6 +20,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.matrix.api.scanner.ContentScannerUrlProvider
+import io.element.android.libraries.matrix.api.x509.X509Provider
 import io.element.android.libraries.matrix.impl.analytics.UtdTracker
 import io.element.android.libraries.matrix.impl.paths.getSessionPaths
 import io.element.android.libraries.matrix.impl.proxy.ProxyProvider
@@ -27,6 +28,8 @@ import io.element.android.libraries.matrix.impl.room.TimelineEventFilterFactory
 import io.element.android.libraries.matrix.impl.scanner.RustContentScanner
 import io.element.android.libraries.matrix.impl.storage.SqliteStoreBuilderProvider
 import io.element.android.libraries.matrix.impl.util.anonymizedTokens
+import io.element.android.libraries.matrix.impl.x509.RawX509SignerWrapper
+import io.element.android.libraries.matrix.impl.x509.RawX509VerifierWrapper
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -71,6 +74,7 @@ class RustMatrixClientFactory(
     private val sqliteStoreBuilderProvider: SqliteStoreBuilderProvider,
     private val workManagerScheduler: WorkManagerScheduler,
     private val contentScannerUrlProviderFactory: ContentScannerUrlProvider.Factory,
+    private val x509Provider: X509Provider,
 ) {
     private val sessionDelegate = RustClientSessionDelegate(
         sessionStore = sessionStore,
@@ -183,7 +187,7 @@ class RustMatrixClientFactory(
         slidingSyncType: ClientBuilderSlidingSync,
         isMessageSearchAvailable: Boolean,
     ): ClientBuilder {
-        return clientBuilderProvider.provide()
+        var builder = clientBuilderProvider.provide()
             .run {
                 sqliteStoreBuilderProvider.provide(sessionPaths)
                     .secret(clientSecret)
@@ -236,7 +240,18 @@ class RustMatrixClientFactory(
             )
             // Make sure all built clients use the single process cross-process lock config
             .crossProcessLockConfig(CrossProcessLockConfig.SingleProcess)
-            .run {
+
+        val rawX509signer = x509Provider.getRawX509Signer()
+        if (rawX509signer != null) {
+            builder = builder.withRawX509Signer(RawX509SignerWrapper(rawX509signer))
+        }
+
+        val rawX509verifier = x509Provider.getRawX509Verifier()
+        if (rawX509verifier != null) {
+            builder = builder.withRawX509Verifier(RawX509VerifierWrapper(rawX509verifier))
+        }
+
+        return builder.run {
                 // Apply sliding sync version settings
                 when (slidingSyncType) {
                     ClientBuilderSlidingSync.Restored -> this

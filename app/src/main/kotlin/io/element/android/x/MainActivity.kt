@@ -61,6 +61,9 @@ class MainActivity : NodeActivity() {
         setContent {
             MainContent(appBindings)
         }
+
+        val activity = this
+        lifecycleScope.launch { appBindings.x509Provider().onAppStartup(activity) }
     }
 
     @Composable

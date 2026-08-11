@@ -15,6 +15,7 @@ import io.element.android.libraries.matrix.api.scanner.ContentScannerUrlProvider
 import io.element.android.libraries.matrix.impl.auth.FakeProxyProvider
 import io.element.android.libraries.matrix.impl.room.FakeTimelineEventFilterFactory
 import io.element.android.libraries.matrix.impl.storage.FakeSqliteStoreBuilderProvider
+import io.element.android.libraries.matrix.impl.x509.DefaultX509Provider
 import io.element.android.libraries.network.useragent.SimpleUserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
@@ -68,4 +69,5 @@ fun TestScope.createRustMatrixClientFactory(
     sqliteStoreBuilderProvider = FakeSqliteStoreBuilderProvider(),
     workManagerScheduler = workManagerScheduler,
     contentScannerUrlProviderFactory = contentScannerUrlProviderFactory,
+    x509Provider = DefaultX509Provider(),
 )
