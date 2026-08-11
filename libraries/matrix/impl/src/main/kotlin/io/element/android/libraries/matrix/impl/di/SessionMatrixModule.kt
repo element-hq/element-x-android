@@ -15,6 +15,7 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.HomeserverCapabilitiesProvider
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.UrlContentFetcher
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
@@ -107,5 +108,10 @@ object SessionMatrixModule {
     @Provides
     fun providesContentScanner(matrixClient: MatrixClient): ContentScanner? {
         return matrixClient.contentScanner
+    }
+
+    @Provides
+    fun providesGetUrlResolverClient(matrixClient: MatrixClient): UrlContentFetcher {
+        return matrixClient
     }
 }

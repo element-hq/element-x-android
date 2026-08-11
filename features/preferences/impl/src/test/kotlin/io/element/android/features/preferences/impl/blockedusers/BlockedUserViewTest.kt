@@ -13,8 +13,10 @@ package io.element.android.features.preferences.impl.blockedusers
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.architecture.AsyncAction
@@ -55,6 +57,20 @@ class BlockedUserViewTest : RobolectricTest() {
         )
         onNodeWithText(userList.first().displayName.orEmpty()).performClick()
         eventsRecorder.assertSingle(BlockedUsersEvents.Unblock(userList.first().userId))
+    }
+
+    @Test
+    fun `long clicking on a user emits the expected Event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<BlockedUsersEvents>()
+        val userList = aMatrixUserList()
+        setBlockedUsersView(
+            aBlockedUsersState(
+                blockedUsers = userList,
+                eventSink = eventsRecorder
+            ),
+        )
+        onNodeWithText(userList.first().displayName.orEmpty()).performTouchInput { longClick() }
+        eventsRecorder.assertSingle(BlockedUsersEvents.CopyToClipboard(userList.first().userId))
     }
 
     @Test

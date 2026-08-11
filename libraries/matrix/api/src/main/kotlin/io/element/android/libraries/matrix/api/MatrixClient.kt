@@ -54,7 +54,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.Optional
 
-interface MatrixClient {
+interface MatrixClient : UrlContentFetcher {
     val sessionId: SessionId
     val deviceId: DeviceId
 
@@ -172,11 +172,6 @@ interface MatrixClient {
      * compute it manually.
      */
     fun userIdServerName(): String
-
-    /**
-     * Execute generic GET requests through the SDKs internal HTTP client.
-     */
-    suspend fun getUrl(url: String): Result<ByteArray>
 
     /**
      * Get a room preview for a given room ID or alias. This is especially useful for rooms that the user is not a member of, or hasn't joined yet.
