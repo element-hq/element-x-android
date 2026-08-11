@@ -56,6 +56,7 @@ import io.element.android.libraries.push.impl.db.PushRequest
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEvent
+import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import timber.log.Timber
@@ -94,6 +95,7 @@ class DefaultNotifiableEventResolver(
     private val callNotificationEventResolver: CallNotificationEventResolver,
     private val fallbackNotificationFactory: FallbackNotificationFactory,
     private val featureFlagService: FeatureFlagService,
+    private val sessionStore: SessionStore,
 ) : NotifiableEventResolver {
     override suspend fun resolveEvents(
         sessionId: SessionId,
@@ -117,10 +119,15 @@ class DefaultNotifiableEventResolver(
             return Result.failure(exception ?: NotificationResolverException.UnknownError("Unknown error while fetching notifications"))
         }
 
+        val otherSessionUserIds = sessionStore.getAllSessions()
+            .map { UserId(it.userId) }
+            .minus(sessionId)
+            .toSet()
+
         // The null check is done above
         val notificationDataMap = notificationsResult.getOrNull()!!.mapValues { (_, notificationData) ->
             notificationData.flatMap { data ->
-                data.asNotifiableEvent(client, sessionId)
+                data.asNotifiableEvent(client, sessionId, otherSessionUserIds)
             }
         }
 
@@ -136,10 +143,23 @@ class DefaultNotifiableEventResolver(
         )
     }
 
+    private fun NotificationContent.senderIdOrNull(): UserId? = when (this) {
+        is NotificationContent.MessageLike.RoomMessage -> senderId
+        is NotificationContent.MessageLike.Poll -> senderId
+        is NotificationContent.MessageLike.CallInvite -> senderId
+        is NotificationContent.MessageLike.RtcNotification -> senderId
+        is NotificationContent.Invite -> senderId
+        else -> null
+    }
+
     private suspend fun NotificationData.asNotifiableEvent(
         client: MatrixClient,
         userId: SessionId,
+        otherSessionUserIds: Set<UserId>,
     ): Result<ResolvedPushEvent> = runCatchingExceptions {
+        if (content.senderIdOrNull() in otherSessionUserIds) {
+            throw NotificationResolverException.EventFilteredOut
+        }
         when (val content = this.content) {
             is NotificationContent.MessageLike.RoomMessage -> {
                 val showMediaPreview = client.mediaPreviewService.getMediaPreviewValue().isPreviewEnabled(roomJoinRule)
