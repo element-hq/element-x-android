@@ -14,18 +14,22 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.wellknown.test.FakeElementWellknownStore
 import io.element.android.features.wellknown.test.anElementWellKnown
+import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.matrix.api.UrlContentFetcher
 import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.wellknown.api.ElementWellKnown
 import io.element.android.libraries.wellknown.api.ElementWellKnownParser
+import io.element.android.libraries.wellknown.api.ElementWellknownStore
 import io.element.android.libraries.wellknown.api.EnterpriseRemoteConfigSource
 import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import java.net.URL
 
 class DefaultWellknownRetrieverTest {
     @Test
@@ -69,6 +73,93 @@ class DefaultWellknownRetrieverTest {
     }
 
     @Test
+    fun `get element wellknown will return an error if the provided host is not valid`() = runTest {
+        val sut = createDefaultWellknownRetriever()
+        assertThat(sut.getElementWellKnown("!not valid", EnterpriseRemoteConfigSource.WELLKNOWN_ENDPOINT))
+            .isInstanceOf(WellknownRetrieverResult.Error::class.java)
+    }
+
+    @Test
+    fun `get element wellknown will return a cached value if present instead of fetching`() = runTest {
+        val host = URL(WELLKNOWN_URL).host.ensureProtocol()
+        val sut = createDefaultWellknownRetriever(
+            cacheStoreFactory = { FakeElementWellknownStore(initialData = mapOf(host to WellknownRetrieverResult.Success(expectedElementWellKnown))) }
+        )
+        assertThat(sut.getElementWellKnown(WELLKNOWN_URL, EnterpriseRemoteConfigSource.WELLKNOWN_ENDPOINT))
+            .isInstanceOf(WellknownRetrieverResult.Success::class.java)
+    }
+
+    @Test
+    fun `get element wellknown will return an outdated value first then fetch the current one`() = runTest {
+        val host = URL(WELLKNOWN_URL).host.ensureProtocol()
+        val resolver = SpyUrlContentFetcher { Result.success(WELLKNOWN_CONTENT.toByteArray()) }
+        val sut = createDefaultWellknownRetriever(
+            urlResolver = resolver,
+            cacheStoreFactory = { FakeElementWellknownStore(initialData = mapOf(host to WellknownRetrieverResult.Outdated(expectedElementWellKnown))) }
+        )
+        // The first call returns the outdated value
+        assertThat(sut.getElementWellKnown(WELLKNOWN_URL, EnterpriseRemoteConfigSource.WELLKNOWN_ENDPOINT))
+            .isInstanceOf(WellknownRetrieverResult.Outdated::class.java)
+        // The resolver is not called yet because the fetch is done in the background
+        resolver.assertions().isNeverCalled()
+
+        // We give it some time to run the background fetch
+        runCurrent()
+
+        // The resolver is called during the background fetch
+        resolver.assertions().isCalledOnce().with(value(WELLKNOWN_URL))
+    }
+
+    @Test
+    fun `get element wellknown will return an error if it happens when trying to retrieve the cached value`() = runTest {
+        val host = URL(WELLKNOWN_URL).host.ensureProtocol()
+        val sut = createDefaultWellknownRetriever(
+            cacheStoreFactory = { FakeElementWellknownStore(initialData = mapOf(host to WellknownRetrieverResult.Error(IllegalStateException("BOOM")))) }
+        )
+        assertThat(sut.getElementWellKnown(WELLKNOWN_URL, EnterpriseRemoteConfigSource.WELLKNOWN_ENDPOINT))
+            .isInstanceOf(WellknownRetrieverResult.Error::class.java)
+    }
+
+    @Test
+    fun `get element wellknown will return an error if it fails to serialize the retrieved value into the cache`() = runTest {
+        val sut = createDefaultWellknownRetriever(
+            elementWellKnownParser = { Result.failure(IllegalStateException("BOOM")) },
+        )
+        assertThat(sut.getElementWellKnown(WELLKNOWN_URL, EnterpriseRemoteConfigSource.WELLKNOWN_ENDPOINT))
+            .isInstanceOf(WellknownRetrieverResult.Error::class.java)
+    }
+
+    @Test
+    fun `WELLKNOWN_ENDPOINT source creates a store with no prefix`() = runTest {
+        val storeFactory = lambdaRecorder<String?, ElementWellknownStore> { FakeElementWellknownStore() }
+        val sut = createDefaultWellknownRetriever(cacheStoreFactory = storeFactory)
+
+        sut.getElementWellKnown(WELLKNOWN_URL, EnterpriseRemoteConfigSource.WELLKNOWN_ENDPOINT)
+
+        storeFactory.assertions().isCalledOnce().with(value(null))
+    }
+
+    @Test
+    fun `ESS_CONFIG source creates a store with ess prefix and checks the ESS config endpoint`() = runTest {
+        val essConfigUrl = "https://ess-config.example.com"
+        val storeFactory = lambdaRecorder<String?, ElementWellknownStore> { FakeElementWellknownStore() }
+        val resolver = SpyUrlContentFetcher { Result.success(WELLKNOWN_CONTENT.toByteArray()) }
+        val sut = createDefaultWellknownRetriever(
+            cacheStoreFactory = storeFactory,
+            enterpriseService = FakeEnterpriseService(
+                overrideWellKnownResult = { null },
+                essConfigEndpointUrlResult = { essConfigUrl },
+            ),
+            urlResolver = resolver,
+        )
+
+        sut.getElementWellKnown(WELLKNOWN_URL, EnterpriseRemoteConfigSource.ESS_CONFIG)
+
+        storeFactory.assertions().isCalledOnce().with(value("ess_config"))
+        resolver.assertions().isCalledOnce().with(value(essConfigUrl))
+    }
+
+    @Test
     fun `get element wellknown was overridden`() = runTest {
         val wellKnown = anElementWellKnown()
 
@@ -91,12 +182,12 @@ class DefaultWellknownRetrieverTest {
     }
 
     private fun TestScope.createDefaultWellknownRetriever(
-        cacheStore: FakeElementWellknownStore = FakeElementWellknownStore(),
+        cacheStoreFactory: ElementWellknownStore.Factory = { FakeElementWellknownStore() },
         elementWellKnownParser: ElementWellKnownParser = { Result.success(expectedElementWellKnown) },
         enterpriseService: FakeEnterpriseService = FakeEnterpriseService(overrideWellKnownResult = { null }),
         urlResolver: UrlContentFetcher = SpyUrlContentFetcher { Result.success(WELLKNOWN_CONTENT.toByteArray()) },
     ) = DefaultWellknownRetriever(
-        elementWellknownStoreFactory = { cacheStore },
+        elementWellknownStoreFactory = cacheStoreFactory,
         enterpriseService = enterpriseService,
         elementWellKnownParser = elementWellKnownParser,
         urlContentFetcher = urlResolver,
