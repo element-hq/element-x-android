@@ -6,10 +6,9 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.matrix.impl.usersearch
+package io.element.android.libraries.matrix.impl.user
 
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
-import io.element.android.libraries.matrix.impl.mapper.map
 import kotlinx.collections.immutable.toImmutableList
 import org.matrix.rustcomponents.sdk.SearchUsersResults
 

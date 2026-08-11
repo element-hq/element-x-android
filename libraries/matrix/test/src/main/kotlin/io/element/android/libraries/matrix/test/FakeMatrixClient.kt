@@ -130,6 +130,7 @@ class FakeMatrixClient(
     private val getMapStyleUrlResult: () -> Result<String?> = { lambdaError() },
     private val getDatabaseSizesLambda: () -> Result<SdkStoreSizes> = { lambdaError() },
     private val resetWellKnownConfigLambda: () -> Result<Unit> = { lambdaError() },
+    private val enableAutomaticCallStatusLambda: (Boolean) -> Unit = { },
     override val contentScanner: ContentScanner? = null,
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
@@ -144,6 +145,7 @@ class FakeMatrixClient(
         private set
     var setUserStatusResult: Result<Unit> = Result.success(Unit)
     var clearUserStatusResult: Result<Unit> = Result.success(Unit)
+    var isUserStatusSupportedResult: Result<Boolean> = Result.success(true)
 
     private val _userProfile: MutableStateFlow<MatrixUser> = MutableStateFlow(MatrixUser(sessionId, userDisplayName, userAvatarUrl))
     override val userProfile: StateFlow<MatrixUser> = _userProfile
@@ -287,6 +289,10 @@ class FakeMatrixClient(
         }
         return clearUserStatusResult
     }
+
+    override suspend fun isUserStatusSupported(): Result<Boolean> = isUserStatusSupportedResult
+
+    override fun enableAutomaticCallStatus(enabled: Boolean) = enableAutomaticCallStatusLambda(enabled)
 
     override suspend fun joinRoom(roomId: RoomId): Result<RoomInfo?> = joinRoomLambda(roomId)
 

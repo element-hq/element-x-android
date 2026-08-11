@@ -155,6 +155,7 @@ class RustMatrixClientFactory(
         val syncService = client.syncService()
             .withSharePos(true)
             .withOfflineMode()
+            .withProfilesExtension()
             .finish()
 
         return RustMatrixClient(
