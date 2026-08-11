@@ -822,7 +822,7 @@ class DefaultNotifiableEventResolverTest : RobolectricTest() {
     }
 
     @Test
-    fun `resolve RoomRedaction with null redactedEventId should return null`() = runTest {
+    fun `resolve RoomRedaction with null redactedEventId is filtered out`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
                 mapOf(
@@ -838,6 +838,7 @@ class DefaultNotifiableEventResolverTest : RobolectricTest() {
         val request = aPushRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
         val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
         assertThat(result.getEvent(request)?.getOrNull()).isNull()
+        assertThat(result.getEvent(request)?.exceptionOrNull()).isEqualTo(NotificationResolverException.EventFilteredOut)
     }
 
     @Test

@@ -304,8 +304,8 @@ class DefaultNotifiableEventResolver(
                 // Note: this case will be handled below
                 val redactedEventId = content.redactedEventId
                 if (redactedEventId == null) {
-                    Timber.tag(loggerTag.value).d("redactedEventId is null.")
-                    throw NotificationResolverException.UnknownError("redactedEventId is null")
+                    Timber.tag(loggerTag.value).w("Ignoring redaction notification with no redactedEventId.")
+                    throw NotificationResolverException.EventFilteredOut
                 } else {
                     ResolvedPushEvent.Redaction(
                         sessionId = userId,
