@@ -59,6 +59,7 @@ class FakeFfiClient(
     private val accountDataResult: (String) -> String? = { lambdaError() },
     private val setAccountDataResult: (String, String) -> Unit = { _, _ -> lambdaError() },
     private val isUserStatusSupportedResult: () -> Boolean = { false },
+    private val isProfilesSlidingSyncExtensionSupportedResult: () -> Boolean = { false },
     private val subscribeToOwnProfileResult: (ProfileListener) -> Unit = {},
     private val closeResult: () -> Unit = {},
 ) : Client(NoHandle) {
@@ -98,6 +99,8 @@ class FakeFfiClient(
     }
 
     override suspend fun isUserStatusSupported(): Boolean = isUserStatusSupportedResult()
+
+    override suspend fun isProfilesSlidingSyncExtensionSupported(): Boolean = isProfilesSlidingSyncExtensionSupportedResult()
 
     override fun subscribeToOwnProfile(listener: ProfileListener): TaskHandle {
         subscribeToOwnProfileResult(listener)

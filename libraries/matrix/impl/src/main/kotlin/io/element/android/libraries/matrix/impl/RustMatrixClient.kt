@@ -320,7 +320,9 @@ class RustMatrixClient(
     }
 
     private suspend fun setupUserProfile() {
-        val supported = isUserStatusSupported().getOrDefault(false)
+        // Subscribing to own profile updates only requires the Profiles sliding sync extension,
+        // not the full user status capability (which also needs the status profile field to be settable).
+        val supported = isProfilesSlidingSyncExtensionSupported().getOrDefault(false)
         if (supported) {
             // No need to seed the data here, it's already stored by the sdk.
             ownProfileTaskHandle = innerClient.subscribeToOwnProfile(ownProfileListener)
@@ -527,6 +529,12 @@ class RustMatrixClient(
     override suspend fun isUserStatusSupported(): Result<Boolean> = withContext(sessionDispatcher) {
         runCatchingExceptions {
             innerClient.isUserStatusSupported()
+        }
+    }
+
+    override suspend fun isProfilesSlidingSyncExtensionSupported(): Result<Boolean> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.isProfilesSlidingSyncExtensionSupported()
         }
     }
 

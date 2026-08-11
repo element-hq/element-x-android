@@ -103,6 +103,9 @@ interface MatrixClient : UrlContentFetcher {
     /** Whether the homeserver advertises support for user status (MSC4426). */
     suspend fun isUserStatusSupported(): Result<Boolean>
 
+    /** Whether the homeserver advertises support for the Profiles sliding sync extension (MSC4262). */
+    suspend fun isProfilesSlidingSyncExtensionSupported(): Result<Boolean>
+
     /** Enable or disable automatically setting the user's status to "in a call" (m.call) while in a call. */
     fun enableAutomaticCallStatus(enabled: Boolean)
     suspend fun joinRoom(roomId: RoomId): Result<RoomInfo?>
