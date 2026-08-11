@@ -44,6 +44,9 @@ import org.matrix.rustcomponents.sdk.StoreSizes
 import org.matrix.rustcomponents.sdk.UserProfile
 import java.io.File
 
+private const val AN_ACCOUNT_DATA_EVENT_TYPE = "org.example.custom"
+private const val AN_ACCOUNT_DATA_CONTENT = """{"key":"value"}"""
+
 class RustMatrixClientTest {
     @Test
     fun `ensure that sessionId and deviceId can be retrieved from the client`() = runTest {
@@ -137,6 +140,30 @@ class RustMatrixClientTest {
 
         createRoomLambda.assertions().isCalledOnce()
         assertThat(createParameters?.historyVisibilityOverride).isEqualTo(RoomHistoryVisibility.Invited)
+    }
+
+    @Test
+    fun `getAccountData returns the raw content provided by the client`() = runTest {
+        val accountDataResult = lambdaRecorder<String, String?> { AN_ACCOUNT_DATA_CONTENT }
+        val client = createRustMatrixClient(
+            client = FakeFfiClient(accountDataResult = accountDataResult)
+        )
+
+        assertThat(client.getAccountData(AN_ACCOUNT_DATA_EVENT_TYPE).getOrThrow()).isEqualTo(AN_ACCOUNT_DATA_CONTENT)
+        accountDataResult.assertions().isCalledOnce().with(value(AN_ACCOUNT_DATA_EVENT_TYPE))
+        client.destroy()
+    }
+
+    @Test
+    fun `setAccountData forwards the event type and the raw content to the client`() = runTest {
+        val setAccountDataResult = lambdaRecorder<String, String, Unit> { _, _ -> }
+        val client = createRustMatrixClient(
+            client = FakeFfiClient(setAccountDataResult = setAccountDataResult)
+        )
+
+        assertThat(client.setAccountData(AN_ACCOUNT_DATA_EVENT_TYPE, AN_ACCOUNT_DATA_CONTENT).isSuccess).isTrue()
+        setAccountDataResult.assertions().isCalledOnce().with(value(AN_ACCOUNT_DATA_EVENT_TYPE), value(AN_ACCOUNT_DATA_CONTENT))
+        client.destroy()
     }
 
     private fun TestScope.createRustMatrixClient(
