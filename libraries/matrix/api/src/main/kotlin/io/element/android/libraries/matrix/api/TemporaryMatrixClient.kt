@@ -15,4 +15,4 @@ import java.lang.AutoCloseable
  * Note: this client implements an [AutoCloseable] interface, so using [AutoCloseable.close] or [AutoCloseable.use] will clean up any resources associated
  * with it, such as temporary files.
  */
-interface TemporaryMatrixClient : GetUrlResolver, AutoCloseable
+interface TemporaryMatrixClient : UrlContentFetcher, AutoCloseable

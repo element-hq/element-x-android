@@ -40,7 +40,7 @@ class DefaultAccountProviderAccessControl(
     ) {
         if (enterpriseService.isEnterpriseBuild.not()) {
             // Ensure that Element Pro is not required for this account provider
-            val temporaryMatrixClient = temporaryMatrixClientFactory.createTemporaryMatrixClient(accountProviderUrl).getOrThrow()
+            val temporaryMatrixClient = temporaryMatrixClientFactory.create(accountProviderUrl).getOrThrow()
             temporaryMatrixClient.use {
                 val wellknownRetriever = wellknownRetrieverFactory.create(temporaryMatrixClient)
                 val wellKnown = wellknownRetriever.getElementWellKnown(

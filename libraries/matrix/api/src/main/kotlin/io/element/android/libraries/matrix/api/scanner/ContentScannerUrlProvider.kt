@@ -7,7 +7,7 @@
 
 package io.element.android.libraries.matrix.api.scanner
 
-import io.element.android.libraries.matrix.api.GetUrlResolver
+import io.element.android.libraries.matrix.api.UrlContentFetcher
 import io.element.android.libraries.matrix.api.core.SessionId
 
 /**
@@ -20,6 +20,6 @@ fun interface ContentScannerUrlProvider {
     suspend fun getContentScannerUrl(sessionId: SessionId): Result<String?>
 
     fun interface Factory {
-        fun create(getUrlResolver: GetUrlResolver): ContentScannerUrlProvider
+        fun create(urlContentFetcher: UrlContentFetcher): ContentScannerUrlProvider
     }
 }

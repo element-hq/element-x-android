@@ -14,7 +14,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.wellknown.test.FakeElementWellknownStore
 import io.element.android.features.wellknown.test.anElementWellKnown
-import io.element.android.libraries.matrix.api.GetUrlResolver
+import io.element.android.libraries.matrix.api.UrlContentFetcher
 import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.wellknown.api.ElementWellKnown
 import io.element.android.libraries.wellknown.api.ElementWellKnownParser
@@ -31,7 +31,7 @@ class DefaultWellknownRetrieverTest {
     @Test
     fun `get element wellknown calls resolver and parser`() = runTest {
         val parser = lambdaRecorder<String, Result<ElementWellKnown>> { Result.success(anElementWellKnown()) }
-        val resolver = SpyGetUrlResolver { Result.success(WELLKNOWN_CONTENT.toByteArray()) }
+        val resolver = SpyUrlContentFetcher { Result.success(WELLKNOWN_CONTENT.toByteArray()) }
         val sut = createDefaultWellknownRetriever(
             elementWellKnownParser = parser,
             urlResolver = resolver,
@@ -54,7 +54,7 @@ class DefaultWellknownRetrieverTest {
 
     @Test
     fun `get element wellknown network error`() = runTest {
-        val resolver = SpyGetUrlResolver { Result.failure(IllegalStateException("Network error")) }
+        val resolver = SpyUrlContentFetcher { Result.failure(IllegalStateException("Network error")) }
         val sut = createDefaultWellknownRetriever(urlResolver = resolver)
         assertThat(sut.getElementWellKnown(WELLKNOWN_URL, EnterpriseRemoteConfigSource.WELLKNOWN_ENDPOINT))
             .isInstanceOf(WellknownRetrieverResult.Error::class.java)
@@ -62,7 +62,7 @@ class DefaultWellknownRetrieverTest {
 
     @Test
     fun `get element wellknown 404 http error counts as not found`() = runTest {
-        val resolver = SpyGetUrlResolver { Result.failure(ClientException.Generic("Http error: 404", null)) }
+        val resolver = SpyUrlContentFetcher { Result.failure(ClientException.Generic("Http error: 404", null)) }
         val sut = createDefaultWellknownRetriever(urlResolver = resolver)
         assertThat(sut.getElementWellKnown(WELLKNOWN_URL, EnterpriseRemoteConfigSource.WELLKNOWN_ENDPOINT))
             .isInstanceOf(WellknownRetrieverResult.NotFound::class.java)
@@ -72,7 +72,7 @@ class DefaultWellknownRetrieverTest {
     fun `get element wellknown was overridden`() = runTest {
         val wellKnown = anElementWellKnown()
 
-        val resolver = SpyGetUrlResolver { Result.success(WELLKNOWN_CONTENT.toByteArray()) }
+        val resolver = SpyUrlContentFetcher { Result.success(WELLKNOWN_CONTENT.toByteArray()) }
 
         val sut = createDefaultWellknownRetriever(
             enterpriseService = FakeEnterpriseService(
@@ -94,12 +94,12 @@ class DefaultWellknownRetrieverTest {
         cacheStore: FakeElementWellknownStore = FakeElementWellknownStore(),
         elementWellKnownParser: ElementWellKnownParser = { Result.success(expectedElementWellKnown) },
         enterpriseService: FakeEnterpriseService = FakeEnterpriseService(overrideWellKnownResult = { null }),
-        urlResolver: GetUrlResolver = SpyGetUrlResolver { Result.success(WELLKNOWN_CONTENT.toByteArray()) },
+        urlResolver: UrlContentFetcher = SpyUrlContentFetcher { Result.success(WELLKNOWN_CONTENT.toByteArray()) },
     ) = DefaultWellknownRetriever(
         elementWellknownStoreFactory = { cacheStore },
         enterpriseService = enterpriseService,
         elementWellKnownParser = elementWellKnownParser,
-        getUrlResolver = urlResolver,
+        urlContentFetcher = urlResolver,
         coroutineScope = backgroundScope,
     )
 
@@ -130,7 +130,7 @@ class DefaultWellknownRetrieverTest {
     }
 }
 
-private class SpyGetUrlResolver(lambda: (String) -> Result<ByteArray>) : GetUrlResolver {
+private class SpyUrlContentFetcher(lambda: (String) -> Result<ByteArray>) : UrlContentFetcher {
     private val spy = lambdaRecorder<String, Result<ByteArray>> { lambda(it) }
 
     override suspend fun getUrl(url: String): Result<ByteArray> {

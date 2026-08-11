@@ -7,7 +7,7 @@
 
 package io.element.android.features.enterprise.api.remoteconfig
 
-import io.element.android.libraries.matrix.api.GetUrlResolver
+import io.element.android.libraries.matrix.api.UrlContentFetcher
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
 
@@ -18,6 +18,6 @@ interface RemoteEnterpriseConfigProvider {
     suspend fun get(sessionId: SessionId): WellknownRetrieverResult<RemoteEnterpriseConfig>
 
     interface Factory {
-        fun create(getUrlResolver: GetUrlResolver): RemoteEnterpriseConfigProvider
+        fun create(urlContentFetcher: UrlContentFetcher): RemoteEnterpriseConfigProvider
     }
 }

@@ -7,7 +7,10 @@
 
 package io.element.android.libraries.matrix.api
 
-fun interface GetUrlResolver {
+/**
+ * An interface to fetch content from a URL using a simple GET request.
+ */
+fun interface UrlContentFetcher {
     /**
      * Execute generic GET requests through the SDKs internal HTTP client.
      */
