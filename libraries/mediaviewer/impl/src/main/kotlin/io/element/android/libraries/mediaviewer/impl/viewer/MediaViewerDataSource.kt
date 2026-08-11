@@ -242,18 +242,15 @@ class MediaViewerDataSource(
             }
     }
 
-    fun validateMedia(
-        eventId: EventId,
-        mediaSource: MediaSource,
-    ) {
+    fun validateMedia(mediaSource: MediaSource, thumbnailMediaSource: MediaSource?) {
         val validationState = mediaValidationState[mediaSource.safeUrl] ?: return
-        val currentState = validationState.getCurrentMediaState(mediaSource.safeUrl)
+        val currentState = validationState.getCurrentOverallState()
 
         if (currentState.isLoading() || currentState.isValid()) {
             return
         }
 
-        contentScannerService.scan(eventId, listOf(mediaSource), validationState)
+        contentScannerService.scan(listOfNotNull(mediaSource, thumbnailMediaSource), validationState)
     }
 
     fun cancelLoadingMedia(data: MediaViewerPageData.MediaViewerData) {

@@ -41,10 +41,11 @@ import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.LocalBuildMeta
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.matrix.api.auth.OAuthDetails
 import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialogView
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -72,7 +73,8 @@ fun ChooseAccountProviderView(
                 title = {},
                 navigationIcon = { BackButton(onClick = onBackClick) }
             )
-        }
+        },
+        contentWindowInsets = scaffoldScrollableContentInsets,
     ) { padding ->
         Box(
             modifier = Modifier
@@ -85,6 +87,7 @@ fun ChooseAccountProviderView(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(state = rememberScrollState())
+                    .padding(lazyColumnContentPadding)
             ) {
                 IconTitleSubtitleMolecule(
                     modifier = Modifier.padding(top = 16.dp, bottom = 32.dp, start = 16.dp, end = 16.dp),
@@ -139,7 +142,6 @@ fun ChooseAccountProviderView(
         }
     }
     LocalNetworkPermissionDialogView(
-        appName = LocalBuildMeta.current.applicationName,
         dialog = state.loginModeState.localNetworkPermissionDialog,
         onSubmit = {
             state.loginModeState.eventSink(LoginModeEvent.RequestLocalNetworkPermission)

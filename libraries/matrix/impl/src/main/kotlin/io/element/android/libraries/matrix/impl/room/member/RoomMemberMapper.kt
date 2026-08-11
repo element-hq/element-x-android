@@ -11,7 +11,9 @@ package io.element.android.libraries.matrix.impl.room.member
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.impl.room.powerlevels.into
+import io.element.android.libraries.matrix.impl.user.from
 import uniffi.matrix_sdk.RoomMemberRole
 import org.matrix.rustcomponents.sdk.MembershipState as RustMembershipState
 import org.matrix.rustcomponents.sdk.RoomMember as RustRoomMember
@@ -30,8 +32,7 @@ object RoomMemberMapper {
             role = mapRole(roomMember.suggestedRoleForPowerLevel, powerLevel),
             membershipChangeReason = roomMember.membershipChangeReason,
             isServiceMember = roomMember.isServiceMember,
-            // TODO map this value when available
-            displayedStatus = null,
+            displayedStatus = DisplayedStatus.from(roomMember.status, roomMember.call),
         )
     }
 

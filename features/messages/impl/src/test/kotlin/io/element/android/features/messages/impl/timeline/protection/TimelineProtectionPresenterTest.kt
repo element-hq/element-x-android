@@ -10,7 +10,6 @@ package io.element.android.features.messages.impl.timeline.protection
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.contentscanner.api.ContentScannerService
-import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaPreviewConfig
 import io.element.android.libraries.matrix.api.media.MediaPreviewService
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
@@ -96,6 +95,24 @@ class TimelineProtectionPresenterTest {
         }
     }
 
+    @Test
+    fun `present - shown content is restored when the presenter is recreated`() = runTest {
+        val mediaPreviewConfig = MediaPreviewConfig(mediaPreviewValue = MediaPreviewValue.Off, hideInviteAvatar = false)
+        val mediaPreviewService = FakeMediaPreviewService(mediaPreviewConfigFlow = MutableStateFlow(mediaPreviewConfig))
+        val timelineProtectionStore = DefaultTimelineProtectionStore()
+        createPresenter(mediaPreviewService = mediaPreviewService, timelineProtectionStore = timelineProtectionStore).test {
+            val initialState = awaitItem()
+            assertThat(initialState.protectionState).isEqualTo(ProtectionState.RenderOnly(persistentSetOf()))
+            initialState.eventSink(TimelineProtectionEvent.ShowContent(eventId = AN_EVENT_ID))
+            val finalState = awaitItem()
+            assertThat(finalState.protectionState).isEqualTo(ProtectionState.RenderOnly(persistentSetOf(AN_EVENT_ID)))
+        }
+        createPresenter(mediaPreviewService = mediaPreviewService, timelineProtectionStore = timelineProtectionStore).test {
+            val initialState = awaitItem()
+            assertThat(initialState.protectionState).isEqualTo(ProtectionState.RenderOnly(persistentSetOf(AN_EVENT_ID)))
+        }
+    }
+
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `present - validate media scans the media source`() = runTest {
@@ -104,7 +121,7 @@ class TimelineProtectionPresenterTest {
         val mediaPreviewConfig = MediaPreviewConfig(mediaPreviewValue = MediaPreviewValue.Private, hideInviteAvatar = false)
         val mediaPreviewService = FakeMediaPreviewService(mediaPreviewConfigFlow = MutableStateFlow(mediaPreviewConfig))
         val room = FakeBaseRoom(initialRoomInfo = aRoomInfo(joinRule = JoinRule.Invite), roomCoroutineScope = backgroundScope)
-        val contentScannerService = lambdaRecorder { _: EventId, _: List<MediaSource>, state: ContentValidationState ->
+        val contentScannerService = lambdaRecorder { _: List<MediaSource>, state: ContentValidationState ->
             state.update(url, ContentValidationValue.Valid)
         }
         val presenter = createPresenter(
@@ -119,7 +136,6 @@ class TimelineProtectionPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink(
                 TimelineProtectionEvent.ValidateContent(
-                    eventId = AN_EVENT_ID,
                     mediaSources = listOf(MediaSource(url)),
                     validationState = validationState
                 )
@@ -135,10 +151,12 @@ class TimelineProtectionPresenterTest {
     private fun createPresenter(
         room: BaseRoom = FakeBaseRoom(),
         mediaPreviewService: MediaPreviewService = FakeMediaPreviewService(),
-        contentScannerService: ContentScannerService = ContentScannerService { _: EventId, _: List<MediaSource>, _: ContentValidationState -> },
+        contentScannerService: ContentScannerService = ContentScannerService { _: List<MediaSource>, _: ContentValidationState -> },
+        timelineProtectionStore: TimelineProtectionStore = DefaultTimelineProtectionStore(),
     ) = TimelineProtectionPresenter(
         mediaPreviewService = mediaPreviewService,
         room = room,
         contentScannerService = contentScannerService,
+        timelineProtectionStore = timelineProtectionStore,
     )
 }

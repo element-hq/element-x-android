@@ -70,6 +70,10 @@
   <string name="screen_room_timeline_reactions_show_more">"Näita rohkem"</string>
   <string name="screen_room_timeline_reactions_show_reactions_summary">"Näita reageerimiste kokkuvõtet"</string>
   <string name="screen_room_timeline_read_marker_title">"Uus"</string>
+  <plurals name="screen_room_timeline_redacted_messages">
+    <item quantity="one">"%1$d eemaldas sõnumi"</item>
+    <item quantity="other">"%1$d eemaldas sõnumid"</item>
+  </plurals>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d jututoa muudatus"</item>
     <item quantity="other">"%1$d jututoa muudatust"</item>

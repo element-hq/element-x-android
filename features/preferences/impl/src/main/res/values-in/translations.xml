@@ -82,6 +82,8 @@ Jika Anda melanjutkan, beberapa pengaturan Anda dapat berubah."</string>
   <string name="screen_notification_settings_notification_section_title">"Beri tahu saya tentang"</string>
   <string name="screen_notification_settings_room_mention_label">"Beri tahu saya pada @room"</string>
   <string name="screen_notification_settings_sound_element_default">"Pengaturan Default Element"</string>
+  <string name="screen_notification_settings_sound_section_title">"Suara"</string>
+  <string name="screen_notification_settings_sound_set_sound_error_title">"Masalah pengaturan suara peringatan"</string>
   <string name="screen_notification_settings_system_notifications_action_required">"Untuk menerima pemberitahuan, silakan ubah %1$s Anda."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"pengaturan sistem"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Pemberitahuan sistem dimatikan"</string>

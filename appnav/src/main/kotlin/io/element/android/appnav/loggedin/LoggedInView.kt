@@ -85,7 +85,6 @@ fun LoggedInView(
     }
 
     LocalNetworkPermissionDialogView(
-        appName = state.appName,
         dialog = state.localNetworkPermissionDialog,
         onSubmit = { state.eventSink(LoggedInEvents.RequestLocationNetworkPermission) },
         onDismiss = { state.eventSink(LoggedInEvents.DismissLocalNetworkPermissionPrompt) },

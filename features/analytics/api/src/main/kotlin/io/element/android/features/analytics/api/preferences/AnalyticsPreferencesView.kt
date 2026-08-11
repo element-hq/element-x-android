@@ -39,7 +39,7 @@ fun AnalyticsPreferencesView(
     )
     Column(modifier) {
         ListItem(
-            headlineContent = {
+            content = {
                 Text(stringResource(id = R.string.screen_analytics_settings_share_data))
             },
             supportingContent = {

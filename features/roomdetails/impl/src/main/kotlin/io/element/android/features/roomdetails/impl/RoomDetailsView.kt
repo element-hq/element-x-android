@@ -78,6 +78,8 @@ import io.element.android.libraries.designsystem.theme.components.ListItemStyle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -135,12 +137,14 @@ fun RoomDetailsView(
             )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
+        contentWindowInsets = scaffoldScrollableContentInsets,
     ) { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)
                 .verticalScroll(rememberScrollState())
                 .consumeWindowInsets(padding)
+                .padding(lazyColumnContentPadding)
         ) {
             leaveRoomView()
 
@@ -198,7 +202,7 @@ fun RoomDetailsView(
             PreferenceCategory {
                 if (state.hasNewContent) {
                     ListItem(
-                        headlineContent = {
+                        content = {
                             Text(
                                 text = stringResource(id = R.string.screen_roomlist_mark_as_read),
                                 style = MaterialTheme.typography.bodyLarge,
@@ -221,7 +225,7 @@ fun RoomDetailsView(
                     )
                 } else {
                     ListItem(
-                        headlineContent = {
+                        content = {
                             Text(
                                 text = stringResource(id = R.string.screen_roomlist_mark_as_unread),
                             )
@@ -264,7 +268,7 @@ fun RoomDetailsView(
                         }
                         if (state.displayRolesAndPermissionsSettings) {
                             ListItem(
-                                headlineContent = { Text(stringResource(R.string.screen_room_details_roles_and_permissions)) },
+                                content = { Text(stringResource(R.string.screen_room_details_roles_and_permissions)) },
                                 leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Admin())),
                                 onClick = openAdminSettings,
                             )
@@ -313,7 +317,7 @@ fun RoomDetailsView(
                 ) {
                     ListItem(
                         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Lock())),
-                        headlineContent = {
+                        content = {
                             Text(stringResource(id = R.string.screen_room_details_encryption_enabled_title))
                         },
                         supportingContent = {
@@ -341,7 +345,7 @@ fun RoomDetailsView(
 @Composable
 private fun KnockRequestsItem(knockRequestsCount: Int?, onKnockRequestsClick: () -> Unit) {
     ListItem(
-        headlineContent = { Text(stringResource(R.string.screen_room_details_requests_to_join_title)) },
+        content = { Text(stringResource(R.string.screen_room_details_requests_to_join_title)) },
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.AskToJoin())),
         trailingContent = if (knockRequestsCount == null || knockRequestsCount == 0) {
             null
@@ -652,7 +656,7 @@ private fun TopicSection(
         if (roomTopic is RoomTopicState.CanAddTopic) {
             ListItem(
                 leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Plus())),
-                headlineContent = {
+                content = {
                     Text(stringResource(id = R.string.screen_room_details_add_topic_title))
                 },
                 onClick = {
@@ -683,7 +687,7 @@ private fun NotificationItem(
         stringResource(R.string.screen_room_details_notification_mode_custom)
     }
     ListItem(
-        headlineContent = { Text(text = stringResource(R.string.screen_room_details_notification_title)) },
+        content = { Text(text = stringResource(R.string.screen_room_details_notification_title)) },
         supportingContent = { Text(text = subtitle) },
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Notifications())),
         onClick = openRoomNotificationSettings,
@@ -696,7 +700,7 @@ private fun SecurityAndPrivacyItem(
     modifier: Modifier = Modifier,
 ) {
     ListItem(
-        headlineContent = { Text(stringResource(R.string.screen_room_details_security_and_privacy_title)) },
+        content = { Text(stringResource(R.string.screen_room_details_security_and_privacy_title)) },
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Lock())),
         onClick = onClick,
         modifier = modifier,
@@ -728,7 +732,7 @@ private fun ProfileItem(
 ) {
     ListItem(
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.UserProfile())),
-        headlineContent = { Text(stringResource(id = R.string.screen_room_details_profile_row_title)) },
+        content = { Text(stringResource(id = R.string.screen_room_details_profile_row_title)) },
         trailingContent = when (verificationState) {
             UserProfileVerificationState.VERIFIED -> ListItemContent.Icon(
                 iconSource = IconSource.Vector(CompoundIcons.Verified()),
@@ -751,7 +755,7 @@ private fun MembersItem(
     openRoomMemberList: () -> Unit,
 ) {
     ListItem(
-        headlineContent = { Text(stringResource(CommonStrings.common_people)) },
+        content = { Text(stringResource(CommonStrings.common_people)) },
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.User())),
         trailingContent = if (hasVerificationViolations) {
             ListItemContent.Icon(
@@ -770,7 +774,7 @@ private fun InviteItem(
     onClick: () -> Unit,
 ) {
     ListItem(
-        headlineContent = { Text(stringResource(R.string.screen_room_details_invite_title)) },
+        content = { Text(stringResource(R.string.screen_room_details_invite_title)) },
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.UserAdd())),
         onClick = onClick,
     )
@@ -783,7 +787,7 @@ private fun PinnedMessagesItem(
 ) {
     val analyticsService = LocalAnalyticsService.current
     ListItem(
-        headlineContent = { Text(stringResource(R.string.screen_room_details_pinned_events_row_title)) },
+        content = { Text(stringResource(R.string.screen_room_details_pinned_events_row_title)) },
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Pin())),
         trailingContent =
             if (pinnedMessagesCount == null) {
@@ -805,7 +809,7 @@ private fun PollsItem(
     openPollHistory: () -> Unit,
 ) {
     ListItem(
-        headlineContent = { Text(stringResource(R.string.screen_polls_history_title)) },
+        content = { Text(stringResource(R.string.screen_polls_history_title)) },
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Polls())),
         onClick = openPollHistory,
     )
@@ -816,7 +820,7 @@ private fun MediaGalleryItem(
     onClick: () -> Unit,
 ) {
     ListItem(
-        headlineContent = { Text(stringResource(R.string.screen_room_details_media_gallery_title)) },
+        content = { Text(stringResource(R.string.screen_room_details_media_gallery_title)) },
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Image())),
         onClick = onClick,
     )
@@ -836,7 +840,7 @@ private fun OtherActionsSection(
         }
         if (canReportRoom) {
             ListItem(
-                headlineContent = {
+                content = {
                     Text(stringResource(CommonStrings.action_report_room))
                 },
                 leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ChatProblem())),
@@ -845,7 +849,7 @@ private fun OtherActionsSection(
             )
         }
         ListItem(
-            headlineContent = {
+            content = {
                 Text(stringResource(CommonStrings.action_leave_room))
             },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Leave())),
@@ -864,7 +868,7 @@ private fun DebugInfoSection(
     PreferenceCategory {
         val toastMessage = stringResource(CommonStrings.common_copied_to_clipboard)
         ListItem(
-            headlineContent = {
+            content = {
                 Text("Internal room ID")
             },
             supportingContent = {
@@ -884,7 +888,7 @@ private fun DebugInfoSection(
             },
         )
         ListItem(
-            headlineContent = {
+            content = {
                 Text("Room version")
             },
             supportingContent = {

@@ -17,6 +17,9 @@ import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
@@ -48,6 +51,7 @@ import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
+import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -127,6 +131,7 @@ class LoggedInPresenterTest {
             buildMeta = buildMeta,
             networkMonitor = networkMonitor,
             localNetworkPermissionAdvisor = FakeLocalNetworkPermissionAdvisor(),
+            featureFlagService = FakeFeatureFlagService(),
             permissionsPresenterFactory = FakePermissionsPresenterFactory(),
         ).test {
             encryptionService.emitRecoveryState(RecoveryState.UNKNOWN)
@@ -346,6 +351,57 @@ class LoggedInPresenterTest {
         }
     }
 
+    @Test
+    fun `present - does not enable automatic call status when server does not support it`() = runTest {
+        val enableAutomaticCallStatusLambda = lambdaRecorder<Boolean, Unit> { }
+        val matrixClient = FakeMatrixClient(
+            accountManagementUrlResult = { Result.success(null) },
+            enableAutomaticCallStatusLambda = enableAutomaticCallStatusLambda,
+        ).apply {
+            isUserStatusSupportedResult = Result.success(false)
+        }
+        createLoggedInPresenter(
+            matrixClient = matrixClient,
+            featureFlagService = FakeFeatureFlagService(
+                initialState = mapOf(FeatureFlags.UserStatus.key to true),
+            ),
+        ).test {
+            cancelAndConsumeRemainingEvents()
+            assert(enableAutomaticCallStatusLambda)
+                .isCalledOnce()
+                .with(value(false))
+        }
+    }
+
+    @Test
+    fun `present - reacts to user status flag being toggled at runtime`() = runTest {
+        val enableAutomaticCallStatusLambda = lambdaRecorder<Boolean, Unit> { }
+        val matrixClient = FakeMatrixClient(
+            accountManagementUrlResult = { Result.success(null) },
+            enableAutomaticCallStatusLambda = enableAutomaticCallStatusLambda,
+        ).apply {
+            isUserStatusSupportedResult = Result.success(true)
+        }
+        val featureFlagService = FakeFeatureFlagService(
+            initialState = mapOf(FeatureFlags.UserStatus.key to false),
+        )
+        createLoggedInPresenter(
+            matrixClient = matrixClient,
+            featureFlagService = featureFlagService,
+        ).test {
+            awaitItem()
+            // Turning the flag on at runtime enables it.
+            featureFlagService.setFeatureEnabled(FeatureFlags.UserStatus, true)
+            cancelAndConsumeRemainingEvents()
+            assert(enableAutomaticCallStatusLambda)
+                .isCalledExactly(2)
+                .withSequence(
+                    listOf(value(false)),
+                    listOf(value(true)),
+                )
+        }
+    }
+
     private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
         skipItems(1)
         return awaitItem()
@@ -362,6 +418,7 @@ class LoggedInPresenterTest {
         ),
         buildMeta: BuildMeta = aBuildMeta(),
         networkMonitor: FakeNetworkMonitor = FakeNetworkMonitor(),
+        featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
     ): LoggedInPresenter {
         return LoggedInPresenter(
             matrixClient = matrixClient,
@@ -373,6 +430,7 @@ class LoggedInPresenterTest {
             buildMeta = buildMeta,
             networkMonitor = networkMonitor,
             localNetworkPermissionAdvisor = FakeLocalNetworkPermissionAdvisor(),
+            featureFlagService = featureFlagService,
             permissionsPresenterFactory = FakePermissionsPresenterFactory(),
         )
     }

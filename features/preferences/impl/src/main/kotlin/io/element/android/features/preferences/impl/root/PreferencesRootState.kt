@@ -11,7 +11,6 @@ package io.element.android.features.preferences.impl.root
 import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.preferences.impl.userstatus.UserStatusState
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
-import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 
@@ -19,7 +18,6 @@ data class PreferencesRootState(
     val myUser: MatrixUser,
     val userStatusState: UserStatusState?,
     val version: String,
-    val deviceId: DeviceId?,
     val isMultiAccountEnabled: Boolean,
     val otherSessions: ImmutableList<MatrixUser>,
     val showSecureBackup: Boolean,

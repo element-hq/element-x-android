@@ -32,7 +32,7 @@
   <string name="screen_media_upload_preview_processing">"Przetwarzanie…"</string>
   <string name="screen_media_upload_preview_title">"Dodaj media"</string>
   <string name="screen_report_content_block_user">"Zablokuj użytkownika"</string>
-  <string name="screen_report_content_block_user_hint">"Sprawdź, czy chcesz ukryć wszystkie bieżące i przyszłe wiadomości od tego użytkownika."</string>
+  <string name="screen_report_content_block_user_hint">"Zaznacz, jeśli chcesz ukryć wszystkie bieżące i przyszłe wiadomości od tego użytkownika."</string>
   <string name="screen_report_content_explanation">"Ta wiadomość zostanie zgłoszona do administratora Twojego serwera domowego. Nie będzie mógł on przeczytać żadnych zaszyfrowanych wiadomości."</string>
   <string name="screen_report_content_hint">"Powód zgłoszenia treści"</string>
   <string name="screen_room_attachment_source_camera">"Kamera"</string>
@@ -73,6 +73,11 @@
   <string name="screen_room_timeline_reactions_show_more">"Pokaż więcej"</string>
   <string name="screen_room_timeline_reactions_show_reactions_summary">"Pokaż podsumowanie reakcji"</string>
   <string name="screen_room_timeline_read_marker_title">"Nowe"</string>
+  <plurals name="screen_room_timeline_redacted_messages">
+    <item quantity="one">"%1$d usunięta wiadomość"</item>
+    <item quantity="few">"%1$d usunięte wiadomości"</item>
+    <item quantity="many">"%1$d usuniętych wiadomości"</item>
+  </plurals>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d zmiana pokoju"</item>
     <item quantity="few">"%1$d zmiany pokoju"</item>

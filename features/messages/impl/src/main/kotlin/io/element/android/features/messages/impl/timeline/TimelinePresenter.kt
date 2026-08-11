@@ -259,7 +259,7 @@ class TimelinePresenter(
                     )
                 }
                 is TimelineEvent.ValidateMedia -> {
-                    timelineProtectionState.eventSink(TimelineProtectionEvent.ValidateContent(event.eventId, event.mediaSources, event.validationState))
+                    timelineProtectionState.eventSink(TimelineProtectionEvent.ValidateContent(event.mediaSources, event.validationState))
                 }
             }
         }
