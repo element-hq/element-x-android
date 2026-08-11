@@ -14,7 +14,9 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.enterprise.api.EnterpriseService
+import io.element.android.libraries.androidutils.text.takeIfNotBlank
 import io.element.android.libraries.core.extensions.mapCatchingExceptions
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.GetUrlResolver
@@ -53,7 +55,8 @@ class DefaultWellknownRetriever(
             return WellknownRetrieverResult.Success(overriddenElementWellKnown)
         }
 
-        val checkedHost = URL(host.ensureProtocol()).host ?: host
+        // The passed `host` function may be a full URL, in that case we're only interested in the actual host
+        val checkedHost = runCatchingExceptions { URL(host.ensureProtocol()).host.takeIfNotBlank() }.getOrNull() ?: host
 
         // We instantiate different stores for different sources, so that we can cache them separately.
         // The ESS_CONFIG source is cached with a prefix to differentiate it from the WELLKNOWN_ENDPOINT.
