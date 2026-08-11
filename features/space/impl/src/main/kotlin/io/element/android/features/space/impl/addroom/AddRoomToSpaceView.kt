@@ -47,6 +47,8 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.OnVisibleRangeChangeEffect
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.matrix.ui.components.SelectedRoom
 import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
 import io.element.android.libraries.matrix.ui.model.getAvatarData
@@ -101,7 +103,8 @@ fun AddRoomToSpaceView(
                     )
                 }
             )
-        }
+        },
+        contentWindowInsets = scaffoldScrollableContentInsets,
     ) { paddingValues ->
         Column(
             Modifier
@@ -130,7 +133,9 @@ fun AddRoomToSpaceView(
                 OnVisibleRangeChangeEffect(lazyListState) { visibleRange ->
                     state.eventSink(AddRoomToSpaceEvent.UpdateSearchVisibleRange(visibleRange))
                 }
-                LazyColumn {
+                LazyColumn(
+                    contentPadding = lazyColumnContentPadding,
+                ) {
                     items(rooms, key = { it.roomId }) { roomInfo ->
                         RoomListItem(
                             roomInfo = roomInfo,

@@ -19,6 +19,8 @@ import io.element.android.features.messages.impl.timeline.components.MessageShie
 import io.element.android.features.messages.impl.timeline.components.aCriticalShield
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
+import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
 import io.element.android.features.messages.impl.typing.aTypingNotificationState
 import io.element.android.features.messages.impl.voicemessages.timeline.FakeRedactedVoiceMessageManager
 import io.element.android.features.messages.impl.voicemessages.timeline.RedactedVoiceMessageManager
@@ -28,6 +30,7 @@ import io.element.android.features.poll.api.actions.SendPollResponseAction
 import io.element.android.features.poll.test.actions.FakeEndPollAction
 import io.element.android.features.poll.test.actions.FakeSendPollResponseAction
 import io.element.android.features.roomcall.api.aStandByCallState
+import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
@@ -44,6 +47,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
 import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
 import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
+import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -866,6 +870,28 @@ class TimelinePresenterTest {
     }
 
     @Test
+    fun `present - collapses a run of three or more redacted events into a single group`() = runTest {
+        val timeline = FakeTimeline(
+            timelineItems = flowOf(
+                (0 until 3).map { index ->
+                    MatrixTimelineItem.Event(
+                        uniqueId = UniqueId("redacted_$index"),
+                        event = anEventTimelineItem(eventId = EventId("\$R$index"), content = RedactedContent),
+                    )
+                }
+            ),
+        )
+        val presenter = createTimelinePresenter(timeline = timeline)
+        presenter.test {
+            val state = consumeItemsUntilPredicate { it.timelineItems.size == 1 }.last()
+            val group = state.timelineItems.single()
+            assertThat(group).isInstanceOf(TimelineItem.GroupedEvents::class.java)
+            assertThat((group as TimelineItem.GroupedEvents).events).hasSize(3)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
     fun `present - reaction ordering`() = runTest {
         val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
         val timeline = FakeTimeline(
@@ -1562,6 +1588,7 @@ class TimelinePresenterTest {
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
         liveLocationShareManager: FakeActiveLiveLocationShareManager = FakeActiveLiveLocationShareManager(),
         markAsFullyRead: MarkAsFullyRead = FakeMarkAsFullyRead { _, _ -> },
+        timelineProtectionPresenter: Presenter<TimelineProtectionState> = { aTimelineProtectionState() },
     ): TimelinePresenter {
         return TimelinePresenter(
             timelineItemsFactoryCreator = aTimelineItemsFactoryCreator(),
@@ -1582,6 +1609,7 @@ class TimelinePresenterTest {
             analyticsService = FakeAnalyticsService(),
             liveLocationShareManager = liveLocationShareManager,
             markAsFullyRead = markAsFullyRead,
+            timelineProtectionPresenter = timelineProtectionPresenter,
         )
     }
 }

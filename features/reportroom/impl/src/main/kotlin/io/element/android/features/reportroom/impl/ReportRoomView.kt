@@ -108,7 +108,7 @@ fun ReportRoomView(
 
             ListItem(
                 modifier = Modifier.padding(end = 8.dp),
-                headlineContent = {
+                content = {
                     Text(text = stringResource(CommonStrings.action_leave_room))
                 },
                 onClick = {

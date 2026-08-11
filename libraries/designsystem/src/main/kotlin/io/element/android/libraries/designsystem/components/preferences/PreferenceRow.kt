@@ -30,7 +30,7 @@ fun PreferenceRow(
 ) {
     ListItem(
         modifier = modifier,
-        headlineContent = {
+        content = {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,

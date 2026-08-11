@@ -60,6 +60,7 @@ dependencies {
     testCommonDependencies(libs)
     testImplementation(projects.features.login.test)
     testImplementation(projects.features.share.test)
+    testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.oauth.test)
     testImplementation(projects.libraries.permissions.test)

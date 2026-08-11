@@ -261,7 +261,7 @@ private fun ShareCurrentLocationItem(
     onClick: () -> Unit,
 ) {
     ListItem(
-        headlineContent = {
+        content = {
             Text(stringResource(CommonStrings.screen_share_my_location_action))
         },
         onClick = onClick,
@@ -276,7 +276,7 @@ private fun SharePinLocationItem(
     onClick: () -> Unit,
 ) {
     ListItem(
-        headlineContent = {
+        content = {
             Text(stringResource(CommonStrings.screen_share_this_location_action))
         },
         onClick = onClick,
@@ -291,7 +291,7 @@ private fun ShareLiveLocationItem(
     onClick: () -> Unit,
 ) {
     ListItem(
-        headlineContent = {
+        content = {
             Text(stringResource(CommonStrings.action_share_live_location))
         },
         onClick = onClick,

@@ -185,6 +185,7 @@ class DefaultBugReporter(
                     .addFormDataPart("device", Build.MODEL.trim())
                     .addFormDataPart("locale", Locale.getDefault().toString())
                     .addFormDataPart("sdk_sha", sdkMetadata.sdkGitSha)
+                    .addFormDataPart("sha", buildMeta.gitRevision)
                     .addFormDataPart("local_time", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME))
                     .addFormDataPart("utc_time", LocalDateTime.ofInstant(Instant.now(), ZoneOffset.UTC).format(DateTimeFormatter.ISO_DATE_TIME))
                     .addFormDataPart("app_id", buildMeta.applicationId)

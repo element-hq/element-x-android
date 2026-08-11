@@ -8,8 +8,11 @@
 package io.element.android.features.preferences.impl.userstatus
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.emoji.test.fakeEmojiPickerPresenterFactory
 import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.UserStatus
+import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.test.runTest
@@ -17,7 +20,10 @@ import org.junit.Test
 
 class UserStatusPresenterTest {
     private fun createPresenter(client: FakeMatrixClient = FakeMatrixClient()) =
-        UserStatusPresenter(matrixClient = client)
+        UserStatusPresenter(
+            matrixClient = client,
+            emojiPickerPresenterFactory = fakeEmojiPickerPresenterFactory(),
+        )
 
     @Test
     fun `initial state - no status set`() = runTest {
@@ -57,6 +63,24 @@ class UserStatusPresenterTest {
             val newState = awaitItem()
             assertThat(newState.pickerState).isEqualTo(UserStatusPickerState.Hidden)
             assertThat(newState.displayedStatus).isEqualTo(DisplayedStatus.UserSet(status))
+            assertThat(newState.updateStatusAction).isInstanceOf(AsyncAction.Success::class.java)
+            assertThat(client.setUserStatusCalled).isTrue()
+        }
+    }
+
+    @Test
+    fun `Set event failure surfaces a Failure action`() = runTest {
+        val client = FakeMatrixClient().apply {
+            setUserStatusResult = Result.failure(AN_EXCEPTION)
+        }
+        createPresenter(client).test {
+            val status = UserStatus(emoji = "💬", text = "In a meeting")
+            awaitItem().eventSink(UserStatusEvent.SetStatus(status))
+            val newState = awaitItem()
+            assertThat(newState.pickerState).isEqualTo(UserStatusPickerState.Hidden)
+            // On failure the SDK does not emit a new profile, so nothing is displayed.
+            assertThat(newState.displayedStatus).isNull()
+            assertThat(newState.updateStatusAction).isInstanceOf(AsyncAction.Failure::class.java)
             assertThat(client.setUserStatusCalled).isTrue()
         }
     }
@@ -117,6 +141,25 @@ class UserStatusPresenterTest {
             val clearedState = awaitItem()
             assertThat(clearedState.pickerState).isEqualTo(UserStatusPickerState.Hidden)
             assertThat(clearedState.displayedStatus).isNull()
+            assertThat(clearedState.updateStatusAction).isInstanceOf(AsyncAction.Success::class.java)
+            assertThat(client.clearUserStatusCalled).isTrue()
+        }
+    }
+
+    @Test
+    fun `Clear event failure surfaces a Failure action`() = runTest {
+        val client = FakeMatrixClient().apply {
+            clearUserStatusResult = Result.failure(AN_EXCEPTION)
+        }
+        createPresenter(client).test {
+            val status = UserStatus(emoji = "☕", text = "Be right back")
+            awaitItem().eventSink(UserStatusEvent.SetStatus(status))
+            awaitItem().eventSink(UserStatusEvent.ClearStatus)
+            val clearedState = awaitItem()
+            assertThat(clearedState.pickerState).isEqualTo(UserStatusPickerState.Hidden)
+            // Clear failed, so the previously set status is still displayed.
+            assertThat(clearedState.displayedStatus).isEqualTo(DisplayedStatus.UserSet(status))
+            assertThat(clearedState.updateStatusAction).isInstanceOf(AsyncAction.Failure::class.java)
             assertThat(client.clearUserStatusCalled).isTrue()
         }
     }

@@ -34,14 +34,14 @@ fun AboutView(
     ) {
         state.elementLegals.forEach { elementLegal ->
             ListItem(
-                headlineContent = {
+                content = {
                     Text(stringResource(id = elementLegal.titleRes))
                 },
                 onClick = { onElementLegalClick(elementLegal) }
             )
         }
         ListItem(
-            headlineContent = {
+            content = {
                 Text(stringResource(id = CommonStrings.common_open_source_licenses))
             },
             onClick = onOpenSourceLicensesClick,

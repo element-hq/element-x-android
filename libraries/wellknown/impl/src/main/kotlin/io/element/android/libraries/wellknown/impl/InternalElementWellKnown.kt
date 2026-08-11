@@ -46,6 +46,8 @@ data class InternalElementWellKnown(
     val customRecoveryPassphrase: InternalCustomRecoveryPassphrase? = null,
     @SerialName("content_scanner_url")
     val contentScannerUrl: String? = null,
+    @SerialName("force_disable_e2ee")
+    val forceDisableE2EE: Boolean? = null,
 )
 
 @Serializable

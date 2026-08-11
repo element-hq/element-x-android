@@ -88,7 +88,7 @@ class DefaultInvitePeoplePresenter(
     override fun present(): InvitePeopleState {
         val roomMembers = remember { mutableStateOf<AsyncData<ImmutableList<RoomMember>>>(AsyncData.Loading()) }
         val selectedUsers = remember { mutableStateOf<ImmutableList<MatrixUser>>(persistentListOf()) }
-        val searchResults = remember { mutableStateOf<SearchBarResultState<ImmutableList<InvitableUser>>>(SearchBarResultState.Initial()) }
+        val searchResults = remember { mutableStateOf<SearchBarResultState<ImmutableList<InvitableUser>>>(SearchBarResultState.Initial) }
         val queryState = rememberTextFieldState()
         var searchActive by rememberSaveable { mutableStateOf(false) }
         val showSearchLoader = rememberSaveable { mutableStateOf(false) }
@@ -332,15 +332,15 @@ class DefaultInvitePeoplePresenter(
         showSearchLoader: MutableState<Boolean>,
         searchQuery: String,
     ) = withContext(coroutineDispatchers.io) {
-        searchResults.value = SearchBarResultState.Initial()
+        searchResults.value = SearchBarResultState.Initial
         showSearchLoader.value = false
         val joinedMembers = roomMembers.value.dataOrNull().orEmpty()
 
         userRepository.search(searchQuery).onEach { state ->
             showSearchLoader.value = state.isSearching
             searchResults.value = when {
-                state.results.isEmpty() && state.isSearching -> SearchBarResultState.Initial()
-                state.results.isEmpty() && !state.isSearching -> SearchBarResultState.NoResultsFound()
+                state.results.isEmpty() && state.isSearching -> SearchBarResultState.Initial
+                state.results.isEmpty() && !state.isSearching -> SearchBarResultState.NoResultsFound
                 else -> SearchBarResultState.Results(state.results.map { result ->
                     val existingMembership = joinedMembers.firstOrNull { j -> j.userId == result.matrixUser.userId }?.membership
                     val isJoined = existingMembership == RoomMembershipState.JOIN

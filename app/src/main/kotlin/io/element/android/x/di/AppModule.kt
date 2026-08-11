@@ -28,8 +28,6 @@ import io.element.android.libraries.di.BaseDirectory
 import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.di.annotations.ApplicationContext
-import io.element.android.libraries.recentemojis.api.EmojibaseProvider
-import io.element.android.libraries.recentemojis.impl.DefaultEmojibaseProvider
 import io.element.android.x.BuildConfig
 import io.element.android.x.R
 import kotlinx.coroutines.CoroutineName
@@ -114,11 +112,5 @@ object AppModule {
     @SingleIn(AppScope::class)
     fun provideSnackbarDispatcher(): SnackbarDispatcher {
         return SnackbarDispatcher()
-    }
-
-    @Provides
-    @SingleIn(AppScope::class)
-    fun providesEmojibaseProvider(@ApplicationContext context: Context): EmojibaseProvider {
-        return DefaultEmojibaseProvider(context)
     }
 }

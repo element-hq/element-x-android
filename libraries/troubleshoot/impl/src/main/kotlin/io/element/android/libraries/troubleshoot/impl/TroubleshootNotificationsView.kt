@@ -68,7 +68,7 @@ private fun ColumnScope.TroubleshootTestView(
     val status = testState.status
     if ((status as? Status.Idle)?.visible == false) return
     ListItem(
-        headlineContent = { Text(text = testState.name) },
+        content = { Text(text = testState.name) },
         supportingContent = { Text(text = testState.description) },
         trailingContent = when (status) {
             is Status.Idle -> null
@@ -108,7 +108,7 @@ private fun ColumnScope.TroubleshootTestView(
     )
     if (status is Status.Failure && status.hasQuickFix) {
         ListItem(
-            headlineContent = { },
+            content = { },
             trailingContent = ListItemContent.Custom {
                 Button(
                     text = status.quickFixButtonString ?: stringResource(id = R.string.troubleshoot_notifications_screen_quick_fix_action),
@@ -137,7 +137,7 @@ private fun ColumnScope.TroubleshootNotificationsContent(state: TroubleshootNoti
     }
     when (state.testSuiteState.mainState) {
         AsyncAction.Uninitialized -> {
-            ListItem(headlineContent = {
+            ListItem(content = {
                 Text(
                     text = stringResource(id = R.string.troubleshoot_notifications_screen_notice)
                 )
@@ -146,20 +146,20 @@ private fun ColumnScope.TroubleshootNotificationsContent(state: TroubleshootNoti
         }
         AsyncAction.Loading -> Unit
         is AsyncAction.Failure -> {
-            ListItem(headlineContent = {
+            ListItem(content = {
                 Text(text = stringResource(id = R.string.troubleshoot_notifications_screen_failure))
             })
             RunTestButton(state = state)
         }
         is AsyncAction.Confirming -> {
-            ListItem(headlineContent = {
+            ListItem(content = {
                 Text(
                     text = stringResource(id = R.string.troubleshoot_notifications_screen_waiting)
                 )
             })
         }
         is AsyncAction.Success -> {
-            ListItem(headlineContent = {
+            ListItem(content = {
                 Text(
                     text = stringResource(id = R.string.troubleshoot_notifications_screen_success)
                 )
@@ -171,7 +171,7 @@ private fun ColumnScope.TroubleshootNotificationsContent(state: TroubleshootNoti
 @Composable
 private fun RunTestButton(state: TroubleshootNotificationsState) {
     ListItem(
-        headlineContent = {
+        content = {
             Button(
                 text = stringResource(
                     id = if (state.testSuiteState.mainState is AsyncAction.Failure) {

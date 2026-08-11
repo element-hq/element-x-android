@@ -293,8 +293,8 @@ private fun TextFieldContainer(
                 width = if (isFocused) 2.dp else 1.dp,
                 color = when {
                     !enabled -> ElementTheme.colors.borderDisabled
+                    isFocused -> ElementTheme.colors.borderFocused
                     isError -> ElementTheme.colors.borderCriticalPrimary
-                    isFocused -> ElementTheme.colors.borderInteractiveHovered
                     else -> ElementTheme.colors.borderInteractiveSecondary
                 }
             )

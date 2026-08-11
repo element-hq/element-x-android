@@ -37,7 +37,14 @@
   <string name="screen_login_subtitle">"Matrix er et åpent nettverk for sikker, desentralisert kommunikasjon."</string>
   <string name="screen_login_title">"Velkommen tilbake!"</string>
   <string name="screen_login_title_with_homeserver">"Logg inn på %1$s"</string>
+  <string name="screen_missing_key_backup_open_element_classic">"Åpne Element Classic"</string>
+  <string name="screen_missing_key_backup_step_1">"Åpne Element Classic på enheten din"</string>
+  <string name="screen_missing_key_backup_step_2_android">"Gå til Innstillinger → Sikkerhet og personvern"</string>
+  <string name="screen_missing_key_backup_step_4">"Følg instruksjonene for å aktivere nøkkellagringen din"</string>
+  <string name="screen_missing_key_backup_step_5">"Kom tilbake til %1$s"</string>
+  <string name="screen_missing_key_backup_title">"Aktiver nøkkellagringen din før du går videre til %1$s"</string>
   <string name="screen_onboarding_app_version">"Versjon %1$s"</string>
+  <string name="screen_onboarding_checking_account">"Sjekker kontoen"</string>
   <string name="screen_onboarding_sign_in_manually">"Logg på manuelt"</string>
   <string name="screen_onboarding_sign_in_to">"Logg inn på %1$s"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"Logg inn med QR-kode"</string>

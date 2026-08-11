@@ -45,10 +45,10 @@ import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenu
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationValue
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 import io.element.android.libraries.mediaviewer.impl.model.aMediaItemVoice
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -64,26 +64,20 @@ fun VoiceItemView(
     state: VoiceMessageState,
     voice: MediaItem.Voice,
     onLongClick: () -> Unit,
+    contentValidationValue: ContentValidationValue,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+    GalleryFileListItem(
+        modifier = modifier,
+        contentValidationValue = contentValidationValue,
+        caption = voice.mediaInfo.caption,
     ) {
-        Spacer(modifier = Modifier.height(20.dp))
         VoiceInfoRow(
             state = state,
             voice = voice,
+            isValidating = contentValidationValue.isLoading(),
             onLongClick = onLongClick,
         )
-        val caption = voice.mediaInfo.caption
-        if (caption != null) {
-            CaptionView(caption)
-        } else {
-            Spacer(modifier = Modifier.height(16.dp))
-        }
-        HorizontalDivider()
     }
 }
 
@@ -91,6 +85,7 @@ fun VoiceItemView(
 private fun VoiceInfoRow(
     state: VoiceMessageState,
     voice: MediaItem.Voice,
+    isValidating: Boolean,
     onLongClick: () -> Unit,
 ) {
     fun playPause() {
@@ -114,12 +109,21 @@ private fun VoiceInfoRow(
             .padding(start = 12.dp, end = 36.dp, top = 8.dp, bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        when (state.buttonType) {
-            VoiceMessageState.ButtonType.Play -> PlayButton(onClick = ::playPause)
-            VoiceMessageState.ButtonType.Pause -> PauseButton(onClick = ::playPause)
-            VoiceMessageState.ButtonType.Downloading -> ProgressButton()
-            VoiceMessageState.ButtonType.Retry -> RetryButton(onClick = ::playPause)
-            VoiceMessageState.ButtonType.Disabled -> PlayButton(onClick = {}, enabled = false)
+        if (isValidating) {
+            CustomIconButton(onClick = {}, enabled = false) {
+                CircularProgressIndicator(
+                    strokeWidth = 2.dp,
+                    modifier = Modifier.size(16.dp)
+                )
+            }
+        } else {
+            when (state.buttonType) {
+                VoiceMessageState.ButtonType.Play -> PlayButton(onClick = ::playPause)
+                VoiceMessageState.ButtonType.Pause -> PauseButton(onClick = ::playPause)
+                VoiceMessageState.ButtonType.Downloading -> ProgressButton()
+                VoiceMessageState.ButtonType.Retry -> RetryButton(onClick = ::playPause)
+                VoiceMessageState.ButtonType.Disabled -> PlayButton(onClick = {}, enabled = false)
+            }
         }
         Spacer(Modifier.width(8.dp))
         Column(
@@ -128,7 +132,7 @@ private fun VoiceInfoRow(
         ) {
             PlaybackSpeedButton(
                 speed = state.playbackSpeed,
-                onClick = { state.eventSink(VoiceMessageEvent.ChangePlaybackSpeed) },
+                onClick = { state.eventSink(VoiceMessageEvent.ChangePlaybackSpeed) }.takeIf { !isValidating } ?: {},
             )
             Text(
                 text = if (state.progress > 0f) state.time else voice.mediaInfo.duration ?: state.time,
@@ -149,7 +153,7 @@ private fun VoiceInfoRow(
             onSeek = {
                 state.eventSink(VoiceMessageEvent.Seek(it))
             },
-            seekEnabled = true,
+            seekEnabled = !isValidating,
         )
     }
 }
@@ -277,11 +281,24 @@ private fun CustomIconButton(
 internal fun VoiceItemViewPreview(
     @PreviewParameter(MediaItemVoiceProvider::class) voice: MediaItem.Voice,
 ) = ElementPreview {
-    VoiceItemView(
-        state = aVoiceMessageState(),
-        voice = voice,
-        onLongClick = {},
-    )
+    val states = remember {
+        listOf(
+            ContentValidationValue.Valid,
+            ContentValidationValue.Loading,
+            ContentValidationValue.Invalid,
+            ContentValidationValue.UnrecoverableError(Throwable("Unrecoverable error")),
+        )
+    }
+    Column {
+        for (state in states) {
+            VoiceItemView(
+                state = aVoiceMessageState(),
+                voice = voice,
+                onLongClick = {},
+                contentValidationValue = state,
+            )
+        }
+    }
 }
 
 @PreviewsDayNight
@@ -289,9 +306,22 @@ internal fun VoiceItemViewPreview(
 internal fun VoiceItemViewPlayPreview(
     @PreviewParameter(VoiceMessageStateProvider::class) state: VoiceMessageState,
 ) = ElementPreview {
-    VoiceItemView(
-        state = state,
-        voice = aMediaItemVoice(),
-        onLongClick = {},
-    )
+    val validationState = remember {
+        listOf(
+            ContentValidationValue.Valid,
+            ContentValidationValue.Loading,
+            ContentValidationValue.Invalid,
+            ContentValidationValue.UnrecoverableError(Throwable("Unrecoverable error")),
+        )
+    }
+    Column {
+        for (validationState in validationState) {
+            VoiceItemView(
+                state = state,
+                voice = aMediaItemVoice(),
+                onLongClick = {},
+                contentValidationValue = validationState,
+            )
+        }
+    }
 }
