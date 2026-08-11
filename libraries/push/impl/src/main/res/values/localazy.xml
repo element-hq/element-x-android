@@ -19,6 +19,10 @@
     <item quantity="one">"You have %d new message."</item>
     <item quantity="other">"You have %d new messages."</item>
   </plurals>
+  <plurals name="notification_gallery_body">
+    <item quantity="one">"Shared %1$d attachment"</item>
+    <item quantity="other">"Shared %1$d attachments"</item>
+  </plurals>
   <string name="notification_incoming_audio_call">"📞 Incoming call"</string>
   <string name="notification_incoming_call">"📹 Incoming call"</string>
   <string name="notification_inline_reply_failed">"** Failed to send - please open room"</string>
@@ -30,6 +34,7 @@
   </plurals>
   <string name="notification_invite_body">"Invited you to chat"</string>
   <string name="notification_invite_body_with_sender">"%1$s invited you to chat"</string>
+  <string name="notification_live_location_started_body">"Started sharing their live location"</string>
   <string name="notification_mentioned_you_body">"Mentioned you: %1$s"</string>
   <string name="notification_new_messages">"New Messages"</string>
   <plurals name="notification_new_messages_for_room">

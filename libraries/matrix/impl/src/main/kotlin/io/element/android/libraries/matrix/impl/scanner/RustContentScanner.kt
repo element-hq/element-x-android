@@ -7,9 +7,11 @@
 
 package io.element.android.libraries.matrix.impl.scanner
 
+import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.scanner.ContentScanner
+import io.element.android.libraries.matrix.impl.exception.mapClientException
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.ContentScanner as RustScanner
@@ -22,6 +24,8 @@ class RustContentScanner(
     override suspend fun scan(mediaSource: MediaSource): Result<Boolean> {
         return runCatchingExceptions {
             rustScanner.scan(client, mediaSource.toRustMediaSource()).clean
+        }.mapFailure {
+            it.mapClientException()
         }
     }
 }

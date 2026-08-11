@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopEventContentValidationCache
 import io.element.android.libraries.mediaviewer.api.AvatarInfo
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.api.anApkMediaInfo
@@ -114,6 +115,7 @@ class MediaViewerPresenterTest {
                 avatarInfo = AvatarInfo(filename = "avatar.png"),
                 mediaSource = aMediaSource(),
                 thumbnailSource = null,
+                blurHash = null,
             ),
             room = FakeJoinedRoom(
                 baseRoom = FakeBaseRoom(
@@ -968,6 +970,8 @@ internal fun TestScope.createMediaViewerPresenter(
             localMediaFactory = localMediaFactory,
             systemClock = FakeSystemClock(),
             pagerKeysHandler = PagerKeysHandler(),
+            contentScannerService = { _, _ -> },
+            contentValidationCache = NoopEventContentValidationCache(),
         ),
         room = room,
         localMediaActions = localMediaActions,
@@ -983,4 +987,5 @@ internal fun createMediaViewerEntryPointParams(
     mediaInfo = TESTED_MEDIA_INFO,
     mediaSource = aMediaSource(),
     thumbnailSource = null,
+    blurHash = null,
 )

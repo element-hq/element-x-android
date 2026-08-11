@@ -477,7 +477,6 @@ Haluatko varmasti jatkaa?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Suurin sallittu tiedostokoko on: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Valitse lähetettävän videon laatu."</string>
   <string name="dialog_video_quality_selector_title">"Valitse videon lähetyslaatu"</string>
-  <string name="emoji_picker_search_placeholder">"Etsi emojeja"</string>
   <string name="error_account_already_logged_in">"Olet jo kirjautuneena tälle laitteelle käyttäjällä %1$s."</string>
   <string name="error_account_creation_not_possible">"Kotipalvelimesi on päivitettävä tukemaan Matrix Authentication Serviceä ja tilin luomista."</string>
   <string name="error_failed_creating_the_permalink">"Pysyvän linkin luominen epäonnistui"</string>

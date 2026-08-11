@@ -12,6 +12,7 @@
   <string name="screen_chat_backup_recovery_action_confirm">"Skriv inn gjenopprettingsnøkkel"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Nøkkellagringen din er for øyeblikket ikke synkronisert."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Hent gjenopprettingsnøkkel"</string>
+  <string name="screen_chat_backup_recovery_action_setup_description">"Chattene dine sikkerhetskopieres automatisk med ende-til-ende-kryptering. For å gjenopprette denne sikkerhetskopien og beholde din digitale identitet når du mister tilgang til alle enhetene dine, trenger du gjenopprettingsnøkkelen din."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Åpne %1$s på en datamaskin"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Logg på kontoen din igjen"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Når du blir bedt om å verifisere din enhet, velger du %1$s"</string>
@@ -19,6 +20,27 @@
   <string name="screen_create_new_recovery_key_list_item_4">"Følg instruksjonene for å opprette en ny gjenopprettingsnøkkel"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"Du bør lagre din nye gjenopprettingsnøkkel i en passordbehandler eller i et kryptert notat"</string>
   <string name="screen_create_new_recovery_key_title">"Tilbakestill krypteringen for kontoen din ved hjelp av en annen enhet"</string>
+  <string name="screen_custom_recovery_key_confirm_error_mismatch">"Gjenopprettingsnøkkelen du skrev inn samsvarer ikke"</string>
+  <string name="screen_custom_recovery_key_confirm_submit">"Fullfør oppsett"</string>
+  <string name="screen_custom_recovery_key_confirm_subtitle">"Skriv inn gjenopprettingsnøkkelen din på nytt."</string>
+  <string name="screen_custom_recovery_key_confirm_title">"Bekreft gjenopprettingsnøkkelen din"</string>
+  <plurals name="screen_custom_recovery_key_input_notice">
+    <item quantity="one">"Minst %1$d tegn. Ikke bruk passordet til kontoen din"</item>
+    <item quantity="other">"Minst %1$d tegn. Ikke bruk passordet til kontoen din"</item>
+  </plurals>
+  <string name="screen_custom_recovery_key_input_strength">"Styrke"</string>
+  <string name="screen_custom_recovery_key_input_strength_a11y">"Passordstyrke: %1$s"</string>
+  <string name="screen_custom_recovery_key_input_strength_moderate">"Moderat"</string>
+  <string name="screen_custom_recovery_key_input_strength_strong">"Sterk"</string>
+  <string name="screen_custom_recovery_key_input_strength_very_strong">"Veldig sterk"</string>
+  <string name="screen_custom_recovery_key_input_strength_very_weak">"Veldig svak"</string>
+  <string name="screen_custom_recovery_key_input_strength_weak">"Svak"</string>
+  <string name="screen_custom_recovery_key_input_subtitle">"Velg en gjenopprettingsnøkkel som du kan huske."</string>
+  <string name="screen_custom_recovery_key_input_title">"Skriv inn en gjenopprettingsnøkkel"</string>
+  <string name="screen_custom_recovery_key_loading_a11y">"Laster inn krav til gjenopprettingsnøkkel"</string>
+  <string name="screen_custom_recovery_key_success_notice">"For å endre gjenopprettingsnøkkelen din, gå til Innstillinger → Kryptering → Sikkerhetskopi"</string>
+  <string name="screen_custom_recovery_key_success_subtitle">"Du kan bruke gjenopprettingsnøkkelen din til å bekrefte nye enheter eller gjenopprette krypterte chatter hvis du mister tilgangen til alle enhetene dine."</string>
+  <string name="screen_custom_recovery_key_success_title">"Sikkerhetskopien din er nå ferdig konfigurert"</string>
   <string name="screen_encryption_reset_action_continue_reset">"Fortsett tilbakestillingen"</string>
   <string name="screen_encryption_reset_bullet_1">"Dine kontodetaljer, kontakter, innstillinger og chatteliste vil bli beholdt"</string>
   <string name="screen_encryption_reset_bullet_2">"Du mister all meldingshistorikk som bare er lagret på serveren"</string>

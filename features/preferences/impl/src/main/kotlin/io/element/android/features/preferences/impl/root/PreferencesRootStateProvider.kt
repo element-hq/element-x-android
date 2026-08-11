@@ -15,7 +15,6 @@ import io.element.android.features.preferences.impl.userstatus.UserStatusPickerS
 import io.element.android.features.preferences.impl.userstatus.UserStatusState
 import io.element.android.features.preferences.impl.userstatus.aUserStatusState
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
-import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
@@ -29,7 +28,6 @@ open class PreferencesRootStateProvider : PreviewParameterProvider<PreferencesRo
             aPreferencesRootState(
                 myUser = aMatrixUser(avatarUrl = "anAvatarUrl"),
                 version = "Version 1.1 (1)",
-                deviceId = DeviceId("ILAKNDNASDLK"),
                 isMultiAccountEnabled = true,
                 otherSessions = aMatrixUserList().drop(1).take(1),
                 showSecureBackup = true,
@@ -55,7 +53,6 @@ open class PreferencesRootStateProvider : PreviewParameterProvider<PreferencesRo
                 showSecureBackupBadge = true,
             ),
             aPreferencesRootState(
-                deviceId = DeviceId("ILAKNDNASDLK"),
                 showLabsItem = true,
                 canReportBug = true,
                 nbOfBlockedUsers = 3,
@@ -76,7 +73,6 @@ open class PreferencesRootStateProvider : PreviewParameterProvider<PreferencesRo
 fun aPreferencesRootState(
     myUser: MatrixUser = aMatrixUser(),
     version: String = "Version 1.1 (1)",
-    deviceId: DeviceId? = null,
     isMultiAccountEnabled: Boolean = false,
     otherSessions: List<MatrixUser> = emptyList(),
     showSecureBackup: Boolean = false,
@@ -96,7 +92,6 @@ fun aPreferencesRootState(
 ) = PreferencesRootState(
     myUser = myUser,
     version = version,
-    deviceId = deviceId,
     isMultiAccountEnabled = isMultiAccountEnabled,
     otherSessions = otherSessions.toImmutableList(),
     showSecureBackup = showSecureBackup,

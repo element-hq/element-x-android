@@ -29,21 +29,32 @@ fun EqualWidthColumn(
 ) {
     SubcomposeLayout(modifier = modifier) { constraints ->
         val measurables = subcompose(0, content).map { it.measure(constraints) }
-        val maxWidth = measurables.maxOf { it.width }
-        val newConstraints = constraints.copy(minWidth = maxWidth)
-        val newMeasurables = if (measurables.all { it.width == maxWidth }) {
-            // Skip re-measuring if all children have the same width
-            measurables
+        if (measurables.isEmpty()) {
+            // No children, so just return a layout with 0 width and height
+            layout(0, 0) {}
+        } else if (measurables.size == 1) {
+            // No need to re-measure if there's only one child
+            val measurable = measurables.first()
+            layout(measurable.width, measurable.height) {
+                measurable.placeRelative(0, 0)
+            }
         } else {
-            // Re-measure with the largest width as the minWidth to have all children constrained to the same width
-            subcompose(1, content).map { it.measure(newConstraints) }
-        }
-        val totalHeight = (newMeasurables.sumOf { it.height } + spacing.toPx() * (newMeasurables.size - 1)).roundToInt()
-        layout(maxWidth, totalHeight) {
-            var yPosition = 0
-            newMeasurables.forEach { measurable ->
-                measurable.placeRelative(0, yPosition)
-                yPosition += measurable.height + spacing.roundToPx()
+            val maxWidth = measurables.maxOf { it.width }
+            val newConstraints = constraints.copy(minWidth = maxWidth)
+            val newMeasurables = if (measurables.all { it.width == maxWidth }) {
+                // Skip re-measuring if all children have the same width
+                measurables
+            } else {
+                // Re-measure with the largest width as the minWidth to have all children constrained to the same width
+                subcompose(1, content).map { it.measure(newConstraints) }
+            }
+            val totalHeight = (newMeasurables.sumOf { it.height } + spacing.toPx() * (newMeasurables.size - 1)).roundToInt()
+            layout(maxWidth, totalHeight) {
+                var yPosition = 0
+                newMeasurables.forEach { measurable ->
+                    measurable.placeRelative(0, yPosition)
+                    yPosition += measurable.height + spacing.roundToPx()
+                }
             }
         }
     }

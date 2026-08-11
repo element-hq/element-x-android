@@ -534,6 +534,6 @@ class DefaultBugReporterTest : RobolectricTest() {
     }
 
     companion object {
-        private const val EXPECTED_NUMBER_OF_PROGRESS_VALUE = 17
+        private const val EXPECTED_NUMBER_OF_PROGRESS_VALUE = 18
     }
 }

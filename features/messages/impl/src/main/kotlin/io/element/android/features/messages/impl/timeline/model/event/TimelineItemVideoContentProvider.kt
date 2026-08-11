@@ -20,6 +20,7 @@ open class TimelineItemVideoContentProvider : PreviewParameterProvider<TimelineI
             aTimelineItemVideoContent(),
             aTimelineItemVideoContent(aspectRatio = 1.0f),
             aTimelineItemVideoContent(aspectRatio = 1.5f),
+            aTimelineItemVideoContent(thumbnailMediaSource = MediaSource("https://example.com/thumbnail.jpg")),
             aTimelineItemVideoContent(blurhash = null),
         )
 }
@@ -27,17 +28,20 @@ open class TimelineItemVideoContentProvider : PreviewParameterProvider<TimelineI
 fun aTimelineItemVideoContent(
     aspectRatio: Float = 0.5f,
     blurhash: String? = A_BLUR_HASH,
+    caption: String? = null,
+    mediaSource: MediaSource = MediaSource(""),
+    thumbnailMediaSource: MediaSource? = null,
 ) = TimelineItemVideoContent(
     filename = "Video.mp4",
     fileSize = 14 * 1024 * 1024L,
-    caption = null,
+    caption = caption,
     formattedCaption = null,
     isEdited = false,
-    thumbnailSource = null,
+    thumbnailSource = thumbnailMediaSource,
     blurHash = blurhash,
     aspectRatio = aspectRatio,
     duration = 100.milliseconds,
-    mediaSource = MediaSource(""),
+    mediaSource = mediaSource,
     width = 150,
     height = 300,
     thumbnailWidth = 150,

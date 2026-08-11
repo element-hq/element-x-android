@@ -39,6 +39,8 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 
 /**
  * https://www.figma.com/file/o9p34zmiuEpZRyvZXJZAYL/FTUE?type=design&node-id=604-60817
@@ -59,7 +61,8 @@ fun ChangeAccountProviderView(
                 title = {},
                 navigationIcon = { BackButton(onClick = onBackClick) }
             )
-        }
+        },
+        contentWindowInsets = scaffoldScrollableContentInsets,
     ) { padding ->
         Box(
             modifier = Modifier
@@ -71,6 +74,7 @@ fun ChangeAccountProviderView(
             Column(
                 modifier = Modifier
                     .verticalScroll(state = rememberScrollState())
+                    .padding(lazyColumnContentPadding)
             ) {
                 IconTitleSubtitleMolecule(
                     modifier = Modifier.padding(top = 16.dp, bottom = 32.dp, start = 16.dp, end = 16.dp),

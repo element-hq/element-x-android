@@ -167,4 +167,5 @@ fun aProfileDetailsReady(
     displayName = displayName,
     displayNameAmbiguous = displayNameAmbiguous,
     avatarUrl = avatarUrl,
+    displayedStatus = null,
 )

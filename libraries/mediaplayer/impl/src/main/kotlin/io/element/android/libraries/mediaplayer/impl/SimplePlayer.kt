@@ -9,6 +9,7 @@
 package io.element.android.libraries.mediaplayer.impl
 
 import android.content.Context
+import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
@@ -49,7 +50,7 @@ object SimplePlayerModule {
     @Provides
     fun simplePlayerProvider(
         @ApplicationContext context: Context,
-    ): SimplePlayer = DefaultSimplePlayer(ExoPlayer.Builder(context).build())
+    ): SimplePlayer = DefaultSimplePlayer(ExoPlayer.Builder(context).setWakeMode(C.WAKE_MODE_LOCAL).build())
 }
 
 /**

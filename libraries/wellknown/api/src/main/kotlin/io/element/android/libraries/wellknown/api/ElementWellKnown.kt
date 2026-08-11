@@ -17,4 +17,5 @@ data class ElementWellKnown(
     val identityProviderAppScheme: String?,
     val customRecoveryPassphrase: CustomRecoveryPassphrase?,
     val contentScannerUrl: String?,
+    val forceDisableE2EE: Boolean?,
 )

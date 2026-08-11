@@ -31,6 +31,7 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.Interaction
+import io.element.android.features.contentscanner.api.ContentScannerService
 import io.element.android.features.location.api.LocationService
 import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.features.messages.impl.attachments.Attachment
@@ -61,8 +62,12 @@ import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
 import io.element.android.libraries.matrix.api.room.getDirectRoomMember
 import io.element.android.libraries.matrix.api.room.powerlevels.use
 import io.element.android.libraries.matrix.api.timeline.TimelineException
+import io.element.android.libraries.matrix.api.timeline.item.event.mediaSources
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
+import io.element.android.libraries.matrix.ui.media.contentvalidation.EventContentValidationCache
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
+import io.element.android.libraries.matrix.ui.messages.reply.content
+import io.element.android.libraries.matrix.ui.messages.reply.eventId
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
@@ -135,6 +140,8 @@ class MessageComposerPresenter(
     private val notificationConversationService: NotificationConversationService,
     private val slashCommandService: SlashCommandService,
     private val featureFlagService: FeatureFlagService,
+    private val contentScannerService: ContentScannerService,
+    private val contentValidationCache: EventContentValidationCache,
 ) : Presenter<MessageComposerState> {
     @AssistedFactory
     interface Factory {
@@ -848,6 +855,11 @@ class MessageComposerPresenter(
                 setText(newComposerMode.content, markdownTextEditorState, richTextEditorState, requestFocus = true)
             }
             else -> {
+                if (currentComposerMode is MessageComposerMode.Reply) {
+                    val mediaSources = currentComposerMode.replyToDetails.content()?.mediaSources() ?: return@launch
+                    val contentValidationState = contentValidationCache[currentComposerMode.replyToDetails.eventId()]
+                    contentScannerService.scan(mediaSources, contentValidationState)
+                }
                 // When coming from edit, just clear the composer as it'd be weird to reset a volatile draft in this scenario.
                 if (currentComposerMode.isEditing) {
                     setText("", markdownTextEditorState, richTextEditorState)

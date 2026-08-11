@@ -145,6 +145,7 @@ class UserProfilePresenter(
             userId = userId,
             userName = userProfile?.displayName,
             avatarUrl = userProfile?.avatarUrl,
+            displayedStatus = userProfile?.displayedStatus,
             isBlocked = isBlocked.value,
             verificationState = UserProfileVerificationState.UNKNOWN,
             startDmActionState = startDmActionState.value,

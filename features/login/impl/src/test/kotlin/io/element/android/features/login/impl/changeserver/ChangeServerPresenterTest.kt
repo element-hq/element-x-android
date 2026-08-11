@@ -17,18 +17,19 @@ import io.element.android.features.login.impl.accountprovider.AccountProviderDat
 import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.features.login.impl.localnetwork.LocalNetworkPermissionGate
 import io.element.android.features.wellknown.test.FakeWellknownRetriever
+import io.element.android.features.wellknown.test.FakeWellknownRetrieverFactory
 import io.element.android.features.wellknown.test.anElementWellKnown
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
+import io.element.android.libraries.matrix.test.FakeTemporaryMatrixClientFactory
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.auth.aMatrixHomeServerDetails
 import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialog
 import io.element.android.libraries.permissions.test.FakeLocalNetworkPermissionAdvisor
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
-import io.element.android.libraries.wellknown.api.ElementWellKnown
+import io.element.android.libraries.wellknown.api.EnterpriseRemoteConfigSource
 import io.element.android.libraries.wellknown.api.WellknownRetriever
 import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
 import io.element.android.tests.testutils.WarmUpRule
@@ -158,7 +159,8 @@ class ChangeServerPresenterTest {
 
     @Test
     fun `present - change server element pro required error`() = runTest {
-        val getElementWellKnownResult = lambdaRecorder<String, WellknownRetrieverResult<ElementWellKnown>> {
+        val getElementWellKnownResult = lambdaRecorder { homeserver: String, _: EnterpriseRemoteConfigSource ->
+            assertThat(homeserver).isEqualTo(A_HOMESERVER_URL)
             WellknownRetrieverResult.Success(
                 anElementWellKnown(
                     enforceElementPro = true,
@@ -174,8 +176,6 @@ class ChangeServerPresenterTest {
             assertThat(initialState.changeServerAction).isEqualTo(AsyncData.Uninitialized)
             val anAccountProvider = AccountProvider(url = A_HOMESERVER_URL)
             initialState.eventSink.invoke(ChangeServerEvents.ChangeServer(anAccountProvider))
-            val loadingState = awaitItem()
-            assertThat(loadingState.changeServerAction).isInstanceOf(AsyncData.Loading::class.java)
             val failureState = awaitItem()
             assertThat(
                 (failureState.changeServerAction.errorOrNull() as ChangeServerError.NeedElementPro).unauthorisedAccountProviderTitle
@@ -183,9 +183,7 @@ class ChangeServerPresenterTest {
             assertThat(
                 (failureState.changeServerAction.errorOrNull() as ChangeServerError.NeedElementPro).applicationId
             ).isEqualTo("io.element.enterprise")
-            getElementWellKnownResult.assertions()
-                .isCalledOnce()
-                .with(value(A_HOMESERVER_URL.ensureProtocol()))
+            getElementWellKnownResult.assertions().isCalledOnce()
         }
     }
 
@@ -269,7 +267,8 @@ class ChangeServerPresenterTest {
         accountProviderDataSource = accountProviderDataSource,
         defaultAccountProviderAccessControl = DefaultAccountProviderAccessControl(
             enterpriseService = enterpriseService,
-            wellknownRetriever = wellknownRetriever,
+            wellknownRetrieverFactory = FakeWellknownRetrieverFactory(wellknownRetriever = wellknownRetriever),
+            temporaryMatrixClientFactory = FakeTemporaryMatrixClientFactory(),
         ),
         localNetworkPermissionGate = LocalNetworkPermissionGate(
             advisor = localNetworkPermissionAdvisor,

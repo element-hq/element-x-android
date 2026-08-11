@@ -37,6 +37,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
+import io.element.android.libraries.matrix.ui.media.contentvalidation.InMemoryEventContentValidationCache
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfig
@@ -315,6 +316,8 @@ class MessageComposerPresenterSlashCommandTest {
         notificationConversationService = notificationConversationService,
         slashCommandService = slashCommandService,
         featureFlagService = featureFlagService,
+        contentScannerService = { _, _ -> },
+        contentValidationCache = InMemoryEventContentValidationCache(),
     ).apply {
         isTesting = true
         showTextFormatting = isRichTextEditorEnabled

@@ -321,7 +321,6 @@ Segur que vols continuar?"</string>
   <string name="dialog_unsaved_changes_description">"Hi ha canvis sense desar."</string>
   <string name="dialog_unsaved_changes_description_android">"Els canvis no s\'han desat. Segur que vols tornar enrere?"</string>
   <string name="dialog_unsaved_changes_title">"Desar canvis?"</string>
-  <string name="emoji_picker_search_placeholder">"Cerca emoticones"</string>
   <string name="error_account_creation_not_possible">"El servidor utilitzat s\'ha d\'actualitzar per admetre el servei d\'autenticació de Matrix i la creació de comptes."</string>
   <string name="error_failed_creating_the_permalink">"No s\'ha pogut crear l\'enllaç permanent"</string>
   <string name="error_failed_loading_map">"%1$s no ha pogut carregar el mapa. Torna-ho a provar més tard."</string>

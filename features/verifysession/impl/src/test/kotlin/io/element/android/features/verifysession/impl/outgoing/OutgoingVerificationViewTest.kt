@@ -99,10 +99,10 @@ class OutgoingVerificationViewTest : RobolectricTest() {
     }
 
     @Test
-    fun `back key pressed - on Completed exits the flow`() = runAndroidComposeUiTest {
+    fun `back key pressed - on Completed finishes the flow`() = runAndroidComposeUiTest {
         ensureCalledOnce { callback ->
             setOutgoingVerificationView(
-                onBack = callback,
+                onFinished = callback,
                 state = anOutgoingVerificationState(
                     step = OutgoingVerificationState.Step.Completed,
                 ),
@@ -112,7 +112,7 @@ class OutgoingVerificationViewTest : RobolectricTest() {
     }
 
     @Test
-    fun `when flow is completed and the user clicks on the continue button, the expected callback is invoked`() = runAndroidComposeUiTest {
+    fun `when flow is completed and the user clicks on the done button, the expected callback is invoked`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<OutgoingVerificationViewEvents>(expectEvents = false)
         ensureCalledOnce { callback ->
             setOutgoingVerificationView(
@@ -122,7 +122,7 @@ class OutgoingVerificationViewTest : RobolectricTest() {
                 ),
                 onFinished = callback,
             )
-            clickOn(CommonStrings.action_continue)
+            clickOn(CommonStrings.action_done)
         }
     }
 

@@ -116,6 +116,7 @@ fun aGalleryItem(
     width: Int = 400,
     height: Int = 300,
     duration: Duration = Duration.ZERO,
+    mediaSource: MediaSource = MediaSource(url = "", json = ""),
 ): GalleryItem {
     return GalleryItem(
         filename = filename,
@@ -125,7 +126,7 @@ fun aGalleryItem(
             GalleryItem.Type.File -> "application/pdf"
             GalleryItem.Type.Image -> "image/jpeg"
         },
-        mediaSource = MediaSource(url = "", json = ""),
+        mediaSource = mediaSource,
         thumbnailSource = null,
         width = width,
         height = height,

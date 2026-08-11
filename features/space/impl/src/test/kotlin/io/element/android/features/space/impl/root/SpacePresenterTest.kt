@@ -30,11 +30,13 @@ import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomType
 import io.element.android.libraries.matrix.api.room.join.JoinRoom
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.spaces.SpaceRoomList
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_ROOM_ID_3
+import io.element.android.libraries.matrix.test.A_ROOM_ID_4
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.join.FakeJoinRoom
@@ -534,6 +536,78 @@ class SpacePresenterTest {
             assertThat(manageModeState.children).hasSize(1)
             assertThat(manageModeState.children.first().roomId).isEqualTo(A_ROOM_ID)
             assertThat(manageModeState.children.first().isSpace).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - left children which can only be joined by invitation are filtered out`() = runTest {
+        val leftInviteOnlyRoom = aSpaceRoom(
+            roomId = A_ROOM_ID,
+            roomType = RoomType.Room,
+            state = CurrentUserMembership.LEFT,
+            joinRule = JoinRule.Invite,
+        )
+        val leftPublicRoom = aSpaceRoom(
+            roomId = A_ROOM_ID_2,
+            roomType = RoomType.Room,
+            state = CurrentUserMembership.LEFT,
+            joinRule = JoinRule.Public,
+        )
+        val leftKnockRoom = aSpaceRoom(
+            roomId = A_ROOM_ID_3,
+            roomType = RoomType.Room,
+            state = CurrentUserMembership.LEFT,
+            joinRule = JoinRule.Knock,
+        )
+        val leftRoomWithUnknownJoinRule = aSpaceRoom(
+            roomId = A_ROOM_ID_4,
+            roomType = RoomType.Room,
+            state = CurrentUserMembership.LEFT,
+            joinRule = null,
+        )
+        val fakeSpaceRoomList = FakeSpaceRoomList(
+            initialSpaceRoomsValue = listOf(leftInviteOnlyRoom, leftPublicRoom, leftKnockRoom, leftRoomWithUnknownJoinRule),
+            paginateResult = { Result.success(Unit) },
+        )
+        val presenter = createSpacePresenter(spaceRoomList = fakeSpaceRoomList)
+        presenter.test {
+            awaitItem()
+            advanceUntilIdle()
+            val stateWithChildren = expectMostRecentItem()
+            assertThat(stateWithChildren.children).containsExactly(leftPublicRoom, leftKnockRoom, leftRoomWithUnknownJoinRule)
+        }
+    }
+
+    @Test
+    fun `present - children which can only be joined by invitation are kept when not left`() = runTest {
+        val joinedRoom = aSpaceRoom(
+            roomId = A_ROOM_ID,
+            roomType = RoomType.Room,
+            state = CurrentUserMembership.JOINED,
+            joinRule = JoinRule.Invite,
+        )
+        val invitedRoom = aSpaceRoom(
+            roomId = A_ROOM_ID_2,
+            roomType = RoomType.Room,
+            state = CurrentUserMembership.INVITED,
+            joinRule = JoinRule.Invite,
+        )
+        val roomWithUnknownMembership = aSpaceRoom(
+            roomId = A_ROOM_ID_3,
+            roomType = RoomType.Room,
+            state = null,
+            joinRule = JoinRule.Invite,
+        )
+        val fakeSpaceRoomList = FakeSpaceRoomList(
+            initialSpaceRoomsValue = listOf(joinedRoom, invitedRoom, roomWithUnknownMembership),
+            paginateResult = { Result.success(Unit) },
+        )
+        val presenter = createSpacePresenter(spaceRoomList = fakeSpaceRoomList)
+        presenter.test {
+            awaitItem()
+            advanceUntilIdle()
+            val stateWithChildren = expectMostRecentItem()
+            assertThat(stateWithChildren.children).containsExactly(joinedRoom, invitedRoom, roomWithUnknownMembership)
         }
     }
 

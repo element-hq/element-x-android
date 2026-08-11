@@ -75,6 +75,7 @@ import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
+import io.element.android.libraries.matrix.ui.media.contentvalidation.InMemoryEventContentValidationCache
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
@@ -1649,6 +1650,8 @@ class MessageComposerPresenterTest : RobolectricTest() {
         notificationConversationService = notificationConversationService,
         slashCommandService = slashCommandService,
         featureFlagService = featureFlagService,
+        contentScannerService = { _, _ -> },
+        contentValidationCache = InMemoryEventContentValidationCache(),
     ).apply {
         isTesting = true
         showTextFormatting = isRichTextEditorEnabled
