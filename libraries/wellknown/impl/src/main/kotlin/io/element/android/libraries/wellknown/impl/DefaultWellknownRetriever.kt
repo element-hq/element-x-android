@@ -56,7 +56,9 @@ class DefaultWellknownRetriever(
         }
 
         // The passed `host` function may be a full URL, in that case we're only interested in the actual host
-        val checkedHost = runCatchingExceptions { URL(host.ensureProtocol()).host.takeIfNotBlank() }.getOrNull() ?: host
+        val checkedHost = runCatchingExceptions { URL(host.ensureProtocol()).host.takeIfNotBlank() }
+            .getOrElse { return WellknownRetrieverResult.Error(IllegalArgumentException("host parameter is not valid", it)) }
+            ?: host
 
         // We instantiate different stores for different sources, so that we can cache them separately.
         // The ESS_CONFIG source is cached with a prefix to differentiate it from the WELLKNOWN_ENDPOINT.
