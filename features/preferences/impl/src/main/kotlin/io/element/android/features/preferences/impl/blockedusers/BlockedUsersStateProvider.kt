@@ -10,6 +10,7 @@ package io.element.android.features.preferences.impl.blockedusers
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import kotlinx.collections.immutable.toImmutableList
@@ -30,11 +31,13 @@ class BlockedUsersStateProvider : PreviewParameterProvider<BlockedUsersState> {
 internal fun aBlockedUsersState(
     blockedUsers: List<MatrixUser> = aMatrixUserList(),
     unblockUserAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    snackbarMessage: SnackbarMessage? = null,
     eventSink: (BlockedUsersEvents) -> Unit = {},
 ): BlockedUsersState {
     return BlockedUsersState(
         blockedUsers = blockedUsers.toImmutableList(),
         unblockUserAction = unblockUserAction,
+        snackbarMessage = snackbarMessage,
         eventSink = eventSink,
     )
 }
