@@ -82,7 +82,6 @@ import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.BigIcon
-import io.element.android.libraries.designsystem.components.async.AsyncFailure
 import io.element.android.libraries.designsystem.components.async.AsyncIndicator
 import io.element.android.libraries.designsystem.components.async.AsyncLoading
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -209,7 +208,6 @@ fun MediaViewerView(
             when (val dataForPage = state.listData[page]) {
                 is MediaViewerPageData.Failure -> {
                     MediaViewerErrorPage(
-                        throwable = dataForPage.throwable,
                         onDismiss = onBackClick,
                     )
                 }
@@ -507,7 +505,6 @@ private fun MediaViewerLoadingPage(
 
 @Composable
 private fun MediaViewerErrorPage(
-    throwable: Throwable,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -521,9 +518,10 @@ private fun MediaViewerErrorPage(
                 .navigationBarsPadding(),
             contentAlignment = Alignment.Center
         ) {
-            AsyncFailure(
-                throwable = throwable,
-                onRetry = null
+            IconTitleSubtitleMolecule(
+                iconStyle = BigIcon.Style.AlertSolid,
+                title = stringResource(CommonStrings.common_something_went_wrong),
+                subTitle = stringResource(CommonStrings.common_something_went_wrong_message),
             )
         }
     }
