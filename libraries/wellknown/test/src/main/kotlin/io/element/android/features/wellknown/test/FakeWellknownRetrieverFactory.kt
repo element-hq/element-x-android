@@ -7,11 +7,11 @@
 
 package io.element.android.features.wellknown.test
 
-import io.element.android.libraries.matrix.api.GetUrlResolver
+import io.element.android.libraries.matrix.api.UrlContentFetcher
 import io.element.android.libraries.wellknown.api.WellknownRetriever
 
 class FakeWellknownRetrieverFactory(
     private val wellknownRetriever: WellknownRetriever = FakeWellknownRetriever(),
 ) : WellknownRetriever.Factory {
-    override fun create(getUrlResolver: GetUrlResolver): WellknownRetriever = wellknownRetriever
+    override fun create(urlContentFetcher: UrlContentFetcher): WellknownRetriever = wellknownRetriever
 }

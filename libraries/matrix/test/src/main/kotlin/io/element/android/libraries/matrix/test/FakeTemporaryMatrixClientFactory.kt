@@ -7,11 +7,11 @@
 
 package io.element.android.libraries.matrix.test
 
-import io.element.android.libraries.matrix.api.TemporaryMatrixClientFactory
 import io.element.android.libraries.matrix.api.TemporaryMatrixClient
+import io.element.android.libraries.matrix.api.TemporaryMatrixClientFactory
 
 class FakeTemporaryMatrixClientFactory(
     private val createResult: (String) -> Result<TemporaryMatrixClient> = { Result.success(FakeTemporaryMatrixClient()) },
 ) : TemporaryMatrixClientFactory {
-    override suspend fun createTemporaryMatrixClient(homeServerUrl: String): Result<TemporaryMatrixClient> = createResult(homeServerUrl)
+    override suspend fun create(homeServerUrl: String): Result<TemporaryMatrixClient> = createResult(homeServerUrl)
 }

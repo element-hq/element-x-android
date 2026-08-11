@@ -10,8 +10,8 @@ package io.element.android.libraries.matrix.impl
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.extensions.runCatchingExceptions
-import io.element.android.libraries.matrix.api.TemporaryMatrixClientFactory
 import io.element.android.libraries.matrix.api.TemporaryMatrixClient
+import io.element.android.libraries.matrix.api.TemporaryMatrixClientFactory
 import io.element.android.libraries.matrix.impl.paths.SessionPathsFactory
 
 @ContributesBinding(AppScope::class)
@@ -19,7 +19,7 @@ class RustTemporaryMatrixClientFactory(
     private val sessionPathsFactory: SessionPathsFactory,
     private val rustMatrixClientFactory: RustMatrixClientFactory,
 ) : TemporaryMatrixClientFactory {
-    override suspend fun createTemporaryMatrixClient(homeServerUrl: String): Result<TemporaryMatrixClient> {
+    override suspend fun create(homeServerUrl: String): Result<TemporaryMatrixClient> {
         return runCatchingExceptions {
             val sessionPaths = sessionPathsFactory.create()
             val client = rustMatrixClientFactory.getBaseClientBuilder(

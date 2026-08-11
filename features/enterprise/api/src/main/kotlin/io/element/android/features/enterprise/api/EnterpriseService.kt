@@ -10,7 +10,7 @@ package io.element.android.features.enterprise.api
 
 import androidx.compose.ui.graphics.Color
 import io.element.android.compound.colors.SemanticColorsLightDark
-import io.element.android.libraries.matrix.api.GetUrlResolver
+import io.element.android.libraries.matrix.api.UrlContentFetcher
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.wellknown.api.ElementWellKnown
 import kotlinx.coroutines.flow.Flow
@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.Flow
 interface EnterpriseService {
     val isEnterpriseBuild: Boolean
     suspend fun isEnterpriseUser(sessionId: SessionId): Boolean
-    suspend fun tweakMasUrl(url: String, homeserver: String, getUrlResolver: GetUrlResolver): String
+    suspend fun tweakMasUrl(url: String, homeserver: String, urlContentFetcher: UrlContentFetcher): String
     fun defaultHomeserverList(): List<String>
     suspend fun isAllowedToConnectToHomeserver(homeserverUrl: String): Boolean
 

@@ -13,7 +13,7 @@ import dev.zacsweers.metro.Provides
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
-import io.element.android.libraries.matrix.api.GetUrlResolver
+import io.element.android.libraries.matrix.api.UrlContentFetcher
 import io.element.android.libraries.wellknown.api.ElementWellKnownParser
 import io.element.android.libraries.wellknown.api.ElementWellknownStore
 import io.element.android.libraries.wellknown.api.WellknownRetriever
@@ -27,14 +27,14 @@ object SessionWellknownModule {
         elementWellknownStoreFactory: ElementWellknownStore.Factory,
         enterpriseService: EnterpriseService,
         elementWellKnownParser: ElementWellKnownParser,
-        getUrlResolver: GetUrlResolver,
+        urlContentFetcher: UrlContentFetcher,
         @SessionCoroutineScope coroutineScope: CoroutineScope,
     ): WellknownRetriever {
         return DefaultWellknownRetriever(
             elementWellknownStoreFactory = elementWellknownStoreFactory,
             enterpriseService = enterpriseService,
             elementWellKnownParser = elementWellKnownParser,
-            getUrlResolver = getUrlResolver,
+            urlContentFetcher = urlContentFetcher,
             coroutineScope = coroutineScope
         )
     }

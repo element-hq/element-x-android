@@ -32,7 +32,7 @@ class DefaultWebClientUrlForAuthenticationRetriever(
             Timber.w("Temporary account creation flow is only supported on matrix.org")
             throw AccountCreationNotSupported()
         }
-        val temporaryMatrixClient = temporaryMatrixClientFactory.createTemporaryMatrixClient(homeServerUrl).getOrThrow()
+        val temporaryMatrixClient = temporaryMatrixClientFactory.create(homeServerUrl).getOrThrow()
         return temporaryMatrixClient.use {
             val wellknownRetriever = wellknownRetrieverFactory.create(temporaryMatrixClient)
             val wellknown = wellknownRetriever.getElementWellKnown(

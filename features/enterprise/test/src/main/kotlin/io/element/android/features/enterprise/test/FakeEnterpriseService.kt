@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 import io.element.android.compound.colors.SemanticColorsLightDark
 import io.element.android.features.enterprise.api.BugReportUrl
 import io.element.android.features.enterprise.api.EnterpriseService
-import io.element.android.libraries.matrix.api.GetUrlResolver
+import io.element.android.libraries.matrix.api.UrlContentFetcher
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.wellknown.api.ElementWellKnown
 import io.element.android.tests.testutils.lambda.lambdaError
@@ -32,7 +32,7 @@ class FakeEnterpriseService(
     private val firebasePushGatewayResult: () -> String? = { lambdaError() },
     private val unifiedPushDefaultPushGatewayResult: () -> String? = { lambdaError() },
     private val getNoisyNotificationChannelIdResult: (SessionId?) -> String? = { lambdaError() },
-    private val tweakMasUrlResult: (String, String, GetUrlResolver) -> String = { _, _, _ -> lambdaError() },
+    private val tweakMasUrlResult: (String, String, UrlContentFetcher) -> String = { _, _, _ -> lambdaError() },
     private val overrideWellKnownResult: () -> ElementWellKnown? = { lambdaError() },
     private val essConfigEndpointUrlResult: (String) -> String = { lambdaError() },
 ) : EnterpriseService {
@@ -43,8 +43,8 @@ class FakeEnterpriseService(
         isEnterpriseUserResult(sessionId)
     }
 
-    override suspend fun tweakMasUrl(url: String, homeserver: String, getUrlResolver: GetUrlResolver): String = simulateLongTask {
-        tweakMasUrlResult(url, homeserver, getUrlResolver)
+    override suspend fun tweakMasUrl(url: String, homeserver: String, urlContentFetcher: UrlContentFetcher): String = simulateLongTask {
+        tweakMasUrlResult(url, homeserver, urlContentFetcher)
     }
 
     override fun defaultHomeserverList(): List<String> {

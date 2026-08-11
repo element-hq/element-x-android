@@ -8,10 +8,10 @@
 package io.element.android.features.enterprise.test.remoteconfig
 
 import io.element.android.features.enterprise.api.remoteconfig.RemoteEnterpriseConfigProvider
-import io.element.android.libraries.matrix.api.GetUrlResolver
+import io.element.android.libraries.matrix.api.UrlContentFetcher
 
 class FakeRemoteEnterpriseConfigProviderFactory(
     private val remoteEnterpriseConfigProvider: RemoteEnterpriseConfigProvider = FakeRemoteEnterpriseConfigProvider(),
 ) : RemoteEnterpriseConfigProvider.Factory {
-    override fun create(getUrlResolver: GetUrlResolver): RemoteEnterpriseConfigProvider = remoteEnterpriseConfigProvider
+    override fun create(urlContentFetcher: UrlContentFetcher): RemoteEnterpriseConfigProvider = remoteEnterpriseConfigProvider
 }

@@ -54,7 +54,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.Optional
 
-interface MatrixClient : GetUrlResolver {
+interface MatrixClient : UrlContentFetcher {
     val sessionId: SessionId
     val deviceId: DeviceId
 

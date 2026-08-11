@@ -279,7 +279,7 @@ class RustMatrixAuthenticationService(
                         enterpriseService.tweakMasUrl(
                             url = it,
                             homeserver = client.server() ?: client.homeserver(),
-                            getUrlResolver = getUrlResolver,
+                            urlContentFetcher = getUrlResolver,
                         )
                     }
                 pendingOAuthAuthorizationData = oAuthAuthorizationData

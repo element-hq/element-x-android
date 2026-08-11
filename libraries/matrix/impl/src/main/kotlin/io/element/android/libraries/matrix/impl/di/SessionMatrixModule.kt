@@ -13,9 +13,9 @@ import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
-import io.element.android.libraries.matrix.api.GetUrlResolver
 import io.element.android.libraries.matrix.api.HomeserverCapabilitiesProvider
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.UrlContentFetcher
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
@@ -32,7 +32,7 @@ import io.element.android.libraries.matrix.api.verification.SessionVerificationS
 import kotlinx.coroutines.CoroutineScope
 
 @BindingContainer
-@ContributesTo(SessionScope::class, replaces = [GetUrlResolver::class])
+@ContributesTo(SessionScope::class)
 object SessionMatrixModule {
     @Provides
     fun providesSessionId(matrixClient: MatrixClient): SessionId {
@@ -111,7 +111,7 @@ object SessionMatrixModule {
     }
 
     @Provides
-    fun providesGetUrlResolverClient(matrixClient: MatrixClient): GetUrlResolver {
+    fun providesGetUrlResolverClient(matrixClient: MatrixClient): UrlContentFetcher {
         return matrixClient
     }
 }

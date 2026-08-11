@@ -19,12 +19,12 @@ import io.element.android.libraries.core.extensions.mapCatchingExceptions
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.di.annotations.AppCoroutineScope
-import io.element.android.libraries.matrix.api.GetUrlResolver
+import io.element.android.libraries.matrix.api.UrlContentFetcher
 import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.wellknown.api.ElementWellKnown
 import io.element.android.libraries.wellknown.api.ElementWellKnownParser
-import io.element.android.libraries.wellknown.api.EnterpriseRemoteConfigSource
 import io.element.android.libraries.wellknown.api.ElementWellknownStore
+import io.element.android.libraries.wellknown.api.EnterpriseRemoteConfigSource
 import io.element.android.libraries.wellknown.api.WellknownRetriever
 import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
 import kotlinx.coroutines.CoroutineScope
@@ -37,13 +37,13 @@ class DefaultWellknownRetriever(
     private val elementWellknownStoreFactory: ElementWellknownStore.Factory,
     private val enterpriseService: EnterpriseService,
     private val elementWellKnownParser: ElementWellKnownParser,
-    @Assisted private val getUrlResolver: GetUrlResolver,
+    @Assisted private val urlContentFetcher: UrlContentFetcher,
     @AppCoroutineScope private val coroutineScope: CoroutineScope,
 ) : WellknownRetriever {
     @ContributesBinding(AppScope::class)
     @AssistedFactory
     fun interface Factory : WellknownRetriever.Factory {
-        override fun create(getUrlResolver: GetUrlResolver): DefaultWellknownRetriever
+        override fun create(urlContentFetcher: UrlContentFetcher): DefaultWellknownRetriever
     }
 
     override suspend fun getElementWellKnown(
@@ -95,7 +95,7 @@ class DefaultWellknownRetriever(
         source: EnterpriseRemoteConfigSource,
         store: ElementWellknownStore
     ): WellknownRetrieverResult<ElementWellKnown> {
-        return getUrlResolver
+        return urlContentFetcher
             .getUrl(url(host, source))
             .mapCatchingExceptions {
                 val data = String(it)
