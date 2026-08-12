@@ -233,7 +233,7 @@ cmd=("${kotlinComponentsPath}/scripts/build.sh" \
     -t "${target_arch}" \
     -o "${elementPwd}/libraries/rustsdk")
 
-echo "$ ${cmd[@]}"
+echo "$" "${cmd[@]}"
 "${cmd[@]}"
 
 mv \
