@@ -137,7 +137,7 @@ private fun VerifyUserSection(
 ) {
     if (state.verificationState == UserProfileVerificationState.UNVERIFIED) {
         ListItem(
-            headlineContent = { Text(stringResource(CommonStrings.common_verify_user)) },
+            content = { Text(stringResource(CommonStrings.common_verify_user)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Lock())),
             onClick = onVerifyClick,
         )

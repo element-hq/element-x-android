@@ -169,7 +169,7 @@ private fun SecurityAndPrivacyItem(
     modifier: Modifier = Modifier,
 ) {
     ListItem(
-        headlineContent = { Text(stringResource(R.string.screen_space_settings_security_and_privacy)) },
+        content = { Text(stringResource(R.string.screen_space_settings_security_and_privacy)) },
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Lock())),
         onClick = onClick,
         modifier = modifier,
@@ -183,7 +183,7 @@ private fun MembersItem(
     modifier: Modifier = Modifier,
 ) {
     ListItem(
-        headlineContent = { Text(stringResource(CommonStrings.common_people)) },
+        content = { Text(stringResource(CommonStrings.common_people)) },
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.User())),
         trailingContent = ListItemContent.Text(memberCount.toString()),
         onClick = onClick,
@@ -197,7 +197,7 @@ private fun RolesAndPermissionsItem(
     modifier: Modifier = Modifier,
 ) {
     ListItem(
-        headlineContent = { Text(stringResource(R.string.screen_space_settings_roles_and_permissions)) },
+        content = { Text(stringResource(R.string.screen_space_settings_roles_and_permissions)) },
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Admin())),
         onClick = onClick,
         modifier = modifier,
@@ -210,7 +210,7 @@ private fun LeaveSpaceItem(
     modifier: Modifier = Modifier,
 ) {
     ListItem(
-        headlineContent = {
+        content = {
             Text(stringResource(CommonStrings.action_leave_space))
         },
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Leave())),

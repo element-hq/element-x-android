@@ -32,9 +32,9 @@ import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.Client
@@ -43,6 +43,9 @@ import org.matrix.rustcomponents.sdk.RoomHistoryVisibility
 import org.matrix.rustcomponents.sdk.StoreSizes
 import org.matrix.rustcomponents.sdk.UserProfile
 import java.io.File
+
+private const val AN_ACCOUNT_DATA_EVENT_TYPE = "org.example.custom"
+private const val AN_ACCOUNT_DATA_CONTENT = """{"key":"value"}"""
 
 class RustMatrixClientTest {
     @Test
@@ -72,7 +75,8 @@ class RustMatrixClientTest {
 
     @Test
     fun `retrieving the UserProfile updates the database`() = runTest {
-        val updateUserProfileResult = lambdaRecorder<String, String?, String?, Unit> { _, _, _ -> }
+        val profilePersisted = CompletableDeferred<Unit>()
+        val updateUserProfileResult = lambdaRecorder<String, String?, String?, Unit> { _, _, _ -> profilePersisted.complete(Unit) }
         val sessionStore = InMemorySessionStore(
             initialList = listOf(
                 aSessionData(
@@ -97,7 +101,7 @@ class RustMatrixClientTest {
             ),
             sessionStore = sessionStore,
         )
-        advanceUntilIdle()
+        profilePersisted.await()
         updateUserProfileResult.assertions().isCalledOnce()
             .with(
                 value(A_USER_ID.value),
@@ -138,6 +142,30 @@ class RustMatrixClientTest {
         assertThat(createParameters?.historyVisibilityOverride).isEqualTo(RoomHistoryVisibility.Invited)
     }
 
+    @Test
+    fun `getAccountData returns the raw content provided by the client`() = runTest {
+        val accountDataResult = lambdaRecorder<String, String?> { AN_ACCOUNT_DATA_CONTENT }
+        val client = createRustMatrixClient(
+            client = FakeFfiClient(accountDataResult = accountDataResult)
+        )
+
+        assertThat(client.getAccountData(AN_ACCOUNT_DATA_EVENT_TYPE).getOrThrow()).isEqualTo(AN_ACCOUNT_DATA_CONTENT)
+        accountDataResult.assertions().isCalledOnce().with(value(AN_ACCOUNT_DATA_EVENT_TYPE))
+        client.destroy()
+    }
+
+    @Test
+    fun `setAccountData forwards the event type and the raw content to the client`() = runTest {
+        val setAccountDataResult = lambdaRecorder<String, String, Unit> { _, _ -> }
+        val client = createRustMatrixClient(
+            client = FakeFfiClient(setAccountDataResult = setAccountDataResult)
+        )
+
+        assertThat(client.setAccountData(AN_ACCOUNT_DATA_EVENT_TYPE, AN_ACCOUNT_DATA_CONTENT).isSuccess).isTrue()
+        setAccountDataResult.assertions().isCalledOnce().with(value(AN_ACCOUNT_DATA_EVENT_TYPE), value(AN_ACCOUNT_DATA_CONTENT))
+        client.destroy()
+    }
+
     private fun TestScope.createRustMatrixClient(
         client: Client = FakeFfiClient(),
         sessionStore: SessionStore = InMemorySessionStore(
@@ -160,5 +188,6 @@ class RustMatrixClientTest {
         analyticsService = FakeAnalyticsService(),
         workManagerScheduler = FakeWorkManagerScheduler(submitLambda = {}),
         contentScanner = FakeContentScanner(),
+        isMessageSearchAvailable = false,
     )
 }

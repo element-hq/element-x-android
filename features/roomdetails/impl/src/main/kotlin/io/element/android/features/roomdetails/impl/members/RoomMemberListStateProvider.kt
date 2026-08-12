@@ -78,7 +78,7 @@ private fun aLoadedRoomMembers() = AsyncData.Success(
         joined = persistentListOf(
             anAlice().withIdentity(identityState = IdentityState.Verified),
             aBob().withIdentity(identityState = IdentityState.PinViolation),
-            aCarol().withIdentity(),
+            aCarol().withIdentity(isInCall = true),
             aDavid().withIdentity(),
             anEve().withIdentity(identityState = IdentityState.VerificationViolation)
         ),
@@ -174,4 +174,8 @@ fun aBannedSusie(): RoomMember = aRoomMember(UserId("@susie:server.org"), USER_N
 
 fun aBannedMallory(): RoomMember = aRoomMember(UserId("@mallory:server.org"), USER_NAME_MALLORY, membership = RoomMembershipState.BAN)
 
-private fun RoomMember.withIdentity(identityState: IdentityState? = null) = RoomMemberWithIdentityState(this, identityState)
+private fun RoomMember.withIdentity(identityState: IdentityState? = null, isInCall: Boolean = false) = RoomMemberWithIdentityState(
+    this,
+    identityState,
+    isInCall
+)

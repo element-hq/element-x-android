@@ -101,7 +101,7 @@ fun BugReportView(
             Spacer(modifier = Modifier.height(16.dp))
             PreferenceDivider()
             ListItem(
-                headlineContent = {
+                content = {
                     Text(stringResource(id = R.string.screen_bug_report_view_logs))
                 },
                 enabled = isFormEnabled,

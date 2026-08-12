@@ -35,4 +35,11 @@ sealed interface WellknownRetrieverResult<out T> {
         is Error -> null
         NotFound -> null
     }
+
+    fun upToDateDataOrNull(): T? = when (this) {
+        is Success<T> -> data
+        is Outdated<T> -> null
+        is Error -> null
+        NotFound -> null
+    }
 }

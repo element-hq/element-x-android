@@ -39,6 +39,7 @@ import io.element.android.libraries.matrix.api.room.location.BeaconInfoUpdate
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.scanner.ContentScanner
+import io.element.android.libraries.matrix.api.search.MessageSearchService
 import io.element.android.libraries.matrix.api.spaces.SpaceService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
@@ -53,7 +54,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.Optional
 
-interface MatrixClient {
+interface MatrixClient : UrlContentFetcher {
     val sessionId: SessionId
     val deviceId: DeviceId
 
@@ -70,6 +71,10 @@ interface MatrixClient {
     val notificationSettingsService: NotificationSettingsService
     val encryptionService: EncryptionService
     val roomDirectoryService: RoomDirectoryService
+
+    /** Whether this live client was built with a message search index attached. */
+    val isMessageSearchAvailable: Boolean
+    val messageSearchService: MessageSearchService
     val mediaPreviewService: MediaPreviewService
     val matrixMediaLoader: MatrixMediaLoader
     val sessionCoroutineScope: CoroutineScope
@@ -94,6 +99,12 @@ interface MatrixClient {
 
     /** Clears both m.status and m.call profile fields (maps to DELETE on the profile endpoint per MSC4426). */
     suspend fun clearUserStatus(): Result<Unit>
+
+    /** Whether the homeserver advertises support for user status (MSC4426). */
+    suspend fun isUserStatusSupported(): Result<Boolean>
+
+    /** Enable or disable automatically setting the user's status to "in a call" (m.call) while in a call. */
+    fun enableAutomaticCallStatus(enabled: Boolean)
     suspend fun joinRoom(roomId: RoomId): Result<RoomInfo?>
     suspend fun joinRoomByIdOrAlias(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomInfo?>
     suspend fun knockRoom(roomIdOrAlias: RoomIdOrAlias, message: String, serverNames: List<String>): Result<RoomInfo?>
@@ -163,11 +174,6 @@ interface MatrixClient {
     fun userIdServerName(): String
 
     /**
-     * Execute generic GET requests through the SDKs internal HTTP client.
-     */
-    suspend fun getUrl(url: String): Result<ByteArray>
-
-    /**
      * Get a room preview for a given room ID or alias. This is especially useful for rooms that the user is not a member of, or hasn't joined yet.
      */
     suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<NotJoinedRoom>
@@ -204,6 +210,16 @@ interface MatrixClient {
      * Adds an emoji to the list of recent emoji reactions for this account.
      */
     suspend fun addRecentEmoji(emoji: String): Result<Unit>
+
+    /**
+     * Returns the raw JSON content of the global account data event of type [eventType], or null if it is not set.
+     */
+    suspend fun getAccountData(eventType: String): Result<String?>
+
+    /**
+     * Sets the global account data event of type [eventType] to the raw JSON [content].
+     */
+    suspend fun setAccountData(eventType: String, content: String): Result<Unit>
 
     /**
      * Marks the room with the provided [roomId] as read, sending a fully read receipt for [eventId].

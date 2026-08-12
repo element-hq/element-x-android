@@ -11,6 +11,7 @@ package io.element.android.libraries.matrix.api.timeline.item.event
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.DisplayedStatus
+import io.element.android.libraries.matrix.api.user.MatrixUser
 
 @Immutable
 sealed interface ProfileDetails {
@@ -58,5 +59,22 @@ fun ProfileDetails.getAvatarUrl(): String? {
     return when (this) {
         is ProfileDetails.Ready -> avatarUrl
         else -> null
+    }
+}
+
+fun ProfileDetails.toMatrixUser(userId: UserId): MatrixUser {
+    return when (this) {
+        is ProfileDetails.Ready -> MatrixUser(
+            userId = userId,
+            displayName = displayName,
+            avatarUrl = avatarUrl,
+            displayedStatus = displayedStatus,
+        )
+        else -> MatrixUser(
+            userId = userId,
+            displayName = null,
+            avatarUrl = null,
+            displayedStatus = null,
+        )
     }
 }

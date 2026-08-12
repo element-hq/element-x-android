@@ -39,6 +39,7 @@ import io.element.android.libraries.matrix.api.room.location.BeaconInfoUpdate
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.scanner.ContentScanner
+import io.element.android.libraries.matrix.api.search.MessageSearchService
 import io.element.android.libraries.matrix.api.spaces.SpaceService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
@@ -55,6 +56,7 @@ import io.element.android.libraries.matrix.test.notificationsettings.FakeNotific
 import io.element.android.libraries.matrix.test.pushers.FakePushersService
 import io.element.android.libraries.matrix.test.roomdirectory.FakeRoomDirectoryService
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
+import io.element.android.libraries.matrix.test.search.FakeMessageSearchService
 import io.element.android.libraries.matrix.test.spaces.FakeSpaceService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
@@ -91,6 +93,8 @@ class FakeMatrixClient(
     override val syncService: SyncService = FakeSyncService(),
     override val encryptionService: EncryptionService = FakeEncryptionService(),
     override val roomDirectoryService: RoomDirectoryService = FakeRoomDirectoryService(),
+    override val isMessageSearchAvailable: Boolean = false,
+    override val messageSearchService: MessageSearchService = FakeMessageSearchService(),
     override val mediaPreviewService: MediaPreviewService = FakeMediaPreviewService(),
     override val roomMembershipObserver: RoomMembershipObserver = RoomMembershipObserver(),
     private val homeserverCapabilitiesProvider: FakeHomeserverCapabilitiesProvider = FakeHomeserverCapabilitiesProvider(),
@@ -120,12 +124,15 @@ class FakeMatrixClient(
     private val getJoinedRoomIdsResult: () -> Result<Set<RoomId>> = { Result.success(emptySet()) },
     private val getRecentEmojisLambda: () -> Result<List<String>> = { Result.success(emptyList()) },
     private val addRecentEmojiLambda: (String) -> Result<Unit> = { Result.success(Unit) },
+    private val getAccountDataLambda: (String) -> Result<String?> = { lambdaError() },
+    private val setAccountDataLambda: (String, String) -> Result<Unit> = { _, _ -> lambdaError() },
     private val markRoomAsFullyReadResult: (RoomId, EventId) -> Result<Unit> = { _, _ -> lambdaError() },
     private val markAllRoomsAsReadResult: () -> Result<Unit> = { Result.success(Unit) },
     private val performDatabaseVacuumLambda: () -> Result<Unit> = { lambdaError() },
     private val getMapStyleUrlResult: () -> Result<String?> = { lambdaError() },
     private val getDatabaseSizesLambda: () -> Result<SdkStoreSizes> = { lambdaError() },
     private val resetWellKnownConfigLambda: () -> Result<Unit> = { lambdaError() },
+    private val enableAutomaticCallStatusLambda: (Boolean) -> Unit = { },
     override val contentScanner: ContentScanner? = null,
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
@@ -140,6 +147,7 @@ class FakeMatrixClient(
         private set
     var setUserStatusResult: Result<Unit> = Result.success(Unit)
     var clearUserStatusResult: Result<Unit> = Result.success(Unit)
+    var isUserStatusSupportedResult: Result<Boolean> = Result.success(true)
 
     private val _userProfile: MutableStateFlow<MatrixUser> = MutableStateFlow(MatrixUser(sessionId, userDisplayName, userAvatarUrl))
     override val userProfile: StateFlow<MatrixUser> = _userProfile
@@ -284,6 +292,10 @@ class FakeMatrixClient(
         return clearUserStatusResult
     }
 
+    override suspend fun isUserStatusSupported(): Result<Boolean> = isUserStatusSupportedResult
+
+    override fun enableAutomaticCallStatus(enabled: Boolean) = enableAutomaticCallStatusLambda(enabled)
+
     override suspend fun joinRoom(roomId: RoomId): Result<RoomInfo?> = joinRoomLambda(roomId)
 
     override suspend fun joinRoomByIdOrAlias(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomInfo?> {
@@ -401,6 +413,14 @@ class FakeMatrixClient(
 
     override suspend fun getRecentEmojis(): Result<List<String>> {
         return getRecentEmojisLambda()
+    }
+
+    override suspend fun getAccountData(eventType: String): Result<String?> {
+        return getAccountDataLambda(eventType)
+    }
+
+    override suspend fun setAccountData(eventType: String, content: String): Result<Unit> {
+        return setAccountDataLambda(eventType, content)
     }
 
     override suspend fun markRoomAsFullyRead(roomId: RoomId, eventId: EventId): Result<Unit> {

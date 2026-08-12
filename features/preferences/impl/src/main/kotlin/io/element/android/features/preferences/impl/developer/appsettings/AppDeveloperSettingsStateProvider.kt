@@ -37,6 +37,8 @@ fun anAppDeveloperSettingsState(
     customElementCallBaseUrlState = customElementCallBaseUrlState,
     tracingLogLevel = AsyncData.Success(LogLevelItem.INFO),
     tracingLogPacks = traceLogPacks.toImmutableList(),
+    gitBranch = "feature/awesome-feature",
+    gitSha = "1234567890",
     eventSink = eventSink,
 )
 
