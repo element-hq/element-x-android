@@ -597,7 +597,7 @@ class DefaultBugReporterTest : RobolectricTest() {
 
     companion object {
         private const val EXPECTED_NUMBER_OF_PROGRESS_VALUE = 18
-        private const val GITHUB_MAX_ISSUE_BODY_SIZE = 65536
+        private const val GITHUB_MAX_ISSUE_BODY_SIZE = 65_536
         private const val TRUNCATION_MARKER_MAX_SIZE = 200
     }
 }
