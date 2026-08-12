@@ -35,5 +35,8 @@ interface SessionPreferencesStore {
     suspend fun setVideoCompressionPreset(preset: VideoCompressionPreset)
     fun getVideoCompressionPreset(): Flow<VideoCompressionPreset>
 
+    suspend fun setHideSpaceRoomMembers(enabled: Boolean)
+    fun isHideSpaceRoomMembersEnabled(): Flow<Boolean>
+
     suspend fun clear()
 }

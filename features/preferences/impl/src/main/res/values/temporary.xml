@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2026 Element Creations Ltd.
+  ~
+  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+  ~ Please see LICENSE files in the repository root for full details.
+  -->
+<resources>
+    <string name="screen_advanced_settings_hide_space_rooms_toggle_title">Hide rooms from spaces</string>
+    <string name="screen_advanced_settings_hide_space_rooms_toggle_description">When enabled, rooms that are part of a space will be hidden from the main room list.</string>
+</resources>
