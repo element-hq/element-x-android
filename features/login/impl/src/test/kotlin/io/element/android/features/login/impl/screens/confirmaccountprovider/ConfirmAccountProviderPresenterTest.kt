@@ -15,8 +15,6 @@ import io.element.android.features.login.impl.accountprovider.AccountProviderDat
 import io.element.android.features.login.impl.login.LoginMode
 import io.element.android.features.login.impl.screens.createaccount.AccountCreationNotSupported
 import io.element.android.features.login.impl.screens.onboarding.createLoginModePresenter
-import io.element.android.features.login.impl.web.FakeWebClientUrlForAuthenticationRetriever
-import io.element.android.features.login.impl.web.WebClientUrlForAuthenticationRetriever
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
@@ -283,7 +281,7 @@ class ConfirmAccountProviderPresenterTest {
     }
 
     @Test
-    fun `present - confirm account creation without oidc and without url generates an error`() = runTest {
+    fun `present - confirm account creation without oidc generates an error`() = runTest {
         val authenticationService = FakeMatrixAuthenticationService(
             setHomeserverResult = {
                 Result.success(aMatrixHomeServerDetails())
@@ -292,9 +290,6 @@ class ConfirmAccountProviderPresenterTest {
         val presenter = createConfirmAccountProviderPresenter(
             params = ConfirmAccountProviderPresenter.Params(isAccountCreation = true),
             matrixAuthenticationService = authenticationService,
-            webClientUrlForAuthenticationRetriever = FakeWebClientUrlForAuthenticationRetriever {
-                throw AccountCreationNotSupported()
-            },
         )
         presenter.test {
             val initialState = awaitItem()
@@ -331,64 +326,17 @@ class ConfirmAccountProviderPresenterTest {
         }
     }
 
-    @Test
-    fun `present - confirm account creation with OAuth and url continues with OAuth`() = runTest {
-        val aUrl = "aUrl"
-        val authenticationService = FakeMatrixAuthenticationService(
-            setHomeserverResult = {
-                Result.success(aMatrixHomeServerDetails(supportsOAuthLogin = true))
-            },
-        )
-        val presenter = createConfirmAccountProviderPresenter(
-            params = ConfirmAccountProviderPresenter.Params(isAccountCreation = true),
-            matrixAuthenticationService = authenticationService,
-            webClientUrlForAuthenticationRetriever = FakeWebClientUrlForAuthenticationRetriever { aUrl },
-        )
-        presenter.test {
-            val initialState = awaitItem()
-            initialState.eventSink(ConfirmAccountProviderEvents.Continue)
-            skipItems(1) // Loading
-            val submittedState = awaitItem()
-            assertThat(submittedState.loginModeState.loginMode).isInstanceOf(AsyncData.Success::class.java)
-            assertThat(submittedState.loginModeState.loginMode.dataOrNull()).isInstanceOf(LoginMode.OAuth::class.java)
-        }
-    }
-
-    @Test
-    fun `present - confirm account creation without OAuth and with url continuing with url`() = runTest {
-        val aUrl = "aUrl"
-        val authenticationService = FakeMatrixAuthenticationService(
-            setHomeserverResult = {
-                Result.success(aMatrixHomeServerDetails())
-            },
-        )
-        val presenter = createConfirmAccountProviderPresenter(
-            params = ConfirmAccountProviderPresenter.Params(isAccountCreation = true),
-            matrixAuthenticationService = authenticationService,
-            webClientUrlForAuthenticationRetriever = FakeWebClientUrlForAuthenticationRetriever { aUrl },
-        )
-        presenter.test {
-            val initialState = awaitItem()
-            initialState.eventSink(ConfirmAccountProviderEvents.Continue)
-            skipItems(1) // Loading
-            val submittedState = awaitItem()
-            assertThat(submittedState.loginModeState.loginMode.dataOrNull()).isEqualTo(LoginMode.AccountCreation(aUrl))
-        }
-    }
-
     private fun createConfirmAccountProviderPresenter(
         params: ConfirmAccountProviderPresenter.Params = ConfirmAccountProviderPresenter.Params(isAccountCreation = false),
         accountProviderDataSource: AccountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
         matrixAuthenticationService: MatrixAuthenticationService = FakeMatrixAuthenticationService(),
         defaultOAuthActionFlow: OAuthActionFlow = FakeOAuthActionFlow(),
-        webClientUrlForAuthenticationRetriever: WebClientUrlForAuthenticationRetriever = FakeWebClientUrlForAuthenticationRetriever(),
     ) = ConfirmAccountProviderPresenter(
         params = params,
         accountProviderDataSource = accountProviderDataSource,
         loginModePresenter = createLoginModePresenter(
             authenticationService = matrixAuthenticationService,
             oAuthActionFlow = defaultOAuthActionFlow,
-            webClientUrlForAuthenticationRetriever = webClientUrlForAuthenticationRetriever,
         ),
     )
 }

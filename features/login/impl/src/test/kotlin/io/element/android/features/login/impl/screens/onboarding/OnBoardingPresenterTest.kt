@@ -17,8 +17,6 @@ import io.element.android.features.login.impl.accesscontrol.DefaultAccountProvid
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.localnetwork.LocalNetworkPermissionGate
 import io.element.android.features.login.impl.login.LoginModePresenter
-import io.element.android.features.login.impl.web.FakeWebClientUrlForAuthenticationRetriever
-import io.element.android.features.login.impl.web.WebClientUrlForAuthenticationRetriever
 import io.element.android.features.wellknown.test.FakeWellknownRetriever
 import io.element.android.features.wellknown.test.FakeWellknownRetrieverFactory
 import io.element.android.libraries.architecture.AsyncData
@@ -322,7 +320,6 @@ private fun createPresenter(
 fun createLoginModePresenter(
     oAuthActionFlow: OAuthActionFlow = FakeOAuthActionFlow(),
     authenticationService: MatrixAuthenticationService = FakeMatrixAuthenticationService(),
-    webClientUrlForAuthenticationRetriever: WebClientUrlForAuthenticationRetriever = FakeWebClientUrlForAuthenticationRetriever(),
     localNetworkPermissionAdvisor: LocalNetworkPermissionAdvisor =
         FakeLocalNetworkPermissionAdvisor(),
     permissionsPresenterFactory: PermissionsPresenter.Factory =
@@ -330,7 +327,6 @@ fun createLoginModePresenter(
 ): LoginModePresenter = LoginModePresenter(
     oAuthActionFlow = oAuthActionFlow,
     authenticationService = authenticationService,
-    webClientUrlForAuthenticationRetriever = webClientUrlForAuthenticationRetriever,
     localNetworkPermissionGate = LocalNetworkPermissionGate(
         advisor = localNetworkPermissionAdvisor,
         permissionsPresenterFactory = permissionsPresenterFactory,
