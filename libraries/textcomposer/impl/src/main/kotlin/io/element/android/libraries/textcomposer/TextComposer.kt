@@ -131,6 +131,7 @@ fun TextComposer(
     resolveAtRoomMentionDisplay: () -> TextDisplay,
     modifier: Modifier = Modifier,
     showTextFormatting: Boolean = false,
+    isInThreadTimeline: Boolean = false,
 ) {
     val markdown = when (state) {
         is TextEditorState.Markdown -> state.state.text.value()
@@ -153,7 +154,7 @@ fun TextComposer(
         .fillMaxSize()
         .height(IntrinsicSize.Min)
 
-    val placeholder = if (composerMode.inThread) {
+    val placeholder = if (composerMode.inThread || (composerMode is MessageComposerMode.Normal && isInThreadTimeline)) {
         stringResource(id = CommonStrings.action_reply_in_thread)
     } else if (composerMode is MessageComposerMode.Attachment || composerMode is MessageComposerMode.EditCaption) {
         stringResource(id = R.string.rich_text_editor_composer_caption_placeholder)

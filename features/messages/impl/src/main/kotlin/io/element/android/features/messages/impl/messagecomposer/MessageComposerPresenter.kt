@@ -425,6 +425,7 @@ class MessageComposerPresenter(
             textEditorState = textEditorState,
             isFullScreen = isFullScreen.value,
             mode = messageComposerContext.composerMode,
+            isInThreadTimeline = isInThread,
             showAttachmentSourcePicker = showAttachmentSourcePicker,
             showTextFormatting = showTextFormatting,
             canShareLocation = canShareLocation.value,
