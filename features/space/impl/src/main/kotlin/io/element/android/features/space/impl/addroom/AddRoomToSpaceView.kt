@@ -12,10 +12,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -112,7 +117,13 @@ fun AddRoomToSpaceView(
                 .consumeWindowInsets(paddingValues)
         ) {
             SearchBar(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        WindowInsets.safeDrawing
+                            .only(WindowInsetsSides.Horizontal)
+                            .asPaddingValues()
+                    ),
                 placeHolderTitle = stringResource(CommonStrings.action_search),
                 queryState = state.searchQuery,
                 active = state.isSearchActive,
@@ -147,23 +158,35 @@ fun AddRoomToSpaceView(
             }
 
             if (!state.isSearchActive) {
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = stringResource(R.string.screen_space_add_rooms_room_access_description),
-                    color = ElementTheme.colors.textSecondary,
-                    style = ElementTheme.typography.fontBodySmRegular,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                )
-                if (state.selectedRooms.isNotEmpty()) {
-                    SelectedRoomsRow(
-                        selectedRooms = state.selectedRooms,
-                        onRemoveRoom = ::onRoomToggled,
-                        modifier = Modifier.padding(vertical = 16.dp)
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            WindowInsets.safeDrawing
+                                .only(WindowInsetsSides.Horizontal)
+                                .asPaddingValues()
+                        )
+                ) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = stringResource(R.string.screen_space_add_rooms_room_access_description),
+                        color = ElementTheme.colors.textSecondary,
+                        style = ElementTheme.typography.fontBodySmRegular,
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     )
+                    if (state.selectedRooms.isNotEmpty()) {
+                        SelectedRoomsRow(
+                            selectedRooms = state.selectedRooms,
+                            onRemoveRoom = ::onRoomToggled,
+                            modifier = Modifier.padding(vertical = 16.dp)
+                        )
+                    }
                 }
 
                 if (state.suggestions.isNotEmpty()) {
-                    LazyColumn {
+                    LazyColumn(
+                        contentPadding = lazyColumnContentPadding,
+                    ) {
                         item {
                             ListSectionHeader(
                                 title = stringResource(id = CommonStrings.common_suggestions),

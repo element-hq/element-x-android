@@ -15,11 +15,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -144,7 +149,13 @@ fun RoomSelectView(
                 .consumeWindowInsets(paddingValues)
         ) {
             SearchBar(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        WindowInsets.safeDrawing
+                            .only(WindowInsetsSides.Horizontal)
+                            .asPaddingValues()
+                    ),
                 placeHolderTitle = stringResource(CommonStrings.action_search),
                 queryState = state.searchQuery,
                 active = state.isSearchActive,
@@ -184,7 +195,10 @@ fun RoomSelectView(
                     showVerticalSpace = true,
                 )
                 if (state.resultState is SearchBarResultState.Results) {
-                    LazyColumn(state = lazyListState) {
+                    LazyColumn(
+                        state = lazyListState,
+                        contentPadding = lazyColumnContentPadding,
+                    ) {
                         items(state.resultState.results, key = { it.roomId.value }) { roomSummary ->
                             Column {
                                 RoomSummaryView(
