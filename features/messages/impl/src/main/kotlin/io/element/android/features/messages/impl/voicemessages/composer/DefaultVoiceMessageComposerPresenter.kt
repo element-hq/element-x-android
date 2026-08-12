@@ -76,6 +76,7 @@ class DefaultVoiceMessageComposerPresenter(
 
     private val permissionsPresenter = permissionsPresenterFactory.create(Manifest.permission.RECORD_AUDIO)
     private var pendingEvent: VoiceMessageRecorderEvent.Start? = null
+    private var isRecordingRequested = false
     private val mediaSender = mediaSenderFactory.create(timelineMode)
 
     @Composable
@@ -122,6 +123,9 @@ class DefaultVoiceMessageComposerPresenter(
                 VoiceMessageRecorderEvent.Start -> {
                     Timber.v("Voice message record button pressed")
                     when {
+                        isRecordingRequested -> {
+                            Timber.v("Voice message recording already requested, ignoring")
+                        }
                         permissionState.permissionGranted -> {
                             localCoroutineScope.startRecording()
                         }
@@ -255,29 +259,39 @@ class DefaultVoiceMessageComposerPresenter(
         )
     }
 
-    private fun CoroutineScope.startRecording() = launch {
-        try {
-            audioFocus.requestAudioFocus(AudioFocusRequester.RecordVoiceMessage) {
-                // something else grabbed focus (phone call, etc) - finish gracefully
-                // so the user keeps their partial recording
-                sessionCoroutineScope.finishRecording()
+    private fun CoroutineScope.startRecording() {
+        isRecordingRequested = true
+        launch {
+            try {
+                audioFocus.requestAudioFocus(AudioFocusRequester.RecordVoiceMessage) {
+                    // something else grabbed focus (phone call, etc) - finish gracefully
+                    // so the user keeps their partial recording
+                    sessionCoroutineScope.finishRecording()
+                }
+                voiceRecorder.startRecord()
+            } catch (e: SecurityException) {
+                isRecordingRequested = false
+                audioFocus.releaseAudioFocus()
+                Timber.e(e, "Voice message error")
+                analyticsService.trackError(VoiceMessageException.PermissionMissing("Expected permission to record but none", e))
             }
-            voiceRecorder.startRecord()
-        } catch (e: SecurityException) {
-            audioFocus.releaseAudioFocus()
-            Timber.e(e, "Voice message error")
-            analyticsService.trackError(VoiceMessageException.PermissionMissing("Expected permission to record but none", e))
         }
     }
 
-    private fun CoroutineScope.finishRecording() = launch {
-        voiceRecorder.stopRecord()
-        audioFocus.releaseAudioFocus()
+    private fun CoroutineScope.finishRecording() {
+        isRecordingRequested = false
+        launch {
+            voiceRecorder.stopRecord()
+            audioFocus.releaseAudioFocus()
+        }
     }
 
-    private fun CoroutineScope.cancelRecording() = launch {
-        voiceRecorder.stopRecord(cancelled = true)
-        audioFocus.releaseAudioFocus()
+    private fun CoroutineScope.cancelRecording() {
+        isRecordingRequested = false
+        launch {
+            voiceRecorder.stopRecord(cancelled = true)
+            audioFocus.releaseAudioFocus()
+        }
     }
 
     private fun CoroutineScope.deleteRecording() = launch {

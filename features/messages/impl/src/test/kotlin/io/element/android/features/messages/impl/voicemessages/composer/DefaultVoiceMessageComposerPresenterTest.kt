@@ -127,6 +127,40 @@ class DefaultVoiceMessageComposerPresenterTest {
     }
 
     @Test
+    fun `present - tapping record twice before the state leaves Idle only starts one recording`() = runTest {
+        val presenter = createDefaultVoiceMessageComposerPresenter()
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
+            initialState.eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
+
+            val finalState = awaitItem()
+            assertThat(finalState.voiceMessageState).isEqualTo(RECORDING_STATE)
+            voiceRecorder.assertCalls(started = 1)
+
+            testPauseAndDestroy(finalState)
+        }
+    }
+
+    @Test
+    fun `present - recording can be started again after being cancelled`() = runTest {
+        val presenter = createDefaultVoiceMessageComposerPresenter()
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
+            initialState.eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
+            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Cancel))
+            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
+
+            val finalState = awaitItem()
+            assertThat(finalState.voiceMessageState).isEqualTo(RECORDING_STATE)
+            voiceRecorder.assertCalls(started = 2, stopped = 1, deleted = 1)
+
+            testPauseAndDestroy(finalState)
+        }
+    }
+
+    @Test
     fun `present - recording state - number of levels is limited`() = runTest {
         val numberOfLevels = 200
         val levels = List(numberOfLevels) { it / numberOfLevels.toFloat() }
