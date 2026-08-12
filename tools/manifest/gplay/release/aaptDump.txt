@@ -1,4 +1,4 @@
-package: name='io.element.android.x' versionCode='202608000' versionName='26.08.0' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'
+package: name='io.element.android.x' versionCode='202608010' versionName='26.08.1' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'
 sdkVersion:'24'
 targetSdkVersion:'37'
 uses-permission: name='android.permission.POST_NOTIFICATIONS'
