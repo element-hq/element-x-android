@@ -10,6 +10,7 @@ package io.element.android.features.enterprise.api
 
 import androidx.compose.ui.graphics.Color
 import io.element.android.compound.colors.SemanticColorsLightDark
+import io.element.android.libraries.matrix.api.UrlContentFetcher
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.wellknown.api.ElementWellKnown
 import kotlinx.coroutines.flow.Flow
@@ -17,7 +18,7 @@ import kotlinx.coroutines.flow.Flow
 interface EnterpriseService {
     val isEnterpriseBuild: Boolean
     suspend fun isEnterpriseUser(sessionId: SessionId): Boolean
-    suspend fun tweakMasUrl(url: String, homeserver: String): String
+    suspend fun tweakMasUrl(url: String, homeserver: String, urlContentFetcher: UrlContentFetcher): String
     fun defaultHomeserverList(): List<String>
     suspend fun isAllowedToConnectToHomeserver(homeserverUrl: String): Boolean
 
@@ -46,6 +47,11 @@ interface EnterpriseService {
      * Gets the overridden Element Well-Known data if it has been set, or null if not set.
      */
     fun overriddenElementWellKnown(): ElementWellKnown?
+
+    /**
+     * Gets the Element Server Suite (ESS) config endpoint URL for the given domain.
+     */
+    fun essConfigEndpointUrl(domain: String): String?
 
     companion object {
         const val ANY_ACCOUNT_PROVIDER = "*"

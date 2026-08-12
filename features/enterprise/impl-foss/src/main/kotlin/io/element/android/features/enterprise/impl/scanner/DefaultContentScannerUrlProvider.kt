@@ -5,10 +5,12 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.matrix.impl.scanner
+package io.element.android.features.enterprise.impl.scanner
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.libraries.matrix.api.UrlContentFetcher
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.scanner.ContentScannerUrlProvider
 
 /**
@@ -16,5 +18,12 @@ import io.element.android.libraries.matrix.api.scanner.ContentScannerUrlProvider
  */
 @ContributesBinding(AppScope::class)
 class DefaultContentScannerUrlProvider : ContentScannerUrlProvider {
-    override suspend fun getContentScannerUrl(homeserver: String): Result<String?> = Result.success(null)
+    override suspend fun getContentScannerUrl(sessionId: SessionId): Result<String?> = Result.success(null)
+
+    @ContributesBinding(AppScope::class)
+    class Factory : ContentScannerUrlProvider.Factory {
+        override fun create(urlContentFetcher: UrlContentFetcher): ContentScannerUrlProvider {
+            return DefaultContentScannerUrlProvider()
+        }
+    }
 }

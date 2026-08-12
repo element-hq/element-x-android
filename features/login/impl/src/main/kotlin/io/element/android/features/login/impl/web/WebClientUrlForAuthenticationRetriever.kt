@@ -13,6 +13,8 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.features.login.impl.screens.createaccount.AccountCreationNotSupported
+import io.element.android.libraries.matrix.api.TemporaryMatrixClientFactory
+import io.element.android.libraries.wellknown.api.EnterpriseRemoteConfigSource
 import io.element.android.libraries.wellknown.api.WellknownRetriever
 import timber.log.Timber
 
@@ -22,24 +24,32 @@ interface WebClientUrlForAuthenticationRetriever {
 
 @ContributesBinding(AppScope::class)
 class DefaultWebClientUrlForAuthenticationRetriever(
-    private val wellknownRetriever: WellknownRetriever,
+    private val wellknownRetrieverFactory: WellknownRetriever.Factory,
+    private val temporaryMatrixClientFactory: TemporaryMatrixClientFactory,
 ) : WebClientUrlForAuthenticationRetriever {
     override suspend fun retrieve(homeServerUrl: String): String {
         if (homeServerUrl != AuthenticationConfig.MATRIX_ORG_URL) {
             Timber.w("Temporary account creation flow is only supported on matrix.org")
             throw AccountCreationNotSupported()
         }
-        val wellknown = wellknownRetriever.getElementWellKnown(homeServerUrl).dataOrNull()
-            ?: throw AccountCreationNotSupported()
-        val registrationHelperUrl = wellknown.registrationHelperUrl
-        return if (registrationHelperUrl != null) {
-            registrationHelperUrl.toUri()
-                .buildUpon()
-                .appendQueryParameter("hs_url", homeServerUrl)
-                .build()
-                .toString()
-        } else {
-            throw AccountCreationNotSupported()
+        val temporaryMatrixClient = temporaryMatrixClientFactory.create(homeServerUrl).getOrThrow()
+        return temporaryMatrixClient.use {
+            val wellknownRetriever = wellknownRetrieverFactory.create(temporaryMatrixClient)
+            val wellknown = wellknownRetriever.getElementWellKnown(
+                host = homeServerUrl,
+                source = EnterpriseRemoteConfigSource.WELLKNOWN_ENDPOINT
+            ).dataOrNull() ?: throw AccountCreationNotSupported()
+
+            val registrationHelperUrl = wellknown.registrationHelperUrl
+            if (registrationHelperUrl != null) {
+                registrationHelperUrl.toUri()
+                    .buildUpon()
+                    .appendQueryParameter("hs_url", homeServerUrl)
+                    .build()
+                    .toString()
+            } else {
+                throw AccountCreationNotSupported()
+            }
         }
     }
 }

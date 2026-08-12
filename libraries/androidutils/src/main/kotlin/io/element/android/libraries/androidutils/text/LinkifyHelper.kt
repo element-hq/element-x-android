@@ -50,6 +50,11 @@ object LinkifyHelper {
                 val start = spannable.getSpanStart(urlSpan)
                 val end = spannable.getSpanEnd(urlSpan)
 
+                if (urlSpan !in oldURLSpans && spannable.isEmailInsideFediverseHandle(urlSpan, start)) {
+                    spannable.removeSpan(urlSpan)
+                    continue
+                }
+
                 // Try to avoid including trailing punctuation in the link.
                 // Since this might fail in some edge cases, we catch the exception and just use the original end index.
                 val newEnd = runCatchingExceptions {
@@ -106,6 +111,10 @@ object LinkifyHelper {
     private fun String.hasBracketedHost(): Boolean {
         val host = runCatchingExceptions { URI(this) }.getOrNull()?.host ?: return false
         return host.startsWith('[') && host.endsWith(']')
+    }
+
+    private fun Spannable.isEmailInsideFediverseHandle(urlSpan: URLSpan, start: Int): Boolean {
+        return urlSpan.url.startsWith("mailto:") && start > 0 && this[start - 1] == '@'
     }
 
     private fun adjustLinkifiedUrlSpanEndIndex(spannable: Spannable, start: Int, end: Int): Int {

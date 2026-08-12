@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.components.aSelectRoomInfo
 import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
 import io.element.android.libraries.roomselect.api.RoomSelectMode
@@ -79,5 +80,13 @@ internal fun aRoomSelectRoomList() = persistentListOf(
     ),
     aSelectRoomInfo(
         roomId = RoomId("!room3:domain"),
+        name = "Alice",
+        heroes = persistentListOf(
+            aMatrixUser(id = "@alice:example.org", displayName = "Alice"),
+        ),
+        isDm = true,
+    ),
+    aSelectRoomInfo(
+        roomId = RoomId("!room4:domain"),
     ),
 )

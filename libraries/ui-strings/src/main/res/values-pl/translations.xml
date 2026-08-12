@@ -20,6 +20,16 @@
   <string name="a11y_edit_room_address_hint">"Podgląd pełnego adresu %1$s"</string>
   <string name="a11y_encryption_details">"Szczegóły szyfrowania"</string>
   <string name="a11y_expand_message_text_field">"Powiększ pole tekstowe wiadomości"</string>
+  <string name="a11y_gallery_attachment">"Galeria, załącznik %1$d"</string>
+  <string name="a11y_gallery_failed_scan">"Galeria, nieudane skanowanie %1$d"</string>
+  <string name="a11y_gallery_image">"Galeria, obraz %1$d"</string>
+  <plurals name="a11y_gallery_more_media">
+    <item quantity="one">"Galeria, %1$d dodatkowe media"</item>
+    <item quantity="few">"Galeria, %1$d dodatkowe media"</item>
+    <item quantity="many">"Galeria, %1$d dodatkowych mediów"</item>
+  </plurals>
+  <string name="a11y_gallery_scanning">"Galeria, skanowanie %1$d"</string>
+  <string name="a11y_gallery_video">"Galeria, wideo %1$d"</string>
   <string name="a11y_hide_password">"Ukryj hasło"</string>
   <string name="a11y_info">"Informacje"</string>
   <string name="a11y_join_call">"Dołącz do połączenia"</string>
@@ -184,8 +194,8 @@
   <string name="action_send_edited_message">"Wyślij edytowaną wiadomość"</string>
   <string name="action_send_message">"Wyślij wiadomość"</string>
   <string name="action_send_voice_message">"Wyślij wiadomość głosową"</string>
-  <string name="action_share">"Wyślij"</string>
-  <string name="action_share_link">"Wyślij link"</string>
+  <string name="action_share">"Udostępnij"</string>
+  <string name="action_share_link">"Udostępnij link"</string>
   <string name="action_share_live_location">"Udostępnij lokalizację na żywo"</string>
   <string name="action_show">"Pokaż"</string>
   <string name="action_sign_in_again">"Zaloguj się ponownie"</string>
@@ -518,6 +528,14 @@ Czy na pewno chcesz kontynuować?"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Wstrząśnij gniewnie, aby zgłosić błąd"</string>
   <string name="screen_bug_report_a11y_screenshot">"Zrzut ekranu"</string>
+  <string name="screen_change_server_navigation_title_login">"Zaloguj"</string>
+  <string name="screen_change_server_navigation_title_register">"Utwórz konto"</string>
+  <string name="screen_change_server_textfield_footer_login">"Jeśli uzyskałeś konto od firmy lub społeczności, wprowadź dostawcę konta (na przykład: nazwafirmy.com)"</string>
+  <string name="screen_change_server_textfield_footer_register">"Załóż darmowe konto na matrix.org. Jeśli chcesz założyć konto u innego dostawcy wprowadź własny adres (na przykład: nazwaspołeczności.org)."</string>
+  <string name="screen_change_server_textfield_header">"Dostawca konta"</string>
+  <string name="screen_change_server_textfield_placeholder">"przykład.com"</string>
+  <string name="screen_change_server_title_login">"Wprowadź dostawcę swojego konta"</string>
+  <string name="screen_change_server_title_register">"Wybierz dostawcę konta"</string>
   <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
   <string name="screen_create_poll_options_section_title">"Opcje"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Usuń %1$s"</string>

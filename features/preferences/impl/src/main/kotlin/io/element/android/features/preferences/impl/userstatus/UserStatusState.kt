@@ -11,6 +11,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.Immutable
 import io.element.android.features.preferences.impl.R
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.emoji.api.picker.EmojiPickerState
 import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.UserStatus
@@ -19,6 +20,7 @@ data class UserStatusState(
     val displayedStatus: DisplayedStatus?,
     val rawStatus: UserStatus?,
     val pickerState: UserStatusPickerState,
+    val updateStatusAction: AsyncAction<Unit>,
     val eventSink: (UserStatusEvent) -> Unit,
 )
 

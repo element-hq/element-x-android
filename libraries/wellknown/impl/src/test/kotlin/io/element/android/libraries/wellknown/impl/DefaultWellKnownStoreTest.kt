@@ -148,11 +148,25 @@ class DefaultWellKnownStoreTest {
         assertThat(result).isEqualTo(WellknownRetrieverResult.Success(wellKnown.map()))
     }
 
+    @Test
+    fun `prefix is used`() = runTest {
+        val prefix = "test-prefix"
+        val clock = FakeSystemClock(epochMillisResult = A_FAKE_TIMESTAMP)
+        val cacheStore = InMemoryCacheStore(
+            initialData = mapOf("$prefix-$A_DOMAIN" to CacheData("{}", A_FAKE_TIMESTAMP))
+        )
+        val sut = createDefaultWellKnownStore(prefix = prefix, cacheStore = cacheStore, systemClock = clock)
+
+        assertThat(sut.get(A_DOMAIN)).isInstanceOf(WellknownRetrieverResult.Success::class.java)
+    }
+
     private fun createDefaultWellKnownStore(
+        prefix: String? = null,
         cacheStore: InMemoryCacheStore = InMemoryCacheStore(),
         systemClock: FakeSystemClock = FakeSystemClock(),
         elementWellKnownParser: ElementWellKnownParser = DefaultElementWellKnownParser(jsonProvider),
     ) = DefaultWellKnownStore(
+        prefix = prefix,
         cacheStore = cacheStore,
         systemClock = systemClock,
         elementWellKnownParser = elementWellKnownParser,
