@@ -54,6 +54,7 @@ fun MarkdownTextInput(
     onReceiveSuggestion: (Suggestion?) -> Unit,
     richTextEditorStyle: RichTextEditorStyle,
     onSelectRichContent: ((Uri) -> Unit)?,
+    onSendMessage: (() -> Unit)? = null,
 ) {
     // Copied from io.element.android.wysiwyg.internal.utils.UriContentListener
     class ReceiveUriContentListener(
@@ -132,6 +133,12 @@ fun MarkdownTextInput(
         update = { editText ->
             editText.contentDescription = placeholder
             editText.applyStyleInCompose(richTextEditorStyle)
+            editText.onEnterKeyListener = onSendMessage?.let { send ->
+                {
+                    send()
+                    true
+                }
+            }
             val text = state.text.value()
             mentionSpanUpdater.updateMentionSpans(text)
             if (state.text.needsDisplaying()) {
