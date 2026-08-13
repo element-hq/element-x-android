@@ -7,7 +7,7 @@ android_gradle_plugin = "9.3.1"
 # When updating this, please also update the version in the file ./idea/kotlinc.xml
 kotlin = "2.4.10"
 kotlinpoet = "2.3.0"
-ksp = "2.3.10"
+ksp = "2.3.11"
 firebaseAppDistribution = "5.3.0"
 
 # AndroidX
@@ -185,7 +185,7 @@ test_detekt_test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version
 # https://github.com/matrix-org/matrix-rust-components-kotlin/commits/main/sdk/sdk-android/src/main/kotlin/org/matrix/rustcomponents/sdk/matrix_sdk_ffi.kt
 # All new features should not be implemented in the pull request that upgrades the version, developers should
 # only fix API breaks and may add some TODOs.
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.08.05"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.08.11"
 
 # Others
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
@@ -270,13 +270,13 @@ metro = { id = "dev.zacsweers.metro", version.ref = "metro" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ktlint = "org.jlleitschuh.gradle.ktlint:14.2.0"
 dependencygraph = "com.savvasdalkitsis.module-dependency-graph:0.12"
-dependencycheck = "org.owasp.dependencycheck:12.2.2"
+dependencycheck = "org.owasp.dependencycheck:13.0.0"
 dependencyanalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }
 paparazzi = "app.cash.paparazzi:2.0.0-alpha05"
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 firebaseAppDistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebaseAppDistribution" }
-sonarqube = "org.sonarqube:7.3.1.8318"
+sonarqube = "org.sonarqube:7.4.0.8496"
 licensee = "app.cash.licensee:1.14.1"
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 gms_google_services = { id = "com.google.gms.google-services", version = "4.5.0" }

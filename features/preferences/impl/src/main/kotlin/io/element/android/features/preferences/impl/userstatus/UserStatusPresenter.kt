@@ -18,7 +18,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.emoji.api.picker.EmojiPickerPresenter
 import io.element.android.libraries.emoji.api.recentemojis.EmptyGetRecentEmojis
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -38,6 +40,7 @@ class UserStatusPresenter(
         var isEmojiPickerVisible by remember { mutableStateOf(false) }
         val customTextFieldState = rememberTextFieldState()
         val coroutineScope = rememberCoroutineScope()
+        val updateStatusAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
 
         fun handleEvent(event: UserStatusEvent) {
             when (event) {
@@ -47,11 +50,15 @@ class UserStatusPresenter(
                 UserStatusEvent.CancelCustomInput -> pickerState = UserStatusPickerState.Hidden
                 is UserStatusEvent.SetStatus -> {
                     pickerState = UserStatusPickerState.Hidden
-                    coroutineScope.launch { matrixClient.setUserStatus(event.status) }
+                    coroutineScope.launch {
+                        updateStatusAction.runUpdatingState { matrixClient.setUserStatus(event.status) }
+                    }
                 }
                 UserStatusEvent.ClearStatus -> {
                     pickerState = UserStatusPickerState.Hidden
-                    coroutineScope.launch { matrixClient.clearUserStatus() }
+                    coroutineScope.launch {
+                        updateStatusAction.runUpdatingState { matrixClient.clearUserStatus() }
+                    }
                 }
                 UserStatusEvent.OpenCustomInput -> {
                     val raw = userProfile.rawStatus
@@ -93,6 +100,7 @@ class UserStatusPresenter(
             displayedStatus = userProfile.displayedStatus,
             rawStatus = userProfile.rawStatus,
             pickerState = effectivePickerState,
+            updateStatusAction = updateStatusAction.value,
             eventSink = ::handleEvent,
         )
     }

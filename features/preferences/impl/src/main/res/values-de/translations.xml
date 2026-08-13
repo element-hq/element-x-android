@@ -11,6 +11,12 @@
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Avatare in Chateinladungen ausblenden"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Medienvorschau im Nachrichtenverlauf ausblenden"</string>
   <string name="screen_advanced_settings_labs">"Labs"</string>
+  <string name="screen_advanced_settings_live_location_section_description">"Die Entfernung, die du zurücklegen musst, um ein Update auszulösen."</string>
+  <string name="screen_advanced_settings_live_location_section_title">"Live-Standort-Updates"</string>
+  <plurals name="screen_advanced_settings_live_location_update_distance">
+    <item quantity="one">"Alle %1$d Meter"</item>
+    <item quantity="other">"Alle %1$d Meter"</item>
+  </plurals>
   <string name="screen_advanced_settings_media_compression_description">"Lade Fotos und Videos schneller hoch und reduziere den Datenverbrauch"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimiere die Medienqualität"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderation und Sicherheit"</string>

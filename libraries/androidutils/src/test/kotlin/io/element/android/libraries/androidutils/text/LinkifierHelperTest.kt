@@ -37,6 +37,60 @@ class LinkifierHelperTest : RobolectricTest() {
     }
 
     @Test
+    fun `linkification finds ipv6 URL`() {
+        val text = "A url http://[2001:db8::1]:8008/path"
+        val result = LinkifyHelper.linkify(text)
+        val urlSpans = result.toSpannable().getSpans<URLSpan>()
+        assertThat(urlSpans.size).isEqualTo(1)
+        assertThat(urlSpans.first().url).isEqualTo("http://[2001:db8::1]:8008/path")
+    }
+
+    @Test
+    @Config(sdk = [30])
+    fun `linkification of an ipv6 URL does not leave a phone number span`() {
+        shadowOf(newInstanceOf(TelephonyManager::class.java)).setSimCountryIso("DE")
+        val text = "A url http://[2001:db8::1]:8008/path"
+        val result = LinkifyHelper.linkify(text)
+        val urlSpans = result.toSpannable().getSpans<URLSpan>()
+        assertThat(urlSpans.size).isEqualTo(1)
+        assertThat(urlSpans.first().url).isEqualTo("http://[2001:db8::1]:8008/path")
+    }
+
+    @Test
+    fun `linkification of an ipv6 URL trims trailing punctuation`() {
+        val text = "A url http://[::1]/x."
+        val result = LinkifyHelper.linkify(text)
+        val urlSpans = result.toSpannable().getSpans<URLSpan>()
+        assertThat(urlSpans.size).isEqualTo(1)
+        assertThat(urlSpans.first().url).isEqualTo("http://[::1]/x")
+    }
+
+    @Test
+    fun `linkification finds an ipv6 URL of any scheme`() {
+        val text = "A url ssh://[2001:db8::1]/path"
+        val result = LinkifyHelper.linkify(text)
+        val urlSpans = result.toSpannable().getSpans<URLSpan>()
+        assertThat(urlSpans.size).isEqualTo(1)
+        assertThat(urlSpans.first().url).isEqualTo("ssh://[2001:db8::1]/path")
+    }
+
+    @Test
+    fun `linkification ignores a bracketed authority which is not an address`() {
+        val text = "A url http://[not-an-address]/path"
+        val result = LinkifyHelper.linkify(text)
+        val urlSpans = result.toSpannable().getSpans<URLSpan>()
+        assertThat(urlSpans).isEmpty()
+    }
+
+    @Test
+    fun `linkification ignores bracketed text which is not a URL`() {
+        val text = "An array values[0]:1 and a bare [::1]"
+        val result = LinkifyHelper.linkify(text)
+        val urlSpans = result.toSpannable().getSpans<URLSpan>()
+        assertThat(urlSpans).isEmpty()
+    }
+
+    @Test
     fun `linkification finds partial URL`() {
         val text = "A partial url matrix.org/test"
         val result = LinkifyHelper.linkify(text)
@@ -85,6 +139,45 @@ class LinkifierHelperTest : RobolectricTest() {
         val urlSpans = result.toSpannable().getSpans<URLSpan>()
         assertThat(urlSpans.size).isEqualTo(1)
         assertThat(urlSpans.first().url).isEqualTo("tel:1234")
+    }
+
+    @Test
+    fun `linkification ignores fediverse handle`() {
+        val text = "Follow me at @name@server.tld"
+        val result = LinkifyHelper.linkify(text)
+        val urlSpans = result.toSpannable().getSpans<URLSpan>()
+        assertThat(urlSpans).isEmpty()
+    }
+
+    @Test
+    fun `linkification ignores fediverse handle at the start of the text`() {
+        val text = "@name@server.tld posted this"
+        val result = LinkifyHelper.linkify(text)
+        val urlSpans = result.toSpannable().getSpans<URLSpan>()
+        assertThat(urlSpans).isEmpty()
+    }
+
+    @Test
+    fun `linkification finds email next to a fediverse handle`() {
+        val text = "@name@server.tld and john@doe.com"
+        val result = LinkifyHelper.linkify(text)
+        val urlSpans = result.toSpannable().getSpans<URLSpan>()
+        assertThat(urlSpans.size).isEqualTo(1)
+        assertThat(urlSpans.first().url).isEqualTo("mailto:john@doe.com")
+    }
+
+    @Test
+    fun `linkification keeps an existing mailto span preceded by an at sign`() {
+        val text = buildSpannedString {
+            append("Mail me @")
+            inSpans(URLSpan("mailto:john@doe.com")) {
+                append("john@doe.com")
+            }
+        }
+        val result = LinkifyHelper.linkify(text)
+        val urlSpans = result.toSpannable().getSpans<URLSpan>()
+        assertThat(urlSpans.size).isEqualTo(1)
+        assertThat(urlSpans.first().url).isEqualTo("mailto:john@doe.com")
     }
 
     @Test

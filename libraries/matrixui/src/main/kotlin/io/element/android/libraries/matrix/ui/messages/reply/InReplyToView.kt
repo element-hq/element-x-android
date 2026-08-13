@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,6 +44,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentErrorView
 import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationValue
 import io.element.android.libraries.matrix.ui.media.contentvalidation.InvalidContentView
 import io.element.android.libraries.matrix.ui.media.contentvalidation.NotFoundContentView
@@ -77,7 +77,7 @@ fun InReplyToView(
             else -> ReplyToLoadingContent(modifier = modifier)
         }
         is InReplyToDetails.Error ->
-            ReplyToErrorContent(data = inReplyTo, maxLines = maxLines, modifier = modifier)
+            ReplyToErrorContent(modifier = modifier)
         is InReplyToDetails.Loading ->
             ReplyToLoadingContent(modifier = modifier)
     }
@@ -150,24 +150,15 @@ private fun ReplyToLoadingContent(
 
 @Composable
 private fun ReplyToErrorContent(
-    data: InReplyToDetails.Error,
-    maxLines: Int,
     modifier: Modifier = Modifier,
 ) {
-    val paddings = PaddingValues(horizontal = 12.dp, vertical = 4.dp)
-    Row(
-        modifier
-            .background(ElementTheme.colors.bgCanvasDefault)
-            .padding(paddings)
-    ) {
-        Text(
-            text = data.message,
-            style = ElementTheme.typography.fontBodyMdRegular,
-            color = ElementTheme.colors.textCriticalPrimary,
-            maxLines = maxLines,
-            overflow = TextOverflow.Ellipsis,
-        )
-    }
+    ContentErrorView(
+        title = stringResource(CommonStrings.error_message_not_found),
+        message = null,
+        modifier = modifier,
+        contentPadding = PaddingValues(vertical = 4.dp, horizontal = 8.dp),
+        onTextLayout = null,
+    )
 }
 
 @Composable

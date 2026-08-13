@@ -11,4 +11,8 @@ interface ElementWellknownStore {
     suspend fun get(domain: String): WellknownRetrieverResult<ElementWellKnown>
     suspend fun update(domain: String, wellknown: String): Result<Unit>
     suspend fun delete(domain: String): Result<Unit>
+
+    fun interface Factory {
+        fun create(prefix: String?): ElementWellknownStore
+    }
 }

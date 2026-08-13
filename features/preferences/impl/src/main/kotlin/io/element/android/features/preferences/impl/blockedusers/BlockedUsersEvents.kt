@@ -12,6 +12,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 
 sealed interface BlockedUsersEvents {
     data class Unblock(val userId: UserId) : BlockedUsersEvents
+    data class CopyToClipboard(val userId: UserId) : BlockedUsersEvents
     data object ConfirmUnblock : BlockedUsersEvents
     data object Cancel : BlockedUsersEvents
 }

@@ -215,25 +215,26 @@ if [ "$update_components" == "1" ]; then
 
     printf "\n## Resetting ${kotlinComponentsPath} to the latest main...\n\n"
 
-    cd "${kotlinComponentsPath}"
-    git reset --hard
-    git checkout main
-    git pull
-else
-    cd "${kotlinComponentsPath}"
+    (
+        cd "${kotlinComponentsPath}"
+        git reset --hard
+        git checkout main
+        git pull
+    )
 fi
 
 ## Build the SDK
 
 printf "\n## Building the SDK for ${target_arch}...\n\n"
 
-./scripts/build.sh \
+cmd=("${kotlinComponentsPath}/scripts/build.sh" \
     -p "${rustSdkPath}" \
     -m sdk \
     -t "${target_arch}" \
-    -o "${elementPwd}/libraries/rustsdk"
+    -o "${elementPwd}/libraries/rustsdk")
 
-cd "${elementPwd}"
+echo "$" "${cmd[@]}"
+"${cmd[@]}"
 
 mv \
     ./libraries/rustsdk/sdk-android-debug.aar \

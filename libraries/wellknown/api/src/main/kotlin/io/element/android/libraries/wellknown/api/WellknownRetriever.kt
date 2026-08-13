@@ -8,6 +8,15 @@
 
 package io.element.android.libraries.wellknown.api
 
+import io.element.android.libraries.matrix.api.UrlContentFetcher
+
 interface WellknownRetriever {
-    suspend fun getElementWellKnown(baseUrl: String): WellknownRetrieverResult<ElementWellKnown>
+    suspend fun getElementWellKnown(
+        host: String,
+        source: EnterpriseRemoteConfigSource
+    ): WellknownRetrieverResult<ElementWellKnown>
+
+    interface Factory {
+        fun create(urlContentFetcher: UrlContentFetcher): WellknownRetriever
+    }
 }
