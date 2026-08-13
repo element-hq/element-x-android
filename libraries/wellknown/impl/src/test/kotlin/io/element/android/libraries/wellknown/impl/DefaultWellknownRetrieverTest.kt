@@ -206,7 +206,7 @@ class DefaultWellknownRetrieverTest {
                 "idp_app_scheme": "an_app_scheme",
                 "content_scanner_url": "https://content-scanner.example.com",
                 "force_disable_e2ee": false,
-                "map_tiler_config": {
+                "map_tiler": {
                     "api_key": "test_api_key",
                     "base_url": "https://tile-server.example.com"
                 }

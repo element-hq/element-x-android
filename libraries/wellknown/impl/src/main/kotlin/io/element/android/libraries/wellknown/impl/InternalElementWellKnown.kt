@@ -48,7 +48,7 @@ data class InternalElementWellKnown(
     val contentScannerUrl: String? = null,
     @SerialName("force_disable_e2ee")
     val forceDisableE2EE: Boolean? = null,
-    @SerialName("map_tiler_config")
+    @SerialName("map_tiler")
     val mapTilerConfig: InternalMapTilerConfig? = null,
 )
 
