@@ -14,7 +14,7 @@ package io.element.android.libraries.matrix.api.x509
  *
  * @see RawX509Verifier
  */
-interface RawX509Signer {
+fun interface RawX509Signer {
     /** Create a signature for the given data, using our private key. */
     fun sign(message: ByteArray): RawX509Signature
 }

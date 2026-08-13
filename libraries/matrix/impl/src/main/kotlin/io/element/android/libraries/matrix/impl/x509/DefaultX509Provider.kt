@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.api.x509.X509Provider
 @ContributesBinding(AppScope::class)
 class DefaultX509Provider : X509Provider {
     override suspend fun onAppStartup(parentActivity: Activity) {
+        // Nothing to do here.
     }
 
     override suspend fun getRawX509Signer(): RawX509Signer? {

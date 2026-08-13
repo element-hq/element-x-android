@@ -14,7 +14,7 @@ package io.element.android.libraries.matrix.api.x509
  *
  * @see RawX509Signer
  */
-interface RawX509Verifier {
+fun interface RawX509Verifier {
     /** Check that `sig` is a valid signature of `message`.
      *
      * Implementations must check:
