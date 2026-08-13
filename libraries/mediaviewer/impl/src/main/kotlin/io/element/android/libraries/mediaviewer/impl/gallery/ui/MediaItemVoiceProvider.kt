@@ -22,7 +22,7 @@ class MediaItemVoiceProvider : PreviewParameterProvider<MediaItem.Voice> {
                 caption = "A caption",
             ),
             aMediaItemVoice(
-                caption = loremIpsum,
+                caption = loremIpsum.take(80),
             ),
             aMediaItemVoice(
                 waveform = emptyList(),

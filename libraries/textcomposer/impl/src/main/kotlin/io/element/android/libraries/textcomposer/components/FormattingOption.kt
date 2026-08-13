@@ -23,14 +23,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 internal fun FormattingOption(
@@ -52,6 +55,8 @@ internal fun FormattingOption(
         FormattingOptionState.Default -> ElementTheme.colors.iconSecondary
         FormattingOptionState.Disabled -> ElementTheme.colors.iconDisabled
     }
+    val activeStateDescription = stringResource(CommonStrings.a11y_active)
+    val inactiveStateDescription = stringResource(CommonStrings.a11y_inactive)
     Box(
         modifier = modifier
             .clickable(
@@ -77,6 +82,13 @@ internal fun FormattingOption(
             )
             .clearAndSetSemantics {
                 this.contentDescription = contentDescription
+                if (toggleable) {
+                    this.stateDescription = if (state == FormattingOptionState.Selected) {
+                        activeStateDescription
+                    } else {
+                        inactiveStateDescription
+                    }
+                }
             }
     ) {
         Box(

@@ -7,14 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"Cifrado por un dispositivo desconocido o eliminado."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Cifrado por un dispositivo no verificado por su propietario."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Cifrado por un usuario no verificado."</string>
-  <string name="emoji_picker_category_activity">"Actividades"</string>
-  <string name="emoji_picker_category_flags">"Banderas"</string>
-  <string name="emoji_picker_category_foods">"Comida y bebida"</string>
-  <string name="emoji_picker_category_nature">"Animales y naturaleza"</string>
-  <string name="emoji_picker_category_objects">"Objetos"</string>
-  <string name="emoji_picker_category_people">"Emojis y personas"</string>
-  <string name="emoji_picker_category_places">"Viajes y lugares"</string>
-  <string name="emoji_picker_category_symbols">"Símbolos"</string>
   <string name="screen_media_upload_preview_caption_warning">"Es posible que las leyendas no sean visibles para las personas que usan aplicaciones más antiguas."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Error al procesar el contenido multimedia, por favor inténtalo de nuevo."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Error al subir el contenido multimedia, por favor inténtalo de nuevo."</string>

@@ -9,6 +9,7 @@
 package io.element.android.libraries.matrix.impl.fixtures.fakes
 
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustSession
+import io.element.android.libraries.matrix.impl.fixtures.factories.aRustUserProfile
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 import io.element.android.libraries.matrix.test.A_USER_ID
@@ -25,6 +26,7 @@ import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.NotificationClient
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.NotificationSettings
+import org.matrix.rustcomponents.sdk.ProfileListener
 import org.matrix.rustcomponents.sdk.PusherIdentifiers
 import org.matrix.rustcomponents.sdk.PusherKind
 import org.matrix.rustcomponents.sdk.RoomDirectorySearch
@@ -49,11 +51,15 @@ class FakeFfiClient(
     private val session: Session = aRustSession(),
     private val clearCachesResult: () -> Unit = { lambdaError() },
     private val withUtdHook: (UnableToDecryptDelegate) -> Unit = { lambdaError() },
-    private val getProfileResult: (String) -> UserProfile = { UserProfile(userId = userId, displayName = null, avatarUrl = null) },
+    private val getProfileResult: (String) -> UserProfile = { aRustUserProfile() },
     private val homeserverLoginDetailsResult: () -> HomeserverLoginDetails = { lambdaError() },
     private val getStoreSizesResult: () -> StoreSizes = { lambdaError() },
     private val createRoomResult: (CreateRoomParameters) -> String = { lambdaError() },
     private val homeserverCapabilities: HomeserverCapabilities = FakeFfiHomeserverCapabilities(),
+    private val accountDataResult: (String) -> String? = { lambdaError() },
+    private val setAccountDataResult: (String, String) -> Unit = { _, _ -> lambdaError() },
+    private val isUserStatusSupportedResult: () -> Boolean = { false },
+    private val subscribeToOwnProfileResult: (ProfileListener) -> Unit = {},
     private val closeResult: () -> Unit = {},
 ) : Client(NoHandle) {
     override fun userId(): String = userId
@@ -91,6 +97,13 @@ class FakeFfiClient(
         return FakeFfiTaskHandle()
     }
 
+    override suspend fun isUserStatusSupported(): Boolean = isUserStatusSupportedResult()
+
+    override fun subscribeToOwnProfile(listener: ProfileListener): TaskHandle {
+        subscribeToOwnProfileResult(listener)
+        return FakeFfiTaskHandle()
+    }
+
     override suspend fun getProfile(userId: String): UserProfile {
         return getProfileResult(userId)
     }
@@ -111,6 +124,14 @@ class FakeFfiClient(
 
     override fun homeserverCapabilities(): HomeserverCapabilities {
         return homeserverCapabilities
+    }
+
+    override suspend fun accountData(eventType: String): String? = simulateLongTask {
+        accountDataResult(eventType)
+    }
+
+    override suspend fun setAccountData(eventType: String, content: String) = simulateLongTask {
+        setAccountDataResult(eventType, content)
     }
 
     override fun close() = closeResult()

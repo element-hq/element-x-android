@@ -18,8 +18,10 @@ interface LinkDesktopHandler {
 sealed interface LinkDesktopStep {
     data object Uninitialized : LinkDesktopStep
     data object Starting : LinkDesktopStep
+
     data class WaitingForAuth(
         val verificationUri: String,
+        val continuationMessageSender: ContinuationMessageSender,
     ) : LinkDesktopStep
 
     data class EstablishingSecureChannel(

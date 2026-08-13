@@ -7,15 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"Verschlüsselt von einem unbekannten oder gelöschten Gerät."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Verschlüsselt durch ein Gerät, das nicht von seinem Besitzer verifiziert wurde."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Verschlüsselt durch einen nicht verifizierten Nutzer."</string>
-  <string name="emoji_picker_category_activity">"Aktivitäten"</string>
-  <string name="emoji_picker_category_flags">"Flaggen"</string>
-  <string name="emoji_picker_category_foods">"Essen &amp; Trinken"</string>
-  <string name="emoji_picker_category_nature">"Tiere &amp; Natur"</string>
-  <string name="emoji_picker_category_objects">"Objekte"</string>
-  <string name="emoji_picker_category_people">"Smileys &amp; Menschen"</string>
-  <string name="emoji_picker_category_places">"Reisen &amp; Orte"</string>
-  <string name="emoji_picker_category_recent">"Zuletzt verwendete Emojis"</string>
-  <string name="emoji_picker_category_symbols">"Symbole"</string>
   <string name="screen_media_upload_preview_caption_warning">"Bildunterschriften sind für Nutzer älterer Apps möglicherweise nicht sichtbar."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Tippe, um die Qualität des Video-Uploads zu ändern"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Die Datei konnte nicht hochgeladen werden."</string>

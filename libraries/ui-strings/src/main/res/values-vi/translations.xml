@@ -422,7 +422,6 @@ Bạn có chắc muốn tiếp tục không?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Kích thước tệp tối đa cho phép là: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Chọn chất lượng video bạn muốn tải lên."</string>
   <string name="dialog_video_quality_selector_title">"Chọn chất lượng tải lên video"</string>
-  <string name="emoji_picker_search_placeholder">"Tìm kiếm biểu tượng cảm xúc"</string>
   <string name="error_account_already_logged_in">"Bạn đã đăng nhập trên thiết bị này với tư cách là%1$s ."</string>
   <string name="error_account_creation_not_possible">"Máy chủ  của bạn cần được nâng cấp để hỗ trợ Dịch vụ Xác thực và tạo tài khoản."</string>
   <string name="error_failed_creating_the_permalink">"Không tạo được liên kết cố định"</string>

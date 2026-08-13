@@ -17,6 +17,9 @@ import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationValue
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopContentValidationState
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.aPdfMediaInfo
 import io.element.android.libraries.mediaviewer.api.aTxtMediaInfo
@@ -275,6 +278,34 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
                     )
                 )
             },
+            anImageMediaInfo(
+                senderName = "Frank",
+                dateSent = "26 NOV, 2024",
+            ).let {
+                aMediaViewerState(
+                    listOf(
+                        aMediaViewerPageData(
+                            downloadedMedia = AsyncData.Uninitialized,
+                            validationState = NoopContentValidationState(ContentValidationValue.Loading),
+                            mediaInfo = it,
+                        )
+                    )
+                )
+            },
+            anImageMediaInfo(
+                senderName = "Frank",
+                dateSent = "26 NOV, 2024",
+            ).let {
+                aMediaViewerState(
+                    listOf(
+                        aMediaViewerPageData(
+                            downloadedMedia = AsyncData.Uninitialized,
+                            validationState = NoopContentValidationState(ContentValidationValue.Invalid),
+                            mediaInfo = it,
+                        )
+                    )
+                )
+            },
         )
 }
 
@@ -293,6 +324,7 @@ fun aMediaViewerPageData(
     downloadedMedia: AsyncData<LocalMedia> = AsyncData.Uninitialized,
     mediaInfo: MediaInfo = anImageMediaInfo(),
     mediaSource: MediaSource = MediaSource(""),
+    validationState: ContentValidationState = NoopContentValidationState(),
 ): MediaViewerPageData.MediaViewerData = MediaViewerPageData.MediaViewerData(
     eventId = null,
     mediaInfo = mediaInfo,
@@ -300,6 +332,7 @@ fun aMediaViewerPageData(
     thumbnailSource = null,
     downloadedMedia = mutableStateOf(downloadedMedia),
     pagerKey = 0L,
+    validationState = validationState,
 )
 
 fun aMediaViewerState(

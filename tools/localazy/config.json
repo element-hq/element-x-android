@@ -261,7 +261,6 @@
     {
       "name" : ":features:messages:impl",
       "includeRegex" : [
-        "emoji_picker_category_.*",
         "screen_report_content_.*",
         "screen_room_attachment.*",
         "screen_room_encrypted.*",
@@ -330,6 +329,7 @@
       "includeRegex" : [
         "screen_advanced_settings_.*",
         "screen\\.advanced_settings\\..*",
+        "screen\\.settings\\..*",
         "screen_edit_profile_.*",
         "screen_notification_settings_.*",
         "screen\\.notification_settings\\..*",
@@ -425,6 +425,12 @@
       "includeRegex" : [
         "screen\\.share_location\\..*",
         "screen\\.view_location\\..*"
+      ]
+    },
+    {
+      "name" : ":libraries:emoji:impl",
+      "includeRegex" : [
+        "emoji_picker_.*"
       ]
     }
   ]

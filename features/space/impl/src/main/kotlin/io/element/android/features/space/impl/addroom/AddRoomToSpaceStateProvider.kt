@@ -40,7 +40,7 @@ internal class AddRoomToSpaceStateProvider : PreviewParameterProvider<AddRoomToS
             anAddRoomToSpaceState(
                 isSearchActive = true,
                 searchQuery = "unknown",
-                searchResults = SearchBarResultState.NoResultsFound(),
+                searchResults = SearchBarResultState.NoResultsFound,
             ),
             // With selected rooms
             anAddRoomToSpaceState(
@@ -62,7 +62,7 @@ internal class AddRoomToSpaceStateProvider : PreviewParameterProvider<AddRoomToS
 
 internal fun anAddRoomToSpaceState(
     searchQuery: String = "",
-    searchResults: SearchBarResultState<ImmutableList<SelectRoomInfo>> = SearchBarResultState.Initial(),
+    searchResults: SearchBarResultState<ImmutableList<SelectRoomInfo>> = SearchBarResultState.Initial,
     selectedRooms: ImmutableList<SelectRoomInfo> = persistentListOf(),
     isSearchActive: Boolean = false,
     saveAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
@@ -87,6 +87,7 @@ internal fun aSelectRoomInfoList(): ImmutableList<SelectRoomInfo> = listOf(
         canonicalAlias = null,
         avatarUrl = null,
         heroes = persistentListOf(),
+        isDm = false,
         isTombstoned = false,
     ),
     SelectRoomInfo(
@@ -95,6 +96,7 @@ internal fun aSelectRoomInfoList(): ImmutableList<SelectRoomInfo> = listOf(
         canonicalAlias = null,
         avatarUrl = null,
         heroes = persistentListOf(),
+        isDm = false,
         isTombstoned = false,
     ),
     SelectRoomInfo(
@@ -103,6 +105,7 @@ internal fun aSelectRoomInfoList(): ImmutableList<SelectRoomInfo> = listOf(
         canonicalAlias = null,
         avatarUrl = null,
         heroes = persistentListOf(),
+        isDm = false,
         isTombstoned = false,
     ),
 ).toImmutableList()

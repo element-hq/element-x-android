@@ -12,7 +12,9 @@ import androidx.compose.ui.graphics.Color
 import io.element.android.compound.colors.SemanticColorsLightDark
 import io.element.android.features.enterprise.api.BugReportUrl
 import io.element.android.features.enterprise.api.EnterpriseService
+import io.element.android.libraries.matrix.api.UrlContentFetcher
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.wellknown.api.ElementWellKnown
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.coroutines.flow.Flow
@@ -30,7 +32,9 @@ class FakeEnterpriseService(
     private val firebasePushGatewayResult: () -> String? = { lambdaError() },
     private val unifiedPushDefaultPushGatewayResult: () -> String? = { lambdaError() },
     private val getNoisyNotificationChannelIdResult: (SessionId?) -> String? = { lambdaError() },
-    private val tweakMasUrlResult: (String, String) -> String = { _, _ -> lambdaError() },
+    private val tweakMasUrlResult: (String, String, UrlContentFetcher) -> String = { _, _, _ -> lambdaError() },
+    private val overrideWellKnownResult: () -> ElementWellKnown? = { lambdaError() },
+    private val essConfigEndpointUrlResult: (String) -> String = { lambdaError() },
 ) : EnterpriseService {
     private val brandColorState = MutableStateFlow(initialBrandColor)
     private val semanticColorsState = MutableStateFlow(initialSemanticColors)
@@ -39,8 +43,8 @@ class FakeEnterpriseService(
         isEnterpriseUserResult(sessionId)
     }
 
-    override suspend fun tweakMasUrl(url: String, homeserver: String): String = simulateLongTask {
-        tweakMasUrlResult(url, homeserver)
+    override suspend fun tweakMasUrl(url: String, homeserver: String, urlContentFetcher: UrlContentFetcher): String = simulateLongTask {
+        tweakMasUrlResult(url, homeserver, urlContentFetcher)
     }
 
     override fun defaultHomeserverList(): List<String> {
@@ -78,5 +82,13 @@ class FakeEnterpriseService(
 
     override fun getNoisyNotificationChannelId(sessionId: SessionId): String? {
         return getNoisyNotificationChannelIdResult(sessionId)
+    }
+
+    override fun overriddenElementWellKnown(): ElementWellKnown? {
+        return overrideWellKnownResult()
+    }
+
+    override fun essConfigEndpointUrl(domain: String): String {
+        return essConfigEndpointUrlResult(domain)
     }
 }
