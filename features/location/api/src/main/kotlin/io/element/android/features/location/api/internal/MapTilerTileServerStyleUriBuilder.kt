@@ -30,7 +30,7 @@ internal class MapTilerTileServerStyleUriBuilder(
         customMapTilerConfig: MapTilerConfig?,
         darkMode: Boolean,
     ): String {
-        val baseUrl = customMapTilerConfig?.baseUrl ?: baseUrl
+        val baseUrl = customMapTilerConfig?.baseUrl.takeIf { !it.isNullOrBlank() } ?: baseUrl
         val apiKey = customMapTilerConfig?.apiKey ?: apiKey
         val mapId = if (darkMode) {
             customMapTilerConfig?.darkStyleId ?: darkMapId
