@@ -51,10 +51,10 @@ fun MarkdownTextInput(
     placeholder: String,
     placeholderColor: androidx.compose.ui.graphics.Color,
     onTyping: (Boolean) -> Unit,
+    onSendMessage: () -> Unit,
     onReceiveSuggestion: (Suggestion?) -> Unit,
     richTextEditorStyle: RichTextEditorStyle,
     onSelectRichContent: ((Uri) -> Unit)?,
-    onSendMessage: (() -> Unit)? = null,
 ) {
     // Copied from io.element.android.wysiwyg.internal.utils.UriContentListener
     class ReceiveUriContentListener(
@@ -217,6 +217,7 @@ internal fun MarkdownTextInputPreview() {
             placeholder = "Placeholder",
             placeholderColor = ElementTheme.colors.textSecondary,
             onTyping = {},
+            onSendMessage = {},
             onReceiveSuggestion = {},
             richTextEditorStyle = style,
             onSelectRichContent = {},

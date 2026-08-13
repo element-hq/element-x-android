@@ -218,10 +218,10 @@ fun TextComposer(
                         placeholder = placeholder,
                         placeholderColor = ElementTheme.colors.textSecondary,
                         onTyping = onTyping,
+                        onSendMessage = { if (canSendTextMessage) onSendMessage() },
                         onReceiveSuggestion = onReceiveSuggestion,
                         richTextEditorStyle = style,
                         onSelectRichContent = onSelectRichContent,
-                        onSendMessage = { if (canSendTextMessage) onSendMessage() },
                     )
                 }
             }
