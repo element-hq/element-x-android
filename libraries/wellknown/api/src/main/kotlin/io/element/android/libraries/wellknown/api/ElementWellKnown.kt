@@ -18,4 +18,5 @@ data class ElementWellKnown(
     val customRecoveryPassphrase: CustomRecoveryPassphrase?,
     val contentScannerUrl: String?,
     val forceDisableE2EE: Boolean?,
+    val tileServerUrl: String?,
 )

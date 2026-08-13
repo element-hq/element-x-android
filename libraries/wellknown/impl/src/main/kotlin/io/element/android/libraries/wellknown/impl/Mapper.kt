@@ -32,6 +32,7 @@ fun InternalElementWellKnown.map() = ElementWellKnown(
     customRecoveryPassphrase = customRecoveryPassphrase?.toPublic(),
     contentScannerUrl = contentScannerUrl,
     forceDisableE2EE = forceDisableE2EE,
+    tileServerUrl = tileServerUrl,
 )
 
 private fun InternalCustomRecoveryPassphrase.toPublic(): CustomRecoveryPassphrase {

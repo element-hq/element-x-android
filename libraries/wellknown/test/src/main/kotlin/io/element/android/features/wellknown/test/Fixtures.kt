@@ -21,6 +21,7 @@ fun anElementWellKnown(
     customRecoveryPassphrase: CustomRecoveryPassphrase? = null,
     contentScannerUrl: String? = null,
     forceDisableE2EE: Boolean? = null,
+    tileServerUrl: String? = null,
 ) = ElementWellKnown(
     registrationHelperUrl = registrationHelperUrl,
     enforceElementPro = enforceElementPro,
@@ -31,6 +32,7 @@ fun anElementWellKnown(
     customRecoveryPassphrase = customRecoveryPassphrase,
     contentScannerUrl = contentScannerUrl,
     forceDisableE2EE = forceDisableE2EE,
+    tileServerUrl = tileServerUrl,
 )
 
 fun aCustomRecoveryPassphrase(

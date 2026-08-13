@@ -204,7 +204,8 @@ class DefaultWellknownRetrieverTest {
                 "notification_sound": "a_notification_sound.flac",
                 "idp_app_scheme": "an_app_scheme",
                 "content_scanner_url": "https://content-scanner.example.com",
-                "force_disable_e2ee": false
+                "force_disable_e2ee": false,
+                "tile_server_url": "https://tile-server.example.com",
             }"""
 
         private val expectedElementWellKnown = ElementWellKnown(
@@ -217,6 +218,7 @@ class DefaultWellknownRetrieverTest {
             contentScannerUrl = "https://content-scanner.example.com",
             customRecoveryPassphrase = null,
             forceDisableE2EE = false,
+            tileServerUrl = "https://tile-server.example.com",
         )
     }
 }

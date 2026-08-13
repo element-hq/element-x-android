@@ -886,12 +886,6 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun getMapStyleUrl(): Result<String?> = withContext(sessionDispatcher) {
-        runCatchingExceptions {
-            innerClient.tileServer()?.mapStyleUrl
-        }
-    }
-
     override suspend fun resetWellKnownConfig(): Result<Unit> {
         return runCatchingExceptions {
             Timber.d("Resetting well-known config for session $sessionId")

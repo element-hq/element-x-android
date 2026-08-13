@@ -48,6 +48,8 @@ data class InternalElementWellKnown(
     val contentScannerUrl: String? = null,
     @SerialName("force_disable_e2ee")
     val forceDisableE2EE: Boolean? = null,
+    @SerialName("tile_server_url")
+    val tileServerUrl: String? = null,
 )
 
 @Serializable
