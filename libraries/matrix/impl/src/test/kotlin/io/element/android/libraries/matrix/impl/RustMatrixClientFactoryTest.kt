@@ -52,7 +52,7 @@ fun TestScope.createRustMatrixClientFactory(
     ),
     clientBuilderProvider: ClientBuilderProvider = FakeClientBuilderProvider(),
     workManagerScheduler: FakeWorkManagerScheduler = FakeWorkManagerScheduler(),
-    contentScannerUrlProvider: ContentScannerUrlProvider = { Result.success(null) },
+    contentScannerUrlProviderFactory: ContentScannerUrlProvider.Factory = { ContentScannerUrlProvider { Result.success(null) } },
 ) = RustMatrixClientFactory(
     cacheDirectory = cacheDirectory,
     appCoroutineScope = backgroundScope,
@@ -67,5 +67,5 @@ fun TestScope.createRustMatrixClientFactory(
     clientBuilderProvider = clientBuilderProvider,
     sqliteStoreBuilderProvider = FakeSqliteStoreBuilderProvider(),
     workManagerScheduler = workManagerScheduler,
-    contentScannerUrlProvider = contentScannerUrlProvider,
+    contentScannerUrlProviderFactory = contentScannerUrlProviderFactory,
 )

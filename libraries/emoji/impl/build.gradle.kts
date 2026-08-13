@@ -36,5 +36,5 @@ dependencies {
     implementation(libs.matrix.emojibase.bindings)
 
     testImplementation(projects.libraries.matrix.test)
-    testCommonDependencies(libs)
+    testCommonDependencies(libs, includeTestComposeView = true)
 }

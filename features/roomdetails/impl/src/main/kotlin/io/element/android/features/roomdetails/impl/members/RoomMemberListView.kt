@@ -338,6 +338,15 @@ private fun RoomMemberListItem(
                         color = ElementTheme.colors.textSecondary,
                     )
                 }
+
+                if (roomMemberWithIdentity.isInCall) {
+                    Icon(
+                        modifier = Modifier.size(20.dp),
+                        imageVector = CompoundIcons.VideoCallSolid(),
+                        contentDescription = stringResource(CommonStrings.action_video_call),
+                        tint = ElementTheme.colors.iconSuccessPrimary
+                    )
+                }
             }
         }
     )

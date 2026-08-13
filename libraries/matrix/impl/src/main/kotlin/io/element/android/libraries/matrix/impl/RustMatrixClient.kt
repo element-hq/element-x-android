@@ -49,7 +49,6 @@ import io.element.android.libraries.matrix.api.scanner.ContentScanner
 import io.element.android.libraries.matrix.api.spaces.SpaceService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncState
-import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.UserStatus
@@ -58,7 +57,6 @@ import io.element.android.libraries.matrix.impl.exception.mapClientException
 import io.element.android.libraries.matrix.impl.linknewdevice.RustLinkDesktopHandler
 import io.element.android.libraries.matrix.impl.linknewdevice.RustLinkMobileHandler
 import io.element.android.libraries.matrix.impl.linknewdevice.RustQrCodeDataParser
-import io.element.android.libraries.matrix.impl.mapper.map
 import io.element.android.libraries.matrix.impl.media.RustMediaLoader
 import io.element.android.libraries.matrix.impl.media.RustMediaPreviewService
 import io.element.android.libraries.matrix.impl.notification.RustNotificationService
@@ -85,7 +83,9 @@ import io.element.android.libraries.matrix.impl.search.RustMessageSearchService
 import io.element.android.libraries.matrix.impl.spaces.RustSpaceService
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import io.element.android.libraries.matrix.impl.sync.map
-import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
+import io.element.android.libraries.matrix.impl.user.UserSearchResultMapper
+import io.element.android.libraries.matrix.impl.user.into
+import io.element.android.libraries.matrix.impl.user.map
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
@@ -126,9 +126,11 @@ import org.matrix.rustcomponents.sdk.IgnoredUsersListener
 import org.matrix.rustcomponents.sdk.Membership
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.PowerLevels
+import org.matrix.rustcomponents.sdk.ProfileListener
 import org.matrix.rustcomponents.sdk.RoomInfoListener
 import org.matrix.rustcomponents.sdk.SendQueueRoomErrorListener
 import org.matrix.rustcomponents.sdk.TaskHandle
+import org.matrix.rustcomponents.sdk.UserProfile
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
@@ -271,8 +273,6 @@ class RustMatrixClient(
 
     private var clientDelegateTaskHandle: TaskHandle? = innerClient.setDelegate(sessionDelegate)
 
-    @Volatile private var localUserStatus: UserStatus? = null
-
     private val _userProfile: MutableStateFlow<MatrixUser> = MutableStateFlow(
         MatrixUser(
             userId = sessionId,
@@ -282,6 +282,14 @@ class RustMatrixClient(
     )
 
     override val userProfile: StateFlow<MatrixUser> = _userProfile
+
+    private var ownProfileTaskHandle: TaskHandle? = null
+
+    private val ownProfileListener = object : ProfileListener {
+        override fun onUpdate(profile: UserProfile) {
+            _userProfile.tryEmit(profile.map())
+        }
+    }
 
     override val ignoredUsersFlow = mxCallbackFlow<ImmutableList<UserId>> {
         // Fetch the initial value manually, the SDK won't return it automatically
@@ -303,8 +311,21 @@ class RustMatrixClient(
         sessionCoroutineScope.launch {
             // Start notification settings
             notificationSettingsService.start()
+            // Setup user profile logic
+            setupUserProfile()
+        }
 
-            // Update the user profile in the session store if needed
+        // Schedule regular database vacuuming to ensure DB performance remains optimal
+        scheduleDatabaseVacuum()
+    }
+
+    private suspend fun setupUserProfile() {
+        val supported = isUserStatusSupported().getOrDefault(false)
+        if (supported) {
+            // No need to seed the data here, it's already stored by the sdk.
+            ownProfileTaskHandle = innerClient.subscribeToOwnProfile(ownProfileListener)
+        } else {
+            // Seed from the session store so cold-start UI has something to render before the network fetch.
             sessionStore.getSession(sessionId.value)?.let { sessionData ->
                 _userProfile.emit(
                     MatrixUser(
@@ -314,12 +335,8 @@ class RustMatrixClient(
                     )
                 )
             }
-            // Force a refresh of the profile
             getUserProfile()
         }
-
-        // Schedule regular database vacuuming to ensure DB performance remains optimal
-        scheduleDatabaseVacuum()
     }
 
     override fun userIdServerName(): String {
@@ -458,13 +475,8 @@ class RustMatrixClient(
 
     override suspend fun getUserProfile(): Result<MatrixUser> = getProfile(sessionId)
         .onSuccess { matrixUser ->
-            _userProfile.emit(
-                matrixUser.copy(
-                    rawStatus = localUserStatus,
-                    displayedStatus = localUserStatus?.let { DisplayedStatus.UserSet(it) },
-                )
-            )
             // Also update our session storage
+            _userProfile.emit(matrixUser)
             sessionStore.updateUserProfile(
                 sessionId = sessionId.value,
                 displayName = matrixUser.displayName,
@@ -495,25 +507,31 @@ class RustMatrixClient(
         }
 
     override suspend fun setUserStatus(status: UserStatus): Result<Unit> = withContext(sessionDispatcher) {
-        localUserStatus = status
-        _userProfile.emit(
-            _userProfile.value.copy(
-                rawStatus = status,
-                displayedStatus = DisplayedStatus.UserSet(status),
-            )
-        )
-        Result.success(Unit)
+        runCatchingExceptions {
+            innerClient.setUserStatus(status.into())
+        }.onSuccess {
+            // The subscription pushes the update on supported servers; only refresh manually as a fallback.
+            if (ownProfileTaskHandle == null) getUserProfile()
+        }
     }
 
     override suspend fun clearUserStatus(): Result<Unit> = withContext(sessionDispatcher) {
-        localUserStatus = null
-        _userProfile.emit(
-            _userProfile.value.copy(
-                rawStatus = null,
-                displayedStatus = null,
-            )
-        )
-        Result.success(Unit)
+        runCatchingExceptions {
+            innerClient.clearUserStatus()
+        }.onSuccess {
+            // The subscription pushes the update on supported servers; only refresh manually as a fallback.
+            if (ownProfileTaskHandle == null) getUserProfile()
+        }
+    }
+
+    override suspend fun isUserStatusSupported(): Result<Boolean> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.isUserStatusSupported()
+        }
+    }
+
+    override fun enableAutomaticCallStatus(enabled: Boolean) {
+        innerClient.enableAutomaticCallStatus(enabled)
     }
 
     override suspend fun joinRoom(roomId: RoomId): Result<RoomInfo?> = withContext(sessionDispatcher) {
@@ -621,6 +639,7 @@ class RustMatrixClient(
 
         sessionCoroutineScope.cancel()
         clientDelegateTaskHandle?.cancelAndDestroy()
+        ownProfileTaskHandle?.cancelAndDestroy()
         sessionVerificationService.destroy()
 
         sessionDelegate.clearCurrentClient()
@@ -803,6 +822,18 @@ class RustMatrixClient(
     override suspend fun getRecentEmojis(): Result<List<String>> = withContext(sessionDispatcher) {
         runCatchingExceptions {
             innerClient.getRecentEmojis().map { it.emoji }
+        }
+    }
+
+    override suspend fun getAccountData(eventType: String): Result<String?> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.accountData(eventType)
+        }
+    }
+
+    override suspend fun setAccountData(eventType: String, content: String): Result<Unit> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.setAccountData(eventType, content)
         }
     }
 

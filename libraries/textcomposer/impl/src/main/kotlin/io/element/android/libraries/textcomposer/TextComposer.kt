@@ -131,6 +131,7 @@ fun TextComposer(
     resolveAtRoomMentionDisplay: () -> TextDisplay,
     modifier: Modifier = Modifier,
     showTextFormatting: Boolean = false,
+    isInThreadTimeline: Boolean = false,
 ) {
     val markdown = when (state) {
         is TextEditorState.Markdown -> state.state.text.value()
@@ -153,13 +154,15 @@ fun TextComposer(
         .fillMaxSize()
         .height(IntrinsicSize.Min)
 
-    val placeholder = if (composerMode.inThread) {
+    val placeholder = if (composerMode.inThread || composerMode is MessageComposerMode.Normal && isInThreadTimeline) {
         stringResource(id = CommonStrings.action_reply_in_thread)
     } else if (composerMode is MessageComposerMode.Attachment || composerMode is MessageComposerMode.EditCaption) {
         stringResource(id = R.string.rich_text_editor_composer_caption_placeholder)
     } else {
         stringResource(id = R.string.rich_text_editor_composer_placeholder)
     }
+    val canSendTextMessage = markdown.isNotBlank() || composerMode is MessageComposerMode.Attachment
+
     val textInput: @Composable () -> Unit = when (state) {
         is TextEditorState.Rich -> {
             val coroutineScope = rememberCoroutineScope()
@@ -215,6 +218,7 @@ fun TextComposer(
                         placeholder = placeholder,
                         placeholderColor = ElementTheme.colors.textSecondary,
                         onTyping = onTyping,
+                        onSendMessage = { if (canSendTextMessage) onSendMessage() },
                         onReceiveSuggestion = onReceiveSuggestion,
                         richTextEditorStyle = style,
                         onSelectRichContent = onSelectRichContent,
@@ -223,8 +227,6 @@ fun TextComposer(
             }
         }
     }
-
-    val canSendTextMessage = markdown.isNotBlank() || composerMode is MessageComposerMode.Attachment
 
     val textFormattingOptions: @Composable (() -> Unit)? = (state as? TextEditorState.Rich)?.let {
         @Composable { TextFormatting(state = it.richTextEditorState) }

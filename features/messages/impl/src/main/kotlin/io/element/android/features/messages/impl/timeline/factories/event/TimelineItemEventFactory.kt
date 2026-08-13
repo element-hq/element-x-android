@@ -38,6 +38,8 @@ import io.element.android.libraries.matrix.ui.messages.reply.map
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
+private const val GROUPING_TIMEOUT_MS = 5 * 60 * 1000L
+
 @AssistedInject
 class TimelineItemEventFactory(
     @Assisted private val config: TimelineItemsFactoryConfig,
@@ -221,8 +223,14 @@ class TimelineItemEventFactory(
         val previousSender = prevTimelineItem?.event?.sender
         val nextSender = nextTimelineItem?.event?.sender
 
-        val previousIsGroupable = prevTimelineItem?.canBeDisplayedInBubbleBlock().orTrue()
-        val nextIsGroupable = nextTimelineItem?.canBeDisplayedInBubbleBlock().orTrue()
+        val previousIsGroupable = prevTimelineItem?.let {
+            it.canBeDisplayedInBubbleBlock() &&
+                currentTimelineItem.event.timestamp - it.event.timestamp <= GROUPING_TIMEOUT_MS
+        }.orTrue()
+        val nextIsGroupable = nextTimelineItem?.let {
+            it.canBeDisplayedInBubbleBlock() &&
+                it.event.timestamp - currentTimelineItem.event.timestamp <= GROUPING_TIMEOUT_MS
+        }.orTrue()
 
         return when {
             previousSender != currentSender && nextSender == currentSender -> {

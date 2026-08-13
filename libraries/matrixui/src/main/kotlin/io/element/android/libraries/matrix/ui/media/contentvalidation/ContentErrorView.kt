@@ -27,7 +27,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 @Composable
 internal fun ContentErrorView(
     title: String,
-    message: String,
+    message: String?,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues.Zero,
     onTextLayout: ((TextLayoutResult) -> Unit)? = null,
@@ -51,12 +51,14 @@ internal fun ContentErrorView(
                 color = ElementTheme.colors.textCriticalPrimary,
                 style = ElementTheme.typography.fontBodyMdMedium,
             )
-            Text(
-                text = message,
-                color = ElementTheme.colors.textSecondary,
-                style = ElementTheme.typography.fontBodySmRegular,
-                onTextLayout = onTextLayout,
-            )
+            if (message != null) {
+                Text(
+                    text = message,
+                    color = ElementTheme.colors.textSecondary,
+                    style = ElementTheme.typography.fontBodySmRegular,
+                    onTextLayout = onTextLayout,
+                )
+            }
         }
     }
 }

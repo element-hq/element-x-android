@@ -440,7 +440,7 @@ Anledning:%1$s."</string>
   <string name="screen_share_open_apple_maps">"Öppna i Apple Maps"</string>
   <string name="screen_share_open_google_maps">"Öppna i Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Öppna i OpenStreetMap"</string>
-  <string name="screen_share_this_location_action">"Dela fäst plats"</string>
+  <string name="screen_share_this_location_action">"Dela vald plats"</string>
   <string name="screen_space_list_description">"Utrymmen som du har skapat eller gått med i."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_title">"Utrymmen"</string>

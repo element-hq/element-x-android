@@ -2,4 +2,5 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_share_location_live_location_disclaimer_title">"您的即時位置歷史將儲存於聊天室中，並在工作階段結束後對其他成員可見。"</string>
   <string name="screen_share_location_live_location_duration_picker_title">"選擇分享即時位置的時間長度。"</string>
+  <string name="screen_share_location_live_location_missing_permissions">"您無權在此聊天室分享您的即時位置"</string>
 </resources>
