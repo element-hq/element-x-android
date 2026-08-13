@@ -94,9 +94,9 @@ class ShareLocationPresenter(
         var pendingLiveLocationShare by remember { mutableStateOf(false) }
         val startLiveLocationAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
         val currentUser by client.userProfile.collectAsState()
-        val customMapStyleUrl by produceState(AsyncData.Loading()) {
+        val customMapConfig by produceState(AsyncData.Loading()) {
             // Ignore errors
-            value = AsyncData.Success(remoteEnterpriseConfigProvider.get(client.sessionId).dataOrNull()?.tileServerUrl)
+            value = AsyncData.Success(remoteEnterpriseConfigProvider.get(client.sessionId).dataOrNull()?.mapTilerConfig)
         }
         val sendLiveLocationPermissions by room.permissionsAsState(SendLiveLocationPermissions.DEFAULT) { perms ->
             perms.sendLiveLocationPermissions()
@@ -201,7 +201,7 @@ class ShareLocationPresenter(
         }
 
         return ShareLocationState(
-            customMapStyleUrl = customMapStyleUrl,
+            customMapTilerConfig = customMapConfig,
             currentUser = currentUser,
             dialogState = dialogState,
             trackUserLocation = trackUserPosition,

@@ -32,6 +32,7 @@ import io.element.android.features.location.impl.common.ui.LocationConstraintsDi
 import io.element.android.features.location.impl.live.LiveLocationStore
 import io.element.android.features.location.test.FakeActiveLiveLocationShareManager
 import io.element.android.features.messages.test.FakeMessageComposerContext
+import io.element.android.features.wellknown.test.aMapTilerConfig
 import io.element.android.features.wellknown.test.anElementWellKnown
 import io.element.android.libraries.dateformatter.test.FakeDurationFormatter
 import io.element.android.libraries.matrix.api.core.EventId
@@ -120,7 +121,7 @@ class ShareLocationPresenterTest {
         val shareLocationPresenter = createShareLocationPresenter()
         shareLocationPresenter.test {
             val state = awaitFirstItem()
-            assertThat(state.customMapStyleUrl.isLoading()).isFalse()
+            assertThat(state.customMapTilerConfig.isLoading()).isFalse()
             assertThat(state.trackUserLocation).isTrue()
             assertThat(state.dialogState).isEqualTo(ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.None))
         }
@@ -128,19 +129,20 @@ class ShareLocationPresenterTest {
 
     @Test
     fun `present - non-null customMapStyleUrl`() = runTest {
+        val mapTilerConfig = aMapTilerConfig(apiKey = "A KEY")
         val shareLocationPresenter = createShareLocationPresenter(
             client = FakeMatrixClient(
                 sessionId = A_USER_ID,
             ),
             remoteEnterpriseConfigProvider = FakeRemoteEnterpriseConfigProvider(
-                getResult = { WellknownRetrieverResult.Success(anElementWellKnown(tileServerUrl = "aUrl")) }
+                getResult = { WellknownRetrieverResult.Success(anElementWellKnown(mapTilerConfig = mapTilerConfig)) }
             )
         )
         shareLocationPresenter.test {
             val state = awaitItem()
-            assertThat(state.customMapStyleUrl.isLoading()).isTrue()
+            assertThat(state.customMapTilerConfig.isLoading()).isTrue()
             val finalState = awaitItem()
-            assertThat(finalState.customMapStyleUrl.dataOrNull()).isEqualTo("aUrl")
+            assertThat(finalState.customMapTilerConfig.dataOrNull()).isEqualTo(mapTilerConfig)
         }
     }
 

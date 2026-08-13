@@ -23,6 +23,7 @@ import io.element.android.features.location.impl.common.permissions.PermissionsE
 import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.features.location.test.FakeActiveLiveLocationShareManager
+import io.element.android.features.wellknown.test.aMapTilerConfig
 import io.element.android.features.wellknown.test.anElementWellKnown
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -87,17 +88,18 @@ class ShowLocationPresenterTest {
 
     @Test
     fun `present - non-null customMapStyleUrl`() = runTest {
+        val mapTilerConfig = aMapTilerConfig(apiKey = "A KEY")
         val shareLocationPresenter = createShowLocationPresenter(
             sessionId = A_SESSION_ID,
             remoteEnterpriseConfigProvider = FakeRemoteEnterpriseConfigProvider(
-                getResult = { WellknownRetrieverResult.Success(anElementWellKnown(tileServerUrl = "aUrl")) }
+                getResult = { WellknownRetrieverResult.Success(anElementWellKnown(mapTilerConfig = mapTilerConfig)) }
             )
         )
         shareLocationPresenter.test {
             val state = awaitItem()
-            assertThat(state.customMapStyleUrl.isLoading()).isTrue()
+            assertThat(state.customMapTilerConfig.isLoading()).isTrue()
             val finalState = awaitItem()
-            assertThat(finalState.customMapStyleUrl.dataOrNull()).isEqualTo("aUrl")
+            assertThat(finalState.customMapTilerConfig.dataOrNull()).isEqualTo(mapTilerConfig)
         }
     }
 
@@ -132,7 +134,7 @@ class ShowLocationPresenterTest {
         val presenter = createShowLocationPresenter(
             sessionId = A_SESSION_ID,
             remoteEnterpriseConfigProvider = FakeRemoteEnterpriseConfigProvider(
-                getResult = { WellknownRetrieverResult.Success(anElementWellKnown(tileServerUrl = null)) }
+                getResult = { WellknownRetrieverResult.Success(anElementWellKnown(mapTilerConfig = aMapTilerConfig())) }
             )
         )
 

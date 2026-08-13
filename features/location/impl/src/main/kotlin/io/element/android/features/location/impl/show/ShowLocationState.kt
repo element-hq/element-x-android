@@ -17,10 +17,11 @@ import io.element.android.libraries.designsystem.components.PinVariant
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import io.element.android.libraries.wellknown.api.MapTilerConfig
 import kotlinx.collections.immutable.ImmutableList
 
 data class ShowLocationState(
-    val customMapStyleUrl: AsyncData<String?>,
+    val customMapTilerConfig: AsyncData<MapTilerConfig?>,
     val isLive: Boolean,
     val dialogState: LocationConstraintsDialogState,
     val locationShares: ImmutableList<LocationShareItem>,

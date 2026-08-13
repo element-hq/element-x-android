@@ -18,6 +18,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import io.element.android.libraries.wellknown.api.MapTilerConfig
 import kotlinx.collections.immutable.toImmutableList
 
 class ShowLocationStateProvider : PreviewParameterProvider<ShowLocationState> {
@@ -36,14 +37,14 @@ class ShowLocationStateProvider : PreviewParameterProvider<ShowLocationState> {
                 constraintsDialogState = LocationConstraintsDialogState.LocationServiceDisabled,
             ),
             aShowLocationState(isTrackMyLocation = true),
-            aShowLocationState(customMapStyleUrl = AsyncData.Loading()),
+            aShowLocationState(customMapTilerConfig = AsyncData.Loading()),
         )
 }
 
 private const val APP_NAME = "ApplicationName"
 
 fun aShowLocationState(
-    customMapStyleUrl: AsyncData<String?> = AsyncData.Success(null),
+    customMapTilerConfig: AsyncData<MapTilerConfig?> = AsyncData.Success(null),
     isLive: Boolean = false,
     constraintsDialogState: LocationConstraintsDialogState = LocationConstraintsDialogState.None,
     locationShares: List<LocationShareItem> = listOf(aLocationShareItem(isLive = isLive)),
@@ -55,7 +56,7 @@ fun aShowLocationState(
     eventSink: (ShowLocationEvent) -> Unit = {},
 ): ShowLocationState {
     return ShowLocationState(
-        customMapStyleUrl = customMapStyleUrl,
+        customMapTilerConfig = customMapTilerConfig,
         dialogState = constraintsDialogState,
         locationShares = locationShares.toImmutableList(),
         focusedLocation = focusedLocation,

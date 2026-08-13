@@ -87,9 +87,9 @@ import kotlinx.coroutines.launch
             mutableStateOf(LocationConstraintsDialogState.None)
         }
 
-        val customMapStyleUrl by produceState(AsyncData.Loading()) {
+        val customMapTilerConfig by produceState(AsyncData.Loading()) {
             // Ignore errors
-            value = AsyncData.Success(remoteEnterpriseConfigProvider.get(sessionId).dataOrNull()?.tileServerUrl)
+            value = AsyncData.Success(remoteEnterpriseConfigProvider.get(sessionId).dataOrNull()?.mapTilerConfig)
         }
 
         fun checkLocationConstraints() {
@@ -222,7 +222,7 @@ import kotlinx.coroutines.launch
             userLocationStateFactory.create(hasLocationPermission = permissionsState.isAnyGranted)
         }
         return ShowLocationState(
-            customMapStyleUrl = customMapStyleUrl,
+            customMapTilerConfig = customMapTilerConfig,
             dialogState = dialogState,
             locationShares = locationShares,
             focusedLocation = focusedLocation,

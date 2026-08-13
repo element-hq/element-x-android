@@ -13,6 +13,7 @@ package io.element.android.libraries.wellknown.impl
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.wellknown.test.FakeElementWellknownStore
+import io.element.android.features.wellknown.test.aMapTilerConfig
 import io.element.android.features.wellknown.test.anElementWellKnown
 import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.matrix.api.UrlContentFetcher
@@ -205,7 +206,10 @@ class DefaultWellknownRetrieverTest {
                 "idp_app_scheme": "an_app_scheme",
                 "content_scanner_url": "https://content-scanner.example.com",
                 "force_disable_e2ee": false,
-                "tile_server_url": "https://tile-server.example.com",
+                "map_tiler_config": {
+                    "api_key": "test_api_key",
+                    "base_url": "https://tile-server.example.com"
+                }
             }"""
 
         private val expectedElementWellKnown = ElementWellKnown(
@@ -218,7 +222,10 @@ class DefaultWellknownRetrieverTest {
             contentScannerUrl = "https://content-scanner.example.com",
             customRecoveryPassphrase = null,
             forceDisableE2EE = false,
-            tileServerUrl = "https://tile-server.example.com",
+            mapTilerConfig = aMapTilerConfig(
+                apiKey = "test_api_key",
+                baseUrl = "https://tile-server.example.com",
+            )
         )
     }
 }
