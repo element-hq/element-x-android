@@ -133,11 +133,9 @@ fun MarkdownTextInput(
         update = { editText ->
             editText.contentDescription = placeholder
             editText.applyStyleInCompose(richTextEditorStyle)
-            editText.onEnterKeyListener = onSendMessage?.let { send ->
-                {
-                    send()
-                    true
-                }
+            editText.onEnterKeyListener = {
+                onSendMessage()
+                true
             }
             val text = state.text.value()
             mentionSpanUpdater.updateMentionSpans(text)
