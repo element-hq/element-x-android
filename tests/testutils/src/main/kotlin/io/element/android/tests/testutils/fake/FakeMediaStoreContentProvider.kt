@@ -17,7 +17,6 @@ import android.provider.MediaStore
 import androidx.test.core.app.ApplicationProvider
 import org.robolectric.shadows.ShadowContentResolver
 import java.io.File
-import java.nio.file.Files
 
 /**
  * Stands in for the MediaStore provider: it records the display names an insert is attempted with,
@@ -25,7 +24,10 @@ import java.nio.file.Files
  * way MediaStore does once a directory already holds 32 files with the same name.
  */
 class FakeMediaStoreContentProvider : ContentProvider() {
-    private val directory: File = Files.createTempDirectory("fake-media-store").toFile()
+    private val directory: File = File.createTempFile("fake-media-store", null).apply {
+        delete()
+        mkdir()
+    }
 
     val insertedDisplayNames = mutableListOf<String>()
 
