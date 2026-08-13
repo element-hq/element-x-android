@@ -29,13 +29,12 @@
   <string name="a11y_poll_end">"نظرسنجی پایان یافته"</string>
   <string name="a11y_react_with">"واکنش با %1$s"</string>
   <string name="a11y_react_with_other_emojis">"واکنش با شکلک‌های دیگر"</string>
-  <string name="a11y_read_receipts_multiple">"خوانده به دست %1$s و %2$s"</string>
+  <string name="a11y_read_receipts_multiple">"پیام پیشین به دست %1$s و %2$s خوانده شد"</string>
   <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="one">"خوانده شده توسط%1$s و%2$d نفر دیگر"</item>
-    <item quantity="other">"خوانده شده توسط%1$s و%2$d نفر دیگر"</item>
+    <item quantity="one">"پیام پیشین به دست %1$s و %2$d دیگر خوانده شد"</item>
+    <item quantity="other">"پیام پیشین به دست %1$s و %2$d دیگر خوانده شد"</item>
   </plurals>
-  <string name="a11y_read_receipts_single">"خوانده به دست %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"زدن برای نمایش همه"</string>
+  <string name="a11y_read_receipts_single">"پیام قبلی به دست %1$s خوانده شد"</string>
   <string name="a11y_remove_reaction">"برداشتن واکنش با %1$s"</string>
   <string name="a11y_remove_reaction_with">"برداشتن واکنش با %1$s"</string>
   <string name="a11y_room_avatar">"چهرک اتاق"</string>
@@ -349,7 +348,6 @@
   <string name="dialog_unsaved_changes_description">"تغییراتی ذخیره نشده دارید."</string>
   <string name="dialog_unsaved_changes_description_android">"تغییراتتان ذخیره نشده‌اند. مطمئنید که می‌خواهید برگردید؟"</string>
   <string name="dialog_unsaved_changes_title">"ذخیرهٔ تغییرات؟"</string>
-  <string name="emoji_picker_search_placeholder">"حست‌وجوی شکلک‌ها"</string>
   <string name="error_failed_creating_the_permalink">"شکست در ایجاد پایاپیوند"</string>
   <string name="error_failed_loading_map">"%1$s نتوانست نقشه را بارگیری کند. لطفا بعدا دوباره امتحان کنید."</string>
   <string name="error_failed_loading_messages">"شکست در بار کردن پیام‌ها"</string>

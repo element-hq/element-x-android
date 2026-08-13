@@ -21,6 +21,7 @@ import com.google.testing.junit.testparameterinjector.KotlinTestParameters.named
 import com.google.testing.junit.testparameterinjector.TestParameter
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.login.LoginMode
+import io.element.android.features.login.impl.login.aLoginModeState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.auth.OAuthDetails
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
@@ -148,7 +149,7 @@ class OnboardingViewTest : RobolectricTestParameter() {
         setOnboardingView(
             state = anOnBoardingState(
                 defaultAccountProvider = "element.io",
-                loginMode = AsyncData.Failure(AN_EXCEPTION),
+                loginModeState = aLoginModeState(loginMode = AsyncData.Failure(AN_EXCEPTION)),
                 eventSink = eventSink,
             ),
         )
@@ -208,7 +209,7 @@ class OnboardingViewTest : RobolectricTestParameter() {
         ensureCalledOnce { callback ->
             setOnboardingView(
                 state = anOnBoardingState(
-                    loginMode = AsyncData.Success(LoginMode.PasswordLogin),
+                    loginModeState = aLoginModeState(loginMode = AsyncData.Success(LoginMode.PasswordLogin)),
                     eventSink = eventSink,
                 ),
                 onNeedLoginPassword = callback,
@@ -224,26 +225,10 @@ class OnboardingViewTest : RobolectricTestParameter() {
         ensureCalledOnceWithParam(oAuthDetails) { callback ->
             setOnboardingView(
                 state = anOnBoardingState(
-                    loginMode = AsyncData.Success(LoginMode.OAuth(oAuthDetails)),
+                    loginModeState = aLoginModeState(loginMode = AsyncData.Success(LoginMode.OAuth(oAuthDetails))),
                     eventSink = eventSink,
                 ),
                 onOAuthDetails = callback,
-            )
-        }
-        eventSink.assertSingle(OnBoardingEvents.ClearError)
-    }
-
-    @Test
-    fun `when success AccountCreation - the expected callback is invoked and the event is received`() = runAndroidComposeUiTest {
-        val eventSink = EventsRecorder<OnBoardingEvents>()
-        val oAuthDetails = OAuthDetails("aUrl")
-        ensureCalledOnceWithParam(oAuthDetails.url) { callback ->
-            setOnboardingView(
-                state = anOnBoardingState(
-                    loginMode = AsyncData.Success(LoginMode.AccountCreation("aUrl")),
-                    eventSink = eventSink,
-                ),
-                onCreateAccountContinue = callback,
             )
         }
         eventSink.assertSingle(OnBoardingEvents.ClearError)
@@ -260,7 +245,6 @@ class OnboardingViewTest : RobolectricTestParameter() {
         onOAuthDetails: (OAuthDetails) -> Unit = EnsureNeverCalledWithParam(),
         onNeedLoginPassword: () -> Unit = EnsureNeverCalled(),
         onLearnMoreClick: () -> Unit = EnsureNeverCalled(),
-        onCreateAccountContinue: (url: String) -> Unit = EnsureNeverCalledWithParam(),
     ) {
         setContent {
             OnBoardingView(
@@ -274,7 +258,6 @@ class OnboardingViewTest : RobolectricTestParameter() {
                 onOAuthDetails = onOAuthDetails,
                 onNeedLoginPassword = onNeedLoginPassword,
                 onLearnMoreClick = onLearnMoreClick,
-                onCreateAccountContinue = onCreateAccountContinue,
             )
         }
     }

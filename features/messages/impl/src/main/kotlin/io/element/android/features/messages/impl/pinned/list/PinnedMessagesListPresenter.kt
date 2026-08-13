@@ -28,6 +28,7 @@ import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.link.LinkState
 import io.element.android.features.messages.impl.pinned.DefaultPinnedEventsTimelineProvider
+import io.element.android.features.messages.impl.pinned.keepDisplayablePinnedEvents
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
@@ -225,7 +226,7 @@ class PinnedMessagesListPresenter(
                     val timelineItemsFlow = asyncTimeline.data.timelineItems
                     combine(timelineItemsFlow, room.membersStateFlow) { items, membersState ->
                         timelineItemsFactory.replaceWith(
-                            timelineItems = items,
+                            timelineItems = items.keepDisplayablePinnedEvents(),
                             roomMembers = membersState.roomMembers().orEmpty(),
                             renderReadReceipts = false,
                         )
@@ -259,7 +260,7 @@ class PinnedMessagesListPresenter(
             AsyncData.Uninitialized, is AsyncData.Loading -> PinnedMessagesListState.Loading
             is AsyncData.Failure -> PinnedMessagesListState.Failed
             is AsyncData.Success -> {
-                if (timelineItems.data.isEmpty()) {
+                if (timelineItems.data.all { it is TimelineItem.Virtual }) {
                     PinnedMessagesListState.Empty
                 } else {
                     val actionListState = actionListPresenter.present()

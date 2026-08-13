@@ -51,6 +51,7 @@ fun MarkdownTextInput(
     placeholder: String,
     placeholderColor: androidx.compose.ui.graphics.Color,
     onTyping: (Boolean) -> Unit,
+    onSendMessage: () -> Unit,
     onReceiveSuggestion: (Suggestion?) -> Unit,
     richTextEditorStyle: RichTextEditorStyle,
     onSelectRichContent: ((Uri) -> Unit)?,
@@ -132,6 +133,12 @@ fun MarkdownTextInput(
         update = { editText ->
             editText.contentDescription = placeholder
             editText.applyStyleInCompose(richTextEditorStyle)
+            editText.onEnterKeyListener = onSendMessage?.let { send ->
+                {
+                    send()
+                    true
+                }
+            }
             val text = state.text.value()
             mentionSpanUpdater.updateMentionSpans(text)
             if (state.text.needsDisplaying()) {
@@ -210,6 +217,7 @@ internal fun MarkdownTextInputPreview() {
             placeholder = "Placeholder",
             placeholderColor = ElementTheme.colors.textSecondary,
             onTyping = {},
+            onSendMessage = {},
             onReceiveSuggestion = {},
             richTextEditorStyle = style,
             onSelectRichContent = {},

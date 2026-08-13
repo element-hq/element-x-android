@@ -15,6 +15,7 @@ import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import io.element.android.features.preferences.impl.R
 import io.element.android.tests.testutils.EnsureNeverCalled
@@ -41,7 +42,7 @@ class DeveloperSettingsViewTest : RobolectricTest() {
         }
     }
 
-    @Config(qualifiers = "h2000dp")
+    @Config(qualifiers = "h2400dp")
     @Test
     fun `clicking on push history notification invokes the expected callback`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<DeveloperSettingsEvents>(expectEvents = false)
@@ -80,7 +81,7 @@ class DeveloperSettingsViewTest : RobolectricTest() {
                 eventSink = eventsRecorder
             ),
         )
-        onNodeWithText("Clear cache").performClick()
+        onNodeWithText("Clear cache").performScrollTo().performClick()
         eventsRecorder.assertSingle(DeveloperSettingsEvents.ClearCache)
     }
 }

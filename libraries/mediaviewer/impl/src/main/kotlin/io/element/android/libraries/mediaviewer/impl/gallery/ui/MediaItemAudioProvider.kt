@@ -22,7 +22,7 @@ class MediaItemAudioProvider : PreviewParameterProvider<MediaItem.Audio> {
                 caption = "A caption",
             ),
             aMediaItemAudio(
-                caption = loremIpsum,
+                caption = loremIpsum.take(80),
             ),
         )
 }

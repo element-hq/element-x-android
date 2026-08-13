@@ -152,4 +152,18 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
+    UserStatus(
+        key = "feature.user_status",
+        title = "User status",
+        description = "Allow users to set a status (e.g. In a meeting, Away) visible to their contacts.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    MessageSearch(
+        key = "feature.message_search",
+        title = "Message search",
+        description = "Index messages locally so they can be searched. Only messages received while enabled are indexed.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
 }

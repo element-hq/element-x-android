@@ -44,6 +44,8 @@ import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
+import io.element.android.libraries.matrix.ui.media.contentvalidation.EventContentValidationCache
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopContentValidationState
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractor
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
@@ -54,6 +56,7 @@ class EventItemFactory(
     private val fileSizeFormatter: FileSizeFormatter,
     private val fileExtensionExtractor: FileExtensionExtractor,
     private val dateFormatter: DateFormatter,
+    private val contentValidationCache: EventContentValidationCache,
 ) {
     fun create(
         currentTimelineItem: MatrixTimelineItem.Event,
@@ -67,6 +70,8 @@ class EventItemFactory(
             timestamp = currentTimelineItem.event.timestamp,
             mode = DateFormatterMode.Full,
         )
+        val validationState = currentTimelineItem.eventId?.let { contentValidationCache[it] }
+            ?: NoopContentValidationState()
         return when (val content = event.content) {
             is CallNotifyContent,
             is FailedToParseMessageLikeContent,
@@ -116,6 +121,8 @@ class EventItemFactory(
                                         ),
                                         mediaSource = c.source,
                                         thumbnailSource = c.info?.thumbnailSource,
+                                        blurHash = c.info?.blurhash,
+                                        validationState = validationState,
                                     )
                                 }
                                 is GalleryItemType.Video -> {
@@ -136,6 +143,8 @@ class EventItemFactory(
                                         ),
                                         mediaSource = c.source,
                                         thumbnailSource = c.info?.thumbnailSource,
+                                        blurHash = c.info?.blurhash,
+                                        validationState = validationState,
                                     )
                                 }
                                 is GalleryItemType.Audio -> {
@@ -154,6 +163,7 @@ class EventItemFactory(
                                             dateSentFull = dateSentFull,
                                         ),
                                         mediaSource = c.source,
+                                        validationState = validationState,
                                     )
                                 }
                                 is GalleryItemType.File -> {
@@ -172,6 +182,7 @@ class EventItemFactory(
                                             dateSentFull = dateSentFull,
                                         ),
                                         mediaSource = c.source,
+                                        validationState = validationState,
                                     )
                                 }
                                 is GalleryItemType.Other -> null
@@ -198,6 +209,7 @@ class EventItemFactory(
                             duration = null,
                         ),
                         mediaSource = type.source,
+                        validationState = validationState,
                     ))
                     is FileMessageType -> listOf(MediaItem.File(
                         id = currentTimelineItem.uniqueId,
@@ -219,6 +231,7 @@ class EventItemFactory(
                             duration = null,
                         ),
                         mediaSource = type.source,
+                        validationState = validationState,
                         // TODO We may want to add a thumbnailSource and set it to type.info?.thumbnailSource
                     ))
                     is ImageMessageType -> listOf(MediaItem.Image(
@@ -242,6 +255,8 @@ class EventItemFactory(
                         ),
                         mediaSource = type.source,
                         thumbnailSource = type.info?.thumbnailSource,
+                        blurHash = type.info?.blurhash,
+                        validationState = validationState,
                     ))
                     is StickerMessageType -> listOf(MediaItem.Image(
                         id = currentTimelineItem.uniqueId,
@@ -264,6 +279,8 @@ class EventItemFactory(
                         ),
                         mediaSource = type.source,
                         thumbnailSource = type.info?.thumbnailSource,
+                        blurHash = type.info?.blurhash,
+                        validationState = validationState,
                     ))
                     is VideoMessageType -> listOf(MediaItem.Video(
                         id = currentTimelineItem.uniqueId,
@@ -286,6 +303,8 @@ class EventItemFactory(
                         ),
                         mediaSource = type.source,
                         thumbnailSource = type.info?.thumbnailSource,
+                        blurHash = type.info?.blurhash,
+                        validationState = validationState,
                     ))
                     is VoiceMessageType -> listOf(MediaItem.Voice(
                         id = currentTimelineItem.uniqueId,
@@ -307,6 +326,7 @@ class EventItemFactory(
                             duration = type.info?.duration?.inWholeMilliseconds?.toHumanReadableDuration(),
                         ),
                         mediaSource = type.source,
+                        validationState = validationState,
                     ))
                 }
             }

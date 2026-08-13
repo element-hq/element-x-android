@@ -10,6 +10,8 @@
 
 package io.element.android.libraries.textcomposer.impl.components.markdown
 
+import android.view.KeyCharacterMap
+import android.view.KeyEvent
 import android.widget.EditText
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.AndroidComposeUiTest
@@ -32,12 +34,51 @@ import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.SuggestionType
 import io.element.android.libraries.textcomposer.model.aMarkdownTextEditorState
+import io.element.android.tests.testutils.EnsureCalledOnce
 import io.element.android.tests.testutils.EnsureCalledOnceWithParam
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
 
 class MarkdownTextInputTest : RobolectricTest() {
+    @Test
+    fun `pressing enter on a physical keyboard sends the message`() = runAndroidComposeUiTest {
+        val state = aMarkdownTextEditorState(initialText = "Hello", initialFocus = true)
+        val onSendMessage = EnsureCalledOnce()
+        setMarkdownTextInput(state = state, onSendMessage = onSendMessage)
+        val editor = activity!!.findEditor()
+        editor.pressEnter()
+        awaitIdle()
+        onSendMessage.assertSuccess()
+        assertThat(editor.editableText.toString()).isEqualTo("Hello")
+    }
+
+    @Test
+    fun `pressing shift enter on a physical keyboard inserts a new line`() = runAndroidComposeUiTest {
+        val state = aMarkdownTextEditorState(initialText = "Hello", initialFocus = true)
+        var sendCount = 0
+        setMarkdownTextInput(state = state, onSendMessage = { sendCount++ })
+        val editor = activity!!.findEditor()
+        editor.setSelection(editor.editableText.length)
+        editor.pressEnter(metaState = KeyEvent.META_SHIFT_ON)
+        awaitIdle()
+        assertThat(sendCount).isEqualTo(0)
+        assertThat(editor.editableText.toString()).isEqualTo("Hello\n")
+    }
+
+    @Test
+    fun `pressing enter on the soft keyboard does not send the message`() = runAndroidComposeUiTest {
+        val state = aMarkdownTextEditorState(initialText = "Hello", initialFocus = true)
+        var sendCount = 0
+        setMarkdownTextInput(state = state, onSendMessage = { sendCount++ })
+        val editor = activity!!.findEditor()
+        editor.setSelection(editor.editableText.length)
+        editor.pressEnter(deviceId = KeyCharacterMap.VIRTUAL_KEYBOARD)
+        awaitIdle()
+        assertThat(sendCount).isEqualTo(0)
+        assertThat(editor.editableText.toString()).isEqualTo("Hello\n")
+    }
+
     @Test
     fun `when user types onTyping is triggered with value 'true'`() = runAndroidComposeUiTest {
         val state = aMarkdownTextEditorState(initialFocus = true)
@@ -150,6 +191,7 @@ class MarkdownTextInputTest : RobolectricTest() {
         state: MarkdownTextEditorState = aMarkdownTextEditorState(),
         onTyping: (Boolean) -> Unit = {},
         onSuggestionReceived: (Suggestion?) -> Unit = {},
+        onSendMessage: (() -> Unit)? = null,
     ) {
         setContent {
             val style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.hasFocus)
@@ -161,11 +203,36 @@ class MarkdownTextInputTest : RobolectricTest() {
                 onReceiveSuggestion = onSuggestionReceived,
                 richTextEditorStyle = style,
                 onSelectRichContent = null,
+                onSendMessage = onSendMessage,
+            )
+        }
+    }
+
+    private fun EditText.pressEnter(
+        metaState: Int = 0,
+        deviceId: Int = PHYSICAL_KEYBOARD_DEVICE_ID,
+    ) {
+        listOf(KeyEvent.ACTION_DOWN, KeyEvent.ACTION_UP).forEach { action ->
+            dispatchKeyEvent(
+                KeyEvent(
+                    0L,
+                    0L,
+                    action,
+                    KeyEvent.KEYCODE_ENTER,
+                    0,
+                    metaState,
+                    deviceId,
+                    0,
+                )
             )
         }
     }
 
     private fun ComponentActivity.findEditor(): EditText {
         return window.decorView.findViewWithTag(TestTags.plainTextEditor.value)
+    }
+
+    private companion object {
+        const val PHYSICAL_KEYBOARD_DEVICE_ID = 1
     }
 }

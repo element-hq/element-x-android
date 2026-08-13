@@ -7,15 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"Chiffré par un appareil inconnu ou supprimé."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Chiffré par un appareil non vérifié par son propriétaire."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Chiffré par un utilisateur non vérifié."</string>
-  <string name="emoji_picker_category_activity">"Activités"</string>
-  <string name="emoji_picker_category_flags">"Drapeaux"</string>
-  <string name="emoji_picker_category_foods">"Nourriture et boissons"</string>
-  <string name="emoji_picker_category_nature">"Animaux et nature"</string>
-  <string name="emoji_picker_category_objects">"Objets"</string>
-  <string name="emoji_picker_category_people">"Émoticônes et personnes"</string>
-  <string name="emoji_picker_category_places">"Voyages &amp; lieux"</string>
-  <string name="emoji_picker_category_recent">"Emojis récents"</string>
-  <string name="emoji_picker_category_symbols">"Symboles"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"Retourner l’image horizontalement"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Retournée horizontalement"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Originale"</string>

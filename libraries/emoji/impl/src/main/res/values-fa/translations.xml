@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"فعّالیت‌ها"</string>
+  <string name="emoji_picker_category_flags">"پرچم‌ها"</string>
+  <string name="emoji_picker_category_foods">"غذا و نوشیدنی"</string>
+  <string name="emoji_picker_category_nature">"حیوانات و طبعیت"</string>
+  <string name="emoji_picker_category_objects">"اشیا"</string>
+  <string name="emoji_picker_category_people">"شکلک‌ها و افراد"</string>
+  <string name="emoji_picker_category_places">"سفر و مکان‌ها"</string>
+  <string name="emoji_picker_category_recent">"شکلک‌های اخیر"</string>
+  <string name="emoji_picker_category_symbols">"نمادها"</string>
+  <string name="emoji_picker_search_placeholder">"حست‌وجوی شکلک‌ها"</string>
+</resources>

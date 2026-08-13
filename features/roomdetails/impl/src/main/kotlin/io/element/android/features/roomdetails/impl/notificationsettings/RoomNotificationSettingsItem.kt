@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
-import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
@@ -36,7 +35,7 @@ fun roomNotificationSettingsItems(): ImmutableList<RoomNotificationSettingsItem>
                 )
                 RoomNotificationMode.MUTE -> RoomNotificationSettingsItem(
                     mode = it,
-                    title = stringResource(CommonStrings.common_mute),
+                    title = stringResource(R.string.screen_room_notification_settings_mode_mute),
                 )
             }
         }
