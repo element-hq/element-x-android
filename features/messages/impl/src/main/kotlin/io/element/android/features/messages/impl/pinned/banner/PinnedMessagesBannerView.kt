@@ -124,11 +124,11 @@ private fun PinnedMessagesBannerRow(
                     state.eventSink(PinnedMessagesBannerEvent.MoveToNextPinned)
                 }
             }
+            .padding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal).asPaddingValues())
             .semantics {
                 role = Role.Button
                 contentDescription = bannerContentDescription
             },
-            .padding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal).asPaddingValues()),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Spacer(modifier = Modifier.width(26.dp))
