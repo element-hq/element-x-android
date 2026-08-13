@@ -191,7 +191,7 @@ class MarkdownTextInputTest : RobolectricTest() {
         state: MarkdownTextEditorState = aMarkdownTextEditorState(),
         onTyping: (Boolean) -> Unit = {},
         onSuggestionReceived: (Suggestion?) -> Unit = {},
-        onSendMessage: (() -> Unit)? = null,
+        onSendMessage: (() -> Unit) = {},
     ) {
         setContent {
             val style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.hasFocus)
