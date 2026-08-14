@@ -54,6 +54,8 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
 import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
+import io.element.android.libraries.emoji.api.picker.EmojiPickerRenderer
+import io.element.android.libraries.emoji.api.picker.NoOpEmojiPickerRenderer
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -70,6 +72,7 @@ fun PinnedMessagesListView(
     onUserDataClick: (MatrixUser) -> Unit,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
+    emojiPickerRenderer: EmojiPickerRenderer,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -93,6 +96,7 @@ fun PinnedMessagesListView(
                 onLinkClick = onLinkClick,
                 onLinkLongClick = onLinkLongClick,
                 onErrorDismiss = onBackClick,
+                emojiPickerRenderer = emojiPickerRenderer,
                 modifier = Modifier
                     .padding(padding)
                     .consumeWindowInsets(padding),
@@ -125,6 +129,7 @@ private fun PinnedMessagesListContent(
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
     onErrorDismiss: () -> Unit,
+    emojiPickerRenderer: EmojiPickerRenderer,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier.fillMaxSize()) {
@@ -145,6 +150,7 @@ private fun PinnedMessagesListContent(
                 onUserDataClick = onUserDataClick,
                 onLinkClick = onLinkClick,
                 onLinkLongClick = onLinkLongClick,
+                emojiPickerRenderer = emojiPickerRenderer,
             )
             PinnedMessagesListState.Loading -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -184,6 +190,7 @@ private fun PinnedMessagesListLoaded(
     onUserDataClick: (MatrixUser) -> Unit,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
+    emojiPickerRenderer: EmojiPickerRenderer,
     modifier: Modifier = Modifier,
 ) {
     fun onActionSelected(timelineItemAction: TimelineItemAction, event: TimelineItem.Event) {
@@ -295,7 +302,8 @@ private fun PinnedMessagesListLoaded(
         state = state.customReactionState,
         onSelectEmoji = { eventOrTransactionId, emoji ->
             state.eventSink(PinnedMessagesListEvent.ToggleReaction(emoji.unicode, eventOrTransactionId))
-        }
+        },
+        emojiPickerRenderer = emojiPickerRenderer,
     )
     ReactionSummaryView(state = state.reactionSummaryState)
 }
@@ -347,5 +355,6 @@ internal fun PinnedMessagesListViewPreview(@PreviewParameter(PinnedMessagesListS
             onUserDataClick = {},
             onLinkClick = {},
             onLinkLongClick = {},
+            emojiPickerRenderer = NoOpEmojiPickerRenderer,
         )
     }
