@@ -34,7 +34,6 @@ fun LoginModeView(
     onLearnMoreClick: () -> Unit,
     onOAuthDetails: (OAuthDetails) -> Unit,
     onNeedLoginPassword: () -> Unit,
-    onCreateAccountContinue: (url: String) -> Unit
 ) {
     val context = LocalContext.current
     when (loginMode) {
@@ -120,7 +119,6 @@ fun LoginModeView(
             when (val loginModeData = loginMode.data) {
                 is LoginMode.OAuth -> onOAuthDetails(loginModeData.oAuthDetails)
                 LoginMode.PasswordLogin -> onNeedLoginPassword()
-                is LoginMode.AccountCreation -> onCreateAccountContinue(loginModeData.url)
             }
             // Also clear the data, to let the next screen be able to go back
             onClearError()
@@ -139,7 +137,6 @@ internal fun LoginModeViewPreview(@PreviewParameter(LoginModeViewErrorProvider::
             onLearnMoreClick = {},
             onOAuthDetails = {},
             onNeedLoginPassword = {},
-            onCreateAccountContinue = {}
         )
     }
 }

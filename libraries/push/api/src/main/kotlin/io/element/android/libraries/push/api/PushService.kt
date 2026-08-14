@@ -16,9 +16,14 @@ import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Entry point for push notification setup: choosing a push provider, registering a pusher with the homeserver, and inspecting the push history.
+ */
 interface PushService {
     /**
      * Return the current push provider, or null if none.
+     *
+     * @param sessionId the session to read the provider of.
      */
     suspend fun getCurrentPushProvider(sessionId: SessionId): PushProvider?
 
@@ -31,6 +36,10 @@ interface PushService {
      * Will unregister any previous pusher and register a new one with the provided [PushProvider].
      *
      * The method has effect only if the [PushProvider] is different than the current one.
+     *
+     * @param matrixClient the session to register the pusher for.
+     * @param pushProvider the provider to switch to.
+     * @param distributor the distributor of that provider to use, which matters for providers such as UnifiedPush.
      */
     suspend fun registerWith(
         matrixClient: MatrixClient,
@@ -42,6 +51,8 @@ interface PushService {
      * Ensure that the pusher with the current push provider and distributor is registered.
      * If there is no current config, the default push provider with the default distributor will be used.
      * Error can be [PusherRegistrationFailure].
+     *
+     * @param matrixClient the session to ensure the pusher of.
      */
     suspend fun ensurePusherIsRegistered(
         matrixClient: MatrixClient,
@@ -50,17 +61,35 @@ interface PushService {
     /**
      * Store the given push provider as the current one, but do not register.
      * To be used when there is no distributor available.
+     *
+     * @param sessionId the session to store the provider for.
+     * @param pushProvider the provider to remember.
      */
     suspend fun selectPushProvider(
         sessionId: SessionId,
         pushProvider: PushProvider,
     )
 
+    /**
+     * Whether the user has asked not to be warned about pusher registration failures for this session.
+     *
+     * @param sessionId the session to read the preference of.
+     */
     fun ignoreRegistrationError(sessionId: SessionId): Flow<Boolean>
+
+    /**
+     * Remembers whether pusher registration failures should be reported to the user for this session.
+     *
+     * @param sessionId the session to store the preference for.
+     * @param ignore true to stop warning the user about registration failures.
+     */
     suspend fun setIgnoreRegistrationError(sessionId: SessionId, ignore: Boolean)
 
     /**
+     * Asks the homeserver to send a test push, so the user can check that the whole chain works.
      * Return false in case of early error.
+     *
+     * @param sessionId the session to test the push setup of.
      */
     suspend fun testPush(sessionId: SessionId): Boolean
 
@@ -86,6 +115,8 @@ interface PushService {
 
     /**
      * Notify the user that the service is un-registered.
+     *
+     * @param userId the user whose push service is no longer registered.
      */
     suspend fun onServiceUnregistered(userId: UserId)
 }

@@ -16,7 +16,7 @@ import org.junit.Test
 
 class VersionFormatterTest {
     @Test
-    fun `version formatter should return simplified version for main branch`() = runTest {
+    fun `version formatter should return formatted version`() = runTest {
         val sut = DefaultVersionFormatter(
             stringProvider = FakeStringProvider(defaultResult = VERSION),
             buildMeta = aBuildMeta(
@@ -28,21 +28,7 @@ class VersionFormatterTest {
         assertThat(sut.get()).isEqualTo("${VERSION}versionName, 123")
     }
 
-    @Test
-    fun `version formatter should return simplified version for other branch`() = runTest {
-        val sut = DefaultVersionFormatter(
-            stringProvider = FakeStringProvider(defaultResult = VERSION),
-            buildMeta = aBuildMeta(
-                versionName = "versionName",
-                versionCode = 123,
-                gitBranchName = "branch",
-                gitRevision = "1234567890",
-            )
-        )
-        assertThat(sut.get()).isEqualTo("${VERSION}versionName, 123\nbranch (1234567890)")
-    }
-
     companion object {
-        const val VERSION = "version"
+        const val VERSION = "version: "
     }
 }

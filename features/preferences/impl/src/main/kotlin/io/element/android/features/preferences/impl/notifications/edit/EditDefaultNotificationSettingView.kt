@@ -88,7 +88,7 @@ fun EditDefaultNotificationSettingView(
                         null -> ""
                     }
                     ListItem(
-                        headlineContent = {
+                        content = {
                             val roomName = summary.name
                             Text(
                                 text = roomName ?: stringResource(id = CommonStrings.common_no_room_name),

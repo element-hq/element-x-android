@@ -71,14 +71,17 @@ class DefaultVoiceRecorder(
     override val state: StateFlow<VoiceRecorderState> = _state
 
     @RequiresPermission(Manifest.permission.RECORD_AUDIO)
-    override suspend fun startRecord() {
+    override suspend fun startRecord() = lock.withLock {
+        if (recordingJob != null) {
+            Timber.w("Voice recorder is already recording, ignoring this start")
+            return@withLock
+        }
+
         Timber.i("Voice recorder started recording")
         outputFile = fileManager.createFile()
             .also(encoder::init)
 
-        lock.withLock {
-            levels.clear()
-        }
+        levels.clear()
 
         val audioRecorder = audioReaderFactory.create(config, dispatchers).also { audioReader = it }
 

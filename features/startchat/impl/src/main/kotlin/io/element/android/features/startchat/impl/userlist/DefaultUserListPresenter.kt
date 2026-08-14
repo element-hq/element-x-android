@@ -67,19 +67,19 @@ class DefaultUserListPresenter(
         val selectedUsers by userListDataStore.selectedUsers.collectAsState(emptyList())
         val queryState = rememberTextFieldState()
         var searchResults: SearchBarResultState<ImmutableList<UserSearchResult>> by remember {
-            mutableStateOf(SearchBarResultState.Initial())
+            mutableStateOf(SearchBarResultState.Initial)
         }
         var showSearchLoader by remember { mutableStateOf(false) }
 
         val searchQuery = queryState.text.toString()
         LaunchedEffect(searchQuery) {
-            searchResults = SearchBarResultState.Initial()
+            searchResults = SearchBarResultState.Initial
             showSearchLoader = false
             userRepository.search(searchQuery).onEach { state ->
                 showSearchLoader = state.isSearching
                 searchResults = when {
-                    state.results.isEmpty() && state.isSearching -> SearchBarResultState.Initial()
-                    state.results.isEmpty() && !state.isSearching -> SearchBarResultState.NoResultsFound()
+                    state.results.isEmpty() && state.isSearching -> SearchBarResultState.Initial
+                    state.results.isEmpty() && !state.isSearching -> SearchBarResultState.NoResultsFound
                     else -> SearchBarResultState.Results(state.results.toImmutableList())
                 }
             }.launchIn(this)

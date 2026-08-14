@@ -7,4 +7,5 @@
 
 <resources>
     <string name="screen_room_details_message_retention_title">Message retention</string>
+    <string name="screen_room_notification_settings_mode_mute">Mute</string>
 </resources>

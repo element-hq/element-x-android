@@ -11,14 +11,12 @@ package io.element.android.libraries.troubleshoot.impl.history
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -50,6 +48,7 @@ import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.push.api.history.PushHistoryItem
 import io.element.android.libraries.troubleshoot.impl.R
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -68,7 +67,7 @@ fun PushHistoryView(
             .fillMaxSize()
             .systemBarsPadding()
             .imePadding(),
-        contentWindowInsets = WindowInsets.statusBars,
+        contentWindowInsets = scaffoldScrollableContentInsets,
         topBar = {
             TopAppBar(
                 navigationIcon = {
@@ -157,7 +156,7 @@ private fun PushHistoryContent(
         modifier = modifier.fillMaxWidth()
     ) {
         ListItem(
-            headlineContent = { Text("Total number of received push") },
+            content = { Text("Total number of received push") },
             trailingContent = ListItemContent.Text(state.pushCounter.toString()),
         )
         LazyColumn(

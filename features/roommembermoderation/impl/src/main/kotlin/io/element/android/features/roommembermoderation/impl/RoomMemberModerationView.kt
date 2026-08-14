@@ -18,11 +18,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -56,6 +56,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.getBestName
+import io.element.android.libraries.matrix.ui.model.toText
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
@@ -221,9 +222,12 @@ private fun RoomMemberActionsBottomSheet(
     onDismiss: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val bottomSheetState = rememberBottomSheetState(
+        initialValue = SheetValue.Hidden,
+        enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+    )
     ModalBottomSheet(
-        modifier = Modifier.systemBarsPadding(),
+        modifier = Modifier.statusBarsPadding(),
         sheetState = bottomSheetState,
         onDismissRequest = {
             coroutineScope.launch {
@@ -260,9 +264,23 @@ private fun RoomMemberActionsBottomSheet(
                 overflow = TextOverflow.Ellipsis,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+                    .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
                     .fillMaxWidth()
             )
+            val userStatus = user.displayedStatus?.toText()
+            if (userStatus != null) {
+                Text(
+                    text = userStatus,
+                    style = ElementTheme.typography.fontBodyLgMedium,
+                    maxLines = 1,
+                    color = ElementTheme.colors.textSecondary,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
+                        .fillMaxWidth()
+                )
+            }
             // Show user ID only if it's different from the display name
             if (bestName != user.userId.value) {
                 Text(
@@ -283,7 +301,7 @@ private fun RoomMemberActionsBottomSheet(
                 when (val action = actionState.action) {
                     is ModerationAction.DisplayProfile -> {
                         ListItem(
-                            headlineContent = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_member_user_info)) },
+                            content = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_member_user_info)) },
                             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.UserProfile())),
                             onClick = {
                                 coroutineScope.launch {
@@ -296,7 +314,7 @@ private fun RoomMemberActionsBottomSheet(
                     }
                     is ModerationAction.KickUser -> {
                         ListItem(
-                            headlineContent = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_remove)) },
+                            content = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_remove)) },
                             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Close())),
                             style = ListItemStyle.Destructive,
                             onClick = {
@@ -310,7 +328,7 @@ private fun RoomMemberActionsBottomSheet(
                     }
                     is ModerationAction.BanUser -> {
                         ListItem(
-                            headlineContent = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_ban)) },
+                            content = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_ban)) },
                             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block())),
                             style = ListItemStyle.Destructive,
                             onClick = {
@@ -324,7 +342,7 @@ private fun RoomMemberActionsBottomSheet(
                     }
                     is ModerationAction.UnbanUser -> {
                         ListItem(
-                            headlineContent = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_unban)) },
+                            content = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_unban)) },
                             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Restart())),
                             style = ListItemStyle.Destructive,
                             onClick = {

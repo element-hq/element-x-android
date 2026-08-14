@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2026 Element Creations Ltd.
+  ~
+  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+  ~ Please see LICENSE files in the repository root for full details.
+  -->
+
+<resources>
+    <!-- Body of the notification shown to users who can act on a knock (MSC4506 knock push rule). -->
+    <string name="notification_knock_request_body">"Requested to join"</string>
+</resources>

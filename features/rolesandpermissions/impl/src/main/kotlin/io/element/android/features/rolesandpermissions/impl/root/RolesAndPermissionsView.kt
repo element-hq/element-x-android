@@ -12,7 +12,8 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -61,7 +62,7 @@ fun RolesAndPermissionsView(
             stringResource(R.string.screen_room_roles_and_permissions_admins)
         }
         ListItem(
-            headlineContent = { Text(adminsTitle) },
+            content = { Text(adminsTitle) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Admin())),
             trailingContent = state.adminCount?.let { adminCount ->
                 ListItemContent.Text("$adminCount")
@@ -69,7 +70,7 @@ fun RolesAndPermissionsView(
             onClick = { rolesAndPermissionsNavigator.openAdminList() },
         )
         ListItem(
-            headlineContent = { Text(stringResource(R.string.screen_room_roles_and_permissions_moderators)) },
+            content = { Text(stringResource(R.string.screen_room_roles_and_permissions_moderators)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ChatProblem())),
             trailingContent = state.moderatorCount?.let { moderationCount ->
                 ListItemContent.Text("$moderationCount")
@@ -78,20 +79,20 @@ fun RolesAndPermissionsView(
         )
         if (state.canSelfDemote) {
             ListItem(
-                headlineContent = { Text(stringResource(R.string.screen_room_roles_and_permissions_change_my_role)) },
+                content = { Text(stringResource(R.string.screen_room_roles_and_permissions_change_my_role)) },
                 onClick = { state.eventSink(RolesAndPermissionsEvents.ChangeOwnRole) },
                 leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Edit()))
             )
         }
         HorizontalDivider()
         ListItem(
-            headlineContent = { Text(stringResource(R.string.screen_room_roles_and_permissions_permissions_header)) },
+            content = { Text(stringResource(R.string.screen_room_roles_and_permissions_permissions_header)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Settings())),
             onClick = { rolesAndPermissionsNavigator.openEditPermissions() },
         )
         HorizontalDivider()
         ListItem(
-            headlineContent = { Text(stringResource(R.string.screen_room_roles_and_permissions_reset)) },
+            content = { Text(stringResource(R.string.screen_room_roles_and_permissions_reset)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Delete())),
             onClick = { state.eventSink(RolesAndPermissionsEvents.ResetPermissions) },
             style = ListItemStyle.Destructive,
@@ -141,7 +142,10 @@ private fun ChangeOwnRoleBottomSheet(
     eventSink: (RolesAndPermissionsEvents) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val sheetState = rememberBottomSheetState(
+        initialValue = SheetValue.Hidden,
+        enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+    )
     fun dismiss() {
         sheetState.hide(coroutineScope) {
             eventSink(RolesAndPermissionsEvents.CancelPendingAction)
@@ -169,7 +173,7 @@ private fun ChangeOwnRoleBottomSheet(
         )
         for (demoteAction in availableDemoteActions) {
             ListItem(
-                headlineContent = { Text(stringResource(demoteAction.titleRes)) },
+                content = { Text(stringResource(demoteAction.titleRes)) },
                 onClick = {
                     sheetState.hide(coroutineScope) {
                         eventSink(RolesAndPermissionsEvents.DemoteSelfTo(demoteAction.role))
@@ -179,7 +183,7 @@ private fun ChangeOwnRoleBottomSheet(
             )
         }
         ListItem(
-            headlineContent = { Text(stringResource(CommonStrings.action_cancel)) },
+            content = { Text(stringResource(CommonStrings.action_cancel)) },
             onClick = ::dismiss,
         )
     }

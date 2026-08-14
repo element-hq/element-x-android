@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_unified_push_description">"اطمینان از در دسترس بودن توزیعگرهای ارسال یکپارچه."</string>
+  <string name="troubleshoot_notifications_test_unified_push_failure">"هیچ توزیعگر ارسال یکپارچه‌ای پیدا نشد."</string>
+  <string name="troubleshoot_notifications_test_unified_push_title">"بررسی ارسال یکپارچه"</string>
+</resources>

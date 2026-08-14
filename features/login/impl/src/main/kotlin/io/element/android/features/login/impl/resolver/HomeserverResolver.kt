@@ -14,6 +14,9 @@ import io.element.android.libraries.core.coroutine.parallelMap
 import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.core.uri.isValidUrl
 import io.element.android.libraries.matrix.api.auth.HomeServerLoginCompatibilityChecker
+import io.element.android.libraries.matrix.api.core.MatrixPatterns
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionAdvisor
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -28,24 +31,34 @@ import java.util.Collections
 class HomeserverResolver(
     private val dispatchers: CoroutineDispatchers,
     private val homeServerLoginCompatibilityChecker: HomeServerLoginCompatibilityChecker,
+    private val localNetworkPermissionAdvisor: LocalNetworkPermissionAdvisor,
 ) {
     fun resolve(userInput: String): Flow<List<HomeserverData>> = flow {
         val flowContext = currentCoroutineContext()
         val trimmedUserInput = userInput.trim()
-        if (trimmedUserInput.length < 4) return@flow
-        val candidateBase = trimmedUserInput.ensureProtocol().removeSuffix("/")
+        val searchTerm = when {
+            MatrixPatterns.isUserId(trimmedUserInput) -> UserId(trimmedUserInput).domainName.orEmpty()
+            trimmedUserInput.startsWith("@") -> return@flow
+            else -> trimmedUserInput
+        }
+        if (searchTerm.length < 4) return@flow
+        val candidateBase = searchTerm.ensureProtocol().removeSuffix("/")
         val list = getUrlCandidates(candidateBase)
         val currentList = Collections.synchronizedList(mutableListOf<HomeserverData>())
         // Run all the requests in parallel
         withContext(dispatchers.io) {
             list.parallelMap { url ->
-                val isValid = homeServerLoginCompatibilityChecker.check(url)
-                    .onFailure { Timber.w(it, "Failed to check compatibility with homeserver $url") }
-                    .getOrNull()
-                    ?: return@parallelMap
+                // Skip the compatibility probe if we'd need ACCESS_LOCAL_NETWORK first —
+                // otherwise the probe hangs on the TCP timeout for ~30s. Emit the URL as a
+                // candidate directly; the actual sign-in flow triggers the permission prompt.
+                val shouldRequestPermissionOrIsValid = localNetworkPermissionAdvisor.shouldRequestPermissionFor(url) ||
+                    homeServerLoginCompatibilityChecker.check(url)
+                        .onFailure { Timber.w(it, "Failed to check compatibility with homeserver $url") }
+                        .getOrNull()
+                        ?: return@parallelMap
 
                 // Emit the list as soon as possible
-                if (isValid) {
+                if (shouldRequestPermissionOrIsValid) {
                     currentList.add(HomeserverData(homeserverUrl = url))
                     withContext(flowContext) {
                         emit(currentList.toList())

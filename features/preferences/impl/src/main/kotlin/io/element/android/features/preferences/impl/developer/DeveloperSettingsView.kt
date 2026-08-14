@@ -15,12 +15,16 @@ import androidx.compose.foundation.progressSemantics
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.preferences.impl.R
 import io.element.android.features.preferences.impl.developer.appsettings.AppDeveloperSettingsView
+import io.element.android.libraries.androidutils.system.copyToClipboard
 import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
@@ -29,6 +33,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.mhssn.colorpicker.ColorPickerDialog
 import io.mhssn.colorpicker.ColorPickerType
@@ -41,9 +46,19 @@ fun DeveloperSettingsView(
     onPushHistoryClick: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
+    extraOptions: @Composable () -> Unit = {},
 ) {
     if (state.showLoader) {
         ProgressDialog()
+    }
+    if (state.markAllRoomsAsReadAction.isConfirming()) {
+        ConfirmationDialog(
+            title = "Are you sure you want to mark all the rooms as read?",
+            content = "",
+            submitText = stringResource(CommonStrings.action_yes),
+            onSubmitClick = { state.eventSink(DeveloperSettingsEvents.MarkAllRoomsAsRead(needsConfirmation = false)) },
+            onDismiss = { state.eventSink(DeveloperSettingsEvents.DismissMarkAllRoomsAsReadConfirmation) },
+        )
     }
     BackHandler(
         enabled = !state.showLoader,
@@ -63,12 +78,14 @@ fun DeveloperSettingsView(
             state = state.appDeveloperSettingsState,
             onOpenShowkase = onOpenShowkase,
         )
+        SessionCategory(deviceId = state.deviceId)
         NotificationCategory(onPushHistoryClick)
+        MarkAllRoomsAsReadCategory(state)
 
         if (state.isEnterpriseBuild) {
             PreferenceCategory(title = "Theme") {
                 ListItem(
-                    headlineContent = {
+                    content = {
                         Text("Change brand color")
                     },
                     onClick = {
@@ -76,7 +93,7 @@ fun DeveloperSettingsView(
                     }
                 )
                 ListItem(
-                    headlineContent = {
+                    content = {
                         Text("Reset brand color")
                     },
                     onClick = {
@@ -85,10 +102,13 @@ fun DeveloperSettingsView(
                 )
             }
         }
+
+        extraOptions()
+
         val cache = state.cacheSize
         PreferenceCategory(title = "Cache") {
             ListItem(
-                headlineContent = { Text("Database sizes") },
+                content = { Text("Database sizes") },
                 supportingContent = {
                     if (state.databaseSizes.isLoading()) {
                         Text("Computing...")
@@ -107,7 +127,7 @@ fun DeveloperSettingsView(
                 }
             )
             ListItem(
-                headlineContent = {
+                content = {
                     Text("Vacuum stores")
                 },
                 onClick = {
@@ -115,7 +135,7 @@ fun DeveloperSettingsView(
                 }
             )
             ListItem(
-                headlineContent = {
+                content = {
                     Text("Clear cache")
                 },
                 trailingContent = if (state.cacheSize.isLoading() || state.clearCacheAction.isLoading()) {
@@ -153,10 +173,54 @@ fun DeveloperSettingsView(
 }
 
 @Composable
+private fun SessionCategory(deviceId: DeviceId) {
+    PreferenceCategory(title = "Session") {
+        val toastMessage = stringResource(CommonStrings.common_copied_to_clipboard)
+        val context = LocalContext.current
+        ListItem(
+            content = { Text("DeviceId") },
+            supportingContent = { Text(text = deviceId.value) },
+            onClick = {
+                context.copyToClipboard(
+                    text = deviceId.value,
+                    toastMessage = toastMessage,
+                )
+            }
+        )
+    }
+}
+
+@Composable
+private fun MarkAllRoomsAsReadCategory(state: DeveloperSettingsState) {
+    PreferenceCategory(title = "Room list") {
+        ListItem(
+            content = {
+                Text("Mark all rooms as read")
+            },
+            supportingContent = {
+                Text(
+                    text = """
+                        This will send a private read receipt and a read marker in every room you are part of. 
+                        It's a long running operation that might get rate limited.
+                        It will run in the background but the app must be alive for it to finish.
+                        """.trimIndent(),
+                    style = ElementTheme.typography.fontBodySmRegular,
+                    color = ElementTheme.colors.textSecondary,
+                )
+            },
+            enabled = !state.showLoader,
+            onClick = {
+                state.eventSink(DeveloperSettingsEvents.MarkAllRoomsAsRead(needsConfirmation = true))
+            },
+        )
+    }
+}
+
+@Composable
 private fun NotificationCategory(onPushHistoryClick: () -> Unit) {
     PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_title)) {
         ListItem(
-            headlineContent = {
+            content = {
                 Text(stringResource(R.string.troubleshoot_notifications_entry_point_push_history_title))
             },
             onClick = onPushHistoryClick,

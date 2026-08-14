@@ -9,9 +9,8 @@ package io.element.android.features.login.impl.screens.classic.loginwithclassic
 
 import android.graphics.Bitmap
 import androidx.compose.runtime.Stable
-import io.element.android.features.login.impl.login.LoginMode
+import io.element.android.features.login.impl.login.LoginModeState
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.UserId
 
 @Stable
@@ -21,6 +20,6 @@ data class LoginWithClassicState(
     val displayName: String?,
     val avatar: Bitmap?,
     val loginWithClassicAction: AsyncAction<Unit>,
-    val loginMode: AsyncData<LoginMode>,
+    val loginModeState: LoginModeState,
     val eventSink: (LoginWithClassicEvent) -> Unit,
 )

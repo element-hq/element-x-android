@@ -13,6 +13,7 @@ import io.element.android.features.preferences.impl.developer.appsettings.AppDev
 import io.element.android.features.preferences.impl.developer.appsettings.anAppDeveloperSettingsState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.matrix.api.core.DeviceId
 import kotlinx.collections.immutable.persistentMapOf
 
 open class DeveloperSettingsStateProvider : PreviewParameterProvider<DeveloperSettingsState> {
@@ -37,15 +38,19 @@ open class DeveloperSettingsStateProvider : PreviewParameterProvider<DeveloperSe
 fun aDeveloperSettingsState(
     appDeveloperSettingsState: AppDeveloperSettingsState = anAppDeveloperSettingsState(),
     clearCacheAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    markAllRoomsAsReadAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     isEnterpriseBuild: Boolean = false,
     showColorPicker: Boolean = false,
+    deviceId: DeviceId = DeviceId("ILAKNDNASDLK"),
     eventSink: (DeveloperSettingsEvents) -> Unit = {},
 ) = DeveloperSettingsState(
     appDeveloperSettingsState = appDeveloperSettingsState,
     cacheSize = AsyncData.Success("1.2 MB"),
     databaseSizes = AsyncData.Success(persistentMapOf("state_store" to "1.2MB")),
     clearCacheAction = clearCacheAction,
+    markAllRoomsAsReadAction = markAllRoomsAsReadAction,
     isEnterpriseBuild = isEnterpriseBuild,
     showColorPicker = showColorPicker,
+    deviceId = deviceId,
     eventSink = eventSink,
 )
