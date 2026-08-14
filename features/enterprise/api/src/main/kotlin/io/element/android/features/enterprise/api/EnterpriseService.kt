@@ -99,11 +99,6 @@ interface EnterpriseService {
     fun getNoisyNotificationChannelId(sessionId: SessionId): String?
 
     /**
-     * Gets the overridden Element Well-Known data if it has been set, or null if not set.
-     */
-    fun overriddenElementWellKnown(): ElementWellKnown?
-
-    /**
      * Gets the Element Server Suite (ESS) config endpoint URL for the given domain.
      * Returns `null` when this build does not read its configuration from an ESS deployment.
      *
