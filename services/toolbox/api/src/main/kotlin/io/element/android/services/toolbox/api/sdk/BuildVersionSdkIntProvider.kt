@@ -20,8 +20,9 @@ interface BuildVersionSdkIntProvider {
     fun get(): Int
 
     /**
-     * Checks the if the current OS version is equal or greater than [version].
+     * Checks if the current OS version is equal or greater than [version], and run [result] if so.
      *
+     * @param T the type of the result to compute.
      * @param version the minimum API level required.
      * @param result computed and returned only when the requirement is met.
      * @return A `non-null` result if true, `null` otherwise.
