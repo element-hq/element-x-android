@@ -53,13 +53,18 @@ class LinkNewDesktopHandler(
         timerJob = null
     }
 
-    fun createNewHandler() {
-        resetJobs()
-        handler = matrixClient.createLinkDesktopHandler().getOrNull()
+    fun startTimer() {
+        timerJob?.cancel()
         timerJob = sessionScope.launch {
             delay(2.minutes)
             linkDesktopStepFlow.emit(LinkDesktopStep.Error(ErrorType.Expired("Scanning QrCode took too long.")))
         }
+    }
+
+    fun createNewHandler() {
+        currentJob?.cancel()
+        currentJob = null
+        handler = matrixClient.createLinkDesktopHandler().getOrNull()
     }
 
     fun reset() {
