@@ -8,6 +8,10 @@
 
 package io.element.android.features.location.api.internal
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import io.element.android.libraries.wellknown.api.MapTilerConfig
+
 /**
  * Builds an URL for a 3rd party service provider static maps API.
  */
@@ -25,4 +29,13 @@ interface StaticMapUrlBuilder {
     fun isServiceAvailable(): Boolean
 }
 
-fun StaticMapUrlBuilder(): StaticMapUrlBuilder = MapTilerStaticMapUrlBuilder()
+@Composable
+fun rememberStaticMapBuilder(mapTilerConfig: MapTilerConfig?): StaticMapUrlBuilder {
+    return remember(mapTilerConfig) {
+        if (mapTilerConfig != null) {
+            MapTilerStaticMapUrlBuilder(mapTilerConfig)
+        } else {
+            MapTilerStaticMapUrlBuilder()
+        }
+    }
+}

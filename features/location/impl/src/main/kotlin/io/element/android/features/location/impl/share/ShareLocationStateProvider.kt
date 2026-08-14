@@ -15,6 +15,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.wellknown.api.MapTilerConfig
 import kotlinx.collections.immutable.persistentListOf
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
@@ -70,13 +71,13 @@ class ShareLocationStateProvider : PreviewParameterProvider<ShareLocationState> 
                 canShareLiveLocation = true,
             ),
             aShareLocationState(
-                customMapStyleUrl = AsyncData.Loading(),
+                customMapTilerConfig = AsyncData.Loading(),
             ),
         )
 }
 
 fun aShareLocationState(
-    customMapStyleUrl: AsyncData<String?> = AsyncData.Success(null),
+    customMapTilerConfig: AsyncData<MapTilerConfig?> = AsyncData.Success(null),
     currentUser: MatrixUser = MatrixUser(UserId("@user:matrix.org")),
     dialogState: ShareLocationState.Dialog = ShareLocationState.Dialog.None,
     trackUserPosition: Boolean = false,
@@ -87,7 +88,7 @@ fun aShareLocationState(
     eventSink: (ShareLocationEvent) -> Unit = {},
 ): ShareLocationState {
     return ShareLocationState(
-        customMapStyleUrl = customMapStyleUrl,
+        customMapTilerConfig = customMapTilerConfig,
         currentUser = currentUser,
         dialogState = dialogState,
         trackUserLocation = trackUserPosition,
@@ -95,6 +96,6 @@ fun aShareLocationState(
         canShareLiveLocation = canShareLiveLocation,
         appName = appName,
         startLiveLocationAction = startLiveLocationAction,
-        eventSink = eventSink
+        eventSink = eventSink,
     )
 }

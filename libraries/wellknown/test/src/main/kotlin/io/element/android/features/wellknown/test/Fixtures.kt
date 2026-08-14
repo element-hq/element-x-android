@@ -10,6 +10,7 @@ package io.element.android.features.wellknown.test
 
 import io.element.android.libraries.wellknown.api.CustomRecoveryPassphrase
 import io.element.android.libraries.wellknown.api.ElementWellKnown
+import io.element.android.libraries.wellknown.api.MapTilerConfig
 
 fun anElementWellKnown(
     registrationHelperUrl: String? = null,
@@ -21,6 +22,7 @@ fun anElementWellKnown(
     customRecoveryPassphrase: CustomRecoveryPassphrase? = null,
     contentScannerUrl: String? = null,
     forceDisableE2EE: Boolean? = null,
+    mapTilerConfig: MapTilerConfig? = null,
 ) = ElementWellKnown(
     registrationHelperUrl = registrationHelperUrl,
     enforceElementPro = enforceElementPro,
@@ -31,10 +33,23 @@ fun anElementWellKnown(
     customRecoveryPassphrase = customRecoveryPassphrase,
     contentScannerUrl = contentScannerUrl,
     forceDisableE2EE = forceDisableE2EE,
+    mapTilerConfig = mapTilerConfig,
 )
 
 fun aCustomRecoveryPassphrase(
     minCharacterCount: Int = 8,
 ) = CustomRecoveryPassphrase(
     minCharacterCount = minCharacterCount,
+)
+
+fun aMapTilerConfig(
+    apiKey: String = "test_api_key",
+    baseUrl: String? = null,
+    lightStyleId: String? = null,
+    darkStyleId: String? = null,
+) = MapTilerConfig(
+    apiKey = apiKey,
+    baseUrl = baseUrl,
+    lightStyleId = lightStyleId,
+    darkStyleId = darkStyleId,
 )

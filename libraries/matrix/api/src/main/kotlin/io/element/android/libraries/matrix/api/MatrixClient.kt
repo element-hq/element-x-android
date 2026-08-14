@@ -256,11 +256,6 @@ interface MatrixClient : UrlContentFetcher {
     suspend fun performDatabaseVacuum(): Result<Unit>
 
     /**
-     * Returns the URL of the map style configured on the server, if any.
-     */
-    suspend fun getMapStyleUrl(): Result<String?>
-
-    /**
      * Resets the cached client `well-known` config by the SDK.
      */
     suspend fun resetWellKnownConfig(): Result<Unit>
