@@ -10,6 +10,11 @@ package io.element.android.libraries.matrix.api.search
 import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.coroutines.CoroutineScope
 
+/**
+ * Creates the message search cursors backed by the local search index.
+ *
+ * Only usable when the session was built with the index attached, see [io.element.android.libraries.matrix.api.MatrixClient.isMessageSearchAvailable].
+ */
 interface MessageSearchService {
     /**
      * Create a new, independent search cursor.

@@ -9,8 +9,17 @@ package io.element.android.libraries.matrix.api.linknewdevice
 
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Drives the linking of a new device that is able to scan a QR code, by showing one on this already signed in device.
+ *
+ * Progress is reported entirely through [linkMobileStep]; there is one handler per attempt, obtained from
+ * [io.element.android.libraries.matrix.api.MatrixClient.createLinkMobileHandler].
+ */
 interface LinkMobileHandler {
+    /** Each step of the flow, from generating the QR code to syncing the secrets to the new device. */
     val linkMobileStep: Flow<LinkMobileStep>
+
+    /** Runs the whole flow, suspending until it finishes or fails; the outcome is reported through [linkMobileStep]. */
     suspend fun start()
 }
 

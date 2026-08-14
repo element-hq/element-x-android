@@ -10,4 +10,9 @@ package io.element.android.features.messages.api.pinned
 
 import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 
+/**
+ * A [TimelineProvider] whose active timeline holds the pinned events of the room, rather than its live events.
+ *
+ * It exists as its own type so that it can be injected where only the pinned timeline is wanted.
+ */
 interface PinnedEventsTimelineProvider : TimelineProvider

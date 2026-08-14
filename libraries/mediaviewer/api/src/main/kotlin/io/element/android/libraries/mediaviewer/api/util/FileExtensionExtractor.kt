@@ -8,6 +8,13 @@
 
 package io.element.android.libraries.mediaviewer.api.util
 
+/**
+ * Extracts the extension of a file name, so it can be shown to the user and used to pick an icon.
+ */
 interface FileExtensionExtractor {
+    /**
+     * @param name the file name to inspect.
+     * @return the extension without its dot, or an empty string when the name has none.
+     */
     fun extractFromName(name: String): String
 }
