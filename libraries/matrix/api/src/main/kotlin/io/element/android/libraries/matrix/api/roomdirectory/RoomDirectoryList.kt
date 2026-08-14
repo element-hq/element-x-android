@@ -10,12 +10,21 @@ package io.element.android.libraries.matrix.api.roomdirectory
 
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * A single, stateful search in the public room directory: one query at a time, with paginated results.
+ *
+ * Obtain an instance from [RoomDirectoryService.createRoomDirectoryList].
+ */
 interface RoomDirectoryList {
     /**
      * Starts a filtered search for the server.
      * If the filter is not provided it will search for all the rooms. You can specify a batch_size to control the number of rooms to fetch per request.
      * If the via_server is not provided it will search in the current homeserver by default.
      * This method will clear the current search results and start a new one
+     *
+     * @param filter the text to look for, or `null` to list every room.
+     * @param batchSize the number of rooms to fetch per request.
+     * @param viaServerName the server whose directory to search, or `null` to use the user's own homeserver.
      */
     suspend fun filter(filter: String?, batchSize: Int, viaServerName: String?): Result<Unit>
 

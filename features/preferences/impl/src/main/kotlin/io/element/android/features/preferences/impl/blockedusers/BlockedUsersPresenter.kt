@@ -18,14 +18,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
+import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
+import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -34,6 +39,8 @@ import kotlinx.coroutines.launch
 class BlockedUsersPresenter(
     private val matrixClient: MatrixClient,
     private val featureFlagService: FeatureFlagService,
+    private val clipboardHelper: ClipboardHelper,
+    private val snackbarDispatcher: SnackbarDispatcher,
 ) : Presenter<BlockedUsersState> {
     @Composable
     override fun present(): BlockedUsersState {
@@ -65,11 +72,17 @@ class BlockedUsersPresenter(
             }
         }
 
+        val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
+
         fun handleEvent(event: BlockedUsersEvents) {
             when (event) {
                 is BlockedUsersEvents.Unblock -> {
                     pendingUserToUnblock = event.userId
                     unblockUserAction.value = AsyncAction.ConfirmingNoParams
+                }
+                is BlockedUsersEvents.CopyToClipboard -> {
+                    clipboardHelper.copyPlainText(event.userId.value)
+                    snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_copied_to_clipboard))
                 }
                 BlockedUsersEvents.ConfirmUnblock -> {
                     pendingUserToUnblock?.let {
@@ -86,6 +99,7 @@ class BlockedUsersPresenter(
         return BlockedUsersState(
             blockedUsers = ignoredMatrixUser.toImmutableList(),
             unblockUserAction = unblockUserAction.value,
+            snackbarMessage = snackbarMessage,
             eventSink = ::handleEvent,
         )
     }

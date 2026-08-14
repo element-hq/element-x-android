@@ -11,6 +11,7 @@ package io.element.android.features.location.impl.share
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bumble.appyx.core.modality.BuildContext
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.enterprise.test.remoteconfig.FakeRemoteEnterpriseConfigProvider
 import io.element.android.features.location.impl.common.FakeUserLocationStateFactory
 import io.element.android.features.location.impl.common.actions.FakeLocationActions
 import io.element.android.features.location.impl.common.permissions.FakePermissionsPresenter
@@ -58,6 +59,7 @@ class DefaultShareLocationEntryPointTest {
                             sessionId = room.sessionId,
                         ),
                         userLocationStateFactory = FakeUserLocationStateFactory(),
+                        remoteEnterpriseConfigProvider = FakeRemoteEnterpriseConfigProvider(),
                     )
                 },
                 analyticsService = FakeAnalyticsService(),

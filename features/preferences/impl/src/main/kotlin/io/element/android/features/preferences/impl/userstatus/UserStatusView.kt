@@ -130,7 +130,7 @@ private fun EmptyStatusRow(
     modifier: Modifier = Modifier,
 ) {
     ListItem(
-        headlineContent = {
+        content = {
             Text(
                 text = stringResource(R.string.screen_settings_user_status_placeholder),
                 modifier = Modifier.padding(vertical = 16.dp),
@@ -153,7 +153,7 @@ private fun CurrentStatusRow(
         is DisplayedStatus.InCall -> "🎧" to stringResource(CommonStrings.common_on_a_call)
     }
     ListItem(
-        headlineContent = { Text(text = text, modifier = Modifier.padding(vertical = 16.dp)) },
+        content = { Text(text = text, modifier = Modifier.padding(vertical = 16.dp)) },
         leadingContent = ListItemContent.Custom { EmojiText(emoji) },
         trailingContent = ListItemContent.Custom({
             IconButton(
@@ -209,7 +209,7 @@ private fun UserStatusPickerBottomSheet(
             val predefinedUserStatus = UserStatus(emoji = predefined.emoji, text = label)
             val isSelected = currentRawStatus == predefinedUserStatus
             ListItem(
-                headlineContent = { Text(text = label) },
+                content = { Text(text = label) },
                 leadingContent = ListItemContent.Custom { EmojiText(predefined.emoji) },
                 trailingContent = if (isSelected) {
                     ListItemContent.Icon(IconSource.Vector(CompoundIcons.Check()), tintColor = ElementTheme.colors.iconAccentPrimary)
@@ -224,7 +224,7 @@ private fun UserStatusPickerBottomSheet(
             )
         }
         ListItem(
-            headlineContent = {
+            content = {
                 Text(text = stringResource(R.string.screen_settings_user_status_custom))
             },
             leadingContent = ListItemContent.Custom { EmojiText("✏️") },
@@ -261,7 +261,7 @@ private fun CustomStatusInputRow(
     val focusRequester = remember { FocusRequester() }
     LaunchedEffect(Unit) { focusRequester.requestFocus() }
     ListItem(
-        headlineContent = {
+        content = {
             TextField(
                 modifier = Modifier.focusRequester(focusRequester),
                 state = textFieldState,

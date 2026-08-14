@@ -61,6 +61,7 @@ import io.element.android.libraries.matrix.test.A_CAPTION
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_REPLY
 import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.libraries.matrix.test.A_TRANSACTION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
@@ -148,9 +149,22 @@ class MessageComposerPresenterTest : RobolectricTest() {
             assertThat(initialState.isFullScreen).isFalse()
             assertThat(initialState.textEditorState.messageHtml()).isEqualTo("")
             assertThat(initialState.mode).isEqualTo(MessageComposerMode.Normal)
+            assertThat(initialState.isInThreadTimeline).isFalse()
             assertThat(initialState.showAttachmentSourcePicker).isFalse()
             assertThat(initialState.canShareLocation).isTrue()
             assertThat(initialState.slashCommandAction).isEqualTo(AsyncAction.Uninitialized)
+        }
+    }
+
+    @Test
+    fun `present - when a threadRoot is provided, isInThreadTimeline is true`() = runTest {
+        val presenter = createPresenter(
+            threadRoot = A_THREAD_ID,
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            assertThat(initialState.mode).isEqualTo(MessageComposerMode.Normal)
+            assertThat(initialState.isInThreadTimeline).isTrue()
         }
     }
 

@@ -19,6 +19,10 @@
     <item quantity="one">"You have %d new message."</item>
     <item quantity="other">"You have %d new messages."</item>
   </plurals>
+  <plurals name="notification_gallery_body">
+    <item quantity="one">"Shared %1$d attachment"</item>
+    <item quantity="other">"Shared %1$d attachments"</item>
+  </plurals>
   <string name="notification_incoming_audio_call">"📞 Incoming call"</string>
   <string name="notification_incoming_call">"📹 Incoming call"</string>
   <string name="notification_inline_reply_failed">"** Failed to send - please open room"</string>

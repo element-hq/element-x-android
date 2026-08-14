@@ -21,7 +21,6 @@ import io.element.android.features.login.impl.screens.classic.loginwithclassic.L
 import io.element.android.features.login.impl.screens.confirmaccountprovider.ConfirmAccountProviderPresenter
 import io.element.android.features.login.impl.screens.createaccount.AccountCreationNotSupported
 import io.element.android.features.login.impl.screens.onboarding.OnBoardingPresenter
-import io.element.android.features.login.impl.web.WebClientUrlForAuthenticationRetriever
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
@@ -40,7 +39,6 @@ import io.element.android.libraries.oauth.api.OAuthActionFlow
 class LoginModePresenter(
     private val oAuthActionFlow: OAuthActionFlow,
     private val authenticationService: MatrixAuthenticationService,
-    private val webClientUrlForAuthenticationRetriever: WebClientUrlForAuthenticationRetriever,
     private val localNetworkPermissionGate: LocalNetworkPermissionGate,
     private val saveAccountProviderToHistory: SaveAccountProviderToHistory,
 ) : Presenter<LoginModeState> {
@@ -92,11 +90,9 @@ class LoginModePresenter(
                             authenticationService.getOAuthUrl(prompt = oAuthPrompt, loginHint = request.loginHint).getOrThrow()
                         )
                     }
-                    request.isAccountCreation -> LoginMode.AccountCreation(
-                        webClientUrlForAuthenticationRetriever.retrieve(request.homeserverUrl)
-                    )
+                    request.isAccountCreation -> throw AccountCreationNotSupported()
                     matrixHomeServerDetails.supportsPasswordLogin -> LoginMode.PasswordLogin
-                    else -> error("Unsupported login flow")
+                    else -> error("Unsupported authentication flow")
                 }
             }.getOrThrow()
         }.runCatchingUpdatingState(

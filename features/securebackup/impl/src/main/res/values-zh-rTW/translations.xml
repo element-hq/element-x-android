@@ -20,6 +20,26 @@
   <string name="screen_create_new_recovery_key_list_item_4">"按照說明建立新復原金鑰"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"將您的新復原金鑰儲存在密碼管理程式或加密筆記中"</string>
   <string name="screen_create_new_recovery_key_title">"使用其他裝置重設您帳號的加密"</string>
+  <string name="screen_custom_recovery_key_confirm_error_mismatch">"您輸入的復原金鑰不符合"</string>
+  <string name="screen_custom_recovery_key_confirm_submit">"完成設定"</string>
+  <string name="screen_custom_recovery_key_confirm_subtitle">"請再次輸入您的復原金鑰。"</string>
+  <string name="screen_custom_recovery_key_confirm_title">"確認您的復原金鑰"</string>
+  <plurals name="screen_custom_recovery_key_input_notice">
+    <item quantity="other">"最少 %1$d 個字元。請勿使用您的帳號密碼。"</item>
+  </plurals>
+  <string name="screen_custom_recovery_key_input_strength">"強度"</string>
+  <string name="screen_custom_recovery_key_input_strength_a11y">"密碼短語強度：%1$s"</string>
+  <string name="screen_custom_recovery_key_input_strength_moderate">"中等"</string>
+  <string name="screen_custom_recovery_key_input_strength_strong">"強"</string>
+  <string name="screen_custom_recovery_key_input_strength_very_strong">"非常強"</string>
+  <string name="screen_custom_recovery_key_input_strength_very_weak">"非常弱"</string>
+  <string name="screen_custom_recovery_key_input_strength_weak">"弱"</string>
+  <string name="screen_custom_recovery_key_input_subtitle">"請輸入您可以記住的復原金鑰。"</string>
+  <string name="screen_custom_recovery_key_input_title">"輸入復原金鑰"</string>
+  <string name="screen_custom_recovery_key_loading_a11y">"正在載入復原金鑰需求"</string>
+  <string name="screen_custom_recovery_key_success_notice">"若要變更復原金鑰，請前往「設定」→「加密」→「備份」"</string>
+  <string name="screen_custom_recovery_key_success_subtitle">"若您無法存取您所有的裝置，可以使用復原金鑰來確認新裝置或還原加密聊天紀錄。"</string>
+  <string name="screen_custom_recovery_key_success_title">"您的備份已設定完成"</string>
   <string name="screen_encryption_reset_action_continue_reset">"繼續重設"</string>
   <string name="screen_encryption_reset_bullet_1">"您的帳號詳細資訊、聯絡人、偏好設定與聊天清單都會保留"</string>
   <string name="screen_encryption_reset_bullet_2">"您將會遺失僅儲存在伺服器上的任何訊息歷史紀錄"</string>

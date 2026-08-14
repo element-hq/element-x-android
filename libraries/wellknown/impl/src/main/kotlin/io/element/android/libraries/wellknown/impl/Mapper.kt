@@ -11,6 +11,7 @@ package io.element.android.libraries.wellknown.impl
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.wellknown.api.CustomRecoveryPassphrase
 import io.element.android.libraries.wellknown.api.ElementWellKnown
+import io.element.android.libraries.wellknown.api.MapTilerConfig
 import timber.log.Timber
 
 private val loggerTag = LoggerTag("Wellknown")
@@ -32,6 +33,14 @@ fun InternalElementWellKnown.map() = ElementWellKnown(
     customRecoveryPassphrase = customRecoveryPassphrase?.toPublic(),
     contentScannerUrl = contentScannerUrl,
     forceDisableE2EE = forceDisableE2EE,
+    mapTilerConfig = mapTilerConfig?.let {
+        MapTilerConfig(
+            apiKey = it.apiKey,
+            lightStyleId = it.lightStyleId,
+            darkStyleId = it.darkStyleId,
+            baseUrl = it.baseUrl,
+        )
+    }
 )
 
 private fun InternalCustomRecoveryPassphrase.toPublic(): CustomRecoveryPassphrase {

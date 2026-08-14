@@ -73,7 +73,6 @@ fun ConfirmAccountProviderView(
     onOAuthDetails: (OAuthDetails) -> Unit,
     onNeedLoginPassword: () -> Unit,
     onLearnMoreClick: () -> Unit,
-    onCreateAccountContinue: (url: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val eventSink = state.eventSink
@@ -207,7 +206,6 @@ fun ConfirmAccountProviderView(
         onLearnMoreClick = onLearnMoreClick,
         onOAuthDetails = onOAuthDetails,
         onNeedLoginPassword = onNeedLoginPassword,
-        onCreateAccountContinue = onCreateAccountContinue,
     )
 
     LocalNetworkPermissionDialogView(
@@ -253,7 +251,6 @@ internal fun ConfirmAccountProviderViewPreview(
         state = state,
         onOAuthDetails = {},
         onNeedLoginPassword = {},
-        onCreateAccountContinue = {},
         onLearnMoreClick = {},
     )
 }

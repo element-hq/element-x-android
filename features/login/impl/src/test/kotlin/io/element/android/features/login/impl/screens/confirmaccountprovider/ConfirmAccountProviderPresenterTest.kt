@@ -20,12 +20,11 @@ import io.element.android.features.login.impl.localnetwork.LocalNetworkPermissio
 import io.element.android.features.login.impl.login.LoginMode
 import io.element.android.features.login.impl.screens.createaccount.AccountCreationNotSupported
 import io.element.android.features.login.impl.screens.onboarding.createLoginModePresenter
-import io.element.android.features.login.impl.web.FakeWebClientUrlForAuthenticationRetriever
-import io.element.android.features.login.impl.web.WebClientUrlForAuthenticationRetriever
-import io.element.android.features.wellknown.test.FakeWellknownRetriever
+import io.element.android.features.wellknown.test.FakeWellknownRetrieverFactory
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
+import io.element.android.libraries.matrix.test.FakeTemporaryMatrixClientFactory
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.auth.aMatrixHomeServerDetails
 import io.element.android.libraries.oauth.api.OAuthAction
@@ -264,7 +263,7 @@ class ConfirmAccountProviderPresenterTest {
     }
 
     @Test
-    fun `present - confirm account creation without oidc and without url generates an error`() = runTest {
+    fun `present - confirm account creation without oidc generates an error`() = runTest {
         val authenticationService = FakeMatrixAuthenticationService(
             setHomeserverResult = {
                 Result.success(aMatrixHomeServerDetails(supportsPasswordLogin = true))
@@ -273,9 +272,6 @@ class ConfirmAccountProviderPresenterTest {
         val presenter = createConfirmAccountProviderPresenter(
             params = ConfirmAccountProviderPresenter.Params(isAccountCreation = true),
             matrixAuthenticationService = authenticationService,
-            webClientUrlForAuthenticationRetriever = FakeWebClientUrlForAuthenticationRetriever {
-                throw AccountCreationNotSupported()
-            },
         )
         presenter.test {
             val initialState = awaitItem()
@@ -307,50 +303,6 @@ class ConfirmAccountProviderPresenterTest {
             initialState.eventSink(ConfirmAccountProviderEvents.Continue(AuthenticationConfig.MATRIX_ORG_URL))
             val submittedState = awaitLoginMode { it is AsyncData.Success }
             assertThat(submittedState.loginModeState.loginMode.dataOrNull()).isInstanceOf(LoginMode.OAuth::class.java)
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `present - confirm account creation with OAuth and url continues with OAuth`() = runTest {
-        val aUrl = "aUrl"
-        val authenticationService = FakeMatrixAuthenticationService(
-            setHomeserverResult = {
-                Result.success(aMatrixHomeServerDetails(supportsOAuthLogin = true))
-            },
-        )
-        val presenter = createConfirmAccountProviderPresenter(
-            params = ConfirmAccountProviderPresenter.Params(isAccountCreation = true),
-            matrixAuthenticationService = authenticationService,
-            webClientUrlForAuthenticationRetriever = FakeWebClientUrlForAuthenticationRetriever { aUrl },
-        )
-        presenter.test {
-            val initialState = awaitItem()
-            initialState.eventSink(ConfirmAccountProviderEvents.Continue(AuthenticationConfig.MATRIX_ORG_URL))
-            val submittedState = awaitLoginMode { it is AsyncData.Success }
-            assertThat(submittedState.loginModeState.loginMode.dataOrNull()).isInstanceOf(LoginMode.OAuth::class.java)
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `present - confirm account creation without OAuth and with url continuing with url`() = runTest {
-        val aUrl = "aUrl"
-        val authenticationService = FakeMatrixAuthenticationService(
-            setHomeserverResult = {
-                Result.success(aMatrixHomeServerDetails(supportsPasswordLogin = true))
-            },
-        )
-        val presenter = createConfirmAccountProviderPresenter(
-            params = ConfirmAccountProviderPresenter.Params(isAccountCreation = true),
-            matrixAuthenticationService = authenticationService,
-            webClientUrlForAuthenticationRetriever = FakeWebClientUrlForAuthenticationRetriever { aUrl },
-        )
-        presenter.test {
-            val initialState = awaitItem()
-            initialState.eventSink(ConfirmAccountProviderEvents.Continue(AuthenticationConfig.MATRIX_ORG_URL))
-            val submittedState = awaitLoginMode { it is AsyncData.Success }
-            assertThat(submittedState.loginModeState.loginMode.dataOrNull()).isEqualTo(LoginMode.AccountCreation(aUrl))
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -419,7 +371,6 @@ class ConfirmAccountProviderPresenterTest {
         accountProviderDataSource: AccountProviderDataSource = anAccountProviderDataSource(),
         matrixAuthenticationService: MatrixAuthenticationService = FakeMatrixAuthenticationService(),
         defaultOAuthActionFlow: OAuthActionFlow = FakeOAuthActionFlow(),
-        webClientUrlForAuthenticationRetriever: WebClientUrlForAuthenticationRetriever = FakeWebClientUrlForAuthenticationRetriever(),
         appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
     ) = ConfirmAccountProviderPresenter(
         params = params,
@@ -428,7 +379,6 @@ class ConfirmAccountProviderPresenterTest {
         loginModePresenter = createLoginModePresenter(
             authenticationService = matrixAuthenticationService,
             oAuthActionFlow = defaultOAuthActionFlow,
-            webClientUrlForAuthenticationRetriever = webClientUrlForAuthenticationRetriever,
         ),
         changeServerPresenter = ChangeServerPresenter(
             authenticationService = matrixAuthenticationService,
@@ -437,7 +387,8 @@ class ConfirmAccountProviderPresenterTest {
                 enterpriseService = FakeEnterpriseService(
                     isAllowedToConnectToHomeserverResult = { true },
                 ),
-                wellknownRetriever = FakeWellknownRetriever(),
+                wellknownRetrieverFactory = FakeWellknownRetrieverFactory(),
+                temporaryMatrixClientFactory = FakeTemporaryMatrixClientFactory(),
             ),
             localNetworkPermissionGate = LocalNetworkPermissionGate(
                 advisor = FakeLocalNetworkPermissionAdvisor(),

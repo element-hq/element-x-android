@@ -50,6 +50,7 @@ import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.BottomSheetScaffold
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.wellknown.api.MapTilerConfig
 import org.maplibre.compose.camera.CameraState
 import org.maplibre.compose.camera.rememberCameraState
 import org.maplibre.compose.map.MapOptions
@@ -66,7 +67,7 @@ import kotlin.math.roundToInt
  * - Updating camera position padding based on sheet height
  * - Rendering the MaplibreMap with proper ornament positioning
  *
- * @param customMapStyleUrl Optional custom style URL for the map
+ * @param customMapTilerConfig Optional custom style URL for the map
  * @param modifier Modifier for the root layout
  * @param scaffoldState State for the bottom sheet scaffold
  * @param cameraState The camera state for the map
@@ -83,7 +84,7 @@ import kotlin.math.roundToInt
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MapBottomSheetScaffold(
-    customMapStyleUrl: AsyncData<String?>,
+    customMapTilerConfig: AsyncData<MapTilerConfig?>,
     modifier: Modifier = Modifier,
     scaffoldState: BottomSheetScaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberBottomSheetState(
@@ -137,11 +138,11 @@ fun MapBottomSheetScaffold(
             val ornamentOptions = mapOptions.ornamentOptions.copy(padding = sheetPadding)
             val mapOptions = mapOptions.copy(ornamentOptions = ornamentOptions)
             Box {
-                when (customMapStyleUrl) {
+                when (customMapTilerConfig) {
                     is AsyncData.Success -> {
                         MaplibreMap(
                             options = mapOptions,
-                            baseStyle = BaseStyle.Uri(rememberTileStyleUrl(customMapStyleUrl.data)),
+                            baseStyle = BaseStyle.Uri(rememberTileStyleUrl(customMapTilerConfig.data)),
                             modifier = Modifier.fillMaxSize(),
                             cameraState = cameraState,
                             content = mapContent,
