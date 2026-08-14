@@ -13,9 +13,16 @@ import androidx.compose.ui.Modifier
 import io.element.android.emojibasebindings.Emoji
 import kotlinx.collections.immutable.ImmutableSet
 
+/**
+ * Renders the emoji picker, so that callers can embed it without depending on its implementation.
+ *
+ * See [NoOpEmojiPickerRenderer] for a renderer that draws nothing, used where the picker is disabled.
+ */
 @Immutable
 interface EmojiPickerRenderer {
     /**
+     * Draws the picker.
+     *
      * @param state opaque state produced by [EmojiPickerPresenter.present].
      * @param onSelectEmoji invoked when the user taps an emoji (including a skin-tone variant).
      * @param selectedEmojis emojis to visually mark as already selected.
