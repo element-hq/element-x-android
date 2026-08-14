@@ -12,6 +12,17 @@ package io.element.android.features.location.api.internal
  * Builds an URL for a 3rd party service provider static maps API.
  */
 interface StaticMapUrlBuilder {
+    /**
+     * Builds the URL of a map image centred on the given coordinates.
+     *
+     * @param lat latitude of the centre of the map.
+     * @param lon longitude of the centre of the map.
+     * @param zoom zoom level to render at.
+     * @param darkMode whether to request the dark map style.
+     * @param width width of the image in density independent pixels.
+     * @param height height of the image in density independent pixels.
+     * @param density screen density, used to request a matching pixel size.
+     */
     fun build(
         lat: Double,
         lon: Double,
@@ -22,6 +33,7 @@ interface StaticMapUrlBuilder {
         density: Float,
     ): String
 
+    /** Whether a map provider is configured for this build; the URLs are unusable when it is not. */
     fun isServiceAvailable(): Boolean
 }
 

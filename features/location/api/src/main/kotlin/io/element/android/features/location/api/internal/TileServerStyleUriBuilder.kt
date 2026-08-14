@@ -18,6 +18,12 @@ import io.element.android.compound.theme.ElementTheme
  * Used for rendering dynamic maps.
  */
 interface TileServerStyleUriBuilder {
+    /**
+     * Builds the style URI the map view loads its tiles from.
+     *
+     * @param customMapStyleUrl the style advertised by the homeserver, or `null` to use the one built into the app.
+     * @param darkMode whether to request the dark map style.
+     */
     fun build(
         customMapStyleUrl: String?,
         darkMode: Boolean,
