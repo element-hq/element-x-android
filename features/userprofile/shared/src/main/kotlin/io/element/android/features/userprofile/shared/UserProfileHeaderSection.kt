@@ -57,7 +57,7 @@ fun UserProfileHeaderSection(
     verificationState: UserProfileVerificationState,
     openAvatarPreview: (url: String) -> Unit,
     onUserIdClick: () -> Unit,
-    onUserNameClick: (() -> Unit)? = null,
+    onUserNameClick: () -> Unit,
     withdrawVerificationClick: () -> Unit,
     displayedStatus: DisplayedStatus?,
     modifier: Modifier = Modifier
