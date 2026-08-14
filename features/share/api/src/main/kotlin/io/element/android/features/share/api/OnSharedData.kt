@@ -11,5 +11,8 @@ package io.element.android.features.share.api
  * Post-processing to be done once a [ShareIntentData] has been consumed.
  */
 fun interface OnSharedData {
+    /**
+     * @param data the shared content that has just been handled, so any temporary copy of it can be released.
+     */
     operator fun invoke(data: ShareIntentData)
 }
