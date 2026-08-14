@@ -12,7 +12,6 @@ import androidx.compose.ui.graphics.Color
 import io.element.android.compound.colors.SemanticColorsLightDark
 import io.element.android.libraries.matrix.api.UrlContentFetcher
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.wellknown.api.ElementWellKnown
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -38,12 +37,14 @@ interface EnterpriseService {
     suspend fun tweakMasUrl(url: String, homeserver: String, urlContentFetcher: UrlContentFetcher): String
 
     /**
-     * The homeservers the user is allowed to sign in to; an empty list, or one containing [ANY_ACCOUNT_PROVIDER], means no restriction.
+     * Returns the list of homeservers the user is allowed to sign in to.
+     *
+     * If the list is empty or contains the special value [ANY_ACCOUNT_PROVIDER], the user is allowed to sign in to any homeserver.
      */
     fun homeserverWhitelist(): List<String>
 
     /**
-     * Whether the user is allowed to sign in to a given homeserver, according to [defaultHomeserverList].
+     * Whether the user is allowed to sign in to a given homeserver, according to [homeserverWhitelist].
      *
      * @param homeserverUrl the server the user is trying to use.
      */
