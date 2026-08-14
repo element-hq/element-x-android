@@ -12,13 +12,12 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.appconfig.OnBoardingConfig
 import io.element.android.features.enterprise.api.EnterpriseService
+import io.element.android.features.enterprise.api.IsEnterpriseBuild
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.localnetwork.LocalNetworkPermissionGate
 import io.element.android.features.login.impl.login.LoginModePresenter
-import io.element.android.features.wellknown.test.FakeWellknownRetriever
-import io.element.android.features.wellknown.test.FakeWellknownRetrieverFactory
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
@@ -29,7 +28,6 @@ import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL_2
 import io.element.android.libraries.matrix.test.A_LOGIN_HINT
-import io.element.android.libraries.matrix.test.FakeTemporaryMatrixClientFactory
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.oauth.api.OAuthActionFlow
@@ -41,7 +39,6 @@ import io.element.android.libraries.permissions.test.FakePermissionsPresenterFac
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
-import io.element.android.libraries.wellknown.api.WellknownRetriever
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.flow.Flow
@@ -186,6 +183,7 @@ class OnBoardingPresenterTest {
             enterpriseService = FakeEnterpriseService(
                 defaultHomeserverListResult = { listOf(ACCOUNT_PROVIDER_FROM_CONFIG, EnterpriseService.ANY_ACCOUNT_PROVIDER) },
                 isAllowedToConnectToHomeserverResult = { true },
+                isElementProEnforcedResult = { false },
             ),
         )
         presenter.test {
@@ -259,6 +257,7 @@ class OnBoardingPresenterTest {
             ),
             enterpriseService = FakeEnterpriseService(
                 isAllowedToConnectToHomeserverResult = { true },
+                isElementProEnforcedResult = { false },
             ),
             loginModePresenter = createLoginModePresenter(
                 authenticationService = authenticationService,
@@ -295,7 +294,7 @@ private fun createPresenter(
     ),
     buildMeta: BuildMeta = aBuildMeta(),
     enterpriseService: EnterpriseService = FakeEnterpriseService(),
-    wellknownRetriever: WellknownRetriever = FakeWellknownRetriever(),
+    isEnterpriseBuild: IsEnterpriseBuild = { false },
     rageshakeFeatureAvailability: () -> Flow<Boolean> = { flowOf(true) },
     loginModePresenter: LoginModePresenter = createLoginModePresenter(),
     onBoardingLogoResIdProvider: OnBoardingLogoResIdProvider = OnBoardingLogoResIdProvider { null },
@@ -307,8 +306,7 @@ private fun createPresenter(
     enterpriseService = enterpriseService,
     defaultAccountProviderAccessControl = DefaultAccountProviderAccessControl(
         enterpriseService = enterpriseService,
-        wellknownRetrieverFactory = FakeWellknownRetrieverFactory(wellknownRetriever = wellknownRetriever),
-        temporaryMatrixClientFactory = FakeTemporaryMatrixClientFactory(),
+        isEnterpriseBuild = isEnterpriseBuild,
     ),
     rageshakeFeatureAvailability = rageshakeFeatureAvailability,
     loginModePresenter = loginModePresenter,
