@@ -11,6 +11,9 @@ package io.element.android.services.toolbox.api.strings
 import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 
+/**
+ * Resolves Android string resources outside of Composable and Context-aware code, so presenters stay testable.
+ */
 interface StringProvider {
     /**
      * Returns a localized string from the application's package's
@@ -39,6 +42,10 @@ interface StringProvider {
      * Returns a localized formatted string from the application's package's
      * default string table, substituting the format arguments as defined in
      * [java.util.Formatter] and [java.lang.String.format], based on the given quantity.
+     *
+     * @param resId Resource id for the plurals.
+     * @param quantity The quantity used to select the plural form.
+     * @param formatArgs The format arguments that will be used for substitution.
      */
     fun getQuantityString(@PluralsRes resId: Int, quantity: Int, vararg formatArgs: Any?): String
 
