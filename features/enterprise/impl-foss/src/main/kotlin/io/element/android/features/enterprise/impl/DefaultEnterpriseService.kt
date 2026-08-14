@@ -16,7 +16,6 @@ import io.element.android.features.enterprise.api.BugReportUrl
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.libraries.matrix.api.UrlContentFetcher
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.wellknown.api.ElementWellKnown
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -26,6 +25,7 @@ class DefaultEnterpriseService : EnterpriseService {
     override suspend fun tweakMasUrl(url: String, homeserver: String, urlContentFetcher: UrlContentFetcher) = url
     override fun homeserverWhitelist(): List<String> = emptyList()
     override suspend fun isAllowedToConnectToHomeserver(homeserverUrl: String) = true
+    override suspend fun isElementProEnforced(homeserverUrl: String): Boolean = false
 
     override suspend fun overrideBrandColor(sessionId: SessionId?, brandColor: String?) = Unit
 

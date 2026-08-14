@@ -50,6 +50,13 @@ interface EnterpriseService {
     suspend fun isAllowedToConnectToHomeserver(homeserverUrl: String): Boolean
 
     /**
+     * Whether the given homeserver enforces the use of Element Pro or a derived app.
+     *
+     * @param homeserverUrl the homeserver to check.
+     */
+    suspend fun isElementProEnforced(homeserverUrl: String): Boolean
+
+    /**
      * Override the brand color.
      * @param sessionId the session to override the brand color for, or null to set the brand color to use when there is no session.
      * @param brandColor the color in hex format (#RRGGBBAA or #RRGGBB), or null to reset to default.
