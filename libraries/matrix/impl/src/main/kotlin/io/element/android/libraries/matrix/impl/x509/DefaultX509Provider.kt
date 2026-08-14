@@ -18,10 +18,9 @@ import io.element.android.libraries.matrix.api.x509.X509Provider
 /**
  * Default implementation of [X509Provider], which does nothing.
  */
-@SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultX509Provider : X509Provider {
-    override suspend fun onAppStartup(parentActivity: Activity) {
+    override suspend fun onAppStartup(activity: Activity) {
         // Nothing to do here.
     }
 
