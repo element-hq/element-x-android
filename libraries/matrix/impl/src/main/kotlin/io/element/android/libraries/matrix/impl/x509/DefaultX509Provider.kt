@@ -10,7 +10,6 @@ package io.element.android.libraries.matrix.impl.x509
 import android.app.Activity
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.x509.RawX509Signer
 import io.element.android.libraries.matrix.api.x509.RawX509Verifier
 import io.element.android.libraries.matrix.api.x509.X509Provider
