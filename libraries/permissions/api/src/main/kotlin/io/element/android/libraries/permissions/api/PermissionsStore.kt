@@ -49,6 +49,5 @@ interface PermissionsStore {
     suspend fun resetPermission(permission: String)
 
     /** Forgets every recorded permission; exposed for debugging from the developer options. */
-    // To debug
     suspend fun resetStore()
 }

@@ -31,6 +31,7 @@ interface TimelineEventFormatter {
             senderDisambiguatedDisplayName = event.senderProfile.getDisambiguatedDisplayName(event.sender),
         )
     }
+
     /**
      * @param content the event content to describe.
      * @param isOutgoing whether the event was sent by the current user, which selects the first-person wording.

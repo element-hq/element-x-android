@@ -32,8 +32,7 @@ interface SessionStore {
     /**
      * Add a new session. If other sessions exist, the new one will be set as the latest used one, and
      * the added session position will be set to a value higher than the other session positions.
-     */
-    /**
+     *
      * @param sessionData the session to store, including its tokens.
      */
     suspend fun addSession(sessionData: SessionData)

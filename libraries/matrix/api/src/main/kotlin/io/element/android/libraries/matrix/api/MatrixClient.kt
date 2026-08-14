@@ -135,6 +135,7 @@ interface MatrixClient : UrlContentFetcher {
 
     /** Scans media content before it is displayed, or `null` when no content scanner is configured for this session. */
     val contentScanner: ContentScanner?
+
     /**
      * Returns the room with the given id if the user has joined it, along with its live [Timeline].
      * A new instance is created on each call and the caller owns it, so it must be closed once no longer needed.

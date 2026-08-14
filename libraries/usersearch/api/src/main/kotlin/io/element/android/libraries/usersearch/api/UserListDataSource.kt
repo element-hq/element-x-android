@@ -17,11 +17,11 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 interface UserListDataSource {
     /**
      * Searches the user directory, returning an empty list rather than failing when the request does not succeed.
+     * TODO should probably have a flow
      *
      * @param query the text to look for in user ids and display names.
      * @param count the maximum number of results to return.
      */
-    // TODO should probably have a flow
     suspend fun search(query: String, count: Long): List<MatrixUser>
 
     /**

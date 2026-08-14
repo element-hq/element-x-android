@@ -30,6 +30,7 @@ interface PollContentStateFactory {
             content = content,
         )
     }
+
     /**
      * @param eventId the poll start event, or `null` while the poll is still a local echo.
      * @param isEditable whether the current user may still edit the poll.

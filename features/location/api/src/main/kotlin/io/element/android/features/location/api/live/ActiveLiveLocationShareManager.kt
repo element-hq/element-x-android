@@ -30,8 +30,7 @@ interface ActiveLiveLocationShareManager {
      * Starts live location sharing in the given room.
      * Calls room.startLiveLocationShare() on the SDK, registers the share,
      * and starts the foreground GPS service if not already running.
-     */
-    /**
+     *
      * @param roomId the room to start sharing the location in.
      * @param duration how long the share should last before it expires on its own.
      */
@@ -41,8 +40,7 @@ interface ActiveLiveLocationShareManager {
      * Stops live location sharing in the given room.
      * Calls room.stopLiveLocationShare() on the SDK, removes the share,
      * and stops the foreground service if no shares remain.
-     */
-    /**
+     *
      * @param roomId the room to stop sharing the location in.
      */
     suspend fun stopShare(roomId: RoomId): Result<Unit>
