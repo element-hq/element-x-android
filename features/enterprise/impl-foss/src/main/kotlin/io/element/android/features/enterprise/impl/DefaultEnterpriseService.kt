@@ -22,8 +22,6 @@ import kotlinx.coroutines.flow.flowOf
 
 @ContributesBinding(AppScope::class)
 class DefaultEnterpriseService : EnterpriseService {
-    override val isEnterpriseBuild = false
-
     override suspend fun isEnterpriseUser(sessionId: SessionId) = false
     override suspend fun tweakMasUrl(url: String, homeserver: String, urlContentFetcher: UrlContentFetcher) = url
     override fun defaultHomeserverList(): List<String> = emptyList()

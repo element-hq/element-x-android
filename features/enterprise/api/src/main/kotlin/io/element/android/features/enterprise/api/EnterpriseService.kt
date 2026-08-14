@@ -21,9 +21,6 @@ import kotlinx.coroutines.flow.Flow
  * On a standard build this reports permissive defaults, so callers do not need to branch on the build type themselves.
  */
 interface EnterpriseService {
-    /** Whether this build is an enterprise one; `false` for the public app. */
-    val isEnterpriseBuild: Boolean
-
     /**
      * Whether the given session belongs to an enterprise deployment, which can be true even on a standard build.
      *
