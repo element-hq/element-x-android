@@ -22,7 +22,7 @@ interface TileServerStyleUriBuilder {
     /**
      * Builds the style URI the map view loads its tiles from.
      *
-     * @param customMapStyleUrl the style advertised by the homeserver, or `null` to use the one built into the app.
+     * @param customMapTilerConfig the custom MapTiler configuration received from the server, or null if not available.
      * @param darkMode whether to request the dark map style.
      */
     fun build(
