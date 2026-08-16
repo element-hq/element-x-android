@@ -13,7 +13,11 @@ import extension.androidLibraryConfig
 import extension.commonDependencies
 import extension.composeLibraryConfig
 import extension.composeDependencies
+import extension.setupCompileOptions
 import extension.setupKover
+import extension.setupLintTasks
+import extension.setupSonar
+import extension.setupTests
 import org.gradle.accessors.dm.LibrariesForLibs
 
 val libs = the<LibrariesForLibs>()
@@ -37,7 +41,11 @@ kotlin {
     }
 }
 
+setupCompileOptions()
+setupTests()
 setupKover()
+setupSonar()
+setupLintTasks()
 
 dependencies {
     commonDependencies(libs)
