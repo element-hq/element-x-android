@@ -49,3 +49,10 @@ private fun ExecOperations.runCommand(cmd: String): String {
     }
     return String(outputStream.toByteArray()).trim()
 }
+
+fun Project.readLocalProperty(name: String): String? = Properties().apply {
+    try {
+        load(file("local.properties").reader())
+    } catch (ignored: IOException) {
+    }
+}.getProperty(name)
