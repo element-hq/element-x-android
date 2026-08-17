@@ -1064,8 +1064,10 @@ class TimelinePresenterTest {
         val paginateLambda = lambdaRecorder(ensureNeverCalled = true) { _: Timeline.PaginationDirection ->
             Result.success(true)
         }
+        val room = aRoomWithDetachedTimeline(paginateLambda = paginateLambda)
         val presenter = createTimelinePresenter(
-            room = aRoomWithDetachedTimeline(paginateLambda = paginateLambda),
+            room = room,
+            timeline = room.liveTimeline,
         )
         presenter.test {
             val initialState = awaitFirstItem()
@@ -1084,8 +1086,10 @@ class TimelinePresenterTest {
         val paginateLambda = lambdaRecorder { _: Timeline.PaginationDirection ->
             Result.success(true)
         }
+        val room = aRoomWithDetachedTimeline(paginateLambda = paginateLambda)
         val presenter = createTimelinePresenter(
-            room = aRoomWithDetachedTimeline(paginateLambda = paginateLambda),
+            room = room,
+            timeline = room.liveTimeline,
         )
         presenter.test {
             val initialState = awaitFirstItem()
@@ -1106,13 +1110,109 @@ class TimelinePresenterTest {
         val paginateLambda = lambdaRecorder { _: Timeline.PaginationDirection ->
             Result.success(false)
         }
+        val room = aRoomWithDetachedTimeline(paginateLambda = paginateLambda)
         val presenter = createTimelinePresenter(
-            room = aRoomWithDetachedTimeline(paginateLambda = paginateLambda),
+            room = room,
+            timeline = room.liveTimeline,
         )
         presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink.invoke(TimelineEvent.FocusOnEvent(AN_EVENT_ID))
             consumeItemsUntilPredicate { it.focusRequestState == FocusRequestState.Success(AN_EVENT_ID) }
+            initialState.eventSink.invoke(TimelineEvent.LoadMore(Timeline.PaginationDirection.BACKWARDS))
+            advanceUntilIdle()
+            assert(paginateLambda)
+                .isCalledOnce()
+                .with(value(Timeline.PaginationDirection.BACKWARDS))
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - a forward pagination while the focus request is debounced is ignored`() = runTest {
+        val paginateLambda = lambdaRecorder(ensureNeverCalled = true) { _: Timeline.PaginationDirection ->
+            Result.success(true)
+        }
+        val room = aRoomWithDetachedTimeline(paginateLambda = paginateLambda)
+        val presenter = createTimelinePresenter(
+            room = room,
+            timeline = room.liveTimeline,
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink.invoke(TimelineEvent.FocusOnEvent(AN_EVENT_ID, debounce = 1.seconds))
+            // The focus request has started and is now waiting for the debounce to elapse
+            consumeItemsUntilPredicate { it.focusRequestState is FocusRequestState.Requested }
+            initialState.eventSink.invoke(TimelineEvent.LoadMore(Timeline.PaginationDirection.FORWARDS))
+            advanceUntilIdle()
+            assert(paginateLambda).isNeverCalled()
+            assertThat(expectMostRecentItem().isLive).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - a forward pagination while the focused timeline is loading is ignored`() = runTest {
+        val paginateLambda = lambdaRecorder(ensureNeverCalled = true) { _: Timeline.PaginationDirection ->
+            Result.success(true)
+        }
+        val room = aRoomWithDetachedTimeline(paginateLambda = paginateLambda)
+        val presenter = createTimelinePresenter(
+            room = room,
+            timeline = room.liveTimeline,
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink.invoke(TimelineEvent.FocusOnEvent(AN_EVENT_ID))
+            // The focused timeline is being created, the focus request has not resolved yet
+            consumeItemsUntilPredicate { it.focusRequestState is FocusRequestState.Loading }
+            initialState.eventSink.invoke(TimelineEvent.LoadMore(Timeline.PaginationDirection.FORWARDS))
+            advanceUntilIdle()
+            assert(paginateLambda).isNeverCalled()
+            assertThat(expectMostRecentItem().isLive).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - a forward pagination after a failed focus request is performed`() = runTest {
+        val paginateLambda = lambdaRecorder { _: Timeline.PaginationDirection ->
+            Result.success(false)
+        }
+        val room = aRoomWithDetachedTimeline(
+            paginateLambda = paginateLambda,
+            createTimelineResult = { Result.failure(RuntimeException("An error")) },
+        )
+        val presenter = createTimelinePresenter(
+            room = room,
+            timeline = room.liveTimeline,
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink.invoke(TimelineEvent.FocusOnEvent(AN_EVENT_ID))
+            consumeItemsUntilPredicate { it.focusRequestState is FocusRequestState.Failure }
+            initialState.eventSink.invoke(TimelineEvent.LoadMore(Timeline.PaginationDirection.FORWARDS))
+            advanceUntilIdle()
+            assert(paginateLambda)
+                .isCalledOnce()
+                .with(value(Timeline.PaginationDirection.FORWARDS))
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - a forward pagination in a thread timeline is ignored`() = runTest {
+        val paginateLambda = lambdaRecorder { _: Timeline.PaginationDirection ->
+            Result.success(true)
+        }
+        val timeline = FakeTimeline(mode = Timeline.Mode.Thread(A_THREAD_ID)).apply {
+            this.paginateLambda = paginateLambda
+        }
+        val presenter = createTimelinePresenter(timeline = timeline)
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink.invoke(TimelineEvent.LoadMore(Timeline.PaginationDirection.FORWARDS))
+            advanceUntilIdle()
+            assert(paginateLambda).isNeverCalled()
+            // A backward pagination is still performed in a thread timeline
             initialState.eventSink.invoke(TimelineEvent.LoadMore(Timeline.PaginationDirection.BACKWARDS))
             advanceUntilIdle()
             assert(paginateLambda)
@@ -1617,27 +1717,33 @@ class TimelinePresenterTest {
 
     private fun aRoomWithDetachedTimeline(
         paginateLambda: (Timeline.PaginationDirection) -> Result<Boolean>,
+        createTimelineResult: () -> Result<Timeline> = { Result.success(aDetachedTimeline(paginateLambda)) },
     ): FakeJoinedRoom {
-        val detachedTimeline = FakeTimeline(
-            timelineItems = flowOf(
-                listOf(
-                    MatrixTimelineItem.Event(
-                        uniqueId = A_UNIQUE_ID,
-                        event = anEventTimelineItem(eventId = AN_EVENT_ID),
-                    )
-                )
-            )
-        ).apply {
-            this.paginateLambda = paginateLambda
-        }
         return FakeJoinedRoom(
-            liveTimeline = FakeTimeline(timelineItems = flowOf(emptyList())),
-            createTimelineResult = { Result.success(detachedTimeline) },
+            liveTimeline = FakeTimeline(timelineItems = flowOf(emptyList())).apply {
+                this.paginateLambda = paginateLambda
+            },
+            createTimelineResult = { createTimelineResult() },
             baseRoom = FakeBaseRoom(
                 roomPermissions = roomPermissions(),
                 threadRootIdForEventResult = { _ -> Result.success(null) },
             ),
         )
+    }
+
+    private fun aDetachedTimeline(
+        paginateLambda: (Timeline.PaginationDirection) -> Result<Boolean>,
+    ) = FakeTimeline(
+        timelineItems = flowOf(
+            listOf(
+                MatrixTimelineItem.Event(
+                    uniqueId = A_UNIQUE_ID,
+                    event = anEventTimelineItem(eventId = AN_EVENT_ID),
+                )
+            )
+        )
+    ).apply {
+        this.paginateLambda = paginateLambda
     }
 
     private fun roomPermissions(
