@@ -166,9 +166,14 @@ class TimelinePresenter(
         fun handleEvent(event: TimelineEvent) {
             when (event) {
                 is TimelineEvent.LoadMore -> {
-                    if (event.direction == Timeline.PaginationDirection.FORWARDS && timelineMode is Timeline.Mode.Thread) {
-                        // Do not paginate forwards in thread mode, as it's not supported
-                        return
+                    if (event.direction == Timeline.PaginationDirection.FORWARDS) {
+                        if (timelineMode is Timeline.Mode.Thread) {
+                            // Do not paginate forwards in thread mode, as it's not supported
+                            return
+                        }
+                        if (focusRequestState.value.isPending()) {
+                            return
+                        }
                     }
                     localScope.launch {
                         timelineController.paginate(direction = event.direction)
@@ -534,6 +539,16 @@ private fun FocusRequestState.onFocusEventRender(): FocusRequestState {
     return when (this) {
         is FocusRequestState.Success -> copy(rendered = true)
         else -> this
+    }
+}
+
+private fun FocusRequestState.isPending(): Boolean {
+    return when (this) {
+        is FocusRequestState.Requested,
+        is FocusRequestState.Loading -> true
+        is FocusRequestState.Success -> !rendered
+        FocusRequestState.None,
+        is FocusRequestState.Failure -> false
     }
 }
 
