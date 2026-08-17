@@ -169,7 +169,12 @@ class MessagesFlowNode(
         ) : NavTarget
 
         @Parcelize
-        data class AttachmentPreview(val timelineMode: Timeline.Mode, val attachments: ImmutableList<Attachment>, val inReplyToEventId: EventId?) : NavTarget
+        data class AttachmentPreview(
+            val timelineMode: Timeline.Mode,
+            val attachments: ImmutableList<Attachment>,
+            val inReplyToEventId: EventId?,
+            val caption: String?,
+        ) : NavTarget
 
         @Parcelize
         data class LocationViewer(val mode: ShowLocationMode) : NavTarget
@@ -281,12 +286,13 @@ class MessagesFlowNode(
                         )
                     }
 
-                    override fun navigateToPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?) {
+                    override fun navigateToPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?, caption: String?) {
                         backstack.push(
                             NavTarget.AttachmentPreview(
                                 attachments = attachments,
                                 timelineMode = Timeline.Mode.Live,
                                 inReplyToEventId = inReplyToEventId,
+                                caption = caption,
                             )
                         )
                     }
@@ -443,6 +449,7 @@ class MessagesFlowNode(
                     attachments = navTarget.attachments,
                     timelineMode = navTarget.timelineMode,
                     inReplyToEventId = navTarget.inReplyToEventId,
+                    caption = navTarget.caption,
                 )
                 createNode<AttachmentsPreviewNode>(buildContext, listOf(inputs))
             }
@@ -595,12 +602,13 @@ class MessagesFlowNode(
                         )
                     }
 
-                    override fun navigateToPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?) {
+                    override fun navigateToPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?, caption: String?) {
                         backstack.push(
                             NavTarget.AttachmentPreview(
                                 attachments = attachments,
                                 timelineMode = Timeline.Mode.Thread(navTarget.threadRootId),
                                 inReplyToEventId = inReplyToEventId,
+                                caption = caption,
                             )
                         )
                     }
