@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
  *
  * The list grows through explicit [paginate] calls; [destroy] must be called to release the underlying SDK resources.
  */
-interface ThreadsListService {    
+interface ThreadsListService {
     /**
      * The list of changes to the threads loaded so far, emitted whenever the SDK sends an update.
      * The underlying subscription is started on the first call and shared by later ones.
