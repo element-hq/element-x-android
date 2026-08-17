@@ -94,7 +94,7 @@ private fun RoomListModalBottomSheetContent(
             .verticalScroll(rememberScrollState())
     ) {
         ListItem(
-            headlineContent = {
+            content = {
                 Text(
                     text = contextMenu.roomName ?: stringResource(id = CommonStrings.common_no_room_name),
                     style = ElementTheme.typography.fontBodyLgMedium,
@@ -104,7 +104,7 @@ private fun RoomListModalBottomSheetContent(
         )
         if (contextMenu.hasNewContent) {
             ListItem(
-                headlineContent = {
+                content = {
                     Text(
                         text = stringResource(id = CommonStrings.action_mark_as_read),
                         style = MaterialTheme.typography.bodyLarge,
@@ -117,7 +117,7 @@ private fun RoomListModalBottomSheetContent(
             )
         } else {
             ListItem(
-                headlineContent = {
+                content = {
                     Text(
                         text = stringResource(id = R.string.screen_roomlist_mark_as_unread),
                         style = MaterialTheme.typography.bodyLarge,
@@ -135,7 +135,7 @@ private fun RoomListModalBottomSheetContent(
             CommonStrings.common_favourite to CompoundIcons.Favourite()
         }
         ListItem(
-            headlineContent = {
+            content = {
                 Text(
                     text = stringResource(id = textResId),
                     style = MaterialTheme.typography.bodyLarge,
@@ -154,7 +154,7 @@ private fun RoomListModalBottomSheetContent(
             },
         )
         ListItem(
-            headlineContent = {
+            content = {
                 Text(
                     text = stringResource(id = CommonStrings.common_settings),
                     style = MaterialTheme.typography.bodyLarge,
@@ -169,7 +169,7 @@ private fun RoomListModalBottomSheetContent(
         )
         if (canReportRoom) {
             ListItem(
-                headlineContent = {
+                content = {
                     Text(text = stringResource(CommonStrings.action_report_room))
                 },
                 modifier = Modifier.clickable { onReportRoomClick() },
@@ -182,7 +182,7 @@ private fun RoomListModalBottomSheetContent(
             )
         }
         ListItem(
-            headlineContent = {
+            content = {
                 Text(text = stringResource(CommonStrings.action_leave_room))
             },
             modifier = Modifier.clickable { onLeaveRoomClick() },

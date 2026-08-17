@@ -34,7 +34,6 @@ import io.element.android.libraries.designsystem.text.buildAnnotatedStringWithSt
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
-import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun RoomNotificationSettingsView(
@@ -118,7 +117,7 @@ private fun RoomSpecificNotificationSettingsView(
                             RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> {
                                 stringResource(id = R.string.screen_room_notification_settings_mode_mentions_and_keywords)
                             }
-                            RoomNotificationMode.MUTE -> stringResource(id = CommonStrings.common_mute)
+                            RoomNotificationMode.MUTE -> stringResource(id = R.string.screen_room_notification_settings_mode_mute)
                         }
                         val displayMentionsOnlyDisclaimer = state.displayMentionsOnlyDisclaimer &&
                             state.defaultRoomNotificationMode == RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY

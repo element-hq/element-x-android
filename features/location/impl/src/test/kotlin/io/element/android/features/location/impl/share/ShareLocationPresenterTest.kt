@@ -19,6 +19,8 @@ import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Composer
+import io.element.android.features.enterprise.api.remoteconfig.RemoteEnterpriseConfigProvider
+import io.element.android.features.enterprise.test.remoteconfig.FakeRemoteEnterpriseConfigProvider
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.impl.aPermissionsState
 import io.element.android.features.location.impl.common.FakeUserLocationStateFactory
@@ -30,6 +32,8 @@ import io.element.android.features.location.impl.common.ui.LocationConstraintsDi
 import io.element.android.features.location.impl.live.LiveLocationStore
 import io.element.android.features.location.test.FakeActiveLiveLocationShareManager
 import io.element.android.features.messages.test.FakeMessageComposerContext
+import io.element.android.features.wellknown.test.aMapTilerConfig
+import io.element.android.features.wellknown.test.anElementWellKnown
 import io.element.android.libraries.dateformatter.test.FakeDurationFormatter
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -51,6 +55,7 @@ import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermiss
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import io.element.android.libraries.preferences.test.FakePreferenceDataStoreFactory
+import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.assert
@@ -60,7 +65,6 @@ import io.element.android.tests.testutils.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -77,20 +81,18 @@ class ShareLocationPresenterTest {
     private val fakeMessageComposerContext = FakeMessageComposerContext()
     private val fakeLocationActions = FakeLocationActions()
     private val fakeBuildMeta = aBuildMeta(applicationName = "app name")
-    private val fakeMatrixClient = FakeMatrixClient(
-        sessionId = A_USER_ID,
-        getMapStyleUrlResult = { Result.success(null) },
-    )
+    private val fakeMatrixClient = FakeMatrixClient(sessionId = A_USER_ID)
 
     private val durationFormatter = FakeDurationFormatter()
 
-    private fun TestScope.createShareLocationPresenter(
+    private fun createShareLocationPresenter(
         joinedRoom: JoinedRoom = FakeJoinedRoom(),
         timelineMode: Timeline.Mode = Timeline.Mode.Live,
         locationActions: FakeLocationActions = fakeLocationActions,
         liveLocationShareManager: FakeActiveLiveLocationShareManager = FakeActiveLiveLocationShareManager(),
         liveLocationStore: LiveLocationStore = createLiveLocationStore(sessionId = joinedRoom.sessionId),
         client: FakeMatrixClient = fakeMatrixClient,
+        remoteEnterpriseConfigProvider: RemoteEnterpriseConfigProvider = FakeRemoteEnterpriseConfigProvider(),
     ): ShareLocationPresenter = ShareLocationPresenter(
         permissionsPresenterFactory = { fakePermissionsPresenter },
         room = joinedRoom,
@@ -104,6 +106,7 @@ class ShareLocationPresenterTest {
         liveLocationShareManager = liveLocationShareManager,
         liveLocationStore = liveLocationStore,
         userLocationStateFactory = FakeUserLocationStateFactory(),
+        remoteEnterpriseConfigProvider = remoteEnterpriseConfigProvider,
     )
 
     @Test
@@ -118,7 +121,7 @@ class ShareLocationPresenterTest {
         val shareLocationPresenter = createShareLocationPresenter()
         shareLocationPresenter.test {
             val state = awaitFirstItem()
-            assertThat(state.customMapStyleUrl.isLoading()).isFalse()
+            assertThat(state.customMapTilerConfig.isLoading()).isFalse()
             assertThat(state.trackUserLocation).isTrue()
             assertThat(state.dialogState).isEqualTo(ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.None))
         }
@@ -126,18 +129,20 @@ class ShareLocationPresenterTest {
 
     @Test
     fun `present - non-null customMapStyleUrl`() = runTest {
+        val mapTilerConfig = aMapTilerConfig(apiKey = "A KEY")
         val shareLocationPresenter = createShareLocationPresenter(
             client = FakeMatrixClient(
                 sessionId = A_USER_ID,
-                getMapStyleUrlResult = { Result.success("aUrl") },
+            ),
+            remoteEnterpriseConfigProvider = FakeRemoteEnterpriseConfigProvider(
+                getResult = { WellknownRetrieverResult.Success(anElementWellKnown(mapTilerConfig = mapTilerConfig)) }
             )
         )
         shareLocationPresenter.test {
-            skipItems(1)
             val state = awaitItem()
-            assertThat(state.customMapStyleUrl.isLoading()).isTrue()
+            assertThat(state.customMapTilerConfig.isLoading()).isTrue()
             val finalState = awaitItem()
-            assertThat(finalState.customMapStyleUrl.dataOrNull()).isEqualTo("aUrl")
+            assertThat(finalState.customMapTilerConfig.dataOrNull()).isEqualTo(mapTilerConfig)
         }
     }
 
@@ -709,7 +714,7 @@ class ShareLocationPresenterTest {
     }
 
     private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
-        skipItems(2)
+        skipItems(1)
         return awaitItem()
     }
 }

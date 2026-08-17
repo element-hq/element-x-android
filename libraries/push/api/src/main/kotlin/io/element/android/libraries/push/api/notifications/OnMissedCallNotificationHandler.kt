@@ -18,6 +18,10 @@ import io.element.android.libraries.matrix.api.core.SessionId
 interface OnMissedCallNotificationHandler {
     /**
      * Adds a missed call notification.
+     *
+     * @param sessionId the session the call was received on.
+     * @param roomId the room the call took place in.
+     * @param eventId the call notification event that went unanswered.
      */
     suspend fun addMissedCallNotification(
         sessionId: SessionId,

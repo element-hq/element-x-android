@@ -93,7 +93,7 @@ fun AdvancedSettingsView(
             }
         )
         ListItem(
-            headlineContent = {
+            content = {
                 Text(text = stringResource(id = CommonStrings.action_view_source))
             },
             supportingContent = {
@@ -105,7 +105,7 @@ fun AdvancedSettingsView(
             onClick = { state.eventSink(AdvancedSettingsEvents.SetDeveloperModeEnabled(!state.isDeveloperModeEnabled)) }
         )
         ListItem(
-            headlineContent = {
+            content = {
                 Text(text = stringResource(id = R.string.screen_advanced_settings_share_presence))
             },
             supportingContent = {
@@ -122,7 +122,7 @@ fun AdvancedSettingsView(
             null -> Unit
             is MediaOptimizationState.AllMedia -> {
                 ListItem(
-                    headlineContent = {
+                    content = {
                         Text(text = stringResource(id = R.string.screen_advanced_settings_media_compression_title))
                     },
                     supportingContent = {
@@ -146,7 +146,7 @@ fun AdvancedSettingsView(
             }
             is MediaOptimizationState.Split -> {
                 ListItem(
-                    headlineContent = {
+                    content = {
                         Text(text = stringResource(id = R.string.screen_advanced_settings_optimise_image_upload_quality_title))
                     },
                     supportingContent = {
@@ -171,7 +171,7 @@ fun AdvancedSettingsView(
                 var displaySelectorDialog by remember { mutableStateOf(false) }
 
                 ListItem(
-                    headlineContent = {
+                    content = {
                         Text(text = stringResource(id = R.string.screen_advanced_settings_optimise_video_upload_quality_title))
                     },
                     supportingContent = {
@@ -247,7 +247,7 @@ private fun VideoQualitySelectorDialog(
                     VideoCompressionPreset.HIGH -> stringResource(CommonStrings.common_video_quality_high_description)
                 }
                 ListItem(
-                    headlineContent = {
+                    content = {
                         Text(
                             text = title,
                             style = ElementTheme.typography.fontBodyLgMedium,
@@ -301,7 +301,7 @@ private fun ModerationAndSafety(
             }
         )
         ListItem(
-            headlineContent = { Text(text = stringResource(R.string.screen_advanced_settings_show_media_timeline_always_hide)) },
+            content = { Text(text = stringResource(R.string.screen_advanced_settings_show_media_timeline_always_hide)) },
             leadingContent = ListItemContent.RadioButton(
                 selected = state.mediaPreviewConfigState.timelineMediaPreviewValue == MediaPreviewValue.Off,
                 compact = true
@@ -312,7 +312,7 @@ private fun ModerationAndSafety(
             enabled = !state.mediaPreviewConfigState.setTimelineMediaPreviewAction.isLoading()
         )
         ListItem(
-            headlineContent = { Text(text = stringResource(R.string.screen_advanced_settings_show_media_timeline_private_rooms)) },
+            content = { Text(text = stringResource(R.string.screen_advanced_settings_show_media_timeline_private_rooms)) },
             leadingContent = ListItemContent.RadioButton(
                 selected = state.mediaPreviewConfigState.timelineMediaPreviewValue == MediaPreviewValue.Private,
                 compact = true
@@ -323,7 +323,7 @@ private fun ModerationAndSafety(
             enabled = !state.mediaPreviewConfigState.setTimelineMediaPreviewAction.isLoading()
         )
         ListItem(
-            headlineContent = { Text(text = stringResource(R.string.screen_advanced_settings_show_media_timeline_always_show)) },
+            content = { Text(text = stringResource(R.string.screen_advanced_settings_show_media_timeline_always_show)) },
             leadingContent = ListItemContent.RadioButton(
                 selected = state.mediaPreviewConfigState.timelineMediaPreviewValue == MediaPreviewValue.On,
                 compact = true

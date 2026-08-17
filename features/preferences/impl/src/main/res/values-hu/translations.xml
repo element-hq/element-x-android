@@ -101,6 +101,14 @@ Ha folytatja, egyes beállítások megváltozhatnak."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"rendszerbeállításokat"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"A rendszerértesítések ki vannak kapcsolva"</string>
   <string name="screen_notification_settings_title">"Értesítések"</string>
+  <string name="screen_settings_user_status_away">"Távol"</string>
+  <string name="screen_settings_user_status_be_right_back">"Rögtön visszajövök"</string>
+  <string name="screen_settings_user_status_custom">"Egyedi…"</string>
+  <string name="screen_settings_user_status_custom_hint">"Egyéni állapot…"</string>
+  <string name="screen_settings_user_status_focus_time">"Feladatra koncentrál"</string>
+  <string name="screen_settings_user_status_in_a_meeting">"Értekezleten"</string>
+  <string name="screen_settings_user_status_on_the_road">"Úton"</string>
+  <string name="screen_settings_user_status_placeholder">"Mi az állapota?"</string>
   <string name="theme_black">"Fekete"</string>
   <string name="theme_dark">"Sötét"</string>
   <string name="theme_light">"Világos"</string>

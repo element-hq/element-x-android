@@ -38,7 +38,7 @@ fun LockScreenSettingsView(
     ) {
         PreferenceCategory(showTopDivider = false) {
             ListItem(
-                headlineContent = {
+                content = {
                     Text(stringResource(id = R.string.screen_app_lock_settings_change_pin))
                 },
                 onClick = onChangePinClick,
@@ -46,7 +46,7 @@ fun LockScreenSettingsView(
             PreferenceDivider()
             if (state.showRemovePinOption) {
                 ListItem(
-                    headlineContent = {
+                    content = {
                         Text(stringResource(id = R.string.screen_app_lock_settings_remove_pin))
                     },
                     style = ListItemStyle.Destructive,

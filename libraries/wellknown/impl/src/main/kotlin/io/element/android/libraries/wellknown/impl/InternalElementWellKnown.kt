@@ -48,10 +48,24 @@ data class InternalElementWellKnown(
     val contentScannerUrl: String? = null,
     @SerialName("force_disable_e2ee")
     val forceDisableE2EE: Boolean? = null,
+    @SerialName("map_tiler")
+    val mapTilerConfig: InternalMapTilerConfig? = null,
 )
 
 @Serializable
 data class InternalCustomRecoveryPassphrase(
     @SerialName("min_character_count")
     val minCharacterCount: Int? = null,
+)
+
+@Serializable
+data class InternalMapTilerConfig(
+    @SerialName("api_key")
+    val apiKey: String,
+    @SerialName("light_style_id")
+    val lightStyleId: String? = null,
+    @SerialName("dark_style_id")
+    val darkStyleId: String? = null,
+    @SerialName("base_url")
+    val baseUrl: String? = null,
 )

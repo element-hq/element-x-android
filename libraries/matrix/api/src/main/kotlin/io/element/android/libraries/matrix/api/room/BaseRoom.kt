@@ -66,21 +66,30 @@ interface BaseRoom : Closeable {
      */
     fun isDm() = roomInfoFlow.value.isDm
 
+    /**
+     * The room this one replaced when it was upgraded, or `null` if this room has no predecessor.
+     * Errors are swallowed and reported as `null`.
+     */
     fun predecessorRoom(): PredecessorRoom?
 
     /**
      * Try to load the room members and update the membersFlow.
+     * The first call may serve members from the local cache before the server response arrives; later calls always go to the server.
      */
     suspend fun updateMembers()
 
     /**
      * Get the members of the room. Note: generally this should not be used, please use
      * [membersStateFlow] and [updateMembers] instead.
+     *
+     * @param limit the maximum number of members to return.
      */
     suspend fun getMembers(limit: Int = 5): Result<List<RoomMember>>
 
     /**
      * Will return an updated member or an error.
+     *
+     * @param userId the member to fetch.
      */
     suspend fun getUpdatedMember(userId: UserId): Result<RoomMember>
 
@@ -103,6 +112,8 @@ interface BaseRoom : Closeable {
 
     /**
      * Gets the role of the user with the provided [userId] in the room.
+     *
+     * @param userId the member whose role is requested.
      */
     suspend fun userRole(userId: UserId): Result<RoomMember.Role>
 
@@ -113,11 +124,15 @@ interface BaseRoom : Closeable {
 
     /**
      * Gets the display name of the user with the provided [userId] in the room.
+     *
+     * @param userId the member whose room specific display name is requested.
      */
     suspend fun userDisplayName(userId: UserId): Result<String?>
 
     /**
      * Gets the avatar of the user with the provided [userId] in the room.
+     *
+     * @param userId the member whose room specific avatar is requested.
      */
     suspend fun userAvatarUrl(userId: UserId): Result<String?>
 
@@ -138,6 +153,8 @@ interface BaseRoom : Closeable {
 
     /**
      * Sets the room as favorite or not, based on the [isFavorite] parameter.
+     *
+     * @param isFavorite true to mark the room as favorite, false to remove the flag.
      */
     suspend fun setIsFavorite(isFavorite: Boolean): Result<Unit>
 
@@ -176,22 +193,29 @@ interface BaseRoom : Closeable {
     suspend fun getRoomVisibility(): Result<RoomVisibility>
 
     /**
-     * Returns the visibility for this room in the room directory, fetching it from the homeserver if needed.
+     * Returns whether this room is encrypted, based on the latest encryption state known to the SDK rather than on the cached [RoomInfo].
      */
     suspend fun getUpdatedIsEncrypted(): Result<Boolean>
 
     /**
      * Store the given `ComposerDraft` in the state store of this room.
+     *
+     * @param composerDraft the unsent message content to remember.
+     * @param threadRoot the thread the draft belongs to, or `null` for the main timeline.
      */
     suspend fun saveComposerDraft(composerDraft: ComposerDraft, threadRoot: ThreadId?): Result<Unit>
 
     /**
      * Retrieve the `ComposerDraft` stored in the state store for this room.
+     *
+     * @param threadRoot the thread whose draft is requested, or `null` for the main timeline.
      */
     suspend fun loadComposerDraft(threadRoot: ThreadId?): Result<ComposerDraft?>
 
     /**
      * Clear the `ComposerDraft` stored in the state store for this room.
+     *
+     * @param threadRoot the thread whose draft should be cleared, or `null` for the main timeline.
      */
     suspend fun clearComposerDraft(threadRoot: ThreadId?): Result<Unit>
 
@@ -202,10 +226,27 @@ interface BaseRoom : Closeable {
      */
     suspend fun reportRoom(reason: String?): Result<Unit>
 
+    /**
+     * Declines the incoming call advertised by the given notification, letting the other devices of the room know.
+     *
+     * @param notificationEventId the id of the call notification event being declined.
+     */
     suspend fun declineCall(notificationEventId: EventId): Result<Unit>
 
+    /**
+     * Emits the id of each user who declines the call advertised by the given notification.
+     * Used to stop ringing once the callee has declined from another device.
+     *
+     * @param notificationEventId the id of the call notification event to watch.
+     */
     suspend fun subscribeToCallDecline(notificationEventId: EventId): Flow<UserId>
 
+    /**
+     * Returns the id of the thread the given event belongs to, fetching the event from the server if it is not cached locally.
+     *
+     * @param eventId the event whose thread is requested.
+     * @return the thread root id, or `null` if the event is not part of a thread.
+     */
     suspend fun threadRootIdForEvent(eventId: EventId): Result<ThreadId?>
 
     /**
@@ -213,5 +254,6 @@ interface BaseRoom : Closeable {
      */
     fun destroy()
 
+    /** Same as [destroy], so that a room can be used with `use { }`. */
     override fun close() = destroy()
 }

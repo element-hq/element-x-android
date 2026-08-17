@@ -55,7 +55,7 @@ fun SecureBackupRootView(
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) {
         ListItem(
-            headlineContent = {
+            content = {
                 Text(
                     text = stringResource(id = R.string.screen_chat_backup_key_backup_title),
                 )
@@ -76,7 +76,7 @@ fun SecureBackupRootView(
 
         // Disable / Enable key storage
         ListItem(
-            headlineContent = {
+            content = {
                 Text(
                     text = stringResource(id = R.string.screen_chat_backup_key_storage_toggle_title),
                 )
@@ -137,7 +137,7 @@ fun SecureBackupRootView(
             RecoveryState.WAITING_FOR_SYNC -> Unit
             RecoveryState.DISABLED -> {
                 ListItem(
-                    headlineContent = {
+                    content = {
                         Text(
                             text = stringResource(id = R.string.screen_chat_backup_recovery_action_setup),
                         )
@@ -161,7 +161,7 @@ fun SecureBackupRootView(
             }
             RecoveryState.ENABLED -> {
                 ListItem(
-                    headlineContent = {
+                    content = {
                         Text(
                             text = stringResource(id = R.string.screen_chat_backup_recovery_action_change),
                         )
@@ -184,7 +184,7 @@ fun SecureBackupRootView(
             }
             RecoveryState.INCOMPLETE ->
                 ListItem(
-                    headlineContent = {
+                    content = {
                         Text(
                             text = stringResource(id = R.string.screen_chat_backup_recovery_action_confirm),
                         )

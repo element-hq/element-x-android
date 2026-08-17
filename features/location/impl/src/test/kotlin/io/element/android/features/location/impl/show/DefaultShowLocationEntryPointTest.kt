@@ -11,6 +11,7 @@ package io.element.android.features.location.impl.show
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bumble.appyx.core.modality.BuildContext
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.enterprise.test.remoteconfig.FakeRemoteEnterpriseConfigProvider
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.ShowLocationEntryPoint
 import io.element.android.features.location.api.ShowLocationMode
@@ -20,7 +21,7 @@ import io.element.android.features.location.impl.common.permissions.FakePermissi
 import io.element.android.features.location.test.FakeActiveLiveLocationShareManager
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.services.analytics.test.FakeAnalyticsService
@@ -41,8 +42,8 @@ class DefaultShowLocationEntryPointTest {
             ShowLocationNode(
                 buildContext = buildContext,
                 plugins = plugins,
-                presenterFactory = object : ShowLocationPresenter.Factory {
-                    override fun create(mode: ShowLocationMode) = ShowLocationPresenter(
+                presenterFactory = { mode ->
+                    ShowLocationPresenter(
                         mode = mode,
                         permissionsPresenterFactory = { FakePermissionsPresenter() },
                         locationActions = FakeLocationActions(),
@@ -50,9 +51,10 @@ class DefaultShowLocationEntryPointTest {
                         dateFormatter = FakeDateFormatter(),
                         stringProvider = FakeStringProvider(),
                         joinedRoom = joinedRoom,
-                        client = FakeMatrixClient(),
+                        sessionId = A_SESSION_ID,
                         liveLocationShareManager = FakeActiveLiveLocationShareManager(),
                         userLocationStateFactory = FakeUserLocationStateFactory(),
+                        remoteEnterpriseConfigProvider = FakeRemoteEnterpriseConfigProvider(),
                     )
                 },
                 analyticsService = FakeAnalyticsService(),

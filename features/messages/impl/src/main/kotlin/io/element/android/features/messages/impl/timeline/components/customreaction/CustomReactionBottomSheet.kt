@@ -8,11 +8,16 @@
 
 package io.element.android.features.messages.impl.timeline.components.customreaction
 
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import io.element.android.emojibasebindings.Emoji
@@ -54,6 +59,7 @@ fun CustomReactionBottomSheet(
                 modifier = modifier,
                 scrollable = false,
             ) {
+                ExpandSheetWhenImeIsVisible(sheetState)
                 emojiPickerRenderer.Render(
                     state = state.target.emojiPickerState,
                     onSelectEmoji = ::onEmojiSelectedDismiss,
@@ -64,6 +70,17 @@ fun CustomReactionBottomSheet(
                     },
                 )
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
+@Composable
+internal fun ExpandSheetWhenImeIsVisible(sheetState: SheetState) {
+    val isImeVisible = WindowInsets.isImeVisible
+    LaunchedEffect(isImeVisible) {
+        if (isImeVisible) {
+            sheetState.expand()
         }
     }
 }

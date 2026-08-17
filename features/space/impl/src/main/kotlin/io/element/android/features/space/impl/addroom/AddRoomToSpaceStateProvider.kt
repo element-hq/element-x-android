@@ -87,6 +87,7 @@ internal fun aSelectRoomInfoList(): ImmutableList<SelectRoomInfo> = listOf(
         canonicalAlias = null,
         avatarUrl = null,
         heroes = persistentListOf(),
+        isDm = false,
         isTombstoned = false,
     ),
     SelectRoomInfo(
@@ -95,6 +96,7 @@ internal fun aSelectRoomInfoList(): ImmutableList<SelectRoomInfo> = listOf(
         canonicalAlias = null,
         avatarUrl = null,
         heroes = persistentListOf(),
+        isDm = false,
         isTombstoned = false,
     ),
     SelectRoomInfo(
@@ -103,6 +105,7 @@ internal fun aSelectRoomInfoList(): ImmutableList<SelectRoomInfo> = listOf(
         canonicalAlias = null,
         avatarUrl = null,
         heroes = persistentListOf(),
+        isDm = false,
         isTombstoned = false,
     ),
 ).toImmutableList()

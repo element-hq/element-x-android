@@ -96,7 +96,7 @@ private fun AvatarActionBottomSheetContent(
         ) { action ->
             ListItem(
                 modifier = Modifier.clickable { onActionClick(action) },
-                headlineContent = {
+                content = {
                     Text(
                         text = stringResource(action.titleResId),
                         style = ElementTheme.typography.fontBodyLgRegular,
