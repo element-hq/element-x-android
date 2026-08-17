@@ -15,10 +15,8 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.contentDescription
@@ -66,7 +64,7 @@ fun TimelineItemTextView(
         LocalTextStyle provides textStyle
     ) {
         val text = getTextWithResolvedMentions(content)
-        var codeBlockOverlays by remember { mutableStateOf<ImmutableList<CodeBlockOverlay>>(persistentListOf()) }
+        val codeBlockBounds = remember { mutableStateOf<ImmutableList<CodeBlockBounds>>(persistentListOf()) }
         val measureLastTextLine = ContentAvoidingLayout.measureLegacyLastTextLine(onContentLayoutChange = onContentLayoutChange)
         val density = LocalDensity.current
         val headerPx = with(density) { (CodeBlockHeaderHeight * fontScale).roundToPx() }
@@ -75,6 +73,7 @@ fun TimelineItemTextView(
         // Not remembered: a stable identity would stop EditorStyledText from calling setText again,
         // and in-place MentionSpan updates would never reach the TextView.
         val displayText = withCodeBlockChrome(text, headerPx, footerPx, languages)
+        val actions = codeBlockActions(displayText, languages)
         Box(modifier.semantics { contentDescription = content.plainText }) {
             EditorStyledText(
                 text = displayText,
@@ -83,13 +82,13 @@ fun TimelineItemTextView(
                 style = ElementRichTextEditorStyle.textStyle(),
                 onTextLayout = { layout ->
                     measureLastTextLine(layout)
-                    codeBlockOverlays = computeCodeBlockOverlays(displayText, layout, languages)
+                    codeBlockBounds.value = computeCodeBlockBounds(displayText, layout)
                 },
                 releaseOnDetach = false,
             )
             CodeBlockCopyButtons(
-                overlays = codeBlockOverlays,
-                latestOverlays = { codeBlockOverlays },
+                actions = actions,
+                boundsAt = { index -> codeBlockBounds.value.getOrNull(index) ?: CodeBlockBounds.Zero },
                 onLongClick = onLongClick,
             )
         }
