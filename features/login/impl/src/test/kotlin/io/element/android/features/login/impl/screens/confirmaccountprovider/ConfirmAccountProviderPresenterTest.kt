@@ -349,6 +349,53 @@ class ConfirmAccountProviderPresenterTest {
         }
     }
 
+    @Test
+    fun `present - offers matrix_org as an autocomplete suggestion even without any history`() = runTest {
+        val presenter = createConfirmAccountProviderPresenter(
+            appPreferencesStore = InMemoryAppPreferencesStore(homeserverHistory = emptyList()),
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(ConfirmAccountProviderEvents.UserInputChanged("https://matr"))
+            val suggestionState = awaitState { it.accountProviderInput == "https://matr" }
+            assertThat(suggestionState.accountProviderSuggestion).isEqualTo(AuthenticationConfig.MATRIX_ORG_URL)
+        }
+    }
+
+    @Test
+    fun `present - offers matrix_org without the scheme as an autocomplete suggestion`() = runTest {
+        val presenter = createConfirmAccountProviderPresenter(
+            appPreferencesStore = InMemoryAppPreferencesStore(homeserverHistory = emptyList()),
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(ConfirmAccountProviderEvents.UserInputChanged("matr"))
+            val suggestionState = awaitState { it.accountProviderInput == "matr" }
+            assertThat(suggestionState.accountProviderSuggestion).isEqualTo("matrix.org")
+        }
+    }
+
+    @Test
+    fun `present - continue prepends https to a bare account provider`() = runTest {
+        val submittedUrls = mutableListOf<String>()
+        val authenticationService = FakeMatrixAuthenticationService(
+            setHomeserverResult = { url ->
+                submittedUrls.add(url)
+                Result.success(aMatrixHomeServerDetails(supportsOAuthLogin = true))
+            },
+        )
+        val presenter = createConfirmAccountProviderPresenter(
+            matrixAuthenticationService = authenticationService,
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(ConfirmAccountProviderEvents.Continue("matrix.org"))
+            awaitLoginMode { it is AsyncData.Success }
+            assertThat(submittedUrls.first()).isEqualTo(AuthenticationConfig.MATRIX_ORG_URL)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
     /**
      * Awaits until the emitted state's login mode matches [predicate], skipping the intermediate
      * account-provider validation states, and returns that state.

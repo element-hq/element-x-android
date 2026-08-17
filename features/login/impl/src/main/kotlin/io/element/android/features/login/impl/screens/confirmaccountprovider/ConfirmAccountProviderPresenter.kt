@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.changeserver.ChangeServerEvents
@@ -28,6 +29,7 @@ import io.element.android.features.login.impl.login.LoginModeEvent
 import io.element.android.features.login.impl.login.LoginModeState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 
 @AssistedInject
@@ -58,12 +60,18 @@ class ConfirmAccountProviderPresenter(
         var userInput by rememberSaveable { mutableStateOf<String?>(null) }
         val accountProviderInput = userInput ?: accountProvider.url
 
-        // Offer the most recent previously-used account provider that the current input is a prefix of.
+        // Offer an account provider that the current input is a prefix of: the most recent previously-used
+        // one first, then matrix.org. matrix.org is always available for autocomplete even before any
+        // sign-in, offered both with and without the https:// scheme so it completes whether the user starts
+        // typing "matrix.org" or "https://matrix.org".
         val accountProviderSuggestion = remember(accountProviderInput, homeserverHistory) {
             val input = accountProviderInput.trim()
+            val candidates = homeserverHistory +
+                AuthenticationConfig.MATRIX_ORG_URL +
+                AuthenticationConfig.MATRIX_ORG_URL.removePrefix("https://")
             input.takeIf { it.isNotEmpty() }
                 ?.let { prefix ->
-                    homeserverHistory.firstOrNull { it.length > prefix.length && it.startsWith(prefix, ignoreCase = true) }
+                    candidates.firstOrNull { it.length > prefix.length && it.startsWith(prefix, ignoreCase = true) }
                 }
         }
 
@@ -94,9 +102,11 @@ class ConfirmAccountProviderPresenter(
                 // Validate (and persist) the chosen account provider before proceeding. This also enforces the
                 // account-provider access control, which the login submit does not run on its own.
                 is ConfirmAccountProviderEvents.Continue -> {
-                    submittedAccountProvider = event.accountProvider
+                    // Default the scheme to https:// so entering a bare host (e.g. "matrix.org") works.
+                    val accountProviderUrl = event.accountProvider.trim().ensureProtocol()
+                    submittedAccountProvider = accountProviderUrl
                     changeServerState.eventSink(
-                        ChangeServerEvents.ChangeServer(AccountProvider(url = event.accountProvider.trim()))
+                        ChangeServerEvents.ChangeServer(AccountProvider(url = accountProviderUrl))
                     )
                 }
                 ConfirmAccountProviderEvents.ClearError -> {

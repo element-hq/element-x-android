@@ -19,6 +19,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -88,12 +89,16 @@ fun ConfirmAccountProviderView(
         ?.substring(input.length)
         .orEmpty()
 
+    // The Continue button lives in a footer slot that is not recomposed while the user types, so a direct
+    // capture of the field text (via ::submit) goes stale and can submit an empty/prefilled value. Reading
+    // the value through rememberUpdatedState keeps it current regardless of which composition scope reads it.
+    val accountProviderToSubmit by rememberUpdatedState(input + suggestionSuffix)
+
     fun submit() {
         // Dismiss the keyboard and release focus while the account provider is being validated.
         focusManager.clearFocus(force = true)
-        // Submit the exact field text (plus any accepted suggestion), read here so it can't lag behind
-        // fast input such as keyboard autofill.
-        eventSink(ConfirmAccountProviderEvents.Continue(input + suggestionSuffix))
+        // Submit the exact field text (plus any accepted suggestion).
+        eventSink(ConfirmAccountProviderEvents.Continue(accountProviderToSubmit))
     }
 
     // Once a validation / login error has been dismissed, return focus and the keyboard to the field so
@@ -115,9 +120,9 @@ fun ConfirmAccountProviderView(
                 iconStyle = BigIcon.Style.Default(CompoundIcons.UserProfileSolid()),
                 title = stringResource(
                     id = if (state.isAccountCreation) {
-                        CommonStrings.screen_select_server_title_register
+                        CommonStrings.screen_change_server_title_register
                     } else {
-                        CommonStrings.screen_select_server_title_login
+                        CommonStrings.screen_change_server_title_login
                     }
                 ),
                 subTitle = null,
@@ -153,13 +158,13 @@ fun ConfirmAccountProviderView(
                 .focusRequester(focusRequester)
                 .onTabOrEnterKeyFocusNext(focusManager)
                 .testTag(TestTags.changeServerServer),
-            label = stringResource(id = CommonStrings.screen_select_server_textfield_header),
-            placeholder = stringResource(id = CommonStrings.screen_select_server_textfield_placeholder),
+            label = stringResource(id = CommonStrings.screen_change_server_textfield_header),
+            placeholder = stringResource(id = CommonStrings.screen_change_server_textfield_placeholder),
             supportingText = stringResource(
                 id = if (state.isAccountCreation) {
-                    CommonStrings.screen_select_server_textfield_footer_register
+                    CommonStrings.screen_change_server_textfield_footer_register
                 } else {
-                    CommonStrings.screen_select_server_textfield_footer_login
+                    CommonStrings.screen_change_server_textfield_footer_login
                 }
             ),
             visualTransformation = ghostTransformation,
