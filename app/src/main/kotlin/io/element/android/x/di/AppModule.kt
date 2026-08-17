@@ -18,7 +18,7 @@ import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 import io.element.android.appconfig.ApplicationConfig
-import io.element.android.features.enterprise.api.EnterpriseService
+import io.element.android.features.enterprise.api.IsEnterpriseBuild
 import io.element.android.libraries.androidutils.system.getVersionCodeFromManifest
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.meta.BuildMeta
@@ -74,17 +74,18 @@ object AppModule {
     fun providesBuildMeta(
         @ApplicationContext context: Context,
         buildType: BuildType,
-        enterpriseService: EnterpriseService,
+        isEnterpriseBuild: IsEnterpriseBuild,
     ): BuildMeta {
         val applicationName = ApplicationConfig.APPLICATION_NAME.takeIf { it.isNotEmpty() } ?: context.getString(R.string.app_name)
+        val isEnterprise = isEnterpriseBuild()
         return BuildMeta(
             isDebuggable = BuildConfig.DEBUG,
             buildType = buildType,
             applicationName = applicationName,
-            productionApplicationName = if (enterpriseService.isEnterpriseBuild) applicationName else ApplicationConfig.PRODUCTION_APPLICATION_NAME,
-            desktopApplicationName = if (enterpriseService.isEnterpriseBuild) applicationName else ApplicationConfig.DESKTOP_APPLICATION_NAME,
+            productionApplicationName = if (isEnterprise) applicationName else ApplicationConfig.PRODUCTION_APPLICATION_NAME,
+            desktopApplicationName = if (isEnterprise) applicationName else ApplicationConfig.DESKTOP_APPLICATION_NAME,
             applicationId = BuildConfig.APPLICATION_ID,
-            isEnterpriseBuild = enterpriseService.isEnterpriseBuild,
+            isEnterpriseBuild = isEnterprise,
             // TODO EAx Config.LOW_PRIVACY_LOG_ENABLE,
             lowPrivacyLoggingEnabled = false,
             versionName = BuildConfig.VERSION_NAME,

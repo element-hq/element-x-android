@@ -20,11 +20,9 @@ import io.element.android.features.login.impl.localnetwork.LocalNetworkPermissio
 import io.element.android.features.login.impl.login.LoginMode
 import io.element.android.features.login.impl.screens.createaccount.AccountCreationNotSupported
 import io.element.android.features.login.impl.screens.onboarding.createLoginModePresenter
-import io.element.android.features.wellknown.test.FakeWellknownRetrieverFactory
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
-import io.element.android.libraries.matrix.test.FakeTemporaryMatrixClientFactory
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.auth.aMatrixHomeServerDetails
 import io.element.android.libraries.oauth.api.OAuthAction
@@ -456,9 +454,9 @@ class ConfirmAccountProviderPresenterTest {
             defaultAccountProviderAccessControl = DefaultAccountProviderAccessControl(
                 enterpriseService = FakeEnterpriseService(
                     isAllowedToConnectToHomeserverResult = { true },
+                    isElementProEnforcedResult = { false },
                 ),
-                wellknownRetrieverFactory = FakeWellknownRetrieverFactory(),
-                temporaryMatrixClientFactory = FakeTemporaryMatrixClientFactory(),
+                isEnterpriseBuild = { false },
             ),
             localNetworkPermissionGate = LocalNetworkPermissionGate(
                 advisor = FakeLocalNetworkPermissionAdvisor(),
