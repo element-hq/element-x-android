@@ -8,6 +8,11 @@
 
 package io.element.android.features.messages.impl.timeline.components.receipt
 
+import androidx.compose.animation.core.InfiniteRepeatableSpec
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.TweenSpec
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,16 +25,17 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -44,7 +50,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.avatar.getBestName
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
@@ -69,18 +74,8 @@ fun TimelineItemReadReceiptView(
     } else {
         when (state.sendState) {
             is LocalEventSendState.Sending.MediaWithProgress -> {
-                val fraction = state.sendState.fraction()
-                val sendingDescription = stringResource(id = CommonStrings.common_sending)
                 ReadReceiptsRow(modifier) {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .padding(2.dp)
-                            .size(AvatarSize.TimelineReadReceipt.dp)
-                            .semantics { contentDescription = sendingDescription },
-                        progress = { fraction },
-                        strokeWidth = 2.dp,
-                        color = ElementTheme.colors.iconSecondary,
-                    )
+                    SendingMediaSpinner()
                 }
             }
             is LocalEventSendState.Sending -> {
@@ -113,8 +108,25 @@ fun TimelineItemReadReceiptView(
     }
 }
 
-internal fun LocalEventSendState.Sending.MediaWithProgress.fraction(): Float {
-    return if (total <= 0L) 0f else (progress.toFloat() / total).coerceIn(0f, 1f)
+@Composable
+private fun SendingMediaSpinner() {
+    val transition = rememberInfiniteTransition("SendingMediaSpinner")
+    val rotation by transition.animateFloat(
+        initialValue = 0f,
+        targetValue = 360f,
+        animationSpec = InfiniteRepeatableSpec(
+            animation = TweenSpec(durationMillis = 1_000, easing = LinearEasing),
+        ),
+        label = "SendingMediaSpinnerRotation",
+    )
+    Icon(
+        modifier = Modifier
+            .padding(2.dp)
+            .rotate(rotation),
+        imageVector = CompoundIcons.Spinner(),
+        contentDescription = stringResource(id = CommonStrings.common_sending),
+        tint = ElementTheme.colors.iconSecondary,
+    )
 }
 
 @Composable
