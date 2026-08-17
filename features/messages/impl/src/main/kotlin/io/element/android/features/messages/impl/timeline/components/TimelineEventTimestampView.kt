@@ -134,7 +134,9 @@ fun TimelineEventTimestampView(
 
 @PreviewsDayNight
 @Composable
-internal fun TimelineEventTimestampViewPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) = ElementPreview {
+internal fun TimelineEventTimestampViewPreview(@PreviewParameter(
+    TimelineItemEventForTimestampViewPreviewParam::class
+) event: TimelineItem.Event) = ElementPreview {
     TimelineEventTimestampView(
         event = event,
         eventSink = {},

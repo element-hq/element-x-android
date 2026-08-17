@@ -328,7 +328,9 @@ private fun OutgoingVerificationBottomMenu(
 
 @PreviewsDayNight
 @Composable
-internal fun OutgoingVerificationViewPreview(@PreviewParameter(OutgoingVerificationStateProvider::class) state: OutgoingVerificationState) = ElementPreview {
+internal fun OutgoingVerificationViewPreview(@PreviewParameter(
+    OutgoingVerificationStatePreviewParam::class
+) state: OutgoingVerificationState) = ElementPreview {
     OutgoingVerificationView(
         state = state,
         onLearnMoreClick = {},

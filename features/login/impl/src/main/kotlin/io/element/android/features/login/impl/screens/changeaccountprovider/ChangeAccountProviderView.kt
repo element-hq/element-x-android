@@ -118,7 +118,9 @@ fun ChangeAccountProviderView(
 
 @PreviewsDayNight
 @Composable
-internal fun ChangeAccountProviderViewPreview(@PreviewParameter(ChangeAccountProviderStateProvider::class) state: ChangeAccountProviderState) = ElementPreview {
+internal fun ChangeAccountProviderViewPreview(@PreviewParameter(
+    ChangeAccountProviderStatePreviewParam::class
+) state: ChangeAccountProviderState) = ElementPreview {
     ChangeAccountProviderView(
         state = state,
         onBackClick = { },

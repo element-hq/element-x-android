@@ -373,14 +373,14 @@ private fun DeveloperPreferencesView(onOpenDeveloperSettings: () -> Unit) {
 
 @PreviewWithLargeHeight
 @Composable
-internal fun PreferencesRootViewLightPreview(@PreviewParameter(PreferencesRootStateProvider::class) state: PreferencesRootState) =
+internal fun PreferencesRootViewLightPreview(@PreviewParameter(PreferencesRootStatePreviewParam::class) state: PreferencesRootState) =
     ElementPreviewLight(
         drawableFallbackForImages = CommonDrawables.sample_avatar,
     ) { ContentToPreview(state) }
 
 @PreviewWithLargeHeight
 @Composable
-internal fun PreferencesRootViewDarkPreview(@PreviewParameter(PreferencesRootStateProvider::class) state: PreferencesRootState) =
+internal fun PreferencesRootViewDarkPreview(@PreviewParameter(PreferencesRootStatePreviewParam::class) state: PreferencesRootState) =
     ElementPreviewDark(
         drawableFallbackForImages = CommonDrawables.sample_avatar,
     ) { ContentToPreview(state) }

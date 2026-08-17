@@ -308,7 +308,7 @@ private fun String.sanitize(): String {
 @PreviewsDayNight
 @Composable
 internal fun AccountDeactivationViewPreview(
-    @PreviewParameter(AccountDeactivationStateProvider::class) state: AccountDeactivationState,
+    @PreviewParameter(AccountDeactivationStatePreviewParam::class) state: AccountDeactivationState,
 ) = ElementPreview {
     AccountDeactivationView(
         state,

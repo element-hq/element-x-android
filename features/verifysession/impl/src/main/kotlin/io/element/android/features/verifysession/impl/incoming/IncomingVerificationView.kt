@@ -264,7 +264,9 @@ private fun IncomingVerificationBottomMenu(
 
 @PreviewsDayNight
 @Composable
-internal fun IncomingVerificationViewPreview(@PreviewParameter(IncomingVerificationStateProvider::class) state: IncomingVerificationState) = ElementPreview {
+internal fun IncomingVerificationViewPreview(@PreviewParameter(
+    IncomingVerificationStatePreviewParam::class
+) state: IncomingVerificationState) = ElementPreview {
     IncomingVerificationView(
         state = state,
     )

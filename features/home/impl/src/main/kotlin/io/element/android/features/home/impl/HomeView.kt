@@ -346,7 +346,7 @@ internal fun RoomListRoomSummary.contentType() = displayType.ordinal
 
 @PreviewsDayNight
 @Composable
-internal fun HomeViewPreview(@PreviewParameter(HomeStateProvider::class) state: HomeState) = ElementPreview {
+internal fun HomeViewPreview(@PreviewParameter(HomeStatePreviewParam::class) state: HomeState) = ElementPreview {
     HomeView(
         homeState = state,
         onRoomClick = {},

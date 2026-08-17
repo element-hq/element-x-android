@@ -123,7 +123,7 @@ fun ConfirmAccountProviderView(
 @PreviewsDayNight
 @Composable
 internal fun ConfirmAccountProviderViewPreview(
-    @PreviewParameter(ConfirmAccountProviderStateProvider::class) state: ConfirmAccountProviderState
+    @PreviewParameter(ConfirmAccountProviderStatePreviewParam::class) state: ConfirmAccountProviderState
 ) = ElementPreview {
     ConfirmAccountProviderView(
         state = state,

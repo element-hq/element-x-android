@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.invitepeople.api.InvitePeopleEvents
 import io.element.android.features.invitepeople.api.InvitePeopleState
-import io.element.android.features.invitepeople.api.InvitePeopleStateProvider
+import io.element.android.features.invitepeople.api.InvitePeopleStatePreviewParam
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -116,7 +116,7 @@ private fun InviteProgressDialog() {
 
 @PreviewsDayNight
 @Composable
-internal fun RoomInviteMembersViewPreview(@PreviewParameter(InvitePeopleStateProvider::class) state: InvitePeopleState) = ElementPreview {
+internal fun RoomInviteMembersViewPreview(@PreviewParameter(InvitePeopleStatePreviewParam::class) state: InvitePeopleState) = ElementPreview {
     RoomInviteMembersView(
         state = state,
         invitePeopleView = {},

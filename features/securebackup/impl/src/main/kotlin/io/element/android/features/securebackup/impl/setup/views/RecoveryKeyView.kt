@@ -269,7 +269,7 @@ private fun RecoveryKeyFooter(state: RecoveryKeyViewState) {
 @PreviewsDayNight
 @Composable
 internal fun RecoveryKeyViewPreview(
-    @PreviewParameter(RecoveryKeyViewStateProvider::class) state: RecoveryKeyViewState
+    @PreviewParameter(RecoveryKeyViewStatePreviewParam::class) state: RecoveryKeyViewState
 ) = ElementPreview {
     RecoveryKeyView(
         state = state,

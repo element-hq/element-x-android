@@ -268,7 +268,7 @@ private fun PushHistoryItem(
 @PreviewsDayNight
 @Composable
 internal fun PushHistoryViewPreview(
-    @PreviewParameter(PushHistoryStateProvider::class) state: PushHistoryState,
+    @PreviewParameter(PushHistoryStatePreviewParam::class) state: PushHistoryState,
 ) = ElementPreview {
     PushHistoryView(
         state = state,

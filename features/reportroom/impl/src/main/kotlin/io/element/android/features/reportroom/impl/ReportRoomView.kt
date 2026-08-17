@@ -139,7 +139,7 @@ fun ReportRoomView(
 @PreviewsDayNight
 @Composable
 internal fun ReportRoomViewPreview(
-    @PreviewParameter(ReportRoomStateProvider::class) state: ReportRoomState
+    @PreviewParameter(ReportRoomStatePreviewParam::class) state: ReportRoomState
 ) = ElementPreview {
     ReportRoomView(
         state = state,

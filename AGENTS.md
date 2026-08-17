@@ -37,7 +37,7 @@ PRs must meet these rules.
 
 - Create previews for **all main states** of a Composable.
 - Use `@PreviewsDayNight` for consistency.
-- Use `PreviewParameterProvider` (e.g., `FooStateProvider`) to provide states.
+- Use `PreviewParameterProvider` (e.g., `FooStatePreviewParam`) to provide states.
 - Wrap previews in `ElementPreview { ... }`.
 
 ---
@@ -88,7 +88,7 @@ We use [Appyx](https://bumble-tech.github.io/appyx/) for navigation and [Molecul
 | `FooView.kt` | Stateless Composable rendering the UI from `FooState`. |
 | `FooState.kt` | Data class representing the immutable UI state. |
 | `FooEvent.kt` | Sealed interface for UI actions sent to the Presenter. |
-| `FooStateProvider.kt` | Provides sample states for Previews and Screenshot tests. |
+| `FooStatePreviewParam.kt` | Provides sample states for Previews and Screenshot tests. |
 | `FooPresenterTest.kt` | Unit tests for the Presenter logic using Turbine. |
 
 ---

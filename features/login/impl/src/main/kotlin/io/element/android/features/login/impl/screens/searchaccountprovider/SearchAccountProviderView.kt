@@ -204,7 +204,9 @@ private fun HomeserverData.toAccountProvider(): AccountProvider {
 
 @PreviewsDayNight
 @Composable
-internal fun SearchAccountProviderViewPreview(@PreviewParameter(SearchAccountProviderStateProvider::class) state: SearchAccountProviderState) = ElementPreview {
+internal fun SearchAccountProviderViewPreview(@PreviewParameter(
+    SearchAccountProviderStatePreviewParam::class
+) state: SearchAccountProviderState) = ElementPreview {
     SearchAccountProviderView(
         state = state,
         onBackClick = {},

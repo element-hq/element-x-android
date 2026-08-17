@@ -332,7 +332,7 @@ private fun LiveLocationDurationDialog(
 @PreviewsDayNight
 @Composable
 internal fun ShareLocationViewPreview(
-    @PreviewParameter(ShareLocationStateProvider::class) state: ShareLocationState
+    @PreviewParameter(ShareLocationStatePreviewParam::class) state: ShareLocationState
 ) = ElementPreview {
     ShareLocationView(
         state = state,

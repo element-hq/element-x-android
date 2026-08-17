@@ -109,7 +109,7 @@ private fun SignedOutFooter(
 @PreviewsDayNight
 @Composable
 internal fun SignedOutViewPreview(
-    @PreviewParameter(SignedOutStateProvider::class) state: SignedOutState,
+    @PreviewParameter(SignedOutStatePreviewParam::class) state: SignedOutState,
 ) = ElementPreview {
     SignedOutView(
         state = state,
