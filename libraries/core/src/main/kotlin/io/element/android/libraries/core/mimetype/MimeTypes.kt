@@ -68,7 +68,7 @@ object MimeTypes {
      * A mime type with a wildcard subtype is a filter, not a media type, so replace it with a
      * concrete default for its top level type.
      */
-    fun String?.withDefaultSubtype(): String = when {
+    fun String?.ensureDefaultSubtype(): String = when {
         this == null -> OctetStream
         hasSubtype(this) -> this
         this == Images -> Jpeg
