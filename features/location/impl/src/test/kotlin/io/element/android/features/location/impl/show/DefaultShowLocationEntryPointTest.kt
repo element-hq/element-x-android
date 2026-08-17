@@ -11,7 +11,6 @@ package io.element.android.features.location.impl.show
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bumble.appyx.core.modality.BuildContext
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.enterprise.test.remoteconfig.FakeRemoteEnterpriseConfigProvider
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.ShowLocationEntryPoint
 import io.element.android.features.location.api.ShowLocationMode
@@ -21,7 +20,6 @@ import io.element.android.features.location.impl.common.permissions.FakePermissi
 import io.element.android.features.location.test.FakeActiveLiveLocationShareManager
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.services.analytics.test.FakeAnalyticsService
@@ -51,10 +49,9 @@ class DefaultShowLocationEntryPointTest {
                         dateFormatter = FakeDateFormatter(),
                         stringProvider = FakeStringProvider(),
                         joinedRoom = joinedRoom,
-                        sessionId = A_SESSION_ID,
                         liveLocationShareManager = FakeActiveLiveLocationShareManager(),
                         userLocationStateFactory = FakeUserLocationStateFactory(),
-                        remoteEnterpriseConfigProvider = FakeRemoteEnterpriseConfigProvider(),
+                        customMapTilerConfigProvider = { Result.success(null) },
                     )
                 },
                 analyticsService = FakeAnalyticsService(),

@@ -62,13 +62,13 @@ class OnBoardingPresenter(
         val forcedAccountProvider = remember {
             // If defaultHomeserverList() returns a singleton list, this is the default account provider.
             // In this case, the user can sign in using this homeserver, or use QrCode login
-            enterpriseService.defaultHomeserverList().singleOrNull()
+            enterpriseService.homeserverAllowList().singleOrNull()
         }
         val canConnectToAnyHomeserver = remember {
             enterpriseService.canConnectToAnyHomeserver()
         }
         val mustChooseAccountProvider = remember {
-            !canConnectToAnyHomeserver && enterpriseService.defaultHomeserverList().size > 1
+            !canConnectToAnyHomeserver && enterpriseService.homeserverAllowList().size > 1
         }
         val linkAccountProvider by produceState<String?>(initialValue = null) {
             // Account provider from the link, if allowed by the enterprise service
