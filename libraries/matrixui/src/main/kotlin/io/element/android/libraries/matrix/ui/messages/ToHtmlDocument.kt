@@ -67,8 +67,19 @@ private fun fixMentions(
 private object CustomHtmlToDomParser {
     fun document(html: String): Document {
         val outputSettings = OutputSettings().prettyPrint(false).indentAmount(0)
-        val cleanHtml = Jsoup.clean(html, "", safeList, outputSettings)
+        val cleanHtml = Jsoup.clean(html.withSummariesAsParagraphs(), "", safeList, outputSettings)
         return Jsoup.parse(cleanHtml)
+    }
+
+    /**
+     * `summary` is not in [safeList], so its content would be merged into the text of the
+     * surrounding `details`. Turn it into a paragraph, which is the closest supported tag.
+     */
+    private fun String.withSummariesAsParagraphs(): String {
+        if (!contains("<summary", ignoreCase = true)) return this
+        val body = Jsoup.parseBodyFragment(this).body()
+        body.getElementsByTag("summary").forEach { it.tagName("p") }
+        return body.html()
     }
 
     private val safeList = Safelist()

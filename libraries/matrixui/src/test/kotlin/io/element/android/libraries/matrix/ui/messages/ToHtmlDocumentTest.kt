@@ -60,6 +60,32 @@ class ToHtmlDocumentTest : RobolectricTest() {
     }
 
     @Test
+    fun `toHtmlDocument - the summary of a details element becomes its own paragraph`() {
+        val body = FormattedBody(
+            format = MessageFormat.HTML,
+            body = "<details><summary>Summary example</summary>Text inside details</details>"
+        )
+
+        val document = body.toHtmlDocument(permalinkParser = FakePermalinkParser())
+
+        assertThat(document?.getElementsByTag("summary")).isEmpty()
+        assertThat(document?.getElementsByTag("p")?.map { it.text() }).containsExactly("Summary example")
+        assertThat(document?.text()).isEqualTo("Summary example Text inside details")
+    }
+
+    @Test
+    fun `toHtmlDocument - a document without a summary keeps its paragraphs`() {
+        val body = FormattedBody(
+            format = MessageFormat.HTML,
+            body = "<p>Hello</p><p>world</p>"
+        )
+
+        val document = body.toHtmlDocument(permalinkParser = FakePermalinkParser())
+
+        assertThat(document?.getElementsByTag("p")?.map { it.text() }).containsExactly("Hello", "world").inOrder()
+    }
+
+    @Test
     fun `toHtmlDocument - if a mention is found without an '@' prefix, it will be added`() {
         val body = FormattedBody(
             format = MessageFormat.HTML,
