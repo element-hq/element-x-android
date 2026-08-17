@@ -27,7 +27,6 @@ import io.element.android.features.login.impl.changeserver.ChangeServerEvents
 import io.element.android.features.login.impl.changeserver.ChangeServerState
 import io.element.android.features.login.impl.login.LoginModeEvent
 import io.element.android.features.login.impl.login.LoginModeState
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
@@ -81,14 +80,17 @@ class ConfirmAccountProviderPresenter(
         val latestSubmittedAccountProvider by rememberUpdatedState(submittedAccountProvider)
 
         // Once the chosen account provider has been validated and persisted, proceed with the actual sign in / sign up.
+        // Reuse the details resolved while validating, so login does not configure (and re-network) the homeserver again.
         LaunchedEffect(changeServerState.changeServerAction) {
-            if (changeServerState.changeServerAction is AsyncData.Success) {
+            val homeServerDetails = changeServerState.changeServerAction.dataOrNull()
+            if (homeServerDetails != null) {
                 loginModeState.eventSink(
                     LoginModeEvent.Submit(
                         isAccountCreation = params.isAccountCreation,
                         homeserverUrl = latestSubmittedAccountProvider.orEmpty().trim(),
                         resolvedHomeserverUrl = null,
                         loginHint = null,
+                        preConfiguredDetails = homeServerDetails,
                     )
                 )
             }

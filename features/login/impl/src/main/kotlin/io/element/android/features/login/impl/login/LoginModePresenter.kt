@@ -75,26 +75,28 @@ class LoginModePresenter(
 
     private suspend fun performSubmit(request: LoginModeEvent.Submit, loginMode: MutableState<AsyncData<LoginMode>>) {
         suspend {
-            authenticationService.setHomeserver(request.homeserverUrl).recoverCatching {
-                // Fallback to the well-known-resolved URL if the primary URL failed and the caller supplied one.
-                if (request.resolvedHomeserverUrl != null && request.resolvedHomeserverUrl != request.homeserverUrl) {
-                    authenticationService.setHomeserver(request.resolvedHomeserverUrl).getOrThrow()
-                } else {
-                    throw it
-                }
-            }.map { matrixHomeServerDetails ->
-                when {
-                    matrixHomeServerDetails.supportsOAuthLogin -> {
-                        val oAuthPrompt = if (request.isAccountCreation) OAuthPrompt.Create else OAuthPrompt.Login
-                        LoginMode.OAuth(
-                            authenticationService.getOAuthUrl(prompt = oAuthPrompt, loginHint = request.loginHint).getOrThrow()
-                        )
+            // Reuse the details the caller already resolved when it configured the homeserver, so we don't
+            // run setHomeserver (a network round-trip) again. Otherwise configure the homeserver ourselves.
+            val matrixHomeServerDetails = request.preConfiguredDetails
+                ?: authenticationService.setHomeserver(request.homeserverUrl).recoverCatching {
+                    // Fallback to the well-known-resolved URL if the primary URL failed and the caller supplied one.
+                    if (request.resolvedHomeserverUrl != null && request.resolvedHomeserverUrl != request.homeserverUrl) {
+                        authenticationService.setHomeserver(request.resolvedHomeserverUrl).getOrThrow()
+                    } else {
+                        throw it
                     }
-                    request.isAccountCreation -> throw AccountCreationNotSupported()
-                    matrixHomeServerDetails.supportsPasswordLogin -> LoginMode.PasswordLogin
-                    else -> error("Unsupported authentication flow")
+                }.getOrThrow()
+            when {
+                matrixHomeServerDetails.supportsOAuthLogin -> {
+                    val oAuthPrompt = if (request.isAccountCreation) OAuthPrompt.Create else OAuthPrompt.Login
+                    LoginMode.OAuth(
+                        authenticationService.getOAuthUrl(prompt = oAuthPrompt, loginHint = request.loginHint).getOrThrow()
+                    )
                 }
-            }.getOrThrow()
+                request.isAccountCreation -> throw AccountCreationNotSupported()
+                matrixHomeServerDetails.supportsPasswordLogin -> LoginMode.PasswordLogin
+                else -> error("Unsupported authentication flow")
+            }
         }.runCatchingUpdatingState(
             state = loginMode,
             errorTransform = {

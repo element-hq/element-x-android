@@ -396,6 +396,29 @@ class ConfirmAccountProviderPresenterTest {
         }
     }
 
+    @Test
+    fun `present - continue configures the homeserver only once`() = runTest {
+        // The consolidated Continue flow validates the account provider and then signs in. Login reuses the
+        // details resolved during validation, so setHomeserver runs exactly once rather than once per phase.
+        val submittedUrls = mutableListOf<String>()
+        val authenticationService = FakeMatrixAuthenticationService(
+            setHomeserverResult = { url ->
+                submittedUrls.add(url)
+                Result.success(aMatrixHomeServerDetails(supportsOAuthLogin = true))
+            },
+        )
+        val presenter = createConfirmAccountProviderPresenter(
+            matrixAuthenticationService = authenticationService,
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(ConfirmAccountProviderEvents.Continue(AuthenticationConfig.MATRIX_ORG_URL))
+            awaitLoginMode { it is AsyncData.Success }
+            assertThat(submittedUrls).containsExactly(AuthenticationConfig.MATRIX_ORG_URL)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
     /**
      * Awaits until the emitted state's login mode matches [predicate], skipping the intermediate
      * account-provider validation states, and returns that state.

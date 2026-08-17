@@ -73,7 +73,7 @@ class ChangeServerPresenterTest {
             val loadingState = awaitItem()
             assertThat(loadingState.changeServerAction).isInstanceOf(AsyncData.Loading::class.java)
             val successState = awaitItem()
-            assertThat(successState.changeServerAction).isEqualTo(AsyncData.Success(Unit))
+            assertThat(successState.changeServerAction).isEqualTo(AsyncData.Success(aMatrixHomeServerDetails(supportsOAuthLogin = true)))
         }
     }
 
@@ -252,7 +252,7 @@ class ChangeServerPresenterTest {
             while (finalState.changeServerAction !is AsyncData.Success) {
                 finalState = awaitItem()
             }
-            assertThat(finalState.changeServerAction).isEqualTo(AsyncData.Success(Unit))
+            assertThat(finalState.changeServerAction).isEqualTo(AsyncData.Success(aMatrixHomeServerDetails(supportsOAuthLogin = true)))
         }
     }
 
