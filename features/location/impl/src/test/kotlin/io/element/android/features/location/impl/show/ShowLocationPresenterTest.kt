@@ -12,7 +12,8 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.enterprise.test.remoteconfig.FakeRemoteEnterpriseConfigProvider
+import io.element.android.features.enterprise.api.remoteconfig.CustomMapTilerConfigProvider
+import io.element.android.features.enterprise.test.remoteconfig.aMapTilerConfig
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.ShowLocationMode
 import io.element.android.features.location.impl.aPermissionsState
@@ -23,20 +24,15 @@ import io.element.android.features.location.impl.common.permissions.PermissionsE
 import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.features.location.test.FakeActiveLiveLocationShareManager
-import io.element.android.features.wellknown.test.aMapTilerConfig
-import io.element.android.features.wellknown.test.anElementWellKnown
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
-import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.location.LiveLocationShare
-import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.location.aLiveLocationShare
-import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.test
@@ -69,9 +65,8 @@ class ShowLocationPresenterTest {
         ),
         locationActions: FakeLocationActions = fakeLocationActions,
         joinedRoom: JoinedRoom = FakeJoinedRoom(),
-        sessionId: SessionId = A_SESSION_ID,
         liveLocationShareManager: FakeActiveLiveLocationShareManager = FakeActiveLiveLocationShareManager(),
-        remoteEnterpriseConfigProvider: FakeRemoteEnterpriseConfigProvider = FakeRemoteEnterpriseConfigProvider(),
+        customMapTilerConfigProvider: CustomMapTilerConfigProvider = { Result.success(null) },
     ) = ShowLocationPresenter(
         mode = mode,
         permissionsPresenterFactory = { fakePermissionsPresenter },
@@ -80,21 +75,15 @@ class ShowLocationPresenterTest {
         dateFormatter = fakeDateFormatter,
         stringProvider = FakeStringProvider(),
         joinedRoom = joinedRoom,
-        sessionId = sessionId,
         liveLocationShareManager = liveLocationShareManager,
         userLocationStateFactory = FakeUserLocationStateFactory(),
-        remoteEnterpriseConfigProvider = remoteEnterpriseConfigProvider,
+        customMapTilerConfigProvider = customMapTilerConfigProvider,
     )
 
     @Test
     fun `present - non-null customMapStyleUrl`() = runTest {
         val mapTilerConfig = aMapTilerConfig(apiKey = "A KEY")
-        val shareLocationPresenter = createShowLocationPresenter(
-            sessionId = A_SESSION_ID,
-            remoteEnterpriseConfigProvider = FakeRemoteEnterpriseConfigProvider(
-                getResult = { WellknownRetrieverResult.Success(anElementWellKnown(mapTilerConfig = mapTilerConfig)) }
-            )
-        )
+        val shareLocationPresenter = createShowLocationPresenter(customMapTilerConfigProvider = { Result.success(mapTilerConfig) })
         shareLocationPresenter.test {
             val state = awaitItem()
             assertThat(state.customMapTilerConfig.isLoading()).isTrue()
@@ -131,12 +120,7 @@ class ShowLocationPresenterTest {
     fun `centers on user location`() = runTest {
         fakePermissionsPresenter.givenState(aPermissionsState(permissions = PermissionsState.Permissions.AllGranted))
 
-        val presenter = createShowLocationPresenter(
-            sessionId = A_SESSION_ID,
-            remoteEnterpriseConfigProvider = FakeRemoteEnterpriseConfigProvider(
-                getResult = { WellknownRetrieverResult.Success(anElementWellKnown(mapTilerConfig = aMapTilerConfig())) }
-            )
-        )
+        val presenter = createShowLocationPresenter(customMapTilerConfigProvider = { Result.success(aMapTilerConfig()) })
 
         presenter.test {
             val initialState = awaitItem()

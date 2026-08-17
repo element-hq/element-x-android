@@ -15,7 +15,6 @@ import com.freeletics.flowredux.dsl.FlowReduxStateMachine
 import io.element.android.features.verifysession.impl.util.andLogStateChange
 import io.element.android.features.verifysession.impl.util.logReceivedEvents
 import io.element.android.libraries.core.bool.orFalse
-import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.verification.SessionVerificationData
@@ -24,6 +23,7 @@ import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.timeout
@@ -106,10 +106,13 @@ class OutgoingVerificationStateMachine(
                     // If a key backup exists, wait until it's restored or a timeout happens
                     val hasBackup = encryptionService.doesBackupExistOnServer().getOrNull().orFalse()
                     if (hasBackup) {
-                        tryOrNull {
-                            encryptionService.recoveryStateStateFlow.filter { it == RecoveryState.ENABLED }
+                        try {
+                            encryptionService.recoveryStateStateFlow
+                                .filter { it == RecoveryState.ENABLED || it == RecoveryState.DISABLED || it == RecoveryState.INCOMPLETE }
                                 .timeout(10.seconds)
                                 .first()
+                        } catch (_: TimeoutCancellationException) {
+                            // The backup was not restored in time, proceed to the Completed state anyway
                         }
                     }
                     state.override { State.Completed.andLogStateChange() }

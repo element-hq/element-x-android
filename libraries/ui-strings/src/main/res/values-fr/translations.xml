@@ -6,6 +6,9 @@
   <string name="a11y_avatar">"Avatar"</string>
   <string name="a11y_clear_search_field">"Effacer le champ de recherche"</string>
   <string name="a11y_collapse_message_text_field">"Réduire la taille du composeur"</string>
+  <string name="a11y_create_poll_votes_allowed_decrease">"Diminuer le nombre de votes autorisés par personne"</string>
+  <string name="a11y_create_poll_votes_allowed_increase">"Augmenter le nombre de votes autorisés par personne"</string>
+  <string name="a11y_custom_emoji">"Émojis personnalisés"</string>
   <string name="a11y_delete">"Supprimer"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d chiffre saisi"</item>
@@ -16,11 +19,21 @@
   <string name="a11y_edit_room_address_hint">"L’adresse complète sera %1$s"</string>
   <string name="a11y_encryption_details">"Détails du chiffrement"</string>
   <string name="a11y_expand_message_text_field">"Augmenter la taille du composeur"</string>
+  <string name="a11y_gallery_attachment">"Galerie, élément %1$d"</string>
+  <string name="a11y_gallery_failed_scan">"Galerie, échec de l’analyse de l’élément %1$d"</string>
+  <string name="a11y_gallery_image">"Galerie, image %1$d"</string>
+  <plurals name="a11y_gallery_more_media">
+    <item quantity="one">"Galerie, %1$d média de plus"</item>
+    <item quantity="other">"Galerie, %1$d média de plus"</item>
+  </plurals>
+  <string name="a11y_gallery_scanning">"Galerie, analyse en cours de l’élément %1$d"</string>
+  <string name="a11y_gallery_video">"Galerie, vidéo %1$d"</string>
   <string name="a11y_hide_password">"Masquer le mot de passe"</string>
   <string name="a11y_info">"Info"</string>
   <string name="a11y_join_call">"Rejoindre l’appel"</string>
   <string name="a11y_jump_to_bottom">"Retourner à la fin de la conversation"</string>
   <string name="a11y_jump_to_unread">"Aller aux messages non lus"</string>
+  <string name="a11y_jump_to_unread_messages">"Aller au premier message non lu"</string>
   <string name="a11y_move_the_map_to_my_location">"Déplacer la carte vers ma position"</string>
   <string name="a11y_notifications_mentions_only">"Mentions uniquement"</string>
   <string name="a11y_notifications_muted">"En sourdine"</string>
@@ -31,6 +44,7 @@
   <string name="a11y_page_n">"Page %1$d"</string>
   <string name="a11y_pause">"Pause"</string>
   <string name="a11y_paused_voice_message">"Message vocal, durée: %1$s, position actuelle: %2$s"</string>
+  <string name="a11y_photo_preview">"Aperçu de la photo"</string>
   <string name="a11y_pin_field">"Code PIN"</string>
   <string name="a11y_pinned_location">"Position épinglée"</string>
   <string name="a11y_play">"Lecture"</string>
@@ -41,12 +55,13 @@
   <string name="a11y_qr_code">"Code QR"</string>
   <string name="a11y_react_with">"Réagir avec %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Réagir avec d’autres émojis"</string>
-  <string name="a11y_read_receipts_multiple">"Lu par %1$s et %2$s"</string>
+  <string name="a11y_read_receipts_multiple">"Message précédent lu par %1$s et %2$s"</string>
   <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="one">"Lu par %1$s et %2$d autre"</item>
-    <item quantity="other">"Lu par %1$s et %2$d autres"</item>
+    <item quantity="one">"Message précédent lu par %1$s et %2$d autre"</item>
+    <item quantity="other">"Message précédent lu par %1$s et %2$d autres"</item>
   </plurals>
-  <string name="a11y_read_receipts_single">"Lu par %1$s"</string>
+  <string name="a11y_read_receipts_single">"Message précédent lu par %1$s"</string>
+  <string name="a11y_read_receipts_tap_to_show_all_android">"afficher tous les accusés de réception"</string>
   <string name="a11y_remove_reaction">"Supprimer la réaction avec %1$s"</string>
   <string name="a11y_remove_reaction_with">"Supprimer la réaction avec %1$s"</string>
   <string name="a11y_room_avatar">"Avatar du salon"</string>
@@ -59,11 +74,13 @@
   <string name="a11y_start_call">"Démarrer un appel"</string>
   <string name="a11y_start_video_call">"Passer un appel vidéo"</string>
   <string name="a11y_start_voice_call">"Lancer un appel vocal"</string>
+  <string name="a11y_status">"Statut"</string>
   <string name="a11y_thread_in_room">"Discussion dans %1$s"</string>
   <string name="a11y_threads_in_room">"Discussions dans %1$s"</string>
   <string name="a11y_tombstoned_room">"Salon clôturé"</string>
   <string name="a11y_user_avatar">"Avatar de l’utilisateur"</string>
   <string name="a11y_user_menu">"Menu utilisateur"</string>
+  <string name="a11y_video_preview">"Aperçu vidéo"</string>
   <string name="a11y_view_avatar">"Voir l’avatar"</string>
   <string name="a11y_view_details">"Afficher les détails"</string>
   <string name="a11y_voice_message">"Message vocal, durée: %1$s"</string>
@@ -138,6 +155,7 @@
   <string name="action_manage_account_and_devices">"Gérer le compte et les appareils"</string>
   <string name="action_manage_devices">"Gérez les sessions"</string>
   <string name="action_manage_rooms">"Gérer les salons"</string>
+  <string name="action_mark_as_read">"Marquer comme lu"</string>
   <string name="action_message">"Message"</string>
   <string name="action_minimize">"Minimiser"</string>
   <string name="action_next">"Suivant"</string>
@@ -192,9 +210,11 @@
   <string name="action_translate">"Traduire"</string>
   <string name="action_try_again">"Essayer à nouveau"</string>
   <string name="action_unpin">"Désépingler"</string>
+  <string name="action_video_call">"Appel vidéo"</string>
   <string name="action_view">"Voir"</string>
   <string name="action_view_in_timeline">"Voir dans la discussion"</string>
   <string name="action_view_source">"Afficher la source"</string>
+  <string name="action_voice_call">"Appel audio"</string>
   <string name="action_yes">"Oui"</string>
   <string name="action_yes_try_again">"Oui, réessayez"</string>
   <string name="banner_migrate_to_native_sliding_sync_description">"Votre serveur prend désormais en charge un nouveau protocole plus rapide. Déconnectez-vous, puis reconnectez-vous pour effectuer la mise à niveau dès maintenant. En le faisant tout de suite, vous éviterez une déconnexion forcée lorsque l’ancien protocole sera supprimé."</string>
@@ -215,6 +235,7 @@
   <string name="common_blocked_users">"Utilisateurs bloqués"</string>
   <string name="common_bubbles">"Bulles"</string>
   <string name="common_call_declined">"Appel rejeté"</string>
+  <string name="common_call_in_progress">"Appel en cours"</string>
   <string name="common_call_started">"Appel démarré"</string>
   <string name="common_call_you_declined">"Vous avez rejeté un appel"</string>
   <string name="common_chat_backup">"Sauvegarde des discussions"</string>
@@ -258,7 +279,17 @@ Raison : %1$s."</string>
   <string name="common_file_saved_on_disk_android">"Fichier enregistré dans Téléchargements"</string>
   <string name="common_forward_message">"Transférer le message"</string>
   <string name="common_frequently_used">"Fréquemment utilisé"</string>
+  <string name="common_gallery">"Galerie"</string>
+  <plurals name="common_gallery_reply_attachments">
+    <item quantity="one">"%1$d élément…"</item>
+    <item quantity="other">"%1$d éléments…"</item>
+  </plurals>
+  <plurals name="common_gallery_reply_media_items">
+    <item quantity="one">"%1$d élément multimédia…"</item>
+    <item quantity="other">"%1$d éléments multimédia…"</item>
+  </plurals>
   <string name="common_gif">"GIF"</string>
+  <string name="common_group_call_in_progress">"Appel de groupe en cours"</string>
   <string name="common_image">"Image"</string>
   <string name="common_in_reply_to">"En réponse à %1$s"</string>
   <string name="common_install_apk_android">"Installer l’APK"</string>
@@ -294,6 +325,7 @@ Raison : %1$s."</string>
   <string name="common_no_space_name">"Espace sans nom"</string>
   <string name="common_not_encrypted">"Non chiffré"</string>
   <string name="common_offline">"Hors ligne"</string>
+  <string name="common_on_a_call">"En appel"</string>
   <string name="common_open_source_licenses">"Licences open source"</string>
   <string name="common_or">"ou"</string>
   <string name="common_other_options">"Autres options"</string>
@@ -401,6 +433,7 @@ Raison : %1$s."</string>
   <string name="common_unmute">"Retirer la sourdine"</string>
   <string name="common_unsupported_call">"Appel non pris en charge"</string>
   <string name="common_unsupported_event">"Événement non pris en charge"</string>
+  <string name="common_user_started_a_call">"%1$s a commencé un appel"</string>
   <string name="common_username">"Nom d’utilisateur"</string>
   <string name="common_verification_cancelled">"Vérification annulée"</string>
   <string name="common_verification_complete">"Vérification terminée"</string>
@@ -422,6 +455,11 @@ Raison : %1$s."</string>
   <string name="common_waiting_live_location">"En attente de la position en temps réel…"</string>
   <string name="common_world_readable_history">"Tout le monde peut voir les anciens messages"</string>
   <string name="common_you">"Vous"</string>
+  <string name="content_scanner_not_found">"Téléchargement indisponible."</string>
+  <string name="content_scanner_not_found_title">"Une erreur est survenue"</string>
+  <string name="content_scanner_scanning">"Analyse en cours…"</string>
+  <string name="content_scanner_unsafe_message">"L’aperçu et le téléchargement ont été désactivés."</string>
+  <string name="content_scanner_unsafe_title">"Le fichier n’est pas sûr"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) a partagé ce message avec vous car vous n’étiez pas dans le salon lors de son envoi."</string>
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s a partagé ce message avec vous car vous n’étiez pas dans le salon lors de son envoi."</string>
   <string name="crypto_history_visible">"Ce salon a été configuré pour que les nouveaux membres puissent lire l’historique. %1$s"</string>
@@ -478,10 +516,19 @@ Raison : %1$s."</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake pour signaler un problème"</string>
   <string name="screen_bug_report_a11y_screenshot">"Capture d’écran"</string>
+  <string name="screen_change_server_navigation_title_login">"Se connecter"</string>
+  <string name="screen_change_server_navigation_title_register">"Créer un compte"</string>
+  <string name="screen_change_server_textfield_footer_login">"Si votre fournisseur de compte est fourni par votre entreprise ou une communauté, veuillez le saisir ici (exemple : monentreprise.com)."</string>
+  <string name="screen_change_server_textfield_footer_register">"Créez un compte sur matrix.org gratuitement. Si vous souhaitez créer un compte auprès d’un autre fournisseur, veuillez modifier l’adresse ici (exemple : monassociation.org)."</string>
+  <string name="screen_change_server_textfield_header">"Fournisseur de compte"</string>
+  <string name="screen_change_server_textfield_placeholder">"exemple.com"</string>
+  <string name="screen_change_server_title_login">"Saisissez votre fournisseur de compte"</string>
+  <string name="screen_change_server_title_register">"Choisissez un fournisseur de compte"</string>
   <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
   <string name="screen_create_poll_options_section_title">"Options"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Supprimer %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Paramètres"</string>
+  <string name="screen_create_poll_votes_allowed_per_person">"Nombre de votes autorisés par personne"</string>
   <string name="screen_live_location_sheet_nobody_sharing">"Personne ne partage sa position"</string>
   <string name="screen_live_location_sheet_sharing_live_location">"Partage de la position en direct"</string>
   <plurals name="screen_live_location_sheet_subtitle">
@@ -489,6 +536,8 @@ Raison : %1$s."</string>
     <item quantity="other">"%1$d personnes"</item>
   </plurals>
   <string name="screen_live_location_sheet_title">"Sur la carte"</string>
+  <string name="screen_local_network_opt_in_subtitle">"Votre fournisseur de compte se trouve sur votre réseau local. Pour pouvoir communiquer, %1$s a besoin de l’autorisation d’accéder aux appareils de ce réseau."</string>
+  <string name="screen_local_network_opt_in_title">"Autoriser l’accès au réseau local"</string>
   <string name="screen_media_picker_error_failed_selection">"Échec de la sélection du média, veuillez réessayer."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Cliquez (clic long) sur un message et choisissez « %1$s » pour qu‘il apparaisse ici."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Épinglez les messages importants pour leur donner plus de visibilité"</string>
@@ -534,6 +583,10 @@ Raison : %1$s."</string>
   <string name="screen_space_list_title">"Espaces"</string>
   <string name="screen_static_location_sheet_timestamp_description">"Partagé %1$s"</string>
   <string name="screen_static_location_sheet_title">"Sur la carte"</string>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="one">"%1$d participant"</item>
+    <item quantity="other">"%1$d participants"</item>
+  </plurals>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Le message n’a pas été envoyé car l’identité numérique vérifiée de %1$s a été réinitialisée."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Le message n’a pas été envoyé car %1$s n’a pas vérifié tous ses appareils."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Message non envoyé car vous n’avez pas vérifié tous vos appareils."</string>
