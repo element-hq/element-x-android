@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_permission_camera">"من أجل جعل التطبيق يستخدم الكاميرا عليك بمنح الإذن لذلك في إعدادات النظام."</string>
+  <string name="dialog_permission_generic">"يرجى منح الإذن في إعدادات النظام."</string>
+  <string name="dialog_permission_microphone">"من أجل جعل التطبيق يستخدم المايكروفون عليك بمنح الإذن لذلك في إعدادت النظام."</string>
+  <string name="dialog_permission_notification">"من أجل جعل التطبيق يظهر الإشعارات عليك أن تمنح الإذن في إعدادات النظام."</string>
+</resources>
