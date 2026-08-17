@@ -85,8 +85,9 @@ class AndroidMediaPreProcessor(
             val result = when {
                 mimeType == MimeTypes.Svg -> processSvgImage(uri, mimeType)
                 mimeType.isMimeTypeImage() -> {
-                    val shouldBeCompressed = mediaOptimizationConfig.compressImages && mimeType !in notCompressibleImageTypes
-                    processImage(uri, mimeType, shouldBeCompressed)
+                    val imageMimeType = resolveImageMimeType(uri, mimeType)
+                    val shouldBeCompressed = mediaOptimizationConfig.compressImages && imageMimeType !in notCompressibleImageTypes
+                    processImage(uri, imageMimeType, shouldBeCompressed)
                 }
                 mimeType.isMimeTypeVideo() -> processVideo(uri, mimeType, mediaOptimizationConfig.videoCompressionPreset)
                 mimeType.isMimeTypeAudio() -> processAudio(uri, mimeType)
@@ -153,6 +154,19 @@ class AndroidMediaPreProcessor(
             is MediaUploadInfo.Video -> copy(file = renamedFile)
             is MediaUploadInfo.VoiceMessage -> copy(file = renamedFile)
         }
+    }
+
+    /**
+     * The declared mime type can be broader than the image actually is - a wildcard from a share intent, or a mislabelled file - and the encoder is picked
+     * from it. Re-encoding a transparent image as JPEG flattens its alpha channel to black, so resolve the real format from the image header first.
+     */
+    private fun resolveImageMimeType(uri: Uri, declaredMimeType: String): String {
+        if (declaredMimeType == MimeTypes.Png || declaredMimeType == MimeTypes.Jpeg) return declaredMimeType
+        val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        tryOrNull {
+            contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, options) }
+        }
+        return options.outMimeType ?: declaredMimeType
     }
 
     private suspend fun processImage(uri: Uri, mimeType: String, shouldBeCompressed: Boolean): MediaUploadInfo {

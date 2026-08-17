@@ -70,6 +70,7 @@ class AndroidMediaPreProcessorTest : RobolectricTest() {
         mediaOptimizationConfig: MediaOptimizationConfig,
         sdkIntVersion: Int = Build.VERSION_CODES.P,
         deleteOriginal: Boolean = false,
+        mimeType: String = asset.mimeType,
     ): MediaUploadInfo {
         val context = InstrumentationRegistry.getInstrumentation().context
         val deleteCallback = lambdaRecorder<Uri?, Unit> {}
@@ -81,7 +82,7 @@ class AndroidMediaPreProcessorTest : RobolectricTest() {
         val file = getFileFromAssets(context, asset.filename)
         val result = sut.process(
             uri = file.toUri(),
-            mimeType = asset.mimeType,
+            mimeType = mimeType,
             deleteOriginal = deleteOriginal,
             mediaOptimizationConfig = mediaOptimizationConfig,
         )
@@ -89,6 +90,52 @@ class AndroidMediaPreProcessorTest : RobolectricTest() {
         assertThat(data.file.path).endsWith(asset.filename)
         deleteCallback.assertions().isCalledExactly(if (deleteOriginal) 0 else 1)
         return data
+    }
+
+    @Test
+    fun `a png shared with a wildcard mime type is still encoded as a png`() = runTest {
+        val mediaUploadInfo = process(
+            asset = assetImagePng,
+            mimeType = MimeTypes.Images,
+            mediaOptimizationConfig = MediaOptimizationConfig(
+                compressImages = true,
+                videoCompressionPreset = VideoCompressionPreset.STANDARD,
+            ),
+            sdkIntVersion = Build.VERSION_CODES.Q,
+        )
+        val info = mediaUploadInfo as MediaUploadInfo.Image
+        assertThat(info.imageInfo.mimetype).isEqualTo(MimeTypes.Png)
+    }
+
+    @Test
+    fun `a gif shared with a wildcard mime type is recognised and left uncompressed`() = runTest {
+        val mediaUploadInfo = process(
+            asset = assetAnimatedGif,
+            mimeType = MimeTypes.Images,
+            mediaOptimizationConfig = MediaOptimizationConfig(
+                compressImages = true,
+                videoCompressionPreset = VideoCompressionPreset.STANDARD,
+            ),
+            sdkIntVersion = Build.VERSION_CODES.Q,
+        )
+        val info = mediaUploadInfo as MediaUploadInfo.Image
+        assertThat(info.imageInfo.mimetype).isEqualTo(MimeTypes.Gif)
+        assertThat(info.imageInfo.size).isEqualTo(assetAnimatedGif.size)
+    }
+
+    @Test
+    fun `a file that is not an image keeps the wildcard mime type it was shared with`() = runTest {
+        val mediaUploadInfo = process(
+            asset = assetText,
+            mimeType = MimeTypes.Images,
+            mediaOptimizationConfig = MediaOptimizationConfig(
+                compressImages = false,
+                videoCompressionPreset = VideoCompressionPreset.STANDARD,
+            ),
+            sdkIntVersion = Build.VERSION_CODES.Q,
+        )
+        val info = mediaUploadInfo as MediaUploadInfo.Image
+        assertThat(info.imageInfo.mimetype).isEqualTo(MimeTypes.Images)
     }
 
     @Test
