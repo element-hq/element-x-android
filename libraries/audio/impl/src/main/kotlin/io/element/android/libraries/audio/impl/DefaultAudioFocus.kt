@@ -96,8 +96,8 @@ class DefaultAudioFocus(
 private fun AudioFocusRequester.toAudioUsage(): Int {
     return when (this) {
         AudioFocusRequester.ElementCall,
-        AudioFocusRequester.VoiceMessage,
         AudioFocusRequester.RecordVoiceMessage -> AudioAttributes.USAGE_VOICE_COMMUNICATION
+        AudioFocusRequester.VoiceMessage,
         AudioFocusRequester.MediaViewer -> AudioAttributes.USAGE_MEDIA
     }
 }
@@ -105,8 +105,8 @@ private fun AudioFocusRequester.toAudioUsage(): Int {
 private fun AudioFocusRequester.toAudioStream(): Int {
     return when (this) {
         AudioFocusRequester.ElementCall,
-        AudioFocusRequester.VoiceMessage,
         AudioFocusRequester.RecordVoiceMessage -> AudioManager.STREAM_VOICE_CALL
+        AudioFocusRequester.VoiceMessage,
         AudioFocusRequester.MediaViewer -> AudioManager.STREAM_MUSIC
     }
 }
