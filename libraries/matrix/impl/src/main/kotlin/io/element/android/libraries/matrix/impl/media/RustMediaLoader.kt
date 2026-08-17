@@ -11,7 +11,7 @@ package io.element.android.libraries.matrix.impl.media
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.extensions.runCatchingExceptions
-import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.core.mimetype.MimeTypes.withDefaultSubtype
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaFile
 import io.element.android.libraries.matrix.api.media.MediaSource
@@ -71,15 +71,8 @@ class RustMediaLoader(
                     val mediaFile = innerClient.getMediaFile(
                         mediaSource = mediaSource,
                         filename = filename,
-                        mimeType = when {
-                            mimeType == null -> MimeTypes.OctetStream
-                            MimeTypes.hasSubtype(mimeType) -> mimeType
-                            // Fallback to a default mime type based on the main type, so that the SDK can create a file with the correct extension.
-                            mimeType == MimeTypes.Images -> MimeTypes.Jpeg
-                            mimeType == MimeTypes.Videos -> MimeTypes.Mp4
-                            mimeType == MimeTypes.Audio -> MimeTypes.Mp3
-                            else -> MimeTypes.OctetStream
-                        },
+                        // Fallback to a default mime type based on the main type, so that the SDK can create a file with the correct extension.
+                        mimeType = mimeType.withDefaultSubtype(),
                         useCache = useCache,
                         tempDir = cacheDirectory.path,
                     )

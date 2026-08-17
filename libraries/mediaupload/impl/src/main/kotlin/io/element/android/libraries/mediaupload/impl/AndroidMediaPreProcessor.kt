@@ -29,6 +29,7 @@ import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeAudio
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeImage
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
+import io.element.android.libraries.core.mimetype.MimeTypes.withDefaultSubtype
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
@@ -82,15 +83,16 @@ class AndroidMediaPreProcessor(
         mediaOptimizationConfig: MediaOptimizationConfig,
     ): Result<MediaUploadInfo> = withContext(coroutineDispatchers.computation) {
         runCatchingExceptions {
+            val resolvedMimeType = mimeType.withDefaultSubtype()
             val result = when {
-                mimeType == MimeTypes.Svg -> processSvgImage(uri, mimeType)
-                mimeType.isMimeTypeImage() -> {
-                    val shouldBeCompressed = mediaOptimizationConfig.compressImages && mimeType !in notCompressibleImageTypes
-                    processImage(uri, mimeType, shouldBeCompressed)
+                resolvedMimeType == MimeTypes.Svg -> processSvgImage(uri, resolvedMimeType)
+                resolvedMimeType.isMimeTypeImage() -> {
+                    val shouldBeCompressed = mediaOptimizationConfig.compressImages && resolvedMimeType !in notCompressibleImageTypes
+                    processImage(uri, resolvedMimeType, shouldBeCompressed)
                 }
-                mimeType.isMimeTypeVideo() -> processVideo(uri, mimeType, mediaOptimizationConfig.videoCompressionPreset)
-                mimeType.isMimeTypeAudio() -> processAudio(uri, mimeType)
-                else -> processFile(uri, mimeType)
+                resolvedMimeType.isMimeTypeVideo() -> processVideo(uri, resolvedMimeType, mediaOptimizationConfig.videoCompressionPreset)
+                resolvedMimeType.isMimeTypeAudio() -> processAudio(uri, resolvedMimeType)
+                else -> processFile(uri, resolvedMimeType)
             }
             if (deleteOriginal) {
                 tryOrNull {
