@@ -73,7 +73,7 @@ class DefaultNotificationConversationService(
             .launchIn(coroutineScope)
     }
 
-    override suspend fun onSendMessage(
+    override suspend fun onMessageInRoom(
         sessionId: SessionId,
         roomId: RoomId,
         roomName: String?,

@@ -16,16 +16,16 @@ import io.element.android.libraries.matrix.api.core.SessionId
  */
 interface NotificationConversationService {
     /**
-     * Called when a new message is received in a room.
+     * Called when a message is sent to, or received in, a room.
      * It should create a new conversation shortcut for this room.
      *
      * @param sessionId the session the message belongs to.
-     * @param roomId the room the message was received in.
+     * @param roomId the room the message belongs to.
      * @param roomName the name to show on the shortcut, or `null` when the room has none.
      * @param roomIsDirect whether the room is a direct message, which changes how the shortcut is presented.
      * @param roomAvatarUrl the avatar to show on the shortcut, or `null` when the room has none.
      */
-    suspend fun onSendMessage(
+    suspend fun onMessageInRoom(
         sessionId: SessionId,
         roomId: RoomId,
         roomName: String?,

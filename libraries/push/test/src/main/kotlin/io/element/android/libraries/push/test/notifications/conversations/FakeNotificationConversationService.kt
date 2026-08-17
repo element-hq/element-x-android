@@ -12,14 +12,16 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
 
-class FakeNotificationConversationService : NotificationConversationService {
-    override suspend fun onSendMessage(
+class FakeNotificationConversationService(
+    private val onMessageInRoomLambda: (SessionId, RoomId, String?, Boolean, String?) -> Unit = { _, _, _, _, _ -> },
+) : NotificationConversationService {
+    override suspend fun onMessageInRoom(
         sessionId: SessionId,
         roomId: RoomId,
         roomName: String?,
         roomIsDirect: Boolean,
         roomAvatarUrl: String?,
-    ) = Unit
+    ) = onMessageInRoomLambda(sessionId, roomId, roomName, roomIsDirect, roomAvatarUrl)
 
     override suspend fun onLeftRoom(sessionId: SessionId, roomId: RoomId) = Unit
 

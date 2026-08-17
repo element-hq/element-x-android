@@ -8,14 +8,17 @@
 
 package io.element.android.libraries.push.impl.notifications
 
+import com.google.common.truth.Truth.assertThat
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.ui.media.test.FakeImageLoader
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
+import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
 import io.element.android.libraries.push.impl.notifications.fake.FakeActiveNotificationsProvider
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationCreator
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationDataFactory
@@ -27,6 +30,7 @@ import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiable
 import io.element.android.libraries.push.impl.notifications.fixtures.aSimpleNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.anInviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
+import io.element.android.libraries.push.test.notifications.conversations.FakeNotificationConversationService
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.services.analytics.test.FakeAnalyticsService
@@ -58,10 +62,32 @@ class NotificationRendererTest : RobolectricTest() {
     )
     private val notificationIdProvider = NotificationIdProvider
 
+    private val publishedShortcutRooms = mutableListOf<RoomId>()
+    private val notificationConversationService = FakeNotificationConversationService(
+        onMessageInRoomLambda = { _, roomId, _, _, _ -> publishedShortcutRooms.add(roomId) },
+    )
+
     private val notificationRenderer = createNotificationRenderer(
         notificationDisplayer = notificationDisplayer,
         notificationDataFactory = notificationDataFactory,
+        notificationConversationService = notificationConversationService,
     )
+
+    @Test
+    fun `given a room message notification when rendering then the conversation shortcut is published`() = runTest {
+        roomGroupMessageCreator.createRoomMessageResult = lambdaRecorder { _, _, _, _, _, _ -> A_NOTIFICATION }
+
+        renderEventsAsNotifications(listOf(aNotifiableMessageEvent(), aNotifiableMessageEvent()))
+
+        assertThat(publishedShortcutRooms).containsExactly(A_ROOM_ID)
+    }
+
+    @Test
+    fun `given no room message notification when rendering then no conversation shortcut is published`() = runTest {
+        renderEventsAsNotifications(listOf(anInviteNotifiableEvent()))
+
+        assertThat(publishedShortcutRooms).isEmpty()
+    }
 
     @Test
     fun `given no notifications when rendering then cancels summary notification`() = runTest {
@@ -122,10 +148,12 @@ fun createNotificationRenderer(
     enterpriseService: EnterpriseService = FakeEnterpriseService(),
     sessionStore: SessionStore = InMemorySessionStore(),
     analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
+    notificationConversationService: NotificationConversationService = FakeNotificationConversationService(),
 ) = NotificationRenderer(
     notificationDisplayer = notificationDisplayer,
     notificationDataFactory = notificationDataFactory,
     enterpriseService = enterpriseService,
     sessionStore = sessionStore,
     analyticsService = analyticsService,
+    notificationConversationService = notificationConversationService,
 )
