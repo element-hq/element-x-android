@@ -102,6 +102,29 @@ data class TextMessageType(
     val formatted: FormattedBody?
 ) : MessageType
 
+data class GalleryMessageType(
+    val body: String,
+    val formatted: FormattedBody?,
+    val items: List<GalleryItemType>,
+) : MessageType
+
+@Immutable
+sealed interface GalleryItemType {
+    data class Image(val content: ImageMessageType) : GalleryItemType
+    data class Audio(val content: AudioMessageType) : GalleryItemType
+    data class Video(val content: VideoMessageType) : GalleryItemType
+    data class File(val content: FileMessageType) : GalleryItemType
+    data class Other(val itemType: String, val body: String) : GalleryItemType
+
+    fun mediaSources(): List<MediaSource> = when (this) {
+        is Image -> listOfNotNull(content.source, content.info?.thumbnailSource)
+        is Audio -> listOf(content.source)
+        is Video -> listOfNotNull(content.source, content.info?.thumbnailSource)
+        is File -> listOfNotNull(content.source, content.info?.thumbnailSource)
+        is Other -> emptyList()
+    }
+}
+
 data class OtherMessageType(
     val msgType: String,
     val body: String,

@@ -171,22 +171,22 @@ class VectorFirebaseMessagingServiceTest : RobolectricTest() {
     fun `test new token is forwarded to the handler`() = runTest {
         val lambda = lambdaRecorder<String, Unit> { }
         val vectorFirebaseMessagingService = createVectorFirebaseMessagingService(
-            firebaseNewTokenHandler = FakeFirebaseNewTokenHandler(handleResult = lambda)
+            firebaseNewInstallationIdHandler = FakeFirebaseNewInstallationIdHandler(handleResult = lambda)
         )
-        vectorFirebaseMessagingService.onNewToken("aToken")
+        vectorFirebaseMessagingService.onRegistered("installationId")
         advanceUntilIdle()
         lambda.assertions()
             .isCalledOnce()
-            .with(value("aToken"))
+            .with(value("installationId"))
     }
 
     private fun TestScope.createVectorFirebaseMessagingService(
-        firebaseNewTokenHandler: FirebaseNewTokenHandler = FakeFirebaseNewTokenHandler(),
+        firebaseNewInstallationIdHandler: FirebaseNewInstallationIdHandler = FakeFirebaseNewInstallationIdHandler(),
         pushHandler: PushHandler = FakePushHandler(),
         pushHandlingWakeLock: FakeFetchPushForegroundServiceManager = FakeFetchPushForegroundServiceManager(),
     ): VectorFirebaseMessagingService {
         return VectorFirebaseMessagingService().apply {
-            this.firebaseNewTokenHandler = firebaseNewTokenHandler
+            this.firebaseNewInstallationIdHandler = firebaseNewInstallationIdHandler
             this.pushParser = FirebasePushParser()
             this.pushHandler = pushHandler
             this.coroutineScope = this@createVectorFirebaseMessagingService

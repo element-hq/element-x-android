@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"سرگرمیاں"</string>
+  <string name="emoji_picker_category_flags">"جھنڈے"</string>
+  <string name="emoji_picker_category_foods">"طعم و مشروب"</string>
+  <string name="emoji_picker_category_nature">"حیوانات و فطرت"</string>
+  <string name="emoji_picker_category_objects">"اشیاء"</string>
+  <string name="emoji_picker_category_people">"مسکراہٹیں و لوگ"</string>
+  <string name="emoji_picker_category_places">"سفر و مقامات"</string>
+  <string name="emoji_picker_category_symbols">"علامتیں"</string>
+</resources>

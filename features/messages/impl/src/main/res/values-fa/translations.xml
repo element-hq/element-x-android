@@ -6,15 +6,6 @@
   <string name="crypto_event_authenticity_unknown_device">"رمز شده به دست افزاره‌ای ناشناخته یا حذف شده."</string>
   <string name="crypto_event_authenticity_unsigned_device">"رمز شده به دست افزاره‌ای که از سوی مالکش تأیید نشده."</string>
   <string name="crypto_event_authenticity_unverified_identity">"رمز شده به دست کاربری تأیید نشده."</string>
-  <string name="emoji_picker_category_activity">"فعّالیت‌ها"</string>
-  <string name="emoji_picker_category_flags">"پرچم‌ها"</string>
-  <string name="emoji_picker_category_foods">"غذا و نوشیدنی"</string>
-  <string name="emoji_picker_category_nature">"حیوانات و طبعیت"</string>
-  <string name="emoji_picker_category_objects">"اشیا"</string>
-  <string name="emoji_picker_category_people">"شکلک‌ها و افراد"</string>
-  <string name="emoji_picker_category_places">"سفر و مکان‌ها"</string>
-  <string name="emoji_picker_category_recent">"شکلک‌های اخیر"</string>
-  <string name="emoji_picker_category_symbols">"نمادها"</string>
   <string name="screen_media_upload_preview_error_failed_processing">"پردازش رسانه برای بارگذاری شکست خورد. لطفاً دوباره تلاش کنید."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"بارگذاری رسانه شکست خورد. لطفاً دوباره تلاش کنید."</string>
   <string name="screen_media_upload_preview_processing">"پردازش کردن…"</string>

@@ -9,21 +9,25 @@
 
 package io.element.android.features.linknewdevice.impl.screens.desktop
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.linknewdevice.impl.R
 import io.element.android.libraries.designsystem.atomic.organisms.NumberedListOrganism
@@ -34,6 +38,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.LocalBuildMeta
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.annotatedTextWithBold
 import io.element.android.libraries.permissions.api.PermissionsView
 import kotlinx.collections.immutable.persistentListOf
@@ -62,6 +67,7 @@ fun DesktopNoticeView(
         title = stringResource(R.string.screen_link_new_device_desktop_title, appName),
         iconStyle = BigIcon.Style.Default(CompoundIcons.Computer()),
         modifier = modifier,
+        isScrollable = true,
         buttons = {
             Button(
                 text = stringResource(R.string.screen_link_new_device_desktop_submit),
@@ -71,11 +77,10 @@ fun DesktopNoticeView(
         }
     ) {
         Column(
-            Modifier.fillMaxWidth()
+            Modifier.fillMaxWidth(),
         ) {
             Spacer(modifier = Modifier.height(40.dp))
             NumberedListOrganism(
-                modifier = Modifier.fillMaxSize(),
                 items = persistentListOf(
                     AnnotatedString(stringResource(R.string.screen_link_new_device_desktop_step1, appName)),
                     annotatedTextWithBold(
@@ -87,6 +92,17 @@ fun DesktopNoticeView(
                     ),
                     AnnotatedString(stringResource(R.string.screen_link_new_device_desktop_step3)),
                 )
+            )
+            Spacer(modifier = Modifier.height(32.dp))
+            Text(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(ElementTheme.colors.bgCriticalSubtle)
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                text = stringResource(R.string.screen_link_new_device_desktop_warning),
+                style = ElementTheme.typography.fontBodyMdMedium,
+                color = ElementTheme.colors.textCriticalPrimary,
             )
         }
     }

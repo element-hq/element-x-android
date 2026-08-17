@@ -60,6 +60,7 @@ object SimplePlayerModule {
                     .build(),
                 true, // handleAudioFocus
             )
+            .setWakeMode(C.WAKE_MODE_LOCAL)
             .build()
         return DefaultSimplePlayer(exoPlayer)
     }

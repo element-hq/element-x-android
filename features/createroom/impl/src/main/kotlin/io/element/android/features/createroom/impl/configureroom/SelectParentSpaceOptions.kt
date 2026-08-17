@@ -11,7 +11,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -57,7 +58,7 @@ internal fun SelectParentSpaceOptions(
         modifier = modifier
     ) {
         ListItem(
-            headlineContent = {
+            content = {
                 Text(
                     text = selectedSpace?.displayName
                         ?: stringResource(R.string.screen_create_room_space_selection_no_space_title),
@@ -85,9 +86,9 @@ internal fun SelectParentSpaceOptions(
         )
 
         if (displaySelectSpaceBottomSheet) {
-            val sheetState = rememberModalBottomSheetState(
-                skipPartiallyExpanded = true,
-                confirmValueChange = { true },
+            val sheetState = rememberBottomSheetState(
+                initialValue = SheetValue.Hidden,
+                enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
             )
             ModalBottomSheet(
                 sheetState = sheetState,
@@ -125,7 +126,7 @@ private fun SelectParentSpaceBottomSheet(
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
         item {
             ListItem(
-                headlineContent = {
+                content = {
                     Text(
                         text = stringResource(R.string.screen_create_room_space_selection_no_space_option),
                         maxLines = 1
@@ -140,7 +141,7 @@ private fun SelectParentSpaceBottomSheet(
         for (space in spaces) {
             item {
                 ListItem(
-                    headlineContent = {
+                    content = {
                         Text(
                             text = space.displayName,
                             maxLines = 1

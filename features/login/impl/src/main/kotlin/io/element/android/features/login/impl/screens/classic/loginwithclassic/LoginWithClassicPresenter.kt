@@ -20,7 +20,8 @@ import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.classic.ElementClassicConnection
 import io.element.android.features.login.impl.classic.ElementClassicConnectionState
-import io.element.android.features.login.impl.login.LoginHelper
+import io.element.android.features.login.impl.login.LoginModeEvent
+import io.element.android.features.login.impl.login.LoginModeState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
@@ -32,7 +33,7 @@ import kotlinx.coroutines.launch
 class LoginWithClassicPresenter(
     @Assisted private val userId: UserId,
     @Assisted private val navigator: LoginWithClassicNavigator,
-    private val loginHelper: LoginHelper,
+    private val loginModePresenter: Presenter<LoginModeState>,
     private val elementClassicConnection: ElementClassicConnection,
     private val accountProviderDataSource: AccountProviderDataSource,
     private val buildMeta: BuildMeta,
@@ -51,7 +52,7 @@ class LoginWithClassicPresenter(
         var loginWithClassicAction by remember {
             mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
         }
-        val loginMode by loginHelper.collectLoginMode()
+        val loginModeState = loginModePresenter.present()
         val elementClassicConnectionState by elementClassicConnection.stateFlow.collectAsState()
 
         fun handleEvent(event: LoginWithClassicEvent) {
@@ -69,11 +70,13 @@ class LoginWithClassicPresenter(
                                 val elementClassicUserId = currentState.elementClassicSession.userId
                                 val accountProvider = elementClassicUserId.domainName.orEmpty().ensureProtocol()
                                 accountProviderDataSource.setUrl(accountProvider)
-                                loginHelper.submit(
-                                    isAccountCreation = false,
-                                    homeserverUrl = accountProvider,
-                                    resolvedHomeserverUrl = currentState.elementClassicSession.homeserverUrl,
-                                    loginHint = "mxid:" + elementClassicUserId.value,
+                                loginModeState.eventSink(
+                                    LoginModeEvent.Submit(
+                                        isAccountCreation = false,
+                                        homeserverUrl = accountProvider,
+                                        resolvedHomeserverUrl = currentState.elementClassicSession.homeserverUrl,
+                                        loginHint = "mxid:" + elementClassicUserId.value,
+                                    )
                                 )
                             }
                         }
@@ -83,7 +86,7 @@ class LoginWithClassicPresenter(
                 }
                 LoginWithClassicEvent.ClearError -> {
                     loginWithClassicAction = AsyncAction.Uninitialized
-                    loginHelper.clearError()
+                    loginModeState.eventSink(LoginModeEvent.ClearError)
                 }
             }
         }
@@ -94,7 +97,7 @@ class LoginWithClassicPresenter(
             userId = userId,
             displayName = elementClassicReady?.displayName,
             avatar = elementClassicReady?.avatar,
-            loginMode = loginMode,
+            loginModeState = loginModeState,
             loginWithClassicAction = loginWithClassicAction,
             eventSink = ::handleEvent,
         )

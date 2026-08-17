@@ -12,6 +12,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import kotlinx.collections.immutable.toImmutableList
@@ -87,6 +88,7 @@ internal fun createRoomListRoomSummary(
     timestamp: String? = null,
     isTombstoned: Boolean = false,
     isSpace: Boolean = false,
+    dmUserStatus: DisplayedStatus? = null,
 ) = RoomListRoomSummary(
     id = A_ROOM_ID.value,
     roomId = A_ROOM_ID,
@@ -109,5 +111,6 @@ internal fun createRoomListRoomSummary(
     isDm = false,
     heroes = heroes.toImmutableList(),
     isTombstoned = isTombstoned,
-    isSpace = isSpace
+    isSpace = isSpace,
+    dmUserStatus = dmUserStatus,
 )

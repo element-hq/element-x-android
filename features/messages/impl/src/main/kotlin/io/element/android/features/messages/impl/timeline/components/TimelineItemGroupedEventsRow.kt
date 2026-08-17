@@ -19,14 +19,15 @@ import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.aGroupedEvents
+import io.element.android.features.messages.impl.timeline.aRedactedMessagesGroupedEvents
 import io.element.android.features.messages.impl.timeline.aTimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
 import io.element.android.features.messages.impl.timeline.components.group.GroupHeaderView
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.components.receipt.ReadReceiptViewState
 import io.element.android.features.messages.impl.timeline.components.receipt.TimelineItemReadReceiptView
+import io.element.android.features.messages.impl.timeline.groups.isRedactedMessagesGroup
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -34,7 +35,6 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
 
 @Composable
@@ -61,14 +61,15 @@ fun TimelineItemGroupedEventsRow(
     eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit =
         { event, contentModifier, onContentLayoutChange ->
             TimelineItemEventContentView(
+                eventId = event.eventId,
                 content = event.content,
-                hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId, event.isMine),
-                onShowContentClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
+                timelineProtectionState = timelineProtectionState,
                 onLinkClick = onLinkClick,
                 onLinkLongClick = onLinkLongClick,
                 eventSink = eventSink,
                 modifier = contentModifier,
                 onContentClick = null,
+                onGalleryItemClick = {},
                 onLongClick = null,
                 onContentLayoutChange = onContentLayoutChange
             )
@@ -132,39 +133,40 @@ private fun TimelineItemGroupedEventsRowContent(
     eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit =
         { event, contentModifier, onContentLayoutChange ->
             TimelineItemEventContentView(
+                eventId = event.eventId,
                 content = event.content,
-                hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId, event.isMine),
-                onShowContentClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
+                timelineProtectionState = timelineProtectionState,
                 onLinkClick = onLinkClick,
                 onLinkLongClick = onLinkLongClick,
                 eventSink = eventSink,
                 modifier = contentModifier,
                 onContentClick = null,
+                onGalleryItemClick = {},
                 onLongClick = null,
                 onContentLayoutChange = onContentLayoutChange
             )
         },
 ) {
     Column(modifier = modifier.animateContentSize()) {
+        val count = timelineItem.events.size
+        // A group made entirely of redacted events is a collapsed run of deleted messages
+        // (element-web style); anything else is the regular run of room state changes. For the
+        // redacted case we show only the count: the SDK does not expose who performed the redaction,
+        // and showing the original authors would be misleading.
+        val headerText = if (timelineItem.isRedactedMessagesGroup()) {
+            pluralStringResource(R.plurals.screen_room_timeline_redacted_messages, count, count)
+        } else {
+            pluralStringResource(R.plurals.screen_room_timeline_state_changes, count, count)
+        }
         GroupHeaderView(
-            text = pluralStringResource(
-                id = R.plurals.screen_room_timeline_state_changes,
-                count = timelineItem.events.size,
-                timelineItem.events.size
-            ),
+            text = headerText,
             isExpanded = isExpanded,
             isHighlighted = !isExpanded && timelineItem.events.any { it.isEvent(focusedEventId) },
             onClick = onExpandGroupClick,
         )
         if (isExpanded) {
             Column {
-                timelineItem.events.let {
-                    if (isTalkbackActive()) {
-                        it.reversed()
-                    } else {
-                        it
-                    }
-                }.forEach { subGroupEvent ->
+                timelineItem.events.forEach { subGroupEvent ->
                     TimelineItemRow(
                         timelineMode = timelineMode,
                         timelineItem = subGroupEvent,
@@ -177,12 +179,14 @@ private fun TimelineItemGroupedEventsRowContent(
                         onLinkClick = onLinkClick,
                         onLinkLongClick = onLinkLongClick,
                         onContentClick = onClick,
+                        onGalleryItemClick = { _, _ -> },
                         onLongClick = onLongClick,
                         inReplyToClick = inReplyToClick,
                         onReactionClick = onReactionClick,
                         onReactionLongClick = onReactionLongClick,
                         onMoreReactionsClick = onMoreReactionsClick,
                         onReadReceiptClick = onReadReceiptClick,
+                        onJoinCallClick = {},
                         onSwipeToReply = {},
                         eventSink = eventSink,
                         eventContentView = eventContentView,
@@ -237,6 +241,34 @@ internal fun TimelineItemGroupedEventsRowContentCollapsePreview() = ElementPrevi
         isExpanded = false,
         onExpandGroupClick = {},
         timelineItem = aGroupedEvents(withReadReceipts = true),
+        timelineMode = Timeline.Mode.Live,
+        timelineRoomInfo = aTimelineRoomInfo(),
+        timelineProtectionState = aTimelineProtectionState(),
+        focusedEventId = null,
+        isLastOutgoingMessage = false,
+        displayThreadSummaries = false,
+        onClick = {},
+        onLongClick = {},
+        onLinkLongClick = {},
+        inReplyToClick = {},
+        onUserDataClick = {},
+        onLinkClick = {},
+        onReactionClick = { _, _ -> },
+        onReactionLongClick = { _, _ -> },
+        onMoreReactionsClick = {},
+        onReadReceiptClick = {},
+        eventSink = {},
+    )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineItemRedactedMessagesGroupPreview() = ElementPreview {
+    // A collapsed run of deleted messages, shown as a single "N removed messages" header.
+    TimelineItemGroupedEventsRowContent(
+        isExpanded = false,
+        onExpandGroupClick = {},
+        timelineItem = aRedactedMessagesGroupedEvents(count = 11),
         timelineMode = Timeline.Mode.Live,
         timelineRoomInfo = aTimelineRoomInfo(),
         timelineProtectionState = aTimelineProtectionState(),

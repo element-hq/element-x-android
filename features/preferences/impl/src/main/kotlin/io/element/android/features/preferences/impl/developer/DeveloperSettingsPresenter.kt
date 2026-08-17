@@ -22,6 +22,7 @@ import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.preferences.impl.developer.appsettings.AppDeveloperSettingsState
 import io.element.android.features.preferences.impl.tasks.ClearCacheUseCase
 import io.element.android.features.preferences.impl.tasks.ComputeCacheSizeUseCase
+import io.element.android.features.preferences.impl.tasks.MarkAllRoomsAsRead
 import io.element.android.features.preferences.impl.tasks.VacuumStoresUseCase
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.architecture.AsyncAction
@@ -30,6 +31,7 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.data.ByteUnit
 import io.element.android.libraries.matrix.api.analytics.GetDatabaseSizesUseCase
+import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.toImmutableMap
@@ -40,12 +42,14 @@ import kotlinx.coroutines.launch
 class DeveloperSettingsPresenter(
     private val appDeveloperSettingsPresenter: Presenter<AppDeveloperSettingsState>,
     private val sessionId: SessionId,
+    private val deviceId: DeviceId,
     private val computeCacheSizeUseCase: ComputeCacheSizeUseCase,
     private val clearCacheUseCase: ClearCacheUseCase,
     private val enterpriseService: EnterpriseService,
     private val vacuumStoresUseCase: VacuumStoresUseCase,
     private val databaseSizesUseCase: GetDatabaseSizesUseCase,
     private val fileSizeFormatter: FileSizeFormatter,
+    private val markAllRoomsAsRead: MarkAllRoomsAsRead,
 ) : Presenter<DeveloperSettingsState> {
     @Composable
     override fun present(): DeveloperSettingsState {
@@ -56,6 +60,9 @@ class DeveloperSettingsPresenter(
             mutableStateOf<AsyncData<ImmutableMap<String, String>>>(AsyncData.Uninitialized)
         }
         val clearCacheAction = remember {
+            mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
+        }
+        val markAllRoomsAsReadAction = remember {
             mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
         }
         var showColorPicker by remember {
@@ -88,6 +95,18 @@ class DeveloperSettingsPresenter(
                 DeveloperSettingsEvents.VacuumStores -> coroutineScope.launch {
                     vacuumStoresUseCase()
                 }
+                is DeveloperSettingsEvents.MarkAllRoomsAsRead -> {
+                    if (event.needsConfirmation) {
+                        markAllRoomsAsReadAction.value = AsyncAction.ConfirmingNoParams
+                    } else {
+                        coroutineScope.markAllRoomsAsRead(
+                            markAllRoomsAsReadAction = markAllRoomsAsReadAction,
+                        )
+                    }
+                }
+                DeveloperSettingsEvents.DismissMarkAllRoomsAsReadConfirmation -> {
+                    markAllRoomsAsReadAction.value = AsyncAction.Uninitialized
+                }
             }
         }
 
@@ -97,8 +116,10 @@ class DeveloperSettingsPresenter(
             cacheSize = cacheSize.value,
             databaseSizes = databaseSizes.value,
             clearCacheAction = clearCacheAction.value,
+            markAllRoomsAsReadAction = markAllRoomsAsReadAction.value,
             isEnterpriseBuild = enterpriseService.isEnterpriseBuild,
             showColorPicker = showColorPicker,
+            deviceId = deviceId,
             eventSink = ::handleEvent,
         )
     }
@@ -131,8 +152,14 @@ class DeveloperSettingsPresenter(
     }
 
     private fun CoroutineScope.clearCache(clearCacheAction: MutableState<AsyncAction<Unit>>) = launch {
+        suspend { clearCacheUseCase() }.runCatchingUpdatingState(state = clearCacheAction)
+    }
+
+    private fun CoroutineScope.markAllRoomsAsRead(
+        markAllRoomsAsReadAction: MutableState<AsyncAction<Unit>>,
+    ) = launch {
         suspend {
-            clearCacheUseCase()
-        }.runCatchingUpdatingState(clearCacheAction)
+            markAllRoomsAsRead().getOrThrow()
+        }.runCatchingUpdatingState(state = markAllRoomsAsReadAction)
     }
 }

@@ -82,6 +82,8 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
@@ -157,6 +159,7 @@ fun SpaceView(
                 }
             }
         },
+        contentWindowInsets = scaffoldScrollableContentInsets,
         content = { padding ->
             Box(
                 modifier = Modifier.padding(padding)
@@ -251,7 +254,10 @@ private fun SpaceViewContent(
     onAddRoomClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(modifier.fillMaxSize()) {
+    LazyColumn(
+        modifier = modifier.fillMaxSize(),
+        contentPadding = lazyColumnContentPadding,
+    ) {
         val spaceInfo = state.spaceInfo
         item(key = "space_header") {
             AnimatedVisibility(

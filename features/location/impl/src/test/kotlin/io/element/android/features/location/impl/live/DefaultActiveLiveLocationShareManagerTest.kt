@@ -374,6 +374,53 @@ class DefaultActiveLiveLocationShareManagerTest {
     }
 
     @Test
+    fun `location update after expiry stops the share and does not send location`() = runTest {
+        val liveLocationStore = createInMemoryLiveLocationStore()
+        val beaconInfoUpdates = MutableSharedFlow<BeaconInfoUpdate>(replay = 1)
+        val stopLiveLocationShareResult = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val sendLiveLocationResult = lambdaRecorder<String, Result<Unit>> { _ -> Result.success(Unit) }
+        val clock = FakeSystemClock(epochMillisResult = 1_000L)
+        val manager = createManager(
+            client = FakeMatrixClient(
+                sessionId = A_SESSION_ID,
+                sessionCoroutineScope = backgroundScope,
+                ownBeaconInfoUpdates = beaconInfoUpdates,
+            ).apply {
+                givenGetRoomResult(
+                    A_ROOM_ID,
+                    FakeJoinedRoom(
+                        startLiveLocationShareResult = { Result.success(AN_EVENT_ID) },
+                        stopLiveLocationShareResult = stopLiveLocationShareResult,
+                        sendLiveLocationResult = sendLiveLocationResult,
+                    ),
+                )
+            },
+            coordinator = createCoordinator(),
+            liveLocationStore = liveLocationStore,
+            clock = clock,
+        )
+        advanceUntilIdle()
+
+        val startResult = async { manager.startShare(A_ROOM_ID, 1.minutes) }
+        beaconInfoUpdates.emit(BeaconInfoUpdate(roomId = A_ROOM_ID, beaconId = AN_EVENT_ID, isLive = true))
+        assertThat(startResult.await().isSuccess).isTrue()
+
+        // Advance the clock past the expiry so the next location tick is beyond the deadline.
+        clock.epochMillisResult = 1_000L + 1.minutes.inWholeMilliseconds + 1_000L
+
+        manager.sharingRoomIds.test {
+            assertThat(awaitItem()).containsExactly(A_ROOM_ID)
+            manager.onLocationUpdate(io.element.android.features.location.api.Location(lat = 0.0, lon = 0.0, accuracy = null))
+            assertThat(awaitItem()).isEmpty()
+            advanceUntilIdle()
+        }
+        assertThat(liveLocationStore.getLiveLocationExpiries()).doesNotContainKey(A_ROOM_ID)
+        assert(sendLiveLocationResult).isNeverCalled()
+        // stopLiveLocationShare is called twice: once defensively in startShare, once from the tick-triggered stopShare.
+        assert(stopLiveLocationShareResult).isCalledExactly(2)
+    }
+
+    @Test
     fun `session deleted clears local state`() = runTest {
         val startServiceRecorder = lambdaRecorder<Unit> { }
         val stopServiceRecorder = lambdaRecorder<Unit> { }

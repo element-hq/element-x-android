@@ -31,10 +31,10 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.Interaction
+import io.element.android.features.contentscanner.api.ContentScannerService
 import io.element.android.features.location.api.LocationService
 import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.features.messages.impl.attachments.Attachment
-import io.element.android.features.messages.impl.attachments.Attachment.Media
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
 import io.element.android.features.messages.impl.draft.ComposerDraftService
 import io.element.android.features.messages.impl.messagecomposer.suggestions.RoomAliasSuggestionsDataSource
@@ -48,6 +48,8 @@ import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -60,8 +62,12 @@ import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
 import io.element.android.libraries.matrix.api.room.getDirectRoomMember
 import io.element.android.libraries.matrix.api.room.powerlevels.use
 import io.element.android.libraries.matrix.api.timeline.TimelineException
+import io.element.android.libraries.matrix.api.timeline.item.event.mediaSources
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
+import io.element.android.libraries.matrix.ui.media.contentvalidation.EventContentValidationCache
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
+import io.element.android.libraries.matrix.ui.messages.reply.content
+import io.element.android.libraries.matrix.ui.messages.reply.eventId
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
@@ -133,6 +139,9 @@ class MessageComposerPresenter(
     private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
     private val notificationConversationService: NotificationConversationService,
     private val slashCommandService: SlashCommandService,
+    private val featureFlagService: FeatureFlagService,
+    private val contentScannerService: ContentScannerService,
+    private val contentValidationCache: EventContentValidationCache,
 ) : Presenter<MessageComposerState> {
     @AssistedFactory
     interface Factory {
@@ -177,10 +186,19 @@ class MessageComposerPresenter(
             canShareLocation.value = locationService.isServiceAvailable()
         }
 
+        val isSendGalleryMessagesEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.SendGalleryMessages)
+            .collectAsState(initial = false)
+
         val galleryMediaPicker = mediaPickerProvider.registerGalleryPicker { uri, mimeType ->
             handlePickedMedia(uri, mimeType)
         }
-        val filesPicker = mediaPickerProvider.registerFilePicker(AnyMimeTypes) { uri, mimeType ->
+        val galleryMultiMediaPicker = mediaPickerProvider.registerGalleryMultiPicker { uris ->
+            handlePickedMediaList(uris)
+        }
+        val filesPicker = mediaPickerProvider.registerFileMultiPicker(AnyMimeTypes) { uris ->
+            handlePickedMediaList(uris, sendAsFile = true)
+        }
+        val fileSinglePicker = mediaPickerProvider.registerFilePicker(AnyMimeTypes) { uri, mimeType ->
             handlePickedMedia(uri, mimeType ?: MimeTypes.OctetStream, sendAsFile = true)
         }
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker { uri ->
@@ -266,7 +284,7 @@ class MessageComposerPresenter(
                 is MessageComposerEvent.SendUri -> {
                     val inReplyToEventId = (messageComposerContext.composerMode as? MessageComposerMode.Reply)?.eventId
                     sessionCoroutineScope.sendAttachment(
-                        attachment = Media(
+                        attachment = Attachment.Media(
                             localMedia = localMediaFactory.createFromUri(
                                 uri = event.uri,
                                 mimeType = null,
@@ -277,8 +295,7 @@ class MessageComposerPresenter(
                         inReplyToEventId = inReplyToEventId,
                     )
 
-                    // Reset composer since the attachment has been sent
-                    messageComposerContext.composerMode = MessageComposerMode.Normal
+                    resetComposerModeAfterAttaching()
                 }
                 is MessageComposerEvent.SetMode -> {
                     localCoroutineScope.setMode(event.composerMode, markdownTextEditorState, richTextEditorState)
@@ -289,11 +306,19 @@ class MessageComposerPresenter(
                 MessageComposerEvent.DismissAttachmentMenu -> showAttachmentSourcePicker = false
                 MessageComposerEvent.PickAttachmentSource.FromGallery -> localCoroutineScope.launch {
                     showAttachmentSourcePicker = false
-                    galleryMediaPicker.launch()
+                    if (isSendGalleryMessagesEnabled) {
+                        galleryMultiMediaPicker.launch()
+                    } else {
+                        galleryMediaPicker.launch()
+                    }
                 }
                 MessageComposerEvent.PickAttachmentSource.FromFiles -> localCoroutineScope.launch {
                     showAttachmentSourcePicker = false
-                    filesPicker.launch()
+                    if (isSendGalleryMessagesEnabled) {
+                        filesPicker.launch()
+                    } else {
+                        fileSinglePicker.launch()
+                    }
                 }
                 MessageComposerEvent.PickAttachmentSource.PhotoFromCamera -> localCoroutineScope.launch {
                     showAttachmentSourcePicker = false
@@ -400,6 +425,7 @@ class MessageComposerPresenter(
             textEditorState = textEditorState,
             isFullScreen = isFullScreen.value,
             mode = messageComposerContext.composerMode,
+            isInThreadTimeline = isInThread,
             showAttachmentSourcePicker = showAttachmentSourcePicker,
             showTextFormatting = showTextFormatting,
             canShareLocation = canShareLocation.value,
@@ -619,8 +645,39 @@ class MessageComposerPresenter(
         val inReplyToEventId = (messageComposerContext.composerMode as? MessageComposerMode.Reply)?.eventId
         navigator.navigateToPreviewAttachments(persistentListOf(mediaAttachment), inReplyToEventId)
 
-        // Reset composer since the attachment will be sent in a separate flow
-        messageComposerContext.composerMode = MessageComposerMode.Normal
+        resetComposerModeAfterAttaching()
+    }
+
+    private fun handlePickedMediaList(
+        uris: List<Uri>,
+        sendAsFile: Boolean = false,
+    ) {
+        if (uris.isEmpty()) return
+        if (uris.size == 1) {
+            handlePickedMedia(uris.first(), sendAsFile = sendAsFile)
+            return
+        }
+        val attachments = uris.map { uri ->
+            val localMedia = localMediaFactory.createFromUri(
+                uri = uri,
+                mimeType = null,
+                name = null,
+                formattedFileSize = null,
+            )
+            Attachment.Media(localMedia, sendAsFile = sendAsFile)
+        }.toImmutableList()
+        val inReplyToEventId = (messageComposerContext.composerMode as? MessageComposerMode.Reply)?.eventId
+        navigator.navigateToPreviewAttachments(attachments, inReplyToEventId)
+
+        resetComposerModeAfterAttaching()
+    }
+
+    private fun resetComposerModeAfterAttaching() {
+        // An attachment is sent as its own message, so a Reply/Normal mode is consumed and reset.
+        // An in-progress edit must survive: the typed text still edits the original on the next send.
+        if (!messageComposerContext.composerMode.isEditing) {
+            messageComposerContext.composerMode = MessageComposerMode.Normal
+        }
     }
 
     private suspend fun sendMedia(
@@ -799,6 +856,11 @@ class MessageComposerPresenter(
                 setText(newComposerMode.content, markdownTextEditorState, richTextEditorState, requestFocus = true)
             }
             else -> {
+                if (currentComposerMode is MessageComposerMode.Reply) {
+                    val mediaSources = currentComposerMode.replyToDetails.content()?.mediaSources() ?: return@launch
+                    val contentValidationState = contentValidationCache[currentComposerMode.replyToDetails.eventId()]
+                    contentScannerService.scan(mediaSources, contentValidationState)
+                }
                 // When coming from edit, just clear the composer as it'd be weird to reset a volatile draft in this scenario.
                 if (currentComposerMode.isEditing) {
                     setText("", markdownTextEditorState, richTextEditorState)

@@ -15,6 +15,8 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.HomeserverCapabilitiesProvider
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.UrlContentFetcher
+import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
@@ -23,6 +25,7 @@ import io.element.android.libraries.matrix.api.notificationsettings.Notification
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.scanner.ContentScanner
 import io.element.android.libraries.matrix.api.spaces.SpaceService
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
@@ -34,6 +37,11 @@ object SessionMatrixModule {
     @Provides
     fun providesSessionId(matrixClient: MatrixClient): SessionId {
         return matrixClient.sessionId
+    }
+
+    @Provides
+    fun providesDeviceId(matrixClient: MatrixClient): DeviceId {
+        return matrixClient.deviceId
     }
 
     @Provides
@@ -95,5 +103,15 @@ object SessionMatrixModule {
     @Provides
     fun providesHomeserverCapabilitiesProvider(matrixClient: MatrixClient): HomeserverCapabilitiesProvider {
         return matrixClient.homeserverCapabilities()
+    }
+
+    @Provides
+    fun providesContentScanner(matrixClient: MatrixClient): ContentScanner? {
+        return matrixClient.contentScanner
+    }
+
+    @Provides
+    fun providesGetUrlResolverClient(matrixClient: MatrixClient): UrlContentFetcher {
+        return matrixClient
     }
 }
