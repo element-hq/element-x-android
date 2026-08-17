@@ -45,7 +45,7 @@ class FakeEnterpriseService(
         tweakMasUrlResult(url, homeserver, urlContentFetcher)
     }
 
-    override fun homeserverWhitelist(): List<String> {
+    override fun homeserverAllowList(): List<String> {
         return defaultHomeserverListResult()
     }
 

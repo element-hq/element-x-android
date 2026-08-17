@@ -41,10 +41,10 @@ interface EnterpriseService {
      *
      * If the list is empty or contains the special value [ANY_ACCOUNT_PROVIDER], the user is allowed to sign in to any homeserver.
      */
-    fun homeserverWhitelist(): List<String>
+    fun homeserverAllowList(): List<String>
 
     /**
-     * Whether the user is allowed to sign in to a given homeserver, according to [homeserverWhitelist].
+     * Whether the user is allowed to sign in to a given homeserver, according to [homeserverAllowList].
      *
      * @param homeserverUrl the server the user is trying to use.
      */
@@ -113,7 +113,7 @@ interface EnterpriseService {
 }
 
 fun EnterpriseService.canConnectToAnyHomeserver(): Boolean {
-    return homeserverWhitelist().let {
+    return homeserverAllowList().let {
         it.isEmpty() || it.contains(EnterpriseService.ANY_ACCOUNT_PROVIDER)
     }
 }

@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.flowOf
 class DefaultEnterpriseService : EnterpriseService {
     override suspend fun isEnterpriseUser(sessionId: SessionId) = false
     override suspend fun tweakMasUrl(url: String, homeserver: String, urlContentFetcher: UrlContentFetcher) = url
-    override fun homeserverWhitelist(): List<String> = emptyList()
+    override fun homeserverAllowList(): List<String> = emptyList()
     override suspend fun isAllowedToConnectToHomeserver(homeserverUrl: String) = true
     override suspend fun isElementProEnforced(homeserverUrl: String): Boolean = false
 

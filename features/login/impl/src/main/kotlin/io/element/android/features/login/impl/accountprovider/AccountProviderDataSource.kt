@@ -23,7 +23,7 @@ class AccountProviderDataSource(
     enterpriseService: EnterpriseService,
 ) {
     private val defaultAccountProvider = createAccountProvider(
-        url = enterpriseService.homeserverWhitelist()
+        url = enterpriseService.homeserverAllowList()
             .firstOrNull { it != EnterpriseService.ANY_ACCOUNT_PROVIDER }
             ?: AuthenticationConfig.MATRIX_ORG_URL
     )

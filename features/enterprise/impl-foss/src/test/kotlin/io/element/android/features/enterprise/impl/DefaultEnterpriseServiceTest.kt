@@ -21,7 +21,7 @@ class DefaultEnterpriseServiceTest {
     @Test
     fun homeserverWhitelist() {
         val defaultEnterpriseService = DefaultEnterpriseService()
-        assertThat(defaultEnterpriseService.homeserverWhitelist()).isEmpty()
+        assertThat(defaultEnterpriseService.homeserverAllowList()).isEmpty()
     }
 
     @Test

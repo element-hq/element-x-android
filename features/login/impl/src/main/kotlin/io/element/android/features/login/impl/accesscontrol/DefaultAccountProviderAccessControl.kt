@@ -47,7 +47,7 @@ class DefaultAccountProviderAccessControl(
         if (enterpriseService.isAllowedToConnectToHomeserver(accountProviderUrl).not()) {
             throw AccountProviderAccessException.UnauthorizedAccountProviderException(
                 unauthorisedAccountProviderTitle = title,
-                authorisedAccountProviderTitles = enterpriseService.homeserverWhitelist(),
+                authorisedAccountProviderTitles = enterpriseService.homeserverAllowList(),
             )
         }
     }
