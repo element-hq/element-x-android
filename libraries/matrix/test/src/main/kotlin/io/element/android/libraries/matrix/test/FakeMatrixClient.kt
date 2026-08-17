@@ -99,7 +99,7 @@ class FakeMatrixClient(
     override val roomMembershipObserver: RoomMembershipObserver = RoomMembershipObserver(),
     private val homeserverCapabilitiesProvider: FakeHomeserverCapabilitiesProvider = FakeHomeserverCapabilitiesProvider(),
     private val accountManagementUrlResult: (AccountManagementAction?) -> Result<String?> = { lambdaError() },
-    private val resolveRoomAliasResult: (RoomAlias) -> Result<Optional<ResolvedRoomAlias>> = {
+    private val resolveRoomAliasResult: suspend (RoomAlias) -> Result<Optional<ResolvedRoomAlias>> = {
         Result.success(
             Optional.of(ResolvedRoomAlias(A_ROOM_ID, emptyList()))
         )
