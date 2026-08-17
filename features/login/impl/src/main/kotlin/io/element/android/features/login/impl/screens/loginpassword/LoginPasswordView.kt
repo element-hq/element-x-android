@@ -56,6 +56,7 @@ import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.form.textFieldState
+import io.element.android.libraries.designsystem.modifiers.bringIntoViewOnImeVisible
 import io.element.android.libraries.designsystem.modifiers.onTabOrEnterKeyFocusNext
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -191,6 +192,7 @@ private fun LoginForm(
             enabled = !isLoading,
             modifier = Modifier
                 .fillMaxWidth()
+                .bringIntoViewOnImeVisible()
                 .onTabOrEnterKeyFocusNext(focusManager)
                 .testTag(TestTags.loginEmailUsername)
                 .semantics {
@@ -243,6 +245,7 @@ private fun LoginForm(
             enabled = !isLoading,
             modifier = Modifier
                 .fillMaxWidth()
+                .bringIntoViewOnImeVisible()
                 .onTabOrEnterKeyFocusNext(focusManager)
                 .testTag(TestTags.loginPassword)
                 .semantics {
