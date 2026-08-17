@@ -280,13 +280,13 @@ class LinkNewDeviceFlowNode(
             NavTarget.DesktopNotice -> {
                 val callback = object : DesktopNoticeNode.Callback {
                     override fun navigateBack() {
-                        // reset the timer when the user leaves the screen (user will have to authenticate again)
+                        // Stop the timer when the user leaves the screen (user will have to authenticate again)
                         linkNewDesktopHandler.reset()
                         backstack.pop()
                     }
 
                     override fun navigateToQrCodeScanner() {
-                        // reset the timer when the user enters the next screen (they clicked on "Ready to scan")
+                        // Start again the timer when the user enters the next screen (they clicked on "Ready to scan")
                         linkNewDesktopHandler.startTimer()
                         backstack.push(NavTarget.DesktopScanQrCode)
                     }
@@ -296,7 +296,7 @@ class LinkNewDeviceFlowNode(
             NavTarget.DesktopScanQrCode -> {
                 val callback = object : ScanQrCodeNode.Callback {
                     override fun cancel() {
-                        // reset the timer when the user goes back to the DesktopNoticeNode
+                        // start again the timer when the user goes back to the DesktopNoticeNode
                         linkNewDesktopHandler.startTimer()
                         backstack.pop()
                     }
