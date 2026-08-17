@@ -35,25 +35,27 @@ class FakeVoiceRecorder(
     private val levelInterval = if (levels.isEmpty()) Duration.ZERO else recordingDuration / levels.size
 
     private var currentRecording: File? = null
-    private var isRecording = false
+    private var lastRecordingId = 0
+    private var activeRecordingId = 0
 
     override suspend fun startRecord() {
         startRecordResult()
-        if (isRecording) return
-        isRecording = true
+        if (activeRecordingId != 0) return
+        val recordingId = ++lastRecordingId
+        activeRecordingId = recordingId
         currentRecording = File("file.ogg")
         val startedAt = timeSource.markNow()
         for (i in 1..levels.size) {
             delay(levelInterval)
+            if (activeRecordingId != recordingId) return
             timeSource += levelInterval
-            if (!isRecording) return
             _state.emit(VoiceRecorderState.Recording(startedAt.elapsedNow(), levels.take(i)))
         }
     }
 
     override suspend fun stopRecord(cancelled: Boolean) {
         stopRecordResult(cancelled)
-        isRecording = false
+        activeRecordingId = 0
         if (cancelled) {
             deleteRecording()
         }
@@ -72,7 +74,7 @@ class FakeVoiceRecorder(
 
     override suspend fun deleteRecording() {
         deleteRecordingResult()
-        isRecording = false
+        activeRecordingId = 0
         currentRecording = null
         _state.emit(VoiceRecorderState.Idle)
     }
