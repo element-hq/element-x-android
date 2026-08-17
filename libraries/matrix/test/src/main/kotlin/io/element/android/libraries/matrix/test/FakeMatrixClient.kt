@@ -79,6 +79,7 @@ class FakeMatrixClient(
     override val sessionId: SessionId = A_SESSION_ID,
     override val sessionPaths: SessionPaths = SessionPaths(fileDirectory = File("files"), cacheDirectory = File("cache")),
     override val deviceId: DeviceId = A_DEVICE_ID,
+    override val server: String = A_SERVER_NAME,
     override val homeserverUrl: String = A_HOMESERVER_URL,
     override val sessionCoroutineScope: CoroutineScope = TestScope(),
     private val userDisplayName: String? = A_USER_NAME,

@@ -7,7 +7,7 @@
 
 package io.element.android.libraries.matrix.api.scanner
 
-import io.element.android.libraries.matrix.api.UrlContentFetcher
+import io.element.android.libraries.matrix.api.ClientUrlContentFetcher
 import io.element.android.libraries.matrix.api.core.SessionId
 
 /**
@@ -26,6 +26,6 @@ fun interface ContentScannerUrlProvider {
         /**
          * @param urlContentFetcher used to read the configuration advertised by the homeserver; a client that is not authenticated yet also works.
          */
-        fun create(urlContentFetcher: UrlContentFetcher): ContentScannerUrlProvider
+        fun create(urlContentFetcher: ClientUrlContentFetcher): ContentScannerUrlProvider
     }
 }
