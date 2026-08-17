@@ -6,8 +6,6 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-@file:Suppress("UnusedImports")
-
 package io.element.android.features.verifysession.impl.outgoing
 
 import app.cash.turbine.ReceiveTurbine
@@ -30,10 +28,12 @@ import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import kotlin.time.Duration.Companion.minutes
 
 @ExperimentalCoroutinesApi
 class OutgoingVerificationPresenterTest {
@@ -137,6 +137,26 @@ class OutgoingVerificationPresenterTest {
             service.emitVerificationFlowState(VerificationFlowState.DidFail)
             assertThat(awaitItem().step).isInstanceOf(Step.AwaitingOtherDeviceResponse::class.java)
             assertThat(awaitItem().step).isEqualTo(Step.Canceled)
+        }
+    }
+
+    @Test
+    fun `present - A verification request the other session never accepts is canceled`() = runTest {
+        val cancelVerificationRecorder = lambdaRecorder<Unit> {}
+        val service = unverifiedSessionService(
+            requestDeviceVerificationLambda = { },
+            cancelVerificationLambda = cancelVerificationRecorder,
+        )
+        val presenter = createOutgoingVerificationPresenter(service)
+        presenter.test {
+            awaitItem().eventSink(OutgoingVerificationViewEvents.RequestVerification)
+            advanceTimeBy(1.minutes)
+            assertThat(awaitItem().step).isEqualTo(Step.AwaitingOtherDeviceResponse)
+            advanceTimeBy(9.minutes)
+            expectNoEvents()
+            advanceTimeBy(2.minutes)
+            assertThat(awaitItem().step).isEqualTo(Step.Canceled)
+            cancelVerificationRecorder.assertions().isCalledOnce()
         }
     }
 
@@ -283,7 +303,7 @@ class OutgoingVerificationPresenterTest {
         var state = awaitItem()
         assertThat(state.step).isEqualTo(Step.Initial)
         state.eventSink(OutgoingVerificationViewEvents.RequestVerification)
-        testScope.advanceUntilIdle()
+        testScope.advanceTimeBy(1.minutes)
         // Await for other device response:
         fakeService.emitVerificationFlowState(VerificationFlowState.DidAcceptVerificationRequest)
         state = awaitItem()

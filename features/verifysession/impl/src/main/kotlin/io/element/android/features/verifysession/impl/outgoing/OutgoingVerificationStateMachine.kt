@@ -23,9 +23,11 @@ import io.element.android.libraries.matrix.api.verification.SessionVerificationS
 import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.timeout
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import com.freeletics.flowredux.dsl.State as MachineState
 
@@ -36,6 +38,11 @@ class OutgoingVerificationStateMachine(
 ) : FlowReduxStateMachine<OutgoingVerificationStateMachine.State, OutgoingVerificationStateMachine.Event>(
     initialState = State.Initial,
 ) {
+    companion object {
+        /** Lifetime the Matrix specification gives a verification request; past it the other session can no longer accept ours. */
+        private val VERIFICATION_REQUEST_TIMEOUT = 10.minutes
+    }
+
     init {
         spec {
             inState<State.Initial> {
@@ -44,11 +51,15 @@ class OutgoingVerificationStateMachine(
                 }
             }
             inState<State.RequestingVerification> {
-                onEnterEffect { event ->
-                    when (event.verificationRequest) {
+                onEnter { state ->
+                    val verificationRequest = state.snapshot.verificationRequest
+                    when (verificationRequest) {
                         is VerificationRequest.Outgoing.CurrentSession -> sessionVerificationService.requestDeviceVerification()
-                        is VerificationRequest.Outgoing.User -> sessionVerificationService.requestUserVerification(event.verificationRequest.userId)
+                        is VerificationRequest.Outgoing.User -> sessionVerificationService.requestUserVerification(verificationRequest.userId)
                     }
+                    delay(VERIFICATION_REQUEST_TIMEOUT)
+                    sessionVerificationService.cancelVerification()
+                    state.override { State.Canceled.andLogStateChange() }
                 }
                 on<Event.DidAcceptVerificationRequest> { _, state ->
                     state.override { State.VerificationRequestAccepted.andLogStateChange() }
