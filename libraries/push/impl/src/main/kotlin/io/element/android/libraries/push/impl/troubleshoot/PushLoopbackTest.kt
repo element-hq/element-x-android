@@ -64,7 +64,7 @@ class PushLoopbackTest(
             return
         } catch (_: PushGatewayFailure.RateLimited) {
             delegate.updateState(
-                description = stringProvider.getString(R.string.troubleshoot_notifications_test_push_loop_back_failure_5),
+                description = stringProvider.getString(R.string.troubleshoot_notifications_test_push_loop_back_failure_rate_limit),
                 status = NotificationTroubleshootTestState.Status.Failure()
             )
             job.cancel()
