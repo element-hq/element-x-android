@@ -1137,6 +1137,19 @@ class MessageComposerPresenterTest : RobolectricTest() {
             skipItems(1)
             assertThat(awaitItem().suggestions).containsExactly(ResolvedSuggestion.AtRoom, ResolvedSuggestion.Member(bob))
             updateMembersResult.assertions().isCalledOnce()
+
+            // Typing after the `@` must not refresh the members again
+            initialState.eventSink(MessageComposerEvent.SuggestionReceived(Suggestion(0, 1, SuggestionType.Mention, "b")))
+            initialState.eventSink(MessageComposerEvent.SuggestionReceived(Suggestion(0, 2, SuggestionType.Mention, "bo")))
+            advanceUntilIdle()
+            updateMembersResult.assertions().isCalledOnce()
+
+            // Starting a new mention refreshes them again
+            initialState.eventSink(MessageComposerEvent.SuggestionReceived(null))
+            initialState.eventSink(MessageComposerEvent.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "")))
+            advanceUntilIdle()
+            updateMembersResult.assertions().isCalledExactly(2)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 

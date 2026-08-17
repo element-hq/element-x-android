@@ -104,7 +104,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
@@ -465,9 +465,8 @@ class MessageComposerPresenter(
             // Refresh the room members, which are only loaded on demand, when a mention starts
             launch {
                 suggestionSearchTrigger
-                    .map { it?.type == SuggestionType.Mention }
-                    .distinctUntilChanged()
-                    .filter { it }
+                    .distinctUntilChangedBy { it?.type }
+                    .filter { it?.type == SuggestionType.Mention }
                     .collect { room.updateMembers() }
             }
 
