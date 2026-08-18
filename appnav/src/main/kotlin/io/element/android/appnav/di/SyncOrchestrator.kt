@@ -101,7 +101,7 @@ class SyncOrchestrator(
         val isAppActiveFlow = combine(isAppActiveFlows) { actives -> actives.any { it } }
         combine(
             // small debounce to avoid spamming startSync when the state is changing quickly in case of error.
-            matrixClient.syncService.syncState.debounce(100.milliseconds),
+            syncService.syncState.debounce(100.milliseconds),
             networkMonitor.connectivity,
             isAppActiveFlow,
         ) { syncState, networkState, isAppActive ->
