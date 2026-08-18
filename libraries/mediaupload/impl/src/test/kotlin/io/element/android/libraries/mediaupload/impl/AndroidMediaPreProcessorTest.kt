@@ -255,10 +255,10 @@ class AndroidMediaPreProcessorTest : RobolectricTest() {
         assertThat(info.thumbnailFile).isNotNull()
         assertThat(info.imageInfo).isEqualTo(
             ImageInfo(
-                height = 979,
-                width = 3006,
+                height = 1958,
+                width = 6012,
                 mimetype = MimeTypes.Jpeg,
-                size = 84_845,
+                size = 682_492,
                 ThumbnailInfo(height = 244, width = 751, mimetype = MimeTypes.Jpeg, size = 7_178),
                 thumbnailSource = null,
                 blurhash = "K07gBzX=j_D4xZjoaSe,s:"
@@ -280,10 +280,10 @@ class AndroidMediaPreProcessorTest : RobolectricTest() {
         assertThat(info.thumbnailFile).isNull()
         assertThat(info.imageInfo).isEqualTo(
             ImageInfo(
-                height = 979,
-                width = 3_006,
+                height = 1_958,
+                width = 6_012,
                 mimetype = MimeTypes.Jpeg,
-                size = 84_845,
+                size = 682_492,
                 thumbnailInfo = null,
                 thumbnailSource = null,
                 blurhash = null,
