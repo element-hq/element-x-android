@@ -17,6 +17,7 @@ constraintlayout = "2.2.2"
 constraintlayout_compose = "1.1.2"
 lifecycle = "2.11.0"
 activity = "1.13.0"
+navigation3 = "1.1.4"
 media3 = "1.10.1"
 camera = "1.6.1"
 work = "2.11.2"
@@ -201,6 +202,8 @@ showkase = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
 showkase_processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }
 jsoup = "org.jsoup:jsoup:1.23.1"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
+navigation3_runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "navigation3" }
+navigation3_ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:2.2.0"
 timber = "com.jakewharton.timber:timber:5.0.1"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }

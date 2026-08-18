@@ -24,6 +24,8 @@ dependencies {
     api(projects.libraries.core)
     api(libs.metro.runtime)
     api(libs.appyx.core)
+    api(libs.navigation3.runtime)
+    api(libs.navigation3.ui)
     api(libs.androidx.lifecycle.runtime)
     api(libs.molecule.runtime)
 

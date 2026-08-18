@@ -19,7 +19,6 @@ interface ViewFolderEntryPoint : FeatureEntryPoint {
     )
 
     fun createNode(
-        parentNode: Node,
         buildContext: BuildContext,
         params: Params,
         callback: Callback,
