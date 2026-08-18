@@ -29,6 +29,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
 import org.matrix.rustcomponents.sdk.Membership
 import org.matrix.rustcomponents.sdk.RoomHero
+import timber.log.Timber
 import uniffi.matrix_sdk_base.EncryptionState
 import org.matrix.rustcomponents.sdk.Membership as RustMembership
 import org.matrix.rustcomponents.sdk.RoomInfo as RustRoomInfo
@@ -37,6 +38,9 @@ import org.matrix.rustcomponents.sdk.RoomPowerLevels as RustRoomPowerLevels
 
 class RoomInfoMapper {
     fun map(rustRoomInfo: RustRoomInfo): RoomInfo = rustRoomInfo.let {
+        if (it.id == "!Kk3Pee-WrV8kK3vFLJnyYj3xVT4Kvy3bMG3u7TLZxnA") {
+            Timber.d("Found !Kk3Pee-WrV8kK3vFLJnyYj3xVT4Kvy3bMG3u7TLZxnA")
+        }
         return RoomInfo(
             id = RoomId(it.id),
             creators = it.creators.orEmpty().map(::UserId).toImmutableList(),

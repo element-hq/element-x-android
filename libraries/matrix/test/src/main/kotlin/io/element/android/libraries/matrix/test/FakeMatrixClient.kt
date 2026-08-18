@@ -133,6 +133,7 @@ class FakeMatrixClient(
     private val resetWellKnownConfigLambda: () -> Result<Unit> = { lambdaError() },
     private val enableAutomaticCallStatusLambda: (Boolean) -> Unit = { },
     override val contentScanner: ContentScanner? = null,
+    private val isShuttingDownResult: () -> Boolean = { false },
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
         private set
@@ -304,6 +305,9 @@ class FakeMatrixClient(
     override suspend fun knockRoom(roomIdOrAlias: RoomIdOrAlias, message: String, serverNames: List<String>): Result<RoomInfo?> {
         return knockRoomLambda(roomIdOrAlias, message, serverNames)
     }
+
+    override val isShuttingDown: Boolean
+        get() = isShuttingDownResult()
 
     // Mocks
 
