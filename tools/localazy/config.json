@@ -173,6 +173,7 @@
       "includeRegex" : [
         "screen_onboarding_.*",
         "screen\\.onboarding\\..*",
+        "screen\\.change_server\\..*",
         "screen\\.missing_key_backup\\..*",
         "screen_login_.*",
         "screen_server_confirmation_.*",

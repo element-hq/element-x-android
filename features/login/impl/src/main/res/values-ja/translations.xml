@@ -24,8 +24,16 @@
   <string name="screen_change_server_error_unauthorized_homeserver_title">"アカウント提供元 %1$s は許可されていません。"</string>
   <string name="screen_change_server_form_header">"ホームサーバーURL"</string>
   <string name="screen_change_server_form_notice">"ドメイン名を入力してください"</string>
+  <string name="screen_change_server_navigation_title_login">"サインイン"</string>
+  <string name="screen_change_server_navigation_title_register">"アカウントを作成"</string>
   <string name="screen_change_server_subtitle">"サーバーのアドレスは何ですか？"</string>
+  <string name="screen_change_server_textfield_footer_login">"アカウントが会社やコミュニティから発行されている場合は、アカウント提供元を変更してください (例: kaisha-mei.com)。"</string>
+  <string name="screen_change_server_textfield_footer_register">"matrix.org 上に無料でアカウントを作成できます。異なるアカウント提供元上にアカウントを作成したい場合は、それにならって変更してください (例: dantai-mei.org)。"</string>
+  <string name="screen_change_server_textfield_header">"アカウント提供元"</string>
+  <string name="screen_change_server_textfield_placeholder">"example.com"</string>
   <string name="screen_change_server_title">"サーバーを選択"</string>
+  <string name="screen_change_server_title_login">"アカウント提供元を入力"</string>
+  <string name="screen_change_server_title_register">"アカウント提供元を選択"</string>
   <string name="screen_create_account_title">"アカウントを作成"</string>
   <string name="screen_login_error_deactivated_account">"アカウントは削除されました。"</string>
   <string name="screen_login_error_invalid_credentials">"ユーザー名またはパスワードが違います"</string>
