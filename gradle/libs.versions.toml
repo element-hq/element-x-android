@@ -17,7 +17,7 @@ constraintlayout = "2.2.2"
 constraintlayout_compose = "1.1.2"
 lifecycle = "2.11.0"
 activity = "1.13.0"
-media3 = "1.10.1"
+media3 = "1.11.0"
 camera = "1.6.1"
 work = "2.11.2"
 
@@ -185,7 +185,7 @@ test_detekt_test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version
 # https://github.com/matrix-org/matrix-rust-components-kotlin/commits/main/sdk/sdk-android/src/main/kotlin/org/matrix/rustcomponents/sdk/matrix_sdk_ffi.kt
 # All new features should not be implemented in the pull request that upgrades the version, developers should
 # only fix API breaks and may add some TODOs.
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.08.13"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.08.19"
 
 # Others
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
@@ -217,7 +217,7 @@ telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "
 statemachine = "com.freeletics.flowredux:compose:1.2.2"
 maplibre = "org.maplibre.gl:android-sdk:13.4.1"
 maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:3.0.2"
-maplibre_compose = "org.maplibre.compose:maplibre-compose:0.13.1"
+maplibre_compose = "org.maplibre.compose:maplibre-compose:0.14.0"
 maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:3.0.2"
 opusencoder = "io.element.android:opusencoder:1.2.0"
 zxing_cpp = "io.github.zxing-cpp:android:3.1.1"

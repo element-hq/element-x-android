@@ -269,6 +269,11 @@ class HomeFlowNode(
                     parentNode = this,
                     buildContext = buildContext,
                     inviteData = navTarget.inviteData,
+                    callback = object : DeclineInviteAndBlockEntryPoint.Callback {
+                        override fun onDeclineSuccess() {
+                            backstack.pop()
+                        }
+                    },
                 )
             }
             is NavTarget.SelectNewOwnersWhenLeavingRoom -> {

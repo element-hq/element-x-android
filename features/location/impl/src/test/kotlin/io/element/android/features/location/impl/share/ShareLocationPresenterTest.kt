@@ -19,8 +19,8 @@ import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Composer
-import io.element.android.features.enterprise.api.remoteconfig.RemoteEnterpriseConfigProvider
-import io.element.android.features.enterprise.test.remoteconfig.FakeRemoteEnterpriseConfigProvider
+import io.element.android.features.enterprise.api.remoteconfig.MapTilerConfig
+import io.element.android.features.enterprise.test.remoteconfig.aMapTilerConfig
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.impl.aPermissionsState
 import io.element.android.features.location.impl.common.FakeUserLocationStateFactory
@@ -32,8 +32,6 @@ import io.element.android.features.location.impl.common.ui.LocationConstraintsDi
 import io.element.android.features.location.impl.live.LiveLocationStore
 import io.element.android.features.location.test.FakeActiveLiveLocationShareManager
 import io.element.android.features.messages.test.FakeMessageComposerContext
-import io.element.android.features.wellknown.test.aMapTilerConfig
-import io.element.android.features.wellknown.test.anElementWellKnown
 import io.element.android.libraries.dateformatter.test.FakeDurationFormatter
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -55,7 +53,6 @@ import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermiss
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import io.element.android.libraries.preferences.test.FakePreferenceDataStoreFactory
-import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.assert
@@ -92,7 +89,7 @@ class ShareLocationPresenterTest {
         liveLocationShareManager: FakeActiveLiveLocationShareManager = FakeActiveLiveLocationShareManager(),
         liveLocationStore: LiveLocationStore = createLiveLocationStore(sessionId = joinedRoom.sessionId),
         client: FakeMatrixClient = fakeMatrixClient,
-        remoteEnterpriseConfigProvider: RemoteEnterpriseConfigProvider = FakeRemoteEnterpriseConfigProvider(),
+        customMapTilerConfigProvider: () -> Result<MapTilerConfig?> = { Result.success(null) },
     ): ShareLocationPresenter = ShareLocationPresenter(
         permissionsPresenterFactory = { fakePermissionsPresenter },
         room = joinedRoom,
@@ -106,7 +103,7 @@ class ShareLocationPresenterTest {
         liveLocationShareManager = liveLocationShareManager,
         liveLocationStore = liveLocationStore,
         userLocationStateFactory = FakeUserLocationStateFactory(),
-        remoteEnterpriseConfigProvider = remoteEnterpriseConfigProvider,
+        customMapTilerConfigProvider = customMapTilerConfigProvider,
     )
 
     @Test
@@ -134,9 +131,7 @@ class ShareLocationPresenterTest {
             client = FakeMatrixClient(
                 sessionId = A_USER_ID,
             ),
-            remoteEnterpriseConfigProvider = FakeRemoteEnterpriseConfigProvider(
-                getResult = { WellknownRetrieverResult.Success(anElementWellKnown(mapTilerConfig = mapTilerConfig)) }
-            )
+            customMapTilerConfigProvider = { Result.success(mapTilerConfig) }
         )
         shareLocationPresenter.test {
             val state = awaitItem()

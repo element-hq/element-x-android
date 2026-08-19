@@ -299,10 +299,10 @@ private fun Content(
 }
 
 /**
- * Ensure that the string does not contain any new line characters, which can happen when pasting values.
+ * Ensure that the string does not contain any line separator, which can happen when pasting values.
  */
 private fun String.sanitize(): String {
-    return replace("\n", "")
+    return filterNot { it == '\n' || it == '\r' }
 }
 
 @PreviewsDayNight

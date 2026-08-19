@@ -9,6 +9,7 @@
 package io.element.android.features.location.impl.show
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.enterprise.api.remoteconfig.MapTilerConfig
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.features.location.impl.common.userlocation.UserLocationState
@@ -18,7 +19,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.location.AssetType
-import io.element.android.libraries.wellknown.api.MapTilerConfig
 import kotlinx.collections.immutable.toImmutableList
 
 class ShowLocationStateProvider : PreviewParameterProvider<ShowLocationState> {

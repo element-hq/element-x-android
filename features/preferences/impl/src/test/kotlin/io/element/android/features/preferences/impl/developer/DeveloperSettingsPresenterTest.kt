@@ -23,12 +23,14 @@ import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.data.megaBytes
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.analytics.GetDatabaseSizesUseCase
 import io.element.android.libraries.matrix.api.analytics.SdkStoreSizes
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -108,10 +110,8 @@ class DeveloperSettingsPresenterTest {
     fun `present - enterprise build can change the brand color`() = runTest {
         val overrideBrandColorResult = lambdaRecorder<SessionId?, String?, Unit> { _, _ -> }
         val presenter = createDeveloperSettingsPresenter(
-            enterpriseService = FakeEnterpriseService(
-                isEnterpriseBuild = true,
-                overrideBrandColorResult = overrideBrandColorResult,
-            )
+            enterpriseService = FakeEnterpriseService(overrideBrandColorResult = overrideBrandColorResult),
+            buildMeta = aBuildMeta(isEnterpriseBuild = true),
         )
         presenter.test {
             skipItems(1)
@@ -179,6 +179,7 @@ class DeveloperSettingsPresenterTest {
         vacuumStoresUseCase: VacuumStoresUseCase = VacuumStoresUseCase {},
         databaseSizesUseCase: GetDatabaseSizesUseCase = GetDatabaseSizesUseCase { Result.success(SdkStoreSizes(null, null, null, null)) },
         markAllRoomsAsRead: FakeMarkAllRoomsAsRead = FakeMarkAllRoomsAsRead(),
+        buildMeta: BuildMeta = aBuildMeta(),
     ): DeveloperSettingsPresenter {
         return DeveloperSettingsPresenter(
             appDeveloperSettingsPresenter = { anAppDeveloperSettingsState() },
@@ -191,6 +192,7 @@ class DeveloperSettingsPresenterTest {
             databaseSizesUseCase = databaseSizesUseCase,
             fileSizeFormatter = FakeFileSizeFormatter(),
             markAllRoomsAsRead = markAllRoomsAsRead,
+            buildMeta = buildMeta,
         )
     }
 }
