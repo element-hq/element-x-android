@@ -35,7 +35,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessa
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
-import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
@@ -49,6 +48,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
 import io.element.android.libraries.matrix.test.timeline.aPollContent
 import io.element.android.libraries.matrix.test.timeline.aProfileChangeMessageContent
+import io.element.android.libraries.matrix.test.timeline.aRedactedContent
 import io.element.android.libraries.matrix.test.timeline.aStickerContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.libraries.matrix.test.timeline.item.event.aRoomMembershipContent
@@ -80,7 +80,7 @@ class EventItemFactoryTest {
             LegacyCallInviteContent,
             aPollContent(),
             aProfileChangeMessageContent(),
-            RedactedContent,
+            aRedactedContent(),
             aRoomMembershipContent(
                 userId = A_USER_ID,
             ),
