@@ -39,6 +39,37 @@ class DefaultAudioFocusTest : RobolectricTest() {
         assertThat(usageOf(AudioFocusRequester.ElementCall)).isEqualTo(AudioAttributes.USAGE_VOICE_COMMUNICATION)
     }
 
+    @Test
+    fun `a transient focus loss does not pause a voice message`() {
+        assertThat(losesFocusOn(AudioFocusRequester.VoiceMessage, AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)).isFalse()
+        assertThat(losesFocusOn(AudioFocusRequester.VoiceMessage, AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)).isFalse()
+    }
+
+    @Test
+    fun `a permanent focus loss pauses a voice message`() {
+        assertThat(losesFocusOn(AudioFocusRequester.VoiceMessage, AudioManager.AUDIOFOCUS_LOSS)).isTrue()
+    }
+
+    @Test
+    fun `a transient focus loss does not stop a voice message recording`() {
+        assertThat(losesFocusOn(AudioFocusRequester.RecordVoiceMessage, AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)).isFalse()
+    }
+
+    @Test
+    fun `a transient focus loss still pauses the media viewer`() {
+        assertThat(losesFocusOn(AudioFocusRequester.MediaViewer, AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)).isTrue()
+    }
+
+    private fun losesFocusOn(requester: AudioFocusRequester, focusChange: Int): Boolean {
+        val context = RuntimeEnvironment.getApplication()
+        val audioManager = requireNotNull(context.getSystemService<AudioManager>())
+        var focusLost = false
+        DefaultAudioFocus(context).requestAudioFocus(requester) { focusLost = true }
+        val request = requireNotNull(shadowOf(audioManager).lastAudioFocusRequest)
+        request.listener.onAudioFocusChange(focusChange)
+        return focusLost
+    }
+
     private fun usageOf(requester: AudioFocusRequester): Int {
         val context = RuntimeEnvironment.getApplication()
         val audioManager = requireNotNull(context.getSystemService<AudioManager>())
