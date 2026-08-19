@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.preferences.impl.store
 
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
@@ -36,12 +37,17 @@ private val timelineMediaPreviewValueKey = stringPreferencesKey("timelineMediaPr
 private val liveLocationMinimumDistanceUpdateKey = intPreferencesKey("liveLocationMinimumDistanceUpdate")
 private val logLevelKey = stringPreferencesKey("logLevel")
 private val traceLogPacksKey = stringPreferencesKey("traceLogPacks")
+private val homeserverHistoryKey = stringPreferencesKey("homeserverHistory")
 private val messageSoundUriKey = stringPreferencesKey("notificationMessageSoundUri")
 private val messageSoundChannelVersionKey = intPreferencesKey("notificationMessageSoundChannelVersion")
 private val messageSoundDisplayNameKey = stringPreferencesKey("notificationMessageSoundDisplayName")
 private val callRingtoneUriKey = stringPreferencesKey("notificationCallRingtoneUri")
 private val callRingtoneChannelVersionKey = intPreferencesKey("notificationCallRingtoneChannelVersion")
 private val callRingtoneDisplayNameKey = stringPreferencesKey("notificationCallRingtoneDisplayName")
+
+// URLs never contain a newline, so it is a safe delimiter to persist an ordered list in a single String.
+private const val HOMESERVER_HISTORY_DELIMITER = "\n"
+private const val MAX_HOMESERVER_HISTORY_SIZE = 20
 
 @ContributesBinding(AppScope::class)
 class DefaultAppPreferencesStore(
@@ -168,6 +174,20 @@ class DefaultAppPreferencesStore(
         }
     }
 
+    override fun getHomeserverHistoryFlow(): Flow<List<String>> {
+        return store.data.map { prefs -> prefs.readHomeserverHistory() }
+    }
+
+    override suspend fun addHomeserverToHistory(url: String) {
+        val normalized = url.trim().lowercase()
+        if (normalized.isEmpty()) return
+        store.edit { prefs ->
+            val updated = (listOf(normalized) + prefs.readHomeserverHistory().filter { it != normalized })
+                .take(MAX_HOMESERVER_HISTORY_SIZE)
+            prefs[homeserverHistoryKey] = updated.joinToString(HOMESERVER_HISTORY_DELIMITER)
+        }
+    }
+
     override fun getMessageSoundFlow(): Flow<NotificationSound> {
         return store.data.map { prefs -> NotificationSound.fromStored(prefs[messageSoundUriKey]) }
     }
@@ -240,6 +260,13 @@ class DefaultAppPreferencesStore(
     override suspend fun reset() {
         store.edit { it.clear() }
     }
+}
+
+private fun Preferences.readHomeserverHistory(): List<String> {
+    return this[homeserverHistoryKey]
+        ?.split(HOMESERVER_HISTORY_DELIMITER)
+        ?.filter { it.isNotEmpty() }
+        ?: emptyList()
 }
 
 private fun BuildMeta.defaultLogLevel(): LogLevel {

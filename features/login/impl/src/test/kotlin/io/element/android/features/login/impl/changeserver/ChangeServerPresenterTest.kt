@@ -14,6 +14,7 @@ import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
 import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
+import io.element.android.features.login.impl.accountprovider.anAccountProviderDataSource
 import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.features.login.impl.localnetwork.LocalNetworkPermissionGate
 import io.element.android.libraries.architecture.AsyncData
@@ -66,7 +67,7 @@ class ChangeServerPresenterTest {
             val loadingState = awaitItem()
             assertThat(loadingState.changeServerAction).isInstanceOf(AsyncData.Loading::class.java)
             val successState = awaitItem()
-            assertThat(successState.changeServerAction).isEqualTo(AsyncData.Success(Unit))
+            assertThat(successState.changeServerAction).isEqualTo(AsyncData.Success(aMatrixHomeServerDetails(supportsOAuthLogin = true)))
         }
     }
 
@@ -244,13 +245,13 @@ class ChangeServerPresenterTest {
             while (finalState.changeServerAction !is AsyncData.Success) {
                 finalState = awaitItem()
             }
-            assertThat(finalState.changeServerAction).isEqualTo(AsyncData.Success(Unit))
+            assertThat(finalState.changeServerAction).isEqualTo(AsyncData.Success(aMatrixHomeServerDetails(supportsOAuthLogin = true)))
         }
     }
 
     private fun createPresenter(
         authenticationService: FakeMatrixAuthenticationService = FakeMatrixAuthenticationService(),
-        accountProviderDataSource: AccountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
+        accountProviderDataSource: AccountProviderDataSource = anAccountProviderDataSource(),
         enterpriseService: EnterpriseService = FakeEnterpriseService(),
         localNetworkPermissionAdvisor: FakeLocalNetworkPermissionAdvisor = FakeLocalNetworkPermissionAdvisor(),
         permissionsPresenter: FakePermissionsPresenter = FakePermissionsPresenter(),
