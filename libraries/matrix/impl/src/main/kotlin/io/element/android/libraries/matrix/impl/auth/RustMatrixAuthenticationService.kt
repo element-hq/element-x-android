@@ -278,7 +278,6 @@ class RustMatrixAuthenticationService(
                     .let {
                         enterpriseService.tweakMasUrl(
                             url = it,
-                            homeserver = client.server() ?: client.homeserver(),
                             urlContentFetcher = getUrlResolver,
                         )
                     }

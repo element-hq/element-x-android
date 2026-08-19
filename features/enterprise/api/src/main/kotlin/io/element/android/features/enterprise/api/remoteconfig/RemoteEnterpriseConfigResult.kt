@@ -19,9 +19,11 @@ sealed interface RemoteEnterpriseConfigResult<out T> {
     data class Outdated<out T>(val data: T) : RemoteEnterpriseConfigResult<T>
 
     /**
-     * Well-known data is not found (file does not exist server side, we got a 404).
+     * Well-known data is not found (file does not exist server side, we got a 404). `needsRefresh` indicates whether a refresh must be done
+     * to replace this value: if it's `true`, the caller must trigger a refresh to try to fetch the data again;
+     * if it's `false`, the caller can assume that the data is not available and no refresh is needed before returning the data.
      */
-    data object NotFound : RemoteEnterpriseConfigResult<Nothing>
+    data class NotFound(val needsRefresh: Boolean) : RemoteEnterpriseConfigResult<Nothing>
 
     /**
      * Any other error.
@@ -32,13 +34,13 @@ sealed interface RemoteEnterpriseConfigResult<out T> {
         is Success<T> -> data
         is Outdated<T> -> data
         is Error -> null
-        NotFound -> null
+        is NotFound -> null
     }
 
     fun upToDateDataOrNull(): T? = when (this) {
         is Success<T> -> data
         is Outdated<T> -> null
         is Error -> null
-        NotFound -> null
+        is NotFound -> null
     }
 }

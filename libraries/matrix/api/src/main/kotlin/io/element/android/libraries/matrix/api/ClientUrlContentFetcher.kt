@@ -8,9 +8,19 @@
 package io.element.android.libraries.matrix.api
 
 /**
- * An interface to fetch content from a URL using a simple GET request.
+ * An interface to fetch content from a URL using a simple GET request launched from a Matrix client.
  */
-fun interface UrlContentFetcher {
+interface ClientUrlContentFetcher {
+    /**
+     * The domain of the public server for this homeserver.
+     */
+    val server: String?
+
+    /**
+     * The URL of the actual Matrix homeserver.
+     */
+    val homeserverUrl: String
+
     /**
      * Execute generic GET requests through the SDKs internal HTTP client.
      */
