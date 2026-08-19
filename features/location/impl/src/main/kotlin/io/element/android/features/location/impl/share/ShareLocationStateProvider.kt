@@ -9,6 +9,7 @@
 package io.element.android.features.location.impl.share
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.enterprise.api.remoteconfig.MapTilerConfig
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.features.location.impl.common.userlocation.UserLocationState
 import io.element.android.libraries.architecture.AsyncAction
@@ -70,13 +71,13 @@ class ShareLocationStateProvider : PreviewParameterProvider<ShareLocationState> 
                 canShareLiveLocation = true,
             ),
             aShareLocationState(
-                customMapStyleUrl = AsyncData.Loading(),
+                customMapTilerConfig = AsyncData.Loading(),
             ),
         )
 }
 
 fun aShareLocationState(
-    customMapStyleUrl: AsyncData<String?> = AsyncData.Success(null),
+    customMapTilerConfig: AsyncData<MapTilerConfig?> = AsyncData.Success(null),
     currentUser: MatrixUser = MatrixUser(UserId("@user:matrix.org")),
     dialogState: ShareLocationState.Dialog = ShareLocationState.Dialog.None,
     trackUserPosition: Boolean = false,
@@ -87,7 +88,7 @@ fun aShareLocationState(
     eventSink: (ShareLocationEvent) -> Unit = {},
 ): ShareLocationState {
     return ShareLocationState(
-        customMapStyleUrl = customMapStyleUrl,
+        customMapTilerConfig = customMapTilerConfig,
         currentUser = currentUser,
         dialogState = dialogState,
         trackUserLocation = trackUserPosition,
@@ -95,6 +96,6 @@ fun aShareLocationState(
         canShareLiveLocation = canShareLiveLocation,
         appName = appName,
         startLiveLocationAction = startLiveLocationAction,
-        eventSink = eventSink
+        eventSink = eventSink,
     )
 }

@@ -22,6 +22,7 @@ class DefaultFilterSelectionStrategy : FilterSelectionStrategy {
     override val filterSelectionStates = MutableStateFlow(buildFilters())
 
     override fun select(filter: RoomListFilter) {
+        if (selectedFilters.any { it in filter.incompatibleFilters }) return
         selectedFilters.add(filter)
         filterSelectionStates.value = buildFilters()
     }

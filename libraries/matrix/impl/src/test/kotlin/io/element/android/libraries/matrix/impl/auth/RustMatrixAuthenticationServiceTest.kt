@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.test.auth.FakeOAuthRedirectUrlProvide
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -48,6 +49,29 @@ class RustMatrixAuthenticationServiceTest {
             ),
         )
         assertThat(sut.setHomeserver("matrix.org").isSuccess).isTrue()
+    }
+
+    @Test
+    fun `setHomeserver can fail gracefully and clean up the temporary client`() = runTest {
+        val closeResult = lambdaRecorder<Unit> {}
+        val sut = createRustMatrixAuthenticationService(
+            clientBuilderProvider = FakeClientBuilderProvider(
+                provideResult = {
+                    FakeFfiClientBuilder(
+                        buildResult = {
+                            FakeFfiClient(
+                                homeserverLoginDetailsResult = {
+                                    throw IllegalStateException("Failed to get homeserver login details")
+                                },
+                                closeResult = closeResult,
+                            )
+                        },
+                    )
+                },
+            ),
+        )
+        assertThat(sut.setHomeserver("matrix.org").isFailure).isTrue()
+        closeResult.assertions().isCalledOnce()
     }
 
     private fun TestScope.createRustMatrixAuthenticationService(

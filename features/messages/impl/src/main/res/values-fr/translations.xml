@@ -70,6 +70,10 @@
   <string name="screen_room_timeline_reactions_show_more">"Afficher plus"</string>
   <string name="screen_room_timeline_reactions_show_reactions_summary">"Afficher le résumé des réactions"</string>
   <string name="screen_room_timeline_read_marker_title">"Nouveau"</string>
+  <plurals name="screen_room_timeline_redacted_messages">
+    <item quantity="one">"%1$d message supprimé"</item>
+    <item quantity="other">"%1$d messages supprimés"</item>
+  </plurals>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d changement dans le salon"</item>
     <item quantity="other">"%1$d changements dans le salon"</item>

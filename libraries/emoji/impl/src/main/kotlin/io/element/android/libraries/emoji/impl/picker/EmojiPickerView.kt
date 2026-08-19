@@ -62,7 +62,7 @@ internal fun EmojiPickerView(
 
     Column(modifier) {
         SearchBar(
-            modifier = Modifier.padding(bottom = 10.dp),
+            modifier = Modifier.padding(bottom = if (state.isSearchActive) 0.dp else 10.dp),
             queryState = state.searchQuery,
             resultState = state.searchResults,
             active = state.isSearchActive,

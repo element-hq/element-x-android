@@ -70,6 +70,10 @@
   <string name="screen_room_timeline_reactions_show_more">"Több megjelenítése"</string>
   <string name="screen_room_timeline_reactions_show_reactions_summary">"Reakció-összefoglaló megjelenítése"</string>
   <string name="screen_room_timeline_read_marker_title">"Új"</string>
+  <plurals name="screen_room_timeline_redacted_messages">
+    <item quantity="one">"%1$d eltávolított üzenet"</item>
+    <item quantity="other">"%1$d eltávolított üzenet"</item>
+  </plurals>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d szobaváltozás"</item>
     <item quantity="other">"%1$d szobaváltozás"</item>

@@ -22,6 +22,11 @@
     <item quantity="few">"Masz %d nowe wiadomości."</item>
     <item quantity="many">"Masz %d nowych wiadomości."</item>
   </plurals>
+  <plurals name="notification_gallery_body">
+    <item quantity="one">"Udostępnił %1$d załącznik"</item>
+    <item quantity="few">"Udostępnił %1$d załączniki"</item>
+    <item quantity="many">"Udostępnił %1$d załączników"</item>
+  </plurals>
   <string name="notification_incoming_audio_call">"📞 Połączenie przychodzące"</string>
   <string name="notification_incoming_call">"📹 Połączenie przychodzące"</string>
   <string name="notification_inline_reply_failed">"** Nie udało się wysłać - proszę otworzyć pokój"</string>
@@ -34,6 +39,7 @@
   </plurals>
   <string name="notification_invite_body">"Zaprosił Cię do czatu"</string>
   <string name="notification_invite_body_with_sender">"%1$s zaprosił Cię do czatu"</string>
+  <string name="notification_live_location_started_body">"Rozpoczął udostępnianie swojej lokalizacji"</string>
   <string name="notification_mentioned_you_body">"Wspomniano o Tobie: %1$s"</string>
   <string name="notification_new_messages">"Nowe wiadomości"</string>
   <plurals name="notification_new_messages_for_room">

@@ -8,6 +8,7 @@
   <string name="a11y_collapse_message_text_field">"Minimiziraj tekstno polje poruke"</string>
   <string name="a11y_create_poll_votes_allowed_decrease">"Smanjenje dopuštenih glasova po osobi"</string>
   <string name="a11y_create_poll_votes_allowed_increase">"Povećanje broja dopuštenih glasova po osobi"</string>
+  <string name="a11y_custom_emoji">"Prilagođeni Emoji"</string>
   <string name="a11y_delete">"Izbriši"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d unesena znamenka"</item>
@@ -65,6 +66,7 @@
   <string name="a11y_start_call">"Započni poziv"</string>
   <string name="a11y_start_video_call">"Započni videopoziv"</string>
   <string name="a11y_start_voice_call">"Započni glasovni poziv"</string>
+  <string name="a11y_status">"Stanje"</string>
   <string name="a11y_thread_in_room">"Nit u %1$s"</string>
   <string name="a11y_threads_in_room">"Teme u %1$s"</string>
   <string name="a11y_tombstoned_room">"Soba označena za uklanjanje"</string>

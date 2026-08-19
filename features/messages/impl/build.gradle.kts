@@ -61,6 +61,7 @@ dependencies {
     implementation(projects.libraries.push.api)
     implementation(projects.libraries.uiUtils)
     implementation(projects.libraries.testtags)
+    implementation(projects.libraries.wellknown.api)
     implementation(projects.features.networkmonitor.api)
     implementation(projects.features.contentscanner.api)
     implementation(projects.services.analytics.compose)

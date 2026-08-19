@@ -8,6 +8,7 @@
   <string name="a11y_collapse_message_text_field">"Pienennä viestin tekstikenttä"</string>
   <string name="a11y_create_poll_votes_allowed_decrease">"Vähennä sallittujen äänien määrää per henkilö"</string>
   <string name="a11y_create_poll_votes_allowed_increase">"Lisää sallittujen äänien määrää per henkilö"</string>
+  <string name="a11y_custom_emoji">"Mukautettu emoji"</string>
   <string name="a11y_delete">"Poista"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d numero syötetty"</item>
@@ -18,11 +19,21 @@
   <string name="a11y_edit_room_address_hint">"Täysi osoite tulee olemaan %1$s"</string>
   <string name="a11y_encryption_details">"Salauksen tiedot"</string>
   <string name="a11y_expand_message_text_field">"Laajenna viestin tekstikenttä"</string>
+  <string name="a11y_gallery_attachment">"Galleria, liite %1$d"</string>
+  <string name="a11y_gallery_failed_scan">"Galleria, epäonnistunut skannaus %1$d"</string>
+  <string name="a11y_gallery_image">"Galleria, kuva %1$d"</string>
+  <plurals name="a11y_gallery_more_media">
+    <item quantity="one">"Galleria, %1$d media lisää"</item>
+    <item quantity="other">"Galleria, %1$d mediaa lisää"</item>
+  </plurals>
+  <string name="a11y_gallery_scanning">"Galleria, skannataan %1$d"</string>
+  <string name="a11y_gallery_video">"Galleria, video %1$d"</string>
   <string name="a11y_hide_password">"Piilota salasana"</string>
   <string name="a11y_info">"Tiedot"</string>
   <string name="a11y_join_call">"Liity puheluun"</string>
   <string name="a11y_jump_to_bottom">"Siirry loppuun"</string>
   <string name="a11y_jump_to_unread">"Siirry lukemattomiin"</string>
+  <string name="a11y_jump_to_unread_messages">"Siirry ensimmäiseen lukemattomaan viestiin"</string>
   <string name="a11y_move_the_map_to_my_location">"Siirrä kartta sijaintiini"</string>
   <string name="a11y_notifications_mentions_only">"Vain maininnat"</string>
   <string name="a11y_notifications_muted">"Mykistetty"</string>
@@ -63,6 +74,7 @@
   <string name="a11y_start_call">"Aloita puhelu"</string>
   <string name="a11y_start_video_call">"Aloita videopuhelu"</string>
   <string name="a11y_start_voice_call">"Aloita äänipuhelu"</string>
+  <string name="a11y_status">"Tila"</string>
   <string name="a11y_thread_in_room">"Viestiketju huoneessa %1$s"</string>
   <string name="a11y_threads_in_room">"Viestiketjut huoneessa %1$s"</string>
   <string name="a11y_tombstoned_room">"Haudattu huone"</string>
@@ -143,6 +155,7 @@
   <string name="action_manage_account_and_devices">"Hallitse tiliä ja laitteita"</string>
   <string name="action_manage_devices">"Hallitse laitteita"</string>
   <string name="action_manage_rooms">"Huoneiden hallitseminen"</string>
+  <string name="action_mark_as_read">"Merkitse luetuksi"</string>
   <string name="action_message">"Lähetä viesti"</string>
   <string name="action_minimize">"Pienennä"</string>
   <string name="action_next">"Seuraava"</string>
@@ -503,6 +516,14 @@ Haluatko varmasti jatkaa?"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Raivostunut ravistaminen ilmoittaa virheestä"</string>
   <string name="screen_bug_report_a11y_screenshot">"Näyttökuva"</string>
+  <string name="screen_change_server_navigation_title_login">"Kirjaudu sisään"</string>
+  <string name="screen_change_server_navigation_title_register">"Luo tili"</string>
+  <string name="screen_change_server_textfield_footer_login">"Jos tilisi on yrityksesi tai yhteisön tarjoama, vaihda palveluntarjoaja (esimerkki: companyname.com)."</string>
+  <string name="screen_change_server_textfield_footer_register">"Luo tili matrix.org -palvelimelle ilmaiseksi. Jos haluat luoda tilin eri palveluntarjoajan kautta, muuta sitä vastaavasti (esimerkiksi: communityname.org)."</string>
+  <string name="screen_change_server_textfield_header">"Palveluntarjoaja"</string>
+  <string name="screen_change_server_textfield_placeholder">"example.com"</string>
+  <string name="screen_change_server_title_login">"Anna palveluntarjoajasi"</string>
+  <string name="screen_change_server_title_register">"Valitse palveluntarjoaja"</string>
   <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
   <string name="screen_create_poll_options_section_title">"Vaihtoehdot"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Poista %1$s"</string>
@@ -515,6 +536,8 @@ Haluatko varmasti jatkaa?"</string>
     <item quantity="other">"%1$d henkilöä"</item>
   </plurals>
   <string name="screen_live_location_sheet_title">"Kartalla"</string>
+  <string name="screen_local_network_opt_in_subtitle">"Kotipalvelimesi on paikallisverkossasi. Yhdistääksesi, %1$s tarvitsee luvan tavoittaa laitteita tässä verkossa."</string>
+  <string name="screen_local_network_opt_in_title">"Salli pääsy paikallisverkkoon"</string>
   <string name="screen_media_picker_error_failed_selection">"Median valinta epäonnistui, yritä uudelleen."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Paina viestiä ja valitse “%1$s” lisätäksesi sen tänne."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Kiinnitä tärkeät viestit, jotta ne löytyvät helposti."</string>

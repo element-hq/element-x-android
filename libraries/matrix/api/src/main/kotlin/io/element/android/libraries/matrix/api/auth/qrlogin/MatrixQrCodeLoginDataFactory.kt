@@ -8,6 +8,14 @@
 
 package io.element.android.libraries.matrix.api.auth.qrlogin
 
+/**
+ * Decodes the raw bytes of a scanned QR code into login data the SDK can use.
+ */
 interface MatrixQrCodeLoginDataFactory {
+    /**
+     * Parses the scanned bytes, failing with a [QrCodeDecodeException] when they are not a valid Matrix login QR code.
+     *
+     * @param data the raw content read from the QR code.
+     */
     fun parseQrCodeData(data: ByteArray): Result<MatrixQrCodeLoginData>
 }

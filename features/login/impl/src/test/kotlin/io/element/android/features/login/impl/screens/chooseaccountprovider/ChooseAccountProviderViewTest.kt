@@ -84,7 +84,6 @@ class ChooseAccountProviderViewTest : RobolectricTest() {
         onOAuthDetails: (OAuthDetails) -> Unit = EnsureNeverCalledWithParam(),
         onNeedLoginPassword: () -> Unit = EnsureNeverCalled(),
         onLearnMoreClick: () -> Unit = EnsureNeverCalled(),
-        onCreateAccountContinue: (url: String) -> Unit = EnsureNeverCalledWithParam(),
     ) {
         setContent {
             ChooseAccountProviderView(
@@ -93,7 +92,6 @@ class ChooseAccountProviderViewTest : RobolectricTest() {
                 onOAuthDetails = onOAuthDetails,
                 onNeedLoginPassword = onNeedLoginPassword,
                 onLearnMoreClick = onLearnMoreClick,
-                onCreateAccountContinue = onCreateAccountContinue,
             )
         }
     }

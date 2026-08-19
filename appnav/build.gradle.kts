@@ -44,6 +44,7 @@ dependencies {
     implementation(projects.libraries.sessionStorage.api)
     implementation(projects.libraries.uiCommon)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.wellknown.api)
     implementation(projects.features.login.api)
 
     implementation(libs.coil)
@@ -60,6 +61,7 @@ dependencies {
     testCommonDependencies(libs)
     testImplementation(projects.features.login.test)
     testImplementation(projects.features.share.test)
+    testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.oauth.test)
     testImplementation(projects.libraries.permissions.test)
