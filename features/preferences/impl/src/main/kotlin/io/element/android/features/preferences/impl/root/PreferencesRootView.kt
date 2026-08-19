@@ -8,6 +8,7 @@
 
 package io.element.android.features.preferences.impl.root
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -337,7 +338,9 @@ private fun ColumnScope.GeneralSection(
         )
     }
     // Put developer settings at the end, so nothing bad happens if the user clicks 8 times to enable the entry
-    if (state.showDeveloperSettings) {
+    AnimatedVisibility(
+        visible = state.showDeveloperSettings,
+    ) {
         DeveloperPreferencesView(onOpenDeveloperSettings)
     }
 }

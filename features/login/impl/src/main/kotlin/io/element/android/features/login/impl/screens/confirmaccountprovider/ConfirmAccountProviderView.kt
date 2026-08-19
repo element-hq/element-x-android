@@ -43,7 +43,6 @@ fun ConfirmAccountProviderView(
     onOAuthDetails: (OAuthDetails) -> Unit,
     onNeedLoginPassword: () -> Unit,
     onLearnMoreClick: () -> Unit,
-    onCreateAccountContinue: (url: String) -> Unit,
     onChange: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -107,7 +106,6 @@ fun ConfirmAccountProviderView(
             onLearnMoreClick = onLearnMoreClick,
             onOAuthDetails = onOAuthDetails,
             onNeedLoginPassword = onNeedLoginPassword,
-            onCreateAccountContinue = onCreateAccountContinue,
         )
     }
 
@@ -131,7 +129,6 @@ internal fun ConfirmAccountProviderViewPreview(
         state = state,
         onOAuthDetails = {},
         onNeedLoginPassword = {},
-        onCreateAccountContinue = {},
         onLearnMoreClick = {},
         onChange = {},
     )

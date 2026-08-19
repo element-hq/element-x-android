@@ -129,11 +129,11 @@ class FakeMatrixClient(
     private val markRoomAsFullyReadResult: (RoomId, EventId) -> Result<Unit> = { _, _ -> lambdaError() },
     private val markAllRoomsAsReadResult: () -> Result<Unit> = { Result.success(Unit) },
     private val performDatabaseVacuumLambda: () -> Result<Unit> = { lambdaError() },
-    private val getMapStyleUrlResult: () -> Result<String?> = { lambdaError() },
     private val getDatabaseSizesLambda: () -> Result<SdkStoreSizes> = { lambdaError() },
     private val resetWellKnownConfigLambda: () -> Result<Unit> = { lambdaError() },
     private val enableAutomaticCallStatusLambda: (Boolean) -> Unit = { },
     override val contentScanner: ContentScanner? = null,
+    private val isShuttingDownResult: () -> Boolean = { false },
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
         private set
@@ -309,6 +309,9 @@ class FakeMatrixClient(
         return knockRoomLambda(roomIdOrAlias, message, serverNames)
     }
 
+    override val isShuttingDown: Boolean
+        get() = isShuttingDownResult()
+
     // Mocks
 
     fun givenCreateRoomResult(result: Result<RoomId>) {
@@ -436,10 +439,6 @@ class FakeMatrixClient(
 
     override suspend fun performDatabaseVacuum(): Result<Unit> {
         return performDatabaseVacuumLambda()
-    }
-
-    override suspend fun getMapStyleUrl(): Result<String?> = simulateLongTask {
-        getMapStyleUrlResult()
     }
 
     override suspend fun canLinkNewDevice(): Result<Boolean> = simulateLongTask {

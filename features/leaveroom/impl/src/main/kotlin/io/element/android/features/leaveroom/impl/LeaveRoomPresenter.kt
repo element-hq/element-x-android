@@ -60,7 +60,13 @@ class LeaveRoomPresenter(
         roomId: RoomId,
         leaveAction: MutableState<AsyncAction<Unit>>,
     ) = launch(dispatchers.io) {
-        client.getRoom(roomId)?.use { room ->
+        val room = client.getRoom(roomId)
+        if (room == null) {
+            Timber.e("Unable to find room $roomId to leave it")
+            leaveAction.value = AsyncAction.Failure(RoomNotFoundException(roomId))
+            return@launch
+        }
+        room.use {
             val roomInfo = room.roomInfoFlow.first()
             leaveAction.value = when {
                 roomInfo.isDm -> Confirmation.Dm(roomId)
@@ -78,7 +84,8 @@ class LeaveRoomPresenter(
         leaveAction: MutableState<AsyncAction<Unit>>,
     ) = launch(dispatchers.io) {
         leaveAction.runCatchingUpdatingState {
-            client.getRoom(roomId)!!.use { room ->
+            val room = client.getRoom(roomId) ?: throw RoomNotFoundException(roomId)
+            room.use {
                 room
                     .leave()
                     .onSuccess { notificationConversationService.onLeftRoom(client.sessionId, roomId) }
@@ -100,3 +107,5 @@ class LeaveRoomPresenter(
         }
     }
 }
+
+internal class RoomNotFoundException(roomId: RoomId) : IllegalStateException("Room $roomId not found")

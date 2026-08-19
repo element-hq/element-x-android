@@ -44,6 +44,7 @@ dependencies {
     implementation(projects.libraries.sessionStorage.api)
     implementation(projects.libraries.uiCommon)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.wellknown.api)
     implementation(projects.features.login.api)
 
     implementation(libs.coil)

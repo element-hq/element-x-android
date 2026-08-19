@@ -8,6 +8,7 @@
 
 package io.element.android.features.location.impl.show
 
+import io.element.android.features.enterprise.api.remoteconfig.MapTilerConfig
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.features.location.impl.common.ui.LocationMarkerData
@@ -20,7 +21,7 @@ import io.element.android.libraries.matrix.api.room.location.AssetType
 import kotlinx.collections.immutable.ImmutableList
 
 data class ShowLocationState(
-    val customMapStyleUrl: AsyncData<String?>,
+    val customMapTilerConfig: AsyncData<MapTilerConfig?>,
     val isLive: Boolean,
     val dialogState: LocationConstraintsDialogState,
     val locationShares: ImmutableList<LocationShareItem>,

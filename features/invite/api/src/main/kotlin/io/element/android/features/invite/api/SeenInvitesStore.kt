@@ -11,6 +11,9 @@ package io.element.android.features.invite.api
 import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Remembers which invitations the user has already looked at, so that only genuinely new ones are highlighted in the room list.
+ */
 interface SeenInvitesStore {
     /**
      * Returns a flow of seen room IDs of invitation.
@@ -32,7 +35,7 @@ interface SeenInvitesStore {
     suspend fun markAsUnSeen(roomId: RoomId)
 
     /**
-     * Delete the store.
+     * Delete the store, so every invitation counts as unseen again.
      */
     suspend fun clear()
 }

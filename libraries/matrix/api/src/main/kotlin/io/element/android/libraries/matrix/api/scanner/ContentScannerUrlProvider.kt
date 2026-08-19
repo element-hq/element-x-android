@@ -19,7 +19,13 @@ fun interface ContentScannerUrlProvider {
      */
     suspend fun getContentScannerUrl(sessionId: SessionId): Result<String?>
 
+    /**
+     * Creates a provider, which needs a fetcher because the scanner URL is itself discovered over HTTP.
+     */
     fun interface Factory {
+        /**
+         * @param urlContentFetcher used to read the configuration advertised by the homeserver; a client that is not authenticated yet also works.
+         */
         fun create(urlContentFetcher: UrlContentFetcher): ContentScannerUrlProvider
     }
 }

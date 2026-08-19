@@ -8,6 +8,9 @@
 
 package io.element.android.features.invitepeople.api
 
+/**
+ * Events the invite people UI sends to its presenter through [InvitePeopleState.eventSink].
+ */
 interface InvitePeopleEvents {
     data object SendInvites : InvitePeopleEvents
     data object CloseSearch : InvitePeopleEvents

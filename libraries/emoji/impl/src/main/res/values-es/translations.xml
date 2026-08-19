@@ -7,5 +7,7 @@
   <string name="emoji_picker_category_objects">"Objetos"</string>
   <string name="emoji_picker_category_people">"Emojis y personas"</string>
   <string name="emoji_picker_category_places">"Viajes y lugares"</string>
+  <string name="emoji_picker_category_recent">"Emojis recientes"</string>
   <string name="emoji_picker_category_symbols">"Símbolos"</string>
+  <string name="emoji_picker_search_placeholder">"Buscar emojis"</string>
 </resources>

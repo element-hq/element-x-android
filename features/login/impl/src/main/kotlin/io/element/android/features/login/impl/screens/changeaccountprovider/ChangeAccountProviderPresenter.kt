@@ -28,7 +28,7 @@ class ChangeAccountProviderPresenter(
     @Composable
     override fun present(): ChangeAccountProviderState {
         val staticAccountProviderList = remember {
-            enterpriseService.defaultHomeserverList()
+            enterpriseService.homeserverAllowList()
                 .filter { it != EnterpriseService.ANY_ACCOUNT_PROVIDER }
                 .map { it.ensureProtocol() }
                 .ifEmpty { listOf(AuthenticationConfig.MATRIX_ORG_URL) }

@@ -653,6 +653,28 @@ class DefaultNotifiableEventResolverTest : RobolectricTest() {
     }
 
     @Test
+    fun `resolve RoomMemberContent knock`() = runTest {
+        val sut = createDefaultNotifiableEventResolver(
+            notificationResult = Result.success(
+                mapOf(
+                    AN_EVENT_ID to Result.success(aNotificationData(
+                        content = NotificationContent.StateEvent.RoomMemberContent(
+                            userId = A_USER_ID_2,
+                            membershipState = RoomMembershipState.KNOCK
+                        )
+                    ))
+                )
+            )
+        )
+        val request = aPushRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
+        val expectedResult = ResolvedPushEvent.Event(
+            aNotifiableMessageEvent(body = "Requested to join")
+        )
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
+    }
+
+    @Test
     fun `resolve RoomMemberContent other`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
