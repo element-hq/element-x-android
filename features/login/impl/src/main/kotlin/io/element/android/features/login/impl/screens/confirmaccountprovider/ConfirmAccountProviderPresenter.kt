@@ -21,6 +21,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.appconfig.AuthenticationConfig
+import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.changeserver.ChangeServerEvents
@@ -38,6 +39,7 @@ class ConfirmAccountProviderPresenter(
     private val loginModePresenter: Presenter<LoginModeState>,
     private val changeServerPresenter: Presenter<ChangeServerState>,
     private val appPreferencesStore: AppPreferencesStore,
+    private val enterpriseService: EnterpriseService,
 ) : Presenter<ConfirmAccountProviderState> {
     data class Params(
         val isAccountCreation: Boolean,
@@ -55,22 +57,28 @@ class ConfirmAccountProviderPresenter(
         val changeServerState = changeServerPresenter.present()
         val homeserverHistory by appPreferencesStore.getHomeserverHistoryFlow().collectAsState(emptyList())
 
-        // Editable input, seeded from the current (history-defaulted) account provider until the user edits it.
-        var userInput by rememberSaveable { mutableStateOf<String?>(null) }
-        val accountProviderInput = userInput ?: accountProvider.url
+        // The account providers offered for autocomplete: previously-used ones first, then the
+        // enterprise/MDM-configured allow-list, then matrix.org (always available, even before any sign-in).
+        // The "*" wildcard is a routing marker, not a real provider, so it is filtered out. Everything is
+        // rendered without the https:// scheme (added back at connection time).
+        val autocompleteCandidates = remember(homeserverHistory) {
+            (homeserverHistory + enterpriseService.homeserverAllowList() + AuthenticationConfig.MATRIX_ORG_URL)
+                .filter { it != EnterpriseService.ANY_ACCOUNT_PROVIDER }
+                .map { it.withoutScheme() }
+                .distinct()
+        }
 
-        // Offer an account provider that the current input is a prefix of: the most recent previously-used
-        // one first, then matrix.org. matrix.org is always available for autocomplete even before any
-        // sign-in, offered both with and without the https:// scheme so it completes whether the user starts
-        // typing "matrix.org" or "https://matrix.org".
-        val accountProviderSuggestion = remember(accountProviderInput, homeserverHistory) {
+        // Editable input, seeded from the current (history-defaulted) account provider until the user edits it.
+        // Displayed without the scheme, so the field shows e.g. "matrix.org" rather than "https://matrix.org".
+        var userInput by rememberSaveable { mutableStateOf<String?>(null) }
+        val accountProviderInput = userInput ?: accountProvider.url.withoutScheme()
+
+        // Offer the first candidate that the current input is a (case-insensitive) prefix of.
+        val accountProviderSuggestion = remember(accountProviderInput, autocompleteCandidates) {
             val input = accountProviderInput.trim()
-            val candidates = homeserverHistory +
-                AuthenticationConfig.MATRIX_ORG_URL +
-                AuthenticationConfig.MATRIX_ORG_URL.removePrefix("https://")
             input.takeIf { it.isNotEmpty() }
                 ?.let { prefix ->
-                    candidates.firstOrNull { it.length > prefix.length && it.startsWith(prefix, ignoreCase = true) }
+                    autocompleteCandidates.firstOrNull { it.length > prefix.length && it.startsWith(prefix, ignoreCase = true) }
                 }
         }
 
@@ -104,8 +112,12 @@ class ConfirmAccountProviderPresenter(
                 // Validate (and persist) the chosen account provider before proceeding. This also enforces the
                 // account-provider access control, which the login submit does not run on its own.
                 is ConfirmAccountProviderEvents.Continue -> {
+                    // Apply the accepted account provider (any accepted completion) back into the field so it
+                    // renders the full server rather than the typed prefix, and survives the OAuth round-trip.
+                    val accountProvider = event.accountProvider.trim()
+                    userInput = accountProvider
                     // Default the scheme to https:// so entering a bare host (e.g. "matrix.org") works.
-                    val accountProviderUrl = event.accountProvider.trim().ensureProtocol()
+                    val accountProviderUrl = accountProvider.ensureProtocol()
                     submittedAccountProvider = accountProviderUrl
                     changeServerState.eventSink(
                         ChangeServerEvents.ChangeServer(AccountProvider(url = accountProviderUrl))
@@ -128,3 +140,9 @@ class ConfirmAccountProviderPresenter(
         )
     }
 }
+
+/**
+ * The host part of an account provider URL, i.e. the value with any `https://` / `http://` scheme removed.
+ * Returns the input unchanged when it has no scheme (e.g. `matrix.org`).
+ */
+private fun String.withoutScheme(): String = substringAfter("://")

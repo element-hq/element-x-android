@@ -11,6 +11,7 @@ package io.element.android.features.login.impl.screens.confirmaccountprovider
 import app.cash.turbine.ReceiveTurbine
 import com.google.common.truth.Truth.assertThat
 import io.element.android.appconfig.AuthenticationConfig
+import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
@@ -50,7 +51,7 @@ class ConfirmAccountProviderPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.isAccountCreation).isFalse()
             assertThat(initialState.submitEnabled).isTrue()
-            assertThat(initialState.accountProviderInput).isEqualTo(AuthenticationConfig.MATRIX_ORG_URL)
+            assertThat(initialState.accountProviderInput).isEqualTo("matrix.org")
             assertThat(initialState.loginModeState.loginMode).isEqualTo(AsyncData.Uninitialized)
         }
     }
@@ -315,9 +316,10 @@ class ConfirmAccountProviderPresenterTest {
         presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.accountProviderSuggestion).isNull()
-            initialState.eventSink(ConfirmAccountProviderEvents.UserInputChanged("https://random"))
-            val suggestionState = awaitState { it.accountProviderInput == "https://random" }
-            assertThat(suggestionState.accountProviderSuggestion).isEqualTo("https://randomcommunity.org")
+            initialState.eventSink(ConfirmAccountProviderEvents.UserInputChanged("random"))
+            val suggestionState = awaitState { it.accountProviderInput == "random" }
+            // Completion is offered without the https:// scheme, even though history stores the full URL.
+            assertThat(suggestionState.accountProviderSuggestion).isEqualTo("randomcommunity.org")
         }
     }
 
@@ -338,9 +340,9 @@ class ConfirmAccountProviderPresenterTest {
         )
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink(ConfirmAccountProviderEvents.UserInputChanged("https://random"))
+            initialState.eventSink(ConfirmAccountProviderEvents.UserInputChanged("random"))
             val suggestionState = awaitState { it.accountProviderSuggestion != null }
-            suggestionState.eventSink(ConfirmAccountProviderEvents.Continue("https://randomcommunity.org"))
+            suggestionState.eventSink(ConfirmAccountProviderEvents.Continue("randomcommunity.org"))
             awaitLoginMode { it is AsyncData.Success }
             assertThat(submittedUrls.first()).isEqualTo("https://randomcommunity.org")
             cancelAndIgnoreRemainingEvents()
@@ -348,15 +350,40 @@ class ConfirmAccountProviderPresenterTest {
     }
 
     @Test
-    fun `present - offers matrix_org as an autocomplete suggestion even without any history`() = runTest {
+    fun `present - continue applies the completed account provider back into the field`() = runTest {
+        val authenticationService = FakeMatrixAuthenticationService(
+            setHomeserverResult = { Result.success(aMatrixHomeServerDetails(supportsPasswordLogin = true)) },
+        )
         val presenter = createConfirmAccountProviderPresenter(
-            appPreferencesStore = InMemoryAppPreferencesStore(homeserverHistory = emptyList()),
+            matrixAuthenticationService = authenticationService,
+            appPreferencesStore = InMemoryAppPreferencesStore(homeserverHistory = listOf("https://randomcommunity.org")),
         )
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink(ConfirmAccountProviderEvents.UserInputChanged("https://matr"))
-            val suggestionState = awaitState { it.accountProviderInput == "https://matr" }
-            assertThat(suggestionState.accountProviderSuggestion).isEqualTo(AuthenticationConfig.MATRIX_ORG_URL)
+            initialState.eventSink(ConfirmAccountProviderEvents.UserInputChanged("random"))
+            val suggestionState = awaitState { it.accountProviderSuggestion != null }
+            suggestionState.eventSink(ConfirmAccountProviderEvents.Continue("randomcommunity.org"))
+            // The field now renders the full accepted server rather than the typed prefix.
+            val appliedState = awaitState { it.accountProviderInput == "randomcommunity.org" }
+            assertThat(appliedState.accountProviderInput).isEqualTo("randomcommunity.org")
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - offers the enterprise allow-list servers as autocomplete suggestions`() = runTest {
+        val presenter = createConfirmAccountProviderPresenter(
+            appPreferencesStore = InMemoryAppPreferencesStore(homeserverHistory = emptyList()),
+            enterpriseService = FakeEnterpriseService(
+                // Preferred servers plus the "*" (any) wildcard: the wildcard is filtered out, the rest complete.
+                defaultHomeserverListResult = { listOf("https://element.io", EnterpriseService.ANY_ACCOUNT_PROVIDER) },
+            ),
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(ConfirmAccountProviderEvents.UserInputChanged("ele"))
+            val suggestionState = awaitState { it.accountProviderInput == "ele" }
+            assertThat(suggestionState.accountProviderSuggestion).isEqualTo("element.io")
         }
     }
 
@@ -370,6 +397,22 @@ class ConfirmAccountProviderPresenterTest {
             initialState.eventSink(ConfirmAccountProviderEvents.UserInputChanged("matr"))
             val suggestionState = awaitState { it.accountProviderInput == "matr" }
             assertThat(suggestionState.accountProviderSuggestion).isEqualTo("matrix.org")
+        }
+    }
+
+    @Test
+    fun `present - does not autocomplete a scheme-prefixed input`() = runTest {
+        // Candidates are bare hosts, so a scheme-prefixed input never completes them - the user completes by
+        // typing the bare host. This also avoids ever suggesting an insecure http scheme.
+        val presenter = createConfirmAccountProviderPresenter(
+            appPreferencesStore = InMemoryAppPreferencesStore(homeserverHistory = emptyList()),
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(ConfirmAccountProviderEvents.UserInputChanged("https://mat"))
+            assertThat(awaitState { it.accountProviderInput == "https://mat" }.accountProviderSuggestion).isNull()
+            initialState.eventSink(ConfirmAccountProviderEvents.UserInputChanged("http://mat"))
+            assertThat(awaitState { it.accountProviderInput == "http://mat" }.accountProviderSuggestion).isNull()
         }
     }
 
@@ -440,10 +483,12 @@ class ConfirmAccountProviderPresenterTest {
         matrixAuthenticationService: MatrixAuthenticationService = FakeMatrixAuthenticationService(),
         defaultOAuthActionFlow: OAuthActionFlow = FakeOAuthActionFlow(),
         appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
+        enterpriseService: EnterpriseService = FakeEnterpriseService(),
     ) = ConfirmAccountProviderPresenter(
         params = params,
         accountProviderDataSource = accountProviderDataSource,
         appPreferencesStore = appPreferencesStore,
+        enterpriseService = enterpriseService,
         loginModePresenter = createLoginModePresenter(
             authenticationService = matrixAuthenticationService,
             oAuthActionFlow = defaultOAuthActionFlow,

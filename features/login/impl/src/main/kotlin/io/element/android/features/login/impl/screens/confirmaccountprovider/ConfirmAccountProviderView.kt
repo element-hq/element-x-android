@@ -50,7 +50,6 @@ import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubti
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.form.textFieldState
-import io.element.android.libraries.designsystem.modifiers.onTabOrEnterKeyFocusNext
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -82,8 +81,9 @@ fun ConfirmAccountProviderView(
     val keyboardController = LocalSoftwareKeyboardController.current
 
     var input by textFieldState(stateValue = state.accountProviderInput)
+
     // Inline autocomplete: the un-typed remainder of the suggested account provider (rendered in grey and
-    // accepted on Continue). Only valid while the suggestion still starts with the current input.
+    // accepted on Continue / Enter). Only valid while the suggestion still starts with the current input.
     val suggestionSuffix = state.accountProviderSuggestion
         ?.takeIf { it.length > input.length && it.startsWith(input, ignoreCase = true) }
         ?.substring(input.length)
@@ -156,7 +156,6 @@ fun ConfirmAccountProviderView(
                 .fillMaxWidth()
                 .padding(top = 40.dp)
                 .focusRequester(focusRequester)
-                .onTabOrEnterKeyFocusNext(focusManager)
                 .testTag(TestTags.changeServerServer),
             label = stringResource(id = CommonStrings.screen_change_server_textfield_header),
             placeholder = stringResource(id = CommonStrings.screen_change_server_textfield_placeholder),
@@ -172,7 +171,22 @@ fun ConfirmAccountProviderView(
                 keyboardType = KeyboardType.Uri,
                 imeAction = ImeAction.Done,
             ),
-            keyboardActions = KeyboardActions(onDone = { submit() }),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    if (suggestionSuffix.isNotEmpty()) {
+                        // A completion is showing: accept it into the field and drop focus, dismissing the
+                        // keyboard. This shows the completed server (with no stray mid-text cursor, since the
+                        // field is no longer focused) ready to sign in with Continue. When no completion is
+                        // showing, Done submits directly.
+                        val accepted = input + suggestionSuffix
+                        input = accepted
+                        eventSink(ConfirmAccountProviderEvents.UserInputChanged(accepted))
+                        focusManager.clearFocus(force = true)
+                    } else {
+                        submit()
+                    }
+                }
+            ),
             singleLine = true,
             trailingIcon = if (input.isNotEmpty()) {
                 {
