@@ -149,6 +149,7 @@ class FakeMatrixClient(
     var setUserStatusResult: Result<Unit> = Result.success(Unit)
     var clearUserStatusResult: Result<Unit> = Result.success(Unit)
     var isUserStatusSupportedResult: Result<Boolean> = Result.success(true)
+    var isProfilesSlidingSyncExtensionSupportedResult: Result<Boolean> = Result.success(true)
 
     private val _userProfile: MutableStateFlow<MatrixUser> = MutableStateFlow(MatrixUser(sessionId, userDisplayName, userAvatarUrl))
     override val userProfile: StateFlow<MatrixUser> = _userProfile
@@ -294,6 +295,8 @@ class FakeMatrixClient(
     }
 
     override suspend fun isUserStatusSupported(): Result<Boolean> = isUserStatusSupportedResult
+
+    override suspend fun isProfilesSlidingSyncExtensionSupported(): Result<Boolean> = isProfilesSlidingSyncExtensionSupportedResult
 
     override fun enableAutomaticCallStatus(enabled: Boolean) = enableAutomaticCallStatusLambda(enabled)
 
