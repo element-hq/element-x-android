@@ -460,6 +460,78 @@ class ConfirmAccountProviderPresenterTest {
         }
     }
 
+    @Test
+    fun `present - continue with a full matrix id signs in to its homeserver and passes a login hint`() = runTest {
+        val submittedUrls = mutableListOf<String>()
+        val authenticationService = FakeMatrixAuthenticationService(
+            setHomeserverResult = { url ->
+                submittedUrls.add(url)
+                Result.success(aMatrixHomeServerDetails(supportsOAuthLogin = true))
+            },
+        )
+        val presenter = createConfirmAccountProviderPresenter(matrixAuthenticationService = authenticationService)
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(ConfirmAccountProviderEvents.Continue("@alice:example.org"))
+            awaitLoginMode { it is AsyncData.Success }
+            assertThat(submittedUrls.first()).isEqualTo("https://example.org")
+            assertThat(authenticationService.getOAuthUrlLoginHint).isEqualTo("mxid:@alice:example.org")
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - continue with a matrix id keeps the port in the homeserver`() = runTest {
+        val submittedUrls = mutableListOf<String>()
+        val authenticationService = FakeMatrixAuthenticationService(
+            setHomeserverResult = { url ->
+                submittedUrls.add(url)
+                Result.success(aMatrixHomeServerDetails(supportsOAuthLogin = true))
+            },
+        )
+        val presenter = createConfirmAccountProviderPresenter(matrixAuthenticationService = authenticationService)
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(ConfirmAccountProviderEvents.Continue("@alice:example.org:8448"))
+            awaitLoginMode { it is AsyncData.Success }
+            assertThat(submittedUrls.first()).isEqualTo("https://example.org:8448")
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - continue with a plain account provider passes no login hint`() = runTest {
+        val authenticationService = FakeMatrixAuthenticationService(
+            setHomeserverResult = { Result.success(aMatrixHomeServerDetails(supportsOAuthLogin = true)) },
+        )
+        val presenter = createConfirmAccountProviderPresenter(matrixAuthenticationService = authenticationService)
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(ConfirmAccountProviderEvents.Continue("matrix.org"))
+            awaitLoginMode { it is AsyncData.Success }
+            assertThat(authenticationService.getOAuthUrlLoginHint).isNull()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - continue with a matrix id during account creation passes no login hint`() = runTest {
+        val authenticationService = FakeMatrixAuthenticationService(
+            setHomeserverResult = { Result.success(aMatrixHomeServerDetails(supportsOAuthLogin = true)) },
+        )
+        val presenter = createConfirmAccountProviderPresenter(
+            params = ConfirmAccountProviderPresenter.Params(isAccountCreation = true),
+            matrixAuthenticationService = authenticationService,
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(ConfirmAccountProviderEvents.Continue("@alice:example.org"))
+            awaitLoginMode { it is AsyncData.Success }
+            assertThat(authenticationService.getOAuthUrlLoginHint).isNull()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
     /**
      * Awaits until the emitted state's login mode matches [predicate], skipping the intermediate
      * account-provider validation states, and returns that state.
