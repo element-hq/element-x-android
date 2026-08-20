@@ -13,6 +13,7 @@ import io.element.android.features.messages.impl.messagesummary.FakeMessageSumma
 import io.element.android.features.messages.impl.threads.list.ThreadsListEvents
 import io.element.android.features.messages.impl.threads.list.ThreadsListPresenter
 import io.element.android.features.messages.impl.threads.list.aThreadListItem
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -21,13 +22,16 @@ import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.threads.FakeThreadsListService
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.test
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class ThreadsListPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
-        createThreadsListPresenter().test {
+        createThreadsListPresenter(
+            coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
+        ).test {
             awaitItem().run {
                 assertThat(threads).isEmpty()
                 assertThat(roomId).isEqualTo(A_ROOM_ID)
@@ -42,7 +46,10 @@ class ThreadsListPresenterTest {
         val paginateRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
         val threadsListService = FakeThreadsListService(paginate = paginateRecorder)
         val room = FakeJoinedRoom(threadsListService = threadsListService)
-        createThreadsListPresenter(room).test {
+        createThreadsListPresenter(
+            room = room,
+            coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
+        ).test {
             val initialItem = awaitItem()
 
             // Pagination is automatically triggered on start, so we should have one call to paginate already
@@ -63,12 +70,14 @@ class ThreadsListPresenterTest {
 
     private fun createThreadsListPresenter(
         room: FakeJoinedRoom = FakeJoinedRoom(),
+        coroutineDispatchers: CoroutineDispatchers,
     ): ThreadsListPresenter {
         return ThreadsListPresenter(
             room = room,
             timelineItemContentFactory = aTimelineItemContentFactory(),
             messageSummaryFormatter = FakeMessageSummaryFormatter(),
             dateFormatter = FakeDateFormatter(),
+            coroutineDispatchers = coroutineDispatchers,
         )
     }
 }
