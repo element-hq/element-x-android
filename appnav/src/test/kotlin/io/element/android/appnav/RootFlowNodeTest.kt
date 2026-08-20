@@ -51,9 +51,8 @@ import io.element.android.libraries.matrix.test.FakeSdkMetadata
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.ui.media.test.FakeImageLoaderHolder
-import io.element.android.libraries.oauth.api.OAuthAction
-import io.element.android.libraries.oauth.api.OAuthActionFlow
 import io.element.android.libraries.oauth.test.FakeOAuthIntentResolver
+import io.element.android.libraries.oauth.test.FakeOAuthActionFlow
 import io.element.android.libraries.preferences.test.FakeSessionPreferencesStoreFactory
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
@@ -63,7 +62,6 @@ import io.element.android.services.apperror.test.FakeAppErrorStateService
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
@@ -208,12 +206,6 @@ private class NotUsedPresenter<T> : Presenter<T> {
 
 private class FakeSyncOrchestratorFactory : SyncOrchestrator.Factory {
     override fun create(matrixClient: MatrixClient, sessionCoroutineScope: CoroutineScope): SyncOrchestrator = error("Not used")
-}
-
-private class FakeOAuthActionFlow : OAuthActionFlow {
-    override fun post(oAuthAction: OAuthAction) = Unit
-    override suspend fun collect(collector: FlowCollector<OAuthAction?>) = Unit
-    override fun reset() = Unit
 }
 
 private class FakeNodeFactoriesBindings(
