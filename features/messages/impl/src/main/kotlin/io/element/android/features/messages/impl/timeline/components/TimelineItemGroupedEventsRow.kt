@@ -195,7 +195,6 @@ private fun TimelineItemGroupedEventsRowContent(
                         onReadReceiptClick = onReadReceiptClick,
                         onJoinCallClick = {},
                         onSwipeToReply = {},
-                        onJoinCallClick = {},
                         onMemberClick = onMemberClick,
                         onRoomStateClick = onRoomStateClick,
                         eventSink = eventSink,
@@ -299,6 +298,8 @@ internal fun TimelineItemRedactedMessagesGroupPreview() = ElementPreview {
         onReactionLongClick = { _, _ -> },
         onMoreReactionsClick = {},
         onReadReceiptClick = {},
+        onMemberClick = {},
+        onRoomStateClick = {},
         eventSink = {},
     )
 }

@@ -32,7 +32,6 @@ import io.element.android.features.messages.impl.MessagesEvent
 import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.features.messages.impl.MessagesPresenter
 import io.element.android.features.messages.impl.MessagesState
-import io.element.android.features.messages.impl.MessagesEvent
 import io.element.android.features.messages.impl.MessagesView
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionPostProcessor

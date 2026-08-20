@@ -76,7 +76,6 @@ internal fun TimelineItemRow(
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
     onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
-    onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     onMemberClick: (UserId) -> Unit = {},
     onRoomStateClick: () -> Unit = {},
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,

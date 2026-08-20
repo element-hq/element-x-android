@@ -615,7 +615,6 @@ internal fun TimelineViewPreview(
             onJoinCallClick = {},
             onMoreReactionsClick = {},
             onReadReceiptClick = {},
-            onJoinCallClick = {},
             onMemberClick = {},
             onRoomStateClick = {},
             onGalleryItemClick = { _, _ -> },

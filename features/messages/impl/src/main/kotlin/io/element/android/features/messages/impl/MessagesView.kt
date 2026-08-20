@@ -317,7 +317,6 @@ fun MessagesView(
                                 }
                             },
                             onRoomStateClick = onRoomStateClick,
-                            onJoinCallClick = onJoinCallClick,
                             knockRequestsBannerView = knockRequestsBannerView,
                         )
 
@@ -496,7 +495,6 @@ private fun MessagesViewContent(
     onSwipeToReply: (TimelineItem.Event) -> Unit,
     onMemberClick: (UserId) -> Unit,
     onRoomStateClick: () -> Unit,
-    onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     modifier: Modifier = Modifier,
     knockRequestsBannerView: @Composable () -> Unit,
 ) {
@@ -554,7 +552,6 @@ private fun MessagesViewContent(
                 onReadReceiptClick = onReadReceiptClick,
                 onJoinCallClick = onJoinCallClick,
                 forceJumpToBottomVisibility = forceJumpToBottomVisibility,
-                onJoinCallClick = onJoinCallClick,
                 onMemberClick = onMemberClick,
                 onRoomStateClick = onRoomStateClick,
                 nestedScrollConnection = scrollBehavior.nestedScrollConnection,
