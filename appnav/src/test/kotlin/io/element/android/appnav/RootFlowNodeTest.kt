@@ -32,9 +32,9 @@ import io.element.android.appnav.root.RootNavStateFlowFactory
 import io.element.android.appnav.root.RootPresenter
 import io.element.android.features.login.api.LoginEntryPoint
 import io.element.android.features.login.api.LoginParams
-import io.element.android.features.login.api.accesscontrol.AccountProviderAccessControl
 import io.element.android.features.login.test.FakeLoginEntryPoint
 import io.element.android.features.login.test.FakeLoginIntentResolver
+import io.element.android.features.login.test.accesscontrol.FakeAccountProviderAccessControl
 import io.element.android.features.preferences.test.FakeCacheService
 import io.element.android.features.rageshake.test.FakeBugReportEntryPoint
 import io.element.android.features.rageshake.test.logs.FakeAnnouncementService
@@ -150,7 +150,7 @@ class RootFlowNodeTest : RobolectricTest() {
             ),
             plugins = emptyList(),
             sessionStore = sessionStore,
-            accountProviderAccessControl = FakeAccountProviderAccessControl(),
+            accountProviderAccessControl = FakeAccountProviderAccessControl { true },
             navStateFlowFactory = RootNavStateFlowFactory(
                 sessionStore = sessionStore,
                 cacheService = FakeCacheService(),
@@ -214,10 +214,6 @@ private class FakeOAuthActionFlow : OAuthActionFlow {
     override fun post(oAuthAction: OAuthAction) = Unit
     override suspend fun collect(collector: FlowCollector<OAuthAction?>) = Unit
     override fun reset() = Unit
-}
-
-private class FakeAccountProviderAccessControl : AccountProviderAccessControl {
-    override suspend fun isAllowedToConnectToAccountProvider(accountProviderUrl: String) = true
 }
 
 private class FakeNodeFactoriesBindings(
