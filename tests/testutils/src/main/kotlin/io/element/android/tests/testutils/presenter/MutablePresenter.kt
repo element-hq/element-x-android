@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.tests.testutils
+package io.element.android.tests.testutils.presenter
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState

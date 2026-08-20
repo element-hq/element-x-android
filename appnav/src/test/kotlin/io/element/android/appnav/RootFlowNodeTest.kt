@@ -43,7 +43,6 @@ import io.element.android.features.signedout.test.FakeSignedOutEntryPoint
 import io.element.android.libraries.accountselect.test.FakeAccountSelectEntryPoint
 import io.element.android.libraries.architecture.AssistedNodeFactory
 import io.element.android.libraries.architecture.NodeFactoriesBindings
-import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.DependencyInjectionGraphOwner
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.test.FakeSdkMetadata
@@ -58,6 +57,7 @@ import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.analytics.test.watchers.FakeAnalyticsColdStartWatcher
 import io.element.android.services.apperror.test.FakeAppErrorStateService
+import io.element.android.tests.testutils.presenter.NotUsedPresenter
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
@@ -193,14 +193,6 @@ private val A_LOGIN_ENTRY_POINT_PARAMS = LoginEntryPoint.Params(
     accountProvider = A_LOGIN_PARAMS.accountProvider,
     loginHint = A_LOGIN_PARAMS.loginHint,
 )
-
-/**
- * The presenters are only used when the [Node] is rendered, which does not happen in these tests.
- */
-private class NotUsedPresenter<T> : Presenter<T> {
-    @Composable
-    override fun present(): T = error("Not used")
-}
 
 private class FakeNodeFactoriesBindings(
     private val nodeFactories: Map<KClass<out Node>, AssistedNodeFactory<*>>,
