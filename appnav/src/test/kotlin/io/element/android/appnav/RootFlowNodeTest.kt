@@ -33,13 +33,14 @@ import io.element.android.appnav.root.RootPresenter
 import io.element.android.features.login.api.LoginEntryPoint
 import io.element.android.features.login.api.LoginParams
 import io.element.android.features.login.api.accesscontrol.AccountProviderAccessControl
+import io.element.android.features.login.test.FakeLoginEntryPoint
 import io.element.android.features.login.test.FakeLoginIntentResolver
 import io.element.android.features.preferences.api.CacheService
-import io.element.android.features.rageshake.api.bugreport.BugReportEntryPoint
+import io.element.android.features.rageshake.test.FakeBugReportEntryPoint
 import io.element.android.features.rageshake.test.logs.FakeAnnouncementService
 import io.element.android.features.share.test.FakeShareIntentHandler
-import io.element.android.features.signedout.api.SignedOutEntryPoint
-import io.element.android.libraries.accountselect.api.AccountSelectEntryPoint
+import io.element.android.features.signedout.test.FakeSignedOutEntryPoint
+import io.element.android.libraries.accountselect.test.FakeAccountSelectEntryPoint
 import io.element.android.libraries.architecture.AssistedNodeFactory
 import io.element.android.libraries.architecture.NodeFactoriesBindings
 import io.element.android.libraries.architecture.Presenter
@@ -81,8 +82,13 @@ class RootFlowNodeTest : RobolectricTest() {
 
     @Test
     fun `given no session, when a login link is handled before the nav state is observed, then the login params are kept`() = runTest {
-        val loginEntryPoint = FakeLoginEntryPoint()
-        val rootFlowNode = createRootFlowNode(loginEntryPoint = loginEntryPoint)
+        var loginEntryPointParams: LoginEntryPoint.Params? = null
+        val rootFlowNode = createRootFlowNode(
+            loginEntryPoint = FakeLoginEntryPoint { buildContext, params ->
+                loginEntryPointParams = params
+                node(buildContext) {}
+            },
+        )
         rootFlowNode.parentNodeTestHelper()
         // The intent is handled first, this is what happens when the deep link cold starts the app.
         rootFlowNode.handleIntent(aLoginIntent())
@@ -90,13 +96,18 @@ class RootFlowNodeTest : RobolectricTest() {
         // Then the first nav state emission lands, it must not override the login params.
         runCurrent()
         assertThat(rootFlowNode.backstack.activeElement).isEqualTo(RootFlowNode.NavTarget.NotLoggedInFlow(A_LOGIN_PARAMS))
-        assertThat(loginEntryPoint.params).isEqualTo(A_LOGIN_ENTRY_POINT_PARAMS)
+        assertThat(loginEntryPointParams).isEqualTo(A_LOGIN_ENTRY_POINT_PARAMS)
     }
 
     @Test
     fun `given no session, when a login link is handled after the nav state is observed, then the login params are applied`() = runTest {
-        val loginEntryPoint = FakeLoginEntryPoint()
-        val rootFlowNode = createRootFlowNode(loginEntryPoint = loginEntryPoint)
+        var loginEntryPointParams: LoginEntryPoint.Params? = null
+        val rootFlowNode = createRootFlowNode(
+            loginEntryPoint = FakeLoginEntryPoint { buildContext, params ->
+                loginEntryPointParams = params
+                node(buildContext) {}
+            },
+        )
         rootFlowNode.parentNodeTestHelper()
         // The nav state is observed first, this is what happens when the app is already running.
         runCurrent()
@@ -104,13 +115,13 @@ class RootFlowNodeTest : RobolectricTest() {
         rootFlowNode.handleIntent(aLoginIntent())
         runCurrent()
         assertThat(rootFlowNode.backstack.activeElement).isEqualTo(RootFlowNode.NavTarget.NotLoggedInFlow(A_LOGIN_PARAMS))
-        assertThat(loginEntryPoint.params).isEqualTo(A_LOGIN_ENTRY_POINT_PARAMS)
+        assertThat(loginEntryPointParams).isEqualTo(A_LOGIN_ENTRY_POINT_PARAMS)
     }
 
     private fun aLoginIntent() = Intent(Intent.ACTION_VIEW, Uri.parse(A_LOGIN_LINK))
 
     private fun TestScope.createRootFlowNode(
-        loginEntryPoint: LoginEntryPoint = FakeLoginEntryPoint(),
+        loginEntryPoint: LoginEntryPoint,
         sessionStore: SessionStore = InMemorySessionStore(),
     ): RootFlowNode {
         val matrixSessionCache = MatrixSessionCache(
@@ -213,33 +224,6 @@ private class FakeOAuthActionFlow : OAuthActionFlow {
 
 private class FakeAccountProviderAccessControl : AccountProviderAccessControl {
     override suspend fun isAllowedToConnectToAccountProvider(accountProviderUrl: String) = true
-}
-
-private class FakeBugReportEntryPoint : BugReportEntryPoint {
-    override fun createNode(parentNode: Node, buildContext: BuildContext, callback: BugReportEntryPoint.Callback): Node = node(buildContext) {}
-}
-
-private class FakeSignedOutEntryPoint : SignedOutEntryPoint {
-    override fun createNode(parentNode: Node, buildContext: BuildContext, params: SignedOutEntryPoint.Params): Node = node(buildContext) {}
-}
-
-private class FakeAccountSelectEntryPoint : AccountSelectEntryPoint {
-    override fun createNode(parentNode: Node, buildContext: BuildContext, callback: AccountSelectEntryPoint.Callback): Node = node(buildContext) {}
-}
-
-private class FakeLoginEntryPoint : LoginEntryPoint {
-    var params: LoginEntryPoint.Params? = null
-        private set
-
-    override fun createNode(
-        parentNode: Node,
-        buildContext: BuildContext,
-        params: LoginEntryPoint.Params,
-        callback: LoginEntryPoint.Callback,
-    ): Node {
-        this.params = params
-        return node(buildContext) {}
-    }
 }
 
 private class FakeNodeFactoriesBindings(
