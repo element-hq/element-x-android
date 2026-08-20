@@ -51,8 +51,12 @@ import io.element.android.libraries.matrix.test.timeline.aProfileChangeMessageCo
 import io.element.android.libraries.matrix.test.timeline.aProfileDetails
 import io.element.android.libraries.matrix.test.timeline.aStickerContent
 import io.element.android.libraries.matrix.test.timeline.item.event.aRoomMembershipContent
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
 import io.element.android.tests.testutils.robolectric.RobolectricTest
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import org.junit.Before
 import org.junit.Test
 import org.robolectric.RuntimeEnvironment
@@ -69,13 +73,21 @@ class DefaultRoomLatestEventFormatterTest : RobolectricTest() {
         context = RuntimeEnvironment.getApplication() as Context
         fakeMatrixClient = FakeMatrixClient()
         val stringProvider = AndroidStringProvider(context.resources)
+        val scope = CoroutineScope(SupervisorJob() + Dispatchers.Unconfined)
         formatter = DefaultRoomLatestEventFormatter(
             sp = AndroidStringProvider(context.resources),
-            roomMembershipContentFormatter = RoomMembershipContentFormatter(fakeMatrixClient, stringProvider),
+            roomMembershipContentFormatter = RoomMembershipContentFormatter(
+                fakeMatrixClient,
+                stringProvider,
+            ),
             profileChangeContentFormatter = ProfileChangeContentFormatter(stringProvider),
-            stateContentFormatter = StateContentFormatter(stringProvider),
+            stateContentFormatter = StateContentFormatter(
+                stringProvider,
+            ),
             rtcNotificationContentFormatter = RtcNotificationContentFormatter(fakeMatrixClient, stringProvider),
-            permalinkParser = FakePermalinkParser()
+            permalinkParser = FakePermalinkParser(),
+            appPreferencesStore = InMemoryAppPreferencesStore(isDeveloperModeEnabled = true),
+            sessionCoroutineScope = scope,
         )
     }
 
