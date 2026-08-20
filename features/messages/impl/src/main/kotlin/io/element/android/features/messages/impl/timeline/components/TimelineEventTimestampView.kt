@@ -70,10 +70,9 @@ fun TimelineEventTimestampView(
             }
             hasError -> Modifier
                 .clickable(
-                    enabled = isVerifiedUserSendFailure,
                     onClickLabel = onClickLabel,
                 ) {
-                    eventSink(TimelineEvent.ComputeVerifiedUserSendFailure(event))
+                    eventSink(TimelineEvent.ShowSendFailureDialog(event))
                 }
             else -> Modifier
         }
