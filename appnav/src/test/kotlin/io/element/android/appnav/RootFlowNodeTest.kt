@@ -42,7 +42,6 @@ import io.element.android.features.share.test.FakeShareIntentHandler
 import io.element.android.features.signedout.test.FakeSignedOutEntryPoint
 import io.element.android.libraries.accountselect.test.FakeAccountSelectEntryPoint
 import io.element.android.libraries.architecture.AssistedNodeFactory
-import io.element.android.libraries.architecture.NodeFactoriesBindings
 import io.element.android.libraries.di.DependencyInjectionGraphOwner
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.test.FakeSdkMetadata
@@ -57,6 +56,7 @@ import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.analytics.test.watchers.FakeAnalyticsColdStartWatcher
 import io.element.android.services.apperror.test.FakeAppErrorStateService
+import io.element.android.tests.testutils.node.FakeNodeFactoriesBindings
 import io.element.android.tests.testutils.presenter.NotUsedPresenter
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -65,7 +65,6 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import kotlin.reflect.KClass
 
 class RootFlowNodeTest : RobolectricTest() {
     @get:Rule
@@ -193,12 +192,6 @@ private val A_LOGIN_ENTRY_POINT_PARAMS = LoginEntryPoint.Params(
     accountProvider = A_LOGIN_PARAMS.accountProvider,
     loginHint = A_LOGIN_PARAMS.loginHint,
 )
-
-private class FakeNodeFactoriesBindings(
-    private val nodeFactories: Map<KClass<out Node>, AssistedNodeFactory<*>>,
-) : NodeFactoriesBindings {
-    override fun nodeFactories() = nodeFactories
-}
 
 /**
  * [RootFlowNode] creates its children using the dependency injection graph of its ancestors, so it needs a parent
