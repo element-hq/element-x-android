@@ -61,6 +61,18 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
+private const val A_LOGIN_LINK = "https://mobile.element.io/element/?account_provider=example.com&login_hint=mxid:@alice:example.com"
+
+private val A_LOGIN_PARAMS = LoginParams(
+    accountProvider = "example.com",
+    loginHint = "mxid:@alice:example.com",
+)
+
+private val A_LOGIN_ENTRY_POINT_PARAMS = LoginEntryPoint.Params(
+    accountProvider = A_LOGIN_PARAMS.accountProvider,
+    loginHint = A_LOGIN_PARAMS.loginHint,
+)
+
 class RootFlowNodeTest : RobolectricTest() {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -175,15 +187,3 @@ class RootFlowNodeTest : RobolectricTest() {
         )
     }
 }
-
-private const val A_LOGIN_LINK = "https://mobile.element.io/element/?account_provider=example.com&login_hint=mxid:@alice:example.com"
-
-private val A_LOGIN_PARAMS = LoginParams(
-    accountProvider = "example.com",
-    loginHint = "mxid:@alice:example.com",
-)
-
-private val A_LOGIN_ENTRY_POINT_PARAMS = LoginEntryPoint.Params(
-    accountProvider = A_LOGIN_PARAMS.accountProvider,
-    loginHint = A_LOGIN_PARAMS.loginHint,
-)
