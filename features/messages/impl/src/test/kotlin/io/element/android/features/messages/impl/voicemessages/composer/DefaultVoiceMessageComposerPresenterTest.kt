@@ -47,7 +47,6 @@ import io.element.android.libraries.voicerecorder.api.VoiceRecorder
 import io.element.android.libraries.voicerecorder.test.FakeVoiceRecorder
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
-import io.element.android.tests.testutils.consumeItemsUntilTimeout
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -153,7 +152,10 @@ class DefaultVoiceMessageComposerPresenterTest {
         )
         presenter.test {
             awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
-            val finalState = consumeItemsUntilTimeout().last()
+
+            // Skip until we reach the final state, which should have the last 128 levels
+            skipItems(numberOfLevels - 1)
+            val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isInstanceOf(VoiceMessageState.Recording::class.java)
             val recordingState = finalState.voiceMessageState as VoiceMessageState.Recording
             // The number of levels should be limited to 128 items
