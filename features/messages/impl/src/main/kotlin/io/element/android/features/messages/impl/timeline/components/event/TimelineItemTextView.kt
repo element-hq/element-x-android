@@ -15,7 +15,10 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,6 +38,8 @@ import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanUpdater
 import io.element.android.wysiwyg.compose.EditorStyledText
 import io.element.android.wysiwyg.link.Link
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun TimelineItemTextView(
@@ -42,6 +47,7 @@ fun TimelineItemTextView(
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
     modifier: Modifier = Modifier,
+    onLongClick: (() -> Unit)? = null,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit = {},
 ) {
     // The View <-> Compose interop is not working well with Compose UI tests (it loops indefinitely), so we skip it in the UI test mode.
@@ -58,14 +64,32 @@ fun TimelineItemTextView(
         LocalTextStyle provides textStyle
     ) {
         val text = getTextWithResolvedMentions(content)
+        val codeBlockBounds = remember { mutableStateOf<ImmutableList<CodeBlockBounds>>(persistentListOf()) }
+        val measureLastTextLine = ContentAvoidingLayout.measureLegacyLastTextLine(onContentLayoutChange = onContentLayoutChange)
+        val density = LocalDensity.current
+        val headerPx = with(density) { (CodeBlockHeaderHeight * fontScale).roundToPx() }
+        val footerPx = with(density) { (CodeBlockFooterHeight * fontScale).roundToPx() }
+        val languages = remember(content.htmlDocument) { codeBlockLanguages(content.htmlDocument) }
+        // Not remembered: a stable identity would stop EditorStyledText from calling setText again,
+        // and in-place MentionSpan updates would never reach the TextView.
+        val displayText = withCodeBlockChrome(text, headerPx, footerPx, languages)
+        val actions = codeBlockActions(displayText, languages)
         Box(modifier.semantics { contentDescription = content.plainText }) {
             EditorStyledText(
-                text = text,
+                text = displayText,
                 onLinkClickedListener = onLinkClick,
                 onLinkLongClickedListener = onLinkLongClick,
                 style = ElementRichTextEditorStyle.textStyle(),
-                onTextLayout = ContentAvoidingLayout.measureLegacyLastTextLine(onContentLayoutChange = onContentLayoutChange),
+                onTextLayout = { layout ->
+                    measureLastTextLine(layout)
+                    codeBlockBounds.value = computeCodeBlockBounds(displayText, layout)
+                },
                 releaseOnDetach = false,
+            )
+            CodeBlockCopyButtons(
+                actions = actions,
+                boundsAt = { index -> codeBlockBounds.value.getOrNull(index) ?: CodeBlockBounds.Zero },
+                onLongClick = onLongClick,
             )
         }
     }
