@@ -11,6 +11,9 @@ package io.element.android.features.preferences.api
 import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Announces that a session's cache has been cleared, since clearing it destroys the client and the app has to react.
+ */
 interface CacheService {
     /**
      * A flow of [SessionId], can let the app to know when the

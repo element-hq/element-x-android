@@ -18,5 +18,11 @@ import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentVal
  * This will only process media when a [ContentScanner] is provided when building the client in Pro.
  */
 fun interface ContentScannerService {
+    /**
+     * Starts scanning the given media, reporting the verdict of each one through [contentValidationState] rather than by returning.
+     *
+     * @param mediaSources the media to scan.
+     * @param contentValidationState where the outcome of each scan is published for the UI to observe.
+     */
     fun scan(mediaSources: List<MediaSource>, contentValidationState: ContentValidationState)
 }

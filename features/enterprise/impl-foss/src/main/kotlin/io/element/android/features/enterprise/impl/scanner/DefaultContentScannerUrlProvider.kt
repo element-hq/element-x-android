@@ -9,7 +9,7 @@ package io.element.android.features.enterprise.impl.scanner
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.matrix.api.UrlContentFetcher
+import io.element.android.libraries.matrix.api.ClientUrlContentFetcher
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.scanner.ContentScannerUrlProvider
 
@@ -22,7 +22,7 @@ class DefaultContentScannerUrlProvider : ContentScannerUrlProvider {
 
     @ContributesBinding(AppScope::class)
     class Factory : ContentScannerUrlProvider.Factory {
-        override fun create(urlContentFetcher: UrlContentFetcher): ContentScannerUrlProvider {
+        override fun create(urlContentFetcher: ClientUrlContentFetcher): ContentScannerUrlProvider {
             return DefaultContentScannerUrlProvider()
         }
     }

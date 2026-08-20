@@ -40,9 +40,19 @@ class LinkNewMobileHandler(
         LinkMobileStep.Uninitialized
     )
 
+    /**
+     * A [StateFlow] that emits the current step of the link mobile process.
+     * It starts with [LinkMobileStep.Uninitialized] and will emit other steps as they occur.
+     */
     val stepFlow: StateFlow<LinkMobileStep>
         get() = linkMobileStepFlow.asStateFlow()
 
+    /**
+     * Creates a new [LinkMobileHandler] and starts the linking process.
+     * If [forRotating] is true, it indicates that this is a rotation of the QR code.
+     *
+     * @param forRotating Whether this is a rotation of the QR code. Defaults to false.
+     */
     fun createAndStartNewHandler(forRotating: Boolean = false) {
         Timber.tag(loggerTag.value).d("createAndStartNewHandler()")
         currentJob?.cancel()
@@ -62,6 +72,10 @@ class LinkNewMobileHandler(
         }
     }
 
+    /**
+     * Resets the handler and cancels any ongoing job.
+     * This will also emit [LinkMobileStep.Uninitialized] to the [stepFlow].
+     */
     fun reset() {
         currentJob?.cancel()
         currentJob = null
@@ -70,10 +84,18 @@ class LinkNewMobileHandler(
         }
     }
 
+    /**
+     * Rotates the QR code by creating a new handler and starting the linking process.
+     * This is typically called when a timeout occurs for the current QR code.
+     */
     fun rotateQrCode() {
         createAndStartNewHandler(forRotating = true)
     }
 
+    /**
+     * Handles the case where there are too many QR code rotations.
+     * This will reset the handler and emit an error to the [stepFlow].
+     */
     fun onTooManyRotation() {
         reset()
         sessionScope.launch {
