@@ -35,7 +35,7 @@ import io.element.android.features.login.api.LoginParams
 import io.element.android.features.login.api.accesscontrol.AccountProviderAccessControl
 import io.element.android.features.login.test.FakeLoginEntryPoint
 import io.element.android.features.login.test.FakeLoginIntentResolver
-import io.element.android.features.preferences.api.CacheService
+import io.element.android.features.preferences.test.FakeCacheService
 import io.element.android.features.rageshake.test.FakeBugReportEntryPoint
 import io.element.android.features.rageshake.test.logs.FakeAnnouncementService
 import io.element.android.features.share.test.FakeShareIntentHandler
@@ -47,7 +47,6 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.DependencyInjectionGraphOwner
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.FakeSdkMetadata
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
@@ -65,7 +64,6 @@ import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
@@ -206,10 +204,6 @@ private val A_LOGIN_ENTRY_POINT_PARAMS = LoginEntryPoint.Params(
 private class NotUsedPresenter<T> : Presenter<T> {
     @Composable
     override fun present(): T = error("Not used")
-}
-
-private class FakeCacheService : CacheService {
-    override val clearedCacheEventFlow = emptyFlow<SessionId>()
 }
 
 private class FakeSyncOrchestratorFactory : SyncOrchestrator.Factory {

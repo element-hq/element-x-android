@@ -75,6 +75,7 @@ dependencies {
     testImplementation(projects.features.forward.test)
     testImplementation(projects.features.messages.test)
     testImplementation(projects.features.networkmonitor.test)
+    testImplementation(projects.features.preferences.test)
     testImplementation(projects.features.rageshake.test)
     testImplementation(projects.features.signedout.test)
     testImplementation(projects.services.apperror.test)
