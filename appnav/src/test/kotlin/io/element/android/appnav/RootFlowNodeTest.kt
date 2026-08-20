@@ -25,11 +25,11 @@ import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
 import com.bumble.appyx.testing.unit.common.helper.parentNodeTestHelper
 import com.bumble.appyx.utils.customisations.NodeCustomisationDirectoryImpl
 import com.google.common.truth.Truth.assertThat
-import io.element.android.appnav.di.MatrixSessionCache
-import io.element.android.appnav.di.SyncOrchestrator
 import io.element.android.appnav.intent.IntentResolver
 import io.element.android.appnav.root.RootNavStateFlowFactory
 import io.element.android.appnav.root.RootPresenter
+import io.element.android.appnav.session.FakeSyncOrchestratorFactory
+import io.element.android.appnav.session.MatrixSessionCache
 import io.element.android.features.login.api.LoginEntryPoint
 import io.element.android.features.login.api.LoginParams
 import io.element.android.features.login.test.FakeLoginEntryPoint
@@ -46,13 +46,12 @@ import io.element.android.libraries.architecture.NodeFactoriesBindings
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.DependencyInjectionGraphOwner
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
-import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.test.FakeSdkMetadata
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.ui.media.test.FakeImageLoaderHolder
-import io.element.android.libraries.oauth.test.FakeOAuthIntentResolver
 import io.element.android.libraries.oauth.test.FakeOAuthActionFlow
+import io.element.android.libraries.oauth.test.FakeOAuthIntentResolver
 import io.element.android.libraries.preferences.test.FakeSessionPreferencesStoreFactory
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
@@ -60,7 +59,6 @@ import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.analytics.test.watchers.FakeAnalyticsColdStartWatcher
 import io.element.android.services.apperror.test.FakeAppErrorStateService
 import io.element.android.tests.testutils.robolectric.RobolectricTest
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
@@ -202,10 +200,6 @@ private val A_LOGIN_ENTRY_POINT_PARAMS = LoginEntryPoint.Params(
 private class NotUsedPresenter<T> : Presenter<T> {
     @Composable
     override fun present(): T = error("Not used")
-}
-
-private class FakeSyncOrchestratorFactory : SyncOrchestrator.Factory {
-    override fun create(matrixClient: MatrixClient, sessionCoroutineScope: CoroutineScope): SyncOrchestrator = error("Not used")
 }
 
 private class FakeNodeFactoriesBindings(
