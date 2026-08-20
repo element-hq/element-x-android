@@ -12,13 +12,8 @@ package io.element.android.appnav
 import android.content.Intent
 import android.net.Uri
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.AncestryInfo
 import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.navigation.model.permanent.PermanentNavModel
-import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.node.node
 import com.bumble.appyx.navmodel.backstack.activeElement
 import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
@@ -42,7 +37,6 @@ import io.element.android.features.share.test.FakeShareIntentHandler
 import io.element.android.features.signedout.test.FakeSignedOutEntryPoint
 import io.element.android.libraries.accountselect.test.FakeAccountSelectEntryPoint
 import io.element.android.libraries.architecture.AssistedNodeFactory
-import io.element.android.libraries.di.DependencyInjectionGraphOwner
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.test.FakeSdkMetadata
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
@@ -57,6 +51,7 @@ import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.analytics.test.watchers.FakeAnalyticsColdStartWatcher
 import io.element.android.services.apperror.test.FakeAppErrorStateService
 import io.element.android.tests.testutils.node.FakeNodeFactoriesBindings
+import io.element.android.tests.testutils.node.FakeParentNode
 import io.element.android.tests.testutils.presenter.NotUsedPresenter
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -192,20 +187,3 @@ private val A_LOGIN_ENTRY_POINT_PARAMS = LoginEntryPoint.Params(
     accountProvider = A_LOGIN_PARAMS.accountProvider,
     loginHint = A_LOGIN_PARAMS.loginHint,
 )
-
-/**
- * [RootFlowNode] creates its children using the dependency injection graph of its ancestors, so it needs a parent
- * owning a graph able to create a [NotLoggedInFlowNode].
- */
-private class FakeParentNode(
-    override val graph: Any,
-) : ParentNode<Unit>(
-    navModel = PermanentNavModel(navTargets = setOf(Unit), savedStateMap = null),
-    buildContext = BuildContext.root(savedStateMap = null),
-),
-    DependencyInjectionGraphOwner {
-    override fun resolve(navTarget: Unit, buildContext: BuildContext): Node = node(buildContext) {}
-
-    @Composable
-    override fun View(modifier: Modifier) = Unit
-}
