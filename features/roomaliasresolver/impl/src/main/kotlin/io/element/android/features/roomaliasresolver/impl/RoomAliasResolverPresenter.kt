@@ -24,7 +24,10 @@ import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
+import java.util.concurrent.TimeoutException
 import kotlin.jvm.optionals.getOrElse
+import kotlin.time.Duration.Companion.seconds
 
 @AssistedInject
 class RoomAliasResolverPresenter(
@@ -61,9 +64,14 @@ class RoomAliasResolverPresenter(
 
     private fun CoroutineScope.resolveAlias(resolveState: MutableState<AsyncData<ResolvedRoomAlias>>) = launch {
         suspend {
-            matrixClient.resolveRoomAlias(roomAlias)
+            val result = withTimeoutOrNull(ALIAS_RESOLVE_TIMEOUT_IN_SECONDS.seconds) {
+                matrixClient.resolveRoomAlias(roomAlias)
+            } ?: throw TimeoutException("Timed out while resolving ${roomAlias.value}")
+            result
                 .getOrThrow()
                 .getOrElse { throw RoomAliasResolverFailures.UnknownAlias }
         }.runCatchingUpdatingState(resolveState)
     }
 }
+
+private const val ALIAS_RESOLVE_TIMEOUT_IN_SECONDS = 10

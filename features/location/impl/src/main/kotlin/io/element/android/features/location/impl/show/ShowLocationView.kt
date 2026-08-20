@@ -102,7 +102,7 @@ fun ShowLocationView(
         }
     }
     MapBottomSheetScaffold(
-        customMapStyleUrl = state.customMapStyleUrl,
+        customMapTilerConfig = state.customMapTilerConfig,
         sheetDragHandle = if (state.isSheetDraggable) {
             { BottomSheetDefaults.DragHandle() }
         } else {

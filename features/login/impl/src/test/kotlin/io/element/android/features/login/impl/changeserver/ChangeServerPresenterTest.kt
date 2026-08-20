@@ -14,24 +14,18 @@ import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
 import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
+import io.element.android.features.login.impl.accountprovider.anAccountProviderDataSource
 import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.features.login.impl.localnetwork.LocalNetworkPermissionGate
-import io.element.android.features.wellknown.test.FakeWellknownRetriever
-import io.element.android.features.wellknown.test.FakeWellknownRetrieverFactory
-import io.element.android.features.wellknown.test.anElementWellKnown
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
-import io.element.android.libraries.matrix.test.FakeTemporaryMatrixClientFactory
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.auth.aMatrixHomeServerDetails
 import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialog
 import io.element.android.libraries.permissions.test.FakeLocalNetworkPermissionAdvisor
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
-import io.element.android.libraries.wellknown.api.EnterpriseRemoteConfigSource
-import io.element.android.libraries.wellknown.api.WellknownRetriever
-import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -64,6 +58,7 @@ class ChangeServerPresenterTest {
             authenticationService = authenticationService,
             enterpriseService = FakeEnterpriseService(
                 isAllowedToConnectToHomeserverResult = { true },
+                isElementProEnforcedResult = { false },
             ),
         ).test {
             val initialState = awaitItem()
@@ -72,7 +67,7 @@ class ChangeServerPresenterTest {
             val loadingState = awaitItem()
             assertThat(loadingState.changeServerAction).isInstanceOf(AsyncData.Loading::class.java)
             val successState = awaitItem()
-            assertThat(successState.changeServerAction).isEqualTo(AsyncData.Success(Unit))
+            assertThat(successState.changeServerAction).isEqualTo(AsyncData.Success(aMatrixHomeServerDetails(supportsOAuthLogin = true)))
         }
     }
 
@@ -86,6 +81,7 @@ class ChangeServerPresenterTest {
         createPresenter(
             enterpriseService = FakeEnterpriseService(
                 isAllowedToConnectToHomeserverResult = { true },
+                isElementProEnforcedResult = { false },
             ),
             authenticationService = authenticationService,
         ).test {
@@ -113,6 +109,7 @@ class ChangeServerPresenterTest {
         createPresenter(
             enterpriseService = FakeEnterpriseService(
                 isAllowedToConnectToHomeserverResult = { true },
+                isElementProEnforcedResult = { false },
             ),
             authenticationService = authenticationService,
         ).test {
@@ -136,6 +133,7 @@ class ChangeServerPresenterTest {
             enterpriseService = FakeEnterpriseService(
                 isAllowedToConnectToHomeserverResult = isAllowedToConnectToHomeserverResult,
                 defaultHomeserverListResult = { listOf("element.io") },
+                isElementProEnforcedResult = { false },
             ),
         ).test {
             val initialState = awaitItem()
@@ -159,23 +157,19 @@ class ChangeServerPresenterTest {
 
     @Test
     fun `present - change server element pro required error`() = runTest {
-        val getElementWellKnownResult = lambdaRecorder { homeserver: String, _: EnterpriseRemoteConfigSource ->
-            assertThat(homeserver).isEqualTo(A_HOMESERVER_URL)
-            WellknownRetrieverResult.Success(
-                anElementWellKnown(
-                    enforceElementPro = true,
-                )
-            )
-        }
+        val isEnterpriseBuildLambda = lambdaRecorder<Boolean> { false }
         createPresenter(
-            wellknownRetriever = FakeWellknownRetriever(
-                getElementWellKnownResult = getElementWellKnownResult,
-            ),
+            isEnterpriseBuild = isEnterpriseBuildLambda,
+            enterpriseService = FakeEnterpriseService(
+                isElementProEnforcedResult = { true },
+            )
         ).test {
             val initialState = awaitItem()
             assertThat(initialState.changeServerAction).isEqualTo(AsyncData.Uninitialized)
             val anAccountProvider = AccountProvider(url = A_HOMESERVER_URL)
             initialState.eventSink.invoke(ChangeServerEvents.ChangeServer(anAccountProvider))
+            // Skip loading state
+            skipItems(1)
             val failureState = awaitItem()
             assertThat(
                 (failureState.changeServerAction.errorOrNull() as ChangeServerError.NeedElementPro).unauthorisedAccountProviderTitle
@@ -183,7 +177,7 @@ class ChangeServerPresenterTest {
             assertThat(
                 (failureState.changeServerAction.errorOrNull() as ChangeServerError.NeedElementPro).applicationId
             ).isEqualTo("io.element.enterprise")
-            getElementWellKnownResult.assertions().isCalledOnce()
+            isEnterpriseBuildLambda.assertions().isCalledOnce()
         }
     }
 
@@ -237,7 +231,7 @@ class ChangeServerPresenterTest {
         val permissionsPresenter = FakePermissionsPresenter()
         createPresenter(
             authenticationService = authenticationService,
-            enterpriseService = FakeEnterpriseService(isAllowedToConnectToHomeserverResult = { true }),
+            enterpriseService = FakeEnterpriseService(isAllowedToConnectToHomeserverResult = { true }, isElementProEnforcedResult = { false }),
             localNetworkPermissionAdvisor = FakeLocalNetworkPermissionAdvisor(shouldPrompt = true),
             permissionsPresenter = permissionsPresenter,
         ).test {
@@ -251,24 +245,23 @@ class ChangeServerPresenterTest {
             while (finalState.changeServerAction !is AsyncData.Success) {
                 finalState = awaitItem()
             }
-            assertThat(finalState.changeServerAction).isEqualTo(AsyncData.Success(Unit))
+            assertThat(finalState.changeServerAction).isEqualTo(AsyncData.Success(aMatrixHomeServerDetails(supportsOAuthLogin = true)))
         }
     }
 
     private fun createPresenter(
         authenticationService: FakeMatrixAuthenticationService = FakeMatrixAuthenticationService(),
-        accountProviderDataSource: AccountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
+        accountProviderDataSource: AccountProviderDataSource = anAccountProviderDataSource(),
         enterpriseService: EnterpriseService = FakeEnterpriseService(),
-        wellknownRetriever: WellknownRetriever = FakeWellknownRetriever(),
         localNetworkPermissionAdvisor: FakeLocalNetworkPermissionAdvisor = FakeLocalNetworkPermissionAdvisor(),
         permissionsPresenter: FakePermissionsPresenter = FakePermissionsPresenter(),
+        isEnterpriseBuild: () -> Boolean = { false },
     ) = ChangeServerPresenter(
         authenticationService = authenticationService,
         accountProviderDataSource = accountProviderDataSource,
         defaultAccountProviderAccessControl = DefaultAccountProviderAccessControl(
             enterpriseService = enterpriseService,
-            wellknownRetrieverFactory = FakeWellknownRetrieverFactory(wellknownRetriever = wellknownRetriever),
-            temporaryMatrixClientFactory = FakeTemporaryMatrixClientFactory(),
+            isEnterpriseBuild = isEnterpriseBuild,
         ),
         localNetworkPermissionGate = LocalNetworkPermissionGate(
             advisor = localNetworkPermissionAdvisor,

@@ -11,6 +11,9 @@ package io.element.android.libraries.featureflag.api
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
+/**
+ * Reads and, where a mutable provider is registered, changes the state of the feature flags.
+ */
 interface FeatureFlagService {
     /**
      * @param feature the feature to check for

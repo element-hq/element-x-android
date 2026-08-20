@@ -177,6 +177,33 @@ class MessagesViewTest : RobolectricTest() {
     }
 
     @Test
+    fun `clicking on an Event which has not been sent yet invoke expected callback`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<MessagesEvent>(expectEvents = false)
+        val localEcho = aTimelineItemEvent(
+            isMine = true,
+            content = aTimelineItemTextContent(),
+        ).copy(eventId = null)
+        val state = aMessagesState(
+            timelineState = aTimelineState(
+                timelineItems = persistentListOf(localEcho),
+            ),
+            eventSink = eventsRecorder
+        )
+        val callback = EnsureCalledOnceWithTwoParamsAndResult(
+            expectedParam1 = true,
+            expectedParam2 = localEcho,
+            result = true,
+        )
+        setMessagesView(
+            state = state,
+            onEventClick = callback,
+        )
+        // Cannot perform click on "Text", it's not detected. Use tag instead
+        onAllNodesWithTag(TestTags.messageBubble.value).onFirst().performClick()
+        callback.assertSuccess()
+    }
+
+    @Test
     fun `long clicking on an Event emits the expected Event userHasPermissionToSendMessage`() {
         `long clicking on an Event emits the expected Event`(userHasPermissionToSendMessage = true)
     }

@@ -13,5 +13,5 @@ import io.element.android.libraries.matrix.api.TemporaryMatrixClientFactory
 class FakeTemporaryMatrixClientFactory(
     private val createResult: (String) -> Result<TemporaryMatrixClient> = { Result.success(FakeTemporaryMatrixClient()) },
 ) : TemporaryMatrixClientFactory {
-    override suspend fun create(homeServerUrl: String): Result<TemporaryMatrixClient> = createResult(homeServerUrl)
+    override suspend fun create(serverName: String): Result<TemporaryMatrixClient> = createResult(serverName)
 }

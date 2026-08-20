@@ -61,6 +61,7 @@ import io.element.android.libraries.matrix.test.A_CAPTION
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_REPLY
 import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.libraries.matrix.test.A_TRANSACTION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
@@ -148,9 +149,22 @@ class MessageComposerPresenterTest : RobolectricTest() {
             assertThat(initialState.isFullScreen).isFalse()
             assertThat(initialState.textEditorState.messageHtml()).isEqualTo("")
             assertThat(initialState.mode).isEqualTo(MessageComposerMode.Normal)
+            assertThat(initialState.isInThreadTimeline).isFalse()
             assertThat(initialState.showAttachmentSourcePicker).isFalse()
             assertThat(initialState.canShareLocation).isTrue()
             assertThat(initialState.slashCommandAction).isEqualTo(AsyncAction.Uninitialized)
+        }
+    }
+
+    @Test
+    fun `present - when a threadRoot is provided, isInThreadTimeline is true`() = runTest {
+        val presenter = createPresenter(
+            threadRoot = A_THREAD_ID,
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            assertThat(initialState.mode).isEqualTo(MessageComposerMode.Normal)
+            assertThat(initialState.isInThreadTimeline).isTrue()
         }
     }
 
@@ -1042,7 +1056,8 @@ class MessageComposerPresenterTest : RobolectricTest() {
             baseRoom = FakeBaseRoom(
                 roomPermissions = FakeRoomPermissions(
                     canTriggerRoomNotification = true,
-                )
+                ),
+                updateMembersResult = {},
             ),
             typingNoticeResult = { Result.success(Unit) }
         ).apply {
@@ -1090,6 +1105,55 @@ class MessageComposerPresenterTest : RobolectricTest() {
     }
 
     @Test
+    fun `present - mention suggestions refresh the room members`() = runTest {
+        val currentUser = aRoomMember(userId = A_USER_ID, membership = RoomMembershipState.JOIN)
+        val bob = aRoomMember(userId = A_USER_ID_2, membership = RoomMembershipState.JOIN)
+        val updateMembersResult = lambdaRecorder<Unit> { }
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
+                roomPermissions = FakeRoomPermissions(
+                    canTriggerRoomNotification = true,
+                ),
+                updateMembersResult = updateMembersResult,
+            ),
+            typingNoticeResult = { Result.success(Unit) }
+        ).apply {
+            givenRoomMembersState(
+                RoomMembersState.Ready(
+                    persistentListOf(currentUser, bob),
+                )
+            )
+            givenRoomInfo(aRoomInfo(isDirect = false))
+        }
+        val presenter = createPresenter(
+            room = room,
+            slashCommandService = FakeSlashCommandService(
+                getSuggestionsResult = { _, _ -> emptyList() },
+            ),
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(MessageComposerEvent.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "")))
+            skipItems(1)
+            assertThat(awaitItem().suggestions).containsExactly(ResolvedSuggestion.AtRoom, ResolvedSuggestion.Member(bob))
+            updateMembersResult.assertions().isCalledOnce()
+
+            // Typing after the `@` must not refresh the members again
+            initialState.eventSink(MessageComposerEvent.SuggestionReceived(Suggestion(0, 1, SuggestionType.Mention, "b")))
+            initialState.eventSink(MessageComposerEvent.SuggestionReceived(Suggestion(0, 2, SuggestionType.Mention, "bo")))
+            advanceUntilIdle()
+            updateMembersResult.assertions().isCalledOnce()
+
+            // Starting a new mention refreshes them again
+            initialState.eventSink(MessageComposerEvent.SuggestionReceived(null))
+            initialState.eventSink(MessageComposerEvent.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "")))
+            advanceUntilIdle()
+            updateMembersResult.assertions().isCalledExactly(2)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
     fun `present - room mention suggestions no permission`() = runTest {
         val currentUser = aRoomMember(userId = A_USER_ID, membership = RoomMembershipState.JOIN)
         val invitedUser = aRoomMember(userId = A_USER_ID_3, membership = RoomMembershipState.INVITE)
@@ -1099,7 +1163,8 @@ class MessageComposerPresenterTest : RobolectricTest() {
             baseRoom = FakeBaseRoom(
                 roomPermissions = FakeRoomPermissions(
                     canTriggerRoomNotification = false,
-                )
+                ),
+                updateMembersResult = {},
             ),
             typingNoticeResult = { Result.success(Unit) }
         ).apply {
@@ -1130,6 +1195,7 @@ class MessageComposerPresenterTest : RobolectricTest() {
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
                 roomPermissions = FakeRoomPermissions(canTriggerRoomNotification = true),
+                updateMembersResult = {},
             ),
             typingNoticeResult = { Result.success(Unit) }
         ).apply {

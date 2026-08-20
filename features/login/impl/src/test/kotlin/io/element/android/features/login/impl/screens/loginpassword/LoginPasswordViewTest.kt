@@ -82,6 +82,21 @@ class LoginPasswordViewTest : RobolectricTest() {
     }
 
     @Test
+    fun `changing login removes carriage returns the expected event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<LoginPasswordEvents>()
+        setLoginPasswordView(
+            aLoginPasswordState(
+                eventSink = eventsRecorder,
+            ),
+        )
+        val userNameHint = activity!!.getString(CommonStrings.common_username)
+        onNodeWithText(userNameHint).performTextInput("a\r\nb")
+        eventsRecorder.assertSingle(
+            LoginPasswordEvents.SetLogin("ab")
+        )
+    }
+
+    @Test
     fun `clearing login invokes the expected event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<LoginPasswordEvents>()
         setLoginPasswordView(
@@ -109,6 +124,21 @@ class LoginPasswordViewTest : RobolectricTest() {
         onNodeWithText(userNameHint).performTextInput(A_PASSWORD)
         eventsRecorder.assertSingle(
             LoginPasswordEvents.SetPassword(A_PASSWORD)
+        )
+    }
+
+    @Test
+    fun `changing password removes carriage returns the expected event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<LoginPasswordEvents>()
+        setLoginPasswordView(
+            aLoginPasswordState(
+                eventSink = eventsRecorder,
+            ),
+        )
+        val passwordHint = activity!!.getString(CommonStrings.common_password)
+        onNodeWithText(passwordHint).performTextInput("a\r\nb")
+        eventsRecorder.assertSingle(
+            LoginPasswordEvents.SetPassword("ab")
         )
     }
 

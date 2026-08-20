@@ -12,6 +12,7 @@ import io.element.android.libraries.matrix.impl.fixtures.factories.aRustSession
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustUserProfile
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
+import io.element.android.libraries.matrix.test.A_SERVER_NAME
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.simulateLongTask
@@ -45,6 +46,7 @@ class FakeFfiClient(
     private val userId: String = A_USER_ID.value,
     private val deviceId: String = A_DEVICE_ID.value,
     private val homeserver: String = A_HOMESERVER_URL,
+    private val server: String? = A_SERVER_NAME,
     private val notificationClient: NotificationClient = FakeFfiNotificationClient(),
     private val notificationSettings: NotificationSettings = FakeFfiNotificationSettings(),
     private val encryption: Encryption = FakeFfiEncryption(),
@@ -59,12 +61,15 @@ class FakeFfiClient(
     private val accountDataResult: (String) -> String? = { lambdaError() },
     private val setAccountDataResult: (String, String) -> Unit = { _, _ -> lambdaError() },
     private val isUserStatusSupportedResult: () -> Boolean = { false },
+    private val isProfilesSlidingSyncExtensionSupportedResult: () -> Boolean = { false },
     private val subscribeToOwnProfileResult: (ProfileListener) -> Unit = {},
+    private val getUrlResult: (String) -> ByteArray = { lambdaError() },
     private val closeResult: () -> Unit = {},
 ) : Client(NoHandle) {
     override fun userId(): String = userId
     override fun deviceId(): String = deviceId
     override fun homeserver(): String = homeserver
+    override fun server(): String? = server
     override suspend fun notificationClient(processSetup: NotificationProcessSetup) = notificationClient
     override suspend fun getNotificationSettings(): NotificationSettings = notificationSettings
     override fun encryption(): Encryption = encryption
@@ -99,6 +104,8 @@ class FakeFfiClient(
 
     override suspend fun isUserStatusSupported(): Boolean = isUserStatusSupportedResult()
 
+    override suspend fun isProfilesSlidingSyncExtensionSupported(): Boolean = isProfilesSlidingSyncExtensionSupportedResult()
+
     override fun subscribeToOwnProfile(listener: ProfileListener): TaskHandle {
         subscribeToOwnProfileResult(listener)
         return FakeFfiTaskHandle()
@@ -132,6 +139,10 @@ class FakeFfiClient(
 
     override suspend fun setAccountData(eventType: String, content: String) = simulateLongTask {
         setAccountDataResult(eventType, content)
+    }
+
+    override suspend fun getUrl(url: String): ByteArray = simulateLongTask {
+        getUrlResult(url)
     }
 
     override fun close() = closeResult()

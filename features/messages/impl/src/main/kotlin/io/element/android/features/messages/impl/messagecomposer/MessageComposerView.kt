@@ -102,6 +102,7 @@ internal fun MessageComposerView(
         onRequestFocus = ::onRequestFocus,
         onSendMessage = ::sendMessage,
         composerMode = state.mode,
+        isInThreadTimeline = state.isInThreadTimeline,
         showTextFormatting = state.showTextFormatting,
         onResetComposerMode = ::onCloseSpecialMode,
         onAddAttachment = ::onAddAttachment,
