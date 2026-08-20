@@ -43,7 +43,6 @@ import io.element.android.libraries.accountselect.api.AccountSelectEntryPoint
 import io.element.android.libraries.architecture.AssistedNodeFactory
 import io.element.android.libraries.architecture.NodeFactoriesBindings
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.deeplink.api.DeeplinkParser
 import io.element.android.libraries.di.DependencyInjectionGraphOwner
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -162,7 +161,7 @@ class RootFlowNodeTest : RobolectricTest() {
             signedOutEntryPoint = FakeSignedOutEntryPoint(),
             accountSelectEntryPoint = FakeAccountSelectEntryPoint(),
             intentResolver = IntentResolver(
-                deeplinkParser = DeeplinkParser { null },
+                deeplinkParser = { null },
                 loginIntentResolver = FakeLoginIntentResolver { A_LOGIN_PARAMS },
                 oAuthIntentResolver = FakeOAuthIntentResolver { null },
                 permalinkParser = FakePermalinkParser(),
