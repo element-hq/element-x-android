@@ -23,7 +23,11 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
 import io.element.android.features.messages.impl.pinned.banner.aLoadedPinnedMessagesBannerState
+import io.element.android.features.messages.impl.selection.SelectionSaveProgress
+import io.element.android.features.messages.impl.selection.TimelineSelectionState
+import io.element.android.features.messages.impl.selection.aTimelineSelectionState
 import io.element.android.features.messages.impl.timeline.TimelineState
+import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemList
 import io.element.android.features.messages.impl.timeline.aTimelineState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionEvent
@@ -45,6 +49,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ROOM_NAME
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
@@ -92,7 +97,21 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
                 composerState = aMessageComposerState(textEditorState = aTextEditorStateMarkdown()),
                 identityChangeState = anIdentityChangeState(listOf(aRoomMemberIdentityStateChange()))
             ),
+            aSelectionMessagesState(),
         )
+}
+
+private fun aSelectionMessagesState(): MessagesState {
+    val selected = listOf(EventId("\$selected-1"), EventId("\$selected-2"))
+    val timelineItems = persistentListOf<TimelineItem>(
+        aTimelineItemEvent(eventId = selected[0], content = aTimelineItemTextContent(body = "First selected message")),
+        aTimelineItemEvent(eventId = EventId("\$other"), content = aTimelineItemTextContent(body = "Not selected")),
+        aTimelineItemEvent(eventId = selected[1], content = aTimelineItemTextContent(body = "Second selected message")),
+    )
+    return aMessagesState(
+        timelineState = aTimelineState(timelineItems = timelineItems),
+        selectionState = aTimelineSelectionState(count = selected.size),
+    )
 }
 
 fun aMessagesState(
@@ -130,6 +149,8 @@ fun aMessagesState(
     ),
     isCurrentlySharingLiveLocationInRoom: Boolean = false,
     dmUserStatus: DisplayedStatus? = null,
+    selectionState: TimelineSelectionState = TimelineSelectionState.Empty,
+    selectionSaveProgress: SelectionSaveProgress? = null,
     eventSink: (MessagesEvent) -> Unit = {},
 ) = MessagesState(
     roomId = RoomId("!id:domain"),
@@ -161,6 +182,8 @@ fun aMessagesState(
     threads = threads,
     showLiveLocationShareBanner = isCurrentlySharingLiveLocationInRoom,
     dmUserStatus = dmUserStatus,
+    selectionState = selectionState,
+    selectionSaveProgress = selectionSaveProgress,
     eventSink = eventSink,
 )
 

@@ -8,6 +8,7 @@
 
 package io.element.android.features.messages.impl
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
@@ -40,6 +41,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,6 +50,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.onClick
@@ -76,6 +79,8 @@ import io.element.android.features.messages.impl.messagecomposer.suggestions.Sug
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerView
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerViewDefaults
+import io.element.android.features.messages.impl.selection.MessagesSelectionTopBar
+import io.element.android.features.messages.impl.selection.SelectionSaveBanner
 import io.element.android.features.messages.impl.timeline.FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.TimelineView
@@ -93,6 +98,8 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.features.messages.impl.timeline.model.event.isBulkSelectable
+import io.element.android.features.messages.impl.timeline.model.event.opensMediaViewer
 import io.element.android.features.messages.impl.topbars.MessagesViewTopBar
 import io.element.android.features.messages.impl.topbars.ThreadTopBar
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessagePermissionRationaleDialog
@@ -166,6 +173,26 @@ fun MessagesView(
 
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
 
+    var showBulkDeleteConfirm by remember { mutableStateOf(false) }
+
+    BackHandler(enabled = state.selectionState.isActive) {
+        state.eventSink(MessagesEvent.ClearSelection)
+    }
+
+    if (showBulkDeleteConfirm) {
+        ConfirmationDialog(
+            title = stringResource(CommonStrings.action_remove),
+            content = pluralStringResource(R.plurals.screen_room_selection_delete_confirm, state.selectionState.count, state.selectionState.count),
+            submitText = stringResource(CommonStrings.action_remove),
+            destructiveSubmit = true,
+            onSubmitClick = {
+                showBulkDeleteConfirm = false
+                state.eventSink(MessagesEvent.BulkRedactSelected)
+            },
+            onDismiss = { showBulkDeleteConfirm = false },
+        )
+    }
+
     var maxComposerHeightPx by remember { mutableIntStateOf(120) }
 
     // This is needed because the composer is inside an AndroidView that can't be affected by the FocusManager in Compose
@@ -176,19 +203,16 @@ fun MessagesView(
         block()
     }
 
-    fun onContentClick(event: TimelineItem.Event) {
-        Timber.v("onMessageClick= ${event.id}")
-        val eventId = event.eventId ?: return
-        if (eventContentValidationState[eventId].getCurrentOverallState() != ContentValidationValue.Valid) return
+    // The click handlers below are captured by the timeline rows, which can outlive a selection
+    // change, so the value has to be read through rememberUpdatedState to not go stale.
+    val selectionActive by rememberUpdatedState(state.selectionState.isActive)
 
-        val hideKeyboard = onEventContentClick(state.timelineState.isLive, event)
-        if (hideKeyboard) {
-            localView.hideKeyboard()
-        }
+    fun canOpenContent(event: TimelineItem.Event): Boolean {
+        val eventId = event.eventId ?: return false
+        return eventContentValidationState[eventId].getCurrentOverallState() == ContentValidationValue.Valid
     }
 
-    fun onMessageLongClick(event: TimelineItem.Event) {
-        Timber.v("OnMessageLongClicked= ${event.id}")
+    fun showContextMenu(event: TimelineItem.Event) {
         hidingKeyboard {
             state.actionListState.eventSink(
                 ActionListEvent.ComputeForMessage(
@@ -197,6 +221,48 @@ fun MessagesView(
                 )
             )
         }
+    }
+
+    fun onContentClick(event: TimelineItem.Event) {
+        Timber.v("onMessageClick= ${event.id}")
+        if (selectionActive) {
+            state.eventSink(MessagesEvent.ToggleSelection(event))
+            return
+        }
+        if (state.selectionState.isEnabled) {
+            // Long press is taken by the selection, so a tap has to open the context menu when
+            // there is no content to open.
+            val opened = canOpenContent(event) && onEventContentClick(state.timelineState.isLive, event)
+            if (opened) {
+                localView.hideKeyboard()
+            } else {
+                showContextMenu(event)
+            }
+            return
+        }
+        if (!canOpenContent(event)) return
+        val hideKeyboard = onEventContentClick(state.timelineState.isLive, event)
+        if (hideKeyboard) {
+            localView.hideKeyboard()
+        }
+    }
+
+    fun onMessageLongClick(event: TimelineItem.Event) {
+        Timber.v("OnMessageLongClicked= ${event.id}")
+        if (selectionActive) {
+            state.eventSink(MessagesEvent.ToggleSelection(event))
+            return
+        }
+        if (state.selectionState.isEnabled && event.content.isBulkSelectable()) {
+            if (event.content.opensMediaViewer()) {
+                // A tap already opens the viewer, so selection is entered from the context menu.
+                showContextMenu(event)
+            } else {
+                state.eventSink(MessagesEvent.EnterSelection(event))
+            }
+            return
+        }
+        showContextMenu(event)
     }
 
     fun onActionSelected(action: TimelineItemAction, event: TimelineItem.Event) {
@@ -232,7 +298,16 @@ fun MessagesView(
             Scaffold(
                 contentWindowInsets = scaffoldScrollableContentInsets,
                 topBar = {
-                    if (state.timelineState.timelineMode is Timeline.Mode.Thread) {
+                    if (state.selectionState.isActive) {
+                        MessagesSelectionTopBar(
+                            state = state.selectionState,
+                            onCancelClick = { state.eventSink(MessagesEvent.ClearSelection) },
+                            onCopyClick = { state.eventSink(MessagesEvent.BulkCopySelected) },
+                            onForwardClick = { state.eventSink(MessagesEvent.BulkForwardSelected) },
+                            onDeleteClick = { showBulkDeleteConfirm = true },
+                            onSaveClick = { state.eventSink(MessagesEvent.BulkSaveSelected) },
+                        )
+                    } else if (state.timelineState.timelineMode is Timeline.Mode.Thread) {
                         ThreadTopBar(
                             roomName = state.roomName,
                             roomAvatarData = state.roomAvatar,
@@ -272,13 +347,17 @@ fun MessagesView(
                             state = state,
                             onContentClick = ::onContentClick,
                             onGalleryItemClick = { event, index ->
-                                val hideKeyboard = onGalleryEventItemClick(
-                                    state.timelineState.isLive,
-                                    event,
-                                    index,
-                                )
-                                if (hideKeyboard) {
-                                    localView.hideKeyboard()
+                                if (selectionActive) {
+                                    state.eventSink(MessagesEvent.ToggleSelection(event))
+                                } else {
+                                    val hideKeyboard = onGalleryEventItemClick(
+                                        state.timelineState.isLive,
+                                        event,
+                                        index,
+                                    )
+                                    if (hideKeyboard) {
+                                        localView.hideKeyboard()
+                                    }
                                 }
                             },
                             onMessageLongClick = ::onMessageLongClick,
@@ -544,6 +623,7 @@ private fun MessagesViewContent(
                 forceJumpToBottomVisibility = forceJumpToBottomVisibility,
                 nestedScrollConnection = scrollBehavior.nestedScrollConnection,
                 floatingDateTopOffset = topBannersHeightDp,
+                selectedEventIds = if (state.selectionState.isActive) state.selectionState.selectedIds else null,
             )
 
             if (state.timelineState.timelineMode !is Timeline.Mode.Thread) {
@@ -564,6 +644,12 @@ private fun MessagesViewContent(
                             state = state.pinnedMessagesBannerState,
                             onClick = ::focusOnPinnedEvent,
                             onViewAllClick = onViewAllPinnedMessagesClick,
+                        )
+                    }
+                    state.selectionSaveProgress?.let { progress ->
+                        SelectionSaveBanner(
+                            progress = progress,
+                            onCancelClick = { state.eventSink(MessagesEvent.CancelSelectionSave) },
                         )
                     }
                     if (state.showLiveLocationShareBanner) {

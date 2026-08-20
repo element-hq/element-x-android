@@ -45,7 +45,7 @@ class DefaultForwardEntryPointTest {
             override fun onDone(roomIds: List<RoomId>) = lambdaError()
         }
         val params = ForwardEntryPoint.Params(
-            eventId = AN_EVENT_ID,
+            eventIds = listOf(AN_EVENT_ID),
             timelineProvider = FakeTimelineProvider(),
         )
         val result = entryPoint.createNode(
@@ -57,7 +57,7 @@ class DefaultForwardEntryPointTest {
         assertThat(result).isInstanceOf(ForwardMessagesNode::class.java)
         assertThat(result.plugins).contains(
             ForwardMessagesNode.Inputs(
-                eventId = params.eventId,
+                eventIds = params.eventIds,
                 timelineProvider = params.timelineProvider,
             )
         )

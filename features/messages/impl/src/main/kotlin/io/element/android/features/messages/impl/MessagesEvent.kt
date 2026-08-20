@@ -21,6 +21,14 @@ sealed interface MessagesEvent {
     data object StopLiveLocationShare : MessagesEvent
     data object ShowLiveLocationShare : MessagesEvent
     data object MarkAsFullyReadAndExit : MessagesEvent
+    data class EnterSelection(val anchor: TimelineItem.Event) : MessagesEvent
+    data class ToggleSelection(val event: TimelineItem.Event) : MessagesEvent
+    data object ClearSelection : MessagesEvent
+    data object BulkRedactSelected : MessagesEvent
+    data object BulkCopySelected : MessagesEvent
+    data object BulkForwardSelected : MessagesEvent
+    data object BulkSaveSelected : MessagesEvent
+    data object CancelSelectionSave : MessagesEvent
 }
 
 enum class InviteDialogAction {

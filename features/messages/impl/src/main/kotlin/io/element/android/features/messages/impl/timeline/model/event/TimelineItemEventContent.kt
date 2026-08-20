@@ -96,6 +96,55 @@ fun TimelineItemEventContent.canReact(): Boolean =
     }
 
 /**
+ * Return true if a tap on the event content opens a media viewer.
+ * Mirrors the navigation done in MessagesFlowNode.processEventClick.
+ */
+fun TimelineItemEventContent.opensMediaViewer(): Boolean =
+    when (this) {
+        is TimelineItemImageContent,
+        is TimelineItemVideoContent,
+        is TimelineItemFileContent,
+        is TimelineItemAudioContent,
+        is TimelineItemLocationContent -> true
+        is TimelineItemTextBasedContent,
+        is TimelineItemEncryptedContent,
+        is TimelineItemStickerContent,
+        is TimelineItemPollContent,
+        is TimelineItemVoiceContent,
+        is TimelineItemGalleryContent,
+        is TimelineItemAttachmentsContent,
+        is TimelineItemStateContent,
+        is TimelineItemRedactedContent,
+        is TimelineItemLegacyCallInviteContent,
+        is TimelineItemRtcNotificationContent,
+        TimelineItemUnknownContent -> false
+    }
+
+/**
+ * Return true if the event content can be part of a bulk selection.
+ */
+fun TimelineItemEventContent.isBulkSelectable(): Boolean =
+    when (this) {
+        is TimelineItemTextBasedContent,
+        is TimelineItemAudioContent,
+        is TimelineItemEncryptedContent,
+        is TimelineItemFileContent,
+        is TimelineItemImageContent,
+        is TimelineItemStickerContent,
+        is TimelineItemLocationContent,
+        is TimelineItemPollContent,
+        is TimelineItemVoiceContent,
+        is TimelineItemVideoContent,
+        is TimelineItemGalleryContent,
+        is TimelineItemAttachmentsContent -> true
+        is TimelineItemStateContent,
+        is TimelineItemRedactedContent,
+        is TimelineItemLegacyCallInviteContent,
+        is TimelineItemRtcNotificationContent,
+        TimelineItemUnknownContent -> false
+    }
+
+/**
  * Whether the event content has been edited.
  */
 fun TimelineItemEventContent.isEdited(): Boolean = when (this) {

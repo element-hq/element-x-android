@@ -10,6 +10,7 @@ package io.element.android.features.messages.impl.actionlist.model
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import io.element.android.features.messages.impl.R
 import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -19,6 +20,7 @@ enum class TimelineItemAction(
     val destructive: Boolean = false
 ) {
     ViewInTimeline(CommonStrings.action_view_in_timeline, CompoundDrawables.ic_compound_visibility_on),
+    Select(R.string.action_select_messages, CompoundDrawables.ic_compound_check),
     Forward(CommonStrings.action_forward, CompoundDrawables.ic_compound_forward),
     CopyText(CommonStrings.action_copy_text, CompoundDrawables.ic_compound_copy),
     CopyCaption(CommonStrings.action_copy_caption, CompoundDrawables.ic_compound_copy),

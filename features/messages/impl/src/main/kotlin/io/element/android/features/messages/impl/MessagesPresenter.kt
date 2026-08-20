@@ -38,6 +38,15 @@ import io.element.android.features.messages.impl.link.LinkState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvent
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
+import io.element.android.features.messages.impl.selection.SelectionMediaSaver
+import io.element.android.features.messages.impl.selection.SelectionSaveProgress
+import io.element.android.features.messages.impl.selection.TimelineSelectionSaver
+import io.element.android.features.messages.impl.selection.TimelineSelectionState
+import io.element.android.features.messages.impl.selection.bulkSaveMessage
+import io.element.android.features.messages.impl.selection.canDeleteSelection
+import io.element.android.features.messages.impl.selection.canSaveSelection
+import io.element.android.features.messages.impl.selection.savableSelection
+import io.element.android.features.messages.impl.selection.saveAll
 import io.element.android.features.messages.impl.timeline.MarkAsFullyRead
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineEvent
@@ -51,6 +60,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.captionOrNull
+import io.element.android.features.messages.impl.timeline.model.event.isBulkSelectable
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.voicemessages.composer.DefaultVoiceMessageComposerPresenter
 import io.element.android.features.roomcall.api.RoomCallState
@@ -72,6 +82,7 @@ import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.emoji.api.recentemojis.AddRecentEmoji
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.toThreadId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
@@ -83,6 +94,7 @@ import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibilit
 import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
+import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.matrix.ui.model.dmUserStatus
 import io.element.android.libraries.matrix.ui.model.getAvatarData
@@ -90,15 +102,22 @@ import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
+
+private const val BULK_REDACT_THROTTLE_MS = 200L
 
 @AssistedInject
 class MessagesPresenter(
@@ -120,6 +139,7 @@ class MessagesPresenter(
     private val snackbarDispatcher: SnackbarDispatcher,
     private val dispatchers: CoroutineDispatchers,
     private val clipboardHelper: ClipboardHelper,
+    private val selectionMediaSaver: SelectionMediaSaver,
     private val htmlConverterProvider: HtmlConverterProvider,
     private val buildMeta: BuildMeta,
     @Assisted private val timelineController: TimelineController,
@@ -176,6 +196,13 @@ class MessagesPresenter(
         }
 
         val canOpenThreadList by featureFlagService.isFeatureEnabledFlow(FeatureFlags.RoomThreadList).collectAsState(initial = false)
+        val isMultiSelectEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.MessageMultiSelect)
+            .collectAsState(initial = false)
+        var saveProgress by remember { mutableStateOf<SelectionSaveProgress?>(null) }
+        var saveJob by remember { mutableStateOf<Job?>(null) }
+        var selectedEventIds: ImmutableSet<EventId> by rememberSaveable(stateSaver = TimelineSelectionSaver) {
+            mutableStateOf(persistentSetOf())
+        }
         val isCurrentlySharingLiveLocationInRoom by remember { liveLocationShareManager.isCurrentlySharing(room.roomId) }.collectAsState()
 
         val userEventPermissions by room.permissionsAsState(UserEventPermissions.DEFAULT) { perms ->
@@ -242,8 +269,9 @@ class MessagesPresenter(
 
         fun handleEvent(event: MessagesEvent) {
             when (event) {
-                is MessagesEvent.HandleAction -> {
-                    localCoroutineScope.handleTimelineAction(
+                is MessagesEvent.HandleAction -> when (event.action) {
+                    TimelineItemAction.Select -> handleEvent(MessagesEvent.EnterSelection(event.event))
+                    else -> localCoroutineScope.handleTimelineAction(
                         action = event.action,
                         targetEvent = event.event,
                         composerState = composerState,
@@ -251,6 +279,65 @@ class MessagesPresenter(
                         timelineState = timelineState,
                         timelineProtectionState = timelineProtectionState,
                     )
+                }
+                is MessagesEvent.EnterSelection -> {
+                    val anchorEventId = event.anchor.eventId ?: return@handleEvent
+                    if (!event.anchor.content.isBulkSelectable()) return@handleEvent
+                    val alreadySelected = anchorEventId in selectedEventIds
+                    if (!alreadySelected && selectedEventIds.size >= TimelineSelectionState.MAX_SELECTION) {
+                        return@handleEvent
+                    }
+                    selectedEventIds = (selectedEventIds + anchorEventId).toImmutableSet()
+                }
+                is MessagesEvent.ToggleSelection -> {
+                    val targetId = event.event.eventId ?: return@handleEvent
+                    if (!event.event.content.isBulkSelectable()) return@handleEvent
+                    val next = if (targetId in selectedEventIds) selectedEventIds - targetId else selectedEventIds + targetId
+                    if (next.size > TimelineSelectionState.MAX_SELECTION) return@handleEvent
+                    selectedEventIds = next.toImmutableSet()
+                }
+                MessagesEvent.ClearSelection -> {
+                    selectedEventIds = persistentSetOf()
+                }
+                MessagesEvent.BulkRedactSelected -> {
+                    val targets = redactableSelection(timelineState.timelineItems, selectedEventIds, userEventPermissions)
+                    if (targets.isNotEmpty()) {
+                        selectedEventIds = persistentSetOf()
+                        sessionCoroutineScope.bulkRedact(targets)
+                    }
+                }
+                MessagesEvent.BulkCopySelected -> {
+                    if (handleBulkCopy(timelineState.timelineItems, selectedEventIds)) {
+                        selectedEventIds = persistentSetOf()
+                    }
+                }
+                MessagesEvent.BulkSaveSelected -> {
+                    if (saveJob?.isActive == true) return@handleEvent
+                    val targets = savableSelection(timelineState.timelineItems, selectedEventIds)
+                    if (targets.isNotEmpty()) {
+                        selectedEventIds = persistentSetOf()
+                        saveProgress = SelectionSaveProgress(saved = 0, total = targets.size)
+                        saveJob = sessionCoroutineScope.launch {
+                            val saved = selectionMediaSaver.saveAll(targets) { count ->
+                                saveProgress = SelectionSaveProgress(count, targets.size)
+                            }
+                            saveProgress = null
+                            saveJob = null
+                            snackbarDispatcher.post(SnackbarMessage(bulkSaveMessage(saved, targets.size)))
+                        }
+                    }
+                }
+                MessagesEvent.CancelSelectionSave -> {
+                    saveJob?.cancel()
+                    saveJob = null
+                    saveProgress = null
+                }
+                MessagesEvent.BulkForwardSelected -> {
+                    val targets = selectionInSentTimeOrder(timelineState.timelineItems, selectedEventIds)
+                    if (targets.isNotEmpty()) {
+                        selectedEventIds = persistentSetOf()
+                        navigator.forwardEvents(targets)
+                    }
                 }
                 is MessagesEvent.ToggleReaction -> {
                     localCoroutineScope.toggleReaction(event.emoji, event.eventOrTransactionId)
@@ -296,6 +383,20 @@ class MessagesPresenter(
             }
         }
 
+        val selectionState = TimelineSelectionState(
+            isEnabled = isMultiSelectEnabled,
+            selectedIds = selectedEventIds,
+            canDelete = canDeleteSelection(
+                timelineItems = timelineState.timelineItems,
+                selectedIds = selectedEventIds,
+                userEventPermissions = userEventPermissions,
+            ),
+            canSave = canSaveSelection(
+                timelineItems = timelineState.timelineItems,
+                selectedIds = selectedEventIds,
+            ),
+        )
+
         return MessagesState(
             roomId = room.roomId,
             roomName = roomInfo.name,
@@ -330,6 +431,8 @@ class MessagesPresenter(
                 hasUnreadThreads = false,
             ),
             showLiveLocationShareBanner = isCurrentlySharingLiveLocationInRoom && timelineState.timelineMode !is Timeline.Mode.Thread,
+            selectionState = selectionState,
+            selectionSaveProgress = saveProgress,
             eventSink = ::handleEvent,
         )
     }
@@ -400,6 +503,8 @@ class MessagesPresenter(
             TimelineItemAction.Pin -> handlePinAction(targetEvent)
             TimelineItemAction.Unpin -> handleUnpinAction(targetEvent)
             TimelineItemAction.ViewInTimeline -> Unit
+            // Handled by handleEvent(HandleAction) before reaching here.
+            TimelineItemAction.Select -> Unit
         }
     }
 
@@ -613,5 +718,65 @@ class MessagesPresenter(
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_copied_to_clipboard))
         }
+    }
+
+    /**
+     * Selected events which are no longer loaded are kept: the homeserver is the final authority
+     * on permissions, so the selection is never truncated.
+     */
+    private fun redactableSelection(
+        timelineItems: List<TimelineItem>,
+        selectedIds: Set<EventId>,
+        userEventPermissions: UserEventPermissions,
+    ): List<EventId> {
+        val loadedEvents = timelineItems
+            .filterIsInstance<TimelineItem.Event>()
+            .mapNotNull { event -> event.eventId?.let { it to event } }
+            .toMap()
+        return selectedIds.filter { eventId ->
+            val event = loadedEvents[eventId]
+            event == null || if (event.isMine) userEventPermissions.canRedactOwn else userEventPermissions.canRedactOther
+        }
+    }
+
+    private fun CoroutineScope.bulkRedact(eventIds: List<EventId>) = launch {
+        var failures = 0
+        eventIds.forEachIndexed { index, eventId ->
+            timelineController.invokeOnCurrentTimeline {
+                redactEvent(eventOrTransactionId = eventId.toEventOrTransactionId(), reason = null)
+                    .onFailure { failures++ }
+            }
+            // Stay below the per-room redact rate limit.
+            if (index < eventIds.lastIndex) delay(BULK_REDACT_THROTTLE_MS)
+        }
+        if (failures > 0) {
+            Timber.w("Failed to redact $failures event(s) out of ${eventIds.size}")
+            snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_error))
+        }
+    }
+
+    /** Returns false when there was nothing to copy, so that the selection can be kept. */
+    private fun handleBulkCopy(timelineItems: List<TimelineItem>, selectedIds: Set<EventId>): Boolean {
+        val content = timelineItems
+            .filterIsInstance<TimelineItem.Event>()
+            .filter { it.eventId in selectedIds }
+            .sortedBy { it.sentTimeMillis }
+            .mapNotNull { (it.content as? TimelineItemTextBasedContent)?.body ?: it.content.captionOrNull() }
+            .joinToString("\n\n")
+        if (content.isEmpty()) return false
+        clipboardHelper.copyPlainText(content)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_copied_to_clipboard))
+        }
+        return true
+    }
+
+    private fun selectionInSentTimeOrder(timelineItems: List<TimelineItem>, selectedIds: Set<EventId>): List<EventId> {
+        val sentTimeByEventId = timelineItems
+            .filterIsInstance<TimelineItem.Event>()
+            .filter { it.eventId in selectedIds }
+            .mapNotNull { event -> event.eventId?.let { it to event.sentTimeMillis } }
+            .toMap()
+        return selectedIds.sortedBy { sentTimeByEventId[it] ?: Long.MAX_VALUE }
     }
 }
