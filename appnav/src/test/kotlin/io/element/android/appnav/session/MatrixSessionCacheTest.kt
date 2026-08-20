@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.appnav.di
+package io.element.android.appnav.session
 
 import com.bumble.appyx.core.state.MutableSavedStateMapImpl
 import com.google.common.truth.Truth.assertThat
