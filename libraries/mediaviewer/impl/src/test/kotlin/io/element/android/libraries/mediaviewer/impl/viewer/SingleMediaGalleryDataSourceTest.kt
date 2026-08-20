@@ -12,7 +12,6 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.media.WaveFormSamples
-import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -178,61 +177,11 @@ class SingleMediaGalleryDataSourceTest {
         assertThat(result).isEqualTo(expectedResult(params))
     }
 
-    @Test
-    fun `createFrom a room media without an event id returns the image it was built from`() {
-        val params = aMediaViewerEntryPointParams(anImageMediaInfo(), eventId = null)
-
-        val sut = SingleMediaGalleryDataSource.createFrom(params, contentValidationCache)
-
-        val data = sut.getLastData().dataOrNull()!!
-        assertThat(data.fileItems).isEmpty()
-        assertThat(data.imageAndVideoItems).hasSize(1)
-        val item = data.imageAndVideoItems.first() as MediaItem.Image
-        assertThat(item.eventId).isNull()
-        assertThat(item.mediaSource).isEqualTo(params.mediaSource)
-    }
-
-    @Test
-    fun `createFrom a room media without an event id puts a file in the file items`() {
-        val params = aMediaViewerEntryPointParams(
-            anApkMediaInfo(),
-            eventId = null,
-            mode = MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios(Timeline.Mode.Media),
-        )
-
-        val sut = SingleMediaGalleryDataSource.createFrom(params, contentValidationCache)
-
-        val data = sut.getLastData().dataOrNull()!!
-        assertThat(data.imageAndVideoItems).isEmpty()
-        assertThat(data.fileItems).hasSize(1)
-        val item = data.fileItems.first() as MediaItem.File
-        assertThat(item.eventId).isNull()
-        assertThat(item.mediaSource).isEqualTo(params.mediaSource)
-    }
-
-    @Test
-    fun `createFrom a room media without an event id puts an audio message in the file items`() {
-        val params = aMediaViewerEntryPointParams(
-            anAudioMediaInfo(),
-            eventId = null,
-            mode = MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios(Timeline.Mode.Media),
-        )
-
-        val sut = SingleMediaGalleryDataSource.createFrom(params, contentValidationCache)
-
-        val data = sut.getLastData().dataOrNull()!!
-        assertThat(data.imageAndVideoItems).isEmpty()
-        assertThat(data.fileItems).hasSize(1)
-        assertThat(data.fileItems.first()).isInstanceOf(MediaItem.Audio::class.java)
-    }
-
     internal fun aMediaViewerEntryPointParams(
         mediaInfo: MediaInfo,
-        eventId: EventId? = AN_EVENT_ID,
-        mode: MediaViewerEntryPoint.MediaViewerMode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(Timeline.Mode.Media),
     ) = MediaViewerEntryPoint.Params.RoomMedia(
-        mode = mode,
-        eventId = eventId,
+        mode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(Timeline.Mode.Media),
+        eventId = AN_EVENT_ID,
         mediaInfo = mediaInfo,
         mediaSource = aMediaSource(url = "aUrl"),
         thumbnailSource = aMediaSource(url = "aThumbnailUrl"),

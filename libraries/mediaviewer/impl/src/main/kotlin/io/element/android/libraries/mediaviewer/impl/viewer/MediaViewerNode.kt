@@ -92,7 +92,8 @@ class MediaViewerNode(
         is MediaViewerEntryPoint.Params.RoomMedia -> {
             val eventId = inputs.eventId
             if (eventId == null) {
-                SingleMediaGalleryDataSource.createFrom(inputs, contentValidationCache)
+                // Local echo, the viewer will not be focused on the item
+                timelineMediaGalleryDataSource
             } else {
                 // Can we use a specific timeline?
                 val timelineMode = inputs.mode.getTimelineMode()
