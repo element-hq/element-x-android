@@ -12,6 +12,8 @@ import app.cash.turbine.ReceiveTurbine
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.location.test.FakeActiveLiveLocationShareManager
 import io.element.android.features.messages.impl.FakeMessagesNavigator
+import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureEvent
+import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureState
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.aResolveVerifiedUserSendFailureState
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactoryCreator
@@ -21,6 +23,7 @@ import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
+import io.element.android.features.messages.impl.timeline.sendfailure.SendFailureDialogState
 import io.element.android.features.messages.impl.typing.aTypingNotificationState
 import io.element.android.features.messages.impl.voicemessages.timeline.FakeRedactedVoiceMessageManager
 import io.element.android.features.messages.impl.voicemessages.timeline.RedactedVoiceMessageManager
@@ -45,6 +48,7 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
 import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
@@ -1391,6 +1395,109 @@ class TimelinePresenterTest {
     }
 
     @Test
+    fun `present - show and hide send failure dialog`() = runTest {
+        val presenter = createTimelinePresenter()
+        val event = aMessageEvent(sendState = LocalEventSendState.Failed.Unknown("An error"))
+        presenter.test {
+            val initialState = awaitFirstItem()
+            assertThat(initialState.sendFailureDialogState).isEqualTo(SendFailureDialogState.Hidden)
+            initialState.eventSink(TimelineEvent.ShowSendFailureDialog(event))
+            awaitItem().also { state ->
+                assertThat(state.sendFailureDialogState).isEqualTo(
+                    SendFailureDialogState.Show(event = event, message = "An error")
+                )
+                state.eventSink(TimelineEvent.HideSendFailureDialog)
+            }
+            awaitItem().also { state ->
+                assertThat(state.sendFailureDialogState).isEqualTo(SendFailureDialogState.Hidden)
+            }
+        }
+    }
+
+    @Test
+    fun `present - show send failure dialog - unknown error with a blank reason`() {
+        assertSendFailureDialogMessage(
+            sendState = LocalEventSendState.Failed.Unknown(error = ""),
+            expectedMessage = "Unknown error",
+        )
+    }
+
+    @Test
+    fun `present - show send failure dialog - invalid mime type`() {
+        assertSendFailureDialogMessage(
+            sendState = LocalEventSendState.Failed.InvalidMimeType(mimeType = "invalid/mimeType"),
+            expectedMessage = "Invalid mime type: invalid/mimeType",
+        )
+    }
+
+    @Test
+    fun `present - show send failure dialog - missing media content`() {
+        assertSendFailureDialogMessage(
+            sendState = LocalEventSendState.Failed.MissingMediaContent,
+            expectedMessage = "Missing media content",
+        )
+    }
+
+    @Test
+    fun `present - show send failure dialog - sending from unverified device`() {
+        assertSendFailureDialogMessage(
+            sendState = LocalEventSendState.Failed.SendingFromUnverifiedDevice,
+            expectedMessage = "Sending from unverified device",
+        )
+    }
+
+    private fun assertSendFailureDialogMessage(
+        sendState: LocalEventSendState.Failed,
+        expectedMessage: String,
+    ) = runTest {
+        val presenter = createTimelinePresenter()
+        val event = aMessageEvent(sendState = sendState)
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink(TimelineEvent.ShowSendFailureDialog(event))
+            assertThat(awaitItem().sendFailureDialogState).isEqualTo(
+                SendFailureDialogState.Show(event = event, message = expectedMessage)
+            )
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - show send failure dialog - verified user failure is delegated to the resolve presenter`() = runTest {
+        val resolveEventSinkRecorder = lambdaRecorder<ResolveVerifiedUserSendFailureEvent, Unit> { }
+        val presenter = createTimelinePresenter(
+            resolveVerifiedUserSendFailurePresenter = {
+                aResolveVerifiedUserSendFailureState(eventSink = resolveEventSinkRecorder)
+            },
+        )
+        val event = aMessageEvent(
+            sendState = LocalEventSendState.Failed.VerifiedUserChangedIdentity(users = listOf(A_USER_ID)),
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink(TimelineEvent.ShowSendFailureDialog(event))
+            // The generic dialog is not displayed, the dedicated one is.
+            assertThat(consumeItemsUntilTimeout()).isEmpty()
+            assertThat(initialState.sendFailureDialogState).isEqualTo(SendFailureDialogState.Hidden)
+            resolveEventSinkRecorder.assertions()
+                .isCalledOnce()
+                .with(value(ResolveVerifiedUserSendFailureEvent.ComputeForMessage(event)))
+        }
+    }
+
+    @Test
+    fun `present - show send failure dialog - no effect if the event did not fail to send`() = runTest {
+        val presenter = createTimelinePresenter()
+        val event = aMessageEvent(sendState = LocalEventSendState.Sending.Event)
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink(TimelineEvent.ShowSendFailureDialog(event))
+            assertThat(consumeItemsUntilTimeout()).isEmpty()
+            assertThat(initialState.sendFailureDialogState).isEqualTo(SendFailureDialogState.Hidden)
+        }
+    }
+
+    @Test
     fun `present - when room member info is loaded, read receipts info should be updated`() = runTest {
         val timeline = FakeTimeline(
             timelineItems = flowOf(
@@ -1589,6 +1696,7 @@ class TimelinePresenterTest {
         liveLocationShareManager: FakeActiveLiveLocationShareManager = FakeActiveLiveLocationShareManager(),
         markAsFullyRead: MarkAsFullyRead = FakeMarkAsFullyRead { _, _ -> },
         timelineProtectionPresenter: Presenter<TimelineProtectionState> = { aTimelineProtectionState() },
+        resolveVerifiedUserSendFailurePresenter: Presenter<ResolveVerifiedUserSendFailureState> = { aResolveVerifiedUserSendFailureState() },
     ): TimelinePresenter {
         return TimelinePresenter(
             timelineItemsFactoryCreator = aTimelineItemsFactoryCreator(),
@@ -1602,7 +1710,7 @@ class TimelinePresenterTest {
             sessionPreferencesStore = sessionPreferencesStore,
             timelineItemIndexer = timelineItemIndexer,
             timelineController = TimelineController(room, timeline),
-            resolveVerifiedUserSendFailurePresenter = { aResolveVerifiedUserSendFailureState() },
+            resolveVerifiedUserSendFailurePresenter = resolveVerifiedUserSendFailurePresenter,
             typingNotificationPresenter = { aTypingNotificationState() },
             roomCallStatePresenter = { aStandByCallState() },
             featureFlagService = featureFlagService,
