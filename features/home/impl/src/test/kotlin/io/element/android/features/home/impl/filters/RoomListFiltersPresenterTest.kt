@@ -28,9 +28,10 @@ class RoomListFiltersPresenterTest {
                 assertThat(state.hasAnyFilterSelected).isFalse()
                 assertThat(state.filterSelectionStates).containsExactly(
                     filterSelectionState(RoomListFilter.Unread, false),
+                    filterSelectionState(RoomListFilter.Mentions, false),
+                    filterSelectionState(RoomListFilter.Favourites, false),
                     filterSelectionState(RoomListFilter.People, false),
                     filterSelectionState(RoomListFilter.Rooms, false),
-                    filterSelectionState(RoomListFilter.Favourites, false),
                     filterSelectionState(RoomListFilter.Invites, false),
                 )
             }
@@ -49,6 +50,7 @@ class RoomListFiltersPresenterTest {
                 assertThat(state.filterSelectionStates).containsExactly(
                     filterSelectionState(RoomListFilter.Rooms, true),
                     filterSelectionState(RoomListFilter.Unread, false),
+                    filterSelectionState(RoomListFilter.Mentions, false),
                     filterSelectionState(RoomListFilter.Favourites, false),
                 ).inOrder()
 
@@ -62,9 +64,10 @@ class RoomListFiltersPresenterTest {
                 assertThat(state.hasAnyFilterSelected).isFalse()
                 assertThat(state.filterSelectionStates).containsExactly(
                     filterSelectionState(RoomListFilter.Unread, false),
+                    filterSelectionState(RoomListFilter.Mentions, false),
+                    filterSelectionState(RoomListFilter.Favourites, false),
                     filterSelectionState(RoomListFilter.People, false),
                     filterSelectionState(RoomListFilter.Rooms, false),
-                    filterSelectionState(RoomListFilter.Favourites, false),
                     filterSelectionState(RoomListFilter.Invites, false),
                 ).inOrder()
                 assertThat(state.selectedFilters()).isEmpty()
