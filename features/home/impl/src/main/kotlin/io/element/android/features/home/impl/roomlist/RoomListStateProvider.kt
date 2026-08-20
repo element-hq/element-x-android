@@ -16,7 +16,9 @@ import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.features.home.impl.model.RoomSummaryDisplayType
 import io.element.android.features.home.impl.model.aRoomListRoomSummary
 import io.element.android.features.home.impl.model.anInviteSender
+import io.element.android.features.home.impl.search.GlobalSearchState
 import io.element.android.features.home.impl.search.RoomListSearchState
+import io.element.android.features.home.impl.search.aGlobalSearchState
 import io.element.android.features.home.impl.search.aRoomListSearchState
 import io.element.android.features.home.impl.spacefilters.SpaceFiltersState
 import io.element.android.features.home.impl.spacefilters.anUnselectedSpaceFiltersState
@@ -53,6 +55,7 @@ internal fun aRoomListState(
     declineInviteMenu: RoomListState.DeclineInviteMenu = RoomListState.DeclineInviteMenu.Hidden,
     leaveRoomState: LeaveRoomState = aLeaveRoomState(),
     searchState: RoomListSearchState = aRoomListSearchState(),
+    globalSearchState: GlobalSearchState = aGlobalSearchState(),
     filtersState: RoomListFiltersState = aRoomListFiltersState(),
     spaceFiltersState: SpaceFiltersState = anUnselectedSpaceFiltersState(),
     contentState: RoomListContentState = aRoomsContentState(),
@@ -66,6 +69,7 @@ internal fun aRoomListState(
     leaveRoomState = leaveRoomState,
     filtersState = filtersState,
     searchState = searchState,
+    globalSearchState = globalSearchState,
     spaceFiltersState = spaceFiltersState,
     contentState = contentState,
     acceptDeclineInviteState = acceptDeclineInviteState,

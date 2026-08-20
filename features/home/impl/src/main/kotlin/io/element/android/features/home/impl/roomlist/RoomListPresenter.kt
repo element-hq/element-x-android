@@ -30,6 +30,7 @@ import io.element.android.features.announcement.api.AnnouncementService
 import io.element.android.features.home.impl.datasource.RoomListDataSource
 import io.element.android.features.home.impl.filters.RoomListFiltersState
 import io.element.android.features.home.impl.filters.into
+import io.element.android.features.home.impl.search.GlobalSearchPresenter
 import io.element.android.features.home.impl.search.RoomListSearchEvent
 import io.element.android.features.home.impl.search.RoomListSearchState
 import io.element.android.features.home.impl.spacefilters.SpaceFiltersState
@@ -85,9 +86,14 @@ class RoomListPresenter(
     private val announcementService: AnnouncementService,
     private val coldStartWatcher: AnalyticsColdStartWatcher,
     private val spaceFiltersPresenter: Presenter<SpaceFiltersState>,
+    private val globalSearchPresenterFactory: GlobalSearchPresenter.Factory,
     private val featureFlagService: FeatureFlagService,
 ) : Presenter<RoomListState> {
     private val encryptionService = client.encryptionService
+
+    private val globalSearchPresenter by lazy {
+        globalSearchPresenterFactory.create(coroutineScope = client.sessionCoroutineScope)
+    }
 
     @Composable
     override fun present(): RoomListState {
@@ -97,6 +103,7 @@ class RoomListPresenter(
         val searchState = searchPresenter.present()
         val spaceFiltersState = spaceFiltersPresenter.present()
         val acceptDeclineInviteState = acceptDeclineInvitePresenter.present()
+        val globalSearchState = globalSearchPresenter.present()
 
         LaunchedEffect(Unit) {
             roomListDataSource.launchIn(this)
@@ -177,6 +184,7 @@ class RoomListPresenter(
             leaveRoomState = leaveRoomState,
             filtersState = filtersState,
             searchState = searchState,
+            globalSearchState = globalSearchState,
             spaceFiltersState = spaceFiltersState,
             contentState = contentState,
             acceptDeclineInviteState = acceptDeclineInviteState,
