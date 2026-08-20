@@ -178,8 +178,8 @@ fun MessagesView(
 
     fun onContentClick(event: TimelineItem.Event) {
         Timber.v("onMessageClick= ${event.id}")
-        val eventId = event.eventId ?: return
-        if (eventContentValidationState[eventId].getCurrentOverallState() != ContentValidationValue.Valid) return
+        val eventId = event.eventId
+        if (eventId != null && eventContentValidationState[eventId].getCurrentOverallState() != ContentValidationValue.Valid) return
 
         val hideKeyboard = onEventContentClick(state.timelineState.isLive, event)
         if (hideKeyboard) {

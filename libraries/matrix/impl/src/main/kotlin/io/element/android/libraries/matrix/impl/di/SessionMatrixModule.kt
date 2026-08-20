@@ -13,9 +13,9 @@ import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
+import io.element.android.libraries.matrix.api.ClientUrlContentFetcher
 import io.element.android.libraries.matrix.api.HomeserverCapabilitiesProvider
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.UrlContentFetcher
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
@@ -111,7 +111,7 @@ object SessionMatrixModule {
     }
 
     @Provides
-    fun providesGetUrlResolverClient(matrixClient: MatrixClient): UrlContentFetcher {
+    fun providesGetUrlResolverClient(matrixClient: MatrixClient): ClientUrlContentFetcher {
         return matrixClient
     }
 }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_unified_push_description">"يتحقق من توفر موزّعي UnifiedPush."</string>
+  <string name="troubleshoot_notifications_test_unified_push_failure">"لم يتم العثور على أي موزّع UnifiedPush."</string>
+  <plurals name="troubleshoot_notifications_test_unified_push_success">
+    <item quantity="zero">"تم العثور على %1$d من موزّعي UnifiedPush: %2$s."</item>
+    <item quantity="one">"تم العثور على %1$d موزّع UnifiedPush: %2$s."</item>
+    <item quantity="two">"تم العثور على %1$d من موزّعي UnifiedPush: %2$s."</item>
+    <item quantity="few">"تم العثور على %1$d من موزّعي UnifiedPush: %2$s."</item>
+    <item quantity="many">"تم العثور على %1$d من موزّعي UnifiedPush: %2$s."</item>
+    <item quantity="other">"تم العثور على %1$d من موزّعي UnifiedPush: %2$s."</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_unified_push_title">"التحقق من UnifiedPush"</string>
+</resources>

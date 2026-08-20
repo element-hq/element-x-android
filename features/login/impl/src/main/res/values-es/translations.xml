@@ -13,6 +13,9 @@
   <string name="screen_change_account_provider_other">"Otro"</string>
   <string name="screen_change_account_provider_subtitle">"Usa un proveedor de cuentas diferente, como tu propio servidor privado o una cuenta de trabajo."</string>
   <string name="screen_change_account_provider_title">"Cambiar proveedor de cuentas"</string>
+  <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
+  <string name="screen_change_server_error_element_pro_required_message">"%1$s requiere la aplicación Element Pro. Descárgala de la tienda."</string>
+  <string name="screen_change_server_error_element_pro_required_title">"Se requiere Element Pro"</string>
   <string name="screen_change_server_error_invalid_homeserver">"No hemos podido acceder a este servidor base. Comprueba que has introducido correctamente la dirección. Si es correcta, ponte en contacto con el administrador de tu servidor base para obtener más ayuda."</string>
   <string name="screen_change_server_error_invalid_well_known">"El servidor no está disponible debido a un problema en el archivo .well-known:
 %1$s"</string>
@@ -25,7 +28,7 @@
   <string name="screen_change_server_subtitle">"¿Cuál es la dirección de tu servidor?"</string>
   <string name="screen_change_server_title">"Selecciona tu servidor"</string>
   <string name="screen_create_account_title">"Crear cuenta"</string>
-  <string name="screen_login_error_deactivated_account">"Esta cuenta ha sido desactivada."</string>
+  <string name="screen_login_error_deactivated_account">"Esta cuenta ha sido eliminada."</string>
   <string name="screen_login_error_invalid_credentials">"Usuario y/o contraseña incorrectos"</string>
   <string name="screen_login_error_invalid_user_id">"Este no es un id de usuario válido. Formato esperado: \'@user:homeserver.org\'"</string>
   <string name="screen_login_error_refresh_tokens">"Este servidor está configurado para utilizar tokens de actualización. Estos no son compatibles cuando se utiliza el inicio de sesión basado en contraseña."</string>
@@ -34,11 +37,20 @@
   <string name="screen_login_subtitle">"Matrix es una red abierta para una comunicación segura y descentralizada."</string>
   <string name="screen_login_title">"¡Hola de nuevo!"</string>
   <string name="screen_login_title_with_homeserver">"Iniciar sesión en %1$s"</string>
+  <string name="screen_missing_key_backup_open_element_classic">"Abrir Element Classic"</string>
+  <string name="screen_missing_key_backup_step_1">"Abre Element Classic en tu dispositivo"</string>
+  <string name="screen_missing_key_backup_step_2_android">"Ve a Ajustes &gt; Seguridad y privacidad"</string>
+  <string name="screen_missing_key_backup_step_3_android">"En «Gestión de claves criptográficas», selecciona «Recuperación de mensajes cifrados»"</string>
+  <string name="screen_missing_key_backup_step_4">"Sigue las instrucciones para activar tu almacén de claves"</string>
+  <string name="screen_missing_key_backup_step_5">"Vuelve a %1$s"</string>
+  <string name="screen_missing_key_backup_title">"Activa tu almacén de claves antes de continuar con %1$s"</string>
   <string name="screen_onboarding_app_version">"Versión %1$s"</string>
+  <string name="screen_onboarding_checking_account">"Comprobación de la cuenta"</string>
   <string name="screen_onboarding_sign_in_manually">"Iniciar sesión manualmente"</string>
   <string name="screen_onboarding_sign_in_to">"Iniciar sesión en %1$s"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"Iniciar sesión con un código QR"</string>
   <string name="screen_onboarding_sign_up">"Crear cuenta"</string>
+  <string name="screen_onboarding_welcome_back">"¡Hola de nuevo!"</string>
   <string name="screen_onboarding_welcome_message">"Bienvenido al %1$s más rápido de todos los tiempos. Diseñado para la velocidad y la simplicidad."</string>
   <string name="screen_onboarding_welcome_subtitle">"Bienvenido a %1$s. Vitaminado, para mayor rapidez y sencillez."</string>
   <string name="screen_onboarding_welcome_title">"Siéntete en tu Elemento"</string>
@@ -57,6 +69,8 @@
   <string name="screen_qr_code_login_error_cancelled_title">"Solicitud de inicio de sesión cancelada"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"El inicio de sesión se rechazó en el otro dispositivo."</string>
   <string name="screen_qr_code_login_error_declined_title">"Inicio de sesión rechazado"</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_subtitle">"No tienes que hacer nada más."</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_title">"Tu otro dispositivo ya está conectado"</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"El inicio de sesión ha caducado. Inténtalo de nuevo."</string>
   <string name="screen_qr_code_login_error_expired_title">"El inicio de sesión no se completó a tiempo"</string>
   <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"Tu otro dispositivo no admite el inicio de sesión en %s con un código QR.

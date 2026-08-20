@@ -19,15 +19,9 @@ import org.junit.Test
 
 class DefaultEnterpriseServiceTest {
     @Test
-    fun `isEnterpriseBuild is false`() {
+    fun homeserverWhitelist() {
         val defaultEnterpriseService = DefaultEnterpriseService()
-        assertThat(defaultEnterpriseService.isEnterpriseBuild).isFalse()
-    }
-
-    @Test
-    fun `defaultHomeserverList should return empty list`() {
-        val defaultEnterpriseService = DefaultEnterpriseService()
-        assertThat(defaultEnterpriseService.defaultHomeserverList()).isEmpty()
+        assertThat(defaultEnterpriseService.homeserverAllowList()).isEmpty()
     }
 
     @Test

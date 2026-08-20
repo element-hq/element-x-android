@@ -17,6 +17,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import io.element.android.features.invite.impl.R
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EventsRecorder
@@ -38,6 +39,20 @@ class DeclineAndBlockViewTest : RobolectricTest() {
                 onBackClick = it
             )
             pressBack()
+        }
+    }
+
+    @Test
+    fun `a successful decline invokes the expected callback`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<DeclineAndBlockEvents>(expectEvents = false)
+        ensureCalledOnce {
+            setDeclineAndBlockView(
+                aDeclineAndBlockState(
+                    declineAction = AsyncAction.Success(Unit),
+                    eventSink = eventsRecorder,
+                ),
+                onDeclineSuccess = it,
+            )
         }
     }
 
@@ -112,11 +127,13 @@ class DeclineAndBlockViewTest : RobolectricTest() {
 private fun AndroidComposeUiTest<ComponentActivity>.setDeclineAndBlockView(
     state: DeclineAndBlockState,
     onBackClick: () -> Unit = EnsureNeverCalled(),
+    onDeclineSuccess: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         DeclineAndBlockView(
             state = state,
             onBackClick = onBackClick,
+            onDeclineSuccess = onDeclineSuccess,
         )
     }
 }

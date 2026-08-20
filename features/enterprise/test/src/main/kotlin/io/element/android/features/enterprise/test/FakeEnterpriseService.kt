@@ -12,9 +12,8 @@ import androidx.compose.ui.graphics.Color
 import io.element.android.compound.colors.SemanticColorsLightDark
 import io.element.android.features.enterprise.api.BugReportUrl
 import io.element.android.features.enterprise.api.EnterpriseService
-import io.element.android.libraries.matrix.api.UrlContentFetcher
+import io.element.android.libraries.matrix.api.ClientUrlContentFetcher
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.wellknown.api.ElementWellKnown
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.coroutines.flow.Flow
@@ -22,7 +21,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class FakeEnterpriseService(
-    override val isEnterpriseBuild: Boolean = false,
     private val isEnterpriseUserResult: (SessionId) -> Boolean = { lambdaError() },
     private val defaultHomeserverListResult: () -> List<String> = { emptyList() },
     private val isAllowedToConnectToHomeserverResult: (String) -> Boolean = { lambdaError() },
@@ -32,9 +30,8 @@ class FakeEnterpriseService(
     private val firebasePushGatewayResult: () -> String? = { lambdaError() },
     private val unifiedPushDefaultPushGatewayResult: () -> String? = { lambdaError() },
     private val getNoisyNotificationChannelIdResult: (SessionId?) -> String? = { lambdaError() },
-    private val tweakMasUrlResult: (String, String, UrlContentFetcher) -> String = { _, _, _ -> lambdaError() },
-    private val overrideWellKnownResult: () -> ElementWellKnown? = { lambdaError() },
-    private val essConfigEndpointUrlResult: (String) -> String = { lambdaError() },
+    private val tweakMasUrlResult: (String, ClientUrlContentFetcher) -> String = { _, _ -> lambdaError() },
+    private val isElementProEnforcedResult: (String) -> Boolean = { lambdaError() },
 ) : EnterpriseService {
     private val brandColorState = MutableStateFlow(initialBrandColor)
     private val semanticColorsState = MutableStateFlow(initialSemanticColors)
@@ -43,16 +40,20 @@ class FakeEnterpriseService(
         isEnterpriseUserResult(sessionId)
     }
 
-    override suspend fun tweakMasUrl(url: String, homeserver: String, urlContentFetcher: UrlContentFetcher): String = simulateLongTask {
-        tweakMasUrlResult(url, homeserver, urlContentFetcher)
+    override suspend fun tweakMasUrl(url: String, urlContentFetcher: ClientUrlContentFetcher): String = simulateLongTask {
+        tweakMasUrlResult(url, urlContentFetcher)
     }
 
-    override fun defaultHomeserverList(): List<String> {
+    override fun homeserverAllowList(): List<String> {
         return defaultHomeserverListResult()
     }
 
     override suspend fun isAllowedToConnectToHomeserver(homeserverUrl: String): Boolean = simulateLongTask {
         isAllowedToConnectToHomeserverResult(homeserverUrl)
+    }
+
+    override suspend fun isElementProEnforced(serverName: String): Boolean = simulateLongTask {
+        isElementProEnforcedResult(serverName)
     }
 
     override suspend fun overrideBrandColor(sessionId: SessionId?, brandColor: String?) = simulateLongTask {
@@ -82,13 +83,5 @@ class FakeEnterpriseService(
 
     override fun getNoisyNotificationChannelId(sessionId: SessionId): String? {
         return getNoisyNotificationChannelIdResult(sessionId)
-    }
-
-    override fun overriddenElementWellKnown(): ElementWellKnown? {
-        return overrideWellKnownResult()
-    }
-
-    override fun essConfigEndpointUrl(domain: String): String {
-        return essConfigEndpointUrlResult(domain)
     }
 }

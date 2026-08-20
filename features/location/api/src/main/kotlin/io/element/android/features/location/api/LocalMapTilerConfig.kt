@@ -8,7 +8,7 @@
 package io.element.android.features.location.api
 
 import androidx.compose.runtime.staticCompositionLocalOf
-import io.element.android.libraries.wellknown.api.MapTilerConfig
+import io.element.android.features.enterprise.api.remoteconfig.MapTilerConfig
 
 /**
  * Provides a [MapTilerConfig] for the MapLibre maps.

@@ -63,10 +63,10 @@ class AndroidMediaPreProcessor(
         /**
          * Used for calculating `inSampleSize` for bitmaps.
          *
-         * *Note*: Ideally, this should result in images of up to (but not included) 1280x1280 being sent. However, images with very different width and height
+         * *Note*: Ideally, this should result in images of up to (but not included) 2560x2560 being sent. However, images with very different width and height
          * values may surpass this limit. (i.e.: an image of `480x3000px` would have `inSampleSize=1` and be sent as is).
          */
-        private const val IMAGE_SCALE_REF_SIZE = 640
+        private const val IMAGE_SCALE_REF_SIZE = 1280
 
         private val notCompressibleImageTypes = listOf(MimeTypes.Gif, MimeTypes.WebP)
     }
@@ -87,8 +87,9 @@ class AndroidMediaPreProcessor(
             val result = when {
                 resolvedMimeType == MimeTypes.Svg -> processSvgImage(uri, resolvedMimeType)
                 resolvedMimeType.isMimeTypeImage() -> {
-                    val shouldBeCompressed = mediaOptimizationConfig.compressImages && resolvedMimeType !in notCompressibleImageTypes
-                    processImage(uri, resolvedMimeType, shouldBeCompressed)
+                    val imageMimeType = resolveImageMimeType(uri, mimeType).ensureDefaultSubtype()
+                    val shouldBeCompressed = mediaOptimizationConfig.compressImages && imageMimeType !in notCompressibleImageTypes
+                    processImage(uri, imageMimeType, shouldBeCompressed)
                 }
                 resolvedMimeType.isMimeTypeVideo() -> processVideo(uri, resolvedMimeType, mediaOptimizationConfig.videoCompressionPreset)
                 resolvedMimeType.isMimeTypeAudio() -> processAudio(uri, resolvedMimeType)
@@ -155,6 +156,19 @@ class AndroidMediaPreProcessor(
             is MediaUploadInfo.Video -> copy(file = renamedFile)
             is MediaUploadInfo.VoiceMessage -> copy(file = renamedFile)
         }
+    }
+
+    /**
+     * The declared mime type can be broader than the image actually is - a wildcard from a share intent, or a mislabelled file - and the encoder is picked
+     * from it. Re-encoding a transparent image as JPEG flattens its alpha channel to black, so resolve the real format from the image header first.
+     */
+    private fun resolveImageMimeType(uri: Uri, declaredMimeType: String): String {
+        if (declaredMimeType == MimeTypes.Png || declaredMimeType == MimeTypes.Jpeg) return declaredMimeType
+        val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        tryOrNull {
+            contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, options) }
+        }
+        return options.outMimeType ?: declaredMimeType
     }
 
     private suspend fun processImage(uri: Uri, mimeType: String, shouldBeCompressed: Boolean): MediaUploadInfo {
