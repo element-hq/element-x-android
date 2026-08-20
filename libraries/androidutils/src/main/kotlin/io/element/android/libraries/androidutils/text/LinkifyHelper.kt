@@ -50,12 +50,9 @@ object LinkifyHelper {
                 val start = spannable.getSpanStart(urlSpan)
                 val end = spannable.getSpanEnd(urlSpan)
 
-                if (urlSpan !in oldURLSpans && spannable.isEmailInsideFediverseHandle(urlSpan, start)) {
-                    spannable.removeSpan(urlSpan)
-                    continue
-                }
-
-                if (urlSpan !in oldURLSpans && spannable.isPhoneNumberMixedWithLetters(urlSpan, start, end)) {
+                if (urlSpan !in oldURLSpans &&
+                    (spannable.isEmailInsideFediverseHandle(urlSpan, start) || spannable.isPhoneNumberMixedWithLetters(urlSpan, start, end))
+                ) {
                     spannable.removeSpan(urlSpan)
                     continue
                 }
