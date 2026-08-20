@@ -109,6 +109,13 @@ class RootFlowNode(
     buildContext = buildContext,
     plugins = plugins
 ) {
+    /**
+     * Login params coming from a launch or new [Intent], waiting to be consumed by the not logged in flow.
+     * Kept here so that the root nav target can be computed from both the logged in state and the pending
+     * login params, whatever the order in which the intent and the first nav state emission are processed.
+     */
+    private var pendingLoginParams: LoginParams? = null
+
     override fun onBuilt() {
         analyticsColdStartWatcher.start()
         appCoroutineScope.launch {
@@ -152,7 +159,7 @@ class RootFlowNode(
                         }
                     }
                     LoggedInState.NotLoggedIn -> {
-                        switchToNotLoggedInFlow(null)
+                        switchToNotLoggedInFlow(pendingLoginParams)
                     }
                 }
             }
@@ -194,15 +201,18 @@ class RootFlowNode(
     }
 
     private fun switchToLoggedInFlow(sessionId: SessionId, navId: Int) {
+        pendingLoginParams = null
         backstack.safeRoot(NavTarget.LoggedInFlow(sessionId, navId))
     }
 
     private fun switchToNotLoggedInFlow(params: LoginParams?) {
+        Timber.d("switchToNotLoggedInFlow, hasLoginParams=${params != null}")
         matrixSessionCache.removeAll()
         backstack.safeRoot(NavTarget.NotLoggedInFlow(params))
     }
 
     private fun switchToSignedOutFlow(sessionId: SessionId) {
+        pendingLoginParams = null
         backstack.safeRoot(NavTarget.SignedOutFlow(sessionId))
     }
 
@@ -319,6 +329,7 @@ class RootFlowNode(
                     }
 
                     override fun onDone() {
+                        pendingLoginParams = null
                         backstack.pop()
                     }
                 }
@@ -418,6 +429,7 @@ class RootFlowNode(
                     Timber.w("Login link ignored, multi account is disabled")
                 }
             } else {
+                pendingLoginParams = params
                 switchToNotLoggedInFlow(params)
             }
         } else {
