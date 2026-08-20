@@ -10,8 +10,10 @@ package io.element.android.features.messages.impl.timeline.sendfailure
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -39,4 +41,17 @@ fun SendFailureDialogView(
             )
         }
     }
+}
+
+@PreviewsDayNight
+@Composable
+fun SendFailureDialogViewPreview(
+    @PreviewParameter(SendFailureDialogStateProvider::class) sendFailureDialogState: SendFailureDialogState,
+) {
+    SendFailureDialogView(
+        sendFailureDialogState = sendFailureDialogState,
+        onDismiss = {},
+        onRetry = {},
+        onRemoveMessage = {}
+    )
 }
