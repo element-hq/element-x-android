@@ -202,7 +202,7 @@ class GlobalSearchPresenterTest {
     }
 }
 
-internal fun TestScope.createGlobalSearchPresenter(
+private fun TestScope.createGlobalSearchPresenter(
     roomListService: RoomListService = FakeRoomListService(),
     messageSearchService: MessageSearchService = FakeMessageSearchService(),
     featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
