@@ -226,9 +226,9 @@ androidComponents {
                 // Depending on whether the app flavor is enterprise or not we want to use different proguard rules.
                 val flavorProguardDir = if (isEnterpriseBuild) {
                     // Custom rules for enterprise builds
-                    "proguard/enterprise"
+                    "../enterprise/proguard"
                 } else {
-                    // These default rules prevent the OSS app from being obfuscated
+                    // Custom fules for FOSS builds
                     "proguard/foss"
                 }
 
