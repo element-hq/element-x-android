@@ -15,8 +15,16 @@ import com.android.build.api.dsl.CompileOptions
 import com.android.build.api.dsl.LibraryDefaultConfig
 import com.android.build.api.dsl.LibraryExtension
 import com.android.build.api.dsl.Lint
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import isEnterpriseBuild
+import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.the
+import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jlleitschuh.gradle.ktlint.KtlintExtension
 import java.io.File
 
 fun ApplicationExtension.androidAppConfig(project: Project) {
@@ -116,4 +124,94 @@ fun Project.defaultLintOptions(lint: Lint) = lint.apply {
     ignoreTestSources = true
     ignoreTestFixturesSources = true
     checkGeneratedSources = false
+}
+
+
+fun Project.setupCompileOptions() {
+    tasks.withType<KotlinCompile> {
+        compilerOptions {
+            // Warnings are potential errors, so stop ignoring them
+            // This is disabled by default, but the CI will enforce this.
+            // You can override by passing `-PallWarningsAsErrors=true` in the command line
+            // Or add a line with "allWarningsAsErrors=true" in your ~/.gradle/gradle.properties file
+            allWarningsAsErrors.set(providers.gradleProperty("allWarningsAsErrors").orNull == "true")
+
+            // Uncomment to suppress Compose Kotlin compiler compatibility warning
+//            freeCompilerArgs.addAll(listOf("-P", "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"))
+
+            // Fix compilation warning for annotations
+            // See https://youtrack.jetbrains.com/issue/KT-73255/Change-defaulting-rule-for-annotations for more details
+            freeCompilerArgs.add("-Xannotation-default-target=first-only")
+        }
+    }
+}
+
+fun Project.setupLintTasks() {
+    // Detekt
+    setupDetekt()
+
+    // KtLint
+    setupKtlint()
+
+    // Dependency check
+    plugins.apply("org.owasp.dependencycheck")
+
+    tasks.register("runQualityChecks") {
+        tasks.findByPath("$path:lintDebug")?.let { dependsOn(it) }
+        tasks.findByName("detekt")?.let { dependsOn(it) }
+        tasks.findByName("ktlintCheck")?.let { dependsOn(it) }
+    }
+}
+
+fun Project.setupDetekt() {
+    plugins.apply("io.gitlab.arturbosch.detekt")
+    extensions.configure<DetektExtension> {
+        buildUponDefaultConfig = true
+        // activate all available (even unstable) rules.
+        allRules = true
+        // point to your custom config defining rules to run, overwriting default behavior
+        config.from(files("$rootDir/tools/detekt/detekt.yml"))
+    }
+
+    val catalog = the<LibrariesForLibs>()
+    dependencies.add("detektPlugins", catalog.detekt.compose.rules)
+    dependencies.add("detektPlugins", project(":tests:detekt-rules"))
+
+    tasks.withType<Detekt>().configureEach {
+        exclude("io/element/android/tests/konsist/failures/**")
+
+        // This file comes from another project and we want to keep it as close to the original as possible
+        exclude("org/rustls/platformverifier/**")
+    }
+}
+
+fun Project.setupKtlint() {
+    plugins.apply("org.jlleitschuh.gradle.ktlint")
+
+    // See https://github.com/JLLeitschuh/ktlint-gradle#configuration
+    extensions.configure<KtlintExtension> {
+        val catalog = the<LibrariesForLibs>()
+        version.set(catalog.versions.ktlint.get())
+        android.set(true)
+        ignoreFailures.set(false)
+        enableExperimentalRules.set(true)
+        // display the corresponding rule
+        verbose.set(true)
+        reporters {
+            reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.PLAIN)
+            // To have XML report for Danger
+            reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE)
+        }
+        val generatedPath = "${layout.buildDirectory.asFile.get()}/generated/"
+        filter {
+            exclude { element -> element.file.path.contains(generatedPath) }
+            exclude("io/element/android/tests/konsist/failures/**")
+
+            // This file comes from another project and we want to keep it as close to the original as possible
+            exclude("**/SafeChildrenTransitionScope.kt")
+
+            // This file comes from another project and we want to keep it as close to the original as possible
+            exclude("org/rustls/platformverifier/**")
+        }
+    }
 }

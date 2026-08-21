@@ -89,12 +89,12 @@ android {
         }
         register("nightly") {
             keyAlias = System.getenv("ELEMENT_ANDROID_NIGHTLY_KEYID")
-                ?: project.property("signing.element.nightly.keyId") as? String?
+                ?: property("signing.element.nightly.keyId") as? String?
             keyPassword = System.getenv("ELEMENT_ANDROID_NIGHTLY_KEYPASSWORD")
-                ?: project.property("signing.element.nightly.keyPassword") as? String?
+                ?: property("signing.element.nightly.keyPassword") as? String?
             storeFile = file("./signature/nightly.keystore")
             storePassword = System.getenv("ELEMENT_ANDROID_NIGHTLY_STOREPASSWORD")
-                ?: project.property("signing.element.nightly.storePassword") as? String?
+                ?: property("signing.element.nightly.storePassword") as? String?
         }
     }
 
@@ -212,7 +212,7 @@ android {
         )
 
         jniLibs {
-            useLegacyPackaging = project.findProperty("useLegacyPackaging")?.toString()?.toBoolean()
+            useLegacyPackaging = providers.gradleProperty("useLegacyPackaging")?.toString()?.toBoolean()
         }
     }
 }
@@ -242,7 +242,7 @@ androidComponents {
         }
     }
 
-    val reportingExtension: ReportingExtension = project.extensions.getByType(ReportingExtension::class.java)
+    val reportingExtension: ReportingExtension = extensions.getByType(ReportingExtension::class.java)
     configureLicensesTasks(reportingExtension)
 }
 
@@ -340,7 +340,7 @@ fun Project.configureLicensesTasks(reportingExtension: ReportingExtension) {
             val artifactsFile = reportingExtension.baseDirectory.file("licensee/android$capitalizedVariantName/artifacts.json")
 
             val copyArtifactsTask =
-                project.tasks.register<AssetCopyTask>("copy${capitalizedVariantName}LicenseeReportToAssets") {
+                tasks.register<AssetCopyTask>("copy${capitalizedVariantName}LicenseeReportToAssets") {
                     inputFile.set(artifactsFile)
                     targetFileName.set("licensee-artifacts.json")
                 }

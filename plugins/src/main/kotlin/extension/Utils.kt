@@ -52,7 +52,7 @@ private fun ExecOperations.runCommand(cmd: String): String {
 
 fun Project.readLocalProperty(name: String): String? = Properties().apply {
     try {
-        load(rootProject.file("local.properties").reader())
+        load(file("local.properties").reader())
     } catch (ignored: IOException) {
     }
 }.getProperty(name)
