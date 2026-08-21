@@ -9,11 +9,14 @@ package io.element.android.libraries.androidutils.media
 
 import android.app.PictureInPictureParams
 import android.content.res.Configuration
+import android.os.Build
 import android.util.Rational
+import androidx.annotation.RequiresApi
 
 /**
  * Set the aspect ratio of the Picture-in-Picture mode based on the current orientation of the other user's device.
  */
+@RequiresApi(Build.VERSION_CODES.O)
 fun PictureInPictureParams.Builder.setAspectRatioFromOrientation(orientation: Int): PictureInPictureParams.Builder {
     val aspectRatio = if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
         // If landscape orientation, invert the aspect ratio
