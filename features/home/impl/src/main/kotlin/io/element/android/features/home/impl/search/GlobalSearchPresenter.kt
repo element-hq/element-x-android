@@ -154,7 +154,7 @@ class GlobalSearchPresenter(
                             mappedResults.isNotEmpty() -> {
                                 AsyncData.Success(GlobalSearchResults.MessageSearchResults(results = mappedResults.toImmutableList()))
                             }
-                            paginationState is MessageSearchPaginationState.Idle && paginationState.endReached -> {
+                            queryState.text.isNotEmpty() && paginationState is MessageSearchPaginationState.Idle && paginationState.endReached -> {
                                 AsyncData.Success(GlobalSearchResults.MessageSearchResults(results = persistentListOf()))
                             }
                             paginationState is MessageSearchPaginationState.Loading -> {
