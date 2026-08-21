@@ -21,12 +21,12 @@ android {
 setupDependencyInjection()
 
 dependencies {
-    releaseImplementation(libs.matrix.sdk)
+    releaseApi(libs.matrix.sdk)
     if (file("${rootDir.path}/libraries/rustsdk/matrix-rust-sdk.aar").exists()) {
         println("\nNote: Using local binary of the Rust SDK.\n")
-        debugImplementation(projects.libraries.rustsdk)
+        debugApi(projects.libraries.rustsdk)
     } else {
-        debugImplementation(libs.matrix.sdk)
+        debugApi(libs.matrix.sdk)
     }
     implementation(projects.libraries.rustlsTls)
 
