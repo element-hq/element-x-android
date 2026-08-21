@@ -90,6 +90,7 @@ import org.junit.Test
 import org.robolectric.annotation.Config
 import kotlin.time.Duration.Companion.milliseconds
 
+@Suppress("LargeClass")
 class MessagesViewTest : RobolectricTest() {
     @Test
     fun `clicking on back invoke expected callback`() = runAndroidComposeUiTest {
