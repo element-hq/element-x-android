@@ -77,6 +77,6 @@ class RustTemporaryMatrixClientFactoryTest {
         clientBuilderProvider = clientBuilderProvider,
         sqliteStoreBuilderProvider = FakeSqliteStoreBuilderProvider(),
         workManagerScheduler = workManagerScheduler,
-        clientBuilderEnterpriseHook = { _, _ -> },
+        clientBuilderEnterpriseHook = { builder, _ -> builder },
     )
 }
