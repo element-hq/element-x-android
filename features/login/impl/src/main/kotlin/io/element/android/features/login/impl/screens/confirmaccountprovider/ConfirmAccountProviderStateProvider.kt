@@ -31,6 +31,10 @@ open class ConfirmAccountProviderStateProvider : PreviewParameterProvider<Confir
                 isAccountCreation = true,
                 loginModeState = aLoginModeState(loginMode = AsyncData.Failure(AccountCreationNotSupported())),
             ),
+            // Validating / signing in: the field and its clear button are disabled and Continue shows progress.
+            aConfirmAccountProviderState(
+                changeServerState = aChangeServerState(changeServerAction = AsyncData.Loading()),
+            ),
         )
 }
 

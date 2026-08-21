@@ -76,7 +76,6 @@ fun ConfirmAccountProviderView(
     onLearnMoreClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val eventSink = state.eventSink
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -99,7 +98,7 @@ fun ConfirmAccountProviderView(
         // Dismiss the keyboard and release focus while the account provider is being validated.
         focusManager.clearFocus(force = true)
         // Submit the exact field text (plus any accepted suggestion).
-        eventSink(ConfirmAccountProviderEvents.Continue(accountProviderToSubmit))
+        state.eventSink(ConfirmAccountProviderEvents.Continue(accountProviderToSubmit))
     }
 
     // Once a validation / login error has been dismissed, return focus and the keyboard to the field so
@@ -151,7 +150,7 @@ fun ConfirmAccountProviderView(
             value = input,
             onValueChange = {
                 input = it
-                eventSink(ConfirmAccountProviderEvents.UserInputChanged(it))
+                state.eventSink(ConfirmAccountProviderEvents.UserInputChanged(it))
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -181,7 +180,7 @@ fun ConfirmAccountProviderView(
                         // showing, Done submits directly.
                         val accepted = input + suggestionSuffix
                         input = accepted
-                        eventSink(ConfirmAccountProviderEvents.UserInputChanged(accepted))
+                        state.eventSink(ConfirmAccountProviderEvents.UserInputChanged(accepted))
                         focusManager.clearFocus(force = true)
                     } else {
                         submit()
@@ -189,7 +188,10 @@ fun ConfirmAccountProviderView(
                 }
             ),
             singleLine = true,
-            trailingIcon = if (input.isNotEmpty()) {
+            // Disable editing while the account provider is being validated / signed in (e.g. when returning
+            // from the MAS page), matching the disabled Continue button.
+            enabled = !state.isLoading,
+            trailingIcon = if (input.isNotEmpty() && !state.isLoading) {
                 {
                     Box(
                         Modifier.clickable(
@@ -197,7 +199,7 @@ fun ConfirmAccountProviderView(
                             role = Role.Button,
                         ) {
                             input = ""
-                            eventSink(ConfirmAccountProviderEvents.UserInputChanged(""))
+                            state.eventSink(ConfirmAccountProviderEvents.UserInputChanged(""))
                         }
                     ) {
                         Icon(
@@ -222,7 +224,7 @@ fun ConfirmAccountProviderView(
 
     LoginModeView(
         loginMode = state.loginModeState.loginMode,
-        onClearError = { eventSink(ConfirmAccountProviderEvents.ClearError) },
+        onClearError = { state.eventSink(ConfirmAccountProviderEvents.ClearError) },
         onLearnMoreClick = onLearnMoreClick,
         onOAuthDetails = onOAuthDetails,
         onNeedLoginPassword = onNeedLoginPassword,
