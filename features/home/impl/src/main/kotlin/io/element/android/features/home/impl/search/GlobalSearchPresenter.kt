@@ -47,13 +47,16 @@ import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.isMediaContent
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
 import io.element.android.libraries.matrix.ui.messages.toPlainText
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import kotlin.jvm.optionals.getOrElse
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -92,8 +95,11 @@ class GlobalSearchPresenter(
                 AsyncData.Uninitialized
             }
 
-            roomListSearchDataSource.setSearchQuery(queryState.text.toString())
-            currentMessageSearch.setQuery(queryState.text.toString())
+            launch { roomListSearchDataSource.setSearchQuery(queryState.text.toString()) }
+            launch {
+                currentMessageSearch.setQuery(queryState.text.toString())
+                    .onFailure { Timber.e(it, "Could not set query for message search") }
+            }
         }
 
         LaunchedEffect(currentTarget) {
@@ -114,7 +120,15 @@ class GlobalSearchPresenter(
                     }
                 }
                 GlobalSearchTarget.MESSAGES -> {
-                    currentMessageSearch.results.collectLatest { results ->
+                    Timber.d("Message search found ${currentMessageSearch.results.value.size} items")
+                    combine(
+                        currentMessageSearch.results,
+                        currentMessageSearch.paginationState,
+                    ) { results, paginationState ->
+                        Pair(results, paginationState)
+                    }.collectLatest { (results, paginationState) ->
+                        Timber.d("Message search found ${results.size} items, pagination state: $paginationState")
+
                         // Try processing the results in parallel to speed up the processing time, since we have to wait until we get the room info for each
                         // result, which can be slow if we have a lot of results. The original order is kept by using `awaitAll()`.
                         val mappedResults = results.map { result ->
@@ -136,10 +150,19 @@ class GlobalSearchPresenter(
                             .awaitAll()
                             .mapNotNull { it }
 
-                        searchResults = if (queryState.text.isNotEmpty() && mappedResults.isNotEmpty()) {
-                            AsyncData.Success(GlobalSearchResults.MessageSearchResults(results = mappedResults.toImmutableList()))
-                        } else {
-                            AsyncData.Uninitialized
+                        searchResults = when {
+                            mappedResults.isNotEmpty() -> {
+                                AsyncData.Success(GlobalSearchResults.MessageSearchResults(results = mappedResults.toImmutableList()))
+                            }
+                            paginationState is MessageSearchPaginationState.Idle && paginationState.endReached -> {
+                                AsyncData.Success(GlobalSearchResults.MessageSearchResults(results = persistentListOf()))
+                            }
+                            paginationState is MessageSearchPaginationState.Loading -> {
+                                AsyncData.Loading(prevData = searchResults.dataOrNull())
+                            }
+                            else -> {
+                                AsyncData.Uninitialized
+                            }
                         }
                     }
                 }
