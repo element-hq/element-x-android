@@ -9,14 +9,12 @@ package io.element.android.features.enterprise.impl
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.SingleIn
 import io.element.android.features.enterprise.api.ClientEnterpriseHook
 import io.element.android.libraries.matrix.api.MatrixClient
 
 /**
  * Default implementation of [ClientEnterpriseHook] that does nothing for FOSS.
  */
-@SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultClientEnterpriseHook : ClientEnterpriseHook {
     override suspend fun invoke(client: MatrixClient) {

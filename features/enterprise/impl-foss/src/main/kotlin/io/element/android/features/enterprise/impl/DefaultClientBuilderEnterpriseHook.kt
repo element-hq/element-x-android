@@ -9,7 +9,6 @@ package io.element.android.features.enterprise.impl
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.SingleIn
 import io.element.android.features.enterprise.api.ClientBuilderEnterpriseHook
 import io.element.android.libraries.matrix.api.MatrixClientBuilder
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -17,7 +16,6 @@ import io.element.android.libraries.matrix.api.core.SessionId
 /**
  * Default implementation of [ClientBuilderEnterpriseHook] that does nothing for FOSS.
  */
-@SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultClientBuilderEnterpriseHook : ClientBuilderEnterpriseHook {
     override suspend fun invoke(clientBuilder: MatrixClientBuilder, sessionId: SessionId): MatrixClientBuilder {
