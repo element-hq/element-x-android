@@ -17,14 +17,13 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
-import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.eventformatter.api.RoomLatestEventFormatter
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
@@ -60,7 +59,7 @@ import timber.log.Timber
 import kotlin.jvm.optionals.getOrElse
 import kotlin.time.Duration.Companion.milliseconds
 
-@ContributesBinding(SessionScope::class)
+@Inject
 class GlobalSearchPresenter(
     private val roomListSearchDataSourceFactory: RoomListSearchDataSource.Factory,
     private val messageSearchService: MessageSearchService,
