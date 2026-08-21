@@ -211,10 +211,8 @@ internal fun TestScope.createGlobalSearchPresenter(
     fileSizeFormatter: FileSizeFormatter = FakeFileSizeFormatter(),
     permalinkParser: PermalinkParser = FakePermalinkParser(),
     matrixClient: MatrixClient = FakeMatrixClient(),
-    coroutineScope: CoroutineScope = backgroundScope,
 ): GlobalSearchPresenter {
     return GlobalSearchPresenter(
-        coroutineScope = coroutineScope,
         roomListSearchDataSourceFactory = object : RoomListSearchDataSource.Factory {
             override fun create(coroutineScope: CoroutineScope): RoomListSearchDataSource {
                 return RoomListSearchDataSource(

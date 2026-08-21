@@ -683,12 +683,9 @@ class RoomListPresenterTest {
             analyticsService = FakeAnalyticsService(),
         ),
         searchPresenter = searchPresenter,
-        globalSearchPresenterFactory = object : GlobalSearchPresenter.Factory {
-            override fun create(coroutineScope: CoroutineScope) = createGlobalSearchPresenter(
-                matrixClient = client,
-                coroutineScope = coroutineScope,
-            )
-        },
+        globalSearchPresenter = createGlobalSearchPresenter(
+            matrixClient = client,
+        ),
         filtersPresenter = filtersPresenter,
         spaceFiltersPresenter = spaceFiltersPresenter,
         analyticsService = analyticsService,

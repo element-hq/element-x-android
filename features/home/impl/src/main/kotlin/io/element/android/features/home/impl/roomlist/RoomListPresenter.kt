@@ -30,7 +30,7 @@ import io.element.android.features.announcement.api.AnnouncementService
 import io.element.android.features.home.impl.datasource.RoomListDataSource
 import io.element.android.features.home.impl.filters.RoomListFiltersState
 import io.element.android.features.home.impl.filters.into
-import io.element.android.features.home.impl.search.GlobalSearchPresenter
+import io.element.android.features.home.impl.search.GlobalSearchState
 import io.element.android.features.home.impl.search.RoomListSearchEvent
 import io.element.android.features.home.impl.search.RoomListSearchState
 import io.element.android.features.home.impl.spacefilters.SpaceFiltersState
@@ -86,14 +86,10 @@ class RoomListPresenter(
     private val announcementService: AnnouncementService,
     private val coldStartWatcher: AnalyticsColdStartWatcher,
     private val spaceFiltersPresenter: Presenter<SpaceFiltersState>,
-    private val globalSearchPresenterFactory: GlobalSearchPresenter.Factory,
+    private val globalSearchPresenter: Presenter<GlobalSearchState>,
     private val featureFlagService: FeatureFlagService,
 ) : Presenter<RoomListState> {
     private val encryptionService = client.encryptionService
-
-    private val globalSearchPresenter by lazy {
-        globalSearchPresenterFactory.create(coroutineScope = client.sessionCoroutineScope)
-    }
 
     @Composable
     override fun present(): RoomListState {

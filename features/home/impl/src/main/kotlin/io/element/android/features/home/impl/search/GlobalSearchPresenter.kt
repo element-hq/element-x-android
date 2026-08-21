@@ -15,16 +15,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import dev.zacsweers.metro.Assisted
-import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.AssistedInject
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
+import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.eventformatter.api.RoomLatestEventFormatter
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
@@ -48,7 +48,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.isMediaConten
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
 import io.element.android.libraries.matrix.ui.messages.toPlainText
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
@@ -58,9 +57,8 @@ import kotlinx.coroutines.launch
 import kotlin.jvm.optionals.getOrElse
 import kotlin.time.Duration.Companion.milliseconds
 
-@AssistedInject
+@ContributesBinding(SessionScope::class)
 class GlobalSearchPresenter(
-    @Assisted private val coroutineScope: CoroutineScope,
     private val roomListSearchDataSourceFactory: RoomListSearchDataSource.Factory,
     private val messageSearchService: MessageSearchService,
     private val featureFlagService: FeatureFlagService,
@@ -71,13 +69,9 @@ class GlobalSearchPresenter(
     private val coroutineDispatchers: CoroutineDispatchers,
     private val matrixClient: MatrixClient,
 ) : Presenter<GlobalSearchState> {
-    @AssistedFactory
-    fun interface Factory {
-        fun create(coroutineScope: CoroutineScope): GlobalSearchPresenter
-    }
-
     @Composable
     override fun present(): GlobalSearchState {
+        val coroutineScope = rememberCoroutineScope()
         val isEnabled by produceState(false) {
             featureFlagService.isFeatureEnabledFlow(FeatureFlags.MessageSearch).collectLatest { value = it }
         }
