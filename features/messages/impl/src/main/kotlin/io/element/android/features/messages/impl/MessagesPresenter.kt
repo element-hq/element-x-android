@@ -400,7 +400,21 @@ class MessagesPresenter(
             TimelineItemAction.Pin -> handlePinAction(targetEvent)
             TimelineItemAction.Unpin -> handleUnpinAction(targetEvent)
             TimelineItemAction.ViewInTimeline -> Unit
+            TimelineItemAction.RetrySending -> handleRetrySending(targetEvent)
         }
+    }
+
+    private suspend fun handleRetrySending(targetEvent: TimelineItem.Event) {
+        val sendHandle = targetEvent.sendhandle ?: return Unit.also {
+            Timber.w("No send handle for event ${targetEvent.eventOrTransactionId}")
+        }
+        sendHandle.retry()
+            .onSuccess {
+                Timber.d("Succeed to add the message back to the send queue")
+            }
+            .onFailure {
+                Timber.e(it, "Failed to add the message back to the send queue")
+            }
     }
 
     private suspend fun handleRemoveCaption(targetEvent: TimelineItem.Event) {
