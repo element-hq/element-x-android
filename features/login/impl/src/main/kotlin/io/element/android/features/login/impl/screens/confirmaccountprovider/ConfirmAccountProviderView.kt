@@ -42,6 +42,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.changeserver.ChangeServerView
 import io.element.android.features.login.impl.login.LoginModeEvent
 import io.element.android.features.login.impl.login.LoginModeView
@@ -120,9 +121,9 @@ fun ConfirmAccountProviderView(
                 iconStyle = BigIcon.Style.Default(CompoundIcons.UserProfileSolid()),
                 title = stringResource(
                     id = if (state.isAccountCreation) {
-                        CommonStrings.screen_change_server_title_register
+                        R.string.screen_change_server_title_register
                     } else {
-                        CommonStrings.screen_change_server_title_login
+                        R.string.screen_change_server_title_login
                     }
                 ),
                 subTitle = null,
@@ -157,13 +158,13 @@ fun ConfirmAccountProviderView(
                 .padding(top = 40.dp)
                 .focusRequester(focusRequester)
                 .testTag(TestTags.changeServerServer),
-            label = stringResource(id = CommonStrings.screen_change_server_textfield_header),
-            placeholder = stringResource(id = CommonStrings.screen_change_server_textfield_placeholder),
+            label = stringResource(id = R.string.screen_change_server_textfield_header),
+            placeholder = stringResource(id = R.string.screen_change_server_textfield_placeholder),
             supportingText = stringResource(
                 id = if (state.isAccountCreation) {
-                    CommonStrings.screen_change_server_textfield_footer_register
+                    R.string.screen_change_server_textfield_footer_register
                 } else {
-                    CommonStrings.screen_change_server_textfield_footer_login
+                    R.string.screen_change_server_textfield_footer_login
                 }
             ),
             visualTransformation = ghostTransformation,
