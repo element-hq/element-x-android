@@ -31,6 +31,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.roomlist.LatestEventValue
+import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.search.MessageSearch
 import io.element.android.libraries.matrix.api.search.MessageSearchPaginationState
 import io.element.android.libraries.matrix.api.search.MessageSearchResult
@@ -108,13 +109,25 @@ class GlobalSearchPresenter(
 
             when (currentTarget) {
                 GlobalSearchTarget.ROOMS -> {
-                    roomListSearchDataSource.roomSummaries.collectLatest { results ->
+                    combine(
+                        roomListSearchDataSource.roomSummaries,
+                        roomListSearchDataSource.loadingState,
+                    ) { summaries, loadingState ->
+                        Pair(summaries, loadingState)
+                    }.collectLatest { (results, loadingState) ->
+                        Timber.d("Room list search found ${results.size} items, loading state: $loadingState")
                         // The room list data source always returns some values, even if the query is empty,
                         // so we only want to update the search results if the query is not empty
-                        searchResults = if (queryState.text.isNotEmpty() && results.isNotEmpty()) {
-                            AsyncData.Success(GlobalSearchResults.RoomListResults(results = results))
-                        } else {
-                            AsyncData.Uninitialized
+                        searchResults = when {
+                            queryState.text.isNotEmpty() && results.isNotEmpty() -> {
+                                AsyncData.Success(GlobalSearchResults.RoomListResults(results = results))
+                            }
+                            loadingState is RoomList.LoadingState.Loaded && results.isEmpty() -> {
+                                AsyncData.Success(GlobalSearchResults.RoomListResults(results = persistentListOf()))
+                            }
+                            else -> {
+                                AsyncData.Uninitialized
+                            }
                         }
                     }
                 }
