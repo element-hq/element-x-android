@@ -139,10 +139,45 @@ class GlobalSearchPresenterTest {
             testScheduler.advanceUntilIdle()
             roomList.summaries.emit(listOf(aRoomSummary()))
 
-            val successState = consumeItemsUntilPredicate { it.results is AsyncData.Success }.last()
+            // Wait for the presenter to emit a loading state before the success state
+            consumeItemsUntilPredicate { it.results is AsyncData.Loading }
+
+            val successState = awaitItem()
             val results = (successState.results.dataOrNull() as GlobalSearchResults.RoomListResults).results
             assertThat(results).hasSize(1)
             cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - room search displays the uninitialized state when removing the query`() = runTest {
+        val roomList = FakeDynamicRoomList()
+        val roomListService = FakeRoomListService(createRoomListLambda = { roomList })
+        val presenter = createGlobalSearchPresenter(roomListService = roomListService)
+        presenter.test {
+            val initialState = awaitItem()
+            assertThat(initialState.results).isEqualTo(AsyncData.Uninitialized)
+
+            initialState.queryState.edit { append("A query") }
+            // Let the query be propagated to the data source before emitting results
+            testScheduler.advanceUntilIdle()
+            roomList.summaries.emit(listOf(aRoomSummary()))
+
+            // Wait for the presenter to emit a loading state before the success state
+            consumeItemsUntilPredicate { it.results is AsyncData.Loading }
+
+            val successState = awaitItem()
+            val results = (successState.results.dataOrNull() as GlobalSearchResults.RoomListResults).results
+            assertThat(results).hasSize(1)
+
+            // Remove the query
+            successState.queryState.edit { replace(0, length, "") }
+            // Skip the intermediate state where the query is empty but results are still present
+            skipItems(1)
+            // It's back to the uninitialized state
+            assertThat(awaitItem().results).isInstanceOf(AsyncData.Uninitialized::class.java)
+            // This happens even if for some reason the room results still contained any items
+            assertThat(roomList.summaries.value).isNotEmpty()
         }
     }
 
@@ -170,6 +205,41 @@ class GlobalSearchPresenterTest {
             assertThat(results).hasSize(1)
             assertThat(results.first()).isInstanceOf(MessageSearchResultItem.Message::class.java)
             cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - message search displays the uninitialized state after removing the query`() = runTest {
+        val messageSearch = FakeMessageSearch()
+        val matrixClient = FakeMatrixClient().apply {
+            getRoomInfoFlowLambda = { flowOf(Optional.of(aRoomInfo())) }
+        }
+        val presenter = createGlobalSearchPresenter(
+            messageSearchService = FakeMessageSearchService(messageSearch),
+            matrixClient = matrixClient,
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(GlobalSearchEvent.UpdateTarget(GlobalSearchTarget.MESSAGES))
+            initialState.queryState.edit { append("A query") }
+            testScheduler.advanceUntilIdle()
+
+            messageSearch.emitResults(persistentListOf(aMessageSearchResult()))
+            testScheduler.advanceUntilIdle()
+
+            val successState = consumeItemsUntilPredicate { it.results is AsyncData.Success }.last()
+            val results = (successState.results.dataOrNull() as GlobalSearchResults.MessageSearchResults).results
+            assertThat(results).hasSize(1)
+            assertThat(results.first()).isInstanceOf(MessageSearchResultItem.Message::class.java)
+
+            // Remove the query
+            successState.queryState.edit { replace(0, length, "") }
+            // Skip the intermediate state where the query is empty but results are still present
+            skipItems(1)
+            // It's back to the uninitialized state
+            assertThat(awaitItem().results).isInstanceOf(AsyncData.Uninitialized::class.java)
+            // This happens even if for some reason the message results still contained any items
+            assertThat(messageSearch.results.value).isNotEmpty()
         }
     }
 
