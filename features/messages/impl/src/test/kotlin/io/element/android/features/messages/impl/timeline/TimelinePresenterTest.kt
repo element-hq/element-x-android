@@ -1404,7 +1404,10 @@ class TimelinePresenterTest {
             initialState.eventSink(TimelineEvent.ShowSendFailureDialog(event))
             awaitItem().also { state ->
                 assertThat(state.sendFailureDialogState).isEqualTo(
-                    SendFailureDialogState.Show(event = event, message = "An error")
+                    SendFailureDialogState.Show(
+                        event = event,
+                        sendFailureType = SendFailureDialogState.SendFailureType.Error("An error"),
+                    )
                 )
                 state.eventSink(TimelineEvent.HideSendFailureDialog)
             }
@@ -1416,39 +1419,39 @@ class TimelinePresenterTest {
 
     @Test
     fun `present - show send failure dialog - unknown error with a blank reason`() {
-        assertSendFailureDialogMessage(
+        assertSendFailureType(
             sendState = LocalEventSendState.Failed.Unknown(error = ""),
-            expectedMessage = "Unknown error",
+            expectedSendFailureType = SendFailureDialogState.SendFailureType.Unknown,
         )
     }
 
     @Test
     fun `present - show send failure dialog - invalid mime type`() {
-        assertSendFailureDialogMessage(
+        assertSendFailureType(
             sendState = LocalEventSendState.Failed.InvalidMimeType(mimeType = "invalid/mimeType"),
-            expectedMessage = "Invalid mime type: invalid/mimeType",
+            expectedSendFailureType = SendFailureDialogState.SendFailureType.InvalidMimeType("invalid/mimeType"),
         )
     }
 
     @Test
     fun `present - show send failure dialog - missing media content`() {
-        assertSendFailureDialogMessage(
+        assertSendFailureType(
             sendState = LocalEventSendState.Failed.MissingMediaContent,
-            expectedMessage = "Missing media content",
+            expectedSendFailureType = SendFailureDialogState.SendFailureType.MissingMediaContent,
         )
     }
 
     @Test
     fun `present - show send failure dialog - sending from unverified device`() {
-        assertSendFailureDialogMessage(
+        assertSendFailureType(
             sendState = LocalEventSendState.Failed.SendingFromUnverifiedDevice,
-            expectedMessage = "Sending from unverified device",
+            expectedSendFailureType = SendFailureDialogState.SendFailureType.SendingFromUnverifiedDevice,
         )
     }
 
-    private fun assertSendFailureDialogMessage(
+    private fun assertSendFailureType(
         sendState: LocalEventSendState.Failed,
-        expectedMessage: String,
+        expectedSendFailureType: SendFailureDialogState.SendFailureType,
     ) = runTest {
         val presenter = createTimelinePresenter()
         val event = aMessageEvent(sendState = sendState)
@@ -1456,7 +1459,7 @@ class TimelinePresenterTest {
             val initialState = awaitFirstItem()
             initialState.eventSink(TimelineEvent.ShowSendFailureDialog(event))
             assertThat(awaitItem().sendFailureDialogState).isEqualTo(
-                SendFailureDialogState.Show(event = event, message = expectedMessage)
+                SendFailureDialogState.Show(event = event, sendFailureType = expectedSendFailureType)
             )
             cancelAndIgnoreRemainingEvents()
         }

@@ -568,7 +568,10 @@ class MessagesViewTest : RobolectricTest() {
         setMessagesView(
             state = aMessagesState(
                 timelineState = aTimelineState(
-                    sendFailureDialogState = SendFailureDialogState.Show(event = timelineItem, message = "Error"),
+                    sendFailureDialogState = SendFailureDialogState.Show(
+                        event = timelineItem,
+                        sendFailureType = SendFailureDialogState.SendFailureType.Error("Error"),
+                    ),
                     eventSink = timelineEventsRecorder,
                 ),
                 eventSink = messagesEventsRecorder,
@@ -590,7 +593,10 @@ class MessagesViewTest : RobolectricTest() {
         setMessagesView(
             state = aMessagesState(
                 timelineState = aTimelineState(
-                    sendFailureDialogState = SendFailureDialogState.Show(event = timelineItem, message = "Error"),
+                    sendFailureDialogState = SendFailureDialogState.Show(
+                        event = timelineItem,
+                        sendFailureType = SendFailureDialogState.SendFailureType.Error("Error"),
+                    ),
                     eventSink = timelineEventsRecorder,
                 ),
                 eventSink = messagesEventsRecorder,
@@ -612,7 +618,10 @@ class MessagesViewTest : RobolectricTest() {
         setMessagesView(
             state = aMessagesState(
                 timelineState = aTimelineState(
-                    sendFailureDialogState = SendFailureDialogState.Show(event = timelineItem, message = "Error"),
+                    sendFailureDialogState = SendFailureDialogState.Show(
+                        event = timelineItem,
+                        sendFailureType = SendFailureDialogState.SendFailureType.Error("Error"),
+                    ),
                     eventSink = timelineEventsRecorder,
                 ),
                 eventSink = messagesEventsRecorder,
