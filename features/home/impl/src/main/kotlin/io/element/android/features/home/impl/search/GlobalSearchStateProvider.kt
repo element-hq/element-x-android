@@ -39,6 +39,7 @@ import io.element.android.libraries.matrix.ui.messages.reply.aProfileDetailsRead
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 
 class GlobalSearchStateProvider : PreviewParameterProvider<GlobalSearchState> {
     override val values: Sequence<GlobalSearchState>
@@ -56,7 +57,13 @@ class GlobalSearchStateProvider : PreviewParameterProvider<GlobalSearchState> {
                 isSearchActive = true,
                 currentTarget = GlobalSearchTarget.ROOMS,
                 queryState = TextFieldState("Query"),
-                results = AsyncData.Success(GlobalSearchResults.RoomListResults(aRoomListRoomSummaryList())),
+                results = AsyncData.Success(
+                    GlobalSearchResults.RoomListResults(
+                        results = aRoomListRoomSummaryList().mapIndexed { index, summary ->
+                            summary.copy(name = "Room with Query #${index + 1}")
+                        }.toPersistentList()
+                    )
+                ),
             ),
             aGlobalSearchState(
                 isSearchActive = true,
@@ -65,7 +72,7 @@ class GlobalSearchStateProvider : PreviewParameterProvider<GlobalSearchState> {
                 results = AsyncData.Success(GlobalSearchResults.MessageSearchResults(persistentListOf(
                     MessageSearchResultItem.Message(
                         messageSearchResult = aMessageSearchResult(eventId = EventId("\$eventId1:server.org")),
-                        body = "A message",
+                        body = "A message with Query",
                         roomInfo = aRoomInfo(),
                         formattedTimestamp = "12:00",
                     ),
@@ -74,7 +81,7 @@ class GlobalSearchStateProvider : PreviewParameterProvider<GlobalSearchState> {
                         mediaContent = MediaSearchResultContent(
                             filename = "file.png",
                             extension = "PNG",
-                            caption = "A caption",
+                            caption = "A caption containing Query",
                             formattedSize = "1 MB",
                             thumbnailSource = MediaSource("https://example.com/thumbnail.png"),
                             thumbnailType = AttachmentThumbnailType.Image,

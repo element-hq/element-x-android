@@ -43,7 +43,10 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             aRoomListState(contentState = aRoomsContentState(securityBannerState = SecurityBannerState.RecoveryKeyConfirmation)),
             aRoomListState(contentState = anEmptyContentState()),
             aRoomListState(contentState = aSkeletonContentState()),
-            aRoomListState(searchState = aRoomListSearchState(isSearchActive = true, query = "Test")),
+            aRoomListState(
+                searchState = aRoomListSearchState(isSearchActive = true, query = "Test"),
+                globalSearchState = aGlobalSearchState(isEnabled = false),
+            ),
             aRoomListState(contentState = aRoomsContentState(securityBannerState = SecurityBannerState.SetUpRecovery)),
             aRoomListState(contentState = aRoomsContentState(batteryOptimizationState = aBatteryOptimizationState(shouldDisplayBanner = true))),
             aRoomListState(contentState = anEmptyContentState(securityBannerState = SecurityBannerState.RecoveryKeyConfirmation)),
