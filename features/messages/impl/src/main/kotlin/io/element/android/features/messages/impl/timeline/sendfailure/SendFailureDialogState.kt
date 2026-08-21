@@ -16,6 +16,15 @@ sealed interface SendFailureDialogState {
 
     data class Show(
         val event: TimelineItem.Event,
-        val message: String,
+        val sendFailureType: SendFailureType,
     ) : SendFailureDialogState
+
+    @Immutable
+    sealed interface SendFailureType {
+        data class InvalidMimeType(val mimeType: String) : SendFailureType
+        data object MissingMediaContent : SendFailureType
+        data object SendingFromUnverifiedDevice : SendFailureType
+        data class Error(val message: String) : SendFailureType
+        data object Unknown : SendFailureType
+    }
 }

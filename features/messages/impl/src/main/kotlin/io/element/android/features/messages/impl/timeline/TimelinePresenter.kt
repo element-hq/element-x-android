@@ -258,25 +258,29 @@ class TimelinePresenter(
                         is LocalEventSendState.Failed.InvalidMimeType -> {
                             sendFailureDialogState = SendFailureDialogState.Show(
                                 event = event.event,
-                                message = "Invalid mime type: ${sendStateFailure.mimeType}",
+                                sendFailureType = SendFailureDialogState.SendFailureType.InvalidMimeType(sendStateFailure.mimeType),
                             )
                         }
                         LocalEventSendState.Failed.MissingMediaContent -> {
                             sendFailureDialogState = SendFailureDialogState.Show(
                                 event = event.event,
-                                message = "Missing media content",
+                                sendFailureType = SendFailureDialogState.SendFailureType.MissingMediaContent,
                             )
                         }
                         LocalEventSendState.Failed.SendingFromUnverifiedDevice -> {
                             sendFailureDialogState = SendFailureDialogState.Show(
                                 event = event.event,
-                                message = "Sending from unverified device",
+                                sendFailureType = SendFailureDialogState.SendFailureType.SendingFromUnverifiedDevice,
                             )
                         }
                         is LocalEventSendState.Failed.Unknown -> {
                             sendFailureDialogState = SendFailureDialogState.Show(
                                 event = event.event,
-                                message = sendStateFailure.error.takeIf { it.isNotBlank() } ?: "Unknown error",
+                                sendFailureType = if (sendStateFailure.error.isNotBlank()) {
+                                    SendFailureDialogState.SendFailureType.Error(sendStateFailure.error)
+                                } else {
+                                    SendFailureDialogState.SendFailureType.Unknown
+                                }
                             )
                         }
                     }

@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -29,10 +30,30 @@ fun SendFailureDialogView(
         is SendFailureDialogState.Hidden -> Unit
         is SendFailureDialogState.Show -> {
             // Show the dialog with the message and actions
+            val content = when (sendFailureDialogState.sendFailureType) {
+                is SendFailureDialogState.SendFailureType.InvalidMimeType -> stringResource(
+                    id = R.string.error_sending_failure_invalid_mime_type,
+                    sendFailureDialogState.sendFailureType.mimeType,
+                )
+                is SendFailureDialogState.SendFailureType.MissingMediaContent -> stringResource(
+                    id = R.string.error_sending_failure_missing_media_content,
+                )
+                is SendFailureDialogState.SendFailureType.SendingFromUnverifiedDevice -> stringResource(
+                    id = R.string.error_sending_failure_sending_from_unverified_device,
+                )
+                is SendFailureDialogState.SendFailureType.Error -> stringResource(
+                    id = R.string.error_sending_failure_other,
+                    sendFailureDialogState.sendFailureType.message
+                )
+                is SendFailureDialogState.SendFailureType.Unknown -> stringResource(
+                    id = R.string.error_sending_failure_unknown,
+                )
+            }
+
             ConfirmationDialog(
                 modifier = modifier,
                 title = stringResource(id = CommonStrings.common_sending_failed),
-                content = sendFailureDialogState.message,
+                content = content,
                 onDismiss = onDismiss,
                 submitText = stringResource(id = CommonStrings.action_retry),
                 onSubmitClick = { onRetry(sendFailureDialogState.event) },

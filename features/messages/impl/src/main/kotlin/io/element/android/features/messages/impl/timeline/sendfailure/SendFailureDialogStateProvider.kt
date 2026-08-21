@@ -16,7 +16,23 @@ class SendFailureDialogStateProvider : PreviewParameterProvider<SendFailureDialo
             SendFailureDialogState.Hidden,
             SendFailureDialogState.Show(
                 event = aTimelineItemEvent(),
-                message = "Failed to send message",
+                sendFailureType = SendFailureDialogState.SendFailureType.InvalidMimeType("image/invalid")
+            ),
+            SendFailureDialogState.Show(
+                event = aTimelineItemEvent(),
+                sendFailureType = SendFailureDialogState.SendFailureType.MissingMediaContent,
+            ),
+            SendFailureDialogState.Show(
+                event = aTimelineItemEvent(),
+                sendFailureType = SendFailureDialogState.SendFailureType.SendingFromUnverifiedDevice,
+            ),
+            SendFailureDialogState.Show(
+                event = aTimelineItemEvent(),
+                sendFailureType = SendFailureDialogState.SendFailureType.Error("Message error from server"),
+            ),
+            SendFailureDialogState.Show(
+                event = aTimelineItemEvent(),
+                sendFailureType = SendFailureDialogState.SendFailureType.Unknown,
             )
         )
 }
