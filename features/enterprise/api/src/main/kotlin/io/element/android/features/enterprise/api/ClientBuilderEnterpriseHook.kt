@@ -14,5 +14,5 @@ import io.element.android.libraries.matrix.api.core.SessionId
  * A hook that can be used to customize the [MatrixClientBuilder] for enterprise features.
  */
 fun interface ClientBuilderEnterpriseHook {
-    suspend operator fun invoke(clientBuilder: MatrixClientBuilder, sessionId: SessionId)
+    suspend operator fun invoke(clientBuilder: MatrixClientBuilder, sessionId: SessionId): MatrixClientBuilder
 }

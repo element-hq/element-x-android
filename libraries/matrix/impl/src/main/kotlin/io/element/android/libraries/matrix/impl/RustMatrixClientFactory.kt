@@ -100,7 +100,7 @@ class RustMatrixClientFactory(
         )
             .homeserverUrl(sessionData.homeserverUrl)
             .username(sessionData.userId)
-            .also { clientBuilderEnterpriseHook(RustMatrixClientBuilder(it), SessionId(sessionData.userId)) }
+            .let { (clientBuilderEnterpriseHook(RustMatrixClientBuilder(it), SessionId(sessionData.userId)) as RustMatrixClientBuilder).inner }
             .use { it.build() }
 
         client.setMediaRetentionPolicy(
