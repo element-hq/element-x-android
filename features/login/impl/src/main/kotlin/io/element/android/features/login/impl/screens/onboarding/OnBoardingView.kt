@@ -212,7 +212,7 @@ private fun FeralOnBoardingContent() {
             modifier = Modifier.padding(bottom = 32.dp),
         )
         Text(
-            text = "FERAL",
+            text = stringResource(R.string.feral_onboarding_welcome_title),
             style = FeralTypography.welcomeTitle.copy(
                 fontSize = 44.sp,
                 fontWeight = FontWeight.Black,
