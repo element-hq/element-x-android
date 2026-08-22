@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.privatepush.impl
+package io.element.android.features.privatepush.test
 
 import io.element.android.features.privatepush.api.PrivatePushService
 import io.element.android.features.privatepush.api.PrivatePushStatus

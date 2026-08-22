@@ -5,10 +5,13 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
+// Modified by Feral: "Private notifications (ntfy)" entry with status (features/privatepush).
 
 package io.element.android.features.preferences.impl.notifications
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.privatepush.api.PrivatePushStatus
+import io.element.android.features.privatepush.api.PrivatePushStatusState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.fullscreenintent.api.aFullScreenIntentPermissionsState
@@ -1126,6 +1129,7 @@ class NotificationSettingsPresenterTest {
             pushService = pushService,
             systemNotificationsEnabledProvider = FakeSystemNotificationsEnabledProvider(),
             fullScreenIntentPermissionsPresenter = { fullScreenIntentPermissionsStateLambda() },
+            privatePushStatusPresenter = { PrivatePushStatusState(status = AsyncData.Success(PrivatePushStatus.Private), eventSink = {}) },
             appPreferencesStore = appPreferencesStore,
             notificationSoundUpdater = notificationSoundUpdater,
             notificationSoundCopier = notificationSoundCopier,

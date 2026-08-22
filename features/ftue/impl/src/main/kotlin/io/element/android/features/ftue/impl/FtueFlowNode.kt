@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
+// Modified by Feral: PrivatePushSetup step (features/privatepush).
 
 package io.element.android.features.ftue.impl
 
@@ -28,6 +29,7 @@ import io.element.android.features.ftue.impl.state.DefaultFtueService
 import io.element.android.features.ftue.impl.state.FtueStep
 import io.element.android.features.ftue.impl.state.InternalFtueState
 import io.element.android.features.lockscreen.api.LockScreenEntryPoint
+import io.element.android.features.privatepush.api.PrivatePushEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
@@ -46,6 +48,7 @@ class FtueFlowNode(
     private val defaultFtueService: DefaultFtueService,
     private val analyticsEntryPoint: AnalyticsEntryPoint,
     private val lockScreenEntryPoint: LockScreenEntryPoint,
+    private val privatePushEntryPoint: PrivatePushEntryPoint,
 ) : BaseFlowNode<FtueFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Placeholder,
@@ -63,6 +66,9 @@ class FtueFlowNode(
 
         @Parcelize
         data object NotificationsOptIn : NavTarget
+
+        @Parcelize
+        data object PrivatePushSetup : NavTarget
 
         @Parcelize
         data object AnalyticsOptIn : NavTarget
@@ -102,6 +108,22 @@ class FtueFlowNode(
                 }
                 createNode<NotificationsOptInNode>(buildContext, listOf(callback))
             }
+            NavTarget.PrivatePushSetup -> {
+                val callback = object : PrivatePushEntryPoint.Callback {
+                    override fun onDone() {
+                        defaultFtueService.updateFtueStep()
+                    }
+
+                    override fun onLater() {
+                        defaultFtueService.updateFtueStep()
+                    }
+                }
+                privatePushEntryPoint.createNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    callback = callback,
+                )
+            }
             NavTarget.AnalyticsOptIn -> {
                 analyticsEntryPoint.createNode(this, buildContext)
             }
@@ -131,6 +153,9 @@ class FtueFlowNode(
             }
             FtueStep.NotificationsOptIn -> {
                 backstack.newRoot(NavTarget.NotificationsOptIn)
+            }
+            FtueStep.PrivatePushSetup -> {
+                backstack.newRoot(NavTarget.PrivatePushSetup)
             }
             FtueStep.AnalyticsOptIn -> {
                 backstack.replace(NavTarget.AnalyticsOptIn)

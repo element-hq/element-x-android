@@ -5,6 +5,8 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
+// Modified by Feral: PusherRegistrationFailure.NoDistributorsAvailable opens the private notifications
+// setup flow (features/privatepush) instead of the generic error dialog; other failures are unchanged.
 
 package io.element.android.appnav.loggedin
 
@@ -12,6 +14,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -33,6 +36,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun LoggedInView(
     state: LoggedInState,
     navigateToNotificationTroubleshoot: () -> Unit,
+    navigateToPrivatePushSetup: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     OnLifecycleEvent { _, event ->
@@ -55,22 +59,33 @@ fun LoggedInView(
         is AsyncData.Loading,
         is AsyncData.Success -> Unit
         is AsyncData.Failure -> {
-            state.pusherRegistrationState.errorOrNull()
-                ?.takeIf { !state.ignoreRegistrationError }
-                ?.getReason()
-                ?.let { reason ->
-                    ErrorDialogWithDoNotShowAgain(
-                        content = stringResource(id = CommonStrings.common_error_registering_pusher_android, reason),
-                        cancelText = stringResource(id = CommonStrings.common_settings),
-                        onDismiss = {
-                            state.eventSink(LoggedInEvents.CloseErrorDialog(it))
-                        },
-                        onCancel = {
-                            state.eventSink(LoggedInEvents.CloseErrorDialog(false))
-                            navigateToNotificationTroubleshoot()
-                        }
-                    )
+            val failure = state.pusherRegistrationState.errorOrNull()
+            if (failure is PusherRegistrationFailure.NoDistributorsAvailable) {
+                // Feral: no ntfy installed -> guided setup flow instead of the generic dialog.
+                LaunchedEffect(failure) {
+                    state.eventSink(LoggedInEvents.CloseErrorDialog(false))
+                    if (!state.ignoreRegistrationError) {
+                        navigateToPrivatePushSetup()
+                    }
                 }
+            } else {
+                failure
+                    ?.takeIf { !state.ignoreRegistrationError }
+                    ?.getReason()
+                    ?.let { reason ->
+                        ErrorDialogWithDoNotShowAgain(
+                            content = stringResource(id = CommonStrings.common_error_registering_pusher_android, reason),
+                            cancelText = stringResource(id = CommonStrings.common_settings),
+                            onDismiss = {
+                                state.eventSink(LoggedInEvents.CloseErrorDialog(it))
+                            },
+                            onCancel = {
+                                state.eventSink(LoggedInEvents.CloseErrorDialog(false))
+                                navigateToNotificationTroubleshoot()
+                            }
+                        )
+                    }
+            }
         }
     }
 
@@ -128,5 +143,6 @@ internal fun LoggedInViewPreview(@PreviewParameter(LoggedInStateProvider::class)
     LoggedInView(
         state = state,
         navigateToNotificationTroubleshoot = {},
+        navigateToPrivatePushSetup = {},
     )
 }

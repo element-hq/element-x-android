@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
+// Modified by Feral: "Private notifications (ntfy)" entry (features/privatepush).
 
 package io.element.android.features.preferences.impl
 
@@ -15,6 +16,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.deactivation.test.FakeAccountDeactivationEntryPoint
 import io.element.android.features.licenses.test.FakeOpenSourceLicensesEntryPoint
 import io.element.android.features.lockscreen.test.FakeLockScreenEntryPoint
+import io.element.android.features.privatepush.test.FakePrivatePushEntryPoint
 import io.element.android.features.logout.test.FakeLogoutEntryPoint
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.libraries.matrix.api.core.EventId
@@ -46,6 +48,7 @@ class DefaultPreferencesEntryPointTest {
                 logoutEntryPoint = FakeLogoutEntryPoint(),
                 openSourceLicensesEntryPoint = FakeOpenSourceLicensesEntryPoint(),
                 accountDeactivationEntryPoint = FakeAccountDeactivationEntryPoint(),
+                privatePushEntryPoint = FakePrivatePushEntryPoint(),
             )
         }
         val callback = object : PreferencesEntryPoint.Callback {

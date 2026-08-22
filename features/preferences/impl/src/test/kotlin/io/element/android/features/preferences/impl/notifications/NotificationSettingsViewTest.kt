@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
+// Modified by Feral: "Private notifications (ntfy)" entry (features/privatepush).
 
 @file:OptIn(ExperimentalTestApi::class)
 
@@ -319,6 +320,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setNotificationSettingsView(
     state: NotificationSettingsState,
     onOpenEditDefault: (isOneToOne: Boolean) -> Unit = EnsureNeverCalledWithParam(),
     onTroubleshootNotificationsClick: () -> Unit = EnsureNeverCalled(),
+    onPrivatePushClick: () -> Unit = EnsureNeverCalled(),
     onBackClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
@@ -326,6 +328,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setNotificationSettingsView(
             state = state,
             onOpenEditDefault = onOpenEditDefault,
             onTroubleshootNotificationsClick = onTroubleshootNotificationsClick,
+            onPrivatePushClick = onPrivatePushClick,
             onBackClick = onBackClick,
         )
     }

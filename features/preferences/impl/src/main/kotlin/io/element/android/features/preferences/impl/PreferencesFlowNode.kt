@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
+// Modified by Feral: "Private notifications (ntfy)" entry with status (features/privatepush).
 
 package io.element.android.features.preferences.impl
 
@@ -35,6 +36,7 @@ import io.element.android.features.preferences.impl.notifications.NotificationSe
 import io.element.android.features.preferences.impl.notifications.edit.EditDefaultNotificationSettingNode
 import io.element.android.features.preferences.impl.root.PreferencesRootNode
 import io.element.android.features.preferences.impl.user.editprofile.EditUserProfileNode
+import io.element.android.features.privatepush.api.PrivatePushEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.appyx.canPop
@@ -59,6 +61,7 @@ class PreferencesFlowNode(
     private val logoutEntryPoint: LogoutEntryPoint,
     private val openSourceLicensesEntryPoint: OpenSourceLicensesEntryPoint,
     private val accountDeactivationEntryPoint: AccountDeactivationEntryPoint,
+    private val privatePushEntryPoint: PrivatePushEntryPoint,
 ) : BaseFlowNode<PreferencesFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = plugins.filterIsInstance<PreferencesEntryPoint.Params>().first().initialElement.toNavTarget(),
@@ -91,6 +94,9 @@ class PreferencesFlowNode(
 
         @Parcelize
         data object TroubleshootNotifications : NavTarget
+
+        @Parcelize
+        data object PrivatePushSetup : NavTarget
 
         @Parcelize
         data object PushHistory : NavTarget
@@ -229,8 +235,35 @@ class PreferencesFlowNode(
                     override fun navigateToTroubleshootNotifications() {
                         backstack.push(NavTarget.TroubleshootNotifications)
                     }
+
+                    override fun navigateToPrivatePushSetup() {
+                        backstack.push(NavTarget.PrivatePushSetup)
+                    }
                 }
                 createNode<NotificationSettingsNode>(buildContext, listOf(notificationSettingsCallback))
+            }
+            NavTarget.PrivatePushSetup -> {
+                privatePushEntryPoint.createNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    callback = object : PrivatePushEntryPoint.Callback {
+                        override fun onDone() = close()
+
+                        override fun onLater() = close()
+
+                        private fun close() {
+                            if (backstack.canPop()) {
+                                backstack.pop()
+                            } else {
+                                navigateUp()
+                            }
+                        }
+
+                        override fun navigateToBlockedUsers() {
+                            backstack.push(NavTarget.BlockedUsers)
+                        }
+                    },
+                )
             }
             NavTarget.TroubleshootNotifications -> {
                 notificationTroubleShootEntryPoint.createNode(

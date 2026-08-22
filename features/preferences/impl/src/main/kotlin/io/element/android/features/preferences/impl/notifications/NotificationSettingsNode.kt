@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
+// Modified by Feral: "Private notifications (ntfy)" entry with status (features/privatepush).
 
 package io.element.android.features.preferences.impl.notifications
 
@@ -29,6 +30,7 @@ class NotificationSettingsNode(
     interface Callback : Plugin {
         fun navigateToEditDefaultNotificationSetting(isOneToOne: Boolean)
         fun navigateToTroubleshootNotifications()
+        fun navigateToPrivatePushSetup()
     }
 
     private val callback: Callback = callback()
@@ -41,6 +43,7 @@ class NotificationSettingsNode(
             onOpenEditDefault = callback::navigateToEditDefaultNotificationSetting,
             onBackClick = ::navigateUp,
             onTroubleshootNotificationsClick = callback::navigateToTroubleshootNotifications,
+            onPrivatePushClick = callback::navigateToPrivatePushSetup,
             modifier = modifier,
         )
     }

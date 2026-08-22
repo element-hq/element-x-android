@@ -55,4 +55,5 @@ dependencies {
     testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.libraries.push.test)
     testImplementation(projects.libraries.pushproviders.test)
+    testImplementation(projects.features.privatepush.test)
 }

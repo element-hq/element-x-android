@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
+// Modified by Feral: "Private notifications (ntfy)" entry with status (features/privatepush).
 
 package io.element.android.features.preferences.impl.notifications
 
@@ -21,6 +22,7 @@ import androidx.compose.foundation.progressSemantics
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
@@ -33,6 +35,7 @@ import androidx.lifecycle.Lifecycle
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.preferences.impl.R
+import io.element.android.features.privatepush.api.PrivatePushStatus
 import io.element.android.libraries.androidutils.system.startNotificationSettingsIntent
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.Announcement
@@ -69,6 +72,7 @@ fun NotificationSettingsView(
     state: NotificationSettingsState,
     onOpenEditDefault: (isOneToOne: Boolean) -> Unit,
     onTroubleshootNotificationsClick: () -> Unit,
+    onPrivatePushClick: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -101,6 +105,7 @@ fun NotificationSettingsView(
 //                onCallsNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetCallNotificationsEnabled(it)) },
                 onInviteForMeNotificationsChange = { state.eventSink(NotificationSettingsEvents.SetInviteForMeNotificationsEnabled(it)) },
                 onTroubleshootNotificationsClick = onTroubleshootNotificationsClick,
+                onPrivatePushClick = onPrivatePushClick,
             )
         }
         AsyncActionView(
@@ -124,6 +129,7 @@ private fun NotificationSettingsContentView(
 //    onCallsNotificationsChanged: (Boolean) -> Unit,
     onInviteForMeNotificationsChange: (Boolean) -> Unit,
     onTroubleshootNotificationsClick: () -> Unit,
+    onPrivatePushClick: () -> Unit,
 ) {
     val context = LocalContext.current
     val systemSettings: NotificationSettingsState.AppSettings = state.appSettings
@@ -217,6 +223,17 @@ private fun NotificationSettingsContentView(
             )
         }
         PreferenceCategory(title = stringResource(id = R.string.troubleshoot_notifications_entry_point_section)) {
+            // Feral: private notifications (ntfy) entry + status
+            ListItem(
+                leadingContent = ListItemContent.Icon(IconSource.Vector(privatePushStatusIcon(state.privatePushStatus.status))),
+                content = {
+                    Text(stringResource(id = CommonStrings.feral_privatepush_settings_entry))
+                },
+                supportingContent = {
+                    Text(privatePushStatusLabel(state.privatePushStatus.status))
+                },
+                onClick = onPrivatePushClick,
+            )
             ListItem(
                 content = {
                     Text(stringResource(id = R.string.troubleshoot_notifications_entry_point_title))
@@ -498,6 +515,27 @@ private fun InvalidNotificationSettingsView(
     }
 }
 
+/** Feral: one-line status under the "Private notifications (ntfy)" entry. */
+@Composable
+private fun privatePushStatusLabel(status: AsyncData<PrivatePushStatus>): String {
+    return when (val value = status.dataOrNull()) {
+        PrivatePushStatus.Private -> stringResource(CommonStrings.feral_privatepush_status_private)
+        is PrivatePushStatus.PublicServer -> stringResource(CommonStrings.feral_privatepush_status_public, value.host)
+        is PrivatePushStatus.NotSetUp -> stringResource(CommonStrings.feral_privatepush_status_not_set_up)
+        null -> stringResource(CommonStrings.common_loading)
+    }
+}
+
+@Composable
+private fun privatePushStatusIcon(status: AsyncData<PrivatePushStatus>): ImageVector {
+    return when (status.dataOrNull()) {
+        PrivatePushStatus.Private -> CompoundIcons.CheckCircleSolid()
+        is PrivatePushStatus.PublicServer -> CompoundIcons.ErrorSolid()
+        is PrivatePushStatus.NotSetUp -> CompoundIcons.NotificationsOffSolid()
+        null -> CompoundIcons.NotificationsSolid()
+    }
+}
+
 @PreviewsDayNight
 @Composable
 internal fun NotificationSettingsViewPreview(@PreviewParameter(NotificationSettingsStateProvider::class) state: NotificationSettingsState) = ElementPreview {
@@ -506,5 +544,6 @@ internal fun NotificationSettingsViewPreview(@PreviewParameter(NotificationSetti
         onBackClick = {},
         onOpenEditDefault = {},
         onTroubleshootNotificationsClick = {},
+        onPrivatePushClick = {},
     )
 }

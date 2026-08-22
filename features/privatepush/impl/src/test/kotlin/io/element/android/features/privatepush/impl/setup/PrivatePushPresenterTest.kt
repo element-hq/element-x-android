@@ -12,7 +12,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.appconfig.PrivatePushConfig
 import io.element.android.features.appupdate.api.AppUpdateStep
 import io.element.android.features.privatepush.api.PrivatePushStatus
-import io.element.android.features.privatepush.impl.FakePrivatePushService
+import io.element.android.features.privatepush.test.FakePrivatePushService
 import io.element.android.features.privatepush.impl.install.FakeApkDownloader
 import io.element.android.features.privatepush.impl.install.FakeNtfyManifestFetcher
 import io.element.android.features.privatepush.impl.install.NTFY_APK_FILE_NAME
