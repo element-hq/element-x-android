@@ -98,6 +98,7 @@ class RustMatrixAuthenticationServiceTest {
             ),
             enterpriseService = enterpriseService,
             featureFlagService = FakeFeatureFlagService(),
+            clientEnterpriseHook = {},
         )
     }
 }

@@ -10,6 +10,7 @@ package io.element.android.libraries.matrix.impl.fixtures.fakes
 
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustSession
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustUserProfile
+import io.element.android.libraries.matrix.impl.scanner.FakeFfiContentScanner
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 import io.element.android.libraries.matrix.test.A_SERVER_NAME
@@ -18,6 +19,7 @@ import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.simulateLongTask
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
+import org.matrix.rustcomponents.sdk.ContentScanner
 import org.matrix.rustcomponents.sdk.CreateRoomParameters
 import org.matrix.rustcomponents.sdk.Encryption
 import org.matrix.rustcomponents.sdk.HomeserverCapabilities
@@ -64,6 +66,7 @@ class FakeFfiClient(
     private val isProfilesSlidingSyncExtensionSupportedResult: () -> Boolean = { false },
     private val subscribeToOwnProfileResult: (ProfileListener) -> Unit = {},
     private val getUrlResult: (String) -> ByteArray = { lambdaError() },
+    private val contentScannerResult: () -> ContentScanner = { FakeFfiContentScanner() },
     private val closeResult: () -> Unit = {},
 ) : Client(NoHandle) {
     override fun userId(): String = userId
@@ -143,6 +146,10 @@ class FakeFfiClient(
 
     override suspend fun getUrl(url: String): ByteArray = simulateLongTask {
         getUrlResult(url)
+    }
+
+    override suspend fun contentScanner(): ContentScanner = simulateLongTask {
+        contentScannerResult()
     }
 
     override fun close() = closeResult()
