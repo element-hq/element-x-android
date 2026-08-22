@@ -29,16 +29,19 @@
   <string name="feral_privatepush_install_already">"ntfy est déjà installée sur ce téléphone."</string>
 
   <string name="feral_privatepush_configure_title">"Relier ntfy au serveur Feral"</string>
-  <string name="feral_privatepush_configure_subtitle">"Par défaut, ntfy utilise un serveur public. Indiquez-lui d\'utiliser le serveur Feral à la place."</string>
+  <string name="feral_privatepush_configure_subtitle">"Un seul réglage à changer dans ntfy : son serveur par défaut doit être l\'adresse du serveur Feral ci-dessous. Rien d\'autre : pas de compte, pas d\'abonnement."</string>
   <string name="feral_privatepush_configure_address_label">"Adresse du serveur Feral"</string>
   <string name="feral_privatepush_configure_copy">"Copier l\'adresse"</string>
   <string name="feral_privatepush_configure_copied">"Adresse copiée"</string>
   <string name="feral_privatepush_configure_hint_wrong_server_retry">"Le serveur Feral n\'a pas pu être joint via ntfy. Vérifiez le serveur par défaut dans ntfy, puis réessayez."</string>
-  <string name="feral_privatepush_configure_step_1">"Ouvrez ntfy."</string>
-  <string name="feral_privatepush_configure_step_2">"Touchez le menu (⋮) en haut à droite, puis Paramètres."</string>
-  <string name="feral_privatepush_configure_step_3">"Dans Général, touchez Serveur par défaut."</string>
+  <string name="feral_privatepush_configure_step_1">"Copiez l\'adresse ci-dessus, puis ouvrez ntfy."</string>
+  <string name="feral_privatepush_configure_step_2">"Dans ntfy, touchez le menu (⋮) en haut à droite, puis Paramètres."</string>
+  <string name="feral_privatepush_configure_step_3">"Dans la section Général, touchez Serveur par défaut."</string>
   <string name="feral_privatepush_configure_step_4">"Collez l\'adresse du serveur Feral et validez."</string>
-  <string name="feral_privatepush_configure_step_5">"Revenez dans Feral."</string>
+  <string name="feral_privatepush_configure_step_5">"Revenez dans Feral et touchez Suivant."</string>
+  <string name="feral_privatepush_configure_note_no_subscribe">"Ne vous abonnez à rien dans ntfy : Feral s\'en charge à l\'étape suivante."</string>
+  <string name="feral_privatepush_configure_note_login">"Si ntfy vous demande un identifiant et un mot de passe, touchez Annuler : aucun compte n\'est nécessaire pour Feral."</string>
+  <string name="feral_privatepush_configure_note_other_uses">"Vous pouvez continuer à utiliser ntfy pour autre chose : quand vous vous abonnez vous-même à un sujet, choisissez « Utiliser un autre serveur » (par exemple ntfy.sh)."</string>
   <string name="feral_privatepush_configure_open_ntfy">"Ouvrir ntfy"</string>
   <string name="feral_privatepush_configure_hint_wrong_server">"ntfy utilise encore un autre serveur (%1$s). Vérifiez que le serveur par défaut est exactement l\'adresse Feral, puis réessayez."</string>
 

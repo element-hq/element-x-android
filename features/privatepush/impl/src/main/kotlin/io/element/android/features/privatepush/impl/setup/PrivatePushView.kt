@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -269,6 +270,10 @@ private fun ConfigurePage(state: PrivatePushState) {
             NumberedStep(3, stringResource(R.string.feral_privatepush_configure_step_3))
             NumberedStep(4, stringResource(R.string.feral_privatepush_configure_step_4))
             NumberedStep(5, stringResource(R.string.feral_privatepush_configure_step_5))
+            Spacer(modifier = Modifier.height(8.dp))
+            SecondaryText(stringResource(R.string.feral_privatepush_configure_note_no_subscribe))
+            SecondaryText(stringResource(R.string.feral_privatepush_configure_note_login))
+            SecondaryText(stringResource(R.string.feral_privatepush_configure_note_other_uses))
         }
     }
 }
