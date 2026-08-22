@@ -10,6 +10,7 @@ package io.element.android.features.appupdate.impl
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,45 +25,51 @@ import io.element.android.features.appupdate.api.AvailableUpdate
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.coroutines.launch
 
+/**
+ * Presents the "update available" banner. The download itself is owned by the
+ * app-scoped [AppUpdateManager]; this presenter only mirrors its state and forwards
+ * user intents, so navigating away from the room list never interrupts a download.
+ */
 @Inject
 class AppUpdateBannerPresenter(
     private val appUpdateChecker: AppUpdateChecker,
-    private val apkDownloader: ApkDownloader,
+    private val appUpdateManager: AppUpdateManager,
 ) : Presenter<AppUpdateBannerState> {
     @Composable
     override fun present(): AppUpdateBannerState {
         val activityContext = LocalContext.current
         val coroutineScope = rememberCoroutineScope()
         var availableUpdate by remember { mutableStateOf<AvailableUpdate?>(null) }
-        var step by remember { mutableStateOf<AppUpdateStep>(AppUpdateStep.Idle) }
+        val step by appUpdateManager.step.collectAsState()
+        val pendingAutoInstall by appUpdateManager.pendingAutoInstall.collectAsState()
 
         LaunchedEffect(Unit) {
+            appUpdateManager.cleanupStaleDownloads()
             availableUpdate = appUpdateChecker.checkForUpdate()
+        }
+
+        // A download that completes while the banner is on screen opens the installer once.
+        LaunchedEffect(pendingAutoInstall) {
+            if (pendingAutoInstall != null && appUpdateManager.consumePendingAutoInstall() != null) {
+                appUpdateManager.install(activityContext)
+            }
         }
 
         fun handleEvents(event: AppUpdateBannerEvents) {
             when (event) {
                 AppUpdateBannerEvents.StartUpdate -> {
                     val update = availableUpdate ?: return
-                    when (val currentStep = step) {
+                    when (step) {
                         is AppUpdateStep.Downloading -> Unit
-                        is AppUpdateStep.ReadyToInstall ->
-                            apkDownloader.install(activityContext, currentStep.apkPath)
+                        is AppUpdateStep.ReadyToInstall -> appUpdateManager.install(activityContext)
                         AppUpdateStep.Idle,
-                        AppUpdateStep.Failed -> coroutineScope.launch {
-                            apkDownloader.downloadAndVerify(update).collect { progress ->
-                                step = progress
-                            }
-                            val finalStep = step
-                            if (finalStep is AppUpdateStep.ReadyToInstall) {
-                                apkDownloader.install(activityContext, finalStep.apkPath)
-                            }
-                        }
+                        AppUpdateStep.Failed -> appUpdateManager.startDownload(update)
                     }
                 }
                 AppUpdateBannerEvents.Dismiss -> {
                     val update = availableUpdate
                     availableUpdate = null
+                    appUpdateManager.cancelAndReset()
                     if (update != null) {
                         coroutineScope.launch {
                             appUpdateChecker.ignoreVersion(update.versionCode)
