@@ -6,6 +6,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+// Modified by Feral: "Log out" wording, explanation subtitle and a "Check my recovery key" button on every log out (Feral-owned strings).
+
 package io.element.android.features.logout.impl
 
 import androidx.compose.foundation.layout.Arrangement
@@ -96,7 +98,7 @@ private fun title(state: LogoutState): String {
                 stringResource(id = R.string.screen_signout_save_recovery_key_title)
             }
         }
-        else -> stringResource(CommonStrings.action_signout)
+        else -> stringResource(CommonStrings.feral_logout_title)
     }
 }
 
@@ -107,7 +109,8 @@ private fun subtitle(state: LogoutState): String? {
             stringResource(id = R.string.screen_signout_key_backup_offline_subtitle)
         state.backupUploadState.isBackingUp() -> stringResource(id = R.string.screen_signout_key_backup_ongoing_subtitle)
         state.isLastDevice -> stringResource(id = R.string.screen_signout_key_backup_disabled_subtitle)
-        else -> null
+        // Feral: plain-language explanation + recovery-key reminder for every log out, not only the last device.
+        else -> stringResource(CommonStrings.feral_logout_explanation)
     }
 }
 
@@ -118,17 +121,16 @@ private fun ColumnScope.Buttons(
     onChangeRecoveryKeyClick: () -> Unit,
 ) {
     val logoutAction = state.logoutAction
-    if (state.isLastDevice) {
-        OutlinedButton(
-            text = stringResource(id = CommonStrings.common_settings),
-            modifier = Modifier.fillMaxWidth(),
-            onClick = onChangeRecoveryKeyClick,
-        )
-    }
+    // Feral: always offer to check the recovery key before logging out (upstream: last device only).
+    OutlinedButton(
+        text = stringResource(id = CommonStrings.feral_logout_check_recovery_key),
+        modifier = Modifier.fillMaxWidth(),
+        onClick = onChangeRecoveryKeyClick,
+    )
     val signOutSubmitRes = when {
         logoutAction is AsyncAction.Loading -> R.string.screen_signout_in_progress_dialog_content
-        state.backupUploadState.isBackingUp() -> CommonStrings.action_signout_anyway
-        else -> CommonStrings.action_signout
+        state.backupUploadState.isBackingUp() -> CommonStrings.feral_logout_anyway
+        else -> CommonStrings.feral_logout_action
     }
     Button(
         text = stringResource(id = signOutSubmitRes),

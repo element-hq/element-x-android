@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Feral-owned strings (log-out wording for members who do not know the device/session model).
+     Kept OUT of the Localazy-managed localazy.xml/translations.xml so upstream i18n regeneration
+     can never drop or overwrite them. English source; translations in values-<locale>/strings_feral.xml. -->
+<resources>
+  <string name="feral_logout_action">"Log out"</string>
+  <string name="feral_logout_anyway">"Log out anyway"</string>
+  <string name="feral_logout_title">"Log out of this phone?"</string>
+  <string name="feral_logout_explanation">"Logging out removes this phone from your account. The messages stored on this phone are deleted; your other devices stay connected.\n\nBefore you continue, make sure you have saved your recovery key: you will need it to read your encrypted messages again after logging back in."</string>
+  <string name="feral_logout_check_recovery_key">"Check my recovery key"</string>
+  <string name="feral_logout_confirmation_content">"Are you sure you want to log out of this phone? Make sure you have saved your recovery key first."</string>
+</resources>

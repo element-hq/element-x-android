@@ -6,6 +6,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+// Modified by Feral: the sign-out entry is labelled "Log out" (Feral-owned string) instead of "Remove this device".
+
 package io.element.android.features.preferences.impl.root
 
 import androidx.compose.animation.AnimatedVisibility
@@ -324,7 +326,7 @@ private fun ColumnScope.GeneralSection(
     }
     HorizontalDivider()
     ListItem(
-        content = { Text(stringResource(id = CommonStrings.action_signout)) },
+        content = { Text(stringResource(id = CommonStrings.feral_logout_action)) },
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Close())),
         style = ListItemStyle.Destructive,
         onClick = onSignOutClick,

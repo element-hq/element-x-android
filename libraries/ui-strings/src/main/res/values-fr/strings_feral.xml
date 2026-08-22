@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Feral-owned strings (français). Hors des fichiers gérés par Localazy. -->
+<resources>
+  <string name="feral_logout_action">"Se déconnecter"</string>
+  <string name="feral_logout_anyway">"Se déconnecter quand même"</string>
+  <string name="feral_logout_title">"Se déconnecter de ce téléphone ?"</string>
+  <string name="feral_logout_explanation">"Se déconnecter retire ce téléphone de votre compte. Les messages enregistrés sur ce téléphone sont supprimés ; vos autres appareils restent connectés.\n\nAvant de continuer, vérifiez que vous avez bien sauvegardé votre clé de récupération : elle vous sera demandée pour relire vos messages chiffrés après vous être reconnecté."</string>
+  <string name="feral_logout_check_recovery_key">"Vérifier ma clé de récupération"</string>
+  <string name="feral_logout_confirmation_content">"Voulez-vous vraiment vous déconnecter de ce téléphone ? Vérifiez d\'abord que votre clé de récupération est sauvegardée."</string>
+</resources>
