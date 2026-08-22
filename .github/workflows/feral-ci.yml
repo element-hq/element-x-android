@@ -1,0 +1,95 @@
+# Feral CI — compile + guard the members-only lock on every Feral change.
+#
+# Purpose (see docs/FERAL_MAINTENANCE.md §5): the release APK is built UNSIGNED in CI
+# (feral-release.yml) and SIGNED off-box on eheyu (tools/feral/sign-release.sh).
+# This workflow is the *compile verifier*: it builds an UNSIGNED
+# FOSS debug APK and runs the Feral guard tests on GitHub's runners, so a
+# broken build or a silently-reverted lock is caught here — long before anything is
+# signed. No secrets and no keystore are ever used here.
+#
+# Actions are pinned by commit SHA (same pins as upstream build.yml at v26.08.2).
+# Upstream's quality.yml runs zizmor on every PR: keep `permissions: {}` and
+# `persist-credentials: false` here.
+# LFS is NOT fetched: only screenshots/test assets are in LFS and neither compiling
+# nor the two guard test modules need them (saves the fork's LFS bandwidth quota).
+name: Feral CI
+
+on:
+  push:
+    branches:
+      - "feral/**"
+  pull_request:
+    branches:
+      - "develop"
+      - "feral/**"
+  workflow_dispatch:
+
+permissions: {}
+
+env:
+  # Same as upstream build.yml (gradle.properties is 8g too since upstream moved to
+  # AGP 9, but CI also wants the MaxMetaspace/HeapDump flags).
+  GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx8g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError -XX:+UseG1GC -Dkotlin.daemon.jvm.options=-Xmx4g
+  # Same as upstream build.yml: the configuration cache is on in gradle.properties,
+  # upstream disables it on CI runners.
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace --no-configuration-cache
+
+# Cancel superseded runs on the same ref.
+concurrency:
+  group: feral-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  guard-test:
+    name: Feral guard tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
+        with:
+          distribution: temurin
+          java-version: "21"
+      - uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+      # Toolchain at v26.08.2: compileSdk 37 / build-tools 37.0.0 (plugins/src/main/kotlin/Versions.kt).
+      # Idempotent when the runner image already ships them.
+      - name: Install Android SDK 37 components
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-37" "build-tools;37.0.0" >/dev/null
+      - name: Run Feral guard tests (members-only lock + updater manifest)
+        run: ./gradlew :features:enterprise:impl-foss:testDebugUnitTest :features:appupdate:impl:testDebugUnitTest $CI_GRADLE_ARG_PROPERTIES
+
+  compile-foss:
+    name: Compile unsigned FOSS debug APK
+    runs-on: ubuntu-latest
+    steps:
+      # element-x-android is a large build; reclaim runner disk first.
+      - name: Free disk space
+        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be
+        with:
+          tool-cache: true
+          android: false # keep the preinstalled Android SDK
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
+        with:
+          distribution: temurin
+          java-version: "21"
+      - uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+      - name: Install Android SDK 37 components
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-37" "build-tools;37.0.0" >/dev/null
+      # assembleFdroidDebug = FOSS flavor (UnifiedPush, no Firebase/google-services
+      # secret needed), debug = auto-signed with the throwaway debug key.
+      # This also forces Metro to resolve the DI graph, so a duplicate/unresolved
+      # `@ContributesBinding(replaces = ...)` for FeralEnterpriseService fails HERE.
+      - name: Assemble unsigned FOSS debug APK
+        run: ./gradlew :app:assembleFdroidDebug $CI_GRADLE_ARG_PROPERTIES
+      - name: Upload APK artifact
+        if: success()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: feral-fdroid-debug-unsigned
+          path: app/build/outputs/apk/fdroid/debug/*.apk
+          if-no-files-found: warn
+          retention-days: 7
