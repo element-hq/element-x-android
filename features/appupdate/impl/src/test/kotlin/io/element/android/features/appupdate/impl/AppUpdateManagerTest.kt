@@ -9,10 +9,13 @@
 package io.element.android.features.appupdate.impl
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.appconfig.AppUpdateConfig
+import io.element.android.features.appupdate.api.ApkDownloadRequest
+import io.element.android.features.appupdate.api.ApkDownloader
 import io.element.android.features.appupdate.api.AppUpdateStep
-import io.element.android.features.appupdate.api.AvailableUpdate
 import io.element.android.features.appupdate.api.anAvailableUpdate
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -31,12 +34,15 @@ class AppUpdateManagerTest {
         private val outcome: AppUpdateStep = AppUpdateStep.ReadyToInstall(APK_PATH),
     ) : ApkDownloader {
         var subscriptions = 0
+        val requests = mutableListOf<ApkDownloadRequest>()
+        val deletedFiles = mutableListOf<String>()
         var deleteDownloadsCalls = 0
         var cleanupCalls = 0
         val installed = mutableListOf<String>()
 
-        override fun downloadAndVerify(update: AvailableUpdate): Flow<AppUpdateStep> = flow {
+        override fun downloadAndVerify(request: ApkDownloadRequest): Flow<AppUpdateStep> = flow {
             subscriptions++
+            requests += request
             emit(AppUpdateStep.Downloading(percent = null))
             delay(DOWNLOAD_DURATION_MS)
             emit(AppUpdateStep.Downloading(percent = 50))
@@ -46,6 +52,10 @@ class AppUpdateManagerTest {
 
         override fun install(apkPath: String) {
             installed += apkPath
+        }
+
+        override fun delete(fileName: String) {
+            deletedFiles += fileName
         }
 
         override fun deleteDownloads() {
@@ -61,6 +71,7 @@ class AppUpdateManagerTest {
         val dispatcher = StandardTestDispatcher(testScheduler)
         return AppUpdateManager(
             apkDownloader = downloader,
+            buildMeta = aBuildMeta(applicationId = APPLICATION_ID, versionCode = INSTALLED_VERSION_CODE),
             // The TestScope itself (not backgroundScope): advanceUntilIdle() ignores background work.
             appCoroutineScope = this,
             coroutineDispatchers = CoroutineDispatchers(io = dispatcher, computation = dispatcher, main = dispatcher),
@@ -110,7 +121,27 @@ class AppUpdateManagerTest {
         advanceUntilIdle()
         assertThat(manager.step.value).isEqualTo(AppUpdateStep.Idle)
         assertThat(manager.pendingAutoInstall.value).isNull()
-        assertThat(downloader.deleteDownloadsCalls).isEqualTo(1)
+        assertThat(downloader.deletedFiles).containsExactly(AppUpdateManager.DOWNLOAD_FILE_NAME)
+        assertThat(downloader.deleteDownloadsCalls).isEqualTo(0)
+    }
+
+    @Test
+    fun `the self-update request pins the Feral certificate, our package and an anti-downgrade floor`() = runTest {
+        val downloader = FakeApkDownloader()
+        val manager = createManager(downloader)
+        manager.startDownload(anAvailableUpdate(versionCode = 42L, url = "https://feralisme.fr/x.apk", sha256 = "abcd"))
+        advanceUntilIdle()
+        assertThat(downloader.requests).containsExactly(
+            ApkDownloadRequest(
+                url = "https://feralisme.fr/x.apk",
+                sha256 = "abcd",
+                packageName = APPLICATION_ID,
+                versionCode = 42L,
+                signingCertSha256 = AppUpdateConfig.SIGNING_CERT_SHA256,
+                fileName = AppUpdateManager.DOWNLOAD_FILE_NAME,
+                minVersionCodeExclusive = INSTALLED_VERSION_CODE,
+            )
+        )
     }
 
     @Test
@@ -158,5 +189,7 @@ class AppUpdateManagerTest {
     private companion object {
         const val APK_PATH = "/cache/updates/feral-update.apk"
         const val DOWNLOAD_DURATION_MS = 100L
+        const val APPLICATION_ID = "fr.feralisme.feral"
+        const val INSTALLED_VERSION_CODE = 10L
     }
 }

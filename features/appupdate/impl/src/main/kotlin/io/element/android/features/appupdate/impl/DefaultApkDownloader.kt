@@ -10,15 +10,16 @@ package io.element.android.features.appupdate.impl
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.content.FileProvider
+import androidx.core.content.pm.PackageInfoCompat
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
-import io.element.android.appconfig.AppUpdateConfig
+import io.element.android.features.appupdate.api.ApkDownloadRequest
+import io.element.android.features.appupdate.api.ApkDownloader
 import io.element.android.features.appupdate.api.AppUpdateStep
-import io.element.android.features.appupdate.api.AvailableUpdate
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.meta.BuildMeta
@@ -34,43 +35,17 @@ import okhttp3.Request
 import timber.log.Timber
 
 /**
- * Downloads a Feral update APK into the app cache and verifies it before install.
- */
-interface ApkDownloader {
-    /** Streams download progress; ends with [AppUpdateStep.ReadyToInstall] or [AppUpdateStep.Failed]. */
-    fun downloadAndVerify(update: AvailableUpdate): Flow<AppUpdateStep>
-
-    /**
-     * Hands the verified APK to the system package installer. Uses the application context
-     * with FLAG_ACTIVITY_NEW_TASK: presenters run inside Molecule (no Compose UI composition,
-     * so there is no LocalContext there) — reading LocalContext in a presenter crashes the app.
-     */
-    fun install(apkPath: String)
-
-    /** Removes every downloaded APK (cancelled, dismissed or partial downloads). */
-    fun deleteDownloads()
-
-    /**
-     * Removes downloaded APKs that are no longer useful: unreadable files and any APK whose
-     * versionCode is not strictly greater than the running app (i.e. the update we just
-     * installed, or a stale one). Called at startup so an installed update never leaves
-     * a 100+ MB file behind in the cache.
-     */
-    fun cleanupStaleDownloads()
-}
-
-/**
  * A downloaded APK is accepted only when ALL of the following hold:
  *  1. its SHA-256 matches the manifest entry (transport integrity),
- *  2. its signing certificate SHA-256 matches the pinned Feral release certificate
- *     ([AppUpdateConfig.SIGNING_CERT_SHA256]) — an attacker cannot produce this
- *     without the Feral keystore (authenticity),
- *  3. its versionCode is strictly greater than the installed one (anti-downgrade).
+ *  2. its signing certificate SHA-256 matches the pinned certificate of the request
+ *     (the Feral release certificate for a self-update, the ntfy release certificate
+ *     for the helper app) — an attacker cannot produce this without the keystore (authenticity),
+ *  3. its package name is the expected one and its versionCode equals the manifest value,
+ *     strictly above [ApkDownloadRequest.minVersionCodeExclusive] when set (anti-downgrade).
  * Android enforces the same-signer rule again at install time; this check simply
  * refuses to even prompt the user with a bad file.
  */
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultApkDownloader(
     @ApplicationContext private val context: Context,
     private val okHttpClient: OkHttpClient,
@@ -80,22 +55,23 @@ class DefaultApkDownloader(
     private val downloadDir: File
         get() = File(context.cacheDir, DOWNLOAD_DIR)
 
-    override fun downloadAndVerify(update: AvailableUpdate): Flow<AppUpdateStep> = flow {
+    override fun downloadAndVerify(request: ApkDownloadRequest): Flow<AppUpdateStep> = flow {
         emit(AppUpdateStep.Downloading(percent = null))
-        // Only ever keep one APK in the cache.
-        deleteDownloads()
-        val file = File(downloadDir.apply { mkdirs() }, DOWNLOAD_FILE_NAME)
+        // One slot per file name: the previous file of this request is replaced, other
+        // downloads (e.g. a ntfy APK next to a Feral update) are left alone.
+        val file = File(downloadDir.apply { mkdirs() }, request.fileName)
+        file.delete()
         val result = runCatchingExceptions {
-            downloadTo(file, update) { percent -> emit(AppUpdateStep.Downloading(percent)) }
-            check(verifyApk(file, update)) { "APK failed signature/version verification" }
+            downloadTo(file, request.url, request.sha256) { percent -> emit(AppUpdateStep.Downloading(percent)) }
+            check(verifyApk(file, request)) { "APK failed signature/package/version verification" }
             file
         }
         result.fold(
             onSuccess = { emit(AppUpdateStep.ReadyToInstall(file.absolutePath)) },
             onFailure = { error ->
-                Timber.w(error, "Feral update download/verification failed")
+                Timber.w(error, "APK download/verification failed (${request.packageName})")
                 // Never leave a partial or rejected APK behind (CancellationException is rethrown
-                // by runCatchingExceptions, so cancelled downloads are cleaned by deleteDownloads()).
+                // by runCatchingExceptions, so cancelled downloads are cleaned by delete()).
                 file.delete()
                 emit(AppUpdateStep.Failed)
             },
@@ -111,15 +87,27 @@ class DefaultApkDownloader(
         context.startActivity(intent)
     }
 
+    override fun delete(fileName: String) {
+        File(downloadDir, fileName).delete()
+    }
+
     override fun deleteDownloads() {
         downloadDir.listFiles()?.forEach { it.delete() }
     }
 
     override fun cleanupStaleDownloads() {
         downloadDir.listFiles()?.forEach { file ->
-            val archiveVersionCode = archiveVersionCode(file)
-            if (archiveVersionCode == null || archiveVersionCode <= buildMeta.versionCode) {
-                Timber.d("Removing stale Feral update ${file.name} (versionCode=$archiveVersionCode)")
+            val info = file.packageArchiveInfo(flags = 0)
+            val archiveVersionCode = info?.let { versionCodeOf(it) }
+            val stale = when {
+                info == null || archiveVersionCode == null -> true
+                // Self-update: useless once it is not newer than the running app.
+                info.packageName == buildMeta.applicationId -> archiveVersionCode <= buildMeta.versionCode
+                // Foreign package (ntfy): useless once installed at that version or newer.
+                else -> installedVersionCode(info.packageName)?.let { it >= archiveVersionCode } ?: false
+            }
+            if (stale) {
+                Timber.d("Removing stale APK ${file.name} (versionCode=$archiveVersionCode)")
                 file.delete()
             }
         }
@@ -127,10 +115,11 @@ class DefaultApkDownloader(
 
     private suspend fun downloadTo(
         file: File,
-        update: AvailableUpdate,
+        url: String,
+        expectedSha256: String,
         onProgress: suspend (Int?) -> Unit,
     ) {
-        val request = Request.Builder().url(update.url).build()
+        val request = Request.Builder().url(url).build()
         val digest = MessageDigest.getInstance("SHA-256")
         okHttpClient.newCall(request).execute().use { response ->
             check(response.isSuccessful) { "HTTP ${response.code}" }
@@ -159,21 +148,17 @@ class DefaultApkDownloader(
             }
         }
         val sha256 = digest.digest().toHexString()
-        check(sha256.equals(update.sha256, ignoreCase = true)) { "sha256 mismatch" }
+        check(sha256.equals(expectedSha256, ignoreCase = true)) { "sha256 mismatch" }
     }
 
-    private fun archiveVersionCode(file: File): Long? {
-        val info = file.packageArchiveInfo(flags = 0) ?: return null
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            info.longVersionCode
-        } else {
-            @Suppress("DEPRECATION")
-            info.versionCode.toLong()
-        }
-    }
+    private fun versionCodeOf(info: PackageInfo): Long = PackageInfoCompat.getLongVersionCode(info)
 
-    private fun verifyApk(file: File, update: AvailableUpdate): Boolean {
-        val pinned = AppUpdateConfig.SIGNING_CERT_SHA256.lowercase()
+    private fun installedVersionCode(packageName: String): Long? = runCatchingExceptions {
+        versionCodeOf(context.packageManager.getPackageInfo(packageName, 0))
+    }.getOrNull()
+
+    private fun verifyApk(file: File, request: ApkDownloadRequest): Boolean {
+        val pinned = request.signingCertSha256.lowercase()
         val info = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             file.packageArchiveInfo(PackageManager.GET_SIGNING_CERTIFICATES)
         } else {
@@ -190,11 +175,12 @@ class DefaultApkDownloader(
         val certOk = signatures.all { signature ->
             MessageDigest.getInstance("SHA-256").digest(signature.toByteArray()).toHexString() == pinned
         }
-        val archiveVersionCode = archiveVersionCode(file) ?: return false
-        val sameApplication = info.packageName == buildMeta.applicationId
-        val versionOk = archiveVersionCode > buildMeta.versionCode &&
-            archiveVersionCode == update.versionCode
-        return certOk && sameApplication && versionOk
+        val archiveVersionCode = versionCodeOf(info)
+        val packageOk = info.packageName == request.packageName
+        val minVersionCode = request.minVersionCodeExclusive
+        val versionOk = archiveVersionCode == request.versionCode &&
+            (minVersionCode == null || archiveVersionCode > minVersionCode)
+        return certOk && packageOk && versionOk
     }
 
     private fun File.packageArchiveInfo(flags: Int) =
@@ -205,6 +191,5 @@ class DefaultApkDownloader(
 
     private companion object {
         const val DOWNLOAD_DIR = "updates"
-        const val DOWNLOAD_FILE_NAME = "feral-update.apk"
     }
 }

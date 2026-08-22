@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Feral-owned strings (private notifications setup flow). Kept OUT of the Localazy-managed
+     files so upstream i18n regeneration can never drop or overwrite them.
+     English source; French in values-fr/strings_feral_privatepush.xml. -->
+<resources>
+  <string name="feral_privatepush_action_later">"Later"</string>
+  <string name="feral_privatepush_action_continue">"Continue"</string>
+  <string name="feral_privatepush_action_next">"Next"</string>
+  <string name="feral_privatepush_action_finish">"Finish"</string>
+
+  <string name="feral_privatepush_why_title">"Private notifications"</string>
+  <string name="feral_privatepush_why_subtitle">"Feral does not use any Google service. Here is how your notifications reach you."</string>
+  <string name="feral_privatepush_why_point_1">"Notifications travel through the Feral server, never through Google or Apple."</string>
+  <string name="feral_privatepush_why_point_2">"A small helper app called ntfy keeps the connection to the Feral server open, so you are notified even when Feral is closed."</string>
+  <string name="feral_privatepush_why_point_3">"This is a one-time setup and takes about two minutes."</string>
+  <string name="feral_privatepush_why_privacy">"Notifications never contain your messages: only a signal that something new is waiting for you."</string>
+
+  <string name="feral_privatepush_install_title">"Install the ntfy app"</string>
+  <string name="feral_privatepush_install_subtitle">"ntfy is free and open source. Install it from wherever you prefer, then come back to Feral."</string>
+  <string name="feral_privatepush_install_play">"Install from the Play Store"</string>
+  <string name="feral_privatepush_install_fdroid">"Install from F-Droid"</string>
+  <string name="feral_privatepush_install_feral">"Download ntfy from feralisme.fr"</string>
+  <string name="feral_privatepush_install_downloading">"Downloading ntfy…"</string>
+  <string name="feral_privatepush_install_downloading_percent">"Downloading ntfy… %1$d%%"</string>
+  <string name="feral_privatepush_install_ready">"Download complete. Android will now ask you to install ntfy."</string>
+  <string name="feral_privatepush_install_action_install">"Install ntfy"</string>
+  <string name="feral_privatepush_install_failed">"The download failed. Check your connection and try again."</string>
+  <string name="feral_privatepush_install_action_retry">"Try again"</string>
+  <string name="feral_privatepush_install_waiting">"Once ntfy is installed, Feral continues automatically."</string>
+  <string name="feral_privatepush_install_already">"ntfy is already installed on this phone."</string>
+
+  <string name="feral_privatepush_configure_title">"Point ntfy to the Feral server"</string>
+  <string name="feral_privatepush_configure_subtitle">"By default ntfy uses a public server. Tell it to use the Feral server instead."</string>
+  <string name="feral_privatepush_configure_address_label">"Feral server address"</string>
+  <string name="feral_privatepush_configure_copy">"Copy address"</string>
+  <string name="feral_privatepush_configure_copied">"Address copied"</string>
+  <string name="feral_privatepush_configure_step_1">"Open ntfy."</string>
+  <string name="feral_privatepush_configure_step_2">"Tap the menu (⋮) in the top-right corner, then Settings."</string>
+  <string name="feral_privatepush_configure_step_3">"Under General, tap Default server."</string>
+  <string name="feral_privatepush_configure_step_4">"Paste the Feral server address and confirm."</string>
+  <string name="feral_privatepush_configure_step_5">"Come back to Feral."</string>
+  <string name="feral_privatepush_configure_open_ntfy">"Open ntfy"</string>
+  <string name="feral_privatepush_configure_hint_wrong_server">"ntfy is still using another server (%1$s). Check that the Default server is exactly the Feral address, then try again."</string>
+
+  <string name="feral_privatepush_connect_title">"Activate notifications"</string>
+  <string name="feral_privatepush_connect_subtitle">"Feral will now connect to the Feral server through ntfy and check that everything is private."</string>
+  <string name="feral_privatepush_connect_action">"Activate notifications"</string>
+  <string name="feral_privatepush_connect_in_progress">"Connecting… this can take up to 30 seconds."</string>
+  <string name="feral_privatepush_connect_success">"Your notifications are private."</string>
+  <string name="feral_privatepush_connect_problem_ntfy_missing">"ntfy is not installed on this phone."</string>
+  <string name="feral_privatepush_connect_problem_ntfy_missing_action">"Install ntfy"</string>
+  <string name="feral_privatepush_connect_problem_wrong_server">"ntfy is connected to another server (%1$s), not to the Feral server. Your notifications would not be private."</string>
+  <string name="feral_privatepush_connect_problem_wrong_server_action">"Check the ntfy settings"</string>
+  <string name="feral_privatepush_connect_problem_registration">"Feral could not activate notifications. Make sure ntfy is running and that you are online, then try again."</string>
+  <string name="feral_privatepush_connect_problem_registration_reason">"Details: %1$s"</string>
+  <string name="feral_privatepush_connect_action_retry">"Try again"</string>
+  <string name="feral_privatepush_connect_action_troubleshoot">"Troubleshoot notifications"</string>
+
+  <string name="feral_privatepush_done_title">"Your notifications are private"</string>
+  <string name="feral_privatepush_done_subtitle">"Feral and ntfy are connected to the Feral server. You can check this at any time in Settings › Notifications › Private notifications."</string>
+  <string name="feral_privatepush_done_tip">"Tip: keep ntfy installed. If you uninstall it, notifications stop."</string>
+</resources>

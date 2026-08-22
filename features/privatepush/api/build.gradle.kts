@@ -10,9 +10,12 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.features.appupdate.api"
+    namespace = "io.element.android.features.privatepush.api"
 }
 
 dependencies {
+    implementation(projects.libraries.architecture)
+    implementation(projects.libraries.matrix.api)
+    implementation(libs.appyx.core)
     implementation(libs.coroutines.core)
 }

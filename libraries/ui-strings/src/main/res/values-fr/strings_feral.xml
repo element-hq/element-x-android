@@ -7,4 +7,10 @@
   <string name="feral_logout_explanation">"Se déconnecter retire ce téléphone de votre compte. Les messages enregistrés sur ce téléphone sont supprimés ; vos autres appareils restent connectés.\n\nAvant de continuer, vérifiez que vous avez bien sauvegardé votre clé de récupération : elle vous sera demandée pour relire vos messages chiffrés après vous être reconnecté."</string>
   <string name="feral_logout_check_recovery_key">"Vérifier ma clé de récupération"</string>
   <string name="feral_logout_confirmation_content">"Voulez-vous vraiment vous déconnecter de ce téléphone ? Vérifiez d\'abord que votre clé de récupération est sauvegardée."</string>
+
+  <!-- Private notifications: Settings > Notifications entry + status (used by features/preferences). -->
+  <string name="feral_privatepush_settings_entry">"Notifications privées (ntfy)"</string>
+  <string name="feral_privatepush_status_private">"Actives : vos notifications passent par le serveur Feral"</string>
+  <string name="feral_privatepush_status_public">"Attention : les notifications passent par un autre serveur (%1$s)"</string>
+  <string name="feral_privatepush_status_not_set_up">"Non configurées"</string>
 </resources>

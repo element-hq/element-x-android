@@ -9,4 +9,10 @@
   <string name="feral_logout_explanation">"Logging out removes this phone from your account. The messages stored on this phone are deleted; your other devices stay connected.\n\nBefore you continue, make sure you have saved your recovery key: you will need it to read your encrypted messages again after logging back in."</string>
   <string name="feral_logout_check_recovery_key">"Check my recovery key"</string>
   <string name="feral_logout_confirmation_content">"Are you sure you want to log out of this phone? Make sure you have saved your recovery key first."</string>
+
+  <!-- Private notifications: Settings > Notifications entry + status (used by features/preferences). -->
+  <string name="feral_privatepush_settings_entry">"Private notifications (ntfy)"</string>
+  <string name="feral_privatepush_status_private">"Active: your notifications go through the Feral server"</string>
+  <string name="feral_privatepush_status_public">"Warning: notifications go through another server (%1$s)"</string>
+  <string name="feral_privatepush_status_not_set_up">"Not set up"</string>
 </resources>

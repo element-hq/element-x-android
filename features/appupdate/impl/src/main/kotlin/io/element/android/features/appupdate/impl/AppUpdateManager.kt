@@ -11,9 +11,13 @@ package io.element.android.features.appupdate.impl
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import io.element.android.appconfig.AppUpdateConfig
+import io.element.android.features.appupdate.api.ApkDownloadRequest
+import io.element.android.features.appupdate.api.ApkDownloader
 import io.element.android.features.appupdate.api.AppUpdateStep
 import io.element.android.features.appupdate.api.AvailableUpdate
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -35,6 +39,7 @@ import kotlinx.coroutines.launch
 @Inject
 class AppUpdateManager(
     private val apkDownloader: ApkDownloader,
+    private val buildMeta: BuildMeta,
     @AppCoroutineScope private val appCoroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) {
@@ -56,7 +61,7 @@ class AppUpdateManager(
         if (_step.value is AppUpdateStep.Downloading) return
         _pendingAutoInstall.value = null
         downloadJob = appCoroutineScope.launch {
-            apkDownloader.downloadAndVerify(update).collect { progress ->
+            apkDownloader.downloadAndVerify(update.toRequest()).collect { progress ->
                 _step.value = progress
             }
             val finalStep = _step.value
@@ -65,6 +70,20 @@ class AppUpdateManager(
             }
         }
     }
+
+    /**
+     * Self-update request: the Feral release certificate is pinned, the package must be ours
+     * and the versionCode strictly greater than the running app (anti-downgrade).
+     */
+    private fun AvailableUpdate.toRequest() = ApkDownloadRequest(
+        url = url,
+        sha256 = sha256,
+        packageName = buildMeta.applicationId,
+        versionCode = versionCode,
+        signingCertSha256 = AppUpdateConfig.SIGNING_CERT_SHA256,
+        fileName = DOWNLOAD_FILE_NAME,
+        minVersionCodeExclusive = buildMeta.versionCode,
+    )
 
     /** Returns the pending auto-install path once, or null if none (or already consumed). */
     fun consumePendingAutoInstall(): String? = _pendingAutoInstall.getAndUpdate { null }
@@ -76,14 +95,14 @@ class AppUpdateManager(
         return true
     }
 
-    /** Cancels any running download, forgets the result and removes downloaded files. */
+    /** Cancels any running download, forgets the result and removes the update file. */
     fun cancelAndReset() {
         downloadJob?.cancel()
         downloadJob = null
         _pendingAutoInstall.value = null
         _step.value = AppUpdateStep.Idle
         appCoroutineScope.launch(coroutineDispatchers.io) {
-            apkDownloader.deleteDownloads()
+            apkDownloader.delete(DOWNLOAD_FILE_NAME)
         }
     }
 
@@ -93,5 +112,9 @@ class AppUpdateManager(
         appCoroutineScope.launch(coroutineDispatchers.io) {
             apkDownloader.cleanupStaleDownloads()
         }
+    }
+
+    companion object {
+        const val DOWNLOAD_FILE_NAME = "feral-update.apk"
     }
 }

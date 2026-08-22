@@ -11,28 +11,48 @@ import extension.testCommonDependencies
 
 plugins {
     id("io.element.android-compose-library")
+    id("kotlin-parcelize")
     alias(libs.plugins.kotlin.serialization)
 }
 
 android {
-    namespace = "io.element.android.features.appupdate.impl"
+    namespace = "io.element.android.features.privatepush.impl"
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 setupDependencyInjection()
 
 dependencies {
-    api(projects.features.appupdate.api)
+    api(projects.features.privatepush.api)
     implementation(projects.appconfig)
+    // Generalized APK downloader (sha256 + signing-cert pin + package/versionCode checks).
+    implementation(projects.features.appupdate.api)
+    implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.core)
+    implementation(projects.libraries.designsystem)
     implementation(projects.libraries.di)
+    implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.preferences.api)
+    implementation(projects.libraries.push.api)
+    implementation(projects.libraries.pushproviders.api)
+    implementation(projects.libraries.troubleshoot.api)
+    implementation(projects.libraries.uiStrings)
+    implementation(libs.androidx.corektx)
     implementation(libs.androidx.datastore.preferences)
     implementation(platform(libs.network.okhttp.bom))
     implementation(libs.network.okhttp)
     implementation(libs.serialization.json)
     implementation(libs.coroutines.core)
 
-    testCommonDependencies(libs)
+    testCommonDependencies(libs, true)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.libraries.preferences.test)
+    testImplementation(projects.libraries.push.test)
+    testImplementation(projects.libraries.pushproviders.test)
 }

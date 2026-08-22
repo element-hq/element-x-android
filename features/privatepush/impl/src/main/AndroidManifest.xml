@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Feral: package visibility (Android 11+) for the store/helper apps the private-push flow detects and opens. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <queries>
+        <package android:name="io.heckel.ntfy" />
+        <package android:name="com.android.vending" />
+        <package android:name="org.fdroid.fdroid" />
+        <package android:name="org.fdroid.basic" />
+    </queries>
+</manifest>
