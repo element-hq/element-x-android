@@ -65,8 +65,6 @@ jobs:
           java-version: "21"
       - uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
       # Toolchain at v26.08.2: compileSdk 37 / build-tools 37.0.0 (idempotent on the runner image).
-      - name: Install Android SDK 37 components
-        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-37" "build-tools;37.0.0" >/dev/null
       - name: Refuse to build with a keystore present
         run: test ! -f signing.properties || { echo "signing.properties must never exist in CI" >&2; exit 1; }
       # The same guard as feral-ci.yml, on the exact tree being released: a tag push or

@@ -53,10 +53,6 @@ jobs:
           distribution: temurin
           java-version: "21"
       - uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
-      # Toolchain at v26.08.2: compileSdk 37 / build-tools 37.0.0 (plugins/src/main/kotlin/Versions.kt).
-      # Idempotent when the runner image already ships them.
-      - name: Install Android SDK 37 components
-        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-37" "build-tools;37.0.0" >/dev/null
       - name: Run Feral guard tests (members-only lock + updater manifest)
         run: ./gradlew :features:enterprise:impl-foss:testDebugUnitTest :features:appupdate:impl:testDebugUnitTest $CI_GRADLE_ARG_PROPERTIES
 
@@ -78,8 +74,6 @@ jobs:
           distribution: temurin
           java-version: "21"
       - uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
-      - name: Install Android SDK 37 components
-        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-37" "build-tools;37.0.0" >/dev/null
       # assembleFdroidDebug = FOSS flavor (UnifiedPush, no Firebase/google-services
       # secret needed), debug = auto-signed with the throwaway debug key.
       # This also forces Metro to resolve the DI graph, so a duplicate/unresolved
