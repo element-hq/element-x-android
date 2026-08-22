@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
+// Modified by Feral: renders the in-app updater banner at the top of the room list.
 
 package io.element.android.features.home.impl.components
 
@@ -228,6 +229,12 @@ private fun RoomsViewList(
         modifier = modifier,
         contentPadding = contentPadding,
     ) {
+        // Feral: in-app updater banner (docs/FERAL_MAINTENANCE.md)
+        if (state.appUpdateBannerState.update != null) {
+            item {
+                AppUpdateBanner(state = state.appUpdateBannerState)
+            }
+        }
         when (state.securityBannerState) {
             SecurityBannerState.SetUpRecovery -> {
                 item {

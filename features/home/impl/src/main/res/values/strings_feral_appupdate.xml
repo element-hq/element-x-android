@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Feral-owned strings (in-app updater banner). Kept out of Localazy-managed files. -->
+<resources>
+  <string name="banner_app_update_title">Update available</string>
+  <string name="banner_app_update_message">Feral %1$s</string>
+  <string name="banner_app_update_downloading">Downloading…</string>
+  <string name="banner_app_update_downloading_percent">Downloading… %1$d%%</string>
+  <string name="banner_app_update_ready">Ready to install</string>
+  <string name="banner_app_update_failed">Download failed</string>
+  <string name="banner_app_update_action">Update</string>
+  <string name="banner_app_update_action_install">Install</string>
+  <string name="banner_app_update_action_retry">Retry</string>
+</resources>
