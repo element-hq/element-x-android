@@ -1,1 +1,2 @@
 @AGENTS.md
+@docs/FERAL_AGENTS.md
