@@ -104,10 +104,14 @@ android {
             if (signingPropertiesFile.exists()) {
                 val signingProperties = Properties()
                 signingPropertiesFile.inputStream().use { signingProperties.load(it) }
-                storeFile = rootProject.file(signingProperties.getProperty("FERAL_RELEASE_STORE_FILE"))
-                storePassword = signingProperties.getProperty("FERAL_RELEASE_STORE_PASSWORD")
-                keyAlias = signingProperties.getProperty("FERAL_RELEASE_KEY_ALIAS")
-                keyPassword = signingProperties.getProperty("FERAL_RELEASE_KEY_PASSWORD")
+                fun required(key: String): String = signingProperties.getProperty(key)?.takeIf { it.isNotBlank() }
+                    ?: error("signing.properties exists but '$key' is missing or empty (expected FERAL_RELEASE_STORE_FILE / _STORE_PASSWORD / _KEY_ALIAS / _KEY_PASSWORD)")
+                storeFile = rootProject.file(required("FERAL_RELEASE_STORE_FILE")).also {
+                    require(it.exists()) { "signing.properties: FERAL_RELEASE_STORE_FILE points to a missing keystore: $it" }
+                }
+                storePassword = required("FERAL_RELEASE_STORE_PASSWORD")
+                keyAlias = required("FERAL_RELEASE_KEY_ALIAS")
+                keyPassword = required("FERAL_RELEASE_KEY_PASSWORD")
             }
         }
     }

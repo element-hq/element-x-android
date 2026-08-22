@@ -4,7 +4,8 @@
   ~
   ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
   ~ Please see LICENSE files in the repository root for full details.
-  ~ Modified by Feral: splash backgrounds follow FeralColors (deepForest / cream).
+  ~ Modified by Feral: splash backgrounds use the Feral brand colours (deep forest #0F2C1E / cream #FFF8E7);
+  ~ keep them equal to the onboarding gradient in features/login/impl/src/main/kotlin/io/element/android/features/login/impl/screens/onboarding/ (Feral*.kt).
   -->
 <resources>
     <!-- Must be equal to DarkColorTokens.colorThemeBg -->
