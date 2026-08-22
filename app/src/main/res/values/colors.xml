@@ -4,10 +4,11 @@
   ~
   ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
   ~ Please see LICENSE files in the repository root for full details.
+  ~ Modified by Feral: splash backgrounds follow FeralColors (deepForest / cream).
   -->
 <resources>
     <!-- Must be equal to DarkColorTokens.colorThemeBg -->
-    <color name="splashscreen_bg_dark">#FF101317</color>
+    <color name="splashscreen_bg_dark">#FF0F2C1E</color>
     <!-- Must be equal to LightColorTokens.colorThemeBg -->
-    <color name="splashscreen_bg_light">#FFFFFFFF</color>
+    <color name="splashscreen_bg_light">#FFFFF8E7</color>
 </resources>

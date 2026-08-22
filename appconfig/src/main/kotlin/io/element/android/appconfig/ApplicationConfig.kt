@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
+// Modified by Feral: client/desktop names set to "Feral".
 
 package io.element.android.appconfig
 
@@ -24,12 +25,12 @@ object ApplicationConfig {
      * Cannot be empty.
      * For Element, the value is "Element".
      */
-    const val PRODUCTION_APPLICATION_NAME: String = "Element"
+    const val PRODUCTION_APPLICATION_NAME: String = "Feral"
 
     /**
      * Used in the strings to reference the Element Desktop client, for instance Element Web.
      * Cannot be empty.
      * For Element, the value is "Element". We use the same name for desktop and mobile for now.
      */
-    const val DESKTOP_APPLICATION_NAME: String = "Element"
+    const val DESKTOP_APPLICATION_NAME: String = "Feral"
 }

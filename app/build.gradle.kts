@@ -5,6 +5,8 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
+// Modified by Feral: release signing comes from a gitignored signing.properties (FERAL_RELEASE_*);
+// without it the release build type has no signing config and AGP packages *-unsigned.apk (signed on eheyu).
 
 @file:Suppress("UnstableApiUsage")
 
@@ -26,6 +28,7 @@ import extension.setupDependencyInjection
 import extension.testCommonDependencies
 import org.sonarqube.gradle.SonarResolverTask
 import java.util.Locale
+import java.util.Properties
 
 plugins {
     id("io.element.android-compose-application")
@@ -96,6 +99,17 @@ android {
             storePassword = System.getenv("ELEMENT_ANDROID_NIGHTLY_STOREPASSWORD")
                 ?: project.property("signing.element.nightly.storePassword") as? String?
         }
+        register("release") {
+            val signingPropertiesFile = rootProject.file("signing.properties")
+            if (signingPropertiesFile.exists()) {
+                val signingProperties = Properties()
+                signingPropertiesFile.inputStream().use { signingProperties.load(it) }
+                storeFile = rootProject.file(signingProperties.getProperty("FERAL_RELEASE_STORE_FILE"))
+                storePassword = signingProperties.getProperty("FERAL_RELEASE_STORE_PASSWORD")
+                keyAlias = signingProperties.getProperty("FERAL_RELEASE_KEY_ALIAS")
+                keyPassword = signingProperties.getProperty("FERAL_RELEASE_KEY_PASSWORD")
+            }
+        }
     }
 
     val baseAppName = BuildTimeConfig.APPLICATION_NAME
@@ -122,7 +136,9 @@ android {
                 "login_redirect_scheme",
                 oAuthRedirectSchemeBase,
             )
-            signingConfig = signingConfigs.getByName("debug")
+            // No signing.properties (CI, feral-release.yml) => no signing config at all =>
+            // AGP packages *-unsigned.apk; signed later on eheyu (tools/feral/sign-release.sh).
+            signingConfig = signingConfigs.getByName("release").takeIf { rootProject.file("signing.properties").exists() }
 
             optimization {
                 enable = true
