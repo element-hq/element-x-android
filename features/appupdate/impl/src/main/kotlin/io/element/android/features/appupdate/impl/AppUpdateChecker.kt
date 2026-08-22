@@ -59,10 +59,14 @@ private data class StoredUpdate(
  * Checks the public Feral update channel for a newer release.
  *
  * Fail-quiet by design: any network/parsing problem simply yields "no update".
- * The network is hit at most once per [AppUpdateConfig.CHECK_INTERVAL_MS]; in between,
- * the last fetched result is served from the local store so the banner survives app
- * restarts without re-fetching.
+ * The network is hit on the first check of each process (cold start) and then at most once
+ * per [AppUpdateConfig.CHECK_INTERVAL_MS]; in between, the last fetched result is served from
+ * the local store so the banner survives app restarts without re-fetching.
  */
+/** Process-wide: has the update channel been queried since this process started? */
+@Volatile
+private var checkedInThisProcess = false
+
 @Inject
 class AppUpdateChecker(
     private val okHttpClient: OkHttpClient,
@@ -79,9 +83,13 @@ class AppUpdateChecker(
         val ignored = prefs[ignoredVersionKey]
         val now = System.currentTimeMillis()
         val lastCheck = prefs[lastCheckKey] ?: 0L
-        if (now - lastCheck < AppUpdateConfig.CHECK_INTERVAL_MS) {
+        // A freshly started process always asks the channel once, so a just-published release
+        // shows up the next time the app is opened; the interval only throttles later re-checks.
+        val throttled = checkedInThisProcess && now - lastCheck < AppUpdateConfig.CHECK_INTERVAL_MS
+        if (throttled) {
             return@withContext pendingFromStore(prefs[pendingUpdateKey], ignored)
         }
+        checkedInThisProcess = true
         val manifest = fetchManifest() ?: return@withContext pendingFromStore(prefs[pendingUpdateKey], ignored)
         val update = manifest.selectUpdate(
             supportedAbis = Build.SUPPORTED_ABIS.orEmpty().toList(),
