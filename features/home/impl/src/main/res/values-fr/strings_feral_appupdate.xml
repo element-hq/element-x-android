@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Feral-owned strings (bannière de mise à jour). Hors des fichiers gérés par Localazy. -->
 <resources>
-  <string name="banner_app_update_title">Mise à jour disponible</string>
+  <string name="banner_app_update_title">"Mise à jour obligatoire"</string>
   <string name="banner_app_update_message">Feral %1$s</string>
   <string name="banner_app_update_downloading">Téléchargement…</string>
   <string name="banner_app_update_downloading_percent">Téléchargement… %1$d%%</string>
