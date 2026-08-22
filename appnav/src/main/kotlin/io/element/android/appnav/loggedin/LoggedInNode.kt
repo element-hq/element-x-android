@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
+// Modified by Feral: route "No distributors available" to the private notifications setup flow.
 
 package io.element.android.appnav.loggedin
 
@@ -31,6 +32,8 @@ class LoggedInNode(
 ) {
     interface Callback : Plugin {
         fun navigateToNotificationTroubleshoot()
+        /** Returns false when the flow could not be shown (caller falls back to the upstream dialog). */
+        fun navigateToPrivatePushSetup(): Boolean
     }
 
     private val callback: Callback = callback()
@@ -41,6 +44,7 @@ class LoggedInNode(
         LoggedInView(
             state = loggedInState,
             navigateToNotificationTroubleshoot = callback::navigateToNotificationTroubleshoot,
+            navigateToPrivatePushSetup = callback::navigateToPrivatePushSetup,
             modifier = modifier
         )
     }

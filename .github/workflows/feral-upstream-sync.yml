@@ -1,0 +1,134 @@
+# Feral upstream sync — detect new upstream Element X Android releases and open a
+# sync PR (or an issue when it needs a hand). This is the "toujours à jour" trigger
+# described in docs/FERAL_MAINTENANCE.md §5.
+#
+# It NEVER ships anything: it rebases the thin Feral stack onto the new tag on a
+# throw-away branch and opens a PR when the rebase is clean, or an issue when a
+# human must resolve conflicts (§4). `main` is re-pointed by hand after review
+# (`git push --force-with-lease origin feral/sync/<tag>:main`, §4); the release is
+# still built unsigned by feral-release.yml and signed by hand on eheyu. It follows
+# the *release TAGS* (vYY.MM.N), never upstream's moving `develop`.
+#
+# Actions are pinned by SHA (same pins as upstream at v26.08.2). This job must push and
+# call `gh`, so the checkout keeps its credentials on purpose (zizmor "artipacked" is
+# expected here). Run it once via "Run workflow" before relying on the schedule.
+name: Feral upstream sync
+
+on:
+  schedule:
+    # Mondays & Thursdays 06:00 UTC — roughly the upstream tag cadence.
+    - cron: "0 6 * * 1,4"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+env:
+  UPSTREAM_REPO: https://github.com/element-hq/element-x-android.git
+  # The Feral release branch = latest upstream stable tag + the thin Feral stack
+  # (FERAL_MAINTENANCE.md §3). It is linear; its base tag is `git describe`-able.
+  FERAL_BRANCH: main
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.FERAL_BRANCH }}
+          fetch-depth: 0
+          fetch-tags: true
+          # persist-credentials stays at its default (true): git push + gh need the token.
+
+      - name: Configure git
+        run: |
+          git config user.name "feral-sync-bot"
+          git config user.email "feral-sync-bot@users.noreply.github.com"
+
+      - name: Find latest stable upstream tag
+        id: upstream
+        run: |
+          set -euo pipefail
+          git remote add upstream "$UPSTREAM_REPO"
+          git fetch --quiet upstream --tags --force
+          # CalVer vYY.MM.N, stable only (drop anything with a '-', e.g. -rc.N).
+          LATEST=$(git tag -l 'v*' --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n1)
+          echo "Latest stable upstream tag: $LATEST"
+          echo "tag=$LATEST" >> "$GITHUB_OUTPUT"
+
+      - name: Sync
+        env:
+          GH_TOKEN: ${{ github.token }}
+          # Passed through env, never interpolated into the script (zizmor template-injection).
+          TAG: ${{ steps.upstream.outputs.tag }}
+        run: |
+          set -euo pipefail
+          if [ -z "$TAG" ]; then echo "No upstream tag found"; exit 1; fi
+
+          # Already based on this tag? Nothing to do. (With rebase-onto-tag the base tag is
+          # an ancestor of the Feral branch, so this check stays valid.)
+          if git merge-base --is-ancestor "$TAG" HEAD; then
+            echo "$FERAL_BRANCH already contains $TAG — up to date."
+            exit 0
+          fi
+
+          SYNC_BRANCH="feral/sync/$TAG"
+          if git ls-remote --exit-code --heads origin "$SYNC_BRANCH" >/dev/null 2>&1; then
+            echo "$SYNC_BRANCH already exists on origin — a sync PR is already open."
+            exit 0
+          fi
+
+          # Base tag = nearest upstream stable tag reachable from the Feral branch
+          # (main is linear: <base tag> + Feral commits). feral-v* release tags don't match.
+          BASE_TAG=$(git describe --tags --abbrev=0 --match 'v[0-9]*' --exclude '*-*' HEAD)
+          FERAL_COMMITS=$(git rev-list --count "$BASE_TAG..HEAD")
+          echo "Base tag: $BASE_TAG ($FERAL_COMMITS Feral commits) -> rebasing onto $TAG"
+
+          git checkout -b "$SYNC_BRANCH"
+
+          # Forks do not inherit custom labels: make sure ours exists (idempotent).
+          gh label create "PR-Dependencies" --color 0366d6 --force >/dev/null 2>&1 || true
+
+          if git rebase --onto "$TAG" "$BASE_TAG"; then
+            echo "Clean rebase of the Feral stack onto $TAG."
+            git push origin "$SYNC_BRANCH"
+            gh pr create \
+              --base "$FERAL_BRANCH" \
+              --head "$SYNC_BRANCH" \
+              --title "Sync upstream $TAG" \
+              --body "Automated sync: the $FERAL_COMMITS Feral commits were rebased from **$BASE_TAG** onto **$TAG** (element-hq/element-x-android) without conflicts.
+
+          Before accepting (docs/FERAL_MAINTENANCE.md §4):
+          - Feral CI on this branch must be green (members-only guard test, updater tests, \`assembleFdroidDebug\`).
+          - \`git diff $BASE_TAG $TAG -- features/enterprise/api\`: any new \`EnterpriseService\` member that gates account access must be overridden in \`FeralEnterpriseService\` (delegation inherits upstream's permissive default).
+          - Skim the churn-prone files (onboarding / login) and the \`element-call-embedded\` version this tag ships (§6: we follow the tag).
+          - Update the sync registry (§12).
+
+          Then re-point \`$FERAL_BRANCH\` — this branch is linear history, do NOT use the merge button:
+          \`\`\`
+          git fetch origin && git push --force-with-lease origin $SYNC_BRANCH:$FERAL_BRANCH
+          \`\`\`
+          and close this PR. The signed release is built on eheyu (§11)."
+          else
+            echo "Rebase onto $TAG conflicts — opening an issue for manual resolution."
+            git rebase --abort
+            gh issue create \
+              --title "Manual upstream sync needed: $TAG" \
+              --label "PR-Dependencies" \
+              --body "Rebasing the Feral stack ($FERAL_COMMITS commits on **$BASE_TAG**) onto upstream **$TAG** has conflicts.
+
+          Resolve locally (docs/FERAL_MAINTENANCE.md §4; \`git rerere\` replays past resolutions):
+          \`\`\`
+          git fetch upstream --tags
+          git checkout -b $SYNC_BRANCH $FERAL_BRANCH
+          git rebase --onto $TAG $BASE_TAG
+          # resolve conflicts commit by commit, then:
+          ./gradlew :features:enterprise:impl-foss:testDebugUnitTest :features:appupdate:impl:testDebugUnitTest
+          ./gradlew :app:assembleFdroidDebug
+          git push origin $SYNC_BRANCH      # Feral CI runs; review; then re-point $FERAL_BRANCH:
+          git push --force-with-lease origin $SYNC_BRANCH:$FERAL_BRANCH
+          \`\`\`
+          Then update the sync registry (§12)."
+          fi

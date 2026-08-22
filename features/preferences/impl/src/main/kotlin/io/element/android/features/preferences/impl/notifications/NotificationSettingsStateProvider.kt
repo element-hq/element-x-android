@@ -5,10 +5,13 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
+// Modified by Feral: "Private notifications (ntfy)" entry with status (features/privatepush).
 
 package io.element.android.features.preferences.impl.notifications
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.privatepush.api.PrivatePushStatus
+import io.element.android.features.privatepush.api.PrivatePushStatusState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
@@ -45,6 +48,8 @@ open class NotificationSettingsStateProvider : PreviewParameterProvider<Notifica
             aInvalidNotificationSettingsState(),
             aInvalidNotificationSettingsState(fixFailed = true),
             aValidNotificationSettingsState(fullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(permissionGranted = false)),
+            aValidNotificationSettingsState(privatePushStatus = PrivatePushStatus.PublicServer("ntfy.sh")),
+            aValidNotificationSettingsState(privatePushStatus = PrivatePushStatus.NotSetUp(PrivatePushStatus.NotSetUp.Reason.NtfyNotInstalled)),
             aValidNotificationSettingsState(appNotificationEnabled = false),
             aValidNotificationSettingsState(
                 // Sentinel URIs — previews shouldn't depend on the host's content provider.
@@ -91,6 +96,7 @@ fun aValidNotificationSettingsState(
     ),
     showChangePushProviderDialog: Boolean = false,
     fullScreenIntentPermissionsState: FullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(),
+    privatePushStatus: PrivatePushStatus = PrivatePushStatus.Private,
     messageSound: NotificationSound = NotificationSound.SystemDefault,
     messageSoundDisplayName: String = "Element default",
     messageSoundCopyError: Boolean = false,
@@ -119,6 +125,7 @@ fun aValidNotificationSettingsState(
     availablePushDistributors = availablePushDistributors.toImmutableList(),
     showChangePushProviderDialog = showChangePushProviderDialog,
     fullScreenIntentPermissionsState = fullScreenIntentPermissionsState,
+    privatePushStatus = PrivatePushStatusState(status = AsyncData.Success(privatePushStatus), eventSink = {}),
     messageSound = NotificationSettingsState.SoundChannelUiState(
         sound = messageSound,
         displayName = messageSoundDisplayName,
@@ -152,6 +159,7 @@ fun aInvalidNotificationSettingsState(
     availablePushDistributors = persistentListOf(),
     showChangePushProviderDialog = false,
     fullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(),
+    privatePushStatus = PrivatePushStatusState(status = AsyncData.Uninitialized, eventSink = {}),
     messageSound = NotificationSettingsState.SoundChannelUiState(
         sound = NotificationSound.SystemDefault,
         displayName = "System default",

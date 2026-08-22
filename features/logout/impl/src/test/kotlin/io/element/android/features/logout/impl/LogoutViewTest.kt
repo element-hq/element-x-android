@@ -35,7 +35,7 @@ class LogoutViewTest : RobolectricTest() {
                 eventSink = eventsRecorder
             ),
         )
-        clickOn(CommonStrings.action_signout)
+        clickOn(CommonStrings.feral_logout_action)
         eventsRecorder.assertSingle(LogoutEvents.Logout(false))
     }
 
@@ -75,7 +75,7 @@ class LogoutViewTest : RobolectricTest() {
                 eventSink = eventsRecorder
             ),
         )
-        clickOn(CommonStrings.action_signout_anyway)
+        clickOn(CommonStrings.feral_logout_anyway)
         eventsRecorder.assertSingle(LogoutEvents.Logout(true))
     }
 
@@ -103,7 +103,7 @@ class LogoutViewTest : RobolectricTest() {
                 ),
                 onChangeRecoveryKeyClick = callback,
             )
-            clickOn(CommonStrings.common_settings)
+            clickOn(CommonStrings.feral_logout_check_recovery_key)
         }
     }
 }

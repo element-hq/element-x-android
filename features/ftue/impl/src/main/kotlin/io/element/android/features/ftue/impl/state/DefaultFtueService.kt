@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
+// Modified by Feral: PrivatePushSetup step after NotificationsOptIn (features/privatepush).
 
 package io.element.android.features.ftue.impl.state
 
@@ -15,9 +16,11 @@ import dev.zacsweers.metro.SingleIn
 import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.lockscreen.api.LockScreenService
+import io.element.android.features.privatepush.api.PrivatePushService
 import io.element.android.libraries.core.coroutine.mapState
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.permissions.api.PermissionStateProvider
@@ -43,6 +46,8 @@ class DefaultFtueService(
     private val lockScreenService: LockScreenService,
     private val sessionVerificationService: SessionVerificationService,
     private val sessionPreferencesStore: SessionPreferencesStore,
+    private val sessionId: SessionId,
+    private val privatePushService: PrivatePushService,
 ) : FtueService {
     private val userNeedsToConfirmSessionVerificationSuccess = MutableStateFlow(false)
 
@@ -98,7 +103,12 @@ class DefaultFtueService(
             } else {
                 getNextStep(FtueStep.NotificationsOptIn)
             }
-            FtueStep.NotificationsOptIn -> if (shouldDisplayLockscreenSetup()) {
+            FtueStep.NotificationsOptIn -> if (shouldDisplayPrivatePushSetup()) {
+                FtueStep.PrivatePushSetup
+            } else {
+                getNextStep(FtueStep.PrivatePushSetup)
+            }
+            FtueStep.PrivatePushSetup -> if (shouldDisplayLockscreenSetup()) {
                 FtueStep.LockscreenSetup
             } else {
                 getNextStep(FtueStep.LockscreenSetup)
@@ -138,6 +148,16 @@ class DefaultFtueService(
         }
     }
 
+    /**
+     * Feral: walk the member through the ntfy setup once notifications are allowed
+     * (pre-13 devices, or POST_NOTIFICATIONS granted) and the endpoint is not private yet.
+     */
+    private suspend fun shouldDisplayPrivatePushSetup(): Boolean {
+        val notificationsAllowed = !sdkVersionProvider.isAtLeast(Build.VERSION_CODES.TIRAMISU) ||
+            permissionStateProvider.isPermissionGranted(Manifest.permission.POST_NOTIFICATIONS)
+        return notificationsAllowed && privatePushService.shouldShowSetup(sessionId)
+    }
+
     private suspend fun shouldDisplayLockscreenSetup(): Boolean {
         return lockScreenService.isSetupRequired().first()
     }
@@ -151,6 +171,7 @@ sealed interface FtueStep {
     data object WaitingForInitialState : FtueStep
     data object SessionVerification : FtueStep
     data object NotificationsOptIn : FtueStep
+    data object PrivatePushSetup : FtueStep
     data object AnalyticsOptIn : FtueStep
     data object LockscreenSetup : FtueStep
 }

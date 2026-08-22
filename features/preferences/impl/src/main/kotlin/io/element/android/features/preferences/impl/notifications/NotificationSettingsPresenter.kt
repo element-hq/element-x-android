@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
+// Modified by Feral: "Private notifications (ntfy)" entry with status (features/privatepush).
 
 package io.element.android.features.preferences.impl.notifications
 
@@ -28,6 +29,7 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingStateNoSuccess
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
+import io.element.android.features.privatepush.api.PrivatePushStatusState
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
@@ -66,6 +68,7 @@ class NotificationSettingsPresenter(
     private val pushService: PushService,
     private val systemNotificationsEnabledProvider: SystemNotificationsEnabledProvider,
     private val fullScreenIntentPermissionsPresenter: Presenter<FullScreenIntentPermissionsState>,
+    private val privatePushStatusPresenter: Presenter<PrivatePushStatusState>,
     private val appPreferencesStore: AppPreferencesStore,
     private val notificationSoundUpdater: NotificationSoundUpdater,
     private val notificationSoundCopier: NotificationSoundCopier,
@@ -290,6 +293,8 @@ class NotificationSettingsPresenter(
             availablePushDistributors = availableDistributors,
             showChangePushProviderDialog = showChangePushProviderDialog,
             fullScreenIntentPermissionsState = key(refreshFullScreenIntentSettings) { fullScreenIntentPermissionsPresenter.present() },
+            // Feral: re-read the ntfy status on every resume (member may come back from ntfy / the setup flow)
+            privatePushStatus = key(refreshFullScreenIntentSettings) { privatePushStatusPresenter.present() },
             messageSound = NotificationSettingsState.SoundChannelUiState(
                 sound = effectiveMessageSound,
                 displayName = messageSoundDisplayName,

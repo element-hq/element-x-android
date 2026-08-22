@@ -6,6 +6,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+// Modified by Feral: the sign-out entry is labelled "Log out" (Feral-owned string) instead of "Remove this device".
+
 package io.element.android.features.preferences.impl.root
 
 import androidx.compose.animation.AnimatedVisibility
@@ -17,6 +19,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
+import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -128,6 +135,7 @@ fun PreferencesRootView(
                 onOpenAdvancedSettings = onOpenAdvancedSettings,
                 onOpenDeveloperSettings = onOpenDeveloperSettings,
                 onOpenLabs = onOpenLabs,
+                onSecureBackupClick = onSecureBackupClick,
                 onSignOutClick = onSignOutClick,
                 onDeactivateClick = onDeactivateClick,
             )
@@ -288,9 +296,31 @@ private fun ColumnScope.GeneralSection(
     onOpenAdvancedSettings: () -> Unit,
     onOpenLabs: () -> Unit,
     onOpenDeveloperSettings: () -> Unit,
+    onSecureBackupClick: () -> Unit,
     onSignOutClick: () -> Unit,
     onDeactivateClick: () -> Unit,
 ) {
+    // Feral: tapping "Log out" first shows a pop-up explaining what it does and reminding the
+    // member to save the recovery key; "Continue" then goes to the usual log-out screen.
+    var showLogoutExplanation by remember { mutableStateOf(false) }
+    if (showLogoutExplanation) {
+        ConfirmationDialog(
+            title = stringResource(id = CommonStrings.feral_logout_title),
+            content = stringResource(id = CommonStrings.feral_logout_explanation),
+            submitText = stringResource(id = CommonStrings.action_continue),
+            destructiveSubmit = true,
+            thirdButtonText = stringResource(id = CommonStrings.feral_logout_check_recovery_key),
+            onThirdButtonClick = {
+                showLogoutExplanation = false
+                onSecureBackupClick()
+            },
+            onSubmitClick = {
+                showLogoutExplanation = false
+                onSignOutClick()
+            },
+            onDismiss = { showLogoutExplanation = false },
+        )
+    }
     ListItem(
         content = { Text(stringResource(id = CommonStrings.common_advanced_settings)) },
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Settings())),
@@ -324,10 +354,10 @@ private fun ColumnScope.GeneralSection(
     }
     HorizontalDivider()
     ListItem(
-        content = { Text(stringResource(id = CommonStrings.action_signout)) },
+        content = { Text(stringResource(id = CommonStrings.feral_logout_action)) },
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Close())),
         style = ListItemStyle.Destructive,
-        onClick = onSignOutClick,
+        onClick = { showLogoutExplanation = true },
     )
     if (state.canDeactivateAccount) {
         ListItem(

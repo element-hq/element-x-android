@@ -5,9 +5,11 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
+// Modified by Feral: "Private notifications (ntfy)" entry with status (features/privatepush).
 
 package io.element.android.features.preferences.impl.notifications
 
+import io.element.android.features.privatepush.api.PrivatePushStatusState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
@@ -24,6 +26,7 @@ data class NotificationSettingsState(
     val availablePushDistributors: ImmutableList<Distributor>,
     val showChangePushProviderDialog: Boolean,
     val fullScreenIntentPermissionsState: FullScreenIntentPermissionsState,
+    val privatePushStatus: PrivatePushStatusState,
     val messageSound: SoundChannelUiState,
     val callRingtone: SoundChannelUiState,
     val showMessageSoundDialog: Boolean,

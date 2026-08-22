@@ -5,6 +5,8 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
+// Modified by Feral: release signing comes from a gitignored signing.properties (FERAL_RELEASE_*);
+// without it the release build type has no signing config and AGP packages *-unsigned.apk (signed on eheyu).
 
 @file:Suppress("UnstableApiUsage")
 
@@ -26,6 +28,7 @@ import extension.setupDependencyInjection
 import extension.testCommonDependencies
 import org.sonarqube.gradle.SonarResolverTask
 import java.util.Locale
+import java.util.Properties
 
 plugins {
     id("io.element.android-compose-application")
@@ -96,6 +99,21 @@ android {
             storePassword = System.getenv("ELEMENT_ANDROID_NIGHTLY_STOREPASSWORD")
                 ?: project.property("signing.element.nightly.storePassword") as? String?
         }
+        register("release") {
+            val signingPropertiesFile = rootProject.file("signing.properties")
+            if (signingPropertiesFile.exists()) {
+                val signingProperties = Properties()
+                signingPropertiesFile.inputStream().use { signingProperties.load(it) }
+                fun required(key: String): String = signingProperties.getProperty(key)?.takeIf { it.isNotBlank() }
+                    ?: error("signing.properties exists but '$key' is missing or empty (expected FERAL_RELEASE_STORE_FILE / _STORE_PASSWORD / _KEY_ALIAS / _KEY_PASSWORD)")
+                storeFile = rootProject.file(required("FERAL_RELEASE_STORE_FILE")).also {
+                    require(it.exists()) { "signing.properties: FERAL_RELEASE_STORE_FILE points to a missing keystore: $it" }
+                }
+                storePassword = required("FERAL_RELEASE_STORE_PASSWORD")
+                keyAlias = required("FERAL_RELEASE_KEY_ALIAS")
+                keyPassword = required("FERAL_RELEASE_KEY_PASSWORD")
+            }
+        }
     }
 
     val baseAppName = BuildTimeConfig.APPLICATION_NAME
@@ -122,7 +140,9 @@ android {
                 "login_redirect_scheme",
                 oAuthRedirectSchemeBase,
             )
-            signingConfig = signingConfigs.getByName("debug")
+            // No signing.properties (CI, feral-release.yml) => no signing config at all =>
+            // AGP packages *-unsigned.apk; signed later on eheyu (tools/feral/sign-release.sh).
+            signingConfig = signingConfigs.getByName("release").takeIf { rootProject.file("signing.properties").exists() }
 
             optimization {
                 enable = true
@@ -236,9 +256,14 @@ androidComponents {
 
             // Stores the value of abiCodes that is associated with the ABI for this variant.
             val abiCode = abiVersionCodes[name] ?: 0
-            // Assigns the new version code to output.versionCode, which changes the version code
-            // for only the output APK, not for the variant itself.
-            output.versionCode.set((output.versionCode.orNull ?: 0) * 10 + abiCode)
+            // Modified by Feral: every APK of a release (all ABI splits + universal) gets the SAME
+            // versionCode (base x 10, ABI digit always 0). Distinct per-ABI codes only matter for Google
+            // Play; for sideloaded APKs they make "universal over split" of the same release an
+            // INSTALL_FAILED_VERSION_DOWNGRADE ("App not installed"). The x10 keeps codes above the
+            // releases shipped with the old scheme (<= 26.08.4, e.g. 202608042) and keeps the in-app
+            // updater's release ordinal (versionCode / 10) unchanged. `abiCode` is kept for reference.
+            check(abiCode in 0..4)
+            output.versionCode.set((output.versionCode.orNull ?: 0) * 10)
         }
     }
 

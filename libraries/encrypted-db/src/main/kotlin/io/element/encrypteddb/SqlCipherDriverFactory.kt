@@ -6,6 +6,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+// Modified by Feral: onUpgrade calls super (runs SQLDelight migrations) — see SqlCipherDriverFactory.create.
+
 package io.element.encrypteddb
 
 import android.content.Context
@@ -55,6 +57,11 @@ class SqlCipherDriverFactory(
                 schema
             ) {
             override fun onUpgrade(db: SupportSQLiteDatabase, oldVersion: Int, newVersion: Int) {
+                // Modified by Feral: the base callback is what runs schema.migrate(); without this call
+                // the .sqm migrations never execute on upgrade and the first query on a new column
+                // crashes (e.g. "no such column: SessionData.position" on 25.05.4 -> 26.08.x).
+                // Reported upstream (element-hq/element-x-android).
+                super.onUpgrade(db, oldVersion, newVersion)
                 onUpgradeCallback?.invoke(db, oldVersion, newVersion)
             }
         })

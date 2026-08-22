@@ -5,10 +5,11 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
+// Modified by Feral: account creation is external (feralisme.fr/inscription).
 
 package io.element.android.appconfig
 
 object OnBoardingConfig {
     /** Whether the user can create an account using the app. */
-    const val CAN_CREATE_ACCOUNT = true
+    const val CAN_CREATE_ACCOUNT = false
 }

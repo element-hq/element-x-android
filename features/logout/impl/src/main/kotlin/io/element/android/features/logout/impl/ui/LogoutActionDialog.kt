@@ -6,6 +6,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+// Modified by Feral: "Log out anyway" wording (Feral-owned string).
+
 package io.element.android.features.logout.impl.ui
 
 import androidx.compose.runtime.Composable
@@ -37,7 +39,7 @@ fun LogoutActionDialog(
             RetryDialog(
                 title = stringResource(id = CommonStrings.dialog_title_error),
                 content = stringResource(id = CommonStrings.error_unknown),
-                retryText = stringResource(id = CommonStrings.action_signout_anyway),
+                retryText = stringResource(id = CommonStrings.feral_logout_anyway),
                 onRetry = onForceLogoutClick,
                 onDismiss = onDismissDialog,
             )

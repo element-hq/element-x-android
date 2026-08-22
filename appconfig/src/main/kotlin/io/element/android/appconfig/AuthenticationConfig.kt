@@ -5,11 +5,12 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
+// Modified by Feral: no public/default matrix.org provider (members-only).
 
 package io.element.android.appconfig
 
 object AuthenticationConfig {
-    const val MATRIX_ORG_URL = "https://matrix.org"
+    const val MATRIX_ORG_URL = ""
 
     /**
      * URL with some docs that explain what's sliding sync and how to add it to your home server.

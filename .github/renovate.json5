@@ -50,5 +50,17 @@
           "* * 1 * *",
       ]
     },
+    {
+      // Feral: element-call-embedded is carried by the upstream tag merge; a standalone bump is review-required.
+      "matchPackageNames": [
+        "io.element.android:element-call-embedded",
+      ],
+      "automerge": false,
+      "groupName": "element-call-embedded",
+      "labels": [
+        "PR-Dependencies",
+        "element-call",
+      ],
+    },
   ],
 }

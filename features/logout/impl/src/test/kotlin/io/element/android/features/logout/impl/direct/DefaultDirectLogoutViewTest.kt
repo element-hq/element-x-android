@@ -36,7 +36,7 @@ class DefaultDirectLogoutViewTest : RobolectricTest() {
                 eventSink = eventsRecorder,
             )
         )
-        clickOn(CommonStrings.action_signout)
+        clickOn(CommonStrings.feral_logout_action)
         eventsRecorder.assertSingle(DirectLogoutEvents.Logout(false))
     }
 
@@ -76,7 +76,7 @@ class DefaultDirectLogoutViewTest : RobolectricTest() {
                 eventSink = eventsRecorder,
             )
         )
-        clickOn(CommonStrings.action_signout_anyway)
+        clickOn(CommonStrings.feral_logout_anyway)
         eventsRecorder.assertSingle(DirectLogoutEvents.Logout(true))
     }
 

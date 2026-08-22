@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
+// Modified by Feral: PrivatePushSetup step (features/privatepush).
 
 package io.element.android.features.ftue.impl
 
@@ -17,8 +18,13 @@ import io.element.android.features.ftue.impl.state.FtueStep
 import io.element.android.features.ftue.impl.state.InternalFtueState
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.features.lockscreen.test.FakeLockScreenService
+import io.element.android.features.privatepush.api.PrivatePushService
+import io.element.android.features.privatepush.api.PrivatePushStatus
+import io.element.android.features.privatepush.test.FakePrivatePushService
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.libraries.permissions.api.PermissionStateProvider
 import io.element.android.libraries.permissions.test.FakePermissionStateProvider
@@ -107,11 +113,13 @@ class DefaultFtueServiceTest {
         val analyticsService = FakeAnalyticsService()
         val permissionStateProvider = FakePermissionStateProvider(permissionGranted = false)
         val lockScreenService = FakeLockScreenService()
+        val privatePushService = FakePrivatePushService()
         val service = createDefaultFtueService(
             sessionVerificationService = sessionVerificationService,
             analyticsService = analyticsService,
             permissionStateProvider = permissionStateProvider,
             lockScreenService = lockScreenService,
+            privatePushService = privatePushService,
         )
 
         service.ftueStepStateFlow.test {
@@ -125,6 +133,11 @@ class DefaultFtueServiceTest {
             assertThat(awaitItem()).isEqualTo(InternalFtueState.Incomplete(FtueStep.NotificationsOptIn))
             permissionStateProvider.setPermissionGranted()
             // Simulate event from NotificationsOptInNode.Callback.onNotificationsOptInFinished
+            service.updateFtueStep()
+            // Feral: private notifications setup
+            assertThat(awaitItem()).isEqualTo(InternalFtueState.Incomplete(FtueStep.PrivatePushSetup))
+            privatePushService.setDismissed(A_SESSION_ID, true)
+            // Simulate event from PrivatePushEntryPoint.Callback.onLater()
             service.updateFtueStep()
             // Entering PIN code
             assertThat(awaitItem()).isEqualTo(InternalFtueState.Incomplete(FtueStep.LockscreenSetup))
@@ -190,6 +203,48 @@ class DefaultFtueServiceTest {
             assertThat(awaitItem()).isEqualTo(InternalFtueState.Complete)
         }
     }
+
+    @Test
+    fun `feral - private push setup is skipped when the notification permission was refused`() = runTest {
+        val sessionVerificationService = FakeSessionVerificationService()
+        val analyticsService = FakeAnalyticsService()
+        val permissionStateProvider = FakePermissionStateProvider(permissionGranted = false)
+        val lockScreenService = FakeLockScreenService()
+        val service = createDefaultFtueService(
+            sessionVerificationService = sessionVerificationService,
+            analyticsService = analyticsService,
+            permissionStateProvider = permissionStateProvider,
+            lockScreenService = lockScreenService,
+            privatePushService = FakePrivatePushService(),
+        )
+        sessionVerificationService.emitVerifiedStatus(SessionVerifiedStatus.Verified)
+        permissionStateProvider.setPermissionDenied(android.Manifest.permission.POST_NOTIFICATIONS, true)
+
+        service.ftueStepStateFlow.test {
+            assertThat(awaitItem()).isEqualTo(InternalFtueState.Unknown)
+            assertThat(awaitItem()).isEqualTo(InternalFtueState.Incomplete(FtueStep.LockscreenSetup))
+        }
+    }
+
+    @Test
+    fun `feral - private push setup is shown on pre-13 devices when required`() = runTest {
+        val sessionVerificationService = FakeSessionVerificationService()
+        val analyticsService = FakeAnalyticsService()
+        val lockScreenService = FakeLockScreenService()
+        val service = createDefaultFtueService(
+            sdkIntVersion = Build.VERSION_CODES.M,
+            sessionVerificationService = sessionVerificationService,
+            analyticsService = analyticsService,
+            lockScreenService = lockScreenService,
+            privatePushService = FakePrivatePushService(),
+        )
+        sessionVerificationService.emitVerifiedStatus(SessionVerifiedStatus.Verified)
+
+        service.ftueStepStateFlow.test {
+            assertThat(awaitItem()).isEqualTo(InternalFtueState.Unknown)
+            assertThat(awaitItem()).isEqualTo(InternalFtueState.Incomplete(FtueStep.PrivatePushSetup))
+        }
+    }
 }
 
 internal fun TestScope.createDefaultFtueService(
@@ -200,6 +255,9 @@ internal fun TestScope.createDefaultFtueService(
     sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
     // First version where notification permission is required
     sdkIntVersion: Int = Build.VERSION_CODES.TIRAMISU,
+    sessionId: SessionId = A_SESSION_ID,
+    // Feral: private by default so the upstream assertions are unchanged
+    privatePushService: PrivatePushService = FakePrivatePushService(statusResult = PrivatePushStatus.Private),
 ) = DefaultFtueService(
     sessionCoroutineScope = backgroundScope,
     sessionVerificationService = sessionVerificationService,
@@ -208,4 +266,6 @@ internal fun TestScope.createDefaultFtueService(
     permissionStateProvider = permissionStateProvider,
     lockScreenService = lockScreenService,
     sessionPreferencesStore = sessionPreferencesStore,
+    sessionId = sessionId,
+    privatePushService = privatePushService,
 )
