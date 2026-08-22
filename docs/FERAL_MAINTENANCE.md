@@ -316,7 +316,15 @@ vers le serveur ntfy Feral depuis un foreground service.
     premier plan (Initializer androidx.startup + `ProcessLifecycleOwner`).
   - Test de diagnostic « Connexion Feral » (service + socket + optimisation batterie,
     correctif = demande d'exemption Doze).
-  - Les membres déjà sur ntfy restent sur UnifiedPush (nom stocké) : aucune migration.
+  - Les membres déjà sur ntfy (app installée) restent sur UnifiedPush (nom stocké) :
+    aucune migration. Si le fournisseur stocké n'a plus de distributeur (ntfy
+    désinstallée / jamais configurée), `NoDistributorsAvailable` déclenche d'abord
+    `PrivatePushService.fallBackToBuiltIn()` (bascule silencieuse vers Feral via
+    `PushService.registerWith`, qui met aussi à jour le nom stocké) ; le parcours ntfy
+    n'est montré que si cette bascule échoue (route `LoggedInFlowNode`).
+  - Session neuve (aucun nom stocké) : `DefaultPushService` prend le premier fournisseur
+    (par `index`) ayant un distributeur → Feral (0) avant UnifiedPush (1), même si ntfy
+    est installée : intégré par défaut, ntfy uniquement par choix explicite dans Réglages.
 - `features/privatepush` : statut `BuiltIn` (« Actives (intégré) ») ; l'étape FTUE
   ntfy n'apparaît plus que si le fournisseur courant n'est pas Feral **et** qu'aucun
   distributeur n'est installé (quasi jamais) ; le parcours reste accessible depuis

@@ -10,6 +10,7 @@ package io.element.android.features.privatepush.test
 
 import io.element.android.features.privatepush.api.PrivatePushService
 import io.element.android.features.privatepush.api.PrivatePushStatus
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,6 +23,8 @@ class FakePrivatePushService(
     val dismissed = MutableStateFlow(false)
     val requests = MutableStateFlow<Set<SessionId>>(emptySet())
     val statusCalls = mutableListOf<SessionId>()
+    var fallBackToBuiltInResult: Boolean = false
+    val fallBackToBuiltInCalls = mutableListOf<SessionId>()
 
     override suspend fun status(sessionId: SessionId): PrivatePushStatus {
         statusCalls += sessionId
@@ -30,6 +33,11 @@ class FakePrivatePushService(
 
     override suspend fun shouldShowSetup(sessionId: SessionId): Boolean =
         statusResult !is PrivatePushStatus.Private && statusResult !is PrivatePushStatus.BuiltIn && !dismissed.value
+
+    override suspend fun fallBackToBuiltIn(matrixClient: MatrixClient): Boolean {
+        fallBackToBuiltInCalls += matrixClient.sessionId
+        return fallBackToBuiltInResult
+    }
 
     override fun isDismissed(sessionId: SessionId): Flow<Boolean> = dismissed
 

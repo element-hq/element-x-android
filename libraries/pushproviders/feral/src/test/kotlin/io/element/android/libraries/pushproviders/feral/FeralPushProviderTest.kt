@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.push.test.FakePusherSubscriber
 import io.element.android.libraries.pushproviders.api.Config
+import io.element.android.libraries.pushproviders.unifiedpush.UnifiedPushConfig
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStore
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStoreFactory
 import io.element.android.libraries.pushstore.test.userpushstore.clientsecret.FakePushClientSecret
@@ -54,6 +55,10 @@ class FeralPushProviderTest {
     fun `provider identity`() {
         val provider = Fixture().createProvider()
         assertThat(provider.index).isEqualTo(0)
+        // DefaultPushService picks the first provider (by index) with a distributor for a fresh session:
+        // the built-in one always has one, so it wins over UnifiedPush even when ntfy is installed.
+        assertThat(provider.index).isLessThan(UnifiedPushConfig.INDEX)
+        assertThat(provider.getDistributors()).isNotEmpty()
         assertThat(provider.name).isEqualTo("Feral")
         assertThat(provider.supportMultipleDistributors).isFalse()
         assertThat(provider.getDistributors()).containsExactly(FeralPushProvider.distributor)

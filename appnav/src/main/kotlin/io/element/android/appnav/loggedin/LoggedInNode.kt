@@ -32,8 +32,11 @@ class LoggedInNode(
 ) {
     interface Callback : Plugin {
         fun navigateToNotificationTroubleshoot()
-        /** Returns false when the flow could not be shown (caller falls back to the upstream dialog). */
-        fun navigateToPrivatePushSetup(): Boolean
+        /**
+         * Tries the built-in Feral provider first (silent), then the ntfy flow.
+         * Returns false when neither could handle it (caller falls back to the upstream dialog).
+         */
+        suspend fun navigateToPrivatePushSetup(): Boolean
     }
 
     private val callback: Callback = callback()

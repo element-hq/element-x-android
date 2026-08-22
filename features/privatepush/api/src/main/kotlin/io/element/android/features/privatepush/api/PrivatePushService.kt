@@ -8,6 +8,7 @@
 
 package io.element.android.features.privatepush.api
 
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.flow.Flow
 
@@ -21,6 +22,14 @@ interface PrivatePushService {
 
     /** true when the FTUE step should be shown: enabled && status != Private && !dismissed. */
     suspend fun shouldShowSetup(sessionId: SessionId): Boolean
+
+    /**
+     * Silently register the built-in Feral provider (no distributor app needed), used when the stored
+     * provider has no usable distributor (ntfy uninstalled or never configured). Also updates the stored
+     * provider name. Returns false when the built-in provider is unavailable or the registration failed:
+     * only then is the ntfy flow worth showing.
+     */
+    suspend fun fallBackToBuiltIn(matrixClient: MatrixClient): Boolean
 
     /** "Later" flag, persisted per session. */
     fun isDismissed(sessionId: SessionId): Flow<Boolean>

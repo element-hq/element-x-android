@@ -13,7 +13,9 @@ import io.element.android.appconfig.FeralPushConfig
 import io.element.android.appconfig.PrivatePushConfig
 import io.element.android.features.privatepush.api.PrivatePushStatus
 import io.element.android.features.privatepush.impl.system.FakeInstalledAppsDetector
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.preferences.test.FakePreferenceDataStoreFactory
 import io.element.android.libraries.push.test.FakePushService
 import io.element.android.libraries.pushproviders.api.Distributor
@@ -30,11 +32,12 @@ class DefaultPrivatePushServiceTest {
     private fun createService(
         ntfyInstalled: Boolean = true,
         provider: PushProvider? = null,
-    ) = DefaultPrivatePushService(
-        pushService = FakePushService(
+        pushService: FakePushService = FakePushService(
             availablePushProviders = listOfNotNull(provider),
             currentPushProvider = { provider },
         ),
+    ) = DefaultPrivatePushService(
+        pushService = pushService,
         installedAppsDetector = FakeInstalledAppsDetector(
             if (ntfyInstalled) mutableMapOf(PrivatePushConfig.NTFY_PACKAGE to 63L) else mutableMapOf()
         ),
@@ -119,6 +122,54 @@ class DefaultPrivatePushServiceTest {
         assertThat(notSetUp.shouldShowSetup(A_SESSION_ID)).isFalse()
         notSetUp.setDismissed(A_SESSION_ID, false)
         assertThat(notSetUp.shouldShowSetup(A_SESSION_ID)).isTrue()
+    }
+
+    @Test
+    fun `fallBackToBuiltIn registers the built-in provider when the stored one has no distributor`() = runTest {
+        // Stored = UnifiedPush, ntfy uninstalled: no distributor, NoDistributorsAvailable upstream.
+        val unifiedPush = aProvider(distributor = null, endpoint = null)
+        val builtIn = aBuiltInProvider()
+        val registrations = mutableListOf<Triple<MatrixClient, PushProvider, Distributor>>()
+        val pushService = FakePushService(
+            availablePushProviders = listOf(builtIn, unifiedPush),
+            currentPushProvider = { unifiedPush },
+            registerWithLambda = { client, provider, distributor -> registrations += Triple(client, provider, distributor); Result.success(Unit) },
+        )
+        val service = createService(ntfyInstalled = false, pushService = pushService)
+        assertThat(service.shouldShowSetup(A_SESSION_ID)).isTrue()
+
+        assertThat(service.fallBackToBuiltIn(FakeMatrixClient())).isTrue()
+        assertThat(registrations).hasSize(1)
+        assertThat(registrations.single().second).isSameInstanceAs(builtIn)
+        assertThat(registrations.single().third).isEqualTo(Distributor(FeralPushConfig.DISTRIBUTOR_VALUE, FeralPushConfig.DISTRIBUTOR_NAME))
+        // The built-in provider is now the current one: no ntfy flow.
+        assertThat(service.status(A_SESSION_ID)).isEqualTo(PrivatePushStatus.BuiltIn)
+        assertThat(service.shouldShowSetup(A_SESSION_ID)).isFalse()
+    }
+
+    @Test
+    fun `fallBackToBuiltIn returns false when the registration fails, the flow is then shown`() = runTest {
+        val unifiedPush = aProvider(distributor = null, endpoint = null)
+        val pushService = FakePushService(
+            availablePushProviders = listOf(aBuiltInProvider(), unifiedPush),
+            currentPushProvider = { unifiedPush },
+            registerWithLambda = { _, _, _ -> Result.failure(IllegalStateException("network")) },
+        )
+        val service = createService(ntfyInstalled = false, pushService = pushService)
+        assertThat(service.fallBackToBuiltIn(FakeMatrixClient())).isFalse()
+        assertThat(service.status(A_SESSION_ID)).isEqualTo(PrivatePushStatus.NotSetUp(PrivatePushStatus.NotSetUp.Reason.NtfyNotInstalled))
+        assertThat(service.shouldShowSetup(A_SESSION_ID)).isTrue()
+    }
+
+    @Test
+    fun `fallBackToBuiltIn returns false without a built-in provider`() = runTest {
+        val unifiedPush = aProvider(distributor = null, endpoint = null)
+        val pushService = FakePushService(
+            availablePushProviders = listOf(unifiedPush),
+            currentPushProvider = { unifiedPush },
+            registerWithLambda = { _, _, _ -> error("must not register") },
+        )
+        assertThat(createService(ntfyInstalled = false, pushService = pushService).fallBackToBuiltIn(FakeMatrixClient())).isFalse()
     }
 
     @Test

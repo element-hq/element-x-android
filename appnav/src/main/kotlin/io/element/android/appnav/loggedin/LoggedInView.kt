@@ -40,7 +40,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun LoggedInView(
     state: LoggedInState,
     navigateToNotificationTroubleshoot: () -> Unit,
-    navigateToPrivatePushSetup: () -> Boolean,
+    navigateToPrivatePushSetup: suspend () -> Boolean,
     modifier: Modifier = Modifier
 ) {
     OnLifecycleEvent { _, event ->
@@ -64,8 +64,9 @@ fun LoggedInView(
         is AsyncData.Success -> Unit
         is AsyncData.Failure -> {
             val failure = state.pusherRegistrationState.errorOrNull()
-            // Feral: no ntfy installed -> guided setup flow instead of the generic dialog. When the
-            // flow cannot be shown (FTUE still running), fall back to the upstream dialog below.
+            // Feral: no distributor app -> silent fallback to the built-in provider, else the guided
+            // ntfy setup flow instead of the generic dialog. When neither applies (FTUE still running),
+            // fall back to the upstream dialog below.
             var setupNotShown by remember(failure) { mutableStateOf(false) }
             if (failure is PusherRegistrationFailure.NoDistributorsAvailable && !state.ignoreRegistrationError && !setupNotShown) {
                 LaunchedEffect(failure) {

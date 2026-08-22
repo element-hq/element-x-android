@@ -18,6 +18,7 @@ import io.element.android.appconfig.PrivatePushConfig
 import io.element.android.features.privatepush.api.PrivatePushService
 import io.element.android.features.privatepush.api.PrivatePushStatus
 import io.element.android.features.privatepush.impl.system.InstalledAppsDetector
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import io.element.android.libraries.push.api.PushService
@@ -28,6 +29,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+import timber.log.Timber
 
 /**
  * "BuiltIn" == the Feral built-in provider (libraries/pushproviders/feral) is the registered one.
@@ -87,6 +89,20 @@ class DefaultPrivatePushService(
         if (currentProvider.name == FeralPushConfig.NAME) return false
         if (installedAppsDetector.isInstalled(PrivatePushConfig.NTFY_PACKAGE)) return false
         return !isDismissed(sessionId).first()
+    }
+
+    override suspend fun fallBackToBuiltIn(matrixClient: MatrixClient): Boolean {
+        val builtIn = pushService.getAvailablePushProviders().firstOrNull { it.name == FeralPushConfig.NAME }
+        if (builtIn == null) {
+            Timber.w("Built-in Feral push provider not available, cannot fall back")
+            return false
+        }
+        val distributor = builtIn.getDistributors().firstOrNull() ?: return false
+        // PushService.registerWith unregisters the previous provider, stores the new name, then registers.
+        return pushService.registerWith(matrixClient, builtIn, distributor)
+            .onSuccess { Timber.i("Fell back to the built-in Feral push provider") }
+            .onFailure { Timber.w(it, "Unable to fall back to the built-in Feral push provider") }
+            .isSuccess
     }
 
     override fun isDismissed(sessionId: SessionId): Flow<Boolean> =
