@@ -65,8 +65,8 @@ fun PollHistoryView(
         state.eventSink(PollHistoryEvents.LoadMore)
     }
 
-    fun onSelectAnswer(pollStartId: EventId, answerId: String) {
-        state.eventSink(PollHistoryEvents.SelectPollAnswer(pollStartId, answerId))
+    fun onSelectAnswer(pollStartId: EventId, answerIds: List<String>) {
+        state.eventSink(PollHistoryEvents.SelectPollAnswer(pollStartId, answerIds))
     }
 
     fun onEndPoll(pollStartId: EventId) {
@@ -151,7 +151,7 @@ private fun PollHistoryList(
     pollHistoryItems: ImmutableList<PollHistoryItem>,
     hasMoreToLoad: Boolean,
     isLoading: Boolean,
-    onSelectAnswer: (pollStartId: EventId, answerId: String) -> Unit,
+    onSelectAnswer: (pollStartId: EventId, answerIds: List<String>) -> Unit,
     onEditPoll: (pollStartId: EventId) -> Unit,
     onEndPoll: (pollStartId: EventId) -> Unit,
     onLoadMore: () -> Unit,
@@ -222,7 +222,7 @@ private fun LoadMoreButton(isLoading: Boolean, onClick: () -> Unit) {
 @Composable
 private fun PollHistoryItemRow(
     pollHistoryItem: PollHistoryItem,
-    onSelectAnswer: (pollStartId: EventId, answerId: String) -> Unit,
+    onSelectAnswer: (pollStartId: EventId, answerIds: List<String>) -> Unit,
     onEditPoll: (pollStartId: EventId) -> Unit,
     onEndPoll: (pollStartId: EventId) -> Unit,
     modifier: Modifier = Modifier,

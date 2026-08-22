@@ -23,6 +23,6 @@ interface SendPollResponseAction {
     suspend fun execute(
         timeline: Timeline,
         pollStartId: EventId,
-        answerId: String
+        answerIds: List<String>
     ): Result<Unit>
 }
