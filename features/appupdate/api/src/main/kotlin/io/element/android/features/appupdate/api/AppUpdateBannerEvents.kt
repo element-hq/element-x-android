@@ -10,5 +10,5 @@ package io.element.android.features.appupdate.api
 
 sealed interface AppUpdateBannerEvents {
     data object StartUpdate : AppUpdateBannerEvents
-    data object Dismiss : AppUpdateBannerEvents
+    // No Dismiss: Feral updates are mandatory; the banner stays until the update is installed.
 }

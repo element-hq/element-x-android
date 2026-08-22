@@ -99,12 +99,6 @@ class AppUpdateChecker(
         update
     }
 
-    suspend fun ignoreVersion(versionCode: Long) {
-        store.edit { editable ->
-            editable[ignoredVersionKey] = versionCode
-            editable.remove(pendingUpdateKey)
-        }
-    }
 
     private fun pendingFromStore(encoded: String?, ignored: Long?): AvailableUpdate? {
         if (encoded == null) return null

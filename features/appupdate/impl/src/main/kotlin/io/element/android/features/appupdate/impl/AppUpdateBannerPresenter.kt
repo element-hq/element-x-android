@@ -14,7 +14,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
 import io.element.android.features.appupdate.api.AppUpdateBannerEvents
@@ -22,7 +21,6 @@ import io.element.android.features.appupdate.api.AppUpdateBannerState
 import io.element.android.features.appupdate.api.AppUpdateStep
 import io.element.android.features.appupdate.api.AvailableUpdate
 import io.element.android.libraries.architecture.Presenter
-import kotlinx.coroutines.launch
 
 /**
  * Presents the "update available" banner. The download itself is owned by the
@@ -41,7 +39,6 @@ class AppUpdateBannerPresenter(
 ) : Presenter<AppUpdateBannerState> {
     @Composable
     override fun present(): AppUpdateBannerState {
-        val coroutineScope = rememberCoroutineScope()
         var availableUpdate by remember { mutableStateOf<AvailableUpdate?>(null) }
         val step by appUpdateManager.step.collectAsState()
         val pendingAutoInstall by appUpdateManager.pendingAutoInstall.collectAsState()
@@ -67,16 +64,6 @@ class AppUpdateBannerPresenter(
                         is AppUpdateStep.ReadyToInstall -> appUpdateManager.install()
                         AppUpdateStep.Idle,
                         AppUpdateStep.Failed -> appUpdateManager.startDownload(update)
-                    }
-                }
-                AppUpdateBannerEvents.Dismiss -> {
-                    val update = availableUpdate
-                    availableUpdate = null
-                    appUpdateManager.cancelAndReset()
-                    if (update != null) {
-                        coroutineScope.launch {
-                            appUpdateChecker.ignoreVersion(update.versionCode)
-                        }
                     }
                 }
             }

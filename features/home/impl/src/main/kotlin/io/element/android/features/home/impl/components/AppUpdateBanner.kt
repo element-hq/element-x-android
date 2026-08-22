@@ -50,7 +50,8 @@ internal fun AppUpdateBanner(
         type = AnnouncementType.Actionable(
             actionText = actionText,
             onActionClick = { state.eventSink(AppUpdateBannerEvents.StartUpdate) },
-            onDismissClick = { state.eventSink(AppUpdateBannerEvents.Dismiss) },
+            // Feral: updates are mandatory — the banner cannot be dismissed and stays until installed.
+            onDismissClick = null,
         ),
     )
 }
