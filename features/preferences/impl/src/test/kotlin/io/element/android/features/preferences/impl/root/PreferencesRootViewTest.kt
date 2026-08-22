@@ -387,7 +387,8 @@ class PreferencesRootViewTest : RobolectricTest() {
     }
 
     @Test
-    fun `click on Remove this device invokes the expected callback`() = runAndroidComposeUiTest {
+    fun `click on Log out shows the explanation and Continue invokes the expected callback`() = runAndroidComposeUiTest {
+        // Feral: "Log out" first opens a pop-up (what it does + recovery key reminder); "Continue" proceeds.
         val eventsRecorder = EventsRecorder<PreferencesRootEvent>(expectEvents = false)
         ensureCalledOnce { callback ->
             setView(
@@ -396,8 +397,26 @@ class PreferencesRootViewTest : RobolectricTest() {
                 ),
                 onSignOutClick = callback,
             )
-            val text = activity!!.getString(CommonStrings.action_signout)
-            onNode(hasText(text) and hasClickAction()).performScrollTo().performClick()
+            val act = requireNotNull(activity)
+            onNode(hasText(act.getString(CommonStrings.feral_logout_action)) and hasClickAction()).performScrollTo().performClick()
+            onNode(hasText(act.getString(CommonStrings.feral_logout_explanation))).assertExists()
+            onNode(hasText(act.getString(CommonStrings.action_continue)) and hasClickAction()).performClick()
+        }
+    }
+
+    @Test
+    fun `click on Check my recovery key in the log out pop-up opens secure backup`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<PreferencesRootEvent>(expectEvents = false)
+        ensureCalledOnce { callback ->
+            setView(
+                aPreferencesRootState(
+                    eventSink = eventsRecorder,
+                ),
+                onSecureBackupClick = callback,
+            )
+            val act = requireNotNull(activity)
+            onNode(hasText(act.getString(CommonStrings.feral_logout_action)) and hasClickAction()).performScrollTo().performClick()
+            onNode(hasText(act.getString(CommonStrings.feral_logout_check_recovery_key)) and hasClickAction()).performClick()
         }
     }
 

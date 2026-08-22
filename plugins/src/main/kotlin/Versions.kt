@@ -45,9 +45,9 @@ private const val versionMonth = 8
  * Release number in the month. Value must be in [0,99].
  * Do not update this value. it is updated by the release script.
  */
-// Modified by Feral: 26.08.4 = Feral hotfixes on upstream v26.08.2 (updater crash, DB migrations). Reset to
+// Modified by Feral: 26.08.5 = Feral release on upstream v26.08.2 (hotfixes, private push, log-out UX). Reset to
 // upstream's value at the next sync; if upstream ever tags the same number, bump again.
-private const val versionReleaseNumber = 4
+private const val versionReleaseNumber = 5
 
 object Versions {
     /**

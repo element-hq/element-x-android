@@ -63,7 +63,8 @@ fun ChooseSelfVerificationModeView(
                 title = {},
                 actions = {
                     TextButton(
-                        text = stringResource(CommonStrings.action_signout),
+                        // Modified by Feral: "Log out" wording (Feral-owned string).
+                        text = stringResource(CommonStrings.feral_logout_action),
                         onClick = { state.eventSink(ChooseSelfVerificationModeEvent.SignOut) }
                     )
                 }
