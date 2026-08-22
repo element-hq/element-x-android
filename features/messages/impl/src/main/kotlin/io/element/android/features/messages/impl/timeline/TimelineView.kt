@@ -103,6 +103,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.animateScrollToItemCenter
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.testtags.TestTag
@@ -137,6 +138,8 @@ fun TimelineView(
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
     onJoinCallClick: (isAudioCall: Boolean) -> Unit,
+    onMemberClick: (UserId) -> Unit = {},
+    onRoomStateClick: () -> Unit = {},
     modifier: Modifier = Modifier,
     lazyListState: LazyListState = rememberLazyListState(),
     forceJumpToBottomVisibility: Boolean = false,
@@ -227,6 +230,8 @@ fun TimelineView(
                         onReadReceiptClick = onReadReceiptClick,
                         onSwipeToReply = onSwipeToReply,
                         onJoinCallClick = onJoinCallClick,
+                        onMemberClick = onMemberClick,
+                        onRoomStateClick = onRoomStateClick,
                         eventSink = state.eventSink,
                     )
                 }
@@ -610,6 +615,8 @@ internal fun TimelineViewPreview(
             onJoinCallClick = {},
             onMoreReactionsClick = {},
             onReadReceiptClick = {},
+            onMemberClick = {},
+            onRoomStateClick = {},
             onGalleryItemClick = { _, _ -> },
             forceJumpToBottomVisibility = true,
         )
