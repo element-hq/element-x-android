@@ -29,6 +29,15 @@ import java.util.Locale
 @ContributesBinding(AppScope::class, replaces = [DefaultEnterpriseService::class])
 class FeralEnterpriseService : EnterpriseService by DefaultEnterpriseService() {
     /**
+     * Private push: the Feral ntfy server (https://ntfy.feralisme.fr) is both the UnifiedPush
+     * server members subscribe to (ntfy app) and the Matrix push gateway Synapse posts to.
+     * Used as the gateway when UnifiedPush endpoint discovery does not provide one, instead of
+     * upstream's public default (matrix.gateway.unifiedpush.org). Pushes carry ids only, never
+     * message content. Server setup: docs/FERAL_MAINTENANCE.md §11 / feralism-brain.
+     */
+    override fun unifiedPushDefaultPushGateway(): String = FERAL_PUSH_GATEWAY_URL
+
+    /**
      * A Feral regional Matrix homeserver the app is allowed to connect to.
      * `locales` maps ISO language/country codes to this server for locale-based
      * pre-selection in onboarding.
@@ -84,3 +93,5 @@ class FeralEnterpriseService : EnterpriseService by DefaultEnterpriseService() {
         }
     }
 }
+
+internal const val FERAL_PUSH_GATEWAY_URL = "https://ntfy.feralisme.fr/_matrix/push/v1/notify"

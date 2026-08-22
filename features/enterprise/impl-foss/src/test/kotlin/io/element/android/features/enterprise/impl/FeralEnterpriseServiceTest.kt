@@ -62,7 +62,14 @@ class FeralEnterpriseServiceTest {
         assertThat(service.isEnterpriseUser(A_SESSION_ID)).isFalse()
         assertThat(service.isElementProEnforced("https://feralisme.fr")).isFalse()
         assertThat(service.firebasePushGateway()).isNull()
-        assertThat(service.unifiedPushDefaultPushGateway()).isNull()
+    }
+
+    @Test
+    fun `push goes through the Feral ntfy gateway, never a public one`() {
+        assertThat(service.unifiedPushDefaultPushGateway())
+            .isEqualTo("https://ntfy.feralisme.fr/_matrix/push/v1/notify")
+        assertThat(service.unifiedPushDefaultPushGateway()).doesNotContain("unifiedpush.org")
+        assertThat(service.unifiedPushDefaultPushGateway()).doesNotContain("matrix.org")
     }
 
     @Test

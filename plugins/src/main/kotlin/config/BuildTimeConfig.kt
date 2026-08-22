@@ -32,7 +32,8 @@ object BuildTimeConfig {
     val BUG_REPORT_APP_NAME: String? = null
     const val PUSH_CONFIG_INCLUDE_FIREBASE: Boolean = true
     const val PUSH_CONFIG_INCLUDE_UNIFIED_PUSH: Boolean = true
-    val PUSHER_APP_ID_RELEASE: String? = null
-    val PUSHER_APP_ID_DEBUG: String? = null
-    val PUSHER_APP_ID_NIGHTLY: String? = null
+    // Modified by Feral: pushers register under a Feral app id, not Element's im.vector.app.android.
+    val PUSHER_APP_ID_RELEASE: String? = "feral.app.android"
+    val PUSHER_APP_ID_DEBUG: String? = "feral.app.android.debug"
+    val PUSHER_APP_ID_NIGHTLY: String? = "feral.app.android.nightly"
 }
