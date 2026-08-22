@@ -16,7 +16,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import dev.zacsweers.metro.Inject
 import io.element.android.features.appupdate.api.AppUpdateBannerEvents
 import io.element.android.features.appupdate.api.AppUpdateBannerState
@@ -29,6 +28,11 @@ import kotlinx.coroutines.launch
  * Presents the "update available" banner. The download itself is owned by the
  * app-scoped [AppUpdateManager]; this presenter only mirrors its state and forwards
  * user intents, so navigating away from the room list never interrupts a download.
+ *
+ * ⚠ This presenter runs inside Molecule (HomeFlowNode.launchMolecule), NOT in a Compose UI
+ * composition: CompositionLocals such as LocalContext are NOT available here and reading
+ * them throws at runtime (it crashed 26.08.0 right after sign-in). Everything needing a
+ * Context lives in the injected manager/downloader.
  */
 @Inject
 class AppUpdateBannerPresenter(
@@ -37,7 +41,6 @@ class AppUpdateBannerPresenter(
 ) : Presenter<AppUpdateBannerState> {
     @Composable
     override fun present(): AppUpdateBannerState {
-        val activityContext = LocalContext.current
         val coroutineScope = rememberCoroutineScope()
         var availableUpdate by remember { mutableStateOf<AvailableUpdate?>(null) }
         val step by appUpdateManager.step.collectAsState()
@@ -51,7 +54,7 @@ class AppUpdateBannerPresenter(
         // A download that completes while the banner is on screen opens the installer once.
         LaunchedEffect(pendingAutoInstall) {
             if (pendingAutoInstall != null && appUpdateManager.consumePendingAutoInstall() != null) {
-                appUpdateManager.install(activityContext)
+                appUpdateManager.install()
             }
         }
 
@@ -61,7 +64,7 @@ class AppUpdateBannerPresenter(
                     val update = availableUpdate ?: return
                     when (step) {
                         is AppUpdateStep.Downloading -> Unit
-                        is AppUpdateStep.ReadyToInstall -> appUpdateManager.install(activityContext)
+                        is AppUpdateStep.ReadyToInstall -> appUpdateManager.install()
                         AppUpdateStep.Idle,
                         AppUpdateStep.Failed -> appUpdateManager.startDownload(update)
                     }

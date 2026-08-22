@@ -40,8 +40,12 @@ interface ApkDownloader {
     /** Streams download progress; ends with [AppUpdateStep.ReadyToInstall] or [AppUpdateStep.Failed]. */
     fun downloadAndVerify(update: AvailableUpdate): Flow<AppUpdateStep>
 
-    /** Hands the verified APK to the system package installer. Needs an Activity context. */
-    fun install(activityContext: Context, apkPath: String)
+    /**
+     * Hands the verified APK to the system package installer. Uses the application context
+     * with FLAG_ACTIVITY_NEW_TASK: presenters run inside Molecule (no Compose UI composition,
+     * so there is no LocalContext there) — reading LocalContext in a presenter crashes the app.
+     */
+    fun install(apkPath: String)
 
     /** Removes every downloaded APK (cancelled, dismissed or partial downloads). */
     fun deleteDownloads()
@@ -98,13 +102,13 @@ class DefaultApkDownloader(
         )
     }.flowOn(coroutineDispatchers.io)
 
-    override fun install(activityContext: Context, apkPath: String) {
+    override fun install(apkPath: String) {
         val authority = "${buildMeta.applicationId}.fileprovider"
         val uri = FileProvider.getUriForFile(context, authority, File(apkPath))
         val intent = Intent(Intent.ACTION_VIEW)
             .setDataAndType(uri, MimeTypes.Apk)
-            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        activityContext.startActivity(intent)
+            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(intent)
     }
 
     override fun deleteDownloads() {

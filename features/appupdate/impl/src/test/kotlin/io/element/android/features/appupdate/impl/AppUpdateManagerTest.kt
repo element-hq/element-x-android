@@ -8,13 +8,11 @@
 
 package io.element.android.features.appupdate.impl
 
-import android.content.Context
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.appupdate.api.AppUpdateStep
 import io.element.android.features.appupdate.api.AvailableUpdate
 import io.element.android.features.appupdate.api.anAvailableUpdate
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -46,7 +44,7 @@ class AppUpdateManagerTest {
             emit(outcome)
         }
 
-        override fun install(activityContext: Context, apkPath: String) {
+        override fun install(apkPath: String) {
             installed += apkPath
         }
 
@@ -133,13 +131,12 @@ class AppUpdateManagerTest {
     fun `install only opens the installer when an APK is ready`() = runTest {
         val downloader = FakeApkDownloader()
         val manager = createManager(downloader)
-        val context = mockk<Context>()
-        assertThat(manager.install(context)).isFalse()
+        assertThat(manager.install()).isFalse()
         assertThat(downloader.installed).isEmpty()
 
         manager.startDownload(anAvailableUpdate())
         advanceUntilIdle()
-        assertThat(manager.install(context)).isTrue()
+        assertThat(manager.install()).isTrue()
         assertThat(downloader.installed).containsExactly(APK_PATH)
     }
 

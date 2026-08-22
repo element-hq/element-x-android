@@ -8,7 +8,6 @@
 
 package io.element.android.features.appupdate.impl
 
-import android.content.Context
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
@@ -71,9 +70,9 @@ class AppUpdateManager(
     fun consumePendingAutoInstall(): String? = _pendingAutoInstall.getAndUpdate { null }
 
     /** Opens the package installer if a verified APK is ready. Returns false otherwise. */
-    fun install(activityContext: Context): Boolean {
+    fun install(): Boolean {
         val ready = _step.value as? AppUpdateStep.ReadyToInstall ?: return false
-        apkDownloader.install(activityContext, ready.apkPath)
+        apkDownloader.install(ready.apkPath)
         return true
     }
 
