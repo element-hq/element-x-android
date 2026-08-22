@@ -59,10 +59,14 @@ Trois remotes, une pile de customisation **mince** :
   (aucun fork EC — voir §6).
 
 Branches :
-- `feral/main` (cible : la branche de release = tag upstream stable + pile Feral ;
-  aujourd'hui le rôle est tenu par `develop`, à migrer).
-- `feral/sync/vYY.MM.N` : branche jetable ouverte par l'automatisation à chaque
-  sync, mergée après revue.
+- **`main`** = la branche de release : **dernier tag upstream stable + pile Feral**,
+  historique **linéaire** (depuis le sync v26.08.2 ; `git describe --tags --match 'v[0-9]*'`
+  donne le tag de base). Elle n'est jamais *mergée* : on la **re-pointe** après chaque
+  sync (`git push --force-with-lease origin feral/sync/<tag>:main`).
+- `develop` = ancien historique (fork + merge géant de 2026-03), conservé pour
+  référence (tag `archive/develop-before-v26.08.2-sync`), plus jamais buildé.
+- `feral/sync/vYY.MM.N` : branche jetable ouverte par l'automatisation (ou à la main)
+  à chaque sync ; CI Feral dessus ; devient `main` après revue.
 
 ## 4. Suivre l'upstream : rebase-onto-tag, depuis les TAGS
 
@@ -77,12 +81,19 @@ toutes les ~2 semaines (CalVer, `vYY.MM.N` ; les `-rc.N` sont ignorés).
 Boucle de sync :
 ```
 git fetch upstream --tags
-git checkout -b feral/sync/vYY.MM.N feral/main
-git rebase --onto vYY.MM.N <tag-de-base-courant>      # tag de base courant : voir le registre §12
-# résoudre les conflits (surtout features/login onboarding + account-provider)
+git checkout -b feral/sync/vYY.MM.N main
+BASE=$(git describe --tags --abbrev=0 --match 'v[0-9]*' --exclude '*-*')   # = registre §12
+git rebase --onto vYY.MM.N "$BASE"
+# résoudre les conflits (surtout features/login onboarding) ; `git rerere` rejoue les anciennes résolutions
+git diff "$BASE" vYY.MM.N -- features/enterprise/api   # nouveau membre EnterpriseService qui conditionne l'accès ? -> surcharger + test
 ./gradlew :features:enterprise:impl-foss:testDebugUnitTest :features:appupdate:impl:testDebugUnitTest   # garde-fous
 ./gradlew :app:assembleFdroidDebug                            # compile + graphe Metro
+git push origin feral/sync/vYY.MM.N                          # CI Feral ; revue
+git push --force-with-lease origin feral/sync/vYY.MM.N:main  # re-pointer main (jamais le bouton merge)
+# puis : mettre à jour §12, tag feral-v<ver> -> feral-release.yml (§11)
 ```
+L'automatisation (`feral-upstream-sync.yml`, §5) fait exactement ce rebase deux fois
+par semaine et ouvre une PR (rebase propre) ou une issue (conflits).
 Activer **`git rerere`** (`git config rerere.enabled true`) pour rejouer
 automatiquement les résolutions récurrentes.
 
@@ -120,7 +131,7 @@ assumé). Pas de ship automatique.
   versionCode par APK). Refuse de tourner si `signing.properties` existe. Signature
   sur eheyu — voir §11.
 - **`.github/workflows/feral-upstream-sync.yml`** — planifié : détecte le dernier
-  tag stable upstream et ouvre une **PR de sync** (merge propre) ou une **issue**
+  tag stable upstream et ouvre une **PR de sync** (rebase propre) ou une **issue**
   (conflits → rebase manuel). Ne ship jamais rien. Le lancer d'abord à la main
   (`Run workflow`) avant de compter sur le cron.
 - **Renovate** — `.github/renovate.json5` (fichier upstream, converti en JSON5 par

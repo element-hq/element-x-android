@@ -17,10 +17,11 @@ name: Feral CI
 on:
   push:
     branches:
+      - "main"
       - "feral/**"
   pull_request:
     branches:
-      - "develop"
+      - "main"
       - "feral/**"
   workflow_dispatch:
 
