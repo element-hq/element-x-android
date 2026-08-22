@@ -270,7 +270,6 @@ dependencies {
     if (isEnterpriseBuild) {
         allEnterpriseImpl(project)
         implementation(projects.appicon.enterprise)
-        implementation(project(":enterprise:features:enterprise:shared"))
     } else {
         implementation(projects.features.enterprise.implFoss)
         implementation(projects.appicon.element)
