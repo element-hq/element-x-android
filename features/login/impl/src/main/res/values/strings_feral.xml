@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Feral-owned strings. Kept OUT of the Localazy-managed translations.xml/localazy.xml
+     so upstream i18n regeneration can never drop or overwrite them. -->
+<resources>
+  <string name="screen_login_members_only_notice">"Access is reserved for members of the Feralist community"</string>
+  <!-- Brand title shown on the onboarding and "sign in with Element Classic" screens
+       (replaces upstream's screen_onboarding_welcome_title). Brand name: not translated. -->
+  <string name="feral_onboarding_welcome_title" translatable="false">"FERAL"</string>
+  <!-- Subtitle under the FERAL title on the onboarding screen; the view upper-cases it. -->
+  <string name="feral_onboarding_welcome_subtitle">"for feralists"</string>
+</resources>

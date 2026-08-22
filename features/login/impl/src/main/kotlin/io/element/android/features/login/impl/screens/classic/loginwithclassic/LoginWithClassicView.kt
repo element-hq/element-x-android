@@ -3,6 +3,9 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
+ *
+ * Modified by Feral: header shows the Feral logo and the Feral-owned brand title
+ * instead of the Element logo / "Be in your element".
  */
 
 package io.element.android.features.login.impl.screens.classic.loginwithclassic
@@ -93,20 +96,15 @@ fun LoginWithClassicView(
                         .background(ElementTheme.colors.bgCanvasDefault, shape = RoundedCornerShape(15.dp)),
                     contentAlignment = Alignment.Center,
                 ) {
-                    val resId = if (state.isElementPro) {
-                        R.drawable.element_pro_logo
-                    } else {
-                        R.drawable.element_foss_logo
-                    }
                     Image(
                         modifier = Modifier.size(37.5.dp),
-                        painter = painterResource(id = resId),
+                        painter = painterResource(id = R.drawable.feral_logo_black),
                         contentDescription = null,
                     )
                 }
                 Spacer(Modifier.height(8.dp))
                 Text(
-                    text = stringResource(id = R.string.screen_onboarding_welcome_title),
+                    text = stringResource(id = R.string.feral_onboarding_welcome_title),
                     color = ElementTheme.colors.textPrimary,
                     style = ElementTheme.typography.fontHeadingMdBold,
                     textAlign = TextAlign.Center,

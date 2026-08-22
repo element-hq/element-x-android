@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
+// Modified by Feral: wires the in-app updater banner presenter into the test factory.
 
 package io.element.android.features.home.impl.roomlist
 
@@ -12,6 +13,8 @@ import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.announcement.api.Announcement
 import io.element.android.features.announcement.api.AnnouncementService
+import io.element.android.features.appupdate.api.AppUpdateBannerState
+import io.element.android.features.appupdate.api.anAppUpdateBannerState
 import io.element.android.features.home.impl.FakeDateTimeObserver
 import io.element.android.features.home.impl.datasource.RoomListDataSource
 import io.element.android.features.home.impl.datasource.aRoomListRoomSummaryFactory
@@ -664,6 +667,7 @@ class RoomListPresenterTest {
         announcementService: AnnouncementService = FakeAnnouncementService(),
         featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
         markRoomAsRead: MarkRoomAsRead? = null,
+        appUpdateBannerPresenter: Presenter<AppUpdateBannerState> = Presenter { anAppUpdateBannerState() },
     ) = RoomListPresenter(
         client = client,
         leaveRoomPresenter = { leaveRoomState },
@@ -686,6 +690,7 @@ class RoomListPresenterTest {
         acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
         fullScreenIntentPermissionsPresenter = { aFullScreenIntentPermissionsState() },
         batteryOptimizationPresenter = { aBatteryOptimizationState() },
+        appUpdateBannerPresenter = appUpdateBannerPresenter,
         markRoomAsRead = markRoomAsRead ?: createTestMarkRoomAsRead(
             client = client,
             notificationCleaner = notificationCleaner,

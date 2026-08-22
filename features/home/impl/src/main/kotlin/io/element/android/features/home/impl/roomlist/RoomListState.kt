@@ -5,10 +5,12 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
+// Modified by Feral: carries the in-app updater banner state (features/appupdate).
 
 package io.element.android.features.home.impl.roomlist
 
 import androidx.compose.runtime.Immutable
+import io.element.android.features.appupdate.api.AppUpdateBannerState
 import io.element.android.features.home.impl.filters.RoomListFiltersState
 import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.features.home.impl.search.RoomListSearchState
@@ -68,6 +70,7 @@ sealed interface RoomListContentState {
 
     data class Rooms(
         val securityBannerState: SecurityBannerState,
+        val appUpdateBannerState: AppUpdateBannerState,
         val fullScreenIntentPermissionsState: FullScreenIntentPermissionsState,
         val batteryOptimizationState: BatteryOptimizationState,
         val showNewNotificationSoundBanner: Boolean,

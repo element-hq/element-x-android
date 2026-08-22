@@ -4,6 +4,8 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
+ *
+ * Modified by Feral: the pre-defined account provider button is labelled "Sign in".
  */
 
 @file:OptIn(ExperimentalTestApi::class)
@@ -138,7 +140,7 @@ class OnboardingViewTest : RobolectricTestParameter() {
                 eventSink = eventSink,
             ),
         )
-        val buttonText = activity!!.getString(R.string.screen_onboarding_sign_in_to, "element.io")
+        val buttonText = activity!!.getString(CommonStrings.screen_change_server_navigation_title_login)
         onNodeWithText(buttonText).performClick()
         eventSink.assertSingle(OnBoardingEvents.OnSignIn("element.io"))
     }

@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
+// Modified by Feral: injects the in-app updater banner presenter.
 
 package io.element.android.features.home.impl.roomlist
 
@@ -27,6 +28,7 @@ import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.announcement.api.Announcement
 import io.element.android.features.announcement.api.AnnouncementService
+import io.element.android.features.appupdate.api.AppUpdateBannerState
 import io.element.android.features.home.impl.datasource.RoomListDataSource
 import io.element.android.features.home.impl.filters.RoomListFiltersState
 import io.element.android.features.home.impl.filters.into
@@ -79,6 +81,7 @@ class RoomListPresenter(
     private val analyticsService: AnalyticsService,
     private val acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
     private val fullScreenIntentPermissionsPresenter: Presenter<FullScreenIntentPermissionsState>,
+    private val appUpdateBannerPresenter: Presenter<AppUpdateBannerState>,
     private val batteryOptimizationPresenter: Presenter<BatteryOptimizationState>,
     private val markRoomAsRead: MarkRoomAsRead,
     private val seenInvitesStore: SeenInvitesStore,
@@ -253,6 +256,7 @@ class RoomListPresenter(
 
                 RoomListContentState.Rooms(
                     securityBannerState = securityBannerState,
+                    appUpdateBannerState = appUpdateBannerPresenter.present(),
                     showNewNotificationSoundBanner = showNewNotificationSoundBanner,
                     showUnreadCount = showUnreadCount,
                     fullScreenIntentPermissionsState = fullScreenIntentPermissionsPresenter.present(),
