@@ -34,6 +34,7 @@ dependencies {
     // UnifiedPushParser: the ntfy message body is the raw Matrix push-gateway notification JSON.
     implementation(projects.libraries.pushproviders.unifiedpush)
     implementation(projects.libraries.pushstore.api)
+    implementation(projects.libraries.sessionStorage.api)
     implementation(projects.libraries.troubleshoot.api)
     implementation(projects.services.toolbox.api)
 
@@ -52,6 +53,7 @@ dependencies {
     testImplementation(projects.libraries.push.test)
     testImplementation(projects.libraries.pushproviders.test)
     testImplementation(projects.libraries.pushstore.test)
+    testImplementation(projects.libraries.sessionStorage.test)
     testImplementation(projects.libraries.troubleshoot.test)
     testImplementation(projects.services.toolbox.test)
 }

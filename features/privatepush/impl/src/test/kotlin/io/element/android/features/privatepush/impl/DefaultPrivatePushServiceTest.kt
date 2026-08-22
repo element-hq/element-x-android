@@ -16,30 +16,45 @@ import io.element.android.features.privatepush.impl.system.FakeInstalledAppsDete
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.preferences.test.FakePreferenceDataStoreFactory
 import io.element.android.libraries.push.test.FakePushService
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
+import io.element.android.libraries.pushproviders.feral.DefaultFeralPushFallback
 import io.element.android.libraries.pushproviders.test.FakePushProvider
 import io.element.android.libraries.pushproviders.test.aSessionPushConfig
+import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class DefaultPrivatePushServiceTest {
     private val ntfy = Distributor(PrivatePushConfig.NTFY_PACKAGE, "ntfy")
 
-    private fun createService(
+    /**
+     * [builtInAvailable] adds the built-in Feral provider to the available ones (it always is in the fdroid
+     * build); [provider] is the current (stored) one.
+     */
+    private fun TestScope.createService(
         ntfyInstalled: Boolean = true,
         provider: PushProvider? = null,
+        builtInAvailable: Boolean = false,
         pushService: FakePushService = FakePushService(
-            availablePushProviders = listOfNotNull(provider),
+            availablePushProviders = listOfNotNull(aBuiltInProvider().takeIf { builtInAvailable }, provider),
             currentPushProvider = { provider },
         ),
     ) = DefaultPrivatePushService(
         pushService = pushService,
         installedAppsDetector = FakeInstalledAppsDetector(
             if (ntfyInstalled) mutableMapOf(PrivatePushConfig.NTFY_PACKAGE to 63L) else mutableMapOf()
+        ),
+        feralPushFallback = DefaultFeralPushFallback(
+            pushService = pushService,
+            sessionStore = InMemorySessionStore(),
+            matrixClientProvider = FakeMatrixClientProvider(),
+            coroutineScope = backgroundScope,
         ),
         preferenceDataStoreFactory = FakePreferenceDataStoreFactory(),
     )
@@ -97,34 +112,6 @@ class DefaultPrivatePushServiceTest {
     }
 
     @Test
-    fun `shouldShowSetup is false with the built-in provider, or before any provider is registered`() = runTest {
-        assertThat(createService(ntfyInstalled = false, provider = aBuiltInProvider()).shouldShowSetup(A_SESSION_ID)).isFalse()
-        assertThat(createService(ntfyInstalled = false, provider = aBuiltInProvider(registered = false)).shouldShowSetup(A_SESSION_ID)).isFalse()
-        assertThat(createService(ntfyInstalled = false, provider = null).shouldShowSetup(A_SESSION_ID)).isFalse()
-    }
-
-    @Test
-    fun `shouldShowSetup is false on another provider when a distributor is installed`() = runTest {
-        // ntfy installed but pointing at a public server, or installed but not connected: Settings, not FTUE.
-        assertThat(createService(ntfyInstalled = true, provider = aProvider(endpoint = "https://ntfy.sh/upabc?up=1")).shouldShowSetup(A_SESSION_ID)).isFalse()
-        assertThat(createService(ntfyInstalled = true, provider = aProvider(distributor = null, endpoint = null)).shouldShowSetup(A_SESSION_ID)).isFalse()
-    }
-
-    @Test
-    fun `shouldShowSetup is false when private or dismissed, true when stuck on UnifiedPush without distributor`() = runTest {
-        val private = createService(provider = aProvider(endpoint = "https://ntfy.feralisme.fr/upabc?up=1"))
-        assertThat(private.shouldShowSetup(A_SESSION_ID)).isFalse()
-
-        val notSetUp = createService(ntfyInstalled = false, provider = aProvider(distributor = null, endpoint = null))
-        assertThat(notSetUp.shouldShowSetup(A_SESSION_ID)).isTrue()
-        notSetUp.setDismissed(A_SESSION_ID, true)
-        assertThat(notSetUp.isDismissed(A_SESSION_ID).first()).isTrue()
-        assertThat(notSetUp.shouldShowSetup(A_SESSION_ID)).isFalse()
-        notSetUp.setDismissed(A_SESSION_ID, false)
-        assertThat(notSetUp.shouldShowSetup(A_SESSION_ID)).isTrue()
-    }
-
-    @Test
     fun `fallBackToBuiltIn registers the built-in provider when the stored one has no distributor`() = runTest {
         // Stored = UnifiedPush, ntfy uninstalled: no distributor, NoDistributorsAvailable upstream.
         val unifiedPush = aProvider(distributor = null, endpoint = null)
@@ -136,19 +123,16 @@ class DefaultPrivatePushServiceTest {
             registerWithLambda = { client, provider, distributor -> registrations += Triple(client, provider, distributor); Result.success(Unit) },
         )
         val service = createService(ntfyInstalled = false, pushService = pushService)
-        assertThat(service.shouldShowSetup(A_SESSION_ID)).isTrue()
-
         assertThat(service.fallBackToBuiltIn(FakeMatrixClient())).isTrue()
         assertThat(registrations).hasSize(1)
         assertThat(registrations.single().second).isSameInstanceAs(builtIn)
         assertThat(registrations.single().third).isEqualTo(Distributor(FeralPushConfig.DISTRIBUTOR_VALUE, FeralPushConfig.DISTRIBUTOR_NAME))
-        // The built-in provider is now the current one: no ntfy flow.
+        // The built-in provider is now the current one.
         assertThat(service.status(A_SESSION_ID)).isEqualTo(PrivatePushStatus.BuiltIn)
-        assertThat(service.shouldShowSetup(A_SESSION_ID)).isFalse()
     }
 
     @Test
-    fun `fallBackToBuiltIn returns false when the registration fails, the flow is then shown`() = runTest {
+    fun `fallBackToBuiltIn returns false when the registration fails, the session stays as it was`() = runTest {
         val unifiedPush = aProvider(distributor = null, endpoint = null)
         val pushService = FakePushService(
             availablePushProviders = listOf(aBuiltInProvider(), unifiedPush),
@@ -158,7 +142,6 @@ class DefaultPrivatePushServiceTest {
         val service = createService(ntfyInstalled = false, pushService = pushService)
         assertThat(service.fallBackToBuiltIn(FakeMatrixClient())).isFalse()
         assertThat(service.status(A_SESSION_ID)).isEqualTo(PrivatePushStatus.NotSetUp(PrivatePushStatus.NotSetUp.Reason.NtfyNotInstalled))
-        assertThat(service.shouldShowSetup(A_SESSION_ID)).isTrue()
     }
 
     @Test
@@ -170,6 +153,16 @@ class DefaultPrivatePushServiceTest {
             registerWithLambda = { _, _, _ -> error("must not register") },
         )
         assertThat(createService(ntfyInstalled = false, pushService = pushService).fallBackToBuiltIn(FakeMatrixClient())).isFalse()
+    }
+
+    @Test
+    fun `dismissed flag is persisted per session`() = runTest {
+        val service = createService(ntfyInstalled = false)
+        assertThat(service.isDismissed(A_SESSION_ID).first()).isFalse()
+        service.setDismissed(A_SESSION_ID, true)
+        assertThat(service.isDismissed(A_SESSION_ID).first()).isTrue()
+        service.setDismissed(A_SESSION_ID, false)
+        assertThat(service.isDismissed(A_SESSION_ID).first()).isFalse()
     }
 
     @Test

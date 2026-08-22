@@ -16,4 +16,6 @@
   <string name="feral_privatepush_status_private">"Active: your notifications go through the Feral server"</string>
   <string name="feral_privatepush_status_public">"Warning: notifications go through another server (%1$s)"</string>
   <string name="feral_privatepush_status_not_set_up">"Not set up"</string>
+  <!-- Built-in push: shown when the silent fallback registration fails (LoggedInView). -->
+  <string name="feral_push_builtin_registration_failed">"Feral could not connect to the notification server. It will retry automatically; you can also check Settings › Notifications › Troubleshoot."</string>
 </resources>

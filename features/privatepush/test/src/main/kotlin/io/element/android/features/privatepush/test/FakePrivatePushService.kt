@@ -31,9 +31,6 @@ class FakePrivatePushService(
         return statusResult
     }
 
-    override suspend fun shouldShowSetup(sessionId: SessionId): Boolean =
-        statusResult !is PrivatePushStatus.Private && statusResult !is PrivatePushStatus.BuiltIn && !dismissed.value
-
     override suspend fun fallBackToBuiltIn(matrixClient: MatrixClient): Boolean {
         fallBackToBuiltInCalls += matrixClient.sessionId
         return fallBackToBuiltInResult

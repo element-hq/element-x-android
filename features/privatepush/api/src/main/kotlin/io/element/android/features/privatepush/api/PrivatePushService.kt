@@ -13,15 +13,13 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Single source of truth for the private-notifications state, shared by the FTUE step,
- * the "No distributors available" routing and the Settings entry.
+ * Single source of truth for the private-notifications state, shared by the Settings entry
+ * (the only place the ntfy flow is reachable from) and the "No distributors available" fallback.
+ * The ntfy setup page is never shown automatically.
  */
 interface PrivatePushService {
     /** Current state, computed from installed apps + the registered push config. Cheap (prefs + PackageManager). */
     suspend fun status(sessionId: SessionId): PrivatePushStatus
-
-    /** true when the FTUE step should be shown: enabled && status != Private && !dismissed. */
-    suspend fun shouldShowSetup(sessionId: SessionId): Boolean
 
     /**
      * Silently register the built-in Feral provider (no distributor app needed), used when the stored
@@ -36,7 +34,7 @@ interface PrivatePushService {
 
     suspend fun setDismissed(sessionId: SessionId, dismissed: Boolean)
 
-    /** Forced (re)display, used where the generic "No distributors available" dialog used to appear. */
+    /** Flow bookkeeping ("connect" requested for a session); nothing displays the flow automatically any more. */
     fun setupRequested(sessionId: SessionId): Flow<Boolean>
 
     fun requestSetup(sessionId: SessionId)

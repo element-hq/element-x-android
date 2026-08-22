@@ -22,6 +22,8 @@ import io.element.android.libraries.pushproviders.feral.service.FeralPushService
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
 
 private val loggerTag = LoggerTag("FeralPushProvider", LoggerTag.PushLoggerTag)
@@ -44,15 +46,18 @@ class FeralPushProvider(
     override val name = FeralPushConfig.NAME
     override val supportMultipleDistributors = false
 
+    /** Concurrent registrations (self-healing fallback vs. LoggedInPresenter) must reuse one topic. */
+    private val registrationMutex = Mutex()
+
     override fun getDistributors(): List<Distributor> = listOf(distributor)
 
-    override suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor): Result<Unit> {
+    override suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor): Result<Unit> = registrationMutex.withLock {
         val sessionId = matrixClient.sessionId
         val existing = feralPushStore.get(sessionId)
         val topic = existing?.topic ?: topicGenerator.generate()
         val endpoint = endpointFor(topic)
         val clientSecret = pushClientSecret.getSecretForUser(sessionId)
-        return pusherSubscriber.registerPusher(matrixClient, pushKey = endpoint, gateway = FeralPushConfig.GATEWAY_URL)
+        pusherSubscriber.registerPusher(matrixClient, pushKey = endpoint, gateway = FeralPushConfig.GATEWAY_URL)
             .onSuccess {
                 feralPushStore.set(
                     FeralPushRegistration(

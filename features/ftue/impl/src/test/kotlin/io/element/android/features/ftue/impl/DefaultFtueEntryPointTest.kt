@@ -5,7 +5,6 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
-// Modified by Feral: PrivatePushSetup step (features/privatepush).
 
 package io.element.android.features.ftue.impl
 
@@ -14,7 +13,6 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.lockscreen.test.FakeLockScreenEntryPoint
-import io.element.android.features.privatepush.test.FakePrivatePushEntryPoint
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.node.TestParentNode
 import kotlinx.coroutines.test.runTest
@@ -38,7 +36,6 @@ class DefaultFtueEntryPointTest {
                 analyticsEntryPoint = { _, _ -> lambdaError() },
                 defaultFtueService = createDefaultFtueService(),
                 lockScreenEntryPoint = FakeLockScreenEntryPoint(),
-                privatePushEntryPoint = FakePrivatePushEntryPoint(),
             )
         }
         val result = entryPoint.createNode(parentNode, BuildContext.root(null))

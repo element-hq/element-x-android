@@ -41,6 +41,8 @@ dependencies {
     implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.push.api)
     implementation(projects.libraries.pushproviders.api)
+    // Built-in Feral provider: fallback/self-healing shared with the NoDistributors route.
+    implementation(projects.libraries.pushproviders.feral)
     implementation(projects.libraries.troubleshoot.api)
     implementation(projects.libraries.uiStrings)
     implementation(libs.androidx.corektx)
@@ -55,5 +57,7 @@ dependencies {
     testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.libraries.push.test)
     testImplementation(projects.libraries.pushproviders.test)
+    testImplementation(projects.libraries.sessionStorage.api)
+    testImplementation(projects.libraries.sessionStorage.test)
     testImplementation(projects.features.privatepush.test)
 }

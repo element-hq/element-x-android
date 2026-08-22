@@ -14,4 +14,6 @@
   <string name="feral_privatepush_status_private">"Actives : vos notifications passent par le serveur Feral"</string>
   <string name="feral_privatepush_status_public">"Attention : les notifications passent par un autre serveur (%1$s)"</string>
   <string name="feral_privatepush_status_not_set_up">"Non configurées"</string>
+  <!-- Push intégré : affiché quand la bascule silencieuse échoue (LoggedInView). -->
+  <string name="feral_push_builtin_registration_failed">"Feral n\'a pas pu se connecter au serveur de notifications. Une nouvelle tentative sera faite automatiquement ; vous pouvez aussi vérifier Réglages › Notifications › Diagnostiquer."</string>
 </resources>

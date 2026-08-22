@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
-// Modified by Feral: PusherRegistrationFailure.NoDistributorsAvailable opens the private notifications
+// Modified by Feral: PusherRegistrationFailure.NoDistributorsAvailable -> silent fallback to the built-in
 // setup flow (features/privatepush) instead of the generic error dialog; other failures are unchanged.
 
 package io.element.android.appnav.loggedin
@@ -40,7 +40,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun LoggedInView(
     state: LoggedInState,
     navigateToNotificationTroubleshoot: () -> Unit,
-    navigateToPrivatePushSetup: suspend () -> Boolean,
+    fallBackToBuiltInPush: suspend () -> Boolean,
     modifier: Modifier = Modifier
 ) {
     OnLifecycleEvent { _, event ->
@@ -64,16 +64,16 @@ fun LoggedInView(
         is AsyncData.Success -> Unit
         is AsyncData.Failure -> {
             val failure = state.pusherRegistrationState.errorOrNull()
-            // Feral: no distributor app -> silent fallback to the built-in provider, else the guided
-            // ntfy setup flow instead of the generic dialog. When neither applies (FTUE still running),
-            // fall back to the upstream dialog below.
-            var setupNotShown by remember(failure) { mutableStateOf(false) }
-            if (failure is PusherRegistrationFailure.NoDistributorsAvailable && !state.ignoreRegistrationError && !setupNotShown) {
+            // Feral: no distributor app for the stored provider -> silent fallback to the built-in Feral
+            // provider; only when that fails is an error shown (Feral wording, it retries on its own).
+            // The ntfy setup page is never shown automatically.
+            var fallbackFailed by remember(failure) { mutableStateOf(false) }
+            if (failure is PusherRegistrationFailure.NoDistributorsAvailable && !state.ignoreRegistrationError && !fallbackFailed) {
                 LaunchedEffect(failure) {
-                    if (navigateToPrivatePushSetup()) {
+                    if (fallBackToBuiltInPush()) {
                         state.eventSink(LoggedInEvents.CloseErrorDialog(false))
                     } else {
-                        setupNotShown = true
+                        fallbackFailed = true
                     }
                 }
             } else {
@@ -82,7 +82,11 @@ fun LoggedInView(
                     ?.getReason()
                     ?.let { reason ->
                         ErrorDialogWithDoNotShowAgain(
-                            content = stringResource(id = CommonStrings.common_error_registering_pusher_android, reason),
+                            content = if (failure is PusherRegistrationFailure.NoDistributorsAvailable) {
+                                stringResource(id = CommonStrings.feral_push_builtin_registration_failed)
+                            } else {
+                                stringResource(id = CommonStrings.common_error_registering_pusher_android, reason)
+                            },
                             cancelText = stringResource(id = CommonStrings.common_settings),
                             onDismiss = {
                                 state.eventSink(LoggedInEvents.CloseErrorDialog(it))
@@ -151,6 +155,6 @@ internal fun LoggedInViewPreview(@PreviewParameter(LoggedInStateProvider::class)
     LoggedInView(
         state = state,
         navigateToNotificationTroubleshoot = {},
-        navigateToPrivatePushSetup = { true },
+        fallBackToBuiltInPush = { true },
     )
 }

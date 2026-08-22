@@ -15,13 +15,15 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
+import io.element.android.libraries.pushproviders.feral.FeralPushFallback
 import timber.log.Timber
 
 private val loggerTag = LoggerTag("FeralPushBootReceiver", LoggerTag.PushLoggerTag)
 
 @ContributesTo(AppScope::class)
-interface FeralPushBootReceiverBindings {
+interface FeralPushBindings {
     fun feralPushServiceController(): FeralPushServiceController
+    fun feralPushFallback(): FeralPushFallback
 }
 
 /** After a reboot, bring the connection service back when a session is registered with the Feral provider. */
@@ -29,7 +31,7 @@ class FeralPushBootReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
         Timber.tag(loggerTag.value).i("Boot completed")
-        val controller = context.bindings<FeralPushBootReceiverBindings>().feralPushServiceController()
+        val controller = context.bindings<FeralPushBindings>().feralPushServiceController()
         val pendingResult = goAsync()
         controller.startIfRegistered().invokeOnCompletion { pendingResult.finish() }
     }

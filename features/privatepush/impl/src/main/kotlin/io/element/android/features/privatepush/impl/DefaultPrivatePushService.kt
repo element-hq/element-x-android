@@ -22,14 +22,13 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import io.element.android.libraries.push.api.PushService
+import io.element.android.libraries.pushproviders.feral.FeralPushFallback
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
-import timber.log.Timber
 
 /**
  * "BuiltIn" == the Feral built-in provider (libraries/pushproviders/feral) is the registered one.
@@ -41,6 +40,7 @@ import timber.log.Timber
 class DefaultPrivatePushService(
     private val pushService: PushService,
     private val installedAppsDetector: InstalledAppsDetector,
+    private val feralPushFallback: FeralPushFallback,
     preferenceDataStoreFactory: PreferenceDataStoreFactory,
 ) : PrivatePushService {
     private val store = preferenceDataStoreFactory.create("feral_privatepush")
@@ -74,35 +74,8 @@ class DefaultPrivatePushService(
         }
     }
 
-    /**
-     * The built-in provider works out of the box, so the ntfy flow is only a first-time step when the
-     * session is stuck on another provider (e.g. UnifiedPush) without any distributor installed:
-     * practically never. Not yet registered (null provider) means the built-in one is about to be picked.
-     */
-    override suspend fun shouldShowSetup(sessionId: SessionId): Boolean {
-        if (!PrivatePushConfig.ENABLED) return false
-        when (status(sessionId)) {
-            PrivatePushStatus.BuiltIn, PrivatePushStatus.Private -> return false
-            is PrivatePushStatus.PublicServer, is PrivatePushStatus.NotSetUp -> Unit
-        }
-        val currentProvider = pushService.getCurrentPushProvider(sessionId) ?: return false
-        if (currentProvider.name == FeralPushConfig.NAME) return false
-        if (installedAppsDetector.isInstalled(PrivatePushConfig.NTFY_PACKAGE)) return false
-        return !isDismissed(sessionId).first()
-    }
-
     override suspend fun fallBackToBuiltIn(matrixClient: MatrixClient): Boolean {
-        val builtIn = pushService.getAvailablePushProviders().firstOrNull { it.name == FeralPushConfig.NAME }
-        if (builtIn == null) {
-            Timber.w("Built-in Feral push provider not available, cannot fall back")
-            return false
-        }
-        val distributor = builtIn.getDistributors().firstOrNull() ?: return false
-        // PushService.registerWith unregisters the previous provider, stores the new name, then registers.
-        return pushService.registerWith(matrixClient, builtIn, distributor)
-            .onSuccess { Timber.i("Fell back to the built-in Feral push provider") }
-            .onFailure { Timber.w(it, "Unable to fall back to the built-in Feral push provider") }
-            .isSuccess
+        return feralPushFallback.register(matrixClient)
     }
 
     override fun isDismissed(sessionId: SessionId): Flow<Boolean> =

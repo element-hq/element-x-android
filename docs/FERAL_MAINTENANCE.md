@@ -318,10 +318,23 @@ vers le serveur ntfy Feral depuis un foreground service.
     correctif = demande d'exemption Doze).
   - Les membres déjà sur ntfy (app installée) restent sur UnifiedPush (nom stocké) :
     aucune migration. Si le fournisseur stocké n'a plus de distributeur (ntfy
-    désinstallée / jamais configurée), `NoDistributorsAvailable` déclenche d'abord
-    `PrivatePushService.fallBackToBuiltIn()` (bascule silencieuse vers Feral via
-    `PushService.registerWith`, qui met aussi à jour le nom stocké) ; le parcours ntfy
-    n'est montré que si cette bascule échoue (route `LoggedInFlowNode`).
+    désinstallée / jamais configurée), **`FeralPushFallback`** bascule silencieusement
+    vers Feral via `PushService.registerWith` (met aussi à jour le nom stocké) :
+    (1) auto-réparation à chaque passage au premier plan (`FeralPushInitializer` →
+    `healLatestSession()` : attend la session vérifiée, une tentative par session et
+    par process — retentée au premier plan suivant si l'enregistrement a échoué —,
+    sans aucune UI ni dépendance au FTUE) ; (2) la route `NoDistributorsAvailable`
+    de `LoggedInView`/`LoggedInFlowNode` (`PrivatePushService.fallBackToBuiltIn()` →
+    `register()`, mutex anti-double enregistrement) : succès → rien ; échec → dialogue
+    d'erreur Feral (`feral_push_builtin_registration_failed`, « nouvelle tentative
+    automatique », bouton Réglages → Diagnostiquer). ⚠️ `LoggedInNode` (donc
+    `LoggedInPresenter.ensurePusherIsRegistered` et cette route) n'existe qu'une fois le
+    FTUE terminé — d'où (1).
+  - **Décision mainteneur (2026-08-22) : la page de configuration ntfy n'est JAMAIS
+    affichée automatiquement** — ni comme étape FTUE (l'étape `PrivatePushSetup` et ses
+    patches dans `features/ftue` sont retirés, fichiers revenus à l'upstream), ni comme
+    repli quand l'enregistrement intégré échoue. Le parcours ntfy n'existe plus que comme
+    entrée explicite Réglages › Notifications (« Notifications privées (ntfy) »).
   - Session neuve (aucun nom stocké) : `DefaultPushService` prend le premier fournisseur
     (par `index`) ayant un distributeur → Feral (0) avant UnifiedPush (1), même si ntfy
     est installée : intégré par défaut, ntfy uniquement par choix explicite dans Réglages.

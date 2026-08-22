@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
-// Modified by Feral: PrivatePushSetup target (features/privatepush) reached from LoggedInNode's
-// "No distributors available" routing, after a silent fallback to the built-in Feral push provider.
+// Modified by Feral: "No distributors available" (LoggedInNode) silently falls back to the built-in
+// Feral push provider (features/privatepush PrivatePushService); the ntfy setup page is never auto-shown.
 
 package io.element.android.appnav
 
@@ -65,7 +65,6 @@ import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorContainer
 import io.element.android.features.preferences.api.PreferencesEntryPoint
-import io.element.android.features.privatepush.api.PrivatePushEntryPoint
 import io.element.android.features.privatepush.api.PrivatePushService
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.features.roomdirectory.api.RoomDirectoryEntryPoint
@@ -162,7 +161,6 @@ class LoggedInFlowNode(
     private val createRoomEntryPoint: CreateRoomEntryPoint,
     private val activeLiveLocationShareManager: ActiveLiveLocationShareManager,
     private val customMapTilerConfigProvider: CustomMapTilerConfigProvider,
-    private val privatePushEntryPoint: PrivatePushEntryPoint,
     private val privatePushService: PrivatePushService,
 ) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
@@ -316,9 +314,6 @@ class LoggedInFlowNode(
         data object Ftue : NavTarget
 
         @Parcelize
-        data object PrivatePushSetup : NavTarget
-
-        @Parcelize
         data object LinkNewDevice : NavTarget
 
         @Parcelize
@@ -340,33 +335,13 @@ class LoggedInFlowNode(
                         backstack.push(NavTarget.Settings(PreferencesEntryPoint.InitialTarget.NotificationTroubleshoot))
                     }
 
-                    override suspend fun navigateToPrivatePushSetup(): Boolean {
+                    override suspend fun fallBackToBuiltInPush(): Boolean {
                         // No usable distributor for the stored provider: the built-in Feral provider
                         // needs none, register it silently (this also updates the stored provider name).
-                        if (privatePushService.fallBackToBuiltIn(matrixClient)) return true
-                        // The FTUE has its own PrivatePushSetup step; only route once Home is the root.
-                        if (ftueService.state.value !is FtueState.Complete) return false
-                        backstack.push(NavTarget.PrivatePushSetup)
-                        return true
+                        return privatePushService.fallBackToBuiltIn(matrixClient)
                     }
                 }
                 createNode<LoggedInNode>(buildContext, listOf(callback))
-            }
-            NavTarget.PrivatePushSetup -> {
-                val callback = object : PrivatePushEntryPoint.Callback {
-                    override fun onDone() {
-                        backstack.pop()
-                    }
-
-                    override fun onLater() {
-                        backstack.pop()
-                    }
-                }
-                privatePushEntryPoint.createNode(
-                    parentNode = this,
-                    buildContext = buildContext,
-                    callback = callback,
-                )
             }
             NavTarget.Home -> {
                 val callback = object : HomeEntryPoint.Callback {

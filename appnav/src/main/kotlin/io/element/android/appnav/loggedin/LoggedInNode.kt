@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
-// Modified by Feral: route "No distributors available" to the private notifications setup flow.
+// Modified by Feral: "No distributors available" -> silent fallback to the built-in Feral push provider.
 
 package io.element.android.appnav.loggedin
 
@@ -32,11 +32,8 @@ class LoggedInNode(
 ) {
     interface Callback : Plugin {
         fun navigateToNotificationTroubleshoot()
-        /**
-         * Tries the built-in Feral provider first (silent), then the ntfy flow.
-         * Returns false when neither could handle it (caller falls back to the upstream dialog).
-         */
-        suspend fun navigateToPrivatePushSetup(): Boolean
+        /** Registers the built-in Feral push provider silently; false when that failed (an error is then shown). */
+        suspend fun fallBackToBuiltInPush(): Boolean
     }
 
     private val callback: Callback = callback()
@@ -47,7 +44,7 @@ class LoggedInNode(
         LoggedInView(
             state = loggedInState,
             navigateToNotificationTroubleshoot = callback::navigateToNotificationTroubleshoot,
-            navigateToPrivatePushSetup = callback::navigateToPrivatePushSetup,
+            fallBackToBuiltInPush = callback::fallBackToBuiltInPush,
             modifier = modifier
         )
     }

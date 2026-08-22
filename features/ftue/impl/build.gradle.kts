@@ -8,7 +8,6 @@ import extension.testCommonDependencies
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
-// Modified by Feral: private notifications (ntfy) FTUE step, see features/privatepush.
 
 plugins {
     id("io.element.android-compose-library")
@@ -45,7 +44,6 @@ dependencies {
     implementation(projects.features.verifysession.api)
     implementation(projects.services.analytics.api)
     implementation(projects.features.lockscreen.api)
-    implementation(projects.features.privatepush.api)
     implementation(projects.libraries.permissions.api)
     implementation(projects.libraries.permissions.noop)
     implementation(projects.services.toolbox.api)
@@ -58,6 +56,5 @@ dependencies {
     testImplementation(projects.libraries.permissions.test)
     testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.features.lockscreen.test)
-    testImplementation(projects.features.privatepush.test)
     testImplementation(projects.services.toolbox.test)
 }
