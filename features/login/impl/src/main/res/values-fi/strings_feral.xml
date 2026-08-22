@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Feral-owned strings. Kept OUT of the Localazy-managed translations.xml/localazy.xml
+     so upstream i18n regeneration can never drop or overwrite them. -->
+<resources>
+  <string name="screen_login_members_only_notice">"Pääsy on varattu Feralist-yhteisön jäsenille"</string>
+</resources>

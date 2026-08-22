@@ -4,6 +4,8 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
+ *
+ * Modified by Feral: members-only notice under the title, Matrix subtitle removed.
  */
 
 package io.element.android.features.login.impl.screens.loginpassword
@@ -39,12 +41,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.login.impl.R
@@ -64,6 +69,7 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.PasswordVisibilityToggle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.testtags.TestTags
@@ -133,9 +139,23 @@ fun LoginPasswordView(
                     id = R.string.screen_account_provider_signin_title,
                     state.accountProvider.title
                 ),
-                subTitle = stringResource(id = R.string.screen_login_subtitle)
+                subTitle = null,
             )
-            Spacer(Modifier.height(40.dp))
+            Spacer(Modifier.height(24.dp))
+            // Feral: members-only notice (iOS parity), Feral-owned string in strings_feral.xml
+            Text(
+                text = stringResource(id = R.string.screen_login_members_only_notice),
+                style = ElementTheme.typography.fontBodySmRegular.copy(
+                    fontFamily = FontFamily.Serif,
+                    letterSpacing = 1.sp,
+                ),
+                color = ElementTheme.colors.textSecondary,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp),
+            )
+            Spacer(Modifier.height(24.dp))
             LoginForm(
                 state = state,
                 isLoading = isLoading,
