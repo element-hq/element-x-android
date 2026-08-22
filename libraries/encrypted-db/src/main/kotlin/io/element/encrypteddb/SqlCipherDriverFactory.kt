@@ -55,6 +55,9 @@ class SqlCipherDriverFactory(
                 schema
             ) {
             override fun onUpgrade(db: SupportSQLiteDatabase, oldVersion: Int, newVersion: Int) {
+                // The base implementation runs the SQLDelight migrations (schema.migrate); without it
+                // the database keeps its old schema after an upgrade and the next query crashes.
+                super.onUpgrade(db, oldVersion, newVersion)
                 onUpgradeCallback?.invoke(db, oldVersion, newVersion)
             }
         })
