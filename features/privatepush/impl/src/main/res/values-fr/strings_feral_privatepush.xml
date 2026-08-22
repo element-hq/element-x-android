@@ -8,7 +8,7 @@
   <string name="feral_privatepush_action_dont_ask_again">"Ne plus demander"</string>
 
   <string name="feral_privatepush_why_title">"Notifications privées"</string>
-  <string name="feral_privatepush_why_subtitle">"Feral n\'utilise aucun service Google. Voici comment vos notifications vous parviennent."</string>
+  <string name="feral_privatepush_why_subtitle">"Feral n\'utilise aucun service Google : les notifications fonctionnent d\'emblée, Feral reste lui-même connecté au serveur Feral. L\'application ntfy est une alternative facultative qui évite la notification permanente « connecté » de Feral."</string>
   <string name="feral_privatepush_why_point_1">"Les notifications passent par le serveur Feral, jamais par Google ni Apple."</string>
   <string name="feral_privatepush_why_point_2">"Une petite application d\'aide, ntfy, garde la connexion au serveur Feral ouverte : vous êtes prévenu·e même quand Feral est fermé."</string>
   <string name="feral_privatepush_why_point_3">"Cette configuration se fait une seule fois et prend environ deux minutes."</string>

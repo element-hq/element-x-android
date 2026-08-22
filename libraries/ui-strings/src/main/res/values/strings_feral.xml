@@ -12,6 +12,7 @@
 
   <!-- Private notifications: Settings > Notifications entry + status (used by features/preferences). -->
   <string name="feral_privatepush_settings_entry">"Private notifications (ntfy)"</string>
+  <string name="feral_privatepush_status_builtin">"Active (built-in): Feral keeps its own connection to the Feral server"</string>
   <string name="feral_privatepush_status_private">"Active: your notifications go through the Feral server"</string>
   <string name="feral_privatepush_status_public">"Warning: notifications go through another server (%1$s)"</string>
   <string name="feral_privatepush_status_not_set_up">"Not set up"</string>

@@ -519,6 +519,7 @@ private fun InvalidNotificationSettingsView(
 @Composable
 private fun privatePushStatusLabel(status: AsyncData<PrivatePushStatus>): String {
     return when (val value = status.dataOrNull()) {
+        PrivatePushStatus.BuiltIn -> stringResource(CommonStrings.feral_privatepush_status_builtin)
         PrivatePushStatus.Private -> stringResource(CommonStrings.feral_privatepush_status_private)
         is PrivatePushStatus.PublicServer -> stringResource(CommonStrings.feral_privatepush_status_public, value.host)
         is PrivatePushStatus.NotSetUp -> stringResource(CommonStrings.feral_privatepush_status_not_set_up)
@@ -529,6 +530,7 @@ private fun privatePushStatusLabel(status: AsyncData<PrivatePushStatus>): String
 @Composable
 private fun privatePushStatusIcon(status: AsyncData<PrivatePushStatus>): ImageVector {
     return when (status.dataOrNull()) {
+        PrivatePushStatus.BuiltIn,
         PrivatePushStatus.Private -> CompoundIcons.CheckCircleSolid()
         is PrivatePushStatus.PublicServer -> CompoundIcons.ErrorSolid()
         is PrivatePushStatus.NotSetUp -> CompoundIcons.NotificationsOffSolid()

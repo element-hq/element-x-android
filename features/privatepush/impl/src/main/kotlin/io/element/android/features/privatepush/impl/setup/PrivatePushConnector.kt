@@ -88,6 +88,8 @@ class PrivatePushConnector(
                     ConnectState.Connected
                 }
                 is PrivatePushStatus.PublicServer -> ConnectState.Problem(ConnectProblem.WrongServer(finalVerdict.host))
+                // Still on the built-in provider: the switch to ntfy did not happen.
+                PrivatePushStatus.BuiltIn -> ConnectState.Problem(ConnectProblem.RegistrationFailed(null))
                 is PrivatePushStatus.NotSetUp -> when (finalVerdict.reason) {
                     PrivatePushStatus.NotSetUp.Reason.NtfyNotInstalled -> ConnectState.Problem(ConnectProblem.NtfyNotInstalled)
                     PrivatePushStatus.NotSetUp.Reason.NotConnected -> ConnectState.Problem(ConnectProblem.RegistrationFailed(null))

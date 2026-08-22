@@ -12,6 +12,9 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 sealed interface PrivatePushStatus {
+    /** The built-in Feral provider is registered: the app itself talks to the Feral server, no ntfy needed. */
+    data object BuiltIn : PrivatePushStatus
+
     /** ntfy distributor registered and the endpoint is on the Feral server. */
     data object Private : PrivatePushStatus
 

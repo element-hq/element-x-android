@@ -9,6 +9,7 @@
 package io.element.android.features.privatepush.impl
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.appconfig.FeralPushConfig
 import io.element.android.appconfig.PrivatePushConfig
 import io.element.android.features.privatepush.api.PrivatePushStatus
 import io.element.android.features.privatepush.impl.system.FakeInstalledAppsDetector
@@ -38,6 +39,12 @@ class DefaultPrivatePushServiceTest {
             if (ntfyInstalled) mutableMapOf(PrivatePushConfig.NTFY_PACKAGE to 63L) else mutableMapOf()
         ),
         preferenceDataStoreFactory = FakePreferenceDataStoreFactory(),
+    )
+
+    private fun aBuiltInProvider(registered: Boolean = true) = FakePushProvider(
+        name = FeralPushConfig.NAME,
+        distributors = listOf(Distributor(FeralPushConfig.DISTRIBUTOR_VALUE, FeralPushConfig.DISTRIBUTOR_NAME)),
+        config = if (registered) aSessionPushConfig(url = FeralPushConfig.GATEWAY_URL, pushKey = "https://ntfy.feralisme.fr/upabc?up=1") else null,
     )
 
     private fun aProvider(distributor: Distributor? = ntfy, endpoint: String?) = FakePushProvider(
@@ -76,11 +83,36 @@ class DefaultPrivatePushServiceTest {
     }
 
     @Test
-    fun `shouldShowSetup is false when private or dismissed, true otherwise`() = runTest {
+    fun `status is BuiltIn when the Feral provider is registered, whether ntfy is installed or not`() = runTest {
+        assertThat(createService(ntfyInstalled = false, provider = aBuiltInProvider()).status(A_SESSION_ID))
+            .isEqualTo(PrivatePushStatus.BuiltIn)
+        assertThat(createService(ntfyInstalled = true, provider = aBuiltInProvider()).status(A_SESSION_ID))
+            .isEqualTo(PrivatePushStatus.BuiltIn)
+        // Selected but not registered yet: not BuiltIn.
+        assertThat(createService(ntfyInstalled = false, provider = aBuiltInProvider(registered = false)).status(A_SESSION_ID))
+            .isEqualTo(PrivatePushStatus.NotSetUp(PrivatePushStatus.NotSetUp.Reason.NtfyNotInstalled))
+    }
+
+    @Test
+    fun `shouldShowSetup is false with the built-in provider, or before any provider is registered`() = runTest {
+        assertThat(createService(ntfyInstalled = false, provider = aBuiltInProvider()).shouldShowSetup(A_SESSION_ID)).isFalse()
+        assertThat(createService(ntfyInstalled = false, provider = aBuiltInProvider(registered = false)).shouldShowSetup(A_SESSION_ID)).isFalse()
+        assertThat(createService(ntfyInstalled = false, provider = null).shouldShowSetup(A_SESSION_ID)).isFalse()
+    }
+
+    @Test
+    fun `shouldShowSetup is false on another provider when a distributor is installed`() = runTest {
+        // ntfy installed but pointing at a public server, or installed but not connected: Settings, not FTUE.
+        assertThat(createService(ntfyInstalled = true, provider = aProvider(endpoint = "https://ntfy.sh/upabc?up=1")).shouldShowSetup(A_SESSION_ID)).isFalse()
+        assertThat(createService(ntfyInstalled = true, provider = aProvider(distributor = null, endpoint = null)).shouldShowSetup(A_SESSION_ID)).isFalse()
+    }
+
+    @Test
+    fun `shouldShowSetup is false when private or dismissed, true when stuck on UnifiedPush without distributor`() = runTest {
         val private = createService(provider = aProvider(endpoint = "https://ntfy.feralisme.fr/upabc?up=1"))
         assertThat(private.shouldShowSetup(A_SESSION_ID)).isFalse()
 
-        val notSetUp = createService(ntfyInstalled = false)
+        val notSetUp = createService(ntfyInstalled = false, provider = aProvider(distributor = null, endpoint = null))
         assertThat(notSetUp.shouldShowSetup(A_SESSION_ID)).isTrue()
         notSetUp.setDismissed(A_SESSION_ID, true)
         assertThat(notSetUp.isDismissed(A_SESSION_ID).first()).isTrue()

@@ -13,6 +13,7 @@ import androidx.datastore.preferences.core.edit
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
+import io.element.android.appconfig.FeralPushConfig
 import io.element.android.appconfig.PrivatePushConfig
 import io.element.android.features.privatepush.api.PrivatePushService
 import io.element.android.features.privatepush.api.PrivatePushStatus
@@ -29,6 +30,7 @@ import kotlinx.coroutines.flow.update
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 
 /**
+ * "BuiltIn" == the Feral built-in provider (libraries/pushproviders/feral) is the registered one.
  * "Private" == the ntfy distributor is the current one AND the registered UnifiedPush endpoint
  * (PushProvider.getPushConfig().pushKey) lives on [PrivatePushConfig.SERVER_HOST].
  */
@@ -45,10 +47,14 @@ class DefaultPrivatePushService(
     private fun dismissedKey(sessionId: SessionId) = booleanPreferencesKey("dismissed_${sessionId.value}")
 
     override suspend fun status(sessionId: SessionId): PrivatePushStatus {
+        val currentProvider = pushService.getCurrentPushProvider(sessionId)
+        if (currentProvider?.name == FeralPushConfig.NAME && currentProvider.getPushConfig(sessionId) != null) {
+            return PrivatePushStatus.BuiltIn
+        }
         if (!installedAppsDetector.isInstalled(PrivatePushConfig.NTFY_PACKAGE)) {
             return PrivatePushStatus.NotSetUp(PrivatePushStatus.NotSetUp.Reason.NtfyNotInstalled)
         }
-        val provider = pushService.getCurrentPushProvider(sessionId)
+        val provider = currentProvider
             ?: return PrivatePushStatus.NotSetUp(PrivatePushStatus.NotSetUp.Reason.NotConnected)
         val distributor = provider.getCurrentDistributor(sessionId)
         val endpoint = provider.getPushConfig(sessionId)?.pushKey
@@ -66,9 +72,20 @@ class DefaultPrivatePushService(
         }
     }
 
+    /**
+     * The built-in provider works out of the box, so the ntfy flow is only a first-time step when the
+     * session is stuck on another provider (e.g. UnifiedPush) without any distributor installed:
+     * practically never. Not yet registered (null provider) means the built-in one is about to be picked.
+     */
     override suspend fun shouldShowSetup(sessionId: SessionId): Boolean {
         if (!PrivatePushConfig.ENABLED) return false
-        if (status(sessionId) is PrivatePushStatus.Private) return false
+        when (status(sessionId)) {
+            PrivatePushStatus.BuiltIn, PrivatePushStatus.Private -> return false
+            is PrivatePushStatus.PublicServer, is PrivatePushStatus.NotSetUp -> Unit
+        }
+        val currentProvider = pushService.getCurrentPushProvider(sessionId) ?: return false
+        if (currentProvider.name == FeralPushConfig.NAME) return false
+        if (installedAppsDetector.isInstalled(PrivatePushConfig.NTFY_PACKAGE)) return false
         return !isDismissed(sessionId).first()
     }
 

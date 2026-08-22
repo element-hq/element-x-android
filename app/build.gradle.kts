@@ -302,6 +302,8 @@ dependencies {
     if (ModulesConfig.pushProvidersConfig.includeUnifiedPush) {
         implementation(projects.libraries.pushproviders.unifiedpush)
     }
+    // Feral: built-in push provider (WebSocket to the Feral ntfy server, no distributor app needed).
+    implementation(projects.libraries.pushproviders.feral)
 
     implementation(libs.appyx.core)
     implementation(libs.androidx.splash)

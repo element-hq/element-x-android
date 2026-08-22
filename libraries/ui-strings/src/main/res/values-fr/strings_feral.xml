@@ -10,6 +10,7 @@
 
   <!-- Private notifications: Settings > Notifications entry + status (used by features/preferences). -->
   <string name="feral_privatepush_settings_entry">"Notifications privées (ntfy)"</string>
+  <string name="feral_privatepush_status_builtin">"Actives (intégré) : Feral garde sa propre connexion au serveur Feral"</string>
   <string name="feral_privatepush_status_private">"Actives : vos notifications passent par le serveur Feral"</string>
   <string name="feral_privatepush_status_public">"Attention : les notifications passent par un autre serveur (%1$s)"</string>
   <string name="feral_privatepush_status_not_set_up">"Non configurées"</string>

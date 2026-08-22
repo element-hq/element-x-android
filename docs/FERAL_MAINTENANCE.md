@@ -295,6 +295,36 @@ refuse un APK gplay. Même `applicationId`/clé ⇒ s'installe par-dessus 25.05.
 `/_matrix/push/v1/notify` ; l'app la découvre via l'endpoint du distributeur) ⇒
 notifications 100 % privées ; les membres installent l'appli ntfy pointée sur le VPS.
 
+### Notifications intégrées — fournisseur push Feral (2026-08-22)
+**Statut : implémenté** (branche `feral/builtin-push`), à valider sur un vrai appareil.
+Les membres n'ont plus besoin de ntfy : l'app garde elle-même une WebSocket ouverte
+vers le serveur ntfy Feral depuis un foreground service.
+- Nouveau module **`libraries/pushproviders/feral`** (Feral-owned, auto-inclus,
+  câblé dans `app/build.gradle.kts` à côté d'unifiedpush) :
+  - `FeralPushProvider` (index 0, nom `Feral`, pseudo-distributeur `feral.builtin`)
+    → choisi automatiquement par `DefaultPushService` quand aucun fournisseur n'est
+    stocké (nouvelles installations) ; pusher `url` = passerelle
+    `https://ntfy.feralisme.fr/_matrix/push/v1/notify`, `pushkey` =
+    `https://ntfy.feralisme.fr/<topic>?up=1`, topic `up` + 32 hex aléatoires,
+    persisté par session (DataStore `feral_push`).
+  - `FeralPushConnectionService` (type `remoteMessaging`, notification permanente
+    silencieuse « Feral — Connecté au serveur Feral ») : une `FeralPushConnection`
+    par session (`wss://…/<topic>/ws?since=<dernier id>`, corps = JSON de la
+    passerelle → `UnifiedPushParser` réutilisé → `PushHandler`). Watchdog 120 s,
+    backoff 1→60 s avec jitter, reconnexion immédiate sur réseau disponible.
+    Démarré après enregistrement, au `BOOT_COMPLETED`, et à chaque passage au
+    premier plan (Initializer androidx.startup + `ProcessLifecycleOwner`).
+  - Test de diagnostic « Connexion Feral » (service + socket + optimisation batterie,
+    correctif = demande d'exemption Doze).
+  - Les membres déjà sur ntfy restent sur UnifiedPush (nom stocké) : aucune migration.
+- `features/privatepush` : statut `BuiltIn` (« Actives (intégré) ») ; l'étape FTUE
+  ntfy n'apparaît plus que si le fournisseur courant n'est pas Feral **et** qu'aucun
+  distributeur n'est installé (quasi jamais) ; le parcours reste accessible depuis
+  Réglages comme alternative facultative (évite la notification permanente).
+- ⚠️ À vérifier sur appareil : survie en Doze (exemption batterie conseillée),
+  redémarrage après kill/reboot, `ForegroundServiceStartNotAllowedException`
+  (loggée, retentée au prochain premier plan).
+
 ### Runbook de release (build CI non signé → signature sur eheyu)
 1. Bump `plugins/src/main/kotlin/Versions.kt` (`versionYear`/`versionMonth`/
    `versionReleaseNumber` → versionName `YY.MM.N`, versionCode `20YYMM0N`×10+abi ;

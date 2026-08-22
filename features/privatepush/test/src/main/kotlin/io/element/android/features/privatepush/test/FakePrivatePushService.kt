@@ -29,7 +29,7 @@ class FakePrivatePushService(
     }
 
     override suspend fun shouldShowSetup(sessionId: SessionId): Boolean =
-        statusResult !is PrivatePushStatus.Private && !dismissed.value
+        statusResult !is PrivatePushStatus.Private && statusResult !is PrivatePushStatus.BuiltIn && !dismissed.value
 
     override fun isDismissed(sessionId: SessionId): Flow<Boolean> = dismissed
 
