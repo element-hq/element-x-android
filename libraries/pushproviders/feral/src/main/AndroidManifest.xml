@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2026 Element Creations Ltd.
+  ~ Feral-owned file: written for the Feral fork, absent upstream (docs/FERAL_MAINTENANCE.md §4).
+  ~
+  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+  ~ Please see LICENSE files in the repository root for full details.
+  -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_REMOTE_MESSAGING" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
+    <application>
+        <!-- Keeps the WebSocket to the Feral ntfy server open, one connection per registered session. -->
+        <service
+            android:name=".service.FeralPushConnectionService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="remoteMessaging" />
+
+        <!-- Restarts the connection service after a reboot (only when a session is registered). -->
+        <receiver
+            android:name=".service.FeralPushBootReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- App-start hook: discovered by androidx.startup (the app manifest merges this provider). -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="io.element.android.libraries.pushproviders.feral.service.FeralPushInitializer"
+                android:value="androidx.startup" />
+        </provider>
+    </application>
+</manifest>

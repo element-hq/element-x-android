@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Feral-owned strings (built-in push provider). Kept OUT of the Localazy-managed files so
+     upstream i18n regeneration can never drop or overwrite them.
+     English source; French in values-fr/strings_feral_push.xml. -->
+<resources>
+  <string name="feral_push_channel_name">"Feral connection"</string>
+  <string name="feral_push_notification_title">"Feral"</string>
+  <string name="feral_push_notification_text">"Connected to the Feral server — receiving messages"</string>
+
+  <string name="feral_push_troubleshoot_title">"Feral connection"</string>
+  <string name="feral_push_troubleshoot_description">"Checks that the built-in connection to the Feral server is up."</string>
+  <string name="feral_push_troubleshoot_success">"Connected to the Feral server."</string>
+  <string name="feral_push_troubleshoot_success_battery">"Connected to the Feral server. Battery optimisation is still on for Feral: notifications may be delayed while the phone is idle. Tap “Attempt to fix” to turn it off."</string>
+  <string name="feral_push_troubleshoot_failure_service">"The Feral connection service is not running."</string>
+  <string name="feral_push_troubleshoot_failure_socket">"The Feral connection service is running but not connected to the Feral server yet."</string>
+</resources>

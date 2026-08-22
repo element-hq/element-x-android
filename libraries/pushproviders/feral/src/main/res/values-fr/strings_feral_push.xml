@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Feral-owned strings (fournisseur de notifications intégré, français). Hors des fichiers gérés par Localazy. -->
+<resources>
+  <string name="feral_push_channel_name">"Connexion Feral"</string>
+  <string name="feral_push_notification_title">"Feral"</string>
+  <string name="feral_push_notification_text">"Connecté au serveur Feral — réception des messages"</string>
+
+  <string name="feral_push_troubleshoot_title">"Connexion Feral"</string>
+  <string name="feral_push_troubleshoot_description">"Vérifie que la connexion intégrée au serveur Feral est établie."</string>
+  <string name="feral_push_troubleshoot_success">"Connecté au serveur Feral."</string>
+  <string name="feral_push_troubleshoot_success_battery">"Connecté au serveur Feral. L\'optimisation de la batterie est encore active pour Feral : les notifications peuvent être retardées quand le téléphone est en veille. Touchez « Tenter de corriger » pour la désactiver."</string>
+  <string name="feral_push_troubleshoot_failure_service">"Le service de connexion Feral n\'est pas lancé."</string>
+  <string name="feral_push_troubleshoot_failure_socket">"Le service de connexion Feral est lancé mais pas encore connecté au serveur Feral."</string>
+</resources>
