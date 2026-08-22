@@ -256,9 +256,14 @@ androidComponents {
 
             // Stores the value of abiCodes that is associated with the ABI for this variant.
             val abiCode = abiVersionCodes[name] ?: 0
-            // Assigns the new version code to output.versionCode, which changes the version code
-            // for only the output APK, not for the variant itself.
-            output.versionCode.set((output.versionCode.orNull ?: 0) * 10 + abiCode)
+            // Modified by Feral: every APK of a release (all ABI splits + universal) gets the SAME
+            // versionCode (base x 10, ABI digit always 0). Distinct per-ABI codes only matter for Google
+            // Play; for sideloaded APKs they make "universal over split" of the same release an
+            // INSTALL_FAILED_VERSION_DOWNGRADE ("App not installed"). The x10 keeps codes above the
+            // releases shipped with the old scheme (<= 26.08.4, e.g. 202608042) and keeps the in-app
+            // updater's release ordinal (versionCode / 10) unchanged. `abiCode` is kept for reference.
+            check(abiCode in 0..4)
+            output.versionCode.set((output.versionCode.orNull ?: 0) * 10)
         }
     }
 
