@@ -338,11 +338,11 @@ class LoggedInFlowNode(
                         backstack.push(NavTarget.Settings(PreferencesEntryPoint.InitialTarget.NotificationTroubleshoot))
                     }
 
-                    override fun navigateToPrivatePushSetup() {
+                    override fun navigateToPrivatePushSetup(): Boolean {
                         // The FTUE has its own PrivatePushSetup step; only route once Home is the root.
-                        if (ftueService.state.value is FtueState.Complete) {
-                            backstack.push(NavTarget.PrivatePushSetup)
-                        }
+                        if (ftueService.state.value !is FtueState.Complete) return false
+                        backstack.push(NavTarget.PrivatePushSetup)
+                        return true
                     }
                 }
                 createNode<LoggedInNode>(buildContext, listOf(callback))

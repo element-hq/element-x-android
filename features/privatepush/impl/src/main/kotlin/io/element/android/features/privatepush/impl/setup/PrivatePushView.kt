@@ -39,6 +39,7 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.LinearProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
@@ -90,6 +91,13 @@ private fun WhyPage(state: PrivatePushState) {
                 onClick = { state.eventSink(PrivatePushEvents.Continue) },
             )
             LaterButton(state)
+            if (state.canStopAsking) {
+                TextButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.feral_privatepush_action_dont_ask_again),
+                    onClick = { state.eventSink(PrivatePushEvents.DontAskAgain) },
+                )
+            }
         },
     ) {
         Column(
@@ -250,6 +258,12 @@ private fun ConfigurePage(state: PrivatePushState) {
                     }
                 },
             )
+            OutlinedButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(R.string.feral_privatepush_configure_copy),
+                leadingIcon = IconSource.Vector(CompoundIcons.Copy()),
+                onClick = { state.eventSink(PrivatePushEvents.CopyAddress) },
+            )
             NumberedStep(1, stringResource(R.string.feral_privatepush_configure_step_1))
             NumberedStep(2, stringResource(R.string.feral_privatepush_configure_step_2))
             NumberedStep(3, stringResource(R.string.feral_privatepush_configure_step_3))
@@ -269,13 +283,17 @@ private fun ConnectPage(state: PrivatePushState) {
         isScrollable = true,
         onBackClick = if (connecting) null else ({ state.eventSink(PrivatePushEvents.Back) }),
         buttons = {
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                text = stringResource(R.string.feral_privatepush_connect_action),
-                enabled = !connecting,
-                showProgress = connecting,
-                onClick = { state.eventSink(PrivatePushEvents.Activate) },
-            )
+            // One primary action: while a problem is shown, its Announcement carries the fix
+            // (Install ntfy / Check the ntfy settings / Try again) and this button steps aside.
+            if (state.connect !is ConnectState.Problem) {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.feral_privatepush_connect_action),
+                    enabled = !connecting,
+                    showProgress = connecting,
+                    onClick = { state.eventSink(PrivatePushEvents.Activate) },
+                )
+            }
             LaterButton(state)
         },
     ) {

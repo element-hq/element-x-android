@@ -5,6 +5,7 @@
   <string name="feral_privatepush_action_continue">"Continuer"</string>
   <string name="feral_privatepush_action_next">"Suivant"</string>
   <string name="feral_privatepush_action_finish">"Terminer"</string>
+  <string name="feral_privatepush_action_dont_ask_again">"Ne plus demander"</string>
 
   <string name="feral_privatepush_why_title">"Notifications privées"</string>
   <string name="feral_privatepush_why_subtitle">"Feral n\'utilise aucun service Google. Voici comment vos notifications vous parviennent."</string>
@@ -32,6 +33,7 @@
   <string name="feral_privatepush_configure_address_label">"Adresse du serveur Feral"</string>
   <string name="feral_privatepush_configure_copy">"Copier l\'adresse"</string>
   <string name="feral_privatepush_configure_copied">"Adresse copiée"</string>
+  <string name="feral_privatepush_configure_hint_wrong_server_retry">"Le serveur Feral n\'a pas pu être joint via ntfy. Vérifiez le serveur par défaut dans ntfy, puis réessayez."</string>
   <string name="feral_privatepush_configure_step_1">"Ouvrez ntfy."</string>
   <string name="feral_privatepush_configure_step_2">"Touchez le menu (⋮) en haut à droite, puis Paramètres."</string>
   <string name="feral_privatepush_configure_step_3">"Dans Général, touchez Serveur par défaut."</string>
@@ -55,6 +57,6 @@
   <string name="feral_privatepush_connect_action_troubleshoot">"Diagnostiquer les notifications"</string>
 
   <string name="feral_privatepush_done_title">"Vos notifications sont privées"</string>
-  <string name="feral_privatepush_done_subtitle">"Feral et ntfy sont reliées au serveur Feral. Vous pouvez le vérifier à tout moment dans Paramètres › Notifications › Notifications privées."</string>
+  <string name="feral_privatepush_done_subtitle">"Feral et ntfy sont reliées au serveur Feral. Vous pouvez le vérifier à tout moment dans Paramètres › Notifications › Notifications privées (ntfy)."</string>
   <string name="feral_privatepush_done_tip">"Conseil : gardez ntfy installée. Si vous la désinstallez, les notifications s\'arrêtent."</string>
 </resources>

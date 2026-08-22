@@ -7,6 +7,7 @@
   <string name="feral_privatepush_action_continue">"Continue"</string>
   <string name="feral_privatepush_action_next">"Next"</string>
   <string name="feral_privatepush_action_finish">"Finish"</string>
+  <string name="feral_privatepush_action_dont_ask_again">"Don\'t ask again"</string>
 
   <string name="feral_privatepush_why_title">"Private notifications"</string>
   <string name="feral_privatepush_why_subtitle">"Feral does not use any Google service. Here is how your notifications reach you."</string>
@@ -34,6 +35,7 @@
   <string name="feral_privatepush_configure_address_label">"Feral server address"</string>
   <string name="feral_privatepush_configure_copy">"Copy address"</string>
   <string name="feral_privatepush_configure_copied">"Address copied"</string>
+  <string name="feral_privatepush_configure_hint_wrong_server_retry">"The Feral server could not be reached through ntfy. Check the Default server in ntfy, then try again."</string>
   <string name="feral_privatepush_configure_step_1">"Open ntfy."</string>
   <string name="feral_privatepush_configure_step_2">"Tap the menu (⋮) in the top-right corner, then Settings."</string>
   <string name="feral_privatepush_configure_step_3">"Under General, tap Default server."</string>
@@ -57,6 +59,6 @@
   <string name="feral_privatepush_connect_action_troubleshoot">"Troubleshoot notifications"</string>
 
   <string name="feral_privatepush_done_title">"Your notifications are private"</string>
-  <string name="feral_privatepush_done_subtitle">"Feral and ntfy are connected to the Feral server. You can check this at any time in Settings › Notifications › Private notifications."</string>
+  <string name="feral_privatepush_done_subtitle">"Feral and ntfy are connected to the Feral server. You can check this at any time in Settings › Notifications › Private notifications (ntfy)."</string>
   <string name="feral_privatepush_done_tip">"Tip: keep ntfy installed. If you uninstall it, notifications stop."</string>
 </resources>

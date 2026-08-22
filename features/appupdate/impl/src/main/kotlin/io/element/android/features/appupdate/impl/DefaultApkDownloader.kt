@@ -27,6 +27,7 @@ import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.annotations.ApplicationContext
 import java.io.File
 import java.security.MessageDigest
+import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -55,16 +56,28 @@ class DefaultApkDownloader(
     private val downloadDir: File
         get() = File(context.cacheDir, DOWNLOAD_DIR)
 
+    /**
+     * File names currently being written. [cleanupStaleDownloads] must skip them: a partially
+     * written APK has no readable package info and would otherwise be deleted under a running
+     * download (e.g. the ntfy download started in Settings while the room list recomposes).
+     */
+    private val inProgress: MutableSet<String> = ConcurrentHashMap.newKeySet()
+
     override fun downloadAndVerify(request: ApkDownloadRequest): Flow<AppUpdateStep> = flow {
         emit(AppUpdateStep.Downloading(percent = null))
         // One slot per file name: the previous file of this request is replaced, other
         // downloads (e.g. a ntfy APK next to a Feral update) are left alone.
         val file = File(downloadDir.apply { mkdirs() }, request.fileName)
         file.delete()
-        val result = runCatchingExceptions {
-            downloadTo(file, request.url, request.sha256) { percent -> emit(AppUpdateStep.Downloading(percent)) }
-            check(verifyApk(file, request)) { "APK failed signature/package/version verification" }
-            file
+        inProgress += request.fileName
+        val result = try {
+            runCatchingExceptions {
+                downloadTo(file, request.url, request.sha256) { percent -> emit(AppUpdateStep.Downloading(percent)) }
+                check(verifyApk(file, request)) { "APK failed signature/package/version verification" }
+                file
+            }
+        } finally {
+            inProgress -= request.fileName
         }
         result.fold(
             onSuccess = { emit(AppUpdateStep.ReadyToInstall(file.absolutePath)) },
@@ -97,6 +110,7 @@ class DefaultApkDownloader(
 
     override fun cleanupStaleDownloads() {
         downloadDir.listFiles()?.forEach { file ->
+            if (file.name in inProgress) return@forEach
             val info = file.packageArchiveInfo(flags = 0)
             val archiveVersionCode = info?.let { versionCodeOf(it) }
             val stale = when {

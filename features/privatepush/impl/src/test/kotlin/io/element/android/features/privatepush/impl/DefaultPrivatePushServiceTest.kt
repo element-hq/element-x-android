@@ -72,7 +72,7 @@ class DefaultPrivatePushServiceTest {
         assertThat(createService(provider = aProvider(endpoint = "https://ntfy.sh/upabc?up=1")).status(A_SESSION_ID))
             .isEqualTo(PrivatePushStatus.PublicServer("ntfy.sh"))
         assertThat(createService(provider = aProvider(endpoint = "not a url")).status(A_SESSION_ID))
-            .isEqualTo(PrivatePushStatus.PublicServer("not a url"))
+            .isEqualTo(PrivatePushStatus.NotSetUp(PrivatePushStatus.NotSetUp.Reason.NotConnected))
     }
 
     @Test

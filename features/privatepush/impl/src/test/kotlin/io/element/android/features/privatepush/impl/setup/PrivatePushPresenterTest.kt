@@ -23,6 +23,7 @@ import io.element.android.features.privatepush.impl.system.FakeInstalledAppsDete
 import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.push.test.FakePushService
@@ -86,6 +87,11 @@ class PrivatePushPresenterTest {
         pushService: FakePushService = FakePushService(),
         downloader: FakeApkDownloader = FakeApkDownloader(),
         manifestFetcher: FakeNtfyManifestFetcher = FakeNtfyManifestFetcher(),
+        connector: PrivatePushConnector = PrivatePushConnector(
+            pushService = pushService,
+            privatePushService = privatePushService,
+            appCoroutineScope = backgroundScope,
+        ),
     ): PrivatePushPresenter {
         val dispatcher = StandardTestDispatcher(testScheduler)
         return PrivatePushPresenter(
@@ -103,6 +109,7 @@ class PrivatePushPresenterTest {
                 appCoroutineScope = backgroundScope,
                 coroutineDispatchers = CoroutineDispatchers(io = dispatcher, computation = dispatcher, main = dispatcher),
             ),
+            connector = connector,
         )
     }
 
@@ -121,6 +128,7 @@ class PrivatePushPresenterTest {
             assertThat(state.connect).isEqualTo(ConnectState.Idle)
             assertThat(state.wrongServerHost).isNull()
             assertThat(state.addressCopied).isFalse()
+            assertThat(state.canStopAsking).isFalse()
         }
     }
 
@@ -231,12 +239,12 @@ class PrivatePushPresenterTest {
             pushService = pushService,
             privatePushService = privatePushService,
         ).test {
+            // dismissed == true surfaces as canStopAsking and adds an emission: target pages, not counts.
             awaitItem().eventSink(PrivatePushEvents.Continue)
-            awaitItem().eventSink(PrivatePushEvents.Continue)
-            val connect = awaitItem()
-            assertThat(connect.page).isEqualTo(PrivatePushPage.Connect)
+            awaitState { it.page == PrivatePushPage.Configure }.eventSink(PrivatePushEvents.Continue)
+            val connect = awaitState { it.page == PrivatePushPage.Connect }
             connect.eventSink(PrivatePushEvents.Activate)
-            assertThat(awaitItem().connect).isEqualTo(ConnectState.Connecting)
+            assertThat(awaitState { it.connect != ConnectState.Idle }.connect).isEqualTo(ConnectState.Connecting)
             val done = awaitState { it.page == PrivatePushPage.Done }
             assertThat(done.connect).isEqualTo(ConnectState.Connected)
             registerWithLambda.assertions().isCalledOnce().with(any(), value(provider), value(ntfyDistributor))
@@ -248,10 +256,11 @@ class PrivatePushPresenterTest {
     }
 
     @Test
-    fun `activate with an endpoint on ntfy_sh drops the stale registration, shows WrongServer and GoToConfigure carries the hint`() = runTest {
+    fun `activate with an endpoint on ntfy_sh drops the stale registration, retries once, shows WrongServer and GoToConfigure carries the hint`() = runTest {
         val unregisterLambda = lambdaRecorder<MatrixClient, Result<Unit>> { Result.success(Unit) }
         val provider = aUnifiedPushProvider(unregisterResult = unregisterLambda)
-        val pushService = FakePushService(availablePushProviders = listOf(provider))
+        val registerWithLambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ -> Result.success(Unit) }
+        val pushService = FakePushService(availablePushProviders = listOf(provider), registerWithLambda = registerWithLambda)
         val privatePushService = FakePrivatePushService(statusResult = PrivatePushStatus.PublicServer("ntfy.sh"))
         val detector = FakeInstalledAppsDetector(mutableMapOf(PrivatePushConfig.NTFY_PACKAGE to 63L))
         createPrivatePushPresenter(detector = detector, pushService = pushService, privatePushService = privatePushService).test {
@@ -261,9 +270,13 @@ class PrivatePushPresenterTest {
             assertThat(awaitItem().connect).isEqualTo(ConnectState.Connecting)
             val problem = awaitState { it.connect is ConnectState.Problem }
             assertThat(problem.connect).isEqualTo(ConnectState.Problem(ConnectProblem.WrongServer("ntfy.sh")))
-            assertThat(problem.wrongServerHost).isEqualTo("ntfy.sh")
-            unregisterLambda.assertions().isCalledOnce()
-            problem.eventSink(PrivatePushEvents.GoToConfigure)
+            // The Configure hint is derived from the verdict one recomposition later.
+            val hinted = awaitState { it.wrongServerHost != null }
+            assertThat(hinted.wrongServerHost).isEqualTo("ntfy.sh")
+            // Stale registration dropped, registered, still public -> dropped and registered once more.
+            unregisterLambda.assertions().isCalledExactly(2)
+            registerWithLambda.assertions().isCalledExactly(2)
+            hinted.eventSink(PrivatePushEvents.GoToConfigure)
             val configure = awaitState { it.page == PrivatePushPage.Configure }
             assertThat(configure.connect).isEqualTo(ConnectState.Idle)
             assertThat(configure.wrongServerHost).isEqualTo("ntfy.sh")
@@ -324,6 +337,8 @@ class PrivatePushPresenterTest {
             assertThat(privatePushService.dismissed.value).isTrue()
             assertThat(privatePushService.requests.value).isEmpty()
             callback.onLaterLambda.assertions().isCalledOnce()
+            // The persisted dismissal flows back as canStopAsking.
+            assertThat(awaitState { it.canStopAsking }.canStopAsking).isTrue()
         }
     }
 
@@ -342,6 +357,52 @@ class PrivatePushPresenterTest {
         createPrivatePushPresenter(callback = callback, detector = detector).test {
             awaitItem().eventSink(PrivatePushEvents.Back)
             runCurrent()
+            callback.onLaterLambda.assertions().isCalledOnce()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+    @Test
+    fun `activate keeps running on the app scope when the presenter leaves composition and a re-entered flow picks up the verdict`() = runTest {
+        val provider = aUnifiedPushProvider()
+        val registerWithLambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ -> Result.success(Unit) }
+        val pushService = FakePushService(availablePushProviders = listOf(provider), registerWithLambda = registerWithLambda)
+        val privatePushService = FakePrivatePushService(statusResult = PrivatePushStatus.PublicServer("ntfy.sh"))
+        val detector = FakeInstalledAppsDetector(mutableMapOf(PrivatePushConfig.NTFY_PACKAGE to 63L))
+        val connector = PrivatePushConnector(pushService = pushService, privatePushService = privatePushService, appCoroutineScope = backgroundScope)
+        createPrivatePushPresenter(detector = detector, pushService = pushService, privatePushService = privatePushService, connector = connector).test {
+            awaitItem().eventSink(PrivatePushEvents.Continue)
+            awaitItem().eventSink(PrivatePushEvents.Continue)
+            awaitItem().eventSink(PrivatePushEvents.Activate)
+            assertThat(awaitItem().connect).isEqualTo(ConnectState.Connecting)
+            // The node goes away while the stale registration was dropped and the re-registration waits.
+            cancelAndIgnoreRemainingEvents()
+        }
+        runCurrent()
+        assertThat(connector.isRunning).isTrue()
+        registerWithLambda.assertions().isNeverCalled()
+        // The member fixed ntfy's default server meanwhile and re-opens the flow.
+        privatePushService.statusResult = PrivatePushStatus.Private
+        createPrivatePushPresenter(detector = detector, pushService = pushService, privatePushService = privatePushService, connector = connector).test {
+            val done = awaitState { it.page == PrivatePushPage.Done }
+            assertThat(done.connect).isEqualTo(ConnectState.Connected)
+            registerWithLambda.assertions().isCalledOnce()
+            assertThat(connector.isRunning).isFalse()
+        }
+    }
+
+    @Test
+    fun `don't ask again is offered after a previous Later and silences the registration error`() = runTest {
+        val callback = RecordingCallback()
+        val privatePushService = FakePrivatePushService()
+        privatePushService.dismissed.value = true
+        val setIgnoreLambda = lambdaRecorder<SessionId, Boolean, Unit> { _, _ -> }
+        val pushService = FakePushService(setIgnoreRegistrationErrorLambda = setIgnoreLambda)
+        createPrivatePushPresenter(callback = callback, privatePushService = privatePushService, pushService = pushService).test {
+            val state = awaitState { it.canStopAsking }
+            state.eventSink(PrivatePushEvents.DontAskAgain)
+            runCurrent()
+            setIgnoreLambda.assertions().isCalledOnce().with(value(A_SESSION_ID), value(true))
+            assertThat(privatePushService.dismissed.value).isTrue()
             callback.onLaterLambda.assertions().isCalledOnce()
         }
     }

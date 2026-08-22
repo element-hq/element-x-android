@@ -12,6 +12,9 @@ sealed interface PrivatePushEvents {
     data object Continue : PrivatePushEvents
     data object Back : PrivatePushEvents
     data object Later : PrivatePushEvents
+
+    /** Like [Later], and also silences the push-registration error that re-opens the flow. */
+    data object DontAskAgain : PrivatePushEvents
     data object InstallFromPlayStore : PrivatePushEvents
     data object InstallFromFdroid : PrivatePushEvents
     data object DownloadFromFeral : PrivatePushEvents

@@ -55,7 +55,10 @@ class DefaultPrivatePushService(
         if (distributor?.value != PrivatePushConfig.NTFY_PACKAGE || endpoint.isNullOrBlank()) {
             return PrivatePushStatus.NotSetUp(PrivatePushStatus.NotSetUp.Reason.NotConnected)
         }
-        val host = endpoint.toHttpUrlOrNull()?.host ?: return PrivatePushStatus.PublicServer(endpoint)
+        // An endpoint that is not an http(s) URL cannot be a working push target: treat it as not
+        // connected rather than printing the raw value as a "server" in the UI.
+        val host = endpoint.toHttpUrlOrNull()?.host
+            ?: return PrivatePushStatus.NotSetUp(PrivatePushStatus.NotSetUp.Reason.NotConnected)
         return if (host.equals(PrivatePushConfig.SERVER_HOST, ignoreCase = true)) {
             PrivatePushStatus.Private
         } else {

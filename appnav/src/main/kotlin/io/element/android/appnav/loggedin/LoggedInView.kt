@@ -15,6 +15,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -36,7 +40,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun LoggedInView(
     state: LoggedInState,
     navigateToNotificationTroubleshoot: () -> Unit,
-    navigateToPrivatePushSetup: () -> Unit,
+    navigateToPrivatePushSetup: () -> Boolean,
     modifier: Modifier = Modifier
 ) {
     OnLifecycleEvent { _, event ->
@@ -60,12 +64,15 @@ fun LoggedInView(
         is AsyncData.Success -> Unit
         is AsyncData.Failure -> {
             val failure = state.pusherRegistrationState.errorOrNull()
-            if (failure is PusherRegistrationFailure.NoDistributorsAvailable) {
-                // Feral: no ntfy installed -> guided setup flow instead of the generic dialog.
+            // Feral: no ntfy installed -> guided setup flow instead of the generic dialog. When the
+            // flow cannot be shown (FTUE still running), fall back to the upstream dialog below.
+            var setupNotShown by remember(failure) { mutableStateOf(false) }
+            if (failure is PusherRegistrationFailure.NoDistributorsAvailable && !state.ignoreRegistrationError && !setupNotShown) {
                 LaunchedEffect(failure) {
-                    state.eventSink(LoggedInEvents.CloseErrorDialog(false))
-                    if (!state.ignoreRegistrationError) {
-                        navigateToPrivatePushSetup()
+                    if (navigateToPrivatePushSetup()) {
+                        state.eventSink(LoggedInEvents.CloseErrorDialog(false))
+                    } else {
+                        setupNotShown = true
                     }
                 }
             } else {
@@ -143,6 +150,6 @@ internal fun LoggedInViewPreview(@PreviewParameter(LoggedInStateProvider::class)
     LoggedInView(
         state = state,
         navigateToNotificationTroubleshoot = {},
-        navigateToPrivatePushSetup = {},
+        navigateToPrivatePushSetup = { true },
     )
 }

@@ -41,8 +41,15 @@ object PrivatePushConfig {
     val FDROID_PACKAGES: List<String> = listOf("org.fdroid.fdroid", "org.fdroid.basic")
 
     /** Web fallback when the F-Droid app cannot open the market:// link. */
-    const val NTFY_FDROID_WEB_URL: String = "https://f-droid.org/packages//"
+    const val NTFY_FDROID_WEB_URL: String = "https://f-droid.org/packages/$NTFY_PACKAGE/"
 
     /** Poll interval while the Install page waits for ntfy to appear. */
     const val INSTALL_POLL_INTERVAL_MS: Long = 2_000L
+
+    /**
+     * Pause between dropping a stale (public) registration and asking ntfy for a new endpoint:
+     * both are fire-and-forget broadcasts, and ntfy answers a REGISTER for a still-known token
+     * with the old endpoint when it has not processed the UNREGISTER yet.
+     */
+    const val REREGISTER_DELAY_MS: Long = 1_000L
 }

@@ -21,7 +21,6 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.appconfig.PrivatePushConfig
 import io.element.android.features.privatepush.api.PrivatePushService
-import io.element.android.features.privatepush.api.PrivatePushStatus
 import io.element.android.features.privatepush.impl.install.NtfyInstaller
 import io.element.android.features.privatepush.impl.system.ExternalAppLauncher
 import io.element.android.features.privatepush.impl.system.InstalledAppsDetector
@@ -34,14 +33,14 @@ import io.element.android.libraries.pushproviders.api.PushProvider
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 /**
  * Drives the 5 pages of the private-notifications setup.
  *
  * ⚠ Runs inside Molecule: never read a CompositionLocal here. Everything needing a Context is
- * injected (launcher, detector, clipboard, installer); ON_RESUME refreshes come from the view
- * as [PrivatePushEvents.Refresh].
+ * injected (launcher, detector, clipboard, installer, connector); ON_RESUME refreshes come from
+ * the view as [PrivatePushEvents.Refresh]. Long-running work (download, registration) lives in
+ * app-scoped owners so it survives the node leaving composition.
  */
 @AssistedInject
 class PrivatePushPresenter(
@@ -53,6 +52,7 @@ class PrivatePushPresenter(
     private val externalAppLauncher: ExternalAppLauncher,
     private val clipboardHelper: ClipboardHelper,
     private val ntfyInstaller: NtfyInstaller,
+    private val connector: PrivatePushConnector,
 ) : Presenter<PrivatePushState> {
     @AssistedFactory
     interface Factory {
@@ -69,7 +69,13 @@ class PrivatePushPresenter(
         val fdroidAvailable = remember { PrivatePushConfig.FDROID_PACKAGES.any(installedAppsDetector::isInstalled) }
         val download by ntfyInstaller.step.collectAsState()
         val pendingAutoInstall by ntfyInstaller.pendingAutoInstall.collectAsState()
-        var connect by remember { mutableStateOf<ConnectState>(ConnectState.Idle) }
+        // A verdict reached before the sequence even starts (ntfy missing): kept out of the connector.
+        var localConnectProblem by remember { mutableStateOf<ConnectState.Problem?>(null) }
+        val connectorState by connector.state.collectAsState()
+        val connect = localConnectProblem ?: connectorState
+        val alreadyDismissed by remember { privatePushService.isDismissed(sessionId) }.collectAsState(initial = false)
+        // A previous run's verdict must not leak into a fresh flow (a running one is kept).
+        remember { connector.reset() }
         var wrongServerHost by remember { mutableStateOf<String?>(null) }
         var addressCopied by remember { mutableStateOf(false) }
 
@@ -94,49 +100,39 @@ class PrivatePushPresenter(
             }
         }
 
-        fun activate() = coroutineScope.launch {
-            connect = ConnectState.Connecting
+        // The connection sequence runs app-scoped (never cancelled with the node); mirror its
+        // verdict into the pages. Connected moves to Done whatever the current page, so a member
+        // coming back after a notification tap still lands on the confirmation.
+        LaunchedEffect(connect) {
+            when (val current = connect) {
+                ConnectState.Connected -> page = PrivatePushPage.Done
+                is ConnectState.Problem -> {
+                    val problem = current.problem
+                    if (problem is ConnectProblem.WrongServer) wrongServerHost = problem.host
+                }
+                ConnectState.Idle,
+                ConnectState.Connecting -> Unit
+            }
+        }
+
+        fun activate() {
             ntfyInstalled = isNtfyInstalled()
             val match = if (ntfyInstalled) findNtfyDistributor() else null
             if (match == null) {
-                connect = ConnectState.Problem(ConnectProblem.NtfyNotInstalled)
-                return@launch
+                localConnectProblem = ConnectState.Problem(ConnectProblem.NtfyNotInstalled)
+                return
             }
+            localConnectProblem = null
             val (provider, distributor) = match
-            // A stale endpoint (e.g. ntfy.sh) is re-sent by ntfy for a known registration and
-            // registerWith() skips the unregister when provider+distributor are unchanged: drop it
-            // first so a fresh endpoint is issued on the server ntfy is now pointed to.
-            if (privatePushService.status(sessionId) is PrivatePushStatus.PublicServer) {
-                provider.unregister(matrixClient).onFailure { error ->
-                    Timber.w(error, "Private push: could not drop the previous registration")
-                }
-            }
-            pushService.registerWith(matrixClient, provider, distributor).fold(
-                onSuccess = {
-                    when (val status = privatePushService.status(sessionId)) {
-                        PrivatePushStatus.Private -> {
-                            privatePushService.setDismissed(sessionId, false)
-                            privatePushService.clearSetupRequest(sessionId)
-                            connect = ConnectState.Connected
-                            page = PrivatePushPage.Done
-                        }
-                        is PrivatePushStatus.PublicServer -> {
-                            wrongServerHost = status.host
-                            connect = ConnectState.Problem(ConnectProblem.WrongServer(status.host))
-                        }
-                        is PrivatePushStatus.NotSetUp -> {
-                            connect = when (status.reason) {
-                                PrivatePushStatus.NotSetUp.Reason.NtfyNotInstalled -> ConnectState.Problem(ConnectProblem.NtfyNotInstalled)
-                                PrivatePushStatus.NotSetUp.Reason.NotConnected -> ConnectState.Problem(ConnectProblem.RegistrationFailed(null))
-                            }
-                        }
-                    }
-                },
-                onFailure = { error ->
-                    Timber.w(error, "Private push registration failed")
-                    connect = ConnectState.Problem(ConnectProblem.RegistrationFailed(error.message))
-                },
-            )
+            connector.connect(matrixClient, provider, distributor)
+        }
+
+        fun dontAskAgain() = coroutineScope.launch {
+            ntfyInstaller.cancelAndReset()
+            pushService.setIgnoreRegistrationError(sessionId, true)
+            privatePushService.setDismissed(sessionId, true)
+            privatePushService.clearSetupRequest(sessionId)
+            callback.onLater()
         }
 
         fun later() = coroutineScope.launch {
@@ -144,6 +140,11 @@ class PrivatePushPresenter(
             privatePushService.setDismissed(sessionId, true)
             privatePushService.clearSetupRequest(sessionId)
             callback.onLater()
+        }
+
+        fun clearConnectVerdict() {
+            localConnectProblem = null
+            connector.reset()
         }
 
         fun handleEvents(event: PrivatePushEvents) {
@@ -160,7 +161,7 @@ class PrivatePushPresenter(
                     PrivatePushPage.Install -> page = PrivatePushPage.Why
                     PrivatePushPage.Configure -> page = if (ntfyInstalled) PrivatePushPage.Why else PrivatePushPage.Install
                     PrivatePushPage.Connect -> {
-                        connect = ConnectState.Idle
+                        clearConnectVerdict()
                         page = PrivatePushPage.Configure
                     }
                     PrivatePushPage.Done -> Unit
@@ -181,14 +182,15 @@ class PrivatePushPresenter(
                 }
                 PrivatePushEvents.Activate -> activate()
                 PrivatePushEvents.GoToInstall -> {
-                    connect = ConnectState.Idle
+                    clearConnectVerdict()
                     page = PrivatePushPage.Install
                 }
                 PrivatePushEvents.GoToConfigure -> {
-                    connect = ConnectState.Idle
+                    clearConnectVerdict()
                     addressCopied = false
                     page = PrivatePushPage.Configure
                 }
+                PrivatePushEvents.DontAskAgain -> dontAskAgain()
                 PrivatePushEvents.OpenTroubleshoot -> callback.navigateToTroubleshoot()
                 PrivatePushEvents.Refresh -> ntfyInstalled = isNtfyInstalled()
                 PrivatePushEvents.Finish -> callback.onDone()
@@ -205,6 +207,7 @@ class PrivatePushPresenter(
             connect = connect,
             wrongServerHost = wrongServerHost,
             addressCopied = addressCopied,
+            canStopAsking = alreadyDismissed,
             eventSink = ::handleEvents,
         )
     }

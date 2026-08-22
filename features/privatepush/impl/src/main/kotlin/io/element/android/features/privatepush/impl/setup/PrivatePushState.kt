@@ -47,5 +47,7 @@ data class PrivatePushState(
     /** Hint shown on the Configure page after a failed verification (endpoint on another server). */
     val wrongServerHost: String?,
     val addressCopied: Boolean,
+    /** The member already said "Later" once: offer to stop re-showing the flow on the push error. */
+    val canStopAsking: Boolean,
     val eventSink: (PrivatePushEvents) -> Unit,
 )

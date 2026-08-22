@@ -17,6 +17,7 @@ open class PrivatePushStateProvider : PreviewParameterProvider<PrivatePushState>
         get() = sequenceOf(
             aPrivatePushState(),
             aPrivatePushState(page = PrivatePushPage.Why, ntfyInstalled = true),
+            aPrivatePushState(page = PrivatePushPage.Why, canStopAsking = true),
             aPrivatePushState(page = PrivatePushPage.Install),
             aPrivatePushState(page = PrivatePushPage.Install, playStoreAvailable = false, fdroidAvailable = false),
             aPrivatePushState(page = PrivatePushPage.Install, download = AppUpdateStep.Downloading(percent = null)),
@@ -47,6 +48,7 @@ fun aPrivatePushState(
     connect: ConnectState = ConnectState.Idle,
     wrongServerHost: String? = null,
     addressCopied: Boolean = false,
+    canStopAsking: Boolean = false,
     eventSink: (PrivatePushEvents) -> Unit = {},
 ) = PrivatePushState(
     page = page,
@@ -58,5 +60,6 @@ fun aPrivatePushState(
     connect = connect,
     wrongServerHost = wrongServerHost,
     addressCopied = addressCopied,
+    canStopAsking = canStopAsking,
     eventSink = eventSink,
 )

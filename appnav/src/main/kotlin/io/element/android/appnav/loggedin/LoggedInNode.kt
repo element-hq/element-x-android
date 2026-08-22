@@ -32,7 +32,8 @@ class LoggedInNode(
 ) {
     interface Callback : Plugin {
         fun navigateToNotificationTroubleshoot()
-        fun navigateToPrivatePushSetup()
+        /** Returns false when the flow could not be shown (caller falls back to the upstream dialog). */
+        fun navigateToPrivatePushSetup(): Boolean
     }
 
     private val callback: Callback = callback()
