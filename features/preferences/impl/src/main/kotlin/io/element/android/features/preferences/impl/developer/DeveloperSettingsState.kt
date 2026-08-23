@@ -22,6 +22,7 @@ data class DeveloperSettingsState(
     val markAllRoomsAsReadAction: AsyncAction<Unit>,
     val isEnterpriseBuild: Boolean,
     val showColorPicker: Boolean,
+    val messageSearchIndexStatus: MessageSearchIndexStatus,
     val deviceId: DeviceId,
     val eventSink: (DeveloperSettingsEvents) -> Unit
 ) {

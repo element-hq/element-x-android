@@ -162,7 +162,8 @@ enum class FeatureFlags(
     MessageSearch(
         key = "feature.message_search",
         title = "Message search",
-        description = "Index messages locally so they can be searched. Only messages received while enabled are indexed.",
+        description = "Index messages locally so they can be searched. New messages are indexed as they arrive; " +
+            "use \"Start indexing\" below to fetch and index older history.",
         defaultValue = { false },
         isFinished = false,
     ),

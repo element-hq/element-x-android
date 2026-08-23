@@ -5,8 +5,22 @@
   ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
   ~ Please see LICENSE files in the repository root for full details.
   -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- The user-initiated search-index sweep runs as a WorkManager foreground service so it can
+         outlive the app being backgrounded and show live progress. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+
+    <application>
+        <!-- Declare the service type WorkManager's foreground service runs under (required on API 34+). -->
+        <service
+            android:name="androidx.work.impl.foreground.SystemForegroundService"
+            android:foregroundServiceType="dataSync"
+            tools:node="merge" />
+    </application>
 
 </manifest>

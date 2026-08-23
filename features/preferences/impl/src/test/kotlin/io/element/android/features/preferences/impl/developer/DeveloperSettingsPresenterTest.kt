@@ -24,14 +24,21 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.data.megaBytes
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.analytics.GetDatabaseSizesUseCase
 import io.element.android.libraries.matrix.api.analytics.SdkStoreSizes
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.search.MessageSearchSweepActivity
+import io.element.android.libraries.matrix.api.search.SearchBackfillCursor
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.core.aBuildMeta
+import io.element.android.libraries.matrix.test.search.FakeMessageSearchIndexer
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
@@ -170,6 +177,93 @@ class DeveloperSettingsPresenterTest {
         }
     }
 
+    @Test
+    fun `present - message search index section is hidden while the flag is off`() = runTest {
+        val presenter = createDeveloperSettingsPresenter()
+        presenter.test {
+            assertThat(awaitItem().messageSearchIndexStatus).isEqualTo(MessageSearchIndexStatus.Hidden)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - message search index needs a restart when the flag is on but no index is attached`() = runTest {
+        val presenter = createDeveloperSettingsPresenter(
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.MessageSearch.key to true)),
+        )
+        presenter.test {
+            consumeItemsUntilPredicate { it.messageSearchIndexStatus == MessageSearchIndexStatus.RestartNeeded }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - message search index maps a running sweep to progress`() = runTest {
+        val indexer = FakeMessageSearchIndexer()
+        val presenter = createDeveloperSettingsPresenter(
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.MessageSearch.key to true)),
+            matrixClient = FakeMatrixClient(isMessageSearchAvailable = true),
+            messageSearchIndexer = indexer,
+        )
+        presenter.test {
+            indexer.userSweepActivityFlow.value = MessageSearchSweepActivity.RUNNING
+            indexer.cursorFlow.value = SearchBackfillCursor(
+                generation = 1,
+                queue = listOf("!a:server.org", "!b:server.org", "!c:server.org"),
+                index = 1,
+            )
+            consumeItemsUntilPredicate {
+                it.messageSearchIndexStatus == MessageSearchIndexStatus.Running(roomsDone = 1, roomsTotal = 3)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - message search index reports a drained sweep as finished`() = runTest {
+        val indexer = FakeMessageSearchIndexer()
+        val presenter = createDeveloperSettingsPresenter(
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.MessageSearch.key to true)),
+            matrixClient = FakeMatrixClient(isMessageSearchAvailable = true),
+            messageSearchIndexer = indexer,
+        )
+        presenter.test {
+            indexer.cursorFlow.value = SearchBackfillCursor(
+                generation = 1,
+                queue = listOf("!a:server.org", "!b:server.org"),
+                index = 2,
+                pagesIssued = 42,
+                finishedAt = 123L,
+            )
+            consumeItemsUntilPredicate {
+                it.messageSearchIndexStatus == MessageSearchIndexStatus.Finished(roomsSwept = 2, pagesFetched = 42)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - start and cancel indexing delegate to the indexer`() = runTest {
+        val startRecorder = lambdaRecorder<SessionId, Unit> { }
+        val cancelRecorder = lambdaRecorder<SessionId, Unit> { }
+        val presenter = createDeveloperSettingsPresenter(
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.MessageSearch.key to true)),
+            matrixClient = FakeMatrixClient(isMessageSearchAvailable = true),
+            messageSearchIndexer = FakeMessageSearchIndexer(
+                startUserInitiatedSweepLambda = startRecorder,
+                cancelSweepLambda = cancelRecorder,
+            ),
+        )
+        presenter.test {
+            val state = awaitItem()
+            state.eventSink(DeveloperSettingsEvents.StartSearchIndexing)
+            state.eventSink(DeveloperSettingsEvents.CancelSearchIndexing)
+            cancelAndIgnoreRemainingEvents()
+        }
+        startRecorder.assertions().isCalledOnce().with(value(A_SESSION_ID))
+        cancelRecorder.assertions().isCalledOnce().with(value(A_SESSION_ID))
+    }
+
     private fun createDeveloperSettingsPresenter(
         sessionId: SessionId = A_SESSION_ID,
         deviceId: DeviceId = A_DEVICE_ID,
@@ -179,6 +273,9 @@ class DeveloperSettingsPresenterTest {
         vacuumStoresUseCase: VacuumStoresUseCase = VacuumStoresUseCase {},
         databaseSizesUseCase: GetDatabaseSizesUseCase = GetDatabaseSizesUseCase { Result.success(SdkStoreSizes(null, null, null, null)) },
         markAllRoomsAsRead: FakeMarkAllRoomsAsRead = FakeMarkAllRoomsAsRead(),
+        featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
+        matrixClient: FakeMatrixClient = FakeMatrixClient(),
+        messageSearchIndexer: FakeMessageSearchIndexer = FakeMessageSearchIndexer(),
         buildMeta: BuildMeta = aBuildMeta(),
     ): DeveloperSettingsPresenter {
         return DeveloperSettingsPresenter(
@@ -192,6 +289,9 @@ class DeveloperSettingsPresenterTest {
             databaseSizesUseCase = databaseSizesUseCase,
             fileSizeFormatter = FakeFileSizeFormatter(),
             markAllRoomsAsRead = markAllRoomsAsRead,
+            featureFlagService = featureFlagService,
+            matrixClient = matrixClient,
+            messageSearchIndexer = messageSearchIndexer,
             buildMeta = buildMeta,
         )
     }

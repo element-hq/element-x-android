@@ -10,6 +10,8 @@ package io.element.android.features.preferences.impl.developer
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.runtime.Composable
@@ -31,6 +33,7 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.LinearProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.DeviceId
@@ -77,6 +80,7 @@ fun DeveloperSettingsView(
         AppDeveloperSettingsView(
             state = state.appDeveloperSettingsState,
             onOpenShowkase = onOpenShowkase,
+            afterFeatureFlags = { MessageSearchIndexCategory(state) },
         )
         SessionCategory(deviceId = state.deviceId)
         NotificationCategory(onPushHistoryClick)
@@ -169,6 +173,105 @@ fun DeveloperSettingsView(
         onPickedColor = {
             state.eventSink(DeveloperSettingsEvents.ChangeBrandColor(it))
         },
+    )
+}
+
+/**
+ * Sits directly under the feature-flag list so it reads as an extension of the "Message search"
+ * toggle that gates it. Wording stays "swept/fetched" on purpose — see [MessageSearchIndexStatus].
+ */
+@Composable
+private fun MessageSearchIndexCategory(state: DeveloperSettingsState) {
+    val status = state.messageSearchIndexStatus
+    if (status is MessageSearchIndexStatus.Hidden) return
+    PreferenceCategory(title = "Message search index") {
+        when (status) {
+            MessageSearchIndexStatus.Hidden -> Unit
+            MessageSearchIndexStatus.RestartNeeded -> ListItem(
+                content = { Text("Start indexing") },
+                supportingContent = {
+                    Text("Restart the app first: the search index is created at startup while the Message search flag is on.")
+                },
+                enabled = false,
+            )
+            MessageSearchIndexStatus.Idle -> ListItem(
+                content = { Text("Start indexing") },
+                supportingContent = {
+                    Text("Fetches older history room by room so it becomes searchable. Uses network data and shows progress in a notification.")
+                },
+                onClick = { state.eventSink(DeveloperSettingsEvents.StartSearchIndexing) },
+            )
+            is MessageSearchIndexStatus.Paused -> ListItem(
+                content = { Text("Resume indexing") },
+                supportingContent = {
+                    Text("Paused at room ${status.roomsDone} of ${status.roomsTotal}.")
+                },
+                onClick = { state.eventSink(DeveloperSettingsEvents.StartSearchIndexing) },
+            )
+            MessageSearchIndexStatus.WaitingForRun -> {
+                LinearProgressIndicator(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                )
+                // Covers both unmet constraints (no connection) and retry backoff — WorkManager
+                // does not say which, so the wording must not claim one.
+                SearchIndexSupportingText("Waiting to continue…")
+                CancelSearchIndexingItem(state)
+            }
+            is MessageSearchIndexStatus.Running -> {
+                if (status.roomsTotal == 0) {
+                    LinearProgressIndicator(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 8.dp),
+                    )
+                    SearchIndexSupportingText("Preparing…")
+                } else {
+                    LinearProgressIndicator(
+                        progress = { status.roomsDone.toFloat() / status.roomsTotal },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 8.dp),
+                    )
+                    SearchIndexSupportingText("Indexing room ${status.roomsDone} of ${status.roomsTotal}")
+                }
+                CancelSearchIndexingItem(state)
+            }
+            is MessageSearchIndexStatus.Finished -> {
+                ListItem(
+                    content = { Text("Indexing finished") },
+                    supportingContent = {
+                        Text(
+                            "${status.roomsSwept} rooms swept, ${status.pagesFetched} pages of history fetched. " +
+                                "New messages are indexed automatically as they arrive."
+                        )
+                    },
+                )
+                ListItem(
+                    content = { Text("Start indexing again") },
+                    onClick = { state.eventSink(DeveloperSettingsEvents.StartSearchIndexing) },
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun SearchIndexSupportingText(text: String) {
+    Text(
+        text = text,
+        style = ElementTheme.typography.fontBodyMdRegular,
+        color = ElementTheme.colors.textSecondary,
+        modifier = Modifier.padding(horizontal = 16.dp),
+    )
+}
+
+@Composable
+private fun CancelSearchIndexingItem(state: DeveloperSettingsState) {
+    ListItem(
+        content = { Text("Cancel indexing") },
+        onClick = { state.eventSink(DeveloperSettingsEvents.CancelSearchIndexing) },
     )
 }
 

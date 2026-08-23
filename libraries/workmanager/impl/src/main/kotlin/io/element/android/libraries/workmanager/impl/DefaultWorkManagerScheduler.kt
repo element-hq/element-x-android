@@ -17,11 +17,14 @@ import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.sessionstorage.api.observer.SessionListener
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
+import io.element.android.libraries.workmanager.api.WorkActivityState
 import io.element.android.libraries.workmanager.api.WorkManagerRequestBuilder
 import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.WorkManagerScheduler
 import io.element.android.libraries.workmanager.api.WorkManagerWorkerType
 import io.element.android.libraries.workmanager.api.workManagerTag
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import timber.log.Timber
 
 @ContributesBinding(AppScope::class)
@@ -73,6 +76,17 @@ class DefaultWorkManagerScheduler(
             // - It's periodic and is not cancelled - since it'll be run again in a next iteration otherwise
             !isPeriodic && !info.state.isFinished || isPeriodic && !isCancelled
         }
+    }
+
+    override fun workStateFlow(sessionId: SessionId, requestType: WorkManagerRequestType): Flow<WorkActivityState> {
+        return workManager.getWorkInfosByTagFlow(workManagerTag(sessionId, requestType))
+            .map { workInfos ->
+                when {
+                    workInfos.any { it.state == WorkInfo.State.RUNNING } -> WorkActivityState.RUNNING
+                    workInfos.any { !it.state.isFinished } -> WorkActivityState.ENQUEUED
+                    else -> WorkActivityState.NONE
+                }
+            }
     }
 
     override fun cancel(sessionId: SessionId, requestType: WorkManagerRequestType?) {

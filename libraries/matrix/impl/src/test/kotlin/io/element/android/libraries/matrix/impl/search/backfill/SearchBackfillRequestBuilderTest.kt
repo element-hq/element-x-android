@@ -45,4 +45,30 @@ class SearchBackfillRequestBuilderTest : RobolectricTest() {
         // The user did not ask for this download, so it must not arrive on their data plan.
         assertThat(request.workSpec.constraints.requiredNetworkType).isEqualTo(NetworkType.UNMETERED)
     }
+
+    @Test
+    fun `a user-initiated sweep replaces the parked background request under the same unique name`() = runTest {
+        // Same unique name keeps the one-sweep-per-session invariant; REPLACE is what lets the
+        // user's request take over one stuck waiting for the background constraints.
+        val results = SearchBackfillRequestBuilder(A_SESSION_ID, userInitiated = true).build()
+
+        val wrapper = results.getOrThrow().single()
+        val type = wrapper.type as WorkManagerWorkerType.Unique
+        assertThat(type.name).isEqualTo(workManagerTag(A_SESSION_ID, WorkManagerRequestType.SEARCH_BACKFILL))
+        assertThat(type.policy).isEqualTo(ExistingWorkPolicy.REPLACE)
+    }
+
+    @Test
+    fun `a user-initiated sweep carries both tags, relaxed constraints and the user flag`() = runTest {
+        val results = SearchBackfillRequestBuilder(A_SESSION_ID, userInitiated = true).build()
+
+        val request = results.getOrThrow().single().request
+        // The shared tag stays: logout cancellation and hasPendingWork key on it. The user tag is
+        // what lets UI observe this sweep without the always-enqueued background one drowning it out.
+        assertThat(request.tags).contains(workManagerTag(A_SESSION_ID, WorkManagerRequestType.SEARCH_BACKFILL))
+        assertThat(request.tags).contains(workManagerTag(A_SESSION_ID, WorkManagerRequestType.SEARCH_BACKFILL_USER))
+        // The user explicitly asked and is watching a progress bar: any connection will do.
+        assertThat(request.workSpec.constraints.requiredNetworkType).isEqualTo(NetworkType.CONNECTED)
+        assertThat(request.workSpec.input.getBoolean(SearchBackfillWorker.USER_INITIATED_PARAM, false)).isTrue()
+    }
 }

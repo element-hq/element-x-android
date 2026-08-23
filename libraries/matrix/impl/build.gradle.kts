@@ -45,6 +45,7 @@ dependencies {
     api(projects.libraries.matrix.api)
     implementation(projects.libraries.core)
     implementation(variantOf(libs.jna) { artifactType("aar") })
+    implementation(libs.androidx.corektx)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.serialization.json)
     implementation(libs.kotlinx.collections.immutable)

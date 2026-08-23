@@ -32,6 +32,27 @@ open class DeveloperSettingsStateProvider : PreviewParameterProvider<DeveloperSe
                 //  at io.mhssn.colorpicker.pickers.ClassicColorPickerKt$ClassicColorPicker$1$1.invokeSuspend(ClassicColorPicker.kt:53)
                 showColorPicker = false,
             ),
+            aDeveloperSettingsState(
+                messageSearchIndexStatus = MessageSearchIndexStatus.Idle,
+            ),
+            aDeveloperSettingsState(
+                messageSearchIndexStatus = MessageSearchIndexStatus.RestartNeeded,
+            ),
+            aDeveloperSettingsState(
+                messageSearchIndexStatus = MessageSearchIndexStatus.Paused(roomsDone = 4, roomsTotal = 9),
+            ),
+            aDeveloperSettingsState(
+                messageSearchIndexStatus = MessageSearchIndexStatus.WaitingForRun,
+            ),
+            aDeveloperSettingsState(
+                messageSearchIndexStatus = MessageSearchIndexStatus.Running(roomsDone = 3, roomsTotal = 9),
+            ),
+            aDeveloperSettingsState(
+                messageSearchIndexStatus = MessageSearchIndexStatus.Running(roomsDone = 0, roomsTotal = 0),
+            ),
+            aDeveloperSettingsState(
+                messageSearchIndexStatus = MessageSearchIndexStatus.Finished(roomsSwept = 9, pagesFetched = 420),
+            ),
         )
 }
 
@@ -41,6 +62,7 @@ fun aDeveloperSettingsState(
     markAllRoomsAsReadAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     isEnterpriseBuild: Boolean = false,
     showColorPicker: Boolean = false,
+    messageSearchIndexStatus: MessageSearchIndexStatus = MessageSearchIndexStatus.Hidden,
     deviceId: DeviceId = DeviceId("ILAKNDNASDLK"),
     eventSink: (DeveloperSettingsEvents) -> Unit = {},
 ) = DeveloperSettingsState(
@@ -51,6 +73,7 @@ fun aDeveloperSettingsState(
     markAllRoomsAsReadAction = markAllRoomsAsReadAction,
     isEnterpriseBuild = isEnterpriseBuild,
     showColorPicker = showColorPicker,
+    messageSearchIndexStatus = messageSearchIndexStatus,
     deviceId = deviceId,
     eventSink = eventSink,
 )
