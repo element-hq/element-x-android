@@ -153,6 +153,16 @@ assumé). Pas de ship automatique.
   `gradle/libs.versions.toml` + rebuild. **Ne jamais bumper en standalone** :
   laisser le merge du tag upstream porter la version EC qu'il embarque et teste.
   Un bump Renovate isolé reste review-required (risque d'incompat widget/SDK).
+  ⚠ Leçon 2026-08-23 (26.08.6/26.08.7) : EC 0.24.0 pris sur `develop` upstream alors que
+  le tag v26.08.2 embarque 0.23.0 → **aucun appel n'aboutissait** (« UNKNOWN_ERROR ») :
+  EC 0.24 loggue un objet cyclique dans son constructeur `Connection` et le shim
+  `console.*` injecté par l'hôte (`JSON.stringify` nu, upstream #4097) levait dans EC
+  avant tout contact avec le SFU — bug présent aussi sur le nightly Element X
+  (element-hq/element-call#4164). Décision du propriétaire : **suivre Element X** — la
+  version EC est celle du tag, point ; Feral ne corrige pas l'hôte à leur place (le shim
+  cycle-safe est parqué sur `feral/ec024-console-shim` comme contribution upstream
+  possible). Avant de publier une version qui change EC : un vrai appel avec le build
+  debug sur le Pixel (console EC dans logcat, `grep '\[ElementCall\]'`).
 - **Web déployé** (`/opt/feral-source`) : widget distant `call.element.io`. À
   terme, **self-héberger la SPA EC** (Feral a déjà LiveKit + lk-jwt) pour ne pas
   fuiter les métadonnées d'appel vers Element.

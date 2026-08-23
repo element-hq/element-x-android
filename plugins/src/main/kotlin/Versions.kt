@@ -47,7 +47,7 @@ private const val versionMonth = 8
  */
 // Modified by Feral: 26.08.7 = Feral release on upstream v26.08.2 (built-in push, no ntfy needed). Reset to
 // upstream's value at the next sync; if upstream ever tags the same number, bump again.
-private const val versionReleaseNumber = 7
+private const val versionReleaseNumber = 8
 
 object Versions {
     /**
