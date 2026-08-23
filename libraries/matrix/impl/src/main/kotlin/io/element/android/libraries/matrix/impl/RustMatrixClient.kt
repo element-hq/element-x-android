@@ -17,6 +17,7 @@ import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.HomeserverCapabilitiesProvider
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.analytics.SdkStoreSizes
@@ -80,6 +81,7 @@ import io.element.android.libraries.matrix.impl.roomlist.RoomListFactory
 import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
 import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import io.element.android.libraries.matrix.impl.search.RustMessageSearchService
+import io.element.android.libraries.matrix.impl.search.backfill.SearchBackfillRequestBuilder
 import io.element.android.libraries.matrix.impl.spaces.RustSpaceService
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import io.element.android.libraries.matrix.impl.sync.map
@@ -323,6 +325,15 @@ class RustMatrixClient(
 
         // Schedule regular database vacuuming to ensure DB performance remains optimal
         scheduleDatabaseVacuum()
+
+        // Bring older history into the search index whenever message search is enabled.
+        sessionCoroutineScope.launch {
+            featureFlagService.isFeatureEnabledFlow(FeatureFlags.MessageSearch)
+                .distinctUntilChanged()
+                .collect { enabled ->
+                    if (enabled) scheduleSearchBackfill()
+                }
+        }
     }
 
     private suspend fun setupUserProfile() {
@@ -945,6 +956,23 @@ class RustMatrixClient(
 
         Timber.i("Scheduling periodic database vacuuming for session $sessionId")
         val request = PerformDatabaseVacuumRequestBuilder(sessionId)
+        sessionCoroutineScope.launch { workManagerScheduler.submit(request) }
+    }
+
+    /**
+     * Starts the background backfill so old history reaches the search index without the user having
+     * to ask for it or wait on it.
+     *
+     * The index store is attached only when the flag was already on as the client was built, so a
+     * session that started with search off has nothing to backfill into until the app is restarted.
+     * The worker re-checks the live flag itself before doing any work.
+     */
+    private fun scheduleSearchBackfill() {
+        if (!isMessageSearchAvailable) return
+        if (workManagerScheduler.hasPendingWork(sessionId, WorkManagerRequestType.SEARCH_BACKFILL)) return
+
+        Timber.i("Scheduling message search backfill for session $sessionId")
+        val request = SearchBackfillRequestBuilder(sessionId)
         sessionCoroutineScope.launch { workManagerScheduler.submit(request) }
     }
 
