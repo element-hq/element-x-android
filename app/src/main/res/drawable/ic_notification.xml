@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2026 Element Creations Ltd.
+  ~ Feral-owned file: written for the Feral fork, absent upstream (docs/FERAL_MAINTENANCE.md §4).
+  ~
+  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+  ~ Please see LICENSE files in the repository root for full details.
+  -->
+<!--
+  Status-bar ("small") icon of every Feral notification. Overrides upstream's
+  libraries/designsystem/…/drawable/ic_notification.xml (the Element swirl) through app-module
+  resource precedence — no upstream file is edited. The bitmaps are the Feral monochrome
+  launcher silhouette (appicon/element …/ic_launcher_monochrome.webp) cropped to its content,
+  white on transparent, 24dp at mdpi…96px at xxxhdpi (tools/feral: regenerate from the webp).
+-->
+<bitmap xmlns:android="http://schemas.android.com/apk/res/android"
+    android:src="@drawable/ic_notification_feral" />

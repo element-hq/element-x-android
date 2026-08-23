@@ -110,6 +110,7 @@ sortir les customisations du code cœur vers des points d'extension conçus pour
 | Serveur / members-only | ✅ `FeralEnterpriseService` (impl-foss, Metro `replaces`) | conserver ce pattern |
 | Branding visuel (logo, couleurs, thème) | patchs dans `OnBoardingView.kt`, `SuperButton.kt` | un `productFlavor` Feral + overrides `res/` |
 | Notice members-only i18n | 1 clé ajoutée dans les `translations.xml` Localazy régénérés | ressource **Feral-owned** hors des fichiers Localazy |
+| Icône de barre d'état des notifications (« small icon ») | ✅ `app/src/main/res/drawable/ic_notification.xml` (Feral-owned, `<bitmap>`) + `drawable-*dpi/ic_notification_feral.png` : surcharge par précédence du module `app` de `libraries/designsystem/…/ic_notification.xml` (le tourbillon Element), aucun fichier upstream touché (26.08.9) | conserver ce pattern ; régénérer les PNG depuis `ic_launcher_monochrome.webp` si le logo change |
 
 Cible : ~4 commits atomiques, sur des fichiers que **Feral possède**, hors des
 fichiers churny upstream.
