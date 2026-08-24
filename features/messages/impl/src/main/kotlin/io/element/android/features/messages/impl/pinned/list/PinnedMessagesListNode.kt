@@ -124,6 +124,7 @@ class PinnedMessagesListNode(
                     callback.handleGalleryItemClick(event, index, canUseOverlay)
                 },
                 onUserDataClick = { callback.navigateToRoomMemberDetails(it.userId) },
+                onMemberClick = {},
                 onLinkClick = { link -> onLinkClick(context, link.url) },
                 onLinkLongClick = {
                     view.performHapticFeedback(

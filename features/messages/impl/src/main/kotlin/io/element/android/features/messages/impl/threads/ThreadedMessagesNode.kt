@@ -309,6 +309,10 @@ class ThreadedMessagesNode(
                         } == true
                     },
                     onUserDataClick = callback::navigateToRoomMemberDetails,
+                    onMemberClick = { userId ->
+                        state.eventSink(MessagesEvent.OnMemberClicked(userId))
+                    },
+                    onRoomStateClick = {},
                     onLinkClick = { url, customTab ->
                         onLinkClick(
                             activity = activity,
