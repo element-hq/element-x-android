@@ -8,7 +8,6 @@
 
 package io.element.android.libraries.matrix.ui.messages.sender
 
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
@@ -19,54 +18,47 @@ import io.element.android.libraries.matrix.ui.messages.reply.aProfileDetailsRead
 data class SenderNameData(
     val userId: UserId,
     val profileDetails: ProfileDetails,
-    val senderNameMode: SenderNameMode,
 )
 
 open class SenderNameDataPreviewParam : PreviewParameterProvider<SenderNameData> {
     override val values: Sequence<SenderNameData>
         get() = sequenceOf(
-            SenderNameMode.Timeline(mainColor = Color.Red),
-            SenderNameMode.Reply,
-            SenderNameMode.ActionList,
+            aSenderNameData(),
+            aSenderNameData(
+                displayNameAmbiguous = true,
+            ),
+            aSenderNameData(
+                profileDetails = ProfileDetails.Unavailable,
+            ),
+            aSenderNameData(
+                displayName = null,
+            ),
+            aSenderNameData(
+                displayedStatus = DisplayedStatus.UserSet(
+                    status = UserStatus(
+                        emoji = "😀",
+                        text = "Should not be rendered",
+                    ),
+                ),
+            ),
+            aSenderNameData(
+                displayedStatus = DisplayedStatus.InCall(0L),
+            ),
+            aSenderNameData(
+                displayNameAmbiguous = true,
+                displayedStatus = DisplayedStatus.UserSet(
+                    status = UserStatus(
+                        emoji = "😀",
+                        text = "Should not be rendered",
+                    ),
+                ),
+            ),
         )
-            .flatMap { senderNameMode ->
-                sequenceOf(
-                    aSenderNameData(
-                        senderNameMode = senderNameMode,
-                    ),
-                    aSenderNameData(
-                        senderNameMode = senderNameMode,
-                        displayNameAmbiguous = true,
-                    ),
-                    aSenderNameData(
-                        senderNameMode = senderNameMode,
-                        profileDetails = ProfileDetails.Unavailable,
-                    ),
-                    aSenderNameData(
-                        senderNameMode = senderNameMode,
-                        displayName = null,
-                    ),
-                    aSenderNameData(
-                        senderNameMode = senderNameMode,
-                        displayedStatus = DisplayedStatus.UserSet(
-                            status = UserStatus(
-                                emoji = "😀",
-                                text = "Should not be rendered",
-                            ),
-                        ),
-                    ),
-                    aSenderNameData(
-                        senderNameMode = senderNameMode,
-                        displayedStatus = DisplayedStatus.InCall(0L),
-                    )
-                )
-            }
 }
 
 private fun aSenderNameData(
-    senderNameMode: SenderNameMode,
-    userId: UserId = UserId("@alice:${senderNameMode.javaClass.simpleName.lowercase()}"),
-    displayName: String? = "Alice ${senderNameMode.javaClass.simpleName}",
+    userId: UserId = UserId("@alice:example.com"),
+    displayName: String? = "Alice",
     displayNameAmbiguous: Boolean = false,
     displayedStatus: DisplayedStatus? = null,
     profileDetails: ProfileDetails = aProfileDetailsReady(
@@ -77,5 +69,4 @@ private fun aSenderNameData(
 ) = SenderNameData(
     userId = userId,
     profileDetails = profileDetails,
-    senderNameMode = senderNameMode,
 )
