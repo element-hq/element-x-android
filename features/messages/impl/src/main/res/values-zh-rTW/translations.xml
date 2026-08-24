@@ -7,6 +7,17 @@
   <string name="crypto_event_authenticity_unknown_device">"由未知或已刪除的裝置加密。"</string>
   <string name="crypto_event_authenticity_unsigned_device">"由未經其擁有者驗證的裝置加密。"</string>
   <string name="crypto_event_authenticity_unverified_identity">"由未經驗證的使用者加密。"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally">"水平翻轉圖片"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"水平翻轉"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"原始狀態"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically">"垂直翻轉圖片"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_flipped">"垂直翻轉"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_original">"原始狀態"</string>
+  <string name="screen_image_edition_a11y_rotate_to_the_left">"向左旋轉圖片"</string>
+  <plurals name="screen_image_edition_a11y_rotation_state">
+    <item quantity="other">"%1$d 度"</item>
+  </plurals>
+  <string name="screen_image_edition_title">"編輯照片"</string>
   <string name="screen_media_upload_preview_caption_warning">"使用舊應用程式的使用者可能看不到標題。"</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"輕點即可變更影片上傳品質"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"無法上傳檔案。"</string>
@@ -17,6 +28,7 @@
   <string name="screen_media_upload_preview_item_count">"第 %1$d 個項目，共 %2$d 個"</string>
   <string name="screen_media_upload_preview_optimize_image_quality_title">"最佳化影像品質"</string>
   <string name="screen_media_upload_preview_processing">"正在處理……"</string>
+  <string name="screen_media_upload_preview_title">"新增媒體"</string>
   <string name="screen_report_content_block_user">"封鎖使用者"</string>
   <string name="screen_report_content_block_user_hint">"檢查您是否要隱藏所有來自此使用者的目前及未來的訊息"</string>
   <string name="screen_report_content_explanation">"此訊息將會回報給您的家伺服器管理員。他們將無法讀取任何已加密的訊息。"</string>
@@ -55,6 +67,9 @@
   <string name="screen_room_timeline_reactions_show_more">"更多"</string>
   <string name="screen_room_timeline_reactions_show_reactions_summary">"顯示反應摘要"</string>
   <string name="screen_room_timeline_read_marker_title">"新訊息"</string>
+  <plurals name="screen_room_timeline_redacted_messages">
+    <item quantity="other">"%1$d 則已移除的訊息"</item>
+  </plurals>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="other">"%1$d 個聊天室變更"</item>
   </plurals>

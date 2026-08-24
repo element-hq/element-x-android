@@ -7,6 +7,9 @@
 
 package io.element.android.libraries.matrix.api.linknewdevice
 
+/**
+ * Lets the user confirm the two-digit check code displayed by the device being linked, which proves the channel is not being intercepted.
+ */
 interface CheckCodeSender {
     /**
      * Validates the given [code]. Returns true if the code is valid, false otherwise.

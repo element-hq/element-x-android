@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.location.api.LocalMapTilerConfig
 import io.element.android.features.location.api.StaticMapView
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContentProvider
@@ -50,6 +51,7 @@ fun TimelineItemLocationView(
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(max = 188.dp),
+            mapTilerConfig = LocalMapTilerConfig.current,
             pinVariant = content.pinVariant,
             location = content.location,
             zoom = 15.0,

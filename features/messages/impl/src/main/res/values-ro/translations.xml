@@ -7,6 +7,19 @@
   <string name="crypto_event_authenticity_unknown_device">"Criptat de un dispozitiv necunoscut sau șters."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Criptat de un dispozitiv care nu este verificat de proprietarul său."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Criptat de un utilizator neverificat."</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally">"Răsturnați imaginea pe orizontală"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Răsturnat pe orizontală"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Original"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically">"Răsturnați imaginea pe verticală"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_flipped">"Răsturnat pe verticală"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_original">"Original"</string>
+  <string name="screen_image_edition_a11y_rotate_to_the_left">"Rotiți imaginea la stânga"</string>
+  <plurals name="screen_image_edition_a11y_rotation_state">
+    <item quantity="one">"%1$d grad"</item>
+    <item quantity="few">"%1$d grade"</item>
+    <item quantity="other">"%1$d grade"</item>
+  </plurals>
+  <string name="screen_image_edition_title">"Editați poza"</string>
   <string name="screen_media_upload_preview_caption_warning">"Este posibil ca descrierile să nu fie vizibile pentru persoanele care folosesc aplicații mai vechi."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Atingeți pentru a modifica calitatea încărcării videoclipului"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Fișierul nu a putut fi încărcat."</string>
@@ -17,6 +30,7 @@
   <string name="screen_media_upload_preview_item_count">"Elementul %1$d din %2$d"</string>
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Optimizați calitatea imaginii"</string>
   <string name="screen_media_upload_preview_processing">"Se procesează…"</string>
+  <string name="screen_media_upload_preview_title">"Adăugați media"</string>
   <string name="screen_report_content_block_user">"Blocați utilizatorul"</string>
   <string name="screen_report_content_block_user_hint">"Confirmați că doriți să ascundeți toate mesajele curente și viitoare de la acest utilizator"</string>
   <string name="screen_report_content_explanation">"Acest mesaj va fi raportat administratorilor homeserver-ului tau. Ei nu vor putea citi niciun mesaj criptat."</string>
@@ -59,6 +73,11 @@
   <string name="screen_room_timeline_reactions_show_more">"Afișați mai mult"</string>
   <string name="screen_room_timeline_reactions_show_reactions_summary">"Afișați rezumatul reacțiilor"</string>
   <string name="screen_room_timeline_read_marker_title">"Nou"</string>
+  <plurals name="screen_room_timeline_redacted_messages">
+    <item quantity="one">"%1$d mesaj șters"</item>
+    <item quantity="few">"%1$d mesaje șterse"</item>
+    <item quantity="other">"%1$d mesaje șterse"</item>
+  </plurals>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d schimbare a camerii"</item>
     <item quantity="few">"%1$d schimbări ale camerei"</item>

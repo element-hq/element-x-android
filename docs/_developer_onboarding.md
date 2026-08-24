@@ -303,6 +303,8 @@ Follow these steps to install and configure the plugin and templates:
    - Click on OK
 4. Configure generate-module-from-template plugin :
    - Navigate to AS/Settings/Tools/Module Template Settings
+   - If a `FeatureModule` template is already listed, select it and remove it, since the plugin keeps its own copy of the
+     imported template and will not pick up changes made to `FeatureModule.json` on its own
    - Click on + / Import From File
    - Pick the `tools/templates/FeatureModule.json`
 
@@ -321,8 +323,10 @@ Example for a new feature called RoomDetails:
 5. The modules api/impl should be created under `features/roomdetails` directory.
 6. Sync project with Gradle so the modules are recognized (no need to add them to settings.gradle).
 7. You can now add more Presentation classes (Events, State, StateProvider, View, Presenter) in the impl module with the `Template Presentation Classes`.
-   To use it, just right click on the package where you want to generate classes, and click on `Template Presentation Classes`.
-   Fill the text field with the base name of the classes, ie `RootRoomDetails` in the `root` package.
+   To use it, just right click on the package where you want to generate classes, and click on `New` / `Template Presentation Classes`.
+   Fill the text field with the base name of the classes: the generated files are `<BaseName>Event.kt`, `<BaseName>State.kt`,
+   `<BaseName>StateProvider.kt`, `<BaseName>Presenter.kt`, `<BaseName>Node.kt` and `<BaseName>View.kt`. For instance
+   `PreferencesRoot` in the `features/preferences/impl/root` package.
 
 
 Note that naming of files and classes is important, since those names are used to set up code coverage rules. For instance, presenters MUST have a
