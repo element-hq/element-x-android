@@ -349,12 +349,12 @@ private fun RoomJoinRuleOptions(
 
 @PreviewWithLargeHeight
 @Composable
-internal fun ConfigureRoomViewLightPreview(@PreviewParameter(ConfigureRoomStateProvider::class) state: ConfigureRoomState) =
+internal fun ConfigureRoomViewLightPreview(@PreviewParameter(ConfigureRoomStatePreviewParam::class) state: ConfigureRoomState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @PreviewWithLargeHeight
 @Composable
-internal fun ConfigureRoomViewDarkPreview(@PreviewParameter(ConfigureRoomStateProvider::class) state: ConfigureRoomState) =
+internal fun ConfigureRoomViewDarkPreview(@PreviewParameter(ConfigureRoomStatePreviewParam::class) state: ConfigureRoomState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @ExcludeFromCoverage

@@ -101,7 +101,7 @@ fun LabsView(
 
 @PreviewsDayNight
 @Composable
-internal fun LabsViewPreview(@PreviewParameter(LabsStateProvider::class) state: LabsState) {
+internal fun LabsViewPreview(@PreviewParameter(LabsStatePreviewParam::class) state: LabsState) {
     ElementPreview {
         LabsView(state = state, onBack = {})
     }

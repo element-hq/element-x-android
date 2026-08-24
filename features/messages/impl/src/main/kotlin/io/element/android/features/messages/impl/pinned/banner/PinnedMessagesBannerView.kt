@@ -324,7 +324,9 @@ private class ExitOnScrollBehavior : PinnedMessagesBannerViewScrollBehavior {
 
 @PreviewsDayNight
 @Composable
-internal fun PinnedMessagesBannerViewPreview(@PreviewParameter(PinnedMessagesBannerStateProvider::class) state: PinnedMessagesBannerState) = ElementPreview {
+internal fun PinnedMessagesBannerViewPreview(@PreviewParameter(
+    PinnedMessagesBannerStatePreviewParam::class
+) state: PinnedMessagesBannerState) = ElementPreview {
     PinnedMessagesBannerView(
         state = state,
         onClick = {},

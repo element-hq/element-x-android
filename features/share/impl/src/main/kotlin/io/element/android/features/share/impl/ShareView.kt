@@ -33,7 +33,7 @@ fun ShareView(
 
 @PreviewsDayNight
 @Composable
-internal fun ShareViewPreview(@PreviewParameter(ShareStateProvider::class) state: ShareState) = ElementPreview {
+internal fun ShareViewPreview(@PreviewParameter(ShareStatePreviewParam::class) state: ShareState) = ElementPreview {
     ShareView(
         state = state,
         onShareSuccess = {}

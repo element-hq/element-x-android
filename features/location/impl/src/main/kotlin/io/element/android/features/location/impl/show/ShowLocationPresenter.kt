@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import io.element.android.features.enterprise.api.remoteconfig.CustomMapTilerConfigProvider
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.ShowLocationMode
 import io.element.android.features.location.api.live.ActiveLiveLocationShareManager
@@ -46,7 +47,6 @@ import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.getBestName
 import io.element.android.libraries.matrix.api.room.joinedRoomMembers
@@ -57,17 +57,18 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
-@AssistedInject class ShowLocationPresenter(
+@AssistedInject
+class ShowLocationPresenter(
     @Assisted private val mode: ShowLocationMode,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
     private val locationActions: LocationActions,
     private val buildMeta: BuildMeta,
     private val dateFormatter: DateFormatter,
     private val stringProvider: StringProvider,
-    private val client: MatrixClient,
     private val joinedRoom: JoinedRoom,
     private val liveLocationShareManager: ActiveLiveLocationShareManager,
     private val userLocationStateFactory: UserLocationState.Factory,
+    private val customMapTilerConfigProvider: CustomMapTilerConfigProvider,
 ) : Presenter<ShowLocationState> {
     @AssistedFactory fun interface Factory {
         fun create(mode: ShowLocationMode): ShowLocationPresenter
@@ -85,9 +86,9 @@ import kotlinx.coroutines.launch
             mutableStateOf(LocationConstraintsDialogState.None)
         }
 
-        val customMapStyleUrl by produceState(AsyncData.Loading()) {
+        val customMapTilerConfig by produceState(AsyncData.Loading()) {
             // Ignore errors
-            value = AsyncData.Success(client.getMapStyleUrl().getOrNull())
+            value = AsyncData.Success(customMapTilerConfigProvider.get().getOrNull())
         }
 
         fun checkLocationConstraints() {
@@ -220,7 +221,7 @@ import kotlinx.coroutines.launch
             userLocationStateFactory.create(hasLocationPermission = permissionsState.isAnyGranted)
         }
         return ShowLocationState(
-            customMapStyleUrl = customMapStyleUrl,
+            customMapTilerConfig = customMapTilerConfig,
             dialogState = dialogState,
             locationShares = locationShares,
             focusedLocation = focusedLocation,

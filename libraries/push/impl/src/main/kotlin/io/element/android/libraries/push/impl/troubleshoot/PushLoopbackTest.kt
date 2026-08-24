@@ -62,6 +62,13 @@ class PushLoopbackTest(
             )
             job.cancel()
             return
+        } catch (_: PushGatewayFailure.RateLimited) {
+            delegate.updateState(
+                description = stringProvider.getString(R.string.troubleshoot_notifications_test_push_loop_back_failure_rate_limit),
+                status = NotificationTroubleshootTestState.Status.Failure()
+            )
+            job.cancel()
+            return
         } catch (e: Exception) {
             Timber.e(e, "Failed to test push")
             delegate.updateState(

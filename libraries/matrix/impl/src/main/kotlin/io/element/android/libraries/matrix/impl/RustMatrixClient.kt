@@ -135,6 +135,7 @@ import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
 import java.util.Optional
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.jvm.optionals.getOrNull
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
@@ -145,7 +146,7 @@ import org.matrix.rustcomponents.sdk.SyncService as ClientSyncService
 @Suppress("LargeClass")
 class RustMatrixClient(
     override val sessionPaths: SessionPaths,
-    private val innerClient: Client,
+    val innerClient: Client,
     private val sessionStore: SessionStore,
     private val sessionDelegate: RustClientSessionDelegate,
     private val innerSyncService: ClientSyncService,
@@ -162,6 +163,7 @@ class RustMatrixClient(
 ) : MatrixClient {
     override val sessionId: UserId = UserId(innerClient.userId())
     override val deviceId: DeviceId = DeviceId(innerClient.deviceId())
+    override val server: String? = innerClient.server()
     override val homeserverUrl: String = innerClient.homeserver()
     override val sessionCoroutineScope = appCoroutineScope.childScope(dispatchers.main, "Session-$sessionId")
     private val sessionDispatcher = dispatchers.io.limitedParallelism(64)
@@ -304,6 +306,10 @@ class RustMatrixClient(
         .buffer(Channel.UNLIMITED)
         .stateIn(sessionCoroutineScope, started = SharingStarted.Eagerly, initialValue = persistentListOf())
 
+    private val _isShuttingDown = AtomicBoolean(false)
+    override val isShuttingDown: Boolean
+        get() = _isShuttingDown.get()
+
     init {
         // Make sure the session delegate has a reference to the client to be able to logout on auth error
         sessionDelegate.bindClient(this)
@@ -320,7 +326,9 @@ class RustMatrixClient(
     }
 
     private suspend fun setupUserProfile() {
-        val supported = isUserStatusSupported().getOrDefault(false)
+        // Subscribing to own profile updates only requires the Profiles sliding sync extension,
+        // not the full user status capability (which also needs the status profile field to be settable).
+        val supported = isProfilesSlidingSyncExtensionSupported().getOrDefault(false)
         if (supported) {
             // No need to seed the data here, it's already stored by the sdk.
             ownProfileTaskHandle = innerClient.subscribeToOwnProfile(ownProfileListener)
@@ -530,6 +538,12 @@ class RustMatrixClient(
         }
     }
 
+    override suspend fun isProfilesSlidingSyncExtensionSupported(): Result<Boolean> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.isProfilesSlidingSyncExtensionSupported()
+        }
+    }
+
     override fun enableAutomaticCallStatus(enabled: Boolean) {
         innerClient.enableAutomaticCallStatus(enabled)
     }
@@ -666,11 +680,13 @@ class RustMatrixClient(
     }
 
     override suspend fun clearCache() {
+        _isShuttingDown.set(true)
         innerClient.clearCaches(innerSyncService)
         destroy()
     }
 
     override suspend fun logout(userInitiated: Boolean, ignoreSdkError: Boolean) {
+        _isShuttingDown.set(true)
         sessionCoroutineScope.cancel()
         // Remove current delegate so we don't receive an auth error
         clientDelegateTaskHandle?.cancelAndDestroy()
@@ -708,6 +724,8 @@ class RustMatrixClient(
     }
 
     override suspend fun deactivateAccount(password: String, eraseData: Boolean): Result<Unit> = withContext(sessionDispatcher) {
+        _isShuttingDown.set(true)
+
         Timber.w("Deactivating account")
         // Remove current delegate so we don't receive an auth error
         clientDelegateTaskHandle?.cancelAndDestroy()
@@ -883,12 +901,6 @@ class RustMatrixClient(
         runCatchingExceptions {
             Timber.d("Performing database vacuuming for session $sessionId...")
             innerClient.optimizeStores()
-        }
-    }
-
-    override suspend fun getMapStyleUrl(): Result<String?> = withContext(sessionDispatcher) {
-        runCatchingExceptions {
-            innerClient.tileServer()?.mapStyleUrl
         }
     }
 

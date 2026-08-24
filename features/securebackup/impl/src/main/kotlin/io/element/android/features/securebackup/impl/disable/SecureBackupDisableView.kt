@@ -112,7 +112,7 @@ private fun SecureBackupDisableItem(text: String) {
 @PreviewsDayNight
 @Composable
 internal fun SecureBackupDisableViewPreview(
-    @PreviewParameter(SecureBackupDisableStateProvider::class) state: SecureBackupDisableState
+    @PreviewParameter(SecureBackupDisableStatePreviewParam::class) state: SecureBackupDisableState
 ) = ElementPreview {
     SecureBackupDisableView(
         state = state,

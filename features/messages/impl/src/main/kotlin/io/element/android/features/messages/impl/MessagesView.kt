@@ -93,6 +93,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.features.messages.impl.timeline.sendfailure.SendFailureDialogView
 import io.element.android.features.messages.impl.topbars.MessagesViewTopBar
 import io.element.android.features.messages.impl.topbars.ThreadTopBar
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessagePermissionRationaleDialog
@@ -178,8 +179,8 @@ fun MessagesView(
 
     fun onContentClick(event: TimelineItem.Event) {
         Timber.v("onMessageClick= ${event.id}")
-        val eventId = event.eventId ?: return
-        if (eventContentValidationState[eventId].getCurrentOverallState() != ContentValidationValue.Valid) return
+        val eventId = event.eventId
+        if (eventId != null && eventContentValidationState[eventId].getCurrentOverallState() != ContentValidationValue.Valid) return
 
         val hideKeyboard = onEventContentClick(state.timelineState.isLive, event)
         if (hideKeyboard) {
@@ -429,6 +430,31 @@ fun MessagesView(
         },
         state = state.linkState,
     )
+
+    SendFailureDialogView(
+        sendFailureDialogState = state.timelineState.sendFailureDialogState,
+        onDismiss = {
+            state.timelineState.eventSink(TimelineEvent.HideSendFailureDialog)
+        },
+        onRetry = { event ->
+            state.eventSink(
+                MessagesEvent.HandleAction(
+                    action = TimelineItemAction.RetrySending,
+                    event = event,
+                )
+            )
+            state.timelineState.eventSink(TimelineEvent.HideSendFailureDialog)
+        },
+        onRemoveMessage = { event ->
+            state.eventSink(
+                MessagesEvent.HandleAction(
+                    action = TimelineItemAction.Redact,
+                    event = event,
+                )
+            )
+            state.timelineState.eventSink(TimelineEvent.HideSendFailureDialog)
+        },
+    )
 }
 
 @Composable
@@ -590,13 +616,19 @@ private fun MessagesViewComposerBottomSheetContents(
     when {
         state.successorRoom != null -> {
             SuccessorRoomBanner(
-                modifier = Modifier.fillMaxWidth().padding(contentPadding),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(contentPadding),
                 roomSuccessor = state.successorRoom,
                 onRoomSuccessorClick = onRoomSuccessorClick
             )
         }
         state.userEventPermissions.canSendMessage -> {
-            Column(modifier = Modifier.fillMaxWidth().padding(contentPadding)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(contentPadding)
+            ) {
                 // Do not show the identity change if user is composing a Rich message or is seeing suggestion(s).
                 if (state.composerState.suggestions.isEmpty() &&
                     state.composerState.textEditorState is TextEditorState.Markdown) {
@@ -662,7 +694,7 @@ private fun SuccessorRoomBanner(
 
 @PreviewsDayNight
 @Composable
-internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class) state: MessagesState) = ElementPreview {
+internal fun MessagesViewPreview(@PreviewParameter(MessagesStatePreviewParam::class) state: MessagesState) = ElementPreview {
     MessagesView(
         state = state,
         onBackClick = {},

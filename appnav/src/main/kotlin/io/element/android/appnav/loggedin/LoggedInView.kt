@@ -124,7 +124,7 @@ private fun ForceNativeSlidingSyncMigrationDialog(
 
 @PreviewsDayNight
 @Composable
-internal fun LoggedInViewPreview(@PreviewParameter(LoggedInStateProvider::class) state: LoggedInState) = ElementPreview {
+internal fun LoggedInViewPreview(@PreviewParameter(LoggedInStatePreviewParam::class) state: LoggedInState) = ElementPreview {
     LoggedInView(
         state = state,
         navigateToNotificationTroubleshoot = {},

@@ -9,10 +9,13 @@
 package io.element.android.features.login.impl.changeserver
 
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialog
 
 data class ChangeServerState(
-    val changeServerAction: AsyncData<Unit>,
+    // On success, carries the resolved homeserver details so the caller can proceed with login without
+    // configuring (and re-networking) the homeserver a second time.
+    val changeServerAction: AsyncData<MatrixHomeServerDetails>,
     val localNetworkPermissionDialog: LocalNetworkPermissionDialog,
     val eventSink: (ChangeServerEvents) -> Unit
 )

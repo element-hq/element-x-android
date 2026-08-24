@@ -55,12 +55,14 @@ import io.element.android.features.messages.impl.timeline.components.receipt.aRe
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetEvent
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.features.messages.impl.timeline.sendfailure.SendFailureDialogState
 import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.libraries.emoji.impl.picker.DefaultEmojiPickerRenderer
 import io.element.android.libraries.emoji.impl.picker.anEmojiPickerState
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisplayName
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -88,6 +90,7 @@ import org.junit.Test
 import org.robolectric.annotation.Config
 import kotlin.time.Duration.Companion.milliseconds
 
+@Suppress("LargeClass")
 class MessagesViewTest : RobolectricTest() {
     @Test
     fun `clicking on back invoke expected callback`() = runAndroidComposeUiTest {
@@ -165,6 +168,33 @@ class MessagesViewTest : RobolectricTest() {
         val callback = EnsureCalledOnceWithTwoParamsAndResult(
             expectedParam1 = true,
             expectedParam2 = timelineItem,
+            result = true,
+        )
+        setMessagesView(
+            state = state,
+            onEventClick = callback,
+        )
+        // Cannot perform click on "Text", it's not detected. Use tag instead
+        onAllNodesWithTag(TestTags.messageBubble.value).onFirst().performClick()
+        callback.assertSuccess()
+    }
+
+    @Test
+    fun `clicking on an Event which has not been sent yet invoke expected callback`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<MessagesEvent>(expectEvents = false)
+        val localEcho = aTimelineItemEvent(
+            isMine = true,
+            content = aTimelineItemTextContent(),
+        ).copy(eventId = null)
+        val state = aMessagesState(
+            timelineState = aTimelineState(
+                timelineItems = persistentListOf(localEcho),
+            ),
+            eventSink = eventsRecorder
+        )
+        val callback = EnsureCalledOnceWithTwoParamsAndResult(
+            expectedParam1 = true,
+            expectedParam2 = localEcho,
             result = true,
         )
         setMessagesView(
@@ -529,6 +559,80 @@ class MessagesViewTest : RobolectricTest() {
         // Give time for the close animation to complete
         mainClock.advanceTimeBy(milliseconds = 1_000)
         eventsRecorder.assertSingle(TimelineEvent.ComputeVerifiedUserSendFailure(timelineItem))
+    }
+
+    @Test
+    fun `clicking on retry in the send failure dialog emits the expected Events`() = runAndroidComposeUiTest {
+        val messagesEventsRecorder = EventsRecorder<MessagesEvent>()
+        val timelineEventsRecorder = EventsRecorder<TimelineEvent>()
+        val timelineItem = aTimelineItemEvent(sendState = LocalEventSendState.Failed.Unknown("Error"))
+        setMessagesView(
+            state = aMessagesState(
+                timelineState = aTimelineState(
+                    sendFailureDialogState = SendFailureDialogState.Show(
+                        event = timelineItem,
+                        sendFailureType = SendFailureDialogState.SendFailureType.Error("Error"),
+                    ),
+                    eventSink = timelineEventsRecorder,
+                ),
+                eventSink = messagesEventsRecorder,
+            ),
+        )
+        // Clear initial 'LoadMore' event emitted when setting the state
+        timelineEventsRecorder.clear()
+
+        clickOn(CommonStrings.action_retry)
+        messagesEventsRecorder.assertSingle(MessagesEvent.HandleAction(TimelineItemAction.RetrySending, timelineItem))
+        timelineEventsRecorder.assertSingle(TimelineEvent.HideSendFailureDialog)
+    }
+
+    @Test
+    fun `clicking on remove message in the send failure dialog emits the expected Events`() = runAndroidComposeUiTest {
+        val messagesEventsRecorder = EventsRecorder<MessagesEvent>()
+        val timelineEventsRecorder = EventsRecorder<TimelineEvent>()
+        val timelineItem = aTimelineItemEvent(sendState = LocalEventSendState.Failed.Unknown("Error"))
+        setMessagesView(
+            state = aMessagesState(
+                timelineState = aTimelineState(
+                    sendFailureDialogState = SendFailureDialogState.Show(
+                        event = timelineItem,
+                        sendFailureType = SendFailureDialogState.SendFailureType.Error("Error"),
+                    ),
+                    eventSink = timelineEventsRecorder,
+                ),
+                eventSink = messagesEventsRecorder,
+            ),
+        )
+        // Clear initial 'LoadMore' event emitted when setting the state
+        timelineEventsRecorder.clear()
+
+        clickOn(CommonStrings.action_remove_message)
+        messagesEventsRecorder.assertSingle(MessagesEvent.HandleAction(TimelineItemAction.Redact, timelineItem))
+        timelineEventsRecorder.assertSingle(TimelineEvent.HideSendFailureDialog)
+    }
+
+    @Test
+    fun `cancelling the send failure dialog emits the expected Event`() = runAndroidComposeUiTest {
+        val messagesEventsRecorder = EventsRecorder<MessagesEvent>(expectEvents = false)
+        val timelineEventsRecorder = EventsRecorder<TimelineEvent>()
+        val timelineItem = aTimelineItemEvent(sendState = LocalEventSendState.Failed.Unknown("Error"))
+        setMessagesView(
+            state = aMessagesState(
+                timelineState = aTimelineState(
+                    sendFailureDialogState = SendFailureDialogState.Show(
+                        event = timelineItem,
+                        sendFailureType = SendFailureDialogState.SendFailureType.Error("Error"),
+                    ),
+                    eventSink = timelineEventsRecorder,
+                ),
+                eventSink = messagesEventsRecorder,
+            ),
+        )
+        // Clear initial 'LoadMore' event emitted when setting the state
+        timelineEventsRecorder.clear()
+
+        clickOn(CommonStrings.action_cancel)
+        timelineEventsRecorder.assertSingle(TimelineEvent.HideSendFailureDialog)
     }
 
     @Test

@@ -24,6 +24,9 @@ typealias GetNotificationDataResult = Result<Map<EventId, Result<NotificationDat
 interface NotificationService {
     /**
      * Fetch notifications for the specified event ids in the given rooms.
+     * Each event is resolved independently, so a partial answer is normal: see [GetNotificationDataResult] for how the two failure levels differ.
+     *
+     * @param ids the events to resolve, grouped by the room they belong to.
      */
     suspend fun getNotifications(ids: Map<RoomId, List<EventId>>): GetNotificationDataResult
 }
