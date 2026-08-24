@@ -32,6 +32,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageTy
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 
@@ -163,9 +164,10 @@ fun aProfileDetailsReady(
     displayName: String? = USER_NAME_SENDER,
     displayNameAmbiguous: Boolean = false,
     avatarUrl: String? = null,
+    displayedStatus: DisplayedStatus? = null
 ) = ProfileDetails.Ready(
     displayName = displayName,
     displayNameAmbiguous = displayNameAmbiguous,
     avatarUrl = avatarUrl,
-    displayedStatus = null,
+    displayedStatus = displayedStatus,
 )

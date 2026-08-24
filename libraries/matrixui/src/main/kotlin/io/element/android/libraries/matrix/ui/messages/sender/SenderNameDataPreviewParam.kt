@@ -13,6 +13,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
 import io.element.android.libraries.matrix.api.user.DisplayedStatus
+import io.element.android.libraries.matrix.api.user.UserStatus
+import io.element.android.libraries.matrix.ui.messages.reply.aProfileDetailsReady
 
 data class SenderNameData(
     val userId: UserId,
@@ -36,26 +38,44 @@ open class SenderNameDataPreviewParam : PreviewParameterProvider<SenderNameData>
                         senderNameMode = senderNameMode,
                         displayNameAmbiguous = true,
                     ),
-                    SenderNameData(
+                    aSenderNameData(
                         senderNameMode = senderNameMode,
-                        userId = UserId("@alice:${senderNameMode.javaClass.simpleName.lowercase()}"),
                         profileDetails = ProfileDetails.Unavailable,
                     ),
+                    aSenderNameData(
+                        senderNameMode = senderNameMode,
+                        displayName = null,
+                    ),
+                    aSenderNameData(
+                        senderNameMode = senderNameMode,
+                        displayedStatus = DisplayedStatus.UserSet(
+                            status = UserStatus(
+                                emoji = "😀",
+                                text = "Should not be rendered",
+                            ),
+                        ),
+                    ),
+                    aSenderNameData(
+                        senderNameMode = senderNameMode,
+                        displayedStatus = DisplayedStatus.InCall(0L),
+                    )
                 )
             }
 }
 
 private fun aSenderNameData(
     senderNameMode: SenderNameMode,
+    userId: UserId = UserId("@alice:${senderNameMode.javaClass.simpleName.lowercase()}"),
+    displayName: String? = "Alice ${senderNameMode.javaClass.simpleName}",
     displayNameAmbiguous: Boolean = false,
     displayedStatus: DisplayedStatus? = null,
-) = SenderNameData(
-    userId = UserId("@alice:${senderNameMode.javaClass.simpleName.lowercase()}"),
-    profileDetails = ProfileDetails.Ready(
-        displayName = "Alice ${senderNameMode.javaClass.simpleName}",
+    profileDetails: ProfileDetails = aProfileDetailsReady(
+        displayName = displayName,
         displayNameAmbiguous = displayNameAmbiguous,
-        avatarUrl = null,
         displayedStatus = displayedStatus,
-    ),
+    )
+) = SenderNameData(
+    userId = userId,
+    profileDetails = profileDetails,
     senderNameMode = senderNameMode,
 )
