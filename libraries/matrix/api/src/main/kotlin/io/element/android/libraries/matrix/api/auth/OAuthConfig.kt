@@ -11,6 +11,8 @@ package io.element.android.libraries.matrix.api.auth
 import io.element.android.libraries.matrix.api.BuildConfig
 
 object OAuthConfig {
+    // This *can* be null if the build time config field is not set
+    @Suppress("UNNECESSARY_SAFE_CALL")
     val CLIENT_URI = BuildConfig.OAUTH_CLIENT_URI_PATH?.let {
         // Concatenate the base URI and the path, ensuring there is exactly one '/' between them
         "${BuildConfig.CLIENT_URI.trimEnd('/')}/${it.trimStart('/')}"

@@ -10,6 +10,9 @@ package io.element.android.features.roommembermoderation.api
 
 import io.element.android.libraries.matrix.api.user.MatrixUser
 
+/**
+ * Events sent to the moderation presenter through [RoomMemberModerationState.eventSink].
+ */
 interface RoomMemberModerationEvents {
     data class ShowActionsForUser(val user: MatrixUser) : RoomMemberModerationEvents
     data class ProcessAction(val action: ModerationAction, val targetUser: MatrixUser) : RoomMemberModerationEvents

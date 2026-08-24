@@ -66,7 +66,7 @@ fun AnalyticsPreferencesView(
 
 @PreviewsDayNight
 @Composable
-internal fun AnalyticsPreferencesViewPreview(@PreviewParameter(AnalyticsPreferencesStateProvider::class) state: AnalyticsPreferencesState) =
+internal fun AnalyticsPreferencesViewPreview(@PreviewParameter(AnalyticsPreferencesStatePreviewParam::class) state: AnalyticsPreferencesState) =
     ElementPreview {
         AnalyticsPreferencesView(
             state = state,

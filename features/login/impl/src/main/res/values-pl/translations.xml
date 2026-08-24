@@ -25,8 +25,16 @@
   <string name="screen_change_server_error_unauthorized_homeserver_title">"Dostawca konta %1$s jest niedozwolony."</string>
   <string name="screen_change_server_form_header">"URL serwera domowego"</string>
   <string name="screen_change_server_form_notice">"Wprowadź adres domeny."</string>
+  <string name="screen_change_server_navigation_title_login">"Zaloguj"</string>
+  <string name="screen_change_server_navigation_title_register">"Utwórz konto"</string>
   <string name="screen_change_server_subtitle">"Jaki jest adres Twojego serwera?"</string>
+  <string name="screen_change_server_textfield_footer_login">"Jeśli uzyskałeś konto od firmy lub społeczności, wprowadź dostawcę konta (na przykład: nazwafirmy.com)"</string>
+  <string name="screen_change_server_textfield_footer_register">"Załóż darmowe konto na matrix.org. Jeśli chcesz założyć konto u innego dostawcy wprowadź własny adres (na przykład: nazwaspołeczności.org)."</string>
+  <string name="screen_change_server_textfield_header">"Dostawca konta"</string>
+  <string name="screen_change_server_textfield_placeholder">"przykład.com"</string>
   <string name="screen_change_server_title">"Wybierz swój serwer"</string>
+  <string name="screen_change_server_title_login">"Wprowadź dostawcę swojego konta"</string>
+  <string name="screen_change_server_title_register">"Wybierz dostawcę konta"</string>
   <string name="screen_create_account_title">"Utwórz konto"</string>
   <string name="screen_login_error_deactivated_account">"To konto zostało usunięte."</string>
   <string name="screen_login_error_invalid_credentials">"Nieprawidłowa nazwa użytkownika i/lub hasło"</string>

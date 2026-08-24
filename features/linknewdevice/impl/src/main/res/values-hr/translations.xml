@@ -5,6 +5,7 @@
   <string name="screen_link_new_device_desktop_step3">"Skenirajte QR kod ovim uređajem"</string>
   <string name="screen_link_new_device_desktop_submit">"Spremno za skeniranje"</string>
   <string name="screen_link_new_device_desktop_title">"Otvorite %1$s na stolnom računalu kako biste dobili QR kod"</string>
+  <string name="screen_link_new_device_desktop_warning">"QR kod skenirajte tek nakon što ste na vlastitom uređaju slijedili gore navedene korake. Nikada ne skenirajte kod koji vam je poslala druga osoba."</string>
   <string name="screen_link_new_device_enter_number_error_numbers_do_not_match">"Brojevi se ne podudaraju"</string>
   <string name="screen_link_new_device_enter_number_notice">"Unesite dvoznamenkasti kod"</string>
   <string name="screen_link_new_device_enter_number_subtitle">"Time ćete potvrditi da je veza s vašim drugim uređajem sigurna."</string>

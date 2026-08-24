@@ -196,11 +196,12 @@ class DefaultNotificationCreator(
             isThread = threadId != null,
             roomIsGroup = !roomInfo.isDm,
         )
-        messagingStyle.addMessagesFromEvents(events, imageLoader)
+        val newEvents = messagingStyle.filterOutAlreadyDisplayedEvents(events)
+        messagingStyle.addMessagesFromEvents(newEvents, imageLoader)
         return builder
             .setCategory(category)
             .setNumber(events.size)
-            .setOnlyAlertOnce(roomInfo.isUpdated)
+            .setOnlyAlertOnce(roomInfo.isUpdated || newEvents.isEmpty())
             .setWhen(lastMessageTimestamp)
             // MESSAGING_STYLE sets title and content for API 16 and above devices.
             .setStyle(messagingStyle)
@@ -414,6 +415,15 @@ class DefaultNotificationCreator(
             .setAutoCancel(true)
             .setContentIntent(pendingIntentFactory.createOpenSessionPendingIntent(userId))
             .build()
+    }
+
+    private fun MessagingStyle.filterOutAlreadyDisplayedEvents(
+        events: List<NotifiableMessageEvent>,
+    ): List<NotifiableMessageEvent> {
+        val displayedEventIds = messages.mapNotNullTo(mutableSetOf()) { it.extras.getString(MESSAGE_EVENT_ID) }
+        return events.filter { event ->
+            event.isSmartReplyError() || displayedEventIds.add(event.eventId.value)
+        }
     }
 
     private suspend fun MessagingStyle.addMessagesFromEvents(

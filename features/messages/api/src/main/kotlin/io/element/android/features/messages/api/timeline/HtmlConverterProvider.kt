@@ -11,9 +11,16 @@ package io.element.android.features.messages.api.timeline
 import androidx.compose.runtime.Composable
 import io.element.android.wysiwyg.utils.HtmlConverter
 
+/**
+ * Provides the converter that turns message HTML into styled text.
+ *
+ * The converter depends on the current theme and typography, so [Update] must be composed before [provide] is called.
+ */
 interface HtmlConverterProvider {
+    /** Rebuilds the converter from the current Compose theme; call this once, high in the composition of a screen that renders messages. */
     @Composable
     fun Update()
 
+    /** Returns the converter built by the last [Update] call. */
     fun provide(): HtmlConverter
 }

@@ -491,7 +491,7 @@ private fun KnockRequestsListTopBar(onBackClick: () -> Unit) {
 @PreviewsDayNight
 @Composable
 internal fun KnockRequestsListViewPreview(
-    @PreviewParameter(KnockRequestsListStateProvider::class) state: KnockRequestsListState
+    @PreviewParameter(KnockRequestsListStatePreviewParam::class) state: KnockRequestsListState
 ) = ElementPreview {
     KnockRequestsListView(
         state = state,

@@ -98,6 +98,7 @@ class KonsistPreviewTest {
         "HomeTopBarSpaceFiltersSelectedPreview",
         "HomeTopBarSpacesPreview",
         "HomeTopBarWithIndicatorPreview",
+        "HomeTopBarWithStatusPreview",
         "IconsOtherPreview",
         "MarkdownTextComposerEditPreview",
         "MatrixBadgeAtomInfoPreview",

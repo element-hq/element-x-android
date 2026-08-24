@@ -16,6 +16,8 @@ import io.element.android.libraries.matrix.api.linknewdevice.LinkDesktopStep
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiContinuationMessageSender
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiGrantLoginWithQrCodeHandler
 import io.element.android.libraries.matrix.test.QR_CODE_DATA
+import io.element.android.tests.testutils.ExpectedResult
+import io.element.android.tests.testutils.match
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -50,16 +52,18 @@ class RustLinkDesktopHandlerTest {
             runCurrent()
             // progress from the handler is mapped and emitted
             listOf(
-                GrantQrLoginProgress.Starting to LinkDesktopStep.Starting,
-                GrantQrLoginProgress.SyncingSecrets to LinkDesktopStep.SyncingSecrets,
+                GrantQrLoginProgress.Starting to ExpectedResult(LinkDesktopStep.Starting),
+                GrantQrLoginProgress.SyncingSecrets to ExpectedResult(LinkDesktopStep.SyncingSecrets),
                 GrantQrLoginProgress.WaitingForAuth("aVerificationUri", FakeFfiContinuationMessageSender())
-                    to LinkDesktopStep.WaitingForAuth("aVerificationUri"),
+                    to ExpectedResult(
+                    resultClass = LinkDesktopStep.WaitingForAuth::class.java,
+                ),
                 GrantQrLoginProgress.EstablishingSecureChannel(1.toUByte(), "1")
-                    to LinkDesktopStep.EstablishingSecureChannel(1.toUByte(), "1"),
-                GrantQrLoginProgress.Done to LinkDesktopStep.Done,
-            ).forEach { (progress, expectedStep) ->
+                    to ExpectedResult(LinkDesktopStep.EstablishingSecureChannel(1.toUByte(), "1")),
+                GrantQrLoginProgress.Done to ExpectedResult(LinkDesktopStep.Done),
+            ).forEach { (progress, expectedResult) ->
                 handler.emitScanProgress(progress)
-                assertThat(awaitItem()).isEqualTo(expectedStep)
+                assertThat(awaitItem()).match(expectedResult)
             }
             // scan returns, no new event is emitted
             completable.complete(Unit)

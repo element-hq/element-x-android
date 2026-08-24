@@ -20,6 +20,7 @@ import io.element.android.features.home.impl.filters.aRoomListFiltersState
 import io.element.android.features.home.impl.model.createRoomListRoomSummary
 import io.element.android.features.home.impl.search.RoomListSearchEvent
 import io.element.android.features.home.impl.search.RoomListSearchState
+import io.element.android.features.home.impl.search.aGlobalSearchState
 import io.element.android.features.home.impl.search.aRoomListSearchState
 import io.element.android.features.home.impl.spacefilters.SpaceFiltersState
 import io.element.android.features.home.impl.spacefilters.aDisabledSpaceFiltersState
@@ -680,6 +681,7 @@ class RoomListPresenterTest {
             analyticsService = FakeAnalyticsService(),
         ),
         searchPresenter = searchPresenter,
+        globalSearchPresenter = { aGlobalSearchState() },
         filtersPresenter = filtersPresenter,
         spaceFiltersPresenter = spaceFiltersPresenter,
         analyticsService = analyticsService,

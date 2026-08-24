@@ -120,6 +120,12 @@ class LoggedInPresenter(
             }.launchIn(this)
         }
 
+        LaunchedEffect(Unit) {
+            // Keep automatic call status (m.call) in sync with homeserver support.
+            val enabled = matrixClient.isUserStatusSupported().getOrDefault(false)
+            matrixClient.enableAutomaticCallStatus(enabled)
+        }
+
         val networkConnectivity by networkMonitor.connectivity.collectAsState()
         LaunchedEffect(networkConnectivity) {
             if (networkConnectivity == NetworkStatus.Connected) {

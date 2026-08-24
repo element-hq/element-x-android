@@ -255,7 +255,7 @@ private fun PollHistoryItemRow(
 @PreviewsDayNight
 @Composable
 internal fun PollHistoryViewPreview(
-    @PreviewParameter(PollHistoryStateProvider::class) state: PollHistoryState
+    @PreviewParameter(PollHistoryStatePreviewParam::class) state: PollHistoryState
 ) = ElementPreview {
     PollHistoryView(
         state = state,

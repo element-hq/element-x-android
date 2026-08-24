@@ -20,6 +20,16 @@
   <string name="a11y_edit_room_address_hint">"Podgląd pełnego adresu %1$s"</string>
   <string name="a11y_encryption_details">"Szczegóły szyfrowania"</string>
   <string name="a11y_expand_message_text_field">"Powiększ pole tekstowe wiadomości"</string>
+  <string name="a11y_gallery_attachment">"Galeria, załącznik %1$d"</string>
+  <string name="a11y_gallery_failed_scan">"Galeria, nieudane skanowanie %1$d"</string>
+  <string name="a11y_gallery_image">"Galeria, obraz %1$d"</string>
+  <plurals name="a11y_gallery_more_media">
+    <item quantity="one">"Galeria, %1$d dodatkowe media"</item>
+    <item quantity="few">"Galeria, %1$d dodatkowe media"</item>
+    <item quantity="many">"Galeria, %1$d dodatkowych mediów"</item>
+  </plurals>
+  <string name="a11y_gallery_scanning">"Galeria, skanowanie %1$d"</string>
+  <string name="a11y_gallery_video">"Galeria, wideo %1$d"</string>
   <string name="a11y_hide_password">"Ukryj hasło"</string>
   <string name="a11y_info">"Informacje"</string>
   <string name="a11y_join_call">"Dołącz do połączenia"</string>
@@ -184,8 +194,8 @@
   <string name="action_send_edited_message">"Wyślij edytowaną wiadomość"</string>
   <string name="action_send_message">"Wyślij wiadomość"</string>
   <string name="action_send_voice_message">"Wyślij wiadomość głosową"</string>
-  <string name="action_share">"Wyślij"</string>
-  <string name="action_share_link">"Wyślij link"</string>
+  <string name="action_share">"Udostępnij"</string>
+  <string name="action_share_link">"Udostępnij link"</string>
   <string name="action_share_live_location">"Udostępnij lokalizację na żywo"</string>
   <string name="action_show">"Pokaż"</string>
   <string name="action_sign_in_again">"Zaloguj się ponownie"</string>

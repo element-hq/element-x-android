@@ -57,7 +57,6 @@ fun ChooseAccountProviderView(
     onOAuthDetails: (OAuthDetails) -> Unit,
     onNeedLoginPassword: () -> Unit,
     onLearnMoreClick: () -> Unit,
-    onCreateAccountContinue: (url: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val isLoading by remember(state.loginModeState.loginMode) {
@@ -137,7 +136,6 @@ fun ChooseAccountProviderView(
                 onLearnMoreClick = onLearnMoreClick,
                 onOAuthDetails = onOAuthDetails,
                 onNeedLoginPassword = onNeedLoginPassword,
-                onCreateAccountContinue = onCreateAccountContinue,
             )
         }
     }
@@ -154,13 +152,14 @@ fun ChooseAccountProviderView(
 
 @PreviewsDayNight
 @Composable
-internal fun ChooseAccountProviderViewPreview(@PreviewParameter(ChooseAccountProviderStateProvider::class) state: ChooseAccountProviderState) = ElementPreview {
+internal fun ChooseAccountProviderViewPreview(@PreviewParameter(
+    ChooseAccountProviderStatePreviewParam::class
+) state: ChooseAccountProviderState) = ElementPreview {
     ChooseAccountProviderView(
         state = state,
         onBackClick = { },
         onLearnMoreClick = { },
         onOAuthDetails = { },
         onNeedLoginPassword = { },
-        onCreateAccountContinue = { },
     )
 }

@@ -12,6 +12,9 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.time.Duration
 
+/**
+ * Owns the live location shares running on this device, across every room, and the foreground service that feeds them GPS updates.
+ */
 interface ActiveLiveLocationShareManager {
     /** All rooms currently sharing live location on this device. */
     val sharingRoomIds: StateFlow<Set<RoomId>>
@@ -27,6 +30,9 @@ interface ActiveLiveLocationShareManager {
      * Starts live location sharing in the given room.
      * Calls room.startLiveLocationShare() on the SDK, registers the share,
      * and starts the foreground GPS service if not already running.
+     *
+     * @param roomId the room to start sharing the location in.
+     * @param duration how long the share should last before it expires on its own.
      */
     suspend fun startShare(roomId: RoomId, duration: Duration): Result<Unit>
 
@@ -34,6 +40,8 @@ interface ActiveLiveLocationShareManager {
      * Stops live location sharing in the given room.
      * Calls room.stopLiveLocationShare() on the SDK, removes the share,
      * and stops the foreground service if no shares remain.
+     *
+     * @param roomId the room to stop sharing the location in.
      */
     suspend fun stopShare(roomId: RoomId): Result<Unit>
 }

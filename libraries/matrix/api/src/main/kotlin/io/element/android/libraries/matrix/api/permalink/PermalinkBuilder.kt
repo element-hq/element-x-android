@@ -11,8 +11,22 @@ package io.element.android.libraries.matrix.api.permalink
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.UserId
 
+/**
+ * Builds `matrix.to` permalinks, which are the shareable links to a user or a room; see [PermalinkParser] for the other direction.
+ */
 interface PermalinkBuilder {
+    /**
+     * Builds a permalink to a user, failing with [PermalinkBuilderError.InvalidData] when the id is malformed.
+     *
+     * @param userId the user to link to.
+     */
     fun permalinkForUser(userId: UserId): Result<String>
+
+    /**
+     * Builds a permalink to a room from its alias, failing with [PermalinkBuilderError.InvalidData] when the alias is malformed.
+     *
+     * @param roomAlias the room alias to link to.
+     */
     fun permalinkForRoomAlias(roomAlias: RoomAlias): Result<String>
 }
 

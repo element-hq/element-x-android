@@ -22,6 +22,11 @@
     <item quantity="few">"У вас %d нових повідомлення."</item>
     <item quantity="many">"У вас %d нових повідомлень."</item>
   </plurals>
+  <plurals name="notification_gallery_body">
+    <item quantity="one">"Поширено %1$d вкладення"</item>
+    <item quantity="few">"Поширено %1$d вкладення"</item>
+    <item quantity="many">"Поширено %1$d вкладень"</item>
+  </plurals>
   <string name="notification_incoming_audio_call">"📞 Вхідний виклик"</string>
   <string name="notification_incoming_call">"📹 Вхідний виклик"</string>
   <string name="notification_inline_reply_failed">"** Не вдалося надіслати - відкрийте кімнату"</string>

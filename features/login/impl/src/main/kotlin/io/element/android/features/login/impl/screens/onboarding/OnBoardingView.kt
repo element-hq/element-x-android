@@ -71,7 +71,6 @@ fun OnBoardingView(
     onOAuthDetails: (OAuthDetails) -> Unit,
     onNeedLoginPassword: () -> Unit,
     onLearnMoreClick: () -> Unit,
-    onCreateAccountContinue: (url: String) -> Unit,
     onReportProblem: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -84,7 +83,6 @@ fun OnBoardingView(
             onLearnMoreClick = onLearnMoreClick,
             onOAuthDetails = onOAuthDetails,
             onNeedLoginPassword = onNeedLoginPassword,
-            onCreateAccountContinue = onCreateAccountContinue,
         )
         LocalNetworkPermissionDialogView(
             dialog = state.loginModeState.localNetworkPermissionDialog,
@@ -353,7 +351,7 @@ private fun OnBoardingButtons(
 @PreviewsDayNight
 @Composable
 internal fun OnBoardingViewPreview(
-    @PreviewParameter(OnBoardingStateProvider::class) state: OnBoardingState
+    @PreviewParameter(OnBoardingStatePreviewParam::class) state: OnBoardingState
 ) = ElementPreview {
     OnBoardingView(
         state = state,
@@ -366,6 +364,5 @@ internal fun OnBoardingViewPreview(
         onOAuthDetails = {},
         onNeedLoginPassword = {},
         onLearnMoreClick = {},
-        onCreateAccountContinue = {},
     )
 }

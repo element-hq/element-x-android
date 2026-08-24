@@ -35,6 +35,7 @@ import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.join.JoinRoom
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import io.element.android.libraries.matrix.api.spaces.SpaceRoomList
@@ -117,12 +118,14 @@ class SpacePresenter(
 
         val filteredChildren by remember {
             derivedStateOf {
-                val notRemoved = children.filterNot { it.roomId in removedRoomIds }
+                val visibleChildren = children
+                    .filterNot { it.roomId in removedRoomIds }
+                    .filterNot { it.cannotBeRejoined() }
                 if (isManageMode) {
                     // In manage mode, only show rooms (not spaces)
-                    notRemoved.filter { !it.isSpace }.toImmutableList()
+                    visibleChildren.filter { !it.isSpace }.toImmutableList()
                 } else {
-                    notRemoved.toImmutableList()
+                    visibleChildren.toImmutableList()
                 }
             }
         }
@@ -253,4 +256,8 @@ class SpacePresenter(
             setJoinActions(joinActions + mapOf(spaceRoom.roomId to AsyncAction.Failure(it)))
         }
     }
+}
+
+private fun SpaceRoom.cannotBeRejoined(): Boolean {
+    return state == CurrentUserMembership.LEFT && joinRule == JoinRule.Invite
 }

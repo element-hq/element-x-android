@@ -195,7 +195,7 @@ private fun ColumnScope.Buttons(
 @PreviewsDayNight
 @Composable
 internal fun SecureBackupSetupViewPreview(
-    @PreviewParameter(SecureBackupSetupStateProvider::class) state: SecureBackupSetupState
+    @PreviewParameter(SecureBackupSetupStatePreviewParam::class) state: SecureBackupSetupState
 ) = ElementPreview {
     SecureBackupSetupView(
         state = state,

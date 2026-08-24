@@ -92,7 +92,7 @@ fun ViewFileView(
 
 @PreviewsDayNight
 @Composable
-internal fun ViewFileViewPreview(@PreviewParameter(ViewFileStateProvider::class) state: ViewFileState) = ElementPreview {
+internal fun ViewFileViewPreview(@PreviewParameter(ViewFileStatePreviewParam::class) state: ViewFileState) = ElementPreview {
     ViewFileView(
         state = state,
         onBackClick = {},
