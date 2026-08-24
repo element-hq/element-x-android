@@ -553,7 +553,7 @@ private fun Modifier.addSeparatorLine(color: Color, isLastItem: Boolean): Modifi
 @PreviewsDayNight
 @Composable
 internal fun GlobalSearchViewPreview(
-    @PreviewParameter(GlobalSearchStateProvider::class) state: GlobalSearchState,
+    @PreviewParameter(GlobalSearchStatePreviewParam::class) state: GlobalSearchState,
 ) {
     ElementPreview {
         GlobalSearchView(

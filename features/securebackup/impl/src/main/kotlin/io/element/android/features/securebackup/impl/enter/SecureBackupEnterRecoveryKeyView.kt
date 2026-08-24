@@ -97,7 +97,7 @@ private fun ColumnScope.Buttons(
 @PreviewsDayNight
 @Composable
 internal fun SecureBackupEnterRecoveryKeyViewPreview(
-    @PreviewParameter(SecureBackupEnterRecoveryKeyStateProvider::class) state: SecureBackupEnterRecoveryKeyState
+    @PreviewParameter(SecureBackupEnterRecoveryKeyStatePreviewParam::class) state: SecureBackupEnterRecoveryKeyState
 ) = ElementPreview {
     SecureBackupEnterRecoveryKeyView(
         state = state,

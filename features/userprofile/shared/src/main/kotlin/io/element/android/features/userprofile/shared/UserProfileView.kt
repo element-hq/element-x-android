@@ -147,7 +147,7 @@ private fun VerifyUserSection(
 @PreviewsDayNight
 @Composable
 internal fun UserProfileViewPreview(
-    @PreviewParameter(UserProfileStateProvider::class) state: UserProfileState
+    @PreviewParameter(UserProfileStatePreviewParam::class) state: UserProfileState
 ) = ElementPreview {
     UserProfileView(
         state = state,

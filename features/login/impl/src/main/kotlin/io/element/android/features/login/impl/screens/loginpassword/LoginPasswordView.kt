@@ -294,7 +294,7 @@ private fun LoginErrorDialog(error: Throwable, onDismiss: () -> Unit) {
 
 @PreviewsDayNight
 @Composable
-internal fun LoginPasswordViewPreview(@PreviewParameter(LoginPasswordStateProvider::class) state: LoginPasswordState) = ElementPreview {
+internal fun LoginPasswordViewPreview(@PreviewParameter(LoginPasswordStatePreviewParam::class) state: LoginPasswordState) = ElementPreview {
     LoginPasswordView(
         state = state,
         onBackClick = {},

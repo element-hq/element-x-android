@@ -186,7 +186,7 @@ private fun Content(
 @PreviewsDayNight
 @Composable
 internal fun LogoutViewPreview(
-    @PreviewParameter(LogoutStateProvider::class) state: LogoutState,
+    @PreviewParameter(LogoutStatePreviewParam::class) state: LogoutState,
 ) = ElementPreview {
     LogoutView(
         state,

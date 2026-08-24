@@ -139,7 +139,7 @@ private fun LeaveRoomProgressDialog(modifier: Modifier = Modifier) {
 @PreviewsDayNight
 @Composable
 internal fun LeaveRoomViewPreview(
-    @PreviewParameter(InternalLeaveRoomStateProvider::class) state: InternalLeaveRoomState
+    @PreviewParameter(InternalLeaveRoomStatePreviewParam::class) state: InternalLeaveRoomState
 ) = ElementPreview {
     Box(
         modifier = Modifier.size(300.dp, 300.dp),

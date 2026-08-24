@@ -112,7 +112,7 @@ private fun EditRoomAddressTopBar(
 @PreviewsDayNight
 @Composable
 internal fun EditRoomAddressViewPreview(
-    @PreviewParameter(EditRoomAddressStateProvider::class) state: EditRoomAddressState
+    @PreviewParameter(EditRoomAddressStatePreviewParam::class) state: EditRoomAddressState
 ) = ElementPreview {
     EditRoomAddressView(
         state = state,

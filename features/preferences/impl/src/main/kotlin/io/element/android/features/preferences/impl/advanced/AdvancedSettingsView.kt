@@ -410,17 +410,17 @@ private fun LiveLocationUpdatesSection(
 
 @PreviewWithLargeHeight
 @Composable
-internal fun AdvancedSettingsViewLightPreview(@PreviewParameter(AdvancedSettingsStateProvider::class) state: AdvancedSettingsState) =
+internal fun AdvancedSettingsViewLightPreview(@PreviewParameter(AdvancedSettingsStatePreviewParam::class) state: AdvancedSettingsState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @PreviewWithLargeHeight
 @Composable
-internal fun AdvancedSettingsViewDarkPreview(@PreviewParameter(AdvancedSettingsStateProvider::class) state: AdvancedSettingsState) =
+internal fun AdvancedSettingsViewDarkPreview(@PreviewParameter(AdvancedSettingsStatePreviewParam::class) state: AdvancedSettingsState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @PreviewWithLargeHeight
 @Composable
-internal fun AdvancedSettingsViewBlackPreview(@PreviewParameter(AdvancedSettingsStateProvider::class) state: AdvancedSettingsState) =
+internal fun AdvancedSettingsViewBlackPreview(@PreviewParameter(AdvancedSettingsStatePreviewParam::class) state: AdvancedSettingsState) =
     ElementPreviewBlack { ContentToPreview(state) }
 
 @ExcludeFromCoverage

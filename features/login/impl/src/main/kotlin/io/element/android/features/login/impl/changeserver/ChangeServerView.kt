@@ -135,7 +135,7 @@ fun ChangeServerView(
 
 @PreviewsDayNight
 @Composable
-internal fun ChangeServerViewPreview(@PreviewParameter(ChangeServerStateProvider::class) state: ChangeServerState) = ElementPreview {
+internal fun ChangeServerViewPreview(@PreviewParameter(ChangeServerStatePreviewParam::class) state: ChangeServerState) = ElementPreview {
     ChangeServerView(
         state = state,
         onLearnMoreClick = {},
