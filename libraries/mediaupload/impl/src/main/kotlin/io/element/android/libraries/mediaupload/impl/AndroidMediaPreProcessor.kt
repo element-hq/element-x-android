@@ -26,6 +26,7 @@ import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.core.mimetype.MimeTypes.ensureDefaultSubtype
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeAudio
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeImage
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
@@ -82,16 +83,17 @@ class AndroidMediaPreProcessor(
         mediaOptimizationConfig: MediaOptimizationConfig,
     ): Result<MediaUploadInfo> = withContext(coroutineDispatchers.computation) {
         runCatchingExceptions {
+            val resolvedMimeType = mimeType.ensureDefaultSubtype()
             val result = when {
-                mimeType == MimeTypes.Svg -> processSvgImage(uri, mimeType)
-                mimeType.isMimeTypeImage() -> {
-                    val imageMimeType = resolveImageMimeType(uri, mimeType)
+                resolvedMimeType == MimeTypes.Svg -> processSvgImage(uri, resolvedMimeType)
+                resolvedMimeType.isMimeTypeImage() -> {
+                    val imageMimeType = resolveImageMimeType(uri, mimeType).ensureDefaultSubtype()
                     val shouldBeCompressed = mediaOptimizationConfig.compressImages && imageMimeType !in notCompressibleImageTypes
                     processImage(uri, imageMimeType, shouldBeCompressed)
                 }
-                mimeType.isMimeTypeVideo() -> processVideo(uri, mimeType, mediaOptimizationConfig.videoCompressionPreset)
-                mimeType.isMimeTypeAudio() -> processAudio(uri, mimeType)
-                else -> processFile(uri, mimeType)
+                resolvedMimeType.isMimeTypeVideo() -> processVideo(uri, resolvedMimeType, mediaOptimizationConfig.videoCompressionPreset)
+                resolvedMimeType.isMimeTypeAudio() -> processAudio(uri, resolvedMimeType)
+                else -> processFile(uri, resolvedMimeType)
             }
             if (deleteOriginal) {
                 tryOrNull {
