@@ -11,6 +11,7 @@ package io.element.android.features.preferences.impl.developer
 import androidx.compose.ui.graphics.Color
 
 sealed interface DeveloperSettingsEvents {
+    data class SetShowDeveloperSettings(val show: Boolean) : DeveloperSettingsEvents
     data class SetShowColorPicker(val show: Boolean) : DeveloperSettingsEvents
     data class ChangeBrandColor(val color: Color?) : DeveloperSettingsEvents
     data object ClearCache : DeveloperSettingsEvents

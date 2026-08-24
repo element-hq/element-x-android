@@ -37,6 +37,7 @@ import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
@@ -46,12 +47,14 @@ import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import kotlin.coroutines.EmptyCoroutineContext
 
 class PreferencesRootPresenterTest {
     @get:Rule
@@ -177,13 +180,17 @@ class PreferencesRootPresenterTest {
     }
 
     @Test
-    fun `present - developer settings is hidden by default in release builds`() = runTest {
+    fun `present - developer settings is hidden when the preference is off`() = runTest {
         createPresenter(
             matrixClient = FakeMatrixClient(
                 canDeactivateAccountResult = { true },
                 accountManagementUrlResult = { Result.success(null) },
             ),
-            showDeveloperSettingsProvider = ShowDeveloperSettingsProvider(aBuildMeta(BuildType.RELEASE))
+            showDeveloperSettingsProvider = ShowDeveloperSettingsProvider(
+                buildMeta = aBuildMeta(BuildType.RELEASE),
+                appPreferencesStore = InMemoryAppPreferencesStore(showDeveloperSettings = false),
+                appCoroutineScope = backgroundScope,
+            ),
         ).test {
             val loadedState = awaitFirstItem()
             assertThat(loadedState.showDeveloperSettings).isFalse()
@@ -191,13 +198,17 @@ class PreferencesRootPresenterTest {
     }
 
     @Test
-    fun `present - developer settings can be enabled in release builds`() = runTest {
+    fun `present - developer settings can be unlocked by tapping the version`() = runTest {
         createPresenter(
             matrixClient = FakeMatrixClient(
                 canDeactivateAccountResult = { true },
                 accountManagementUrlResult = { Result.success(null) },
             ),
-            showDeveloperSettingsProvider = ShowDeveloperSettingsProvider(aBuildMeta(BuildType.RELEASE))
+            showDeveloperSettingsProvider = ShowDeveloperSettingsProvider(
+                buildMeta = aBuildMeta(BuildType.RELEASE),
+                appPreferencesStore = InMemoryAppPreferencesStore(showDeveloperSettings = false),
+                appCoroutineScope = backgroundScope,
+            ),
         ).test {
             val loadedState = awaitFirstItem()
             repeat(times = ShowDeveloperSettingsProvider.DEVELOPER_SETTINGS_COUNTER) {
@@ -328,7 +339,11 @@ class PreferencesRootPresenterTest {
     private fun createPresenter(
         matrixClient: FakeMatrixClient = FakeMatrixClient(),
         sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService(),
-        showDeveloperSettingsProvider: ShowDeveloperSettingsProvider = ShowDeveloperSettingsProvider(aBuildMeta(BuildType.DEBUG)),
+        showDeveloperSettingsProvider: ShowDeveloperSettingsProvider = ShowDeveloperSettingsProvider(
+            buildMeta = aBuildMeta(BuildType.DEBUG),
+            appPreferencesStore = InMemoryAppPreferencesStore(showDeveloperSettings = true),
+            appCoroutineScope = CoroutineScope(EmptyCoroutineContext),
+        ),
         rageshakeFeatureAvailability: RageshakeFeatureAvailability = RageshakeFeatureAvailability { flowOf(true) },
         indicatorService: IndicatorService = FakeIndicatorService(),
         featureFlagService: FeatureFlagService = FakeFeatureFlagService(),

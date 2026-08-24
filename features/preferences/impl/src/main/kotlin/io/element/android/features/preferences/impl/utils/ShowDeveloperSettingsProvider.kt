@@ -8,31 +8,52 @@
 
 package io.element.android.features.preferences.impl.utils
 
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
+import io.element.android.libraries.di.annotations.AppCoroutineScope
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.ui.utils.MultipleTapToUnlock
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
+@SingleIn(AppScope::class)
 @Inject
 class ShowDeveloperSettingsProvider(
     buildMeta: BuildMeta,
+    private val appPreferencesStore: AppPreferencesStore,
+    @AppCoroutineScope
+    private val appCoroutineScope: CoroutineScope,
 ) {
     companion object {
         const val DEVELOPER_SETTINGS_COUNTER = 7
     }
 
-    private val multipleTapToUnlock = MultipleTapToUnlock(DEVELOPER_SETTINGS_COUNTER)
-    private val isDeveloperBuild = buildMeta.buildType != BuildType.RELEASE
+    private var multipleTapToUnlock = MultipleTapToUnlock(DEVELOPER_SETTINGS_COUNTER)
 
-    private val _showDeveloperSettings = MutableStateFlow(isDeveloperBuild)
-    val showDeveloperSettings: StateFlow<Boolean> = _showDeveloperSettings
+    val showDeveloperSettings: StateFlow<Boolean> = appPreferencesStore
+        .showDeveloperSettingsFlow()
+        .stateIn(
+            scope = appCoroutineScope,
+            started = SharingStarted.Eagerly,
+            initialValue = buildMeta.buildType != BuildType.RELEASE,
+        )
 
     fun unlockDeveloperSettings(scope: CoroutineScope) {
         if (multipleTapToUnlock.unlock(scope)) {
-            _showDeveloperSettings.value = true
+            multipleTapToUnlock = MultipleTapToUnlock(DEVELOPER_SETTINGS_COUNTER)
+            setShowDeveloperSettings(true)
+        }
+    }
+
+    fun setShowDeveloperSettings(show: Boolean) {
+        appCoroutineScope.launch {
+            appPreferencesStore.setShowDeveloperSettings(show)
         }
     }
 }
