@@ -8,9 +8,15 @@
 
 package io.element.android.features.call.impl.pip
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+
 interface PipView {
+    @RequiresApi(Build.VERSION_CODES.O)
     fun setPipOrientation(orientation: Int?)
+    @RequiresApi(Build.VERSION_CODES.O)
     fun setPipParams()
+    @RequiresApi(Build.VERSION_CODES.O)
     fun enterPipMode(): Boolean
     fun hangUp()
 }
