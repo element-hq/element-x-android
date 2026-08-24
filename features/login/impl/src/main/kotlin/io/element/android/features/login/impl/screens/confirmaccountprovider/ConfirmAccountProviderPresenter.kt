@@ -30,6 +30,7 @@ import io.element.android.features.login.impl.login.LoginModeEvent
 import io.element.android.features.login.impl.login.LoginModeState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.uri.ensureProtocol
+import io.element.android.libraries.matrix.api.core.MatrixPatterns
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 
 @AssistedInject
@@ -87,6 +88,11 @@ class ConfirmAccountProviderPresenter(
         var submittedAccountProvider by remember { mutableStateOf<String?>(null) }
         val latestSubmittedAccountProvider by rememberUpdatedState(submittedAccountProvider)
 
+        // A login hint (the full Matrix user ID) captured when the user enters one, so the authentication
+        // server can pre-fill their identity. Null when a plain account provider was entered.
+        var submittedLoginHint by remember { mutableStateOf<String?>(null) }
+        val latestSubmittedLoginHint by rememberUpdatedState(submittedLoginHint)
+
         // Once the chosen account provider has been validated and persisted, proceed with the actual sign in / sign up.
         // Reuse the details resolved while validating, so login does not configure (and re-network) the homeserver again.
         LaunchedEffect(changeServerState.changeServerAction) {
@@ -97,7 +103,7 @@ class ConfirmAccountProviderPresenter(
                         isAccountCreation = params.isAccountCreation,
                         homeserverUrl = latestSubmittedAccountProvider.orEmpty().trim(),
                         resolvedHomeserverUrl = null,
-                        loginHint = null,
+                        loginHint = latestSubmittedLoginHint,
                         preConfiguredDetails = homeServerDetails,
                     )
                 )
@@ -116,8 +122,16 @@ class ConfirmAccountProviderPresenter(
                     // renders the full server rather than the typed prefix, and survives the OAuth round-trip.
                     val accountProvider = event.accountProvider.trim()
                     userInput = accountProvider
+                    // If the user entered a full Matrix user ID (e.g. "@alice:example.org"), sign in to its
+                    // homeserver and pass the ID as a login hint so the authentication server can pre-fill it.
+                    // Otherwise treat the input as the account provider host. Only the homeserver is ever
+                    // persisted to history, never the user ID.
+                    val isUserId = MatrixPatterns.isUserId(accountProvider)
+                    // For a user ID the homeserver is the domain part (after the ':'), keeping any port.
+                    val host = if (isUserId) accountProvider.substringAfter(":") else accountProvider
+                    submittedLoginHint = "mxid:$accountProvider".takeIf { isUserId && !params.isAccountCreation }
                     // Default the scheme to https:// so entering a bare host (e.g. "matrix.org") works.
-                    val accountProviderUrl = accountProvider.ensureProtocol()
+                    val accountProviderUrl = host.ensureProtocol()
                     submittedAccountProvider = accountProviderUrl
                     changeServerState.eventSink(
                         ChangeServerEvents.ChangeServer(AccountProvider(url = accountProviderUrl))
