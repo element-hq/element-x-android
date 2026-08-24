@@ -11,5 +11,11 @@ package io.element.android.libraries.matrix.api
  * Factory to create a temporary [TemporaryMatrixClient] for a given home server URL.
  */
 interface TemporaryMatrixClientFactory {
-    suspend fun create(homeServerUrl: String): Result<TemporaryMatrixClient>
+    /**
+     * Builds an unauthenticated client pointing at [serverName], backed by a fresh set of temporary session directories.
+     * The caller owns the returned client and must close it to delete those directories.
+     *
+     * @param serverName the domain of the public-facing server for the actual homeserver
+     */
+    suspend fun create(serverName: String): Result<TemporaryMatrixClient>
 }

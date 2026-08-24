@@ -46,7 +46,7 @@ fun FileItemView(
 @PreviewsDayNight
 @Composable
 internal fun FileItemViewPreview(
-    @PreviewParameter(MediaItemFileProvider::class) file: MediaItem.File,
+    @PreviewParameter(MediaItemFilePreviewParam::class) file: MediaItem.File,
 ) = ElementPreview {
     val states = remember {
         listOf(

@@ -12,6 +12,12 @@ package io.element.android.libraries.push.api.notifications.sound
  * FileProvider, so the persisted reference outlives the original source.
  */
 interface NotificationSoundCopier {
+    /**
+     * Copies the picked sound into app-private storage, replacing any file previously stored for [slot].
+     *
+     * @param sourceUriString the uri of the sound the user picked.
+     * @param slot which of the two sounds is being set, since each keeps its own copy.
+     */
     suspend fun copyToAppFiles(sourceUriString: String, slot: SoundSlot): CopyResult
 
     /**

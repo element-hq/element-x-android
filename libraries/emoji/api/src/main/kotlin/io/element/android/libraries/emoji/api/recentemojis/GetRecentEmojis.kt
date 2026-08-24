@@ -15,6 +15,7 @@ import kotlinx.collections.immutable.persistentListOf
  * Returns the list of recently used emojis for reactions.
  */
 fun interface GetRecentEmojis {
+    /** Returns the recently used emojis, most recent first; see [EmptyGetRecentEmojis] for a picker with no recent tab. */
     suspend operator fun invoke(): Result<ImmutableList<String>>
 }
 

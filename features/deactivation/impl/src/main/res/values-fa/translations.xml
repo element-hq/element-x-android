@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_deactivate_account_confirmation_dialog_content">"لطفاً تأیید کنید که می‌خواهید حساب کاربری خود را حذف کنید. این اقدام قابل بازگشت نیست."</string>
   <string name="screen_deactivate_account_delete_all_messages">"حذف همهٔ پیام‌هایم"</string>
+  <string name="screen_deactivate_account_delete_all_messages_notice">"هشدار: کاربران آینده ممکن است مکالمات ناقص را ببینند."</string>
+  <string name="screen_deactivate_account_description">"حذف حساب کاربری شما %1$s است، این کار باعث می‌شود:"</string>
   <string name="screen_deactivate_account_description_bold_part">"بازگشت‌ناپذیر"</string>
+  <string name="screen_deactivate_account_list_item_1">"حساب کاربری خود را %1$s کنید (شما نمی‌توانید دوباره وارد سیستم شوید و شناسه شما قابل استفاده مجدد نیست)."</string>
   <string name="screen_deactivate_account_list_item_1_bold_part">"از کار انداختن دایمی"</string>
   <string name="screen_deactivate_account_list_item_2">"برداشتنتان از همهٔ اتاق‌های گپ."</string>
   <string name="screen_deactivate_account_list_item_3">"حذف اطّلاعات حسابتان از کارساز هویت."</string>
-  <string name="screen_deactivate_account_title">"غیرفعّال‌سازی حساب"</string>
+  <string name="screen_deactivate_account_list_item_4">"پیام‌های شما همچنان برای کاربران ثبت‌نام‌شده قابل مشاهده خواهند بود، اما اگر تصمیم به حذف آنها بگیرید، برای کاربران جدید یا ثبت‌نام‌نشده در دسترس نخواهند بود."</string>
+  <string name="screen_deactivate_account_title">"حذف حساب کاربری"</string>
 </resources>

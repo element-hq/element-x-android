@@ -30,8 +30,6 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
@@ -67,7 +65,6 @@ class LoggedInPresenter(
     private val buildMeta: BuildMeta,
     private val networkMonitor: NetworkMonitor,
     private val localNetworkPermissionAdvisor: LocalNetworkPermissionAdvisor,
-    private val featureFlagService: FeatureFlagService,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
 ) : Presenter<LoggedInState> {
     private val localNetworkPermissionsPresenter: PermissionsPresenter =
@@ -124,13 +121,9 @@ class LoggedInPresenter(
         }
 
         LaunchedEffect(Unit) {
-            // Keep automatic call status (m.call) in sync with the feature flag and homeserver support.
-            featureFlagService.isFeatureEnabledFlow(FeatureFlags.UserStatus)
-                .onEach { isUserStatusEnabled ->
-                    val enabled = isUserStatusEnabled && matrixClient.isUserStatusSupported().getOrDefault(false)
-                    matrixClient.enableAutomaticCallStatus(enabled)
-                }
-                .launchIn(this)
+            // Keep automatic call status (m.call) in sync with homeserver support.
+            val enabled = matrixClient.isUserStatusSupported().getOrDefault(false)
+            matrixClient.enableAutomaticCallStatus(enabled)
         }
 
         val networkConnectivity by networkMonitor.connectivity.collectAsState()

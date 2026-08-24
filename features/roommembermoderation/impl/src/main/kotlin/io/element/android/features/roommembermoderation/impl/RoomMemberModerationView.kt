@@ -362,7 +362,7 @@ private fun RoomMemberActionsBottomSheet(
 
 @PreviewsDayNight
 @Composable
-internal fun RoomMemberModerationViewPreview(@PreviewParameter(InternalRoomMemberModerationStateProvider::class) state: InternalRoomMemberModerationState) {
+internal fun RoomMemberModerationViewPreview(@PreviewParameter(InternalRoomMemberModerationStatePreviewParam::class) state: InternalRoomMemberModerationState) {
     val isDoingAction = listOf(state.kickUserAsyncAction, state.banUserAsyncAction, state.unbanUserAsyncAction).any { it is AsyncAction.Loading }
     val modifier = if (isDoingAction) {
         Modifier.fillMaxWidth().heightIn(min = 64.dp)

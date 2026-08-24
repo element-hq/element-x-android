@@ -514,7 +514,7 @@ private fun EmojiButton(
 @PreviewsDayNight
 @Composable
 internal fun ActionListViewContentPreview(
-    @PreviewParameter(ActionListStateProvider::class) state: ActionListState
+    @PreviewParameter(ActionListStatePreviewParam::class) state: ActionListState
 ) = ElementPreview {
     ActionListViewContent(
         state = state,

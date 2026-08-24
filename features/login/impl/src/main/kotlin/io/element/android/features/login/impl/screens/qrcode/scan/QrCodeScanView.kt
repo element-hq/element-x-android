@@ -218,7 +218,7 @@ private fun ColumnScope.Buttons(
 
 @PreviewsDayNight
 @Composable
-internal fun QrCodeScanViewPreview(@PreviewParameter(QrCodeScanStateProvider::class) state: QrCodeScanState) = ElementPreview {
+internal fun QrCodeScanViewPreview(@PreviewParameter(QrCodeScanStatePreviewParam::class) state: QrCodeScanState) = ElementPreview {
     QrCodeScanView(
         state = state,
         onQrCodeDataReady = {},

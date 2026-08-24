@@ -207,7 +207,7 @@ private fun ColumnScope.TestSuiteView(
 @PreviewsDayNight
 @Composable
 internal fun TroubleshootNotificationsViewPreview(
-    @PreviewParameter(TroubleshootNotificationsStateProvider::class) state: TroubleshootNotificationsState,
+    @PreviewParameter(TroubleshootNotificationsStatePreviewParam::class) state: TroubleshootNotificationsState,
 ) = ElementPreview {
     TroubleshootNotificationsView(
         state = state,

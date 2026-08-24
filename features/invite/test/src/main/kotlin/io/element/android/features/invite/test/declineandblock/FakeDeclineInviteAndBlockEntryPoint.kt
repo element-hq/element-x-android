@@ -19,6 +19,7 @@ class FakeDeclineInviteAndBlockEntryPoint : DeclineInviteAndBlockEntryPoint {
         parentNode: Node,
         buildContext: BuildContext,
         inviteData: InviteData,
+        callback: DeclineInviteAndBlockEntryPoint.Callback,
     ): Node {
         lambdaError()
     }
