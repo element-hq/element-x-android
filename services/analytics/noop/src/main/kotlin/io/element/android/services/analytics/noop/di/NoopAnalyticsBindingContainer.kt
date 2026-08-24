@@ -17,5 +17,5 @@ import io.element.android.libraries.di.identifiers.SentrySdkDsn
 @ContributesTo(AppScope::class)
 object NoopAnalyticsBindingContainer {
     @Provides
-    fun provideSentrySdkDsn(): SentrySdkDsn? = null
+    fun providesSentrySdkDsn(): SentrySdkDsn? = null
 }

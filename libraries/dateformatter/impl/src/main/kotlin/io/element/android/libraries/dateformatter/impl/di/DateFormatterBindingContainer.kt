@@ -27,5 +27,5 @@ object DateFormatterBindingContainer {
     fun providesLocale(): Locale = Locale.getDefault()
 
     @Provides
-    fun providesTimezone(): TimezoneProvider = TimezoneProvider { TimeZone.currentSystemDefault() }
+    fun providesTimezoneProvider(): TimezoneProvider = TimezoneProvider { TimeZone.currentSystemDefault() }
 }

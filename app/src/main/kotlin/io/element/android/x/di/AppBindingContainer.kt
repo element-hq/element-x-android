@@ -111,7 +111,7 @@ object AppBindingContainer {
 
     @Provides
     @SingleIn(AppScope::class)
-    fun provideSnackbarDispatcher(): SnackbarDispatcher {
+    fun providesSnackbarDispatcher(): SnackbarDispatcher {
         return SnackbarDispatcher()
     }
 }

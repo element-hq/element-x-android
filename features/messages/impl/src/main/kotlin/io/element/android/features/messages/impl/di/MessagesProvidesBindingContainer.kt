@@ -21,5 +21,5 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 object MessagesProvidesBindingContainer {
     @Provides
     @LiveTimeline
-    fun provideLiveTimeline(joinedRoom: JoinedRoom): Timeline = joinedRoom.liveTimeline
+    fun providesLiveTimeline(joinedRoom: JoinedRoom): Timeline = joinedRoom.liveTimeline
 }

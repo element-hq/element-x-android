@@ -25,7 +25,7 @@ import timber.log.Timber
 object CacheStoreBindingContainer {
     @Provides
     @SingleIn(AppScope::class)
-    fun provideCacheDatabase(
+    fun providesCacheDatabase(
         @ApplicationContext context: Context,
     ): CacheDatabase {
         val name = "cache_database"

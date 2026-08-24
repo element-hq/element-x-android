@@ -24,7 +24,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 @BindingContainer
 interface InviteBindingContainer {
     @Binds
-    fun bindAcceptDeclinePresenter(presenter: AcceptDeclineInvitePresenter): Presenter<AcceptDeclineInviteState>
+    fun bindAcceptDeclineInvitePresenter(presenter: AcceptDeclineInvitePresenter): Presenter<AcceptDeclineInviteState>
 
     companion object {
         @Provides

@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.workmanager.impl
+package io.element.android.libraries.workmanager.impl.di
 
 import android.content.Context
 import androidx.work.WorkManager

@@ -5,11 +5,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.preferences.impl.userstatus
+package io.element.android.features.preferences.impl.userstatus.di
 
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.ContributesTo
+import io.element.android.features.preferences.impl.userstatus.UserStatusPresenter
+import io.element.android.features.preferences.impl.userstatus.UserStatusState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.SessionScope
 

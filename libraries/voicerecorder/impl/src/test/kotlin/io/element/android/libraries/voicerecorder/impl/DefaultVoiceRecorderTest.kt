@@ -151,7 +151,7 @@ class DefaultVoiceRecorderTest {
     }
 
     private fun TestScope.createDefaultVoiceRecorder(): DefaultVoiceRecorder {
-        val fileConfig = VoiceRecorderBindingContainer.provideVoiceFileConfig()
+        val fileConfig = VoiceRecorderBindingContainer.providesVoiceFileConfig()
         return DefaultVoiceRecorder(
             dispatchers = testCoroutineDispatchers(),
             timeSource = timeSource,

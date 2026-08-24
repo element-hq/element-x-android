@@ -20,7 +20,7 @@ import io.element.android.libraries.matrix.api.core.RoomAlias
 @ContributesTo(SessionScope::class)
 object RoomAliasResolverBindingContainer {
     @Provides
-    fun providesJoinRoomPresenterFactory(
+    fun providesRoomAliasResolverPresenterFactory(
         client: MatrixClient,
     ): RoomAliasResolverPresenter.Factory {
         return object : RoomAliasResolverPresenter.Factory {

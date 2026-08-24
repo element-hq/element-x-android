@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.services.toolbox.impl.systemclock
+package io.element.android.services.toolbox.impl.systemclock.di
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
@@ -18,7 +18,7 @@ import kotlin.time.TimeSource
 @ContributesTo(AppScope::class)
 object TimeBindingContainer {
     @Provides
-    fun timeSource(): TimeSource {
+    fun providesTimeSource(): TimeSource {
         return TimeSource.Monotonic
     }
 }

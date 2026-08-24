@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.preferences.impl.store
+package io.element.android.libraries.preferences.impl.store.di
 
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
@@ -15,6 +15,7 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
+import io.element.android.libraries.preferences.impl.store.DefaultSessionPreferencesStoreFactory
 import kotlinx.coroutines.CoroutineScope
 
 @BindingContainer

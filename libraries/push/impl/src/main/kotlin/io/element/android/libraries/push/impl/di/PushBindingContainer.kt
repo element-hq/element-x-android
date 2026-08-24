@@ -25,7 +25,7 @@ import io.element.android.libraries.push.impl.battery.BatteryOptimizationPresent
 interface PushBindingContainer {
     companion object {
         @Provides
-        fun provideNotificationCompatManager(@ApplicationContext context: Context): NotificationManagerCompat {
+        fun providesNotificationManagerCompat(@ApplicationContext context: Context): NotificationManagerCompat {
             return NotificationManagerCompat.from(context)
         }
     }

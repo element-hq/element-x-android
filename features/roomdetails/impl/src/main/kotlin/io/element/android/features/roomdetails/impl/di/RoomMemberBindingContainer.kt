@@ -23,7 +23,7 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 @ContributesTo(RoomScope::class)
 object RoomMemberBindingContainer {
     @Provides
-    fun provideRoomMemberDetailsPresenterFactory(
+    fun providesRoomMemberDetailsPresenterFactory(
         room: JoinedRoom,
         userProfilePresenterFactory: UserProfilePresenterFactory,
         encryptionService: EncryptionService,

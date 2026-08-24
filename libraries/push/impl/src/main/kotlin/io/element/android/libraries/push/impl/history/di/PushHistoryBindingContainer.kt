@@ -26,7 +26,7 @@ import timber.log.Timber
 object PushHistoryBindingContainer {
     @Provides
     @SingleIn(AppScope::class)
-    fun providePushDatabase(
+    fun providesPushDatabase(
         @ApplicationContext context: Context,
     ): PushDatabase {
         val name = "push_database"

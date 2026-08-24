@@ -26,7 +26,7 @@ import timber.log.Timber
 object SessionStorageBindingContainer {
     @Provides
     @SingleIn(AppScope::class)
-    fun provideMatrixDatabase(
+    fun providesSessionDatabase(
         @ApplicationContext context: Context,
     ): SessionDatabase {
         val name = "session_database"

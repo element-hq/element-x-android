@@ -20,5 +20,5 @@ import io.element.android.libraries.di.SessionScope
 @BindingContainer
 interface FtueBindingContainer {
     @Binds
-    fun bindChooseSelfVerificationMethodPresenter(presenter: ChooseSelfVerificationModePresenter): Presenter<ChooseSelfVerificationModeState>
+    fun bindChooseSelfVerificationModePresenter(presenter: ChooseSelfVerificationModePresenter): Presenter<ChooseSelfVerificationModeState>
 }

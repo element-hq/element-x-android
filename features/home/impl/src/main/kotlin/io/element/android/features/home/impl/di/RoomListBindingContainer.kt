@@ -31,10 +31,10 @@ interface RoomListBindingContainer {
     fun bindRoomListPresenter(presenter: RoomListPresenter): Presenter<RoomListState>
 
     @Binds
-    fun bindSearchPresenter(presenter: RoomListSearchPresenter): Presenter<RoomListSearchState>
+    fun bindRoomListSearchPresenter(presenter: RoomListSearchPresenter): Presenter<RoomListSearchState>
 
     @Binds
-    fun bindFiltersPresenter(presenter: RoomListFiltersPresenter): Presenter<RoomListFiltersState>
+    fun bindRoomListFiltersPresenter(presenter: RoomListFiltersPresenter): Presenter<RoomListFiltersState>
 
     @Binds
     fun bindSpaceFiltersPresenter(presenter: SpaceFiltersPresenter): Presenter<SpaceFiltersState>

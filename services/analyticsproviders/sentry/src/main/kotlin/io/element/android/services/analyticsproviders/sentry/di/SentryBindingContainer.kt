@@ -19,8 +19,8 @@ import io.element.android.services.analyticsproviders.sentry.SentryConfig
 @ContributesTo(AppScope::class)
 object SentryBindingContainer {
     @Provides
-    fun provideSentryDsn(): SentryDsn? = SentryConfig.DSN.takeIf { it.isNotBlank() }?.let(::SentryDsn)
+    fun providesSentryDsn(): SentryDsn? = SentryConfig.DSN.takeIf { it.isNotBlank() }?.let(::SentryDsn)
 
     @Provides
-    fun provideSentrySdkDsn(): SentrySdkDsn? = SentryConfig.SDK_DSN.takeIf { it.isNotBlank() }?.let(::SentrySdkDsn)
+    fun providesSentrySdkDsn(): SentrySdkDsn? = SentryConfig.SDK_DSN.takeIf { it.isNotBlank() }?.let(::SentrySdkDsn)
 }

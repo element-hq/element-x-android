@@ -24,7 +24,7 @@ import io.element.android.opusencoder.OggOpusEncoder
 @ContributesTo(RoomScope::class)
 object VoiceRecorderBindingContainer {
     @Provides
-    fun provideAudioConfig(): AudioConfig {
+    fun providesAudioConfig(): AudioConfig {
         val sampleRate = SampleRate
         return AudioConfig(
             format = AudioFormat.Builder()
@@ -40,7 +40,7 @@ object VoiceRecorderBindingContainer {
     }
 
     @Provides
-    public fun provideVoiceFileConfig(): VoiceFileConfig =
+    public fun providesVoiceFileConfig(): VoiceFileConfig =
         VoiceFileConfig(
             cacheSubdir = "voice_recordings",
             fileExt = "ogg",
@@ -48,5 +48,5 @@ object VoiceRecorderBindingContainer {
         )
 
     @Provides
-    fun provideOggOpusEncoder(): OggOpusEncoder = OggOpusEncoder.create()
+    fun providesOggOpusEncoder(): OggOpusEncoder = OggOpusEncoder.create()
 }

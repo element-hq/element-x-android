@@ -56,7 +56,7 @@ object SessionMatrixBindingContainer {
     }
 
     @Provides
-    fun provideRoomMembershipObserver(matrixClient: MatrixClient): RoomMembershipObserver {
+    fun providesRoomMembershipObserver(matrixClient: MatrixClient): RoomMembershipObserver {
         return matrixClient.roomMembershipObserver
     }
 
@@ -112,7 +112,7 @@ object SessionMatrixBindingContainer {
     }
 
     @Provides
-    fun providesGetUrlResolverClient(matrixClient: MatrixClient): ClientUrlContentFetcher {
+    fun providesClientUrlContentFetcher(matrixClient: MatrixClient): ClientUrlContentFetcher {
         return matrixClient
     }
 
