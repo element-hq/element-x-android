@@ -10,9 +10,8 @@ package io.element.android.features.enterprise.api
 
 import androidx.compose.ui.graphics.Color
 import io.element.android.compound.colors.SemanticColorsLightDark
-import io.element.android.libraries.matrix.api.UrlContentFetcher
+import io.element.android.libraries.matrix.api.ClientUrlContentFetcher
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.wellknown.api.ElementWellKnown
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -21,9 +20,6 @@ import kotlinx.coroutines.flow.Flow
  * On a standard build this reports permissive defaults, so callers do not need to branch on the build type themselves.
  */
 interface EnterpriseService {
-    /** Whether this build is an enterprise one; `false` for the public app. */
-    val isEnterpriseBuild: Boolean
-
     /**
      * Whether the given session belongs to an enterprise deployment, which can be true even on a standard build.
      *
@@ -35,22 +31,30 @@ interface EnterpriseService {
      * Rewrites the authentication server URL when the deployment requires a different one from the one advertised.
      *
      * @param url the URL to rewrite.
-     * @param homeserver the homeserver the URL belongs to.
      * @param urlContentFetcher used to read the deployment configuration; a client that is not authenticated yet also works.
      */
-    suspend fun tweakMasUrl(url: String, homeserver: String, urlContentFetcher: UrlContentFetcher): String
+    suspend fun tweakMasUrl(url: String, urlContentFetcher: ClientUrlContentFetcher): String
 
     /**
-     * The homeservers the user is allowed to sign in to; an empty list, or one containing [ANY_ACCOUNT_PROVIDER], means no restriction.
+     * Returns the list of homeservers the user is allowed to sign in to.
+     *
+     * If the list is empty or contains the special value [ANY_ACCOUNT_PROVIDER], the user is allowed to sign in to any homeserver.
      */
-    fun defaultHomeserverList(): List<String>
+    fun homeserverAllowList(): List<String>
 
     /**
-     * Whether the user is allowed to sign in to a given homeserver, according to [defaultHomeserverList].
+     * Whether the user is allowed to sign in to a given homeserver, according to [homeserverAllowList].
      *
      * @param homeserverUrl the server the user is trying to use.
      */
     suspend fun isAllowedToConnectToHomeserver(homeserverUrl: String): Boolean
+
+    /**
+     * Whether the given homeserver enforces the use of Element Pro or a derived app.
+     *
+     * @param serverName the homeserver to check.
+     */
+    suspend fun isElementProEnforced(serverName: String): Boolean
 
     /**
      * Override the brand color.
@@ -94,26 +98,13 @@ interface EnterpriseService {
      */
     fun getNoisyNotificationChannelId(sessionId: SessionId): String?
 
-    /**
-     * Gets the overridden Element Well-Known data if it has been set, or null if not set.
-     */
-    fun overriddenElementWellKnown(): ElementWellKnown?
-
-    /**
-     * Gets the Element Server Suite (ESS) config endpoint URL for the given domain.
-     * Returns `null` when this build does not read its configuration from an ESS deployment.
-     *
-     * @param domain the server whose configuration endpoint is requested.
-     */
-    fun essConfigEndpointUrl(domain: String): String?
-
     companion object {
         const val ANY_ACCOUNT_PROVIDER = "*"
     }
 }
 
 fun EnterpriseService.canConnectToAnyHomeserver(): Boolean {
-    return defaultHomeserverList().let {
+    return homeserverAllowList().let {
         it.isEmpty() || it.contains(EnterpriseService.ANY_ACCOUNT_PROVIDER)
     }
 }

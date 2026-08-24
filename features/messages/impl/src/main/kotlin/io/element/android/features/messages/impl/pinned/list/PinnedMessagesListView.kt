@@ -33,8 +33,12 @@ import io.element.android.features.messages.impl.link.LinkEvent
 import io.element.android.features.messages.impl.link.LinkView
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.components.TimelineItemRow
+import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionBottomSheet
+import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionEvent
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
+import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryEvent
+import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
@@ -50,6 +54,8 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
 import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
+import io.element.android.libraries.emoji.api.picker.EmojiPickerRenderer
+import io.element.android.libraries.emoji.api.picker.NoOpEmojiPickerRenderer
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -66,6 +72,7 @@ fun PinnedMessagesListView(
     onUserDataClick: (MatrixUser) -> Unit,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
+    emojiPickerRenderer: EmojiPickerRenderer,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -89,6 +96,7 @@ fun PinnedMessagesListView(
                 onLinkClick = onLinkClick,
                 onLinkLongClick = onLinkLongClick,
                 onErrorDismiss = onBackClick,
+                emojiPickerRenderer = emojiPickerRenderer,
                 modifier = Modifier
                     .padding(padding)
                     .consumeWindowInsets(padding),
@@ -121,6 +129,7 @@ private fun PinnedMessagesListContent(
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
     onErrorDismiss: () -> Unit,
+    emojiPickerRenderer: EmojiPickerRenderer,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier.fillMaxSize()) {
@@ -141,6 +150,7 @@ private fun PinnedMessagesListContent(
                 onUserDataClick = onUserDataClick,
                 onLinkClick = onLinkClick,
                 onLinkLongClick = onLinkLongClick,
+                emojiPickerRenderer = emojiPickerRenderer,
             )
             PinnedMessagesListState.Loading -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -180,6 +190,7 @@ private fun PinnedMessagesListLoaded(
     onUserDataClick: (MatrixUser) -> Unit,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
+    emojiPickerRenderer: EmojiPickerRenderer,
     modifier: Modifier = Modifier,
 ) {
     fun onActionSelected(timelineItemAction: TimelineItemAction, event: TimelineItem.Event) {
@@ -203,11 +214,25 @@ private fun PinnedMessagesListLoaded(
         )
     }
 
+    fun onReactionClick(emoji: String, event: TimelineItem.Event) {
+        state.eventSink(PinnedMessagesListEvent.ToggleReaction(emoji, event.eventOrTransactionId))
+    }
+
+    fun onReactionLongClick(emoji: String, event: TimelineItem.Event) {
+        event.eventId?.let { eventId ->
+            state.reactionSummaryState.eventSink(ReactionSummaryEvent.ShowReactionSummary(eventId, event.reactionsState.reactions, emoji))
+        }
+    }
+
+    fun onMoreReactionsClick(event: TimelineItem.Event) {
+        state.customReactionState.eventSink(CustomReactionEvent.ShowCustomReactionSheet(event))
+    }
+
     ActionListView(
         state = state.actionListState,
         onSelectAction = ::onActionSelected,
-        onCustomReactionClick = {},
-        onEmojiReactionClick = { _, _ -> },
+        onCustomReactionClick = ::onMoreReactionsClick,
+        onEmojiReactionClick = ::onReactionClick,
         onVerifiedUserSendFailureClick = {}
     )
 
@@ -239,9 +264,9 @@ private fun PinnedMessagesListLoaded(
                 onLongClick = ::onMessageLongClick,
                 displayThreadSummaries = displayThreadSummaries,
                 inReplyToClick = {},
-                onReactionClick = { _, _ -> },
-                onReactionLongClick = { _, _ -> },
-                onMoreReactionsClick = {},
+                onReactionClick = ::onReactionClick,
+                onReactionLongClick = ::onReactionLongClick,
+                onMoreReactionsClick = ::onMoreReactionsClick,
                 onReadReceiptClick = {},
                 onSwipeToReply = {},
                 onJoinCallClick = {},
@@ -273,6 +298,14 @@ private fun PinnedMessagesListLoaded(
         state.linkState,
         onLinkValid = onLinkClick,
     )
+    CustomReactionBottomSheet(
+        state = state.customReactionState,
+        onSelectEmoji = { eventOrTransactionId, emoji ->
+            state.eventSink(PinnedMessagesListEvent.ToggleReaction(emoji.unicode, eventOrTransactionId))
+        },
+        emojiPickerRenderer = emojiPickerRenderer,
+    )
+    ReactionSummaryView(state = state.reactionSummaryState)
 }
 
 @Composable
@@ -322,5 +355,6 @@ internal fun PinnedMessagesListViewPreview(@PreviewParameter(PinnedMessagesListS
             onUserDataClick = {},
             onLinkClick = {},
             onLinkLongClick = {},
+            emojiPickerRenderer = NoOpEmojiPickerRenderer,
         )
     }

@@ -38,6 +38,9 @@ class PictureInPicturePresenter(
 
         fun handleEvent(event: PictureInPictureEvent) {
             when (event) {
+                is PictureInPictureEvent.OnCallStarted -> {
+                    pipController?.setupPipCallbacks()
+                }
                 is PictureInPictureEvent.SetPipController -> {
                     pipController = event.pipController
                 }
@@ -54,6 +57,10 @@ class PictureInPicturePresenter(
                     } else {
                         pipController?.exitPip()
                     }
+                }
+                is PictureInPictureEvent.SetPipOrientation -> {
+                    Timber.tag(loggerTag.value).d("onOrientationChange: ${event.orientation}")
+                    pipView?.setPipOrientation(event.orientation)
                 }
             }
         }

@@ -60,7 +60,7 @@ class ChooseAccountProviderPresenter(
 
         val staticAccountProviderList = remember {
             // The list cannot contains ANY_ACCOUNT_PROVIDER ("*") and cannot be empty at this point
-            enterpriseService.defaultHomeserverList()
+            enterpriseService.homeserverAllowList()
                 .map { it.ensureProtocol() }
                 .map { url ->
                     AccountProvider(

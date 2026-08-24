@@ -9,8 +9,8 @@
 package io.element.android.features.login.impl.screens.confirmaccountprovider
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.login.impl.accountprovider.AccountProvider
-import io.element.android.features.login.impl.accountprovider.anAccountProvider
+import io.element.android.features.login.impl.changeserver.ChangeServerState
+import io.element.android.features.login.impl.changeserver.aChangeServerState
 import io.element.android.features.login.impl.login.LoginModeState
 import io.element.android.features.login.impl.login.aLoginModeState
 import io.element.android.features.login.impl.screens.createaccount.AccountCreationNotSupported
@@ -20,6 +20,10 @@ open class ConfirmAccountProviderStatePreviewParam : PreviewParameterProvider<Co
     override val values: Sequence<ConfirmAccountProviderState>
         get() = sequenceOf(
             aConfirmAccountProviderState(),
+            aConfirmAccountProviderState(
+                accountProviderInput = "element",
+                accountProviderSuggestion = "element.io",
+            ),
             aConfirmAccountProviderState(
                 isAccountCreation = true,
             ),
@@ -31,13 +35,17 @@ open class ConfirmAccountProviderStatePreviewParam : PreviewParameterProvider<Co
 }
 
 private fun aConfirmAccountProviderState(
-    accountProvider: AccountProvider = anAccountProvider(),
+    accountProviderInput: String = "matrix.org",
+    accountProviderSuggestion: String? = null,
     isAccountCreation: Boolean = false,
     loginModeState: LoginModeState = aLoginModeState(),
+    changeServerState: ChangeServerState = aChangeServerState(),
     eventSink: (ConfirmAccountProviderEvents) -> Unit = {},
 ) = ConfirmAccountProviderState(
-    accountProvider = accountProvider,
+    accountProviderInput = accountProviderInput,
+    accountProviderSuggestion = accountProviderSuggestion,
     isAccountCreation = isAccountCreation,
     loginModeState = loginModeState,
+    changeServerState = changeServerState,
     eventSink = eventSink
 )

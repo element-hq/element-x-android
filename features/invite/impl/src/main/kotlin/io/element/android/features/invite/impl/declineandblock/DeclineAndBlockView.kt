@@ -46,6 +46,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun DeclineAndBlockView(
     state: DeclineAndBlockState,
     onBackClick: () -> Unit,
+    onDeclineSuccess: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
@@ -53,7 +54,7 @@ fun DeclineAndBlockView(
     val isDeclining = state.declineAction is AsyncAction.Loading
     AsyncActionView(
         async = state.declineAction,
-        onSuccess = { onBackClick() },
+        onSuccess = { onDeclineSuccess() },
         errorMessage = { stringResource(CommonStrings.error_unknown) },
         onRetry = { state.eventSink(DeclineAndBlockEvents.Decline) },
         onErrorDismiss = { state.eventSink(DeclineAndBlockEvents.ClearDeclineAction) }
@@ -149,5 +150,6 @@ internal fun DeclineAndBlockViewPreview(
     DeclineAndBlockView(
         state = state,
         onBackClick = {},
+        onDeclineSuccess = {},
     )
 }

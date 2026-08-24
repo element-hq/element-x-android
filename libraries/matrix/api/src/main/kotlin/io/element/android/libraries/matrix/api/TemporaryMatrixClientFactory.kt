@@ -12,10 +12,10 @@ package io.element.android.libraries.matrix.api
  */
 interface TemporaryMatrixClientFactory {
     /**
-     * Builds an unauthenticated client pointing at [homeServerUrl], backed by a fresh set of temporary session directories.
+     * Builds an unauthenticated client pointing at [serverName], backed by a fresh set of temporary session directories.
      * The caller owns the returned client and must close it to delete those directories.
      *
-     * @param homeServerUrl the URL of the homeserver the client will talk to.
+     * @param serverName the domain of the public-facing server for the actual homeserver
      */
-    suspend fun create(homeServerUrl: String): Result<TemporaryMatrixClient>
+    suspend fun create(serverName: String): Result<TemporaryMatrixClient>
 }

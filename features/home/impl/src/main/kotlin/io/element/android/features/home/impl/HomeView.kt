@@ -55,6 +55,8 @@ import io.element.android.features.home.impl.roomlist.RoomListContextMenu
 import io.element.android.features.home.impl.roomlist.RoomListDeclineInviteMenu
 import io.element.android.features.home.impl.roomlist.RoomListEvent
 import io.element.android.features.home.impl.roomlist.RoomListState
+import io.element.android.features.home.impl.search.GlobalSearchEvent
+import io.element.android.features.home.impl.search.GlobalSearchView
 import io.element.android.features.home.impl.search.RoomListSearchView
 import io.element.android.features.home.impl.spacefilters.SpaceFiltersEvent
 import io.element.android.features.home.impl.spacefilters.SpaceFiltersState
@@ -73,6 +75,7 @@ import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
 import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
@@ -80,7 +83,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeView(
     homeState: HomeState,
-    onRoomClick: (RoomId) -> Unit,
+    onRoomClick: (RoomId, EventId?) -> Unit,
     onSettingsClick: () -> Unit,
     onSetUpRecoveryClick: () -> Unit,
     onConfirmRecoveryKeyClick: () -> Unit,
@@ -122,22 +125,34 @@ fun HomeView(
             state = homeState,
             onSetUpRecoveryClick = onSetUpRecoveryClick,
             onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
-            onRoomClick = { if (firstThrottler.canHandle()) onRoomClick(it) },
+            onRoomClick = { roomId -> if (firstThrottler.canHandle()) onRoomClick(roomId, null) },
             onOpenSettings = { if (firstThrottler.canHandle()) onSettingsClick() },
             onStartChatClick = { if (firstThrottler.canHandle()) onStartChatClick() },
             onCreateSpaceClick = { if (firstThrottler.canHandle()) onCreateSpaceClick() },
             onMenuActionClick = onMenuActionClick,
         )
-        // This overlaid view will only be visible when state.displaySearchResults is true
-        RoomListSearchView(
-            state = state.searchState,
-            eventSink = state.eventSink,
-            hideInvitesAvatars = state.hideInvitesAvatars,
-            onRoomClick = { if (firstThrottler.canHandle()) onRoomClick(it) },
-            modifier = Modifier
-                .fillMaxSize()
-                .background(ElementTheme.colors.bgCanvasDefault)
-        )
+
+        if (state.globalSearchState.isEnabled) {
+            GlobalSearchView(
+                state = state.globalSearchState,
+                onSelectSearchResult = { roomId, eventId -> if (firstThrottler.canHandle()) onRoomClick(roomId, eventId) },
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(ElementTheme.colors.bgCanvasDefault),
+            )
+        } else {
+            // This overlaid view will only be visible when state.displaySearchResults is true
+            RoomListSearchView(
+                state = state.searchState,
+                eventSink = state.eventSink,
+                hideInvitesAvatars = state.hideInvitesAvatars,
+                onRoomClick = { roomId -> if (firstThrottler.canHandle()) onRoomClick(roomId, null) },
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(ElementTheme.colors.bgCanvasDefault)
+            )
+        }
+
         acceptDeclineInviteView()
     }
 }
@@ -186,8 +201,18 @@ private fun HomeScaffold(
                 selectedNavigationItem = state.currentHomeNavigationBarItem,
                 currentUserAndNeighbors = state.currentUserAndNeighbors,
                 showAvatarIndicator = state.showAvatarIndicator,
-                areSearchResultsDisplayed = roomListState.searchState.isSearchActive,
-                onToggleSearch = { roomListState.eventSink(RoomListEvent.ToggleSearchResults) },
+                areSearchResultsDisplayed = if (roomListState.globalSearchState.isEnabled) {
+                    roomListState.globalSearchState.isSearchActive
+                } else {
+                    roomListState.searchState.isSearchActive
+                },
+                onToggleSearch = {
+                    if (roomListState.globalSearchState.isEnabled) {
+                        roomListState.globalSearchState.eventSink(GlobalSearchEvent.ToggleSearchVisibility)
+                    } else {
+                        roomListState.eventSink(RoomListEvent.ToggleSearchResults)
+                    }
+                },
                 onMenuActionClick = onMenuActionClick,
                 onOpenSettings = onOpenSettings,
                 onAccountSwitch = {
@@ -349,7 +374,7 @@ internal fun RoomListRoomSummary.contentType() = displayType.ordinal
 internal fun HomeViewPreview(@PreviewParameter(HomeStatePreviewParam::class) state: HomeState) = ElementPreview {
     HomeView(
         homeState = state,
-        onRoomClick = {},
+        onRoomClick = { _, _ -> },
         onSettingsClick = {},
         onSetUpRecoveryClick = {},
         onConfirmRecoveryKeyClick = {},
@@ -369,7 +394,7 @@ internal fun HomeViewPreview(@PreviewParameter(HomeStatePreviewParam::class) sta
 internal fun HomeViewA11yPreview() = ElementPreview {
     HomeView(
         homeState = aHomeState(),
-        onRoomClick = {},
+        onRoomClick = { _, _ -> },
         onSettingsClick = {},
         onSetUpRecoveryClick = {},
         onConfirmRecoveryKeyClick = {},

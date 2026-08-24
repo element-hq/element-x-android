@@ -39,6 +39,7 @@ PRs must meet these rules.
 - Use `@PreviewsDayNight` for consistency.
 - Use `PreviewParameterProvider` (e.g., `FooStatePreviewParam`) to provide states.
 - Wrap previews in `ElementPreview { ... }`.
+- When writing tests, never try to record the screenshots, the CI will do it.
 
 ---
 
