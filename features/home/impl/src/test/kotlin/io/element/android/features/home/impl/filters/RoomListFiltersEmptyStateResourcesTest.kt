@@ -30,6 +30,15 @@ class RoomListFiltersEmptyStateResourcesTest {
     }
 
     @Test
+    fun `fromSelectedFilters should return exact RoomListFiltersEmptyStateResources when selectedFilters has only mentions filter`() {
+        val selectedFilters = listOf(RoomListFilter.Mentions)
+        val result = RoomListFiltersEmptyStateResources.fromSelectedFilters(selectedFilters, isSpaceFilterSelected = false)
+        assertThat(result).isNotNull()
+        assertThat(result?.title).isEqualTo(R.string.screen_roomlist_filter_mentions_empty_state_title)
+        assertThat(result?.subtitle).isEqualTo(R.string.screen_roomlist_filter_mixed_empty_state_subtitle)
+    }
+
+    @Test
     fun `fromSelectedFilters should return exact RoomListFiltersEmptyStateResources when selectedFilters has only people filter`() {
         val selectedFilters = listOf(RoomListFilter.People)
         val result = RoomListFiltersEmptyStateResources.fromSelectedFilters(selectedFilters, isSpaceFilterSelected = false)
