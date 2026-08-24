@@ -202,7 +202,9 @@ class ElementCallActivity :
         }
         DisposableEffect(Unit) {
             val onPictureInPictureModeChangedListener = Consumer { _: PictureInPictureModeChangedInfo ->
-                setPipParams()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    setPipParams()
+                }
                 pipEventSink(PictureInPictureEvent.OnPictureInPictureModeChanged(isInPictureInPictureMode))
                 if (!isInPictureInPictureMode && !lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
                     Timber.tag(loggerTag.value).d("Exiting PiP mode: Hangup the call")
@@ -300,6 +302,7 @@ class ElementCallActivity :
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun setPipOrientation(orientation: Int?) {
         currentPipOrientation = orientation
         setPictureInPictureParams(getPictureInPictureParams())
