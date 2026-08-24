@@ -232,7 +232,7 @@ private fun CreatePollTopAppBar(
 @PreviewsDayNight
 @Composable
 internal fun CreatePollViewPreview(
-    @PreviewParameter(CreatePollStateProvider::class) state: CreatePollState
+    @PreviewParameter(CreatePollStatePreviewParam::class) state: CreatePollState
 ) = ElementPreview {
     CreatePollView(
         state = state,

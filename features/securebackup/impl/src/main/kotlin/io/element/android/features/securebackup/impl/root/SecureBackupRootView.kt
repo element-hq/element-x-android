@@ -236,7 +236,7 @@ private fun LoadingView() {
 @PreviewsDayNight
 @Composable
 internal fun SecureBackupRootViewPreview(
-    @PreviewParameter(SecureBackupRootStateProvider::class) state: SecureBackupRootState
+    @PreviewParameter(SecureBackupRootStatePreviewParam::class) state: SecureBackupRootState
 ) = ElementPreview {
     SecureBackupRootView(
         state = state,

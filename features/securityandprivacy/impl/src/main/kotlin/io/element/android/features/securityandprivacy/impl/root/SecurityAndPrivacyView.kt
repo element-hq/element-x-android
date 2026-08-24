@@ -469,12 +469,12 @@ private fun HistoryVisibilityItem(
 
 @PreviewWithLargeHeight
 @Composable
-internal fun SecurityAndPrivacyViewLightPreview(@PreviewParameter(SecurityAndPrivacyStateProvider::class) state: SecurityAndPrivacyState) =
+internal fun SecurityAndPrivacyViewLightPreview(@PreviewParameter(SecurityAndPrivacyStatePreviewParam::class) state: SecurityAndPrivacyState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @PreviewWithLargeHeight
 @Composable
-internal fun SecurityAndPrivacyViewDarkPreview(@PreviewParameter(SecurityAndPrivacyStateProvider::class) state: SecurityAndPrivacyState) =
+internal fun SecurityAndPrivacyViewDarkPreview(@PreviewParameter(SecurityAndPrivacyStatePreviewParam::class) state: SecurityAndPrivacyState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @ExcludeFromCoverage

@@ -255,7 +255,7 @@ private fun CreateRoomActionButton(
 
 @PreviewsDayNight
 @Composable
-internal fun StartChatViewPreview(@PreviewParameter(StartChatStateProvider::class) state: StartChatState) =
+internal fun StartChatViewPreview(@PreviewParameter(StartChatStatePreviewParam::class) state: StartChatState) =
     ElementPreview {
         StartChatView(
             state = state,

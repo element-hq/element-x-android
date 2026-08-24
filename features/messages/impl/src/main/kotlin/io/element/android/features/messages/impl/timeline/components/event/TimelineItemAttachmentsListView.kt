@@ -265,7 +265,7 @@ private fun AttachmentListItem(
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemAttachmentsListViewPreview(
-    @PreviewParameter(TimelineItemAttachmentsContentProvider::class) content: TimelineItemAttachmentsContent
+    @PreviewParameter(TimelineItemAttachmentsContentPreviewParam::class) content: TimelineItemAttachmentsContent
 ) = ElementPreview {
     TimelineItemAttachmentsListView(
         eventId = EventId("\$eventId"),

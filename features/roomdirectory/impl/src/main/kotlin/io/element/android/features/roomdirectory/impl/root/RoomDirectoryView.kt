@@ -278,7 +278,7 @@ private fun RoomDirectoryRoomRow(
 
 @PreviewsDayNight
 @Composable
-internal fun RoomDirectoryViewPreview(@PreviewParameter(RoomDirectoryStateProvider::class) state: RoomDirectoryState) = ElementPreview {
+internal fun RoomDirectoryViewPreview(@PreviewParameter(RoomDirectoryStatePreviewParam::class) state: RoomDirectoryState) = ElementPreview {
     RoomDirectoryView(
         state = state,
         onResultClick = {},

@@ -232,7 +232,7 @@ fun BugReportView(
 
 @Preview(heightDp = 1000)
 @Composable
-internal fun BugReportViewDayPreview(@PreviewParameter(BugReportStateProvider::class) state: BugReportState) = ElementPreview {
+internal fun BugReportViewDayPreview(@PreviewParameter(BugReportStatePreviewParam::class) state: BugReportState) = ElementPreview {
     BugReportView(
         state = state,
         onSuccess = {},
@@ -243,7 +243,7 @@ internal fun BugReportViewDayPreview(@PreviewParameter(BugReportStateProvider::c
 
 @Preview(heightDp = 1000, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-internal fun BugReportViewNightPreview(@PreviewParameter(BugReportStateProvider::class) state: BugReportState) = ElementPreview {
+internal fun BugReportViewNightPreview(@PreviewParameter(BugReportStatePreviewParam::class) state: BugReportState) = ElementPreview {
     BugReportView(
         state = state,
         onSuccess = {},

@@ -134,7 +134,7 @@ private fun RowScope.SecondaryText(
 @PreviewsDayNight
 @Composable
 internal fun SenderNamePreview(
-    @PreviewParameter(SenderNameDataProvider::class) senderNameData: SenderNameData,
+    @PreviewParameter(SenderNameDataPreviewParam::class) senderNameData: SenderNameData,
 ) = ElementPreview {
     SenderName(
         senderId = senderNameData.userId,
