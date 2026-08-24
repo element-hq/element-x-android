@@ -231,7 +231,7 @@ private fun NotificationCategory(onPushHistoryClick: () -> Unit) {
 @PreviewsDayNight
 @Composable
 internal fun DeveloperSettingsViewPreview(
-    @PreviewParameter(DeveloperSettingsStateProvider::class) state: DeveloperSettingsState
+    @PreviewParameter(DeveloperSettingsStatePreviewParam::class) state: DeveloperSettingsState
 ) = ElementPreview {
     DeveloperSettingsView(
         state = state,

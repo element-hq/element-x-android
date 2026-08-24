@@ -500,7 +500,9 @@ private fun InvalidNotificationSettingsView(
 
 @PreviewsDayNight
 @Composable
-internal fun NotificationSettingsViewPreview(@PreviewParameter(NotificationSettingsStateProvider::class) state: NotificationSettingsState) = ElementPreview {
+internal fun NotificationSettingsViewPreview(@PreviewParameter(
+    NotificationSettingsStatePreviewParam::class
+) state: NotificationSettingsState) = ElementPreview {
     NotificationSettingsView(
         state = state,
         onBackClick = {},

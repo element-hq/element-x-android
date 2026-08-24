@@ -38,7 +38,7 @@ fun ForwardMessagesView(
 
 @PreviewsDayNight
 @Composable
-internal fun ForwardMessagesViewPreview(@PreviewParameter(ForwardMessagesStateProvider::class) state: ForwardMessagesState) = ElementPreview {
+internal fun ForwardMessagesViewPreview(@PreviewParameter(ForwardMessagesStatePreviewParam::class) state: ForwardMessagesState) = ElementPreview {
     ForwardMessagesView(
         state = state,
         onForwardSuccess = {}

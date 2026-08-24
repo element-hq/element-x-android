@@ -147,7 +147,7 @@ private fun RoomAliasResolverTopBar(
 
 @PreviewsDayNight
 @Composable
-internal fun RoomAliasResolverViewPreview(@PreviewParameter(RoomAliasResolverStateProvider::class) state: RoomAliasResolverState) = ElementPreview {
+internal fun RoomAliasResolverViewPreview(@PreviewParameter(RoomAliasResolverStatePreviewParam::class) state: RoomAliasResolverState) = ElementPreview {
     RoomAliasResolverView(
         state = state,
         onSuccess = { },

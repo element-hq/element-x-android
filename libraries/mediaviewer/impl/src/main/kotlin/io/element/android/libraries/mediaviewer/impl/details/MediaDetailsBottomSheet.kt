@@ -266,7 +266,7 @@ private fun SectionText(
 @PreviewsDayNight
 @Composable
 internal fun MediaDetailsBottomSheetPreview(
-    @PreviewParameter(MediaBottomSheetStateDetailsProvider::class) state: MediaBottomSheetState.Details,
+    @PreviewParameter(MediaBottomSheetStateDetailsPreviewParam::class) state: MediaBottomSheetState.Details,
 ) = ElementPreview(fillMaxSize = true) {
     MediaDetailsBottomSheet(
         state = state,

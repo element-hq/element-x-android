@@ -145,7 +145,7 @@ fun DeclineAndBlockView(
 @PreviewsDayNight
 @Composable
 internal fun DeclineAndBlockViewPreview(
-    @PreviewParameter(DeclineAndBlockStateProvider::class) state: DeclineAndBlockState
+    @PreviewParameter(DeclineAndBlockStatePreviewParam::class) state: DeclineAndBlockState
 ) = ElementPreview {
     DeclineAndBlockView(
         state = state,

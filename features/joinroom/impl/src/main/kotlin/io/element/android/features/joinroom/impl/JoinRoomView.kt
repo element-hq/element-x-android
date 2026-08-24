@@ -642,7 +642,7 @@ private fun JoinRoomTopBar(
 
 @PreviewsDayNight
 @Composable
-internal fun JoinRoomViewPreview(@PreviewParameter(JoinRoomStateProvider::class) state: JoinRoomState) = ElementPreview {
+internal fun JoinRoomViewPreview(@PreviewParameter(JoinRoomStatePreviewParam::class) state: JoinRoomState) = ElementPreview {
     JoinRoomView(
         state = state,
         onBackClick = { },

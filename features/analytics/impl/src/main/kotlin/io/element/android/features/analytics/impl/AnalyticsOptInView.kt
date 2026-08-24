@@ -171,7 +171,7 @@ private fun AnalyticsOptInFooter(
 
 @PreviewsDayNight
 @Composable
-internal fun AnalyticsOptInViewPreview(@PreviewParameter(AnalyticsOptInStateProvider::class) state: AnalyticsOptInState) = ElementPreview {
+internal fun AnalyticsOptInViewPreview(@PreviewParameter(AnalyticsOptInStatePreviewParam::class) state: AnalyticsOptInState) = ElementPreview {
     AnalyticsOptInView(
         state = state,
         onClickTerms = {},

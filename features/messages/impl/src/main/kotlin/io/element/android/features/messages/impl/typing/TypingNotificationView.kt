@@ -141,7 +141,7 @@ private fun computeTypingNotificationText(typingMembers: ImmutableList<TypingRoo
 @PreviewsDayNight
 @Composable
 internal fun TypingNotificationViewPreview(
-    @PreviewParameter(TypingNotificationStateProvider::class) state: TypingNotificationState,
+    @PreviewParameter(TypingNotificationStatePreviewParam::class) state: TypingNotificationState,
 ) = ElementPreview {
     TypingNotificationView(
         modifier = if (state.reserveSpace) Modifier.border(1.dp, Color.Blue) else Modifier,

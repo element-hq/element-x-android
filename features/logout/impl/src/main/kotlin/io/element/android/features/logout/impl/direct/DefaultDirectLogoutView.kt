@@ -13,7 +13,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.logout.api.direct.DirectLogoutEvents
 import io.element.android.features.logout.api.direct.DirectLogoutState
-import io.element.android.features.logout.api.direct.DirectLogoutStateProvider
+import io.element.android.features.logout.api.direct.DirectLogoutStatePreviewParam
 import io.element.android.features.logout.api.direct.DirectLogoutView
 import io.element.android.features.logout.impl.ui.LogoutActionDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -43,7 +43,7 @@ class DefaultDirectLogoutView : DirectLogoutView {
 @PreviewsDayNight
 @Composable
 internal fun DefaultDirectLogoutViewPreview(
-    @PreviewParameter(DirectLogoutStateProvider::class) state: DirectLogoutState,
+    @PreviewParameter(DirectLogoutStatePreviewParam::class) state: DirectLogoutState,
 ) = ElementPreview {
     DefaultDirectLogoutView().Render(state = state)
 }

@@ -366,7 +366,7 @@ private fun SpaceItem(
 @PreviewsDayNight
 @Composable
 internal fun LeaveSpaceViewPreview(
-    @PreviewParameter(LeaveSpaceStateProvider::class) state: LeaveSpaceState,
+    @PreviewParameter(LeaveSpaceStatePreviewParam::class) state: LeaveSpaceState,
 ) = ElementPreview {
     LeaveSpaceView(
         state = state,

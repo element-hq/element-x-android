@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.startchat.impl.userlist.UserListEvents
 import io.element.android.features.startchat.impl.userlist.UserListState
-import io.element.android.features.startchat.impl.userlist.UserListStateProvider
+import io.element.android.features.startchat.impl.userlist.UserListStatePreviewParam
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -129,7 +129,7 @@ fun UserListView(
 
 @PreviewsDayNight
 @Composable
-internal fun UserListViewPreview(@PreviewParameter(UserListStateProvider::class) state: UserListState) = ElementPreview {
+internal fun UserListViewPreview(@PreviewParameter(UserListStatePreviewParam::class) state: UserListState) = ElementPreview {
     UserListView(
         state = state,
         onSelectUser = {},

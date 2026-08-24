@@ -178,7 +178,7 @@ private fun NotificationRow(
 @PreviewsDayNight
 @Composable
 internal fun NotificationsOptInViewPreview(
-    @PreviewParameter(NotificationsOptInStateProvider::class) state: NotificationsOptInState
+    @PreviewParameter(NotificationsOptInStatePreviewParam::class) state: NotificationsOptInState
 ) {
     ElementPreview {
         NotificationsOptInView(

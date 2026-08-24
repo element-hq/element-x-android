@@ -694,7 +694,7 @@ private fun SuccessorRoomBanner(
 
 @PreviewsDayNight
 @Composable
-internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class) state: MessagesState) = ElementPreview {
+internal fun MessagesViewPreview(@PreviewParameter(MessagesStatePreviewParam::class) state: MessagesState) = ElementPreview {
     MessagesView(
         state = state,
         onBackClick = {},
