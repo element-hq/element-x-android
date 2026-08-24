@@ -245,6 +245,20 @@ fun TextComposer(
         canSendTextMessage,
     ) {
         when {
+            composerMode.isEditing -> EndButtonParams(
+                endButtonContentDescriptionResId = CommonStrings.action_send_edited_message,
+                endButtonClick = {
+                    if (canSendTextMessage) {
+                        onSendMessage()
+                    }
+                },
+                endButtonContent = @Composable {
+                    SendButtonIcon(
+                        canSendMessage = canSendTextMessage,
+                        isEditing = true,
+                    )
+                },
+            )
             !canSendTextMessage ->
                 when (voiceMessageState) {
                     VoiceMessageState.Idle -> EndButtonParams(
@@ -296,18 +310,6 @@ fun TextComposer(
                         )
                     }
                 }
-            composerMode.isEditing -> EndButtonParams(
-                endButtonContentDescriptionResId = CommonStrings.action_send_edited_message,
-                endButtonClick = {
-                    onSendMessage()
-                },
-                endButtonContent = @Composable {
-                    SendButtonIcon(
-                        canSendMessage = true,
-                        isEditing = true,
-                    )
-                },
-            )
             else -> EndButtonParams(
                 endButtonContentDescriptionResId = CommonStrings.action_send_message,
                 endButtonClick = {

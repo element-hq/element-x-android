@@ -60,15 +60,12 @@ import java.util.Optional
  * One instance exists per session, created on login or session restore and torn down by [logout], [clearCache] or account deactivation.
  * Suspending members here report failures through a [Result] instead of throwing, and run their work off the main thread.
  */
-interface MatrixClient : UrlContentFetcher {
+interface MatrixClient : ClientUrlContentFetcher {
     /** Identifier of the logged in user; a [SessionId] and a [UserId] are the same value. */
     val sessionId: SessionId
 
     /** Identifier of this device, as assigned by the homeserver when the session was created. */
     val deviceId: DeviceId
-
-    /** Base URL of the homeserver this client is connected to. */
-    val homeserverUrl: String
 
     /** Directories holding this session's databases, caches and downloaded media. */
     val sessionPaths: SessionPaths
@@ -135,6 +132,9 @@ interface MatrixClient : UrlContentFetcher {
 
     /** Scans media content before it is displayed, or `null` when no content scanner is configured for this session. */
     val contentScanner: ContentScanner?
+
+    /** Whether the session is in the process of shutting down, either because it is being logged out or its cache is being cleared. */
+    val isShuttingDown: Boolean
 
     /**
      * Returns the room with the given id if the user has joined it, along with its live [Timeline].
@@ -244,6 +244,9 @@ interface MatrixClient : UrlContentFetcher {
 
     /** Whether the homeserver advertises support for user status (MSC4426). */
     suspend fun isUserStatusSupported(): Result<Boolean>
+
+    /** Whether the homeserver advertises support for the Profiles sliding sync extension (MSC4262). */
+    suspend fun isProfilesSlidingSyncExtensionSupported(): Result<Boolean>
 
     /**
      * Enable or disable automatically setting the user's status to "in a call" (m.call) while in a call.

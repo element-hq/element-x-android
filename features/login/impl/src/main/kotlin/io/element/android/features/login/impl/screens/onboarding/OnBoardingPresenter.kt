@@ -60,7 +60,7 @@ class OnBoardingPresenter(
     override fun present(): OnBoardingState {
         val localCoroutineScope = rememberCoroutineScope()
         val forcedAccountProvider = remember {
-            // If defaultHomeserverList() returns a singleton list, this is the default account provider.
+            // If homeserverAllowList() returns a singleton list, this is the default account provider.
             // In this case, the user can sign in using this homeserver, or use QrCode login
             enterpriseService.homeserverAllowList().singleOrNull()
         }

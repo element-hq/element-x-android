@@ -19,7 +19,7 @@ class RustTemporaryMatrixClientFactory(
     private val sessionPathsFactory: SessionPathsFactory,
     private val rustMatrixClientFactory: RustMatrixClientFactory,
 ) : TemporaryMatrixClientFactory {
-    override suspend fun create(homeServerUrl: String): Result<TemporaryMatrixClient> {
+    override suspend fun create(serverName: String): Result<TemporaryMatrixClient> {
         return runCatchingExceptions {
             val sessionPaths = sessionPathsFactory.create()
             val client = rustMatrixClientFactory.getBaseClientBuilder(
@@ -28,7 +28,7 @@ class RustTemporaryMatrixClientFactory(
                 slidingSyncType = ClientBuilderSlidingSync.Native,
                 isMessageSearchAvailable = false,
             )
-                .homeserverUrl(homeServerUrl)
+                .serverName(serverName)
                 .build()
             RustTemporaryMatrixClient(client, sessionPaths)
         }

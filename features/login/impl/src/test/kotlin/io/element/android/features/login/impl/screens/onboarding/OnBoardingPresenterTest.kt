@@ -16,6 +16,8 @@ import io.element.android.features.enterprise.api.IsEnterpriseBuild
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
+import io.element.android.features.login.impl.accountprovider.SaveAccountProviderToHistory
+import io.element.android.features.login.impl.accountprovider.anAccountProviderDataSource
 import io.element.android.features.login.impl.localnetwork.LocalNetworkPermissionGate
 import io.element.android.features.login.impl.login.LoginModePresenter
 import io.element.android.libraries.architecture.AsyncData
@@ -31,11 +33,12 @@ import io.element.android.libraries.matrix.test.A_LOGIN_HINT
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.oauth.api.OAuthActionFlow
-import io.element.android.libraries.oauth.test.customtab.FakeOAuthActionFlow
+import io.element.android.libraries.oauth.test.FakeOAuthActionFlow
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionAdvisor
 import io.element.android.libraries.permissions.test.FakeLocalNetworkPermissionAdvisor
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
@@ -248,7 +251,7 @@ class OnBoardingPresenterTest {
                 Result.failure(AN_EXCEPTION)
             },
         )
-        val accountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService())
+        val accountProviderDataSource = anAccountProviderDataSource()
         val presenter = createPresenter(
             params = OnBoardingNode.Params(
                 accountProvider = A_HOMESERVER_URL,
@@ -299,7 +302,7 @@ private fun createPresenter(
     loginModePresenter: LoginModePresenter = createLoginModePresenter(),
     onBoardingLogoResIdProvider: OnBoardingLogoResIdProvider = OnBoardingLogoResIdProvider { null },
     sessionStore: SessionStore = InMemorySessionStore(),
-    accountProviderDataSource: AccountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
+    accountProviderDataSource: AccountProviderDataSource = anAccountProviderDataSource(),
 ) = OnBoardingPresenter(
     params = params,
     buildMeta = buildMeta,
@@ -322,6 +325,8 @@ fun createLoginModePresenter(
         FakeLocalNetworkPermissionAdvisor(),
     permissionsPresenterFactory: PermissionsPresenter.Factory =
         FakePermissionsPresenterFactory(),
+    saveAccountProviderToHistory: SaveAccountProviderToHistory =
+        SaveAccountProviderToHistory(anAccountProviderDataSource(), InMemoryAppPreferencesStore()),
 ): LoginModePresenter = LoginModePresenter(
     oAuthActionFlow = oAuthActionFlow,
     authenticationService = authenticationService,
@@ -329,4 +334,5 @@ fun createLoginModePresenter(
         advisor = localNetworkPermissionAdvisor,
         permissionsPresenterFactory = permissionsPresenterFactory,
     ),
+    saveAccountProviderToHistory = saveAccountProviderToHistory,
 )
