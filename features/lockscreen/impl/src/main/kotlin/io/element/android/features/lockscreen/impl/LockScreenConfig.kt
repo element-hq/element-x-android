@@ -27,7 +27,7 @@ data class LockScreenConfig(
 
 @ContributesTo(AppScope::class)
 @BindingContainer
-object LockScreenConfigModule {
+object LockScreenConfigBindingContainer {
     @Provides
     fun providesLockScreenConfig(): LockScreenConfig = LockScreenConfig(
         isPinMandatory = AppConfigLockScreenConfig.IS_PIN_MANDATORY,

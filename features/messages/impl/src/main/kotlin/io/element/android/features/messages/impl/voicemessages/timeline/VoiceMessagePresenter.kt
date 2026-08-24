@@ -26,7 +26,7 @@ import io.element.android.libraries.voiceplayer.api.VoiceMessageState
 
 @BindingContainer
 @ContributesTo(RoomScope::class)
-interface VoiceMessagePresenterModule {
+interface VoiceMessagePresenterBindingContainer {
     @Binds
     @IntoMap
     @TimelineItemEventContentKey(TimelineItemVoiceContent::class)

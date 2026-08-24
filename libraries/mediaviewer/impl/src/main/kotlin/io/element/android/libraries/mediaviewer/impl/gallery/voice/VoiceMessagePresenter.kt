@@ -27,7 +27,7 @@ import kotlin.time.Duration
 
 @BindingContainer
 @ContributesTo(RoomScope::class)
-interface VoiceMessagePresenterModule {
+interface VoiceMessagePresenterBindingContainer {
     @Binds
     @IntoMap
     @MediaItemEventContentKey(MediaItem.Voice::class)

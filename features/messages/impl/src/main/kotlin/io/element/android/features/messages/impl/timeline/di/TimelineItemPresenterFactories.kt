@@ -27,7 +27,7 @@ import kotlin.reflect.KClass
  */
 @BindingContainer
 @ContributesTo(RoomScope::class)
-interface TimelineItemPresenterFactoriesModule {
+interface TimelineItemPresenterFactoriesBindingContainer {
     @Multibinds
     fun multiBindTimelineItemPresenterFactories(): @JvmSuppressWildcards Map<KClass<out TimelineItemEventContent>, TimelineItemPresenterFactory<*, *>>
 }

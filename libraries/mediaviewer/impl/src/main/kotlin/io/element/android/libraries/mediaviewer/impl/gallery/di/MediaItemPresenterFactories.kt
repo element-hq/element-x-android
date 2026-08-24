@@ -27,7 +27,7 @@ import kotlin.reflect.KClass
  */
 @BindingContainer
 @ContributesTo(RoomScope::class)
-interface MediaItemPresenterFactoriesModule {
+interface MediaItemPresenterFactoriesBindingContainer {
     @Multibinds
     fun multiBindMediaItemPresenterFactories(): @JvmSuppressWildcards Map<KClass<out MediaItem.Event>, MediaItemPresenterFactory<*, *>>
 }

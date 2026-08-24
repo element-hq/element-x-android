@@ -16,7 +16,7 @@ import kotlin.reflect.KClass
  *
  * @BindingContainer
  * @ContributesTo(Scope::class)
- * abstract class YourNodeModule {
+ * abstract class YourNodeBindingContainer {
 
  *  @Binds
  *  @IntoMap

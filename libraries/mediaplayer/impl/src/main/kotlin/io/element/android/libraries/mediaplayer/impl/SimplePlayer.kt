@@ -46,7 +46,7 @@ interface SimplePlayer {
 
 @ContributesTo(RoomScope::class)
 @BindingContainer
-object SimplePlayerModule {
+object SimplePlayerBindingContainer {
     @Provides
     fun simplePlayerProvider(
         @ApplicationContext context: Context,
