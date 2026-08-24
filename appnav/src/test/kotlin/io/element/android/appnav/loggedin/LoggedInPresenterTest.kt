@@ -17,9 +17,6 @@ import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
@@ -131,7 +128,6 @@ class LoggedInPresenterTest {
             buildMeta = buildMeta,
             networkMonitor = networkMonitor,
             localNetworkPermissionAdvisor = FakeLocalNetworkPermissionAdvisor(),
-            featureFlagService = FakeFeatureFlagService(),
             permissionsPresenterFactory = FakePermissionsPresenterFactory(),
         ).test {
             encryptionService.emitRecoveryState(RecoveryState.UNKNOWN)
@@ -362,9 +358,6 @@ class LoggedInPresenterTest {
         }
         createLoggedInPresenter(
             matrixClient = matrixClient,
-            featureFlagService = FakeFeatureFlagService(
-                initialState = mapOf(FeatureFlags.UserStatus.key to true),
-            ),
         ).test {
             cancelAndConsumeRemainingEvents()
             assert(enableAutomaticCallStatusLambda)
@@ -374,7 +367,7 @@ class LoggedInPresenterTest {
     }
 
     @Test
-    fun `present - reacts to user status flag being toggled at runtime`() = runTest {
+    fun `present - enables automatic call status when server supports it`() = runTest {
         val enableAutomaticCallStatusLambda = lambdaRecorder<Boolean, Unit> { }
         val matrixClient = FakeMatrixClient(
             accountManagementUrlResult = { Result.success(null) },
@@ -382,23 +375,13 @@ class LoggedInPresenterTest {
         ).apply {
             isUserStatusSupportedResult = Result.success(true)
         }
-        val featureFlagService = FakeFeatureFlagService(
-            initialState = mapOf(FeatureFlags.UserStatus.key to false),
-        )
         createLoggedInPresenter(
             matrixClient = matrixClient,
-            featureFlagService = featureFlagService,
         ).test {
-            awaitItem()
-            // Turning the flag on at runtime enables it.
-            featureFlagService.setFeatureEnabled(FeatureFlags.UserStatus, true)
             cancelAndConsumeRemainingEvents()
             assert(enableAutomaticCallStatusLambda)
-                .isCalledExactly(2)
-                .withSequence(
-                    listOf(value(false)),
-                    listOf(value(true)),
-                )
+                .isCalledOnce()
+                .with(value(true))
         }
     }
 
@@ -418,7 +401,6 @@ class LoggedInPresenterTest {
         ),
         buildMeta: BuildMeta = aBuildMeta(),
         networkMonitor: FakeNetworkMonitor = FakeNetworkMonitor(),
-        featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
     ): LoggedInPresenter {
         return LoggedInPresenter(
             matrixClient = matrixClient,
@@ -430,7 +412,6 @@ class LoggedInPresenterTest {
             buildMeta = buildMeta,
             networkMonitor = networkMonitor,
             localNetworkPermissionAdvisor = FakeLocalNetworkPermissionAdvisor(),
-            featureFlagService = featureFlagService,
             permissionsPresenterFactory = FakePermissionsPresenterFactory(),
         )
     }

@@ -8,54 +8,65 @@
 
 package io.element.android.libraries.matrix.ui.messages.sender
 
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
 import io.element.android.libraries.matrix.api.user.DisplayedStatus
+import io.element.android.libraries.matrix.api.user.UserStatus
+import io.element.android.libraries.matrix.ui.messages.reply.aProfileDetailsReady
 
 data class SenderNameData(
     val userId: UserId,
     val profileDetails: ProfileDetails,
-    val senderNameMode: SenderNameMode,
 )
 
 open class SenderNameDataPreviewParam : PreviewParameterProvider<SenderNameData> {
     override val values: Sequence<SenderNameData>
         get() = sequenceOf(
-            SenderNameMode.Timeline(mainColor = Color.Red),
-            SenderNameMode.Reply,
-            SenderNameMode.ActionList,
+            aSenderNameData(),
+            aSenderNameData(
+                displayNameAmbiguous = true,
+            ),
+            aSenderNameData(
+                profileDetails = ProfileDetails.Unavailable,
+            ),
+            aSenderNameData(
+                displayName = null,
+            ),
+            aSenderNameData(
+                displayedStatus = DisplayedStatus.UserSet(
+                    status = UserStatus(
+                        emoji = "😀",
+                        text = "Should not be rendered",
+                    ),
+                ),
+            ),
+            aSenderNameData(
+                displayedStatus = DisplayedStatus.InCall(0L),
+            ),
+            aSenderNameData(
+                displayNameAmbiguous = true,
+                displayedStatus = DisplayedStatus.UserSet(
+                    status = UserStatus(
+                        emoji = "😀",
+                        text = "Should not be rendered",
+                    ),
+                ),
+            ),
         )
-            .flatMap { senderNameMode ->
-                sequenceOf(
-                    aSenderNameData(
-                        senderNameMode = senderNameMode,
-                    ),
-                    aSenderNameData(
-                        senderNameMode = senderNameMode,
-                        displayNameAmbiguous = true,
-                    ),
-                    SenderNameData(
-                        senderNameMode = senderNameMode,
-                        userId = UserId("@alice:${senderNameMode.javaClass.simpleName.lowercase()}"),
-                        profileDetails = ProfileDetails.Unavailable,
-                    ),
-                )
-            }
 }
 
 private fun aSenderNameData(
-    senderNameMode: SenderNameMode,
+    userId: UserId = UserId("@alice:example.com"),
+    displayName: String? = "Alice",
     displayNameAmbiguous: Boolean = false,
     displayedStatus: DisplayedStatus? = null,
-) = SenderNameData(
-    userId = UserId("@alice:${senderNameMode.javaClass.simpleName.lowercase()}"),
-    profileDetails = ProfileDetails.Ready(
-        displayName = "Alice ${senderNameMode.javaClass.simpleName}",
+    profileDetails: ProfileDetails = aProfileDetailsReady(
+        displayName = displayName,
         displayNameAmbiguous = displayNameAmbiguous,
-        avatarUrl = null,
         displayedStatus = displayedStatus,
-    ),
-    senderNameMode = senderNameMode,
+    )
+) = SenderNameData(
+    userId = userId,
+    profileDetails = profileDetails,
 )
