@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_firebase_availability_description">"يتحقق من توفر Firebase."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_failure">"Firebase غير متاح."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_success">"Firebase متاح."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_title">"التحقق من Firebase"</string>
+  <string name="troubleshoot_notifications_test_firebase_token_description">"يتحقق من توفر رمز Firebase المميز."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_failure">"رمز Firebase المميز غير معروف."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_success">"رمز Firebase المميز: %1$s."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_title">"التحقق من رمز Firebase المميز"</string>
+</resources>

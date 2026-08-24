@@ -37,6 +37,7 @@ import io.element.android.features.messages.impl.timeline.model.virtual.Timeline
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemTypingNotificationModel
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
+import io.element.android.features.messages.impl.timeline.sendfailure.SendFailureDialogState
 import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.features.messages.impl.userEventPermissions
 import io.element.android.features.messages.impl.voicemessages.timeline.RedactedVoiceMessageManager
@@ -56,6 +57,7 @@ import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsSta
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.DisplayFirstTimelineItems
@@ -142,6 +144,7 @@ class TimelinePresenter(
 
         val newEventState = remember { mutableStateOf<NewEventState>(NewEventState.None) }
         val messageShieldDialogData: MutableState<MessageShieldData?> = remember { mutableStateOf(null) }
+        var sendFailureDialogState by remember { mutableStateOf<SendFailureDialogState>(SendFailureDialogState.Hidden) }
 
         // Forces [JumpToUnreadState.Hidden] until the next RoomInfo push. Set after a
         // [TimelineEvent.MarkAllAsRead] await completes so the FAB hides without waiting for
@@ -166,9 +169,14 @@ class TimelinePresenter(
         fun handleEvent(event: TimelineEvent) {
             when (event) {
                 is TimelineEvent.LoadMore -> {
-                    if (event.direction == Timeline.PaginationDirection.FORWARDS && timelineMode is Timeline.Mode.Thread) {
-                        // Do not paginate forwards in thread mode, as it's not supported
-                        return
+                    if (event.direction == Timeline.PaginationDirection.FORWARDS) {
+                        if (timelineMode is Timeline.Mode.Thread) {
+                            // Do not paginate forwards in thread mode, as it's not supported
+                            return
+                        }
+                        if (focusRequestState.value.isPending()) {
+                            return
+                        }
                     }
                     localScope.launch {
                         timelineController.paginate(direction = event.direction)
@@ -244,6 +252,47 @@ class TimelinePresenter(
                     suppressJumpToUnread.value = true
                 }
                 is TimelineEvent.ShowShieldDialog -> messageShieldDialogData.value = event.messageShieldData
+                is TimelineEvent.ShowSendFailureDialog -> {
+                    val sendStateFailure = event.event.localSendState as? LocalEventSendState.Failed ?: return
+                    when (sendStateFailure) {
+                        is LocalEventSendState.Failed.VerifiedUser -> {
+                            // defer to the resolveVerifiedUserSendFailureState to handle this case,
+                            // as it will show a dialog with the right information
+                            resolveVerifiedUserSendFailureState.eventSink(ResolveVerifiedUserSendFailureEvent.ComputeForMessage(event.event))
+                        }
+                        is LocalEventSendState.Failed.InvalidMimeType -> {
+                            sendFailureDialogState = SendFailureDialogState.Show(
+                                event = event.event,
+                                sendFailureType = SendFailureDialogState.SendFailureType.InvalidMimeType(sendStateFailure.mimeType),
+                            )
+                        }
+                        LocalEventSendState.Failed.MissingMediaContent -> {
+                            sendFailureDialogState = SendFailureDialogState.Show(
+                                event = event.event,
+                                sendFailureType = SendFailureDialogState.SendFailureType.MissingMediaContent,
+                            )
+                        }
+                        LocalEventSendState.Failed.SendingFromUnverifiedDevice -> {
+                            sendFailureDialogState = SendFailureDialogState.Show(
+                                event = event.event,
+                                sendFailureType = SendFailureDialogState.SendFailureType.SendingFromUnverifiedDevice,
+                            )
+                        }
+                        is LocalEventSendState.Failed.Unknown -> {
+                            sendFailureDialogState = SendFailureDialogState.Show(
+                                event = event.event,
+                                sendFailureType = if (sendStateFailure.error.isNotBlank()) {
+                                    SendFailureDialogState.SendFailureType.Error(sendStateFailure.error)
+                                } else {
+                                    SendFailureDialogState.SendFailureType.Unknown
+                                }
+                            )
+                        }
+                    }
+                }
+                is TimelineEvent.HideSendFailureDialog -> {
+                    sendFailureDialogState = SendFailureDialogState.Hidden
+                }
                 is TimelineEvent.ComputeVerifiedUserSendFailure -> {
                     resolveVerifiedUserSendFailureState.eventSink(ResolveVerifiedUserSendFailureEvent.ComputeForMessage(event.event))
                 }
@@ -408,6 +457,7 @@ class TimelinePresenter(
             focusRequestState = focusRequestState.value,
             messageShieldDialogData = messageShieldDialogData.value,
             resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailureState,
+            sendFailureDialogState = sendFailureDialogState,
             displayThreadSummaries = displayThreadSummaries,
             displayJumpToUnread = displayJumpToUnread,
             jumpToUnread = jumpToUnread.value,
@@ -534,6 +584,16 @@ private fun FocusRequestState.onFocusEventRender(): FocusRequestState {
     return when (this) {
         is FocusRequestState.Success -> copy(rendered = true)
         else -> this
+    }
+}
+
+private fun FocusRequestState.isPending(): Boolean {
+    return when (this) {
+        is FocusRequestState.Requested,
+        is FocusRequestState.Loading -> true
+        is FocusRequestState.Success -> !rendered
+        FocusRequestState.None,
+        is FocusRequestState.Failure -> false
     }
 }
 

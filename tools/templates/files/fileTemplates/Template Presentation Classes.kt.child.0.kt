@@ -2,7 +2,7 @@
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
-open class ${NAME}StateProvider : PreviewParameterProvider<${NAME}State> {
+open class ${NAME}StatePreviewParam : PreviewParameterProvider<${NAME}State> {
     override val values: Sequence<${NAME}State>
         get() = sequenceOf(
             a${NAME}State(),

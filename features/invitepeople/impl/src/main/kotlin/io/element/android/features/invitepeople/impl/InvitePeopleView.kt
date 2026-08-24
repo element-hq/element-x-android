@@ -316,7 +316,7 @@ private fun InvitePeopleConfirmModal(
 
 @PreviewsDayNight
 @Composable
-internal fun InvitePeopleViewPreview(@PreviewParameter(DefaultInvitePeopleStateProvider::class) state: DefaultInvitePeopleState) =
+internal fun InvitePeopleViewPreview(@PreviewParameter(DefaultInvitePeopleStatePreviewParam::class) state: DefaultInvitePeopleState) =
     ElementPreview {
         InvitePeopleView(state = state)
     }

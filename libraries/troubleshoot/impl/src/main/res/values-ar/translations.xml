@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_push_history_title">"سجل الإشعارات الفورية"</string>
+  <string name="troubleshoot_notifications_screen_action">"تشغيل الاختبارات"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"تشغيل الاختبارات مرة أخرى"</string>
+  <string name="troubleshoot_notifications_screen_failure">"فشلت بعض الاختبارات. يرجى التحقق من التفاصيل."</string>
+  <string name="troubleshoot_notifications_screen_notice">"شغّل الاختبارات لاكتشاف أي مشكلة في إعداداتك قد تجعل الإشعارات لا تعمل كما هو متوقع."</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"محاولة الإصلاح"</string>
+  <string name="troubleshoot_notifications_screen_success">"اجتازت جميع الاختبارات بنجاح."</string>
+  <string name="troubleshoot_notifications_screen_title">"استكشاف أخطاء الإشعارات وإصلاحها"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"تتطلب بعض الاختبارات انتباهك. يرجى التحقق من التفاصيل."</string>
+</resources>

@@ -5,7 +5,7 @@
   <string name="screen_start_chat_error_starting_chat">"Une erreur s’est produite lors de la tentative de création de la discussion"</string>
   <string name="screen_start_chat_join_room_by_address_action">"Saisir une adresse de salon"</string>
   <string name="screen_start_chat_join_room_by_address_invalid_address">"Ce n’est pas une adresse valide"</string>
-  <string name="screen_start_chat_join_room_by_address_placeholder">"Saisir…"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Adresse du salon…"</string>
   <string name="screen_start_chat_join_room_by_address_room_found">"Ce salon existe"</string>
   <string name="screen_start_chat_join_room_by_address_room_not_found">"Salon non trouvé"</string>
   <string name="screen_start_chat_join_room_by_address_supporting_text">"ex: #nom-du-salon:matrix.org"</string>

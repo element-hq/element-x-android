@@ -11,7 +11,9 @@ package io.element.android.features.call.impl.pip
 import io.element.android.features.call.impl.utils.PipController
 
 sealed interface PictureInPictureEvent {
+    data object OnCallStarted : PictureInPictureEvent
     data class SetPipController(val pipController: PipController) : PictureInPictureEvent
     data object EnterPictureInPicture : PictureInPictureEvent
     data class OnPictureInPictureModeChanged(val isInPip: Boolean) : PictureInPictureEvent
+    data class SetPipOrientation(val orientation: Int?) : PictureInPictureEvent
 }

@@ -553,7 +553,7 @@ private fun AttachmentsPreviewBottomActions(
 // Only preview in dark, dark theme is forced on the Node.
 @Preview
 @Composable
-internal fun AttachmentsPreviewViewPreview(@PreviewParameter(AttachmentsPreviewStateProvider::class) state: AttachmentsPreviewState) = ElementPreviewDark {
+internal fun AttachmentsPreviewViewPreview(@PreviewParameter(AttachmentsPreviewStatePreviewParam::class) state: AttachmentsPreviewState) = ElementPreviewDark {
     AttachmentsPreviewView(
         state = state,
         localMediaRenderer = SampleMediaRenderer(),

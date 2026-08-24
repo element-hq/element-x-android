@@ -680,7 +680,7 @@ private fun RemoveRoomsActionView(
 @PreviewsDayNight
 @Composable
 internal fun SpaceViewPreview(
-    @PreviewParameter(SpaceStateProvider::class) state: SpaceState
+    @PreviewParameter(SpaceStatePreviewParam::class) state: SpaceState
 ) = ElementPreview {
     SpaceView(
         state = state,

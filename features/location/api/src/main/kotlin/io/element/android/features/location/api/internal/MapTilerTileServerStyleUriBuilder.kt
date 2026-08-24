@@ -10,8 +10,8 @@
 
 package io.element.android.features.location.api.internal
 
+import io.element.android.features.enterprise.api.remoteconfig.MapTilerConfig
 import io.element.android.features.location.api.BuildConfig
-import io.element.android.libraries.wellknown.api.MapTilerConfig
 
 internal class MapTilerTileServerStyleUriBuilder(
     private val baseUrl: String,
