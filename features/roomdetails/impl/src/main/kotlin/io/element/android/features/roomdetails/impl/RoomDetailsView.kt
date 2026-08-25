@@ -837,7 +837,7 @@ private fun PushToTalkItem(
     onClick: () -> Unit,
 ) {
     ListItem(
-        headlineContent = { Text("Push-to-talk (prototype)") },
+        content = { Text("Push-to-talk (prototype)") },
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.VoiceCall())),
         onClick = onClick,
     )

@@ -60,7 +60,7 @@ fun PttPrototypeView(
         ) {
             // Enable/disable PTT for this room — drives the in-room header/banner/composer UI.
             ListItem(
-                headlineContent = { Text("Enable push-to-talk in this room") },
+                content = { Text("Enable push-to-talk in this room") },
                 supportingContent = { Text("Shows the PTT controls in the room. (Interim: local to this device.)") },
                 trailingContent = ListItemContent.Switch(
                     checked = state.isPttEnabled,
@@ -70,7 +70,7 @@ fun PttPrototypeView(
             )
             // Silent by default: audio output only exists while this is on (and covert is off).
             ListItem(
-                headlineContent = { Text("Listen (hear others)") },
+                content = { Text("Listen (hear others)") },
                 supportingContent = {
                     Text(
                         if (state.isCovert) {
@@ -88,7 +88,7 @@ fun PttPrototypeView(
             )
             // Master override — hard-silences all audio output and tones regardless of Listen.
             ListItem(
-                headlineContent = { Text("Covert (silent) mode") },
+                content = { Text("Covert (silent) mode") },
                 supportingContent = {
                     Text("Guarantees the device makes no sound — no audio, no tones — overriding Listen.")
                 },
@@ -97,7 +97,7 @@ fun PttPrototypeView(
             )
             // Optional user opt-in — battery for background reliability.
             ListItem(
-                headlineContent = { Text("Ignore battery optimizations") },
+                content = { Text("Ignore battery optimizations") },
                 supportingContent = {
                     Text("Improves background alert reliability on some phones. Uses more battery — optional.")
                 },
@@ -106,7 +106,7 @@ fun PttPrototypeView(
             )
             if (!state.canDrawOverlays) {
                 ListItem(
-                    headlineContent = { Text("Allow floating PTT button") },
+                    content = { Text("Allow floating PTT button") },
                     supportingContent = {
                         Text("Draw a talk button over other apps to transmit while Element is in the background.")
                     },
@@ -115,7 +115,7 @@ fun PttPrototypeView(
             }
             if (!state.canUseFullScreenIntent) {
                 ListItem(
-                    headlineContent = { Text("Allow full-screen PTT alerts") },
+                    content = { Text("Allow full-screen PTT alerts") },
                     supportingContent = {
                         Text("Show the join screen over the lock screen when a session goes live.")
                     },
