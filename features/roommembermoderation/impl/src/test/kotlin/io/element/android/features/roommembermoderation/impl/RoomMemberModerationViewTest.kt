@@ -126,7 +126,7 @@ class RoomMemberModerationViewTest : RobolectricTest() {
             ),
         )
         pressTag(TestTags.dialogPositive.value)
-        eventsRecorder.assertSingle(InternalRoomMemberModerationEvents.DoKickUser(reason = ""))
+        eventsRecorder.assertSingle(InternalRoomMemberModerationEvent.DoKickUser(reason = ""))
     }
 
     @Test
@@ -140,7 +140,7 @@ class RoomMemberModerationViewTest : RobolectricTest() {
             ),
         )
         pressTag(TestTags.dialogNegative.value)
-        eventsRecorder.assertSingle(InternalRoomMemberModerationEvents.Reset)
+        eventsRecorder.assertSingle(InternalRoomMemberModerationEvent.Reset)
     }
 
     @Test
@@ -154,7 +154,7 @@ class RoomMemberModerationViewTest : RobolectricTest() {
             ),
         )
         pressTag(TestTags.dialogPositive.value)
-        eventsRecorder.assertSingle(InternalRoomMemberModerationEvents.DoBanUser(reason = ""))
+        eventsRecorder.assertSingle(InternalRoomMemberModerationEvent.DoBanUser(reason = ""))
     }
 
     @Test
@@ -168,7 +168,7 @@ class RoomMemberModerationViewTest : RobolectricTest() {
             ),
         )
         pressTag(TestTags.dialogNegative.value)
-        eventsRecorder.assertSingle(InternalRoomMemberModerationEvents.Reset)
+        eventsRecorder.assertSingle(InternalRoomMemberModerationEvent.Reset)
     }
 
     @Test
@@ -182,7 +182,7 @@ class RoomMemberModerationViewTest : RobolectricTest() {
             ),
         )
         pressTag(TestTags.dialogPositive.value)
-        eventsRecorder.assertSingle(InternalRoomMemberModerationEvents.DoUnbanUser(""))
+        eventsRecorder.assertSingle(InternalRoomMemberModerationEvent.DoUnbanUser(""))
     }
 
     @Test
@@ -196,7 +196,7 @@ class RoomMemberModerationViewTest : RobolectricTest() {
             ),
         )
         pressTag(TestTags.dialogNegative.value)
-        eventsRecorder.assertSingle(InternalRoomMemberModerationEvents.Reset)
+        eventsRecorder.assertSingle(InternalRoomMemberModerationEvent.Reset)
     }
 
     @Test

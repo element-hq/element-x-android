@@ -110,25 +110,25 @@ class RoomMemberModerationPresenter(
                         }
                     }
                 }
-                is InternalRoomMemberModerationEvents.DoKickUser -> {
+                is InternalRoomMemberModerationEvent.DoKickUser -> {
                     selectedUser?.let {
                         coroutineScope.kickUser(it.userId, event.reason, kickUserAsyncAction)
                     }
                     selectedUser = null
                 }
-                is InternalRoomMemberModerationEvents.DoBanUser -> {
+                is InternalRoomMemberModerationEvent.DoBanUser -> {
                     selectedUser?.let {
                         coroutineScope.banUser(it.userId, event.reason, banUserAsyncAction)
                     }
                     selectedUser = null
                 }
-                is InternalRoomMemberModerationEvents.DoUnbanUser -> {
+                is InternalRoomMemberModerationEvent.DoUnbanUser -> {
                     selectedUser?.let {
                         coroutineScope.unbanUser(it.userId, event.reason, unbanUserAsyncAction)
                     }
                     selectedUser = null
                 }
-                is InternalRoomMemberModerationEvents.Reset -> {
+                is InternalRoomMemberModerationEvent.Reset -> {
                     selectedUser = null
                     moderationActions.value = persistentListOf()
                     kickUserAsyncAction.value = AsyncAction.Uninitialized
