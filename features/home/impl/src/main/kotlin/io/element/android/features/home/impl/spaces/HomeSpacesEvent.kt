@@ -8,4 +8,4 @@
 
 package io.element.android.features.home.impl.spaces
 
-sealed interface HomeSpacesEvents
+sealed interface HomeSpacesEvent

@@ -43,7 +43,7 @@ internal fun aHomeSpacesState(
     seenSpaceInvites: Set<RoomId> = emptySet(),
     hideInvitesAvatar: Boolean = false,
     canExploreSpaces: Boolean = true,
-    eventSink: (HomeSpacesEvents) -> Unit = {},
+    eventSink: (HomeSpacesEvent) -> Unit = {},
 ) = HomeSpacesState(
     space = space,
     spaceRooms = spaceRooms.toImmutableList(),
