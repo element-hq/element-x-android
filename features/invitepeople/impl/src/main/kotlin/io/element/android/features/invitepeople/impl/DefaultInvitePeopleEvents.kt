@@ -8,10 +8,10 @@
 
 package io.element.android.features.invitepeople.impl
 
-import io.element.android.features.invitepeople.api.InvitePeopleEvents
+import io.element.android.features.invitepeople.api.InvitePeopleEvent
 import io.element.android.libraries.matrix.api.user.MatrixUser
 
-sealed interface DefaultInvitePeopleEvents : InvitePeopleEvents {
+sealed interface DefaultInvitePeopleEvents : InvitePeopleEvent {
     data class ToggleUser(val user: MatrixUser) : DefaultInvitePeopleEvents
     data class OnSearchActiveChanged(val active: Boolean) : DefaultInvitePeopleEvents
     data object DismissUnknownUsersModal : DefaultInvitePeopleEvents

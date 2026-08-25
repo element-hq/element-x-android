@@ -11,7 +11,7 @@ package io.element.android.features.invitepeople.impl
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import app.cash.turbine.ReceiveTurbine
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.invitepeople.api.InvitePeopleEvents
+import io.element.android.features.invitepeople.api.InvitePeopleEvent
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
@@ -94,7 +94,7 @@ internal class DefaultInvitePeoplePresenterTest {
             assertThat(resultState.isSearchActive).isTrue()
             resultState.searchQuery.setTextAndPlaceCursorAtEnd("some query")
             assertThat(awaitItemAsDefault().searchQuery.text.toString()).isEqualTo("some query")
-            resultState.eventSink(InvitePeopleEvents.CloseSearch)
+            resultState.eventSink(InvitePeopleEvent.CloseSearch)
             skipItems(1)
             awaitItemAsDefault().also {
                 assertThat(it.isSearchActive).isFalse()
@@ -420,7 +420,7 @@ internal class DefaultInvitePeoplePresenterTest {
             // The results are updated...
             assertThat(resultState.searchResults).isInstanceOf(SearchBarResultState.Results::class.java)
             // Send invites
-            initialState.eventSink(InvitePeopleEvents.SendInvites)
+            initialState.eventSink(InvitePeopleEvent.SendInvites)
 
             // Can't invite in the loading state
             awaitItem().run {
@@ -474,7 +474,7 @@ internal class DefaultInvitePeoplePresenterTest {
             // The results are updated...
             assertThat(resultState.searchResults).isInstanceOf(SearchBarResultState.Results::class.java)
             // Send invites
-            initialState.eventSink(InvitePeopleEvents.SendInvites)
+            initialState.eventSink(InvitePeopleEvent.SendInvites)
 
             // Can't invite in the loading state
             awaitItem().run {
@@ -655,7 +655,7 @@ internal class DefaultInvitePeoplePresenterTest {
             // If we do not have their identity cached, or fail to fetch it, we should mark them as unknown.
             awaitItemAsDefault().run {
                 assertThat(selectedUsers).containsExactly(alice, bob, charlie)
-                eventSink(InvitePeopleEvents.SendInvites)
+                eventSink(InvitePeopleEvent.SendInvites)
             }
 
             getUserIdentityResult.assertions().isCalledExactly(3).withSequence(
@@ -668,7 +668,7 @@ internal class DefaultInvitePeoplePresenterTest {
             awaitItemAsDefault().run {
                 assertThat(sendInvitesAction).isInstanceOf(ConfirmingUnknownUserInvitation::class.java)
                 assertThat(canInvite).isTrue()
-                eventSink(InvitePeopleEvents.SendInvites)
+                eventSink(InvitePeopleEvent.SendInvites)
             }
 
             delay(1_000)
@@ -738,7 +738,7 @@ internal class DefaultInvitePeoplePresenterTest {
                     searchResults.users().map { Pair(it.matrixUser, it.isSelected) }
                 ).containsExactly(Pair(alice, true), Pair(bob, true))
 
-                eventSink(InvitePeopleEvents.SendInvites)
+                eventSink(InvitePeopleEvent.SendInvites)
             }
 
             getUserIdentityResult.assertions().isCalledExactly(3).withSequence(
@@ -803,7 +803,7 @@ internal class DefaultInvitePeoplePresenterTest {
 
             awaitItemAsDefault().run {
                 assertThat(selectedUsers).containsExactly(alice, bob, charlie)
-                eventSink(InvitePeopleEvents.SendInvites)
+                eventSink(InvitePeopleEvent.SendInvites)
             }
 
             getUserIdentityResult.assertions().isCalledExactly(3).withSequence(
@@ -856,7 +856,7 @@ internal class DefaultInvitePeoplePresenterTest {
             initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(alice))
 
             // And we send the invites
-            initialState.eventSink(InvitePeopleEvents.SendInvites)
+            initialState.eventSink(InvitePeopleEvent.SendInvites)
 
             skipItems(1)
 

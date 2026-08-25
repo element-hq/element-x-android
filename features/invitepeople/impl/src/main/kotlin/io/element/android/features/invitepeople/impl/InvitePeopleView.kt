@@ -30,7 +30,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.invitepeople.api.InvitePeopleEvents
+import io.element.android.features.invitepeople.api.InvitePeopleEvent
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonRowMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
@@ -164,7 +164,7 @@ private fun InvitePeopleContentView(
             InvitePeopleConfirmModal(
                 users = state.sendInvitesAction.users,
                 onDismiss = { state.eventSink.invoke(DefaultInvitePeopleEvents.DismissUnknownUsersModal) },
-                onInvite = { state.eventSink.invoke(InvitePeopleEvents.SendInvites) },
+                onInvite = { state.eventSink.invoke(InvitePeopleEvent.SendInvites) },
                 onRemove = { state.eventSink.invoke(DefaultInvitePeopleEvents.RemoveUnknownUsers) }
             )
         }
