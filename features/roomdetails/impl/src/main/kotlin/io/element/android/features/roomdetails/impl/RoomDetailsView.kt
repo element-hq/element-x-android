@@ -252,10 +252,6 @@ fun RoomDetailsView(
                 PollsItem(
                     openPollHistory = openPollHistory
                 )
-                // Push-to-talk (Stage 1 prototype): drives Element Call as a PTT channel.
-                PushToTalkItem(
-                    onClick = onPushToTalkClick
-                )
             }
             when (state.roomType) {
                 is RoomDetailsType.Room -> {
@@ -343,6 +339,10 @@ fun RoomDetailsView(
                     roomVersion = state.roomVersion,
                 )
             }
+            // Push-to-talk (Stage 1 prototype) — debug-only entry, kept last so it doesn't shift the list.
+            PushToTalkItem(
+                onClick = onPushToTalkClick
+            )
         }
     }
 }
