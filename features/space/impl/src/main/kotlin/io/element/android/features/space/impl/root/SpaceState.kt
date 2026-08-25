@@ -8,9 +8,11 @@
 
 package io.element.android.features.space.impl.root
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.Immutable
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
@@ -32,6 +34,9 @@ data class SpaceState(
     val selectedRoomIds: ImmutableSet<RoomId>,
     val canEditSpaceGraph: Boolean,
     val removeRoomsAction: AsyncAction<Unit>,
+    val searchQuery: TextFieldState,
+    val isSearchActive: Boolean,
+    val searchResults: SearchBarResultState<ImmutableList<SpaceRoom>>,
     val eventSink: (SpaceEvent) -> Unit
 ) {
     fun isJoining(spaceId: RoomId): Boolean = joinActions[spaceId] == AsyncAction.Loading

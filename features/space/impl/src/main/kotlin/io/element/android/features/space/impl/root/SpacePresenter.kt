@@ -10,6 +10,8 @@
 
 package io.element.android.features.space.impl.root
 
+import androidx.compose.foundation.text.input.clearText
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -28,6 +30,7 @@ import io.element.android.features.invite.api.toInviteData
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.mapState
+import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -130,6 +133,24 @@ class SpacePresenter(
             }
         }
 
+        val searchQuery = rememberTextFieldState()
+        var isSearchActive by remember { mutableStateOf(false) }
+        val searchResults by remember {
+            derivedStateOf {
+                val query = searchQuery.text.toString()
+                if (query.isBlank()) {
+                    SearchBarResultState.Initial
+                } else {
+                    val matches = filteredChildren.filter { it.matches(query) }.toImmutableList()
+                    if (matches.isEmpty()) {
+                        SearchBarResultState.NoResultsFound
+                    } else {
+                        SearchBarResultState.Results(matches)
+                    }
+                }
+            }
+        }
+
         LaunchedEffect(children) {
             // Remove joined children from the join actions
             val joinedChildren = children
@@ -172,6 +193,12 @@ class SpacePresenter(
                     acceptDeclineInviteState.eventSink(
                         AcceptDeclineInviteEvent.DeclineInvite(invite = event.spaceRoom.toInviteData(), shouldConfirm = true, blockUser = false)
                     )
+                }
+                is SpaceEvent.OnSearchActiveChanged -> {
+                    isSearchActive = event.active
+                    if (!event.active) {
+                        searchQuery.clearText()
+                    }
                 }
                 SpaceEvent.HideTopicViewer -> topicViewerState = TopicViewerState.Hidden
                 is SpaceEvent.ShowTopicViewer -> topicViewerState = TopicViewerState.Shown(event.topic)
@@ -238,6 +265,9 @@ class SpacePresenter(
             selectedRoomIds = selectedRoomIds.toImmutableSet(),
             canEditSpaceGraph = canEditSpaceGraph,
             removeRoomsAction = removeRoomsAction,
+            searchQuery = searchQuery,
+            isSearchActive = isSearchActive,
+            searchResults = searchResults,
             eventSink = ::handleEvent,
         )
     }
@@ -260,4 +290,9 @@ class SpacePresenter(
 
 private fun SpaceRoom.cannotBeRejoined(): Boolean {
     return state == CurrentUserMembership.LEFT && joinRule == JoinRule.Invite
+}
+
+private fun SpaceRoom.matches(query: String): Boolean {
+    return displayName.contains(query, ignoreCase = true) ||
+        canonicalAlias?.value?.contains(query, ignoreCase = true) == true
 }
