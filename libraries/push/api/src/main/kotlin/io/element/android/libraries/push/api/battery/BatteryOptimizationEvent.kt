@@ -8,7 +8,7 @@
 
 package io.element.android.libraries.push.api.battery
 
-sealed interface BatteryOptimizationEvents {
-    data object Dismiss : BatteryOptimizationEvents
-    data object RequestDisableOptimizations : BatteryOptimizationEvents
+sealed interface BatteryOptimizationEvent {
+    data object Dismiss : BatteryOptimizationEvent
+    data object RequestDisableOptimizations : BatteryOptimizationEvent
 }
