@@ -18,5 +18,5 @@ data class LoggedInState(
     val forceNativeSlidingSyncMigration: Boolean,
     val appName: String,
     val localNetworkPermissionDialog: LocalNetworkPermissionDialog,
-    val eventSink: (LoggedInEvents) -> Unit,
+    val eventSink: (LoggedInEvent) -> Unit,
 )
