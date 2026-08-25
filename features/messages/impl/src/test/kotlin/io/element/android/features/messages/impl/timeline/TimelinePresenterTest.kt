@@ -62,6 +62,7 @@ import io.element.android.libraries.matrix.test.A_THREAD_ID_2
 import io.element.android.libraries.matrix.test.A_UNIQUE_ID
 import io.element.android.libraries.matrix.test.A_UNIQUE_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
@@ -1674,7 +1675,7 @@ class TimelinePresenterTest {
                             sender = A_USER_ID,
                             receipts = persistentListOf(
                                 Receipt(
-                                    userId = A_USER_ID,
+                                    userId = A_USER_ID_2,
                                     timestamp = 0L,
                                 )
                             )
@@ -1703,7 +1704,7 @@ class TimelinePresenterTest {
 
             room.givenRoomMembersState(
                 RoomMembersState.Ready(
-                    persistentListOf(aRoomMember(userId = A_USER_ID, avatarUrl = avatarUrl))
+                    persistentListOf(aRoomMember(userId = A_USER_ID_2, avatarUrl = avatarUrl))
                 )
             )
 
