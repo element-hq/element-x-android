@@ -8,6 +8,6 @@
 
 package io.element.android.features.share.impl
 
-sealed interface ShareEvents {
-    data object ClearError : ShareEvents
+sealed interface ShareEvent {
+    data object ClearError : ShareEvent
 }
