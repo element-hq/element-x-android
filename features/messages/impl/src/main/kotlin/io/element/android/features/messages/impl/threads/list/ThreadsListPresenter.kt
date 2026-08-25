@@ -104,9 +104,9 @@ class ThreadsListPresenter(
             derivedStateOf { roomInfo.heroes.map { it.getAvatarData(AvatarSize.CurrentUserTopBar) }.toImmutableList() }
         }
 
-        fun handleEvent(event: ThreadsListEvents) {
+        fun handleEvent(event: ThreadsListEvent) {
             when (event) {
-                ThreadsListEvents.Paginate -> if ((paginationStatus as? ThreadListPaginationStatus.Idle)?.hasMoreToLoad == true) {
+                ThreadsListEvent.Paginate -> if ((paginationStatus as? ThreadListPaginationStatus.Idle)?.hasMoreToLoad == true) {
                     coroutineScope.launch {
                         Timber.d("Paginating thread list: $paginationStatus")
                         threadsListService.paginate()
@@ -137,9 +137,9 @@ data class ThreadsListState(
     val isRoomTombstoned: Boolean,
     val heroes: ImmutableList<AvatarData>,
     val threads: ImmutableList<ThreadListRowItem>,
-    val eventSink: (ThreadsListEvents) -> Unit,
+    val eventSink: (ThreadsListEvent) -> Unit,
 )
 
-sealed interface ThreadsListEvents {
-    data object Paginate : ThreadsListEvents
+sealed interface ThreadsListEvent {
+    data object Paginate : ThreadsListEvent
 }
