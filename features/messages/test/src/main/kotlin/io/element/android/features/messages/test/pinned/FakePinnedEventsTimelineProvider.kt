@@ -10,10 +10,17 @@ package io.element.android.features.messages.test.pinned
 import io.element.android.features.messages.api.pinned.PinnedEventsTimelineProvider
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.timeline.FakeTimelineProvider
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class FakePinnedEventsTimelineProvider(
     private val fakeTimelineProvider: FakeTimelineProvider = FakeTimelineProvider(),
+    displayablePinnedEventsCount: Int? = null,
 ) : PinnedEventsTimelineProvider {
+    val pinnedEventsCount = MutableStateFlow(displayablePinnedEventsCount)
+
     override fun activeTimelineFlow(): StateFlow<Timeline?> = fakeTimelineProvider.activeTimelineFlow()
+
+    override fun displayablePinnedEventsCount(): Flow<Int?> = pinnedEventsCount
 }
