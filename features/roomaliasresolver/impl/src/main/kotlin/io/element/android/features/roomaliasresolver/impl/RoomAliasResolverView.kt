@@ -66,9 +66,9 @@ fun RoomAliasResolverView(
         ResolvedRoomAliasView(
             resolvedRoomAlias = state.resolveState,
             onSuccess = onSuccess,
-            onRetry = { state.eventSink(RoomAliasResolverEvents.Retry) },
+            onRetry = { state.eventSink(RoomAliasResolverEvent.Retry) },
             onDismissError = {
-                state.eventSink(RoomAliasResolverEvents.DismissError)
+                state.eventSink(RoomAliasResolverEvent.DismissError)
                 onBackClick()
             }
         )

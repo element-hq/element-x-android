@@ -8,7 +8,7 @@
 
 package io.element.android.features.roomaliasresolver.impl
 
-sealed interface RoomAliasResolverEvents {
-    data object Retry : RoomAliasResolverEvents
-    data object DismissError : RoomAliasResolverEvents
+sealed interface RoomAliasResolverEvent {
+    data object Retry : RoomAliasResolverEvent
+    data object DismissError : RoomAliasResolverEvent
 }
