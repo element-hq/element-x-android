@@ -11,7 +11,7 @@ package io.element.android.features.invitepeople.impl
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import app.cash.turbine.ReceiveTurbine
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.invitepeople.api.InvitePeopleEvents
+import io.element.android.features.invitepeople.api.InvitePeopleEvent
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
@@ -88,13 +88,13 @@ internal class DefaultInvitePeoplePresenterTest {
             val initialState = awaitItem()
             skipItems(1)
 
-            initialState.eventSink(DefaultInvitePeopleEvents.OnSearchActiveChanged(true))
+            initialState.eventSink(DefaultInvitePeopleEvent.OnSearchActiveChanged(true))
 
             val resultState = awaitItemAsDefault()
             assertThat(resultState.isSearchActive).isTrue()
             resultState.searchQuery.setTextAndPlaceCursorAtEnd("some query")
             assertThat(awaitItemAsDefault().searchQuery.text.toString()).isEqualTo("some query")
-            resultState.eventSink(InvitePeopleEvents.CloseSearch)
+            resultState.eventSink(InvitePeopleEvent.CloseSearch)
             skipItems(1)
             awaitItemAsDefault().also {
                 assertThat(it.isSearchActive).isFalse()
@@ -290,18 +290,18 @@ internal class DefaultInvitePeoplePresenterTest {
             skipItems(1)
 
             // When we toggle a user not in the list, they are added
-            initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(aMatrixUser()))
+            initialState.eventSink(DefaultInvitePeopleEvent.ToggleUser(aMatrixUser()))
             assertThat(awaitItemAsDefault().selectedUsers).containsExactly(aMatrixUser())
 
             // Toggling a different user also adds them
-            initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(aMatrixUser(id = A_USER_ID_2.value)))
+            initialState.eventSink(DefaultInvitePeopleEvent.ToggleUser(aMatrixUser(id = A_USER_ID_2.value)))
             assertThat(awaitItemAsDefault().selectedUsers).containsExactly(
                 aMatrixUser(),
                 aMatrixUser(id = A_USER_ID_2.value)
             )
 
             // Toggling the first user removes them
-            initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(aMatrixUser()))
+            initialState.eventSink(DefaultInvitePeopleEvent.ToggleUser(aMatrixUser()))
             assertThat(awaitItemAsDefault().selectedUsers).containsExactly(aMatrixUser(id = A_USER_ID_2.value))
         }
     }
@@ -319,7 +319,7 @@ internal class DefaultInvitePeoplePresenterTest {
 
             val selectedUser = aMatrixUser(displayName = "John Doe")
 
-            initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(selectedUser))
+            initialState.eventSink(DefaultInvitePeopleEvent.ToggleUser(selectedUser))
 
             initialState.searchQuery.setTextAndPlaceCursorAtEnd("some query")
             skipItems(1)
@@ -373,7 +373,7 @@ internal class DefaultInvitePeoplePresenterTest {
             }
 
             // And then a user is toggled
-            initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(selectedUser))
+            initialState.eventSink(DefaultInvitePeopleEvent.ToggleUser(selectedUser))
             skipItems(1)
             val resultState = awaitItemAsDefault()
 
@@ -414,13 +414,13 @@ internal class DefaultInvitePeoplePresenterTest {
             repository.emitStateWithUsers(users = aMatrixUserList() + selectedUser)
             skipItems(1)
             // And then a user is toggled
-            initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(selectedUser))
+            initialState.eventSink(DefaultInvitePeopleEvent.ToggleUser(selectedUser))
             skipItems(1)
             val resultState = awaitItemAsDefault()
             // The results are updated...
             assertThat(resultState.searchResults).isInstanceOf(SearchBarResultState.Results::class.java)
             // Send invites
-            initialState.eventSink(InvitePeopleEvents.SendInvites)
+            initialState.eventSink(InvitePeopleEvent.SendInvites)
 
             // Can't invite in the loading state
             awaitItem().run {
@@ -468,13 +468,13 @@ internal class DefaultInvitePeoplePresenterTest {
             repository.emitStateWithUsers(users = aMatrixUserList() + selectedUser)
             skipItems(1)
             // And then a user is toggled
-            initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(selectedUser))
+            initialState.eventSink(DefaultInvitePeopleEvent.ToggleUser(selectedUser))
             skipItems(1)
             val resultState = awaitItemAsDefault()
             // The results are updated...
             assertThat(resultState.searchResults).isInstanceOf(SearchBarResultState.Results::class.java)
             // Send invites
-            initialState.eventSink(InvitePeopleEvents.SendInvites)
+            initialState.eventSink(InvitePeopleEvent.SendInvites)
 
             // Can't invite in the loading state
             awaitItem().run {
@@ -645,17 +645,17 @@ internal class DefaultInvitePeoplePresenterTest {
             skipItems(1)
 
             // When we toggle a user not in the list, they are added, and we fetch their identity.
-            initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(alice))
+            initialState.eventSink(DefaultInvitePeopleEvent.ToggleUser(alice))
             delay(100)
-            awaitItemAsDefault().eventSink(DefaultInvitePeopleEvents.ToggleUser(bob))
+            awaitItemAsDefault().eventSink(DefaultInvitePeopleEvent.ToggleUser(bob))
             delay(100)
-            awaitItemAsDefault().eventSink(DefaultInvitePeopleEvents.ToggleUser(charlie))
+            awaitItemAsDefault().eventSink(DefaultInvitePeopleEvent.ToggleUser(charlie))
             delay(100)
 
             // If we do not have their identity cached, or fail to fetch it, we should mark them as unknown.
             awaitItemAsDefault().run {
                 assertThat(selectedUsers).containsExactly(alice, bob, charlie)
-                eventSink(InvitePeopleEvents.SendInvites)
+                eventSink(InvitePeopleEvent.SendInvites)
             }
 
             getUserIdentityResult.assertions().isCalledExactly(3).withSequence(
@@ -668,7 +668,7 @@ internal class DefaultInvitePeoplePresenterTest {
             awaitItemAsDefault().run {
                 assertThat(sendInvitesAction).isInstanceOf(ConfirmingUnknownUserInvitation::class.java)
                 assertThat(canInvite).isTrue()
-                eventSink(InvitePeopleEvents.SendInvites)
+                eventSink(InvitePeopleEvent.SendInvites)
             }
 
             delay(1_000)
@@ -712,11 +712,11 @@ internal class DefaultInvitePeoplePresenterTest {
             skipItems(1)
 
             // When we toggle a user not in the list, they are added, and we fetch their identity.
-            initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(alice))
+            initialState.eventSink(DefaultInvitePeopleEvent.ToggleUser(alice))
             delay(100)
-            awaitItemAsDefault().eventSink(DefaultInvitePeopleEvents.ToggleUser(bob))
+            awaitItemAsDefault().eventSink(DefaultInvitePeopleEvent.ToggleUser(bob))
             delay(100)
-            awaitItemAsDefault().eventSink(DefaultInvitePeopleEvents.ToggleUser(charlie))
+            awaitItemAsDefault().eventSink(DefaultInvitePeopleEvent.ToggleUser(charlie))
             delay(100)
 
             // And the search is matching Alice and Bob
@@ -738,7 +738,7 @@ internal class DefaultInvitePeoplePresenterTest {
                     searchResults.users().map { Pair(it.matrixUser, it.isSelected) }
                 ).containsExactly(Pair(alice, true), Pair(bob, true))
 
-                eventSink(InvitePeopleEvents.SendInvites)
+                eventSink(InvitePeopleEvent.SendInvites)
             }
 
             getUserIdentityResult.assertions().isCalledExactly(3).withSequence(
@@ -751,7 +751,7 @@ internal class DefaultInvitePeoplePresenterTest {
             awaitItemAsDefault().run {
                 assertThat(sendInvitesAction).isInstanceOf(ConfirmingUnknownUserInvitation::class.java)
                 assertThat(canInvite).isTrue()
-                eventSink(DefaultInvitePeopleEvents.RemoveUnknownUsers)
+                eventSink(DefaultInvitePeopleEvent.RemoveUnknownUsers)
             }
 
             // Selecting "remove" should remove all unknown users, but keeps those who are known.
@@ -794,16 +794,16 @@ internal class DefaultInvitePeoplePresenterTest {
             skipItems(1)
 
             // When we toggle a user not in the list, they are added, and we fetch their identity.
-            initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(alice))
+            initialState.eventSink(DefaultInvitePeopleEvent.ToggleUser(alice))
             delay(100)
-            awaitItemAsDefault().eventSink(DefaultInvitePeopleEvents.ToggleUser(bob))
+            awaitItemAsDefault().eventSink(DefaultInvitePeopleEvent.ToggleUser(bob))
             delay(100)
-            awaitItemAsDefault().eventSink(DefaultInvitePeopleEvents.ToggleUser(charlie))
+            awaitItemAsDefault().eventSink(DefaultInvitePeopleEvent.ToggleUser(charlie))
             delay(100)
 
             awaitItemAsDefault().run {
                 assertThat(selectedUsers).containsExactly(alice, bob, charlie)
-                eventSink(InvitePeopleEvents.SendInvites)
+                eventSink(InvitePeopleEvent.SendInvites)
             }
 
             getUserIdentityResult.assertions().isCalledExactly(3).withSequence(
@@ -816,7 +816,7 @@ internal class DefaultInvitePeoplePresenterTest {
             awaitItemAsDefault().run {
                 assertThat(sendInvitesAction).isInstanceOf(ConfirmingUnknownUserInvitation::class.java)
                 assertThat(canInvite).isTrue()
-                eventSink(DefaultInvitePeopleEvents.DismissUnknownUsersModal)
+                eventSink(DefaultInvitePeopleEvent.DismissUnknownUsersModal)
             }
 
             // Dismissing should not modify the selection at all
@@ -853,10 +853,10 @@ internal class DefaultInvitePeoplePresenterTest {
             skipItems(1)
 
             // We want to add a new user to a DM
-            initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(alice))
+            initialState.eventSink(DefaultInvitePeopleEvent.ToggleUser(alice))
 
             // And we send the invites
-            initialState.eventSink(InvitePeopleEvents.SendInvites)
+            initialState.eventSink(InvitePeopleEvent.SendInvites)
 
             skipItems(1)
 

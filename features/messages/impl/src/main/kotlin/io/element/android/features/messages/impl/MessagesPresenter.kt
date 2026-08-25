@@ -54,7 +54,7 @@ import io.element.android.features.messages.impl.timeline.model.event.captionOrN
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.voicemessages.composer.DefaultVoiceMessageComposerPresenter
 import io.element.android.features.roomcall.api.RoomCallState
-import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvent
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.architecture.AsyncData
@@ -263,7 +263,7 @@ class MessagesPresenter(
                     }
                 }
                 is MessagesEvent.OnUserClicked -> {
-                    roomMemberModerationState.eventSink(RoomMemberModerationEvents.ShowActionsForUser(event.user))
+                    roomMemberModerationState.eventSink(RoomMemberModerationEvent.ShowActionsForUser(event.user))
                 }
                 MessagesEvent.StopLiveLocationShare -> {
                     localCoroutineScope.launch {

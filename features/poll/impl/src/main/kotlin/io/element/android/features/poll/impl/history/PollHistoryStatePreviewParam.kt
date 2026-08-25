@@ -48,7 +48,7 @@ internal fun aPollHistoryState(
     currentItems: List<PollHistoryItem> = listOf(
         aPollHistoryItem(),
     ),
-    eventSink: (PollHistoryEvents) -> Unit = {},
+    eventSink: (PollHistoryEvent) -> Unit = {},
 ) = PollHistoryState(
     isLoading = isLoading,
     hasMoreToLoad = hasMoreToLoad,

@@ -42,7 +42,7 @@ fun aDeveloperSettingsState(
     isEnterpriseBuild: Boolean = false,
     showColorPicker: Boolean = false,
     deviceId: DeviceId = DeviceId("ILAKNDNASDLK"),
-    eventSink: (DeveloperSettingsEvents) -> Unit = {},
+    eventSink: (DeveloperSettingsEvent) -> Unit = {},
 ) = DeveloperSettingsState(
     appDeveloperSettingsState = appDeveloperSettingsState,
     cacheSize = AsyncData.Success("1.2 MB"),

@@ -61,7 +61,7 @@ class LeaveSpacePresenterTest {
             val stateError = awaitItem()
             assertThat(stateError.selectableSpaceRooms.isFailure()).isTrue()
             // Retry
-            stateError.eventSink(LeaveSpaceEvents.Retry)
+            stateError.eventSink(LeaveSpaceEvent.Retry)
             skipItems(1)
             val stateLoadingAgain = awaitItem()
             assertThat(stateLoadingAgain.selectableSpaceRooms.isLoading()).isTrue()
@@ -121,7 +121,7 @@ class LeaveSpacePresenterTest {
             assertThat(finalState.selectableSpaceRooms.dataOrNull()!!.map { it.spaceRoom.roomId }).containsExactly(A_ROOM_ID, A_ROOM_ID_3)
             assertThat(finalState.selectedRoomsCount).isEqualTo(2)
             // Leaving the space will not include the DM
-            finalState.eventSink(LeaveSpaceEvents.LeaveSpace)
+            finalState.eventSink(LeaveSpaceEvent.LeaveSpace)
             val stateLeaving = awaitItem()
             assertThat(stateLeaving.leaveSpaceAction).isEqualTo(AsyncAction.Loading)
             val stateLeft = awaitItem()
@@ -165,32 +165,32 @@ class LeaveSpacePresenterTest {
             assertThat(room2.isSelected).isFalse()
             assertThat(room2.isLastOwner).isTrue()
             // Deselect all
-            state.eventSink(LeaveSpaceEvents.DeselectAllRooms)
+            state.eventSink(LeaveSpaceEvent.DeselectAllRooms)
             skipItems(1)
             val stateAllDeselected = awaitItem()
             val dataAllDeselected = stateAllDeselected.selectableSpaceRooms.dataOrNull()!!
             assertThat(dataAllDeselected.any { it.isSelected }).isFalse()
             // Select all
-            stateAllDeselected.eventSink(LeaveSpaceEvents.SelectAllRooms)
+            stateAllDeselected.eventSink(LeaveSpaceEvent.SelectAllRooms)
             skipItems(1)
             val stateAllSelected = awaitItem()
             val dataAllSelected = stateAllSelected.selectableSpaceRooms.dataOrNull()!!
             // The last admin room should not be selected
             assertThat(dataAllSelected.count { it.isSelected }).isEqualTo(1)
             // Toggle selection of the first room
-            stateAllSelected.eventSink(LeaveSpaceEvents.ToggleRoomSelection(A_ROOM_ID))
+            stateAllSelected.eventSink(LeaveSpaceEvent.ToggleRoomSelection(A_ROOM_ID))
             skipItems(1)
             val stateOneDeselected = awaitItem()
             val dataOneDeselected = stateOneDeselected.selectableSpaceRooms.dataOrNull()!!
             assertThat(dataOneDeselected[0].isSelected).isFalse()
             // Toggle selection of the first room
-            stateOneDeselected.eventSink(LeaveSpaceEvents.ToggleRoomSelection(A_ROOM_ID))
+            stateOneDeselected.eventSink(LeaveSpaceEvent.ToggleRoomSelection(A_ROOM_ID))
             skipItems(1)
             val stateOneSelected = awaitItem()
             val dataOneSelected = stateOneSelected.selectableSpaceRooms.dataOrNull()!!
             assertThat(dataOneSelected[0].isSelected).isTrue()
             // Leave space
-            stateOneSelected.eventSink(LeaveSpaceEvents.LeaveSpace)
+            stateOneSelected.eventSink(LeaveSpaceEvent.LeaveSpace)
             val stateLeaving = awaitItem()
             assertThat(stateLeaving.leaveSpaceAction).isEqualTo(AsyncAction.Loading)
             val stateLeft = awaitItem()
@@ -215,13 +215,13 @@ class LeaveSpacePresenterTest {
         presenter.test {
             skipItems(3)
             val state = awaitItem()
-            state.eventSink(LeaveSpaceEvents.LeaveSpace)
+            state.eventSink(LeaveSpaceEvent.LeaveSpace)
             val stateLeaving = awaitItem()
             assertThat(stateLeaving.leaveSpaceAction).isEqualTo(AsyncAction.Loading)
             val stateError = awaitItem()
             assertThat(stateError.leaveSpaceAction.isFailure()).isTrue()
             // Close error
-            stateError.eventSink(LeaveSpaceEvents.CloseError)
+            stateError.eventSink(LeaveSpaceEvent.CloseError)
             val stateErrorClosed = awaitItem()
             assertThat(stateErrorClosed.leaveSpaceAction).isEqualTo(AsyncAction.Uninitialized)
         }

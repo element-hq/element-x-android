@@ -71,7 +71,7 @@ fun aChooseAccountProviderState(
     ),
     selectedAccountProvider: AccountProvider? = null,
     loginModeState: LoginModeState = aLoginModeState(),
-    eventSink: (ChooseAccountProviderEvents) -> Unit = {},
+    eventSink: (ChooseAccountProviderEvent) -> Unit = {},
 ) = ChooseAccountProviderState(
     accountProviders = accountProviders.toImmutableList(),
     selectedAccountProvider = selectedAccountProvider,

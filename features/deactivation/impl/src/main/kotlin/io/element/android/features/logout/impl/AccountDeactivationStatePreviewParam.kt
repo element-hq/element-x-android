@@ -45,7 +45,7 @@ internal fun aDeactivateFormState(
 internal fun anAccountDeactivationState(
     deactivateFormState: DeactivateFormState = aDeactivateFormState(),
     accountDeactivationAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
-    eventSink: (AccountDeactivationEvents) -> Unit = {},
+    eventSink: (AccountDeactivationEvent) -> Unit = {},
 ) = AccountDeactivationState(
     deactivateFormState = deactivateFormState,
     accountDeactivationAction = accountDeactivationAction,

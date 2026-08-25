@@ -149,9 +149,9 @@ class LoggedInPresenter(
             else -> LocalNetworkPermissionDialog.Settings
         }
 
-        fun handleEvent(event: LoggedInEvents) {
+        fun handleEvent(event: LoggedInEvent) {
             when (event) {
-                is LoggedInEvents.CloseErrorDialog -> {
+                is LoggedInEvent.CloseErrorDialog -> {
                     pusherRegistrationState.value = AsyncData.Uninitialized
                     if (event.doNotShowAgain) {
                         coroutineScope.launch {
@@ -159,17 +159,17 @@ class LoggedInPresenter(
                         }
                     }
                 }
-                LoggedInEvents.CheckSlidingSyncProxyAvailability -> coroutineScope.launch {
+                LoggedInEvent.CheckSlidingSyncProxyAvailability -> coroutineScope.launch {
                     forceNativeSlidingSyncMigration = matrixClient.needsForcedNativeSlidingSyncMigration().getOrDefault(false)
                 }
-                LoggedInEvents.LogoutAndMigrateToNativeSlidingSync -> coroutineScope.launch {
+                LoggedInEvent.LogoutAndMigrateToNativeSlidingSync -> coroutineScope.launch {
                     // Force the logout since Native Sliding Sync is already enforced by the SDK
                     matrixClient.logout(userInitiated = true, ignoreSdkError = true)
                 }
-                LoggedInEvents.DismissLocalNetworkPermissionPrompt -> {
+                LoggedInEvent.DismissLocalNetworkPermissionPrompt -> {
                     localNetworkPromptDismissedThisSession = true
                 }
-                LoggedInEvents.RequestLocationNetworkPermission -> {
+                LoggedInEvent.RequestLocationNetworkPermission -> {
                     if (localNetworkPermissionDialog == LocalNetworkPermissionDialog.Settings) {
                         localNetworkPermissionState.eventSink(PermissionsEvent.OpenSystemSettingAndCloseDialog)
                     } else {

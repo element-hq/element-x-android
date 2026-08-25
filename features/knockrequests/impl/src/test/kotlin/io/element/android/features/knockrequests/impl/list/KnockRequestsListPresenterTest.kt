@@ -65,7 +65,7 @@ class KnockRequestsListPresenterTest {
             skipItems(2)
             awaitItem().also { state ->
                 val knockRequestPresentable = state.knockRequests.dataOrNull()?.first()!!
-                state.eventSink(KnockRequestsListEvents.Accept(knockRequestPresentable))
+                state.eventSink(KnockRequestsListEvent.Accept(knockRequestPresentable))
             }
             skipItems(1)
             awaitItem().also { state ->
@@ -75,7 +75,7 @@ class KnockRequestsListPresenterTest {
             }
             awaitItem().also { state ->
                 assertThat(state.asyncAction).isInstanceOf(AsyncAction.Success::class.java)
-                state.eventSink(KnockRequestsListEvents.ResetCurrentAction)
+                state.eventSink(KnockRequestsListEvent.ResetCurrentAction)
             }
             skipItems(2)
             awaitItem().also { state ->
@@ -99,7 +99,7 @@ class KnockRequestsListPresenterTest {
             skipItems(2)
             awaitItem().also { state ->
                 val knockRequestPresentable = state.knockRequests.dataOrNull()?.first()!!
-                state.eventSink(KnockRequestsListEvents.Accept(knockRequestPresentable))
+                state.eventSink(KnockRequestsListEvent.Accept(knockRequestPresentable))
             }
             skipItems(1)
             awaitItem().also { state ->
@@ -109,14 +109,14 @@ class KnockRequestsListPresenterTest {
             }
             awaitItem().also { state ->
                 assertThat(state.asyncAction).isInstanceOf(AsyncAction.Failure::class.java)
-                state.eventSink(KnockRequestsListEvents.RetryCurrentAction)
+                state.eventSink(KnockRequestsListEvent.RetryCurrentAction)
             }
             awaitItem().also { state ->
                 assertThat(state.asyncAction).isInstanceOf(AsyncAction.Loading::class.java)
             }
             awaitItem().also { state ->
                 assertThat(state.asyncAction).isInstanceOf(AsyncAction.Failure::class.java)
-                state.eventSink(KnockRequestsListEvents.ResetCurrentAction)
+                state.eventSink(KnockRequestsListEvent.ResetCurrentAction)
             }
             skipItems(1)
             awaitItem().also { state ->
@@ -140,21 +140,21 @@ class KnockRequestsListPresenterTest {
             skipItems(2)
             awaitItem().also { state ->
                 val knockRequestPresentable = state.knockRequests.dataOrNull()?.first()!!
-                state.eventSink(KnockRequestsListEvents.Decline(knockRequestPresentable))
+                state.eventSink(KnockRequestsListEvent.Decline(knockRequestPresentable))
             }
             skipItems(1)
             awaitItem().also { state ->
                 val knockRequestPresentable = state.knockRequests.dataOrNull()?.first()!!
                 assertThat(state.currentAction).isEqualTo(KnockRequestsAction.Decline(knockRequestPresentable))
                 assertThat(state.asyncAction).isInstanceOf(AsyncAction.ConfirmingNoParams::class.java)
-                state.eventSink(KnockRequestsListEvents.ConfirmCurrentAction)
+                state.eventSink(KnockRequestsListEvent.ConfirmCurrentAction)
             }
             awaitItem().also { state ->
                 assertThat(state.asyncAction).isInstanceOf(AsyncAction.Loading::class.java)
             }
             awaitItem().also { state ->
                 assertThat(state.asyncAction).isInstanceOf(AsyncAction.Success::class.java)
-                state.eventSink(KnockRequestsListEvents.ResetCurrentAction)
+                state.eventSink(KnockRequestsListEvent.ResetCurrentAction)
             }
             skipItems(2)
             awaitItem().also { state ->
@@ -178,21 +178,21 @@ class KnockRequestsListPresenterTest {
             skipItems(2)
             awaitItem().also { state ->
                 val knockRequestPresentable = state.knockRequests.dataOrNull()?.first()!!
-                state.eventSink(KnockRequestsListEvents.DeclineAndBan(knockRequestPresentable))
+                state.eventSink(KnockRequestsListEvent.DeclineAndBan(knockRequestPresentable))
             }
             skipItems(1)
             awaitItem().also { state ->
                 val knockRequestPresentable = state.knockRequests.dataOrNull()?.first()!!
                 assertThat(state.currentAction).isEqualTo(KnockRequestsAction.DeclineAndBan(knockRequestPresentable))
                 assertThat(state.asyncAction).isInstanceOf(AsyncAction.ConfirmingNoParams::class.java)
-                state.eventSink(KnockRequestsListEvents.ConfirmCurrentAction)
+                state.eventSink(KnockRequestsListEvent.ConfirmCurrentAction)
             }
             awaitItem().also { state ->
                 assertThat(state.asyncAction).isInstanceOf(AsyncAction.Loading::class.java)
             }
             awaitItem().also { state ->
                 assertThat(state.asyncAction).isInstanceOf(AsyncAction.Success::class.java)
-                state.eventSink(KnockRequestsListEvents.ResetCurrentAction)
+                state.eventSink(KnockRequestsListEvent.ResetCurrentAction)
             }
             skipItems(2)
             awaitItem().also { state ->
@@ -220,20 +220,20 @@ class KnockRequestsListPresenterTest {
             skipItems(2)
             awaitItem().also { state ->
                 assertThat(state.canAcceptAll).isTrue()
-                state.eventSink(KnockRequestsListEvents.AcceptAll)
+                state.eventSink(KnockRequestsListEvent.AcceptAll)
             }
             skipItems(1)
             awaitItem().also { state ->
                 assertThat(state.currentAction).isEqualTo(KnockRequestsAction.AcceptAll)
                 assertThat(state.asyncAction).isInstanceOf(AsyncAction.ConfirmingNoParams::class.java)
-                state.eventSink(KnockRequestsListEvents.ConfirmCurrentAction)
+                state.eventSink(KnockRequestsListEvent.ConfirmCurrentAction)
             }
             awaitItem().also { state ->
                 assertThat(state.asyncAction).isInstanceOf(AsyncAction.Loading::class.java)
             }
             awaitItem().also { state ->
                 assertThat(state.asyncAction).isInstanceOf(AsyncAction.Success::class.java)
-                state.eventSink(KnockRequestsListEvents.ResetCurrentAction)
+                state.eventSink(KnockRequestsListEvent.ResetCurrentAction)
             }
             skipItems(2)
             awaitItem().also { state ->
@@ -262,20 +262,20 @@ class KnockRequestsListPresenterTest {
             skipItems(2)
             awaitItem().also { state ->
                 assertThat(state.canAcceptAll).isTrue()
-                state.eventSink(KnockRequestsListEvents.AcceptAll)
+                state.eventSink(KnockRequestsListEvent.AcceptAll)
             }
             skipItems(1)
             awaitItem().also { state ->
                 assertThat(state.currentAction).isEqualTo(KnockRequestsAction.AcceptAll)
                 assertThat(state.asyncAction).isInstanceOf(AsyncAction.ConfirmingNoParams::class.java)
-                state.eventSink(KnockRequestsListEvents.ConfirmCurrentAction)
+                state.eventSink(KnockRequestsListEvent.ConfirmCurrentAction)
             }
             awaitItem().also { state ->
                 assertThat(state.asyncAction).isInstanceOf(AsyncAction.Loading::class.java)
             }
             awaitItem().also { state ->
                 assertThat(state.asyncAction).isInstanceOf(AsyncAction.Failure::class.java)
-                state.eventSink(KnockRequestsListEvents.ResetCurrentAction)
+                state.eventSink(KnockRequestsListEvent.ResetCurrentAction)
             }
             skipItems(2)
             awaitItem().also { state ->

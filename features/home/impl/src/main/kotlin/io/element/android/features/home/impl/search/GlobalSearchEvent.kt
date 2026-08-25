@@ -7,9 +7,6 @@
 
 package io.element.android.features.home.impl.search
 
-import androidx.compose.runtime.Immutable
-
-@Immutable
 sealed interface GlobalSearchEvent {
     object ClearQuery : GlobalSearchEvent
     object ToggleSearchVisibility : GlobalSearchEvent

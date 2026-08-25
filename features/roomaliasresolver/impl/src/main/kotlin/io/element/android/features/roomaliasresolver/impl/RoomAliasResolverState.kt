@@ -15,7 +15,7 @@ import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 data class RoomAliasResolverState(
     val roomAlias: RoomAlias,
     val resolveState: AsyncData<ResolvedRoomAlias>,
-    val eventSink: (RoomAliasResolverEvents) -> Unit
+    val eventSink: (RoomAliasResolverEvent) -> Unit
 )
 
 sealed class RoomAliasResolverFailures : Exception() {

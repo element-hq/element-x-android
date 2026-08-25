@@ -120,7 +120,7 @@ class NotificationSettingsPresenterTest {
         val presenter = createNotificationSettingsPresenter(notificationSettingsService)
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink(NotificationSettingsEvents.FixConfigurationMismatch)
+            initialState.eventSink(NotificationSettingsEvent.FixConfigurationMismatch)
             val fixedState = consumeItemsUntilPredicate(timeout = 2000.milliseconds) {
                 it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
             }.last()
@@ -148,14 +148,14 @@ class NotificationSettingsPresenterTest {
                 it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
             }.last()
             assertThat(loadedState.appSettings.appNotificationsEnabled).isTrue()
-            loadedState.eventSink(NotificationSettingsEvents.SetNotificationsEnabled(false))
+            loadedState.eventSink(NotificationSettingsEvent.SetNotificationsEnabled(false))
             val updatedState = consumeItemsUntilPredicate {
                 !it.appSettings.appNotificationsEnabled
             }.last()
             assertThat(updatedState.appSettings.appNotificationsEnabled).isFalse()
             unregisterWithResult.assertions().isCalledOnce()
             // Enable notification again
-            loadedState.eventSink(NotificationSettingsEvents.SetNotificationsEnabled(true))
+            loadedState.eventSink(NotificationSettingsEvent.SetNotificationsEnabled(true))
             val updatedState2 = consumeItemsUntilPredicate {
                 it.appSettings.appNotificationsEnabled
             }.last()
@@ -173,7 +173,7 @@ class NotificationSettingsPresenterTest {
             }.last()
             val validMatrixState = loadedState.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid
             assertThat(validMatrixState?.callNotificationsEnabled).isFalse()
-            loadedState.eventSink(NotificationSettingsEvents.SetCallNotificationsEnabled(true))
+            loadedState.eventSink(NotificationSettingsEvent.SetCallNotificationsEnabled(true))
             val updatedState = consumeItemsUntilPredicate {
                 (it.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid)?.callNotificationsEnabled == true
             }.last()
@@ -192,7 +192,7 @@ class NotificationSettingsPresenterTest {
             }.last()
             val validMatrixState = loadedState.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid
             assertThat(validMatrixState?.inviteForMeNotificationsEnabled).isFalse()
-            loadedState.eventSink(NotificationSettingsEvents.SetInviteForMeNotificationsEnabled(true))
+            loadedState.eventSink(NotificationSettingsEvent.SetInviteForMeNotificationsEnabled(true))
             val updatedState = consumeItemsUntilPredicate {
                 (it.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid)?.inviteForMeNotificationsEnabled == true
             }.last()
@@ -211,7 +211,7 @@ class NotificationSettingsPresenterTest {
             }.last()
             val validMatrixState = loadedState.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid
             assertThat(validMatrixState?.atRoomNotificationsEnabled).isFalse()
-            loadedState.eventSink(NotificationSettingsEvents.SetAtRoomNotificationsEnabled(true))
+            loadedState.eventSink(NotificationSettingsEvent.SetAtRoomNotificationsEnabled(true))
             val updatedState = consumeItemsUntilPredicate {
                 (it.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid)?.atRoomNotificationsEnabled == true
             }.last()
@@ -232,12 +232,12 @@ class NotificationSettingsPresenterTest {
             }.last()
             val validMatrixState = loadedState.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid
             assertThat(validMatrixState?.atRoomNotificationsEnabled).isFalse()
-            loadedState.eventSink(NotificationSettingsEvents.SetAtRoomNotificationsEnabled(true))
+            loadedState.eventSink(NotificationSettingsEvent.SetAtRoomNotificationsEnabled(true))
             val errorState = consumeItemsUntilPredicate {
                 it.changeNotificationSettingAction.isFailure()
             }.last()
             assertThat(errorState.changeNotificationSettingAction.isFailure()).isTrue()
-            errorState.eventSink(NotificationSettingsEvents.ClearNotificationChangeError)
+            errorState.eventSink(NotificationSettingsEvent.ClearNotificationChangeError)
             val clearErrorState = consumeItemsUntilPredicate {
                 it.changeNotificationSettingAction.isUninitialized()
             }.last()
@@ -258,16 +258,16 @@ class NotificationSettingsPresenterTest {
                 Distributor(value = "aDistributorValue0", name = "aDistributorName0"),
                 Distributor(value = "aDistributorValue1", name = "aDistributorName1"),
             )
-            initialState.eventSink.invoke(NotificationSettingsEvents.ChangePushProvider)
+            initialState.eventSink.invoke(NotificationSettingsEvent.ChangePushProvider)
             val withDialog = awaitItem()
             assertThat(withDialog.showChangePushProviderDialog).isTrue()
             // Cancel
-            withDialog.eventSink(NotificationSettingsEvents.CancelChangePushProvider)
+            withDialog.eventSink(NotificationSettingsEvent.CancelChangePushProvider)
             val withoutDialog = awaitItem()
             assertThat(withoutDialog.showChangePushProviderDialog).isFalse()
-            withDialog.eventSink.invoke(NotificationSettingsEvents.ChangePushProvider)
+            withDialog.eventSink.invoke(NotificationSettingsEvent.ChangePushProvider)
             assertThat(awaitItem().showChangePushProviderDialog).isTrue()
-            withDialog.eventSink(NotificationSettingsEvents.SetPushProvider(1))
+            withDialog.eventSink(NotificationSettingsEvent.SetPushProvider(1))
             val withNewProvider = awaitItem()
             assertThat(withNewProvider.showChangePushProviderDialog).isFalse()
             assertThat(withNewProvider.currentPushDistributor).isInstanceOf(AsyncData.Loading::class.java)
@@ -290,10 +290,10 @@ class NotificationSettingsPresenterTest {
                 Distributor(value = "aDistributorValue0", name = "aDistributorName0"),
                 Distributor(value = "aDistributorValue1", name = "aDistributorName1"),
             )
-            initialState.eventSink.invoke(NotificationSettingsEvents.ChangePushProvider)
+            initialState.eventSink.invoke(NotificationSettingsEvent.ChangePushProvider)
             assertThat(awaitItem().showChangePushProviderDialog).isTrue()
             // Choose the same value (index 0)
-            initialState.eventSink(NotificationSettingsEvents.SetPushProvider(0))
+            initialState.eventSink(NotificationSettingsEvent.SetPushProvider(0))
             val withNewProvider = awaitItem()
             assertThat(withNewProvider.showChangePushProviderDialog).isFalse()
             expectNoEvents()
@@ -318,7 +318,7 @@ class NotificationSettingsPresenterTest {
             expectNoEvents()
 
             // Refresh
-            initialState.eventSink.invoke(NotificationSettingsEvents.RefreshSystemNotificationsEnabled)
+            initialState.eventSink.invoke(NotificationSettingsEvent.RefreshSystemNotificationsEnabled)
             assertThat(awaitItem().fullScreenIntentPermissionsState.permissionGranted).isTrue()
         }
     }
@@ -334,10 +334,10 @@ class NotificationSettingsPresenterTest {
         )
         presenter.test {
             val initialState = awaitLastSequentialItem()
-            initialState.eventSink.invoke(NotificationSettingsEvents.ChangePushProvider)
+            initialState.eventSink.invoke(NotificationSettingsEvent.ChangePushProvider)
             val withDialog = awaitItem()
             assertThat(withDialog.showChangePushProviderDialog).isTrue()
-            withDialog.eventSink(NotificationSettingsEvents.SetPushProvider(1))
+            withDialog.eventSink(NotificationSettingsEvent.SetPushProvider(1))
             val withNewProvider = awaitItem()
             assertThat(withNewProvider.showChangePushProviderDialog).isFalse()
             assertThat(withNewProvider.currentPushDistributor).isInstanceOf(AsyncData.Loading::class.java)
@@ -384,7 +384,7 @@ class NotificationSettingsPresenterTest {
             }.last()
             assertThat(initialState.messageSound.sound).isEqualTo(NotificationSound.SystemDefault)
 
-            initialState.eventSink(NotificationSettingsEvents.SetMessageSound(customSound))
+            initialState.eventSink(NotificationSettingsEvent.SetMessageSound(customSound))
 
             val updatedState = consumeItemsUntilPredicate { it.messageSound.sound == customSound }.last()
             assertThat(updatedState.messageSound.sound).isEqualTo(customSound)
@@ -410,7 +410,7 @@ class NotificationSettingsPresenterTest {
             }.last()
             assertThat(initialState.callRingtone.sound).isEqualTo(NotificationSound.SystemDefault)
 
-            initialState.eventSink(NotificationSettingsEvents.SetCallRingtone(NotificationSound.Silent))
+            initialState.eventSink(NotificationSettingsEvent.SetCallRingtone(NotificationSound.Silent))
 
             val updatedState = consumeItemsUntilPredicate { it.callRingtone.sound == NotificationSound.Silent }.last()
             assertThat(updatedState.callRingtone.sound).isEqualTo(NotificationSound.Silent)
@@ -435,11 +435,11 @@ class NotificationSettingsPresenterTest {
                 it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
             }.last()
 
-            initialState.eventSink(NotificationSettingsEvents.SetMessageSound(NotificationSound.Custom("content://a")))
+            initialState.eventSink(NotificationSettingsEvent.SetMessageSound(NotificationSound.Custom("content://a")))
             consumeItemsUntilPredicate { it.messageSound.sound == NotificationSound.Custom("content://a") }
-            initialState.eventSink(NotificationSettingsEvents.SetMessageSound(NotificationSound.Custom("content://b")))
+            initialState.eventSink(NotificationSettingsEvent.SetMessageSound(NotificationSound.Custom("content://b")))
             consumeItemsUntilPredicate { it.messageSound.sound == NotificationSound.Custom("content://b") }
-            initialState.eventSink(NotificationSettingsEvents.SetMessageSound(NotificationSound.SystemDefault))
+            initialState.eventSink(NotificationSettingsEvent.SetMessageSound(NotificationSound.SystemDefault))
             consumeItemsUntilPredicate { it.messageSound.sound == NotificationSound.SystemDefault }
 
             assertThat(versions).containsExactly(1, 2, 3).inOrder()
@@ -461,7 +461,7 @@ class NotificationSettingsPresenterTest {
             consumeItemsUntilPredicate {
                 it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid &&
                     it.messageSound.sound == NotificationSound.Custom("content://existing")
-            }.last().eventSink(NotificationSettingsEvents.SetMessageSound(NotificationSound.SystemDefault))
+            }.last().eventSink(NotificationSettingsEvent.SetMessageSound(NotificationSound.SystemDefault))
             consumeItemsUntilPredicate { it.messageSound.sound == NotificationSound.SystemDefault }
             assertThat(appPreferencesStore.getNotificationSoundChannelConfig().messageSound).isEqualTo(NotificationSound.SystemDefault)
             recreateRecorder.assertions().isCalledOnce().with(value(NotificationSound.SystemDefault), value(1))
@@ -483,7 +483,7 @@ class NotificationSettingsPresenterTest {
                 it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
             }.last()
 
-            initialState.eventSink(NotificationSettingsEvents.SetMessageSound(NotificationSound.Custom("content://x")))
+            initialState.eventSink(NotificationSettingsEvent.SetMessageSound(NotificationSound.Custom("content://x")))
 
             val errorState = consumeItemsUntilPredicate {
                 it.changeNotificationSettingAction.isFailure()
@@ -670,7 +670,7 @@ class NotificationSettingsPresenterTest {
             val initialState = consumeItemsUntilPredicate {
                 it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
             }.last()
-            initialState.eventSink(NotificationSettingsEvents.SetMessageSound(NotificationSound.Custom("content://media/source")))
+            initialState.eventSink(NotificationSettingsEvent.SetMessageSound(NotificationSound.Custom("content://media/source")))
             advanceUntilIdle()
 
             val expectedSound = NotificationSound.Custom("content://my.app.fileprovider/notification_sounds/message_sound.ogg")
@@ -695,7 +695,7 @@ class NotificationSettingsPresenterTest {
             val initialState = consumeItemsUntilPredicate {
                 it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
             }.last()
-            initialState.eventSink(NotificationSettingsEvents.SetMessageSound(NotificationSound.Custom("content://broken")))
+            initialState.eventSink(NotificationSettingsEvent.SetMessageSound(NotificationSound.Custom("content://broken")))
 
             val errorState = consumeItemsUntilPredicate { it.messageSound.copyError }.last()
             assertThat(errorState.messageSound.copyError).isTrue()
@@ -703,7 +703,7 @@ class NotificationSettingsPresenterTest {
             assertThat(appPreferencesStore.getNotificationSoundChannelConfig().messageSound).isEqualTo(priorChoice)
 
             // Dismissing the inline error clears the flag without altering persistence.
-            errorState.eventSink(NotificationSettingsEvents.DismissMessageSoundCopyError)
+            errorState.eventSink(NotificationSettingsEvent.DismissMessageSoundCopyError)
             val cleared = consumeItemsUntilPredicate { !it.messageSound.copyError }.last()
             assertThat(cleared.messageSound.copyError).isFalse()
             assertThat(appPreferencesStore.getNotificationSoundChannelConfig().messageSound).isEqualTo(priorChoice)
@@ -725,7 +725,7 @@ class NotificationSettingsPresenterTest {
             val initialState = consumeItemsUntilPredicate {
                 it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
             }.last()
-            initialState.eventSink(NotificationSettingsEvents.SetCallRingtone(NotificationSound.Custom("content://broken")))
+            initialState.eventSink(NotificationSettingsEvent.SetCallRingtone(NotificationSound.Custom("content://broken")))
 
             val errorState = consumeItemsUntilPredicate { it.callRingtone.copyError }.last()
             assertThat(errorState.callRingtone.copyError).isTrue()
@@ -733,7 +733,7 @@ class NotificationSettingsPresenterTest {
             assertThat(appPreferencesStore.getNotificationSoundChannelConfig().callRingtone).isEqualTo(priorChoice)
 
             // Dismissing the inline error clears the flag without altering persistence.
-            errorState.eventSink(NotificationSettingsEvents.DismissCallRingtoneCopyError)
+            errorState.eventSink(NotificationSettingsEvent.DismissCallRingtoneCopyError)
             val cleared = consumeItemsUntilPredicate { !it.callRingtone.copyError }.last()
             assertThat(cleared.callRingtone.copyError).isFalse()
             assertThat(appPreferencesStore.getNotificationSoundChannelConfig().callRingtone).isEqualTo(priorChoice)
@@ -759,8 +759,8 @@ class NotificationSettingsPresenterTest {
             val initialState = consumeItemsUntilPredicate {
                 it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
             }.last()
-            initialState.eventSink(NotificationSettingsEvents.SetMessageSound(NotificationSound.SystemDefault))
-            initialState.eventSink(NotificationSettingsEvents.SetCallRingtone(NotificationSound.Silent))
+            initialState.eventSink(NotificationSettingsEvent.SetMessageSound(NotificationSound.SystemDefault))
+            initialState.eventSink(NotificationSettingsEvent.SetCallRingtone(NotificationSound.Silent))
             advanceUntilIdle()
             assertThat(copierCalls).isEmpty()
             cancelAndIgnoreRemainingEvents()
@@ -791,8 +791,8 @@ class NotificationSettingsPresenterTest {
             val initialState = consumeItemsUntilPredicate {
                 it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
             }.last()
-            initialState.eventSink(NotificationSettingsEvents.SetMessageSound(NotificationSound.SystemDefault))
-            initialState.eventSink(NotificationSettingsEvents.SetCallRingtone(NotificationSound.Silent))
+            initialState.eventSink(NotificationSettingsEvent.SetMessageSound(NotificationSound.SystemDefault))
+            initialState.eventSink(NotificationSettingsEvent.SetCallRingtone(NotificationSound.Silent))
             advanceUntilIdle()
             assertThat(deleteCalls).containsExactly(
                 NotificationSoundCopier.SoundSlot.Message,
@@ -835,8 +835,8 @@ class NotificationSettingsPresenterTest {
 
             // Re-pick the persisted sound for both slots — neither should churn the channel,
             // bump the version, or hit the copier / delete sweep.
-            initial.eventSink(NotificationSettingsEvents.SelectMessageSoundPreset(NotificationSound.ElementDefault))
-            initial.eventSink(NotificationSettingsEvents.SetCallRingtone(NotificationSound.Silent))
+            initial.eventSink(NotificationSettingsEvent.SelectMessageSoundPreset(NotificationSound.ElementDefault))
+            initial.eventSink(NotificationSettingsEvent.SetCallRingtone(NotificationSound.Silent))
             advanceUntilIdle()
 
             val config = appPreferencesStore.getNotificationSoundChannelConfig()
@@ -873,8 +873,8 @@ class NotificationSettingsPresenterTest {
             val initial = consumeItemsUntilPredicate {
                 it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
             }.last()
-            initial.eventSink(NotificationSettingsEvents.SetMessageSound(NotificationSound.Custom("content://A")))
-            initial.eventSink(NotificationSettingsEvents.SetMessageSound(NotificationSound.Custom("content://B")))
+            initial.eventSink(NotificationSettingsEvent.SetMessageSound(NotificationSound.Custom("content://A")))
+            initial.eventSink(NotificationSettingsEvent.SetMessageSound(NotificationSound.Custom("content://B")))
             advanceUntilIdle()
 
             assertThat(copyOrder).containsExactly("content://A", "content://B").inOrder()
@@ -908,7 +908,7 @@ class NotificationSettingsPresenterTest {
             val initialState = consumeItemsUntilPredicate {
                 it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
             }.last()
-            initialState.eventSink(NotificationSettingsEvents.SetMessageSound(NotificationSound.Custom("content://media/source")))
+            initialState.eventSink(NotificationSettingsEvent.SetMessageSound(NotificationSound.Custom("content://media/source")))
             advanceUntilIdle()
             assertThat(deleteCalls).isEmpty()
             cancelAndIgnoreRemainingEvents()
@@ -924,11 +924,11 @@ class NotificationSettingsPresenterTest {
             }.last()
             assertThat(initial.showMessageSoundDialog).isFalse()
 
-            initial.eventSink(NotificationSettingsEvents.ShowMessageSoundDialog)
+            initial.eventSink(NotificationSettingsEvent.ShowMessageSoundDialog)
             val shown = consumeItemsUntilPredicate { it.showMessageSoundDialog }.last()
             assertThat(shown.showMessageSoundDialog).isTrue()
 
-            shown.eventSink(NotificationSettingsEvents.DismissMessageSoundDialog)
+            shown.eventSink(NotificationSettingsEvent.DismissMessageSoundDialog)
             val hidden = consumeItemsUntilPredicate { !it.showMessageSoundDialog }.last()
             assertThat(hidden.showMessageSoundDialog).isFalse()
             cancelAndIgnoreRemainingEvents()
@@ -950,10 +950,10 @@ class NotificationSettingsPresenterTest {
             val initial = consumeItemsUntilPredicate {
                 it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
             }.last()
-            initial.eventSink(NotificationSettingsEvents.ShowMessageSoundDialog)
+            initial.eventSink(NotificationSettingsEvent.ShowMessageSoundDialog)
             val shown = consumeItemsUntilPredicate { it.showMessageSoundDialog }.last()
 
-            shown.eventSink(NotificationSettingsEvents.SelectMessageSoundPreset(NotificationSound.ElementDefault))
+            shown.eventSink(NotificationSettingsEvent.SelectMessageSoundPreset(NotificationSound.ElementDefault))
             advanceUntilIdle()
             consumeItemsUntilPredicate {
                 !it.showMessageSoundDialog && it.messageSound.sound == NotificationSound.ElementDefault
@@ -973,10 +973,10 @@ class NotificationSettingsPresenterTest {
                 it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
             }.last()
             assertThat(initial.pendingMessageSoundPickerLaunch).isEqualTo(0)
-            initial.eventSink(NotificationSettingsEvents.ShowMessageSoundDialog)
+            initial.eventSink(NotificationSettingsEvent.ShowMessageSoundDialog)
             val shown = consumeItemsUntilPredicate { it.showMessageSoundDialog }.last()
 
-            shown.eventSink(NotificationSettingsEvents.LaunchMessageSoundPicker)
+            shown.eventSink(NotificationSettingsEvent.LaunchMessageSoundPicker)
             val launched = consumeItemsUntilPredicate { it.pendingMessageSoundPickerLaunch == 1 }.last()
             assertThat(launched.showMessageSoundDialog).isFalse()
             assertThat(launched.pendingMessageSoundPickerLaunch).isEqualTo(1)
@@ -993,11 +993,11 @@ class NotificationSettingsPresenterTest {
             }.last()
             assertThat(initial.showCallRingtoneDialog).isFalse()
 
-            initial.eventSink(NotificationSettingsEvents.ShowCallRingtoneDialog)
+            initial.eventSink(NotificationSettingsEvent.ShowCallRingtoneDialog)
             val shown = consumeItemsUntilPredicate { it.showCallRingtoneDialog }.last()
             assertThat(shown.showCallRingtoneDialog).isTrue()
 
-            shown.eventSink(NotificationSettingsEvents.DismissCallRingtoneDialog)
+            shown.eventSink(NotificationSettingsEvent.DismissCallRingtoneDialog)
             val hidden = consumeItemsUntilPredicate { !it.showCallRingtoneDialog }.last()
             assertThat(hidden.showCallRingtoneDialog).isFalse()
             cancelAndIgnoreRemainingEvents()
@@ -1020,10 +1020,10 @@ class NotificationSettingsPresenterTest {
                 it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid &&
                     it.callRingtone.sound == NotificationSound.Silent
             }.last()
-            initial.eventSink(NotificationSettingsEvents.ShowCallRingtoneDialog)
+            initial.eventSink(NotificationSettingsEvent.ShowCallRingtoneDialog)
             val shown = consumeItemsUntilPredicate { it.showCallRingtoneDialog }.last()
 
-            shown.eventSink(NotificationSettingsEvents.SelectCallRingtonePreset(NotificationSound.SystemDefault))
+            shown.eventSink(NotificationSettingsEvent.SelectCallRingtonePreset(NotificationSound.SystemDefault))
             advanceUntilIdle()
             consumeItemsUntilPredicate {
                 !it.showCallRingtoneDialog && it.callRingtone.sound == NotificationSound.SystemDefault
@@ -1043,10 +1043,10 @@ class NotificationSettingsPresenterTest {
                 it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
             }.last()
             assertThat(initial.pendingCallRingtonePickerLaunch).isEqualTo(0)
-            initial.eventSink(NotificationSettingsEvents.ShowCallRingtoneDialog)
+            initial.eventSink(NotificationSettingsEvent.ShowCallRingtoneDialog)
             val shown = consumeItemsUntilPredicate { it.showCallRingtoneDialog }.last()
 
-            shown.eventSink(NotificationSettingsEvents.LaunchCallRingtonePicker)
+            shown.eventSink(NotificationSettingsEvent.LaunchCallRingtonePicker)
             val launched = consumeItemsUntilPredicate { it.pendingCallRingtonePickerLaunch == 1 }.last()
             assertThat(launched.showCallRingtoneDialog).isFalse()
             assertThat(launched.pendingCallRingtonePickerLaunch).isEqualTo(1)
@@ -1078,7 +1078,7 @@ class NotificationSettingsPresenterTest {
                 it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid &&
                     it.callRingtone.sound == NotificationSound.Silent
             }.last()
-            initial.eventSink(NotificationSettingsEvents.SelectCallRingtonePreset(NotificationSound.SystemDefault))
+            initial.eventSink(NotificationSettingsEvent.SelectCallRingtonePreset(NotificationSound.SystemDefault))
             advanceUntilIdle()
             val after = consumeItemsUntilPredicate {
                 it.callRingtone.sound == NotificationSound.SystemDefault

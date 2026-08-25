@@ -210,7 +210,7 @@ class LoggedInPresenterTest {
             lambda.assertions()
                 .isCalledOnce()
             // Reset the error and do not show again
-            finalState.eventSink(LoggedInEvents.CloseErrorDialog(doNotShowAgain = false))
+            finalState.eventSink(LoggedInEvent.CloseErrorDialog(doNotShowAgain = false))
             val lastState = awaitItem()
             assertThat(lastState.pusherRegistrationState.isUninitialized()).isTrue()
             assertThat(lastState.ignoreRegistrationError).isFalse()
@@ -240,7 +240,7 @@ class LoggedInPresenterTest {
             lambda.assertions()
                 .isCalledOnce()
             // Reset the error and do not show again
-            finalState.eventSink(LoggedInEvents.CloseErrorDialog(doNotShowAgain = true))
+            finalState.eventSink(LoggedInEvent.CloseErrorDialog(doNotShowAgain = true))
             skipItems(1)
             setIgnoreRegistrationErrorLambda.assertions()
                 .isCalledOnce()
@@ -296,7 +296,7 @@ class LoggedInPresenterTest {
         ).test {
             val initialState = awaitItem()
             assertThat(initialState.forceNativeSlidingSyncMigration).isFalse()
-            initialState.eventSink(LoggedInEvents.CheckSlidingSyncProxyAvailability)
+            initialState.eventSink(LoggedInEvent.CheckSlidingSyncProxyAvailability)
             assertThat(awaitItem().forceNativeSlidingSyncMigration).isTrue()
         }
     }
@@ -318,7 +318,7 @@ class LoggedInPresenterTest {
         ).test {
             val initialState = awaitItem()
 
-            initialState.eventSink(LoggedInEvents.LogoutAndMigrateToNativeSlidingSync)
+            initialState.eventSink(LoggedInEvent.LogoutAndMigrateToNativeSlidingSync)
 
             advanceUntilIdle()
 

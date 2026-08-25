@@ -15,7 +15,7 @@ data class RoomDirectoryState(
     val query: String,
     val roomDescriptions: ImmutableList<RoomDescription>,
     val displayLoadMoreIndicator: Boolean,
-    val eventSink: (RoomDirectoryEvents) -> Unit
+    val eventSink: (RoomDirectoryEvent) -> Unit
 ) {
     val displayEmptyState = roomDescriptions.isEmpty() && !displayLoadMoreIndicator
 }
