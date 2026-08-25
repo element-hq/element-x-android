@@ -58,11 +58,11 @@ class AcceptDeclineInvitePresenter(
                         )
                     }
                 }
-                is InternalAcceptDeclineInviteEvents.ClearAcceptActionState -> {
+                is InternalAcceptDeclineInviteEvent.ClearAcceptActionState -> {
                     acceptedAction.value = AsyncAction.Uninitialized
                 }
 
-                is InternalAcceptDeclineInviteEvents.ClearDeclineActionState -> {
+                is InternalAcceptDeclineInviteEvent.ClearDeclineActionState -> {
                     declinedAction.value = AsyncAction.Uninitialized
                 }
             }

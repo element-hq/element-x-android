@@ -37,11 +37,11 @@ fun AcceptDeclineInviteView(
         AsyncActionView(
             async = state.acceptAction,
             onSuccess = { roomId ->
-                state.eventSink(InternalAcceptDeclineInviteEvents.ClearAcceptActionState)
+                state.eventSink(InternalAcceptDeclineInviteEvent.ClearAcceptActionState)
                 onAcceptInviteSuccess(roomId)
             },
             onErrorDismiss = {
-                state.eventSink(InternalAcceptDeclineInviteEvents.ClearAcceptActionState)
+                state.eventSink(InternalAcceptDeclineInviteEvent.ClearAcceptActionState)
             },
             errorTitle = {
                 stringResource(CommonStrings.common_something_went_wrong)
@@ -57,11 +57,11 @@ fun AcceptDeclineInviteView(
         AsyncActionView(
             async = state.declineAction,
             onSuccess = { roomId ->
-                state.eventSink(InternalAcceptDeclineInviteEvents.ClearDeclineActionState)
+                state.eventSink(InternalAcceptDeclineInviteEvent.ClearDeclineActionState)
                 onDeclineInviteSuccess(roomId)
             },
             onErrorDismiss = {
-                state.eventSink(InternalAcceptDeclineInviteEvents.ClearDeclineActionState)
+                state.eventSink(InternalAcceptDeclineInviteEvent.ClearDeclineActionState)
             },
             errorTitle = {
                 stringResource(CommonStrings.common_something_went_wrong)
@@ -85,7 +85,7 @@ fun AcceptDeclineInviteView(
                             )
                         },
                         onDismissClick = {
-                            state.eventSink(InternalAcceptDeclineInviteEvents.ClearDeclineActionState)
+                            state.eventSink(InternalAcceptDeclineInviteEvent.ClearDeclineActionState)
                         }
                     )
                 }
