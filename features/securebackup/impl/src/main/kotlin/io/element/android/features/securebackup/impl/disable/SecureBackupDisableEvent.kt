@@ -8,7 +8,7 @@
 
 package io.element.android.features.securebackup.impl.disable
 
-sealed interface SecureBackupDisableEvents {
-    data object DisableBackup : SecureBackupDisableEvents
-    data object DismissDialogs : SecureBackupDisableEvents
+sealed interface SecureBackupDisableEvent {
+    data object DisableBackup : SecureBackupDisableEvent
+    data object DismissDialogs : SecureBackupDisableEvent
 }
