@@ -8,6 +8,6 @@
 
 package io.element.android.features.signedout.impl
 
-sealed interface SignedOutEvents {
-    data object SignInAgain : SignedOutEvents
+sealed interface SignedOutEvent {
+    data object SignInAgain : SignedOutEvent
 }
