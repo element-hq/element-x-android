@@ -244,6 +244,7 @@ fun MessagesView(
                     } else {
                         MessagesViewTopBar(
                             roomName = state.roomName,
+                            memberCount = state.memberCount,
                             roomAvatar = state.roomAvatar,
                             isTombstoned = state.isTombstoned,
                             heroes = state.heroes,
