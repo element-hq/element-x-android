@@ -16,6 +16,7 @@ open class LockScreenSettingsStatePreviewParam : PreviewParameterProvider<LockSc
             aLockScreenSettingsState(),
             aLockScreenSettingsState(isLockMandatory = true),
             aLockScreenSettingsState(showRemovePinConfirmation = true),
+            aLockScreenSettingsState(isPinKeypadShuffled = true),
         )
 }
 
@@ -24,10 +25,12 @@ fun aLockScreenSettingsState(
     isBiometricEnabled: Boolean = false,
     showRemovePinConfirmation: Boolean = false,
     showToggleBiometric: Boolean = true,
+    isPinKeypadShuffled: Boolean = false,
 ) = LockScreenSettingsState(
     showRemovePinOption = isLockMandatory,
     isBiometricEnabled = isBiometricEnabled,
     showRemovePinConfirmation = showRemovePinConfirmation,
     showToggleBiometric = showToggleBiometric,
+    isPinKeypadShuffled = isPinKeypadShuffled,
     eventSink = {}
 )

@@ -162,6 +162,7 @@ private fun PinUnlockPage(
                     },
                     maxWidth = constraints.maxWidth,
                     maxHeight = constraints.maxHeight,
+                    isShuffled = state.isPinKeypadShuffled,
                     horizontalAlignment = Alignment.CenterHorizontally,
                 )
             }

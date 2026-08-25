@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation,UnusedResources">
+  <string name="screen_app_lock_settings_shuffle_pin_keypad">Shuffle the keypad</string>
+  <string name="screen_app_lock_settings_shuffle_pin_keypad_subtitle">Show the digits in a random order so nobody can read your PIN from the movement of your finger.</string>
+</resources>

@@ -23,6 +23,7 @@ data class PinUnlockState(
     val signOutAction: AsyncAction<Unit>,
     val showBiometricUnlock: Boolean,
     val isUnlocked: Boolean,
+    val isPinKeypadShuffled: Boolean,
     val biometricUnlockResult: BiometricAuthenticator.AuthenticationResult?,
     val eventSink: (PinUnlockEvent) -> Unit
 ) {
