@@ -8,8 +8,8 @@
 
 package io.element.android.features.securityandprivacy.impl.editroomaddress
 
-sealed interface EditRoomAddressEvents {
-    data object Save : EditRoomAddressEvents
-    data object DismissError : EditRoomAddressEvents
-    data class RoomAddressChanged(val roomAddress: String) : EditRoomAddressEvents
+sealed interface EditRoomAddressEvent {
+    data object Save : EditRoomAddressEvent
+    data object DismissError : EditRoomAddressEvent
+    data class RoomAddressChanged(val roomAddress: String) : EditRoomAddressEvent
 }
