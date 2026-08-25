@@ -102,14 +102,14 @@ fun AccountDeactivationView(
             Content(
                 state = state,
                 onSubmitClick = {
-                    eventSink(AccountDeactivationEvents.DeactivateAccount(isRetry = false))
+                    eventSink(AccountDeactivationEvent.DeactivateAccount(isRetry = false))
                 }
             )
             Spacer(modifier = Modifier.height(32.dp))
             Buttons(
                 state = state,
                 onSubmitClick = {
-                    eventSink(AccountDeactivationEvents.DeactivateAccount(isRetry = false))
+                    eventSink(AccountDeactivationEvent.DeactivateAccount(isRetry = false))
                 }
             )
         }
@@ -117,13 +117,13 @@ fun AccountDeactivationView(
     AccountDeactivationActionDialog(
         state.accountDeactivationAction,
         onConfirmClick = {
-            eventSink(AccountDeactivationEvents.DeactivateAccount(isRetry = false))
+            eventSink(AccountDeactivationEvent.DeactivateAccount(isRetry = false))
         },
         onRetryClick = {
-            eventSink(AccountDeactivationEvents.DeactivateAccount(isRetry = true))
+            eventSink(AccountDeactivationEvent.DeactivateAccount(isRetry = true))
         },
         onDismissDialog = {
-            eventSink(AccountDeactivationEvents.CloseDialogs)
+            eventSink(AccountDeactivationEvent.CloseDialogs)
         },
     )
 }
@@ -239,7 +239,7 @@ private fun Content(
                 headline = stringResource(R.string.screen_deactivate_account_delete_all_messages),
                 value = eraseData,
                 onChange = {
-                    eventSink(AccountDeactivationEvents.SetEraseData(it))
+                    eventSink(AccountDeactivationEvent.SetEraseData(it))
                 },
                 enabled = !isLoading,
             )
@@ -275,7 +275,7 @@ private fun Content(
                 onValueChange = {
                     val sanitized = it.sanitize()
                     passwordFieldState = sanitized
-                    eventSink(AccountDeactivationEvents.SetPassword(sanitized))
+                    eventSink(AccountDeactivationEvent.SetPassword(sanitized))
                 },
                 placeholder = stringResource(CommonStrings.common_password),
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
@@ -299,16 +299,16 @@ private fun Content(
 }
 
 /**
- * Ensure that the string does not contain any new line characters, which can happen when pasting values.
+ * Ensure that the string does not contain any line separator, which can happen when pasting values.
  */
 private fun String.sanitize(): String {
-    return replace("\n", "")
+    return filterNot { it == '\n' || it == '\r' }
 }
 
 @PreviewsDayNight
 @Composable
 internal fun AccountDeactivationViewPreview(
-    @PreviewParameter(AccountDeactivationStateProvider::class) state: AccountDeactivationState,
+    @PreviewParameter(AccountDeactivationStatePreviewParam::class) state: AccountDeactivationState,
 ) = ElementPreview {
     AccountDeactivationView(
         state,

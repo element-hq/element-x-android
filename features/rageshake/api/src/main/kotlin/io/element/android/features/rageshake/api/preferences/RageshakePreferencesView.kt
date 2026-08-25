@@ -68,6 +68,8 @@ fun RageshakePreferencesView(
 
 @PreviewsDayNight
 @Composable
-internal fun RageshakePreferencesViewPreview(@PreviewParameter(RageshakePreferencesStateProvider::class) state: RageshakePreferencesState) = ElementPreview {
+internal fun RageshakePreferencesViewPreview(@PreviewParameter(
+    RageshakePreferencesStatePreviewParam::class
+) state: RageshakePreferencesState) = ElementPreview {
     RageshakePreferencesView(state)
 }

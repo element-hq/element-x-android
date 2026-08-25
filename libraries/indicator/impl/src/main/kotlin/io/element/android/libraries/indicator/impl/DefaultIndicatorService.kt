@@ -9,11 +9,14 @@
 package io.element.android.libraries.indicator.impl
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.indicator.api.IndicatorService
@@ -43,12 +46,17 @@ class DefaultIndicatorService(
     override fun showSettingChatBackupIndicator(): State<Boolean> {
         val backupState by encryptionService.backupStateStateFlow.collectAsState()
         val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
+        var doesBackupExistOnServer by remember { mutableStateOf<Boolean?>(null) }
+
+        LaunchedEffect(backupState) {
+            if (backupState == BackupState.UNKNOWN) {
+                doesBackupExistOnServer = encryptionService.doesBackupExistOnServer().getOrNull()
+            }
+        }
 
         return remember {
             derivedStateOf {
-                val showForBackup = backupState in listOf(
-                    BackupState.UNKNOWN,
-                )
+                val showForBackup = backupState == BackupState.UNKNOWN && doesBackupExistOnServer != true
                 val showForRecovery = recoveryState in listOf(
                     RecoveryState.DISABLED,
                     RecoveryState.INCOMPLETE,

@@ -32,13 +32,13 @@ sealed interface RemoteEnterpriseConfigResult<out T> {
         is Success<T> -> data
         is Outdated<T> -> data
         is Error -> null
-        NotFound -> null
+        is NotFound -> null
     }
 
     fun upToDateDataOrNull(): T? = when (this) {
         is Success<T> -> data
         is Outdated<T> -> null
         is Error -> null
-        NotFound -> null
+        is NotFound -> null
     }
 }

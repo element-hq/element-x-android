@@ -10,7 +10,7 @@ package io.element.android.features.enterprise.api
 
 import androidx.compose.ui.graphics.Color
 import io.element.android.compound.colors.SemanticColorsLightDark
-import io.element.android.libraries.matrix.api.UrlContentFetcher
+import io.element.android.libraries.matrix.api.ClientUrlContentFetcher
 import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.flow.Flow
 
@@ -31,10 +31,9 @@ interface EnterpriseService {
      * Rewrites the authentication server URL when the deployment requires a different one from the one advertised.
      *
      * @param url the URL to rewrite.
-     * @param homeserver the homeserver the URL belongs to.
      * @param urlContentFetcher used to read the deployment configuration; a client that is not authenticated yet also works.
      */
-    suspend fun tweakMasUrl(url: String, homeserver: String, urlContentFetcher: UrlContentFetcher): String
+    suspend fun tweakMasUrl(url: String, urlContentFetcher: ClientUrlContentFetcher): String
 
     /**
      * Returns the list of homeservers the user is allowed to sign in to.
@@ -53,9 +52,9 @@ interface EnterpriseService {
     /**
      * Whether the given homeserver enforces the use of Element Pro or a derived app.
      *
-     * @param homeserverUrl the homeserver to check.
+     * @param serverName the homeserver to check.
      */
-    suspend fun isElementProEnforced(homeserverUrl: String): Boolean
+    suspend fun isElementProEnforced(serverName: String): Boolean
 
     /**
      * Override the brand color.
@@ -98,14 +97,6 @@ interface EnterpriseService {
      * @param sessionId the session whose channel is requested.
      */
     fun getNoisyNotificationChannelId(sessionId: SessionId): String?
-
-    /**
-     * Gets the Element Server Suite (ESS) config endpoint URL for the given domain.
-     * Returns `null` when this build does not read its configuration from an ESS deployment.
-     *
-     * @param domain the server whose configuration endpoint is requested.
-     */
-    fun essConfigEndpointUrl(domain: String): String?
 
     companion object {
         const val ANY_ACCOUNT_PROVIDER = "*"

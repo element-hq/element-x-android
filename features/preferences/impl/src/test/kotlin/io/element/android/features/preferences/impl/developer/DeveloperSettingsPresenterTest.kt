@@ -88,7 +88,7 @@ class DeveloperSettingsPresenterTest {
             skipItems(2)
             assertThat(clearCacheUseCase.executeHasBeenCalled).isFalse()
             awaitItem().also { state ->
-                state.eventSink(DeveloperSettingsEvents.ClearCache)
+                state.eventSink(DeveloperSettingsEvent.ClearCache)
             }
             awaitItem().also { state ->
                 assertThat(state.clearCacheAction).isInstanceOf(AsyncAction.Loading::class.java)
@@ -117,13 +117,13 @@ class DeveloperSettingsPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.isEnterpriseBuild).isTrue()
-            initialState.eventSink(DeveloperSettingsEvents.SetShowColorPicker(true))
+            initialState.eventSink(DeveloperSettingsEvent.SetShowColorPicker(true))
             assertThat(awaitItem().showColorPicker).isTrue()
-            initialState.eventSink(DeveloperSettingsEvents.SetShowColorPicker(false))
+            initialState.eventSink(DeveloperSettingsEvent.SetShowColorPicker(false))
             assertThat(awaitItem().showColorPicker).isFalse()
-            initialState.eventSink(DeveloperSettingsEvents.SetShowColorPicker(true))
+            initialState.eventSink(DeveloperSettingsEvent.SetShowColorPicker(true))
             assertThat(awaitItem().showColorPicker).isTrue()
-            initialState.eventSink(DeveloperSettingsEvents.ChangeBrandColor(Color.Green))
+            initialState.eventSink(DeveloperSettingsEvent.ChangeBrandColor(Color.Green))
             assertThat(awaitItem().showColorPicker).isFalse()
             skipItems(1)
             overrideBrandColorResult.assertions().isCalledOnce()
@@ -138,10 +138,10 @@ class DeveloperSettingsPresenterTest {
         presenter.test {
             skipItems(2)
             val initialState = awaitItem()
-            initialState.eventSink(DeveloperSettingsEvents.MarkAllRoomsAsRead(needsConfirmation = true))
+            initialState.eventSink(DeveloperSettingsEvent.MarkAllRoomsAsRead(needsConfirmation = true))
             val stateWithConfirmation = awaitItem()
             assertThat(stateWithConfirmation.markAllRoomsAsReadAction.isConfirming()).isTrue()
-            stateWithConfirmation.eventSink(DeveloperSettingsEvents.MarkAllRoomsAsRead(needsConfirmation = false))
+            stateWithConfirmation.eventSink(DeveloperSettingsEvent.MarkAllRoomsAsRead(needsConfirmation = false))
             awaitItem().also { state ->
                 assertThat(state.markAllRoomsAsReadAction.isConfirming()).isFalse()
                 assertThat(state.markAllRoomsAsReadAction).isInstanceOf(AsyncAction.Loading::class.java)
@@ -164,7 +164,7 @@ class DeveloperSettingsPresenterTest {
         presenter.test {
             val state = awaitItem()
             assertThat(vacuumCalled).isFalse()
-            state.eventSink(DeveloperSettingsEvents.VacuumStores)
+            state.eventSink(DeveloperSettingsEvent.VacuumStores)
             skipItems(1)
             assertThat(vacuumCalled).isTrue()
         }

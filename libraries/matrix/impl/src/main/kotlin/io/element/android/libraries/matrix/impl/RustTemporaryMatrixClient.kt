@@ -22,6 +22,9 @@ class RustTemporaryMatrixClient(
         client.getUrl(url)
     }.mapFailure { it.mapClientException() }
 
+    override val server: String? = client.server()
+    override val homeserverUrl: String = client.homeserver()
+
     override fun close() {
         client.close()
         paths?.let {

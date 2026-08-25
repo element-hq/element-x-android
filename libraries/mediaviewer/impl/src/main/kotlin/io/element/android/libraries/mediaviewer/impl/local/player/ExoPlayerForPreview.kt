@@ -266,4 +266,5 @@ class ExoPlayerForPreview(
     override fun setVideoCodecParameters(codecParameters: CodecParameters) {}
     override fun addVideoCodecParametersChangeListener(listener: CodecParametersChangeListener, keys: List<String>) {}
     override fun removeVideoCodecParametersChangeListener(listener: CodecParametersChangeListener) {}
+    override fun setEnforceAdPlaybackOnTimelineRefresh(enforceAdPlaybackOnTimelineRefresh: Boolean) = throw NotImplementedError()
 }

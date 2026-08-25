@@ -22,10 +22,12 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SERVER_LIST
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.tests.testutils.WarmUpRule
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import java.util.Optional
+import java.util.concurrent.TimeoutException
 
 class RoomAliasHelperPresenterTest {
     @get:Rule
@@ -61,6 +63,22 @@ class RoomAliasHelperPresenterTest {
     }
 
     @Test
+    fun `present - a server that never answers ends up in an error state`() = runTest {
+        val client = FakeMatrixClient(
+            resolveRoomAliasResult = { awaitCancellation() }
+        )
+        val presenter = createPresenter(matrixClient = client)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            assertThat(awaitItem().resolveState.isUninitialized()).isTrue()
+            assertThat(awaitItem().resolveState.isLoading()).isTrue()
+            val resultState = awaitItem()
+            assertThat(resultState.resolveState.errorOrNull()).isInstanceOf(TimeoutException::class.java)
+        }
+    }
+
+    @Test
     fun `present - resolve alias error and retry`() = runTest {
         val client = FakeMatrixClient(
             resolveRoomAliasResult = { Result.failure(AN_EXCEPTION) }
@@ -73,7 +91,7 @@ class RoomAliasHelperPresenterTest {
             assertThat(awaitItem().resolveState.isLoading()).isTrue()
             val resultState = awaitItem()
             assertThat(resultState.resolveState.errorOrNull()).isEqualTo(AN_EXCEPTION)
-            resultState.eventSink(RoomAliasResolverEvents.Retry)
+            resultState.eventSink(RoomAliasResolverEvent.Retry)
             val retryLoadingState = awaitItem()
             assertThat(retryLoadingState.resolveState.isLoading()).isTrue()
             val retryState = awaitItem()

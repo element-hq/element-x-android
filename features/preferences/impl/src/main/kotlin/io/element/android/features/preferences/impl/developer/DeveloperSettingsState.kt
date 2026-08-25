@@ -23,7 +23,7 @@ data class DeveloperSettingsState(
     val isEnterpriseBuild: Boolean,
     val showColorPicker: Boolean,
     val deviceId: DeviceId,
-    val eventSink: (DeveloperSettingsEvents) -> Unit
+    val eventSink: (DeveloperSettingsEvent) -> Unit
 ) {
     val showLoader = clearCacheAction is AsyncAction.Loading || markAllRoomsAsReadAction is AsyncAction.Loading
 }

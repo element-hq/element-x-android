@@ -1,4 +1,5 @@
 import extension.setupDependencyInjection
+import extension.testCommonDependencies
 
 /*
  * Copyright (c) 2025 Element Creations Ltd.
@@ -22,4 +23,6 @@ dependencies {
 
     implementation(libs.androidx.corektx)
     implementation(projects.libraries.di)
+
+    testCommonDependencies(libs)
 }

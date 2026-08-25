@@ -16,7 +16,6 @@ import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.Client
-import org.matrix.rustcomponents.sdk.NoHandle
 import java.io.File
 import kotlin.io.path.createTempDirectory
 import org.matrix.rustcomponents.sdk.ClientException as RustClientException
@@ -84,7 +83,7 @@ class RustTemporaryMatrixClientTest {
     }
 
     private fun createRustTemporaryMatrixClient(
-        client: Client = Client(NoHandle),
+        client: Client = FakeFfiClient(),
         paths: SessionPaths,
     ): RustTemporaryMatrixClient {
         return RustTemporaryMatrixClient(client, paths)

@@ -79,10 +79,10 @@ class DeveloperSettingsPresenter(
             computeCacheSize(cacheSize)
         }
 
-        fun handleEvent(event: DeveloperSettingsEvents) {
+        fun handleEvent(event: DeveloperSettingsEvent) {
             when (event) {
-                DeveloperSettingsEvents.ClearCache -> coroutineScope.clearCache(clearCacheAction)
-                is DeveloperSettingsEvents.ChangeBrandColor -> coroutineScope.launch {
+                DeveloperSettingsEvent.ClearCache -> coroutineScope.clearCache(clearCacheAction)
+                is DeveloperSettingsEvent.ChangeBrandColor -> coroutineScope.launch {
                     showColorPicker = false
                     val color = event.color
                         ?.toArgb()
@@ -91,13 +91,13 @@ class DeveloperSettingsPresenter(
                         ?.padStart(7, '#')
                     enterpriseService.overrideBrandColor(sessionId, color)
                 }
-                is DeveloperSettingsEvents.SetShowColorPicker -> {
+                is DeveloperSettingsEvent.SetShowColorPicker -> {
                     showColorPicker = event.show
                 }
-                DeveloperSettingsEvents.VacuumStores -> coroutineScope.launch {
+                DeveloperSettingsEvent.VacuumStores -> coroutineScope.launch {
                     vacuumStoresUseCase()
                 }
-                is DeveloperSettingsEvents.MarkAllRoomsAsRead -> {
+                is DeveloperSettingsEvent.MarkAllRoomsAsRead -> {
                     if (event.needsConfirmation) {
                         markAllRoomsAsReadAction.value = AsyncAction.ConfirmingNoParams
                     } else {
@@ -106,7 +106,7 @@ class DeveloperSettingsPresenter(
                         )
                     }
                 }
-                DeveloperSettingsEvents.DismissMarkAllRoomsAsReadConfirmation -> {
+                DeveloperSettingsEvent.DismissMarkAllRoomsAsReadConfirmation -> {
                     markAllRoomsAsReadAction.value = AsyncAction.Uninitialized
                 }
             }
