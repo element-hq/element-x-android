@@ -8,11 +8,13 @@
 
 package io.element.android.features.space.impl.root
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.features.invite.api.acceptdecline.anAcceptDeclineInviteState
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.CallIntentConsensus
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
@@ -21,6 +23,7 @@ import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibilit
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import io.element.android.libraries.previewutils.room.aSpaceRoom
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
@@ -62,6 +65,19 @@ open class SpaceStatePreviewParam : PreviewParameterProvider<SpaceState> {
                 selectedRoomIds = setOf(RoomId("!spaceId0:example.com")),
                 removeRoomsAction = AsyncAction.ConfirmingNoParams,
             ),
+            // Search states
+            aSpaceState(
+                children = aListOfSpaceRooms(),
+                searchQuery = TextFieldState("room"),
+                isSearchActive = true,
+                searchResults = SearchBarResultState.Results(aListOfSpaceRooms().toImmutableList()),
+            ),
+            aSpaceState(
+                children = aListOfSpaceRooms(),
+                searchQuery = TextFieldState("nothing"),
+                isSearchActive = true,
+                searchResults = SearchBarResultState.NoResultsFound,
+            ),
         )
 }
 
@@ -80,6 +96,9 @@ fun aSpaceState(
     selectedRoomIds: Set<RoomId> = emptySet(),
     canManageRooms: Boolean = true,
     removeRoomsAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    searchQuery: TextFieldState = TextFieldState(),
+    isSearchActive: Boolean = false,
+    searchResults: SearchBarResultState<ImmutableList<SpaceRoom>> = SearchBarResultState.Initial,
     eventSink: (SpaceEvent) -> Unit = { },
 ) = SpaceState(
     spaceInfo = spaceInfo,
@@ -95,6 +114,9 @@ fun aSpaceState(
     selectedRoomIds = selectedRoomIds.toImmutableSet(),
     canEditSpaceGraph = canManageRooms,
     removeRoomsAction = removeRoomsAction,
+    searchQuery = searchQuery,
+    isSearchActive = isSearchActive,
+    searchResults = searchResults,
     eventSink = eventSink,
 )
 
