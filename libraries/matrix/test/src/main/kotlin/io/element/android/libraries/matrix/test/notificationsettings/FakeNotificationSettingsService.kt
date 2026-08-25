@@ -42,6 +42,8 @@ class FakeNotificationSettingsService(
     private var setDefaultNotificationModeError: Throwable? = null
     private var setAtRoomError: Throwable? = null
     private var canHomeServerPushEncryptedEventsToDeviceResult = Result.success(true)
+
+    val setRoomNotificationModeCalls = mutableListOf<Pair<RoomId, RoomNotificationMode>>()
     override val notificationSettingsChangeFlow: SharedFlow<Unit>
         get() = notificationSettingsStateFlow
 
@@ -97,6 +99,7 @@ class FakeNotificationSettingsService(
         return if (error != null) {
             Result.failure(error)
         } else {
+            setRoomNotificationModeCalls.add(roomId to mode)
             roomNotificationModeIsDefault = false
             roomNotificationMode = mode
             notificationSettingsStateFlow.emit(Unit)

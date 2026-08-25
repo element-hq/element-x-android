@@ -14,11 +14,15 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
+import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
 import io.element.android.libraries.matrix.impl.analytics.toAnalyticsJoinedRoom
 import io.element.android.libraries.matrix.test.A_ROOM_ALIAS
 import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_SERVER_LIST
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.services.analytics.test.FakeAnalyticsService
@@ -138,6 +142,76 @@ class DefaultJoinRoomTest {
             .isNeverCalled()
         assertThat(analyticsService.capturedEvents).containsExactly(
             roomResult.toAnalyticsJoinedRoom(aTrigger)
+        )
+    }
+
+    @Test
+    fun `joining the successor of a room with its own notification mode carries that mode over`() = runTest {
+        val notificationSettingsService = FakeNotificationSettingsService(
+            initialRoomMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
+            initialRoomModeIsDefault = false,
+        )
+        val sut = aJoinRoom(
+            notificationSettingsService = notificationSettingsService,
+            predecessorRoom = PredecessorRoom(roomId = A_ROOM_ID_2),
+        )
+
+        sut.invoke(A_ROOM_ID.toRoomIdOrAlias(), emptyList(), JoinedRoom.Trigger.MobilePermalink)
+
+        assertThat(notificationSettingsService.setRoomNotificationModeCalls)
+            .containsExactly(A_ROOM_ID to RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY)
+    }
+
+    @Test
+    fun `joining a room without a predecessor leaves its notification mode alone`() = runTest {
+        val notificationSettingsService = FakeNotificationSettingsService(
+            initialRoomMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
+            initialRoomModeIsDefault = false,
+        )
+        val sut = aJoinRoom(
+            notificationSettingsService = notificationSettingsService,
+            predecessorRoom = null,
+        )
+
+        sut.invoke(A_ROOM_ID.toRoomIdOrAlias(), emptyList(), JoinedRoom.Trigger.MobilePermalink)
+
+        assertThat(notificationSettingsService.setRoomNotificationModeCalls).isEmpty()
+    }
+
+    @Test
+    fun `joining the successor of a room using the default notification mode leaves the default in place`() = runTest {
+        val notificationSettingsService = FakeNotificationSettingsService(
+            initialRoomModeIsDefault = true,
+        )
+        val sut = aJoinRoom(
+            notificationSettingsService = notificationSettingsService,
+            predecessorRoom = PredecessorRoom(roomId = A_ROOM_ID_2),
+        )
+
+        sut.invoke(A_ROOM_ID.toRoomIdOrAlias(), emptyList(), JoinedRoom.Trigger.MobilePermalink)
+
+        assertThat(notificationSettingsService.setRoomNotificationModeCalls).isEmpty()
+    }
+
+    private fun aJoinRoom(
+        notificationSettingsService: FakeNotificationSettingsService,
+        predecessorRoom: PredecessorRoom?,
+    ): DefaultJoinRoom {
+        val roomInfo = aRoomInfo(id = A_ROOM_ID)
+        val client = FakeMatrixClient(notificationSettingsService = notificationSettingsService).also {
+            it.joinRoomLambda = { Result.success(roomInfo) }
+            it.givenGetRoomResult(
+                roomId = A_ROOM_ID,
+                result = FakeBaseRoom(predecessorRoomResult = { predecessorRoom }).apply { givenRoomInfo(roomInfo) },
+            )
+            it.givenGetRoomResult(
+                roomId = A_ROOM_ID_2,
+                result = FakeBaseRoom().apply { givenRoomInfo(aRoomInfo(id = A_ROOM_ID_2)) },
+            )
+        }
+        return DefaultJoinRoom(
+            client = client,
+            analyticsService = FakeAnalyticsService(),
         )
     }
 }

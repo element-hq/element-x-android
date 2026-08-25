@@ -10,9 +10,11 @@ package io.element.android.libraries.matrix.impl.room.join
 
 import dev.zacsweers.metro.ContributesBinding
 import im.vector.app.features.analytics.plan.JoinedRoom
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.matrix.api.exception.ErrorKind
@@ -44,6 +46,7 @@ class DefaultJoinRoom(
         }.onSuccess { roomInfo ->
             if (roomInfo != null) {
                 analyticsService.capture(roomInfo.toAnalyticsJoinedRoom(trigger))
+                inheritNotificationModeFromPredecessor(roomInfo.id)
             }
         }.mapFailure {
             if (it is ClientException.MatrixApi) {
@@ -55,5 +58,19 @@ class DefaultJoinRoom(
                 it
             }
         }.map { }
+    }
+
+    private suspend fun inheritNotificationModeFromPredecessor(roomId: RoomId) {
+        val room = client.getRoom(roomId) ?: return
+        val predecessorId = room.predecessorRoom()?.roomId ?: return
+        val predecessor = client.getRoom(predecessorId) ?: return
+        val predecessorInfo = predecessor.info()
+        val settings = client.notificationSettingsService.getRoomNotificationSettings(
+            roomId = predecessorId,
+            isEncrypted = predecessorInfo.isEncrypted.orFalse(),
+            isOneToOne = predecessorInfo.isDm,
+        ).getOrNull() ?: return
+        if (settings.isDefault) return
+        client.notificationSettingsService.setRoomNotificationMode(roomId, settings.mode)
     }
 }
