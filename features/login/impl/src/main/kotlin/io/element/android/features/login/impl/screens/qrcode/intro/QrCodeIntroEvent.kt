@@ -8,6 +8,6 @@
 
 package io.element.android.features.login.impl.screens.qrcode.intro
 
-sealed interface QrCodeIntroEvents {
-    data object Continue : QrCodeIntroEvents
+sealed interface QrCodeIntroEvent {
+    data object Continue : QrCodeIntroEvent
 }
