@@ -46,6 +46,7 @@ class DefaultReportRoomTest {
         assertThat(result.isSuccess).isTrue()
         assert(successLeaveRoomLambda).isNeverCalled()
         assert(successReportRoomLambda).isNeverCalled()
+        room.assertDestroyed()
     }
 
     @Test
@@ -67,6 +68,7 @@ class DefaultReportRoomTest {
         assert(successReportRoomLambda)
             .isCalledOnce()
             .with(value("Spam"))
+        room.assertDestroyed()
     }
 
     @Test
@@ -86,6 +88,7 @@ class DefaultReportRoomTest {
         assertThat(result.isSuccess).isTrue()
         assert(successLeaveRoomLambda).isCalledOnce()
         assert(successReportRoomLambda).isNeverCalled()
+        room.assertDestroyed()
     }
 
     @Test
@@ -107,6 +110,7 @@ class DefaultReportRoomTest {
         assert(successReportRoomLambda)
             .isCalledOnce()
             .with(value("Spam"))
+        room.assertDestroyed()
     }
 
     @Test
@@ -127,6 +131,7 @@ class DefaultReportRoomTest {
         assertThat(result.exceptionOrNull()).isEqualTo(ReportRoom.Exception.LeftRoomFailed)
         assert(failureLeaveRoomLambda).isCalledOnce()
         assert(successReportRoomLambda).isCalledOnce()
+        room.assertDestroyed()
     }
 
     @Test
@@ -147,5 +152,6 @@ class DefaultReportRoomTest {
         assertThat(result.exceptionOrNull()).isEqualTo(ReportRoom.Exception.ReportRoomFailed)
         assert(successLeaveRoomLambda).isNeverCalled()
         assert(failureReportRoomLambda).isCalledOnce()
+        room.assertDestroyed()
     }
 }

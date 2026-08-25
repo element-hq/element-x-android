@@ -99,7 +99,7 @@ class NotificationBroadcastReceiverHandler(
 
     private fun handleRejectRoom(sessionId: SessionId, roomId: RoomId) = appCoroutineScope.launch {
         val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return@launch
-        client.getRoom(roomId)?.leave()
+        client.getRoom(roomId)?.use { it.leave() }
     }
 
     @Suppress("unused")
@@ -159,17 +159,21 @@ class NotificationBroadcastReceiverHandler(
             return@launch
         }
         val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return@launch
-        val room = activeRoomsHolder.getActiveRoomMatching(sessionId, roomId) ?: client.getJoinedRoom(roomId)
+        val (room, needsDestroy) = activeRoomsHolder.getActiveRoomMatching(sessionId, roomId)?.let { it to false }
+            ?: client.getJoinedRoom(roomId)?.let { it to true }
+            ?: return@launch
 
-        room?.let {
-            sendMatrixEvent(
-                sessionId = sessionId,
-                roomId = roomId,
-                replyToEventId = replyToEventId,
-                threadId = threadId,
-                room = it,
-                message = message,
-            )
+        sendMatrixEvent(
+            sessionId = sessionId,
+            roomId = roomId,
+            replyToEventId = replyToEventId,
+            threadId = threadId,
+            room = room,
+            message = message,
+        )
+
+        if (needsDestroy) {
+            room.destroy()
         }
     }
 

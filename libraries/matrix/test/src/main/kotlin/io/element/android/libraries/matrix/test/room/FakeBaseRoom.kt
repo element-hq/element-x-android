@@ -113,6 +113,10 @@ class FakeBaseRoom(
         check(isDestroyed) { "Room should be destroyed" }
     }
 
+    fun assertNotDestroyed() {
+        check(!isDestroyed) { "Room should not be destroyed" }
+    }
+
     override suspend fun userDisplayName(userId: UserId): Result<String?> = simulateLongTask {
         userDisplayNameResult(userId)
     }
