@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="UnusedResources">
+  <string name="screen_notification_settings_conversations_label">"Use conversation notifications"</string>
+  <string name="screen_notification_settings_conversations_description">"Show room notifications as conversations. Turning this off lets Do Not Disturb silence them."</string>
+</resources>

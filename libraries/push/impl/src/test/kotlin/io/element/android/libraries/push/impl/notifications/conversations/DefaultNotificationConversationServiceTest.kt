@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.ui.media.test.FakeImageLoaderHolder
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.push.impl.notifications.factories.FakeIntentProvider
 import io.element.android.libraries.push.impl.notifications.shortcut.createShortcutId
 import io.element.android.libraries.push.test.notifications.push.FakeNotificationBitmapLoader
@@ -50,6 +51,46 @@ class DefaultNotificationConversationServiceTest : RobolectricTest() {
 
         val shortcuts = ShortcutManagerCompat.getDynamicShortcuts(context)
         assertThat(shortcuts).isNotEmpty()
+    }
+
+    @Test
+    fun `onSendMessage adds no shortcut when conversation notifications are off`() = runTest {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val service = createService(
+            context = context,
+            appPreferencesStore = InMemoryAppPreferencesStore(isConversationNotificationsEnabled = false),
+        )
+
+        service.onSendMessage(
+            sessionId = A_SESSION_ID,
+            roomId = A_ROOM_ID,
+            roomName = "Room title",
+            roomIsDirect = false,
+            roomAvatarUrl = null,
+        )
+
+        assertThat(ShortcutManagerCompat.getDynamicShortcuts(context)).isEmpty()
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `on conversation notifications turned off, all shortcuts are cleared`() = runTest {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val appPreferencesStore = InMemoryAppPreferencesStore(isConversationNotificationsEnabled = true)
+        createService(context, appPreferencesStore = appPreferencesStore)
+        runCurrent()
+
+        val shortcutInfo = ShortcutInfoCompat.Builder(context, "$A_SESSION_ID-$A_ROOM_ID")
+            .setShortLabel("Room title")
+            .setIntent(Intent(Intent.ACTION_VIEW))
+            .build()
+        ShortcutManagerCompat.setDynamicShortcuts(context, listOf(shortcutInfo))
+        assertThat(ShortcutManagerCompat.getDynamicShortcuts(context)).hasSize(1)
+
+        appPreferencesStore.setConversationNotificationsEnabled(false)
+        runCurrent()
+
+        assertThat(ShortcutManagerCompat.getDynamicShortcuts(context)).isEmpty()
     }
 
     @Test
@@ -176,6 +217,7 @@ class DefaultNotificationConversationServiceTest : RobolectricTest() {
         context: Context = InstrumentationRegistry.getInstrumentation().context,
         sessionObserver: FakeSessionObserver = FakeSessionObserver(),
         lockScreenService: FakeLockScreenService = FakeLockScreenService(),
+        appPreferencesStore: InMemoryAppPreferencesStore = InMemoryAppPreferencesStore(),
     ) = DefaultNotificationConversationService(
         context = context,
         intentProvider = FakeIntentProvider(),
@@ -184,6 +226,7 @@ class DefaultNotificationConversationServiceTest : RobolectricTest() {
         imageLoaderHolder = FakeImageLoaderHolder(),
         sessionObserver = sessionObserver,
         lockScreenService = lockScreenService,
+        appPreferencesStore = appPreferencesStore,
         coroutineScope = backgroundScope,
     )
 }

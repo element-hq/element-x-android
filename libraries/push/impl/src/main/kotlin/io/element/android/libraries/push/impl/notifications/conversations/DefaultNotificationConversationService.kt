@@ -28,6 +28,7 @@ import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
 import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
 import io.element.android.libraries.push.impl.intent.IntentProvider
@@ -51,6 +52,7 @@ class DefaultNotificationConversationService(
     private val matrixClientProvider: MatrixClientProvider,
     private val imageLoaderHolder: ImageLoaderHolder,
     private val lockScreenService: LockScreenService,
+    private val appPreferencesStore: AppPreferencesStore,
     sessionObserver: SessionObserver,
     @AppCoroutineScope private val coroutineScope: CoroutineScope,
 ) : NotificationConversationService {
@@ -71,6 +73,16 @@ class DefaultNotificationConversationService(
                 }
             }
             .launchIn(coroutineScope)
+
+        appPreferencesStore.isConversationNotificationsEnabledFlow()
+            .withPreviousValue()
+            .onEach { (wasEnabled, isEnabled) ->
+                if (wasEnabled == true && !isEnabled) {
+                    // The shortcuts already published are what make the existing notifications conversations, so they have to go too.
+                    clearShortcuts()
+                }
+            }
+            .launchIn(coroutineScope)
     }
 
     override suspend fun onSendMessage(
@@ -82,6 +94,11 @@ class DefaultNotificationConversationService(
     ) {
         if (lockScreenService.isPinSetup().first()) {
             // We don't create shortcuts when a pin code is set for privacy reasons
+            return
+        }
+
+        if (!appPreferencesStore.isConversationNotificationsEnabledFlow().first()) {
+            // The user asked for their notifications not to be conversations, and a shortcut is what makes them one.
             return
         }
 
