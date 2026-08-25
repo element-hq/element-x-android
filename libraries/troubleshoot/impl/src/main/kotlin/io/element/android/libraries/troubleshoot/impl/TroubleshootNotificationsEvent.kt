@@ -8,8 +8,8 @@
 
 package io.element.android.libraries.troubleshoot.impl
 
-sealed interface TroubleshootNotificationsEvents {
-    data object StartTests : TroubleshootNotificationsEvents
-    data object RetryFailedTests : TroubleshootNotificationsEvents
-    data class QuickFix(val testIndex: Int) : TroubleshootNotificationsEvents
+sealed interface TroubleshootNotificationsEvent {
+    data object StartTests : TroubleshootNotificationsEvent
+    data object RetryFailedTests : TroubleshootNotificationsEvent
+    data class QuickFix(val testIndex: Int) : TroubleshootNotificationsEvent
 }
