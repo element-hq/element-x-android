@@ -8,6 +8,6 @@
 
 package io.element.android.features.location.impl.common.permissions
 
-sealed interface PermissionsEvents {
-    data object RequestPermissions : PermissionsEvents
+sealed interface PermissionsEvent {
+    data object RequestPermissions : PermissionsEvent
 }
