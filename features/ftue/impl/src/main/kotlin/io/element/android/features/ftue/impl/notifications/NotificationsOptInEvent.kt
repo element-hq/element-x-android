@@ -8,7 +8,7 @@
 
 package io.element.android.features.ftue.impl.notifications
 
-sealed interface NotificationsOptInEvents {
-    data object ContinueClicked : NotificationsOptInEvents
-    data object NotNowClicked : NotificationsOptInEvents
+sealed interface NotificationsOptInEvent {
+    data object ContinueClicked : NotificationsOptInEvent
+    data object NotNowClicked : NotificationsOptInEvent
 }
