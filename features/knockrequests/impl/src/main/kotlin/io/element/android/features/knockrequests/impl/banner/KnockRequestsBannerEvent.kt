@@ -8,7 +8,7 @@
 
 package io.element.android.features.knockrequests.impl.banner
 
-sealed interface KnockRequestsBannerEvents {
-    data object AcceptSingleRequest : KnockRequestsBannerEvents
-    data object Dismiss : KnockRequestsBannerEvents
+sealed interface KnockRequestsBannerEvent {
+    data object AcceptSingleRequest : KnockRequestsBannerEvent
+    data object Dismiss : KnockRequestsBannerEvent
 }
