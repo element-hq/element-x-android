@@ -189,6 +189,12 @@ private fun NotificationSettingsContentView(
                 },
                 onClick = onDirectChatsClick
             )
+            PreferenceSwitch(
+                modifier = Modifier,
+                title = stringResource(id = R.string.screen_notification_settings_invite_for_me_label),
+                isChecked = matrixSettings.inviteForMeNotificationsEnabled,
+                onCheckedChange = onInviteForMeNotificationsChange
+            )
         }
 
         PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_mode_mentions)) {
@@ -200,22 +206,6 @@ private fun NotificationSettingsContentView(
             )
         }
         SoundsPreferenceCategory(state = state)
-        PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_additional_settings_section_title)) {
-            // TODO We are removing the call notification toggle until support for call notifications has been added
-//                PreferenceSwitch(
-//                    modifier = Modifier,
-//                    title = stringResource(id = CommonStrings.screen_notification_settings_calls_label),
-//                    isChecked = matrixSettings.callNotificationsEnabled,
-//                    switchAlignment = Alignment.Top,
-//                    onCheckedChange = onCallsNotificationsChanged
-//                )
-            PreferenceSwitch(
-                modifier = Modifier,
-                title = stringResource(id = R.string.screen_notification_settings_invite_for_me_label),
-                isChecked = matrixSettings.inviteForMeNotificationsEnabled,
-                onCheckedChange = onInviteForMeNotificationsChange
-            )
-        }
         PreferenceCategory(title = stringResource(id = R.string.troubleshoot_notifications_entry_point_section)) {
             ListItem(
                 content = {
