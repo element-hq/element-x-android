@@ -8,6 +8,6 @@
 
 package io.element.android.features.analytics.api
 
-sealed interface AnalyticsOptInEvents {
-    data class EnableAnalytics(val isEnabled: Boolean) : AnalyticsOptInEvents
+sealed interface AnalyticsOptInEvent {
+    data class EnableAnalytics(val isEnabled: Boolean) : AnalyticsOptInEvent
 }
