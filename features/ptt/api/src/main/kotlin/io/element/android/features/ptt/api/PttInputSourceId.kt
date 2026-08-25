@@ -16,4 +16,7 @@ package io.element.android.features.ptt.api
 enum class PttInputSourceId {
     /** Bluetooth / wired accessories that emulate media keys (Pryme/AINA-style), via MediaSession. */
     MediaButton,
+
+    /** A BLE-GATT PTT button (e.g. Pryme BT-PTT-Z) read over a custom characteristic. Enterprise-only. */
+    BleButton,
 }
