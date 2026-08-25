@@ -27,7 +27,11 @@ sealed class ChangeServerError : Exception() {
     ) : ChangeServerError()
 
     data object SlidingSyncAlert : ChangeServerError()
-    data object InvalidServer : ChangeServerError()
+
+    data class InvalidServer(
+        val supportContact: String? = null,
+    ) : ChangeServerError()
+
     data object UnsupportedServer : ChangeServerError()
 
     companion object {
@@ -37,7 +41,7 @@ sealed class ChangeServerError : Exception() {
                 when (error) {
                     is AuthenticationException.SlidingSyncVersion -> SlidingSyncAlert
                     is AuthenticationException.InvalidServerName,
-                    is AuthenticationException.ServerUnreachable -> InvalidServer
+                    is AuthenticationException.ServerUnreachable -> InvalidServer()
                     // AccountAlreadyLoggedIn error should not happen at this point
                     is AuthenticationException.AccountAlreadyLoggedIn -> Error(messageStr = error.message)
                     is AuthenticationException.Generic -> Error(messageStr = error.message)

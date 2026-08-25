@@ -13,7 +13,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 class ChangeServerErrorPreviewParam : PreviewParameterProvider<ChangeServerError> {
     override val values: Sequence<ChangeServerError>
         get() = sequenceOf(
-            ChangeServerError.InvalidServer,
+            ChangeServerError.InvalidServer(),
             ChangeServerError.Error(
                 messageStr = "An error description",
             ),
@@ -27,5 +27,6 @@ class ChangeServerErrorPreviewParam : PreviewParameterProvider<ChangeServerError
             ),
             ChangeServerError.SlidingSyncAlert,
             ChangeServerError.UnsupportedServer,
+            ChangeServerError.InvalidServer(supportContact = "admin@example.org"),
         )
 }
