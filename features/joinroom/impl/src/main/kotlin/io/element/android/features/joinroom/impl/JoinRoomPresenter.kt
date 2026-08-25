@@ -151,37 +151,37 @@ class JoinRoomPresenter(
             contentState.markRoomInviteAsSeen()
         }
 
-        fun handleEvent(event: JoinRoomEvents) {
+        fun handleEvent(event: JoinRoomEvent) {
             when (event) {
-                JoinRoomEvents.JoinRoom -> coroutineScope.joinRoom(joinAction)
-                is JoinRoomEvents.KnockRoom -> coroutineScope.knockRoom(knockAction, knockMessage)
-                is JoinRoomEvents.AcceptInvite -> {
+                JoinRoomEvent.JoinRoom -> coroutineScope.joinRoom(joinAction)
+                is JoinRoomEvent.KnockRoom -> coroutineScope.knockRoom(knockAction, knockMessage)
+                is JoinRoomEvent.AcceptInvite -> {
                     acceptDeclineInviteState.eventSink(
                         AcceptDeclineInviteEvent.AcceptInvite(event.inviteData)
                     )
                 }
-                is JoinRoomEvents.DeclineInvite -> {
+                is JoinRoomEvent.DeclineInvite -> {
                     acceptDeclineInviteState.eventSink(
                         AcceptDeclineInviteEvent.DeclineInvite(invite = event.inviteData, blockUser = event.blockUser, shouldConfirm = true)
                     )
                 }
-                is JoinRoomEvents.CancelKnock -> coroutineScope.cancelKnockRoom(event.requiresConfirmation, cancelKnockAction)
-                JoinRoomEvents.RetryFetchingContent -> {
+                is JoinRoomEvent.CancelKnock -> coroutineScope.cancelKnockRoom(event.requiresConfirmation, cancelKnockAction)
+                JoinRoomEvent.RetryFetchingContent -> {
                     retryCount++
                 }
-                JoinRoomEvents.ClearActionStates -> {
+                JoinRoomEvent.ClearActionStates -> {
                     knockAction.value = AsyncAction.Uninitialized
                     joinAction.value = AsyncAction.Uninitialized
                     cancelKnockAction.value = AsyncAction.Uninitialized
                     forgetRoomAction.value = AsyncAction.Uninitialized
                 }
-                is JoinRoomEvents.UpdateKnockMessage -> {
+                is JoinRoomEvent.UpdateKnockMessage -> {
                     knockMessage = event.message.take(MAX_KNOCK_MESSAGE_LENGTH)
                 }
-                JoinRoomEvents.DismissErrorAndHideContent -> {
+                JoinRoomEvent.DismissErrorAndHideContent -> {
                     isDismissingContent = true
                 }
-                JoinRoomEvents.ForgetRoom -> coroutineScope.forgetRoom(forgetRoomAction)
+                JoinRoomEvent.ForgetRoom -> coroutineScope.forgetRoom(forgetRoomAction)
             }
         }
 

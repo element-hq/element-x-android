@@ -207,7 +207,7 @@ fun aJoinRoomState(
     knockMessage: String = "",
     hideInviteAvatars: Boolean = false,
     canReportRoom: Boolean = true,
-    eventSink: (JoinRoomEvents) -> Unit = {}
+    eventSink: (JoinRoomEvent) -> Unit = {}
 ) = JoinRoomState(
     roomIdOrAlias = roomIdOrAlias,
     contentState = contentState,

@@ -388,8 +388,8 @@ class JoinRoomPresenterTest {
             skipItems(1)
 
             awaitItem().also { state ->
-                state.eventSink(JoinRoomEvents.AcceptInvite(inviteData))
-                state.eventSink(JoinRoomEvents.DeclineInvite(inviteData, false))
+                state.eventSink(JoinRoomEvent.AcceptInvite(inviteData))
+                state.eventSink(JoinRoomEvent.DeclineInvite(inviteData, false))
 
                 assert(eventSinkRecorder)
                     .isCalledExactly(2)
@@ -422,7 +422,7 @@ class JoinRoomPresenterTest {
         presenter.test {
             skipItems(1)
             awaitItem().also { state ->
-                state.eventSink(JoinRoomEvents.JoinRoom)
+                state.eventSink(JoinRoomEvent.JoinRoom)
             }
             awaitItem().also { state ->
                 assertThat(state.joinAction).isEqualTo(AsyncAction.Loading)
@@ -453,14 +453,14 @@ class JoinRoomPresenterTest {
         presenter.test {
             skipItems(1)
             awaitItem().also { state ->
-                state.eventSink(JoinRoomEvents.JoinRoom)
+                state.eventSink(JoinRoomEvent.JoinRoom)
             }
             awaitItem().also { state ->
                 assertThat(state.joinAction).isEqualTo(AsyncAction.Loading)
             }
             awaitItem().also { state ->
                 assertThat(state.joinAction).isEqualTo(AsyncAction.Failure(AN_EXCEPTION))
-                state.eventSink(JoinRoomEvents.ClearActionStates)
+                state.eventSink(JoinRoomEvent.ClearActionStates)
             }
             awaitItem().also { state ->
                 assertThat(state.joinAction).isEqualTo(AsyncAction.Uninitialized)
@@ -480,7 +480,7 @@ class JoinRoomPresenterTest {
         presenter.test {
             skipItems(1)
             awaitItem().also { state ->
-                state.eventSink(JoinRoomEvents.JoinRoom)
+                state.eventSink(JoinRoomEvent.JoinRoom)
             }
             awaitItem().also { state ->
                 assertThat(state.joinAction).isEqualTo(AsyncAction.Loading)
@@ -683,17 +683,17 @@ class JoinRoomPresenterTest {
         presenter.test {
             skipItems(1)
             awaitItem().also { state ->
-                state.eventSink(JoinRoomEvents.UpdateKnockMessage(knockMessage))
+                state.eventSink(JoinRoomEvent.UpdateKnockMessage(knockMessage))
             }
             awaitItem().also { state ->
-                state.eventSink(JoinRoomEvents.KnockRoom)
+                state.eventSink(JoinRoomEvent.KnockRoom)
             }
 
             assertThat(awaitItem().knockAction).isEqualTo(AsyncAction.Loading)
             awaitItem().also { state ->
                 assertThat(state.knockAction).isEqualTo(AsyncAction.Success(Unit))
                 fakeKnockRoom.lambda = knockRoomFailure
-                state.eventSink(JoinRoomEvents.KnockRoom)
+                state.eventSink(JoinRoomEvent.KnockRoom)
             }
 
             assertThat(awaitItem().knockAction).isEqualTo(AsyncAction.Loading)
@@ -731,17 +731,17 @@ class JoinRoomPresenterTest {
         presenter.test {
             skipItems(1)
             awaitItem().also { state ->
-                state.eventSink(JoinRoomEvents.CancelKnock(true))
+                state.eventSink(JoinRoomEvent.CancelKnock(true))
             }
             awaitItem().also { state ->
                 assertThat(state.cancelKnockAction).isEqualTo(AsyncAction.ConfirmingNoParams)
-                state.eventSink(JoinRoomEvents.CancelKnock(false))
+                state.eventSink(JoinRoomEvent.CancelKnock(false))
             }
             assertThat(awaitItem().cancelKnockAction).isEqualTo(AsyncAction.Loading)
             awaitItem().also { state ->
                 assertThat(state.cancelKnockAction).isEqualTo(AsyncAction.Success(Unit))
                 cancelKnockRoom.lambda = cancelKnockRoomFailure
-                state.eventSink(JoinRoomEvents.CancelKnock(false))
+                state.eventSink(JoinRoomEvent.CancelKnock(false))
             }
             assertThat(awaitItem().cancelKnockAction).isEqualTo(AsyncAction.Loading)
             awaitItem().also { state ->
@@ -778,14 +778,14 @@ class JoinRoomPresenterTest {
         presenter.test {
             skipItems(1)
             awaitItem().also { state ->
-                state.eventSink(JoinRoomEvents.ForgetRoom)
+                state.eventSink(JoinRoomEvent.ForgetRoom)
             }
 
             assertThat(awaitItem().forgetAction).isEqualTo(AsyncAction.Loading)
             awaitItem().also { state ->
                 assertThat(state.forgetAction).isEqualTo(AsyncAction.Success(Unit))
                 fakeForgetRoom.lambda = forgetRoomFailure
-                state.eventSink(JoinRoomEvents.ForgetRoom)
+                state.eventSink(JoinRoomEvent.ForgetRoom)
             }
 
             assertThat(awaitItem().forgetAction).isEqualTo(AsyncAction.Loading)
