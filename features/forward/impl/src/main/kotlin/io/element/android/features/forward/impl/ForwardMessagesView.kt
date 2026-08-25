@@ -31,7 +31,7 @@ fun ForwardMessagesView(
             stringResource(id = CommonStrings.error_unknown)
         },
         onErrorDismiss = {
-            state.eventSink(ForwardMessagesEvents.ClearError)
+            state.eventSink(ForwardMessagesEvent.ClearError)
         },
     )
 }

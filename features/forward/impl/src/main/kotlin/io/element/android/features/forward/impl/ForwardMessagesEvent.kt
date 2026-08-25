@@ -8,6 +8,6 @@
 
 package io.element.android.features.forward.impl
 
-sealed interface ForwardMessagesEvents {
-    data object ClearError : ForwardMessagesEvents
+sealed interface ForwardMessagesEvent {
+    data object ClearError : ForwardMessagesEvent
 }
