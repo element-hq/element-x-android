@@ -8,7 +8,7 @@
 
 package io.element.android.features.logout.api.direct
 
-sealed interface DirectLogoutEvents {
-    data class Logout(val ignoreSdkError: Boolean) : DirectLogoutEvents
-    data object CloseDialogs : DirectLogoutEvents
+sealed interface DirectLogoutEvent {
+    data class Logout(val ignoreSdkError: Boolean) : DirectLogoutEvent
+    data object CloseDialogs : DirectLogoutEvent
 }
