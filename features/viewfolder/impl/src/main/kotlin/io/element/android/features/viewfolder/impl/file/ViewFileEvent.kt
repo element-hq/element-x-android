@@ -8,7 +8,7 @@
 
 package io.element.android.features.viewfolder.impl.file
 
-sealed interface ViewFileEvents {
-    data object SaveOnDisk : ViewFileEvents
-    data object Share : ViewFileEvents
+sealed interface ViewFileEvent {
+    data object SaveOnDisk : ViewFileEvent
+    data object Share : ViewFileEvent
 }
