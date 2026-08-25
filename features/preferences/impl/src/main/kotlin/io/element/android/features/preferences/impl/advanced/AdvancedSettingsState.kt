@@ -19,6 +19,7 @@ import kotlinx.collections.immutable.ImmutableList
 data class AdvancedSettingsState(
     val isDeveloperModeEnabled: Boolean,
     val isSharePresenceEnabled: Boolean,
+    val isRenderRedactedMessagesEnabled: Boolean,
     val mediaOptimizationState: MediaOptimizationState?,
     val theme: ThemeOption,
     val availableThemeOptions: ImmutableList<ThemeOption>,

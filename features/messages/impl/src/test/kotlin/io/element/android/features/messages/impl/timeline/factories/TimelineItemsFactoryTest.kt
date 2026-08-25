@@ -16,6 +16,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
@@ -119,11 +120,52 @@ class TimelineItemsFactoryTest {
                 timelineItems = items,
                 roomMembers = emptyList(),
                 renderReadReceipts = false,
+                renderRedactedMessages = true,
             )
             val bodies = awaitItem()
                 .filterIsInstance<TimelineItem.Event>()
                 .map { (it.content as TimelineItemTextContent).body }
             assertThat(bodies).containsExactly("A regular message")
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `removed messages are left out when the user has turned them off`() = runTest {
+        val factory = aTimelineItemsFactory(
+            config = TimelineItemsFactoryConfig(
+                computeReadReceipts = false,
+                computeReactions = false,
+            )
+        )
+        val items = listOf(
+            MatrixTimelineItem.Event(
+                uniqueId = UniqueId("event-0"),
+                event = anEventTimelineItem(
+                    sender = A_USER_ID,
+                    content = RedactedContent,
+                ),
+            ),
+            MatrixTimelineItem.Event(
+                uniqueId = UniqueId("event-1"),
+                event = anEventTimelineItem(
+                    sender = A_USER_ID,
+                    content = aMessageContent(body = "A regular message"),
+                ),
+            ),
+        )
+        factory.timelineItems.test {
+            factory.replaceWith(
+                timelineItems = items,
+                roomMembers = emptyList(),
+                renderReadReceipts = false,
+                renderRedactedMessages = false,
+            )
+            val contents = awaitItem()
+                .filterIsInstance<TimelineItem.Event>()
+                .map { it.content }
+            assertThat(contents).hasSize(1)
+            assertThat(contents.first()).isInstanceOf(TimelineItemTextContent::class.java)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -151,6 +193,7 @@ class TimelineItemsFactoryTest {
                 timelineItems = items,
                 roomMembers = emptyList(),
                 renderReadReceipts = false,
+                renderRedactedMessages = true,
             )
             positions = awaitItem()
                 .filterIsInstance<TimelineItem.Event>()

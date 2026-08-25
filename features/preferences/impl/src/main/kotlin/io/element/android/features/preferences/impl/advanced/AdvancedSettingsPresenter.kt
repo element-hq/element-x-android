@@ -46,6 +46,9 @@ class AdvancedSettingsPresenter(
         val isSharePresenceEnabled by remember {
             sessionPreferencesStore.isSharePresenceEnabled()
         }.collectAsState(initial = true)
+        val isRenderRedactedMessagesEnabled by remember {
+            sessionPreferencesStore.isRenderRedactedMessagesEnabled()
+        }.collectAsState(initial = true)
         val isBlackThemeAllowed by remember {
             featureFlagService.isFeatureEnabledFlow(FeatureFlags.AllowBlackTheme)
         }.collectAsState(initial = false)
@@ -108,6 +111,9 @@ class AdvancedSettingsPresenter(
                 is AdvancedSettingsEvent.SetSharePresenceEnabled -> sessionCoroutineScope.launch {
                     sessionPreferencesStore.setSharePresence(event.enabled)
                 }
+                is AdvancedSettingsEvent.SetRenderRedactedMessagesEnabled -> sessionCoroutineScope.launch {
+                    sessionPreferencesStore.setRenderRedactedMessages(event.enabled)
+                }
                 is AdvancedSettingsEvent.SetCompressMedia -> sessionCoroutineScope.launch {
                     sessionPreferencesStore.setOptimizeImages(event.compress)
                 }
@@ -136,6 +142,7 @@ class AdvancedSettingsPresenter(
         return AdvancedSettingsState(
             isDeveloperModeEnabled = isDeveloperModeEnabled,
             isSharePresenceEnabled = isSharePresenceEnabled,
+            isRenderRedactedMessagesEnabled = isRenderRedactedMessagesEnabled,
             mediaOptimizationState = mediaOptimizationState,
             theme = themeOption,
             availableThemeOptions = availableThemeOptions,
