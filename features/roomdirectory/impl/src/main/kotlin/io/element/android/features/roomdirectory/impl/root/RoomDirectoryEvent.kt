@@ -8,7 +8,7 @@
 
 package io.element.android.features.roomdirectory.impl.root
 
-sealed interface RoomDirectoryEvents {
-    data class Search(val query: String) : RoomDirectoryEvents
-    data object LoadMore : RoomDirectoryEvents
+sealed interface RoomDirectoryEvent {
+    data class Search(val query: String) : RoomDirectoryEvent
+    data object LoadMore : RoomDirectoryEvent
 }
