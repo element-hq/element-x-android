@@ -8,11 +8,11 @@
 
 package io.element.android.features.login.impl.screens.confirmaccountprovider
 
-sealed interface ConfirmAccountProviderEvents {
-    data class UserInputChanged(val accountProvider: String) : ConfirmAccountProviderEvents
+sealed interface ConfirmAccountProviderEvent {
+    data class UserInputChanged(val accountProvider: String) : ConfirmAccountProviderEvent
 
     // Carries the account provider to submit (the current field text, or the accepted autocomplete suggestion),
     // captured from the view at click time so it can't lag behind fast input (e.g. keyboard autofill).
-    data class Continue(val accountProvider: String) : ConfirmAccountProviderEvents
-    data object ClearError : ConfirmAccountProviderEvents
+    data class Continue(val accountProvider: String) : ConfirmAccountProviderEvent
+    data object ClearError : ConfirmAccountProviderEvent
 }

@@ -99,7 +99,7 @@ fun ConfirmAccountProviderView(
         // Dismiss the keyboard and release focus while the account provider is being validated.
         focusManager.clearFocus(force = true)
         // Submit the exact field text (plus any accepted suggestion).
-        eventSink(ConfirmAccountProviderEvents.Continue(accountProviderToSubmit))
+        eventSink(ConfirmAccountProviderEvent.Continue(accountProviderToSubmit))
     }
 
     // Once a validation / login error has been dismissed, return focus and the keyboard to the field so
@@ -151,7 +151,7 @@ fun ConfirmAccountProviderView(
             value = input,
             onValueChange = {
                 input = it
-                eventSink(ConfirmAccountProviderEvents.UserInputChanged(it))
+                eventSink(ConfirmAccountProviderEvent.UserInputChanged(it))
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -181,7 +181,7 @@ fun ConfirmAccountProviderView(
                         // showing, Done submits directly.
                         val accepted = input + suggestionSuffix
                         input = accepted
-                        eventSink(ConfirmAccountProviderEvents.UserInputChanged(accepted))
+                        eventSink(ConfirmAccountProviderEvent.UserInputChanged(accepted))
                         focusManager.clearFocus(force = true)
                     } else {
                         submit()
@@ -197,7 +197,7 @@ fun ConfirmAccountProviderView(
                             role = Role.Button,
                         ) {
                             input = ""
-                            eventSink(ConfirmAccountProviderEvents.UserInputChanged(""))
+                            eventSink(ConfirmAccountProviderEvent.UserInputChanged(""))
                         }
                     ) {
                         Icon(
@@ -222,7 +222,7 @@ fun ConfirmAccountProviderView(
 
     LoginModeView(
         loginMode = state.loginModeState.loginMode,
-        onClearError = { eventSink(ConfirmAccountProviderEvents.ClearError) },
+        onClearError = { eventSink(ConfirmAccountProviderEvent.ClearError) },
         onLearnMoreClick = onLearnMoreClick,
         onOAuthDetails = onOAuthDetails,
         onNeedLoginPassword = onNeedLoginPassword,
