@@ -10,8 +10,8 @@ package io.element.android.features.startchat.impl.userlist
 
 import io.element.android.libraries.matrix.api.user.MatrixUser
 
-sealed interface UserListEvents {
-    data class AddToSelection(val matrixUser: MatrixUser) : UserListEvents
-    data class RemoveFromSelection(val matrixUser: MatrixUser) : UserListEvents
-    data class OnSearchActiveChanged(val active: Boolean) : UserListEvents
+sealed interface UserListEvent {
+    data class AddToSelection(val matrixUser: MatrixUser) : UserListEvent
+    data class RemoveFromSelection(val matrixUser: MatrixUser) : UserListEvent
+    data class OnSearchActiveChanged(val active: Boolean) : UserListEvent
 }
