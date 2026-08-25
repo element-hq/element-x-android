@@ -8,7 +8,7 @@
 
 package io.element.android.features.login.impl.screens.qrcode.scan
 
-sealed interface QrCodeScanEvents {
-    data class QrCodeScanned(val code: ByteArray) : QrCodeScanEvents
-    data object TryAgain : QrCodeScanEvents
+sealed interface QrCodeScanEvent {
+    data class QrCodeScanned(val code: ByteArray) : QrCodeScanEvent
+    data object TryAgain : QrCodeScanEvent
 }
