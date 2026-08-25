@@ -20,7 +20,7 @@ import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.RoomModeration
 import io.element.android.features.roommembermoderation.api.ModerationAction
 import io.element.android.features.roommembermoderation.api.ModerationActionState
-import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvent
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationPermissions
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.features.roommembermoderation.api.roomMemberModerationPermissions
@@ -77,9 +77,9 @@ class RoomMemberModerationPresenter(
         }
         val moderationActions = remember { mutableStateOf<ImmutableList<ModerationActionState>>(persistentListOf()) }
 
-        fun handleEvent(event: RoomMemberModerationEvents) {
+        fun handleEvent(event: RoomMemberModerationEvent) {
             when (event) {
-                is RoomMemberModerationEvents.ShowActionsForUser -> {
+                is RoomMemberModerationEvent.ShowActionsForUser -> {
                     selectedUser = event.user
                     val member = room.membersStateFlow.value.roomMembers()?.firstOrNull {
                         it.userId == event.user.userId
@@ -90,7 +90,7 @@ class RoomMemberModerationPresenter(
                         currentUserPowerLevel = currentUserPowerLevel,
                     )
                 }
-                is RoomMemberModerationEvents.ProcessAction -> {
+                is RoomMemberModerationEvent.ProcessAction -> {
                     // First, hide any list of existing actions that could be displayed
                     moderationActions.value = persistentListOf()
 
