@@ -30,6 +30,7 @@ open class AppDeveloperSettingsStatePreviewParam : PreviewParameterProvider<AppD
 fun anAppDeveloperSettingsState(
     customElementCallBaseUrlState: CustomElementCallBaseUrlState = aCustomElementCallBaseUrlState(),
     traceLogPacks: List<TraceLogPack> = emptyList(),
+    roomListActivityVisibility: RoomListActivityVisibilityItem = RoomListActivityVisibilityItem.CURRENT,
     eventSink: (AppDeveloperSettingsEvent) -> Unit = {},
 ) = AppDeveloperSettingsState(
     features = aFeatureUiModelList(),
@@ -37,6 +38,7 @@ fun anAppDeveloperSettingsState(
     customElementCallBaseUrlState = customElementCallBaseUrlState,
     tracingLogLevel = AsyncData.Success(LogLevelItem.INFO),
     tracingLogPacks = traceLogPacks.toImmutableList(),
+    roomListActivityVisibility = roomListActivityVisibility,
     gitBranch = "feature/awesome-feature",
     gitSha = "1234567890",
     eventSink = eventSink,

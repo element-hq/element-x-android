@@ -37,6 +37,14 @@ interface AppPreferencesStore {
     fun getCustomElementCallBaseUrlFlow(): Flow<String?>
 
     /**
+     * @param visibility how much of a room's unread activity the room list should show.
+     */
+    suspend fun setRoomListActivityVisibility(visibility: RoomListActivityVisibility)
+
+    /** How much unread activity the room list shows; defaults to [RoomListActivityVisibility.CURRENT]. */
+    fun getRoomListActivityVisibilityFlow(): Flow<RoomListActivityVisibility>
+
+    /**
      * @param theme the name of the theme to apply: light, dark, or follow the system.
      */
     suspend fun setTheme(theme: String)
