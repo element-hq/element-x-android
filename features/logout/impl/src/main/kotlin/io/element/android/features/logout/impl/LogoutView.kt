@@ -61,7 +61,7 @@ fun LogoutView(
                 state = state,
                 onChangeRecoveryKeyClick = onChangeRecoveryKeyClick,
                 onLogoutClick = {
-                    eventSink(LogoutEvents.Logout(ignoreSdkError = false))
+                    eventSink(LogoutEvent.Logout(ignoreSdkError = false))
                 }
             )
         },
@@ -72,13 +72,13 @@ fun LogoutView(
     LogoutActionDialog(
         state.logoutAction,
         onConfirmClick = {
-            eventSink(LogoutEvents.Logout(ignoreSdkError = false))
+            eventSink(LogoutEvent.Logout(ignoreSdkError = false))
         },
         onForceLogoutClick = {
-            eventSink(LogoutEvents.Logout(ignoreSdkError = true))
+            eventSink(LogoutEvent.Logout(ignoreSdkError = true))
         },
         onDismissDialog = {
-            eventSink(LogoutEvents.CloseDialogs)
+            eventSink(LogoutEvent.CloseDialogs)
         },
     )
 }
