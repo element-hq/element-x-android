@@ -78,10 +78,12 @@ import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_CAPTION
+import io.element.android.libraries.matrix.test.A_REASON
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.A_THREAD_ID
+import io.element.android.libraries.matrix.test.A_TRANSACTION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.core.FakeSendHandle
@@ -557,10 +559,83 @@ class MessagesPresenterTest {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent()
             initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Redact, messageEvent))
-            awaitItem()
+            advanceUntilIdle()
+            val confirmingState = expectMostRecentItem()
+            assertThat(confirmingState.eventToRedact).isEqualTo(messageEvent)
+            assert(redactEventLambda).isNeverCalled()
+            confirmingState.eventSink(MessagesEvent.ConfirmRedact(A_REASON))
+            advanceUntilIdle()
+            assertThat(expectMostRecentItem().eventToRedact).isNull()
+            assert(redactEventLambda)
+                .isCalledOnce()
+                .with(value(messageEvent.eventOrTransactionId), value(A_REASON))
+        }
+    }
+
+    @Test
+    fun `present - handle action redact - a blank reason is not sent`() = runTest {
+        val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
+        val liveTimeline = FakeTimeline()
+        val redactEventLambda = lambdaRecorder { _: EventOrTransactionId, _: String? -> Result.success(Unit) }
+        liveTimeline.redactEventLambda = redactEventLambda
+        val presenter = createMessagesPresenter(
+            timeline = liveTimeline,
+            coroutineDispatchers = coroutineDispatchers,
+        )
+        presenter.testWithLifecycleOwner {
+            val initialState = awaitItem()
+            val messageEvent = aMessageEvent()
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Redact, messageEvent))
+            advanceUntilIdle()
+            expectMostRecentItem().eventSink(MessagesEvent.ConfirmRedact("  "))
+            advanceUntilIdle()
+            assertThat(expectMostRecentItem().eventToRedact).isNull()
             assert(redactEventLambda)
                 .isCalledOnce()
                 .with(value(messageEvent.eventOrTransactionId), value(null))
+        }
+    }
+
+    @Test
+    fun `present - handle action redact - cancelling does not redact`() = runTest {
+        val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
+        val liveTimeline = FakeTimeline()
+        val redactEventLambda = lambdaRecorder { _: EventOrTransactionId, _: String? -> Result.success(Unit) }
+        liveTimeline.redactEventLambda = redactEventLambda
+        val presenter = createMessagesPresenter(
+            timeline = liveTimeline,
+            coroutineDispatchers = coroutineDispatchers,
+        )
+        presenter.testWithLifecycleOwner {
+            val initialState = awaitItem()
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Redact, aMessageEvent()))
+            advanceUntilIdle()
+            expectMostRecentItem().eventSink(MessagesEvent.CancelRedact)
+            advanceUntilIdle()
+            assertThat(expectMostRecentItem().eventToRedact).isNull()
+            assert(redactEventLambda).isNeverCalled()
+        }
+    }
+
+    @Test
+    fun `present - handle action redact - a message which was never sent is redacted without asking`() = runTest {
+        val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
+        val liveTimeline = FakeTimeline()
+        val redactEventLambda = lambdaRecorder { _: EventOrTransactionId, _: String? -> Result.success(Unit) }
+        liveTimeline.redactEventLambda = redactEventLambda
+        val presenter = createMessagesPresenter(
+            timeline = liveTimeline,
+            coroutineDispatchers = coroutineDispatchers,
+        )
+        presenter.testWithLifecycleOwner {
+            val initialState = awaitItem()
+            val localEcho = aMessageEvent(eventId = null, transactionId = A_TRANSACTION_ID)
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Redact, localEcho))
+            advanceUntilIdle()
+            assertThat(expectMostRecentItem().eventToRedact).isNull()
+            assert(redactEventLambda)
+                .isCalledOnce()
+                .with(value(localEcho.eventOrTransactionId), value(null))
         }
     }
 

@@ -104,6 +104,7 @@ import io.element.android.libraries.designsystem.atomic.molecules.ComposerAlertM
 import io.element.android.libraries.designsystem.components.ExpandableBottomSheetLayout
 import io.element.android.libraries.designsystem.components.ExpandableBottomSheetLayoutState
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
+import io.element.android.libraries.designsystem.components.dialogs.TextFieldDialog
 import io.element.android.libraries.designsystem.components.rememberExpandableBottomSheetLayoutState
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -455,6 +456,19 @@ fun MessagesView(
             state.timelineState.eventSink(TimelineEvent.HideSendFailureDialog)
         },
     )
+
+    if (state.eventToRedact != null) {
+        TextFieldDialog(
+            title = stringResource(CommonStrings.action_remove_message),
+            label = stringResource(CommonStrings.common_reason),
+            placeholder = null,
+            value = null,
+            submitText = stringResource(CommonStrings.action_remove),
+            destructiveSubmit = true,
+            onSubmit = { reason -> state.eventSink(MessagesEvent.ConfirmRedact(reason)) },
+            onDismissRequest = { state.eventSink(MessagesEvent.CancelRedact) },
+        )
+    }
 }
 
 @Composable
