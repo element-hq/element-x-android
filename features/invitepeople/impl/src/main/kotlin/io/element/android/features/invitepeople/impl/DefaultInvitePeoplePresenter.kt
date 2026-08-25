@@ -182,23 +182,23 @@ class DefaultInvitePeoplePresenter(
         fun handleEvent(event: InvitePeopleEvent) {
             when (event) {
                 // Dedicated `when` for exhaustivity.
-                is DefaultInvitePeopleEvents -> when (event) {
-                    is DefaultInvitePeopleEvents.OnSearchActiveChanged -> {
+                is DefaultInvitePeopleEvent -> when (event) {
+                    is DefaultInvitePeopleEvent.OnSearchActiveChanged -> {
                         searchActive = event.active
                         if (!event.active) {
                             queryState.clearText()
                         }
                     }
 
-                    is DefaultInvitePeopleEvents.ToggleUser -> {
+                    is DefaultInvitePeopleEvent.ToggleUser -> {
                         selectedUsers.toggleUser(event.user)
                         searchResults.toggleUser(event.user)
                         // suggestions will automatically update via derivedStateOf when selectedUsers changes
                     }
-                    is DefaultInvitePeopleEvents.DismissUnknownUsersModal -> {
+                    is DefaultInvitePeopleEvent.DismissUnknownUsersModal -> {
                         sendInvitesAction.value = AsyncAction.Uninitialized
                     }
-                    is DefaultInvitePeopleEvents.RemoveUnknownUsers -> {
+                    is DefaultInvitePeopleEvent.RemoveUnknownUsers -> {
                         val usersToRemove = selectedUsers.value.filter { it in unknownUsers }
                         usersToRemove.forEach { user ->
                             selectedUsers.toggleUser(user)
