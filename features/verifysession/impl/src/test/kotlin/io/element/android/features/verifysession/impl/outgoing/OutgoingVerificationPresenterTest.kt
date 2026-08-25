@@ -152,7 +152,7 @@ class OutgoingVerificationPresenterTest {
         )
         val presenter = createOutgoingVerificationPresenter(service)
         presenter.test {
-            awaitItem().eventSink(OutgoingVerificationViewEvents.RequestVerification)
+            awaitItem().eventSink(OutgoingVerificationViewEvent.RequestVerification)
             advanceTimeBy(1.minutes)
             assertThat(awaitItem().step).isEqualTo(Step.AwaitingOtherDeviceResponse)
             advanceTimeBy(9.minutes)
