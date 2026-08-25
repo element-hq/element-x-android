@@ -10,7 +10,7 @@ package io.element.android.features.startchat.impl.root
 
 import io.element.android.libraries.matrix.api.user.MatrixUser
 
-sealed interface StartChatEvents {
-    data class StartDM(val matrixUser: MatrixUser) : StartChatEvents
-    data object CancelStartDM : StartChatEvents
+sealed interface StartChatEvent {
+    data class StartDM(val matrixUser: MatrixUser) : StartChatEvent
+    data object CancelStartDM : StartChatEvent
 }
