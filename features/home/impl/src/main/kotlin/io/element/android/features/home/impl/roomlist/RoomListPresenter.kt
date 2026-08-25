@@ -30,7 +30,6 @@ import io.element.android.features.announcement.api.AnnouncementService
 import io.element.android.features.home.impl.datasource.RoomListDataSource
 import io.element.android.features.home.impl.filters.RoomListFiltersState
 import io.element.android.features.home.impl.filters.into
-import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.features.home.impl.search.RoomListSearchEvent
 import io.element.android.features.home.impl.search.RoomListSearchState
 import io.element.android.features.home.impl.spacefilters.SpaceFiltersState
@@ -43,8 +42,6 @@ import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteS
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.preferences.impl.tasks.MarkRoomAsRead
-import io.element.android.features.share.api.DirectShareShortcutsPublisher
-import io.element.android.features.share.api.SharingRoomInfo
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -65,15 +62,12 @@ import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
-
-private const val MAX_DIRECT_SHARE_SHORTCUTS = 5
 
 @Inject
 class RoomListPresenter(
@@ -92,7 +86,6 @@ class RoomListPresenter(
     private val coldStartWatcher: AnalyticsColdStartWatcher,
     private val spaceFiltersPresenter: Presenter<SpaceFiltersState>,
     private val featureFlagService: FeatureFlagService,
-    private val directShareShortcutsPublisher: DirectShareShortcutsPublisher,
 ) : Presenter<RoomListState> {
     private val encryptionService = client.encryptionService
 
@@ -107,13 +100,6 @@ class RoomListPresenter(
 
         LaunchedEffect(Unit) {
             roomListDataSource.launchIn(this)
-        }
-
-        LaunchedEffect(Unit) {
-            roomListDataSource.roomSummariesFlow
-                .map { summaries -> summaries.take(MAX_DIRECT_SHARE_SHORTCUTS).map { it.toSharingRoomInfo() } }
-                .distinctUntilChanged()
-                .collectLatest { shortcuts -> directShareShortcutsPublisher.publishShortcutsForRooms(shortcuts) }
         }
 
         var securityBannerDismissed by rememberSaveable { mutableStateOf(false) }
@@ -316,17 +302,6 @@ class RoomListPresenter(
                 }
         }
     }
-
-    private fun RoomListRoomSummary.toSharingRoomInfo() = SharingRoomInfo(
-        sessionId = client.sessionId,
-        roomId = roomId,
-        displayName = name ?: roomId.value,
-        avatarUrl = avatarData.url ?: if (isDm) {
-            heroes.firstOrNull { it.id != client.sessionId.value }?.url
-        } else {
-            null
-        },
-    )
 
     private fun CoroutineScope.markAsRead(roomId: RoomId) = launch {
         markRoomAsRead(roomId)

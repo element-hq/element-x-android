@@ -16,6 +16,8 @@ import im.vector.app.features.analytics.plan.CryptoSessionStateChange
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
+import io.element.android.features.share.api.DirectShareShortcutsObserver
+import io.element.android.features.share.test.FakeDirectShareShortcutsObserver
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -127,6 +129,7 @@ class LoggedInPresenterTest {
             buildMeta = buildMeta,
             networkMonitor = networkMonitor,
             localNetworkPermissionAdvisor = FakeLocalNetworkPermissionAdvisor(),
+            directShareShortcutsObserver = FakeDirectShareShortcutsObserver(),
             permissionsPresenterFactory = FakePermissionsPresenterFactory(),
         ).test {
             encryptionService.emitRecoveryState(RecoveryState.UNKNOWN)
@@ -362,6 +365,7 @@ class LoggedInPresenterTest {
         ),
         buildMeta: BuildMeta = aBuildMeta(),
         networkMonitor: FakeNetworkMonitor = FakeNetworkMonitor(),
+        directShareShortcutsObserver: DirectShareShortcutsObserver = FakeDirectShareShortcutsObserver(),
     ): LoggedInPresenter {
         return LoggedInPresenter(
             matrixClient = matrixClient,
@@ -373,6 +377,7 @@ class LoggedInPresenterTest {
             buildMeta = buildMeta,
             networkMonitor = networkMonitor,
             localNetworkPermissionAdvisor = FakeLocalNetworkPermissionAdvisor(),
+            directShareShortcutsObserver = directShareShortcutsObserver,
             permissionsPresenterFactory = FakePermissionsPresenterFactory(),
         )
     }

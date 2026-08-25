@@ -10,6 +10,10 @@ package io.element.android.features.share.test
 import io.element.android.features.share.api.DirectShareShortcutsPublisher
 import io.element.android.features.share.api.SharingRoomInfo
 
-class FakeDirectShareShortcutsPublisher : DirectShareShortcutsPublisher {
-    override suspend fun publishShortcutsForRooms(rooms: List<SharingRoomInfo>) {}
+class FakeDirectShareShortcutsPublisher(
+    private val publishShortcutsForRoomsLambda: (List<SharingRoomInfo>) -> Unit = {},
+) : DirectShareShortcutsPublisher {
+    override suspend fun publishShortcutsForRooms(rooms: List<SharingRoomInfo>) {
+        publishShortcutsForRoomsLambda(rooms)
+    }
 }
