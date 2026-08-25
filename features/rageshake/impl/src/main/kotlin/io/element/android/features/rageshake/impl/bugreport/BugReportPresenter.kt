@@ -83,9 +83,9 @@ class BugReportPresenter(
         }
         val uploadListener = BugReporterUploadListener(sendingProgress, sendingAction)
 
-        fun handleEvent(event: BugReportEvents) {
+        fun handleEvent(event: BugReportEvent) {
             when (event) {
-                BugReportEvents.SendBugReport -> {
+                BugReportEvent.SendBugReport -> {
                     if (formState.value.description.length < 10 && formState.value.ghIssueNumber == null) {
                         sendingAction.value = AsyncAction.Failure(BugReportFormError.DescriptionTooShort)
                     } else {
@@ -93,27 +93,27 @@ class BugReportPresenter(
                         appCoroutineScope.sendBugReport(formState.value, crashInfo.isNotEmpty(), uploadListener)
                     }
                 }
-                BugReportEvents.ResetAll -> appCoroutineScope.resetAll()
-                is BugReportEvents.SetDescription -> updateFormState(formState) {
+                BugReportEvent.ResetAll -> appCoroutineScope.resetAll()
+                is BugReportEvent.SetDescription -> updateFormState(formState) {
                     copy(description = event.description)
                 }
-                is BugReportEvents.SetCanContact -> updateFormState(formState) {
+                is BugReportEvent.SetCanContact -> updateFormState(formState) {
                     copy(canContact = event.canContact)
                 }
-                is BugReportEvents.SetSendLog -> updateFormState(formState) {
+                is BugReportEvent.SetSendLog -> updateFormState(formState) {
                     copy(sendLogs = event.sendLog)
                 }
-                is BugReportEvents.SetSendScreenshot -> updateFormState(formState) {
+                is BugReportEvent.SetSendScreenshot -> updateFormState(formState) {
                     copy(sendScreenshot = event.sendScreenshot)
                 }
-                is BugReportEvents.SetSendPushRules -> updateFormState(formState) {
+                is BugReportEvent.SetSendPushRules -> updateFormState(formState) {
                     copy(sendPushRules = event.sendPushRules)
                 }
-                BugReportEvents.ClearError -> {
+                BugReportEvent.ClearError -> {
                     sendingProgress.floatValue = 0f
                     sendingAction.value = AsyncAction.Uninitialized
                 }
-                is BugReportEvents.SetGhIssueNumber -> updateFormState(formState) {
+                is BugReportEvent.SetGhIssueNumber -> updateFormState(formState) {
                     copy(ghIssueNumber = event.ghIssueNumber)
                 }
             }
