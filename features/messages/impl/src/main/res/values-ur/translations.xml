@@ -6,14 +6,6 @@
   <string name="crypto_event_authenticity_unknown_device">"کسی نامعلوم یا حذف شدہ آلے کے ذریعے مرموز کردہ۔"</string>
   <string name="crypto_event_authenticity_unsigned_device">"کسی ایسے آلے کے ذریعے مرموز کردہ جس کی توثیق اسکے مالک سے نہیں ہوئی۔"</string>
   <string name="crypto_event_authenticity_unverified_identity">"ایک غیر توثیق شدہ صارف کے ذریعے مرموز کردہ۔"</string>
-  <string name="emoji_picker_category_activity">"سرگرمیاں"</string>
-  <string name="emoji_picker_category_flags">"جھنڈے"</string>
-  <string name="emoji_picker_category_foods">"طعم و مشروب"</string>
-  <string name="emoji_picker_category_nature">"حیوانات و فطرت"</string>
-  <string name="emoji_picker_category_objects">"اشیاء"</string>
-  <string name="emoji_picker_category_people">"مسکراہٹیں و لوگ"</string>
-  <string name="emoji_picker_category_places">"سفر و مقامات"</string>
-  <string name="emoji_picker_category_symbols">"علامتیں"</string>
   <string name="screen_media_upload_preview_error_failed_processing">"وسائط کا معالجہ برائے ترفیع ناکام، برائے مہربانی دوبارہ کوشش کریں۔"</string>
   <string name="screen_media_upload_preview_error_failed_sending">"وسائط رفع کرنے میں ناکام، برائے مہربانی دوبارہ کوشش کریں۔"</string>
   <string name="screen_report_content_block_user">"صارف کو مسدود کریں"</string>

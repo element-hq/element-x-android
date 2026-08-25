@@ -58,6 +58,7 @@ class DefaultShareLocationEntryPointTest {
                             sessionId = room.sessionId,
                         ),
                         userLocationStateFactory = FakeUserLocationStateFactory(),
+                        customMapTilerConfigProvider = { Result.success(null) },
                     )
                 },
                 analyticsService = FakeAnalyticsService(),

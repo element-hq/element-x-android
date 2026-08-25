@@ -16,6 +16,7 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopContentValidationState
 import io.element.android.libraries.mediaviewer.api.GalleryInfo
 import io.element.android.libraries.mediaviewer.api.GalleryItemData
 import io.element.android.libraries.mediaviewer.api.MediaInfo
@@ -91,9 +92,11 @@ class GalleryMediaGalleryDataSourceTest {
                     mediaSource = MediaSource("image_url"),
                     thumbnailSource = MediaSource("thumbnail_url"),
                     type = GalleryItemData.Type.Image,
+                    blurHash = null,
                 )
             ),
             galleryInfo = aGalleryInfo(),
+            contentValidationState = noopValidationState,
         )
         val data = (result.getLastData() as AsyncData.Success).data
         assertThat(data.fileItems).isEmpty()
@@ -104,6 +107,8 @@ class GalleryMediaGalleryDataSourceTest {
                 mediaInfo = expectedMediaInfo("image.jpg", MimeTypes.Jpeg),
                 mediaSource = MediaSource("image_url"),
                 thumbnailSource = MediaSource("thumbnail_url"),
+                blurHash = null,
+                validationState = noopValidationState,
             )
         )
     }
@@ -119,9 +124,11 @@ class GalleryMediaGalleryDataSourceTest {
                     mediaSource = MediaSource("video_url"),
                     thumbnailSource = MediaSource("thumbnail_url"),
                     type = GalleryItemData.Type.Video,
+                    blurHash = null,
                 )
             ),
             galleryInfo = aGalleryInfo(),
+            contentValidationState = noopValidationState,
         )
         val data = (result.getLastData() as AsyncData.Success).data
         assertThat(data.fileItems).isEmpty()
@@ -132,6 +139,8 @@ class GalleryMediaGalleryDataSourceTest {
                 mediaInfo = expectedMediaInfo("video.mp4", MimeTypes.Mp4),
                 mediaSource = MediaSource("video_url"),
                 thumbnailSource = MediaSource("thumbnail_url"),
+                blurHash = null,
+                validationState = noopValidationState,
             )
         )
     }
@@ -147,9 +156,11 @@ class GalleryMediaGalleryDataSourceTest {
                     mediaSource = MediaSource("audio_url"),
                     thumbnailSource = null,
                     type = GalleryItemData.Type.Audio,
+                    blurHash = null,
                 )
             ),
             galleryInfo = aGalleryInfo(),
+            contentValidationState = noopValidationState,
         )
         val data = (result.getLastData() as AsyncData.Success).data
         assertThat(data.fileItems).isEmpty()
@@ -159,6 +170,7 @@ class GalleryMediaGalleryDataSourceTest {
                 eventId = AN_EVENT_ID,
                 mediaInfo = expectedMediaInfo("audio.mp3", MimeTypes.Mp3),
                 mediaSource = MediaSource("audio_url"),
+                validationState = noopValidationState,
             )
         )
     }
@@ -174,9 +186,11 @@ class GalleryMediaGalleryDataSourceTest {
                     mediaSource = MediaSource("file_url"),
                     thumbnailSource = null,
                     type = GalleryItemData.Type.File,
+                    blurHash = null,
                 )
             ),
             galleryInfo = aGalleryInfo(),
+            contentValidationState = noopValidationState,
         )
         val data = (result.getLastData() as AsyncData.Success).data
         assertThat(data.fileItems).isEmpty()
@@ -186,6 +200,7 @@ class GalleryMediaGalleryDataSourceTest {
                 eventId = AN_EVENT_ID,
                 mediaInfo = expectedMediaInfo("document.pdf", MimeTypes.Pdf),
                 mediaSource = MediaSource("file_url"),
+                validationState = noopValidationState,
             )
         )
     }
@@ -201,9 +216,11 @@ class GalleryMediaGalleryDataSourceTest {
                     mediaSource = MediaSource("image_url"),
                     thumbnailSource = null,
                     type = GalleryItemData.Type.Image,
+                    blurHash = null,
                 )
             ),
             galleryInfo = aGalleryInfo(),
+            contentValidationState = noopValidationState,
         )
         val data = (result.getLastData() as AsyncData.Success).data
         val item = data.imageAndVideoItems.single() as MediaItem.Image
@@ -222,6 +239,7 @@ class GalleryMediaGalleryDataSourceTest {
                     mediaSource = MediaSource("image_url"),
                     thumbnailSource = null,
                     type = GalleryItemData.Type.Image,
+                    blurHash = null,
                 ),
                 GalleryItemData(
                     filename = "document.pdf",
@@ -229,6 +247,7 @@ class GalleryMediaGalleryDataSourceTest {
                     mediaSource = MediaSource("file_url"),
                     thumbnailSource = null,
                     type = GalleryItemData.Type.File,
+                    blurHash = null,
                 ),
                 GalleryItemData(
                     filename = "video.mp4",
@@ -236,9 +255,11 @@ class GalleryMediaGalleryDataSourceTest {
                     mediaSource = MediaSource("video_url"),
                     thumbnailSource = null,
                     type = GalleryItemData.Type.Video,
+                    blurHash = null,
                 ),
             ),
             galleryInfo = aGalleryInfo(),
+            contentValidationState = noopValidationState,
         )
         val data = (result.getLastData() as AsyncData.Success).data
         assertThat(data.fileItems).isEmpty()
@@ -247,6 +268,8 @@ class GalleryMediaGalleryDataSourceTest {
         assertThat((data.imageAndVideoItems[1] as MediaItem.File).id).isEqualTo(UniqueId("${AN_EVENT_ID.value}_1"))
         assertThat((data.imageAndVideoItems[2] as MediaItem.Video).id).isEqualTo(UniqueId("${AN_EVENT_ID.value}_2"))
     }
+
+    private val noopValidationState = NoopContentValidationState()
 
     private fun aGalleryInfo() = GalleryInfo(
         caption = "A caption",

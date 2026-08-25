@@ -7,15 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"Xifrat per un dispositiu desconegut o eliminat."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Xifrat per un dispositiu no verificat pel seu propietari."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Xifrat per un usuari no verificat."</string>
-  <string name="emoji_picker_category_activity">"Activitats"</string>
-  <string name="emoji_picker_category_flags">"Banderes"</string>
-  <string name="emoji_picker_category_foods">"Menjar &amp; begudes"</string>
-  <string name="emoji_picker_category_nature">"Animals i naturalesa"</string>
-  <string name="emoji_picker_category_objects">"Objectes"</string>
-  <string name="emoji_picker_category_people">"Cares i persones"</string>
-  <string name="emoji_picker_category_places">"Viatges i llocs"</string>
-  <string name="emoji_picker_category_recent">"Emoticones recents"</string>
-  <string name="emoji_picker_category_symbols">"Símbols"</string>
   <string name="screen_media_upload_preview_caption_warning">"És possible que les llegendes no siguin visibles pels que utilitzin aplicacions antigues."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"No s\'ha pogut processar el contingut que s\'havia de pujar. Torna-ho a provar."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"No s\'ha pogut pujar el contingut. Torna-ho a provar."</string>

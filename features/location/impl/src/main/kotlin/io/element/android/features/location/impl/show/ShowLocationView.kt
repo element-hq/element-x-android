@@ -102,7 +102,7 @@ fun ShowLocationView(
         }
     }
     MapBottomSheetScaffold(
-        customMapStyleUrl = state.customMapStyleUrl,
+        customMapTilerConfig = state.customMapTilerConfig,
         sheetDragHandle = if (state.isSheetDraggable) {
             { BottomSheetDefaults.DragHandle() }
         } else {
@@ -200,7 +200,7 @@ fun ShowLocationView(
 
 @PreviewsDayNight
 @Composable
-internal fun ShowLocationViewPreview(@PreviewParameter(ShowLocationStateProvider::class) state: ShowLocationState) = ElementPreview {
+internal fun ShowLocationViewPreview(@PreviewParameter(ShowLocationStatePreviewParam::class) state: ShowLocationState) = ElementPreview {
     ShowLocationView(
         state = state,
         onBackClick = {},

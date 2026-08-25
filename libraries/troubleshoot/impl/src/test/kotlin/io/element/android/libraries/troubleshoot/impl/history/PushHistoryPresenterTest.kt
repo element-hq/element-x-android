@@ -73,9 +73,9 @@ class PushHistoryPresenterTest {
         )
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink(PushHistoryEvents.Reset(requiresConfirmation = true))
+            initialState.eventSink(PushHistoryEvent.Reset(requiresConfirmation = true))
             assertThat(awaitItem().resetAction).isEqualTo(AsyncAction.ConfirmingNoParams)
-            initialState.eventSink(PushHistoryEvents.ClearDialog)
+            initialState.eventSink(PushHistoryEvent.ClearDialog)
             assertThat(awaitItem().resetAction).isEqualTo(AsyncAction.Uninitialized)
             resetPushHistoryResult.assertions().isNeverCalled()
         }
@@ -92,9 +92,9 @@ class PushHistoryPresenterTest {
         )
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink(PushHistoryEvents.Reset(requiresConfirmation = true))
+            initialState.eventSink(PushHistoryEvent.Reset(requiresConfirmation = true))
             assertThat(awaitItem().resetAction).isEqualTo(AsyncAction.ConfirmingNoParams)
-            initialState.eventSink(PushHistoryEvents.Reset(requiresConfirmation = false))
+            initialState.eventSink(PushHistoryEvent.Reset(requiresConfirmation = false))
             assertThat(awaitItem().resetAction).isEqualTo(AsyncAction.Loading)
             assertThat(awaitItem().resetAction).isEqualTo(AsyncAction.Uninitialized)
             resetPushHistoryResult.assertions().isCalledOnce()
@@ -115,13 +115,13 @@ class PushHistoryPresenterTest {
             pushService.emitPushHistoryItems(listOf(item, itemError))
             awaitItem().let { state ->
                 assertThat(state.pushHistoryItems).containsExactly(item, itemError)
-                state.eventSink(PushHistoryEvents.SetShowOnlyErrors(showOnlyErrors = true))
+                state.eventSink(PushHistoryEvent.SetShowOnlyErrors(showOnlyErrors = true))
             }
             skipItems(1)
             awaitItem().let { state ->
                 assertThat(state.showOnlyErrors).isTrue()
                 assertThat(state.pushHistoryItems).containsExactly(itemError)
-                state.eventSink(PushHistoryEvents.SetShowOnlyErrors(showOnlyErrors = false))
+                state.eventSink(PushHistoryEvent.SetShowOnlyErrors(showOnlyErrors = false))
             }
             skipItems(1)
             awaitItem().let { state ->
@@ -142,7 +142,7 @@ class PushHistoryPresenterTest {
         presenter.test {
             val initialState = awaitItem()
             initialState.eventSink(
-                PushHistoryEvents.NavigateTo(
+                PushHistoryEvent.NavigateTo(
                     sessionId = A_SESSION_ID,
                     roomId = A_ROOM_ID,
                     eventId = AN_EVENT_ID,
@@ -160,7 +160,7 @@ class PushHistoryPresenterTest {
         presenter.test {
             val initialState = awaitItem()
             initialState.eventSink(
-                PushHistoryEvents.NavigateTo(
+                PushHistoryEvent.NavigateTo(
                     sessionId = A_SESSION_ID_2,
                     roomId = A_ROOM_ID,
                     eventId = AN_EVENT_ID,
@@ -168,7 +168,7 @@ class PushHistoryPresenterTest {
             )
             assertThat(awaitItem().showNotSameAccountError).isTrue()
             // Reset error
-            initialState.eventSink(PushHistoryEvents.ClearDialog)
+            initialState.eventSink(PushHistoryEvent.ClearDialog)
             assertThat(awaitItem().showNotSameAccountError).isFalse()
         }
     }

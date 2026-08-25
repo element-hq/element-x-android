@@ -46,7 +46,8 @@ class DefaultShareIntentHandler(
         val (directShareSessionId, directShareRoomId) = resolveDirectShareTarget(intent)
         return when {
             uris.isEmpty() && type == MimeTypes.PlainText -> handlePlainText(intent, directShareSessionId, directShareRoomId)
-            type.isMimeTypeImage() ||
+            uris.isNotEmpty() ||
+                type.isMimeTypeImage() ||
                 type.isMimeTypeVideo() ||
                 type.isMimeTypeAudio() ||
                 type.isMimeTypeApplication() ||

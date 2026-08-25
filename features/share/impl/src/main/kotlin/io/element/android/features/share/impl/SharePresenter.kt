@@ -66,9 +66,9 @@ class SharePresenter(
             }
         }
 
-        fun handleEvent(event: ShareEvents) {
+        fun handleEvent(event: ShareEvent) {
             when (event) {
-                ShareEvents.ClearError -> shareActionState.value = AsyncAction.Uninitialized
+                ShareEvent.ClearError -> shareActionState.value = AsyncAction.Uninitialized
             }
         }
 

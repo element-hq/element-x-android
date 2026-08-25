@@ -7,15 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"Cifrato da un dispositivo sconosciuto o eliminato."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Cifrato da un dispositivo non verificato dal proprietario."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Cifrato da un utente non verificato."</string>
-  <string name="emoji_picker_category_activity">"Attività"</string>
-  <string name="emoji_picker_category_flags">"Bandiere"</string>
-  <string name="emoji_picker_category_foods">"Cibi &amp; Bevande"</string>
-  <string name="emoji_picker_category_nature">"Animali &amp; Natura"</string>
-  <string name="emoji_picker_category_objects">"Oggetti"</string>
-  <string name="emoji_picker_category_people">"Faccine &amp; Persone"</string>
-  <string name="emoji_picker_category_places">"Viaggi &amp; Luoghi"</string>
-  <string name="emoji_picker_category_recent">"Emoji recenti"</string>
-  <string name="emoji_picker_category_symbols">"Simboli"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"Capovolgi l\'immagine orizzontalmente"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Capovolto orizzontalmente"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Originale"</string>
@@ -47,7 +38,7 @@
   <string name="screen_room_attachment_source_camera_photo">"Scatta foto"</string>
   <string name="screen_room_attachment_source_camera_video">"Registra video"</string>
   <string name="screen_room_attachment_source_files">"Allegato"</string>
-  <string name="screen_room_attachment_source_gallery">"Libreria di foto e video"</string>
+  <string name="screen_room_attachment_source_gallery">"Libreria foto e video"</string>
   <string name="screen_room_attachment_source_location">"Condividi posizione"</string>
   <string name="screen_room_attachment_source_poll">"Sondaggio"</string>
   <string name="screen_room_attachment_text_formatting">"Formattazione del testo"</string>

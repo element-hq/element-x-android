@@ -16,6 +16,7 @@ import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.media.aMediaSource
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopEventContentValidationCache
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.api.aVideoMediaInfo
@@ -36,22 +37,24 @@ class SingleMediaGalleryDataSourceTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
+    private val contentValidationCache = NoopEventContentValidationCache()
+
     @Test
     fun `function start is no op`() = runTest {
-        val sut = SingleMediaGalleryDataSource(aGroupedMediaItems())
+        val sut = SingleMediaGalleryDataSource(aGroupedMediaItems(), contentValidationCache)
         sut.start(backgroundScope)
     }
 
     @Test
     fun `function loadMore is no op`() = runTest {
-        val sut = SingleMediaGalleryDataSource(aGroupedMediaItems())
+        val sut = SingleMediaGalleryDataSource(aGroupedMediaItems(), contentValidationCache)
         sut.loadMore(Timeline.PaginationDirection.BACKWARDS)
         sut.loadMore(Timeline.PaginationDirection.FORWARDS)
     }
 
     @Test
     fun `function deleteItem is no op`() = runTest {
-        val sut = SingleMediaGalleryDataSource(aGroupedMediaItems())
+        val sut = SingleMediaGalleryDataSource(aGroupedMediaItems(), contentValidationCache)
         sut.deleteItem(AN_EVENT_ID)
     }
 
@@ -61,7 +64,7 @@ class SingleMediaGalleryDataSourceTest {
             imageAndVideoItems = listOf(aMediaItemImage()),
             fileItems = listOf(aMediaItemFile()),
         )
-        val sut = SingleMediaGalleryDataSource(data)
+        val sut = SingleMediaGalleryDataSource(data, contentValidationCache)
         assertThat(sut.getLastData()).isEqualTo(AsyncData.Success(data))
     }
 
@@ -71,7 +74,7 @@ class SingleMediaGalleryDataSourceTest {
             imageAndVideoItems = listOf(aMediaItemImage()),
             fileItems = listOf(aMediaItemFile()),
         )
-        val sut = SingleMediaGalleryDataSource(data)
+        val sut = SingleMediaGalleryDataSource(data, contentValidationCache)
         sut.groupedMediaItemsFlow().test {
             assertThat(awaitItem()).isEqualTo(AsyncData.Success(data))
             awaitComplete()
@@ -89,6 +92,8 @@ class SingleMediaGalleryDataSourceTest {
                     mediaInfo = params.mediaInfo,
                     mediaSource = params.mediaSource,
                     thumbnailSource = params.thumbnailSource,
+                    blurHash = null,
+                    validationState = contentValidationCache[AN_EVENT_ID],
                 )
             }
         )
@@ -105,6 +110,8 @@ class SingleMediaGalleryDataSourceTest {
                     mediaInfo = params.mediaInfo,
                     mediaSource = params.mediaSource,
                     thumbnailSource = params.thumbnailSource,
+                    blurHash = null,
+                    validationState = contentValidationCache[AN_EVENT_ID],
                 )
             }
         )
@@ -120,6 +127,7 @@ class SingleMediaGalleryDataSourceTest {
                     eventId = params.eventId,
                     mediaInfo = params.mediaInfo,
                     mediaSource = params.mediaSource,
+                    validationState = contentValidationCache[AN_EVENT_ID],
                 )
             }
         )
@@ -138,6 +146,7 @@ class SingleMediaGalleryDataSourceTest {
                     eventId = params.eventId,
                     mediaInfo = params.mediaInfo,
                     mediaSource = params.mediaSource,
+                    validationState = contentValidationCache[AN_EVENT_ID],
                 )
             }
         )
@@ -153,6 +162,7 @@ class SingleMediaGalleryDataSourceTest {
                     eventId = params.eventId,
                     mediaInfo = params.mediaInfo,
                     mediaSource = params.mediaSource,
+                    validationState = contentValidationCache[AN_EVENT_ID],
                 )
             }
         )
@@ -163,7 +173,7 @@ class SingleMediaGalleryDataSourceTest {
         expectedResult: (MediaViewerEntryPoint.Params.RoomMedia) -> MediaItem,
     ) {
         val params = aMediaViewerEntryPointParams(mediaInfo)
-        val result = params.toMediaItem()
+        val result = params.toMediaItem(contentValidationCache[AN_EVENT_ID],)
         assertThat(result).isEqualTo(expectedResult(params))
     }
 
@@ -175,5 +185,6 @@ class SingleMediaGalleryDataSourceTest {
         mediaInfo = mediaInfo,
         mediaSource = aMediaSource(url = "aUrl"),
         thumbnailSource = aMediaSource(url = "aThumbnailUrl"),
+        blurHash = null,
     )
 }

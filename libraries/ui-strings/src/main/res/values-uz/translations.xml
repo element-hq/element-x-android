@@ -450,7 +450,6 @@ Davom etasizmi?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Ruxsat etilgan maksimal fayl hajmi: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Yuklanadigan video sifatini tanlang."</string>
   <string name="dialog_video_quality_selector_title">"Video yuklash sifatini tanlang"</string>
-  <string name="emoji_picker_search_placeholder">"Emojilarni qidiring"</string>
   <string name="error_account_already_logged_in">"Bu qurilmada allaqachon %1$s hisobiga kirgansiz."</string>
   <string name="error_account_creation_not_possible">"Matrix autentifikatsiya xizmati va hisob yaratish imkoniyatini qo‘llab-quvvatlash uchun uy serveringizni yangilash talab etiladi."</string>
   <string name="error_failed_creating_the_permalink">"Doimiy havola yaratilmadi"</string>

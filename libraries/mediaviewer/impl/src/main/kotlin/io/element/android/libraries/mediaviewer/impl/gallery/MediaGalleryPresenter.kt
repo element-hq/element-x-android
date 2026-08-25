@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import io.element.android.features.contentscanner.api.ContentScannerService
 import io.element.android.libraries.androidutils.R
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -43,7 +44,11 @@ import io.element.android.libraries.mediaviewer.impl.model.eventId
 import io.element.android.libraries.mediaviewer.impl.model.mediaInfo
 import io.element.android.libraries.mediaviewer.impl.model.mediaPermissions
 import io.element.android.libraries.mediaviewer.impl.model.mediaSource
+import io.element.android.libraries.mediaviewer.impl.model.thumbnailSource
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @AssistedInject
@@ -55,6 +60,7 @@ class MediaGalleryPresenter(
     private val mediaLoader: MatrixMediaLoader,
     private val localMediaActions: LocalMediaActions,
     private val snackbarDispatcher: SnackbarDispatcher,
+    private val contentScannerService: ContentScannerService,
 ) : Presenter<MediaGalleryState> {
     @AssistedFactory
     interface Factory {
@@ -74,6 +80,16 @@ class MediaGalleryPresenter(
 
         val groupedMediaItems by remember {
             mediaGalleryDataSource.groupedMediaItemsFlow()
+                .onEach { groupedItems ->
+                    if (groupedItems is AsyncData.Success) {
+                        val items = groupedItems.data.getItems(mode)
+                        items.forEach { item ->
+                            if (item is MediaItem.Event && item.eventId() != null) {
+                                coroutineScope.validateMedia(item)
+                            }
+                        }
+                    }
+                }
         }
             .collectAsState(AsyncData.Uninitialized)
 
@@ -218,6 +234,21 @@ class MediaGalleryPresenter(
                 val snackbarMessage = SnackbarMessage(mediaActionsError(it))
                 snackbarDispatcher.post(snackbarMessage)
             }
+    }
+
+    private fun CoroutineScope.validateMedia(mediaItem: MediaItem.Event) {
+        launch {
+            val thumbnailSource = mediaItem.thumbnailSource()
+            val mediaSource = mediaItem.mediaSource()
+            val contentValidationState = mediaItem.validationState
+            val currentState = contentValidationState.overallStateFlow.first()
+
+            if (currentState.isLoading() || currentState.isValid()) {
+                return@launch
+            }
+
+            contentScannerService.scan(listOfNotNull(thumbnailSource, mediaSource).distinct(), contentValidationState)
+        }
     }
 
     private fun mediaActionsError(throwable: Throwable): Int {

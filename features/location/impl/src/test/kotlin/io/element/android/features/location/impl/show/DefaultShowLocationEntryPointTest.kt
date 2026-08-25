@@ -20,7 +20,6 @@ import io.element.android.features.location.impl.common.permissions.FakePermissi
 import io.element.android.features.location.test.FakeActiveLiveLocationShareManager
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.services.analytics.test.FakeAnalyticsService
@@ -41,8 +40,8 @@ class DefaultShowLocationEntryPointTest {
             ShowLocationNode(
                 buildContext = buildContext,
                 plugins = plugins,
-                presenterFactory = object : ShowLocationPresenter.Factory {
-                    override fun create(mode: ShowLocationMode) = ShowLocationPresenter(
+                presenterFactory = { mode ->
+                    ShowLocationPresenter(
                         mode = mode,
                         permissionsPresenterFactory = { FakePermissionsPresenter() },
                         locationActions = FakeLocationActions(),
@@ -50,9 +49,9 @@ class DefaultShowLocationEntryPointTest {
                         dateFormatter = FakeDateFormatter(),
                         stringProvider = FakeStringProvider(),
                         joinedRoom = joinedRoom,
-                        client = FakeMatrixClient(),
                         liveLocationShareManager = FakeActiveLiveLocationShareManager(),
                         userLocationStateFactory = FakeUserLocationStateFactory(),
+                        customMapTilerConfigProvider = { Result.success(null) },
                     )
                 },
                 analyticsService = FakeAnalyticsService(),

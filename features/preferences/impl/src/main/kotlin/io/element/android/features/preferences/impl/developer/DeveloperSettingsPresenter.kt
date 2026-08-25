@@ -30,7 +30,9 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.data.ByteUnit
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.analytics.GetDatabaseSizesUseCase
+import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.toImmutableMap
@@ -41,6 +43,7 @@ import kotlinx.coroutines.launch
 class DeveloperSettingsPresenter(
     private val appDeveloperSettingsPresenter: Presenter<AppDeveloperSettingsState>,
     private val sessionId: SessionId,
+    private val deviceId: DeviceId,
     private val computeCacheSizeUseCase: ComputeCacheSizeUseCase,
     private val clearCacheUseCase: ClearCacheUseCase,
     private val enterpriseService: EnterpriseService,
@@ -48,6 +51,7 @@ class DeveloperSettingsPresenter(
     private val databaseSizesUseCase: GetDatabaseSizesUseCase,
     private val fileSizeFormatter: FileSizeFormatter,
     private val markAllRoomsAsRead: MarkAllRoomsAsRead,
+    private val buildMeta: BuildMeta,
 ) : Presenter<DeveloperSettingsState> {
     @Composable
     override fun present(): DeveloperSettingsState {
@@ -75,10 +79,10 @@ class DeveloperSettingsPresenter(
             computeCacheSize(cacheSize)
         }
 
-        fun handleEvent(event: DeveloperSettingsEvents) {
+        fun handleEvent(event: DeveloperSettingsEvent) {
             when (event) {
-                DeveloperSettingsEvents.ClearCache -> coroutineScope.clearCache(clearCacheAction)
-                is DeveloperSettingsEvents.ChangeBrandColor -> coroutineScope.launch {
+                DeveloperSettingsEvent.ClearCache -> coroutineScope.clearCache(clearCacheAction)
+                is DeveloperSettingsEvent.ChangeBrandColor -> coroutineScope.launch {
                     showColorPicker = false
                     val color = event.color
                         ?.toArgb()
@@ -87,13 +91,13 @@ class DeveloperSettingsPresenter(
                         ?.padStart(7, '#')
                     enterpriseService.overrideBrandColor(sessionId, color)
                 }
-                is DeveloperSettingsEvents.SetShowColorPicker -> {
+                is DeveloperSettingsEvent.SetShowColorPicker -> {
                     showColorPicker = event.show
                 }
-                DeveloperSettingsEvents.VacuumStores -> coroutineScope.launch {
+                DeveloperSettingsEvent.VacuumStores -> coroutineScope.launch {
                     vacuumStoresUseCase()
                 }
-                is DeveloperSettingsEvents.MarkAllRoomsAsRead -> {
+                is DeveloperSettingsEvent.MarkAllRoomsAsRead -> {
                     if (event.needsConfirmation) {
                         markAllRoomsAsReadAction.value = AsyncAction.ConfirmingNoParams
                     } else {
@@ -102,7 +106,7 @@ class DeveloperSettingsPresenter(
                         )
                     }
                 }
-                DeveloperSettingsEvents.DismissMarkAllRoomsAsReadConfirmation -> {
+                DeveloperSettingsEvent.DismissMarkAllRoomsAsReadConfirmation -> {
                     markAllRoomsAsReadAction.value = AsyncAction.Uninitialized
                 }
             }
@@ -115,8 +119,9 @@ class DeveloperSettingsPresenter(
             databaseSizes = databaseSizes.value,
             clearCacheAction = clearCacheAction.value,
             markAllRoomsAsReadAction = markAllRoomsAsReadAction.value,
-            isEnterpriseBuild = enterpriseService.isEnterpriseBuild,
+            isEnterpriseBuild = buildMeta.isEnterpriseBuild,
             showColorPicker = showColorPicker,
+            deviceId = deviceId,
             eventSink = ::handleEvent,
         )
     }

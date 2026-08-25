@@ -39,7 +39,7 @@ fun SignedOutView(
     state: SignedOutState,
     modifier: Modifier = Modifier,
 ) {
-    BackHandler(onBack = { state.eventSink(SignedOutEvents.SignInAgain) })
+    BackHandler(onBack = { state.eventSink(SignedOutEvent.SignInAgain) })
     HeaderFooterPage(
         modifier = modifier
             .fillMaxSize()
@@ -49,7 +49,7 @@ fun SignedOutView(
         content = { SignedOutContent() },
         footer = {
             SignedOutFooter(
-                onSignInAgain = { state.eventSink(SignedOutEvents.SignInAgain) },
+                onSignInAgain = { state.eventSink(SignedOutEvent.SignInAgain) },
             )
         }
     )
@@ -109,7 +109,7 @@ private fun SignedOutFooter(
 @PreviewsDayNight
 @Composable
 internal fun SignedOutViewPreview(
-    @PreviewParameter(SignedOutStateProvider::class) state: SignedOutState,
+    @PreviewParameter(SignedOutStatePreviewParam::class) state: SignedOutState,
 ) = ElementPreview {
     SignedOutView(
         state = state,

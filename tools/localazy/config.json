@@ -173,6 +173,7 @@
       "includeRegex" : [
         "screen_onboarding_.*",
         "screen\\.onboarding\\..*",
+        "screen\\.change_server\\..*",
         "screen\\.missing_key_backup\\..*",
         "screen_login_.*",
         "screen_server_confirmation_.*",
@@ -261,7 +262,6 @@
     {
       "name" : ":features:messages:impl",
       "includeRegex" : [
-        "emoji_picker_category_.*",
         "screen_report_content_.*",
         "screen_room_attachment.*",
         "screen_room_encrypted.*",
@@ -272,6 +272,7 @@
         "screen_room_retry.*",
         "screen_room_timeline.*",
         "screen\\.room\\.timeline.*",
+        "error\\.sending_failure\\..*",
         "screen\\.room_timeline.*",
         "screen_room_typing.*",
         "screen\\.image_edition\\..*",
@@ -330,6 +331,7 @@
       "includeRegex" : [
         "screen_advanced_settings_.*",
         "screen\\.advanced_settings\\..*",
+        "screen\\.settings\\..*",
         "screen_edit_profile_.*",
         "screen_notification_settings_.*",
         "screen\\.notification_settings\\..*",
@@ -425,6 +427,12 @@
       "includeRegex" : [
         "screen\\.share_location\\..*",
         "screen\\.view_location\\..*"
+      ]
+    },
+    {
+      "name" : ":libraries:emoji:impl",
+      "includeRegex" : [
+        "emoji_picker_.*"
       ]
     }
   ]

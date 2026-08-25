@@ -99,7 +99,6 @@
   <string name="screen_room_notification_settings_error_setting_mode">"Misslyckades att ställa in läget, vänligen pröva igen."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Din hemserver stöder inte det här alternativet i krypterade rum, du blir inte aviserad i det här rummet."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Alla meddelanden"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Endast omnämnanden och nyckelord"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"I det här rummet, meddela mig för"</string>
   <string name="screen_room_roles_and_permissions_admins">"Administratörer"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"Administratörer och ägare"</string>

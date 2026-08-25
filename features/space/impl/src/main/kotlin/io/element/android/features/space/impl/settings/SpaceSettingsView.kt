@@ -43,6 +43,8 @@ import io.element.android.libraries.designsystem.theme.components.ListItemStyle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -62,11 +64,13 @@ fun SpaceSettingsView(
         topBar = {
             SpaceSettingsTopBar(onBackClick = onBackClick)
         },
+        contentWindowInsets = scaffoldScrollableContentInsets,
     ) { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)
                 .verticalScroll(rememberScrollState())
+                .padding(lazyColumnContentPadding)
         ) {
             SpaceInfoSection(
                 roomId = state.roomId,
@@ -165,7 +169,7 @@ private fun SecurityAndPrivacyItem(
     modifier: Modifier = Modifier,
 ) {
     ListItem(
-        headlineContent = { Text(stringResource(R.string.screen_space_settings_security_and_privacy)) },
+        content = { Text(stringResource(R.string.screen_space_settings_security_and_privacy)) },
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Lock())),
         onClick = onClick,
         modifier = modifier,
@@ -179,7 +183,7 @@ private fun MembersItem(
     modifier: Modifier = Modifier,
 ) {
     ListItem(
-        headlineContent = { Text(stringResource(CommonStrings.common_people)) },
+        content = { Text(stringResource(CommonStrings.common_people)) },
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.User())),
         trailingContent = ListItemContent.Text(memberCount.toString()),
         onClick = onClick,
@@ -193,7 +197,7 @@ private fun RolesAndPermissionsItem(
     modifier: Modifier = Modifier,
 ) {
     ListItem(
-        headlineContent = { Text(stringResource(R.string.screen_space_settings_roles_and_permissions)) },
+        content = { Text(stringResource(R.string.screen_space_settings_roles_and_permissions)) },
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Admin())),
         onClick = onClick,
         modifier = modifier,
@@ -206,7 +210,7 @@ private fun LeaveSpaceItem(
     modifier: Modifier = Modifier,
 ) {
     ListItem(
-        headlineContent = {
+        content = {
             Text(stringResource(CommonStrings.action_leave_space))
         },
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Leave())),
@@ -219,7 +223,7 @@ private fun LeaveSpaceItem(
 @PreviewsDayNight
 @Composable
 internal fun SpaceSettingsViewPreview(
-    @PreviewParameter(SpaceSettingsStateProvider::class) state: SpaceSettingsState
+    @PreviewParameter(SpaceSettingsStatePreviewParam::class) state: SpaceSettingsState
 ) = ElementPreview {
     SpaceSettingsView(
         state = state,

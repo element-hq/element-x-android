@@ -49,7 +49,6 @@ import io.element.android.libraries.matrix.api.scanner.ContentScanner
 import io.element.android.libraries.matrix.api.spaces.SpaceService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncState
-import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.UserStatus
@@ -58,7 +57,6 @@ import io.element.android.libraries.matrix.impl.exception.mapClientException
 import io.element.android.libraries.matrix.impl.linknewdevice.RustLinkDesktopHandler
 import io.element.android.libraries.matrix.impl.linknewdevice.RustLinkMobileHandler
 import io.element.android.libraries.matrix.impl.linknewdevice.RustQrCodeDataParser
-import io.element.android.libraries.matrix.impl.mapper.map
 import io.element.android.libraries.matrix.impl.media.RustMediaLoader
 import io.element.android.libraries.matrix.impl.media.RustMediaPreviewService
 import io.element.android.libraries.matrix.impl.notification.RustNotificationService
@@ -81,10 +79,13 @@ import io.element.android.libraries.matrix.impl.roomdirectory.map
 import io.element.android.libraries.matrix.impl.roomlist.RoomListFactory
 import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
 import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
+import io.element.android.libraries.matrix.impl.search.RustMessageSearchService
 import io.element.android.libraries.matrix.impl.spaces.RustSpaceService
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import io.element.android.libraries.matrix.impl.sync.map
-import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
+import io.element.android.libraries.matrix.impl.user.UserSearchResultMapper
+import io.element.android.libraries.matrix.impl.user.into
+import io.element.android.libraries.matrix.impl.user.map
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
@@ -125,13 +126,16 @@ import org.matrix.rustcomponents.sdk.IgnoredUsersListener
 import org.matrix.rustcomponents.sdk.Membership
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.PowerLevels
+import org.matrix.rustcomponents.sdk.ProfileListener
 import org.matrix.rustcomponents.sdk.RoomInfoListener
 import org.matrix.rustcomponents.sdk.SendQueueRoomErrorListener
 import org.matrix.rustcomponents.sdk.TaskHandle
+import org.matrix.rustcomponents.sdk.UserProfile
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
 import java.util.Optional
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.jvm.optionals.getOrNull
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
@@ -142,7 +146,7 @@ import org.matrix.rustcomponents.sdk.SyncService as ClientSyncService
 @Suppress("LargeClass")
 class RustMatrixClient(
     override val sessionPaths: SessionPaths,
-    private val innerClient: Client,
+    val innerClient: Client,
     private val sessionStore: SessionStore,
     private val sessionDelegate: RustClientSessionDelegate,
     private val innerSyncService: ClientSyncService,
@@ -155,9 +159,11 @@ class RustMatrixClient(
     private val analyticsService: AnalyticsService,
     private val workManagerScheduler: WorkManagerScheduler,
     override val contentScanner: ContentScanner?,
+    override val isMessageSearchAvailable: Boolean,
 ) : MatrixClient {
     override val sessionId: UserId = UserId(innerClient.userId())
     override val deviceId: DeviceId = DeviceId(innerClient.deviceId())
+    override val server: String? = innerClient.server()
     override val homeserverUrl: String = innerClient.homeserver()
     override val sessionCoroutineScope = appCoroutineScope.childScope(dispatchers.main, "Session-$sessionId")
     private val sessionDispatcher = dispatchers.io.limitedParallelism(64)
@@ -190,6 +196,11 @@ class RustMatrixClient(
     )
 
     override val roomDirectoryService = RustRoomDirectoryService(
+        client = innerClient,
+        sessionDispatcher = sessionDispatcher,
+    )
+
+    override val messageSearchService = RustMessageSearchService(
         client = innerClient,
         sessionDispatcher = sessionDispatcher,
     )
@@ -264,8 +275,6 @@ class RustMatrixClient(
 
     private var clientDelegateTaskHandle: TaskHandle? = innerClient.setDelegate(sessionDelegate)
 
-    @Volatile private var localUserStatus: UserStatus? = null
-
     private val _userProfile: MutableStateFlow<MatrixUser> = MutableStateFlow(
         MatrixUser(
             userId = sessionId,
@@ -275,6 +284,14 @@ class RustMatrixClient(
     )
 
     override val userProfile: StateFlow<MatrixUser> = _userProfile
+
+    private var ownProfileTaskHandle: TaskHandle? = null
+
+    private val ownProfileListener = object : ProfileListener {
+        override fun onUpdate(profile: UserProfile) {
+            _userProfile.tryEmit(profile.map())
+        }
+    }
 
     override val ignoredUsersFlow = mxCallbackFlow<ImmutableList<UserId>> {
         // Fetch the initial value manually, the SDK won't return it automatically
@@ -289,6 +306,10 @@ class RustMatrixClient(
         .buffer(Channel.UNLIMITED)
         .stateIn(sessionCoroutineScope, started = SharingStarted.Eagerly, initialValue = persistentListOf())
 
+    private val _isShuttingDown = AtomicBoolean(false)
+    override val isShuttingDown: Boolean
+        get() = _isShuttingDown.get()
+
     init {
         // Make sure the session delegate has a reference to the client to be able to logout on auth error
         sessionDelegate.bindClient(this)
@@ -296,8 +317,23 @@ class RustMatrixClient(
         sessionCoroutineScope.launch {
             // Start notification settings
             notificationSettingsService.start()
+            // Setup user profile logic
+            setupUserProfile()
+        }
 
-            // Update the user profile in the session store if needed
+        // Schedule regular database vacuuming to ensure DB performance remains optimal
+        scheduleDatabaseVacuum()
+    }
+
+    private suspend fun setupUserProfile() {
+        // Subscribing to own profile updates only requires the Profiles sliding sync extension,
+        // not the full user status capability (which also needs the status profile field to be settable).
+        val supported = isProfilesSlidingSyncExtensionSupported().getOrDefault(false)
+        if (supported) {
+            // No need to seed the data here, it's already stored by the sdk.
+            ownProfileTaskHandle = innerClient.subscribeToOwnProfile(ownProfileListener)
+        } else {
+            // Seed from the session store so cold-start UI has something to render before the network fetch.
             sessionStore.getSession(sessionId.value)?.let { sessionData ->
                 _userProfile.emit(
                     MatrixUser(
@@ -307,12 +343,8 @@ class RustMatrixClient(
                     )
                 )
             }
-            // Force a refresh of the profile
             getUserProfile()
         }
-
-        // Schedule regular database vacuuming to ensure DB performance remains optimal
-        scheduleDatabaseVacuum()
     }
 
     override fun userIdServerName(): String {
@@ -430,10 +462,10 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun createDM(userId: UserId): Result<RoomId> {
+    override suspend fun createDM(userId: UserId, isEncrypted: Boolean): Result<RoomId> {
         val createRoomParams = CreateRoomParameters(
             name = null,
-            isEncrypted = true,
+            isEncrypted = isEncrypted,
             isDirect = true,
             visibility = RoomVisibility.Private,
             preset = RoomPreset.TRUSTED_PRIVATE_CHAT,
@@ -451,13 +483,8 @@ class RustMatrixClient(
 
     override suspend fun getUserProfile(): Result<MatrixUser> = getProfile(sessionId)
         .onSuccess { matrixUser ->
-            _userProfile.emit(
-                matrixUser.copy(
-                    rawStatus = localUserStatus,
-                    displayedStatus = localUserStatus?.let { DisplayedStatus.UserSet(it) },
-                )
-            )
             // Also update our session storage
+            _userProfile.emit(matrixUser)
             sessionStore.updateUserProfile(
                 sessionId = sessionId.value,
                 displayName = matrixUser.displayName,
@@ -488,25 +515,37 @@ class RustMatrixClient(
         }
 
     override suspend fun setUserStatus(status: UserStatus): Result<Unit> = withContext(sessionDispatcher) {
-        localUserStatus = status
-        _userProfile.emit(
-            _userProfile.value.copy(
-                rawStatus = status,
-                displayedStatus = DisplayedStatus.UserSet(status),
-            )
-        )
-        Result.success(Unit)
+        runCatchingExceptions {
+            innerClient.setUserStatus(status.into())
+        }.onSuccess {
+            // The subscription pushes the update on supported servers; only refresh manually as a fallback.
+            if (ownProfileTaskHandle == null) getUserProfile()
+        }
     }
 
     override suspend fun clearUserStatus(): Result<Unit> = withContext(sessionDispatcher) {
-        localUserStatus = null
-        _userProfile.emit(
-            _userProfile.value.copy(
-                rawStatus = null,
-                displayedStatus = null,
-            )
-        )
-        Result.success(Unit)
+        runCatchingExceptions {
+            innerClient.clearUserStatus()
+        }.onSuccess {
+            // The subscription pushes the update on supported servers; only refresh manually as a fallback.
+            if (ownProfileTaskHandle == null) getUserProfile()
+        }
+    }
+
+    override suspend fun isUserStatusSupported(): Result<Boolean> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.isUserStatusSupported()
+        }
+    }
+
+    override suspend fun isProfilesSlidingSyncExtensionSupported(): Result<Boolean> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.isProfilesSlidingSyncExtensionSupported()
+        }
+    }
+
+    override fun enableAutomaticCallStatus(enabled: Boolean) {
+        innerClient.enableAutomaticCallStatus(enabled)
     }
 
     override suspend fun joinRoom(roomId: RoomId): Result<RoomInfo?> = withContext(sessionDispatcher) {
@@ -614,6 +653,7 @@ class RustMatrixClient(
 
         sessionCoroutineScope.cancel()
         clientDelegateTaskHandle?.cancelAndDestroy()
+        ownProfileTaskHandle?.cancelAndDestroy()
         sessionVerificationService.destroy()
 
         sessionDelegate.clearCurrentClient()
@@ -640,11 +680,13 @@ class RustMatrixClient(
     }
 
     override suspend fun clearCache() {
+        _isShuttingDown.set(true)
         innerClient.clearCaches(innerSyncService)
         destroy()
     }
 
     override suspend fun logout(userInitiated: Boolean, ignoreSdkError: Boolean) {
+        _isShuttingDown.set(true)
         sessionCoroutineScope.cancel()
         // Remove current delegate so we don't receive an auth error
         clientDelegateTaskHandle?.cancelAndDestroy()
@@ -682,6 +724,8 @@ class RustMatrixClient(
     }
 
     override suspend fun deactivateAccount(password: String, eraseData: Boolean): Result<Unit> = withContext(sessionDispatcher) {
+        _isShuttingDown.set(true)
+
         Timber.w("Deactivating account")
         // Remove current delegate so we don't receive an auth error
         clientDelegateTaskHandle?.cancelAndDestroy()
@@ -799,6 +843,18 @@ class RustMatrixClient(
         }
     }
 
+    override suspend fun getAccountData(eventType: String): Result<String?> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.accountData(eventType)
+        }
+    }
+
+    override suspend fun setAccountData(eventType: String, content: String): Result<Unit> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.setAccountData(eventType, content)
+        }
+    }
+
     override suspend fun canLinkNewDevice(): Result<Boolean> = withContext(sessionDispatcher) {
         runCatchingExceptions {
             innerClient.isLoginWithQrCodeSupported()
@@ -848,12 +904,6 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun getMapStyleUrl(): Result<String?> = withContext(sessionDispatcher) {
-        runCatchingExceptions {
-            innerClient.tileServer()?.mapStyleUrl
-        }
-    }
-
     override suspend fun resetWellKnownConfig(): Result<Unit> {
         return runCatchingExceptions {
             Timber.d("Resetting well-known config for session $sessionId")
@@ -876,7 +926,11 @@ class RustMatrixClient(
                 File(sessionPaths.fileDirectory, fileName)
             }.sumOf { file ->
                 file.length()
-            }
+            } +
+                // The message search index. Like the state database above it lives in the file
+                // directory and so survives a cache clear, but it can grow without bound and must
+                // not be invisible in the storage figures. Returns 0 when the index is disabled.
+                File(sessionPaths.fileDirectory, SEARCH_INDEX_DIRECTORY).getSizeOfFiles()
         }
     }
 

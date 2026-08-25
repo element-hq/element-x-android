@@ -115,9 +115,24 @@ sealed interface GalleryItemType {
     data class Video(val content: VideoMessageType) : GalleryItemType
     data class File(val content: FileMessageType) : GalleryItemType
     data class Other(val itemType: String, val body: String) : GalleryItemType
+
+    fun mediaSources(): List<MediaSource> = when (this) {
+        is Image -> listOfNotNull(content.source, content.info?.thumbnailSource)
+        is Audio -> listOf(content.source)
+        is Video -> listOfNotNull(content.source, content.info?.thumbnailSource)
+        is File -> listOfNotNull(content.source, content.info?.thumbnailSource)
+        is Other -> emptyList()
+    }
 }
 
 data class OtherMessageType(
     val msgType: String,
     val body: String,
-) : MessageType
+) : MessageType {
+    /**
+     * A `m.key.verification.request` carries a body meant for clients that cannot handle in-chat
+     * verification, so it must not be rendered as a message.
+     */
+    val isKeyVerificationRequest: Boolean
+        get() = msgType == "m.key.verification.request"
+}

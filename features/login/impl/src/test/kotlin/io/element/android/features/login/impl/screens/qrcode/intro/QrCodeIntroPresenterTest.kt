@@ -37,7 +37,7 @@ class QrCodeIntroPresenterTest {
         val permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter)
         val presenter = createQrCodeIntroPresenter(permissionsPresenterFactory = permissionsPresenterFactory)
         presenter.test {
-            awaitItem().eventSink(QrCodeIntroEvents.Continue)
+            awaitItem().eventSink(QrCodeIntroEvent.Continue)
             assertThat(awaitItem().canContinue).isTrue()
         }
     }
@@ -48,7 +48,7 @@ class QrCodeIntroPresenterTest {
         val permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter)
         val presenter = createQrCodeIntroPresenter(permissionsPresenterFactory = permissionsPresenterFactory)
         presenter.test {
-            awaitItem().eventSink(QrCodeIntroEvents.Continue)
+            awaitItem().eventSink(QrCodeIntroEvent.Continue)
             assertThat(awaitItem().cameraPermissionState.showDialog).isTrue()
         }
     }

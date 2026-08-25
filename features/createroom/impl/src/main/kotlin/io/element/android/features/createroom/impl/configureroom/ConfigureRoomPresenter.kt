@@ -24,6 +24,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.CreatedRoom
+import io.element.android.features.enterprise.api.SessionEnterpriseService
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
@@ -73,6 +74,7 @@ class ConfigureRoomPresenter(
     private val featureFlagService: FeatureFlagService,
     private val roomAliasHelper: RoomAliasHelper,
     private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
+    private val sessionEnterpriseService: SessionEnterpriseService,
 ) : Presenter<ConfigureRoomState> {
     @AssistedFactory
     interface Factory {
@@ -186,14 +188,14 @@ class ConfigureRoomPresenter(
             localCoroutineScope.createRoom(config, createRoomAction)
         }
 
-        fun handleEvent(event: ConfigureRoomEvents) {
+        fun handleEvent(event: ConfigureRoomEvent) {
             when (event) {
-                is ConfigureRoomEvents.RoomNameChanged -> dataStore.setRoomName(event.name)
-                is ConfigureRoomEvents.TopicChanged -> dataStore.setTopic(event.topic)
-                is ConfigureRoomEvents.JoinRuleChanged -> dataStore.setJoinRule(event.joinRuleItem)
-                is ConfigureRoomEvents.RoomAddressChanged -> dataStore.setRoomAddress(event.roomAddress)
-                is ConfigureRoomEvents.CreateRoom -> createRoom(createRoomConfig)
-                is ConfigureRoomEvents.HandleAvatarAction -> {
+                is ConfigureRoomEvent.RoomNameChanged -> dataStore.setRoomName(event.name)
+                is ConfigureRoomEvent.TopicChanged -> dataStore.setTopic(event.topic)
+                is ConfigureRoomEvent.JoinRuleChanged -> dataStore.setJoinRule(event.joinRuleItem)
+                is ConfigureRoomEvent.RoomAddressChanged -> dataStore.setRoomAddress(event.roomAddress)
+                is ConfigureRoomEvent.CreateRoom -> createRoom(createRoomConfig)
+                is ConfigureRoomEvent.HandleAvatarAction -> {
                     when (event.action) {
                         AvatarAction.ChoosePhoto -> galleryImagePicker.launch()
                         AvatarAction.TakePhoto -> if (cameraPermissionState.permissionGranted) {
@@ -205,10 +207,10 @@ class ConfigureRoomPresenter(
                         AvatarAction.Remove -> dataStore.setAvatarUri(uri = null)
                     }
                 }
-                is ConfigureRoomEvents.SetParentSpace -> {
+                is ConfigureRoomEvent.SetParentSpace -> {
                     dataStore.setParentSpace(event.space, false)
                 }
-                ConfigureRoomEvents.CancelCreateRoom -> {
+                ConfigureRoomEvent.CancelCreateRoom -> {
                     createRoomAction.value = AsyncAction.Uninitialized
                 }
             }
@@ -256,7 +258,7 @@ class ConfigureRoomPresenter(
                     CreateRoomParameters(
                         name = config.roomName,
                         topic = config.topic,
-                        isEncrypted = true,
+                        isEncrypted = !sessionEnterpriseService.isEncryptionDisabledByHomeserver(),
                         isDirect = false,
                         visibility = RoomVisibility.Private,
                         historyVisibilityOverride = RoomHistoryVisibility.Invited,

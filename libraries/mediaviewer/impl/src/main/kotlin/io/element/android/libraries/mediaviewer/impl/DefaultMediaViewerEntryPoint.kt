@@ -27,6 +27,8 @@ class DefaultMediaViewerEntryPoint : MediaViewerEntryPoint {
             ),
             mediaSource = MediaSource(url = avatarUrl),
             thumbnailSource = null,
+            // Maybe add avatar blurhash if available?
+            blurHash = null,
         )
     }
 

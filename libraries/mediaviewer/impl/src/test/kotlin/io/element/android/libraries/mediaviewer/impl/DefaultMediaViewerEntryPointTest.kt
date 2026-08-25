@@ -12,11 +12,13 @@ import android.net.Uri
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bumble.appyx.core.modality.BuildContext
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.contentscanner.api.ContentScannerService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.media.FakeMatrixMediaLoader
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopEventContentValidationCache
 import io.element.android.libraries.mediaplayer.test.FakeAudioFocus
 import io.element.android.libraries.mediaviewer.api.AvatarInfo
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
@@ -71,6 +73,8 @@ class DefaultMediaViewerEntryPointTest {
                 audioFocus = FakeAudioFocus(),
                 sessionId = A_SESSION_ID,
                 enterpriseService = FakeEnterpriseService(),
+                contentValidationCache = NoopEventContentValidationCache(),
+                contentScannerService = ContentScannerService { _, _ -> },
             )
         }
         val callback = object : MediaViewerEntryPoint.Callback {
@@ -118,6 +122,8 @@ class DefaultMediaViewerEntryPointTest {
                 audioFocus = FakeAudioFocus(),
                 sessionId = A_SESSION_ID,
                 enterpriseService = FakeEnterpriseService(),
+                contentValidationCache = NoopEventContentValidationCache(),
+                contentScannerService = ContentScannerService { _, _ -> },
             )
         }
         val callback = object : MediaViewerEntryPoint.Callback {
@@ -141,6 +147,7 @@ class DefaultMediaViewerEntryPointTest {
                 avatarInfo = AvatarInfo(filename = "avatar.png"),
                 mediaSource = MediaSource(url = "avatarUrl"),
                 thumbnailSource = null,
+                blurHash = null,
             )
         )
         assertThat(result.plugins).contains(callback)

@@ -11,10 +11,22 @@ package io.element.android.features.invitepeople.api
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.RoomId
 
+/**
+ * State of the invite people UI, produced by an [InvitePeoplePresenter] and consumed by an [InvitePeopleRenderer].
+ */
 interface InvitePeopleState {
+    /** Whether the send button should be enabled, i.e. at least one user is selected and the user has the permission. */
     val canInvite: Boolean
+
+    /** Whether the search field currently has focus, which the host screen uses to adapt its own layout. */
     val isSearchActive: Boolean
+
+    /** Progress of the invite request, so the UI can show a loader and surface failures. */
     val sendInvitesAction: AsyncAction<Unit>
+
+    /** Progress of turning a direct message into a room, which happens when inviting a third person into a DM. */
     val createRoomFromDmAction: AsyncAction<RoomId>
-    val eventSink: (InvitePeopleEvents) -> Unit
+
+    /** Where the UI sends its events. */
+    val eventSink: (InvitePeopleEvent) -> Unit
 }

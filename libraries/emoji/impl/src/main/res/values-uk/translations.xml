@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Дії"</string>
+  <string name="emoji_picker_category_flags">"Прапори"</string>
+  <string name="emoji_picker_category_foods">"Їжа та напої"</string>
+  <string name="emoji_picker_category_nature">"Тварини та природа"</string>
+  <string name="emoji_picker_category_objects">"Об\'єкти"</string>
+  <string name="emoji_picker_category_people">"Смайлики та люди"</string>
+  <string name="emoji_picker_category_places">"Подорожі та місця"</string>
+  <string name="emoji_picker_category_recent">"Нещодавні емодзі"</string>
+  <string name="emoji_picker_category_symbols">"Символи"</string>
+  <string name="emoji_picker_search_placeholder">"Пошук емоджі"</string>
+</resources>

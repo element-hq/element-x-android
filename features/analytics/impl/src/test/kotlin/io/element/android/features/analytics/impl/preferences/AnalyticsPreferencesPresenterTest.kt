@@ -13,7 +13,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.appconfig.AnalyticsConfig
-import io.element.android.features.analytics.api.AnalyticsOptInEvents
+import io.element.android.features.analytics.api.AnalyticsOptInEvent
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
@@ -67,9 +67,9 @@ class AnalyticsPreferencesPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.isEnabled).isTrue()
-            initialState.eventSink.invoke(AnalyticsOptInEvents.EnableAnalytics(false))
+            initialState.eventSink.invoke(AnalyticsOptInEvent.EnableAnalytics(false))
             assertThat(awaitItem().isEnabled).isFalse()
-            initialState.eventSink.invoke(AnalyticsOptInEvents.EnableAnalytics(true))
+            initialState.eventSink.invoke(AnalyticsOptInEvent.EnableAnalytics(true))
             assertThat(awaitItem().isEnabled).isTrue()
         }
     }
