@@ -10,7 +10,7 @@ package io.element.android.features.preferences.impl.notifications.edit
 
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 
-sealed interface EditDefaultNotificationSettingStateEvents {
-    data class SetNotificationMode(val mode: RoomNotificationMode) : EditDefaultNotificationSettingStateEvents
-    data object ClearError : EditDefaultNotificationSettingStateEvents
+sealed interface EditDefaultNotificationSettingStateEvent {
+    data class SetNotificationMode(val mode: RoomNotificationMode) : EditDefaultNotificationSettingStateEvent
+    data object ClearError : EditDefaultNotificationSettingStateEvent
 }
