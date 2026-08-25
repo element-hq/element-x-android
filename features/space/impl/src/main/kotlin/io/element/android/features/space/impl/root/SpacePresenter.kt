@@ -150,51 +150,51 @@ class SpacePresenter(
             }
         }
 
-        fun handleEvent(event: SpaceEvents) {
+        fun handleEvent(event: SpaceEvent) {
             when (event) {
                 // SpaceRoomList is loaded automatically as backend is really slow. Event is kept for future.
-                SpaceEvents.LoadMore -> Unit
-                is SpaceEvents.Join -> {
+                SpaceEvent.LoadMore -> Unit
+                is SpaceEvent.Join -> {
                     sessionCoroutineScope.joinRoom(event.spaceRoom, joinActions, setJoinActions)
                 }
-                SpaceEvents.ClearFailures -> {
+                SpaceEvent.ClearFailures -> {
                     val failedActions = joinActions
                         .filterValues { it is AsyncAction.Failure }
                         .mapValues { AsyncAction.Uninitialized }
                     setJoinActions(joinActions + failedActions)
                 }
-                is SpaceEvents.AcceptInvite -> {
+                is SpaceEvent.AcceptInvite -> {
                     acceptDeclineInviteState.eventSink(
                         AcceptDeclineInviteEvent.AcceptInvite(event.spaceRoom.toInviteData())
                     )
                 }
-                is SpaceEvents.DeclineInvite -> {
+                is SpaceEvent.DeclineInvite -> {
                     acceptDeclineInviteState.eventSink(
                         AcceptDeclineInviteEvent.DeclineInvite(invite = event.spaceRoom.toInviteData(), shouldConfirm = true, blockUser = false)
                     )
                 }
-                SpaceEvents.HideTopicViewer -> topicViewerState = TopicViewerState.Hidden
-                is SpaceEvents.ShowTopicViewer -> topicViewerState = TopicViewerState.Shown(event.topic)
+                SpaceEvent.HideTopicViewer -> topicViewerState = TopicViewerState.Hidden
+                is SpaceEvent.ShowTopicViewer -> topicViewerState = TopicViewerState.Shown(event.topic)
 
                 // Manage mode events
-                SpaceEvents.EnterManageMode -> {
+                SpaceEvent.EnterManageMode -> {
                     isManageMode = true
                     selectedRoomIds = emptySet()
                 }
-                SpaceEvents.ExitManageMode -> {
+                SpaceEvent.ExitManageMode -> {
                     localCoroutineScope.launch { exitManageMode(shouldReset = removedRoomIds.isNotEmpty()) }
                 }
-                is SpaceEvents.ToggleRoomSelection -> {
+                is SpaceEvent.ToggleRoomSelection -> {
                     selectedRoomIds = if (event.roomId in selectedRoomIds) {
                         selectedRoomIds - event.roomId
                     } else {
                         selectedRoomIds + event.roomId
                     }
                 }
-                SpaceEvents.RemoveSelectedRooms -> {
+                SpaceEvent.RemoveSelectedRooms -> {
                     removeRoomsAction = AsyncAction.ConfirmingNoParams
                 }
-                SpaceEvents.ConfirmRoomRemoval -> {
+                SpaceEvent.ConfirmRoomRemoval -> {
                     localCoroutineScope.launch {
                         removeRoomsAction = AsyncAction.Loading
                         val spaceId = spaceRoomList.spaceId
@@ -219,7 +219,7 @@ class SpacePresenter(
                         }
                     }
                 }
-                SpaceEvents.ClearRemoveAction -> {
+                SpaceEvent.ClearRemoveAction -> {
                     removeRoomsAction = AsyncAction.Uninitialized
                 }
             }
