@@ -22,7 +22,7 @@ import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.JoinedRoom.Trigger
 import io.element.android.features.invite.api.SeenInvitesStore
-import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvent
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.features.invite.api.toInviteData
 import io.element.android.libraries.architecture.AsyncAction
@@ -165,12 +165,12 @@ class SpacePresenter(
                 }
                 is SpaceEvents.AcceptInvite -> {
                     acceptDeclineInviteState.eventSink(
-                        AcceptDeclineInviteEvents.AcceptInvite(event.spaceRoom.toInviteData())
+                        AcceptDeclineInviteEvent.AcceptInvite(event.spaceRoom.toInviteData())
                     )
                 }
                 is SpaceEvents.DeclineInvite -> {
                     acceptDeclineInviteState.eventSink(
-                        AcceptDeclineInviteEvents.DeclineInvite(invite = event.spaceRoom.toInviteData(), shouldConfirm = true, blockUser = false)
+                        AcceptDeclineInviteEvent.DeclineInvite(invite = event.spaceRoom.toInviteData(), shouldConfirm = true, blockUser = false)
                     )
                 }
                 SpaceEvents.HideTopicViewer -> topicViewerState = TopicViewerState.Hidden

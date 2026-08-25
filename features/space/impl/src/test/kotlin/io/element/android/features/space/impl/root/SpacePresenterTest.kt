@@ -15,7 +15,7 @@ import com.google.testing.junit.testparameterinjector.KotlinTestParameters.named
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import io.element.android.features.invite.api.SeenInvitesStore
-import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvent
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.features.invite.api.acceptdecline.anAcceptDeclineInviteState
 import io.element.android.features.invite.api.toInviteData
@@ -272,7 +272,7 @@ class SpacePresenterTest {
             "decline" to false,
         ),
     ) = runTest {
-        val eventRecorder = EventsRecorder<AcceptDeclineInviteEvents>()
+        val eventRecorder = EventsRecorder<AcceptDeclineInviteEvent>()
         val anInvitedRoom = aSpaceRoom(
             roomId = A_ROOM_ID_2,
             state = CurrentUserMembership.INVITED,
@@ -302,14 +302,14 @@ class SpacePresenterTest {
             if (acceptInvite) {
                 state.eventSink(SpaceEvents.AcceptInvite(anInvitedRoom))
                 eventRecorder.assertSingle(
-                    AcceptDeclineInviteEvents.AcceptInvite(
+                    AcceptDeclineInviteEvent.AcceptInvite(
                         invite = anInvitedRoom.toInviteData(),
                     )
                 )
             } else {
                 state.eventSink(SpaceEvents.DeclineInvite(anInvitedRoom))
                 eventRecorder.assertSingle(
-                    AcceptDeclineInviteEvents.DeclineInvite(
+                    AcceptDeclineInviteEvent.DeclineInvite(
                         invite = anInvitedRoom.toInviteData(),
                         shouldConfirm = true,
                         blockUser = false,

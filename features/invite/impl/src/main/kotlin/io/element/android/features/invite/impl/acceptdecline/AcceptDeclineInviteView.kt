@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.invite.api.InviteData
-import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvent
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.features.invite.api.acceptdecline.ConfirmingDeclineInvite
 import io.element.android.features.invite.impl.AcceptInvite
@@ -77,7 +77,7 @@ fun AcceptDeclineInviteView(
                         blockUser = confirming.blockUser,
                         onConfirmClick = {
                             state.eventSink(
-                                AcceptDeclineInviteEvents.DeclineInvite(
+                                AcceptDeclineInviteEvent.DeclineInvite(
                                     confirming.inviteData,
                                     blockUser = confirming.blockUser,
                                     shouldConfirm = false

@@ -8,9 +8,9 @@
 
 package io.element.android.features.invite.impl.acceptdecline
 
-import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvent
 
-sealed interface InternalAcceptDeclineInviteEvents : AcceptDeclineInviteEvents {
+sealed interface InternalAcceptDeclineInviteEvents : AcceptDeclineInviteEvent {
     data object ClearAcceptActionState : InternalAcceptDeclineInviteEvents
     data object ClearDeclineActionState : InternalAcceptDeclineInviteEvents
 }

@@ -10,7 +10,7 @@ package io.element.android.features.invite.impl.acceptdecline
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.invite.api.InviteData
-import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvent
 import io.element.android.features.invite.api.acceptdecline.ConfirmingDeclineInvite
 import io.element.android.features.invite.impl.AcceptInvite
 import io.element.android.features.invite.impl.DeclineInvite
@@ -51,7 +51,7 @@ class AcceptDeclineInvitePresenterTest {
             val inviteData = anInviteData()
             awaitItem().also { state ->
                 state.eventSink(
-                    AcceptDeclineInviteEvents.DeclineInvite(inviteData, blockUser = false, shouldConfirm = true)
+                    AcceptDeclineInviteEvent.DeclineInvite(inviteData, blockUser = false, shouldConfirm = true)
                 )
             }
             awaitItem().also { state ->
@@ -78,13 +78,13 @@ class AcceptDeclineInvitePresenterTest {
             val inviteData = anInviteData()
             awaitItem().also { state ->
                 state.eventSink(
-                    AcceptDeclineInviteEvents.DeclineInvite(inviteData, blockUser = false, shouldConfirm = true)
+                    AcceptDeclineInviteEvent.DeclineInvite(inviteData, blockUser = false, shouldConfirm = true)
                 )
             }
             awaitItem().also { state ->
                 assertThat(state.declineAction).isEqualTo(ConfirmingDeclineInvite(inviteData, false))
                 state.eventSink(
-                    AcceptDeclineInviteEvents.DeclineInvite(inviteData, blockUser = false, shouldConfirm = false)
+                    AcceptDeclineInviteEvent.DeclineInvite(inviteData, blockUser = false, shouldConfirm = false)
                 )
             }
             assertThat(awaitItem().declineAction.isLoading()).isTrue()
@@ -114,13 +114,13 @@ class AcceptDeclineInvitePresenterTest {
             val inviteData = anInviteData()
             awaitItem().also { state ->
                 state.eventSink(
-                    AcceptDeclineInviteEvents.DeclineInvite(inviteData, blockUser = false, shouldConfirm = true)
+                    AcceptDeclineInviteEvent.DeclineInvite(inviteData, blockUser = false, shouldConfirm = true)
                 )
             }
             awaitItem().also { state ->
                 assertThat(state.declineAction).isEqualTo(ConfirmingDeclineInvite(inviteData, blockUser = false))
                 state.eventSink(
-                    AcceptDeclineInviteEvents.DeclineInvite(inviteData, blockUser = false, shouldConfirm = false)
+                    AcceptDeclineInviteEvent.DeclineInvite(inviteData, blockUser = false, shouldConfirm = false)
                 )
             }
             assertThat(awaitItem().declineAction.isLoading()).isTrue()
@@ -146,7 +146,7 @@ class AcceptDeclineInvitePresenterTest {
             val inviteData = anInviteData()
             awaitItem().also { state ->
                 state.eventSink(
-                    AcceptDeclineInviteEvents.AcceptInvite(inviteData)
+                    AcceptDeclineInviteEvent.AcceptInvite(inviteData)
                 )
             }
             awaitItem().also { state ->
@@ -178,7 +178,7 @@ class AcceptDeclineInvitePresenterTest {
             val inviteData = anInviteData()
             awaitItem().also { state ->
                 state.eventSink(
-                    AcceptDeclineInviteEvents.AcceptInvite(inviteData)
+                    AcceptDeclineInviteEvent.AcceptInvite(inviteData)
                 )
             }
             awaitItem().also { state ->

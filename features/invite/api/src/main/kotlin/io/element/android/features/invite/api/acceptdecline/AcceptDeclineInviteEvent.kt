@@ -13,7 +13,7 @@ import io.element.android.features.invite.api.InviteData
 /**
  * Events sent to the accept/decline invite presenter, from whichever screen is showing the invitation.
  */
-interface AcceptDeclineInviteEvents {
-    data class AcceptInvite(val invite: InviteData) : AcceptDeclineInviteEvents
-    data class DeclineInvite(val invite: InviteData, val blockUser: Boolean, val shouldConfirm: Boolean) : AcceptDeclineInviteEvents
+interface AcceptDeclineInviteEvent {
+    data class AcceptInvite(val invite: InviteData) : AcceptDeclineInviteEvent
+    data class DeclineInvite(val invite: InviteData, val blockUser: Boolean, val shouldConfirm: Boolean) : AcceptDeclineInviteEvent
 }

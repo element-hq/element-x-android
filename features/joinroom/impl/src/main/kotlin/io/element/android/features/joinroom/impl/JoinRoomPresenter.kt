@@ -26,7 +26,7 @@ import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.features.invite.api.InviteData
 import io.element.android.features.invite.api.SeenInvitesStore
-import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvent
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.features.invite.api.toInviteData
 import io.element.android.features.joinroom.impl.di.CancelKnockRoom
@@ -157,12 +157,12 @@ class JoinRoomPresenter(
                 is JoinRoomEvents.KnockRoom -> coroutineScope.knockRoom(knockAction, knockMessage)
                 is JoinRoomEvents.AcceptInvite -> {
                     acceptDeclineInviteState.eventSink(
-                        AcceptDeclineInviteEvents.AcceptInvite(event.inviteData)
+                        AcceptDeclineInviteEvent.AcceptInvite(event.inviteData)
                     )
                 }
                 is JoinRoomEvents.DeclineInvite -> {
                     acceptDeclineInviteState.eventSink(
-                        AcceptDeclineInviteEvents.DeclineInvite(invite = event.inviteData, blockUser = event.blockUser, shouldConfirm = true)
+                        AcceptDeclineInviteEvent.DeclineInvite(invite = event.inviteData, blockUser = event.blockUser, shouldConfirm = true)
                     )
                 }
                 is JoinRoomEvents.CancelKnock -> coroutineScope.cancelKnockRoom(event.requiresConfirmation, cancelKnockAction)
