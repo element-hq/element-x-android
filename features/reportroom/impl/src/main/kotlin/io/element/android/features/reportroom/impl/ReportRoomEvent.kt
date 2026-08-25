@@ -8,9 +8,9 @@
 
 package io.element.android.features.reportroom.impl
 
-sealed interface ReportRoomEvents {
-    data class UpdateReason(val reason: String) : ReportRoomEvents
-    data object ToggleLeaveRoom : ReportRoomEvents
-    data object Report : ReportRoomEvents
-    data object ClearReportAction : ReportRoomEvents
+sealed interface ReportRoomEvent {
+    data class UpdateReason(val reason: String) : ReportRoomEvent
+    data object ToggleLeaveRoom : ReportRoomEvent
+    data object Report : ReportRoomEvent
+    data object ClearReportAction : ReportRoomEvent
 }

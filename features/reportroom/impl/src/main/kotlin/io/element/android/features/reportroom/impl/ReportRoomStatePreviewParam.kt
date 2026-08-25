@@ -30,7 +30,7 @@ fun aReportRoomState(
     reason: String = "",
     leaveRoom: Boolean = false,
     reportAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
-    eventSink: (ReportRoomEvents) -> Unit = {}
+    eventSink: (ReportRoomEvent) -> Unit = {}
 ) = ReportRoomState(
     reason = reason,
     leaveRoom = leaveRoom,
