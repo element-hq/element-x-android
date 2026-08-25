@@ -53,8 +53,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.heading
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
@@ -80,6 +78,7 @@ import io.element.android.libraries.designsystem.modifiers.backgroundVerticalGra
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
+import io.element.android.libraries.designsystem.text.AdaptativeTitle
 import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -149,12 +148,10 @@ fun HomeTopBar(
                         // "Chats"
                         else -> ElementTheme.typography.fontHeadingLgBold
                     }
-                    Text(
-                        modifier = Modifier.semantics {
-                            heading()
-                        },
+                    AdaptativeTitle(
+                        title = displayTitle,
                         style = style,
-                        text = displayTitle,
+                        twoLinesStyle = ElementTheme.typography.fontHeadingSmMedium,
                     )
                 }
             },
