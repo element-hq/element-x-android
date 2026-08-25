@@ -12,6 +12,8 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.home.impl.datasource.aRoomListRoomSummaryFactory
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.eventformatter.test.FakeRoomLatestEventFormatter
+import io.element.android.libraries.matrix.api.core.RoomAlias
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.test.room.aRoomSummary
@@ -22,6 +24,7 @@ import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -88,6 +91,36 @@ class RoomListSearchPresenterTest {
                     roomList.currentFilter.value
                 ).isEqualTo(
                     RoomListFilter.None
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `present - query matching a room alias also filters on that room id`() = runTest {
+        val roomWithAlias = aRoomSummary(
+            roomId = RoomId("!aliased:domain"),
+            name = "A room",
+            canonicalAlias = RoomAlias("#element-x-android:matrix.org"),
+        )
+        val roomList = FakeDynamicRoomList()
+        val roomListService = FakeRoomListService(
+            createRoomListLambda = { roomList },
+            allRooms = FakeDynamicRoomList(summaries = MutableStateFlow(listOf(roomWithAlias))),
+        )
+        val presenter = createRoomListSearchPresenter(roomListService)
+        presenter.test {
+            awaitItem().let { state ->
+                state.query.edit { append("element-x") }
+            }
+            awaitItem().let {
+                assertThat(
+                    roomList.currentFilter.value
+                ).isEqualTo(
+                    RoomListFilter.any(
+                        RoomListFilter.NormalizedMatchRoomName("element-x"),
+                        RoomListFilter.Identifiers(listOf(roomWithAlias.roomId)),
+                    )
                 )
             }
         }
