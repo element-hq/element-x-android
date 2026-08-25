@@ -84,6 +84,29 @@ class AdvancedSettingsPresenterTest {
     }
 
     @Test
+    fun `present - hide space rooms off on`() = runTest {
+        val presenter = createAdvancedSettingsPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            // Skip until the initial data it loaded
+            skipItems(1)
+
+            with(awaitItem()) {
+                assertThat(hideSpaceRooms).isFalse()
+                eventSink(AdvancedSettingsEvent.SetHideSpaceRooms(true))
+            }
+            with(awaitItem()) {
+                assertThat(hideSpaceRooms).isTrue()
+                eventSink(AdvancedSettingsEvent.SetHideSpaceRooms(false))
+            }
+            with(awaitItem()) {
+                assertThat(hideSpaceRooms).isFalse()
+            }
+        }
+    }
+
+    @Test
     fun `present - share presence off on`() = runTest {
         val presenter = createAdvancedSettingsPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
