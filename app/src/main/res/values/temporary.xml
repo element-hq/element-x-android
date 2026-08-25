@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2026 Element Creations Ltd.
+  ~
+  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+  ~ Please see LICENSE files in the repository root for full details.
+  -->
+
+<resources>
+    <string name="screen_permission_rationale_title">Data access</string>
+    <string name="screen_permission_rationale_subtitle">These permissions are only used for the features listed below, and only while you are using them.</string>
+    <string name="screen_permission_rationale_camera_title">Camera</string>
+    <string name="screen_permission_rationale_camera_description">Taking a photo or a video to send in a room, and scanning a QR code to sign in.</string>
+    <string name="screen_permission_rationale_microphone_title">Microphone</string>
+    <string name="screen_permission_rationale_microphone_description">Recording a voice message and taking part in a call.</string>
+    <string name="screen_permission_rationale_location_title">Location</string>
+    <string name="screen_permission_rationale_location_description">Sharing your location in a room.</string>
+    <string name="screen_permission_rationale_notifications_title">Notifications</string>
+    <string name="screen_permission_rationale_notifications_description">Letting you know about new messages, invitations and calls.</string>
+</resources>
