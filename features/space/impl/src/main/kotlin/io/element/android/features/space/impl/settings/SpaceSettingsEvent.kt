@@ -8,4 +8,4 @@
 
 package io.element.android.features.space.impl.settings
 
-sealed interface SpaceSettingsEvents
+sealed interface SpaceSettingsEvent
