@@ -24,7 +24,7 @@ import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
-import io.element.android.features.login.impl.changeserver.ChangeServerEvents
+import io.element.android.features.login.impl.changeserver.ChangeServerEvent
 import io.element.android.features.login.impl.changeserver.ChangeServerState
 import io.element.android.features.login.impl.login.LoginModeEvent
 import io.element.android.features.login.impl.login.LoginModeState
@@ -134,12 +134,12 @@ class ConfirmAccountProviderPresenter(
                     val accountProviderUrl = host.ensureProtocol()
                     submittedAccountProvider = accountProviderUrl
                     changeServerState.eventSink(
-                        ChangeServerEvents.ChangeServer(AccountProvider(url = accountProviderUrl))
+                        ChangeServerEvent.ChangeServer(AccountProvider(url = accountProviderUrl))
                     )
                 }
                 ConfirmAccountProviderEvents.ClearError -> {
                     loginModeState.eventSink(LoginModeEvent.ClearError)
-                    changeServerState.eventSink(ChangeServerEvents.ClearError)
+                    changeServerState.eventSink(ChangeServerEvent.ClearError)
                 }
             }
         }

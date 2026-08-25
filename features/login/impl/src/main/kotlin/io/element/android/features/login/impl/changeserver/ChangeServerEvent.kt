@@ -10,9 +10,9 @@ package io.element.android.features.login.impl.changeserver
 
 import io.element.android.features.login.impl.accountprovider.AccountProvider
 
-sealed interface ChangeServerEvents {
-    data class ChangeServer(val accountProvider: AccountProvider) : ChangeServerEvents
-    data object ClearError : ChangeServerEvents
-    data object RequestLocalNetworkPermission : ChangeServerEvents
-    data object DismissLocalNetworkPermission : ChangeServerEvents
+sealed interface ChangeServerEvent {
+    data class ChangeServer(val accountProvider: AccountProvider) : ChangeServerEvent
+    data object ClearError : ChangeServerEvent
+    data object RequestLocalNetworkPermission : ChangeServerEvent
+    data object DismissLocalNetworkPermission : ChangeServerEvent
 }
