@@ -14,6 +14,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -79,6 +80,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import kotlin.time.Duration
 
 const val FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS = 200L
 
@@ -124,6 +126,10 @@ class TimelinePresenter(
     private var timelineItems by mutableStateOf<ImmutableList<TimelineItem>>(persistentListOf())
 
     private val focusRequestState: MutableState<FocusRequestState> = mutableStateOf(FocusRequestState.None)
+
+    // Where to come back to after following one or more replies.
+    private val returnAnchors = mutableStateListOf<EventId>()
+    private var firstVisibleEventId: EventId? = null
 
     @Composable
     override fun present(): TimelineState {
@@ -183,6 +189,7 @@ class TimelinePresenter(
                     }
                 }
                 is TimelineEvent.OnScrollFinished -> {
+                    firstVisibleEventId = (timelineItems.getOrNull(event.firstIndex) as? TimelineItem.Event)?.eventId
                     if (isLive) {
                         if (event.firstIndex == 0) {
                             newEventState.value = NewEventState.None
@@ -225,6 +232,9 @@ class TimelinePresenter(
                     liveLocationShareManager.stopShare(room.roomId)
                 }
                 is TimelineEvent.FocusOnEvent -> sessionCoroutineScope.launch {
+                    if (event.fromReply) {
+                        firstVisibleEventId?.takeIf { it != event.eventId }?.let(returnAnchors::add)
+                    }
                     focusRequestState.value = FocusRequestState.Requested(event.eventId, event.debounce)
                     delay(event.debounce)
                     Timber.tag(tag).d("Started focus on ${event.eventId}")
@@ -240,7 +250,17 @@ class TimelinePresenter(
                     focusRequestState.value = FocusRequestState.None
                 }
                 is TimelineEvent.JumpToLive -> {
+                    if (returnAnchors.isNotEmpty()) returnAnchors.clear()
                     timelineController.focusOnLive()
+                }
+                is TimelineEvent.JumpBack -> {
+                    val anchor = returnAnchors.removeLastOrNull()
+                    if (anchor != null) {
+                        sessionCoroutineScope.launch {
+                            focusRequestState.value = FocusRequestState.Requested(anchor, Duration.ZERO)
+                            focusOnEvent(anchor, focusRequestState)
+                        }.start()
+                    }
                 }
                 TimelineEvent.HideShieldDialog -> messageShieldDialogData.value = null
                 TimelineEvent.MarkAllAsRead -> sessionCoroutineScope.launch {
@@ -461,6 +481,7 @@ class TimelinePresenter(
             displayThreadSummaries = displayThreadSummaries,
             displayJumpToUnread = displayJumpToUnread,
             jumpToUnread = jumpToUnread.value,
+            canJumpBack = returnAnchors.isNotEmpty(),
             eventSink = ::handleEvent,
         )
     }

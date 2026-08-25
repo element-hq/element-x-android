@@ -1875,6 +1875,97 @@ class TimelinePresenterTest {
         canPinUnpin = canPinUnpin,
     )
 
+    @Test
+    fun `present - following a reply offers a way back to where the timeline was`() = runTest {
+        val timeline = aTimelineWithTwoEvents()
+        val presenter = createTimelinePresenter(timeline = timeline, room = aFocusableRoom(timeline))
+        presenter.test {
+            advanceUntilIdle()
+            val loadedState = expectMostRecentItem()
+            assertThat(loadedState.canJumpBack).isFalse()
+            val replyTargetId = loadedState.firstEventIdAt(1)
+
+            loadedState.eventSink(TimelineEvent.OnScrollFinished(0))
+            advanceUntilIdle()
+            loadedState.eventSink(TimelineEvent.FocusOnEvent(replyTargetId, fromReply = true))
+            advanceUntilIdle()
+            assertThat(expectMostRecentItem().canJumpBack).isTrue()
+
+            loadedState.eventSink(TimelineEvent.JumpBack)
+            advanceUntilIdle()
+            assertThat(expectMostRecentItem().canJumpBack).isFalse()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - a focus that did not come from a reply offers no way back`() = runTest {
+        val timeline = aTimelineWithTwoEvents()
+        val presenter = createTimelinePresenter(timeline = timeline, room = aFocusableRoom(timeline))
+        presenter.test {
+            advanceUntilIdle()
+            val loadedState = expectMostRecentItem()
+            val targetId = loadedState.firstEventIdAt(1)
+
+            loadedState.eventSink(TimelineEvent.OnScrollFinished(0))
+            advanceUntilIdle()
+            loadedState.eventSink(TimelineEvent.FocusOnEvent(targetId))
+            advanceUntilIdle()
+            assertThat(expectMostRecentItem().canJumpBack).isFalse()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - jumping to live forgets where the timeline was`() = runTest {
+        val timeline = aTimelineWithTwoEvents()
+        val presenter = createTimelinePresenter(timeline = timeline, room = aFocusableRoom(timeline))
+        presenter.test {
+            advanceUntilIdle()
+            val loadedState = expectMostRecentItem()
+            val replyTargetId = loadedState.firstEventIdAt(1)
+
+            loadedState.eventSink(TimelineEvent.OnScrollFinished(0))
+            advanceUntilIdle()
+            loadedState.eventSink(TimelineEvent.FocusOnEvent(replyTargetId, fromReply = true))
+            advanceUntilIdle()
+            assertThat(expectMostRecentItem().canJumpBack).isTrue()
+
+            loadedState.eventSink(TimelineEvent.JumpToLive)
+            advanceUntilIdle()
+            assertThat(expectMostRecentItem().canJumpBack).isFalse()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    private fun aTimelineWithTwoEvents() = FakeTimeline(
+        markAsReadResult = { Result.success(Unit) },
+        timelineItems = flowOf(
+            listOf(
+                MatrixTimelineItem.Event(A_UNIQUE_ID, anEventTimelineItem()),
+                MatrixTimelineItem.Event(
+                    uniqueId = A_UNIQUE_ID_2,
+                    event = anEventTimelineItem(eventId = AN_EVENT_ID_2, content = aMessageContent("Test message")),
+                ),
+            )
+        )
+    ).apply {
+        sendReadReceiptLambda = { _, _ -> Result.success(Unit) }
+    }
+
+    private fun aFocusableRoom(timeline: FakeTimeline) = FakeJoinedRoom(
+        liveTimeline = timeline,
+        createTimelineResult = { Result.success(timeline) },
+        baseRoom = FakeBaseRoom(
+            roomPermissions = roomPermissions(),
+            threadRootIdForEventResult = { _ -> Result.success(null) },
+        ),
+    )
+
+    private fun TimelineState.firstEventIdAt(index: Int): EventId {
+        return checkNotNull((timelineItems[index] as TimelineItem.Event).eventId)
+    }
+
     private fun TestScope.createTimelinePresenter(
         timeline: Timeline = FakeTimeline(),
         room: FakeJoinedRoom = FakeJoinedRoom(
