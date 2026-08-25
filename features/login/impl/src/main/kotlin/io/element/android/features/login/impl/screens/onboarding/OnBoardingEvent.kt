@@ -8,11 +8,11 @@
 
 package io.element.android.features.login.impl.screens.onboarding
 
-sealed interface OnBoardingEvents {
+sealed interface OnBoardingEvent {
     data class OnSignIn(
         val defaultAccountProvider: String
-    ) : OnBoardingEvents
+    ) : OnBoardingEvent
 
-    data object OnVersionClick : OnBoardingEvents
-    data object ClearError : OnBoardingEvents
+    data object OnVersionClick : OnBoardingEvent
+    data object ClearError : OnBoardingEvent
 }
