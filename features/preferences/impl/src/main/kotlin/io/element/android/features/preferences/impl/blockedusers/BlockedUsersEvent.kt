@@ -10,9 +10,9 @@ package io.element.android.features.preferences.impl.blockedusers
 
 import io.element.android.libraries.matrix.api.core.UserId
 
-sealed interface BlockedUsersEvents {
-    data class Unblock(val userId: UserId) : BlockedUsersEvents
-    data class CopyToClipboard(val userId: UserId) : BlockedUsersEvents
-    data object ConfirmUnblock : BlockedUsersEvents
-    data object Cancel : BlockedUsersEvents
+sealed interface BlockedUsersEvent {
+    data class Unblock(val userId: UserId) : BlockedUsersEvent
+    data class CopyToClipboard(val userId: UserId) : BlockedUsersEvent
+    data object ConfirmUnblock : BlockedUsersEvent
+    data object Cancel : BlockedUsersEvent
 }

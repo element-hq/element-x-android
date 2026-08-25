@@ -74,23 +74,23 @@ class BlockedUsersPresenter(
 
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
 
-        fun handleEvent(event: BlockedUsersEvents) {
+        fun handleEvent(event: BlockedUsersEvent) {
             when (event) {
-                is BlockedUsersEvents.Unblock -> {
+                is BlockedUsersEvent.Unblock -> {
                     pendingUserToUnblock = event.userId
                     unblockUserAction.value = AsyncAction.ConfirmingNoParams
                 }
-                is BlockedUsersEvents.CopyToClipboard -> {
+                is BlockedUsersEvent.CopyToClipboard -> {
                     clipboardHelper.copyPlainText(event.userId.value)
                     snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_copied_to_clipboard))
                 }
-                BlockedUsersEvents.ConfirmUnblock -> {
+                BlockedUsersEvent.ConfirmUnblock -> {
                     pendingUserToUnblock?.let {
                         coroutineScope.unblockUser(it, unblockUserAction)
                         pendingUserToUnblock = null
                     }
                 }
-                BlockedUsersEvents.Cancel -> {
+                BlockedUsersEvent.Cancel -> {
                     pendingUserToUnblock = null
                     unblockUserAction.value = AsyncAction.Uninitialized
                 }
