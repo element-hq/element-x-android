@@ -20,7 +20,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.annotations.ContributesNode
-import io.element.android.features.invitepeople.api.InvitePeopleEvents
+import io.element.android.features.invitepeople.api.InvitePeopleEvent
 import io.element.android.features.invitepeople.api.InvitePeoplePresenter
 import io.element.android.features.invitepeople.api.InvitePeopleRenderer
 import io.element.android.libraries.architecture.callback
@@ -81,7 +81,7 @@ class RoomInviteMembersNode(
                 ProgressDialog(text = stringResource(CommonStrings.common_creating_room))
             },
             onErrorDismiss = {
-                state.eventSink(InvitePeopleEvents.ClearError)
+                state.eventSink(InvitePeopleEvent.ClearError)
             }
         )
 

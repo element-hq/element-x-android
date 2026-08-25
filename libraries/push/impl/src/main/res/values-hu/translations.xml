@@ -30,6 +30,7 @@
   </plurals>
   <string name="notification_invite_body">"Meghívta, hogy csevegjen"</string>
   <string name="notification_invite_body_with_sender">"%1$s meghívta egy csevegésre"</string>
+  <string name="notification_live_location_started_body">"Elkezdték megosztani az élő helyzetüket"</string>
   <string name="notification_mentioned_you_body">"Megemlítette Önt: %1$s"</string>
   <string name="notification_new_messages">"Új üzenetek"</string>
   <plurals name="notification_new_messages_for_room">

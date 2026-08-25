@@ -3,14 +3,34 @@
   <string name="screen_create_room_action_create_room">"Nueva sala"</string>
   <string name="screen_create_room_add_people_title">"Invitar personas"</string>
   <string name="screen_create_room_error_creating_room">"Se ha producido un error al crear la sala"</string>
+  <string name="screen_create_room_error_creating_space">"No se pudo crear el espacio debido a un error desconocido. Inténtalo de nuevo más tarde."</string>
+  <string name="screen_create_room_name_placeholder">"Añadir nombre…"</string>
+  <string name="screen_create_room_new_room_title">"Nueva sala"</string>
+  <string name="screen_create_room_new_space_title">"Nuevo espacio"</string>
   <string name="screen_create_room_private_option_description">"Solo las personas invitadas pueden acceder."</string>
+  <string name="screen_create_room_private_option_title">"Privado"</string>
   <string name="screen_create_room_public_option_description">"Cualquiera puede encontrar esta sala.
 Puedes cambiar esto en cualquier momento en los ajustes de la sala."</string>
+  <string name="screen_create_room_public_option_short_description">"Cualquiera puede unirse."</string>
+  <string name="screen_create_room_public_option_title">"Público"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Cualquiera puede solicitar unirse, pero un administrador o un moderador tendrá que aceptar la solicitud"</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Permitir solicitar unirse"</string>
+  <string name="screen_create_room_room_access_section_knocking_restricted_option_description">"Cualquiera en %1$s puede unirse, pero el resto debe solicitar acceso."</string>
+  <string name="screen_create_room_room_access_section_knocking_restricted_option_title">"Solicitar unirse"</string>
+  <string name="screen_create_room_room_access_section_private_option_description">"Solo las personas invitadas pueden unirse."</string>
+  <string name="screen_create_room_room_access_section_private_option_title">"Privado"</string>
   <string name="screen_create_room_room_access_section_public_option_description">"Cualquiera puede unirse."</string>
+  <string name="screen_create_room_room_access_section_public_option_title">"Público"</string>
+  <string name="screen_create_room_room_access_section_restricted_option_description">"Cualquiera de %1$s puede unirse."</string>
+  <string name="screen_create_room_room_access_section_restricted_option_title">"Estándar"</string>
+  <string name="screen_create_room_room_access_section_title">"Quién tiene acceso"</string>
   <string name="screen_create_room_room_address_section_footer">"Necesitarás una dirección de sala para que sea visible en el directorio de salas públicas."</string>
   <string name="screen_create_room_room_address_section_title">"Dirección"</string>
   <string name="screen_create_room_room_visibility_section_title">"Visibilidad de la sala"</string>
+  <string name="screen_create_room_space_selection_no_space_description">"(ningún espacio)"</string>
+  <string name="screen_create_room_space_selection_no_space_option">"No añadir a un espacio"</string>
+  <string name="screen_create_room_space_selection_no_space_title">"No se ha seleccionado ningún espacio"</string>
+  <string name="screen_create_room_space_selection_sheet_title">"Añadir a un espacio"</string>
   <string name="screen_create_room_topic_label">"Tema (opcional)"</string>
+  <string name="screen_create_room_topic_placeholder">"Añadir descripción…"</string>
 </resources>

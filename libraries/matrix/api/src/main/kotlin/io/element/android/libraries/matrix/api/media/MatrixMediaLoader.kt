@@ -8,6 +8,9 @@
 
 package io.element.android.libraries.matrix.api.media
 
+/**
+ * Fetches media content from the homeserver, decrypting it on the way when the room is encrypted.
+ */
 interface MatrixMediaLoader {
     /**
      * @param source to fetch the content for.

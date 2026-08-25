@@ -28,11 +28,28 @@ import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
+/**
+ * A room the current user has joined, adding to [BaseRoom] everything that requires membership: sending events, moderation and room settings.
+ *
+ * An instance owns SDK resources, in particular [liveTimeline], so it must be closed once no longer needed.
+ */
 interface JoinedRoom : BaseRoom {
+    /**
+     * A counter incremented every time a synced event is received on [liveTimeline], so callers can refresh data derived from the room.
+     * It carries no meaning beyond "something changed", and is only updated while it has subscribers.
+     */
     val syncUpdateFlow: StateFlow<Long>
 
+    /** The members currently typing in the room, never including the current user; starts as an empty list. */
     val roomTypingMembersFlow: Flow<List<UserId>>
+
+    /** Emits when the verification state of other members' identities changes, for instance after a member resets their identity. */
     val identityStateChangesFlow: Flow<List<IdentityStateChange>>
+
+    /**
+     * The notification settings that apply to this room.
+     * Starts as [RoomNotificationSettingsState.Unknown]: [updateRoomNotificationSettings] must be called to populate it.
+     */
     val roomNotificationSettingsStateFlow: StateFlow<RoomNotificationSettingsState>
 
     /**
@@ -45,6 +62,7 @@ interface JoinedRoom : BaseRoom {
      */
     val liveTimeline: Timeline
 
+    /** Gives access to the paginated list of threads started in this room. */
     val threadsListService: ThreadsListService
 
     /**
@@ -55,6 +73,14 @@ interface JoinedRoom : BaseRoom {
         createTimelineParams: CreateTimelineParams,
     ): Result<Timeline>
 
+    /**
+     * Replaces the content of an event previously sent by the current user, by sending an edit of it.
+     *
+     * @param eventId the event to edit.
+     * @param body the new content, as plain text.
+     * @param htmlBody the new content as HTML, or `null` when the message has no formatted version.
+     * @param intentionalMentions the users and rooms this new content deliberately mentions.
+     */
     suspend fun editMessage(eventId: EventId, body: String, htmlBody: String?, intentionalMentions: List<IntentionalMention>): Result<Unit>
 
     /**
@@ -63,12 +89,28 @@ interface JoinedRoom : BaseRoom {
      */
     suspend fun typingNotice(isTyping: Boolean): Result<Unit>
 
+    /**
+     * Invites a user to this room.
+     *
+     * @param id the user to invite.
+     */
     suspend fun inviteUserById(id: UserId): Result<Unit>
 
+    /**
+     * Uploads [data] as the new avatar of the room, not of the current user.
+     *
+     * @param mimeType the MIME type of the image, for instance `image/jpeg`.
+     * @param data the raw bytes of the image.
+     */
     suspend fun updateAvatar(mimeType: String, data: ByteArray): Result<Unit>
 
+    /** Removes the avatar of the room. */
     suspend fun removeAvatar(): Result<Unit>
 
+    /**
+     * Refreshes [roomNotificationSettingsStateFlow], which moves to a pending state and then to a ready or error state.
+     * The failure is reported through that flow as well as through the returned [Result].
+     */
     suspend fun updateRoomNotificationSettings(): Result<Unit>
 
     /**
@@ -83,11 +125,15 @@ interface JoinedRoom : BaseRoom {
 
     /**
      * Update the room's visibility in the room directory.
+     *
+     * @param roomVisibility whether the room should be listed publicly in the directory.
      */
     suspend fun updateRoomVisibility(roomVisibility: RoomVisibility): Result<Unit>
 
     /**
-     * Update room history visibility for this room.
+     * Update room history visibility for this room, i.e. how much of the past a new member is allowed to read.
+     *
+     * @param historyVisibility the new history visibility to apply.
      */
     suspend fun updateHistoryVisibility(historyVisibility: RoomHistoryVisibility): Result<Unit>
 
@@ -98,6 +144,8 @@ interface JoinedRoom : BaseRoom {
      * - `true` if the room alias didn't exist and it's now published.
      * - `false` if the room alias was already present so it couldn't be
      * published.
+     *
+     * @param roomAlias the alias to publish.
      */
     suspend fun publishRoomAliasInRoomDirectory(roomAlias: RoomAlias): Result<Boolean>
 
@@ -108,6 +156,8 @@ interface JoinedRoom : BaseRoom {
      * - `true` if the room alias was present and it's now removed from the
      * room directory.
      * - `false` if the room alias didn't exist so it couldn't be removed.
+     *
+     * @param roomAlias the alias to remove.
      */
     suspend fun removeRoomAliasFromRoomDirectory(roomAlias: RoomAlias): Result<Boolean>
 
@@ -117,26 +167,74 @@ interface JoinedRoom : BaseRoom {
     suspend fun enableEncryption(): Result<Unit>
 
     /**
-     * Update the join rule for this room.
+     * Update the join rule for this room, i.e. who is allowed to join it.
+     *
+     * @param joinRule the new join rule to apply.
      */
     suspend fun updateJoinRule(joinRule: JoinRule): Result<Unit>
 
+    /**
+     * Changes the power level of individual members, which is how roles such as moderator or administrator are granted.
+     *
+     * @param changes the new power level to apply to each user.
+     */
     suspend fun updateUsersRoles(changes: List<UserRoleChange>): Result<Unit>
 
+    /**
+     * Changes the power level required for each action in the room, such as inviting, kicking or changing the room name.
+     *
+     * @param roomPowerLevelsValues the new threshold for every action.
+     */
     suspend fun updatePowerLevels(roomPowerLevelsValues: RoomPowerLevelsValues): Result<Unit>
 
+    /** Restores the power levels required for each action to the defaults the room was created with. */
     suspend fun resetPowerLevels(): Result<Unit>
 
+    /**
+     * Changes the name of the room.
+     *
+     * @param name the new room name.
+     */
     suspend fun setName(name: String): Result<Unit>
 
+    /**
+     * Changes the topic of the room.
+     *
+     * @param topic the new room topic.
+     */
     suspend fun setTopic(topic: String): Result<Unit>
 
+    /**
+     * Reports an event to the homeserver moderators, optionally ignoring its sender at the same time.
+     *
+     * @param eventId the event being reported.
+     * @param reason the explanation sent to the moderators.
+     * @param blockUserId the sender to also add to the ignore list, or `null` to only report the event.
+     */
     suspend fun reportContent(eventId: EventId, reason: String, blockUserId: UserId?): Result<Unit>
 
+    /**
+     * Removes a member from the room; they are able to join again unless they are also banned.
+     *
+     * @param userId the member to remove.
+     * @param reason the reason recorded in the membership event, or `null` for none.
+     */
     suspend fun kickUser(userId: UserId, reason: String? = null): Result<Unit>
 
+    /**
+     * Bans a user from the room, removing them if they are a member and preventing them from joining again.
+     *
+     * @param userId the user to ban.
+     * @param reason the reason recorded in the membership event, or `null` for none.
+     */
     suspend fun banUser(userId: UserId, reason: String? = null): Result<Unit>
 
+    /**
+     * Lifts the ban on a user, allowing them to join the room again; it does not invite them back.
+     *
+     * @param userId the user to unban.
+     * @param reason the reason recorded in the membership event, or `null` for none.
+     */
     suspend fun unbanUser(userId: UserId, reason: String? = null): Result<Unit>
 
     /**
@@ -161,6 +259,12 @@ interface JoinedRoom : BaseRoom {
      */
     fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver>
 
+    /**
+     * Enables or disables the send queue of this room only; see [io.element.android.libraries.matrix.api.MatrixClient.setAllSendQueuesEnabled]
+     * for the session-wide equivalent and for why a queue disables itself.
+     *
+     * @param enabled whether the send queue of this room should be enabled.
+     */
     suspend fun setSendQueueEnabled(enabled: Boolean)
 
     /**

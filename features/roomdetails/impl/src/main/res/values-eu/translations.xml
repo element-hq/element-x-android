@@ -83,7 +83,6 @@
   <string name="screen_room_notification_settings_error_loading_settings">"Errorea gertatu da jakinarazpen-ezarpenak kargatzean."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Zure zerbitzaria ez da bateragarria enkriptatutako gelen aukerarekin; litekeena da gela batzuetako jakinarazpenak ez jasotzea."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Mezu guztiak"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Aipamenak eta hitz gakoak soilik"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Gela honetan, jakinarazi"</string>
   <string name="screen_room_roles_and_permissions_admins">"Administratzaileak"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"Administratzaileak eta jabeak"</string>

@@ -8,6 +8,10 @@
 
 package io.element.android.features.location.api
 
+/**
+ * Tells whether the location features can be used at all, which depends on the build having a map provider configured.
+ */
 interface LocationService {
+    /** Whether location sharing and map rendering are available; `false` disables the whole feature in the UI. */
     fun isServiceAvailable(): Boolean
 }

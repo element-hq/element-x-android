@@ -28,13 +28,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalRippleThemeConfiguration
+import androidx.compose.material3.RippleThemeConfiguration
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -181,11 +183,8 @@ private fun ButtonInternal(
         ButtonSize.LargeLowPadding -> PaddingValues(horizontal = lowHorizontalPaddingValue, vertical = 13.dp)
     }
 
-    val shape = when (style) {
-        ButtonStyle.Filled,
-        ButtonStyle.Outlined -> RoundedCornerShape(percent = 50)
-        ButtonStyle.Text -> RectangleShape
-    }
+    // Apply the same shape to all buttons, so that the focus ring is consistent across styles.
+    val shape = RoundedCornerShape(percent = 50)
 
     val border = when (style) {
         ButtonStyle.Filled -> null
@@ -202,48 +201,66 @@ private fun ButtonInternal(
         ButtonStyle.Text -> null
     }
 
-    androidx.compose.material3.Button(
-        onClick = {
-            if (!showProgress) {
-                onClick()
-            }
-        },
-        modifier = modifier.heightIn(min = minHeight),
-        enabled = enabled,
-        shape = shape,
-        colors = colors,
-        elevation = null,
-        border = border,
-        contentPadding = contentPadding,
-        interactionSource = remember { MutableInteractionSource() },
+    // Reduce outerStrokeInset on Filled buttons so that it's displayed around the button
+    val outerStrokeInset = when (style) {
+        ButtonStyle.Filled -> (-4).dp
+        ButtonStyle.Outlined,
+        ButtonStyle.Text -> 0.dp
+    }
+
+    CompositionLocalProvider(
+        LocalRippleThemeConfiguration provides RippleThemeConfiguration(
+            RippleThemeConfiguration.Focus.InsetRing(
+                outerStrokeInset = outerStrokeInset,
+                outerStrokeWidth = 2.dp,
+                innerStrokeInset = 0.dp,
+                innerStrokeWidth = 0.dp,
+            )
+        ),
     ) {
-        when {
-            showProgress -> {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .progressSemantics()
-                        .size(20.dp),
-                    color = LocalContentColor.current,
-                    strokeWidth = 2.dp,
-                )
-                Spacer(modifier = Modifier.width(8.dp))
+        androidx.compose.material3.Button(
+            onClick = {
+                if (!showProgress) {
+                    onClick()
+                }
+            },
+            modifier = modifier.heightIn(min = minHeight),
+            enabled = enabled,
+            shape = shape,
+            colors = colors,
+            elevation = null,
+            border = border,
+            contentPadding = contentPadding,
+            interactionSource = remember { MutableInteractionSource() },
+        ) {
+            when {
+                showProgress -> {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .progressSemantics()
+                            .size(20.dp),
+                        color = LocalContentColor.current,
+                        strokeWidth = 2.dp,
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
+                leadingIcon != null -> {
+                    Icon(
+                        painter = leadingIcon.getPainter(),
+                        contentDescription = null,
+                        tint = LocalContentColor.current,
+                        modifier = Modifier.size(20.dp),
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
             }
-            leadingIcon != null -> {
-                Icon(
-                    painter = leadingIcon.getPainter(),
-                    contentDescription = null,
-                    tint = LocalContentColor.current,
-                    modifier = Modifier.size(20.dp),
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-            }
+            Text(
+                text = text,
+                style = ElementTheme.typography.fontBodyLgMedium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
         }
-        Text(
-            text = text,
-            style = ElementTheme.typography.fontBodyLgMedium,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
     }
 }
 
@@ -294,7 +311,7 @@ internal enum class ButtonStyle {
 
     @Composable
     fun getColors(destructive: Boolean): ButtonColors = when (this) {
-        Filled -> ButtonDefaults.buttonColors(
+        Filled -> ButtonDefaults.filledTonalButtonColors(
             containerColor = getPrimaryColor(destructive),
             contentColor = ElementTheme.materialColors.onPrimary,
             disabledContainerColor = if (destructive) {
@@ -304,13 +321,13 @@ internal enum class ButtonStyle {
             },
             disabledContentColor = ElementTheme.colors.textOnSolidPrimary
         )
-        Outlined -> ButtonDefaults.buttonColors(
+        Outlined -> ButtonDefaults.outlinedButtonColors(
             containerColor = Color.Transparent,
             contentColor = getPrimaryColor(destructive),
             disabledContainerColor = Color.Transparent,
             disabledContentColor = getDisabledContentColor(destructive),
         )
-        Text -> ButtonDefaults.buttonColors(
+        Text -> ButtonDefaults.textButtonColors(
             containerColor = Color.Transparent,
             contentColor = if (destructive) {
                 ElementTheme.colors.textCriticalPrimary

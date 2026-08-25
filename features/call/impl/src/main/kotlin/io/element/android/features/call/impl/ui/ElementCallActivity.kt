@@ -11,9 +11,9 @@ package io.element.android.features.call.impl.ui
 import android.Manifest
 import android.app.PictureInPictureParams
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
-import android.util.Rational
 import android.view.WindowManager
 import android.webkit.PermissionRequest
 import androidx.activity.compose.setContent
@@ -38,6 +38,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Lifecycle
 import dev.zacsweers.metro.Inject
 import io.element.android.compound.colors.SemanticColorsLightDark
+import io.element.android.compound.theme.ForcedDarkElementTheme
 import io.element.android.features.call.api.CallData
 import io.element.android.features.call.impl.DefaultElementCallEntryPoint
 import io.element.android.features.call.impl.di.CallBindings
@@ -48,6 +49,7 @@ import io.element.android.features.call.impl.pip.PipView
 import io.element.android.features.call.impl.services.CallForegroundService
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.libraries.androidutils.browser.ConsoleMessageLogger
+import io.element.android.libraries.androidutils.media.setAspectRatioFromOrientation
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.audio.api.AudioFocus
@@ -84,6 +86,8 @@ class ElementCallActivity :
     private val webViewTarget = mutableStateOf<CallData?>(null)
 
     private var eventSink: ((CallScreenEvent) -> Unit)? = null
+
+    private var currentPipOrientation: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -143,24 +147,28 @@ class ElementCallActivity :
                 compoundDark = colors.dark,
                 buildMeta = buildMeta,
             ) {
-                val state = presenter.present()
-                eventSink = state.eventSink
-                LaunchedEffect(state.isCallActive) {
-                    if (state.isCallActive) {
-                        setCallIsActive()
+                ForcedDarkElementTheme(
+                    colors = colors,
+                ) {
+                    val state = presenter.present()
+                    eventSink = state.eventSink
+                    LaunchedEffect(state.isCallActive) {
+                        if (state.isCallActive) {
+                            setCallIsActive()
+                        }
                     }
+                    CallScreenView(
+                        state = state,
+                        pipState = pipState,
+                        onConsoleMessage = {
+                            consoleMessageLogger.log("ElementCall", it)
+                        },
+                        requestPermissions = { permissions, callback ->
+                            requestPermissionCallback = callback
+                            requestPermissionsLauncher.launch(permissions)
+                        }
+                    )
                 }
-                CallScreenView(
-                    state = state,
-                    pipState = pipState,
-                    onConsoleMessage = {
-                        consoleMessageLogger.log("ElementCall", it)
-                    },
-                    requestPermissions = { permissions, callback ->
-                        requestPermissionCallback = callback
-                        requestPermissionsLauncher.launch(permissions)
-                    }
-                )
             }
         }
     }
@@ -194,6 +202,9 @@ class ElementCallActivity :
         }
         DisposableEffect(Unit) {
             val onPictureInPictureModeChangedListener = Consumer { _: PictureInPictureModeChangedInfo ->
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    setPipParams()
+                }
                 pipEventSink(PictureInPictureEvent.OnPictureInPictureModeChanged(isInPictureInPictureMode))
                 if (!isInPictureInPictureMode && !lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
                     Timber.tag(loggerTag.value).d("Exiting PiP mode: Hangup the call")
@@ -292,10 +303,17 @@ class ElementCallActivity :
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
+    override fun setPipOrientation(orientation: Int?) {
+        currentPipOrientation = orientation
+        setPictureInPictureParams(getPictureInPictureParams())
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun getPictureInPictureParams(): PictureInPictureParams {
+        // Portrait for calls seems more appropriate as a fallback value
+        val orientation = currentPipOrientation ?: Configuration.ORIENTATION_PORTRAIT
         return PictureInPictureParams.Builder()
-            // Portrait for calls seems more appropriate
-            .setAspectRatio(Rational(3, 5))
+            .setAspectRatioFromOrientation(orientation)
             .apply {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     setAutoEnterEnabled(true)

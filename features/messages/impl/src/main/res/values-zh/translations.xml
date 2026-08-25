@@ -7,15 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"由未知或已删除的设备加密。"</string>
   <string name="crypto_event_authenticity_unsigned_device">"由未经其所有者验证的设备加密。"</string>
   <string name="crypto_event_authenticity_unverified_identity">"由未经验证的用户加密。"</string>
-  <string name="emoji_picker_category_activity">"节假日"</string>
-  <string name="emoji_picker_category_flags">"旗帜"</string>
-  <string name="emoji_picker_category_foods">"饮食"</string>
-  <string name="emoji_picker_category_nature">"动物和自然"</string>
-  <string name="emoji_picker_category_objects">"日常物品"</string>
-  <string name="emoji_picker_category_people">"表情和人物"</string>
-  <string name="emoji_picker_category_places">"文旅景点"</string>
-  <string name="emoji_picker_category_recent">"最近的 Emoji"</string>
-  <string name="emoji_picker_category_symbols">"符号"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"水平翻转图像"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"水平翻转"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"原始"</string>
@@ -76,6 +67,9 @@
   <string name="screen_room_timeline_reactions_show_more">"展开"</string>
   <string name="screen_room_timeline_reactions_show_reactions_summary">"显示反应摘要"</string>
   <string name="screen_room_timeline_read_marker_title">"新消息"</string>
+  <plurals name="screen_room_timeline_redacted_messages">
+    <item quantity="other">"%1$d 个已移除的消息"</item>
+  </plurals>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="other">"%1$d 个房间变化"</item>
   </plurals>

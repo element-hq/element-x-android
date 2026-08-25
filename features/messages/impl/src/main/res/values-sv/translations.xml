@@ -7,14 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"Krypterad av en okänd eller raderad enhet."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Krypterad av en enhet som inte verifierats av ägaren."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Krypterad av en overifierad användare."</string>
-  <string name="emoji_picker_category_activity">"Aktiviteter"</string>
-  <string name="emoji_picker_category_flags">"Flaggor"</string>
-  <string name="emoji_picker_category_foods">"Mat &amp; dryck"</string>
-  <string name="emoji_picker_category_nature">"Djur &amp; natur"</string>
-  <string name="emoji_picker_category_objects">"Föremål"</string>
-  <string name="emoji_picker_category_people">"Smileys &amp; personer"</string>
-  <string name="emoji_picker_category_places">"Resor &amp; platser"</string>
-  <string name="emoji_picker_category_symbols">"Symboler"</string>
   <string name="screen_media_upload_preview_caption_warning">"Bildtexter kanske inte är synliga för personer som använder äldre appar."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Tryck för att ändra videouppladdningskvaliteten"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Filen kunde inte laddas upp."</string>

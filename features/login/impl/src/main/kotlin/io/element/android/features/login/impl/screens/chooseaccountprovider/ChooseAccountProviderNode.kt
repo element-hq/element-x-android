@@ -32,7 +32,6 @@ class ChooseAccountProviderNode(
     interface Callback : Plugin {
         fun navigateToLoginPassword()
         fun navigateToOAuth(oAuthDetails: OAuthDetails)
-        fun navigateToCreateAccount(url: String)
     }
 
     private val callback: Callback = callback()
@@ -48,7 +47,6 @@ class ChooseAccountProviderNode(
             onOAuthDetails = callback::navigateToOAuth,
             onNeedLoginPassword = callback::navigateToLoginPassword,
             onLearnMoreClick = { openLearnMorePage(context) },
-            onCreateAccountContinue = callback::navigateToCreateAccount,
         )
     }
 }

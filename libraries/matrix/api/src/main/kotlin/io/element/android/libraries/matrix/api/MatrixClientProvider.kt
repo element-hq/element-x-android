@@ -10,18 +10,26 @@ package io.element.android.libraries.matrix.api
 
 import io.element.android.libraries.matrix.api.core.SessionId
 
+/**
+ * In-memory cache of the [MatrixClient] of every logged in session.
+ *
+ * Prefer injecting the [MatrixClient] directly: this provider is meant for the entry points that only know a [SessionId], such as push handling and workers.
+ */
 interface MatrixClientProvider {
     /**
-     * Can be used to get or restore a MatrixClient with the given [SessionId].
-     * If a [MatrixClient] is already in memory, it'll return it. Otherwise it'll try to restore one.
-     * Most of the time you want to use injected constructor instead of retrieving a MatrixClient with this provider.
+     * Returns the cached [MatrixClient] for [sessionId], restoring the session from storage and starting its sync if it is not in memory yet.
+     * Concurrent calls are serialised, so only one restore happens per session.
+     *
+     * @param sessionId the [SessionId] of the session to get or restore.
+     * @return the client, or a failure if the session could not be restored.
      */
     suspend fun getOrRestore(sessionId: SessionId): Result<MatrixClient>
 
     /**
-     * Can be used to retrieve an existing [MatrixClient] with the given [SessionId].
-     * @param sessionId the [SessionId] of the [MatrixClient] to retrieve.
-     * @return the [MatrixClient] if it exists.
+     * Returns the [MatrixClient] for [sessionId] only if it is already in memory, without attempting to restore it.
+     *
+     * @param sessionId the [SessionId] of the session to retrieve.
+     * @return the cached client, or `null` if that session is not currently held in memory.
      */
     fun getOrNull(sessionId: SessionId): MatrixClient?
 }

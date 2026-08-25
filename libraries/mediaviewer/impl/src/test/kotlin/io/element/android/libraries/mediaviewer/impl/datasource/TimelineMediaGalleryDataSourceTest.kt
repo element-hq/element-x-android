@@ -34,9 +34,12 @@ import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.libraries.matrix.ui.components.A_BLUR_HASH
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopEventContentValidationCache
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
+import io.element.android.libraries.mediaviewer.impl.model.aMediaItemImage
 import io.element.android.libraries.mediaviewer.test.util.FileExtensionExtractorWithoutValidation
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -170,6 +173,32 @@ class TimelineMediaGalleryDataSourceTest {
     }
 
     @Test
+    fun `test - failing to load a focused timeline keeps the item that was opened`() = runTest {
+        val room = FakeJoinedRoom(
+            createTimelineResult = { Result.failure(AN_EXCEPTION) },
+            roomCoroutineScope = backgroundScope,
+        )
+        val initialMediaItem = aMediaItemImage()
+        val sut = createTimelineMediaGalleryDataSource(
+            room = room,
+            mediaTimeline = FocusedMediaTimeline(
+                room = room,
+                eventId = AN_EVENT_ID,
+                onlyPinnedEvents = false,
+                initialMediaItem = initialMediaItem,
+            ),
+        )
+        sut.start(backgroundScope)
+        sut.groupedMediaItemsFlow().test {
+            val item = awaitItem()
+            assertThat(item.isSuccess()).isTrue()
+            assertThat(item.dataOrNull()?.imageAndVideoItems).contains(initialMediaItem)
+            expectNoEvents()
+        }
+        assertThat(sut.getLastData().isFailure()).isFalse()
+    }
+
+    @Test
     fun `test - when timeline emits new data, the flow emits the data`() = runTest {
         val timelineItems = MutableStateFlow<List<MatrixTimelineItem>>(emptyList())
         val fakeTimeline = FakeTimeline(
@@ -249,6 +278,8 @@ class TimelineMediaGalleryDataSourceTest {
                                 ),
                                 mediaSource = MediaSource("url"),
                                 thumbnailSource = MediaSource("url_thumbnail"),
+                                blurHash = A_BLUR_HASH,
+                                validationState = noopValidationState,
                             )
                         ),
                         fileItems = persistentListOf()
@@ -259,14 +290,17 @@ class TimelineMediaGalleryDataSourceTest {
     }
 }
 
+private val noopValidationState = NoopContentValidationState()
+
 internal fun TestScope.createTimelineMediaGalleryDataSource(
     room: JoinedRoom = FakeJoinedRoom(
         liveTimeline = FakeTimeline(),
     ),
+    mediaTimeline: MediaTimeline? = null,
 ): TimelineMediaGalleryDataSource {
     return TimelineMediaGalleryDataSource(
         room = room,
-        mediaTimeline = LiveMediaTimeline(room),
+        mediaTimeline = mediaTimeline ?: LiveMediaTimeline(room),
         timelineMediaItemsFactory = createTimelineMediaItemsFactory(),
         mediaItemsPostProcessor = MediaItemsPostProcessor(),
     )
@@ -281,5 +315,6 @@ fun TestScope.createTimelineMediaItemsFactory() = TimelineMediaItemsFactory(
         fileSizeFormatter = FakeFileSizeFormatter(),
         fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
         dateFormatter = FakeDateFormatter(),
-    ),
+        contentValidationCache = NoopEventContentValidationCache(noopValidationState),
+    )
 )

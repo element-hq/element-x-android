@@ -70,7 +70,7 @@ fun EditDefaultNotificationSettingView(
                             mode = item,
                             isSelected = state.mode == item,
                             displayMentionsOnlyDisclaimer = state.displayMentionsOnlyDisclaimer,
-                            onSelectOption = { state.eventSink(EditDefaultNotificationSettingStateEvents.SetNotificationMode(it)) }
+                            onSelectOption = { state.eventSink(EditDefaultNotificationSettingStateEvent.SetNotificationMode(it)) }
                         )
                     }
                 }
@@ -88,7 +88,7 @@ fun EditDefaultNotificationSettingView(
                         null -> ""
                     }
                     ListItem(
-                        headlineContent = {
+                        content = {
                             val roomName = summary.name
                             Text(
                                 text = roomName ?: stringResource(id = CommonStrings.common_no_room_name),
@@ -116,7 +116,7 @@ fun EditDefaultNotificationSettingView(
         AsyncActionView(
             async = state.changeNotificationSettingAction,
             errorMessage = { stringResource(R.string.screen_notification_settings_edit_failed_updating_default_mode) },
-            onErrorDismiss = { state.eventSink(EditDefaultNotificationSettingStateEvents.ClearError) },
+            onErrorDismiss = { state.eventSink(EditDefaultNotificationSettingStateEvent.ClearError) },
             onSuccess = {},
         )
     }
@@ -125,7 +125,7 @@ fun EditDefaultNotificationSettingView(
 @PreviewsDayNight
 @Composable
 internal fun EditDefaultNotificationSettingViewPreview(
-    @PreviewParameter(EditDefaultNotificationSettingStateProvider::class) state: EditDefaultNotificationSettingState
+    @PreviewParameter(EditDefaultNotificationSettingStatePreviewParam::class) state: EditDefaultNotificationSettingState
 ) = ElementPreview {
     EditDefaultNotificationSettingView(
         state = state,

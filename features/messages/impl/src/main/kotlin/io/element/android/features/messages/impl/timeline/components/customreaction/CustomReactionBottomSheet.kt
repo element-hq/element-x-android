@@ -8,19 +8,23 @@
 
 package io.element.android.features.messages.impl.timeline.components.customreaction
 
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.SheetState
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import io.element.android.emojibasebindings.Emoji
-import io.element.android.features.messages.impl.timeline.components.customreaction.picker.EmojiPicker
-import io.element.android.features.messages.impl.timeline.components.customreaction.picker.EmojiPickerPresenter
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.features.messages.impl.timeline.a11y.a11yReactionAction
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.hide
+import io.element.android.libraries.emoji.api.picker.EmojiPickerRenderer
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -28,44 +32,55 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransa
 fun CustomReactionBottomSheet(
     state: CustomReactionState,
     onSelectEmoji: (EventOrTransactionId, Emoji) -> Unit,
+    emojiPickerRenderer: EmojiPickerRenderer,
     modifier: Modifier = Modifier,
 ) {
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
-    val target = state.target as? CustomReactionState.Target.Success
 
-    fun onDismiss() {
-        state.eventSink(CustomReactionEvent.DismissCustomReactionSheet)
-    }
+    when (state.target) {
+        CustomReactionState.Target.None,
+        is CustomReactionState.Target.Loading -> Unit
+        is CustomReactionState.Target.Success -> {
+            fun onEmojiSelectedDismiss(emoji: Emoji) {
+                sheetState.hide(coroutineScope) {
+                    state.eventSink(CustomReactionEvent.DismissCustomReactionSheet)
+                    onSelectEmoji(state.target.event.eventOrTransactionId, emoji)
+                }
+            }
 
-    fun onEmojiSelectedDismiss(emoji: Emoji) {
-        if (target?.event == null) return
-        sheetState.hide(coroutineScope) {
-            state.eventSink(CustomReactionEvent.DismissCustomReactionSheet)
-            onSelectEmoji(target.event.eventOrTransactionId, emoji)
-        }
-    }
+            fun onDismiss() {
+                state.eventSink(CustomReactionEvent.DismissCustomReactionSheet)
+            }
 
-    if (target?.emojibaseStore != null && target.event.eventId != null) {
-        ModalBottomSheet(
-            onDismissRequest = ::onDismiss,
-            sheetState = sheetState,
-            modifier = modifier,
-            scrollable = false,
-        ) {
-            val presenter = remember {
-                EmojiPickerPresenter(
-                    emojibaseStore = target.emojibaseStore,
-                    recentEmojis = state.recentEmojis,
-                    coroutineDispatchers = CoroutineDispatchers.Default,
+            ModalBottomSheet(
+                onDismissRequest = ::onDismiss,
+                sheetState = sheetState,
+                modifier = modifier,
+                scrollable = false,
+            ) {
+                ExpandSheetWhenImeIsVisible(sheetState)
+                emojiPickerRenderer.Render(
+                    state = state.target.emojiPickerState,
+                    onSelectEmoji = ::onEmojiSelectedDismiss,
+                    selectedEmojis = state.selectedEmoji,
+                    modifier = Modifier.fillMaxSize(),
+                    contentDescription = { emoji, isSelected ->
+                        a11yReactionAction(emoji = emoji.unicode, userAlreadyReacted = isSelected)
+                    },
                 )
             }
-            EmojiPicker(
-                onSelectEmoji = ::onEmojiSelectedDismiss,
-                state = presenter.present(),
-                selectedEmojis = state.selectedEmoji,
-                modifier = Modifier.fillMaxSize(),
-            )
+        }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
+@Composable
+internal fun ExpandSheetWhenImeIsVisible(sheetState: SheetState) {
+    val isImeVisible = WindowInsets.isImeVisible
+    LaunchedEffect(isImeVisible) {
+        if (isImeVisible) {
+            sheetState.expand()
         }
     }
 }

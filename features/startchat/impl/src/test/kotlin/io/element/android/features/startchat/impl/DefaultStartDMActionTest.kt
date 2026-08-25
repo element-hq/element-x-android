@@ -11,6 +11,8 @@ package io.element.android.features.startchat.impl
 import androidx.compose.runtime.mutableStateOf
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.CreatedRoom
+import io.element.android.features.enterprise.api.SessionEnterpriseService
+import io.element.android.features.enterprise.test.FakeSessionEnterpriseService
 import io.element.android.features.startchat.api.ConfirmingStartDmWithMatrixUser
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -25,6 +27,7 @@ import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -122,13 +125,41 @@ class DefaultStartDMActionTest {
         assertThat(state.value).isEqualTo(ConfirmingStartDmWithMatrixUser(aMatrixUser(), isUserIdentityUnknown = true))
     }
 
+    @Test
+    fun `when SessionEnterpriseService disables encryption the DM is created without encryption`() = runTest {
+        val createDmLambda = lambdaRecorder<UserId, Boolean, Result<RoomId>> { _, _ -> Result.success(A_ROOM_ID) }
+        val matrixClient = FakeMatrixClient().apply {
+            givenFindDmResult(Result.success(null))
+            createDmResult = createDmLambda
+        }
+
+        val action = createStartDMAction(
+            matrixClient = matrixClient,
+            sessionEnterpriseService = FakeSessionEnterpriseService(isEncryptionDisabledResult = { true })
+        )
+        val state = mutableStateOf<AsyncAction<RoomId>>(AsyncAction.Uninitialized)
+
+        val matrixUser = aMatrixUser()
+        action.execute(matrixUser = matrixUser, createIfDmDoesNotExist = true, actionState = state)
+
+        createDmLambda.assertions().isCalledOnce().with(
+            value(matrixUser.userId),
+            // isEncrypted should be false because encryption is disabled
+            value(false),
+        )
+
+        assertThat(state.value).isEqualTo(AsyncAction.Success(A_ROOM_ID))
+    }
+
     private fun createStartDMAction(
         matrixClient: MatrixClient = FakeMatrixClient(),
         analyticsService: AnalyticsService = FakeAnalyticsService(),
+        sessionEnterpriseService: SessionEnterpriseService = FakeSessionEnterpriseService(isEncryptionDisabledResult = { false }),
     ): DefaultStartDMAction {
         return DefaultStartDMAction(
             matrixClient = matrixClient,
             analyticsService = analyticsService,
+            sessionEnterpriseService = sessionEnterpriseService,
         )
     }
 }

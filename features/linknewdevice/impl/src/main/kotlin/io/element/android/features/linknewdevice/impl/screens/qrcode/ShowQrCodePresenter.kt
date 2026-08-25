@@ -26,24 +26,29 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import kotlin.time.Duration.Companion.seconds
 
 private val tag = LoggerTag("ShowQrCodePresenter", LoggerTags.linkNewDevice)
 
 @AssistedInject
 class ShowQrCodePresenter(
     @Assisted private val initialData: String,
+    @Assisted private val maxQrCodeRotation: Int,
     private val linkNewMobileHandler: LinkNewMobileHandler,
 ) : Presenter<ShowQrCodeState> {
     @AssistedFactory
     interface Factory {
-        fun create(initialData: String): ShowQrCodePresenter
+        fun create(
+            initialData: String,
+            maxQrCodeRotation: Int,
+        ): ShowQrCodePresenter
     }
 
     private var loadingJob: Job? = null
 
     @Composable
     override fun present(): ShowQrCodeState {
-        var qrCodeRotationCounter by remember { mutableIntStateOf(MAX_QR_CODE_ROTATION) }
+        var qrCodeRotationCounter by remember { mutableIntStateOf(maxQrCodeRotation) }
         val state by produceState(
             initialValue = ShowQrCodeState(
                 data = AsyncData.Success(initialData),
@@ -63,7 +68,7 @@ class ShowQrCodePresenter(
                             linkNewMobileHandler.rotateQrCode()
                             // Ensure that outdated data is not rendered too long while rotating QR code
                             loadingJob = launch {
-                                delay(1000)
+                                delay(1.seconds)
                                 value = ShowQrCodeState(
                                     data = AsyncData.Loading(),
                                 )
@@ -79,9 +84,5 @@ class ShowQrCodePresenter(
         }
 
         return state
-    }
-
-    companion object {
-        const val MAX_QR_CODE_ROTATION = 10
     }
 }

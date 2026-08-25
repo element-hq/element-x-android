@@ -56,6 +56,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
@@ -102,6 +103,7 @@ class LinkNewDeviceFlowNode(
                 @Suppress("AssignedValueIsNeverRead")
                 linkDesktopHandlerJob = observeLinkNewDesktopHandler()
             },
+            onResume = ::onResume,
             onDestroy = {
                 linkMobileHandlerJob?.cancel()
                 linkDesktopHandlerJob?.cancel()
@@ -209,6 +211,18 @@ class LinkNewDeviceFlowNode(
             .launchIn(sessionCoroutineScope)
     }
 
+    private fun onResume() = sessionCoroutineScope.launch {
+        // Application is resumed, if the step is waiting for auth, send the confirmation
+        (linkNewMobileHandler.stepFlow.value as? LinkMobileStep.WaitingForAuth)?.let {
+            Timber.tag(tag.value).d("Resuming while waiting for auth on mobile, sending confirmation")
+            it.continuationMessageSender.confirm()
+        }
+        (linkNewDesktopHandler.stepFlow.value as? LinkDesktopStep.WaitingForAuth)?.let {
+            Timber.tag(tag.value).d("Resuming while waiting for auth on desktop, sending confirmation")
+            it.continuationMessageSender.confirm()
+        }
+    }
+
     private fun navigateToError(errorType: ErrorType) {
         // Map the error to an error screen
         val error = when (errorType) {
@@ -249,6 +263,8 @@ class LinkNewDeviceFlowNode(
                                 }
                                 LinkDeviceType.Desktop -> {
                                     linkNewDesktopHandler.reset()
+                                    // Ensure unlock state does not last longer than the timeout for scanning the QR code, so start the timer after unlock
+                                    linkNewDesktopHandler.startTimer()
                                     backstack.push(NavTarget.DesktopNotice)
                                 }
                             }
@@ -264,10 +280,14 @@ class LinkNewDeviceFlowNode(
             NavTarget.DesktopNotice -> {
                 val callback = object : DesktopNoticeNode.Callback {
                     override fun navigateBack() {
+                        // Stop the timer when the user leaves the screen (user will have to authenticate again)
+                        linkNewDesktopHandler.reset()
                         backstack.pop()
                     }
 
                     override fun navigateToQrCodeScanner() {
+                        // Start again the timer when the user enters the next screen (they clicked on "Ready to scan")
+                        linkNewDesktopHandler.startTimer()
                         backstack.push(NavTarget.DesktopScanQrCode)
                     }
                 }
@@ -276,6 +296,8 @@ class LinkNewDeviceFlowNode(
             NavTarget.DesktopScanQrCode -> {
                 val callback = object : ScanQrCodeNode.Callback {
                     override fun cancel() {
+                        // start again the timer when the user goes back to the DesktopNoticeNode
+                        linkNewDesktopHandler.startTimer()
                         backstack.pop()
                     }
                 }

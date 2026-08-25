@@ -30,6 +30,7 @@
   </plurals>
   <string name="notification_invite_body">"Kutse osalema vestluses"</string>
   <string name="notification_invite_body_with_sender">"%1$s saatus sulle vestluskutse"</string>
+  <string name="notification_live_location_started_body">"Hakkas jagama oma asukohta reaalajas"</string>
   <string name="notification_mentioned_you_body">"Mainis sind: %1$s"</string>
   <string name="notification_new_messages">"Uued sõnumid"</string>
   <plurals name="notification_new_messages_for_room">

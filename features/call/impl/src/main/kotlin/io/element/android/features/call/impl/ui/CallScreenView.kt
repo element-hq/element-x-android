@@ -125,6 +125,7 @@ internal fun CallScreenView(
                         if (webViewAudioManager?.isInCallMode?.get() == false) {
                             Timber.d("URL $url is loaded, starting in-call audio mode")
                             webViewAudioManager?.onCallStarted()
+                            pipState.eventSink(PictureInPictureEvent.OnCallStarted)
                         } else {
                             Timber.d("Can't start in-call audio mode since the app is already in it.")
                         }
@@ -137,7 +138,12 @@ internal fun CallScreenView(
                     onInvalidAudioDeviceAdded = { invalidAudioDeviceReason = it },
                 )
                 state.eventSink(CallScreenEvent.SetupMessageChannels(interceptor))
-                val pipController = WebViewPipController(webView)
+                val pipController = WebViewPipController(
+                    webView = webView,
+                    updatePipOrientation = { orientation ->
+                        pipState.eventSink(PictureInPictureEvent.SetPipOrientation(orientation))
+                    }
+                )
                 pipState.eventSink(PictureInPictureEvent.SetPipController(pipController))
             },
             onDestroyWebView = {
@@ -271,7 +277,7 @@ private fun WebView.dispatchEscKeyEvent() {
 @PreviewsDayNight
 @Composable
 internal fun CallScreenViewPreview(
-    @PreviewParameter(CallScreenStateProvider::class) state: CallScreenState,
+    @PreviewParameter(CallScreenStatePreviewParam::class) state: CallScreenState,
 ) = ElementPreview {
     CallScreenView(
         state = state,

@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContentProvider
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContentPreviewParam
 import io.element.android.features.poll.api.pollcontent.PollContentView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -55,7 +55,7 @@ fun TimelineItemPollView(
 
 @PreviewsDayNight
 @Composable
-internal fun TimelineItemPollViewPreview(@PreviewParameter(TimelineItemPollContentProvider::class) content: TimelineItemPollContent) =
+internal fun TimelineItemPollViewPreview(@PreviewParameter(TimelineItemPollContentPreviewParam::class) content: TimelineItemPollContent) =
     ElementPreview {
         TimelineItemPollView(
             content = content,

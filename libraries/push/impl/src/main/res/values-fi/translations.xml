@@ -19,6 +19,10 @@
     <item quantity="one">"Sinulla on %d uusi viesti."</item>
     <item quantity="other">"Sinulla on %d uutta viestiä."</item>
   </plurals>
+  <plurals name="notification_gallery_body">
+    <item quantity="one">"Jakoi %1$d liitteen"</item>
+    <item quantity="other">"Jakoi %1$d liitettä"</item>
+  </plurals>
   <string name="notification_incoming_audio_call">"📞 Saapuva puhelu"</string>
   <string name="notification_incoming_call">"📹 Saapuva puhelu"</string>
   <string name="notification_inline_reply_failed">"** Lähetys epäonnistui - avaa huone"</string>
@@ -30,6 +34,7 @@
   </plurals>
   <string name="notification_invite_body">"Kutsui sinut keskustelemaan"</string>
   <string name="notification_invite_body_with_sender">"%1$s kutsui sinut keskustelemaan"</string>
+  <string name="notification_live_location_started_body">"Aloitti reaaliaikaisen sijainnin jakamisen"</string>
   <string name="notification_mentioned_you_body">"Mainitsi sinut: %1$s"</string>
   <string name="notification_new_messages">"Uusia viestejä"</string>
   <plurals name="notification_new_messages_for_room">

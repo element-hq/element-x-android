@@ -5,6 +5,7 @@
   <string name="screen_link_new_device_desktop_step3">"使用此设备扫描二维码"</string>
   <string name="screen_link_new_device_desktop_submit">"准备进行扫描"</string>
   <string name="screen_link_new_device_desktop_title">"在台式电脑上打开 %1$s 以获取二维码"</string>
+  <string name="screen_link_new_device_desktop_warning">"确保仅在属于你自己的设备上按上述步骤操作后再扫描二维码。绝对不要扫描来自他人的二维码。"</string>
   <string name="screen_link_new_device_enter_number_error_numbers_do_not_match">"数字不匹配"</string>
   <string name="screen_link_new_device_enter_number_notice">"输入两位数字的代码"</string>
   <string name="screen_link_new_device_enter_number_subtitle">"这将验证你与其它设备的连接是否安全。"</string>

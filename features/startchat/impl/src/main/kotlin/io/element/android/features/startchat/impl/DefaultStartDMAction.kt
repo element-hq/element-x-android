@@ -11,6 +11,7 @@ package io.element.android.features.startchat.impl
 import androidx.compose.runtime.MutableState
 import dev.zacsweers.metro.ContributesBinding
 import im.vector.app.features.analytics.plan.CreatedRoom
+import io.element.android.features.enterprise.api.SessionEnterpriseService
 import io.element.android.features.startchat.api.ConfirmingStartDmWithMatrixUser
 import io.element.android.features.startchat.api.StartDMAction
 import io.element.android.libraries.architecture.AsyncAction
@@ -26,6 +27,7 @@ import io.element.android.services.analytics.api.AnalyticsService
 class DefaultStartDMAction(
     private val matrixClient: MatrixClient,
     private val analyticsService: AnalyticsService,
+    private val sessionEnterpriseService: SessionEnterpriseService,
 ) : StartDMAction {
     override suspend fun execute(
         matrixUser: MatrixUser,
@@ -33,7 +35,11 @@ class DefaultStartDMAction(
         actionState: MutableState<AsyncAction<RoomId>>,
     ) {
         actionState.value = AsyncAction.Loading
-        when (val result = matrixClient.startDM(matrixUser.userId, createIfDmDoesNotExist)) {
+        when (val result = matrixClient.startDM(
+            userId = matrixUser.userId,
+            createIfDmDoesNotExist = createIfDmDoesNotExist,
+            isEncryped = !sessionEnterpriseService.isEncryptionDisabledByHomeserver(),
+        )) {
             is StartDMResult.Success -> {
                 if (result.isNew) {
                     analyticsService.capture(CreatedRoom(isDM = true))

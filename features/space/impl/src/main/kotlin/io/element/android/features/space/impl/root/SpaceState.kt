@@ -32,7 +32,7 @@ data class SpaceState(
     val selectedRoomIds: ImmutableSet<RoomId>,
     val canEditSpaceGraph: Boolean,
     val removeRoomsAction: AsyncAction<Unit>,
-    val eventSink: (SpaceEvents) -> Unit
+    val eventSink: (SpaceEvent) -> Unit
 ) {
     fun isJoining(spaceId: RoomId): Boolean = joinActions[spaceId] == AsyncAction.Loading
     fun isSelected(spaceId: RoomId): Boolean = selectedRoomIds.contains(spaceId)

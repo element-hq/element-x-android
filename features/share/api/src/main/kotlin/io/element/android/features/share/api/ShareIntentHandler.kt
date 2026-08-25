@@ -9,10 +9,14 @@ package io.element.android.features.share.api
 
 import android.content.Intent
 
+/**
+ * Recognises the intents another app uses to share content into this one, and resolves what was shared.
+ */
 interface ShareIntentHandler {
     /**
      * This methods aims to handle incoming share intents and parse its data.
      *
+     * @param intent the intent the app was started with.
      * @return the [ShareIntentData] if it could be resolved, or null.
      */
     fun handleIncomingShareIntent(

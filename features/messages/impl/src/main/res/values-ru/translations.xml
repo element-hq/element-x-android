@@ -7,15 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"Зашифровано неизвестным или удаленным устройством."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Зашифровано устройством, не проверенным его владельцем."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Зашифровано непроверенным пользователем."</string>
-  <string name="emoji_picker_category_activity">"Активности"</string>
-  <string name="emoji_picker_category_flags">"Флаги"</string>
-  <string name="emoji_picker_category_foods">"Еда и напитки"</string>
-  <string name="emoji_picker_category_nature">"Животные и природа"</string>
-  <string name="emoji_picker_category_objects">"Объекты"</string>
-  <string name="emoji_picker_category_people">"Эмодзи и люди"</string>
-  <string name="emoji_picker_category_places">"Путешествия и места"</string>
-  <string name="emoji_picker_category_recent">"Недавние эмодзи"</string>
-  <string name="emoji_picker_category_symbols">"Символы"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"Перевернуть изображение по горизонтали"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Перевернуто по горизонтали"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Оригинал"</string>

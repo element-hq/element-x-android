@@ -74,16 +74,16 @@ class LogoutPresenter(
             }
         }
 
-        fun handleEvent(event: LogoutEvents) {
+        fun handleEvent(event: LogoutEvent) {
             when (event) {
-                is LogoutEvents.Logout -> {
+                is LogoutEvent.Logout -> {
                     if (logoutAction.value.isConfirming() || event.ignoreSdkError) {
                         localCoroutineScope.logout(logoutAction, event.ignoreSdkError)
                     } else {
                         logoutAction.value = AsyncAction.ConfirmingNoParams
                     }
                 }
-                LogoutEvents.CloseDialogs -> {
+                LogoutEvent.CloseDialogs -> {
                     logoutAction.value = AsyncAction.Uninitialized
                 }
             }

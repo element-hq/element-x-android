@@ -8,6 +8,7 @@
 package io.element.android.features.securityandprivacy.impl.root
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.enterprise.test.FakeSessionEnterpriseService
 import io.element.android.features.securityandprivacy.impl.FakeSecurityAndPrivacyNavigator
 import io.element.android.features.securityandprivacy.impl.SecurityAndPrivacyNavigator
 import io.element.android.features.securityandprivacy.impl.manageauthorizedspaces.SpaceSelectionStateHolder
@@ -1046,6 +1047,20 @@ class SecurityAndPrivacyPresenterTest {
         }
     }
 
+    @Test
+    fun `present - showEncryptionSection is false if the HS disabled encryption`() = runTest {
+        val sessionEnterpriseService = FakeSessionEnterpriseService(isEncryptionDisabledResult = { true })
+        val presenter = createSecurityAndPrivacyPresenter(
+            sessionEnterpriseService = sessionEnterpriseService,
+        )
+        presenter.test {
+            skipItems(1)
+
+            // The HS has disabled encryption, so the encryption section should not be shown
+            assertThat(awaitItem().showEncryptionSection).isFalse()
+        }
+    }
+
     private fun roomPermissions(
         canChangeRoomAccess: Boolean = true,
         canChangeHistoryVisibility: Boolean = true,
@@ -1084,6 +1099,9 @@ class SecurityAndPrivacyPresenterTest {
             ),
         ),
         spaceSelectionStateHolder: SpaceSelectionStateHolder = SpaceSelectionStateHolder(),
+        sessionEnterpriseService: FakeSessionEnterpriseService = FakeSessionEnterpriseService(
+            isEncryptionDisabledResult = { false },
+        )
     ): SecurityAndPrivacyPresenter {
         return SecurityAndPrivacyPresenter(
             room = room,
@@ -1091,6 +1109,7 @@ class SecurityAndPrivacyPresenterTest {
             navigator = navigator,
             featureFlagService = featureFlagService,
             spaceSelectionStateHolder = spaceSelectionStateHolder,
+            sessionEnterpriseService = sessionEnterpriseService,
         )
     }
 }

@@ -8,6 +8,14 @@
 
 package io.element.android.services.analyticsproviders.api.trackers
 
+/**
+ * Reports non-fatal errors to the crash reporting backend.
+ */
 interface ErrorTracker {
+    /**
+     * Records an error that was handled but is still worth knowing about.
+     *
+     * @param throwable the failure to report; never pass one whose message can contain user content.
+     */
     fun trackError(throwable: Throwable)
 }

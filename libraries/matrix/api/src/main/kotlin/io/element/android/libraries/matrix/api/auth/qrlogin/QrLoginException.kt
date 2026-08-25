@@ -20,6 +20,8 @@ sealed class QrLoginException : Exception() {
     data object OtherDeviceNotSignedIn : QrLoginException()
     data object CheckCodeAlreadySent : QrLoginException()
     data object CheckCodeCannotBeSent : QrLoginException()
+    data object ContinuationAlreadySent : QrLoginException()
+    data object ContinuationCannotBeSent : QrLoginException()
     data object UnsupportedQrCodeType : QrLoginException()
     data object Unknown : QrLoginException()
 }

@@ -20,7 +20,7 @@ data class KnockRequestsListState(
     val currentAction: KnockRequestsAction,
     val asyncAction: AsyncAction<Unit>,
     val permissions: KnockRequestPermissions,
-    val eventSink: (KnockRequestsListEvents) -> Unit,
+    val eventSink: (KnockRequestsListEvent) -> Unit,
 ) {
     val canAcceptAll = permissions.canAccept && knockRequests is AsyncData.Success && knockRequests.data.size > 1
 }

@@ -52,9 +52,11 @@ class DefaultActiveLiveLocationShareManager(
     private val clock: SystemClock,
     private val sessionObserver: SessionObserver,
 ) : ActiveLiveLocationShareManager, LiveLocationReceiver {
+    private data class Timeout(val expiresAt: Instant, val job: Job)
+
     private val isSetup = AtomicBoolean(false)
     private val cachedRooms = ConcurrentHashMap<RoomId, JoinedRoom>()
-    private val timeoutJobs = ConcurrentHashMap<RoomId, Job>()
+    private val timeouts = ConcurrentHashMap<RoomId, Timeout>()
     private val syncedActiveShareIds = MutableStateFlow<Set<BeaconId>>(emptySet())
     private val localSharingRoomIds = MutableStateFlow<Set<RoomId>>(emptySet())
     override val sharingRoomIds: StateFlow<Set<RoomId>> = localSharingRoomIds
@@ -139,15 +141,28 @@ class DefaultActiveLiveLocationShareManager(
     }
 
     override suspend fun onLocationUpdate(location: Location) {
-        val activeSharesCount = localSharingRoomIds.value.size
-        Timber.d("ActiveLiveLocationShareManager received location update for $activeSharesCount active share(s)")
-        localSharingRoomIds.value.forEach { roomId ->
+        val active = stopExpiredShares()
+        Timber.d("ActiveLiveLocationShareManager received location update for ${active.size} active share(s)")
+        active.forEach { roomId ->
             Timber.d("ActiveLiveLocationShareManager sending location to room $roomId")
             sendLiveLocation(roomId, location)
                 .onFailure {
                     Timber.e(it, "ActiveLiveLocationShareManager failed to send location to room $roomId")
                 }
         }
+    }
+
+    private suspend fun stopExpiredShares(): List<RoomId> {
+        val nowMillis = clock.epochMillis()
+        val (expired, active) = localSharingRoomIds.value.partition { roomId ->
+            val timeout = timeouts[roomId] ?: return@partition false
+            timeout.expiresAt.toEpochMilliseconds() <= nowMillis
+        }
+        expired.forEach { roomId ->
+            Timber.d("ActiveLiveLocationShareManager location tick detected expired share for room $roomId, stopping")
+            stopShare(roomId)
+        }
+        return active
     }
 
     private suspend fun sendLiveLocation(roomId: RoomId, location: Location): Result<Unit> {
@@ -192,20 +207,21 @@ class DefaultActiveLiveLocationShareManager(
     }
 
     private fun scheduleTimeout(roomId: RoomId, expiresAt: Instant) {
-        timeoutJobs.remove(roomId)?.cancel()
+        timeouts.remove(roomId)?.job?.cancel()
         val delayMillis = expiresAt.toEpochMilliseconds() - clock.epochMillis()
-        timeoutJobs[roomId] = matrixClient.sessionCoroutineScope.launch {
+        val job = matrixClient.sessionCoroutineScope.launch {
             delay(delayMillis)
             stopShare(roomId)
                 .onFailure { error ->
                     Timber.e(error, "ActiveLiveLocationShareManager failed to stop timed out share for room $roomId")
                 }
         }
+        timeouts[roomId] = Timeout(expiresAt = expiresAt, job = job)
     }
 
     private suspend fun stopLocalShare(roomId: RoomId) {
         Timber.d("ActiveLiveLocationShareManager stop local share in $roomId")
-        timeoutJobs.remove(roomId)?.cancel()
+        timeouts.remove(roomId)?.job?.cancel()
         val wasSharing = localSharingRoomIds.getAndUpdate { it - roomId }.isNotEmpty()
         cachedRooms.remove(roomId)?.close()
         liveLocationStore.removeLiveLocationExpiry(roomId)
@@ -220,11 +236,11 @@ class DefaultActiveLiveLocationShareManager(
         sessionObserver.removeListener(sessionListener)
         coordinator.unregister(matrixClient.sessionId)
         liveLocationStore.clear()
+        timeouts.values.forEach { it.job.cancel() }
+        timeouts.clear()
         for (room in cachedRooms.values) {
             room.close()
-            timeoutJobs[room.roomId]?.cancel()
         }
-        timeoutJobs.clear()
         cachedRooms.clear()
         localSharingRoomIds.value = emptySet()
         syncedActiveShareIds.value = emptySet()

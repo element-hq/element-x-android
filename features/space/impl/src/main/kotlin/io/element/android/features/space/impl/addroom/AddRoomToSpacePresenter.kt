@@ -66,8 +66,8 @@ class AddRoomToSpacePresenter(
             derivedStateOf {
                 when {
                     filteredRooms.isNotEmpty() -> SearchBarResultState.Results(filteredRooms)
-                    isSearchActive && searchQuery.text.isNotEmpty() -> SearchBarResultState.NoResultsFound<ImmutableList<SelectRoomInfo>>()
-                    else -> SearchBarResultState.Initial<ImmutableList<SelectRoomInfo>>()
+                    isSearchActive && searchQuery.text.isNotEmpty() -> SearchBarResultState.NoResultsFound
+                    else -> SearchBarResultState.Initial
                 }
             }
         }

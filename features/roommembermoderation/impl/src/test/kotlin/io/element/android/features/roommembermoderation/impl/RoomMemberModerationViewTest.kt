@@ -16,7 +16,7 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import io.element.android.features.roommembermoderation.api.ModerationAction
 import io.element.android.features.roommembermoderation.api.ModerationActionState
-import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvent
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.testtags.TestTags
@@ -34,7 +34,7 @@ class RoomMemberModerationViewTest : RobolectricTest() {
     @Test
     fun `clicking on display profile action calls onSelectAction`() = runAndroidComposeUiTest {
         val user = anAlice()
-        val eventsRecorder = EventsRecorder<RoomMemberModerationEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<RoomMemberModerationEvent>(expectEvents = false)
         ensureCalledOnceWithTwoParams<ModerationAction, MatrixUser>(ModerationAction.DisplayProfile, user) { callback ->
             setRoomMemberModerationView(
                 aRoomMembersModerationState(
@@ -55,7 +55,7 @@ class RoomMemberModerationViewTest : RobolectricTest() {
     @Test
     fun `clicking on kick user action calls onSelectAction`() = runAndroidComposeUiTest {
         val user = anAlice()
-        val eventsRecorder = EventsRecorder<RoomMemberModerationEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<RoomMemberModerationEvent>(expectEvents = false)
         ensureCalledOnceWithTwoParams<ModerationAction, MatrixUser>(ModerationAction.KickUser, user) { callback ->
             setRoomMemberModerationView(
                 aRoomMembersModerationState(
@@ -76,7 +76,7 @@ class RoomMemberModerationViewTest : RobolectricTest() {
     @Test
     fun `clicking on ban user action calls onSelectAction`() = runAndroidComposeUiTest {
         val user = anAlice()
-        val eventsRecorder = EventsRecorder<RoomMemberModerationEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<RoomMemberModerationEvent>(expectEvents = false)
         ensureCalledOnceWithTwoParams<ModerationAction, MatrixUser>(ModerationAction.BanUser, user) { callback ->
             setRoomMemberModerationView(
                 aRoomMembersModerationState(
@@ -97,7 +97,7 @@ class RoomMemberModerationViewTest : RobolectricTest() {
     @Test
     fun `clicking on unban user action calls onSelectAction`() = runAndroidComposeUiTest {
         val user = anAlice()
-        val eventsRecorder = EventsRecorder<RoomMemberModerationEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<RoomMemberModerationEvent>(expectEvents = false)
         ensureCalledOnceWithTwoParams<ModerationAction, MatrixUser>(ModerationAction.UnbanUser, user) { callback ->
             setRoomMemberModerationView(
                 aRoomMembersModerationState(
@@ -117,7 +117,7 @@ class RoomMemberModerationViewTest : RobolectricTest() {
 
     @Test
     fun `clicking submit on kick confirmation dialog sends DoKickUser event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<RoomMemberModerationEvents>()
+        val eventsRecorder = EventsRecorder<RoomMemberModerationEvent>()
         setRoomMemberModerationView(
             aRoomMembersModerationState(
                 selectedUser = anAlice(),
@@ -126,12 +126,12 @@ class RoomMemberModerationViewTest : RobolectricTest() {
             ),
         )
         pressTag(TestTags.dialogPositive.value)
-        eventsRecorder.assertSingle(InternalRoomMemberModerationEvents.DoKickUser(reason = ""))
+        eventsRecorder.assertSingle(InternalRoomMemberModerationEvent.DoKickUser(reason = ""))
     }
 
     @Test
     fun `clicking dismiss on kick confirmation dialog sends Reset event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<RoomMemberModerationEvents>()
+        val eventsRecorder = EventsRecorder<RoomMemberModerationEvent>()
         setRoomMemberModerationView(
             aRoomMembersModerationState(
                 selectedUser = anAlice(),
@@ -140,12 +140,12 @@ class RoomMemberModerationViewTest : RobolectricTest() {
             ),
         )
         pressTag(TestTags.dialogNegative.value)
-        eventsRecorder.assertSingle(InternalRoomMemberModerationEvents.Reset)
+        eventsRecorder.assertSingle(InternalRoomMemberModerationEvent.Reset)
     }
 
     @Test
     fun `clicking submit on ban confirmation dialog sends DoBanUser event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<RoomMemberModerationEvents>()
+        val eventsRecorder = EventsRecorder<RoomMemberModerationEvent>()
         setRoomMemberModerationView(
             aRoomMembersModerationState(
                 selectedUser = anAlice(),
@@ -154,12 +154,12 @@ class RoomMemberModerationViewTest : RobolectricTest() {
             ),
         )
         pressTag(TestTags.dialogPositive.value)
-        eventsRecorder.assertSingle(InternalRoomMemberModerationEvents.DoBanUser(reason = ""))
+        eventsRecorder.assertSingle(InternalRoomMemberModerationEvent.DoBanUser(reason = ""))
     }
 
     @Test
     fun `clicking dismiss on ban confirmation dialog sends Reset event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<RoomMemberModerationEvents>()
+        val eventsRecorder = EventsRecorder<RoomMemberModerationEvent>()
         setRoomMemberModerationView(
             aRoomMembersModerationState(
                 selectedUser = anAlice(),
@@ -168,12 +168,12 @@ class RoomMemberModerationViewTest : RobolectricTest() {
             ),
         )
         pressTag(TestTags.dialogNegative.value)
-        eventsRecorder.assertSingle(InternalRoomMemberModerationEvents.Reset)
+        eventsRecorder.assertSingle(InternalRoomMemberModerationEvent.Reset)
     }
 
     @Test
     fun `clicking confirm on unban confirmation dialog sends DoUnbanUser event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<RoomMemberModerationEvents>()
+        val eventsRecorder = EventsRecorder<RoomMemberModerationEvent>()
         setRoomMemberModerationView(
             aRoomMembersModerationState(
                 selectedUser = anAlice(),
@@ -182,12 +182,12 @@ class RoomMemberModerationViewTest : RobolectricTest() {
             ),
         )
         pressTag(TestTags.dialogPositive.value)
-        eventsRecorder.assertSingle(InternalRoomMemberModerationEvents.DoUnbanUser(""))
+        eventsRecorder.assertSingle(InternalRoomMemberModerationEvent.DoUnbanUser(""))
     }
 
     @Test
     fun `clicking dismiss on unban confirmation dialog sends Reset event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<RoomMemberModerationEvents>()
+        val eventsRecorder = EventsRecorder<RoomMemberModerationEvent>()
         setRoomMemberModerationView(
             aRoomMembersModerationState(
                 selectedUser = anAlice(),
@@ -196,12 +196,12 @@ class RoomMemberModerationViewTest : RobolectricTest() {
             ),
         )
         pressTag(TestTags.dialogNegative.value)
-        eventsRecorder.assertSingle(InternalRoomMemberModerationEvents.Reset)
+        eventsRecorder.assertSingle(InternalRoomMemberModerationEvent.Reset)
     }
 
     @Test
     fun `disabled actions are not clickable`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<RoomMemberModerationEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<RoomMemberModerationEvent>(expectEvents = false)
         setRoomMemberModerationView(
             aRoomMembersModerationState(
                 selectedUser = anAlice(),

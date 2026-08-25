@@ -14,6 +14,7 @@ package io.element.android.libraries.matrix.api.roomlist
  * It lets load rooms on demand and filter them.
  */
 interface DynamicRoomList : RoomList {
+    /** The number of rooms added to the list by each [loadMore] call, as chosen when the list was created. */
     val pageSize: Int
 
     /**

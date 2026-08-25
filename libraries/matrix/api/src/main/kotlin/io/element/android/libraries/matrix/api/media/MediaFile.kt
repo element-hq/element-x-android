@@ -16,6 +16,7 @@ import java.io.File
  * When closed the file will be removed from the disk unless [persist] has been used.
  */
 interface MediaFile : Closeable {
+    /** The absolute path of the file on disk; see [toFile] to get a [File] instead. */
     fun path(): String
 
     /**

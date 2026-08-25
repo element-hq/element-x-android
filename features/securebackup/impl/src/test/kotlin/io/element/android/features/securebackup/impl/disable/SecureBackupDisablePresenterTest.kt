@@ -47,7 +47,7 @@ class SecureBackupDisablePresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.disableAction).isEqualTo(AsyncAction.Uninitialized)
-            initialState.eventSink(SecureBackupDisableEvents.DisableBackup)
+            initialState.eventSink(SecureBackupDisableEvent.DisableBackup)
             val loadingState = awaitItem()
             assertThat(loadingState.disableAction).isInstanceOf(AsyncAction.Loading::class.java)
             val finalState = awaitItem()
@@ -68,12 +68,12 @@ class SecureBackupDisablePresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.disableAction).isEqualTo(AsyncAction.Uninitialized)
-            initialState.eventSink(SecureBackupDisableEvents.DisableBackup)
+            initialState.eventSink(SecureBackupDisableEvent.DisableBackup)
             val loadingState = awaitItem()
             assertThat(loadingState.disableAction).isInstanceOf(AsyncAction.Loading::class.java)
             val errorState = awaitItem()
             assertThat(errorState.disableAction).isInstanceOf(AsyncAction.Failure::class.java)
-            errorState.eventSink(SecureBackupDisableEvents.DismissDialogs)
+            errorState.eventSink(SecureBackupDisableEvent.DismissDialogs)
             val finalState = awaitItem()
             assertThat(finalState.disableAction).isEqualTo(AsyncAction.Uninitialized)
         }

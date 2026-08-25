@@ -49,6 +49,8 @@ internal fun TimelineViewMessageShieldPreview() = ElementPreview {
             onReactionLongClick = { _, _ -> },
             onMoreReactionsClick = {},
             onReadReceiptClick = {},
+            onJoinCallClick = {},
+            onGalleryItemClick = { _, _ -> },
             forceJumpToBottomVisibility = true,
         )
     }

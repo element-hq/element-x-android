@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_share_location_live_location_disclaimer_title">"Tu historial de ubicación en tiempo real se guardará en la sala y será visible para los miembros después de que termine la sesión."</string>
+  <string name="screen_share_location_live_location_duration_picker_title">"Elige por cuánto tiempo quieres compartir tu ubicación en tiempo real"</string>
+  <string name="screen_share_location_live_location_missing_permissions">"No tienes permiso para compartir tu ubicación en tiempo real en esta sala."</string>
+</resources>

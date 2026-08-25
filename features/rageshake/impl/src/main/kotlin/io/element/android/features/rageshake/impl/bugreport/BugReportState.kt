@@ -18,7 +18,7 @@ data class BugReportState(
     val screenshotUri: String?,
     val sendingProgress: Float,
     val sending: AsyncAction<Unit>,
-    val eventSink: (BugReportEvents) -> Unit
+    val eventSink: (BugReportEvent) -> Unit
 ) {
     val submitEnabled = sending !is AsyncAction.Loading
     val isDescriptionInError = sending is AsyncAction.Failure &&

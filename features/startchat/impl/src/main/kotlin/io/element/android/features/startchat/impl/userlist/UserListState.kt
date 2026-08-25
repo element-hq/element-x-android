@@ -23,7 +23,7 @@ data class UserListState(
     val isSearchActive: Boolean,
     val selectionMode: SelectionMode,
     val recentDirectRooms: ImmutableList<RecentDirectRoom>,
-    val eventSink: (UserListEvents) -> Unit,
+    val eventSink: (UserListEvent) -> Unit,
 ) {
     val isMultiSelectionEnabled = selectionMode == SelectionMode.Multiple
 }

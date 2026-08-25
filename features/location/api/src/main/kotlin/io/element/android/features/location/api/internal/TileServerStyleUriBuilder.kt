@@ -11,6 +11,7 @@ package io.element.android.features.location.api.internal
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.enterprise.api.remoteconfig.MapTilerConfig
 
 /**
  * Builds a style URI for a MapLibre compatible tile server.
@@ -18,8 +19,14 @@ import io.element.android.compound.theme.ElementTheme
  * Used for rendering dynamic maps.
  */
 interface TileServerStyleUriBuilder {
+    /**
+     * Builds the style URI the map view loads its tiles from.
+     *
+     * @param customMapTilerConfig the custom MapTiler configuration received from the server, or null if not available.
+     * @param darkMode whether to request the dark map style.
+     */
     fun build(
-        customMapStyleUrl: String?,
+        customMapTilerConfig: MapTilerConfig?,
         darkMode: Boolean,
     ): String
 }
@@ -31,12 +38,12 @@ interface TileServerStyleUriBuilder {
  */
 @Composable
 fun rememberTileStyleUrl(
-    customMapStyleUrl: String?,
+    customMapTileConfig: MapTilerConfig?,
 ): String {
     val darkMode = !ElementTheme.isLightTheme
-    return remember(darkMode, customMapStyleUrl) {
+    return remember(darkMode, customMapTileConfig) {
         MapTilerTileServerStyleUriBuilder().build(
-            customMapStyleUrl = customMapStyleUrl,
+            customMapTilerConfig = customMapTileConfig,
             darkMode = darkMode,
         )
     }

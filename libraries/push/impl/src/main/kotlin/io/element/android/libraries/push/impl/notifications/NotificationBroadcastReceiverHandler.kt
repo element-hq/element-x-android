@@ -105,13 +105,21 @@ class NotificationBroadcastReceiverHandler(
     @Suppress("unused")
     private fun handleMarkAsRead(sessionId: SessionId, roomId: RoomId, threadId: ThreadId?) = appCoroutineScope.launch {
         val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return@launch
-        val isSendPublicReadReceiptsEnabled = sessionPreferencesStore.get(sessionId, this).isSendPublicReadReceiptsEnabled().first()
+        val isSendPublicReadReceiptsEnabled = sessionPreferencesStore.get(
+            sessionId = sessionId,
+            // Make sure `sessionCoroutineScope` is used here, otherwise we'll have several instances using different coroutines,
+            // and it will not work as expected.
+            sessionCoroutineScope = client.sessionCoroutineScope,
+        ).isSendPublicReadReceiptsEnabled().first()
         val receiptType = if (isSendPublicReadReceiptsEnabled) {
             ReceiptType.READ
         } else {
             ReceiptType.READ_PRIVATE
         }
-        val room = client.getJoinedRoom(roomId) ?: return@launch
+
+        val (room, needsDestroy) = activeRoomsHolder.getActiveRoomMatching(sessionId, roomId)?.let { it to false }
+            ?: client.getJoinedRoom(roomId)?.let { it to true }
+            ?: return@launch
         val timeline = if (threadId != null) {
             room.createTimeline(CreateTimelineParams.Threaded(threadId)).getOrNull()
         } else {
@@ -130,6 +138,10 @@ class NotificationBroadcastReceiverHandler(
             }
         if (timeline?.mode != Timeline.Mode.Live) {
             timeline?.close()
+        }
+
+        if (needsDestroy) {
+            room.destroy()
         }
     }
 

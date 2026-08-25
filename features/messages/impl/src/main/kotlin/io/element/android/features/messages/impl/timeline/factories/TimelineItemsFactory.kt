@@ -21,6 +21,9 @@ import io.element.android.libraries.androidutils.diff.MutableListDiffCache
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
@@ -110,11 +113,20 @@ class TimelineItemsFactory(
     ): TimelineItem? {
         val timelineItem =
             when (val currentTimelineItem = timelineItems[index]) {
-                is MatrixTimelineItem.Event -> eventItemFactory.create(currentTimelineItem, index, timelineItems, roomMembers, renderReadReceipts)
+                is MatrixTimelineItem.Event -> if (currentTimelineItem.event.isKeyVerificationRequest()) {
+                    null
+                } else {
+                    eventItemFactory.create(currentTimelineItem, index, timelineItems, roomMembers, renderReadReceipts)
+                }
                 is MatrixTimelineItem.Virtual -> virtualItemFactory.create(currentTimelineItem)
                 MatrixTimelineItem.Other -> null
             }
         diffCache[index] = timelineItem
         return timelineItem
     }
+}
+
+private fun EventTimelineItem.isKeyVerificationRequest(): Boolean {
+    val messageType = (content as? MessageContent)?.type
+    return messageType is OtherMessageType && messageType.isKeyVerificationRequest
 }

@@ -20,11 +20,12 @@ import io.element.android.features.home.impl.filters.aRoomListFiltersState
 import io.element.android.features.home.impl.model.createRoomListRoomSummary
 import io.element.android.features.home.impl.search.RoomListSearchEvent
 import io.element.android.features.home.impl.search.RoomListSearchState
+import io.element.android.features.home.impl.search.aGlobalSearchState
 import io.element.android.features.home.impl.search.aRoomListSearchState
 import io.element.android.features.home.impl.spacefilters.SpaceFiltersState
 import io.element.android.features.home.impl.spacefilters.aDisabledSpaceFiltersState
 import io.element.android.features.invite.api.SeenInvitesStore
-import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvent
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.features.invite.api.acceptdecline.anAcceptDeclineInviteState
 import io.element.android.features.invite.test.InMemorySeenInvitesStore
@@ -473,7 +474,7 @@ class RoomListPresenterTest {
 
     @Test
     fun `present - when a room is invited then accept and decline events are sent to acceptDeclinePresenter`() = runTest {
-        val eventSinkRecorder = lambdaRecorder { _: AcceptDeclineInviteEvents -> }
+        val eventSinkRecorder = lambdaRecorder { _: AcceptDeclineInviteEvent -> }
         val acceptDeclinePresenter = Presenter {
             anAcceptDeclineInviteState(eventSink = eventSinkRecorder)
         }
@@ -512,8 +513,8 @@ class RoomListPresenterTest {
             assert(eventSinkRecorder)
                 .isCalledExactly(2)
                 .withSequence(
-                    listOf(value(AcceptDeclineInviteEvents.AcceptInvite(inviteData))),
-                    listOf(value(AcceptDeclineInviteEvents.DeclineInvite(inviteData, blockUser = false, shouldConfirm = false))),
+                    listOf(value(AcceptDeclineInviteEvent.AcceptInvite(inviteData))),
+                    listOf(value(AcceptDeclineInviteEvent.DeclineInvite(inviteData, blockUser = false, shouldConfirm = false))),
                 )
         }
     }
@@ -680,6 +681,7 @@ class RoomListPresenterTest {
             analyticsService = FakeAnalyticsService(),
         ),
         searchPresenter = searchPresenter,
+        globalSearchPresenter = { aGlobalSearchState() },
         filtersPresenter = filtersPresenter,
         spaceFiltersPresenter = spaceFiltersPresenter,
         analyticsService = analyticsService,

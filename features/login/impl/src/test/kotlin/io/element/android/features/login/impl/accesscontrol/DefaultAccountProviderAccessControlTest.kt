@@ -11,13 +11,9 @@ package io.element.android.features.login.impl.accesscontrol
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.changeserver.AccountProviderAccessException
-import io.element.android.features.wellknown.test.FakeWellknownRetriever
-import io.element.android.features.wellknown.test.anElementWellKnown
 import io.element.android.libraries.matrix.test.AN_ACCOUNT_PROVIDER
 import io.element.android.libraries.matrix.test.AN_ACCOUNT_PROVIDER_2
 import io.element.android.libraries.matrix.test.AN_ACCOUNT_PROVIDER_URL
-import io.element.android.libraries.wellknown.api.ElementWellKnown
-import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertThrows
 import org.junit.Test
@@ -28,9 +24,7 @@ class DefaultAccountProviderAccessControlTest {
         val accessControl = createDefaultAccountProviderAccessControl(
             isEnterpriseBuild = false,
             isAllowedToConnectToHomeserver = true,
-            elementWellKnown = anElementWellKnown(
-                enforceElementPro = true,
-            ),
+            enterpriseService = FakeEnterpriseService(isElementProEnforcedResult = { true }),
         )
         accessControl.expectNeedElementProException()
     }
@@ -41,9 +35,7 @@ class DefaultAccountProviderAccessControlTest {
             isEnterpriseBuild = false,
             // false here.
             isAllowedToConnectToHomeserver = false,
-            elementWellKnown = anElementWellKnown(
-                enforceElementPro = true,
-            ),
+            enterpriseService = FakeEnterpriseService(isElementProEnforcedResult = { true }),
         )
         accessControl.expectNeedElementProException()
     }
@@ -53,8 +45,9 @@ class DefaultAccountProviderAccessControlTest {
         val accessControl = createDefaultAccountProviderAccessControl(
             isEnterpriseBuild = false,
             isAllowedToConnectToHomeserver = true,
-            elementWellKnown = anElementWellKnown(
-                enforceElementPro = false,
+            enterpriseService = FakeEnterpriseService(
+                isAllowedToConnectToHomeserverResult = { true },
+                isElementProEnforcedResult = { false }
             ),
         )
         accessControl.expectAllowed()
@@ -65,19 +58,15 @@ class DefaultAccountProviderAccessControlTest {
         val accessControl = createDefaultAccountProviderAccessControl(
             isEnterpriseBuild = false,
             isAllowedToConnectToHomeserver = true,
-            elementWellKnown = anElementWellKnown(
-                enforceElementPro = null,
-            ),
         )
         accessControl.expectAllowed()
     }
 
     @Test
-    fun `foss build should allow using account provider twith missing wellknown`() = runTest {
+    fun `foss build should allow using account provider with missing wellknown`() = runTest {
         val accessControl = createDefaultAccountProviderAccessControl(
             isEnterpriseBuild = false,
             isAllowedToConnectToHomeserver = true,
-            elementWellKnown = null,
         )
         accessControl.expectAllowed()
     }
@@ -88,8 +77,10 @@ class DefaultAccountProviderAccessControlTest {
             isEnterpriseBuild = false,
             isAllowedToConnectToHomeserver = false,
             allowedAccountProviders = listOf(AN_ACCOUNT_PROVIDER_2),
-            elementWellKnown = anElementWellKnown(
-                enforceElementPro = false,
+            enterpriseService = FakeEnterpriseService(
+                isAllowedToConnectToHomeserverResult = { false },
+                isElementProEnforcedResult = { false },
+                defaultHomeserverListResult = { listOf(AN_ACCOUNT_PROVIDER_2) },
             ),
         )
         accessControl.expectUnauthorizedAccountProviderException()
@@ -100,8 +91,9 @@ class DefaultAccountProviderAccessControlTest {
         val accessControl = createDefaultAccountProviderAccessControl(
             isEnterpriseBuild = true,
             isAllowedToConnectToHomeserver = true,
-            elementWellKnown = anElementWellKnown(
-                enforceElementPro = true,
+            enterpriseService = FakeEnterpriseService(
+                isAllowedToConnectToHomeserverResult = { true },
+                isElementProEnforcedResult = { true },
             ),
         )
         accessControl.expectAllowed()
@@ -112,8 +104,9 @@ class DefaultAccountProviderAccessControlTest {
         val accessControl = createDefaultAccountProviderAccessControl(
             isEnterpriseBuild = true,
             isAllowedToConnectToHomeserver = true,
-            elementWellKnown = anElementWellKnown(
-                enforceElementPro = false,
+            enterpriseService = FakeEnterpriseService(
+                isAllowedToConnectToHomeserverResult = { true },
+                isElementProEnforcedResult = { false },
             ),
         )
         accessControl.expectAllowed()
@@ -125,8 +118,10 @@ class DefaultAccountProviderAccessControlTest {
             isEnterpriseBuild = true,
             isAllowedToConnectToHomeserver = false,
             allowedAccountProviders = listOf(AN_ACCOUNT_PROVIDER_2),
-            elementWellKnown = anElementWellKnown(
-                enforceElementPro = true,
+            enterpriseService = FakeEnterpriseService(
+                isAllowedToConnectToHomeserverResult = { false },
+                isElementProEnforcedResult = { true },
+                defaultHomeserverListResult = { listOf(AN_ACCOUNT_PROVIDER_2) },
             ),
         )
         accessControl.expectUnauthorizedAccountProviderException()
@@ -138,8 +133,10 @@ class DefaultAccountProviderAccessControlTest {
             isEnterpriseBuild = true,
             isAllowedToConnectToHomeserver = false,
             allowedAccountProviders = listOf(AN_ACCOUNT_PROVIDER_2),
-            elementWellKnown = anElementWellKnown(
-                enforceElementPro = false,
+            enterpriseService = FakeEnterpriseService(
+                isAllowedToConnectToHomeserverResult = { false },
+                isElementProEnforcedResult = { false },
+                defaultHomeserverListResult = { listOf(AN_ACCOUNT_PROVIDER_2) },
             ),
         )
         accessControl.expectUnauthorizedAccountProviderException()
@@ -149,22 +146,14 @@ class DefaultAccountProviderAccessControlTest {
         isEnterpriseBuild: Boolean = false,
         isAllowedToConnectToHomeserver: Boolean = false,
         allowedAccountProviders: List<String> = emptyList(),
-        elementWellKnown: ElementWellKnown? = null,
-    ) = DefaultAccountProviderAccessControl(
-        enterpriseService = FakeEnterpriseService(
-            isEnterpriseBuild = isEnterpriseBuild,
+        enterpriseService: FakeEnterpriseService = FakeEnterpriseService(
             isAllowedToConnectToHomeserverResult = { isAllowedToConnectToHomeserver },
             defaultHomeserverListResult = { allowedAccountProviders },
-        ),
-        wellknownRetriever = FakeWellknownRetriever(
-            getElementWellKnownResult = {
-                if (elementWellKnown == null) {
-                    WellknownRetrieverResult.NotFound
-                } else {
-                    WellknownRetrieverResult.Success(elementWellKnown)
-                }
-            },
-        ),
+            isElementProEnforcedResult = { false },
+        )
+    ) = DefaultAccountProviderAccessControl(
+        isEnterpriseBuild = { isEnterpriseBuild },
+        enterpriseService = enterpriseService,
     )
 
     private fun DefaultAccountProviderAccessControl.expectNeedElementProException() {

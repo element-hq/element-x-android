@@ -24,9 +24,11 @@ import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.timeline.aTimelineItemList
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemFileContent
+import io.element.android.libraries.emoji.api.picker.NoOpEmojiPickerRenderer
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
+import io.element.android.tests.testutils.EnsureNeverCalledWithTwoParams
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
@@ -96,6 +98,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setPinnedMessagesListView(
     state: PinnedMessagesListState,
     onBackClick: () -> Unit = EnsureNeverCalled(),
     onEventClick: (event: TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
+    onGalleryItemClick: (event: TimelineItem.Event, index: Int) -> Unit = EnsureNeverCalledWithTwoParams(),
     onUserDataClick: (MatrixUser) -> Unit = EnsureNeverCalledWithParam(),
     onLinkClick: (Link) -> Unit = EnsureNeverCalledWithParam(),
     onLinkLongClick: (Link) -> Unit = EnsureNeverCalledWithParam(),
@@ -105,9 +108,11 @@ private fun AndroidComposeUiTest<ComponentActivity>.setPinnedMessagesListView(
             state = state,
             onBackClick = onBackClick,
             onEventClick = onEventClick,
+            onGalleryItemClick = onGalleryItemClick,
             onUserDataClick = onUserDataClick,
             onLinkClick = onLinkClick,
             onLinkLongClick = onLinkLongClick,
+            emojiPickerRenderer = NoOpEmojiPickerRenderer,
         )
     }
 }

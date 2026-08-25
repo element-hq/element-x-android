@@ -134,7 +134,7 @@ internal fun ListSupportingTextNoPaddingPreview() {
 internal fun ListSupportingTextDefaultPaddingPreview() {
     ElementThemedPreview {
         Column {
-            ListItem(headlineContent = { Text("A title") })
+            ListItem(content = { Text("A title") })
             ListSupportingText(
                 text = "Supporting line text lorem ipsum dolor sit amet, consectetur. Read more",
                 contentPadding = ListSupportingTextDefaults.Padding.Default,
@@ -149,7 +149,7 @@ internal fun ListSupportingTextSmallPaddingPreview() {
     ElementThemedPreview {
         Column {
             ListItem(
-                headlineContent = { Text("A title") },
+                content = { Text("A title") },
                 leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ShareAndroid()))
             )
             ListSupportingText(
@@ -165,7 +165,7 @@ internal fun ListSupportingTextSmallPaddingPreview() {
 internal fun ListSupportingTextLargePaddingPreview() {
     ElementThemedPreview {
         Column {
-            ListItem(headlineContent = { Text("A title") }, leadingContent = ListItemContent.Switch(checked = true))
+            ListItem(content = { Text("A title") }, leadingContent = ListItemContent.Switch(checked = true))
             ListSupportingText(
                 text = "Supporting line text lorem ipsum dolor sit amet, consectetur. Read more",
                 contentPadding = ListSupportingTextDefaults.Padding.LargeLeadingContent,
@@ -179,7 +179,7 @@ internal fun ListSupportingTextLargePaddingPreview() {
 internal fun ListSupportingTextCustomPaddingPreview() {
     ElementThemedPreview {
         Column {
-            ListItem(headlineContent = { Text("A title") })
+            ListItem(content = { Text("A title") })
             ListSupportingText(
                 text = "Supporting line text lorem ipsum dolor sit amet, consectetur. Read more",
                 contentPadding = ListSupportingTextDefaults.Padding.Custom(24.dp),

@@ -17,4 +17,6 @@ data class MatrixUser(
     val userId: UserId,
     val displayName: String? = null,
     val avatarUrl: String? = null,
+    val displayedStatus: DisplayedStatus? = null,
+    val rawStatus: UserStatus? = null,
 ) : Parcelable

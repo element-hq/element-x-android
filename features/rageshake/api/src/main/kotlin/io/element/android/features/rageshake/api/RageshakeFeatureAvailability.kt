@@ -10,6 +10,10 @@ package io.element.android.features.rageshake.api
 
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Tells whether bug reporting is available, which an enterprise deployment can turn off.
+ */
 fun interface RageshakeFeatureAvailability {
+    /** Whether the rageshake and bug report entry points should be offered to the user. */
     fun isAvailable(): Flow<Boolean>
 }

@@ -101,6 +101,14 @@ Kui sa jätkad muutmist, siis võivad muutuda ka need peidetud eelistused."</str
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"süsteemi seadistusi"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Süsteemi teavitused on välja lülitatud"</string>
   <string name="screen_notification_settings_title">"Teavitused"</string>
+  <string name="screen_settings_user_status_away">"Eemal"</string>
+  <string name="screen_settings_user_status_be_right_back">"Tulen kohe tagasi"</string>
+  <string name="screen_settings_user_status_custom">"Kohandatud…"</string>
+  <string name="screen_settings_user_status_custom_hint">"Kohandatud olek…"</string>
+  <string name="screen_settings_user_status_focus_time">"Keskendumisaeg"</string>
+  <string name="screen_settings_user_status_in_a_meeting">"Koosolekul"</string>
+  <string name="screen_settings_user_status_on_the_road">"Olen liikumises"</string>
+  <string name="screen_settings_user_status_placeholder">"Mis on sinu olek võrgus?"</string>
   <string name="theme_black">"Süsimust kujundus"</string>
   <string name="theme_dark">"Tume"</string>
   <string name="theme_light">"Hele"</string>

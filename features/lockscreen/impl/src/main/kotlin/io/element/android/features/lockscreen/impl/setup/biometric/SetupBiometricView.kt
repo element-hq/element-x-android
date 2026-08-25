@@ -79,7 +79,7 @@ private fun SetupBiometricFooter(
 
 @Composable
 @PreviewsDayNight
-internal fun SetupBiometricViewPreview(@PreviewParameter(SetupBiometricStateProvider::class) state: SetupBiometricState) {
+internal fun SetupBiometricViewPreview(@PreviewParameter(SetupBiometricStatePreviewParam::class) state: SetupBiometricState) {
     ElementPreview {
         SetupBiometricView(
             state = state,

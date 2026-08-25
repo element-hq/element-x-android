@@ -20,7 +20,7 @@ import io.element.android.libraries.textcomposer.model.aTextEditorStateMarkdown
 @PreviewsDayNight
 @Composable
 internal fun MessagesViewWithIdentityChangePreview(
-    @PreviewParameter(IdentityChangeStateProvider::class) identityChangeState: IdentityChangeState
+    @PreviewParameter(IdentityChangeStatePreviewParam::class) identityChangeState: IdentityChangeState
 ) = ElementPreview {
     MessagesView(
         state = aMessagesState(
@@ -35,6 +35,7 @@ internal fun MessagesViewWithIdentityChangePreview(
         onBackClick = {},
         onRoomDetailsClick = {},
         onEventContentClick = { _, _ -> false },
+        onGalleryEventItemClick = { _, _, _ -> false },
         onUserDataClick = {},
         onLinkClick = { _, _ -> },
         onSendLocationClick = {},
@@ -42,6 +43,7 @@ internal fun MessagesViewWithIdentityChangePreview(
         onJoinCallClick = {},
         onViewAllPinnedMessagesClick = {},
         knockRequestsBannerView = {},
+        customReactionBottomSheet = {},
         onThreadsListClick = {},
     )
 }

@@ -7,15 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"Criptografado por um dispositivo desconhecido ou apagado."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Criptografado por um dispositivo que não foi verificado pelo seu dono."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Criptografado por um usuário não verificado."</string>
-  <string name="emoji_picker_category_activity">"Atividades"</string>
-  <string name="emoji_picker_category_flags">"Bandeiras"</string>
-  <string name="emoji_picker_category_foods">"Comida &amp; Bebida"</string>
-  <string name="emoji_picker_category_nature">"Animais &amp; Natureza"</string>
-  <string name="emoji_picker_category_objects">"Objetos"</string>
-  <string name="emoji_picker_category_people">"Sorrisos &amp; Pessoas"</string>
-  <string name="emoji_picker_category_places">"Viagens &amp; Lugares"</string>
-  <string name="emoji_picker_category_recent">"Emojis recentes"</string>
-  <string name="emoji_picker_category_symbols">"Símbolos"</string>
   <string name="screen_media_upload_preview_caption_warning">"As legendas podem não ser visíveis para pessoas que usam apps mais antigos."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Toque para alterar a qualidade do envio do vídeo"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"O arquivo não pôde ser enviado."</string>

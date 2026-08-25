@@ -114,7 +114,6 @@
   <string name="screen_room_notification_settings_error_setting_mode">"Rejimni o‘rnatib bo‘lmadi, qayta urinib ko‘ring."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Uy serveringiz shifrlangan xonalarda ushbu imkoniyatni qoʻllab-quvvatlamaydi, shuning uchun bu xonadan bildirishnomalar olmaysiz."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Barcha xabarlar"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Faqat eslatmalar va kalit so\'zlar"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Bu xonada menga xabar bering"</string>
   <string name="screen_room_roles_and_permissions_admins">"Adminlar"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"Adminlar va egalari"</string>

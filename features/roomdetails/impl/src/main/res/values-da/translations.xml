@@ -113,8 +113,6 @@
   <string name="screen_room_notification_settings_error_restoring_default">"Gendannelse af standardtilstanden mislykkedes. Prøv igen."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Kunne ikke indstille tilstanden. Prøv igen."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Din hjemmeserver understøtter ikke denne indstilling i krypterede rum, du får ikke besked i dette rum."</string>
-  <string name="screen_room_notification_settings_mode_all_messages">"Alle beskeder"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Kun omtaler og nøgleord"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Giv mig besked i dette rum for"</string>
   <string name="screen_room_roles_and_permissions_admins">"Administratorer"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"Administratorer og ejere"</string>

@@ -8,10 +8,10 @@
 
 package io.element.android.features.analytics.impl
 
-import io.element.android.features.analytics.api.AnalyticsOptInEvents
+import io.element.android.features.analytics.api.AnalyticsOptInEvent
 
 data class AnalyticsOptInState(
     val applicationName: String,
     val hasPolicyLink: Boolean,
-    val eventSink: (AnalyticsOptInEvents) -> Unit
+    val eventSink: (AnalyticsOptInEvent) -> Unit
 )

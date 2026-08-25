@@ -10,9 +10,9 @@ package io.element.android.libraries.push.impl.test
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.appconfig.PushConfig
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.push.impl.BuildConfig
 import io.element.android.libraries.push.impl.pushgateway.PushGatewayNotifyRequest
 import io.element.android.libraries.pushproviders.api.Config
 
@@ -28,7 +28,7 @@ class DefaultTestPush(
         pushGatewayNotifyRequest.execute(
             PushGatewayNotifyRequest.Params(
                 url = config.url,
-                appId = PushConfig.PUSHER_APP_ID,
+                appId = BuildConfig.PUSHER_APP_ID,
                 pushKey = config.pushKey,
                 eventId = TEST_EVENT_ID,
                 roomId = TEST_ROOM_ID,

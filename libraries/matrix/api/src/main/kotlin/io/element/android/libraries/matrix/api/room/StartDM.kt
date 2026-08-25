@@ -18,6 +18,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 suspend fun MatrixClient.startDM(
     userId: UserId,
     createIfDmDoesNotExist: Boolean,
+    isEncryped: Boolean,
 ): StartDMResult {
     return findDM(userId)
         .fold(
@@ -25,7 +26,7 @@ suspend fun MatrixClient.startDM(
                 if (existingDM != null) {
                     StartDMResult.Success(existingDM, isNew = false)
                 } else if (createIfDmDoesNotExist) {
-                    createDM(userId).fold(
+                    createDM(userId, isEncryped).fold(
                         { StartDMResult.Success(it, isNew = true) },
                         { StartDMResult.Failure(it) }
                     )

@@ -7,7 +7,6 @@
     "PR-Dependencies",
   ],
   "ignoreDeps": [
-    "string:app_name",
     "gradle",
   ],
   "minimumReleaseAge": "7 days",

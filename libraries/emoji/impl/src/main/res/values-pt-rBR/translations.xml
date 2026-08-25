@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Atividades"</string>
+  <string name="emoji_picker_category_flags">"Bandeiras"</string>
+  <string name="emoji_picker_category_foods">"Comida &amp; Bebida"</string>
+  <string name="emoji_picker_category_nature">"Animais &amp; Natureza"</string>
+  <string name="emoji_picker_category_objects">"Objetos"</string>
+  <string name="emoji_picker_category_people">"Sorrisos &amp; Pessoas"</string>
+  <string name="emoji_picker_category_places">"Viagens &amp; Lugares"</string>
+  <string name="emoji_picker_category_recent">"Emojis recentes"</string>
+  <string name="emoji_picker_category_symbols">"Símbolos"</string>
+  <string name="emoji_picker_search_placeholder">"Pesquisar emojis"</string>
+</resources>

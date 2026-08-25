@@ -15,6 +15,12 @@ appId: ${MAESTRO_APP_ID}
     text: ${MAESTRO_INVITEE1_MXID}
     index: 1
 - tapOn: "Finish"
+- runFlow:
+    when:
+      visible: 'Invite new contact to this room?'
+    commands:
+      - tapOn:
+          id: "confirm_invite_unknown"
 - tapOn: "aRoomName"
 - tapOn: "Invite"
 # assert there's 1 member and 1 invitee
@@ -23,6 +29,10 @@ appId: ${MAESTRO_APP_ID}
 - tapOn:
     text: ${MAESTRO_INVITEE2_MXID}
     index: 1
+# Hide keyboard by tapping on an external element in case it's displayed, otherwise it will 'eat' the back button press
+- tapOn:
+    # Navigation title
+    text: "Invite people"
 - tapOn: "Invite"
 - runFlow:
     when:
@@ -30,10 +40,6 @@ appId: ${MAESTRO_APP_ID}
     commands:
       - tapOn:
           id: "confirm_invite_unknown"
-# Close the keyboard if it's still open
-- tapOn: "Back"
-# Go back to the room details screen
-- tapOn: "Back"
 - scrollUntilVisible:
     direction: DOWN
     element:

@@ -94,6 +94,7 @@
   <string name="screen_notification_settings_sound_import_sound_error_title">"Помилка імпорту файлу"</string>
   <string name="screen_notification_settings_sound_preview_sound_error_title">"Проблема з попереднім прослуховуванням звуку сповіщення"</string>
   <string name="screen_notification_settings_sound_section_title">"Звук"</string>
+  <string name="screen_notification_settings_sound_set_sound_error_dismiss_a11y">"Відхилити помилку звукового сповіщення"</string>
   <string name="screen_notification_settings_sound_set_sound_error_title">"Проблема налаштовування звуку сповіщення"</string>
   <string name="screen_notification_settings_sound_silent">"Без звуку"</string>
   <string name="screen_notification_settings_sound_system_default">"Як у системі"</string>
@@ -101,6 +102,14 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"системні налаштування"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Системні сповіщення вимкнені"</string>
   <string name="screen_notification_settings_title">"Сповіщення"</string>
+  <string name="screen_settings_user_status_away">"Не на місці"</string>
+  <string name="screen_settings_user_status_be_right_back">"Зараз повернуся"</string>
+  <string name="screen_settings_user_status_custom">"Власний…"</string>
+  <string name="screen_settings_user_status_custom_hint">"Власний статус…"</string>
+  <string name="screen_settings_user_status_focus_time">"Зосереджений(а)"</string>
+  <string name="screen_settings_user_status_in_a_meeting">"На зустрічі"</string>
+  <string name="screen_settings_user_status_on_the_road">"У дорозі"</string>
+  <string name="screen_settings_user_status_placeholder">"Який у вас статус?"</string>
   <string name="theme_black">"Темна"</string>
   <string name="theme_dark">"Темна"</string>
   <string name="theme_light">"Світла"</string>

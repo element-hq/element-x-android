@@ -25,25 +25,28 @@ import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
- * Keeps the focused field visible above the keyboard. Intended for a field inside a scrollable
- * container: the field is never clipped by a pinned footer, but the IME is shown only after focus
- * arrives, so we re-request bringIntoView once it is visible to scroll the field back into the
- * reduced viewport.
+ * Keeps a focused field visible above the keyboard. Intended for a field — or a group that wraps
+ * one — inside a scrollable container: the content is never clipped by a pinned footer, but the IME
+ * is shown only after focus arrives, so we re-request bringIntoView once it is visible to scroll the
+ * content back into the reduced viewport.
+ *
+ * Tracks focus via `hasFocus` rather than `isFocused`, so it also works when applied to a wrapper
+ * whose child — rather than the wrapper itself — takes focus.
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun Modifier.bringIntoViewOnImeVisible(): Modifier {
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
-    var isFocused by remember { mutableStateOf(false) }
+    var hasFocus by remember { mutableStateOf(false) }
     val isImeVisible = WindowInsets.isImeVisible
-    LaunchedEffect(isImeVisible, isFocused) {
-        if (isImeVisible && isFocused) {
-            // Delay to ensure the keyboard is fully shown before scrolling the field into view.
+    LaunchedEffect(isImeVisible, hasFocus) {
+        if (isImeVisible && hasFocus) {
+            // Delay to ensure the keyboard is fully shown before scrolling the content into view.
             delay(100.milliseconds)
             bringIntoViewRequester.bringIntoView()
         }
     }
     return this
         .bringIntoViewRequester(bringIntoViewRequester)
-        .onFocusChanged { isFocused = it.isFocused }
+        .onFocusChanged { hasFocus = it.hasFocus }
 }

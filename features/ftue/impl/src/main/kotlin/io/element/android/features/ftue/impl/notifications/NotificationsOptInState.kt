@@ -12,5 +12,5 @@ import io.element.android.libraries.permissions.api.PermissionsState
 
 data class NotificationsOptInState(
     val notificationsPermissionState: PermissionsState,
-    val eventSink: (NotificationsOptInEvents) -> Unit
+    val eventSink: (NotificationsOptInEvent) -> Unit
 )

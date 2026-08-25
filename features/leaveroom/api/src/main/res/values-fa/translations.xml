@@ -4,6 +4,7 @@
   <string name="leave_room_alert_empty_subtitle">"مطمئنید که می‌خواهید این اتاق را ترک کنید؟ تنها فرد این‌جا هستید. در صورت ترک، هیچ‌کسی از جمله خودتان در آینده نخواهد توانست به آن بپیوندد."</string>
   <string name="leave_room_alert_private_subtitle">"مطمئنید که می‌خواهید این اتاق را ترک کنید؟ این اتاق عمومی نبوده قادر نخواهید بود بدون دعوت دوباره بپیوندید."</string>
   <string name="leave_room_alert_select_new_owner_action">"گزینش مالکان"</string>
+  <string name="leave_room_alert_select_new_owner_subtitle">"شما تنها مالک این اتاق هستید. قبل از ترک اتاق، باید مالکیت را به شخص دیگری منتقل کنید."</string>
   <string name="leave_room_alert_select_new_owner_title">"انتقال مالکیت"</string>
   <string name="leave_room_alert_subtitle">"مطمئنید که می‌خواهید این اتاق را ترک کنید؟"</string>
 </resources>

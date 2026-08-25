@@ -58,32 +58,32 @@ class SecureBackupEnterRecoveryKeyViewTest : RobolectricTest() {
     @Test
     @Config(qualifiers = "h1024dp")
     fun `tapping on Continue when key is valid - calls expected action`() = runAndroidComposeUiTest {
-        val recorder = EventsRecorder<SecureBackupEnterRecoveryKeyEvents>()
+        val recorder = EventsRecorder<SecureBackupEnterRecoveryKeyEvent>()
         setSecureBackupEnterRecoveryKeyView(
             aSecureBackupEnterRecoveryKeyState(isSubmitEnabled = true, eventSink = recorder),
         )
         clickOn(CommonStrings.action_continue)
 
-        recorder.assertSingle(SecureBackupEnterRecoveryKeyEvents.Submit)
+        recorder.assertSingle(SecureBackupEnterRecoveryKeyEvent.Submit)
     }
 
     @Test
     fun `entering a char emits the expected event`() = runAndroidComposeUiTest {
-        val recorder = EventsRecorder<SecureBackupEnterRecoveryKeyEvents>()
+        val recorder = EventsRecorder<SecureBackupEnterRecoveryKeyEvent>()
         val keyValue = aFormattedRecoveryKey()
         setSecureBackupEnterRecoveryKeyView(
             aSecureBackupEnterRecoveryKeyState(isSubmitEnabled = true, eventSink = recorder),
         )
         onNodeWithText(keyValue).performTextInput("X")
         recorder.assertSingle(
-            SecureBackupEnterRecoveryKeyEvents.OnRecoveryKeyChange("X$keyValue")
+            SecureBackupEnterRecoveryKeyEvent.OnRecoveryKeyChange("X$keyValue")
         )
     }
 
     @Test
     @Config(qualifiers = "h1024dp")
     fun `toggling the visibility of the textfield changes it`() = runAndroidComposeUiTest {
-        val recorder = EventsRecorder<SecureBackupEnterRecoveryKeyEvents>()
+        val recorder = EventsRecorder<SecureBackupEnterRecoveryKeyEvent>()
         val keyValue = aFormattedRecoveryKey()
         setSecureBackupEnterRecoveryKeyView(aSecureBackupEnterRecoveryKeyState(isSubmitEnabled = true, eventSink = recorder))
 
@@ -94,18 +94,18 @@ class SecureBackupEnterRecoveryKeyViewTest : RobolectricTest() {
 
         waitForIdle()
 
-        recorder.assertSingle(SecureBackupEnterRecoveryKeyEvents.ChangeRecoveryKeyFieldContentsVisibility(false))
+        recorder.assertSingle(SecureBackupEnterRecoveryKeyEvent.ChangeRecoveryKeyFieldContentsVisibility(false))
     }
 
     @Test
     fun `validating from keyboard emits the expected event`() = runAndroidComposeUiTest {
-        val recorder = EventsRecorder<SecureBackupEnterRecoveryKeyEvents>()
+        val recorder = EventsRecorder<SecureBackupEnterRecoveryKeyEvent>()
         val keyValue = aFormattedRecoveryKey()
         setSecureBackupEnterRecoveryKeyView(
             aSecureBackupEnterRecoveryKeyState(isSubmitEnabled = true, eventSink = recorder),
         )
         onNodeWithText(keyValue).performImeAction()
-        recorder.assertSingle(SecureBackupEnterRecoveryKeyEvents.Submit)
+        recorder.assertSingle(SecureBackupEnterRecoveryKeyEvent.Submit)
     }
 
     @Test

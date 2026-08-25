@@ -39,7 +39,7 @@ import org.robolectric.annotation.Config
 class LoginPasswordViewTest : RobolectricTest() {
     @Test
     fun `clicking on back invoke back callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<LoginPasswordEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<LoginPasswordEvent>(expectEvents = false)
         ensureCalledOnce { callback ->
             setLoginPasswordView(
                 aLoginPasswordState(
@@ -53,7 +53,7 @@ class LoginPasswordViewTest : RobolectricTest() {
 
     @Test
     fun `changing login invokes the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<LoginPasswordEvents>()
+        val eventsRecorder = EventsRecorder<LoginPasswordEvent>()
         setLoginPasswordView(
             aLoginPasswordState(
                 eventSink = eventsRecorder,
@@ -62,13 +62,13 @@ class LoginPasswordViewTest : RobolectricTest() {
         val userNameHint = activity!!.getString(CommonStrings.common_username)
         onNodeWithText(userNameHint).performTextInput(A_USER_NAME)
         eventsRecorder.assertSingle(
-            LoginPasswordEvents.SetLogin(A_USER_NAME)
+            LoginPasswordEvent.SetLogin(A_USER_NAME)
         )
     }
 
     @Test
     fun `changing login removes new lines the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<LoginPasswordEvents>()
+        val eventsRecorder = EventsRecorder<LoginPasswordEvent>()
         setLoginPasswordView(
             aLoginPasswordState(
                 eventSink = eventsRecorder,
@@ -77,13 +77,28 @@ class LoginPasswordViewTest : RobolectricTest() {
         val userNameHint = activity!!.getString(CommonStrings.common_username)
         onNodeWithText(userNameHint).performTextInput("a\nb")
         eventsRecorder.assertSingle(
-            LoginPasswordEvents.SetLogin("ab")
+            LoginPasswordEvent.SetLogin("ab")
+        )
+    }
+
+    @Test
+    fun `changing login removes carriage returns the expected event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<LoginPasswordEvent>()
+        setLoginPasswordView(
+            aLoginPasswordState(
+                eventSink = eventsRecorder,
+            ),
+        )
+        val userNameHint = activity!!.getString(CommonStrings.common_username)
+        onNodeWithText(userNameHint).performTextInput("a\r\nb")
+        eventsRecorder.assertSingle(
+            LoginPasswordEvent.SetLogin("ab")
         )
     }
 
     @Test
     fun `clearing login invokes the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<LoginPasswordEvents>()
+        val eventsRecorder = EventsRecorder<LoginPasswordEvent>()
         setLoginPasswordView(
             aLoginPasswordState(
                 formState = aLoginFormState(A_USER_NAME),
@@ -93,13 +108,13 @@ class LoginPasswordViewTest : RobolectricTest() {
         val a11yClear = activity!!.getString(CommonStrings.action_clear)
         onNodeWithContentDescription(a11yClear).performClick()
         eventsRecorder.assertSingle(
-            LoginPasswordEvents.SetLogin("")
+            LoginPasswordEvent.SetLogin("")
         )
     }
 
     @Test
     fun `changing password invokes the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<LoginPasswordEvents>()
+        val eventsRecorder = EventsRecorder<LoginPasswordEvent>()
         setLoginPasswordView(
             aLoginPasswordState(
                 eventSink = eventsRecorder,
@@ -108,13 +123,28 @@ class LoginPasswordViewTest : RobolectricTest() {
         val userNameHint = activity!!.getString(CommonStrings.common_password)
         onNodeWithText(userNameHint).performTextInput(A_PASSWORD)
         eventsRecorder.assertSingle(
-            LoginPasswordEvents.SetPassword(A_PASSWORD)
+            LoginPasswordEvent.SetPassword(A_PASSWORD)
+        )
+    }
+
+    @Test
+    fun `changing password removes carriage returns the expected event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<LoginPasswordEvent>()
+        setLoginPasswordView(
+            aLoginPasswordState(
+                eventSink = eventsRecorder,
+            ),
+        )
+        val passwordHint = activity!!.getString(CommonStrings.common_password)
+        onNodeWithText(passwordHint).performTextInput("a\r\nb")
+        eventsRecorder.assertSingle(
+            LoginPasswordEvent.SetPassword("ab")
         )
     }
 
     @Test
     fun `reveal password makes the password visible`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<LoginPasswordEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<LoginPasswordEvent>(expectEvents = false)
         setLoginPasswordView(
             aLoginPasswordState(
                 formState = aLoginFormState(password = A_PASSWORD),
@@ -135,7 +165,7 @@ class LoginPasswordViewTest : RobolectricTest() {
 
     @Test
     fun `when login is empty, continue button is not enabled`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<LoginPasswordEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<LoginPasswordEvent>(expectEvents = false)
         setLoginPasswordView(
             aLoginPasswordState(
                 formState = aLoginFormState(password = A_PASSWORD),
@@ -148,7 +178,7 @@ class LoginPasswordViewTest : RobolectricTest() {
 
     @Test
     fun `when password is empty, continue button is not enabled`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<LoginPasswordEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<LoginPasswordEvent>(expectEvents = false)
         setLoginPasswordView(
             aLoginPasswordState(
                 formState = aLoginFormState(login = A_USER_NAME),
@@ -162,7 +192,7 @@ class LoginPasswordViewTest : RobolectricTest() {
     @Config(qualifiers = "h1024dp")
     @Test
     fun `clicking on Continue sends expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<LoginPasswordEvents>()
+        val eventsRecorder = EventsRecorder<LoginPasswordEvent>()
         setLoginPasswordView(
             aLoginPasswordState(
                 formState = aLoginFormState(login = A_USER_NAME, password = A_PASSWORD),
@@ -173,7 +203,7 @@ class LoginPasswordViewTest : RobolectricTest() {
         onNodeWithText(continueStr).assertIsEnabled()
         clickOn(CommonStrings.action_continue)
         eventsRecorder.assertSingle(
-            LoginPasswordEvents.Submit
+            LoginPasswordEvent.Submit
         )
     }
 }

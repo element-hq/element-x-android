@@ -22,13 +22,14 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.Composer
+import io.element.android.features.enterprise.api.remoteconfig.CustomMapTilerConfigProvider
 import io.element.android.features.location.api.live.ActiveLiveLocationShareManager
 import io.element.android.features.location.impl.common.LocationConstraintsCheck
 import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.SendLiveLocationPermissions
 import io.element.android.features.location.impl.common.actions.LocationActions
 import io.element.android.features.location.impl.common.checkLocationConstraints
-import io.element.android.features.location.impl.common.permissions.PermissionsEvents
+import io.element.android.features.location.impl.common.permissions.PermissionsEvent
 import io.element.android.features.location.impl.common.permissions.PermissionsPresenter
 import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.features.location.impl.common.sendLiveLocationPermissions
@@ -72,6 +73,7 @@ class ShareLocationPresenter(
     private val liveLocationShareManager: ActiveLiveLocationShareManager,
     private val liveLocationStore: LiveLocationStore,
     private val userLocationStateFactory: UserLocationState.Factory,
+    private val customMapTilerConfigProvider: CustomMapTilerConfigProvider,
 ) : Presenter<ShareLocationState> {
     @AssistedFactory
     fun interface Factory {
@@ -92,9 +94,9 @@ class ShareLocationPresenter(
         var pendingLiveLocationShare by remember { mutableStateOf(false) }
         val startLiveLocationAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
         val currentUser by client.userProfile.collectAsState()
-        val customMapStyleUrl by produceState(AsyncData.Loading()) {
+        val customMapConfig by produceState(AsyncData.Loading()) {
             // Ignore errors
-            value = AsyncData.Success(client.getMapStyleUrl().getOrNull())
+            value = AsyncData.Success(customMapTilerConfigProvider.get().getOrNull())
         }
         val sendLiveLocationPermissions by room.permissionsAsState(SendLiveLocationPermissions.DEFAULT) { perms ->
             perms.sendLiveLocationPermissions()
@@ -109,7 +111,7 @@ class ShareLocationPresenter(
                 sendLiveLocationPermissions = SendLiveLocationPermissions.GRANTED
             )
             if (locationConstraints is LocationConstraintsCheck.PermissionShouldBeRequested) {
-                permissionsState.eventSink(PermissionsEvents.RequestPermissions)
+                permissionsState.eventSink(PermissionsEvent.RequestPermissions)
             }
             trackUserPosition = locationConstraints is LocationConstraintsCheck.Success
             dialogState = ShareLocationState.Dialog.Constraints(locationConstraints.toDialogState())
@@ -135,7 +137,7 @@ class ShareLocationPresenter(
                 }
                 else -> {
                     if (locationConstraints is LocationConstraintsCheck.PermissionShouldBeRequested) {
-                        permissionsState.eventSink(PermissionsEvents.RequestPermissions)
+                        permissionsState.eventSink(PermissionsEvent.RequestPermissions)
                     }
                     dialogState = ShareLocationState.Dialog.Constraints(locationConstraints.toDialogState())
                 }
@@ -193,13 +195,13 @@ class ShareLocationPresenter(
                 }
                 ShareLocationEvent.RequestPermissions -> {
                     dialogState = ShareLocationState.Dialog.None
-                    permissionsState.eventSink(PermissionsEvents.RequestPermissions)
+                    permissionsState.eventSink(PermissionsEvent.RequestPermissions)
                 }
             }
         }
 
         return ShareLocationState(
-            customMapStyleUrl = customMapStyleUrl,
+            customMapTilerConfig = customMapConfig,
             currentUser = currentUser,
             dialogState = dialogState,
             trackUserLocation = trackUserPosition,

@@ -12,8 +12,11 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.push.api.gateway.PushGatewayFailure
 import io.element.android.libraries.push.impl.test.DefaultTestPush
 import kotlinx.coroutines.test.runTest
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Assert.assertThrows
 import org.junit.Test
+import retrofit2.HttpException
+import retrofit2.Response
 
 class DefaultPushGatewayNotifyRequestTest {
     @Test
@@ -62,6 +65,58 @@ class DefaultPushGatewayNotifyRequestTest {
             )
         )
         assertThat(factory.baseUrlParameter).isEqualTo("aUrl")
+    }
+
+    @Test
+    fun `notify with a rate limiting status should throw expected Exception`() {
+        listOf(429, 507).forEach { statusCode ->
+            val factory = FakePushGatewayApiFactory(
+                notifyResponse = {
+                    throw HttpException(Response.error<Unit>(statusCode, "".toResponseBody()))
+                }
+            )
+            val pushGatewayNotifyRequest = DefaultPushGatewayNotifyRequest(
+                pushGatewayApiFactory = factory,
+            )
+            assertThrows(PushGatewayFailure.RateLimited::class.java) {
+                runTest {
+                    pushGatewayNotifyRequest.execute(
+                        PushGatewayNotifyRequest.Params(
+                            url = "aUrl",
+                            appId = "anAppId",
+                            pushKey = "aPushKey",
+                            eventId = DefaultTestPush.TEST_EVENT_ID,
+                            roomId = DefaultTestPush.TEST_ROOM_ID,
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `notify with another http error should not be mapped to a rate limit`() {
+        val factory = FakePushGatewayApiFactory(
+            notifyResponse = {
+                throw HttpException(Response.error<Unit>(500, "".toResponseBody()))
+            }
+        )
+        val pushGatewayNotifyRequest = DefaultPushGatewayNotifyRequest(
+            pushGatewayApiFactory = factory,
+        )
+        assertThrows(HttpException::class.java) {
+            runTest {
+                pushGatewayNotifyRequest.execute(
+                    PushGatewayNotifyRequest.Params(
+                        url = "aUrl",
+                        appId = "anAppId",
+                        pushKey = "aPushKey",
+                        eventId = DefaultTestPush.TEST_EVENT_ID,
+                        roomId = DefaultTestPush.TEST_ROOM_ID,
+                    )
+                )
+            }
+        }
     }
 
     @Test

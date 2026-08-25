@@ -23,10 +23,14 @@ import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.data.megaBytes
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.analytics.GetDatabaseSizesUseCase
 import io.element.android.libraries.matrix.api.analytics.SdkStoreSizes
+import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -57,6 +61,7 @@ class DeveloperSettingsPresenterTest {
                 assertThat(state.cacheSize).isEqualTo(AsyncData.Uninitialized)
                 assertThat(state.isEnterpriseBuild).isFalse()
                 assertThat(state.showColorPicker).isFalse()
+                assertThat(state.deviceId).isEqualTo(A_DEVICE_ID)
             }
             awaitItem().also { state ->
                 assertThat(state.cacheSize.isLoading()).isTrue()
@@ -83,7 +88,7 @@ class DeveloperSettingsPresenterTest {
             skipItems(2)
             assertThat(clearCacheUseCase.executeHasBeenCalled).isFalse()
             awaitItem().also { state ->
-                state.eventSink(DeveloperSettingsEvents.ClearCache)
+                state.eventSink(DeveloperSettingsEvent.ClearCache)
             }
             awaitItem().also { state ->
                 assertThat(state.clearCacheAction).isInstanceOf(AsyncAction.Loading::class.java)
@@ -105,22 +110,20 @@ class DeveloperSettingsPresenterTest {
     fun `present - enterprise build can change the brand color`() = runTest {
         val overrideBrandColorResult = lambdaRecorder<SessionId?, String?, Unit> { _, _ -> }
         val presenter = createDeveloperSettingsPresenter(
-            enterpriseService = FakeEnterpriseService(
-                isEnterpriseBuild = true,
-                overrideBrandColorResult = overrideBrandColorResult,
-            )
+            enterpriseService = FakeEnterpriseService(overrideBrandColorResult = overrideBrandColorResult),
+            buildMeta = aBuildMeta(isEnterpriseBuild = true),
         )
         presenter.test {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.isEnterpriseBuild).isTrue()
-            initialState.eventSink(DeveloperSettingsEvents.SetShowColorPicker(true))
+            initialState.eventSink(DeveloperSettingsEvent.SetShowColorPicker(true))
             assertThat(awaitItem().showColorPicker).isTrue()
-            initialState.eventSink(DeveloperSettingsEvents.SetShowColorPicker(false))
+            initialState.eventSink(DeveloperSettingsEvent.SetShowColorPicker(false))
             assertThat(awaitItem().showColorPicker).isFalse()
-            initialState.eventSink(DeveloperSettingsEvents.SetShowColorPicker(true))
+            initialState.eventSink(DeveloperSettingsEvent.SetShowColorPicker(true))
             assertThat(awaitItem().showColorPicker).isTrue()
-            initialState.eventSink(DeveloperSettingsEvents.ChangeBrandColor(Color.Green))
+            initialState.eventSink(DeveloperSettingsEvent.ChangeBrandColor(Color.Green))
             assertThat(awaitItem().showColorPicker).isFalse()
             skipItems(1)
             overrideBrandColorResult.assertions().isCalledOnce()
@@ -135,10 +138,10 @@ class DeveloperSettingsPresenterTest {
         presenter.test {
             skipItems(2)
             val initialState = awaitItem()
-            initialState.eventSink(DeveloperSettingsEvents.MarkAllRoomsAsRead(needsConfirmation = true))
+            initialState.eventSink(DeveloperSettingsEvent.MarkAllRoomsAsRead(needsConfirmation = true))
             val stateWithConfirmation = awaitItem()
             assertThat(stateWithConfirmation.markAllRoomsAsReadAction.isConfirming()).isTrue()
-            stateWithConfirmation.eventSink(DeveloperSettingsEvents.MarkAllRoomsAsRead(needsConfirmation = false))
+            stateWithConfirmation.eventSink(DeveloperSettingsEvent.MarkAllRoomsAsRead(needsConfirmation = false))
             awaitItem().also { state ->
                 assertThat(state.markAllRoomsAsReadAction.isConfirming()).isFalse()
                 assertThat(state.markAllRoomsAsReadAction).isInstanceOf(AsyncAction.Loading::class.java)
@@ -161,7 +164,7 @@ class DeveloperSettingsPresenterTest {
         presenter.test {
             val state = awaitItem()
             assertThat(vacuumCalled).isFalse()
-            state.eventSink(DeveloperSettingsEvents.VacuumStores)
+            state.eventSink(DeveloperSettingsEvent.VacuumStores)
             skipItems(1)
             assertThat(vacuumCalled).isTrue()
         }
@@ -169,16 +172,19 @@ class DeveloperSettingsPresenterTest {
 
     private fun createDeveloperSettingsPresenter(
         sessionId: SessionId = A_SESSION_ID,
+        deviceId: DeviceId = A_DEVICE_ID,
         cacheSizeUseCase: FakeComputeCacheSizeUseCase = FakeComputeCacheSizeUseCase(),
         clearCacheUseCase: FakeClearCacheUseCase = FakeClearCacheUseCase(),
         enterpriseService: EnterpriseService = FakeEnterpriseService(),
         vacuumStoresUseCase: VacuumStoresUseCase = VacuumStoresUseCase {},
         databaseSizesUseCase: GetDatabaseSizesUseCase = GetDatabaseSizesUseCase { Result.success(SdkStoreSizes(null, null, null, null)) },
         markAllRoomsAsRead: FakeMarkAllRoomsAsRead = FakeMarkAllRoomsAsRead(),
+        buildMeta: BuildMeta = aBuildMeta(),
     ): DeveloperSettingsPresenter {
         return DeveloperSettingsPresenter(
             appDeveloperSettingsPresenter = { anAppDeveloperSettingsState() },
             sessionId = sessionId,
+            deviceId = deviceId,
             computeCacheSizeUseCase = cacheSizeUseCase,
             clearCacheUseCase = clearCacheUseCase,
             enterpriseService = enterpriseService,
@@ -186,6 +192,7 @@ class DeveloperSettingsPresenterTest {
             databaseSizesUseCase = databaseSizesUseCase,
             fileSizeFormatter = FakeFileSizeFormatter(),
             markAllRoomsAsRead = markAllRoomsAsRead,
+            buildMeta = buildMeta,
         )
     }
 }

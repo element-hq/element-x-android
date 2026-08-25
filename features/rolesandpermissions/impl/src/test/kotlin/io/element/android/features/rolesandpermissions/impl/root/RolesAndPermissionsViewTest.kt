@@ -92,19 +92,19 @@ class RolesAndPermissionsViewTest : RobolectricTest() {
     @Test
     @Config(qualifiers = "h640dp")
     fun `tapping on reset permissions triggers ResetPermissions event`() = runAndroidComposeUiTest {
-        val recorder = EventsRecorder<RolesAndPermissionsEvents>()
+        val recorder = EventsRecorder<RolesAndPermissionsEvent>()
         setRolesAndPermissionsView(
             state = aRolesAndPermissionsState(
                 eventSink = recorder,
             ),
         )
         clickOn(R.string.screen_room_roles_and_permissions_reset)
-        recorder.assertSingle(RolesAndPermissionsEvents.ResetPermissions)
+        recorder.assertSingle(RolesAndPermissionsEvent.ResetPermissions)
     }
 
     @Test
     fun `tapping on Reset in the reset permissions confirmation dialog triggers ResetPermissions event`() = runAndroidComposeUiTest {
-        val recorder = EventsRecorder<RolesAndPermissionsEvents>()
+        val recorder = EventsRecorder<RolesAndPermissionsEvent>()
         setRolesAndPermissionsView(
             state = aRolesAndPermissionsState(
                 resetPermissionsAction = AsyncAction.ConfirmingNoParams,
@@ -112,12 +112,12 @@ class RolesAndPermissionsViewTest : RobolectricTest() {
             ),
         )
         clickOn(CommonStrings.action_reset)
-        recorder.assertSingle(RolesAndPermissionsEvents.ResetPermissions)
+        recorder.assertSingle(RolesAndPermissionsEvent.ResetPermissions)
     }
 
     @Test
     fun `tapping on Cancel in the reset permissions confirmation dialog triggers CancelPendingAction event`() = runAndroidComposeUiTest {
-        val recorder = EventsRecorder<RolesAndPermissionsEvents>()
+        val recorder = EventsRecorder<RolesAndPermissionsEvent>()
         setRolesAndPermissionsView(
             state = aRolesAndPermissionsState(
                 resetPermissionsAction = AsyncAction.ConfirmingNoParams,
@@ -125,12 +125,12 @@ class RolesAndPermissionsViewTest : RobolectricTest() {
             ),
         )
         clickOn(CommonStrings.action_cancel)
-        recorder.assertSingle(RolesAndPermissionsEvents.CancelPendingAction)
+        recorder.assertSingle(RolesAndPermissionsEvent.CancelPendingAction)
     }
 
     @Test
     fun `tapping on 'Demote to moderator' in the demote self bottom sheet triggers the right event`() = runAndroidComposeUiTest {
-        val recorder = EventsRecorder<RolesAndPermissionsEvents>()
+        val recorder = EventsRecorder<RolesAndPermissionsEvent>()
         setRolesAndPermissionsView(
             state = aRolesAndPermissionsState(
                 changeOwnRoleAction = AsyncAction.ConfirmingNoParams,
@@ -139,12 +139,12 @@ class RolesAndPermissionsViewTest : RobolectricTest() {
         )
         clickOn(R.string.screen_room_roles_and_permissions_change_role_demote_to_moderator)
         mainClock.advanceTimeBy(1_000L)
-        recorder.assertSingle(RolesAndPermissionsEvents.DemoteSelfTo(RoomMember.Role.Moderator))
+        recorder.assertSingle(RolesAndPermissionsEvent.DemoteSelfTo(RoomMember.Role.Moderator))
     }
 
     @Test
     fun `tapping on 'Demote to member' in the demote self bottom sheet triggers the right event`() = runAndroidComposeUiTest {
-        val recorder = EventsRecorder<RolesAndPermissionsEvents>()
+        val recorder = EventsRecorder<RolesAndPermissionsEvent>()
         setRolesAndPermissionsView(
             state = aRolesAndPermissionsState(
                 changeOwnRoleAction = AsyncAction.ConfirmingNoParams,
@@ -153,12 +153,12 @@ class RolesAndPermissionsViewTest : RobolectricTest() {
         )
         clickOn(R.string.screen_room_roles_and_permissions_change_role_demote_to_member)
         mainClock.advanceTimeBy(1_000L)
-        recorder.assertSingle(RolesAndPermissionsEvents.DemoteSelfTo(RoomMember.Role.User))
+        recorder.assertSingle(RolesAndPermissionsEvent.DemoteSelfTo(RoomMember.Role.User))
     }
 
     @Test
     fun `tapping on 'Cancel' in the demote self bottom sheet triggers the right event`() = runAndroidComposeUiTest {
-        val recorder = EventsRecorder<RolesAndPermissionsEvents>()
+        val recorder = EventsRecorder<RolesAndPermissionsEvent>()
         setRolesAndPermissionsView(
             state = aRolesAndPermissionsState(
                 changeOwnRoleAction = AsyncAction.ConfirmingNoParams,
@@ -167,7 +167,7 @@ class RolesAndPermissionsViewTest : RobolectricTest() {
         )
         clickOn(CommonStrings.action_cancel)
         mainClock.advanceTimeBy(1_000L)
-        recorder.assertSingle(RolesAndPermissionsEvents.CancelPendingAction)
+        recorder.assertSingle(RolesAndPermissionsEvent.CancelPendingAction)
     }
 }
 

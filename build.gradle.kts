@@ -98,7 +98,7 @@ allprojects {
             // This is disabled by default, but the CI will enforce this.
             // You can override by passing `-PallWarningsAsErrors=true` in the command line
             // Or add a line with "allWarningsAsErrors=true" in your ~/.gradle/gradle.properties file
-            allWarningsAsErrors = project.properties["allWarningsAsErrors"] == "true"
+            allWarningsAsErrors = findProperty("allWarningsAsErrors") == "true"
 
             // Uncomment to suppress Compose Kotlin compiler compatibility warning
 //            freeCompilerArgs.addAll(listOf("-P", "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"))

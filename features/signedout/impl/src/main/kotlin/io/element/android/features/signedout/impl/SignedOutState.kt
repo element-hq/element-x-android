@@ -13,5 +13,5 @@ import io.element.android.libraries.sessionstorage.api.SessionData
 data class SignedOutState(
     val appName: String,
     val signedOutSession: SessionData?,
-    val eventSink: (SignedOutEvents) -> Unit,
+    val eventSink: (SignedOutEvent) -> Unit,
 )

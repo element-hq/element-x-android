@@ -76,7 +76,7 @@ private fun ColumnScope.Buttons(
 
 @PreviewsDayNight
 @Composable
-internal fun MissingKeyBackupViewPreview(@PreviewParameter(MissingKeyBackupStateProvider::class) state: MissingKeyBackupState) = ElementPreview {
+internal fun MissingKeyBackupViewPreview(@PreviewParameter(MissingKeyBackupStatePreviewParam::class) state: MissingKeyBackupState) = ElementPreview {
     MissingKeyBackupView(
         state = state,
         onBackClick = {},

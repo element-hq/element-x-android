@@ -13,9 +13,15 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -33,6 +39,8 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -112,10 +120,12 @@ private fun RoomListSearchContent(
                 title = {
                     // The stateSaver will keep the selection state when returning to this UI
                     val focusRequester = remember { FocusRequester() }
+                    val searchLabel = stringResource(CommonStrings.action_search)
                     FilledTextField(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .focusRequester(focusRequester),
+                            .focusRequester(focusRequester)
+                            .semantics { contentDescription = searchLabel },
                         state = state.query,
                         lineLimits = TextFieldLineLimits.SingleLine,
                         colors = TextFieldDefaults.colors(
@@ -132,7 +142,7 @@ private fun RoomListSearchContent(
                                 IconButton(onClick = { state.eventSink(RoomListSearchEvent.ClearQuery) }) {
                                     Icon(
                                         imageVector = CompoundIcons.Close(),
-                                        contentDescription = stringResource(CommonStrings.action_cancel)
+                                        contentDescription = stringResource(CommonStrings.a11y_clear_search_field)
                                     )
                                 }
                             }
@@ -149,7 +159,8 @@ private fun RoomListSearchContent(
                     }
                 },
             )
-        }
+        },
+        contentWindowInsets = WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom),
     ) { padding ->
         Column(
             modifier = Modifier
@@ -163,6 +174,7 @@ private fun RoomListSearchContent(
             LazyColumn(
                 state = lazyListState,
                 modifier = Modifier.weight(1f),
+                contentPadding = WindowInsets.navigationBars.asPaddingValues(),
             ) {
                 items(
                     items = state.results,
@@ -184,7 +196,7 @@ private fun RoomListSearchContent(
 
 @PreviewsDayNight
 @Composable
-internal fun RoomListSearchContentPreview(@PreviewParameter(RoomListSearchStateProvider::class) state: RoomListSearchState) = ElementPreview {
+internal fun RoomListSearchContentPreview(@PreviewParameter(RoomListSearchStatePreviewParam::class) state: RoomListSearchState) = ElementPreview {
     RoomListSearchContent(
         state = state,
         hideInvitesAvatars = false,

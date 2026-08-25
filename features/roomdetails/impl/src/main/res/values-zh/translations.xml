@@ -111,7 +111,8 @@
   <string name="screen_room_notification_settings_error_setting_mode">"设置模式失败，请重试。"</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"主服务器不支持在加密房间中的此选项，因此在此房间你可能无法收到通知。"</string>
   <string name="screen_room_notification_settings_mode_all_messages">"所有消息"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"仅限提及和关键词"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"仅提及与关键词"</string>
+  <string name="screen_room_notification_settings_mode_mute">"静默"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"在此房间通知我以下类型"</string>
   <string name="screen_room_roles_and_permissions_admins">"管理员"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"管理员与所有者"</string>

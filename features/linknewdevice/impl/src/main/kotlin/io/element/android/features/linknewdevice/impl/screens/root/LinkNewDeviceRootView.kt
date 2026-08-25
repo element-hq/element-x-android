@@ -140,7 +140,7 @@ fun LinkNewDeviceRootView(
 @PreviewsDayNight
 @Composable
 internal fun LinkNewDeviceRootViewPreview(
-    @PreviewParameter(LinkNewDeviceRootStateProvider::class) state: LinkNewDeviceRootState
+    @PreviewParameter(LinkNewDeviceRootStatePreviewParam::class) state: LinkNewDeviceRootState
 ) = ElementPreview {
     LinkNewDeviceRootView(
         state = state,

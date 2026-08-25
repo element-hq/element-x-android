@@ -15,6 +15,9 @@ enum class AudioFocusRequester {
     MediaViewer,
 }
 
+/**
+ * Claims and releases system audio focus, so that the app's own players do not talk over each other or over other apps.
+ */
 interface AudioFocus {
     /**
      * Request audio focus for the given requester.

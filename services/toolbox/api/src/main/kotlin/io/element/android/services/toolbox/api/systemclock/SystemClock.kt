@@ -8,6 +8,10 @@
 
 package io.element.android.services.toolbox.api.systemclock
 
+/**
+ * Reads the current time, injected rather than called statically so that tests can control it.
+ */
 fun interface SystemClock {
+    /** The current wall-clock time in milliseconds since the epoch. */
     fun epochMillis(): Long
 }

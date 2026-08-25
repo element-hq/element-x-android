@@ -7,15 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"Κρυπτογραφημένο από άγνωστη ή διαγεγραμμένη συσκευή."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Κρυπτογραφημένο από μια συσκευή που δεν έχει επαληθευτεί από τον ιδιοκτήτη της."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Κρυπτογραφημένο από μη επαληθευμένο χρήστη."</string>
-  <string name="emoji_picker_category_activity">"Δραστηριότητες"</string>
-  <string name="emoji_picker_category_flags">"Σημαίες"</string>
-  <string name="emoji_picker_category_foods">"Φαγητό &amp; Ποτό"</string>
-  <string name="emoji_picker_category_nature">"Ζώα &amp; Φύση"</string>
-  <string name="emoji_picker_category_objects">"Αντικείμενα"</string>
-  <string name="emoji_picker_category_people">"Φατσούλες &amp; Άνθρωποι"</string>
-  <string name="emoji_picker_category_places">"Ταξίδια &amp; Μέρη"</string>
-  <string name="emoji_picker_category_recent">"Πρόσφατα emoji"</string>
-  <string name="emoji_picker_category_symbols">"Σύμβολα"</string>
   <string name="screen_media_upload_preview_caption_warning">"Οι λεζάντες ενδέχεται να μην είναι ορατές σε άτομα που χρησιμοποιούν παλαιότερες εφαρμογές."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Πατήστε για να αλλάξετε την ποιότητα μεταφόρτωσης βίντεο"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Δεν ήταν δυνατή η μεταφόρτωση του αρχείου."</string>

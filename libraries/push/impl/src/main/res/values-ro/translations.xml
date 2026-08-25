@@ -20,6 +20,11 @@
     <item quantity="few">"Aveți %d mesaje noi."</item>
     <item quantity="other">"Aveți %d mesaje noi."</item>
   </plurals>
+  <plurals name="notification_gallery_body">
+    <item quantity="one">"%1$d atașament partajat"</item>
+    <item quantity="few">"%1$d atașamente partajate"</item>
+    <item quantity="other">"%1$d atașamente partajate"</item>
+  </plurals>
   <string name="notification_incoming_audio_call">"📞 Apel primit"</string>
   <string name="notification_incoming_call">"Apel primit"</string>
   <string name="notification_inline_reply_failed">"** Trimiterea eșuată - vă rugăm să deschideți camera"</string>
@@ -31,6 +36,7 @@
   </plurals>
   <string name="notification_invite_body">"V-a invitat la o discuție"</string>
   <string name="notification_invite_body_with_sender">"%1$s v-a invitat să discutați"</string>
+  <string name="notification_live_location_started_body">"A început să își partajeze locația live"</string>
   <string name="notification_mentioned_you_body">"%1$s v-a menționat"</string>
   <string name="notification_new_messages">"Mesaje noi"</string>
   <plurals name="notification_new_messages_for_room">

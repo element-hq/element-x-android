@@ -23,6 +23,7 @@ data class SelectRoomInfo(
     val canonicalAlias: RoomAlias?,
     val avatarUrl: String?,
     val heroes: ImmutableList<MatrixUser>,
+    val isDm: Boolean,
     val isTombstoned: Boolean,
 ) {
     fun getAvatarData(size: AvatarSize) = AvatarData(
@@ -41,5 +42,6 @@ fun RoomInfo.toSelectRoomInfo() = SelectRoomInfo(
     avatarUrl = avatarUrl,
     heroes = heroes,
     canonicalAlias = canonicalAlias,
+    isDm = isDm,
     isTombstoned = successorRoom != null,
 )

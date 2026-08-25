@@ -26,14 +26,14 @@ fun ShareView(
             onShareSuccess(it)
         },
         onErrorDismiss = {
-            state.eventSink(ShareEvents.ClearError)
+            state.eventSink(ShareEvent.ClearError)
         },
     )
 }
 
 @PreviewsDayNight
 @Composable
-internal fun ShareViewPreview(@PreviewParameter(ShareStateProvider::class) state: ShareState) = ElementPreview {
+internal fun ShareViewPreview(@PreviewParameter(ShareStatePreviewParam::class) state: ShareState) = ElementPreview {
     ShareView(
         state = state,
         onShareSuccess = {}

@@ -12,7 +12,12 @@ package io.element.android.services.analytics.api.watchers
  * until the cached room list is displayed. This check only takes place in a cold app start after the user is authenticated.
  */
 interface AnalyticsColdStartWatcher {
+    /** Begins the measurement, to be called as early as possible in the cold start. */
     fun start()
+
+    /** Restarts the measurement from the login flow, since a user who has to sign in first is not a normal cold start. */
     fun whenLoggingIn()
+
+    /** Ends the measurement, to be called once the cached room list is actually on screen. */
     fun onRoomListVisible()
 }

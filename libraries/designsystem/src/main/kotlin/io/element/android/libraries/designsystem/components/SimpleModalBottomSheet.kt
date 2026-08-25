@@ -17,7 +17,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
@@ -39,7 +40,10 @@ fun SimpleModalBottomSheet(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         modifier = modifier,
-        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        sheetState = rememberBottomSheetState(
+            initialValue = SheetValue.Hidden,
+            enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+        ),
         scrollable = false,
     ) {
         Column(
@@ -61,7 +65,7 @@ fun SimpleModalBottomSheet(
 
 @PreviewsDayNight
 @Composable
-internal fun SimpleModalBottomSheetPreview() = ElementPreview {
+internal fun SimpleModalBottomSheetPreview() = ElementPreview(fillMaxSize = true) {
     SimpleModalBottomSheet(title = "A title", onDismiss = {}) {
         Text(
             text = LoremIpsum(20).values.first(),

@@ -28,7 +28,6 @@
     <item quantity="other">"%1$s(e)k eta beste %2$d(e)k irakurri dute"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"%1$s(e)k irakurri du"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Egin tap guztiak ikusteko"</string>
   <string name="a11y_remove_reaction">"Kendu %1$s erreakzioa"</string>
   <string name="a11y_room_avatar">"Gelaren abatarra"</string>
   <string name="a11y_send_files">"Bidali fitxategiak"</string>

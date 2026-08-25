@@ -65,7 +65,7 @@ class SharePresenterTest : RobolectricTest() {
             assertThat(awaitItem().shareAction.isLoading()).isTrue()
             val failure = awaitItem()
             assertThat(failure.shareAction.isFailure()).isTrue()
-            failure.eventSink.invoke(ShareEvents.ClearError)
+            failure.eventSink.invoke(ShareEvent.ClearError)
             assertThat(awaitItem().shareAction.isUninitialized()).isTrue()
         }
     }

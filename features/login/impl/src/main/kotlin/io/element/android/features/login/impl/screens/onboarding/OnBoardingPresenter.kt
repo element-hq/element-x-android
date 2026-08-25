@@ -25,7 +25,8 @@ import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.api.canConnectToAnyHomeserver
 import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
-import io.element.android.features.login.impl.login.LoginHelper
+import io.element.android.features.login.impl.login.LoginModeEvent
+import io.element.android.features.login.impl.login.LoginModeState
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
@@ -41,7 +42,7 @@ class OnBoardingPresenter(
     private val enterpriseService: EnterpriseService,
     private val defaultAccountProviderAccessControl: DefaultAccountProviderAccessControl,
     private val rageshakeFeatureAvailability: RageshakeFeatureAvailability,
-    private val loginHelper: LoginHelper,
+    private val loginModePresenter: Presenter<LoginModeState>,
     private val onBoardingLogoResIdProvider: OnBoardingLogoResIdProvider,
     private val sessionStore: SessionStore,
     private val accountProviderDataSource: AccountProviderDataSource,
@@ -59,15 +60,15 @@ class OnBoardingPresenter(
     override fun present(): OnBoardingState {
         val localCoroutineScope = rememberCoroutineScope()
         val forcedAccountProvider = remember {
-            // If defaultHomeserverList() returns a singleton list, this is the default account provider.
+            // If homeserverAllowList() returns a singleton list, this is the default account provider.
             // In this case, the user can sign in using this homeserver, or use QrCode login
-            enterpriseService.defaultHomeserverList().singleOrNull()
+            enterpriseService.homeserverAllowList().singleOrNull()
         }
         val canConnectToAnyHomeserver = remember {
             enterpriseService.canConnectToAnyHomeserver()
         }
         val mustChooseAccountProvider = remember {
-            !canConnectToAnyHomeserver && enterpriseService.defaultHomeserverList().size > 1
+            !canConnectToAnyHomeserver && enterpriseService.homeserverAllowList().size > 1
         }
         val linkAccountProvider by produceState<String?>(initialValue = null) {
             // Account provider from the link, if allowed by the enterprise service
@@ -98,22 +99,24 @@ class OnBoardingPresenter(
             value = sessionStore.numberOfSessions() > 0
         }
 
-        val loginMode by loginHelper.collectLoginMode()
+        val loginModeState = loginModePresenter.present()
 
-        fun handleEvent(event: OnBoardingEvents) {
+        fun handleEvent(event: OnBoardingEvent) {
             when (event) {
-                is OnBoardingEvents.OnSignIn -> localCoroutineScope.launch {
+                is OnBoardingEvent.OnSignIn -> localCoroutineScope.launch {
                     // Ensure that the current account provider is set
                     accountProviderDataSource.setUrl(event.defaultAccountProvider)
-                    loginHelper.submit(
-                        isAccountCreation = false,
-                        homeserverUrl = event.defaultAccountProvider,
-                        resolvedHomeserverUrl = null,
-                        loginHint = params.loginHint?.takeIf { forcedAccountProvider == null },
+                    loginModeState.eventSink(
+                        LoginModeEvent.Submit(
+                            isAccountCreation = false,
+                            homeserverUrl = event.defaultAccountProvider,
+                            resolvedHomeserverUrl = null,
+                            loginHint = params.loginHint?.takeIf { forcedAccountProvider == null },
+                        )
                     )
                 }
-                OnBoardingEvents.ClearError -> loginHelper.clearError()
-                OnBoardingEvents.OnVersionClick -> {
+                OnBoardingEvent.ClearError -> loginModeState.eventSink(LoginModeEvent.ClearError)
+                OnBoardingEvent.OnVersionClick -> {
                     if (canReportBug) {
                         if (multipleTapToUnlock.unlock(localCoroutineScope)) {
                             showReportBug = true
@@ -133,7 +136,7 @@ class OnBoardingPresenter(
             canLoginWithQrCode = canLoginWithQrCode,
             canCreateAccount = defaultAccountProvider == null && canConnectToAnyHomeserver && OnBoardingConfig.CAN_CREATE_ACCOUNT,
             canReportBug = canReportBug && showReportBug,
-            loginMode = loginMode,
+            loginModeState = loginModeState,
             version = buildMeta.versionName,
             onBoardingLogoResId = onBoardingLogoResId,
             eventSink = ::handleEvent,

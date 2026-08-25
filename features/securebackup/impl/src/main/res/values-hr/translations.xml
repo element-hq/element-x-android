@@ -20,6 +20,27 @@
   <string name="screen_create_new_recovery_key_list_item_4">"Pridržavajte se uputa za izradu novog ključa za oporavak"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"Spremite svoj novi ključ za oporavak u upravitelj zaporki ili šifriranu bilješku"</string>
   <string name="screen_create_new_recovery_key_title">"Resetirajte šifriranje za svoj račun pomoću drugog uređaja"</string>
+  <string name="screen_custom_recovery_key_confirm_error_mismatch">"Ključ za oporavak koji ste unijeli ne odgovara"</string>
+  <string name="screen_custom_recovery_key_confirm_submit">"Završi postavljanje"</string>
+  <string name="screen_custom_recovery_key_confirm_subtitle">"Ponovno unesite svoj ključ za oporavak."</string>
+  <string name="screen_custom_recovery_key_confirm_title">"Potvrdite svoj ključ za oporavak"</string>
+  <plurals name="screen_custom_recovery_key_input_notice">
+    <item quantity="one">"Minimalno %1$d znakova. Nemojte koristiti lozinku računa."</item>
+    <item quantity="other">"Minimalno %1$d znakova. Nemojte koristiti lozinku računa."</item>
+  </plurals>
+  <string name="screen_custom_recovery_key_input_strength">"Snaga"</string>
+  <string name="screen_custom_recovery_key_input_strength_a11y">"Jačina lozinke: %1$s"</string>
+  <string name="screen_custom_recovery_key_input_strength_moderate">"Umjereno"</string>
+  <string name="screen_custom_recovery_key_input_strength_strong">"Jak"</string>
+  <string name="screen_custom_recovery_key_input_strength_very_strong">"Vrlo jaka"</string>
+  <string name="screen_custom_recovery_key_input_strength_very_weak">"Vrlo slaba"</string>
+  <string name="screen_custom_recovery_key_input_strength_weak">"Slaba"</string>
+  <string name="screen_custom_recovery_key_input_subtitle">"Odaberite ključ za oporavak koji možete zapamtiti."</string>
+  <string name="screen_custom_recovery_key_input_title">"Unesite ključ za oporavak"</string>
+  <string name="screen_custom_recovery_key_loading_a11y">"Učitavanje zahtjeva za ključ za oporavak"</string>
+  <string name="screen_custom_recovery_key_success_notice">"Za promjenu ključa za oporavak, idite na Postavke → Šifriranje → Sigurnosna kopija"</string>
+  <string name="screen_custom_recovery_key_success_subtitle">"Ključ za oporavak možete koristiti za potvrdu novih uređaja ili vraćanje šifriranih razgovora ako izgubite pristup svim svojim uređajima."</string>
+  <string name="screen_custom_recovery_key_success_title">"Vaša sigurnosna kopija je sada potpuno postavljena"</string>
   <string name="screen_encryption_reset_action_continue_reset">"Nastavi s poništavanjem"</string>
   <string name="screen_encryption_reset_bullet_1">"Sačuvat će se podatci o vašem računu, kontakti, postavke i popis razgovora"</string>
   <string name="screen_encryption_reset_bullet_2">"Izgubit ćete svu povijest poruka koja je pohranjena samo na poslužitelju"</string>

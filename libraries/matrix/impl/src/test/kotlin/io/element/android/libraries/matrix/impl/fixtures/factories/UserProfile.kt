@@ -9,14 +9,20 @@
 package io.element.android.libraries.matrix.impl.fixtures.factories
 
 import io.element.android.libraries.matrix.test.A_USER_ID
+import org.matrix.rustcomponents.sdk.UserCall
 import org.matrix.rustcomponents.sdk.UserProfile
+import org.matrix.rustcomponents.sdk.UserStatus
 
 internal fun aRustUserProfile(
     userId: String = A_USER_ID.value,
     displayName: String = "displayName",
     avatarUrl: String = "avatarUrl",
+    status: UserStatus? = null,
+    call: UserCall? = null,
 ) = UserProfile(
     userId = userId,
     displayName = displayName,
     avatarUrl = avatarUrl,
+    status = status,
+    call = call,
 )

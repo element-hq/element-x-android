@@ -10,4 +10,9 @@ package io.element.android.libraries.push.api.gateway
 
 sealed class PushGatewayFailure : Exception() {
     class PusherRejected : PushGatewayFailure()
+
+    /**
+     * The gateway refused the notification because too many were sent to it.
+     */
+    class RateLimited : PushGatewayFailure()
 }

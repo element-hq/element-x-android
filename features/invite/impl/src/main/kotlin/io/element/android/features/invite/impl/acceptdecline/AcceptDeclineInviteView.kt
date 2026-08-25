@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.invite.api.InviteData
-import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvent
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.features.invite.api.acceptdecline.ConfirmingDeclineInvite
 import io.element.android.features.invite.impl.AcceptInvite
@@ -37,11 +37,11 @@ fun AcceptDeclineInviteView(
         AsyncActionView(
             async = state.acceptAction,
             onSuccess = { roomId ->
-                state.eventSink(InternalAcceptDeclineInviteEvents.ClearAcceptActionState)
+                state.eventSink(InternalAcceptDeclineInviteEvent.ClearAcceptActionState)
                 onAcceptInviteSuccess(roomId)
             },
             onErrorDismiss = {
-                state.eventSink(InternalAcceptDeclineInviteEvents.ClearAcceptActionState)
+                state.eventSink(InternalAcceptDeclineInviteEvent.ClearAcceptActionState)
             },
             errorTitle = {
                 stringResource(CommonStrings.common_something_went_wrong)
@@ -57,11 +57,11 @@ fun AcceptDeclineInviteView(
         AsyncActionView(
             async = state.declineAction,
             onSuccess = { roomId ->
-                state.eventSink(InternalAcceptDeclineInviteEvents.ClearDeclineActionState)
+                state.eventSink(InternalAcceptDeclineInviteEvent.ClearDeclineActionState)
                 onDeclineInviteSuccess(roomId)
             },
             onErrorDismiss = {
-                state.eventSink(InternalAcceptDeclineInviteEvents.ClearDeclineActionState)
+                state.eventSink(InternalAcceptDeclineInviteEvent.ClearDeclineActionState)
             },
             errorTitle = {
                 stringResource(CommonStrings.common_something_went_wrong)
@@ -77,7 +77,7 @@ fun AcceptDeclineInviteView(
                         blockUser = confirming.blockUser,
                         onConfirmClick = {
                             state.eventSink(
-                                AcceptDeclineInviteEvents.DeclineInvite(
+                                AcceptDeclineInviteEvent.DeclineInvite(
                                     confirming.inviteData,
                                     blockUser = confirming.blockUser,
                                     shouldConfirm = false
@@ -85,7 +85,7 @@ fun AcceptDeclineInviteView(
                             )
                         },
                         onDismissClick = {
-                            state.eventSink(InternalAcceptDeclineInviteEvents.ClearDeclineActionState)
+                            state.eventSink(InternalAcceptDeclineInviteEvent.ClearDeclineActionState)
                         }
                     )
                 }
@@ -123,7 +123,7 @@ private fun DeclineConfirmationDialog(
 
 @PreviewsDayNight
 @Composable
-internal fun AcceptDeclineInviteViewPreview(@PreviewParameter(AcceptDeclineInviteStateProvider::class) state: AcceptDeclineInviteState) =
+internal fun AcceptDeclineInviteViewPreview(@PreviewParameter(AcceptDeclineInviteStatePreviewParam::class) state: AcceptDeclineInviteState) =
     ElementPreview {
         AcceptDeclineInviteView(
             state = state,

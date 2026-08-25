@@ -16,7 +16,7 @@ data class EditRoomAddressState(
     val roomAddress: String,
     val roomAddressValidity: RoomAddressValidity,
     val saveAction: AsyncAction<Unit>,
-    val eventSink: (EditRoomAddressEvents) -> Unit
+    val eventSink: (EditRoomAddressEvent) -> Unit
 ) {
     val canBeSaved = roomAddressValidity == RoomAddressValidity.Valid
 }

@@ -85,7 +85,6 @@
   <string name="screen_room_notification_settings_error_setting_mode">"Het instellen van de meldingen is mislukt. Probeer het opnieuw."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Je homeserver ondersteunt deze optie niet in versleutelde kamers; in deze kamer krijg je geen meldingen."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Alle berichten"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Alleen vermeldingen en trefwoorden"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"In deze kamer, stuur me een melding voor"</string>
   <string name="screen_room_roles_and_permissions_admins">"Beheerders"</string>
   <string name="screen_room_roles_and_permissions_change_my_role">"Mijn rol wijzigen"</string>

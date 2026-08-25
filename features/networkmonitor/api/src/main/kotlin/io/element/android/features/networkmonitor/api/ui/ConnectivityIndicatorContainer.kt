@@ -19,16 +19,15 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 
 private val INDICATOR_VERTICAL_PADDING = 6.dp
 
@@ -47,7 +46,7 @@ fun ConnectivityIndicatorContainer(
             // Needed to get valid UI previews
             24.dp
         } else {
-            WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + INDICATOR_VERTICAL_PADDING
+            scaffoldScrollableContentInsets.asPaddingValues().calculateTopPadding() + INDICATOR_VERTICAL_PADDING
         }
         val target = if (isIndicatorVisible.targetState) statusBarTopPadding else 0.dp
         val topWindowInset by animateDpAsState(

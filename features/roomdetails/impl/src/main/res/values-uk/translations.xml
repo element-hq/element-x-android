@@ -117,7 +117,8 @@
   <string name="screen_room_notification_settings_error_setting_mode">"Не вдалося встановити режим, спробуйте ще раз."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Ваш домашній сервер не підтримує цю опцію в зашифрованих кімнатах, ви не отримаєте сповіщення в цій кімнаті."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Всі повідомлення"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Тільки згадки та ключові слова"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Лише згадки та ключові слова"</string>
+  <string name="screen_room_notification_settings_mode_mute">"Вимкнути звук"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"У цій кімнаті сповіщати мене про"</string>
   <string name="screen_room_roles_and_permissions_admins">"Адміністратори"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"Адміністратори та власники"</string>

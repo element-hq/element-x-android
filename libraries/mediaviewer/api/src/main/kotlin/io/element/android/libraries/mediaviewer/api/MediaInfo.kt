@@ -14,6 +14,23 @@ import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
+data class GalleryInfo(
+    val caption: String?,
+    val formattedCaption: CharSequence? = null,
+    val senderId: UserId?,
+    val senderName: String?,
+    val senderAvatar: String?,
+    val dateSent: String?,
+    val dateSentFull: String?,
+    val initialIndex: Int,
+) : Parcelable
+
+@Parcelize
+data class AvatarInfo(
+    val filename: String,
+) : Parcelable
+
+@Parcelize
 data class MediaInfo(
     val filename: String,
     val caption: String?,

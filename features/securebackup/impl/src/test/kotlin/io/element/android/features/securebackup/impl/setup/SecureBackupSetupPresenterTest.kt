@@ -58,7 +58,7 @@ class SecureBackupSetupPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink.invoke(SecureBackupSetupEvents.CreateRecoveryKey)
+            initialState.eventSink.invoke(SecureBackupSetupEvent.CreateRecoveryKey)
             val creatingState = awaitItem()
             assertThat(creatingState.setupState).isEqualTo(SetupState.Creating)
             assertThat(creatingState.recoveryKeyViewState).isEqualTo(
@@ -80,13 +80,13 @@ class SecureBackupSetupPresenterTest {
                     inProgress = false,
                 )
             )
-            createdState.eventSink.invoke(SecureBackupSetupEvents.RecoveryKeyHasBeenSaved)
+            createdState.eventSink.invoke(SecureBackupSetupEvent.RecoveryKeyHasBeenSaved)
             val createdAndSaveState = awaitItem()
             assertThat(createdAndSaveState.setupState).isInstanceOf(SetupState.CreatedAndSaved::class.java)
-            createdAndSaveState.eventSink.invoke(SecureBackupSetupEvents.Done)
+            createdAndSaveState.eventSink.invoke(SecureBackupSetupEvent.Done)
             val doneState = awaitItem()
             assertThat(doneState.showSaveConfirmationDialog).isTrue()
-            doneState.eventSink.invoke(SecureBackupSetupEvents.DismissDialog)
+            doneState.eventSink.invoke(SecureBackupSetupEvent.DismissDialog)
             val doneStateCancelled = awaitItem()
             assertThat(doneStateCancelled.showSaveConfirmationDialog).isFalse()
         }
@@ -130,12 +130,12 @@ class SecureBackupSetupPresenterTest {
             assertThat(initialState.isChangeRecoveryKeyUserStory).isFalse()
             assertThat(initialState.setupState).isEqualTo(SetupState.Init)
 
-            initialState.eventSink(SecureBackupSetupEvents.CreateRecoveryKey)
+            initialState.eventSink(SecureBackupSetupEvent.CreateRecoveryKey)
             val creatingState = awaitItem()
             assertThat(creatingState.setupState).isEqualTo(SetupState.Creating)
             val failedState = awaitItem()
             assertThat(failedState.setupState).isInstanceOf(SetupState.Error::class.java)
-            failedState.eventSink(SecureBackupSetupEvents.DismissDialog)
+            failedState.eventSink(SecureBackupSetupEvent.DismissDialog)
 
             val finalState = awaitItem()
             assertThat(finalState.setupState).isEqualTo(SetupState.Init)
@@ -153,7 +153,7 @@ class SecureBackupSetupPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink.invoke(SecureBackupSetupEvents.CreateRecoveryKey)
+            initialState.eventSink.invoke(SecureBackupSetupEvent.CreateRecoveryKey)
             val creatingState = awaitItem()
             assertThat(creatingState.setupState).isEqualTo(SetupState.Creating)
             assertThat(creatingState.recoveryKeyViewState).isEqualTo(
@@ -174,13 +174,13 @@ class SecureBackupSetupPresenterTest {
                     inProgress = false,
                 )
             )
-            createdState.eventSink.invoke(SecureBackupSetupEvents.RecoveryKeyHasBeenSaved)
+            createdState.eventSink.invoke(SecureBackupSetupEvent.RecoveryKeyHasBeenSaved)
             val createdAndSaveState = awaitItem()
             assertThat(createdAndSaveState.setupState).isInstanceOf(SetupState.CreatedAndSaved::class.java)
-            createdAndSaveState.eventSink.invoke(SecureBackupSetupEvents.Done)
+            createdAndSaveState.eventSink.invoke(SecureBackupSetupEvent.Done)
             val doneState = awaitItem()
             assertThat(doneState.showSaveConfirmationDialog).isTrue()
-            doneState.eventSink.invoke(SecureBackupSetupEvents.DismissDialog)
+            doneState.eventSink.invoke(SecureBackupSetupEvent.DismissDialog)
             val doneStateCancelled = awaitItem()
             assertThat(doneStateCancelled.showSaveConfirmationDialog).isFalse()
         }

@@ -12,6 +12,7 @@ import android.os.Build
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
+import io.element.android.libraries.core.extensions.normalized
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.SdkMetadata
 
@@ -26,11 +27,11 @@ class DefaultUserAgentProvider(
     override fun provide(): String = userAgent
 
     /**
-     * Create an user agent with the application version.
+     * Create a user agent with the application version.
      * Ex: Element X/1.5.0 (Xiaomi Mi 9T; Android 11; RKQ1.200826.002; Sdk c344b155c)
      */
     private fun buildUserAgent(): String {
-        val appName = buildMeta.applicationName
+        val appName = buildMeta.applicationName.normalized()
         val appVersion = buildMeta.versionName
         val deviceManufacturer = Build.MANUFACTURER
         val deviceModel = Build.MODEL

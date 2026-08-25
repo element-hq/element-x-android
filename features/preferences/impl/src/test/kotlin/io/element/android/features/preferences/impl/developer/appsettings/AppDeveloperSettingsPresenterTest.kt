@@ -16,6 +16,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.featureflag.api.Feature
 import io.element.android.libraries.featureflag.test.FakeFeature
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -53,6 +54,8 @@ class AppDeveloperSettingsPresenterTest {
                 assertThat(state.rageshakeState.isSupported).isTrue()
                 assertThat(state.rageshakeState.sensitivity).isEqualTo(0.3f)
                 assertThat(state.tracingLogLevel).isEqualTo(AsyncData.Uninitialized)
+                assertThat(state.gitBranch).isEqualTo("feature/awesome-feature")
+                assertThat(state.gitSha).isEqualTo("1234567890")
             }
             awaitItem().also { state ->
                 assertThat(state.features).isNotEmpty()
@@ -145,6 +148,10 @@ class AppDeveloperSettingsPresenterTest {
             featureFlagService = featureFlagService,
             rageshakePresenter = { aRageshakePreferencesState() },
             appPreferencesStore = preferencesStore,
+            buildMeta = aBuildMeta(
+                gitRevision = "1234567890",
+                gitBranchName = "feature/awesome-feature"
+            )
         )
     }
 }

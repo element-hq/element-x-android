@@ -64,8 +64,7 @@ fun Project.setupKover() {
     tasks.register("koverVerifyAll") {
         group = "verification"
         description = "Verifies the code coverage of all subprojects."
-        val dependencies = listOf(":koverVerifyMerged") + koverVariants.map { ":app:koverVerify${it.replaceFirstChar(Char::titlecase)}" }
-        dependsOn(dependencies)
+        dependsOn(":koverVerifyMerged")
     }
     // https://kotlin.github.io/kotlinx-kover/
     // Run `./gradlew :app:koverHtmlReport` to get report at ./app/build/reports/kover

@@ -11,7 +11,16 @@ package io.element.android.features.knockrequests.api.banner
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
+/**
+ * Renders the banner shown at the top of a room when people are waiting to join it.
+ */
 interface KnockRequestsBannerRenderer {
+    /**
+     * Draws the banner, or nothing when there is no pending request or the user cannot moderate the room.
+     *
+     * @param modifier layout modifier for the container.
+     * @param onViewRequestsClick called when the user asks to see the full list of requests.
+     */
     @Composable
     fun View(modifier: Modifier, onViewRequestsClick: () -> Unit)
 }

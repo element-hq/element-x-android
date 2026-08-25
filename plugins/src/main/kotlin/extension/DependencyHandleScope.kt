@@ -123,7 +123,7 @@ fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:wellknown:impl"))
     implementation(project(":libraries:oauth:impl"))
     implementation(project(":libraries:workmanager:impl"))
-    implementation(project(":libraries:recentemojis:impl"))
+    implementation(project(":libraries:emoji:impl"))
 }
 
 fun DependencyHandlerScope.allServicesImpl() {

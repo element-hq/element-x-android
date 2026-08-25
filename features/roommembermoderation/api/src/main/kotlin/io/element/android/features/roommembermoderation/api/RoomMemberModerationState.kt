@@ -10,10 +10,16 @@ package io.element.android.features.roommembermoderation.api
 
 import androidx.compose.runtime.Immutable
 
+/**
+ * State of the member moderation flow, which is the action sheet and the confirmation dialogs shown for a room member.
+ */
 @Immutable
 interface RoomMemberModerationState {
+    /** Which moderation actions the current user is allowed to perform, so the UI can hide or disable the rest. */
     val permissions: RoomMemberModerationPermissions
-    val eventSink: (RoomMemberModerationEvents) -> Unit
+
+    /** Where the host screen sends its events to open the actions of a member or run one of them. */
+    val eventSink: (RoomMemberModerationEvent) -> Unit
 }
 
 data class ModerationActionState(

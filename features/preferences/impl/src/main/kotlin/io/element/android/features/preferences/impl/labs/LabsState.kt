@@ -14,5 +14,5 @@ import kotlinx.collections.immutable.ImmutableList
 data class LabsState(
     val features: ImmutableList<FeatureUiModel>,
     val isApplyingChanges: Boolean,
-    val eventSink: (LabsEvents) -> Unit,
+    val eventSink: (LabsEvent) -> Unit,
 )

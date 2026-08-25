@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_invite_users_already_a_member">"أنت عضو بالفعل"</string>
+  <string name="screen_invite_users_already_invited">"مَدعُوّ بالفعل"</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_multiple_users">"ليست لديك حاليًا أي دردشات مع جهات الاتصال هذه. أكّد دعوتهم إلى هذه الغرفة قبل المتابعة."</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_one_user">"ليست لديك حاليًا أي دردشات مع جهة الاتصال هذه. أكّد دعوتها إلى هذه الغرفة قبل المتابعة."</string>
+  <string name="screen_invite_users_confirm_dialog_title_mutiple_users">"هل تريد دعوة جهات اتصال جديدة إلى هذه الغرفة؟"</string>
+  <string name="screen_invite_users_confirm_dialog_title_one_user">"هل تريد دعوة جهة اتصال جديدة إلى هذه الغرفة؟"</string>
+</resources>

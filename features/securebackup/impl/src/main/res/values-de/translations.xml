@@ -8,10 +8,11 @@
   <string name="screen_chat_backup_key_storage_toggle_description">"Schlüssel von diesem Gerät hochladen"</string>
   <string name="screen_chat_backup_key_storage_toggle_title">"Schlüsselspeicherung zulassen"</string>
   <string name="screen_chat_backup_recovery_action_change">"Wiederherstellungsschlüssel ändern"</string>
-  <string name="screen_chat_backup_recovery_action_change_description">"Stelle deine kryptographische Identität und deinen Nachrichtenverlauf mit einem Wiederherstellungsschlüssel wieder her, falls du deine Geräte verloren hast."</string>
+  <string name="screen_chat_backup_recovery_action_change_description">"Von deinen Chats wird automatisch ein Ende-zu-Ende-verschlüsseltes Backup erstellt. Wenn du den Zugriff auf alle deine Geräte verlierst, brauchst du deinen Wiederherstellungsschlüssel, um dieses Backup wiederherzustellen und deine digitale Identität zu behalten."</string>
   <string name="screen_chat_backup_recovery_action_confirm">"Wiederherstellungsschlüssel eingeben"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Dein Schlüssel ist derzeit nicht synchronisiert."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Wiederherstellungsschlüssel einrichten"</string>
+  <string name="screen_chat_backup_recovery_action_setup_description">"Von deinen Chats wird automatisch ein Ende-zu-Ende-verschlüsseltes Backup erstellt. Wenn du den Zugriff auf alle deine Geräte verlierst, brauchst du deinen Wiederherstellungsschlüssel, um dieses Backup wiederherzustellen und deine digitale Identität zu behalten."</string>
   <string name="screen_create_new_recovery_key_list_item_1">
     "Öffne "
     <b>"%1$s"</b>

@@ -42,7 +42,7 @@ class TroubleshootNotificationsPresenterTest {
         )
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink(TroubleshootNotificationsEvents.StartTests)
+            initialState.eventSink(TroubleshootNotificationsEvent.StartTests)
             skipItems(1)
             val stateAfterStart = awaitItem()
             assertThat(stateAfterStart.testSuiteState.mainState).isEqualTo(AsyncAction.Loading)
@@ -63,7 +63,7 @@ class TroubleshootNotificationsPresenterTest {
         )
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink(TroubleshootNotificationsEvents.RetryFailedTests)
+            initialState.eventSink(TroubleshootNotificationsEvent.RetryFailedTests)
             skipItems(1)
             val stateAfterStart = awaitItem()
             assertThat(stateAfterStart.testSuiteState.mainState).isEqualTo(AsyncAction.Loading)
@@ -160,7 +160,7 @@ class TroubleshootNotificationsPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.testSuiteState.mainState).isInstanceOf(AsyncAction.Failure::class.java)
-            initialState.eventSink(TroubleshootNotificationsEvents.QuickFix(0))
+            initialState.eventSink(TroubleshootNotificationsEvent.QuickFix(0))
             val stateAfterStart = awaitItem()
             assertThat(stateAfterStart.testSuiteState.mainState).isEqualTo(AsyncAction.Loading)
         }

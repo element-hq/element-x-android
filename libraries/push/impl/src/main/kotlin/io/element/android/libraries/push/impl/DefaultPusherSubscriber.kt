@@ -10,7 +10,6 @@ package io.element.android.libraries.push.impl
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.appconfig.PushConfig
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
@@ -74,7 +73,7 @@ class DefaultPusherSubscriber(
     ): SetHttpPusherData =
         SetHttpPusherData(
             pushKey = pushKey,
-            appId = PushConfig.PUSHER_APP_ID,
+            appId = BuildConfig.PUSHER_APP_ID,
             // TODO + abs(activeSessionHolder.getActiveSession().myUserId.hashCode())
             profileTag = DEFAULT_PUSHER_FILE_TAG + "_",
             // TODO localeProvider.current().language
@@ -104,7 +103,7 @@ class DefaultPusherSubscriber(
             .unsetHttpPusher(
                 unsetHttpPusherData = UnsetHttpPusherData(
                     pushKey = pushKey,
-                    appId = PushConfig.PUSHER_APP_ID
+                    appId = BuildConfig.PUSHER_APP_ID
                 )
             )
             .onSuccess {

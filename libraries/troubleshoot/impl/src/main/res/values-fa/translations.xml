@@ -4,7 +4,9 @@
   <string name="troubleshoot_notifications_screen_action">"اجرای آزمون‌ها"</string>
   <string name="troubleshoot_notifications_screen_action_again">"اجرای دوبارهٔ آزمون‌ها"</string>
   <string name="troubleshoot_notifications_screen_failure">"برخی آزمون‌ها شکست خوردند. بررسی جزییات."</string>
+  <string name="troubleshoot_notifications_screen_notice">"اجرای آزمون‌ها برای تشخیص مشکلات در پیکربندیتان که می‌تواند باعث شود آگاهی آن‌گونه که انتظار می‌رود رفتار نکنند."</string>
   <string name="troubleshoot_notifications_screen_quick_fix_action">"تلاش برای تعمیر"</string>
   <string name="troubleshoot_notifications_screen_success">"همهٔ آزمون‌ها با موفّقیت گذرانده شدند."</string>
   <string name="troubleshoot_notifications_screen_title">"رفع‌اشکال آگاهی‌ها"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"برخی آزم.ن‌ها نیازمند توجّهتانند. لطفاُ جزییات را بررسی کنید."</string>
 </resources>

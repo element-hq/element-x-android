@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_share_location_live_location_disclaimer_title">"سيُخزَّن سجل موقعك المباشر في الغرفة وسيكون مرئيًا للأعضاء بعد انتهاء الجلسة."</string>
+  <string name="screen_share_location_live_location_duration_picker_title">"اختر مدة مشاركة موقعك المباشر."</string>
+  <string name="screen_share_location_live_location_missing_permissions">"ليست لديك صلاحيات لمشاركة موقعك المباشر في هذه الغرفة"</string>
+</resources>

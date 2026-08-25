@@ -26,6 +26,7 @@ setupDependencyInjection()
 
 dependencies {
     api(projects.features.location.api)
+    implementation(projects.features.enterprise.api)
     implementation(projects.features.messages.api)
     implementation(libs.maplibre.compose)
     implementation(libs.coil)
@@ -45,6 +46,7 @@ dependencies {
     implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.push.api)
     implementation(projects.libraries.sessionStorage.api)
+    implementation(projects.libraries.wellknown.api)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.datetime)
 
@@ -58,5 +60,7 @@ dependencies {
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.libraries.sessionStorage.test)
+    testImplementation(projects.libraries.wellknown.test)
     testImplementation(projects.features.location.test)
+    testImplementation(projects.features.enterprise.test)
 }

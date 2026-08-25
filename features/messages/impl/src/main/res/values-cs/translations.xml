@@ -7,15 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"Šifrováno neznámým nebo smazaným zařízením."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Šifrováno zařízením, které nebylo ověřeno jeho vlastníkem."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Šifrováno neověřeným uživatelem."</string>
-  <string name="emoji_picker_category_activity">"Aktivity"</string>
-  <string name="emoji_picker_category_flags">"Vlajky"</string>
-  <string name="emoji_picker_category_foods">"Jídlo a nápoje"</string>
-  <string name="emoji_picker_category_nature">"Zvířata a příroda"</string>
-  <string name="emoji_picker_category_objects">"Předměty"</string>
-  <string name="emoji_picker_category_people">"Smajlíci a lidé"</string>
-  <string name="emoji_picker_category_places">"Cestování a místa"</string>
-  <string name="emoji_picker_category_recent">"Nedávné emotikony"</string>
-  <string name="emoji_picker_category_symbols">"Symboly"</string>
   <string name="screen_media_upload_preview_caption_warning">"Titulky nemusí být viditelné pro lidi, kteří používají starší aplikace."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Klepnutím změníte kvalitu nahrávání videa"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Soubor nelze nahrát."</string>

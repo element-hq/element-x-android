@@ -44,10 +44,10 @@ class ViewFilePresenter(
         val coroutineScope = rememberCoroutineScope()
         val colorationMode = remember { name.toColorationMode() }
 
-        fun handleEvent(event: ViewFileEvents) {
+        fun handleEvent(event: ViewFileEvent) {
             when (event) {
-                ViewFileEvents.Share -> coroutineScope.share(path)
-                ViewFileEvents.SaveOnDisk -> coroutineScope.save(path)
+                ViewFileEvent.Share -> coroutineScope.share(path)
+                ViewFileEvent.SaveOnDisk -> coroutineScope.save(path)
             }
         }
 

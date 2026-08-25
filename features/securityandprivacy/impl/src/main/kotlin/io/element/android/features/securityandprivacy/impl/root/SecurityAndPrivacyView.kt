@@ -54,6 +54,8 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
@@ -78,14 +80,16 @@ fun SecurityAndPrivacyView(
                     state.eventSink(SecurityAndPrivacyEvent.Save)
                 },
             )
-        }
+        },
+        contentWindowInsets = scaffoldScrollableContentInsets,
     ) { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)
                 .imePadding()
                 .verticalScroll(rememberScrollState())
-                .consumeWindowInsets(padding),
+                .consumeWindowInsets(padding)
+                .padding(lazyColumnContentPadding),
             verticalArrangement = Arrangement.spacedBy(32.dp),
         ) {
             if (state.showRoomAccessSection) {
@@ -231,7 +235,7 @@ private fun RoomAccessSection(
         modifier = modifier,
     ) {
         ListItem(
-            headlineContent = { Text(text = stringResource(R.string.screen_security_and_privacy_room_access_anyone_option_title)) },
+            content = { Text(text = stringResource(R.string.screen_security_and_privacy_room_access_anyone_option_title)) },
             supportingContent = { Text(text = stringResource(R.string.screen_security_and_privacy_room_access_anyone_option_description)) },
             trailingContent = ListItemContent.RadioButton(selected = edited == SecurityAndPrivacyRoomAccess.Anyone),
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Public())),
@@ -239,7 +243,7 @@ private fun RoomAccessSection(
         )
         if (state.showSpaceMemberOption) {
             ListItem(
-                headlineContent = { Text(text = stringResource(R.string.screen_security_and_privacy_room_access_space_members_option_title)) },
+                content = { Text(text = stringResource(R.string.screen_security_and_privacy_room_access_space_members_option_title)) },
                 supportingContent = {
                     Text(text = state.spaceMemberDescription())
                 },
@@ -251,7 +255,7 @@ private fun RoomAccessSection(
         }
         if (state.showAskToJoinOption) {
             ListItem(
-                headlineContent = { Text(text = stringResource(R.string.screen_security_and_privacy_ask_to_join_option_title)) },
+                content = { Text(text = stringResource(R.string.screen_security_and_privacy_ask_to_join_option_title)) },
                 supportingContent = { Text(text = stringResource(R.string.screen_security_and_privacy_ask_to_join_option_description)) },
                 trailingContent = ListItemContent.RadioButton(selected = edited == SecurityAndPrivacyRoomAccess.AskToJoin),
                 onClick = { onSelectOption(SecurityAndPrivacyRoomAccess.AskToJoin) },
@@ -261,7 +265,7 @@ private fun RoomAccessSection(
         }
         if (state.showAskToJoinWithSpaceMemberOption) {
             ListItem(
-                headlineContent = { Text(text = stringResource(R.string.screen_security_and_privacy_ask_to_join_option_title)) },
+                content = { Text(text = stringResource(R.string.screen_security_and_privacy_ask_to_join_option_title)) },
                 supportingContent = { Text(text = state.askToJoinWithSpaceMembersDescription()) },
                 trailingContent = ListItemContent.RadioButton(selected = edited is SecurityAndPrivacyRoomAccess.AskToJoinWithSpaceMember),
                 onClick = ::onAskToJoinWithSpaceMembersClick,
@@ -270,7 +274,7 @@ private fun RoomAccessSection(
             )
         }
         ListItem(
-            headlineContent = { Text(text = stringResource(R.string.screen_security_and_privacy_room_access_invite_only_option_title)) },
+            content = { Text(text = stringResource(R.string.screen_security_and_privacy_room_access_invite_only_option_title)) },
             supportingContent = { Text(text = stringResource(R.string.screen_security_and_privacy_room_access_invite_only_option_description)) },
             trailingContent = ListItemContent.RadioButton(selected = edited == SecurityAndPrivacyRoomAccess.InviteOnly),
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Lock())),
@@ -326,7 +330,7 @@ private fun RoomAddressSection(
         modifier = modifier,
     ) {
         ListItem(
-            headlineContent = {
+            content = {
                 Text(text = roomAddress ?: stringResource(R.string.screen_security_and_privacy_add_room_address_action))
             },
             trailingContent = if (roomAddress.isNullOrEmpty()) ListItemContent.Icon(IconSource.Vector(CompoundIcons.Plus())) else null,
@@ -336,7 +340,7 @@ private fun RoomAddressSection(
         )
 
         ListItem(
-            headlineContent = { Text(text = stringResource(R.string.screen_security_and_privacy_room_directory_visibility_toggle_title)) },
+            content = { Text(text = stringResource(R.string.screen_security_and_privacy_room_directory_visibility_toggle_title)) },
             supportingContent = {
                 Text(text = stringResource(R.string.screen_security_and_privacy_room_directory_visibility_toggle_description, homeserverName))
             },
@@ -383,7 +387,7 @@ private fun EncryptionSection(
         modifier = modifier,
     ) {
         ListItem(
-            headlineContent = { Text(text = stringResource(R.string.screen_security_and_privacy_encryption_toggle_title)) },
+            content = { Text(text = stringResource(R.string.screen_security_and_privacy_encryption_toggle_title)) },
             supportingContent = { Text(text = stringResource(R.string.screen_security_and_privacy_encryption_section_footer)) },
             trailingContent = ListItemContent.Switch(
                 checked = isRoomEncrypted,
@@ -455,7 +459,7 @@ private fun HistoryVisibilityItem(
         SecurityAndPrivacyHistoryVisibility.WorldReadable -> stringResource(R.string.screen_security_and_privacy_room_history_anyone_option_title)
     }
     ListItem(
-        headlineContent = { Text(text = headlineText) },
+        content = { Text(text = headlineText) },
         trailingContent = ListItemContent.RadioButton(selected = isSelected, enabled = isEnabled),
         onClick = { onSelectOption(option) },
         enabled = isEnabled,
@@ -465,12 +469,12 @@ private fun HistoryVisibilityItem(
 
 @PreviewWithLargeHeight
 @Composable
-internal fun SecurityAndPrivacyViewLightPreview(@PreviewParameter(SecurityAndPrivacyStateProvider::class) state: SecurityAndPrivacyState) =
+internal fun SecurityAndPrivacyViewLightPreview(@PreviewParameter(SecurityAndPrivacyStatePreviewParam::class) state: SecurityAndPrivacyState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @PreviewWithLargeHeight
 @Composable
-internal fun SecurityAndPrivacyViewDarkPreview(@PreviewParameter(SecurityAndPrivacyStateProvider::class) state: SecurityAndPrivacyState) =
+internal fun SecurityAndPrivacyViewDarkPreview(@PreviewParameter(SecurityAndPrivacyStatePreviewParam::class) state: SecurityAndPrivacyState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @ExcludeFromCoverage

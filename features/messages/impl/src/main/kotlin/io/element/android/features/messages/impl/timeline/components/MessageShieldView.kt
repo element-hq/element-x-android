@@ -166,6 +166,7 @@ internal fun MessageShieldViewPreview() {
                         displayName = USER_NAME_ALICE,
                         displayNameAmbiguous = false,
                         avatarUrl = null,
+                        displayedStatus = null,
                     ),
                 )
             )

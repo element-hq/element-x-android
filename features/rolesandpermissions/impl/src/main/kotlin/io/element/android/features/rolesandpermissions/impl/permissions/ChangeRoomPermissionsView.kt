@@ -132,7 +132,7 @@ private fun titleForType(type: RoomPermissionType): String = when (type) {
 
 @PreviewsDayNight
 @Composable
-internal fun ChangeRoomPermissionsViewPreview(@PreviewParameter(ChangeRoomPermissionsStateProvider::class) state: ChangeRoomPermissionsState) {
+internal fun ChangeRoomPermissionsViewPreview(@PreviewParameter(ChangeRoomPermissionsStatePreviewParam::class) state: ChangeRoomPermissionsState) {
     ElementPreview {
         ChangeRoomPermissionsView(
             state = state,

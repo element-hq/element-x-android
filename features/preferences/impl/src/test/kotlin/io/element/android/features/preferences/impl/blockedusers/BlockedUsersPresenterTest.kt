@@ -12,7 +12,9 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
@@ -21,6 +23,7 @@ import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
@@ -115,10 +118,10 @@ class BlockedUsersPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink(BlockedUsersEvents.Unblock(A_USER_ID))
+            initialState.eventSink(BlockedUsersEvent.Unblock(A_USER_ID))
 
             assertThat(awaitItem().unblockUserAction).isInstanceOf(AsyncAction.Confirming::class.java)
-            initialState.eventSink(BlockedUsersEvents.ConfirmUnblock)
+            initialState.eventSink(BlockedUsersEvent.ConfirmUnblock)
 
             assertThat(awaitItem().unblockUserAction).isInstanceOf(AsyncAction.Loading::class.java)
             assertThat(awaitItem().unblockUserAction).isInstanceOf(AsyncAction.Success::class.java)
@@ -138,10 +141,10 @@ class BlockedUsersPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink(BlockedUsersEvents.Unblock(A_USER_ID))
+            initialState.eventSink(BlockedUsersEvent.Unblock(A_USER_ID))
 
             assertThat(awaitItem().unblockUserAction).isInstanceOf(AsyncAction.Confirming::class.java)
-            initialState.eventSink(BlockedUsersEvents.ConfirmUnblock)
+            initialState.eventSink(BlockedUsersEvent.ConfirmUnblock)
 
             assertThat(awaitItem().unblockUserAction).isInstanceOf(AsyncAction.Loading::class.java)
             assertThat(awaitItem().unblockUserAction).isInstanceOf(AsyncAction.Failure::class.java)
@@ -160,12 +163,35 @@ class BlockedUsersPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink(BlockedUsersEvents.Unblock(A_USER_ID))
+            initialState.eventSink(BlockedUsersEvent.Unblock(A_USER_ID))
 
             assertThat(awaitItem().unblockUserAction).isInstanceOf(AsyncAction.Confirming::class.java)
-            initialState.eventSink(BlockedUsersEvents.Cancel)
+            initialState.eventSink(BlockedUsersEvent.Cancel)
 
             assertThat(awaitItem().unblockUserAction).isEqualTo(AsyncAction.Uninitialized)
+        }
+    }
+
+    @Test
+    fun `present - copy user id to clipboard`() = runTest {
+        val clipboardHelper = FakeClipboardHelper()
+        val matrixClient = FakeMatrixClient(
+            ignoredUsersFlow = MutableStateFlow(persistentListOf(A_USER_ID))
+        )
+        val presenter = aBlockedUsersPresenter(
+            matrixClient = matrixClient,
+            clipboardHelper = clipboardHelper,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.snackbarMessage).isNull()
+            initialState.eventSink(BlockedUsersEvent.CopyToClipboard(A_USER_ID))
+
+            assertThat(clipboardHelper.clipboardContents).isEqualTo(A_USER_ID.value)
+            assertThat(awaitItem().snackbarMessage?.messageResId).isEqualTo(CommonStrings.common_copied_to_clipboard)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -175,7 +201,7 @@ class BlockedUsersPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            awaitItem().eventSink(BlockedUsersEvents.ConfirmUnblock)
+            awaitItem().eventSink(BlockedUsersEvent.ConfirmUnblock)
             ensureAllEventsConsumed()
         }
     }
@@ -183,8 +209,12 @@ class BlockedUsersPresenterTest {
     private fun aBlockedUsersPresenter(
         matrixClient: FakeMatrixClient = FakeMatrixClient(),
         featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
+        clipboardHelper: FakeClipboardHelper = FakeClipboardHelper(),
+        snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
     ) = BlockedUsersPresenter(
         matrixClient = matrixClient,
         featureFlagService = featureFlagService,
+        clipboardHelper = clipboardHelper,
+        snackbarDispatcher = snackbarDispatcher,
     )
 }

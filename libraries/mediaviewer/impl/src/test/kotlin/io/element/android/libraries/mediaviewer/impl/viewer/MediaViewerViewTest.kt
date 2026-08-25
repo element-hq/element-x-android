@@ -48,6 +48,24 @@ class MediaViewerViewTest : RobolectricTest() {
     private val mockMediaUrl: Uri = mockk("localMediaUri")
 
     @Test
+    fun `displaying a media will automatically validate it`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<MediaViewerEvent>()
+        val pagerData = aMediaViewerPageData(downloadedMedia = AsyncData.Success(aLocalMedia(uri = mockMediaUrl)))
+        val state = aMediaViewerState(
+            listData = listOf(pagerData),
+            eventSink = eventsRecorder
+        )
+        setMediaViewerView(
+            state = state,
+        )
+        eventsRecorder.assertList(
+            listOf(
+                MediaViewerEvent.ValidateMedia(mediaSource = pagerData.mediaSource, thumbnailMediaSource = pagerData.thumbnailSource),
+            )
+        )
+    }
+
+    @Test
     fun `clicking on back invokes expected callback`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<MediaViewerEvent>()
         val state = aMediaViewerState(
@@ -58,6 +76,9 @@ class MediaViewerViewTest : RobolectricTest() {
                 state = state,
                 onBackClick = callback,
             )
+
+            // Remove the `ValidateMedia` event that is emitted when the media is loaded, since we are not testing it here.
+            eventsRecorder.clear()
 
             // Wait for enough time for the onVisibilityChanged modifier to trigger
             mainClock.advanceTimeBy(200)
@@ -120,6 +141,9 @@ class MediaViewerViewTest : RobolectricTest() {
             ),
         )
 
+        // Remove the `ValidateMedia` event that is emitted when the media is loaded, since we are not testing it here.
+        eventsRecorder.clear()
+
         // Wait for enough time for the onVisibilityChanged modifier to trigger
         mainClock.advanceTimeBy(200)
 
@@ -157,9 +181,11 @@ class MediaViewerViewTest : RobolectricTest() {
                 eventSink = eventsRecorder
             ),
         )
+
         clickOn(textRes)
         eventsRecorder.assertList(
             listOf(
+                MediaViewerEvent.ValidateMedia(mediaSource = data.mediaSource, thumbnailMediaSource = data.thumbnailSource),
                 MediaViewerEvent.LoadMedia(data),
                 expectedEvent,
             )
@@ -175,6 +201,10 @@ class MediaViewerViewTest : RobolectricTest() {
         setMediaViewerView(
             state = state,
         )
+
+        // Remove the `ValidateMedia` event that is emitted when the media is loaded, since we are not testing it here.
+        eventsRecorder.clear()
+
         // Ensure that the action are visible
         val resources = activity!!.resources
         val contentDescription = resources.getString(CommonStrings.action_share)
@@ -205,6 +235,10 @@ class MediaViewerViewTest : RobolectricTest() {
                 state = state,
                 onBackClick = callback,
             )
+
+            // Remove the `ValidateMedia` event that is emitted when the media is loaded, since we are not testing it here.
+            eventsRecorder.clear()
+
             val imageContentDescription = activity!!.getString(CommonStrings.common_image)
             onNodeWithContentDescription(imageContentDescription).performTouchInput { swipeDown(startY = centerY) }
             mainClock.advanceTimeBy(1_000)
@@ -228,6 +262,9 @@ class MediaViewerViewTest : RobolectricTest() {
                 eventSink = eventsRecorder
             ),
         )
+
+        // Remove the `ValidateMedia` event that is emitted when the media is loaded, since we are not testing it here.
+        eventsRecorder.clear()
 
         // Wait for enough time for the onVisibilityChanged modifier to trigger
         mainClock.advanceTimeBy(200)
@@ -253,6 +290,9 @@ class MediaViewerViewTest : RobolectricTest() {
                 eventSink = eventsRecorder
             ),
         )
+
+        // Remove the `ValidateMedia` event that is emitted when the media is loaded, since we are not testing it here.
+        eventsRecorder.clear()
 
         // Wait for enough time for the onVisibilityChanged modifier to trigger
         mainClock.advanceTimeBy(200)

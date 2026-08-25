@@ -14,5 +14,10 @@ import android.content.Intent
  * Used to launch external intents from anywhere in the app.
  */
 interface ExternalIntentLauncher {
+    /**
+     * Starts the given intent, doing nothing when no installed app can handle it.
+     *
+     * @param intent the intent to hand over to the system.
+     */
     fun launch(intent: Intent)
 }

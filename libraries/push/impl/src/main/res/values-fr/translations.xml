@@ -19,6 +19,10 @@
     <item quantity="one">"Vous avez %d nouveau message."</item>
     <item quantity="other">"Vous avez %d nouveaux messages."</item>
   </plurals>
+  <plurals name="notification_gallery_body">
+    <item quantity="one">"%1$d attachement partagé"</item>
+    <item quantity="other">"%1$d attachements partagés"</item>
+  </plurals>
   <string name="notification_incoming_audio_call">"📞 Appel entrant"</string>
   <string name="notification_incoming_call">"📹 Appel entrant"</string>
   <string name="notification_inline_reply_failed">"** Échec de l’envoi - veuillez ouvrir le salon"</string>
@@ -30,6 +34,7 @@
   </plurals>
   <string name="notification_invite_body">"Vous a invité(e) à discuter"</string>
   <string name="notification_invite_body_with_sender">"%1$s vous a invité à discuter"</string>
+  <string name="notification_live_location_started_body">"A commencé à partager sa position en direct"</string>
   <string name="notification_mentioned_you_body">"Mentionné(e) : %1$s"</string>
   <string name="notification_new_messages">"Nouveaux messages"</string>
   <plurals name="notification_new_messages_for_room">

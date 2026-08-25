@@ -1,5 +1,5 @@
 appId: ${MAESTRO_APP_ID}
 ---
 - extendedWaitUntil:
-    visible: "Change account provider"
+    visible: "Enter your account provider"
     timeout: 10000

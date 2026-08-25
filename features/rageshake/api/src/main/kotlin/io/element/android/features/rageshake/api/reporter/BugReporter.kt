@@ -10,6 +10,11 @@ package io.element.android.features.rageshake.api.reporter
 
 import java.io.File
 
+/**
+ * Uploads bug reports, including the log files the app has been writing.
+ *
+ * Progress and the outcome are reported through the listener passed to [sendBugReport] rather than by returning or throwing.
+ */
 interface BugReporter {
     /**
      * Send a bug report.
@@ -35,17 +40,21 @@ interface BugReporter {
     )
 
     /**
-     * Provide the log directory.
+     * Provide the log directory, i.e. where the rotating log files are written.
      */
     fun logDirectory(): File
 
     /**
-     * Set the current tracing log level.
+     * Set the current tracing log level, so it can be reported alongside the bug.
+     *
+     * @param logLevel the log level currently in effect.
      */
     fun setCurrentTracingLogLevel(logLevel: String)
 
     /**
      * Save the logcat.
+     *
+     * @return the file the logcat was written to, or `null` when it could not be captured.
      */
     fun saveLogCat(): File?
 }

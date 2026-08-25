@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.accountprovider.AccountProviderView
+import io.element.android.features.login.impl.login.LoginModeEvent
 import io.element.android.features.login.impl.login.LoginModeView
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
@@ -43,7 +44,10 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.matrix.api.auth.OAuthDetails
+import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialogView
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -53,12 +57,11 @@ fun ChooseAccountProviderView(
     onOAuthDetails: (OAuthDetails) -> Unit,
     onNeedLoginPassword: () -> Unit,
     onLearnMoreClick: () -> Unit,
-    onCreateAccountContinue: (url: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val isLoading by remember(state.loginMode) {
+    val isLoading by remember(state.loginModeState.loginMode) {
         derivedStateOf {
-            state.loginMode is AsyncData.Loading
+            state.loginModeState.loginMode is AsyncData.Loading
         }
     }
 
@@ -69,7 +72,8 @@ fun ChooseAccountProviderView(
                 title = {},
                 navigationIcon = { BackButton(onClick = onBackClick) }
             )
-        }
+        },
+        contentWindowInsets = scaffoldScrollableContentInsets,
     ) { padding ->
         Box(
             modifier = Modifier
@@ -82,6 +86,7 @@ fun ChooseAccountProviderView(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(state = rememberScrollState())
+                    .padding(lazyColumnContentPadding)
             ) {
                 IconTitleSubtitleMolecule(
                     modifier = Modifier.padding(top = 16.dp, bottom = 32.dp, start = 16.dp, end = 16.dp),
@@ -103,7 +108,7 @@ fun ChooseAccountProviderView(
                         item = alteredItem,
                         selected = item == state.selectedAccountProvider,
                         onClick = {
-                            state.eventSink(ChooseAccountProviderEvents.SelectAccountProvider(item))
+                            state.eventSink(ChooseAccountProviderEvent.SelectAccountProvider(item))
                         }
                     )
                 }
@@ -114,7 +119,7 @@ fun ChooseAccountProviderView(
                     text = stringResource(id = CommonStrings.action_continue),
                     showProgress = isLoading,
                     onClick = {
-                        state.eventSink(ChooseAccountProviderEvents.Continue)
+                        state.eventSink(ChooseAccountProviderEvent.Continue)
                     },
                     enabled = state.submitEnabled || isLoading,
                     modifier = Modifier
@@ -124,28 +129,37 @@ fun ChooseAccountProviderView(
                 Spacer(modifier = Modifier.height(48.dp))
             }
             LoginModeView(
-                loginMode = state.loginMode,
+                loginMode = state.loginModeState.loginMode,
                 onClearError = {
-                    state.eventSink(ChooseAccountProviderEvents.ClearError)
+                    state.eventSink(ChooseAccountProviderEvent.ClearError)
                 },
                 onLearnMoreClick = onLearnMoreClick,
                 onOAuthDetails = onOAuthDetails,
                 onNeedLoginPassword = onNeedLoginPassword,
-                onCreateAccountContinue = onCreateAccountContinue,
             )
         }
     }
+    LocalNetworkPermissionDialogView(
+        dialog = state.loginModeState.localNetworkPermissionDialog,
+        onSubmit = {
+            state.loginModeState.eventSink(LoginModeEvent.RequestLocalNetworkPermission)
+        },
+        onDismiss = {
+            state.loginModeState.eventSink(LoginModeEvent.DismissLocalNetworkPermission)
+        }
+    )
 }
 
 @PreviewsDayNight
 @Composable
-internal fun ChooseAccountProviderViewPreview(@PreviewParameter(ChooseAccountProviderStateProvider::class) state: ChooseAccountProviderState) = ElementPreview {
+internal fun ChooseAccountProviderViewPreview(@PreviewParameter(
+    ChooseAccountProviderStatePreviewParam::class
+) state: ChooseAccountProviderState) = ElementPreview {
     ChooseAccountProviderView(
         state = state,
         onBackClick = { },
         onLearnMoreClick = { },
         onOAuthDetails = { },
         onNeedLoginPassword = { },
-        onCreateAccountContinue = { },
     )
 }

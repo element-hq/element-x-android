@@ -393,7 +393,7 @@ private fun MemberRow(
 
 @PreviewsDayNight
 @Composable
-internal fun ChangeRolesViewPreview(@PreviewParameter(ChangeRolesStateProvider::class) state: ChangeRolesState) {
+internal fun ChangeRolesViewPreview(@PreviewParameter(ChangeRolesStatePreviewParam::class) state: ChangeRolesState) {
     ElementPreview {
         ChangeRolesView(
             state = state

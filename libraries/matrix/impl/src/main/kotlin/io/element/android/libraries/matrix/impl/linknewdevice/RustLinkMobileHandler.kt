@@ -84,7 +84,13 @@ class RustLinkMobileHandler(
             )
             GrantGeneratedQrLoginProgress.Starting -> LinkMobileStep.Starting
             GrantGeneratedQrLoginProgress.SyncingSecrets -> LinkMobileStep.SyncingSecrets
-            is GrantGeneratedQrLoginProgress.WaitingForAuth -> LinkMobileStep.WaitingForAuth(verificationUri)
+            is GrantGeneratedQrLoginProgress.WaitingForAuth -> LinkMobileStep.WaitingForAuth(
+                verificationUri = verificationUri,
+                continuationMessageSender = RustContinuationMessageSender(
+                    inner = continuationSender,
+                    sessionDispatcher = sessionDispatcher,
+                )
+            )
         }
     }
 }

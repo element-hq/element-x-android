@@ -20,6 +20,9 @@ interface MatrixToConverter {
      * - https://riot.im/develop/#/room/#element-android:matrix.org  ->  https://matrix.to/#/#element-android:matrix.org
      * - https://app.element.io/#/room/#element-android:matrix.org   ->  https://matrix.to/#/#element-android:matrix.org
      * - https://www.example.org/#/room/#element-android:matrix.org  ->  https://matrix.to/#/#element-android:matrix.org
+     *
+     * @param uri the uri to convert.
+     * @return the equivalent matrix.to uri, or `null` when the input is not a permalink this converter recognises.
      */
     fun convert(uri: Uri): Uri?
 }

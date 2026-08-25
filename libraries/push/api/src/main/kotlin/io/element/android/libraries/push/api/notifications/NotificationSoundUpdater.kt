@@ -14,8 +14,20 @@ import io.element.android.libraries.preferences.api.store.NotificationSound
  * versioned channel because Android forbids mutating sound after creation.
  */
 interface NotificationSoundUpdater {
+    /**
+     * Recreates the message notification channel so it uses [sound].
+     *
+     * @param sound the sound the new channel should play.
+     * @param version bumped on every change, since a new channel id is the only way to change a channel's sound.
+     */
     fun recreateNoisyChannel(sound: NotificationSound, version: Int)
 
+    /**
+     * Recreates the ringing call notification channel so it uses [sound]; see [recreateNoisyChannel] for why a version is needed.
+     *
+     * @param sound the sound the new channel should play.
+     * @param version bumped on every change to force a new channel id.
+     */
     fun recreateRingingCallChannel(sound: NotificationSound, version: Int)
 
     /** Current channel sound classified into [NotificationSound]. Null when the channel doesn't exist. */

@@ -111,7 +111,6 @@
   <string name="screen_room_notification_settings_error_setting_mode">"모드 설정이 실패했습니다. 다시 시도해 주세요."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"귀하의 홈 서버는 암호화된 방에서 이 옵션을 지원하지 않으므로, 이 방에서 알림을 받지 못합니다."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"모든 메시지"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"언급 및 키워드만"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"이 방에서, 알림을 주세요"</string>
   <string name="screen_room_roles_and_permissions_admins">"관리자"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"관리자 및 소유자"</string>

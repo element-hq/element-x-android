@@ -9,6 +9,11 @@ package io.element.android.services.analyticsproviders.api
 
 import kotlin.time.Duration
 
+/**
+ * A performance measurement in progress, which reports its timing once [finish] is called.
+ *
+ * Transactions can nest through [startChild]; see `recordChildTransaction` for a scoped alternative that always finishes the child.
+ */
 interface AnalyticsTransaction {
     /**
      * The time elapsed since the transaction started until now if the transaction is ongoing or the time it finished.
@@ -17,11 +22,17 @@ interface AnalyticsTransaction {
 
     /**
      * Start a child span from this transaction.
+     *
+     * @param operation the kind of operation the child measures.
+     * @param description a human readable detail shown alongside the measurement.
      */
     fun startChild(operation: String, description: String? = null): AnalyticsTransaction
 
     /**
      * Adds extra data to the transaction. This data is not indexed, it's just listed.
+     *
+     * @param key the name of the field.
+     * @param value the value to attach.
      */
     fun putExtraData(key: String, value: String)
 
@@ -29,6 +40,9 @@ interface AnalyticsTransaction {
      * Similar to [putExtraData], adds extra data that *will be indexed* and can be used for filtering in the analytics portal.
      *
      * **Do not add numerical values using this function, use [putExtraData] instead.**
+     *
+     * @param key the name of the indexed field.
+     * @param value the value to attach.
      */
     fun putIndexableData(key: String, value: String)
 
@@ -44,6 +58,8 @@ interface AnalyticsTransaction {
 
     /**
      * Attach a throwable to the transaction, so we can know it failed.
+     *
+     * @param throwable the failure that occurred during the measured operation.
      */
     fun attachError(throwable: Throwable)
 

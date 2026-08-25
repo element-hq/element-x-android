@@ -34,7 +34,6 @@
     <item quantity="other">"Gelezen door %1$s en %2$d anderen"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Gelezen door %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Tik om alles weer te geven"</string>
   <string name="a11y_remove_reaction">"Verwijder reactie met %1$s"</string>
   <string name="a11y_remove_reaction_with">"Reactie met %1$s verwijderen"</string>
   <string name="a11y_room_avatar">"Kamerafbeelding"</string>

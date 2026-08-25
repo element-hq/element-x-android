@@ -8,10 +8,15 @@
   <string name="screen_bug_report_editor_placeholder">"شرح مشکل…"</string>
   <string name="screen_bug_report_editor_supporting">"ترجیحاً توضیحات را به زبان انگلیسی بنویسید."</string>
   <string name="screen_bug_report_error_description_too_short">"توضیحات خیلی کوتاه است، لطفاً جزئیات بیشتری در مورد آنچه اتفاق افتاده ارائه دهید. متشکرم!"</string>
+  <string name="screen_bug_report_github_issue_description">"در صورت وجود، می‌توانید شماره مشکل مرتبط با GitHub را وارد کنید."</string>
+  <string name="screen_bug_report_github_issue_label">"مسئله GitHub"</string>
   <string name="screen_bug_report_include_crash_logs">"ارسال رخدادنگارهای خطا"</string>
   <string name="screen_bug_report_include_logs">"اجازه به گزارش‌ها"</string>
+  <string name="screen_bug_report_include_logs_error">"گزارش‌های شما بیش از حد بزرگ هستند، بنابراین نمی‌توان آنها را در این گزارش گنجاند، لطفاً آنها را از طریق دیگری برای ما ارسال کنید."</string>
   <string name="screen_bug_report_include_screenshot">"ارسال تصویر صفحه"</string>
   <string name="screen_bug_report_logs_description">"برای اطمینان از درست کار کردن همه‌چیز گزارش‌ها در پیامتان قرار خواهد گرفت. برای فرستادن پیام بدون گزارش‌ها این تنظیم را خاموش کنید."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$sآخرین باری که استفاده شد، از کار افتاد. آیا مایلید گزارش خرابی را با ما به اشتراک بگذارید؟"</string>
+  <string name="screen_bug_report_send_notification_settings_description">"اگر با اعلان‌ها مشکل دارید، آپلود قوانین ارسال اعلان می‌تواند به ما در شناسایی علت اصلی کمک کند. توجه داشته باشید که این قوانین می‌توانند حاوی اطلاعات خصوصی مانند نام نمایشی یا کلمات کلیدی شما باشند که باید برای آنها اعلان دریافت کنید."</string>
+  <string name="screen_bug_report_send_notification_settings_title">"تنظیمات ارسال اعلان"</string>
   <string name="screen_bug_report_view_logs">"دیدن گزارش‌ها"</string>
 </resources>

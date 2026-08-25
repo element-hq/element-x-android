@@ -66,7 +66,7 @@ fun <T : DropdownOption> PreferenceDropdown(
             iconResourceId = iconResourceId,
             showIconAreaIfNoIcon = showIconAreaIfNoIcon,
         ),
-        headlineContent = {
+        content = {
             Text(
                 style = ElementTheme.typography.fontBodyLgRegular,
                 modifier = Modifier.fillMaxWidth(),

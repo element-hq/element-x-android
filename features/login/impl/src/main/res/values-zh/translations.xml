@@ -25,8 +25,16 @@
   <string name="screen_change_server_error_unauthorized_homeserver_title">"账户提供者 %1$s 不被允许。"</string>
   <string name="screen_change_server_form_header">"主服务器 URL"</string>
   <string name="screen_change_server_form_notice">"输入域名地址。"</string>
+  <string name="screen_change_server_navigation_title_login">"登录"</string>
+  <string name="screen_change_server_navigation_title_register">"创建账户"</string>
   <string name="screen_change_server_subtitle">"你的服务器地址是什么？"</string>
+  <string name="screen_change_server_textfield_footer_login">"如果你的账户由你的公司或社区提供，则应更改账户提供者（例如：companyname.com）。"</string>
+  <string name="screen_change_server_textfield_footer_register">"在 matrix.org 创建免费账户。如果你想使用其它服务提供者创建账户，请相应地更改域名（例如：communityname.org）。"</string>
+  <string name="screen_change_server_textfield_header">"账户提供者"</string>
+  <string name="screen_change_server_textfield_placeholder">"example.com"</string>
   <string name="screen_change_server_title">"选择服务器"</string>
+  <string name="screen_change_server_title_login">"输入你的账户提供者"</string>
+  <string name="screen_change_server_title_register">"选择账户提供者"</string>
   <string name="screen_create_account_title">"创建账户"</string>
   <string name="screen_login_error_deactivated_account">"此账户已被删除。"</string>
   <string name="screen_login_error_invalid_credentials">"用户名与（或）密码不正确"</string>

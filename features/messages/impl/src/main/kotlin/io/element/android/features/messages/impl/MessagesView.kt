@@ -20,14 +20,17 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
@@ -83,7 +86,6 @@ import io.element.android.features.messages.impl.timeline.aTimelineState
 import io.element.android.features.messages.impl.timeline.components.CallMenuItem
 import io.element.android.features.messages.impl.timeline.components.PttMenuItem
 import io.element.android.features.messages.impl.timeline.components.PttSessionBanner
-import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionBottomSheet
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionEvent
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryEvent
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryView
@@ -93,6 +95,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.features.messages.impl.timeline.sendfailure.SendFailureDialogView
 import io.element.android.features.messages.impl.topbars.MessagesViewTopBar
 import io.element.android.features.messages.impl.topbars.ThreadTopBar
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessagePermissionRationaleDialog
@@ -115,6 +118,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.HideKeyboardWhenDisposed
 import io.element.android.libraries.designsystem.utils.KeepScreenOn
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.EventId
@@ -125,6 +129,8 @@ import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationValue
+import io.element.android.libraries.matrix.ui.media.contentvalidation.LocalEventContentValidationState
 import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.link.Link
@@ -138,6 +144,7 @@ fun MessagesView(
     onBackClick: () -> Unit,
     onRoomDetailsClick: () -> Unit,
     onEventContentClick: (isLive: Boolean, event: TimelineItem.Event) -> Boolean,
+    onGalleryEventItemClick: (isLive: Boolean, event: TimelineItem.Event, index: Int) -> Boolean,
     onUserDataClick: (UserId) -> Unit,
     onLinkClick: (String, Boolean) -> Unit,
     onSendLocationClick: () -> Unit,
@@ -145,12 +152,15 @@ fun MessagesView(
     onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     onViewAllPinnedMessagesClick: () -> Unit,
     onThreadsListClick: () -> Unit,
+    knockRequestsBannerView: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     onJoinPttSession: () -> Unit = {},
     onLeavePttSession: () -> Unit = {},
     forceJumpToBottomVisibility: Boolean = false,
-    knockRequestsBannerView: @Composable () -> Unit,
+    customReactionBottomSheet: @Composable () -> Unit,
 ) {
+    val eventContentValidationState = LocalEventContentValidationState.current
+
     OnLifecycleEvent { _, event ->
         state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvent.LifecycleEvent(event))
     }
@@ -173,6 +183,9 @@ fun MessagesView(
 
     fun onContentClick(event: TimelineItem.Event) {
         Timber.v("onMessageClick= ${event.id}")
+        val eventId = event.eventId
+        if (eventId != null && eventContentValidationState[eventId].getCurrentOverallState() != ContentValidationValue.Valid) return
+
         val hideKeyboard = onEventContentClick(state.timelineState.isLive, event)
         if (hideKeyboard) {
             localView.hideKeyboard()
@@ -211,18 +224,18 @@ fun MessagesView(
     val expandableState = rememberExpandableBottomSheetLayoutState()
     ExpandableBottomSheetLayout(
         modifier = modifier
-                .fillMaxSize()
-                .imePadding()
-                .systemBarsPadding()
-                .onSizeChanged { size ->
-                    // Let the composer takes at max half of the available height.
-                    // The value will be different if the soft keyboard is displayed
-                    // or not.
-                    maxComposerHeightPx = (size.height * 0.5f).toInt()
-                },
+            .fillMaxSize()
+            .imePadding()
+            .systemBarsPadding()
+            .onSizeChanged { size ->
+                // Let the composer takes at max half of the available height.
+                // The value will be different if the soft keyboard is displayed
+                // or not.
+                maxComposerHeightPx = (size.height * 0.5f).toInt()
+            },
         content = {
             Scaffold(
-                contentWindowInsets = WindowInsets.statusBars,
+                contentWindowInsets = scaffoldScrollableContentInsets,
                 topBar = {
                     if (state.timelineState.timelineMode is Timeline.Mode.Thread) {
                         ThreadTopBar(
@@ -240,6 +253,7 @@ fun MessagesView(
                             heroes = state.heroes,
                             dmUserIdentityState = state.dmUserVerificationState,
                             sharedHistoryIcon = state.topBarSharedHistoryIcon,
+                            dmUserStatus = state.dmUserStatus,
                             onBackClick = { hidingKeyboard { onBackClick() } },
                             onRoomDetailsClick = { hidingKeyboard { onRoomDetailsClick() } },
                             menuActions = {
@@ -260,12 +274,22 @@ fun MessagesView(
                 content = { padding ->
                     Box(
                         modifier = Modifier
-                                .padding(padding)
-                                .consumeWindowInsets(padding)
+                            .padding(padding)
+                            .consumeWindowInsets(padding)
                     ) {
                         MessagesViewContent(
                             state = state,
                             onContentClick = ::onContentClick,
+                            onGalleryItemClick = { event, index ->
+                                val hideKeyboard = onGalleryEventItemClick(
+                                    state.timelineState.isLive,
+                                    event,
+                                    index,
+                                )
+                                if (hideKeyboard) {
+                                    localView.hideKeyboard()
+                                }
+                            },
                             onMessageLongClick = ::onMessageLongClick,
                             onUserDataClick = {
                                 hidingKeyboard {
@@ -291,6 +315,7 @@ fun MessagesView(
                             onSwipeToReply = { targetEvent ->
                                 state.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Reply, targetEvent))
                             },
+                            onJoinCallClick = onJoinCallClick,
                             forceJumpToBottomVisibility = forceJumpToBottomVisibility,
                             onViewAllPinnedMessagesClick = onViewAllPinnedMessagesClick,
                             onJoinPttClick = onJoinPttSession,
@@ -299,10 +324,10 @@ fun MessagesView(
 
                         SuggestionsPickerView(
                             modifier = Modifier
-                                    .shadow(10.dp)
-                                    .background(ElementTheme.colors.bgCanvasDefault)
-                                    .align(Alignment.BottomStart)
-                                    .heightIn(max = 230.dp),
+                                .shadow(10.dp)
+                                .background(ElementTheme.colors.bgCanvasDefault)
+                                .align(Alignment.BottomStart)
+                                .heightIn(max = 230.dp),
                             roomId = state.roomId,
                             roomName = state.roomName,
                             roomAvatarData = state.roomAvatar,
@@ -400,12 +425,7 @@ fun MessagesView(
         },
     )
 
-    CustomReactionBottomSheet(
-        state = state.customReactionState,
-        onSelectEmoji = { uniqueId, emoji ->
-            state.eventSink(MessagesEvent.ToggleReaction(emoji.unicode, uniqueId))
-        }
-    )
+    customReactionBottomSheet()
 
     ReactionSummaryView(state = state.reactionSummaryState)
     ReadReceiptBottomSheet(
@@ -418,6 +438,31 @@ fun MessagesView(
             onLinkClick(link.url, false)
         },
         state = state.linkState,
+    )
+
+    SendFailureDialogView(
+        sendFailureDialogState = state.timelineState.sendFailureDialogState,
+        onDismiss = {
+            state.timelineState.eventSink(TimelineEvent.HideSendFailureDialog)
+        },
+        onRetry = { event ->
+            state.eventSink(
+                MessagesEvent.HandleAction(
+                    action = TimelineItemAction.RetrySending,
+                    event = event,
+                )
+            )
+            state.timelineState.eventSink(TimelineEvent.HideSendFailureDialog)
+        },
+        onRemoveMessage = { event ->
+            state.eventSink(
+                MessagesEvent.HandleAction(
+                    action = TimelineItemAction.Redact,
+                    event = event,
+                )
+            )
+            state.timelineState.eventSink(TimelineEvent.HideSendFailureDialog)
+        },
     )
 }
 
@@ -482,10 +527,12 @@ private fun MessagesViewContent(
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
     onMessageLongClick: (TimelineItem.Event) -> Unit,
+    onGalleryItemClick: ((TimelineItem.Event, Int) -> Unit),
     onSendLocationClick: () -> Unit,
     onCreatePollClick: () -> Unit,
     onViewAllPinnedMessagesClick: () -> Unit,
     onJoinPttClick: () -> Unit,
+    onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     forceJumpToBottomVisibility: Boolean,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
@@ -493,9 +540,9 @@ private fun MessagesViewContent(
 ) {
     Box(
         modifier = modifier
-                .fillMaxSize()
-                .navigationBarsPadding()
-                .imePadding(),
+            .fillMaxSize()
+            .navigationBarsPadding()
+            .imePadding(),
     ) {
         AttachmentsBottomSheet(
             state = state.composerState,
@@ -526,7 +573,9 @@ private fun MessagesViewContent(
                 pinnedMessagesCount = (state.pinnedMessagesBannerState as? PinnedMessagesBannerState.Visible)?.pinnedMessagesCount() ?: 0,
             )
             val density = LocalDensity.current
-            var pinnedBannerHeightDp by remember { mutableStateOf(0.dp) }
+            // Combined height of the banners overlaid above the timeline. Drives the floating
+            // date badge offset so the badge sits below whichever banners are currently showing.
+            var topBannersHeightDp by remember { mutableStateOf(0.dp) }
 
             TimelineView(
                 state = state.timelineState,
@@ -534,19 +583,23 @@ private fun MessagesViewContent(
                 onUserDataClick = onUserDataClick,
                 onLinkClick = { link -> onLinkClick(link, false) },
                 onContentClick = onContentClick,
+                onGalleryItemClick = onGalleryItemClick,
                 onMessageLongClick = onMessageLongClick,
                 onSwipeToReply = onSwipeToReply,
                 onReactionClick = onReactionClick,
                 onReactionLongClick = onReactionLongClick,
                 onMoreReactionsClick = onMoreReactionsClick,
                 onReadReceiptClick = onReadReceiptClick,
+                onJoinCallClick = onJoinCallClick,
                 forceJumpToBottomVisibility = forceJumpToBottomVisibility,
                 nestedScrollConnection = scrollBehavior.nestedScrollConnection,
-                floatingDateTopOffset = pinnedBannerHeightDp,
+                floatingDateTopOffset = topBannersHeightDp,
             )
 
             if (state.timelineState.timelineMode !is Timeline.Mode.Thread) {
-                Column {
+                Column(
+                    modifier = Modifier.onSizeChanged { topBannersHeightDp = with(density) { it.height.toDp() } },
+                ) {
                     val pttCallState = state.roomCallState
                     if (state.isPttEnabled && pttCallState is RoomCallState.OnGoing && !pttCallState.isUserLocallyInTheCall) {
                         PttSessionBanner(
@@ -557,7 +610,6 @@ private fun MessagesViewContent(
                     }
                     AnimatedVisibility(
                         visible = state.pinnedMessagesBannerState is PinnedMessagesBannerState.Visible && scrollBehavior.isVisible,
-                        modifier = Modifier.onSizeChanged { pinnedBannerHeightDp = with(density) { it.height.toDp() } },
                         enter = expandVertically(),
                         exit = shrinkVertically(),
                     ) {
@@ -592,12 +644,23 @@ private fun MessagesViewComposerBottomSheetContents(
     onRoomSuccessorClick: (RoomId) -> Unit,
     onLinkClick: (String, Boolean) -> Unit,
 ) {
+    val contentPadding = WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal).asPaddingValues()
     when {
         state.successorRoom != null -> {
-            SuccessorRoomBanner(roomSuccessor = state.successorRoom, onRoomSuccessorClick = onRoomSuccessorClick)
+            SuccessorRoomBanner(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(contentPadding),
+                roomSuccessor = state.successorRoom,
+                onRoomSuccessorClick = onRoomSuccessorClick
+            )
         }
         state.userEventPermissions.canSendMessage -> {
-            Column(modifier = Modifier.fillMaxWidth()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(contentPadding)
+            ) {
                 // Do not show the identity change if user is composing a Rich message or is seeing suggestion(s).
                 if (state.composerState.suggestions.isEmpty() &&
                     state.composerState.textEditorState is TextEditorState.Markdown) {
@@ -627,18 +690,18 @@ private fun MessagesViewComposerBottomSheetContents(
             }
         }
         else -> {
-            CantSendMessageBanner()
+            CantSendMessageBanner(Modifier.padding(contentPadding))
         }
     }
 }
 
 @Composable
-private fun CantSendMessageBanner() {
+private fun CantSendMessageBanner(modifier: Modifier = Modifier) {
     Row(
-        modifier = Modifier
-                .fillMaxWidth()
-                .background(ElementTheme.colors.bgSubtleSecondary)
-                .padding(16.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .background(ElementTheme.colors.bgSubtleSecondary)
+            .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
@@ -669,12 +732,13 @@ private fun SuccessorRoomBanner(
 
 @PreviewsDayNight
 @Composable
-internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class) state: MessagesState) = ElementPreview {
+internal fun MessagesViewPreview(@PreviewParameter(MessagesStatePreviewParam::class) state: MessagesState) = ElementPreview {
     MessagesView(
         state = state,
         onBackClick = {},
         onRoomDetailsClick = {},
         onEventContentClick = { _, _ -> false },
+        onGalleryEventItemClick = { _, _, _ -> false },
         onUserDataClick = {},
         onLinkClick = { _, _ -> },
         onSendLocationClick = {},
@@ -683,6 +747,7 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class)
         onViewAllPinnedMessagesClick = { },
         forceJumpToBottomVisibility = true,
         knockRequestsBannerView = {},
+        customReactionBottomSheet = {},
         onThreadsListClick = {},
     )
 }
@@ -730,6 +795,7 @@ internal fun MessagesViewA11yPreview() = ElementPreview {
         onBackClick = {},
         onRoomDetailsClick = {},
         onEventContentClick = { _, _ -> false },
+        onGalleryEventItemClick = { _, _, _ -> false },
         onUserDataClick = {},
         onLinkClick = { _, _ -> },
         onSendLocationClick = {},
@@ -739,5 +805,6 @@ internal fun MessagesViewA11yPreview() = ElementPreview {
         onThreadsListClick = {},
         forceJumpToBottomVisibility = true,
         knockRequestsBannerView = {},
+        customReactionBottomSheet = {},
     )
 }

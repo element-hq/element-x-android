@@ -12,7 +12,13 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.timeline.Timeline
 
 fun interface VoiceMessageComposerPresenter : Presenter<VoiceMessageComposerState> {
+    /**
+     * Creates a presenter for one voice message composer.
+     */
     interface Factory {
+        /**
+         * @param timelineMode the timeline the recording will be sent to, which matters for threads in particular.
+         */
         fun create(timelineMode: Timeline.Mode): VoiceMessageComposerPresenter
     }
 }

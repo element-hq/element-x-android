@@ -69,18 +69,18 @@ body:
       description:  |
         Trigger the defect, then click on the menu from the room list then "Report a bug". Describe the issue, mentioning that you have also filed a bug (it's helpful if you can include a link to the bug). Send the report to submit anonymous logs to the developers.
       options:
-        - 'Yes'
         - 'No'
+        - 'Yes'
     validations:
       required: true
   - type: dropdown
     id: pr
     attributes:
-      label: Are you willing to provide a PR?
+      label: Will you submit a Pull Request?
       description:  |
-        Providing a PR can drastically speed up the process of fixing this bug. Don't worry, it's still OK to answer 'No' :).
+        Submitting a Pull Request can drastically speed up the process of fixing this bug. Don't worry, it's still OK to answer 'No' :).
       options:
-        - 'Yes'
         - 'No'
+        - 'Yes'
     validations:
       required: true

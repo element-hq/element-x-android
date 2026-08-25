@@ -10,27 +10,12 @@ package io.element.android.features.messages.impl.timeline.di
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import dev.zacsweers.metro.BindingContainer
-import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.Multibinds
 import dev.zacsweers.metro.SingleIn
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.RoomScope
 import kotlin.reflect.KClass
-
-/**
- * Container that declares the [TimelineItemPresenterFactory] map multi binding.
- *
- * Its sole purpose is to support the case of an empty map multibinding.
- */
-@BindingContainer
-@ContributesTo(RoomScope::class)
-interface TimelineItemPresenterFactoriesModule {
-    @Multibinds
-    fun multiBindTimelineItemPresenterFactories(): @JvmSuppressWildcards Map<KClass<out TimelineItemEventContent>, TimelineItemPresenterFactory<*, *>>
-}
 
 /**
  * Room level caching layer for the [TimelineItemPresenterFactory] instances.

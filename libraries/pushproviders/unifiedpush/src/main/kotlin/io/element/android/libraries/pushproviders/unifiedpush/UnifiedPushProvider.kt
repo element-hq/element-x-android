@@ -36,7 +36,7 @@ class UnifiedPushProvider(
 
     override suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor): Result<Unit> {
         val clientSecret = pushClientSecret.getSecretForUser(matrixClient.sessionId)
-        return registerUnifiedPushUseCase.execute(distributor, clientSecret)
+        return registerUnifiedPushUseCase.execute(distributor, clientSecret, matrixClient.sessionId)
             .onSuccess {
                 unifiedPushStore.setDistributorValue(matrixClient.sessionId, distributor.value)
             }

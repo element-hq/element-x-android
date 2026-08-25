@@ -82,7 +82,7 @@ object AsyncActionViewDefaults {
 @PreviewsDayNight
 @Composable
 internal fun AsyncActionViewPreview(
-    @PreviewParameter(AsyncActionProvider::class) async: AsyncAction<Unit>,
+    @PreviewParameter(AsyncActionPreviewParam::class) async: AsyncAction<Unit>,
 ) = ElementPreview {
     AsyncActionView(
         async = async,

@@ -26,6 +26,7 @@ import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.core.mimetype.MimeTypes.ensureDefaultSubtype
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeAudio
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeImage
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
@@ -62,12 +63,12 @@ class AndroidMediaPreProcessor(
         /**
          * Used for calculating `inSampleSize` for bitmaps.
          *
-         * *Note*: Ideally, this should result in images of up to (but not included) 1280x1280 being sent. However, images with very different width and height
+         * *Note*: Ideally, this should result in images of up to (but not included) 2560x2560 being sent. However, images with very different width and height
          * values may surpass this limit. (i.e.: an image of `480x3000px` would have `inSampleSize=1` and be sent as is).
          */
-        private const val IMAGE_SCALE_REF_SIZE = 640
+        private const val IMAGE_SCALE_REF_SIZE = 1280
 
-        private val notCompressibleImageTypes = listOf(MimeTypes.Gif, MimeTypes.WebP, MimeTypes.Svg)
+        private val notCompressibleImageTypes = listOf(MimeTypes.Gif, MimeTypes.WebP)
     }
 
     private val contentResolver = context.contentResolver
@@ -82,18 +83,17 @@ class AndroidMediaPreProcessor(
         mediaOptimizationConfig: MediaOptimizationConfig,
     ): Result<MediaUploadInfo> = withContext(coroutineDispatchers.computation) {
         runCatchingExceptions {
+            val resolvedMimeType = mimeType.ensureDefaultSubtype()
             val result = when {
-                // Special case for SVG, since Android can't read its metadata or create a thumbnail, it must be sent as a file
-                mimeType == MimeTypes.Svg -> {
-                    processFile(uri, mimeType)
+                resolvedMimeType == MimeTypes.Svg -> processSvgImage(uri, resolvedMimeType)
+                resolvedMimeType.isMimeTypeImage() -> {
+                    val imageMimeType = resolveImageMimeType(uri, mimeType).ensureDefaultSubtype()
+                    val shouldBeCompressed = mediaOptimizationConfig.compressImages && imageMimeType !in notCompressibleImageTypes
+                    processImage(uri, imageMimeType, shouldBeCompressed)
                 }
-                mimeType.isMimeTypeImage() -> {
-                    val shouldBeCompressed = mediaOptimizationConfig.compressImages && mimeType !in notCompressibleImageTypes
-                    processImage(uri, mimeType, shouldBeCompressed)
-                }
-                mimeType.isMimeTypeVideo() -> processVideo(uri, mimeType, mediaOptimizationConfig.videoCompressionPreset)
-                mimeType.isMimeTypeAudio() -> processAudio(uri, mimeType)
-                else -> processFile(uri, mimeType)
+                resolvedMimeType.isMimeTypeVideo() -> processVideo(uri, resolvedMimeType, mediaOptimizationConfig.videoCompressionPreset)
+                resolvedMimeType.isMimeTypeAudio() -> processAudio(uri, resolvedMimeType)
+                else -> processFile(uri, resolvedMimeType)
             }
             if (deleteOriginal) {
                 tryOrNull {
@@ -158,8 +158,22 @@ class AndroidMediaPreProcessor(
         }
     }
 
+    /**
+     * The declared mime type can be broader than the image actually is - a wildcard from a share intent, or a mislabelled file - and the encoder is picked
+     * from it. Re-encoding a transparent image as JPEG flattens its alpha channel to black, so resolve the real format from the image header first.
+     */
+    private fun resolveImageMimeType(uri: Uri, declaredMimeType: String): String {
+        if (declaredMimeType == MimeTypes.Png || declaredMimeType == MimeTypes.Jpeg) return declaredMimeType
+        val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        tryOrNull {
+            contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, options) }
+        }
+        return options.outMimeType ?: declaredMimeType
+    }
+
     private suspend fun processImage(uri: Uri, mimeType: String, shouldBeCompressed: Boolean): MediaUploadInfo {
         Timber.d("Processing image ${uri.path.orEmpty().hash()}")
+
         suspend fun processImageWithCompression(): MediaUploadInfo {
             // Read the orientation metadata from its own stream. Trying to reuse this stream for compression will fail.
             val orientation = contentResolver.openInputStream(uri).use { input ->
@@ -218,6 +232,28 @@ class AndroidMediaPreProcessor(
         } else {
             processImageWithoutCompression()
         }
+    }
+
+    private val svgDimensionExtractor = SvgDimensionExtractor()
+
+    private suspend fun processSvgImage(uri: Uri, mimeType: String): MediaUploadInfo {
+        Timber.d("Processing SVG image ${uri.path.orEmpty().hash()}")
+        val file = copyToTmpFile(uri)
+        val size = svgDimensionExtractor.extractDimensions(file)
+        val imageInfo = ImageInfo(
+            width = size.width.toLong(),
+            height = size.height.toLong(),
+            mimetype = mimeType,
+            size = file.length(),
+            thumbnailInfo = null,
+            thumbnailSource = null,
+            blurhash = null,
+        )
+        return MediaUploadInfo.Image(
+            file = file,
+            imageInfo = imageInfo,
+            thumbnailFile = null,
+        )
     }
 
     private suspend fun processVideo(uri: Uri, mimeType: String?, videoCompressionPreset: VideoCompressionPreset): MediaUploadInfo {

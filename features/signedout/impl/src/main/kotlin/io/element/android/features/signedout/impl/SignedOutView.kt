@@ -21,14 +21,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
-import io.element.android.libraries.designsystem.atomic.organisms.InfoListItem
-import io.element.android.libraries.designsystem.atomic.organisms.InfoListOrganism
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.BigIcon
+import io.element.android.libraries.designsystem.components.visuallist.VisualList
+import io.element.android.libraries.designsystem.components.visuallist.VisualListItemData
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -40,7 +39,7 @@ fun SignedOutView(
     state: SignedOutState,
     modifier: Modifier = Modifier,
 ) {
-    BackHandler(onBack = { state.eventSink(SignedOutEvents.SignInAgain) })
+    BackHandler(onBack = { state.eventSink(SignedOutEvent.SignInAgain) })
     HeaderFooterPage(
         modifier = modifier
             .fillMaxSize()
@@ -50,7 +49,7 @@ fun SignedOutView(
         content = { SignedOutContent() },
         footer = {
             SignedOutFooter(
-                onSignInAgain = { state.eventSink(SignedOutEvents.SignInAgain) },
+                onSignInAgain = { state.eventSink(SignedOutEvent.SignInAgain) },
             )
         }
     )
@@ -75,23 +74,21 @@ private fun SignedOutContent() {
             verticalBias = -0.4f
         )
     ) {
-        InfoListOrganism(
+        VisualList(
             items = persistentListOf(
-                InfoListItem(
+                VisualListItemData(
                     message = stringResource(id = R.string.screen_signed_out_reason_1),
                     iconVector = CompoundIcons.Lock(),
                 ),
-                InfoListItem(
+                VisualListItemData(
                     message = stringResource(id = R.string.screen_signed_out_reason_2),
                     iconVector = CompoundIcons.Devices(),
                 ),
-                InfoListItem(
+                VisualListItemData(
                     message = stringResource(id = R.string.screen_signed_out_reason_3),
                     iconVector = CompoundIcons.Block(),
                 ),
             ),
-            textStyle = ElementTheme.typography.fontBodyMdMedium,
-            iconTint = ElementTheme.colors.iconSecondary,
         )
     }
 }
@@ -112,7 +109,7 @@ private fun SignedOutFooter(
 @PreviewsDayNight
 @Composable
 internal fun SignedOutViewPreview(
-    @PreviewParameter(SignedOutStateProvider::class) state: SignedOutState,
+    @PreviewParameter(SignedOutStatePreviewParam::class) state: SignedOutState,
 ) = ElementPreview {
     SignedOutView(
         state = state,

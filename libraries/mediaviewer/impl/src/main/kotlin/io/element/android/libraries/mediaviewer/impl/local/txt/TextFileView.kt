@@ -98,7 +98,7 @@ private fun TextFileContentView(
 @PreviewsDayNight
 @Composable
 internal fun TextFileContentViewPreview(
-    @PreviewParameter(TextFileContentProvider::class) text: AsyncData<ImmutableList<String>>,
+    @PreviewParameter(TextFileContentPreviewParam::class) text: AsyncData<ImmutableList<String>>,
 ) = ElementPreview {
     TextFileContentView(
         data = text,

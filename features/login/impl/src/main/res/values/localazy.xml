@@ -25,8 +25,16 @@
   <string name="screen_change_server_error_unauthorized_homeserver_title">"Account provider %1$s not allowed."</string>
   <string name="screen_change_server_form_header">"Homeserver URL"</string>
   <string name="screen_change_server_form_notice">"Enter a domain address."</string>
+  <string name="screen_change_server_navigation_title_login">"Sign in"</string>
+  <string name="screen_change_server_navigation_title_register">"Create account"</string>
   <string name="screen_change_server_subtitle">"What is the address of your server?"</string>
+  <string name="screen_change_server_textfield_footer_login">"If your account is provided by your company or a community, then change the account provider (example: companyname.com)."</string>
+  <string name="screen_change_server_textfield_footer_register">"Create an account on matrix.org for free. If you want to create an account with a different provider, then change it accordingly (example: communityname.org)."</string>
+  <string name="screen_change_server_textfield_header">"Account provider"</string>
+  <string name="screen_change_server_textfield_placeholder">"example.com"</string>
   <string name="screen_change_server_title">"Select your server"</string>
+  <string name="screen_change_server_title_login">"Enter your account provider"</string>
+  <string name="screen_change_server_title_register">"Choose an account provider"</string>
   <string name="screen_create_account_title">"Create account"</string>
   <string name="screen_login_error_deactivated_account">"This account has been deleted."</string>
   <string name="screen_login_error_invalid_credentials">"Incorrect username and/or password"</string>

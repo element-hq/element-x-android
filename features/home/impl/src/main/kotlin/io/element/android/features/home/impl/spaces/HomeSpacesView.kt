@@ -171,7 +171,7 @@ private fun EmptySpaceHomeView(
 @PreviewsDayNight
 @Composable
 internal fun HomeSpacesViewPreview(
-    @PreviewParameter(HomeSpacesStateProvider::class) state: HomeSpacesState,
+    @PreviewParameter(HomeSpacesStatePreviewParam::class) state: HomeSpacesState,
 ) = ElementPreview {
     HomeSpacesView(
         state = state,

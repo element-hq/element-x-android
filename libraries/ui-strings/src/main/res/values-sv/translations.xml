@@ -37,7 +37,6 @@
     <item quantity="other">"Läst av %1$s och %2$d andra"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Läst av %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Tryck för att visa alla"</string>
   <string name="a11y_remove_reaction">"Ta bort reaktionen med %1$s"</string>
   <string name="a11y_remove_reaction_with">"Ta bort reaktion med %1$s"</string>
   <string name="a11y_room_avatar">"Rumsavatar"</string>
@@ -380,7 +379,6 @@ Anledning:%1$s."</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Den maximala tillåtna filstorleken är: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Välj kvaliteten på videon du vill ladda upp."</string>
   <string name="dialog_video_quality_selector_title">"Välj videouppladdningskvalitet"</string>
-  <string name="emoji_picker_search_placeholder">"Sök emojier"</string>
   <string name="error_account_already_logged_in">"Du är redan inloggad på den här enheten som %1$s."</string>
   <string name="error_account_creation_not_possible">"Din hemserver måste uppgraderas för att stödja Matrix Authentication Service och skapande av konto."</string>
   <string name="error_failed_creating_the_permalink">"Misslyckades att skapa permalänken"</string>
@@ -442,7 +440,7 @@ Anledning:%1$s."</string>
   <string name="screen_share_open_apple_maps">"Öppna i Apple Maps"</string>
   <string name="screen_share_open_google_maps">"Öppna i Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Öppna i OpenStreetMap"</string>
-  <string name="screen_share_this_location_action">"Dela fäst plats"</string>
+  <string name="screen_share_this_location_action">"Dela vald plats"</string>
   <string name="screen_space_list_description">"Utrymmen som du har skapat eller gått med i."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_title">"Utrymmen"</string>

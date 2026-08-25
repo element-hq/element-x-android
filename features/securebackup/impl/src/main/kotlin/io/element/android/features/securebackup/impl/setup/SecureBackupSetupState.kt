@@ -15,7 +15,7 @@ data class SecureBackupSetupState(
     val recoveryKeyViewState: RecoveryKeyViewState,
     val showSaveConfirmationDialog: Boolean,
     val setupState: SetupState,
-    val eventSink: (SecureBackupSetupEvents) -> Unit
+    val eventSink: (SecureBackupSetupEvent) -> Unit
 )
 
 sealed interface SetupState {

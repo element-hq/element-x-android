@@ -8,11 +8,11 @@
   <string name="screen_chat_backup_key_storage_toggle_description">"Prześlij klucze z tego urządzenia"</string>
   <string name="screen_chat_backup_key_storage_toggle_title">"Zezwól na magazynowanie kluczy"</string>
   <string name="screen_chat_backup_recovery_action_change">"Zmień klucz przywracania"</string>
-  <string name="screen_chat_backup_recovery_action_change_description">"Twoje czaty są automatycznie archiwizowane za pomocą szyfrowania end-to-end. Aby przywrócić tę kopię zapasową i swoją tożsamość cyfrową, wymagany będzie klucz przywracania."</string>
+  <string name="screen_chat_backup_recovery_action_change_description">"Twoje czaty są automatycznie archiwizowane za pomocą szyfrowania end-to-end. Aby przywrócić kopię zapasową i swoją tożsamość cyfrową, wymagany będzie klucz przywracania."</string>
   <string name="screen_chat_backup_recovery_action_confirm">"Wprowadź klucz przywracania"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Magazyn kluczy nie jest zsynchronizowany."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Uzyskaj klucz przywracania"</string>
-  <string name="screen_chat_backup_recovery_action_setup_description">"Twoje czaty są automatycznie archiwizowane za pomocą szyfrowania end-to-end. Aby przywrócić tę kopię zapasową i swoją tożsamość cyfrową, wymagany będzie klucz przywracania."</string>
+  <string name="screen_chat_backup_recovery_action_setup_description">"Twoje czaty są automatycznie archiwizowane za pomocą szyfrowania end-to-end. Aby przywrócić kopię zapasową i swoją tożsamość cyfrową, wymagany będzie klucz przywracania."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Otwórz %1$s na urządzeniu stacjonarnym"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Zaloguj się ponownie na swoje konto"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Gdy pojawi się prośba o weryfikację urządzenia, wybierz %1$s"</string>

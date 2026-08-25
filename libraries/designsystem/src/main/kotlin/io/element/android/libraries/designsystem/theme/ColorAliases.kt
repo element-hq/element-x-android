@@ -53,11 +53,6 @@ val SemanticColors.messageFromOtherBackground
 val SemanticColors.progressIndicatorTrackColor
     get() = if (isLight) LightColorTokens.colorAlphaGray500 else DarkColorTokens.colorAlphaGray500
 
-// This color is not present in Semantic color, so put hard-coded value for now
-@OptIn(CoreColorToken::class)
-val SemanticColors.bgSubtleTertiary
-    get() = if (isLight) LightColorTokens.colorGray100 else DarkColorTokens.colorGray100
-
 // Temporary color, which is not in the token right now
 val SemanticColors.temporaryColorBgSpecial
     get() = if (isLight) Color(0xFFE4E8F0) else Color(0xFF3A4048)

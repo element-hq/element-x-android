@@ -34,7 +34,7 @@ import org.junit.Test
 class JoinRoomViewTest : RobolectricTest() {
     @Test
     fun `clicking on back invoke the expected callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<JoinRoomEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<JoinRoomEvent>(expectEvents = false)
         ensureCalledOnce {
             setJoinRoomView(
                 aJoinRoomState(
@@ -48,7 +48,7 @@ class JoinRoomViewTest : RobolectricTest() {
 
     @Test
     fun `clicking on Join room on CanJoin room emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<JoinRoomEvents>()
+        val eventsRecorder = EventsRecorder<JoinRoomEvent>()
         setJoinRoomView(
             aJoinRoomState(
                 contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.CanJoin),
@@ -56,12 +56,12 @@ class JoinRoomViewTest : RobolectricTest() {
             ),
         )
         clickOn(R.string.screen_join_room_join_action)
-        eventsRecorder.assertSingle(JoinRoomEvents.JoinRoom)
+        eventsRecorder.assertSingle(JoinRoomEvent.JoinRoom)
     }
 
     @Test
     fun `clicking on Knock room on CanKnock room emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<JoinRoomEvents>()
+        val eventsRecorder = EventsRecorder<JoinRoomEvent>()
         setJoinRoomView(
             aJoinRoomState(
                 contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.CanKnock),
@@ -70,12 +70,12 @@ class JoinRoomViewTest : RobolectricTest() {
             ),
         )
         clickOn(R.string.screen_join_room_knock_action)
-        eventsRecorder.assertSingle(JoinRoomEvents.KnockRoom)
+        eventsRecorder.assertSingle(JoinRoomEvent.KnockRoom)
     }
 
     @Test
     fun `clicking on closing Knock error emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<JoinRoomEvents>()
+        val eventsRecorder = EventsRecorder<JoinRoomEvent>()
         setJoinRoomView(
             aJoinRoomState(
                 contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.CanKnock),
@@ -84,12 +84,12 @@ class JoinRoomViewTest : RobolectricTest() {
             ),
         )
         clickOn(CommonStrings.action_ok)
-        eventsRecorder.assertSingle(JoinRoomEvents.ClearActionStates)
+        eventsRecorder.assertSingle(JoinRoomEvent.ClearActionStates)
     }
 
     @Test
     fun `clicking on cancel knock request emit the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<JoinRoomEvents>()
+        val eventsRecorder = EventsRecorder<JoinRoomEvent>()
         setJoinRoomView(
             aJoinRoomState(
                 contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsKnocked),
@@ -97,12 +97,12 @@ class JoinRoomViewTest : RobolectricTest() {
             ),
         )
         clickOn(R.string.screen_join_room_cancel_knock_action)
-        eventsRecorder.assertSingle(JoinRoomEvents.CancelKnock(true))
+        eventsRecorder.assertSingle(JoinRoomEvent.CancelKnock(true))
     }
 
     @Test
     fun `clicking on closing Cancel Knock error emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<JoinRoomEvents>()
+        val eventsRecorder = EventsRecorder<JoinRoomEvent>()
         setJoinRoomView(
             aJoinRoomState(
                 contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsKnocked),
@@ -111,12 +111,12 @@ class JoinRoomViewTest : RobolectricTest() {
             ),
         )
         clickOn(CommonStrings.action_ok)
-        eventsRecorder.assertSingle(JoinRoomEvents.ClearActionStates)
+        eventsRecorder.assertSingle(JoinRoomEvent.ClearActionStates)
     }
 
     @Test
     fun `clicking on closing Join error emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<JoinRoomEvents>()
+        val eventsRecorder = EventsRecorder<JoinRoomEvent>()
         setJoinRoomView(
             aJoinRoomState(
                 contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.CanKnock),
@@ -125,12 +125,12 @@ class JoinRoomViewTest : RobolectricTest() {
             ),
         )
         clickOn(CommonStrings.action_ok)
-        eventsRecorder.assertSingle(JoinRoomEvents.ClearActionStates)
+        eventsRecorder.assertSingle(JoinRoomEvent.ClearActionStates)
     }
 
     @Test
     fun `when joining room is successful, the expected callback is invoked`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<JoinRoomEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<JoinRoomEvent>(expectEvents = false)
         ensureCalledOnce {
             setJoinRoomView(
                 aJoinRoomState(
@@ -144,7 +144,7 @@ class JoinRoomViewTest : RobolectricTest() {
 
     @Test
     fun `clicking on Accept when JoinAuthorisationStatus is IsInvited emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<JoinRoomEvents>()
+        val eventsRecorder = EventsRecorder<JoinRoomEvent>()
         val inviteData = anInviteData()
         setJoinRoomView(
             aJoinRoomState(
@@ -153,12 +153,12 @@ class JoinRoomViewTest : RobolectricTest() {
             ),
         )
         clickOn(CommonStrings.action_accept)
-        eventsRecorder.assertSingle(JoinRoomEvents.AcceptInvite(inviteData))
+        eventsRecorder.assertSingle(JoinRoomEvent.AcceptInvite(inviteData))
     }
 
     @Test
     fun `clicking on Decline when JoinAuthorisationStatus is IsInvited emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<JoinRoomEvents>()
+        val eventsRecorder = EventsRecorder<JoinRoomEvent>()
         val inviteData = anInviteData()
         setJoinRoomView(
             aJoinRoomState(
@@ -167,13 +167,13 @@ class JoinRoomViewTest : RobolectricTest() {
             ),
         )
         clickOn(CommonStrings.action_decline)
-        eventsRecorder.assertSingle(JoinRoomEvents.DeclineInvite(inviteData, false))
+        eventsRecorder.assertSingle(JoinRoomEvent.DeclineInvite(inviteData, false))
     }
 
     @Test
     fun `clicking on Decline and block when JoinAuthorisationStatus is IsInvited and can report room, the expected callback is invoked`() {
         runAndroidComposeUiTest {
-            val eventsRecorder = EventsRecorder<JoinRoomEvents>(expectEvents = false)
+            val eventsRecorder = EventsRecorder<JoinRoomEvent>(expectEvents = false)
             val inviteData = anInviteData()
             val joinRoomState = aJoinRoomState(
                 contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(inviteData, aRoomMember().toInviteSender())),
@@ -192,7 +192,7 @@ class JoinRoomViewTest : RobolectricTest() {
 
     @Test
     fun `clicking on Decline and block when JoinAuthorisationStatus is IsInvited and cant report room, emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<JoinRoomEvents>()
+        val eventsRecorder = EventsRecorder<JoinRoomEvent>()
         val inviteData = anInviteData()
         val joinRoomState = aJoinRoomState(
             contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(inviteData, aRoomMember().toInviteSender())),
@@ -201,12 +201,12 @@ class JoinRoomViewTest : RobolectricTest() {
         )
         setJoinRoomView(state = joinRoomState)
         clickOn(R.string.screen_join_room_decline_and_block_button_title)
-        eventsRecorder.assertSingle(JoinRoomEvents.DeclineInvite(inviteData, true))
+        eventsRecorder.assertSingle(JoinRoomEvent.DeclineInvite(inviteData, true))
     }
 
     @Test
     fun `clicking on Retry when an error occurs emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<JoinRoomEvents>()
+        val eventsRecorder = EventsRecorder<JoinRoomEvent>()
         setJoinRoomView(
             aJoinRoomState(
                 contentState = aFailureContentState(),
@@ -214,12 +214,12 @@ class JoinRoomViewTest : RobolectricTest() {
             ),
         )
         clickOn(CommonStrings.action_retry)
-        eventsRecorder.assertSingle(JoinRoomEvents.RetryFetchingContent)
+        eventsRecorder.assertSingle(JoinRoomEvent.RetryFetchingContent)
     }
 
     @Test
     fun `clicking on ok when user is unauthorized the expected callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<JoinRoomEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<JoinRoomEvent>(expectEvents = false)
         ensureCalledOnce {
             setJoinRoomView(
                 aJoinRoomState(
@@ -235,7 +235,7 @@ class JoinRoomViewTest : RobolectricTest() {
 
     @Test
     fun `clicking on forget when user is banned invokes the expected callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<JoinRoomEvents>()
+        val eventsRecorder = EventsRecorder<JoinRoomEvent>()
         setJoinRoomView(
             aJoinRoomState(
                 contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsBanned(null, null)),
@@ -243,7 +243,7 @@ class JoinRoomViewTest : RobolectricTest() {
             ),
         )
         clickOn(R.string.screen_join_room_forget_action)
-        eventsRecorder.assertSingle(JoinRoomEvents.ForgetRoom)
+        eventsRecorder.assertSingle(JoinRoomEvent.ForgetRoom)
     }
 }
 

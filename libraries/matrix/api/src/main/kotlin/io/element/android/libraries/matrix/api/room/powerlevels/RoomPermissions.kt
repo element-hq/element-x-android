@@ -59,12 +59,16 @@ interface RoomPermissions : AutoCloseable {
     /**
      * Returns true if the current user is able to send a specific message type
      * in the room.
+     *
+     * @param message the kind of message the caller wants to send.
      */
     fun canOwnUserSendMessage(message: MessageEventType): Boolean
 
     /**
      * Returns true if the current user is able to send a specific state event
      * type in the room.
+     *
+     * @param stateEvent the kind of state event the caller wants to send.
      */
     fun canOwnUserSendState(stateEvent: StateEventType): Boolean
 
@@ -77,48 +81,66 @@ interface RoomPermissions : AutoCloseable {
     /**
      * Returns true if the user with the given userId is able to ban in the
      * room.
+     *
+     * @param userId the member whose ability is checked.
      */
     fun canUserBan(userId: UserId): Boolean
 
     /**
      * Returns true if the user with the given userId is able to invite in the
      * room.
+     *
+     * @param userId the member whose ability is checked.
      */
     fun canUserInvite(userId: UserId): Boolean
 
     /**
      * Returns true if the user with the given userId is able to kick in the
      * room.
+     *
+     * @param userId the member whose ability is checked.
      */
     fun canUserKick(userId: UserId): Boolean
 
     /**
      * Returns true if the user with the given userId is able to pin or unpin
      * events in the room.
+     *
+     * @param userId the member whose ability is checked.
      */
     fun canUserPinUnpin(userId: UserId): Boolean
 
     /**
      * Returns true if the user with the given userId is able to redact
      * messages of other users in the room.
+     *
+     * @param userId the member whose ability is checked.
      */
     fun canUserRedactOther(userId: UserId): Boolean
 
     /**
      * Returns true if the user with the given userId is able to redact
      * their own messages in the room.
+     *
+     * @param userId the member whose ability is checked.
      */
     fun canUserRedactOwn(userId: UserId): Boolean
 
     /**
      * Returns true if the user with the given userId is able to send a
      * specific message type in the room.
+     *
+     * @param userId the member whose ability is checked.
+     * @param message the kind of message to check.
      */
     fun canUserSendMessage(userId: UserId, message: MessageEventType): Boolean
 
     /**
      * Returns true if the user with the given userId is able to send a
      * specific state event type in the room.
+     *
+     * @param userId the member whose ability is checked.
+     * @param stateEvent the kind of state event to check.
      */
     fun canUserSendState(userId: UserId, stateEvent: StateEventType): Boolean
 
@@ -127,6 +149,8 @@ interface RoomPermissions : AutoCloseable {
      * notification in the room.
      *
      * The call may fail if there is an error in getting the power levels.
+     *
+     * @param userId the member whose ability is checked.
      */
     fun canUserTriggerRoomNotification(userId: UserId): Boolean
 }

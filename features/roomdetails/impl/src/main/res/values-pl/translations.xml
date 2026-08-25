@@ -118,6 +118,7 @@
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Twój serwer domowy nie wspiera tej opcji w pokojach szyfrowanych, możesz nie otrzymać powiadomień z tego pokoju."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Wszystkie wiadomości"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Tylko wzmianki i słowa kluczowe"</string>
+  <string name="screen_room_notification_settings_mode_mute">"Wycisz"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"W tym pokoju, powiadamiaj mnie przez"</string>
   <string name="screen_room_roles_and_permissions_admins">"Administratorzy"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"Administratorzy i właściciele"</string>

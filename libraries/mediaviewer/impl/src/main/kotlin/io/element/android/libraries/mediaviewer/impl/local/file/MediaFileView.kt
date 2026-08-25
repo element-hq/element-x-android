@@ -114,7 +114,7 @@ fun MediaFileView(
 @PreviewsDayNight
 @Composable
 internal fun MediaFileViewPreview(
-    @PreviewParameter(MediaInfoFileProvider::class) info: MediaInfo
+    @PreviewParameter(MediaInfoFilePreviewParam::class) info: MediaInfo
 ) = ElementPreview {
     MediaFileView(
         modifier = Modifier.fillMaxSize(),

@@ -117,7 +117,7 @@ private fun QrCodeOrLoading(
 @PreviewsDayNight
 @Composable
 internal fun ShowQrCodeViewPreview(
-    @PreviewParameter(ShowQrCodeStateProvider::class) state: ShowQrCodeState,
+    @PreviewParameter(ShowQrCodeStatePreviewParam::class) state: ShowQrCodeState,
 ) = ElementPreview {
     ShowQrCodeView(
         state = state,

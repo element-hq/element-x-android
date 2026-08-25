@@ -8,6 +8,7 @@
 
 package io.element.android.features.location.api.internal
 
+import io.element.android.features.enterprise.api.remoteconfig.MapTilerConfig
 import io.element.android.features.location.api.BuildConfig
 import kotlin.math.roundToInt
 
@@ -27,6 +28,13 @@ internal class MapTilerStaticMapUrlBuilder(
         apiKey = BuildConfig.MAPTILER_API_KEY,
         lightMapId = BuildConfig.MAPTILER_LIGHT_MAP_ID,
         darkMapId = BuildConfig.MAPTILER_DARK_MAP_ID,
+    )
+
+    constructor(mapTilerConfig: MapTilerConfig) : this(
+        baseUrl = (mapTilerConfig.baseUrl ?: BuildConfig.MAPTILER_BASE_URL).removeSuffix("/"),
+        apiKey = mapTilerConfig.apiKey.takeIf { it.isNotBlank() } ?: BuildConfig.MAPTILER_API_KEY,
+        lightMapId = mapTilerConfig.lightStyleId ?: BuildConfig.MAPTILER_LIGHT_MAP_ID,
+        darkMapId = mapTilerConfig.darkStyleId ?: BuildConfig.MAPTILER_DARK_MAP_ID,
     )
 
     override fun build(

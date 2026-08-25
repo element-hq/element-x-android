@@ -16,6 +16,8 @@ import io.element.android.features.messages.impl.UserEventPermissions
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.link.LinkState
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
+import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
+import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.libraries.ui.strings.CommonPlurals
@@ -34,6 +36,8 @@ sealed interface PinnedMessagesListState {
         val timelineItems: ImmutableList<TimelineItem>,
         val actionListState: ActionListState,
         val linkState: LinkState,
+        val customReactionState: CustomReactionState,
+        val reactionSummaryState: ReactionSummaryState,
         val displayThreadSummaries: Boolean,
         val eventSink: (PinnedMessagesListEvent) -> Unit,
     ) : PinnedMessagesListState {

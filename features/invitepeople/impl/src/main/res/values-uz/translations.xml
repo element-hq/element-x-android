@@ -2,4 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_invite_users_already_a_member">"Allaqachon a\'zo"</string>
   <string name="screen_invite_users_already_invited">"Allaqachon taklif qilingan"</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_multiple_users">"Hozirda ushbu kontaktlar bilan hech qanday chatingiz yoʻq. Davom etishdan oldin ularni ushbu xonaga taklif qilishni tasdiqlang."</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_one_user">"Hozirda bu kontakt bilan hech qanday chatingiz yoʻq. Davom etishdan oldin ularni ushbu xonaga taklif qilishni tasdiqlang."</string>
+  <string name="screen_invite_users_confirm_dialog_title_mutiple_users">"Bu xonaga yangi kontaktlar taklif qilinsinmi?"</string>
+  <string name="screen_invite_users_confirm_dialog_title_one_user">"Bu xonaga yangi kontakt taklif qilinsinmi?"</string>
 </resources>

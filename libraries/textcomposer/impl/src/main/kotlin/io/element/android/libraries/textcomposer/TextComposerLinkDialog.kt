@@ -179,7 +179,7 @@ private fun EditLinkDialog(
         }
         item {
             ListItem(
-                headlineContent = {
+                content = {
                     Text(
                         text = stringResource(R.string.rich_text_editor_remove_link),
                         color = ElementTheme.colors.textCriticalPrimary

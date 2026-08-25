@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.core.extensions
 
+import java.text.Normalizer
 import java.util.Locale
 
 fun Boolean.toOnOff() = if (this) "ON" else "OFF"
@@ -113,4 +114,15 @@ fun String.toSafeLength(
     } else {
         this
     }
+}
+
+/**
+ * Remove accents and replace special characters by ASCII from the string.
+ * For instance, "é" will be replaced by "e", "ç" by "c", etc.
+ */
+fun String.normalized(): String {
+    // Normalize the string.
+    return Normalizer.normalize(this, Normalizer.Form.NFD)
+        // then keep only ASCII characters and replace non-ASCII characters with an empty string.
+        .replace("[^\\p{ASCII}]".toRegex(), "")
 }

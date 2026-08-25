@@ -65,8 +65,8 @@ class RoomSelectPresenter(
             derivedStateOf {
                 when {
                     roomSummaryDetailsList.isNotEmpty() -> SearchBarResultState.Results(roomSummaryDetailsList.toImmutableList())
-                    isSearchActive -> SearchBarResultState.NoResultsFound()
-                    else -> SearchBarResultState.Initial()
+                    isSearchActive -> SearchBarResultState.NoResultsFound
+                    else -> SearchBarResultState.Initial
                 }
             }
         }

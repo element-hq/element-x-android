@@ -24,12 +24,13 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayout
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContentProvider
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContentPreviewParam
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.utils.containsOnlyEmojis
 import io.element.android.libraries.androidutils.text.LinkifyHelper
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.utils.LocalUiTestMode
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanUpdater
 import io.element.android.wysiwyg.compose.EditorStyledText
@@ -43,6 +44,9 @@ fun TimelineItemTextView(
     modifier: Modifier = Modifier,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit = {},
 ) {
+    // The View <-> Compose interop is not working well with Compose UI tests (it loops indefinitely), so we skip it in the UI test mode.
+    if (LocalUiTestMode.current) return
+
     val emojiOnly = content.formattedBody.toString() == content.body &&
         content.body.replace(" ", "").containsOnlyEmojis()
     val textStyle = when {
@@ -78,7 +82,7 @@ internal fun getTextWithResolvedMentions(content: TimelineItemTextBasedContent):
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemTextViewPreview(
-    @PreviewParameter(TimelineItemTextBasedContentProvider::class) content: TimelineItemTextBasedContent
+    @PreviewParameter(TimelineItemTextBasedContentPreviewParam::class) content: TimelineItemTextBasedContent
 ) = ElementPreview {
     TimelineItemTextView(
         content = content,

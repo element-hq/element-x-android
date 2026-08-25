@@ -70,10 +70,15 @@ class FakeMatrixAuthenticationService(
         return importCreatedSessionLambda(externalSession)
     }
 
+    /** The login hint passed to the most recent [getOAuthUrl] call. */
+    var getOAuthUrlLoginHint: String? = null
+        private set
+
     override suspend fun getOAuthUrl(
         prompt: OAuthPrompt,
         loginHint: String?,
     ): Result<OAuthDetails> = simulateLongTask {
+        getOAuthUrlLoginHint = loginHint
         oAuthError?.let { Result.failure(it) } ?: Result.success(AN_OAUTH_DATA)
     }
 

@@ -81,6 +81,7 @@ dependencies {
     implementation(projects.features.deactivation.api)
     implementation(projects.features.home.api)
     implementation(projects.features.invite.api)
+    implementation(projects.libraries.emoji.api)
     implementation(projects.services.analytics.api)
     implementation(projects.services.analytics.compose)
     implementation(projects.services.appnavstate.api)
@@ -98,6 +99,7 @@ dependencies {
 
     testCommonDependencies(libs, true)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.libraries.emoji.test)
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.mediapickers.test)
     testImplementation(projects.libraries.mediaupload.test)

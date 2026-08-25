@@ -26,6 +26,8 @@ import java.util.concurrent.ConcurrentHashMap
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 
+internal const val ANDROID_KEYSTORE = "AndroidKeyStore"
+
 /**
  * Default implementation of [SecretKeyRepository] that uses the Android Keystore to store the keys.
  * The generated key uses AES algorithm, with a key size of 128 bits, and the GCM block mode.

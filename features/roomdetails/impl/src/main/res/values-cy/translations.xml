@@ -103,7 +103,7 @@
   <string name="screen_room_notification_settings_error_setting_mode">"Wedi methu gosod y modd, ceisiwch eto."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Nid yw eich gweinydd cartref yn cefnogi\'r dewis hwn mewn ystafelloedd sydd wedi\'u hamgryptio, chewch chi ddim eich hysbysu yn yr ystafell hon."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Pob neges"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Crybwylliadau ac Allweddeiriau\'n unig"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Dim ond Crybwylliadau ac Allweddeiriau"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Yn yr ystafell hon, rhowch wybod i mi am"</string>
   <string name="screen_room_roles_and_permissions_admins">"Gweinyddwyr"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"Gweinyddwyr a pherchnogion"</string>

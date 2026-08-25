@@ -17,6 +17,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
+/**
+ * Exposes the app lock state: whether a PIN or biometric lock is set up, whether it is mandatory, and whether the app is locked right now.
+ */
 interface LockScreenService {
     /**
      * The current lock state of the app.

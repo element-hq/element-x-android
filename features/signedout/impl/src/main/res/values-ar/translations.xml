@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signed_out_reason_1">"لقد غيّرت كلمة مرورك في جلسة أخرى"</string>
+  <string name="screen_signed_out_reason_2">"لقد حذفت هذه الجلسة من جلسة أخرى"</string>
+  <string name="screen_signed_out_reason_3">"أبطل مسؤول الخادم صلاحية وصولك"</string>
+  <string name="screen_signed_out_subtitle">"ربما تم تسجيل خروجك لأحد الأسباب المذكورة أدناه. يُرجى تسجيل الدخول مرة أخرى لمتابعة استخدام %s."</string>
+  <string name="screen_signed_out_title">"تم تسجيل خروجك"</string>
+</resources>

@@ -18,6 +18,12 @@ interface NotificationConversationService {
     /**
      * Called when a new message is received in a room.
      * It should create a new conversation shortcut for this room.
+     *
+     * @param sessionId the session the message belongs to.
+     * @param roomId the room the message was received in.
+     * @param roomName the name to show on the shortcut, or `null` when the room has none.
+     * @param roomIsDirect whether the room is a direct message, which changes how the shortcut is presented.
+     * @param roomAvatarUrl the avatar to show on the shortcut, or `null` when the room has none.
      */
     suspend fun onSendMessage(
         sessionId: SessionId,
@@ -30,12 +36,18 @@ interface NotificationConversationService {
     /**
      * Called when a room is left.
      * It should remove the conversation shortcut for this room.
+     *
+     * @param sessionId the session the room belongs to.
+     * @param roomId the room that was left.
      */
     suspend fun onLeftRoom(sessionId: SessionId, roomId: RoomId)
 
     /**
      * Called when the list of available rooms changes.
      * It should update the conversation shortcuts accordingly, removing shortcuts for no longer joined rooms.
+     *
+     * @param sessionId the session the rooms belong to.
+     * @param roomIds the rooms the user is currently joined to.
      */
     suspend fun onAvailableRoomsChanged(sessionId: SessionId, roomIds: Set<RoomId>)
 }

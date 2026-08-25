@@ -140,7 +140,7 @@ private fun CheckableSpaceListItem(
     enabled: Boolean = true,
 ) {
     ListItem(
-        headlineContent = {
+        content = {
             Text(text = headlineText)
         },
         supportingContent = supportingText?.let {
@@ -191,7 +191,7 @@ private fun ManageAuthorizedSpacesTopBar(
 @PreviewsDayNight
 @Composable
 internal fun ManageAuthorizedSpacesViewPreview(
-    @PreviewParameter(ManageAuthorizedSpacesStateProvider::class) state: ManageAuthorizedSpacesState
+    @PreviewParameter(ManageAuthorizedSpacesStatePreviewParam::class) state: ManageAuthorizedSpacesState
 ) = ElementPreview {
     ManageAuthorizedSpacesView(state = state)
 }

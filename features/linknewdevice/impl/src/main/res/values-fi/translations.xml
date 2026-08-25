@@ -5,6 +5,7 @@
   <string name="screen_link_new_device_desktop_step3">"Skannaa QR-koodi tällä laitteella"</string>
   <string name="screen_link_new_device_desktop_submit">"Valmis skannaamaan"</string>
   <string name="screen_link_new_device_desktop_title">"Avaa %1$s pöytätietokoneella saadaksesi QR-koodin"</string>
+  <string name="screen_link_new_device_desktop_warning">"Skannaa QR-koodi vasta, kun olet noudattanut yllä olevia ohjeita omalla laitteellasi. Älä koskaan skannaa toisen henkilön lähettämää koodia."</string>
   <string name="screen_link_new_device_enter_number_error_numbers_do_not_match">"Numerot eivät täsmää"</string>
   <string name="screen_link_new_device_enter_number_notice">"Kirjoita 2-numeroinen koodi"</string>
   <string name="screen_link_new_device_enter_number_subtitle">"Tämä varmistaa, että yhteys toiseen laitteeseesi on turvallinen."</string>

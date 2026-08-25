@@ -5,6 +5,7 @@
   <string name="screen_link_new_device_desktop_step3">"Scanați codul QR cu acest dispozitiv"</string>
   <string name="screen_link_new_device_desktop_submit">"Gata de scanare"</string>
   <string name="screen_link_new_device_desktop_title">"Deschide %1$s pe un computer desktop pentru a obține codul QR"</string>
+  <string name="screen_link_new_device_desktop_warning">"Scanați un cod QR doar după ce urmați pașii de mai sus pe propriul dispozitiv. Nu scanați niciodată un cod trimis de o altă persoană."</string>
   <string name="screen_link_new_device_enter_number_error_numbers_do_not_match">"Numerele nu se potrivesc"</string>
   <string name="screen_link_new_device_enter_number_notice">"Introduceți codul de 2 cifre"</string>
   <string name="screen_link_new_device_enter_number_subtitle">"Aceasta va verifica dacă conexiunea cu celălalt dispozitiv este sigură."</string>

@@ -41,10 +41,12 @@ dependencies {
     implementation(projects.libraries.uiStrings)
     implementation(projects.services.analytics.api)
     implementation(projects.libraries.featureflag.api)
+    implementation(projects.features.enterprise.api)
 
     testCommonDependencies(libs, true)
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.testtags)
+    testImplementation(projects.features.enterprise.test)
 }

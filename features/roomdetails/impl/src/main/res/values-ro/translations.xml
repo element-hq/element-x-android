@@ -118,6 +118,7 @@
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Serverul dumneavoastră nu acceptă această opțiune în camerele criptate, nu veți primi notificări în această cameră."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Toate mesajele"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Numai mențiuni și cuvinte cheie"</string>
+  <string name="screen_room_notification_settings_mode_mute">"Mut"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"În această cameră, anunțați-mă pentru"</string>
   <string name="screen_room_roles_and_permissions_admins">"Administratori"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"Administratori și proprietari"</string>

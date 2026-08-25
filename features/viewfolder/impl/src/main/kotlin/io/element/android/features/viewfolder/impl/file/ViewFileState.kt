@@ -14,7 +14,7 @@ data class ViewFileState(
     val name: String,
     val lines: AsyncData<List<String>>,
     val colorationMode: ColorationMode,
-    val eventSink: (ViewFileEvents) -> Unit,
+    val eventSink: (ViewFileEvent) -> Unit,
 )
 
 enum class ColorationMode {

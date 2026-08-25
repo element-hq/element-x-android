@@ -7,15 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"Krüptitud tundmatu või kustutatud seadme poolt."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Krüptitud seadme poolt, mida tema omanik pole verifitseerinud."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Krüptitud verifitseerimata kasutaja poolt."</string>
-  <string name="emoji_picker_category_activity">"Tegevused"</string>
-  <string name="emoji_picker_category_flags">"Lipud"</string>
-  <string name="emoji_picker_category_foods">"Toit ja jook"</string>
-  <string name="emoji_picker_category_nature">"Loomad ja loodus"</string>
-  <string name="emoji_picker_category_objects">"Esemed"</string>
-  <string name="emoji_picker_category_people">"Emotikonid ja inimesed"</string>
-  <string name="emoji_picker_category_places">"Reisimine ja kohad"</string>
-  <string name="emoji_picker_category_recent">"Hiljutised emojid"</string>
-  <string name="emoji_picker_category_symbols">"Sümbolid"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"Pööra pilti ümber rõhttelje"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Pilt on pööratud ümber rõhttelje"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Pildi algne variant"</string>
@@ -79,6 +70,10 @@
   <string name="screen_room_timeline_reactions_show_more">"Näita rohkem"</string>
   <string name="screen_room_timeline_reactions_show_reactions_summary">"Näita reageerimiste kokkuvõtet"</string>
   <string name="screen_room_timeline_read_marker_title">"Uus"</string>
+  <plurals name="screen_room_timeline_redacted_messages">
+    <item quantity="one">"%1$d eemaldas sõnumi"</item>
+    <item quantity="other">"%1$d eemaldas sõnumid"</item>
+  </plurals>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d jututoa muudatus"</item>
     <item quantity="other">"%1$d jututoa muudatust"</item>

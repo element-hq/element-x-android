@@ -11,6 +11,7 @@ package io.element.android.libraries.matrix.impl.mapper
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustUserProfile
+import io.element.android.libraries.matrix.impl.user.map
 import io.element.android.libraries.matrix.test.A_USER_ID
 import org.junit.Test
 

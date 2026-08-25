@@ -68,7 +68,7 @@ Jos jatkat, jotkin asetukset saattavat muuttua."</string>
   <string name="screen_notification_settings_edit_custom_settings_section_title">"Keskustelukohtaiset asetukset"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Ilmoitusasetusten muokkaamisessa tapahtui virhe."</string>
   <string name="screen_notification_settings_edit_mode_all_messages">"Kaikista viesteistä"</string>
-  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Vain maininnoista ja avainsanoista"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Vain maininnoista ja vastauksista"</string>
   <string name="screen_notification_settings_edit_screen_direct_section_header">"Yksityiskeskusteluissa, ilmoita minulle"</string>
   <string name="screen_notification_settings_edit_screen_group_section_header">"Ryhmäkeskusteluissa, ilmoita minulle"</string>
   <string name="screen_notification_settings_enable_notifications">"Ota ilmoitukset käyttöön tällä laitteella"</string>
@@ -101,6 +101,14 @@ Jos jatkat, jotkin asetukset saattavat muuttua."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"järjestelmäsi asetuksia"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Järjestelmän ilmoitukset on poissa päältä"</string>
   <string name="screen_notification_settings_title">"Ilmoitukset"</string>
+  <string name="screen_settings_user_status_away">"Poissa"</string>
+  <string name="screen_settings_user_status_be_right_back">"Palaan pian"</string>
+  <string name="screen_settings_user_status_custom">"Mukautettu…"</string>
+  <string name="screen_settings_user_status_custom_hint">"Mukautettu tila…"</string>
+  <string name="screen_settings_user_status_focus_time">"Keskittymisaika"</string>
+  <string name="screen_settings_user_status_in_a_meeting">"Kokouksessa"</string>
+  <string name="screen_settings_user_status_on_the_road">"Tien päällä"</string>
+  <string name="screen_settings_user_status_placeholder">"Mikä on tilasi?"</string>
   <string name="theme_black">"Musta"</string>
   <string name="theme_dark">"Tumma"</string>
   <string name="theme_light">"Vaalea"</string>

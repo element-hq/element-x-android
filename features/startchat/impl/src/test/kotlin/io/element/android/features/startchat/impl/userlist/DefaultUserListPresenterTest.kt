@@ -40,7 +40,6 @@ class DefaultUserListPresenterTest {
                 FakeMatrixClient(),
             )
         presenter.test {
-            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.searchQuery.text.toString()).isEmpty()
             assertThat(initialState.isMultiSelectionEnabled).isFalse()
@@ -60,7 +59,6 @@ class DefaultUserListPresenterTest {
                 FakeMatrixClient(),
             )
         presenter.test {
-            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.searchQuery.text.toString()).isEmpty()
             assertThat(initialState.isMultiSelectionEnabled).isTrue()
@@ -80,25 +78,22 @@ class DefaultUserListPresenterTest {
                 FakeMatrixClient(),
             )
         presenter.test {
-            skipItems(1)
             val initialState = awaitItem()
 
-            initialState.eventSink(UserListEvents.OnSearchActiveChanged(true))
+            initialState.eventSink(UserListEvent.OnSearchActiveChanged(true))
             assertThat(awaitItem().isSearchActive).isTrue()
 
             val matrixIdQuery = "@name:matrix.org"
             initialState.searchQuery.setTextAndPlaceCursorAtEnd(matrixIdQuery)
             assertThat(awaitItem().searchQuery.text.toString()).isEqualTo(matrixIdQuery)
             assertThat(userRepository.providedQuery).isEqualTo(matrixIdQuery)
-            skipItems(1)
 
             val notMatrixIdQuery = "name"
             initialState.searchQuery.setTextAndPlaceCursorAtEnd(notMatrixIdQuery)
             assertThat(awaitItem().searchQuery.text.toString()).isEqualTo(notMatrixIdQuery)
             assertThat(userRepository.providedQuery).isEqualTo(notMatrixIdQuery)
-            skipItems(1)
 
-            initialState.eventSink(UserListEvents.OnSearchActiveChanged(false))
+            initialState.eventSink(UserListEvent.OnSearchActiveChanged(false))
             assertThat(awaitItem().isSearchActive).isFalse()
         }
     }
@@ -115,13 +110,12 @@ class DefaultUserListPresenterTest {
                 FakeMatrixClient(),
             )
         presenter.test {
-            skipItems(1)
             val initialState = awaitItem()
 
             initialState.searchQuery.setTextAndPlaceCursorAtEnd("alice")
             assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
             assertThat(userRepository.providedQuery).isEqualTo("alice")
-            skipItems(2)
+            skipItems(1)
 
             // When the user repository emits a result, it's copied to the state
             val result = UserSearchResultState(
@@ -166,13 +160,12 @@ class DefaultUserListPresenterTest {
                 FakeMatrixClient(),
             )
         presenter.test {
-            skipItems(1)
             val initialState = awaitItem()
 
             initialState.searchQuery.setTextAndPlaceCursorAtEnd("alice")
             assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
             assertThat(userRepository.providedQuery).isEqualTo("alice")
-            skipItems(2)
+            skipItems(1)
 
             // When the results list is empty, the state is set to NoResults
             userRepository.emitState(UserSearchResultState(results = emptyList(), isSearching = false))
@@ -190,7 +183,6 @@ class DefaultUserListPresenterTest {
                 FakeMatrixClient(),
             )
         presenter.test {
-            skipItems(1)
             val initialState = awaitItem()
 
             val userA = aMatrixUser("@userA:domain", "A")
@@ -198,22 +190,22 @@ class DefaultUserListPresenterTest {
             val userABis = aMatrixUser("@userA:domain", "A")
             val userC = aMatrixUser("@userC:domain", "C")
 
-            initialState.eventSink(UserListEvents.AddToSelection(userA))
+            initialState.eventSink(UserListEvent.AddToSelection(userA))
             assertThat(awaitItem().selectedUsers).containsExactly(userA)
 
-            initialState.eventSink(UserListEvents.AddToSelection(userB))
+            initialState.eventSink(UserListEvent.AddToSelection(userB))
             assertThat(awaitItem().selectedUsers).containsExactly(userA, userB)
 
-            initialState.eventSink(UserListEvents.AddToSelection(userABis))
-            initialState.eventSink(UserListEvents.AddToSelection(userC))
+            initialState.eventSink(UserListEvent.AddToSelection(userABis))
+            initialState.eventSink(UserListEvent.AddToSelection(userC))
             // duplicated users should be ignored
             assertThat(awaitItem().selectedUsers).containsExactly(userA, userB, userC)
 
-            initialState.eventSink(UserListEvents.RemoveFromSelection(userB))
+            initialState.eventSink(UserListEvent.RemoveFromSelection(userB))
             assertThat(awaitItem().selectedUsers).containsExactly(userA, userC)
-            initialState.eventSink(UserListEvents.RemoveFromSelection(userA))
+            initialState.eventSink(UserListEvent.RemoveFromSelection(userA))
             assertThat(awaitItem().selectedUsers).containsExactly(userC)
-            initialState.eventSink(UserListEvents.RemoveFromSelection(userC))
+            initialState.eventSink(UserListEvent.RemoveFromSelection(userC))
             assertThat(awaitItem().selectedUsers).isEmpty()
         }
     }

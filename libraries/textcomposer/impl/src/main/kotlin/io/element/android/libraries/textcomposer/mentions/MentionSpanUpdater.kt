@@ -18,6 +18,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.RoomNamesCache
+import io.element.android.libraries.matrix.ui.model.toEmojiText
 
 interface MentionSpanUpdater {
     fun updateMentionSpans(text: CharSequence): CharSequence
@@ -48,6 +49,13 @@ class DefaultMentionSpanUpdater(
         for (mentionSpan in text.getMentionSpans()) {
             mentionSpan.updateTheme(theme)
             mentionSpan.updateDisplayText(formatter)
+            mentionSpan.updateTrailingText(
+                if (mentionSpan.type is MentionType.User) {
+                    roomMemberProfilesCache.getDisplayedStatus(mentionSpan.type.userId)?.toEmojiText()
+                } else {
+                    null
+                }
+            )
         }
         return text
     }

@@ -9,6 +9,8 @@
 package io.element.android.libraries.textcomposer.components.markdown
 
 import android.content.Context
+import android.view.KeyCharacterMap
+import android.view.KeyEvent
 import android.view.View
 import androidx.appcompat.widget.AppCompatEditText
 
@@ -17,7 +19,26 @@ internal class MarkdownEditText(
 ) : AppCompatEditText(context) {
     var onSelectionChangeListener: ((Int, Int) -> Unit)? = null
 
+    var onEnterKeyListener: (() -> Boolean)? = null
+
     private var isModifyingText = false
+
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (event.keyCode == KeyEvent.KEYCODE_ENTER &&
+            !event.isShiftPressed &&
+            event.deviceId != KeyCharacterMap.VIRTUAL_KEYBOARD
+        ) {
+            val listener = onEnterKeyListener
+            if (listener != null) {
+                return when (event.action) {
+                    KeyEvent.ACTION_UP -> true
+                    KeyEvent.ACTION_DOWN -> if (event.repeatCount == 0) listener() else true
+                    else -> super.dispatchKeyEvent(event)
+                }
+            }
+        }
+        return super.dispatchKeyEvent(event)
+    }
 
     fun updateEditableText(charSequence: CharSequence) {
         isModifyingText = true

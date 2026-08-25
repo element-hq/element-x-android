@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_report_room_leave_failed_alert_message">"تم إرسال بلاغك بنجاح، لكننا واجهنا مشكلة أثناء محاولة مغادرة الغرفة. يرجى المحاولة مرة أخرى."</string>
+  <string name="screen_report_room_leave_failed_alert_title">"تعذّرت مغادرة الغرفة"</string>
+  <string name="screen_report_room_reason_footer">"أبلغ مسؤولك عن هذه الغرفة. إذا كانت الرسائل مشفّرة، فلن يتمكن مسؤولك من قراءتها."</string>
+  <string name="screen_report_room_reason_placeholder">"صِف سبب الإبلاغ…"</string>
+  <string name="screen_report_room_title">"الإبلاغ عن الغرفة"</string>
+</resources>

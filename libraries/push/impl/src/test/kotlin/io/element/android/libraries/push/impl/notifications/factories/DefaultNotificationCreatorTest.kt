@@ -19,6 +19,7 @@ import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.A_COLOR_INT
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -40,6 +41,7 @@ import io.element.android.libraries.push.impl.notifications.factories.action.Rej
 import io.element.android.libraries.push.impl.notifications.fixtures.aFallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
+import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
@@ -300,6 +302,81 @@ class DefaultNotificationCreatorTest : RobolectricTest() {
             events = listOf(aNotifiableMessageEvent()),
         )
         result.commonAssertions()
+    }
+
+    @Test
+    fun `test createMessagesListNotification does not add an event which is already displayed`() = runTest {
+        val sut = createNotificationCreator()
+        val event = aNotifiableMessageEvent(body = "A message")
+        val existingNotification = sut.createRoomNotification(events = listOf(event))
+        assertThat(existingNotification.flags and Notification.FLAG_ONLY_ALERT_ONCE).isEqualTo(0)
+        val result = sut.createRoomNotification(events = listOf(event), existingNotification = existingNotification)
+        assertThat(result.messageTexts()).containsExactly("A message")
+        assertThat(result.flags and Notification.FLAG_ONLY_ALERT_ONCE).isNotEqualTo(0)
+    }
+
+    @Test
+    fun `test createMessagesListNotification adds a new event to the already displayed ones`() = runTest {
+        val sut = createNotificationCreator()
+        val existingNotification = sut.createRoomNotification(events = listOf(aNotifiableMessageEvent(body = "A message")))
+        val result = sut.createRoomNotification(
+            events = listOf(aNotifiableMessageEvent(eventId = AN_EVENT_ID_2, body = "Another message")),
+            existingNotification = existingNotification,
+        )
+        assertThat(result.messageTexts()).containsExactly("A message", "Another message").inOrder()
+    }
+
+    @Test
+    fun `test createMessagesListNotification adds the smart reply error of an already displayed event`() = runTest {
+        val sut = createNotificationCreator()
+        val event = aNotifiableMessageEvent(body = "A message").copy(outGoingMessage = true)
+        val existingNotification = sut.createRoomNotification(events = listOf(event))
+        val result = sut.createRoomNotification(
+            events = listOf(event.copy(outGoingMessageFailed = true)),
+            existingNotification = existingNotification,
+        )
+        assertThat(result.messageTexts()).containsExactly("A message", "test").inOrder()
+    }
+
+    @Test
+    fun `test createMessagesListNotification does not add an image and its caption twice`() = runTest {
+        val sut = createNotificationCreator()
+        val event = aNotifiableMessageEvent(body = "A caption").copy(
+            imageUriString = "aUri",
+            imageMimeType = "image/jpeg",
+        )
+        val existingNotification = sut.createRoomNotification(events = listOf(event))
+        assertThat(existingNotification.messageTexts()).containsExactly("test", "A caption").inOrder()
+        val result = sut.createRoomNotification(events = listOf(event), existingNotification = existingNotification)
+        assertThat(result.messageTexts()).containsExactly("test", "A caption").inOrder()
+    }
+
+    private suspend fun NotificationCreator.createRoomNotification(
+        events: List<NotifiableMessageEvent>,
+        existingNotification: Notification? = null,
+    ) = createMessagesListNotification(
+        notificationAccountParams = aNotificationAccountParams(),
+        roomInfo = RoomEventGroupInfo(
+            sessionId = A_SESSION_ID,
+            roomId = A_ROOM_ID,
+            roomDisplayName = "roomDisplayName",
+            hasSmartReplyError = false,
+            shouldBing = false,
+            customSound = null,
+            isUpdated = false,
+        ),
+        threadId = null,
+        largeIcon = null,
+        lastMessageTimestamp = 123_456L,
+        tickerText = "tickerText",
+        existingNotification = existingNotification,
+        imageLoader = FakeImageLoader(),
+        events = events,
+    )
+
+    private fun Notification.messageTexts(): List<String?> {
+        val messagingStyle = checkNotNull(NotificationCompat.MessagingStyle.extractMessagingStyleFromNotification(this))
+        return messagingStyle.messages.map { it.text?.toString() }
     }
 
     private fun Notification.commonAssertions(

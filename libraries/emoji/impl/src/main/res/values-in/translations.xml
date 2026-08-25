@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Aktivitas"</string>
+  <string name="emoji_picker_category_flags">"Bendera"</string>
+  <string name="emoji_picker_category_foods">"Makanan &amp; Minuman"</string>
+  <string name="emoji_picker_category_nature">"Hewan &amp; Alam"</string>
+  <string name="emoji_picker_category_objects">"Objek"</string>
+  <string name="emoji_picker_category_people">"Senyuman &amp; Orang"</string>
+  <string name="emoji_picker_category_places">"Wisata &amp; Tempat"</string>
+  <string name="emoji_picker_category_recent">"Emojis Sebelumnya"</string>
+  <string name="emoji_picker_category_symbols">"Simbol"</string>
+  <string name="emoji_picker_search_placeholder">"Cari emoji"</string>
+</resources>

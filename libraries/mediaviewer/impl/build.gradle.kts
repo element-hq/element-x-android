@@ -39,6 +39,7 @@ dependencies {
 
     implementation(projects.features.enterprise.api)
     implementation(projects.features.viewfolder.api)
+    implementation(projects.features.contentscanner.api)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.audio.api)
@@ -48,6 +49,7 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.matrix.api)
+    implementation(projects.libraries.matrixui)
     implementation(projects.libraries.matrixmedia.api)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.uiUtils)

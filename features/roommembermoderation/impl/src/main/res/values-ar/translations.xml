@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_manage_room_member_ban">"حظر المستخدم"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"حظر"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"لن يتمكن هذا العضو من الانضمام مرة أخرى حتى إذا تمت دعوته."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"هل أنت متأكد من أنك تريد حظر هذا العضو؟"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description">"لن يتمكن هذا المستخدم من الانضمام إلى هذه المساحة مرة أخرى إذا تمت دعوته، لكنه سيظل محتفظًا بعضويته في أي غرف أو مساحات فرعية."</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"جارٍ حظر %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"إزالة"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"يمكن لهذا المستخدم الانضمام إلى هذه الغرفة مرة أخرى عند دعوته."</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"هل أنت متأكد من رغبتك في إزالة هذا العضو؟"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description">"سيتمكن هذا المستخدم من الانضمام إلى هذه المساحة مرة أخرى إذا تمت دعوته، وسيظل محتفظًا بعضويته في أي غرف أو مساحات فرعية."</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"عرض الملف الشخصي"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"إزالة المستخدم"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"إزالة العضو وحظره من الانضمام مستقبلًا؟"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"جارٍ إزالة %1$s…"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban">"إلغاء حظر المستخدم"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_action">"إلغاء الحظر"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_description">"سيتمكن هذا المستخدم من الانضمام مرة أخرى إذا تمت دعوته"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_title">"هل أنت متأكد من رغبتك في إلغاء حظر هذا العضو؟"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unbanning_user">"جارٍ رفع حظر %1$s"</string>
+</resources>

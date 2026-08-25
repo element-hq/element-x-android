@@ -20,6 +20,27 @@
   <string name="screen_create_new_recovery_key_list_item_4">"Segui le istruzioni per creare una nuova chiave di recupero"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"Salva la tua nuova chiave di recupero in un gestore di password o in una nota criptata"</string>
   <string name="screen_create_new_recovery_key_title">"Reimposta la crittografia del tuo account utilizzando un altro dispositivo"</string>
+  <string name="screen_custom_recovery_key_confirm_error_mismatch">"La chiave di recupero che hai inserito non corrisponde"</string>
+  <string name="screen_custom_recovery_key_confirm_submit">"Completa la configurazione"</string>
+  <string name="screen_custom_recovery_key_confirm_subtitle">"Inserisci nuovamente la tua chiave di recupero."</string>
+  <string name="screen_custom_recovery_key_confirm_title">"Conferma la tua chiave di recupero"</string>
+  <plurals name="screen_custom_recovery_key_input_notice">
+    <item quantity="one">"Minimo %1$d carattere. Non usare la password del tuo account"</item>
+    <item quantity="other">"Minimo %1$d caratteri. Non usare la password del tuo account"</item>
+  </plurals>
+  <string name="screen_custom_recovery_key_input_strength">"Complessità"</string>
+  <string name="screen_custom_recovery_key_input_strength_a11y">"Complessità della passphrase: %1$s"</string>
+  <string name="screen_custom_recovery_key_input_strength_moderate">"Moderata"</string>
+  <string name="screen_custom_recovery_key_input_strength_strong">"Sicura"</string>
+  <string name="screen_custom_recovery_key_input_strength_very_strong">"Molto sicura"</string>
+  <string name="screen_custom_recovery_key_input_strength_very_weak">"Molto debole"</string>
+  <string name="screen_custom_recovery_key_input_strength_weak">"Debole"</string>
+  <string name="screen_custom_recovery_key_input_subtitle">"Scegli una chiave di recupero che puoi ricordare."</string>
+  <string name="screen_custom_recovery_key_input_title">"Inserisci una chiave di recupero"</string>
+  <string name="screen_custom_recovery_key_loading_a11y">"Caricamento dei requisiti per la chiave di recupero"</string>
+  <string name="screen_custom_recovery_key_success_notice">"Per modificare la chiave di recupero, vai su Impostazioni → Crittografia → Backup"</string>
+  <string name="screen_custom_recovery_key_success_subtitle">"Puoi utilizzare la tua chiave di recupero per confermare nuovi dispositivi o ripristinare le tue chat crittografate se perdi l\'accesso a tutti i tuoi dispositivi."</string>
+  <string name="screen_custom_recovery_key_success_title">"Il tuo backup è ora completamente configurato."</string>
   <string name="screen_encryption_reset_action_continue_reset">"Continua il ripristino"</string>
   <string name="screen_encryption_reset_bullet_1">"I dettagli del tuo account, i contatti, le preferenze e l\'elenco delle conversazioni verranno conservati"</string>
   <string name="screen_encryption_reset_bullet_2">"Perderai la cronologia dei messaggi esistente"</string>

@@ -18,6 +18,7 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.media.FakeMatrixMediaLoader
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopEventContentValidationCache
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint.MediaViewerMode
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.mediaviewer.impl.datasource.FakeMediaGalleryDataSource
@@ -290,5 +291,7 @@ class MediaViewerDataSourceTest {
         localMediaFactory = localMediaFactory,
         systemClock = FakeSystemClock(),
         pagerKeysHandler = PagerKeysHandler(),
+        contentScannerService = { _, _ -> },
+        contentValidationCache = NoopEventContentValidationCache(),
     )
 }

@@ -15,9 +15,11 @@ import androidx.compose.runtime.State
  * A set of State<Boolean> to observe to display or not the indicators in the UI.
  */
 interface IndicatorService {
+    /** Whether to show the red dot on the room list top bar, which aggregates the reasons the user should open the settings. */
     @Composable
     fun showRoomListTopBarIndicator(): State<Boolean>
 
+    /** Whether to show the red dot on the chat backup setting, i.e. when recovery needs the user's attention. */
     @Composable
     fun showSettingChatBackupIndicator(): State<Boolean>
 }

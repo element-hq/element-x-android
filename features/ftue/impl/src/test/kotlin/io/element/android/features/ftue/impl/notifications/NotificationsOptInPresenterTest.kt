@@ -55,7 +55,7 @@ class NotificationsOptInPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink(NotificationsOptInEvents.ContinueClicked)
+            initialState.eventSink(NotificationsOptInEvent.ContinueClicked)
             assertThat(awaitItem().notificationsPermissionState.showDialog).isTrue()
         }
     }
@@ -70,7 +70,7 @@ class NotificationsOptInPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink(NotificationsOptInEvents.ContinueClicked)
+            initialState.eventSink(NotificationsOptInEvent.ContinueClicked)
             assertThat(isFinished).isTrue()
         }
     }
@@ -86,7 +86,7 @@ class NotificationsOptInPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink(NotificationsOptInEvents.NotNowClicked)
+            initialState.eventSink(NotificationsOptInEvent.NotNowClicked)
             assertThat(isFinished).isTrue()
         }
     }
@@ -105,7 +105,7 @@ class NotificationsOptInPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink(NotificationsOptInEvents.NotNowClicked)
+            initialState.eventSink(NotificationsOptInEvent.NotNowClicked)
 
             // Allow background coroutines to run
             runCurrent()

@@ -28,6 +28,8 @@ import io.element.android.libraries.textcomposer.mentions.getMentionSpans
 import io.element.android.wysiwyg.view.spans.CodeBlockSpan
 import io.element.android.wysiwyg.view.spans.InlineCodeSpan
 
+private val MATRIX_URI_REGEX = Regex("""matrix:(?:u|user|r|room|roomid|e|event)/\S*[^\s.,;:!?)]""", RegexOption.IGNORE_CASE)
+
 interface TextPillificationHelper {
     fun pillify(text: CharSequence, pillifyPermalinks: Boolean = true): CharSequence
 }
@@ -87,6 +89,7 @@ class DefaultTextPillificationHelper(
     }
 
     private fun pillifyPermalinks(text: SpannableStringBuilder) {
+        pillifyMatrixUris(text)
         for (match in Patterns.WEB_URL.toRegex().findAll(text)) {
             val start = match.range.first
             val end = match.range.last + 1
@@ -95,6 +98,21 @@ class DefaultTextPillificationHelper(
             val mentionSpan = mentionSpanProvider.getMentionSpanFor(match.value, url)
             if (mentionSpan != null) {
                 text.setSpan(mentionSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+        }
+    }
+
+    private fun pillifyMatrixUris(text: SpannableStringBuilder) {
+        for (match in MATRIX_URI_REGEX.findAll(text)) {
+            val start = match.range.first
+            val end = match.range.last + 1
+            if (!text.canPillify(start, end)) continue
+            val mentionSpan = mentionSpanProvider.getMentionSpanFor(match.value, match.value)
+            if (mentionSpan != null) {
+                text.setSpan(mentionSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                if (text.getSpans<URLSpan>(start, end).isEmpty()) {
+                    text.setSpan(URLSpan(match.value), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
             }
         }
     }

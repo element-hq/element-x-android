@@ -35,7 +35,7 @@ import org.robolectric.annotation.Config
 class PollHistoryViewTest : RobolectricTest() {
     @Test
     fun `clicking on back invokes the expected callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<PollHistoryEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<PollHistoryEvent>(expectEvents = false)
         ensureCalledOnce {
             setPollHistoryViewView(
                 aPollHistoryState(
@@ -50,7 +50,7 @@ class PollHistoryViewTest : RobolectricTest() {
     @Config(qualifiers = "h1024dp")
     @Test
     fun `clicking on edit poll invokes the expected callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<PollHistoryEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<PollHistoryEvent>(expectEvents = false)
         val eventId = EventId("\$anEventId")
         val state = aPollHistoryState(
             currentItems = listOf(
@@ -76,7 +76,7 @@ class PollHistoryViewTest : RobolectricTest() {
     @Config(qualifiers = "h1024dp")
     @Test
     fun `clicking on poll end emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<PollHistoryEvents>()
+        val eventsRecorder = EventsRecorder<PollHistoryEvent>()
         val eventId = EventId("\$anEventId")
         val state = aPollHistoryState(
             currentItems = listOf(
@@ -102,14 +102,14 @@ class PollHistoryViewTest : RobolectricTest() {
         eventsRecorder.assertEmpty()
         clickOn(CommonStrings.action_ok)
         eventsRecorder.assertSingle(
-            PollHistoryEvents.EndPoll(eventId)
+            PollHistoryEvent.EndPoll(eventId)
         )
     }
 
     @Config(qualifiers = "h1024dp")
     @Test
     fun `clicking on poll answer emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<PollHistoryEvents>()
+        val eventsRecorder = EventsRecorder<PollHistoryEvent>()
         val eventId = EventId("\$anEventId")
         val state = aPollHistoryState(
             currentItems = listOf(
@@ -133,13 +133,13 @@ class PollHistoryViewTest : RobolectricTest() {
             useUnmergedTree = true,
         ).performClick()
         eventsRecorder.assertSingle(
-            PollHistoryEvents.SelectPollAnswer(eventId, answer.id)
+            PollHistoryEvent.SelectPollAnswer(eventId, answer.id)
         )
     }
 
     @Test
     fun `clicking on past tab emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<PollHistoryEvents>()
+        val eventsRecorder = EventsRecorder<PollHistoryEvent>()
         setPollHistoryViewView(
             aPollHistoryState(
                 eventSink = eventsRecorder
@@ -147,14 +147,14 @@ class PollHistoryViewTest : RobolectricTest() {
         )
         clickOn(R.string.screen_polls_history_filter_past)
         eventsRecorder.assertSingle(
-            PollHistoryEvents.SelectFilter(filter = PollHistoryFilter.PAST)
+            PollHistoryEvent.SelectFilter(filter = PollHistoryFilter.PAST)
         )
     }
 
     @Config(qualifiers = "h1024dp")
     @Test
     fun `clicking on load more emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<PollHistoryEvents>()
+        val eventsRecorder = EventsRecorder<PollHistoryEvent>()
         setPollHistoryViewView(
             aPollHistoryState(
                 hasMoreToLoad = true,
@@ -163,7 +163,7 @@ class PollHistoryViewTest : RobolectricTest() {
         )
         clickOn(CommonStrings.action_load_more)
         eventsRecorder.assertSingle(
-            PollHistoryEvents.LoadMore
+            PollHistoryEvent.LoadMore
         )
     }
 }

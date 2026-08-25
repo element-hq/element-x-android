@@ -145,7 +145,7 @@ private fun SetupPinFailure.title(): String {
 
 @Composable
 @PreviewsDayNight
-internal fun SetupPinViewPreview(@PreviewParameter(SetupPinStateProvider::class) state: SetupPinState) {
+internal fun SetupPinViewPreview(@PreviewParameter(SetupPinStatePreviewParam::class) state: SetupPinState) {
     ElementPreview {
         SetupPinView(
             state = state,

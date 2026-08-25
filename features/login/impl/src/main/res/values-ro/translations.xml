@@ -25,8 +25,16 @@
   <string name="screen_change_server_error_unauthorized_homeserver_title">"Furnizorul de cont %1$s nu este permis."</string>
   <string name="screen_change_server_form_header">"Adresa URL a homeserver-ului"</string>
   <string name="screen_change_server_form_notice">"Introduceți o adresă de domeniu."</string>
+  <string name="screen_change_server_navigation_title_login">"Autentificare"</string>
+  <string name="screen_change_server_navigation_title_register">"Creați un cont"</string>
   <string name="screen_change_server_subtitle">"Care este adresa serverului dumneavoastră?"</string>
+  <string name="screen_change_server_textfield_footer_login">"Dacă contul este furnizat de compania dumneavoastră sau de o comunitate, schimbați furnizorul contului (exemplu: numecompanie.com)."</string>
+  <string name="screen_change_server_textfield_footer_register">"Creați un cont gratuit pe matrix.org. Dacă doriți să creați un cont la un alt furnizor, schimbați-l în consecință (exemplu: numecomunitate.org)."</string>
+  <string name="screen_change_server_textfield_header">"Furnizor de cont"</string>
+  <string name="screen_change_server_textfield_placeholder">"exemplu.ro"</string>
   <string name="screen_change_server_title">"Selectați serverul dumneavoastra"</string>
+  <string name="screen_change_server_title_login">"Introduceți furnizorul contului dumneavoastră"</string>
+  <string name="screen_change_server_title_register">"Alegeți un furnizor de cont"</string>
   <string name="screen_create_account_title">"Creați un cont"</string>
   <string name="screen_login_error_deactivated_account">"Acest cont a fost șters."</string>
   <string name="screen_login_error_invalid_credentials">"Utilizator și/sau parolă incorecte"</string>

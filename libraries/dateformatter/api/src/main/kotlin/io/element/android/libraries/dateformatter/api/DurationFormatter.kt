@@ -21,6 +21,11 @@ import kotlin.time.Duration
  * - 30 seconds → "30 seconds"
  */
 interface DurationFormatter {
+    /**
+     * Formats the duration using its largest appropriate unit, rounding rather than listing several units.
+     *
+     * @param duration the duration to describe.
+     */
     fun format(duration: Duration): String
 }
 

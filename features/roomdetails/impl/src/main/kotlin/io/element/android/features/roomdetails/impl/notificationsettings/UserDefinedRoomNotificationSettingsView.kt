@@ -66,7 +66,7 @@ fun UserDefinedRoomNotificationSettingsView(
             }
 
             ListItem(
-                headlineContent = { Text(stringResource(R.string.screen_room_notification_settings_edit_remove_setting)) },
+                content = { Text(stringResource(R.string.screen_room_notification_settings_edit_remove_setting)) },
                 style = ListItemStyle.Destructive,
                 onClick = {
                     state.eventSink(RoomNotificationSettingsEvent.DeleteCustomNotification)
@@ -105,7 +105,7 @@ private fun UserDefinedRoomNotificationSettingsTopBar(
 @PreviewsDayNight
 @Composable
 internal fun UserDefinedRoomNotificationSettingsViewPreview(
-    @PreviewParameter(UserDefinedRoomNotificationSettingsStateProvider::class) state: RoomNotificationSettingsState
+    @PreviewParameter(UserDefinedRoomNotificationSettingsStatePreviewParam::class) state: RoomNotificationSettingsState
 ) = ElementPreview {
     UserDefinedRoomNotificationSettingsView(
         state = state,

@@ -9,12 +9,17 @@
 package io.element.android.libraries.matrix.impl.fixtures.fakes
 
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustSession
+import io.element.android.libraries.matrix.impl.fixtures.factories.aRustUserProfile
+import io.element.android.libraries.matrix.impl.scanner.FakeFfiContentScanner
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
+import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
+import io.element.android.libraries.matrix.test.A_SERVER_NAME
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.simulateLongTask
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
+import org.matrix.rustcomponents.sdk.ContentScanner
 import org.matrix.rustcomponents.sdk.CreateRoomParameters
 import org.matrix.rustcomponents.sdk.Encryption
 import org.matrix.rustcomponents.sdk.HomeserverCapabilities
@@ -24,6 +29,7 @@ import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.NotificationClient
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.NotificationSettings
+import org.matrix.rustcomponents.sdk.ProfileListener
 import org.matrix.rustcomponents.sdk.PusherIdentifiers
 import org.matrix.rustcomponents.sdk.PusherKind
 import org.matrix.rustcomponents.sdk.RoomDirectorySearch
@@ -41,21 +47,32 @@ import uniffi.matrix_sdk_base.MediaRetentionPolicy
 class FakeFfiClient(
     private val userId: String = A_USER_ID.value,
     private val deviceId: String = A_DEVICE_ID.value,
+    private val homeserver: String = A_HOMESERVER_URL,
+    private val server: String? = A_SERVER_NAME,
     private val notificationClient: NotificationClient = FakeFfiNotificationClient(),
     private val notificationSettings: NotificationSettings = FakeFfiNotificationSettings(),
     private val encryption: Encryption = FakeFfiEncryption(),
     private val session: Session = aRustSession(),
     private val clearCachesResult: () -> Unit = { lambdaError() },
     private val withUtdHook: (UnableToDecryptDelegate) -> Unit = { lambdaError() },
-    private val getProfileResult: (String) -> UserProfile = { UserProfile(userId = userId, displayName = null, avatarUrl = null) },
+    private val getProfileResult: (String) -> UserProfile = { aRustUserProfile() },
     private val homeserverLoginDetailsResult: () -> HomeserverLoginDetails = { lambdaError() },
     private val getStoreSizesResult: () -> StoreSizes = { lambdaError() },
     private val createRoomResult: (CreateRoomParameters) -> String = { lambdaError() },
     private val homeserverCapabilities: HomeserverCapabilities = FakeFfiHomeserverCapabilities(),
+    private val accountDataResult: (String) -> String? = { lambdaError() },
+    private val setAccountDataResult: (String, String) -> Unit = { _, _ -> lambdaError() },
+    private val isUserStatusSupportedResult: () -> Boolean = { false },
+    private val isProfilesSlidingSyncExtensionSupportedResult: () -> Boolean = { false },
+    private val subscribeToOwnProfileResult: (ProfileListener) -> Unit = {},
+    private val getUrlResult: (String) -> ByteArray = { lambdaError() },
+    private val contentScannerResult: () -> ContentScanner = { FakeFfiContentScanner() },
     private val closeResult: () -> Unit = {},
 ) : Client(NoHandle) {
     override fun userId(): String = userId
     override fun deviceId(): String = deviceId
+    override fun homeserver(): String = homeserver
+    override fun server(): String? = server
     override suspend fun notificationClient(processSetup: NotificationProcessSetup) = notificationClient
     override suspend fun getNotificationSettings(): NotificationSettings = notificationSettings
     override fun encryption(): Encryption = encryption
@@ -88,6 +105,15 @@ class FakeFfiClient(
         return FakeFfiTaskHandle()
     }
 
+    override suspend fun isUserStatusSupported(): Boolean = isUserStatusSupportedResult()
+
+    override suspend fun isProfilesSlidingSyncExtensionSupported(): Boolean = isProfilesSlidingSyncExtensionSupportedResult()
+
+    override fun subscribeToOwnProfile(listener: ProfileListener): TaskHandle {
+        subscribeToOwnProfileResult(listener)
+        return FakeFfiTaskHandle()
+    }
+
     override suspend fun getProfile(userId: String): UserProfile {
         return getProfileResult(userId)
     }
@@ -108,6 +134,22 @@ class FakeFfiClient(
 
     override fun homeserverCapabilities(): HomeserverCapabilities {
         return homeserverCapabilities
+    }
+
+    override suspend fun accountData(eventType: String): String? = simulateLongTask {
+        accountDataResult(eventType)
+    }
+
+    override suspend fun setAccountData(eventType: String, content: String) = simulateLongTask {
+        setAccountDataResult(eventType, content)
+    }
+
+    override suspend fun getUrl(url: String): ByteArray = simulateLongTask {
+        getUrlResult(url)
+    }
+
+    override suspend fun contentScanner(): ContentScanner = simulateLongTask {
+        contentScannerResult()
     }
 
     override fun close() = closeResult()

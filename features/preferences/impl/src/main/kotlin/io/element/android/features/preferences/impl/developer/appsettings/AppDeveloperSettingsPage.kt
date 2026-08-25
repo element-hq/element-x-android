@@ -24,6 +24,7 @@ fun AppDeveloperSettingsPage(
     onOpenShowkase: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
+    extraOptions: @Composable () -> Unit = {},
 ) {
     BackHandler(
         onBack = onBackClick,
@@ -40,6 +41,7 @@ fun AppDeveloperSettingsPage(
             onOpenShowkase = onOpenShowkase,
             modifier = Modifier.padding(top = 8.dp)
         )
+        extraOptions()
     }
 }
 

@@ -12,6 +12,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_SECRET
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.unifiedpush.registration.EndpointRegistrationHandler
 import io.element.android.libraries.pushproviders.unifiedpush.registration.RegistrationResult
@@ -41,7 +42,7 @@ class DefaultRegisterUnifiedPushUseCaseTest : RobolectricTest() {
             delay(100)
             endpointRegistrationHandler.registrationDone(RegistrationResult(A_SECRET, Result.success(Unit)))
         }
-        val result = useCase.execute(aDistributor, A_SECRET)
+        val result = useCase.execute(aDistributor, A_SECRET, A_SESSION_ID)
         assertThat(result.isSuccess).isTrue()
     }
 
@@ -56,7 +57,7 @@ class DefaultRegisterUnifiedPushUseCaseTest : RobolectricTest() {
             delay(100)
             endpointRegistrationHandler.registrationDone(RegistrationResult(A_SECRET, Result.failure(AN_EXCEPTION)))
         }
-        val result = useCase.execute(aDistributor, A_SECRET)
+        val result = useCase.execute(aDistributor, A_SECRET, A_SESSION_ID)
         assertThat(result.isSuccess).isFalse()
     }
 
@@ -67,7 +68,7 @@ class DefaultRegisterUnifiedPushUseCaseTest : RobolectricTest() {
             endpointRegistrationHandler = endpointRegistrationHandler
         )
         val aDistributor = Distributor("aValue", "aName")
-        val result = useCase.execute(aDistributor, A_SECRET)
+        val result = useCase.execute(aDistributor, A_SECRET, A_SESSION_ID)
         assertThat(result.isSuccess).isFalse()
     }
 

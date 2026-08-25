@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_deactivate_account_confirmation_dialog_content">"يرجى تأكيد رغبتك في حذف حسابك. لا يمكن التراجع عن هذا الإجراء."</string>
+  <string name="screen_deactivate_account_delete_all_messages">"حذف جميع رسائلي"</string>
+  <string name="screen_deactivate_account_delete_all_messages_notice">"تحذير: قد يرى المستخدمون في المستقبل محادثات غير مكتملة."</string>
+  <string name="screen_deactivate_account_description">"حذف حسابك %1$s، وسيؤدي إلى:"</string>
+  <string name="screen_deactivate_account_description_bold_part">"إجراء لا رجعة فيه"</string>
+  <string name="screen_deactivate_account_list_item_1">"%1$s (لن تتمكن من تسجيل الدخول مرة أخرى، ولا يمكن إعادة استخدام معرّفك)."</string>
+  <string name="screen_deactivate_account_list_item_1_bold_part">"تعطيل حسابك نهائيًا"</string>
+  <string name="screen_deactivate_account_list_item_2">"إزالتك من جميع غرف الدردشة."</string>
+  <string name="screen_deactivate_account_list_item_3">"حذف معلومات حسابك من خادم الهوية لدينا."</string>
+  <string name="screen_deactivate_account_list_item_4">"ستظل رسائلك مرئية للمستخدمين المسجلين، لكنها لن تكون متاحة للمستخدمين الجدد أو غير المسجلين إذا اخترت حذفها."</string>
+  <string name="screen_deactivate_account_title">"حذف الحساب"</string>
+</resources>

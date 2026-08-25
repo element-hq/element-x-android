@@ -52,16 +52,16 @@ class NotificationsOptInPresenter(
     override fun present(): NotificationsOptInState {
         val notificationsPermissionsState = postNotificationPermissionsPresenter.present()
 
-        fun handleEvent(event: NotificationsOptInEvents) {
+        fun handleEvent(event: NotificationsOptInEvent) {
             when (event) {
-                NotificationsOptInEvents.ContinueClicked -> {
+                NotificationsOptInEvent.ContinueClicked -> {
                     if (notificationsPermissionsState.permissionGranted) {
                         callback.onNotificationsOptInFinished()
                     } else {
                         notificationsPermissionsState.eventSink(PermissionsEvent.RequestPermissions)
                     }
                 }
-                NotificationsOptInEvents.NotNowClicked -> {
+                NotificationsOptInEvent.NotNowClicked -> {
                     if (buildVersionSdkIntProvider.isAtLeast(Build.VERSION_CODES.TIRAMISU)) {
                         appCoroutineScope.setPermissionDenied()
                     }

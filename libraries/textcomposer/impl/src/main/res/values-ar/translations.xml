@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_a11y_add_attachment">"إضافة مرفق"</string>
+  <string name="rich_text_editor_bullet_list">"تبديل قائمة النقاط"</string>
+  <string name="rich_text_editor_close_formatting_options">"إلغاء وإغلاق خيارات تنسيق النص"</string>
+  <string name="rich_text_editor_code_block">"تبديل كتلة التعليمات البرمجية"</string>
+  <string name="rich_text_editor_composer_caption_placeholder">"أضف تعليقًا توضيحيًا"</string>
+  <string name="rich_text_editor_composer_encrypted_placeholder">"رسالة مشفّرة…"</string>
+  <string name="rich_text_editor_composer_placeholder">"راسل…"</string>
+  <string name="rich_text_editor_composer_unencrypted_placeholder">"رسالة غير مشفّرة…"</string>
+  <string name="rich_text_editor_create_link">"إنشاء رابط"</string>
+  <string name="rich_text_editor_edit_link">"تعديل الرابط"</string>
+  <string name="rich_text_editor_format_action">"%1$s، الحالة: %2$s"</string>
+  <string name="rich_text_editor_format_bold">"تطبيق التنسيق الغامق"</string>
+  <string name="rich_text_editor_format_italic">"تطبيق التنسيق المائل"</string>
+  <string name="rich_text_editor_format_state_disabled">"معطّل"</string>
+  <string name="rich_text_editor_format_state_off">"غير مفعّل"</string>
+  <string name="rich_text_editor_format_state_on">"مفعّل"</string>
+  <string name="rich_text_editor_format_strikethrough">"تطبيق التنسيق الذي يتوسّطه خط"</string>
+  <string name="rich_text_editor_format_underline">"تطبيق التنسيق الذي تحته خط"</string>
+  <string name="rich_text_editor_full_screen_toggle">"تبديل وضع ملء الشاشة"</string>
+  <string name="rich_text_editor_indent">"ترك مسافة بادئة"</string>
+  <string name="rich_text_editor_inline_code">"تطبيق تنسيق الكود المضمن"</string>
+  <string name="rich_text_editor_link">"تعيين الرابط"</string>
+  <string name="rich_text_editor_numbered_list">"تبديل القائمة المرقمة"</string>
+  <string name="rich_text_editor_open_compose_options">"فتح خيارات كتابة الرسالة"</string>
+  <string name="rich_text_editor_quote">"تبديل الاقتباس"</string>
+  <string name="rich_text_editor_remove_link">"حذف الرابط"</string>
+  <string name="rich_text_editor_unindent">"إزالة المسافة البادئة"</string>
+  <string name="rich_text_editor_url_placeholder">"الرابط"</string>
+  <string name="screen_media_upload_preview_caption_warning">"قد لا تكون التعليقات التوضيحية مرئية للأشخاص الذين يستخدمون تطبيقات أقدم."</string>
+  <string name="screen_room_voice_message_tooltip">"اضغط مطولًا للتسجيل"</string>
+</resources>

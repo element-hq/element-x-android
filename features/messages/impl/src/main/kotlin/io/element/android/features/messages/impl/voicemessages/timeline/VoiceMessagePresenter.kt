@@ -12,26 +12,11 @@ import androidx.compose.runtime.Composable
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
-import dev.zacsweers.metro.BindingContainer
-import dev.zacsweers.metro.Binds
-import dev.zacsweers.metro.ContributesTo
-import dev.zacsweers.metro.IntoMap
-import io.element.android.features.messages.impl.timeline.di.TimelineItemEventContentKey
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactory
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.voiceplayer.api.VoiceMessagePresenterFactory
 import io.element.android.libraries.voiceplayer.api.VoiceMessageState
-
-@BindingContainer
-@ContributesTo(RoomScope::class)
-interface VoiceMessagePresenterModule {
-    @Binds
-    @IntoMap
-    @TimelineItemEventContentKey(TimelineItemVoiceContent::class)
-    fun bindVoiceMessagePresenterFactory(factory: VoiceMessagePresenter.Factory): TimelineItemPresenterFactory<*, *>
-}
 
 @AssistedInject
 class VoiceMessagePresenter(

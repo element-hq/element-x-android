@@ -77,7 +77,7 @@ class ChangeRolesPresenter(
         val queryState = rememberTextFieldState()
         var searchActive by rememberSaveable { mutableStateOf(false) }
         var searchResults by remember {
-            mutableStateOf<SearchBarResultState<MembersByRole>>(SearchBarResultState.Initial())
+            mutableStateOf<SearchBarResultState<MembersByRole>>(SearchBarResultState.Initial)
         }
         val selectedUsers = remember {
             mutableStateOf<ImmutableList<MatrixUser>>(persistentListOf())
@@ -118,7 +118,7 @@ class ChangeRolesPresenter(
                 .groupedByRole()
 
             searchResults = if (results.isEmpty()) {
-                SearchBarResultState.NoResultsFound()
+                SearchBarResultState.NoResultsFound
             } else {
                 SearchBarResultState.Results(results)
             }
