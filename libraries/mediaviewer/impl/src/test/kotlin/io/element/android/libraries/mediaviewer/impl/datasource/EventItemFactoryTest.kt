@@ -80,7 +80,7 @@ class EventItemFactoryTest {
             LegacyCallInviteContent,
             aPollContent(),
             aProfileChangeMessageContent(),
-            RedactedContent,
+            RedactedContent(threadInfo = null),
             aRoomMembershipContent(
                 userId = A_USER_ID,
             ),

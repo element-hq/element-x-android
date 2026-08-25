@@ -81,7 +81,7 @@ class TimelineEventContentMapper(
                             )
                         }
                         is MsgLikeKind.Redacted -> {
-                            RedactedContent
+                            RedactedContent(threadInfo = extractThreadInfo(it.content))
                         }
                         is MsgLikeKind.Poll -> {
                             PollContent(

@@ -880,7 +880,7 @@ class TimelinePresenterTest {
                 (0 until 3).map { index ->
                     MatrixTimelineItem.Event(
                         uniqueId = UniqueId("redacted_$index"),
-                        event = anEventTimelineItem(eventId = EventId("\$R$index"), content = RedactedContent),
+                        event = anEventTimelineItem(eventId = EventId("\$R$index"), content = RedactedContent(threadInfo = null)),
                     )
                 }
             ),

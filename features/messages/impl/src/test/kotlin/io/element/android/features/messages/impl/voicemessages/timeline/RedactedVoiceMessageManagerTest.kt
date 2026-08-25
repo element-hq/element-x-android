@@ -88,7 +88,7 @@ fun aRedactedMatrixTimeline(eventId: EventId) = listOf<MatrixTimelineItem>(
             sender = A_USER_ID,
             senderProfile = ProfileDetails.Unavailable,
             timestamp = 9442,
-            content = RedactedContent,
+            content = RedactedContent(threadInfo = null),
             origin = null,
             timelineItemDebugInfoProvider = {
                 TimelineItemDebugInfo(
