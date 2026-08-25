@@ -102,7 +102,7 @@ class DefaultRoomLatestEventFormatter(
                 message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is RoomMembershipContent -> {
-                roomMembershipContentFormatter.format(content, senderDisambiguatedDisplayName, isOutgoing)
+                roomMembershipContentFormatter.format(content, senderDisambiguatedDisplayName, isOutgoing, RenderingMode.RoomList)
             }
             is ProfileChangeContent -> {
                 profileChangeContentFormatter.format(content, senderId, senderDisambiguatedDisplayName, isOutgoing)

@@ -51,7 +51,7 @@ class DefaultTimelineEventFormatter(
     override fun format(content: EventContent, isOutgoing: Boolean, sender: UserId, senderDisambiguatedDisplayName: String): CharSequence? {
         return when (content) {
             is RoomMembershipContent -> {
-                roomMembershipContentFormatter.format(content, senderDisambiguatedDisplayName, isOutgoing)
+                roomMembershipContentFormatter.format(content, senderDisambiguatedDisplayName, isOutgoing, RenderingMode.Timeline)
             }
             is ProfileChangeContent -> {
                 profileChangeContentFormatter.format(content, sender, senderDisambiguatedDisplayName, isOutgoing)

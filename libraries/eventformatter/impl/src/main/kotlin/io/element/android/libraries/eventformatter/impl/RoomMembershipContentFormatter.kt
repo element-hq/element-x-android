@@ -9,6 +9,7 @@
 package io.element.android.libraries.eventformatter.impl
 
 import dev.zacsweers.metro.Inject
+import io.element.android.libraries.eventformatter.impl.mode.RenderingMode
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
@@ -24,6 +25,7 @@ class RoomMembershipContentFormatter(
         membershipContent: RoomMembershipContent,
         senderDisambiguatedDisplayName: String,
         senderIsYou: Boolean,
+        renderingMode: RenderingMode,
     ): CharSequence? {
         val userId = membershipContent.userId
         val memberIsYou = matrixClient.isMe(userId)
@@ -115,10 +117,13 @@ class RoomMembershipContentFormatter(
             } else {
                 sp.getString(R.string.state_event_room_knock_denied, senderDisambiguatedDisplayName, userDisplayNameOrId)
             }
-            MembershipChange.NONE -> if (senderIsYou) {
-                sp.getString(R.string.state_event_room_none_by_you)
-            } else {
-                sp.getString(R.string.state_event_room_none, senderDisambiguatedDisplayName)
+            MembershipChange.NONE -> when (renderingMode) {
+                RenderingMode.Timeline -> null
+                RenderingMode.RoomList -> if (senderIsYou) {
+                    sp.getString(R.string.state_event_room_none_by_you)
+                } else {
+                    sp.getString(R.string.state_event_room_none, senderDisambiguatedDisplayName)
+                }
             }
             MembershipChange.ERROR -> {
                 Timber.v("Filtering timeline item for room membership: $membershipContent")
