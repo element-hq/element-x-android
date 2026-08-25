@@ -18,6 +18,8 @@ class FakePttSessionManager(
     private val sessionStateFlow: MutableStateFlow<PttSessionState?> = MutableStateFlow(null),
     private val isHearingEnabledFlow: MutableStateFlow<Boolean> = MutableStateFlow(false),
     private val isCovertFlow: MutableStateFlow<Boolean> = MutableStateFlow(false),
+    private val pressToTalkLambda: () -> Unit = {},
+    private val releaseToTalkLambda: () -> Unit = {},
 ) : PttSessionManager {
     override val sessionState: StateFlow<PttSessionState?> = sessionStateFlow
 
@@ -29,9 +31,9 @@ class FakePttSessionManager(
 
     override fun stop() = Unit
 
-    override fun pressToTalk() = Unit
+    override fun pressToTalk() = pressToTalkLambda()
 
-    override fun releaseToTalk() = Unit
+    override fun releaseToTalk() = releaseToTalkLambda()
 
     override fun setHearingEnabled(enabled: Boolean) {
         isHearingEnabledFlow.value = enabled

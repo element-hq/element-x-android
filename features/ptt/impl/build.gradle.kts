@@ -43,4 +43,5 @@ dependencies {
 
     testCommonDependencies(libs, true)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.features.ptt.test)
 }

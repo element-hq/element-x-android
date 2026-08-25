@@ -26,6 +26,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import dev.zacsweers.metro.Inject
 import io.element.android.features.ptt.api.PttChannelConfig
 import io.element.android.features.ptt.impl.PttSessionController
+import io.element.android.features.ptt.impl.input.PttInputCoordinator
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.log.logger.LoggerTag
@@ -65,8 +66,8 @@ class PttSessionHostService : Service() {
     }
 
     @Inject lateinit var sessionController: PttSessionController
+    @Inject lateinit var inputCoordinator: PttInputCoordinator
 
-    private var mediaButtonController: PttMediaButtonController? = null
     private var overlayButton: PttOverlayButton? = null
 
     // Retry the overlay button when the app returns to foreground — e.g. after the user grants the
@@ -98,14 +99,9 @@ class PttSessionHostService : Service() {
             return START_NOT_STICKY
         }
         sessionController.startSession(config)
-        // Catch Bluetooth / wired PTT-accessory buttons for the life of the session.
-        if (mediaButtonController == null) {
-            mediaButtonController = PttMediaButtonController(
-                context = this,
-                onKeyDown = { sessionController.pressToTalk() },
-                onKeyUp = { sessionController.releaseToTalk() },
-            )
-        }
+        // Catch hardware/accessory PTT buttons (media-key accessories today; OEM/BLE sources plug in
+        // via the same coordinator) for the life of the session.
+        inputCoordinator.start()
         // Floating on-screen PTT button, for transmit while backgrounded without an accessory.
         if (overlayButton == null) {
             overlayButton = PttOverlayButton(
@@ -150,8 +146,7 @@ class PttSessionHostService : Service() {
 
     override fun onDestroy() {
         ProcessLifecycleOwner.get().lifecycle.removeObserver(foregroundObserver)
-        mediaButtonController?.release()
-        mediaButtonController = null
+        inputCoordinator.stop()
         overlayButton?.hide()
         overlayButton = null
         ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
