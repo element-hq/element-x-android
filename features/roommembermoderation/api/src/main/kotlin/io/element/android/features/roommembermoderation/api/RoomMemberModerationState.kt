@@ -9,6 +9,7 @@
 package io.element.android.features.roommembermoderation.api
 
 import androidx.compose.runtime.Immutable
+import io.element.android.libraries.matrix.api.room.RoomMember
 
 /**
  * State of the member moderation flow, which is the action sheet and the confirmation dialogs shown for a room member.
@@ -32,4 +33,7 @@ sealed interface ModerationAction {
     data object KickUser : ModerationAction
     data object BanUser : ModerationAction
     data object UnbanUser : ModerationAction
+
+    /** Give the member [role], which is only offered for a role they do not already hold. */
+    data class ChangeRole(val role: RoomMember.Role) : ModerationAction
 }

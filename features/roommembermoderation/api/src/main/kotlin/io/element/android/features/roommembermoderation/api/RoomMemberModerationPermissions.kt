@@ -8,10 +8,12 @@
 package io.element.android.features.roommembermoderation.api
 
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPermissions
+import io.element.android.libraries.matrix.api.room.powerlevels.canEditRolesAndPermissions
 
 data class RoomMemberModerationPermissions(
     val canKick: Boolean,
     val canBan: Boolean,
+    val canChangeRoles: Boolean,
 ) {
     // Unban requires both kick and ban permission instead of a dedicated unban permission
     val canUnban = canBan && canKick
@@ -20,6 +22,7 @@ data class RoomMemberModerationPermissions(
         val DEFAULT = RoomMemberModerationPermissions(
             canKick = false,
             canBan = false,
+            canChangeRoles = false,
         )
     }
 }
@@ -28,5 +31,6 @@ fun RoomPermissions.roomMemberModerationPermissions(): RoomMemberModerationPermi
     return RoomMemberModerationPermissions(
         canKick = canOwnUserKick(),
         canBan = canOwnUserBan(),
+        canChangeRoles = canEditRolesAndPermissions(),
     )
 }

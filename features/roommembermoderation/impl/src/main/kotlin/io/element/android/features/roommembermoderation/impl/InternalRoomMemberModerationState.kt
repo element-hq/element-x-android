@@ -13,6 +13,7 @@ import io.element.android.features.roommembermoderation.api.RoomMemberModeration
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationPermissions
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 
@@ -23,6 +24,8 @@ data class InternalRoomMemberModerationState(
     val kickUserAsyncAction: AsyncAction<Unit>,
     val banUserAsyncAction: AsyncAction<Unit>,
     val unbanUserAsyncAction: AsyncAction<Unit>,
+    val changeRoleAsyncAction: AsyncAction<Unit>,
+    val roleToApply: RoomMember.Role?,
     override val eventSink: (RoomMemberModerationEvent) -> Unit,
 ) : RoomMemberModerationState {
     val canDisplayActions = actions.isNotEmpty()

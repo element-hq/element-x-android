@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2026 Element Creations Ltd.
+  ~
+  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+  ~ Please see LICENSE files in the repository root for full details.
+  -->
+
+<resources>
+    <string name="screen_bottom_sheet_manage_room_member_make_admin">Make admin</string>
+    <string name="screen_bottom_sheet_manage_room_member_make_moderator">Make moderator</string>
+    <string name="screen_bottom_sheet_manage_room_member_make_member">Make member</string>
+    <string name="screen_bottom_sheet_manage_room_member_role_owner">Owner</string>
+    <string name="screen_bottom_sheet_manage_room_member_role_admin">Admin</string>
+    <string name="screen_bottom_sheet_manage_room_member_role_moderator">Moderator</string>
+    <string name="screen_bottom_sheet_manage_room_member_role_member">Member</string>
+    <string name="screen_bottom_sheet_manage_room_member_change_role_confirmation_title">Change role?</string>
+    <string name="screen_bottom_sheet_manage_room_member_change_role_confirmation_description">%1$s will be given the “%2$s” role in this room.</string>
+</resources>

@@ -109,11 +109,13 @@ internal fun aRoomMemberListState(
 fun aRoomMemberModerationState(
     canBan: Boolean = false,
     canKick: Boolean = false,
+    canChangeRoles: Boolean = false,
 ): RoomMemberModerationState {
     return object : RoomMemberModerationState {
         override val permissions: RoomMemberModerationPermissions = RoomMemberModerationPermissions(
             canBan = canBan,
             canKick = canKick,
+            canChangeRoles = canChangeRoles,
         )
         override val eventSink: (RoomMemberModerationEvent) -> Unit = {}
     }

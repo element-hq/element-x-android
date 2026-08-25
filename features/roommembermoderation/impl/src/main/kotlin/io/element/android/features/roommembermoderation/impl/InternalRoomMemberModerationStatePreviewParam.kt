@@ -16,6 +16,7 @@ import io.element.android.features.roommembermoderation.api.RoomMemberModeration
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.toImmutableList
@@ -76,6 +77,20 @@ class InternalRoomMemberModerationStatePreviewParam : PreviewParameterProvider<I
                 selectedUser = anAlice(),
                 unbanUserAsyncAction = AsyncAction.Loading,
             ),
+            aRoomMembersModerationState(
+                selectedUser = anAlice(),
+                actions = listOf(
+                    ModerationActionState(action = ModerationAction.DisplayProfile, isEnabled = true),
+                    ModerationActionState(action = ModerationAction.ChangeRole(RoomMember.Role.Admin), isEnabled = true),
+                    ModerationActionState(action = ModerationAction.ChangeRole(RoomMember.Role.Moderator), isEnabled = true),
+                    ModerationActionState(action = ModerationAction.KickUser, isEnabled = true),
+                ),
+            ),
+            aRoomMembersModerationState(
+                selectedUser = anAlice(),
+                changeRoleAsyncAction = AsyncAction.ConfirmingNoParams,
+                roleToApply = RoomMember.Role.Moderator,
+            ),
         )
 }
 
@@ -93,6 +108,8 @@ fun aRoomMembersModerationState(
     kickUserAsyncAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     banUserAsyncAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     unbanUserAsyncAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    changeRoleAsyncAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    roleToApply: RoomMember.Role? = null,
     eventSink: (RoomMemberModerationEvent) -> Unit = {},
 ) = InternalRoomMemberModerationState(
     permissions = permissions,
@@ -101,5 +118,7 @@ fun aRoomMembersModerationState(
     kickUserAsyncAction = kickUserAsyncAction,
     banUserAsyncAction = banUserAsyncAction,
     unbanUserAsyncAction = unbanUserAsyncAction,
+    changeRoleAsyncAction = changeRoleAsyncAction,
+    roleToApply = roleToApply,
     eventSink = eventSink,
 )

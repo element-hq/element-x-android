@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -72,6 +73,9 @@ class RoomMemberModerationPresenter(
             remember { mutableStateOf(AsyncAction.Uninitialized as AsyncAction<Unit>) }
         val unbanUserAsyncAction =
             remember { mutableStateOf(AsyncAction.Uninitialized as AsyncAction<Unit>) }
+        val changeRoleAsyncAction =
+            remember { mutableStateOf(AsyncAction.Uninitialized as AsyncAction<Unit>) }
+        var roleToApply by remember { mutableStateOf<RoomMember.Role?>(null) }
         var selectedUser by remember {
             mutableStateOf<MatrixUser?>(null)
         }
@@ -94,7 +98,7 @@ class RoomMemberModerationPresenter(
                     // First, hide any list of existing actions that could be displayed
                     moderationActions.value = persistentListOf()
 
-                    when (event.action) {
+                    when (val action = event.action) {
                         is ModerationAction.DisplayProfile -> Unit
                         is ModerationAction.KickUser -> {
                             selectedUser = event.targetUser
@@ -107,6 +111,11 @@ class RoomMemberModerationPresenter(
                         is ModerationAction.UnbanUser -> {
                             selectedUser = event.targetUser
                             unbanUserAsyncAction.value = AsyncAction.ConfirmingNoParams
+                        }
+                        is ModerationAction.ChangeRole -> {
+                            selectedUser = event.targetUser
+                            roleToApply = action.role
+                            changeRoleAsyncAction.value = AsyncAction.ConfirmingNoParams
                         }
                     }
                 }
@@ -128,12 +137,23 @@ class RoomMemberModerationPresenter(
                     }
                     selectedUser = null
                 }
+                is InternalRoomMemberModerationEvent.DoChangeRole -> {
+                    val user = selectedUser
+                    val role = roleToApply
+                    if (user != null && role != null) {
+                        coroutineScope.changeRole(user.userId, role, changeRoleAsyncAction)
+                    }
+                    selectedUser = null
+                    roleToApply = null
+                }
                 is InternalRoomMemberModerationEvent.Reset -> {
                     selectedUser = null
                     moderationActions.value = persistentListOf()
                     kickUserAsyncAction.value = AsyncAction.Uninitialized
                     banUserAsyncAction.value = AsyncAction.Uninitialized
                     unbanUserAsyncAction.value = AsyncAction.Uninitialized
+                    changeRoleAsyncAction.value = AsyncAction.Uninitialized
+                    roleToApply = null
                 }
             }
         }
@@ -145,6 +165,8 @@ class RoomMemberModerationPresenter(
             kickUserAsyncAction = kickUserAsyncAction.value,
             banUserAsyncAction = banUserAsyncAction.value,
             unbanUserAsyncAction = unbanUserAsyncAction.value,
+            changeRoleAsyncAction = changeRoleAsyncAction.value,
+            roleToApply = roleToApply,
             eventSink = ::handleEvent,
         )
     }
@@ -170,6 +192,14 @@ class RoomMemberModerationPresenter(
                 RoomMembershipState.INVITE,
                 RoomMembershipState.JOIN,
                 RoomMembershipState.KNOCK -> {
+                    if (permissions.canChangeRoles && member?.role !is RoomMember.Role.Owner) {
+                        val currentRole = member?.role ?: RoomMember.Role.User
+                        for (role in assignableRoles) {
+                            if (role != currentRole) {
+                                add(ModerationActionState(action = ModerationAction.ChangeRole(role), isEnabled = canModerateThisUser))
+                            }
+                        }
+                    }
                     if (permissions.canKick) {
                         add(ModerationActionState(action = ModerationAction.KickUser, isEnabled = canModerateThisUser))
                     }
@@ -222,6 +252,18 @@ class RoomMemberModerationPresenter(
         )
     }
 
+    private fun CoroutineScope.changeRole(
+        userId: UserId,
+        role: RoomMember.Role,
+        changeRoleAction: MutableState<AsyncAction<Unit>>,
+    ) {
+        launch(dispatchers.io) {
+            changeRoleAction.runUpdatingState {
+                room.updateUsersRoles(listOf(UserRoleChange(userId, role)))
+            }
+        }
+    }
+
     private fun <T> CoroutineScope.runActionAndWaitForMembershipChange(
         action: MutableState<AsyncAction<T>>,
         block: suspend () -> Result<T>
@@ -245,3 +287,5 @@ class RoomMemberModerationPresenter(
         }
     }
 }
+
+private val assignableRoles = listOf(RoomMember.Role.Admin, RoomMember.Role.Moderator, RoomMember.Role.User)

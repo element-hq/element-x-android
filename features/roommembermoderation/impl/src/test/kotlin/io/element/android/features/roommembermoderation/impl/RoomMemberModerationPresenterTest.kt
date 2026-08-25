@@ -21,7 +21,9 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
+import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
@@ -33,12 +35,15 @@ import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermiss
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -355,19 +360,23 @@ class RoomMemberModerationPresenterTest {
         canKick: Boolean = false,
         canBan: Boolean = false,
         myUserRole: RoomMember.Role = RoomMember.Role.User,
+        canChangeRoles: Boolean = false,
+        updateUsersRolesResult: (List<UserRoleChange>) -> Result<Unit> = { Result.success(Unit) },
         kickUserResult: Result<Unit> = Result.success(Unit),
         banUserResult: Result<Unit> = Result.success(Unit),
         unBanUserResult: Result<Unit> = Result.success(Unit),
         targetRoomMember: RoomMember? = null,
     ): FakeJoinedRoom {
         return FakeJoinedRoom(
+            updateUserRoleResult = updateUsersRolesResult,
             kickUserResult = { _, _ -> kickUserResult },
             banUserResult = { _, _ -> banUserResult },
             unBanUserResult = { _, _ -> unBanUserResult },
             baseRoom = FakeBaseRoom(
                 roomPermissions = FakeRoomPermissions(
                     canBan = canBan,
-                    canKick = canKick
+                    canKick = canKick,
+                    canSendState = { it == StateEventType.RoomPowerLevels && canChangeRoles },
                 ),
                 userRoleResult = { Result.success(myUserRole) },
                 updateMembersResult = { Result.success(Unit) },
@@ -381,6 +390,98 @@ class RoomMemberModerationPresenterTest {
         ).apply {
             val roomMembers = listOfNotNull(targetRoomMember).toImmutableList()
             givenRoomMembersState(state = RoomMembersState.Ready(roomMembers))
+        }
+    }
+
+    @Test
+    fun `present - changing a role is offered only for the roles the member does not already hold`() = runTest {
+        val room = aJoinedRoom(
+            canBan = false,
+            canKick = false,
+            canChangeRoles = true,
+            myUserRole = RoomMember.Role.Admin,
+            targetRoomMember = aRoomMember(userId = A_USER_ID, powerLevel = RoomMember.Role.Moderator.powerLevel, role = RoomMember.Role.Moderator),
+        )
+        createRoomMemberModerationPresenter(room = room).test {
+            val initialState = awaitState()
+            initialState.eventSink(RoomMemberModerationEvent.ShowActionsForUser(targetUser))
+            skipItems(2)
+            val updatedState = awaitState()
+            assertThat(updatedState.actions).containsExactly(
+                ModerationActionState(action = ModerationAction.DisplayProfile, isEnabled = true),
+                ModerationActionState(action = ModerationAction.ChangeRole(RoomMember.Role.Admin), isEnabled = true),
+                ModerationActionState(action = ModerationAction.ChangeRole(RoomMember.Role.User), isEnabled = true),
+            )
+        }
+    }
+
+    @Test
+    fun `present - changing a role is not offered without the power levels permission`() = runTest {
+        val room = aJoinedRoom(
+            canBan = false,
+            canKick = false,
+            canChangeRoles = false,
+            myUserRole = RoomMember.Role.Admin,
+            targetRoomMember = aRoomMember(userId = A_USER_ID, powerLevel = RoomMember.Role.User.powerLevel),
+        )
+        createRoomMemberModerationPresenter(room = room).test {
+            val initialState = awaitState()
+            initialState.eventSink(RoomMemberModerationEvent.ShowActionsForUser(targetUser))
+            advanceUntilIdle()
+            assertThat(expectMostRecentItem().let { it as InternalRoomMemberModerationState }.actions).containsExactly(
+                ModerationActionState(action = ModerationAction.DisplayProfile, isEnabled = true),
+            )
+        }
+    }
+
+    @Test
+    fun `present - changing a role is not offered for an owner`() = runTest {
+        val room = aJoinedRoom(
+            canChangeRoles = true,
+            myUserRole = RoomMember.Role.Owner(isCreator = true),
+            targetRoomMember = aRoomMember(
+                userId = A_USER_ID,
+                powerLevel = RoomMember.Role.Owner(isCreator = false).powerLevel,
+                role = RoomMember.Role.Owner(isCreator = false),
+            ),
+        )
+        createRoomMemberModerationPresenter(room = room).test {
+            val initialState = awaitState()
+            initialState.eventSink(RoomMemberModerationEvent.ShowActionsForUser(targetUser))
+            skipItems(2)
+            val updatedState = awaitState()
+            assertThat(updatedState.actions).containsExactly(
+                ModerationActionState(action = ModerationAction.DisplayProfile, isEnabled = true),
+            )
+        }
+    }
+
+    @Test
+    fun `present - confirming a role change applies it once`() = runTest {
+        val updateUsersRolesLambda = lambdaRecorder<List<UserRoleChange>, Result<Unit>> { Result.success(Unit) }
+        val room = aJoinedRoom(
+            canChangeRoles = true,
+            myUserRole = RoomMember.Role.Admin,
+            updateUsersRolesResult = updateUsersRolesLambda,
+            targetRoomMember = aRoomMember(userId = A_USER_ID, powerLevel = RoomMember.Role.User.powerLevel),
+        )
+        createRoomMemberModerationPresenter(room = room).test {
+            val initialState = awaitState()
+            initialState.eventSink(
+                RoomMemberModerationEvent.ProcessAction(ModerationAction.ChangeRole(RoomMember.Role.Moderator), targetUser)
+            )
+            advanceUntilIdle()
+            val confirmingState = expectMostRecentItem() as InternalRoomMemberModerationState
+            assertThat(confirmingState.changeRoleAsyncAction).isEqualTo(AsyncAction.ConfirmingNoParams)
+            assertThat(confirmingState.roleToApply).isEqualTo(RoomMember.Role.Moderator)
+            updateUsersRolesLambda.assertions().isNeverCalled()
+
+            initialState.eventSink(InternalRoomMemberModerationEvent.DoChangeRole)
+            advanceUntilIdle()
+            updateUsersRolesLambda.assertions().isCalledOnce().with(
+                value(listOf(UserRoleChange(A_USER_ID, RoomMember.Role.Moderator)))
+            )
+            cancelAndIgnoreRemainingEvents()
         }
     }
 

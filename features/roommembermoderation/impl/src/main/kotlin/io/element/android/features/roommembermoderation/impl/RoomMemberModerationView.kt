@@ -44,6 +44,7 @@ import io.element.android.libraries.designsystem.components.async.rememberAsyncI
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
+import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.TextFieldDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -53,6 +54,7 @@ import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.ListItemStyle
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.getBestName
@@ -209,7 +211,55 @@ private fun RoomMemberAsyncActions(
             is AsyncAction.Loading,
             AsyncAction.Uninitialized -> Unit
         }
+
+        when (val action = state.changeRoleAsyncAction) {
+            is AsyncAction.Confirming -> {
+                val role = state.roleToApply
+                if (role != null) {
+                    ConfirmationDialog(
+                        title = stringResource(R.string.screen_bottom_sheet_manage_room_member_change_role_confirmation_title),
+                        content = stringResource(
+                            R.string.screen_bottom_sheet_manage_room_member_change_role_confirmation_description,
+                            selectedUser?.getBestName().orEmpty(),
+                            stringResource(role.roleNameId()),
+                        ),
+                        submitText = stringResource(CommonStrings.action_confirm),
+                        onSubmitClick = { state.eventSink(InternalRoomMemberModerationEvent.DoChangeRole) },
+                        onDismiss = { state.eventSink(InternalRoomMemberModerationEvent.Reset) },
+                    )
+                }
+            }
+            is AsyncAction.Failure -> {
+                Timber.e(action.error, "Failed to change the role of a room member.")
+                LaunchedEffect(action) {
+                    asyncIndicatorState.enqueue(AsyncIndicator.DURATION_SHORT) {
+                        AsyncIndicator.Failure(
+                            text = stringResource(CommonStrings.common_failed),
+                        )
+                    }
+                }
+            }
+            is AsyncAction.Success -> {
+                LaunchedEffect(action) { asyncIndicatorState.clear() }
+            }
+            is AsyncAction.Loading,
+            AsyncAction.Uninitialized -> Unit
+        }
     }
+}
+
+private fun RoomMember.Role.roleNameId(): Int = when (this) {
+    is RoomMember.Role.Owner -> R.string.screen_bottom_sheet_manage_room_member_role_owner
+    RoomMember.Role.Admin -> R.string.screen_bottom_sheet_manage_room_member_role_admin
+    RoomMember.Role.Moderator -> R.string.screen_bottom_sheet_manage_room_member_role_moderator
+    RoomMember.Role.User -> R.string.screen_bottom_sheet_manage_room_member_role_member
+}
+
+private fun RoomMember.Role.actionLabelId(): Int = when (this) {
+    is RoomMember.Role.Owner,
+    RoomMember.Role.Admin -> R.string.screen_bottom_sheet_manage_room_member_make_admin
+    RoomMember.Role.Moderator -> R.string.screen_bottom_sheet_manage_room_member_make_moderator
+    RoomMember.Role.User -> R.string.screen_bottom_sheet_manage_room_member_make_member
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -331,6 +381,19 @@ private fun RoomMemberActionsBottomSheet(
                             content = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_ban)) },
                             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block())),
                             style = ListItemStyle.Destructive,
+                            onClick = {
+                                coroutineScope.launch {
+                                    bottomSheetState.hide()
+                                    onSelectAction(action, user)
+                                }
+                            },
+                            enabled = actionState.isEnabled
+                        )
+                    }
+                    is ModerationAction.ChangeRole -> {
+                        ListItem(
+                            content = { Text(stringResource(action.role.actionLabelId())) },
+                            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Admin())),
                             onClick = {
                                 coroutineScope.launch {
                                     bottomSheetState.hide()
