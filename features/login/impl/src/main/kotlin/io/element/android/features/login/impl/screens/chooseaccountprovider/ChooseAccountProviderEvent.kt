@@ -10,8 +10,8 @@ package io.element.android.features.login.impl.screens.chooseaccountprovider
 
 import io.element.android.features.login.impl.accountprovider.AccountProvider
 
-sealed interface ChooseAccountProviderEvents {
-    data class SelectAccountProvider(val accountProvider: AccountProvider) : ChooseAccountProviderEvents
-    data object Continue : ChooseAccountProviderEvents
-    data object ClearError : ChooseAccountProviderEvents
+sealed interface ChooseAccountProviderEvent {
+    data class SelectAccountProvider(val accountProvider: AccountProvider) : ChooseAccountProviderEvent
+    data object Continue : ChooseAccountProviderEvent
+    data object ClearError : ChooseAccountProviderEvent
 }
