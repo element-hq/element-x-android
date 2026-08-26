@@ -335,6 +335,8 @@ licensee {
     ignoreDependencies("com.github.matrix-org", "matrix-analytics-events")
     // Ignore dependency that are not third-party licenses to us.
     ignoreDependencies(groupId = "io.element.android")
+    // Ridgeline-owned proprietary PTT libraries (Mumble AAR) — first-party, not a third-party licence.
+    ignoreDependencies(groupId = "com.ridgelineinternational.mumble")
 }
 
 fun Project.configureLicensesTasks(reportingExtension: ReportingExtension) {
