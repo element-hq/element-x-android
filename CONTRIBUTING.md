@@ -77,7 +77,7 @@ Only once all of the above is met should you open a PR with your proposed change
     * Don't submit large PRs, especially if not previously talked about. Anything above 200 lines is large (excluding generated code e.g. tests, translations, mocks)
     * Please don't open unfinished PRs and expect us to fill in the details
     * If you would like our opinion/direction on unfinished code please link your branch or idea in the ticket
-    * Please limit the number of commits in a single PR. We are perfectly happy with splitting work across multiple sessions as long as they're logically independant and show promise of progress (ideally expressed through a ticket)
+    * Please limit the number of commits in a single PR. We are perfectly happy with splitting work across multiple sessions as long as they're logically independent and show promise of progress (ideally expressed through a ticket)
     * Each and every commit should stand on its own, clearly explaining what it does and why
 * Once a PR goes into review please don't rewrite the history unless agreed so with the reviewer.
     * Tweaks and fixes following review can be directly committed (to be interactively rebased later) or as fixups
