@@ -37,6 +37,7 @@ import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
+import io.element.android.libraries.mediaupload.api.resolvedMimeType
 import io.element.android.libraries.permissions.api.PermissionsEvent
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import kotlinx.collections.immutable.toImmutableList
@@ -224,11 +225,14 @@ class RoomDetailsEditPresenter(
             if (avatarUri != null) {
                 val preprocessed = mediaPreProcessor.process(
                     uri = avatarUri,
-                    mimeType = MimeTypes.Jpeg,
+                    // Let the processor resolve the real image type from the file content (rather than assuming
+                    // JPEG), so an animated GIF/WebP/PNG avatar is detected and kept as-is instead of being
+                    // flattened to a static JPEG frame.
+                    mimeType = MimeTypes.Images,
                     deleteOriginal = false,
                     mediaOptimizationConfig = mediaOptimizationConfigProvider.get(),
                 ).getOrThrow()
-                room.updateAvatar(MimeTypes.Jpeg, preprocessed.file.readBytes()).getOrThrow()
+                room.updateAvatar(preprocessed.resolvedMimeType(), preprocessed.file.readBytes()).getOrThrow()
             } else {
                 room.removeAvatar().getOrThrow()
             }
