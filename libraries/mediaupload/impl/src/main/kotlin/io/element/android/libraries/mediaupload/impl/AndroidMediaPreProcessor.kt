@@ -21,6 +21,7 @@ import io.element.android.libraries.androidutils.file.getFileName
 import io.element.android.libraries.androidutils.file.safeRenameTo
 import io.element.android.libraries.androidutils.hash.hash
 import io.element.android.libraries.androidutils.media.runAndRelease
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.extensions.mapFailure
@@ -68,8 +69,12 @@ class AndroidMediaPreProcessor(
          */
         private const val IMAGE_SCALE_REF_SIZE = 1280
 
-        private val notCompressibleImageTypes = listOf(MimeTypes.Gif, MimeTypes.WebP)
+        // The only image mime types that can possibly be animated. Checking file content to detect animation is
+        // skipped for any other mime type, since it would always be a waste of work.
+        private val potentiallyAnimatedImageTypes = listOf(MimeTypes.Gif, MimeTypes.WebP, MimeTypes.Png)
     }
+
+    private val animatedImageDetector = AnimatedImageDetector()
 
     private val contentResolver = context.contentResolver
 
@@ -88,7 +93,7 @@ class AndroidMediaPreProcessor(
                 resolvedMimeType == MimeTypes.Svg -> processSvgImage(uri, resolvedMimeType)
                 resolvedMimeType.isMimeTypeImage() -> {
                     val imageMimeType = resolveImageMimeType(uri, mimeType).ensureDefaultSubtype()
-                    val shouldBeCompressed = mediaOptimizationConfig.compressImages && imageMimeType !in notCompressibleImageTypes
+                    val shouldBeCompressed = mediaOptimizationConfig.compressImages && !isAnimatedImage(uri, imageMimeType)
                     processImage(uri, imageMimeType, shouldBeCompressed)
                 }
                 resolvedMimeType.isMimeTypeVideo() -> processVideo(uri, resolvedMimeType, mediaOptimizationConfig.videoCompressionPreset)
@@ -169,6 +174,19 @@ class AndroidMediaPreProcessor(
             contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, options) }
         }
         return options.outMimeType ?: declaredMimeType
+    }
+
+    /**
+     * Whether [uri] is an actually animated image, checked by inspecting its content rather than assuming from its
+     * mime type - most WebP images are static, and a GIF, WebP or PNG can only be animated in the first place.
+     * Compressing an animated image would flatten it down to a single static frame, so this is used to decide
+     * whether it's safe to compress it.
+     */
+    private fun isAnimatedImage(uri: Uri, mimeType: String): Boolean {
+        if (mimeType !in potentiallyAnimatedImageTypes) return false
+        return tryOrNull {
+            contentResolver.openInputStream(uri)?.use { animatedImageDetector.isAnimated(it) }
+        }.orFalse()
     }
 
     private suspend fun processImage(uri: Uri, mimeType: String, shouldBeCompressed: Boolean): MediaUploadInfo {
