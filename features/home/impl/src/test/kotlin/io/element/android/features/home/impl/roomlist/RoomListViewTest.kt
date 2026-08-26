@@ -25,10 +25,11 @@ import io.element.android.features.home.impl.HomeView
 import io.element.android.features.home.impl.R
 import io.element.android.features.home.impl.aHomeState
 import io.element.android.features.home.impl.components.RoomListMenuAction
-import io.element.android.features.home.impl.components.RoomSummaryRow
 import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.features.home.impl.model.RoomSummaryDisplayType
 import io.element.android.features.home.impl.model.aRoomListRoomSummary
+import io.element.android.features.home.impl.search.aGlobalSearchState
+import io.element.android.features.home.impl.search.aRoomListSearchState
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -201,22 +202,26 @@ class RoomListViewTest : RobolectricTest() {
     }
 
     @Test
-    fun `the avatar in the search results is not clickable`() = runAndroidComposeUiTest {
+    fun `clicking on the avatar of a search result invokes the avatar callback`() = runAndroidComposeUiTest {
         val roomWithAvatar = aRoomListRoomSummary(
             id = "!roomWithAvatar:domain",
             avatarData = AvatarData("!roomWithAvatar:domain", "A room", url = "mxc://an/avatar", size = AvatarSize.RoomListItem),
         )
-        setSafeContent {
-            RoomSummaryRow(
-                room = roomWithAvatar,
-                hideInviteAvatars = false,
-                isInviteSeen = false,
-                onClick = EnsureNeverCalledWithParam(),
-                eventSink = EventsRecorder(expectEvents = false),
+        val eventsRecorder = EventsRecorder<RoomListEvent>()
+        val state = aRoomListState(
+            contentState = aRoomsContentState(summaries = persistentListOf()),
+            globalSearchState = aGlobalSearchState(isEnabled = false),
+            searchState = aRoomListSearchState(isSearchActive = true, results = persistentListOf(roomWithAvatar)),
+            eventSink = eventsRecorder,
+        )
+        ensureCalledOnceWithParam(roomWithAvatar) { callback ->
+            setRoomListView(
+                state = state,
+                onRoomAvatarClick = callback,
             )
+            eventsRecorder.clear()
+            onNodeWithTag(TestTags.roomListAvatar.value).performClick()
         }
-
-        onNodeWithTag(TestTags.roomListAvatar.value).assertIsNotEnabled()
     }
 
     @Test

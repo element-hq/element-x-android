@@ -81,8 +81,8 @@ internal fun RoomSummaryRow(
     hideInviteAvatars: Boolean,
     isInviteSeen: Boolean,
     onClick: (RoomListRoomSummary) -> Unit,
+    onAvatarClick: (RoomListRoomSummary) -> Unit,
     modifier: Modifier = Modifier,
-    onAvatarClick: ((RoomListRoomSummary) -> Unit)? = null,
     showUnreadCount: Boolean = false,
     eventSink: (RoomListEvent) -> Unit,
 ) {
@@ -183,8 +183,8 @@ private fun RoomSummaryScaffoldRow(
     room: RoomListRoomSummary,
     onClick: (RoomListRoomSummary) -> Unit,
     onLongClick: (RoomListRoomSummary) -> Unit,
+    onAvatarClick: (RoomListRoomSummary) -> Unit,
     modifier: Modifier = Modifier,
-    onAvatarClick: ((RoomListRoomSummary) -> Unit)? = null,
     hideAvatarImage: Boolean = false,
     content: @Composable ColumnScope.() -> Unit
 ) {
@@ -218,10 +218,10 @@ private fun RoomSummaryScaffoldRow(
             hideImage = hideAvatarImage,
             modifier = Modifier
                 .clickable(
-                    enabled = onAvatarClick != null && room.avatarData.url != null && !hideAvatarImage,
+                    enabled = room.avatarData.url != null && !hideAvatarImage,
                     onClickLabel = stringResource(CommonStrings.action_view),
                 ) {
-                    onAvatarClick?.invoke(room)
+                    onAvatarClick(room)
                 }
                 .testTag(TestTags.roomListAvatar),
         )
@@ -472,6 +472,7 @@ internal fun RoomSummaryRowPreview(@PreviewParameter(RoomListRoomSummaryPreviewP
         // Set isInviteSeen to true for the preview when the room has name "Bob"
         isInviteSeen = data.name == "Bob",
         onClick = {},
+        onAvatarClick = {},
         eventSink = {},
     )
 }

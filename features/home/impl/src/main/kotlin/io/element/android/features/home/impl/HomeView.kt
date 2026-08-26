@@ -149,6 +149,7 @@ fun HomeView(
                 eventSink = state.eventSink,
                 hideInvitesAvatars = state.hideInvitesAvatars,
                 onRoomClick = { roomId -> if (firstThrottler.canHandle()) onRoomClick(roomId, null) },
+                onRoomAvatarClick = { room -> if (firstThrottler.canHandle()) onRoomAvatarClick(room) },
                 modifier = Modifier
                     .fillMaxSize()
                     .background(ElementTheme.colors.bgCanvasDefault)
