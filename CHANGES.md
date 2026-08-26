@@ -1,3 +1,67 @@
+Changes in Element X v26.08.3
+=============================
+
+<!-- Release notes generated using configuration in .github/release.yml at v26.08.3 -->
+
+## What's Changed
+### ✨ Features
+* Let users enter their full Matrix user ID on the account provider screen by @jennaharris7 in https://github.com/element-hq/element-x-android/pull/7500
+* Enable user status feature and hide status text in the timeline by @bmarty in https://github.com/element-hq/element-x-android/pull/7517
+### 🐛 Bugfixes
+* Fix cold start with a mobile deep link by @bmarty in https://github.com/element-hq/element-x-android/pull/7488
+* Make the account provider screen scrollable so its description is not clipped by the keyboard by @jennaharris7 in https://github.com/element-hq/element-x-android/pull/7521
+### 🧱 Build
+* Update Gradle Wrapper from 9.7.0 to 9.7.1 by @ElementBot in https://github.com/element-hq/element-x-android/pull/7485
+* Fix flaky test in `DefaultVoiceMessageComposerPresenterTest` by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7487
+* Fix warning about deprecated Gradle `keepRules.file` API by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7498
+* Update Enterprise Copyright in idea settings, so that new files get an expected header. by @bmarty in https://github.com/element-hq/element-x-android/pull/7501
+* Remove workaround for Renovate. by @bmarty in https://github.com/element-hq/element-x-android/pull/7502
+### 🚧 In development 🚧
+* Make PIP react to camera orientation changes in the other participant's device by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6951
+* Feature: global search by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7410
+### Dependency upgrades
+* Update dependency org.maplibre.gl:android-sdk to v13.5.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7486
+* Update dependency androidx.webkit:webkit to v1.17.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7484
+* Update dependency io.sentry:sentry-android to v8.53.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7481
+* Update dependency io.element.android:element-call-embedded to v0.24.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7474
+* Update roborazzi to v1.72.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7489
+* Update metro to v1.4.2 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7493
+* Update dependency com.squareup.okhttp3:okhttp-bom to v5.5.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7512
+* Update dependency com.google.guava:guava to v33.7.0-android by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7516
+* Update sdk to version 26.08.25 by @bmarty in https://github.com/element-hq/element-x-android/pull/7550
+### 💼 Element Pro
+* Add `ClientEnterpriseHook` and `ClientBuilderEnterpriseHook` by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7495
+* Remove dependency on enterprise module. by @bmarty in https://github.com/element-hq/element-x-android/pull/7505
+### Others
+* Show the right image when opening one that has not finished sending by @hayaksi1 in https://github.com/element-hq/element-x-android/pull/7359
+* Move strings to the login module by @bmarty in https://github.com/element-hq/element-x-android/pull/7494
+* Allow empty problem description if the GitHub issue number is present for rageshakes by @bxdxnn in https://github.com/element-hq/element-x-android/pull/7497
+* Apply the system theme when switching back to it from a forced light or dark theme by @hayaksi1 in https://github.com/element-hq/element-x-android/pull/7453
+* Show dialog with reason when user clicks on a message with a failure by @bmarty in https://github.com/element-hq/element-x-android/pull/7490
+* Keep a focused timeline focused until the event has been rendered by @hayaksi1 in https://github.com/element-hq/element-x-android/pull/7463
+* Do not render in-chat key verification requests in the timeline by @hayaksi1 in https://github.com/element-hq/element-x-android/pull/7443
+* Share a file whose mime type is not one of the supported ones by @hayaksi1 in https://github.com/element-hq/element-x-android/pull/7435
+* Show reactions in the pinned messages list by @bxdxnn in https://github.com/element-hq/element-x-android/pull/6676
+* Send a concrete mime type for media shared with a wildcard one by @hayaksi1 in https://github.com/element-hq/element-x-android/pull/7449
+* Rename module and ensure that naming convention is followed by @bmarty in https://github.com/element-hq/element-x-android/pull/7514
+* Fix lint issue, ensure that PiP methods are not called on old devices not supporting them. by @bmarty in https://github.com/element-hq/element-x-android/pull/7515
+* Rename PreviewParameterProvider subclasses to the PreviewParam suffix by @hayaksi1 in https://github.com/element-hq/element-x-android/pull/7468
+* Update Ref. by @bmarty in https://github.com/element-hq/element-x-android/pull/7518
+* Remove the reference to the decommissioned OIDC playground by @sandhose in https://github.com/element-hq/element-x-android/pull/7519
+* Hide the encryption badge when key storage is set up on the server by @hayaksi1 in https://github.com/element-hq/element-x-android/pull/7447
+* Rename remaining events sealed interface by @bmarty in https://github.com/element-hq/element-x-android/pull/7533
+* Stop waiting on a verification request the other session never accepts by @hayaksi1 in https://github.com/element-hq/element-x-android/pull/7457
+* Point the proxy debugging doc at the method that builds the clients by @hayaksi1 in https://github.com/element-hq/element-x-android/pull/7543
+* Show the build date in the screenshot gallery footer by @hayaksi1 in https://github.com/element-hq/element-x-android/pull/7544
+* Run the database migrations again when a database is upgraded by @hayaksi1 in https://github.com/element-hq/element-x-android/pull/7570
+* Update fonts on the headings by @bmarty in https://github.com/element-hq/element-x-android/pull/7520
+* Add a "Push rules" entry in the developer options by @bmarty in https://github.com/element-hq/element-x-android/pull/7577
+
+## New Contributors
+* @sandhose made their first contribution in https://github.com/element-hq/element-x-android/pull/7519
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v26.08.2...v26.08.3
+
 Changes in Element X v26.08.2
 =============================
 
