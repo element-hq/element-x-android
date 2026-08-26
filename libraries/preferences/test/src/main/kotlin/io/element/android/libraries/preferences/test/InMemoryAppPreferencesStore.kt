@@ -14,6 +14,7 @@ import io.element.android.libraries.matrix.api.tracing.TraceLogPack
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.api.store.NotificationSound
 import io.element.android.libraries.preferences.api.store.NotificationSoundChannelConfig
+import io.element.android.libraries.preferences.api.store.RoomListActivityVisibility
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -25,6 +26,7 @@ class InMemoryAppPreferencesStore(
     hideInviteAvatars: Boolean? = null,
     timelineMediaPreviewValue: MediaPreviewValue? = null,
     theme: String? = null,
+    roomListActivityVisibility: RoomListActivityVisibility = RoomListActivityVisibility.CURRENT,
     liveLocationMinimumDistanceUpdate: Int = 10,
     logLevel: LogLevel = LogLevel.INFO,
     traceLogPacks: Set<TraceLogPack> = emptySet(),
@@ -39,6 +41,7 @@ class InMemoryAppPreferencesStore(
     private val isDeveloperModeEnabled = MutableStateFlow(isDeveloperModeEnabled)
     private val customElementCallBaseUrl = MutableStateFlow(customElementCallBaseUrl)
     private val theme = MutableStateFlow(theme)
+    private val roomListActivityVisibility = MutableStateFlow(roomListActivityVisibility)
     private val liveLocationMinimumDistanceUpdate = MutableStateFlow(liveLocationMinimumDistanceUpdate)
     private val logLevel = MutableStateFlow(logLevel)
     private val tracingLogPacks = MutableStateFlow(traceLogPacks)
@@ -51,6 +54,14 @@ class InMemoryAppPreferencesStore(
     private val callRingtone = MutableStateFlow(callRingtone)
     private val callRingtoneChannelVersion = MutableStateFlow(callRingtoneChannelVersion)
     private val callRingtoneDisplayName = MutableStateFlow(callRingtoneDisplayName)
+
+    override suspend fun setRoomListActivityVisibility(visibility: RoomListActivityVisibility) {
+        roomListActivityVisibility.value = visibility
+    }
+
+    override fun getRoomListActivityVisibilityFlow(): Flow<RoomListActivityVisibility> {
+        return roomListActivityVisibility
+    }
 
     override suspend fun setDeveloperModeEnabled(enabled: Boolean) {
         isDeveloperModeEnabled.value = enabled

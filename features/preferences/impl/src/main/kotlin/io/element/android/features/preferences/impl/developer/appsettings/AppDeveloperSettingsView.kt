@@ -56,6 +56,17 @@ fun AppDeveloperSettingsView(
             FeatureListContent(state)
         }
         ElementCallCategory(state = state)
+        PreferenceCategory(title = "Room list") {
+            PreferenceDropdown(
+                title = "Unread activity",
+                supportingText = "What an unread room shows in the room list",
+                selectedOption = state.roomListActivityVisibility,
+                options = RoomListActivityVisibilityItem.entries.toImmutableList(),
+                onSelectOption = { visibility ->
+                    state.eventSink(AppDeveloperSettingsEvent.SetRoomListActivityVisibility(visibility))
+                }
+            )
+        }
         PreferenceCategory(title = "Rust SDK") {
             PreferenceDropdown(
                 title = "Tracing log level",

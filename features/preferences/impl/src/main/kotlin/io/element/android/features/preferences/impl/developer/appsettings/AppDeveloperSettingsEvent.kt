@@ -15,5 +15,6 @@ sealed interface AppDeveloperSettingsEvent {
     data class UpdateEnabledFeature(val feature: FeatureUiModel, val isEnabled: Boolean) : AppDeveloperSettingsEvent
     data class SetCustomElementCallBaseUrl(val baseUrl: String?) : AppDeveloperSettingsEvent
     data class SetTracingLogLevel(val logLevel: LogLevelItem) : AppDeveloperSettingsEvent
+    data class SetRoomListActivityVisibility(val visibility: RoomListActivityVisibilityItem) : AppDeveloperSettingsEvent
     data class ToggleTracingLogPack(val logPack: TraceLogPack, val enabled: Boolean) : AppDeveloperSettingsEvent
 }

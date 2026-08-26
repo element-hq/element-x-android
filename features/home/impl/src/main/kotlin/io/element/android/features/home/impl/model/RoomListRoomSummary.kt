@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.ui.model.InviteSender
+import io.element.android.libraries.preferences.api.store.RoomListActivityVisibility
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
@@ -53,6 +54,19 @@ data class RoomListRoomSummary(
         numberOfUnreadMentions > 0 ||
         numberOfUnreadNotifications > 0 ||
         isMarkedUnread
+
+    /**
+     * Whether the row shows an unread badge. Only rooms whose unread content would have notified get one,
+     * so a muted or mentions-only room no longer shows the grey dot it used to.
+     */
+    fun showsUnreadBadge(activityVisibility: RoomListActivityVisibility): Boolean {
+        return activityVisibility == RoomListActivityVisibility.CURRENT && isHighlighted
+    }
+
+    /** Whether the row emphasises its name and message preview because the room has unread content. */
+    fun emphasisesUnreadContent(activityVisibility: RoomListActivityVisibility): Boolean {
+        return activityVisibility != RoomListActivityVisibility.HIDE && hasNewContent
+    }
 
     fun toInviteData() = InviteData(
         roomId = roomId,
