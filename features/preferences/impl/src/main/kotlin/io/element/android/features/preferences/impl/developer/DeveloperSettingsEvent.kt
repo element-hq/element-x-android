@@ -17,4 +17,6 @@ sealed interface DeveloperSettingsEvent {
     data object VacuumStores : DeveloperSettingsEvent
     data class MarkAllRoomsAsRead(val needsConfirmation: Boolean) : DeveloperSettingsEvent
     data object DismissMarkAllRoomsAsReadConfirmation : DeveloperSettingsEvent
+    data object OpenPushRules : DeveloperSettingsEvent
+    data object DismissPushRulesError : DeveloperSettingsEvent
 }
