@@ -13,8 +13,10 @@ package io.element.android.features.home.impl.roomlist
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
@@ -25,7 +27,11 @@ import io.element.android.features.home.impl.aHomeState
 import io.element.android.features.home.impl.components.RoomListMenuAction
 import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.features.home.impl.model.RoomSummaryDisplayType
+import io.element.android.features.home.impl.model.aRoomListRoomSummary
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
@@ -35,6 +41,7 @@ import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.setSafeContent
+import kotlinx.collections.immutable.persistentListOf
 import org.junit.Test
 import org.robolectric.annotation.Config
 
@@ -172,6 +179,43 @@ class RoomListViewTest : RobolectricTest() {
     }
 
     @Test
+    fun `clicking on the avatar of a room that has one invokes the avatar callback`() = runAndroidComposeUiTest {
+        val roomWithAvatar = aRoomListRoomSummary(
+            id = "!roomWithAvatar:domain",
+            avatarData = AvatarData("!roomWithAvatar:domain", "A room", url = "mxc://an/avatar", size = AvatarSize.RoomListItem),
+        )
+        val eventsRecorder = EventsRecorder<RoomListEvent>()
+        val state = aRoomListState(
+            contentState = aRoomsContentState(summaries = persistentListOf(roomWithAvatar)),
+            eventSink = eventsRecorder,
+        )
+        ensureCalledOnceWithParam(roomWithAvatar) { callback ->
+            setRoomListView(
+                state = state,
+                onRoomAvatarClick = callback,
+            )
+            eventsRecorder.clear()
+            onNodeWithTag(TestTags.roomListAvatar.value).performClick()
+        }
+    }
+
+    @Test
+    fun `the avatar of a room that has none is not clickable`() = runAndroidComposeUiTest {
+        val roomWithoutAvatar = aRoomListRoomSummary(id = "!roomWithoutAvatar:domain")
+        val eventsRecorder = EventsRecorder<RoomListEvent>()
+        setRoomListView(
+            state = aRoomListState(
+                contentState = aRoomsContentState(summaries = persistentListOf(roomWithoutAvatar)),
+                eventSink = eventsRecorder,
+            ),
+            onRoomAvatarClick = EnsureNeverCalledWithParam(),
+        )
+        eventsRecorder.clear()
+
+        onNodeWithTag(TestTags.roomListAvatar.value).assertIsNotEnabled()
+    }
+
+    @Test
     fun `clicking on a room twice invokes the expected callback only once`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<RoomListEvent>()
         val state = aRoomListState(
@@ -273,11 +317,13 @@ private fun AndroidComposeUiTest<ComponentActivity>.setRoomListView(
     onMenuActionClick: (RoomListMenuAction) -> Unit = EnsureNeverCalledWithParam(),
     onReportRoomClick: (RoomId) -> Unit = EnsureNeverCalledWithParam(),
     onDeclineInviteAndBlockUser: (RoomListRoomSummary) -> Unit = EnsureNeverCalledWithParam(),
+    onRoomAvatarClick: (RoomListRoomSummary) -> Unit = EnsureNeverCalledWithParam(),
 ) {
     setSafeContent {
         HomeView(
             homeState = aHomeState(roomListState = state),
             onRoomClick = { roomId, _ -> onRoomClick(roomId) },
+            onRoomAvatarClick = onRoomAvatarClick,
             onSettingsClick = onSettingsClick,
             onSetUpRecoveryClick = onSetUpRecoveryClick,
             onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,

@@ -84,6 +84,7 @@ import kotlinx.coroutines.launch
 fun HomeView(
     homeState: HomeState,
     onRoomClick: (RoomId, EventId?) -> Unit,
+    onRoomAvatarClick: (RoomListRoomSummary) -> Unit,
     onSettingsClick: () -> Unit,
     onSetUpRecoveryClick: () -> Unit,
     onConfirmRecoveryKeyClick: () -> Unit,
@@ -126,6 +127,7 @@ fun HomeView(
             onSetUpRecoveryClick = onSetUpRecoveryClick,
             onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
             onRoomClick = { roomId -> if (firstThrottler.canHandle()) onRoomClick(roomId, null) },
+            onRoomAvatarClick = { room -> if (firstThrottler.canHandle()) onRoomAvatarClick(room) },
             onOpenSettings = { if (firstThrottler.canHandle()) onSettingsClick() },
             onStartChatClick = { if (firstThrottler.canHandle()) onStartChatClick() },
             onCreateSpaceClick = { if (firstThrottler.canHandle()) onCreateSpaceClick() },
@@ -164,6 +166,7 @@ private fun HomeScaffold(
     onSetUpRecoveryClick: () -> Unit,
     onConfirmRecoveryKeyClick: () -> Unit,
     onRoomClick: (RoomId) -> Unit,
+    onRoomAvatarClick: (RoomListRoomSummary) -> Unit,
     onOpenSettings: () -> Unit,
     onStartChatClick: () -> Unit,
     onCreateSpaceClick: () -> Unit,
@@ -292,6 +295,7 @@ private fun HomeScaffold(
                         onSetUpRecoveryClick = onSetUpRecoveryClick,
                         onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
                         onRoomClick = ::onRoomClick,
+                        onRoomAvatarClick = onRoomAvatarClick,
                         onCreateRoomClick = onStartChatClick,
                         contentPadding = lazyColumnContentPadding + contentPadding,
                         modifier = Modifier
@@ -375,6 +379,7 @@ internal fun HomeViewPreview(@PreviewParameter(HomeStatePreviewParam::class) sta
     HomeView(
         homeState = state,
         onRoomClick = { _, _ -> },
+        onRoomAvatarClick = {},
         onSettingsClick = {},
         onSetUpRecoveryClick = {},
         onConfirmRecoveryKeyClick = {},
@@ -395,6 +400,7 @@ internal fun HomeViewA11yPreview() = ElementPreview {
     HomeView(
         homeState = aHomeState(),
         onRoomClick = { _, _ -> },
+        onRoomAvatarClick = {},
         onSettingsClick = {},
         onSetUpRecoveryClick = {},
         onConfirmRecoveryKeyClick = {},
