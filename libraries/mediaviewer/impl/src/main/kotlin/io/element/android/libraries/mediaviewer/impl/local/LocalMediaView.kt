@@ -59,7 +59,7 @@ fun LocalMediaView(
             forPreview = forPreview,
             modifier = modifier,
         )
-        mimeType == MimeTypes.PlainText -> TextFileView(
+        mimeType == MimeTypes.PlainText || mimeType == MimeTypes.Json -> TextFileView(
             localMedia = localMedia,
             textFileViewer = textFileViewer,
             modifier = modifier,
