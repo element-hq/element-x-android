@@ -34,6 +34,7 @@ dependencies {
     implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixui)
+    implementation(projects.libraries.mediaviewer.api)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)
@@ -64,6 +65,7 @@ dependencies {
     api(projects.features.home.api)
 
     testCommonDependencies(libs, true)
+    testImplementation(projects.libraries.mediaviewer.test)
     testImplementation(projects.features.announcement.test)
     testImplementation(projects.features.invite.test)
     testImplementation(projects.features.logout.test)

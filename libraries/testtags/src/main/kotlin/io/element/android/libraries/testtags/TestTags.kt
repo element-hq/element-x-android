@@ -52,6 +52,7 @@ object TestTags {
      * Room detail screen.
      */
     val roomDetailAvatar = TestTag("room_detail-avatar")
+    val roomListAvatar = TestTag("room_list-avatar")
 
     /**
      * Room member screen.

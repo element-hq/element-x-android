@@ -12,6 +12,9 @@ PRs must meet these rules.
 
 - Style enforced by **Editor config** (`.editorconfig`).
 - Set "Hard wrap at" to 160 chars in Android Studio.
+- **Callbacks are not optional.** Declare a callback as `(Foo) -> Unit`, never `((Foo) -> Unit)?`.
+  A nullable callback leads to bugs and makes callers convoluted (`enabled = onFooClick != null`).
+  Every caller passes one, even if it is a no-op lambda.
 
 ### PII & Logging
 
