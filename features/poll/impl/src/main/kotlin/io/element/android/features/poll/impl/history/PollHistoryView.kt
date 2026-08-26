@@ -62,15 +62,15 @@ fun PollHistoryView(
     modifier: Modifier = Modifier,
 ) {
     fun onLoadMore() {
-        state.eventSink(PollHistoryEvents.LoadMore)
+        state.eventSink(PollHistoryEvent.LoadMore)
     }
 
     fun onSelectAnswer(pollStartId: EventId, answerId: String) {
-        state.eventSink(PollHistoryEvents.SelectPollAnswer(pollStartId, answerId))
+        state.eventSink(PollHistoryEvent.SelectPollAnswer(pollStartId, answerId))
     }
 
     fun onEndPoll(pollStartId: EventId) {
-        state.eventSink(PollHistoryEvents.EndPoll(pollStartId))
+        state.eventSink(PollHistoryEvent.EndPoll(pollStartId))
     }
 
     Scaffold(
@@ -97,7 +97,7 @@ fun PollHistoryView(
             }
             PollHistoryFilterButtons(
                 activeFilter = state.activeFilter,
-                onSelectFilter = { state.eventSink(PollHistoryEvents.SelectFilter(it)) },
+                onSelectFilter = { state.eventSink(PollHistoryEvent.SelectFilter(it)) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 8.dp),
@@ -255,7 +255,7 @@ private fun PollHistoryItemRow(
 @PreviewsDayNight
 @Composable
 internal fun PollHistoryViewPreview(
-    @PreviewParameter(PollHistoryStateProvider::class) state: PollHistoryState
+    @PreviewParameter(PollHistoryStatePreviewParam::class) state: PollHistoryState
 ) = ElementPreview {
     PollHistoryView(
         state = state,

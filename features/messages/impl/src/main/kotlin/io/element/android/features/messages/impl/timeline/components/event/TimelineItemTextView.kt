@@ -24,7 +24,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayout
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContentProvider
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContentPreviewParam
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.utils.containsOnlyEmojis
 import io.element.android.libraries.androidutils.text.LinkifyHelper
@@ -82,7 +82,7 @@ internal fun getTextWithResolvedMentions(content: TimelineItemTextBasedContent):
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemTextViewPreview(
-    @PreviewParameter(TimelineItemTextBasedContentProvider::class) content: TimelineItemTextBasedContent
+    @PreviewParameter(TimelineItemTextBasedContentPreviewParam::class) content: TimelineItemTextBasedContent
 ) = ElementPreview {
     TimelineItemTextView(
         content = content,

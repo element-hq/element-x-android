@@ -32,7 +32,7 @@ accompanist = "0.37.3"
 
 # Test
 test_core = "1.7.0"
-roborazzi = "1.71.0"
+roborazzi = "1.72.0"
 
 # Jetbrain
 datetime = "0.8.0"
@@ -54,7 +54,7 @@ haze = "1.7.2"
 dependencyAnalysis = "3.18.0"
 
 # DI
-metro = "1.4.1"
+metro = "1.4.2"
 
 # Auto service
 autoservice = "1.1.1"
@@ -123,7 +123,7 @@ androidx_activity_activity = { module = "androidx.activity:activity", version.re
 androidx_activity_compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 androidx_startup = "androidx.startup:startup-runtime:1.2.0"
 androidx_preference = "androidx.preference:preference:1.2.1"
-androidx_webkit = "androidx.webkit:webkit:1.16.0"
+androidx_webkit = "androidx.webkit:webkit:1.17.0"
 
 androidx_compose_bom = { module = "androidx.compose:compose-bom", version.ref = "compose_bom" }
 androidx_compose_material3 = { module = "androidx.compose.material3:material3", version = '1.5.0-alpha23' }
@@ -149,7 +149,7 @@ accompanist_permission = { module = "com.google.accompanist:accompanist-permissi
 squareup_seismic = "com.squareup:seismic:1.0.3"
 
 # network
-network_okhttp_bom = "com.squareup.okhttp3:okhttp-bom:5.4.0"
+network_okhttp_bom = "com.squareup.okhttp3:okhttp-bom:5.5.0"
 network_okhttp_logging = { module = "com.squareup.okhttp3:logging-interceptor" }
 network_okhttp_okhttp = { module = "com.squareup.okhttp3:okhttp" }
 network_okhttp = { module = "com.squareup.okhttp3:okhttp" }
@@ -185,7 +185,7 @@ test_detekt_test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version
 # https://github.com/matrix-org/matrix-rust-components-kotlin/commits/main/sdk/sdk-android/src/main/kotlin/org/matrix/rustcomponents/sdk/matrix_sdk_ffi.kt
 # All new features should not be implemented in the pull request that upgrades the version, developers should
 # only fix API breaks and may add some TODOs.
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.08.19"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.08.25"
 
 # Others
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
@@ -215,14 +215,14 @@ vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil3", version.ref = "telephoto" }
 telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "telephoto" }
 statemachine = "com.freeletics.flowredux:compose:1.2.2"
-maplibre = "org.maplibre.gl:android-sdk:13.4.1"
+maplibre = "org.maplibre.gl:android-sdk:13.5.0"
 maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:3.0.2"
 maplibre_compose = "org.maplibre.compose:maplibre-compose:0.14.0"
 maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:3.0.2"
 opusencoder = "io.element.android:opusencoder:1.2.0"
 zxing_cpp = "io.github.zxing-cpp:android:3.1.1"
 google_zxing = "com.google.zxing:core:3.5.4"
-google_guava = "com.google.guava:guava:33.6.0-android"
+google_guava = "com.google.guava:guava:33.7.0-android"
 
 haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }
 haze_materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = "haze" }
@@ -230,7 +230,7 @@ color_picker = "io.mhssn:colorpicker:1.0.0"
 
 # Analytics
 posthog = "com.posthog:posthog-android:3.56.4"
-sentry = "io.sentry:sentry-android:8.52.0"
+sentry = "io.sentry:sentry-android:8.53.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.37.0"
 
@@ -242,7 +242,7 @@ sigpwned_emoji4j = "com.sigpwned:emoji4j-core:16.0.0"
 metro_runtime = { module = "dev.zacsweers.metro:runtime", version.ref = "metro" }
 
 # Element Call
-element_call_embedded = "io.element.android:element-call-embedded:0.23.0"
+element_call_embedded = "io.element.android:element-call-embedded:0.24.0"
 
 # Auto services
 google_autoservice = { module = "com.google.auto.service:auto-service", version.ref = "autoservice" }

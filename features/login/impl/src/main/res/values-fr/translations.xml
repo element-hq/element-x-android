@@ -25,8 +25,16 @@
   <string name="screen_change_server_error_unauthorized_homeserver_title">"Le fournisseur de compte %1$s n’est pas autorisé."</string>
   <string name="screen_change_server_form_header">"URL du serveur d’accueil"</string>
   <string name="screen_change_server_form_notice">"Saisissez une adresse de domaine."</string>
+  <string name="screen_change_server_navigation_title_login">"Se connecter"</string>
+  <string name="screen_change_server_navigation_title_register">"Créer un compte"</string>
   <string name="screen_change_server_subtitle">"Quelle est l’adresse de votre serveur ?"</string>
+  <string name="screen_change_server_textfield_footer_login">"Si votre fournisseur de compte est fourni par votre entreprise ou une communauté, veuillez le saisir ici (exemple : monentreprise.com)."</string>
+  <string name="screen_change_server_textfield_footer_register">"Créez un compte sur matrix.org gratuitement. Si vous souhaitez créer un compte auprès d’un autre fournisseur, veuillez modifier l’adresse ici (exemple : monassociation.org)."</string>
+  <string name="screen_change_server_textfield_header">"Fournisseur de compte"</string>
+  <string name="screen_change_server_textfield_placeholder">"exemple.com"</string>
   <string name="screen_change_server_title">"Choisissez votre serveur"</string>
+  <string name="screen_change_server_title_login">"Saisissez votre fournisseur de compte"</string>
+  <string name="screen_change_server_title_register">"Choisissez un fournisseur de compte"</string>
   <string name="screen_create_account_title">"Créer un compte"</string>
   <string name="screen_login_error_deactivated_account">"Ce compte a été supprimé."</string>
   <string name="screen_login_error_invalid_credentials">"Nom d’utilisateur et/ou mot de passe incorrects"</string>

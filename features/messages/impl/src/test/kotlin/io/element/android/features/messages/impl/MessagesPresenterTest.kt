@@ -72,6 +72,7 @@ import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -83,6 +84,7 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
+import io.element.android.libraries.matrix.test.core.FakeSendHandle
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
@@ -1040,6 +1042,56 @@ class MessagesPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.RemoveCaption, messageEvent))
             editCaptionLambda.assertions().isCalledOnce().with(value(AN_EVENT_ID.toEventOrTransactionId()), value(null), value(null))
+        }
+    }
+
+    @Test
+    fun `present - handle action retry sending`() = runTest {
+        val retryLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val messageEvent = aMessageEvent(
+            sendState = LocalEventSendState.Failed.Unknown("Error"),
+            sendHandleProvider = { FakeSendHandle(retryLambda = retryLambda) },
+        )
+        val presenter = createMessagesPresenter()
+        presenter.testWithLifecycleOwner {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.RetrySending, messageEvent))
+            advanceUntilIdle()
+            retryLambda.assertions().isCalledOnce()
+        }
+    }
+
+    @Test
+    fun `present - handle action retry sending - failure is ignored`() = runTest {
+        val retryLambda = lambdaRecorder<Result<Unit>> { Result.failure(AN_EXCEPTION) }
+        val messageEvent = aMessageEvent(
+            sendState = LocalEventSendState.Failed.Unknown("Error"),
+            sendHandleProvider = { FakeSendHandle(retryLambda = retryLambda) },
+        )
+        val presenter = createMessagesPresenter()
+        presenter.testWithLifecycleOwner {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.RetrySending, messageEvent))
+            advanceUntilIdle()
+            retryLambda.assertions().isCalledOnce()
+        }
+    }
+
+    @Test
+    fun `present - handle action retry sending - no send handle, it should have no effect`() = runTest {
+        val messageEvent = aMessageEvent(
+            sendState = LocalEventSendState.Failed.Unknown("Error"),
+            sendHandleProvider = { null },
+        )
+        val presenter = createMessagesPresenter()
+        presenter.testWithLifecycleOwner {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.RetrySending, messageEvent))
+            advanceUntilIdle()
+            // No op!
         }
     }
 

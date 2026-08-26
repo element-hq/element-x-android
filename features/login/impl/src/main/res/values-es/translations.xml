@@ -25,8 +25,16 @@
   <string name="screen_change_server_error_unauthorized_homeserver_title">"No se permite el proveedor de cuentas %1$s."</string>
   <string name="screen_change_server_form_header">"URL del servidor base"</string>
   <string name="screen_change_server_form_notice">"Introduce una dirección de dominio."</string>
+  <string name="screen_change_server_navigation_title_login">"Iniciar sesión"</string>
+  <string name="screen_change_server_navigation_title_register">"Crear cuenta"</string>
   <string name="screen_change_server_subtitle">"¿Cuál es la dirección de tu servidor?"</string>
+  <string name="screen_change_server_textfield_footer_login">"Si tu cuenta te la proporciona tu empresa o una comunidad, cambia el proveedor de la cuenta (ejemplo: nombredeempresa.com)."</string>
+  <string name="screen_change_server_textfield_footer_register">"Crea una cuenta gratuita en matrix.org. Si deseas crear una cuenta con otro proveedor, modifícala según corresponda (por ejemplo: communityname.org)."</string>
+  <string name="screen_change_server_textfield_header">"Proveedor de cuentas"</string>
+  <string name="screen_change_server_textfield_placeholder">"ejemplo.com"</string>
   <string name="screen_change_server_title">"Selecciona tu servidor"</string>
+  <string name="screen_change_server_title_login">"Introduce tu proveedor de cuenta"</string>
+  <string name="screen_change_server_title_register">"Elegir proveedor de cuentas"</string>
   <string name="screen_create_account_title">"Crear cuenta"</string>
   <string name="screen_login_error_deactivated_account">"Esta cuenta ha sido eliminada."</string>
   <string name="screen_login_error_invalid_credentials">"Usuario y/o contraseña incorrectos"</string>
