@@ -32,6 +32,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.data.ByteUnit
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.analytics.GetDatabaseSizesUseCase
 import io.element.android.libraries.matrix.api.core.DeviceId
@@ -41,6 +42,9 @@ import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
 
 @AssistedInject
 class DeveloperSettingsPresenter(
@@ -190,7 +194,7 @@ class DeveloperSettingsPresenter(
                 pushRulesAction.value = AsyncAction.Uninitialized
                 navigator.openPushRules(
                     filename = pushRulesFilename(),
-                    content = content.orEmpty(),
+                    content = content.orEmpty().prettyPrintJson(),
                 )
             }
             .onFailure {
@@ -204,3 +208,18 @@ class DeveloperSettingsPresenter(
      */
     private fun pushRulesFilename() = "push_rules${sessionId.value.replace(':', '_')}.json"
 }
+
+@OptIn(ExperimentalSerializationApi::class)
+private val prettyPrintJson = Json {
+    prettyPrint = true
+    // Keep the indentation small, for a better rendering on mobile.
+    prettyPrintIndent = "  "
+}
+
+/**
+ * Pretty print this json content, so that it is readable when rendered.
+ * Return the content as is if it is not valid json.
+ */
+private fun String.prettyPrintJson(): String = runCatchingExceptions {
+    prettyPrintJson.encodeToString(JsonElement.serializer(), prettyPrintJson.parseToJsonElement(this))
+}.getOrDefault(this)

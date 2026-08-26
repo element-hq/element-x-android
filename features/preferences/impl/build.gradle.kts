@@ -92,6 +92,7 @@ dependencies {
     implementation(libs.color.picker)
     implementation(libs.androidx.browser)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.serialization.json)
     api(projects.features.preferences.api)
     implementation(libs.showkase)
 

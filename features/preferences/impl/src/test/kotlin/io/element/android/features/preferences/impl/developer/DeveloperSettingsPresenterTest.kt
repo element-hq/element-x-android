@@ -44,7 +44,17 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
-private const val A_PUSH_RULES_CONTENT = "{\"global\":{}}"
+private const val A_PUSH_RULES_CONTENT = """{"global":{"override":[{"rule_id":".m.rule.master","enabled":false}]}}"""
+private const val A_PUSH_RULES_CONTENT_PRETTY_PRINTED = """{
+  "global": {
+    "override": [
+      {
+        "rule_id": ".m.rule.master",
+        "enabled": false
+      }
+    ]
+  }
+}"""
 private val AN_EXCEPTION = Exception("A failure")
 
 class DeveloperSettingsPresenterTest {
@@ -195,7 +205,26 @@ class DeveloperSettingsPresenterTest {
             }
             openPushRulesLambda.assertions().isCalledOnce().with(
                 value("push_rules@alice_server.org.json"),
-                value(A_PUSH_RULES_CONTENT),
+                value(A_PUSH_RULES_CONTENT_PRETTY_PRINTED),
+            )
+        }
+    }
+
+    @Test
+    fun `present - OpenPushRules event keeps the content as is when it is not valid json`() = runTest {
+        val openPushRulesLambda = lambdaRecorder<String, String, Unit> { _, _ -> }
+        val presenter = createDeveloperSettingsPresenter(
+            navigator = DeveloperSettingsNavigator(openPushRulesLambda),
+            notificationSettingsService = FakeNotificationSettingsService(
+                getRawPushRulesResult = { Result.success("not json") },
+            ),
+        )
+        presenter.test {
+            awaitItem().eventSink(DeveloperSettingsEvent.OpenPushRules)
+            skipItems(2)
+            openPushRulesLambda.assertions().isCalledOnce().with(
+                value("push_rules@alice_server.org.json"),
+                value("not json"),
             )
         }
     }
