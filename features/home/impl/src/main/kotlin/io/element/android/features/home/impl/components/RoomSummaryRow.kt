@@ -82,7 +82,7 @@ internal fun RoomSummaryRow(
     isInviteSeen: Boolean,
     onClick: (RoomListRoomSummary) -> Unit,
     modifier: Modifier = Modifier,
-    onAvatarClick: (RoomListRoomSummary) -> Unit = {},
+    onAvatarClick: ((RoomListRoomSummary) -> Unit)? = null,
     showUnreadCount: Boolean = false,
     eventSink: (RoomListEvent) -> Unit,
 ) {
@@ -184,7 +184,7 @@ private fun RoomSummaryScaffoldRow(
     onClick: (RoomListRoomSummary) -> Unit,
     onLongClick: (RoomListRoomSummary) -> Unit,
     modifier: Modifier = Modifier,
-    onAvatarClick: (RoomListRoomSummary) -> Unit = {},
+    onAvatarClick: ((RoomListRoomSummary) -> Unit)? = null,
     hideAvatarImage: Boolean = false,
     content: @Composable ColumnScope.() -> Unit
 ) {
@@ -218,10 +218,10 @@ private fun RoomSummaryScaffoldRow(
             hideImage = hideAvatarImage,
             modifier = Modifier
                 .clickable(
-                    enabled = room.avatarData.url != null && !hideAvatarImage,
+                    enabled = onAvatarClick != null && room.avatarData.url != null && !hideAvatarImage,
                     onClickLabel = stringResource(CommonStrings.action_view),
                 ) {
-                    onAvatarClick(room)
+                    onAvatarClick?.invoke(room)
                 }
                 .testTag(TestTags.roomListAvatar),
         )

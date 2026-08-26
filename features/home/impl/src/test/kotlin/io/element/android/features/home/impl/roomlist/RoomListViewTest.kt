@@ -25,6 +25,7 @@ import io.element.android.features.home.impl.HomeView
 import io.element.android.features.home.impl.R
 import io.element.android.features.home.impl.aHomeState
 import io.element.android.features.home.impl.components.RoomListMenuAction
+import io.element.android.features.home.impl.components.RoomSummaryRow
 import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.features.home.impl.model.RoomSummaryDisplayType
 import io.element.android.features.home.impl.model.aRoomListRoomSummary
@@ -197,6 +198,25 @@ class RoomListViewTest : RobolectricTest() {
             eventsRecorder.clear()
             onNodeWithTag(TestTags.roomListAvatar.value).performClick()
         }
+    }
+
+    @Test
+    fun `the avatar in the search results is not clickable`() = runAndroidComposeUiTest {
+        val roomWithAvatar = aRoomListRoomSummary(
+            id = "!roomWithAvatar:domain",
+            avatarData = AvatarData("!roomWithAvatar:domain", "A room", url = "mxc://an/avatar", size = AvatarSize.RoomListItem),
+        )
+        setSafeContent {
+            RoomSummaryRow(
+                room = roomWithAvatar,
+                hideInviteAvatars = false,
+                isInviteSeen = false,
+                onClick = EnsureNeverCalledWithParam(),
+                eventSink = EventsRecorder(expectEvents = false),
+            )
+        }
+
+        onNodeWithTag(TestTags.roomListAvatar.value).assertIsNotEnabled()
     }
 
     @Test
