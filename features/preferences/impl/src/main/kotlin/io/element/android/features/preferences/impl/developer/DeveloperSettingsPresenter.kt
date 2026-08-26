@@ -17,7 +17,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.toArgb
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.preferences.impl.developer.appsettings.AppDeveloperSettingsState
 import io.element.android.features.preferences.impl.tasks.ClearCacheUseCase
@@ -34,13 +36,15 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.analytics.GetDatabaseSizesUseCase
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Inject
+@AssistedInject
 class DeveloperSettingsPresenter(
+    @Assisted private val navigator: DeveloperSettingsNavigator,
     private val appDeveloperSettingsPresenter: Presenter<AppDeveloperSettingsState>,
     private val sessionId: SessionId,
     private val deviceId: DeviceId,
@@ -52,7 +56,13 @@ class DeveloperSettingsPresenter(
     private val fileSizeFormatter: FileSizeFormatter,
     private val markAllRoomsAsRead: MarkAllRoomsAsRead,
     private val buildMeta: BuildMeta,
+    private val notificationSettingsService: NotificationSettingsService,
 ) : Presenter<DeveloperSettingsState> {
+    @AssistedFactory
+    fun interface Factory {
+        fun create(navigator: DeveloperSettingsNavigator): DeveloperSettingsPresenter
+    }
+
     @Composable
     override fun present(): DeveloperSettingsState {
         val cacheSize = remember {
@@ -65,6 +75,9 @@ class DeveloperSettingsPresenter(
             mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
         }
         val markAllRoomsAsReadAction = remember {
+            mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
+        }
+        val pushRulesAction = remember {
             mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
         }
         var showColorPicker by remember {
@@ -109,6 +122,10 @@ class DeveloperSettingsPresenter(
                 DeveloperSettingsEvent.DismissMarkAllRoomsAsReadConfirmation -> {
                     markAllRoomsAsReadAction.value = AsyncAction.Uninitialized
                 }
+                DeveloperSettingsEvent.OpenPushRules -> coroutineScope.openPushRules(pushRulesAction)
+                DeveloperSettingsEvent.DismissPushRulesError -> {
+                    pushRulesAction.value = AsyncAction.Uninitialized
+                }
             }
         }
 
@@ -119,6 +136,7 @@ class DeveloperSettingsPresenter(
             databaseSizes = databaseSizes.value,
             clearCacheAction = clearCacheAction.value,
             markAllRoomsAsReadAction = markAllRoomsAsReadAction.value,
+            pushRulesAction = pushRulesAction.value,
             isEnterpriseBuild = buildMeta.isEnterpriseBuild,
             showColorPicker = showColorPicker,
             deviceId = deviceId,
@@ -164,4 +182,25 @@ class DeveloperSettingsPresenter(
             markAllRoomsAsRead().getOrThrow()
         }.runCatchingUpdatingState(state = markAllRoomsAsReadAction)
     }
+
+    private fun CoroutineScope.openPushRules(pushRulesAction: MutableState<AsyncAction<Unit>>) = launch {
+        pushRulesAction.value = AsyncAction.Loading
+        notificationSettingsService.getRawPushRules()
+            .onSuccess { content ->
+                pushRulesAction.value = AsyncAction.Uninitialized
+                navigator.openPushRules(
+                    filename = pushRulesFilename(),
+                    content = content.orEmpty(),
+                )
+            }
+            .onFailure {
+                pushRulesAction.value = AsyncAction.Failure(it)
+            }
+    }
+
+    /**
+     * The user id contains a colon, which is not a valid character for a file name on all the file systems,
+     * so replace it by an underscore.
+     */
+    private fun pushRulesFilename() = "push_rules${sessionId.value.replace(':', '_')}.json"
 }
