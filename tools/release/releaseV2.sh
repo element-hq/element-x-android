@@ -188,7 +188,10 @@ git commit -a -m "Adding fastlane file for version ${version}"
 
 printf "\n================================================================================\n"
 printf "OK, finishing the release...\n"
-git flow release finish "${version}"
+# GIT_MERGE_AUTOEDIT avoids opening the editor for the 2 merge commits, whose default message is
+# always used, and -m provides the message of the annotated tag. git flow appends the tag name to
+# it, so the tag message ends up being "Release v${version}".
+GIT_MERGE_AUTOEDIT=no git flow release finish -m "Release" "${version}"
 
 printf "\n================================================================================\n"
 read -r -p "Done, push the branch 'main' and the new tag (yes/no) default to yes? " doPush
