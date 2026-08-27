@@ -45,6 +45,7 @@ import io.element.android.features.messages.test.timeline.voicemessages.composer
 import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -561,11 +562,11 @@ class MessagesPresenterTest {
             initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Redact, messageEvent))
             advanceUntilIdle()
             val confirmingState = expectMostRecentItem()
-            assertThat(confirmingState.eventToRedact).isEqualTo(messageEvent)
+            assertThat(confirmingState.redactEventAction).isEqualTo(MessagesState.ConfirmingRedaction(messageEvent.eventId!!))
             assert(redactEventLambda).isNeverCalled()
             confirmingState.eventSink(MessagesEvent.ConfirmRedact(A_REASON))
             advanceUntilIdle()
-            assertThat(expectMostRecentItem().eventToRedact).isNull()
+            assertThat(expectMostRecentItem().redactEventAction).isEqualTo(AsyncAction.Uninitialized)
             assert(redactEventLambda)
                 .isCalledOnce()
                 .with(value(messageEvent.eventOrTransactionId), value(A_REASON))
@@ -589,7 +590,7 @@ class MessagesPresenterTest {
             advanceUntilIdle()
             expectMostRecentItem().eventSink(MessagesEvent.ConfirmRedact("  "))
             advanceUntilIdle()
-            assertThat(expectMostRecentItem().eventToRedact).isNull()
+            assertThat(expectMostRecentItem().redactEventAction).isEqualTo(AsyncAction.Uninitialized)
             assert(redactEventLambda)
                 .isCalledOnce()
                 .with(value(messageEvent.eventOrTransactionId), value(null))
@@ -612,7 +613,7 @@ class MessagesPresenterTest {
             advanceUntilIdle()
             expectMostRecentItem().eventSink(MessagesEvent.CancelRedact)
             advanceUntilIdle()
-            assertThat(expectMostRecentItem().eventToRedact).isNull()
+            assertThat(expectMostRecentItem().redactEventAction).isEqualTo(AsyncAction.Uninitialized)
             assert(redactEventLambda).isNeverCalled()
         }
     }
@@ -632,7 +633,7 @@ class MessagesPresenterTest {
             val localEcho = aMessageEvent(eventId = null, transactionId = A_TRANSACTION_ID)
             initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Redact, localEcho))
             advanceUntilIdle()
-            assertThat(expectMostRecentItem().eventToRedact).isNull()
+            assertThat(expectMostRecentItem().redactEventAction).isEqualTo(AsyncAction.Uninitialized)
             assert(redactEventLambda)
                 .isCalledOnce()
                 .with(value(localEcho.eventOrTransactionId), value(null))
