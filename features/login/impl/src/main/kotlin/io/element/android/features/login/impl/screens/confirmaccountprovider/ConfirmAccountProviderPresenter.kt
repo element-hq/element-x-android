@@ -24,7 +24,7 @@ import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
-import io.element.android.features.login.impl.changeserver.ChangeServerEvents
+import io.element.android.features.login.impl.changeserver.ChangeServerEvent
 import io.element.android.features.login.impl.changeserver.ChangeServerState
 import io.element.android.features.login.impl.login.LoginModeEvent
 import io.element.android.features.login.impl.login.LoginModeState
@@ -110,14 +110,14 @@ class ConfirmAccountProviderPresenter(
             }
         }
 
-        fun handleEvent(event: ConfirmAccountProviderEvents) {
+        fun handleEvent(event: ConfirmAccountProviderEvent) {
             when (event) {
-                is ConfirmAccountProviderEvents.UserInputChanged -> {
+                is ConfirmAccountProviderEvent.UserInputChanged -> {
                     userInput = event.accountProvider
                 }
                 // Validate (and persist) the chosen account provider before proceeding. This also enforces the
                 // account-provider access control, which the login submit does not run on its own.
-                is ConfirmAccountProviderEvents.Continue -> {
+                is ConfirmAccountProviderEvent.Continue -> {
                     // Apply the accepted account provider (any accepted completion) back into the field so it
                     // renders the full server rather than the typed prefix, and survives the OAuth round-trip.
                     val accountProvider = event.accountProvider.trim()
@@ -134,12 +134,12 @@ class ConfirmAccountProviderPresenter(
                     val accountProviderUrl = host.ensureProtocol()
                     submittedAccountProvider = accountProviderUrl
                     changeServerState.eventSink(
-                        ChangeServerEvents.ChangeServer(AccountProvider(url = accountProviderUrl))
+                        ChangeServerEvent.ChangeServer(AccountProvider(url = accountProviderUrl))
                     )
                 }
-                ConfirmAccountProviderEvents.ClearError -> {
+                ConfirmAccountProviderEvent.ClearError -> {
                     loginModeState.eventSink(LoginModeEvent.ClearError)
-                    changeServerState.eventSink(ChangeServerEvents.ClearError)
+                    changeServerState.eventSink(ChangeServerEvent.ClearError)
                 }
             }
         }

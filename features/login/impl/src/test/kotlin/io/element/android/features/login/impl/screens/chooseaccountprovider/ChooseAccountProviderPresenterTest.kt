@@ -88,7 +88,7 @@ class ChooseAccountProviderPresenterTest {
         presenter.test {
             awaitItem().also {
                 assertThat(it.selectedAccountProvider).isNull()
-                it.eventSink(ChooseAccountProviderEvents.Continue)
+                it.eventSink(ChooseAccountProviderEvent.Continue)
                 expectNoEvents()
             }
         }
@@ -112,11 +112,11 @@ class ChooseAccountProviderPresenterTest {
         presenter.test {
             awaitItem().also {
                 assertThat(it.selectedAccountProvider).isNull()
-                it.eventSink(ChooseAccountProviderEvents.SelectAccountProvider(accountProvider1))
+                it.eventSink(ChooseAccountProviderEvent.SelectAccountProvider(accountProvider1))
             }
             awaitItem().also {
                 assertThat(it.selectedAccountProvider).isEqualTo(accountProvider1)
-                it.eventSink(ChooseAccountProviderEvents.Continue)
+                it.eventSink(ChooseAccountProviderEvent.Continue)
                 skipItems(1) // Loading
 
                 // Check an error was returned
@@ -124,7 +124,7 @@ class ChooseAccountProviderPresenterTest {
                 assertThat(submittedState.loginModeState.loginMode).isInstanceOf(AsyncData.Failure::class.java)
 
                 // Assert the error is then cleared
-                submittedState.eventSink(ChooseAccountProviderEvents.ClearError)
+                submittedState.eventSink(ChooseAccountProviderEvent.ClearError)
                 val clearedState = awaitItem()
                 assertThat(clearedState.loginModeState.loginMode).isEqualTo(AsyncData.Uninitialized)
             }
@@ -145,15 +145,15 @@ class ChooseAccountProviderPresenterTest {
         presenter.test {
             awaitItem().also {
                 assertThat(it.selectedAccountProvider).isNull()
-                it.eventSink(ChooseAccountProviderEvents.SelectAccountProvider(accountProvider1))
+                it.eventSink(ChooseAccountProviderEvent.SelectAccountProvider(accountProvider1))
             }
             awaitItem().also {
                 assertThat(it.selectedAccountProvider).isEqualTo(accountProvider1)
-                it.eventSink(ChooseAccountProviderEvents.Continue)
+                it.eventSink(ChooseAccountProviderEvent.Continue)
             }
             awaitItem().also {
                 assertThat(it.loginModeState.loginMode.isLoading()).isTrue()
-                it.eventSink(ChooseAccountProviderEvents.SelectAccountProvider(accountProvider2))
+                it.eventSink(ChooseAccountProviderEvent.SelectAccountProvider(accountProvider2))
             }
             expectNoEvents()
         }

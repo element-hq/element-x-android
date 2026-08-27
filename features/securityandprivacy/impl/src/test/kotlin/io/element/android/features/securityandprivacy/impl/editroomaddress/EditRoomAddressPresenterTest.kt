@@ -97,7 +97,7 @@ class EditRoomAddressPresenterTest {
         val presenter = createEditRoomAddressPresenter(roomAliasHelper = roomAliasHelper)
         presenter.test {
             with(awaitItem()) {
-                eventSink(EditRoomAddressEvents.RoomAddressChanged("invalid"))
+                eventSink(EditRoomAddressEvent.RoomAddressChanged("invalid"))
             }
             with(awaitItem()) {
                 assertThat(roomAddress).isEqualTo("invalid")
@@ -115,7 +115,7 @@ class EditRoomAddressPresenterTest {
         val presenter = createEditRoomAddressPresenter()
         presenter.test {
             with(awaitItem()) {
-                eventSink(EditRoomAddressEvents.RoomAddressChanged("valid"))
+                eventSink(EditRoomAddressEvent.RoomAddressChanged("valid"))
             }
             with(awaitItem()) {
                 assertThat(roomAddress).isEqualTo("valid")
@@ -134,7 +134,7 @@ class EditRoomAddressPresenterTest {
         val presenter = createEditRoomAddressPresenter(client = client)
         presenter.test {
             with(awaitItem()) {
-                eventSink(EditRoomAddressEvents.RoomAddressChanged("valid"))
+                eventSink(EditRoomAddressEvent.RoomAddressChanged("valid"))
             }
             with(awaitItem()) {
                 assertThat(roomAddress).isEqualTo("valid")
@@ -163,13 +163,13 @@ class EditRoomAddressPresenterTest {
         val presenter = createEditRoomAddressPresenter(room = room, navigator = navigator)
         presenter.test {
             with(awaitItem()) {
-                eventSink(EditRoomAddressEvents.RoomAddressChanged("valid"))
+                eventSink(EditRoomAddressEvent.RoomAddressChanged("valid"))
             }
             skipItems(1)
             with(awaitItem()) {
                 assertThat(roomAddressValidity).isEqualTo(RoomAddressValidity.Valid)
                 assertThat(canBeSaved).isTrue()
-                eventSink(EditRoomAddressEvents.Save)
+                eventSink(EditRoomAddressEvent.Save)
             }
             with(awaitItem()) {
                 assertThat(saveAction).isEqualTo(AsyncAction.Loading)
@@ -212,13 +212,13 @@ class EditRoomAddressPresenterTest {
         val presenter = createEditRoomAddressPresenter(room = room, navigator = navigator)
         presenter.test {
             with(awaitItem()) {
-                eventSink(EditRoomAddressEvents.RoomAddressChanged("valid"))
+                eventSink(EditRoomAddressEvent.RoomAddressChanged("valid"))
             }
             skipItems(1)
             with(awaitItem()) {
                 assertThat(roomAddressValidity).isEqualTo(RoomAddressValidity.Valid)
                 assertThat(canBeSaved).isTrue()
-                eventSink(EditRoomAddressEvents.Save)
+                eventSink(EditRoomAddressEvent.Save)
             }
             with(awaitItem()) {
                 assertThat(saveAction).isEqualTo(AsyncAction.Loading)
@@ -263,13 +263,13 @@ class EditRoomAddressPresenterTest {
         val presenter = createEditRoomAddressPresenter(room = room, navigator = navigator)
         presenter.test {
             with(awaitItem()) {
-                eventSink(EditRoomAddressEvents.RoomAddressChanged("valid"))
+                eventSink(EditRoomAddressEvent.RoomAddressChanged("valid"))
             }
             skipItems(1)
             with(awaitItem()) {
                 assertThat(roomAddressValidity).isEqualTo(RoomAddressValidity.Valid)
                 assertThat(canBeSaved).isTrue()
-                eventSink(EditRoomAddressEvents.Save)
+                eventSink(EditRoomAddressEvent.Save)
             }
             with(awaitItem()) {
                 assertThat(saveAction).isEqualTo(AsyncAction.Loading)
@@ -309,13 +309,13 @@ class EditRoomAddressPresenterTest {
         )
         presenter.test {
             with(awaitItem()) {
-                eventSink(EditRoomAddressEvents.RoomAddressChanged("valid"))
+                eventSink(EditRoomAddressEvent.RoomAddressChanged("valid"))
             }
             skipItems(1)
             with(awaitItem()) {
                 assertThat(roomAddressValidity).isEqualTo(RoomAddressValidity.Valid)
                 assertThat(canBeSaved).isTrue()
-                eventSink(EditRoomAddressEvents.Save)
+                eventSink(EditRoomAddressEvent.Save)
             }
             with(awaitItem()) {
                 assertThat(saveAction).isEqualTo(AsyncAction.Loading)
@@ -339,12 +339,12 @@ class EditRoomAddressPresenterTest {
         )
         presenter.test {
             with(awaitItem()) {
-                eventSink(EditRoomAddressEvents.Save)
+                eventSink(EditRoomAddressEvent.Save)
             }
             assertThat(awaitItem().saveAction).isInstanceOf(AsyncAction.Loading::class.java)
             with(awaitItem()) {
                 assertThat(saveAction).isInstanceOf(AsyncAction.Failure::class.java)
-                eventSink(EditRoomAddressEvents.DismissError)
+                eventSink(EditRoomAddressEvent.DismissError)
             }
             with(awaitItem()) {
                 assertThat(saveAction).isEqualTo(AsyncAction.Uninitialized)

@@ -19,7 +19,7 @@ data class ConfirmAccountProviderState(
     val isAccountCreation: Boolean,
     val loginModeState: LoginModeState,
     val changeServerState: ChangeServerState,
-    val eventSink: (ConfirmAccountProviderEvents) -> Unit
+    val eventSink: (ConfirmAccountProviderEvent) -> Unit
 ) {
     val submitEnabled: Boolean
         get() = accountProviderInput.isNotBlank() &&

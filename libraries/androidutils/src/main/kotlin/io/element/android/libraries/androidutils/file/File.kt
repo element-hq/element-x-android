@@ -42,6 +42,32 @@ fun File.safeRenameTo(dest: File) {
     )
 }
 
+/**
+ * Returns this file name with [suffix] inserted before its extension, i.e. `"image.png"` with the
+ * suffix `"_1"` gives `"image_1.png"`. A name without extension simply gets the suffix appended.
+ */
+fun String.withFileNameSuffix(suffix: String): String {
+    val extension = substringAfterLast('.', "")
+    return if (extension.isEmpty()) {
+        "$this$suffix"
+    } else {
+        "${substringBeforeLast('.')}$suffix.$extension"
+    }
+}
+
+fun <T> saveWithUniqueFileName(
+    fileName: String,
+    uniqueSuffix: () -> String = { "_${System.currentTimeMillis()}" },
+    saveAs: (String) -> T,
+): T {
+    return try {
+        saveAs(fileName)
+    } catch (nameConflict: IllegalStateException) {
+        Timber.w(nameConflict, "Unable to build a unique file name, retrying with a suffixed one")
+        saveAs(fileName.withFileNameSuffix(uniqueSuffix()))
+    }
+}
+
 fun Context.createTmpFile(baseDir: File = cacheDir, extension: String? = null): File {
     val suffix = extension?.let { ".$extension" }
     return File.createTempFile(UUID.randomUUID().toString(), suffix, baseDir).apply { mkdirs() }

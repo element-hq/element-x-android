@@ -49,12 +49,12 @@ class KonsistArchitectureTest {
     }
 
     @Test
-    fun `Events MUST be sealed interface`() {
+    fun `Event MUST be sealed interface`() {
         Konsist.scopeFromProject()
             .classes()
             .withSealedModifier()
-            .withNameEndingWith("Events")
-            .assertEmpty(additionalMessage = "Events class MUST be sealed interface")
+            .withNameEndingWith("Event")
+            .assertEmpty(additionalMessage = "Event class MUST be sealed interface")
     }
 
     @Test

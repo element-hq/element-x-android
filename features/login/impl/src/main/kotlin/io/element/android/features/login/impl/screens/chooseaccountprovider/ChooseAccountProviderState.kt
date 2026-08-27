@@ -17,7 +17,7 @@ data class ChooseAccountProviderState(
     val accountProviders: ImmutableList<AccountProvider>,
     val selectedAccountProvider: AccountProvider?,
     val loginModeState: LoginModeState,
-    val eventSink: (ChooseAccountProviderEvents) -> Unit,
+    val eventSink: (ChooseAccountProviderEvent) -> Unit,
 ) {
     val submitEnabled: Boolean
         get() = selectedAccountProvider != null &&
