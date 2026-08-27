@@ -62,7 +62,7 @@ class DefaultTimelineEventFormatter(
             is CallNotifyContent -> {
                 sp.getString(CommonStrings.common_call_started)
             }
-            RedactedContent,
+            is RedactedContent,
             is LegacyCallInviteContent,
             is StickerContent,
             is PollContent,

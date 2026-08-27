@@ -11,8 +11,14 @@ package io.element.android.appnav.loggedin
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialog
 
+enum class SyncIndicatorState {
+    Hidden,
+    Syncing,
+    ServerUnreachable,
+}
+
 data class LoggedInState(
-    val showSyncSpinner: Boolean,
+    val syncIndicatorState: SyncIndicatorState,
     val pusherRegistrationState: AsyncData<Unit>,
     val ignoreRegistrationError: Boolean,
     val forceNativeSlidingSyncMigration: Boolean,
