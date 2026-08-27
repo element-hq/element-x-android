@@ -8,6 +8,9 @@
 
 package io.element.android.features.cachecleaner.api
 
+/**
+ * Removes the temporary files holding decrypted content, so plaintext media does not linger on disk.
+ */
 interface CacheCleaner {
     /**
      * Clear the cache subdirs holding temporarily decrypted content (such as media and voice messages).

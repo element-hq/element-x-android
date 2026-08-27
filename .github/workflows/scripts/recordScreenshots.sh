@@ -78,6 +78,10 @@ else
   git config --local user.name "${INPUT_AUTHOR_EMAIL}"
 fi
 git add -A
+if git diff --cached --quiet; then
+  echo "Screenshots are already up to date, nothing to commit."
+  exit 0
+fi
 git commit -m "Update screenshots"
 
 GITHUB_REPO="https://$GITHUB_ACTOR:$TOKEN@github.com/$REPO.git"

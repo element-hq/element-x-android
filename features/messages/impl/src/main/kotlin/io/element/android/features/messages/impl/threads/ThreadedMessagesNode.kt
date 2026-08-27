@@ -28,6 +28,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.messages.impl.MessagesEvent
 import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.features.messages.impl.MessagesPresenter
 import io.element.android.features.messages.impl.MessagesState
@@ -40,11 +41,12 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
+import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionBottomSheet
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.roommembermoderation.api.ModerationAction
-import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvent
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationRenderer
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.androidutils.system.openUrlInExternalApp
@@ -54,6 +56,7 @@ import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.emoji.api.picker.EmojiPickerRenderer
 import io.element.android.libraries.matrix.api.analytics.toAnalyticsViewRoom
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -91,6 +94,7 @@ class ThreadedMessagesNode(
     private val permalinkParser: PermalinkParser,
     private val appNavigationStateService: AppNavigationStateService,
     private val roomMemberModerationRenderer: RoomMemberModerationRenderer,
+    private val emojiPickerRenderer: EmojiPickerRenderer,
 ) : Node(buildContext, plugins = plugins), MessagesNavigator {
     data class Inputs(
         val threadRootEventId: ThreadId,
@@ -322,7 +326,15 @@ class ThreadedMessagesNode(
                     onViewAllPinnedMessagesClick = {},
                     modifier = modifier,
                     knockRequestsBannerView = {},
-                    customReactionBottomSheet = {},
+                    customReactionBottomSheet = {
+                        CustomReactionBottomSheet(
+                            state = state.customReactionState,
+                            onSelectEmoji = { uniqueId, emoji ->
+                                state.eventSink(MessagesEvent.ToggleReaction(emoji.unicode, uniqueId))
+                            },
+                            emojiPickerRenderer = emojiPickerRenderer,
+                        )
+                    },
                     onThreadsListClick = {},
                 )
 
@@ -331,7 +343,7 @@ class ThreadedMessagesNode(
                     onSelectAction = { action, target ->
                         when (action) {
                             is ModerationAction.DisplayProfile -> callback.navigateToRoomMemberDetails(target.userId)
-                            else -> state.roomMemberModerationState.eventSink(RoomMemberModerationEvents.ProcessAction(action, target))
+                            else -> state.roomMemberModerationState.eventSink(RoomMemberModerationEvent.ProcessAction(action, target))
                         }
                     },
                     onAvatarClick = { user ->

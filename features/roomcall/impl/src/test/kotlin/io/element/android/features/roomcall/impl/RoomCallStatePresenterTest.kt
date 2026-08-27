@@ -50,6 +50,42 @@ class RoomCallStatePresenterTest {
     }
 
     @Test
+    fun `present - a DM with no other member cannot start a call`() = runTest {
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
+                initialRoomInfo = aRoomInfo(isDm = true, activeMembersCount = 1, joinedMembersCount = 1),
+                roomPermissions = roomPermissions(true),
+            )
+        )
+        val presenter = createRoomCallStatePresenter(joinedRoom = room)
+        presenter.test {
+            skipItems(1)
+            assertThat(awaitItem()).isEqualTo(
+                RoomCallState.StandBy(
+                    canStartCall = false,
+                    isDM = true
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - a DM becomes callable once the other member is active`() = runTest {
+        val baseRoom = FakeBaseRoom(
+            initialRoomInfo = aRoomInfo(isDm = true, activeMembersCount = 1, joinedMembersCount = 1),
+            roomPermissions = roomPermissions(true),
+        )
+        val room = FakeJoinedRoom(baseRoom = baseRoom)
+        val presenter = createRoomCallStatePresenter(joinedRoom = room)
+        presenter.test {
+            skipItems(1)
+            assertThat(awaitItem()).isEqualTo(RoomCallState.StandBy(canStartCall = false, isDM = true))
+            baseRoom.givenRoomInfo(aRoomInfo(isDm = true, activeMembersCount = 2, joinedMembersCount = 2))
+            assertThat(awaitItem()).isEqualTo(RoomCallState.StandBy(canStartCall = true, isDM = true))
+        }
+    }
+
+    @Test
     fun `present - element call not available`() = runTest {
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(

@@ -18,6 +18,14 @@
   <string name="a11y_edit_room_address_hint">"完整地址为 %1$s"</string>
   <string name="a11y_encryption_details">"加密详情"</string>
   <string name="a11y_expand_message_text_field">"展开消息文本框"</string>
+  <string name="a11y_gallery_attachment">"媒体组，第 %1$d 个附件"</string>
+  <string name="a11y_gallery_failed_scan">"媒体组，第 %1$d 个扫描失败"</string>
+  <string name="a11y_gallery_image">"媒体组，第 %1$d 个图像"</string>
+  <plurals name="a11y_gallery_more_media">
+    <item quantity="other">"媒体组，其余 %1$d 个媒体"</item>
+  </plurals>
+  <string name="a11y_gallery_scanning">"媒体组，正在扫描第 %1$d 个"</string>
+  <string name="a11y_gallery_video">"媒体组，第 %1$d 个视频"</string>
   <string name="a11y_hide_password">"隐藏密码"</string>
   <string name="a11y_info">"信息"</string>
   <string name="a11y_join_call">"加入通话"</string>
@@ -268,7 +276,7 @@
   <string name="common_file_saved_on_disk_android">"文件已保存到“下载”"</string>
   <string name="common_forward_message">"转发消息"</string>
   <string name="common_frequently_used">"常用"</string>
-  <string name="common_gallery">"图库"</string>
+  <string name="common_gallery">"媒体组"</string>
   <plurals name="common_gallery_reply_attachments">
     <item quantity="other">"%1$d 个附件…"</item>
   </plurals>

@@ -1,14 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crypto_event_authenticity_mismatched_sender">"فرستنده رویداد با صاحب دستگاهی که آن را ارسال کرده است، مطابقت ندارد."</string>
   <string name="crypto_event_authenticity_not_guaranteed">"اعتبار این پیام رمز شده نمی‌تواند روی این افزاره تأیید شود."</string>
   <string name="crypto_event_authenticity_previously_verified">"رمز شده به دست کاربری از پیش تأیید شده."</string>
   <string name="crypto_event_authenticity_sent_in_clear">"رمز نشده."</string>
   <string name="crypto_event_authenticity_unknown_device">"رمز شده به دست افزاره‌ای ناشناخته یا حذف شده."</string>
   <string name="crypto_event_authenticity_unsigned_device">"رمز شده به دست افزاره‌ای که از سوی مالکش تأیید نشده."</string>
   <string name="crypto_event_authenticity_unverified_identity">"رمز شده به دست کاربری تأیید نشده."</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally">"تصویر را به صورت افقی بچرخانید"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"به صورت افقی برگردانده شده"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"اصلی"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically">"تصویر را به صورت عمودی بچرخانید"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_flipped">"به صورت عمودی برگردانده شده"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_original">"اصلی"</string>
+  <string name="screen_image_edition_a11y_rotate_to_the_left">"تصویر را به سمت چپ بچرخانید"</string>
+  <plurals name="screen_image_edition_a11y_rotation_state">
+    <item quantity="one">"درجه %1$d"</item>
+    <item quantity="other">"درجه‌های %1$d"</item>
+  </plurals>
+  <string name="screen_image_edition_title">"ویرایش عکس"</string>
+  <string name="screen_media_upload_preview_caption_warning">"ممکن است زیرنویس‌ها برای افرادی که از برنامه‌های قدیمی‌تر استفاده می‌کنند قابل مشاهده نباشند."</string>
+  <string name="screen_media_upload_preview_change_video_quality_prompt">"برای تغییر کیفیت آپلود ویدیو، ضربه بزنید"</string>
+  <string name="screen_media_upload_preview_error_could_not_be_uploaded">"فایل قابل آپلود نبود."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"پردازش رسانه برای بارگذاری شکست خورد. لطفاً دوباره تلاش کنید."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"بارگذاری رسانه شکست خورد. لطفاً دوباره تلاش کنید."</string>
+  <string name="screen_media_upload_preview_error_too_large_message">"حداکثر اندازه مجاز فایل %1$s است."</string>
+  <string name="screen_media_upload_preview_error_too_large_title">"فایل برای آپلود خیلی بزرگ است"</string>
+  <string name="screen_media_upload_preview_item_count">"مورد %1$d از %2$d"</string>
+  <string name="screen_media_upload_preview_optimize_image_quality_title">"بهینه سازی کیفیت تصویر"</string>
   <string name="screen_media_upload_preview_processing">"پردازش کردن…"</string>
+  <string name="screen_media_upload_preview_title">"افزودن رسانه"</string>
   <string name="screen_report_content_block_user">"انسداد کاربر"</string>
   <string name="screen_report_content_block_user_hint">"اگر می‌خواهید همه پیام‌های فعلی و آینده را از این کاربر را پنهان کنید، علامت بزنید"</string>
   <string name="screen_report_content_explanation">"این پیام به مدیر کارساز خانگی شما گزارش خواهد شد. آنها قادر به خواندن پیام های رمزگذاری شده نخواهند بود."</string>
@@ -32,13 +53,27 @@
   <string name="screen_room_timeline_add_reaction">"افزودن شکلک"</string>
   <string name="screen_room_timeline_beginning_of_room">"آغاز %1$s است."</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"این، آغاز گفت‌وگوست."</string>
+  <string name="screen_room_timeline_legacy_call">"تماس پشتیبانی نشده. بپرسید که آیا تماس گیرنده می‌تواند از برنامه جدید Element X استفاده کند یا خیر."</string>
   <string name="screen_room_timeline_less_reactions">"نمایش کم‌تر"</string>
   <string name="screen_room_timeline_message_copied">"پیام رونوشت شد"</string>
   <string name="screen_room_timeline_no_permission_to_post">"اجازهٔ فرستادن به این اتاق را ندارید"</string>
+  <plurals name="screen_room_timeline_reaction_a11y">
+    <item quantity="one">"عضو %1$d با %2$s واکنش نشان داد"</item>
+    <item quantity="other">"اعضای %1$d با %2$s واکنش نشان دادند"</item>
+  </plurals>
+  <plurals name="screen_room_timeline_reaction_including_you_a11y">
+    <item quantity="one">"شما و عضو %1$d با %2$s واکنش نشان دادید"</item>
+    <item quantity="other">"شما و اعضای %1$d با %2$s واکنش نشان دادید"</item>
+  </plurals>
+  <string name="screen_room_timeline_reaction_you_a11y">"شما با %1$s واکنش نشان دادید"</string>
   <string name="screen_room_timeline_reactions_show_less">"نمایش کم‌تر"</string>
   <string name="screen_room_timeline_reactions_show_more">"نمایش بیش‌تر"</string>
   <string name="screen_room_timeline_reactions_show_reactions_summary">"نمایش خلاصهٔ واکنش‌ها"</string>
   <string name="screen_room_timeline_read_marker_title">"جدید"</string>
+  <plurals name="screen_room_timeline_redacted_messages">
+    <item quantity="one">"پیام حذف شده %1$d"</item>
+    <item quantity="other">"پیام‌های حذف شده %1$d"</item>
+  </plurals>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$dتغییر اتاق"</item>
     <item quantity="other">"%1$dتغییر اتاق"</item>

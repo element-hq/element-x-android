@@ -86,7 +86,7 @@ class ForwardMessagesPresenterTest {
             val failedForwardState = awaitItem()
             assertThat(failedForwardState.forwardAction.isFailure()).isTrue()
             // Then clear error
-            failedForwardState.eventSink(ForwardMessagesEvents.ClearError)
+            failedForwardState.eventSink(ForwardMessagesEvent.ClearError)
             assertThat(awaitItem().forwardAction.isUninitialized()).isTrue()
             forwardEventLambda.assertions().isCalledOnce()
         }

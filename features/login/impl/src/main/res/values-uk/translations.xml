@@ -25,8 +25,16 @@
   <string name="screen_change_server_error_unauthorized_homeserver_title">"Постачальник облікового запису %1$s не дозволений."</string>
   <string name="screen_change_server_form_header">"URL-адреса домашнього сервера"</string>
   <string name="screen_change_server_form_notice">"Введіть адресу домену."</string>
+  <string name="screen_change_server_navigation_title_login">"Увійти"</string>
+  <string name="screen_change_server_navigation_title_register">"Створити обліковий запис"</string>
   <string name="screen_change_server_subtitle">"Яка адреса вашого сервера?"</string>
+  <string name="screen_change_server_textfield_footer_login">"Якщо ваш обліковий запис надано вашою компанією або спільнотою, змініть постачальника облікового запису (наприклад: companyname.com)."</string>
+  <string name="screen_change_server_textfield_footer_register">"Створіть обліковий запис на matrix.org безплатно. Якщо ви хочете створити обліковий запис у іншого постачальника, змініть його відповідно (наприклад: communityname.org)."</string>
+  <string name="screen_change_server_textfield_header">"Постачальник облікового запису"</string>
+  <string name="screen_change_server_textfield_placeholder">"example.com"</string>
   <string name="screen_change_server_title">"Виберіть свій сервер"</string>
+  <string name="screen_change_server_title_login">"Вкажіть постачальника вашого облікового запису"</string>
+  <string name="screen_change_server_title_register">"Оберіть постачальника облікового запису"</string>
   <string name="screen_create_account_title">"Створити обліковий запис"</string>
   <string name="screen_login_error_deactivated_account">"Цей обліковий запис було видалено."</string>
   <string name="screen_login_error_invalid_credentials">"Неправильне ім\'я користувача та/або пароль"</string>
