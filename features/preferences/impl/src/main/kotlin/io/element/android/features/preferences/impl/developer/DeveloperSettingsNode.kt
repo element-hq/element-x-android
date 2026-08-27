@@ -28,15 +28,22 @@ import io.element.android.libraries.di.SessionScope
 class DeveloperSettingsNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: DeveloperSettingsPresenter,
+    presenterFactory: DeveloperSettingsPresenter.Factory,
     private val extraDeveloperOptionsRenderer: ExtraDeveloperOptionsRenderer,
-) : Node(buildContext, plugins = plugins) {
+) : Node(buildContext, plugins = plugins),
+    DeveloperSettingsNavigator {
     interface Callback : Plugin {
+        fun navigateToPushRules(filename: String, content: String)
         fun navigateToPushHistory()
         fun onDone()
     }
 
     private val callback: Callback = callback()
+    private val presenter = presenterFactory.create(navigator = this)
+
+    override fun openPushRules(filename: String, content: String) {
+        callback.navigateToPushRules(filename = filename, content = content)
+    }
 
     @Composable
     override fun View(modifier: Modifier) {

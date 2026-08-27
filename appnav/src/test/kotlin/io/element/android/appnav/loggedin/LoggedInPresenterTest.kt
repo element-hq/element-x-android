@@ -67,7 +67,7 @@ class LoggedInPresenterTest {
     fun `present - initial state`() = runTest {
         createLoggedInPresenter().test {
             val initialState = awaitItem()
-            assertThat(initialState.showSyncSpinner).isFalse()
+            assertThat(initialState.syncIndicatorState).isEqualTo(SyncIndicatorState.Hidden)
             assertThat(initialState.pusherRegistrationState.isUninitialized()).isTrue()
             assertThat(initialState.ignoreRegistrationError).isFalse()
         }
@@ -97,11 +97,33 @@ class LoggedInPresenterTest {
             matrixClient = FakeMatrixClient(roomListService = roomListService),
         ).test {
             val initialState = awaitItem()
-            assertThat(initialState.showSyncSpinner).isFalse()
+            assertThat(initialState.syncIndicatorState).isEqualTo(SyncIndicatorState.Hidden)
             roomListService.postSyncIndicator(RoomListService.SyncIndicator.Show)
-            consumeItemsUntilPredicate { it.showSyncSpinner }
+            consumeItemsUntilPredicate { it.syncIndicatorState == SyncIndicatorState.Syncing }
             roomListService.postSyncIndicator(RoomListService.SyncIndicator.Hide)
-            consumeItemsUntilPredicate { !it.showSyncSpinner }
+            consumeItemsUntilPredicate { it.syncIndicatorState != SyncIndicatorState.Syncing }
+        }
+    }
+
+    @Test
+    fun `present - say the server is unreachable when the device has network but the sync is offline`() = runTest {
+        createLoggedInPresenter(
+            syncState = SyncState.Offline,
+            networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Connected),
+        ).test {
+            consumeItemsUntilPredicate { it.syncIndicatorState == SyncIndicatorState.ServerUnreachable }
+            cancelAndConsumeRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - say nothing when the device itself has no network`() = runTest {
+        createLoggedInPresenter(
+            syncState = SyncState.Offline,
+            networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Disconnected),
+        ).test {
+            consumeItemsUntilPredicate { it.syncIndicatorState == SyncIndicatorState.Hidden }
+            cancelAndConsumeRemainingEvents()
         }
     }
 
