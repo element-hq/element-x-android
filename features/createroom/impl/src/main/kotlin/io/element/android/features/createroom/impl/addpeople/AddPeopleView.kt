@@ -21,7 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.createroom.impl.R
-import io.element.android.features.invitepeople.api.InvitePeopleEvents
+import io.element.android.features.invitepeople.api.InvitePeopleEvent
 import io.element.android.features.invitepeople.api.InvitePeopleState
 import io.element.android.features.invitepeople.api.InvitePeopleStatePreviewParam
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
@@ -56,7 +56,7 @@ fun AddPeopleView(
             Button(
                 text = stringResource(CommonStrings.action_finish),
                 onClick = {
-                    state.eventSink(InvitePeopleEvents.SendInvites)
+                    state.eventSink(InvitePeopleEvent.SendInvites)
                 },
                 enabled = state.canInvite,
                 modifier = Modifier

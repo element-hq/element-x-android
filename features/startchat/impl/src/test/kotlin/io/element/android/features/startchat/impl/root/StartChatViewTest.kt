@@ -36,7 +36,7 @@ import org.robolectric.annotation.Config
 class StartChatViewTest : RobolectricTest() {
     @Test
     fun `clicking on back invokes the expected callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<StartChatEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<StartChatEvent>(expectEvents = false)
         ensureCalledOnce {
             setStartChatView(
                 aCreateRoomRootState(
@@ -50,7 +50,7 @@ class StartChatViewTest : RobolectricTest() {
 
     @Test
     fun `clicking on New room invokes the expected callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<StartChatEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<StartChatEvent>(expectEvents = false)
         ensureCalledOnce {
             setStartChatView(
                 aCreateRoomRootState(
@@ -65,7 +65,7 @@ class StartChatViewTest : RobolectricTest() {
     @Config(qualifiers = "h1024dp")
     @Test
     fun `clicking on Invite people invokes the expected callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<StartChatEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<StartChatEvent>(expectEvents = false)
         ensureCalledOnce {
             setStartChatView(
                 aCreateRoomRootState(
@@ -84,7 +84,7 @@ class StartChatViewTest : RobolectricTest() {
     fun `clicking on a user suggestion invokes the expected callback`() = runAndroidComposeUiTest {
         val recentDirectRoomList = aRecentDirectRoomList()
         val firstRoom = recentDirectRoomList[0]
-        val eventsRecorder = EventsRecorder<StartChatEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<StartChatEvent>(expectEvents = false)
         ensureCalledOnceWithParam(firstRoom.roomId) {
             setStartChatView(
                 aCreateRoomRootState(
@@ -102,7 +102,7 @@ class StartChatViewTest : RobolectricTest() {
     @Config(qualifiers = "h1024dp")
     @Test
     fun `clicking on Join room by address invokes the expected callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<StartChatEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<StartChatEvent>(expectEvents = false)
         ensureCalledOnce {
             setStartChatView(
                 aCreateRoomRootState(
@@ -116,7 +116,7 @@ class StartChatViewTest : RobolectricTest() {
 
     @Test
     fun `clicking on room directory invokes the expected callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<StartChatEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<StartChatEvent>(expectEvents = false)
         ensureCalledOnce {
             setStartChatView(
                 aCreateRoomRootState(

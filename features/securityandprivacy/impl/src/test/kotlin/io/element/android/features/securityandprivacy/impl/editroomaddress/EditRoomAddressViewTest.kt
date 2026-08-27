@@ -39,7 +39,7 @@ class EditRoomAddressViewTest : RobolectricTest() {
 
     @Test
     fun `click on disabled save doesn't emit event`() = runAndroidComposeUiTest {
-        val recorder = EventsRecorder<EditRoomAddressEvents>(expectEvents = false)
+        val recorder = EventsRecorder<EditRoomAddressEvent>(expectEvents = false)
         val state = anEditRoomAddressState(eventSink = recorder)
         setEditRoomAddressView(state)
         clickOn(CommonStrings.action_save)
@@ -48,7 +48,7 @@ class EditRoomAddressViewTest : RobolectricTest() {
 
     @Test
     fun `click on enabled save emits the expected event`() = runAndroidComposeUiTest {
-        val recorder = EventsRecorder<EditRoomAddressEvents>()
+        val recorder = EventsRecorder<EditRoomAddressEvent>()
         val state = anEditRoomAddressState(
             roomAddress = "room",
             roomAddressValidity = RoomAddressValidity.Valid,
@@ -56,12 +56,12 @@ class EditRoomAddressViewTest : RobolectricTest() {
         )
         setEditRoomAddressView(state)
         clickOn(CommonStrings.action_save)
-        recorder.assertSingle(EditRoomAddressEvents.Save)
+        recorder.assertSingle(EditRoomAddressEvent.Save)
     }
 
     @Test
     fun `text changes on text field emits the expected event`() = runAndroidComposeUiTest {
-        val recorder = EventsRecorder<EditRoomAddressEvents>()
+        val recorder = EventsRecorder<EditRoomAddressEvent>()
         val state = anEditRoomAddressState(
             roomAddress = "",
             eventSink = recorder
@@ -69,12 +69,12 @@ class EditRoomAddressViewTest : RobolectricTest() {
         setEditRoomAddressView(state)
 
         onNodeWithTag(TestTags.roomAddressField.value).performTextInput("alias")
-        recorder.assertSingle(EditRoomAddressEvents.RoomAddressChanged("alias"))
+        recorder.assertSingle(EditRoomAddressEvent.RoomAddressChanged("alias"))
     }
 
     @Test
     fun `click on dismiss error emits the expected event`() = runAndroidComposeUiTest {
-        val recorder = EventsRecorder<EditRoomAddressEvents>()
+        val recorder = EventsRecorder<EditRoomAddressEvent>()
         val state = anEditRoomAddressState(
             roomAddress = "",
             saveAction = AsyncAction.Failure(IllegalStateException()),
@@ -82,12 +82,12 @@ class EditRoomAddressViewTest : RobolectricTest() {
         )
         setEditRoomAddressView(state)
         clickOn(CommonStrings.action_cancel)
-        recorder.assertSingle(EditRoomAddressEvents.DismissError)
+        recorder.assertSingle(EditRoomAddressEvent.DismissError)
     }
 
     @Test
     fun `click on retry error emits the expected event`() = runAndroidComposeUiTest {
-        val recorder = EventsRecorder<EditRoomAddressEvents>()
+        val recorder = EventsRecorder<EditRoomAddressEvent>()
         val state = anEditRoomAddressState(
             roomAddress = "",
             saveAction = AsyncAction.Failure(IllegalStateException()),
@@ -95,7 +95,7 @@ class EditRoomAddressViewTest : RobolectricTest() {
         )
         setEditRoomAddressView(state)
         clickOn(CommonStrings.action_retry)
-        recorder.assertSingle(EditRoomAddressEvents.Save)
+        recorder.assertSingle(EditRoomAddressEvent.Save)
     }
 }
 

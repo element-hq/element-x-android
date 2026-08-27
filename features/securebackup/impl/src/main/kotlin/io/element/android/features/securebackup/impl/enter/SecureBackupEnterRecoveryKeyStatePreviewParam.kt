@@ -30,7 +30,7 @@ fun aSecureBackupEnterRecoveryKeyState(
     isSubmitEnabled: Boolean = recoveryKey.isNotEmpty(),
     displayTextFieldContents: Boolean = true,
     submitAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
-    eventSink: (SecureBackupEnterRecoveryKeyEvents) -> Unit = {},
+    eventSink: (SecureBackupEnterRecoveryKeyEvent) -> Unit = {},
 ) = SecureBackupEnterRecoveryKeyState(
     recoveryKeyViewState = RecoveryKeyViewState(
         recoveryKeyUserStory = RecoveryKeyUserStory.Enter,
