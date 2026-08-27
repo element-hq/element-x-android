@@ -41,7 +41,11 @@ class ShareNode(
     private val roomSelectEntryPoint: RoomSelectEntryPoint,
 ) : ParentNode<ShareNode.NavTarget>(
     navModel = PermanentNavModel(
-        navTargets = setOf(NavTarget),
+        navTargets = if (plugins.filterIsInstance<Inputs>().firstOrNull()?.shareIntentData?.directShareRoomId != null) {
+            emptySet()
+        } else {
+            setOf(NavTarget)
+        },
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -80,13 +84,13 @@ class ShareNode(
 
     @Composable
     override fun View(modifier: Modifier) {
+        val state = presenter.present()
+
         Box(modifier = modifier) {
-            // Will render to room select screen
             Children(
                 navModel = navModel,
             )
 
-            val state = presenter.present()
             ShareView(
                 state = state,
                 onShareSuccess = callback::onDone,

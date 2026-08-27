@@ -25,6 +25,7 @@ import im.vector.app.features.analytics.plan.CryptoSessionStateChange
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
+import io.element.android.features.share.api.DirectShareShortcutsObserver
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.extensions.runCatchingExceptions
@@ -65,6 +66,7 @@ class LoggedInPresenter(
     private val buildMeta: BuildMeta,
     private val networkMonitor: NetworkMonitor,
     private val localNetworkPermissionAdvisor: LocalNetworkPermissionAdvisor,
+    private val directShareShortcutsObserver: DirectShareShortcutsObserver,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
 ) : Presenter<LoggedInState> {
     private val localNetworkPermissionsPresenter: PermissionsPresenter =
@@ -78,6 +80,7 @@ class LoggedInPresenter(
         }.collectAsState(initial = false)
         val pusherRegistrationState = remember<MutableState<AsyncData<Unit>>> { mutableStateOf(AsyncData.Uninitialized) }
         LaunchedEffect(Unit) { preloadAccountManagementUrl() }
+        LaunchedEffect(Unit) { directShareShortcutsObserver.start() }
         LaunchedEffect(Unit) {
             sessionVerificationService.sessionVerifiedStatus
                 .onEach { sessionVerifiedStatus ->
