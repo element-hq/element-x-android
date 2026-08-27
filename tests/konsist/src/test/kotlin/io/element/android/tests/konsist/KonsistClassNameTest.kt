@@ -103,6 +103,7 @@ class KonsistClassNameTest {
                 "FakeImageLoader",
                 "FakeKeyStore",
                 "FakeListenableFuture",
+                "FakeMediaStoreContentProvider",
                 "FakeParentNode",
             )
             .assertTrue {

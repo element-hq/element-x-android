@@ -15,28 +15,35 @@ import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.features.lockscreen.test.FakeLockScreenService
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.libraries.matrix.test.A_THREAD_ID_2
+import io.element.android.libraries.matrix.test.A_TIMESTAMP
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.media.test.FakeImageLoaderHolder
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
+import io.element.android.libraries.push.impl.notifications.factories.NotificationAccountParams
+import io.element.android.libraries.push.impl.notifications.factories.NotificationCreator
 import io.element.android.libraries.push.impl.notifications.factories.aNotificationAccountParams
 import io.element.android.libraries.push.impl.notifications.fake.FakeActiveNotificationsProvider
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationCreator
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationDisplayer
 import io.element.android.libraries.push.impl.notifications.fake.FakeRoomGroupMessageCreator
 import io.element.android.libraries.push.impl.notifications.fake.FakeSummaryGroupMessageCreator
+import io.element.android.libraries.push.impl.notifications.fixtures.A_NOTIFICATION
 import io.element.android.libraries.push.impl.notifications.fixtures.aFallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.aSimpleNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.anInviteNotifiableEvent
+import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
@@ -48,6 +55,8 @@ import io.element.android.services.appnavstate.api.AppNavigationStateService
 import io.element.android.services.appnavstate.test.FakeAppNavigationStateService
 import io.element.android.services.appnavstate.test.aNavigationState
 import io.element.android.services.appnavstate.test.anAppNavigationState
+import io.element.android.services.toolbox.test.systemclock.A_FAKE_TIMESTAMP
+import io.element.android.tests.testutils.lambda.LambdaThreeParamsRecorder
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -472,6 +481,137 @@ class DefaultNotificationDrawerManagerTest {
         extraInvocationsForNotificationSummary = 1,
     )
 
+    @Test
+    fun `when the app is locked, a noisy message event produces a noisy fallback notification`() = testAppLockedNotifiableEventReceived(
+        notifiableEvent = aNotifiableMessageEvent(noisy = true),
+        expectedFallbackEvent = anExpectedFallbackNotifiableEvent(noisy = true, timestamp = A_TIMESTAMP),
+    )
+
+    @Test
+    fun `when the app is locked, a silent message event produces a silent fallback notification`() = testAppLockedNotifiableEventReceived(
+        notifiableEvent = aNotifiableMessageEvent(noisy = false),
+        expectedFallbackEvent = anExpectedFallbackNotifiableEvent(noisy = false, timestamp = A_TIMESTAMP),
+    )
+
+    @Test
+    fun `when the app is locked, a noisy invite event produces a noisy fallback notification`() = testAppLockedNotifiableEventReceived(
+        notifiableEvent = anInviteNotifiableEvent(noisy = true),
+        expectedFallbackEvent = anExpectedFallbackNotifiableEvent(noisy = true, timestamp = 0),
+    )
+
+    @Test
+    fun `when the app is locked, a silent invite event produces a silent fallback notification`() = testAppLockedNotifiableEventReceived(
+        notifiableEvent = anInviteNotifiableEvent(noisy = false),
+        expectedFallbackEvent = anExpectedFallbackNotifiableEvent(noisy = false, timestamp = 0),
+    )
+
+    @Test
+    fun `when the app is locked, a noisy simple event produces a noisy fallback notification`() = testAppLockedNotifiableEventReceived(
+        notifiableEvent = aSimpleNotifiableEvent(noisy = true),
+        expectedFallbackEvent = anExpectedFallbackNotifiableEvent(noisy = true, timestamp = 0),
+    )
+
+    @Test
+    fun `when the app is locked, a silent simple event produces a silent fallback notification`() = testAppLockedNotifiableEventReceived(
+        notifiableEvent = aSimpleNotifiableEvent(noisy = false),
+        expectedFallbackEvent = anExpectedFallbackNotifiableEvent(noisy = false, timestamp = 0),
+    )
+
+    @Test
+    fun `when the app is locked, a noisy fallback event stays noisy`() = testAppLockedNotifiableEventReceived(
+        notifiableEvent = aFallbackNotifiableEvent(noisy = true),
+        expectedFallbackEvent = anExpectedFallbackNotifiableEvent(noisy = true, timestamp = A_FAKE_TIMESTAMP),
+    )
+
+    @Test
+    fun `when the app is locked, a silent fallback event stays silent`() = testAppLockedNotifiableEventReceived(
+        notifiableEvent = aFallbackNotifiableEvent(noisy = false),
+        expectedFallbackEvent = anExpectedFallbackNotifiableEvent(noisy = false, timestamp = A_FAKE_TIMESTAMP),
+    )
+
+    @Test
+    fun `when the app is locked, all the events are grouped into a single fallback notification`() = runTest {
+        val createFallbackNotificationResult = aCreateFallbackNotificationRecorder()
+        val sut = createAppLockedNotificationDrawerManager(createFallbackNotificationResult)
+        sut.onNotifiableEventsReceived(
+            listOf(
+                aNotifiableMessageEvent(noisy = false),
+                aNotifiableMessageEvent(eventId = AN_EVENT_ID_2, noisy = true),
+            )
+        )
+        createFallbackNotificationResult.assertions()
+            .isCalledOnce()
+            .with(
+                value(null),
+                any(),
+                value(
+                    listOf(
+                        anExpectedFallbackNotifiableEvent(noisy = false, timestamp = A_TIMESTAMP),
+                        anExpectedFallbackNotifiableEvent(eventId = AN_EVENT_ID_2, noisy = true, timestamp = A_TIMESTAMP),
+                    )
+                ),
+            )
+    }
+
+    @Test
+    fun `when the app is not locked, no fallback notification is created`() = runTest {
+        val createFallbackNotificationResult = aCreateFallbackNotificationRecorder()
+        val sut = createDefaultNotificationDrawerManager(
+            appNavigationStateService = FakeAppNavigationStateService(
+                initialAppNavigationState = anAppNavigationState(isInForeground = false),
+            ),
+            notificationCreator = FakeNotificationCreator(
+                createFallbackNotificationResult = createFallbackNotificationResult,
+            ),
+            lockScreenService = FakeLockScreenService().apply { setIsPinSetup(false) },
+        )
+        sut.onNotifiableEventsReceived(listOf(aNotifiableMessageEvent(noisy = true)))
+        createFallbackNotificationResult.assertions().isNeverCalled()
+    }
+
+    /**
+     * The content of the original event must be stripped, only the noisy flag, the ids and the timestamp are kept.
+     */
+    private fun anExpectedFallbackNotifiableEvent(
+        eventId: EventId = AN_EVENT_ID,
+        noisy: Boolean,
+        timestamp: Long,
+    ) = aFallbackNotifiableEvent(
+        eventId = eventId,
+        description = null,
+        canBeReplaced = false,
+        noisy = noisy,
+        timestamp = timestamp,
+        cause = null,
+    )
+
+    private fun aCreateFallbackNotificationRecorder() =
+        lambdaRecorder<Notification?, NotificationAccountParams, List<FallbackNotifiableEvent>, Notification> { _, _, _ -> A_NOTIFICATION }
+
+    private fun TestScope.createAppLockedNotificationDrawerManager(
+        createFallbackNotificationResult: LambdaThreeParamsRecorder<Notification?, NotificationAccountParams, List<FallbackNotifiableEvent>, Notification>,
+    ) = createDefaultNotificationDrawerManager(
+        appNavigationStateService = FakeAppNavigationStateService(
+            initialAppNavigationState = anAppNavigationState(isInForeground = false),
+        ),
+        notificationCreator = FakeNotificationCreator(
+            createFallbackNotificationResult = createFallbackNotificationResult,
+        ),
+        lockScreenService = FakeLockScreenService().apply { setIsPinSetup(true) },
+    )
+
+    private fun testAppLockedNotifiableEventReceived(
+        notifiableEvent: NotifiableEvent,
+        expectedFallbackEvent: FallbackNotifiableEvent,
+    ) = runTest {
+        val createFallbackNotificationResult = aCreateFallbackNotificationRecorder()
+        val sut = createAppLockedNotificationDrawerManager(createFallbackNotificationResult)
+        sut.onNotifiableEventsReceived(listOf(notifiableEvent))
+        createFallbackNotificationResult.assertions()
+            .isCalledOnce()
+            .with(value(null), any(), value(listOf(expectedFallbackEvent)))
+    }
+
     private fun testOnNotifiableEventReceived(
         appNavigationState: AppNavigationState,
         notifiableEvents: List<NotifiableEvent>,
@@ -503,6 +643,7 @@ class DefaultNotificationDrawerManagerTest {
 fun TestScope.createDefaultNotificationDrawerManager(
     notificationDisplayer: NotificationDisplayer = FakeNotificationDisplayer(),
     notificationRenderer: NotificationRenderer? = null,
+    notificationCreator: NotificationCreator = FakeNotificationCreator(),
     appNavigationStateService: AppNavigationStateService = FakeAppNavigationStateService(),
     roomGroupMessageCreator: RoomGroupMessageCreator = FakeRoomGroupMessageCreator(),
     summaryGroupMessageCreator: SummaryGroupMessageCreator = FakeSummaryGroupMessageCreator(),
@@ -519,7 +660,7 @@ fun TestScope.createDefaultNotificationDrawerManager(
         notificationRenderer = notificationRenderer ?: NotificationRenderer(
             notificationDisplayer = notificationDisplayer,
             notificationDataFactory = DefaultNotificationDataFactory(
-                notificationCreator = FakeNotificationCreator(),
+                notificationCreator = notificationCreator,
                 roomGroupMessageCreator = roomGroupMessageCreator,
                 summaryGroupMessageCreator = summaryGroupMessageCreator,
                 activeNotificationsProvider = activeNotificationsProvider,

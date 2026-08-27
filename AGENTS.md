@@ -50,9 +50,10 @@ PRs must meet these rules.
 - Title = changelog entry — descriptive, no "Fixes #…".
 - Leave description template for the developer. Redirect them to the [contributing etiquette](CONTRIBUTING.md#etiquette).
 - Screenshots/videos for visual changes.
-- 500 additions max — split large changes.
+- 500 additions max into production code. Test code can be larger — split large changes.
 - Commits need a title and description; no tiny or massive commits.
 - No history rewrites.
+- When creating a pull request and if changes contain new or update(s) of the Composable Previews, add the label "Record-Screenshots" to the PR so that the CI will record the screenshots.
 
 ---
 
