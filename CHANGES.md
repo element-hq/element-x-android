@@ -1,3 +1,23 @@
+Changes in Element X v26.08.4
+=============================
+
+<!-- Release notes generated using configuration in .github/release.yml at v26.08.4 -->
+
+## What's Changed
+### 🧱 Build
+* Add releaseV2.sh, a release script automating the GitHub release by @bmarty in https://github.com/element-hq/element-x-android/pull/7579
+* Update submodule ref. by @bmarty in https://github.com/element-hq/element-x-android/pull/7582
+### Others
+* Keep the formatting of a caption that is being edited by @hayaksi1 in https://github.com/element-hq/element-x-android/pull/7572
+* Say when the server cannot be reached instead of showing nothing by @hayaksi1 in https://github.com/element-hq/element-x-android/pull/7567
+* Keep saving files to Downloads once 32 files share the same name by @hayaksi1 in https://github.com/element-hq/element-x-android/pull/7344
+* Fix removed messages hiding its thread on deletion by @bxdxnn in https://github.com/element-hq/element-x-android/pull/7480
+* Drop the sender's name from the room list preview of two-person rooms by @hayaksi1 in https://github.com/element-hq/element-x-android/pull/7562
+* Document how the Element Call base URL developer option is used by @hayaksi1 in https://github.com/element-hq/element-x-android/pull/7546
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v26.08.3...v26.08.4
+
 Changes in Element X v26.08.3
 =============================
 
