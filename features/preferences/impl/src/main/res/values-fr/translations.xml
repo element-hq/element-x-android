@@ -101,6 +101,14 @@ Si vous continuez, il est possible que certains de vos paramètres soient modifi
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"paramètres du système"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Les notifications du système sont désactivées"</string>
   <string name="screen_notification_settings_title">"Notifications"</string>
+  <string name="screen_settings_user_status_away">"Absent"</string>
+  <string name="screen_settings_user_status_be_right_back">"Je reviens tout de suite"</string>
+  <string name="screen_settings_user_status_custom">"Personnalisé…"</string>
+  <string name="screen_settings_user_status_custom_hint">"Statut personnalisé…"</string>
+  <string name="screen_settings_user_status_focus_time">"Concentré"</string>
+  <string name="screen_settings_user_status_in_a_meeting">"En réunion"</string>
+  <string name="screen_settings_user_status_on_the_road">"Sur la route"</string>
+  <string name="screen_settings_user_status_placeholder">"Quel est votre statut ?"</string>
   <string name="theme_black">"Noir"</string>
   <string name="theme_dark">"Sombre"</string>
   <string name="theme_light">"Clair"</string>

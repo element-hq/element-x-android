@@ -16,7 +16,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsEvents
+import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsEvent
 import io.element.android.libraries.fullscreenintent.impl.FullScreenIntentPermissionsPresenter
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.preferences.test.FakePreferenceDataStoreFactory
@@ -78,7 +78,7 @@ class FullScreenIntentPermissionsPresenterTest {
         }.test {
             skipItems(1)
             val loadedItem = awaitItem()
-            loadedItem.eventSink(FullScreenIntentPermissionsEvents.Dismiss)
+            loadedItem.eventSink(FullScreenIntentPermissionsEvent.Dismiss)
             runCurrent()
             assertThat(awaitItem().shouldDisplayBanner).isFalse()
         }
@@ -94,7 +94,7 @@ class FullScreenIntentPermissionsPresenterTest {
         }.test {
             skipItems(1)
             val loadedItem = awaitItem()
-            loadedItem.eventSink(FullScreenIntentPermissionsEvents.OpenSettings)
+            loadedItem.eventSink(FullScreenIntentPermissionsEvent.OpenSettings)
             launchLambda.assertions().isCalledOnce()
             cancelAndIgnoreRemainingEvents()
         }
@@ -113,7 +113,7 @@ class FullScreenIntentPermissionsPresenterTest {
         }.test {
             skipItems(1)
             val loadedItem = awaitItem()
-            loadedItem.eventSink(FullScreenIntentPermissionsEvents.OpenSettings)
+            loadedItem.eventSink(FullScreenIntentPermissionsEvent.OpenSettings)
             launchLambda.assertions().isNeverCalled()
             cancelAndIgnoreRemainingEvents()
         }

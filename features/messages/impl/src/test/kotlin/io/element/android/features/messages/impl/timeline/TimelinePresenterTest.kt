@@ -12,6 +12,8 @@ import app.cash.turbine.ReceiveTurbine
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.location.test.FakeActiveLiveLocationShareManager
 import io.element.android.features.messages.impl.FakeMessagesNavigator
+import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureEvent
+import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureState
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.aResolveVerifiedUserSendFailureState
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactoryCreator
@@ -21,6 +23,7 @@ import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
+import io.element.android.features.messages.impl.timeline.sendfailure.SendFailureDialogState
 import io.element.android.features.messages.impl.typing.aTypingNotificationState
 import io.element.android.features.messages.impl.voicemessages.timeline.FakeRedactedVoiceMessageManager
 import io.element.android.features.messages.impl.voicemessages.timeline.RedactedVoiceMessageManager
@@ -45,9 +48,9 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
 import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
-import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -65,6 +68,7 @@ import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
+import io.element.android.libraries.matrix.test.timeline.aRedactedContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.libraries.matrix.test.timeline.item.event.aRoomMembershipContent
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
@@ -876,7 +880,7 @@ class TimelinePresenterTest {
                 (0 until 3).map { index ->
                     MatrixTimelineItem.Event(
                         uniqueId = UniqueId("redacted_$index"),
-                        event = anEventTimelineItem(eventId = EventId("\$R$index"), content = RedactedContent),
+                        event = anEventTimelineItem(eventId = EventId("\$R$index"), content = aRedactedContent()),
                     )
                 }
             ),
@@ -1056,6 +1060,169 @@ class TimelinePresenterTest {
                 assertThat(state.focusedEventId).isEqualTo(AN_EVENT_ID)
                 assertThat(state.timelineItems).isEmpty()
             }
+        }
+    }
+
+    @Test
+    fun `present - a forward pagination while the focused event is not rendered yet is ignored`() = runTest {
+        val paginateLambda = lambdaRecorder(ensureNeverCalled = true) { _: Timeline.PaginationDirection ->
+            Result.success(true)
+        }
+        val room = aRoomWithDetachedTimeline(paginateLambda = paginateLambda)
+        val presenter = createTimelinePresenter(
+            room = room,
+            timeline = room.liveTimeline,
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink.invoke(TimelineEvent.FocusOnEvent(AN_EVENT_ID))
+            val focusedState = consumeItemsUntilPredicate { it.focusRequestState == FocusRequestState.Success(AN_EVENT_ID) }.last()
+            assertThat(focusedState.isLive).isFalse()
+            initialState.eventSink.invoke(TimelineEvent.LoadMore(Timeline.PaginationDirection.FORWARDS))
+            advanceUntilIdle()
+            assert(paginateLambda).isNeverCalled()
+            assertThat(expectMostRecentItem().isLive).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - a forward pagination is performed once the focused event has been rendered`() = runTest {
+        val paginateLambda = lambdaRecorder { _: Timeline.PaginationDirection ->
+            Result.success(true)
+        }
+        val room = aRoomWithDetachedTimeline(paginateLambda = paginateLambda)
+        val presenter = createTimelinePresenter(
+            room = room,
+            timeline = room.liveTimeline,
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink.invoke(TimelineEvent.FocusOnEvent(AN_EVENT_ID))
+            consumeItemsUntilPredicate { it.focusRequestState == FocusRequestState.Success(AN_EVENT_ID) }
+            initialState.eventSink.invoke(TimelineEvent.OnFocusEventRender)
+            initialState.eventSink.invoke(TimelineEvent.LoadMore(Timeline.PaginationDirection.FORWARDS))
+            advanceUntilIdle()
+            assert(paginateLambda)
+                .isCalledOnce()
+                .with(value(Timeline.PaginationDirection.FORWARDS))
+            assertThat(expectMostRecentItem().isLive).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - a backward pagination while the focused event is not rendered yet is performed`() = runTest {
+        val paginateLambda = lambdaRecorder { _: Timeline.PaginationDirection ->
+            Result.success(false)
+        }
+        val room = aRoomWithDetachedTimeline(paginateLambda = paginateLambda)
+        val presenter = createTimelinePresenter(
+            room = room,
+            timeline = room.liveTimeline,
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink.invoke(TimelineEvent.FocusOnEvent(AN_EVENT_ID))
+            consumeItemsUntilPredicate { it.focusRequestState == FocusRequestState.Success(AN_EVENT_ID) }
+            initialState.eventSink.invoke(TimelineEvent.LoadMore(Timeline.PaginationDirection.BACKWARDS))
+            advanceUntilIdle()
+            assert(paginateLambda)
+                .isCalledOnce()
+                .with(value(Timeline.PaginationDirection.BACKWARDS))
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - a forward pagination while the focus request is debounced is ignored`() = runTest {
+        val paginateLambda = lambdaRecorder(ensureNeverCalled = true) { _: Timeline.PaginationDirection ->
+            Result.success(true)
+        }
+        val room = aRoomWithDetachedTimeline(paginateLambda = paginateLambda)
+        val presenter = createTimelinePresenter(
+            room = room,
+            timeline = room.liveTimeline,
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink.invoke(TimelineEvent.FocusOnEvent(AN_EVENT_ID, debounce = 1.seconds))
+            // The focus request has started and is now waiting for the debounce to elapse
+            consumeItemsUntilPredicate { it.focusRequestState is FocusRequestState.Requested }
+            initialState.eventSink.invoke(TimelineEvent.LoadMore(Timeline.PaginationDirection.FORWARDS))
+            advanceUntilIdle()
+            assert(paginateLambda).isNeverCalled()
+            assertThat(expectMostRecentItem().isLive).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - a forward pagination while the focused timeline is loading is ignored`() = runTest {
+        val paginateLambda = lambdaRecorder(ensureNeverCalled = true) { _: Timeline.PaginationDirection ->
+            Result.success(true)
+        }
+        val room = aRoomWithDetachedTimeline(paginateLambda = paginateLambda)
+        val presenter = createTimelinePresenter(
+            room = room,
+            timeline = room.liveTimeline,
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink.invoke(TimelineEvent.FocusOnEvent(AN_EVENT_ID))
+            // The focused timeline is being created, the focus request has not resolved yet
+            consumeItemsUntilPredicate { it.focusRequestState is FocusRequestState.Loading }
+            initialState.eventSink.invoke(TimelineEvent.LoadMore(Timeline.PaginationDirection.FORWARDS))
+            advanceUntilIdle()
+            assert(paginateLambda).isNeverCalled()
+            assertThat(expectMostRecentItem().isLive).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - a forward pagination after a failed focus request is performed`() = runTest {
+        val paginateLambda = lambdaRecorder { _: Timeline.PaginationDirection ->
+            Result.success(false)
+        }
+        val room = aRoomWithDetachedTimeline(
+            paginateLambda = paginateLambda,
+            createTimelineResult = { Result.failure(RuntimeException("An error")) },
+        )
+        val presenter = createTimelinePresenter(
+            room = room,
+            timeline = room.liveTimeline,
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink.invoke(TimelineEvent.FocusOnEvent(AN_EVENT_ID))
+            consumeItemsUntilPredicate { it.focusRequestState is FocusRequestState.Failure }
+            initialState.eventSink.invoke(TimelineEvent.LoadMore(Timeline.PaginationDirection.FORWARDS))
+            advanceUntilIdle()
+            assert(paginateLambda)
+                .isCalledOnce()
+                .with(value(Timeline.PaginationDirection.FORWARDS))
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - a forward pagination in a thread timeline is ignored`() = runTest {
+        val paginateLambda = lambdaRecorder { _: Timeline.PaginationDirection ->
+            Result.success(true)
+        }
+        val timeline = FakeTimeline(mode = Timeline.Mode.Thread(A_THREAD_ID)).apply {
+            this.paginateLambda = paginateLambda
+        }
+        val presenter = createTimelinePresenter(timeline = timeline)
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink.invoke(TimelineEvent.LoadMore(Timeline.PaginationDirection.FORWARDS))
+            advanceUntilIdle()
+            assert(paginateLambda).isNeverCalled()
+            // A backward pagination is still performed in a thread timeline
+            initialState.eventSink.invoke(TimelineEvent.LoadMore(Timeline.PaginationDirection.BACKWARDS))
+            advanceUntilIdle()
+            assert(paginateLambda)
+                .isCalledOnce()
+                .with(value(Timeline.PaginationDirection.BACKWARDS))
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -1391,6 +1558,112 @@ class TimelinePresenterTest {
     }
 
     @Test
+    fun `present - show and hide send failure dialog`() = runTest {
+        val presenter = createTimelinePresenter()
+        val event = aMessageEvent(sendState = LocalEventSendState.Failed.Unknown("An error"))
+        presenter.test {
+            val initialState = awaitFirstItem()
+            assertThat(initialState.sendFailureDialogState).isEqualTo(SendFailureDialogState.Hidden)
+            initialState.eventSink(TimelineEvent.ShowSendFailureDialog(event))
+            awaitItem().also { state ->
+                assertThat(state.sendFailureDialogState).isEqualTo(
+                    SendFailureDialogState.Show(
+                        event = event,
+                        sendFailureType = SendFailureDialogState.SendFailureType.Error("An error"),
+                    )
+                )
+                state.eventSink(TimelineEvent.HideSendFailureDialog)
+            }
+            awaitItem().also { state ->
+                assertThat(state.sendFailureDialogState).isEqualTo(SendFailureDialogState.Hidden)
+            }
+        }
+    }
+
+    @Test
+    fun `present - show send failure dialog - unknown error with a blank reason`() {
+        assertSendFailureType(
+            sendState = LocalEventSendState.Failed.Unknown(error = ""),
+            expectedSendFailureType = SendFailureDialogState.SendFailureType.Unknown,
+        )
+    }
+
+    @Test
+    fun `present - show send failure dialog - invalid mime type`() {
+        assertSendFailureType(
+            sendState = LocalEventSendState.Failed.InvalidMimeType(mimeType = "invalid/mimeType"),
+            expectedSendFailureType = SendFailureDialogState.SendFailureType.InvalidMimeType("invalid/mimeType"),
+        )
+    }
+
+    @Test
+    fun `present - show send failure dialog - missing media content`() {
+        assertSendFailureType(
+            sendState = LocalEventSendState.Failed.MissingMediaContent,
+            expectedSendFailureType = SendFailureDialogState.SendFailureType.MissingMediaContent,
+        )
+    }
+
+    @Test
+    fun `present - show send failure dialog - sending from unverified device`() {
+        assertSendFailureType(
+            sendState = LocalEventSendState.Failed.SendingFromUnverifiedDevice,
+            expectedSendFailureType = SendFailureDialogState.SendFailureType.SendingFromUnverifiedDevice,
+        )
+    }
+
+    private fun assertSendFailureType(
+        sendState: LocalEventSendState.Failed,
+        expectedSendFailureType: SendFailureDialogState.SendFailureType,
+    ) = runTest {
+        val presenter = createTimelinePresenter()
+        val event = aMessageEvent(sendState = sendState)
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink(TimelineEvent.ShowSendFailureDialog(event))
+            assertThat(awaitItem().sendFailureDialogState).isEqualTo(
+                SendFailureDialogState.Show(event = event, sendFailureType = expectedSendFailureType)
+            )
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - show send failure dialog - verified user failure is delegated to the resolve presenter`() = runTest {
+        val resolveEventSinkRecorder = lambdaRecorder<ResolveVerifiedUserSendFailureEvent, Unit> { }
+        val presenter = createTimelinePresenter(
+            resolveVerifiedUserSendFailurePresenter = {
+                aResolveVerifiedUserSendFailureState(eventSink = resolveEventSinkRecorder)
+            },
+        )
+        val event = aMessageEvent(
+            sendState = LocalEventSendState.Failed.VerifiedUserChangedIdentity(users = listOf(A_USER_ID)),
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink(TimelineEvent.ShowSendFailureDialog(event))
+            // The generic dialog is not displayed, the dedicated one is.
+            assertThat(consumeItemsUntilTimeout()).isEmpty()
+            assertThat(initialState.sendFailureDialogState).isEqualTo(SendFailureDialogState.Hidden)
+            resolveEventSinkRecorder.assertions()
+                .isCalledOnce()
+                .with(value(ResolveVerifiedUserSendFailureEvent.ComputeForMessage(event)))
+        }
+    }
+
+    @Test
+    fun `present - show send failure dialog - no effect if the event did not fail to send`() = runTest {
+        val presenter = createTimelinePresenter()
+        val event = aMessageEvent(sendState = LocalEventSendState.Sending.Event)
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink(TimelineEvent.ShowSendFailureDialog(event))
+            assertThat(consumeItemsUntilTimeout()).isEmpty()
+            assertThat(initialState.sendFailureDialogState).isEqualTo(SendFailureDialogState.Hidden)
+        }
+    }
+
+    @Test
     fun `present - when room member info is loaded, read receipts info should be updated`() = runTest {
         val timeline = FakeTimeline(
             timelineItems = flowOf(
@@ -1552,6 +1825,37 @@ class TimelinePresenterTest {
         return awaitItem()
     }
 
+    private fun aRoomWithDetachedTimeline(
+        paginateLambda: (Timeline.PaginationDirection) -> Result<Boolean>,
+        createTimelineResult: () -> Result<Timeline> = { Result.success(aDetachedTimeline(paginateLambda)) },
+    ): FakeJoinedRoom {
+        return FakeJoinedRoom(
+            liveTimeline = FakeTimeline(timelineItems = flowOf(emptyList())).apply {
+                this.paginateLambda = paginateLambda
+            },
+            createTimelineResult = { createTimelineResult() },
+            baseRoom = FakeBaseRoom(
+                roomPermissions = roomPermissions(),
+                threadRootIdForEventResult = { _ -> Result.success(null) },
+            ),
+        )
+    }
+
+    private fun aDetachedTimeline(
+        paginateLambda: (Timeline.PaginationDirection) -> Result<Boolean>,
+    ) = FakeTimeline(
+        timelineItems = flowOf(
+            listOf(
+                MatrixTimelineItem.Event(
+                    uniqueId = A_UNIQUE_ID,
+                    event = anEventTimelineItem(eventId = AN_EVENT_ID),
+                )
+            )
+        )
+    ).apply {
+        this.paginateLambda = paginateLambda
+    }
+
     private fun roomPermissions(
         canRedactOther: Boolean = false,
         canRedactOwn: Boolean = true,
@@ -1589,6 +1893,7 @@ class TimelinePresenterTest {
         liveLocationShareManager: FakeActiveLiveLocationShareManager = FakeActiveLiveLocationShareManager(),
         markAsFullyRead: MarkAsFullyRead = FakeMarkAsFullyRead { _, _ -> },
         timelineProtectionPresenter: Presenter<TimelineProtectionState> = { aTimelineProtectionState() },
+        resolveVerifiedUserSendFailurePresenter: Presenter<ResolveVerifiedUserSendFailureState> = { aResolveVerifiedUserSendFailureState() },
     ): TimelinePresenter {
         return TimelinePresenter(
             timelineItemsFactoryCreator = aTimelineItemsFactoryCreator(),
@@ -1602,7 +1907,7 @@ class TimelinePresenterTest {
             sessionPreferencesStore = sessionPreferencesStore,
             timelineItemIndexer = timelineItemIndexer,
             timelineController = TimelineController(room, timeline),
-            resolveVerifiedUserSendFailurePresenter = { aResolveVerifiedUserSendFailureState() },
+            resolveVerifiedUserSendFailurePresenter = resolveVerifiedUserSendFailurePresenter,
             typingNotificationPresenter = { aTypingNotificationState() },
             roomCallStatePresenter = { aStandByCallState() },
             featureFlagService = featureFlagService,

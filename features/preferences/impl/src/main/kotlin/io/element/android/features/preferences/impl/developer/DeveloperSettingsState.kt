@@ -20,10 +20,13 @@ data class DeveloperSettingsState(
     val databaseSizes: AsyncData<ImmutableMap<String, String>>,
     val clearCacheAction: AsyncAction<Unit>,
     val markAllRoomsAsReadAction: AsyncAction<Unit>,
+    val pushRulesAction: AsyncAction<Unit>,
     val isEnterpriseBuild: Boolean,
     val showColorPicker: Boolean,
     val deviceId: DeviceId,
-    val eventSink: (DeveloperSettingsEvents) -> Unit
+    val eventSink: (DeveloperSettingsEvent) -> Unit
 ) {
-    val showLoader = clearCacheAction is AsyncAction.Loading || markAllRoomsAsReadAction is AsyncAction.Loading
+    val showLoader = clearCacheAction is AsyncAction.Loading ||
+        markAllRoomsAsReadAction is AsyncAction.Loading ||
+        pushRulesAction is AsyncAction.Loading
 }

@@ -3,12 +3,16 @@
   <string name="banner_battery_optimization_content_android">"از کار انداختن بهینه‌سازی باتری برای این کاره برای اطمینان از گرفتن همهٔ آگاهی‌ها."</string>
   <string name="banner_battery_optimization_submit_android">"از کار انداختن بهینه سازی"</string>
   <string name="banner_battery_optimization_title_android">"آگاهی‌ها نمی‌رسند؟"</string>
-  <string name="banner_set_up_recovery_content">"بازگردانی تاریخچهٔ پیام‌ها و هویت رمزنگاشته‌تان با کلید بازیابی در صورت از دست دادن همهٔ افزاره‌های موجودتان."</string>
+  <string name="banner_new_sound_message">"پینگ اعلان شما به‌روزرسانی شده است—واضح‌تر، سریع‌تر و کم‌دردسرتر."</string>
+  <string name="banner_new_sound_title">"ما صداهای شما را تازه کرده‌ایم"</string>
+  <string name="banner_set_up_recovery_content">"چت‌های شما به طور خودکار با رمزگذاری سراسری پشتیبان‌گیری می‌شوند. برای بازیابی این پشتیبان‌گیری و حفظ هویت دیجیتال خود در زمانی که دسترسی به تمام دستگاه‌هایتان را از دست می‌دهید، به کلید بازیابی خود نیاز خواهید داشت."</string>
   <string name="banner_set_up_recovery_submit">"دریافت کلید بازیابی"</string>
-  <string name="banner_set_up_recovery_title">"برپایی بازیابی"</string>
+  <string name="banner_set_up_recovery_title">"از چت‌هایتان پشتیبان بگیرید"</string>
   <string name="confirm_recovery_key_banner_message">"کلید بازیابی خود را تأیید کنید تا دسترسی به حافظه کلیدها و تاریخچه پیام‌هایتان حفظ شود ."</string>
   <string name="confirm_recovery_key_banner_primary_button_title">"ورود کلید بازیابیتان"</string>
+  <string name="confirm_recovery_key_banner_secondary_button_title">"کلید بازیابی خود را فراموش کرده‌اید؟"</string>
   <string name="confirm_recovery_key_banner_title">"ذخیره‌ساز کلیدتان از هم‌گام بودن در آمده"</string>
+  <string name="full_screen_intent_banner_message">"برای اطمینان از اینکه هرگز تماس مهمی را از دست نمی‌دهید، لطفاً تنظیمات خود را تغییر دهید تا وقتی تلفنتان قفل است، اعلان‌ها به صورت تمام صفحه نمایش داده شوند."</string>
   <string name="full_screen_intent_banner_title">"بهبود تجریهٔ تماستان"</string>
   <string name="screen_home_tab_chats">"گپ‌ها"</string>
   <string name="screen_home_tab_spaces">"فضاها"</string>
@@ -30,6 +34,7 @@
   <string name="screen_roomlist_filter_invites">"دعوت‌ها"</string>
   <string name="screen_roomlist_filter_invites_empty_state_title">"هیچ دعوت منتظری ندارید."</string>
   <string name="screen_roomlist_filter_low_priority">"اولویت کم"</string>
+  <string name="screen_roomlist_filter_low_priority_empty_state_title">"شما هنوز هیچ چت با اولویت پایین ندارید"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"می توانید پالایه‌ها را برای دیدن دیگر گپ‌هایتان بردارید"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"هیچ گپی برای این گزینش ندارید"</string>
   <string name="screen_roomlist_filter_people">"افراد"</string>
@@ -44,6 +49,7 @@
   <string name="screen_roomlist_mark_as_read">"علامت‌گذاری به عنوان خوانده شده"</string>
   <string name="screen_roomlist_mark_as_unread">"نشان به ناخوانده"</string>
   <string name="screen_roomlist_tombstoned_room_description">"این اتاق ارتقا یافته"</string>
+  <string name="screen_roomlist_your_spaces">"فضاهای شما"</string>
   <string name="session_verification_banner_message">"گویا از افزاره‌ای جدید استفاده می‌کنید. تأیید با افزاره‌ای دیگر برای دسترسی به پیام‌های رمزنگاری شده‌تان."</string>
   <string name="session_verification_banner_title">"تأیید کنید که خودتانید"</string>
 </resources>

@@ -29,6 +29,7 @@
   </plurals>
   <string name="notification_invite_body">"已邀请你聊天"</string>
   <string name="notification_invite_body_with_sender">"%1$s 已邀请你聊天"</string>
+  <string name="notification_knock_request_body">"已申请加入"</string>
   <string name="notification_live_location_started_body">"已开始共享其实时位置"</string>
   <string name="notification_mentioned_you_body">"提到了你：%1$s"</string>
   <string name="notification_new_messages">"新消息"</string>
@@ -92,6 +93,7 @@
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"错误：%1$s。"</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"错误，无法测试推送。"</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"错误，等待推送超时。"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_rate_limit">"错误：推送网关已对此设备限流，因此通知可能不稳定。请更换其它推送网关。"</string>
   <string name="troubleshoot_notifications_test_push_loop_back_success">"推送回路耗时 %1$d 毫秒。"</string>
   <string name="troubleshoot_notifications_test_push_loop_back_title">"测试推送回路"</string>
 </resources>

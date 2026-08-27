@@ -11,10 +11,11 @@ import io.element.android.libraries.matrix.api.TemporaryMatrixClient
 import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeTemporaryMatrixClient(
+    override val server: String = A_SERVER_NAME,
+    override val homeserverUrl: String = A_HOMESERVER_URL,
     private val getUrlResult: (String) -> Result<ByteArray> = { lambdaError() },
     private val closeLambda: () -> Unit = {},
 ) : TemporaryMatrixClient {
     override suspend fun getUrl(url: String): Result<ByteArray> = getUrlResult(url)
-
     override fun close() = closeLambda()
 }

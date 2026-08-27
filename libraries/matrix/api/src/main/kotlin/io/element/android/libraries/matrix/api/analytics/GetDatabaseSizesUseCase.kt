@@ -9,6 +9,14 @@ package io.element.android.libraries.matrix.api.analytics
 
 import io.element.android.libraries.matrix.api.core.SessionId
 
+/**
+ * Reads the on-disk size of a session's SDK stores, so they can be reported as analytics.
+ */
 fun interface GetDatabaseSizesUseCase {
+    /**
+     * Returns the size of each store of the given session.
+     *
+     * @param sessionId the session whose stores are measured.
+     */
     operator fun invoke(sessionId: SessionId): Result<SdkStoreSizes>
 }

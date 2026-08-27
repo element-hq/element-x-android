@@ -126,7 +126,7 @@ fun DependencyLicensesListView(
 @PreviewsDayNight
 @Composable
 internal fun DependencyLicensesListViewPreview(
-    @PreviewParameter(DependencyLicensesListStateProvider::class) state: DependencyLicensesListState
+    @PreviewParameter(DependencyLicensesListStatePreviewParam::class) state: DependencyLicensesListState
 ) = ElementPreview {
     DependencyLicensesListView(
         state = state,

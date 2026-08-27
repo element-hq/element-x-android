@@ -95,24 +95,6 @@ class TimelineProtectionPresenterTest {
         }
     }
 
-    @Test
-    fun `present - shown content is restored when the presenter is recreated`() = runTest {
-        val mediaPreviewConfig = MediaPreviewConfig(mediaPreviewValue = MediaPreviewValue.Off, hideInviteAvatar = false)
-        val mediaPreviewService = FakeMediaPreviewService(mediaPreviewConfigFlow = MutableStateFlow(mediaPreviewConfig))
-        val timelineProtectionStore = DefaultTimelineProtectionStore()
-        createPresenter(mediaPreviewService = mediaPreviewService, timelineProtectionStore = timelineProtectionStore).test {
-            val initialState = awaitItem()
-            assertThat(initialState.protectionState).isEqualTo(ProtectionState.RenderOnly(persistentSetOf()))
-            initialState.eventSink(TimelineProtectionEvent.ShowContent(eventId = AN_EVENT_ID))
-            val finalState = awaitItem()
-            assertThat(finalState.protectionState).isEqualTo(ProtectionState.RenderOnly(persistentSetOf(AN_EVENT_ID)))
-        }
-        createPresenter(mediaPreviewService = mediaPreviewService, timelineProtectionStore = timelineProtectionStore).test {
-            val initialState = awaitItem()
-            assertThat(initialState.protectionState).isEqualTo(ProtectionState.RenderOnly(persistentSetOf(AN_EVENT_ID)))
-        }
-    }
-
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `present - validate media scans the media source`() = runTest {
@@ -152,11 +134,9 @@ class TimelineProtectionPresenterTest {
         room: BaseRoom = FakeBaseRoom(),
         mediaPreviewService: MediaPreviewService = FakeMediaPreviewService(),
         contentScannerService: ContentScannerService = ContentScannerService { _: List<MediaSource>, _: ContentValidationState -> },
-        timelineProtectionStore: TimelineProtectionStore = DefaultTimelineProtectionStore(),
     ) = TimelineProtectionPresenter(
         mediaPreviewService = mediaPreviewService,
         room = room,
         contentScannerService = contentScannerService,
-        timelineProtectionStore = timelineProtectionStore,
     )
 }

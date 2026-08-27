@@ -34,9 +34,9 @@ class ChooseAccountProviderPresenter(
         val loginModeState = loginModePresenter.present()
         var selectedAccountProvider: AccountProvider? by remember { mutableStateOf(null) }
 
-        fun handleEvent(event: ChooseAccountProviderEvents) {
+        fun handleEvent(event: ChooseAccountProviderEvent) {
             when (event) {
-                ChooseAccountProviderEvents.Continue -> {
+                ChooseAccountProviderEvent.Continue -> {
                     selectedAccountProvider?.let { provider ->
                         loginModeState.eventSink(
                             LoginModeEvent.Submit(
@@ -48,19 +48,19 @@ class ChooseAccountProviderPresenter(
                         )
                     }
                 }
-                is ChooseAccountProviderEvents.SelectAccountProvider -> {
+                is ChooseAccountProviderEvent.SelectAccountProvider -> {
                     // Ensure that the user does not change the server during processing.
                     if (loginModeState.loginMode is AsyncData.Uninitialized) {
                         selectedAccountProvider = event.accountProvider
                     }
                 }
-                ChooseAccountProviderEvents.ClearError -> loginModeState.eventSink(LoginModeEvent.ClearError)
+                ChooseAccountProviderEvent.ClearError -> loginModeState.eventSink(LoginModeEvent.ClearError)
             }
         }
 
         val staticAccountProviderList = remember {
             // The list cannot contains ANY_ACCOUNT_PROVIDER ("*") and cannot be empty at this point
-            enterpriseService.defaultHomeserverList()
+            enterpriseService.homeserverAllowList()
                 .map { it.ensureProtocol() }
                 .map { url ->
                     AccountProvider(

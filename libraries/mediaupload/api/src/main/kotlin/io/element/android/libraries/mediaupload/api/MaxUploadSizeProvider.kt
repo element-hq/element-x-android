@@ -12,5 +12,6 @@ package io.element.android.libraries.mediaupload.api
  * Provides the maximum upload size allowed by the Matrix server.
  */
 fun interface MaxUploadSizeProvider {
+    /** Returns the maximum size in bytes a single upload may have, as advertised by the homeserver. */
     suspend fun getMaxUploadSize(): Result<Long>
 }

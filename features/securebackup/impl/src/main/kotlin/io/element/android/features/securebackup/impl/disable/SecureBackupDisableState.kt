@@ -15,5 +15,5 @@ data class SecureBackupDisableState(
     val backupState: BackupState,
     val disableAction: AsyncAction<Unit>,
     val appName: String,
-    val eventSink: (SecureBackupDisableEvents) -> Unit
+    val eventSink: (SecureBackupDisableEvent) -> Unit
 )

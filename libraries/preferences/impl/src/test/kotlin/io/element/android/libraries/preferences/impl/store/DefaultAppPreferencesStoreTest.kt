@@ -54,4 +54,74 @@ class DefaultAppPreferencesStoreTest {
 
         assertThat(store.getLiveLocationMinimumDistanceInMetersUpdateFlow().first()).isEqualTo(25)
     }
+
+    @Test
+    fun `homeserver history is empty by default`() = runTest {
+        val store = createStore()
+        assertThat(store.getHomeserverHistoryFlow().first()).isEmpty()
+    }
+
+    @Test
+    fun `adding homeservers keeps the most recent first`() = runTest {
+        val store = createStore()
+
+        store.addHomeserverToHistory("https://matrix.org")
+        store.addHomeserverToHistory("https://example.com")
+
+        assertThat(store.getHomeserverHistoryFlow().first())
+            .containsExactly("https://example.com", "https://matrix.org")
+            .inOrder()
+    }
+
+    @Test
+    fun `adding an existing homeserver moves it to the front without duplicating`() = runTest {
+        val store = createStore()
+
+        store.addHomeserverToHistory("https://matrix.org")
+        store.addHomeserverToHistory("https://example.com")
+        store.addHomeserverToHistory("https://matrix.org")
+
+        assertThat(store.getHomeserverHistoryFlow().first())
+            .containsExactly("https://matrix.org", "https://example.com")
+            .inOrder()
+    }
+
+    @Test
+    fun `homeservers are normalised and deduplicated case-insensitively`() = runTest {
+        val store = createStore()
+
+        store.addHomeserverToHistory("  HTTPS://Matrix.ORG  ")
+        store.addHomeserverToHistory("https://matrix.org")
+
+        assertThat(store.getHomeserverHistoryFlow().first())
+            .containsExactly("https://matrix.org")
+    }
+
+    @Test
+    fun `blank homeservers are ignored`() = runTest {
+        val store = createStore()
+
+        store.addHomeserverToHistory("   ")
+
+        assertThat(store.getHomeserverHistoryFlow().first()).isEmpty()
+    }
+
+    @Test
+    fun `homeserver history is capped to the most recent entries`() = runTest {
+        val store = createStore()
+
+        repeat(25) { index ->
+            store.addHomeserverToHistory("https://server$index.org")
+        }
+
+        val history = store.getHomeserverHistoryFlow().first()
+        assertThat(history).hasSize(20)
+        assertThat(history.first()).isEqualTo("https://server24.org")
+        assertThat(history.last()).isEqualTo("https://server5.org")
+    }
+
+    private fun createStore() = DefaultAppPreferencesStore(
+        buildMeta = buildMeta,
+        preferenceDataStoreFactory = FakePreferenceDataStoreFactory(),
+    )
 }
