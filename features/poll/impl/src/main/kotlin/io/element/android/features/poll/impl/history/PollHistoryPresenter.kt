@@ -64,12 +64,12 @@ class PollHistoryPresenter(
             }
         }
         val coroutineScope = rememberCoroutineScope()
-        fun handleEvent(event: PollHistoryEvents) {
+        fun handleEvent(event: PollHistoryEvent) {
             when (event) {
-                is PollHistoryEvents.LoadMore -> {
+                is PollHistoryEvent.LoadMore -> {
                     coroutineScope.loadMore(timeline)
                 }
-                is PollHistoryEvents.SelectPollAnswer -> sessionCoroutineScope.launch {
+                is PollHistoryEvent.SelectPollAnswer -> sessionCoroutineScope.launch {
                     sendPollResponseAction.execute(
                         timeline = timeline,
                         pollStartId = event.pollStartId,
@@ -78,10 +78,10 @@ class PollHistoryPresenter(
                         Timber.e(error, "Failed to send poll response")
                     }
                 }
-                is PollHistoryEvents.EndPoll -> sessionCoroutineScope.launch {
+                is PollHistoryEvent.EndPoll -> sessionCoroutineScope.launch {
                     endPollAction.execute(timeline = timeline, pollStartId = event.pollStartId)
                 }
-                is PollHistoryEvents.SelectFilter -> {
+                is PollHistoryEvent.SelectFilter -> {
                     activeFilter = event.filter
                 }
             }

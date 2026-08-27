@@ -63,7 +63,7 @@ class ChangeServerPresenterTest {
         ).test {
             val initialState = awaitItem()
             assertThat(initialState.changeServerAction).isEqualTo(AsyncData.Uninitialized)
-            initialState.eventSink.invoke(ChangeServerEvents.ChangeServer(AccountProvider(url = A_HOMESERVER_URL)))
+            initialState.eventSink.invoke(ChangeServerEvent.ChangeServer(AccountProvider(url = A_HOMESERVER_URL)))
             val loadingState = awaitItem()
             assertThat(loadingState.changeServerAction).isInstanceOf(AsyncData.Loading::class.java)
             val successState = awaitItem()
@@ -87,13 +87,13 @@ class ChangeServerPresenterTest {
         ).test {
             val initialState = awaitItem()
             assertThat(initialState.changeServerAction).isEqualTo(AsyncData.Uninitialized)
-            initialState.eventSink.invoke(ChangeServerEvents.ChangeServer(AccountProvider(url = A_HOMESERVER_URL)))
+            initialState.eventSink.invoke(ChangeServerEvent.ChangeServer(AccountProvider(url = A_HOMESERVER_URL)))
             val loadingState = awaitItem()
             assertThat(loadingState.changeServerAction).isInstanceOf(AsyncData.Loading::class.java)
             val failureState = awaitItem()
             assertThat(failureState.changeServerAction).isInstanceOf(AsyncData.Failure::class.java)
             // Clear error
-            failureState.eventSink.invoke(ChangeServerEvents.ClearError)
+            failureState.eventSink.invoke(ChangeServerEvent.ClearError)
             val finalState = awaitItem()
             assertThat(finalState.changeServerAction).isEqualTo(AsyncData.Uninitialized)
         }
@@ -115,7 +115,7 @@ class ChangeServerPresenterTest {
         ).test {
             val initialState = awaitItem()
             assertThat(initialState.changeServerAction).isEqualTo(AsyncData.Uninitialized)
-            initialState.eventSink.invoke(ChangeServerEvents.ChangeServer(AccountProvider(url = A_HOMESERVER_URL)))
+            initialState.eventSink.invoke(ChangeServerEvent.ChangeServer(AccountProvider(url = A_HOMESERVER_URL)))
             val loadingState = awaitItem()
             assertThat(loadingState.changeServerAction).isInstanceOf(AsyncData.Loading::class.java)
             val failureState = awaitItem()
@@ -139,7 +139,7 @@ class ChangeServerPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.changeServerAction).isEqualTo(AsyncData.Uninitialized)
             val anAccountProvider = AccountProvider(url = A_HOMESERVER_URL)
-            initialState.eventSink.invoke(ChangeServerEvents.ChangeServer(anAccountProvider))
+            initialState.eventSink.invoke(ChangeServerEvent.ChangeServer(anAccountProvider))
             val loadingState = awaitItem()
             assertThat(loadingState.changeServerAction).isInstanceOf(AsyncData.Loading::class.java)
             val failureState = awaitItem()
@@ -167,7 +167,7 @@ class ChangeServerPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.changeServerAction).isEqualTo(AsyncData.Uninitialized)
             val anAccountProvider = AccountProvider(url = A_HOMESERVER_URL)
-            initialState.eventSink.invoke(ChangeServerEvents.ChangeServer(anAccountProvider))
+            initialState.eventSink.invoke(ChangeServerEvent.ChangeServer(anAccountProvider))
             // Skip loading state
             skipItems(1)
             val failureState = awaitItem()
@@ -194,7 +194,7 @@ class ChangeServerPresenterTest {
         ).test {
             val initialState = awaitItem()
             assertThat(initialState.localNetworkPermissionDialog).isEqualTo(LocalNetworkPermissionDialog.None)
-            initialState.eventSink.invoke(ChangeServerEvents.ChangeServer(AccountProvider(url = A_HOMESERVER_URL)))
+            initialState.eventSink.invoke(ChangeServerEvent.ChangeServer(AccountProvider(url = A_HOMESERVER_URL)))
             val promptState = expectMostRecentItem()
             // Dialog is shown, permission has not been requested yet, setHomeserver has not been called.
             assertThat(promptState.localNetworkPermissionDialog).isNotEqualTo(LocalNetworkPermissionDialog.None)
@@ -213,10 +213,10 @@ class ChangeServerPresenterTest {
             permissionsPresenter = FakePermissionsPresenter(),
         ).test {
             val initialState = awaitItem()
-            initialState.eventSink.invoke(ChangeServerEvents.ChangeServer(AccountProvider(url = A_HOMESERVER_URL)))
+            initialState.eventSink.invoke(ChangeServerEvent.ChangeServer(AccountProvider(url = A_HOMESERVER_URL)))
             val promptState = expectMostRecentItem()
             assertThat(promptState.localNetworkPermissionDialog).isNotEqualTo(LocalNetworkPermissionDialog.None)
-            promptState.eventSink.invoke(ChangeServerEvents.DismissLocalNetworkPermission)
+            promptState.eventSink.invoke(ChangeServerEvent.DismissLocalNetworkPermission)
             val dismissedState = expectMostRecentItem()
             assertThat(dismissedState.localNetworkPermissionDialog).isEqualTo(LocalNetworkPermissionDialog.None)
             assertThat(dismissedState.changeServerAction).isEqualTo(AsyncData.Uninitialized)
@@ -236,7 +236,7 @@ class ChangeServerPresenterTest {
             permissionsPresenter = permissionsPresenter,
         ).test {
             val initialState = awaitItem()
-            initialState.eventSink.invoke(ChangeServerEvents.ChangeServer(AccountProvider(url = A_HOMESERVER_URL)))
+            initialState.eventSink.invoke(ChangeServerEvent.ChangeServer(AccountProvider(url = A_HOMESERVER_URL)))
             val promptState = expectMostRecentItem()
             assertThat(promptState.localNetworkPermissionDialog).isNotEqualTo(LocalNetworkPermissionDialog.None)
             permissionsPresenter.setPermissionGranted()

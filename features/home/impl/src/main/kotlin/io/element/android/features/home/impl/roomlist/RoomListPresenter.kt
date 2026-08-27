@@ -37,8 +37,8 @@ import io.element.android.features.home.impl.spacefilters.SpaceFiltersState
 import io.element.android.features.home.impl.spacefilters.into
 import io.element.android.features.home.impl.spacefilters.selectedFilter
 import io.element.android.features.invite.api.SeenInvitesStore
-import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents.AcceptInvite
-import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents.DeclineInvite
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvent.AcceptInvite
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvent.DeclineInvite
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState

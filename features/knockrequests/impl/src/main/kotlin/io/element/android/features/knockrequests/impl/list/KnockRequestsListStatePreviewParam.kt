@@ -140,7 +140,7 @@ fun aKnockRequestsListState(
         canDecline = true,
         canBan = true,
     ),
-    eventSink: (KnockRequestsListEvents) -> Unit = {},
+    eventSink: (KnockRequestsListEvent) -> Unit = {},
 ) = KnockRequestsListState(
     knockRequests = knockRequests,
     currentAction = currentAction,

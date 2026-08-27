@@ -18,7 +18,7 @@ import io.element.android.features.enterprise.test.FakeSessionEnterpriseService
 import io.element.android.features.invitepeople.test.FakeStartDMAction
 import io.element.android.features.startchat.api.ConfirmingStartDmWithMatrixUser
 import io.element.android.features.startchat.api.StartDMAction
-import io.element.android.features.userprofile.api.UserProfileEvents
+import io.element.android.features.userprofile.api.UserProfileEvent
 import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.api.UserProfileVerificationState
 import io.element.android.features.userprofile.impl.root.UserProfilePresenter
@@ -182,12 +182,12 @@ class UserProfilePresenterTest {
         val presenter = createUserProfilePresenter()
         presenter.test {
             val initialState = awaitFirstItem()
-            initialState.eventSink(UserProfileEvents.BlockUser(needsConfirmation = true))
+            initialState.eventSink(UserProfileEvent.BlockUser(needsConfirmation = true))
 
             val dialogState = awaitItem()
             assertThat(dialogState.displayConfirmationDialog).isEqualTo(UserProfileState.ConfirmationDialog.Block)
 
-            dialogState.eventSink(UserProfileEvents.ClearConfirmationDialog)
+            dialogState.eventSink(UserProfileEvent.ClearConfirmationDialog)
             assertThat(awaitItem().displayConfirmationDialog).isNull()
         }
     }
@@ -202,12 +202,12 @@ class UserProfilePresenterTest {
         )
         presenter.test {
             val initialState = awaitFirstItem()
-            initialState.eventSink(UserProfileEvents.BlockUser(needsConfirmation = false))
+            initialState.eventSink(UserProfileEvent.BlockUser(needsConfirmation = false))
             assertThat(awaitItem().isBlocked.isLoading()).isTrue()
             ignoredUsersFlow.emit(persistentListOf(A_USER_ID))
             assertThat(awaitItem().isBlocked.dataOrNull()).isTrue()
 
-            initialState.eventSink(UserProfileEvents.UnblockUser(needsConfirmation = false))
+            initialState.eventSink(UserProfileEvent.UnblockUser(needsConfirmation = false))
             assertThat(awaitItem().isBlocked.isLoading()).isTrue()
             ignoredUsersFlow.emit(persistentListOf())
             assertThat(awaitItem().isBlocked.dataOrNull()).isFalse()
@@ -222,12 +222,12 @@ class UserProfilePresenterTest {
         val presenter = createUserProfilePresenter(client = matrixClient)
         presenter.test {
             val initialState = awaitFirstItem(count = 2)
-            initialState.eventSink(UserProfileEvents.BlockUser(needsConfirmation = false))
+            initialState.eventSink(UserProfileEvent.BlockUser(needsConfirmation = false))
             assertThat(awaitItem().isBlocked.isLoading()).isTrue()
             val errorState = awaitItem()
             assertThat(errorState.isBlocked.errorOrNull()).isEqualTo(AN_EXCEPTION)
             // Clear error
-            initialState.eventSink(UserProfileEvents.ClearBlockUserError)
+            initialState.eventSink(UserProfileEvent.ClearBlockUserError)
             assertThat(awaitItem().isBlocked).isEqualTo(AsyncData.Success(false))
         }
     }
@@ -240,12 +240,12 @@ class UserProfilePresenterTest {
         val presenter = createUserProfilePresenter(client = matrixClient)
         presenter.test {
             val initialState = awaitFirstItem(count = 2)
-            initialState.eventSink(UserProfileEvents.UnblockUser(needsConfirmation = false))
+            initialState.eventSink(UserProfileEvent.UnblockUser(needsConfirmation = false))
             assertThat(awaitItem().isBlocked.isLoading()).isTrue()
             val errorState = awaitItem()
             assertThat(errorState.isBlocked.errorOrNull()).isEqualTo(AN_EXCEPTION)
             // Clear error
-            initialState.eventSink(UserProfileEvents.ClearBlockUserError)
+            initialState.eventSink(UserProfileEvent.ClearBlockUserError)
             assertThat(awaitItem().isBlocked).isEqualTo(AsyncData.Success(true))
         }
     }
@@ -255,12 +255,12 @@ class UserProfilePresenterTest {
         val presenter = createUserProfilePresenter()
         presenter.test {
             val initialState = awaitFirstItem()
-            initialState.eventSink(UserProfileEvents.UnblockUser(needsConfirmation = true))
+            initialState.eventSink(UserProfileEvent.UnblockUser(needsConfirmation = true))
 
             val dialogState = awaitItem()
             assertThat(dialogState.displayConfirmationDialog).isEqualTo(UserProfileState.ConfirmationDialog.Unblock)
 
-            dialogState.eventSink(UserProfileEvents.ClearConfirmationDialog)
+            dialogState.eventSink(UserProfileEvent.ClearConfirmationDialog)
             assertThat(awaitItem().displayConfirmationDialog).isNull()
         }
     }
@@ -279,7 +279,7 @@ class UserProfilePresenterTest {
             val initialState = awaitFirstItem()
             assertThat(initialState.startDmActionState).isInstanceOf(AsyncAction.Uninitialized::class.java)
             val matrixUser = MatrixUser(UserId("@alice:server.org"))
-            initialState.eventSink(UserProfileEvents.StartDM)
+            initialState.eventSink(UserProfileEvent.StartDM)
             awaitItem().also { state ->
                 assertThat(state.startDmActionState).isEqualTo(startDMFailureResult)
                 executeResult.assertions().isCalledOnce().with(
@@ -287,7 +287,7 @@ class UserProfilePresenterTest {
                     value(false),
                     any(),
                 )
-                state.eventSink(UserProfileEvents.ClearStartDMState)
+                state.eventSink(UserProfileEvent.ClearStartDMState)
             }
             awaitItem().also { state ->
                 assertThat(state.startDmActionState.isUninitialized()).isTrue()
@@ -309,7 +309,7 @@ class UserProfilePresenterTest {
             val initialState = awaitFirstItem()
             assertThat(initialState.startDmActionState).isInstanceOf(AsyncAction.Uninitialized::class.java)
             val matrixUser = MatrixUser(UserId("@alice:server.org"))
-            initialState.eventSink(UserProfileEvents.StartDM)
+            initialState.eventSink(UserProfileEvent.StartDM)
             awaitItem().also { state ->
                 assertThat(state.startDmActionState).isEqualTo(startDMSuccessResult)
                 executeResult.assertions().isCalledOnce().with(
@@ -335,7 +335,7 @@ class UserProfilePresenterTest {
         }.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.startDmActionState).isInstanceOf(AsyncAction.Uninitialized::class.java)
-            initialState.eventSink(UserProfileEvents.StartDM)
+            initialState.eventSink(UserProfileEvent.StartDM)
             val confirmingState = awaitItem()
             assertThat(confirmingState.startDmActionState).isEqualTo(startDMConfirmationResult)
             executeResult.assertions().isCalledOnce().with(
@@ -344,7 +344,7 @@ class UserProfilePresenterTest {
                 any(),
             )
             // Cancelling should not create the DM
-            confirmingState.eventSink(UserProfileEvents.ClearStartDMState)
+            confirmingState.eventSink(UserProfileEvent.ClearStartDMState)
             val finalState = awaitItem()
             assertThat(finalState.startDmActionState.isUninitialized()).isTrue()
             executeResult.assertions().isCalledExactly(1)
@@ -365,7 +365,7 @@ class UserProfilePresenterTest {
         }.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.startDmActionState).isInstanceOf(AsyncAction.Uninitialized::class.java)
-            initialState.eventSink(UserProfileEvents.StartDM)
+            initialState.eventSink(UserProfileEvent.StartDM)
             val confirmingState = awaitItem()
             assertThat(confirmingState.startDmActionState).isEqualTo(startDMConfirmationResult)
             executeResult.assertions().isCalledOnce().with(
@@ -374,7 +374,7 @@ class UserProfilePresenterTest {
                 any(),
             )
             // Start DM again should invoke the action with createIfDmDoesNotExist = true
-            confirmingState.eventSink(UserProfileEvents.StartDM)
+            confirmingState.eventSink(UserProfileEvent.StartDM)
             executeResult.assertions().isCalledExactly(2).withSequence(
                 listOf(value(matrixUser), value(false), any()),
                 listOf(value(matrixUser), value(true), any()),

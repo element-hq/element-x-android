@@ -40,7 +40,7 @@ private fun aConfirmAccountProviderState(
     isAccountCreation: Boolean = false,
     loginModeState: LoginModeState = aLoginModeState(),
     changeServerState: ChangeServerState = aChangeServerState(),
-    eventSink: (ConfirmAccountProviderEvents) -> Unit = {},
+    eventSink: (ConfirmAccountProviderEvent) -> Unit = {},
 ) = ConfirmAccountProviderState(
     accountProviderInput = accountProviderInput,
     accountProviderSuggestion = accountProviderSuggestion,

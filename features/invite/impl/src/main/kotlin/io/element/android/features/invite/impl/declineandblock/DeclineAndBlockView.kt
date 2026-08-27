@@ -56,8 +56,8 @@ fun DeclineAndBlockView(
         async = state.declineAction,
         onSuccess = { onDeclineSuccess() },
         errorMessage = { stringResource(CommonStrings.error_unknown) },
-        onRetry = { state.eventSink(DeclineAndBlockEvents.Decline) },
-        onErrorDismiss = { state.eventSink(DeclineAndBlockEvents.ClearDeclineAction) }
+        onRetry = { state.eventSink(DeclineAndBlockEvent.Decline) },
+        onErrorDismiss = { state.eventSink(DeclineAndBlockEvent.ClearDeclineAction) }
     )
 
     Scaffold(
@@ -89,7 +89,7 @@ fun DeclineAndBlockView(
                     Text(text = stringResource(R.string.screen_decline_and_block_block_user_option_description))
                 },
                 onClick = {
-                    state.eventSink(DeclineAndBlockEvents.ToggleBlockUser)
+                    state.eventSink(DeclineAndBlockEvent.ToggleBlockUser)
                 },
                 trailingContent = ListItemContent.Switch(checked = state.blockUser)
             )
@@ -104,7 +104,7 @@ fun DeclineAndBlockView(
                     Text(text = stringResource(R.string.screen_decline_and_block_report_user_option_description))
                 },
                 onClick = {
-                    state.eventSink(DeclineAndBlockEvents.ToggleReportRoom)
+                    state.eventSink(DeclineAndBlockEvent.ToggleReportRoom)
                 },
                 trailingContent = ListItemContent.Switch(checked = state.reportRoom)
             )
@@ -113,7 +113,7 @@ fun DeclineAndBlockView(
                 Spacer(modifier = Modifier.height(24.dp))
                 TextField(
                     value = state.reportReason,
-                    onValueChange = { state.eventSink(DeclineAndBlockEvents.UpdateReportReason(it)) },
+                    onValueChange = { state.eventSink(DeclineAndBlockEvent.UpdateReportReason(it)) },
                     placeholder = stringResource(R.string.screen_decline_and_block_report_user_reason_placeholder),
                     minLines = 3,
                     enabled = !isDeclining,
@@ -132,7 +132,7 @@ fun DeclineAndBlockView(
                 enabled = !isDeclining && state.canDecline,
                 onClick = {
                     focusManager.clearFocus(force = true)
-                    state.eventSink(DeclineAndBlockEvents.Decline)
+                    state.eventSink(DeclineAndBlockEvent.Decline)
                 },
                 modifier = Modifier
                     .fillMaxWidth()

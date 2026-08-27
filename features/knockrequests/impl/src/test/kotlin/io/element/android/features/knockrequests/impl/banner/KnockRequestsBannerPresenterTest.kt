@@ -146,7 +146,7 @@ import org.junit.Test
         presenter.test {
             skipItems(2)
             awaitItem().also { state ->
-                state.eventSink(KnockRequestsBannerEvents.AcceptSingleRequest)
+                state.eventSink(KnockRequestsBannerEvent.AcceptSingleRequest)
             }
             awaitItem().also { state ->
                 assertThat(state.isVisible).isFalse()
@@ -182,7 +182,7 @@ import org.junit.Test
             skipItems(2)
             awaitItem().also { state ->
                 assertThat(state.knockRequests).hasSize(1)
-                state.eventSink(KnockRequestsBannerEvents.AcceptSingleRequest)
+                state.eventSink(KnockRequestsBannerEvent.AcceptSingleRequest)
             }
             awaitItem().also { state ->
                 assertThat(state.isVisible).isFalse()
@@ -206,7 +206,7 @@ import org.junit.Test
         presenter.test {
             skipItems(2)
             awaitItem().also { state ->
-                state.eventSink(KnockRequestsBannerEvents.Dismiss)
+                state.eventSink(KnockRequestsBannerEvent.Dismiss)
             }
             advanceUntilIdle()
             assert(markAsSeenLambda).isCalledExactly(3)

@@ -87,7 +87,7 @@ internal fun anIncomingUserVerificationRequest() = VerificationRequest.Incoming.
 internal fun anIncomingVerificationState(
     step: Step = aStepInitial(),
     verificationRequest: VerificationRequest.Incoming = anIncomingSessionVerificationRequest(),
-    eventSink: (IncomingVerificationViewEvents) -> Unit = {},
+    eventSink: (IncomingVerificationViewEvent) -> Unit = {},
 ) = IncomingVerificationState(
     step = step,
     request = verificationRequest,
