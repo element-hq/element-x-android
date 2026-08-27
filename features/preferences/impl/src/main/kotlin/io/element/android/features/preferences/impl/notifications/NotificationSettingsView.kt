@@ -195,9 +195,6 @@ private fun NotificationSettingsContentView(
                 isChecked = matrixSettings.inviteForMeNotificationsEnabled,
                 onCheckedChange = onInviteForMeNotificationsChange
             )
-        }
-
-        PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_mode_mentions)) {
             PreferenceSwitch(
                 modifier = Modifier,
                 title = stringResource(id = R.string.screen_notification_settings_room_mention_label),
