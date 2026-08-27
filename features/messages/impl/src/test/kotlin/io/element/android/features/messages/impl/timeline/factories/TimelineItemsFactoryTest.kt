@@ -12,12 +12,16 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
+import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
+import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
+import io.element.android.libraries.matrix.test.timeline.aRedactedContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -82,6 +86,42 @@ class TimelineItemsFactoryTest {
             TimelineItemGroupPosition.Middle,
             TimelineItemGroupPosition.Last,
         ).inOrder()
+    }
+
+    @Test
+    fun `redacted message keeps its thread info`() = runTest {
+        val factory = aTimelineItemsFactory(
+            config = TimelineItemsFactoryConfig(
+                computeReadReceipts = false,
+                computeReactions = false,
+            )
+        )
+        val items = listOf(
+            MatrixTimelineItem.Event(
+                uniqueId = UniqueId("event-0"),
+                event = anEventTimelineItem(
+                    sender = A_USER_ID,
+                    timestamp = 0L,
+                    content = aRedactedContent(
+                        threadInfo = EventThreadInfo.ThreadResponse(A_THREAD_ID),
+                    ),
+                ),
+            )
+        )
+        var threadInfo: TimelineItemThreadInfo? = null
+        factory.timelineItems.test {
+            factory.replaceWith(
+                timelineItems = items,
+                roomMembers = emptyList(),
+                renderReadReceipts = false,
+            )
+            threadInfo = awaitItem()
+                .filterIsInstance<TimelineItem.Event>()
+                .firstOrNull()
+                ?.threadInfo
+            cancelAndIgnoreRemainingEvents()
+        }
+        assertThat(threadInfo).isEqualTo(TimelineItemThreadInfo.ThreadResponse(A_THREAD_ID))
     }
 
     @Test
