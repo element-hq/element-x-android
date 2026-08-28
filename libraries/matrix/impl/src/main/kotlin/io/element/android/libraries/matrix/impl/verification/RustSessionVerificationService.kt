@@ -266,6 +266,9 @@ class RustSessionVerificationService(
             if (!isInitialized.get()) {
                 encryptionService.waitForE2eeInitializationTasks()
                 isInitialized.set(true)
+                // Also update the state, because update may have been ignored by VerificationStateListener.onUpdate
+                // If we do not do that the FTUE is stuck on blank screen.
+                _sessionVerifiedStatus.value = encryptionService.verificationState().map()
             }
 
             if (!this::verificationController.isInitialized) {
