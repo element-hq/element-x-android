@@ -196,7 +196,7 @@ private fun RoomListSearchContent(
 
 @PreviewsDayNight
 @Composable
-internal fun RoomListSearchContentPreview(@PreviewParameter(RoomListSearchStateProvider::class) state: RoomListSearchState) = ElementPreview {
+internal fun RoomListSearchContentPreview(@PreviewParameter(RoomListSearchStatePreviewParam::class) state: RoomListSearchState) = ElementPreview {
     RoomListSearchContent(
         state = state,
         hideInvitesAvatars = false,

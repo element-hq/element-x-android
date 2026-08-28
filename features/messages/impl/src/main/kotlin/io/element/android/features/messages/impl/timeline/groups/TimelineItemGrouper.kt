@@ -12,6 +12,7 @@ import androidx.annotation.VisibleForTesting
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.UniqueId
@@ -99,7 +100,8 @@ internal const val MIN_REDACTED_RUN_SIZE = 3
  * Fold runs of [MIN_REDACTED_RUN_SIZE] or more consecutive deleted (redacted) messages into a single
  * [TimelineItem.GroupedEvents], so a long stretch of "Message removed" tiles shows as one expandable
  * "N removed messages" line, like element-web. Shorter runs, and anything that is not a redacted event
- * (day dividers included), are left untouched.
+ * (day dividers included), are left untouched. A deleted message that still heads a thread is left
+ * untouched too, so that its thread summary stays reachable.
  *
  * This runs as the final step of [TimelineItemGrouper.group], after the state and membership events
  * have been grouped. It is deliberately kept out of the normal grouping: a run needs a higher minimum
@@ -134,7 +136,7 @@ internal fun List<TimelineItem>.collapseRedactedRuns(groupIds: MutableMap<String
     }
 
     for (item in this) {
-        if (item is TimelineItem.Event && item.content is TimelineItemRedactedContent) {
+        if (item is TimelineItem.Event && item.content is TimelineItemRedactedContent && item.threadInfo !is TimelineItemThreadInfo.ThreadRoot) {
             run.add(item)
         } else {
             flushRun()

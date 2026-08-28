@@ -81,7 +81,7 @@ class DefaultPinnedMessagesBannerFormatterTest : RobolectricTest() {
     fun `Redacted content`() {
         val expected = "Message removed"
         val senderName = "Someone"
-        val message = createRoomEvent(false, senderName, RedactedContent)
+        val message = createRoomEvent(false, senderName, RedactedContent(threadInfo = null))
         val result = formatter.format(message)
         assertThat(result).isEqualTo(expected)
     }

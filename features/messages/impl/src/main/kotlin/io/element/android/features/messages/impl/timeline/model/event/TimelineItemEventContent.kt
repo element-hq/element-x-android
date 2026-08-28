@@ -33,6 +33,9 @@ sealed interface TimelineItemEventContentWithAttachment :
     val fileSize: Long?
     val caption: String?
     val formattedCaption: CharSequence?
+
+    /** The caption as it was written, in HTML, so that editing it can start from the formatted text. */
+    val htmlCaption: String?
     val mediaSource: MediaSource
     val mimeType: String
     val formattedFileSize: String
@@ -58,10 +61,12 @@ fun TimelineItemEventContent.canBeForwarded(): Boolean =
         is TimelineItemFileContent,
         is TimelineItemAudioContent,
         is TimelineItemVideoContent,
-        is TimelineItemLocationContent,
         is TimelineItemVoiceContent,
         is TimelineItemGalleryContent,
         is TimelineItemAttachmentsContent -> true
+        // Live location shares can't be forwarded, the SDK rejects them, so we only show the option for static locations
+        // See https://github.com/element-hq/element-x-android/issues/7190
+        is TimelineItemLocationContent -> mode is TimelineItemLocationContent.Mode.Static
         // Stickers can't be forwarded (yet) so we don't show the option
         // See https://github.com/element-hq/element-x-android/issues/2161
         is TimelineItemStickerContent -> false
@@ -122,6 +127,13 @@ fun TimelineItemEventContent.formattedCaptionOrNull(): CharSequence? = when (thi
     is TimelineItemEventContentWithAttachment -> formattedCaption
     is TimelineItemGalleryContent -> formattedCaption
     is TimelineItemAttachmentsContent -> formattedCaption
+    else -> null
+}
+
+fun TimelineItemEventContent.htmlCaptionOrNull(): String? = when (this) {
+    is TimelineItemEventContentWithAttachment -> htmlCaption
+    is TimelineItemGalleryContent -> htmlCaption
+    is TimelineItemAttachmentsContent -> htmlCaption
     else -> null
 }
 

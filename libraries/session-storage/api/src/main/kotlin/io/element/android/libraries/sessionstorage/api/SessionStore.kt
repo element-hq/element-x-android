@@ -11,6 +11,11 @@ package io.element.android.libraries.sessionstorage.api
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
+/**
+ * Persists the logged in sessions and their access tokens, so the app can restore them after a restart.
+ *
+ * Sessions are ordered by last usage, which is what makes "the latest session" meaningful across the interface.
+ */
 interface SessionStore {
     /**
      * A flow emitting the current logged in state.
@@ -27,22 +32,32 @@ interface SessionStore {
     /**
      * Add a new session. If other sessions exist, the new one will be set as the latest used one, and
      * the added session position will be set to a value higher than the other session positions.
+     *
+     * @param sessionData the session to store, including its tokens.
      */
     suspend fun addSession(sessionData: SessionData)
 
     /**
      * Will update the session data matching the userId, except the value of loginTimestamp.
      * No op if userId is not found in DB.
+     *
+     * @param sessionData the new content of the session.
      */
     suspend fun updateData(sessionData: SessionData)
 
     /**
      * Update the user profile info of the session matching the userId.
+     *
+     * @param sessionId the session to update.
+     * @param displayName the new display name, or `null` when the user has none.
+     * @param avatarUrl the new avatar, or `null` when the user has none.
      */
     suspend fun updateUserProfile(sessionId: String, displayName: String?, avatarUrl: String?)
 
     /**
      * Get the session data matching the userId, or null if not found.
+     *
+     * @param sessionId the session to read.
      */
     suspend fun getSession(sessionId: String): SessionData?
 
@@ -63,11 +78,15 @@ interface SessionStore {
 
     /**
      * Set the session with [sessionId] as the latest used one.
+     *
+     * @param sessionId the session to bring to the front of the ordering.
      */
     suspend fun setLatestSession(sessionId: String)
 
     /**
      * Remove the session matching the sessionId.
+     *
+     * @param sessionId the session to forget, which also discards its tokens.
      */
     suspend fun removeSession(sessionId: String)
 }

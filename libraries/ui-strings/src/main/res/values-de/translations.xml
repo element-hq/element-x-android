@@ -35,12 +35,12 @@
   <string name="a11y_qr_code">"QR-Code"</string>
   <string name="a11y_react_with">"Reagiere mit %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Mit anderen Emojis reagieren"</string>
-  <string name="a11y_read_receipts_multiple">"Gelesen von %1$s und %2$s"</string>
+  <string name="a11y_read_receipts_multiple">"Vorherige Nachricht gelesen von %1$s und %2$s"</string>
   <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="one">"Gelesen von %1$s und %2$d weiteren"</item>
-    <item quantity="other">"Gelesen von %1$s und %2$d weiteren"</item>
+    <item quantity="one">"Vorherige Nachricht gelesen von %1$s und %2$d weiteren"</item>
+    <item quantity="other">"Vorherige Nachricht gelesen von %1$s und %2$d weiteren"</item>
   </plurals>
-  <string name="a11y_read_receipts_single">"Gelesen von %1$s"</string>
+  <string name="a11y_read_receipts_single">"Vorherige Nachricht gelesen von %1$s"</string>
   <string name="a11y_remove_reaction">"Reaktion mit %1$s entfernen"</string>
   <string name="a11y_remove_reaction_with">"Entferne Reaktionen mit %1$s"</string>
   <string name="a11y_room_avatar">"Avatar"</string>
@@ -49,6 +49,7 @@
   <string name="a11y_session_verification_time_limited_action_required">"Zeitlich begrenzte Handlung erforderlich, du hast eine Minute Zeit zur Verifizierung"</string>
   <string name="a11y_show_password">"Passwort anzeigen"</string>
   <string name="a11y_start_call">"Anruf starten"</string>
+  <string name="a11y_start_video_call">"Starte einen Videoanruf"</string>
   <string name="a11y_start_voice_call">"Sprachanruf starten"</string>
   <string name="a11y_tombstoned_room">"Stillgelegter Chat"</string>
   <string name="a11y_user_avatar">"Nutzer-Avatar"</string>
@@ -460,6 +461,13 @@ Möchtest du wirklich fortfahren?"</string>
   <string name="screen_create_poll_options_section_title">"Optionen"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Entferne %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Einstellungen"</string>
+  <string name="screen_live_location_sheet_nobody_sharing">"Niemand teilt seinen Standort"</string>
+  <string name="screen_live_location_sheet_sharing_live_location">"Live-Standort teilen"</string>
+  <plurals name="screen_live_location_sheet_subtitle">
+    <item quantity="one">"%1$d Person"</item>
+    <item quantity="other">"%1$d Leute"</item>
+  </plurals>
+  <string name="screen_live_location_sheet_title">"Auf der Karte"</string>
   <string name="screen_media_picker_error_failed_selection">"Medienauswahl fehlgeschlagen, bitte versuche es erneut."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Halte eine Nachricht gedrückt und wähle “%1$s”, um sie hier einzufügen."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Fixiere wichtige Nachrichten, so dass sie leicht gefunden werden können"</string>
@@ -484,6 +492,7 @@ Möchtest du wirklich fortfahren?"</string>
   <string name="screen_room_event_pill">"Nachricht in %1$s"</string>
   <string name="screen_room_grouped_state_events_expand">"Erweitern"</string>
   <string name="screen_room_grouped_state_events_reduce">"Verkleinern"</string>
+  <string name="screen_room_live_location_banner">"Live-Standort teilen"</string>
   <string name="screen_room_permalink_same_room_android">"Du siehst diesen Chat bereits!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s von %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s fixierte Nachrichten"</string>

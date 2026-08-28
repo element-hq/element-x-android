@@ -7,6 +7,11 @@
   <string name="crypto_event_authenticity_unknown_device">"Encrypted by an unknown or deleted device."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Encrypted by a device not verified by its owner."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Encrypted by an unverified user."</string>
+  <string name="error_sending_failure_invalid_mime_type">"Invalid mime type: %s"</string>
+  <string name="error_sending_failure_missing_media_content">"Missing media content"</string>
+  <string name="error_sending_failure_other">"Error details: %s"</string>
+  <string name="error_sending_failure_sending_from_unverified_device">"Sending from unverified device"</string>
+  <string name="error_sending_failure_unknown">"Unknown error"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"Flip image horizontally"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Flipped horizontally"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Original"</string>

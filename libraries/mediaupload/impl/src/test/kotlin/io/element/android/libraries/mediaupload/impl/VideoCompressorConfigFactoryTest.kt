@@ -34,6 +34,46 @@ class VideoCompressorConfigFactoryTest : RobolectricTest() {
     }
 
     @Test
+    fun `the bitrate is clamped to the source bitrate when the source is already low`() {
+        val metadata = VideoFileMetadata(width = 720, height = 720, bitrate = 615_000, frameRate = 25, rotation = 0)
+
+        val videoCompressorConfig = VideoCompressorConfigFactory.create(
+            metadata = metadata,
+            preset = VideoCompressionPreset.STANDARD,
+        )
+
+        assertThat(videoCompressorConfig.newBitRate).isEqualTo(615_000)
+    }
+
+    @Test
+    fun `the bitrate is not raised for a high bitrate source`() {
+        val metadata = VideoFileMetadata(width = 1920, height = 1080, bitrate = 20_000_000, frameRate = 30, rotation = 0)
+
+        val videoCompressorConfig = VideoCompressorConfigFactory.create(
+            metadata = metadata,
+            preset = VideoCompressionPreset.STANDARD,
+        )
+
+        assertThat(videoCompressorConfig.newBitRate).isLessThan(20_000_000)
+        assertThat(videoCompressorConfig.newBitRate).isGreaterThan(0)
+    }
+
+    @Test
+    fun `an unknown bitrate falls back to the calculated optimal`() {
+        val unknown = VideoCompressorConfigFactory.create(
+            metadata = VideoFileMetadata(width = 1280, height = 720, bitrate = -1, frameRate = 30, rotation = 0),
+            preset = VideoCompressionPreset.STANDARD,
+        )
+        val zero = VideoCompressorConfigFactory.create(
+            metadata = VideoFileMetadata(width = 1280, height = 720, bitrate = 0, frameRate = 30, rotation = 0),
+            preset = VideoCompressionPreset.STANDARD,
+        )
+
+        assertThat(unknown.newBitRate).isGreaterThan(0)
+        assertThat(zero.newBitRate).isEqualTo(unknown.newBitRate)
+    }
+
+    @Test
     fun `if the video should be compressed and is larger than 720p it will be resized`() {
         // Given
         val metadata = VideoFileMetadata(width = 1920, height = 1080, bitrate = 1_000_000, frameRate = 50, rotation = 0)

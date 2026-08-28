@@ -25,8 +25,16 @@
   <string name="screen_change_server_error_unauthorized_homeserver_title">"%1$s teenusepakkuja pole lubatud."</string>
   <string name="screen_change_server_form_header">"Koduserveri url"</string>
   <string name="screen_change_server_form_notice">"Sisesta domeeni aadress."</string>
+  <string name="screen_change_server_navigation_title_login">"Logi sisse"</string>
+  <string name="screen_change_server_navigation_title_register">"Loo kasutajakonto"</string>
   <string name="screen_change_server_subtitle">"Mis on sinu koduserveri aadress?"</string>
+  <string name="screen_change_server_textfield_footer_login">"Kui sinu kasutajakonto paikneb äriühingu või kogukonna serveris, siis muuda kontoteenuse pakkujat (näiteks: minufirmanimi.ee)."</string>
+  <string name="screen_change_server_textfield_footer_register">"Loo tasuta kasutajakonto matrix.org serverisse. Kui soovid luua kasutajakonto mõne teise teenusepakkuja juures, siis muuda seda vastavalt (näiteks: minukogukond.ee)."</string>
+  <string name="screen_change_server_textfield_header">"Teenusepakkuja"</string>
+  <string name="screen_change_server_textfield_placeholder">"domeeninäidis.ee"</string>
   <string name="screen_change_server_title">"Vali oma server"</string>
+  <string name="screen_change_server_title_login">"Sisesta oma kasutajakonto teenusepakkuja"</string>
+  <string name="screen_change_server_title_register">"Vali kasutajakonto teenusepakkuja"</string>
   <string name="screen_create_account_title">"Loo kasutajakonto"</string>
   <string name="screen_login_error_deactivated_account">"See kasutajakonto on kustutatud."</string>
   <string name="screen_login_error_invalid_credentials">"Vigane kasutajanimi ja/või salasõna"</string>

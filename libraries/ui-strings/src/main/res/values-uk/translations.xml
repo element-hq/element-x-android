@@ -20,6 +20,16 @@
   <string name="a11y_edit_room_address_hint">"Повна адреса буде %1$s"</string>
   <string name="a11y_encryption_details">"Подробиці шифрування"</string>
   <string name="a11y_expand_message_text_field">"Розгорнути текстове поле повідомлення"</string>
+  <string name="a11y_gallery_attachment">"Галерея, вкладення %1$d"</string>
+  <string name="a11y_gallery_failed_scan">"Галерея, невдалося сканувати %1$d"</string>
+  <string name="a11y_gallery_image">"Галерея, зображення %1$d"</string>
+  <plurals name="a11y_gallery_more_media">
+    <item quantity="one">"Галерея, ще %1$d медіа"</item>
+    <item quantity="few">"Галерея, ще %1$d медіа"</item>
+    <item quantity="many">"Галерея, ще %1$d медіа"</item>
+  </plurals>
+  <string name="a11y_gallery_scanning">"Галерея, сканування %1$d"</string>
+  <string name="a11y_gallery_video">"Галерея, відео %1$d"</string>
   <string name="a11y_hide_password">"Cховати пароль"</string>
   <string name="a11y_info">"Інформація"</string>
   <string name="a11y_join_call">"Приєднатися до виклику"</string>

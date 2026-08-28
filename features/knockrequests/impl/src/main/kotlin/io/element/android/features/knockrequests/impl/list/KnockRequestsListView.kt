@@ -108,15 +108,15 @@ private fun KnockRequestsListContent(
     modifier: Modifier = Modifier,
 ) {
     fun onAcceptClick(knockRequest: KnockRequestPresentable) {
-        state.eventSink(KnockRequestsListEvents.Accept(knockRequest))
+        state.eventSink(KnockRequestsListEvent.Accept(knockRequest))
     }
 
     fun onDeclineClick(knockRequest: KnockRequestPresentable) {
-        state.eventSink(KnockRequestsListEvents.Decline(knockRequest))
+        state.eventSink(KnockRequestsListEvent.Decline(knockRequest))
     }
 
     fun onBanClick(knockRequest: KnockRequestPresentable) {
-        state.eventSink(KnockRequestsListEvents.DeclineAndBan(knockRequest))
+        state.eventSink(KnockRequestsListEvent.DeclineAndBan(knockRequest))
     }
 
     var bottomPaddingInPixels by remember { mutableIntStateOf(0) }
@@ -160,19 +160,19 @@ private fun KnockRequestsListContent(
             currentAction = state.currentAction,
             asyncAction = state.asyncAction,
             onConfirm = {
-                state.eventSink(KnockRequestsListEvents.ConfirmCurrentAction)
+                state.eventSink(KnockRequestsListEvent.ConfirmCurrentAction)
             },
             onRetry = {
-                state.eventSink(KnockRequestsListEvents.RetryCurrentAction)
+                state.eventSink(KnockRequestsListEvent.RetryCurrentAction)
             },
             onDismiss = {
-                state.eventSink(KnockRequestsListEvents.ResetCurrentAction)
+                state.eventSink(KnockRequestsListEvent.ResetCurrentAction)
             },
         )
         if (state.canAcceptAll) {
             KnockRequestsAcceptAll(
                 onClick = {
-                    state.eventSink(KnockRequestsListEvents.AcceptAll)
+                    state.eventSink(KnockRequestsListEvent.AcceptAll)
                 },
                 onHeightChange = { height ->
                     bottomPaddingInPixels = height
@@ -491,7 +491,7 @@ private fun KnockRequestsListTopBar(onBackClick: () -> Unit) {
 @PreviewsDayNight
 @Composable
 internal fun KnockRequestsListViewPreview(
-    @PreviewParameter(KnockRequestsListStateProvider::class) state: KnockRequestsListState
+    @PreviewParameter(KnockRequestsListStatePreviewParam::class) state: KnockRequestsListState
 ) = ElementPreview {
     KnockRequestsListView(
         state = state,

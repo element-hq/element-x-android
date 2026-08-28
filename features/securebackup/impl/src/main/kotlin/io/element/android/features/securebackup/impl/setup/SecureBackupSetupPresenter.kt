@@ -53,18 +53,18 @@ class SecureBackupSetupPresenter(
         }
         var showSaveConfirmationDialog by remember { mutableStateOf(false) }
 
-        fun handleEvent(event: SecureBackupSetupEvents) {
+        fun handleEvent(event: SecureBackupSetupEvent) {
             when (event) {
-                SecureBackupSetupEvents.CreateRecoveryKey -> {
+                SecureBackupSetupEvent.CreateRecoveryKey -> {
                     coroutineScope.createOrChangeRecoveryKey(stateAndDispatch)
                 }
-                SecureBackupSetupEvents.RecoveryKeyHasBeenSaved ->
+                SecureBackupSetupEvent.RecoveryKeyHasBeenSaved ->
                     stateAndDispatch.dispatchAction(SecureBackupSetupStateMachine.Event.UserSavedKey)
-                SecureBackupSetupEvents.DismissDialog -> {
+                SecureBackupSetupEvent.DismissDialog -> {
                     showSaveConfirmationDialog = false
                     stateAndDispatch.dispatchAction(SecureBackupSetupStateMachine.Event.ClearError)
                 }
-                SecureBackupSetupEvents.Done -> {
+                SecureBackupSetupEvent.Done -> {
                     showSaveConfirmationDialog = true
                 }
             }

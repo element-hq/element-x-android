@@ -5,6 +5,7 @@
   <string name="screen_link_new_device_desktop_step3">"Olvassa be a QR-kódot ezzel az eszközzel"</string>
   <string name="screen_link_new_device_desktop_submit">"Készen áll a beolvasásra"</string>
   <string name="screen_link_new_device_desktop_title">"Nyissa meg az asztali %1$s alkalmazást, hogy megkapja a QR-kódot"</string>
+  <string name="screen_link_new_device_desktop_warning">"Csak a fenti lépések végrehajtása után olvass be QR-kódot a saját eszközén. Soha ne olvasson be más által küldött kódot."</string>
   <string name="screen_link_new_device_enter_number_error_numbers_do_not_match">"A számok nem egyeznek"</string>
   <string name="screen_link_new_device_enter_number_notice">"Írja be a kétjegyű kódot"</string>
   <string name="screen_link_new_device_enter_number_subtitle">"Ezzel ellenőrizni fogja, hogy a másik eszközzel való kapcsolat biztonságos-e."</string>
