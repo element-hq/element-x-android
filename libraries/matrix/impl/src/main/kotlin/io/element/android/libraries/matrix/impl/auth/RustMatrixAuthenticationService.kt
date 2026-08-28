@@ -44,6 +44,7 @@ import io.element.android.libraries.matrix.impl.keys.SecretGenerator
 import io.element.android.libraries.matrix.impl.mapper.toSessionData
 import io.element.android.libraries.matrix.impl.paths.SessionPathsFactory
 import io.element.android.libraries.sessionstorage.api.LoginType
+import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.first
@@ -101,23 +102,26 @@ class RustMatrixAuthenticationService(
         runCatchingExceptions {
             val sessionData = sessionStore.getSession(sessionId.value)
             if (sessionData != null) {
-                if (sessionData.isTokenValid) {
-                    // Use the sessionData.passphrase, which can be null for a previously created session
-                    if (sessionData.passphrase == null) {
-                        Timber.w("Restoring a session without a passphrase")
-                    } else {
-                        Timber.w("Restoring a session with a passphrase")
-                    }
-                    rustMatrixClientFactory.create(sessionData)
-                } else {
-                    throw SessionRestorationException.InvalidToken()
-                }
+                restoreSession(sessionData)
             } else {
                 throw SessionRestorationException.MissingSession(sessionId)
             }
         }.mapFailure { failure ->
             failure.mapClientException()
         }
+    }
+
+    private suspend fun restoreSession(sessionData: SessionData): MatrixClient {
+        if (!sessionData.isTokenValid) {
+            throw SessionRestorationException.InvalidToken()
+        }
+        // Use the sessionData.passphrase, which can be null for a previously created session
+        if (sessionData.passphrase == null) {
+            Timber.w("Restoring a session without a passphrase")
+        } else {
+            Timber.w("Restoring a session with a passphrase")
+        }
+        return rustMatrixClientFactory.create(sessionData)
     }
 
     private fun getDatabaseKey(): ClientSecret {
@@ -137,7 +141,7 @@ class RustMatrixAuthenticationService(
 
                 client.homeserverLoginDetails().map()
             }.onFailure {
-                clear(destroyClient = true)
+                clear()
             }.mapFailure { failure ->
                 Timber.e(failure, "Failed to set homeserver to $homeserver")
                 failure.mapAuthenticationException()
@@ -165,18 +169,7 @@ class RustMatrixAuthenticationService(
                         passphrase = pendingKey.formattedAsString(),
                         sessionPaths = currentSessionPaths,
                     )
-                val matrixClient = rustMatrixClientFactory.create(client, sessionData, isMessageSearchAvailable())
-
-                // Apply enterprise hooks to the newly created client as soon as possible
-                clientEnterpriseHook(matrixClient)
-
-                newMatrixClientObservers.forEach { it.invoke(matrixClient) }
-                sessionStore.addSession(sessionData)
-
-                // Clean up the strong reference held here since it's no longer necessary
-                clear(destroyClient = false)
-
-                SessionId(sessionData.userId)
+                finalizeClientCreation(sessionData)
             }.mapFailure { failure ->
                 Timber.e(failure, "Failed to login")
                 failure.mapAuthenticationException()
@@ -305,20 +298,7 @@ class RustMatrixAuthenticationService(
                     passphrase = pendingKey.formattedAsString(),
                     sessionPaths = currentSessionPaths,
                 )
-                val matrixClient = rustMatrixClientFactory.create(client, sessionData, isMessageSearchAvailable())
-
-                // Apply enterprise hooks to the newly created client as soon as possible
-                clientEnterpriseHook(matrixClient)
-
-                matrixClient.waitForKnownVerificationState()
-
-                newMatrixClientObservers.forEach { it.invoke(matrixClient) }
-                sessionStore.addSession(sessionData)
-
-                // Clean up the strong reference held here since it's no longer necessary
-                clear(destroyClient = false)
-
-                SessionId(sessionData.userId)
+                finalizeClientCreation(sessionData)
             }.mapFailure { failure ->
                 Timber.e(failure, "Failed to login with OAuth")
                 failure.mapAuthenticationException()
@@ -374,18 +354,7 @@ class RustMatrixAuthenticationService(
                         passphrase = pendingKey.formattedAsString(),
                         sessionPaths = emptySessionPaths,
                     )
-                val matrixClient = rustMatrixClientFactory.create(client, sessionData, isMessageSearchAvailable())
-
-                // Apply enterprise hooks to the newly created client as soon as possible
-                clientEnterpriseHook(matrixClient)
-
-                newMatrixClientObservers.forEach { it.invoke(matrixClient) }
-                sessionStore.addSession(sessionData)
-
-                // Clean up the strong reference held here since it's no longer necessary
-                clear(destroyClient = false)
-
-                SessionId(sessionData.userId)
+                finalizeClientCreation(sessionData)
             }.mapFailure {
                 when (it) {
                     is QrCodeDecodeException -> QrErrorMapper.map(it)
@@ -399,6 +368,22 @@ class RustMatrixAuthenticationService(
                 Timber.e(throwable, "Failed to login with QR code")
             }
         }
+
+    private suspend fun finalizeClientCreation(sessionData: SessionData): SessionId {
+        val matrixClient = restoreSession(sessionData)
+        // Apply enterprise hooks to the newly created client as soon as possible
+        clientEnterpriseHook(matrixClient)
+
+        matrixClient.waitForKnownVerificationState()
+
+        newMatrixClientObservers.forEach { it.invoke(matrixClient) }
+        sessionStore.addSession(sessionData)
+
+        // Clean up the strong reference held here since it's no longer necessary
+        clear()
+
+        return SessionId(sessionData.userId)
+    }
 
     private suspend fun makeClient(
         sessionPaths: SessionPaths,
@@ -449,10 +434,8 @@ class RustMatrixAuthenticationService(
             .build()
     }
 
-    private fun clear(destroyClient: Boolean) {
-        if (destroyClient) {
-            currentClient?.close()
-        }
+    private fun clear() {
+        currentClient?.close()
         currentClient = null
     }
 
