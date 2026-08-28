@@ -35,7 +35,6 @@ import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.CrossProcessLockConfig
 import org.matrix.rustcomponents.sdk.RequestConfig
@@ -117,14 +116,6 @@ class RustMatrixClientFactory(
 
         client.restoreSession(sessionData.toSession())
 
-        create(client, sessionData, isMessageSearchAvailable)
-    }
-
-    suspend fun create(
-        client: Client,
-        sessionData: SessionData,
-        isMessageSearchAvailable: Boolean,
-    ): RustMatrixClient {
         val (anonymizedAccessToken, anonymizedRefreshToken) = client.session().anonymizedTokens()
 
         // Must be called before creating the sync service, timelines etc.
@@ -140,7 +131,7 @@ class RustMatrixClientFactory(
             .withProfilesExtension()
             .finish()
 
-        return RustMatrixClient(
+        RustMatrixClient(
             sessionPaths = sessionData.getSessionPaths(),
             innerClient = client,
             sessionStore = sessionStore,
