@@ -44,7 +44,7 @@ fun TroubleshootNotificationsView(
         when (event) {
             Lifecycle.Event.ON_RESUME -> {
                 if (state.hasFailedTests) {
-                    state.eventSink(TroubleshootNotificationsEvents.RetryFailedTests)
+                    state.eventSink(TroubleshootNotificationsEvent.RetryFailedTests)
                 }
             }
             else -> Unit
@@ -129,7 +129,7 @@ private fun ColumnScope.TroubleshootNotificationsContent(state: TroubleshootNoti
             TestSuiteView(
                 testSuiteState = state.testSuiteState,
                 onQuickFixClick = {
-                    state.eventSink(TroubleshootNotificationsEvents.QuickFix(it))
+                    state.eventSink(TroubleshootNotificationsEvent.QuickFix(it))
                 }
             )
         }
@@ -181,7 +181,7 @@ private fun RunTestButton(state: TroubleshootNotificationsState) {
                     }
                 ),
                 onClick = {
-                    state.eventSink(TroubleshootNotificationsEvents.StartTests)
+                    state.eventSink(TroubleshootNotificationsEvent.StartTests)
                 },
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -207,7 +207,7 @@ private fun ColumnScope.TestSuiteView(
 @PreviewsDayNight
 @Composable
 internal fun TroubleshootNotificationsViewPreview(
-    @PreviewParameter(TroubleshootNotificationsStateProvider::class) state: TroubleshootNotificationsState,
+    @PreviewParameter(TroubleshootNotificationsStatePreviewParam::class) state: TroubleshootNotificationsState,
 ) = ElementPreview {
     TroubleshootNotificationsView(
         state = state,

@@ -10,7 +10,7 @@ package io.element.android.features.userprofile.shared.blockuser
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import io.element.android.features.userprofile.api.UserProfileEvents
+import io.element.android.features.userprofile.api.UserProfileEvent
 import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.shared.R
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
@@ -23,24 +23,24 @@ fun BlockUserDialogs(state: UserProfileState) {
             BlockConfirmationDialog(
                 onBlockAction = {
                     state.eventSink(
-                        UserProfileEvents.BlockUser(
+                        UserProfileEvent.BlockUser(
                             needsConfirmation = false
                         )
                     )
                 },
-                onDismiss = { state.eventSink(UserProfileEvents.ClearConfirmationDialog) }
+                onDismiss = { state.eventSink(UserProfileEvent.ClearConfirmationDialog) }
             )
         }
         UserProfileState.ConfirmationDialog.Unblock -> {
             UnblockConfirmationDialog(
                 onUnblockAction = {
                     state.eventSink(
-                        UserProfileEvents.UnblockUser(
+                        UserProfileEvent.UnblockUser(
                             needsConfirmation = false
                         )
                     )
                 },
-                onDismiss = { state.eventSink(UserProfileEvents.ClearConfirmationDialog) }
+                onDismiss = { state.eventSink(UserProfileEvent.ClearConfirmationDialog) }
             )
         }
     }

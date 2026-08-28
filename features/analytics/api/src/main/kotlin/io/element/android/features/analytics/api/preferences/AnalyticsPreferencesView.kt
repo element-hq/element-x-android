@@ -13,7 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import io.element.android.features.analytics.api.AnalyticsOptInEvents
+import io.element.android.features.analytics.api.AnalyticsOptInEvent
 import io.element.android.features.analytics.api.R
 import io.element.android.libraries.designsystem.components.LINK_TAG
 import io.element.android.libraries.designsystem.components.list.ListItemContent
@@ -30,7 +30,7 @@ fun AnalyticsPreferencesView(
     modifier: Modifier = Modifier,
 ) {
     fun onEnabledChanged(isEnabled: Boolean) {
-        state.eventSink(AnalyticsOptInEvents.EnableAnalytics(isEnabled = isEnabled))
+        state.eventSink(AnalyticsOptInEvent.EnableAnalytics(isEnabled = isEnabled))
     }
 
     val supportingText = stringResource(
@@ -66,7 +66,7 @@ fun AnalyticsPreferencesView(
 
 @PreviewsDayNight
 @Composable
-internal fun AnalyticsPreferencesViewPreview(@PreviewParameter(AnalyticsPreferencesStateProvider::class) state: AnalyticsPreferencesState) =
+internal fun AnalyticsPreferencesViewPreview(@PreviewParameter(AnalyticsPreferencesStatePreviewParam::class) state: AnalyticsPreferencesState) =
     ElementPreview {
         AnalyticsPreferencesView(
             state = state,

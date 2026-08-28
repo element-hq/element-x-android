@@ -153,7 +153,7 @@ class OnBoardingPresenterTest {
             awaitItem().also { state ->
                 assertThat(state.canReportBug).isFalse()
                 repeat(7) {
-                    state.eventSink(OnBoardingEvents.OnVersionClick)
+                    state.eventSink(OnBoardingEvent.OnVersionClick)
                 }
             }
             expectNoEvents()
@@ -168,7 +168,7 @@ class OnBoardingPresenterTest {
             awaitItem().also { state ->
                 assertThat(state.canReportBug).isFalse()
                 repeat(7) {
-                    state.eventSink(OnBoardingEvents.OnVersionClick)
+                    state.eventSink(OnBoardingEvent.OnVersionClick)
                 }
             }
             assertThat(awaitItem().canReportBug).isTrue()
@@ -272,7 +272,7 @@ class OnBoardingPresenterTest {
             awaitItem().also {
                 assertThat(it.defaultAccountProvider).isEqualTo(A_HOMESERVER_URL)
                 assertThat(accountProviderDataSource.flow.first().url).isEqualTo(AuthenticationConfig.MATRIX_ORG_URL)
-                it.eventSink(OnBoardingEvents.OnSignIn(A_HOMESERVER_URL_2))
+                it.eventSink(OnBoardingEvent.OnSignIn(A_HOMESERVER_URL_2))
                 skipItems(1) // Loading
                 // Account data source has been updated
                 assertThat(accountProviderDataSource.flow.first().url).isEqualTo(A_HOMESERVER_URL_2)
@@ -281,7 +281,7 @@ class OnBoardingPresenterTest {
                 assertThat(submittedState.loginModeState.loginMode).isInstanceOf(AsyncData.Failure::class.java)
 
                 // Assert the error is then cleared
-                submittedState.eventSink(OnBoardingEvents.ClearError)
+                submittedState.eventSink(OnBoardingEvent.ClearError)
                 val clearedState = awaitItem()
                 assertThat(clearedState.loginModeState.loginMode).isEqualTo(AsyncData.Uninitialized)
             }

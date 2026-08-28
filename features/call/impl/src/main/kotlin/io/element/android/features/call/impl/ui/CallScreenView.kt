@@ -266,7 +266,7 @@ private fun WebView.dispatchEscKeyEvent() {
 @PreviewsDayNight
 @Composable
 internal fun CallScreenViewPreview(
-    @PreviewParameter(CallScreenStateProvider::class) state: CallScreenState,
+    @PreviewParameter(CallScreenStatePreviewParam::class) state: CallScreenState,
 ) = ElementPreview {
     CallScreenView(
         state = state,

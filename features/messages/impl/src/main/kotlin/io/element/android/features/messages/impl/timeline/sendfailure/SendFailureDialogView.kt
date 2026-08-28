@@ -68,7 +68,7 @@ fun SendFailureDialogView(
 @PreviewsDayNight
 @Composable
 internal fun SendFailureDialogViewPreview(
-    @PreviewParameter(SendFailureDialogStateProvider::class) sendFailureDialogState: SendFailureDialogState,
+    @PreviewParameter(SendFailureDialogStatePreviewParam::class) sendFailureDialogState: SendFailureDialogState,
 ) = ElementPreview {
     SendFailureDialogView(
         sendFailureDialogState = sendFailureDialogState,

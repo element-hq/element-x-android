@@ -134,7 +134,7 @@ enum class ComposerAlertLevel {
 @PreviewsDayNight
 @Composable
 internal fun ComposerAlertMoleculePreview(
-    @PreviewParameter(ComposerAlertMoleculeParamsProvider::class) params: ComposerAlertMoleculeParams,
+    @PreviewParameter(ComposerAlertMoleculeParamsPreviewParam::class) params: ComposerAlertMoleculeParams,
 ) = ElementPreview {
     ComposerAlertMolecule(
         avatar = params.avatar,

@@ -32,7 +32,7 @@ import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.SendLiveLocationPermissions
 import io.element.android.features.location.impl.common.actions.LocationActions
 import io.element.android.features.location.impl.common.checkLocationConstraints
-import io.element.android.features.location.impl.common.permissions.PermissionsEvents
+import io.element.android.features.location.impl.common.permissions.PermissionsEvent
 import io.element.android.features.location.impl.common.permissions.PermissionsPresenter
 import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.features.location.impl.common.toDialogState
@@ -99,7 +99,7 @@ class ShowLocationPresenter(
                 sendLiveLocationPermissions = SendLiveLocationPermissions.GRANTED
             )
             if (locationConstraints is LocationConstraintsCheck.PermissionShouldBeRequested) {
-                permissionsState.eventSink(PermissionsEvents.RequestPermissions)
+                permissionsState.eventSink(PermissionsEvent.RequestPermissions)
             }
             isTrackMyLocation = locationConstraints is LocationConstraintsCheck.Success
             dialogState = locationConstraints.toDialogState()
@@ -130,7 +130,7 @@ class ShowLocationPresenter(
                     locationActions.openLocationSettings()
                     dialogState = LocationConstraintsDialogState.None
                 }
-                ShowLocationEvent.RequestPermissions -> permissionsState.eventSink(PermissionsEvents.RequestPermissions)
+                ShowLocationEvent.RequestPermissions -> permissionsState.eventSink(PermissionsEvent.RequestPermissions)
                 ShowLocationEvent.StopLocationSharing -> coroutineScope.launch {
                     liveLocationShareManager.stopShare(joinedRoom.roomId)
                 }

@@ -345,7 +345,7 @@ private fun TimelineItemEventContentViewWrapper(
 
 @PreviewsDayNight
 @Composable
-internal fun PinnedMessagesListViewPreview(@PreviewParameter(PinnedMessagesListStateProvider::class) state: PinnedMessagesListState) =
+internal fun PinnedMessagesListViewPreview(@PreviewParameter(PinnedMessagesListStatePreviewParam::class) state: PinnedMessagesListState) =
     ElementPreview {
         PinnedMessagesListView(
             state = state,

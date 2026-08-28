@@ -183,7 +183,7 @@ private fun FeatureListContent(
 @PreviewsDayNight
 @Composable
 internal fun AppDeveloperSettingsViewPreview(
-    @PreviewParameter(AppDeveloperSettingsStateProvider::class) state: AppDeveloperSettingsState
+    @PreviewParameter(AppDeveloperSettingsStatePreviewParam::class) state: AppDeveloperSettingsState
 ) = ElementPreview {
     AppDeveloperSettingsView(
         state = state,
