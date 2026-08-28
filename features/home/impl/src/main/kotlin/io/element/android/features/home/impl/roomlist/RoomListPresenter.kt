@@ -179,9 +179,10 @@ class RoomListPresenter(
             }
         }.collectAsState(initial = emptySet())
         // A room is only hidden while the whole room list is shown: picking a space filter is an explicit request to see its rooms.
-        val hiddenRoomIds by remember {
+        val hasSelectedSpaceFilter = spaceFiltersState.selectedFilter() != null
+        val hiddenRoomIds by remember(hasSelectedSpaceFilter) {
             derivedStateOf {
-                if (hideSpaceRooms && spaceFiltersState.selectedFilter() == null) {
+                if (hideSpaceRooms && !hasSelectedSpaceFilter) {
                     spaceDescendants.toImmutableSet()
                 } else {
                     persistentSetOf()

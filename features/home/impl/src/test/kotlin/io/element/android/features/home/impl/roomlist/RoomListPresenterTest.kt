@@ -33,6 +33,8 @@ import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.preferences.impl.tasks.MarkRoomAsRead
 import io.element.android.features.rageshake.test.logs.FakeAnnouncementService
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
@@ -215,6 +217,52 @@ class RoomListPresenterTest {
                 state.contentState is RoomListContentState.Rooms && state.contentAsRooms().summaries.size == 2
             }.last()
             assertThat(state.contentAsRooms().summaries.map { it.roomId }).containsExactly(A_ROOM_ID, A_ROOM_ID_2)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - rooms of a space are listed once its filter is selected, even when the setting is on`() = runTest {
+        val roomList = FakeDynamicRoomList(
+            loadingState = MutableStateFlow(RoomList.LoadingState.Loaded(2))
+        )
+        val spaceService = FakeSpaceService()
+        val matrixClient = FakeMatrixClient(
+            roomListService = FakeRoomListService(createRoomListLambda = { roomList }),
+            spaceService = spaceService,
+        )
+        val spaceFilter = SpaceServiceFilter(
+            spaceRoom = aSpaceRoom(roomId = A_ROOM_ID_3),
+            level = 0,
+            descendants = listOf(A_ROOM_ID_2),
+        )
+        val selection = MutableStateFlow<SpaceServiceFilter?>(null)
+        val presenter = createRoomListPresenter(
+            client = matrixClient,
+            appPreferencesStore = InMemoryAppPreferencesStore(hideSpaceRooms = true),
+            spaceFiltersPresenter = Presenter {
+                val selected by selection.collectAsState()
+                selected?.let { SpaceFiltersState.Selected(selectedFilter = it, eventSink = {}) }
+                    ?: SpaceFiltersState.Unselected(eventSink = {})
+            },
+        )
+        presenter.test {
+            skipItems(1)
+            roomList.summaries.emit(
+                listOf(
+                    aRoomSummary(roomId = A_ROOM_ID),
+                    aRoomSummary(roomId = A_ROOM_ID_2),
+                )
+            )
+            spaceService.emitSpaceFilters(listOf(spaceFilter))
+            consumeItemsUntilPredicate { state ->
+                state.contentState is RoomListContentState.Rooms && state.contentAsRooms().summaries.size == 1
+            }
+            selection.emit(spaceFilter)
+            val state = consumeItemsUntilPredicate { state ->
+                state.contentAsRooms().summaries.any { it.roomId == A_ROOM_ID_2 }
+            }.last()
+            assertThat(state.contentAsRooms().summaries.map { it.roomId }).contains(A_ROOM_ID_2)
             cancelAndIgnoreRemainingEvents()
         }
     }
