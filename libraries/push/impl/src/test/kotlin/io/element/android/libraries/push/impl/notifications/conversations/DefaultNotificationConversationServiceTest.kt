@@ -10,6 +10,7 @@ package io.element.android.libraries.push.impl.notifications.conversations
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ShortcutInfo
 import android.os.Build
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
@@ -22,7 +23,6 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.ui.media.test.FakeImageLoaderHolder
-import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.push.impl.notifications.factories.FakeIntentProvider
 import io.element.android.libraries.push.impl.notifications.shortcut.createShortcutId
 import io.element.android.libraries.push.test.notifications.push.FakeNotificationBitmapLoader
@@ -34,6 +34,7 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.robolectric.annotation.Config
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
 class DefaultNotificationConversationServiceTest : RobolectricTest() {
     @Test
@@ -54,12 +55,9 @@ class DefaultNotificationConversationServiceTest : RobolectricTest() {
     }
 
     @Test
-    fun `onSendMessage adds no shortcut when conversation notifications are off`() = runTest {
+    fun `the shortcut is offered to the share sheet as a conversation`() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().context
-        val service = createService(
-            context = context,
-            appPreferencesStore = InMemoryAppPreferencesStore(isConversationNotificationsEnabled = false),
-        )
+        val service = createService(context)
 
         service.onSendMessage(
             sessionId = A_SESSION_ID,
@@ -69,28 +67,12 @@ class DefaultNotificationConversationServiceTest : RobolectricTest() {
             roomAvatarUrl = null,
         )
 
-        assertThat(ShortcutManagerCompat.getDynamicShortcuts(context)).isEmpty()
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @Test
-    fun `on conversation notifications turned off, all shortcuts are cleared`() = runTest {
-        val context = InstrumentationRegistry.getInstrumentation().context
-        val appPreferencesStore = InMemoryAppPreferencesStore(isConversationNotificationsEnabled = true)
-        createService(context, appPreferencesStore = appPreferencesStore)
-        runCurrent()
-
-        val shortcutInfo = ShortcutInfoCompat.Builder(context, "$A_SESSION_ID-$A_ROOM_ID")
-            .setShortLabel("Room title")
-            .setIntent(Intent(Intent.ACTION_VIEW))
-            .build()
-        ShortcutManagerCompat.setDynamicShortcuts(context, listOf(shortcutInfo))
-        assertThat(ShortcutManagerCompat.getDynamicShortcuts(context)).hasSize(1)
-
-        appPreferencesStore.setConversationNotificationsEnabled(false)
-        runCurrent()
-
-        assertThat(ShortcutManagerCompat.getDynamicShortcuts(context)).isEmpty()
+        val shortcut = ShortcutManagerCompat.getDynamicShortcuts(context).single()
+        assertThat(shortcut.categories).containsAtLeast(
+            ShortcutInfo.SHORTCUT_CATEGORY_CONVERSATION,
+            // Matches the <share-target> category in app/src/main/res/xml/shortcuts.xml
+            "io.element.android.category.SHARE_TARGET",
+        )
     }
 
     @Test
@@ -211,6 +193,46 @@ class DefaultNotificationConversationServiceTest : RobolectricTest() {
         val shortcuts = ShortcutManagerCompat.getDynamicShortcuts(context)
         assertThat(shortcuts).hasSize(1)
         assertThat(shortcuts.first().id).startsWith(A_SESSION_ID_2.value)
+    }
+
+
+    @Test
+    fun `onSendMessage adds no shortcut when conversation notifications are off`() = runTest {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val service = createService(
+            context = context,
+            appPreferencesStore = InMemoryAppPreferencesStore(isConversationNotificationsEnabled = false),
+        )
+
+        service.onSendMessage(
+            sessionId = A_SESSION_ID,
+            roomId = A_ROOM_ID,
+            roomName = "Room title",
+            roomIsDirect = false,
+            roomAvatarUrl = null,
+        )
+
+        assertThat(ShortcutManagerCompat.getDynamicShortcuts(context)).isEmpty()
+    }
+
+    @Test
+    fun `on conversation notifications turned off, all shortcuts are cleared`() = runTest {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val appPreferencesStore = InMemoryAppPreferencesStore(isConversationNotificationsEnabled = true)
+        createService(context, appPreferencesStore = appPreferencesStore)
+        runCurrent()
+
+        val shortcutInfo = ShortcutInfoCompat.Builder(context, "$A_SESSION_ID-$A_ROOM_ID")
+            .setShortLabel("Room title")
+            .setIntent(Intent(Intent.ACTION_VIEW))
+            .build()
+        ShortcutManagerCompat.setDynamicShortcuts(context, listOf(shortcutInfo))
+        assertThat(ShortcutManagerCompat.getDynamicShortcuts(context)).hasSize(1)
+
+        appPreferencesStore.setConversationNotificationsEnabled(false)
+        runCurrent()
+
+        assertThat(ShortcutManagerCompat.getDynamicShortcuts(context)).isEmpty()
     }
 
     private fun TestScope.createService(

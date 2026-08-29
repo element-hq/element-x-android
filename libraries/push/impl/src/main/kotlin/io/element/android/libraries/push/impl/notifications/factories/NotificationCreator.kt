@@ -320,7 +320,7 @@ class DefaultNotificationCreator(
         val fallbackNotifiableEvent = fallbackNotifiableEvents.first()
         val channelId = notificationChannels.getChannelIdForMessage(
             sessionId = fallbackNotifiableEvent.sessionId,
-            noisy = false,
+            noisy = fallbackNotifiableEvents.any { it.noisy },
         )
         val existingCounter = existingNotification
             ?.extras

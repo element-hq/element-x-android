@@ -57,6 +57,19 @@ class DeveloperSettingsViewTest : RobolectricTest() {
         }
     }
 
+    @Config(qualifiers = "h2400dp")
+    @Test
+    fun `clicking on push rules emits the expected event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<DeveloperSettingsEvent>()
+        setDeveloperSettingsView(
+            state = aDeveloperSettingsState(
+                eventSink = eventsRecorder
+            ),
+        )
+        onNodeWithText("Push rules").performScrollTo().performClick()
+        eventsRecorder.assertSingle(DeveloperSettingsEvent.OpenPushRules)
+    }
+
     @Config(qualifiers = "h2000dp")
     @Test
     fun `clicking on open showkase invokes the expected callback`() = runAndroidComposeUiTest {
