@@ -69,7 +69,7 @@ class TimelineItemsFactory(
         timelineItems: List<MatrixTimelineItem>,
         roomMembers: List<RoomMember>,
         renderReadReceipts: Boolean,
-        renderRedactedMessages: Boolean,
+        renderRedactedMessages: Boolean = true,
     ) = withContext(dispatchers.computation) {
         lock.withLock {
             diffCacheUpdater.updateWith(timelineItems)

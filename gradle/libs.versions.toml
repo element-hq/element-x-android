@@ -84,7 +84,7 @@ kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlin
 kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 ksp_gradle_plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:34.17.0"
+google_firebase_bom = "com.google.firebase:firebase-bom:34.18.0"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 ksp_plugin = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
@@ -175,7 +175,7 @@ test_truth = "com.google.truth:truth:1.4.5"
 test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.22"
 test_robolectric = "org.robolectric:robolectric:4.16.1"
 test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "appyx" }
-test_composable_preview_scanner = "io.github.sergio-sastre.ComposablePreviewScanner:android:0.9.2"
+test_composable_preview_scanner = "io.github.sergio-sastre.ComposablePreviewScanner:android:0.9.3"
 test_detekt_api = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detekt" }
 test_detekt_test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version.ref = "detekt" }
 
@@ -208,9 +208,9 @@ matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose",
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-driver-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
-sqlcipher = "net.zetetic:sqlcipher-android:4.17.0"
+sqlcipher = "net.zetetic:sqlcipher-android:4.18.0"
 sqlite = "androidx.sqlite:sqlite-ktx:2.7.0"
-unifiedpush = "org.unifiedpush.android:connector:3.3.3"
+unifiedpush = "org.unifiedpush.android:connector:3.3.4"
 vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil3", version.ref = "telephoto" }
 telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "telephoto" }
@@ -222,7 +222,7 @@ maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:3.0.2"
 opusencoder = "io.element.android:opusencoder:1.2.0"
 zxing_cpp = "io.github.zxing-cpp:android:3.1.1"
 google_zxing = "com.google.zxing:core:3.5.4"
-google_guava = "com.google.guava:guava:33.7.0-android"
+google_guava = "com.google.guava:guava:33.7.1-android"
 
 haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }
 haze_materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = "haze" }

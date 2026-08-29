@@ -10,6 +10,7 @@ package io.element.android.libraries.designsystem.atomic.atoms
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import io.element.android.compound.theme.ElementTheme
@@ -20,11 +21,12 @@ fun RoomPreviewTitleAtom(
     title: String,
     modifier: Modifier = Modifier,
     fontStyle: FontStyle? = null,
+    style: TextStyle = ElementTheme.typography.fontHeadingLgBold
 ) {
     Text(
         modifier = modifier,
         text = title,
-        style = ElementTheme.typography.fontHeadingLgBold,
+        style = style,
         textAlign = TextAlign.Center,
         fontStyle = fontStyle,
         color = ElementTheme.colors.textPrimary,

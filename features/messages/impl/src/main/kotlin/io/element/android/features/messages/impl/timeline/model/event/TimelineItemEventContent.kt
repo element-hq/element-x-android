@@ -33,6 +33,9 @@ sealed interface TimelineItemEventContentWithAttachment :
     val fileSize: Long?
     val caption: String?
     val formattedCaption: CharSequence?
+
+    /** The caption as it was written, in HTML, so that editing it can start from the formatted text. */
+    val htmlCaption: String?
     val mediaSource: MediaSource
     val mimeType: String
     val formattedFileSize: String
@@ -124,6 +127,13 @@ fun TimelineItemEventContent.formattedCaptionOrNull(): CharSequence? = when (thi
     is TimelineItemEventContentWithAttachment -> formattedCaption
     is TimelineItemGalleryContent -> formattedCaption
     is TimelineItemAttachmentsContent -> formattedCaption
+    else -> null
+}
+
+fun TimelineItemEventContent.htmlCaptionOrNull(): String? = when (this) {
+    is TimelineItemEventContentWithAttachment -> htmlCaption
+    is TimelineItemGalleryContent -> htmlCaption
+    is TimelineItemAttachmentsContent -> htmlCaption
     else -> null
 }
 

@@ -24,6 +24,7 @@ class FallbackNotificationFactory(
         roomId: RoomId,
         eventId: EventId,
         cause: String?,
+        noisy: Boolean,
     ): FallbackNotifiableEvent = FallbackNotifiableEvent(
         sessionId = sessionId,
         roomId = roomId,
@@ -32,6 +33,7 @@ class FallbackNotificationFactory(
         canBeReplaced = true,
         isRedacted = false,
         isUpdated = false,
+        noisy = noisy,
         timestamp = clock.epochMillis(),
         description = "",
         cause = cause,

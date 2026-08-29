@@ -105,9 +105,18 @@ class LoggedInPresenter(
         }
         val syncIndicator by matrixClient.roomListService.syncIndicator.collectAsState()
         val isOnline by syncService.isOnline.collectAsState()
-        val showSyncSpinner by remember {
+        val hasNetwork by networkMonitor.connectivity.collectAsState()
+        val syncIndicatorState by remember {
             derivedStateOf {
-                isOnline && syncIndicator == RoomListService.SyncIndicator.Show
+                when {
+                    isOnline -> if (syncIndicator == RoomListService.SyncIndicator.Show) {
+                        SyncIndicatorState.Syncing
+                    } else {
+                        SyncIndicatorState.Hidden
+                    }
+                    hasNetwork == NetworkStatus.Connected -> SyncIndicatorState.ServerUnreachable
+                    else -> SyncIndicatorState.Hidden
+                }
             }
         }
         var forceNativeSlidingSyncMigration by remember { mutableStateOf(false) }
@@ -181,7 +190,7 @@ class LoggedInPresenter(
         }
 
         return LoggedInState(
-            showSyncSpinner = showSyncSpinner,
+            syncIndicatorState = syncIndicatorState,
             pusherRegistrationState = pusherRegistrationState.value,
             ignoreRegistrationError = ignoreRegistrationError,
             forceNativeSlidingSyncMigration = forceNativeSlidingSyncMigration,
