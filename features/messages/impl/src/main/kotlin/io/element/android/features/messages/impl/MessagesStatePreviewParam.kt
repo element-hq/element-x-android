@@ -38,7 +38,7 @@ import io.element.android.features.messages.impl.timeline.protection.TimelinePro
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roomcall.api.aStandByCallState
-import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvent
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationPermissions
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.architecture.AsyncData
@@ -168,7 +168,7 @@ fun aRoomMemberModerationState(
     permissions: RoomMemberModerationPermissions = RoomMemberModerationPermissions.DEFAULT,
 ) = object : RoomMemberModerationState {
     override val permissions: RoomMemberModerationPermissions = permissions
-    override val eventSink: (RoomMemberModerationEvents) -> Unit = {}
+    override val eventSink: (RoomMemberModerationEvent) -> Unit = {}
 }
 
 fun aUserEventPermissions(

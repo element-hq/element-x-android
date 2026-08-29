@@ -60,7 +60,7 @@ class SignedOutPresenterTest {
             assertThat(initialState.signedOutSession).isEqualTo(aSessionData)
             assertThat(sessionStore.getAllSessions()).isNotEmpty()
             assertThat(sessionStore.numberOfSessions()).isEqualTo(1)
-            initialState.eventSink(SignedOutEvents.SignInAgain)
+            initialState.eventSink(SignedOutEvent.SignInAgain)
             assertThat(awaitItem().signedOutSession).isNull()
             assertThat(sessionStore.getAllSessions()).isEmpty()
             assertThat(sessionStore.numberOfSessions()).isEqualTo(0)

@@ -28,7 +28,7 @@ fun anEditRoomAddressState(
     roomAddressValidity: RoomAddressValidity = RoomAddressValidity.Unknown,
     homeserverName: String = ":myserver.org",
     saveAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
-    eventSink: (EditRoomAddressEvents) -> Unit = {}
+    eventSink: (EditRoomAddressEvent) -> Unit = {}
 ) = EditRoomAddressState(
     roomAddress = roomAddress,
     roomAddressValidity = roomAddressValidity,

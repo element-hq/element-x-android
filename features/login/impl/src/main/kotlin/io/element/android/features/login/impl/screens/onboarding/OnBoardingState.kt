@@ -26,7 +26,7 @@ data class OnBoardingState(
     @DrawableRes
     val onBoardingLogoResId: Int?,
     val loginModeState: LoginModeState,
-    val eventSink: (OnBoardingEvents) -> Unit,
+    val eventSink: (OnBoardingEvent) -> Unit,
 ) {
     val submitEnabled: Boolean
         get() = defaultAccountProvider != null &&

@@ -101,7 +101,7 @@ fun aValidNotificationSettingsState(
     showCallRingtoneDialog: Boolean = false,
     pendingMessageSoundPickerLaunch: Int = 0,
     pendingCallRingtonePickerLaunch: Int = 0,
-    eventSink: (NotificationSettingsEvents) -> Unit = {},
+    eventSink: (NotificationSettingsEvent) -> Unit = {},
 ) = NotificationSettingsState(
     matrixSettings = NotificationSettingsState.MatrixSettings.Valid(
         atRoomNotificationsEnabled = atRoomNotificationsEnabled,
@@ -138,7 +138,7 @@ fun aValidNotificationSettingsState(
 
 fun aInvalidNotificationSettingsState(
     fixFailed: Boolean = false,
-    eventSink: (NotificationSettingsEvents) -> Unit = {},
+    eventSink: (NotificationSettingsEvent) -> Unit = {},
 ) = NotificationSettingsState(
     matrixSettings = NotificationSettingsState.MatrixSettings.Invalid(
         fixFailed = fixFailed,

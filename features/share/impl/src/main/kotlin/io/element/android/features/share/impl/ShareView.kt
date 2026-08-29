@@ -26,7 +26,7 @@ fun ShareView(
             onShareSuccess(it)
         },
         onErrorDismiss = {
-            state.eventSink(ShareEvents.ClearError)
+            state.eventSink(ShareEvent.ClearError)
         },
     )
 }

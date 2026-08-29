@@ -105,7 +105,7 @@ private fun Content(
         ) {
             QrCodeCameraView(
                 modifier = Modifier.fillMaxSize(),
-                onScanQrCode = { state.eventSink.invoke(QrCodeScanEvents.QrCodeScanned(it)) },
+                onScanQrCode = { state.eventSink.invoke(QrCodeScanEvent.QrCodeScanned(it)) },
                 isScanning = state.isScanning,
             )
         }
@@ -125,7 +125,7 @@ private fun ColumnScope.Buttons(
                         .fillMaxWidth()
                         .padding(bottom = 16.dp),
                     onClick = {
-                        state.eventSink.invoke(QrCodeScanEvents.TryAgain)
+                        state.eventSink.invoke(QrCodeScanEvent.TryAgain)
                     }
                 )
                 Column(

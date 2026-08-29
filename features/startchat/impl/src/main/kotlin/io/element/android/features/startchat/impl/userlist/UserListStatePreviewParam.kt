@@ -68,7 +68,7 @@ fun aUserListState(
     showSearchLoader: Boolean = false,
     selectionMode: SelectionMode = SelectionMode.Single,
     recentDirectRooms: List<RecentDirectRoom> = emptyList(),
-    eventSink: (UserListEvents) -> Unit = {},
+    eventSink: (UserListEvent) -> Unit = {},
 ) = UserListState(
     searchQuery = TextFieldState(initialText = searchQuery),
     isSearchActive = isSearchActive,

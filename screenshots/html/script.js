@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
-import { screenshots } from './data.js';
+import { buildDate, screenshots } from './data.js';
 
 const URL_PARAM_LANGUAGES = "l";
 const URL_PARAM_IMAGE_WIDTH = "w";
@@ -360,5 +360,13 @@ function addTable() {
   document.getElementById('lines').textContent = `${linesCounter} lines`;
 }
 
+function addBuildDate() {
+  const element = document.createElement('div');
+  element.className = 'build-date';
+  element.textContent = `Built on ${new Date(buildDate * 1000).toLocaleDateString()}`;
+  document.getElementById('footer').appendChild(element);
+}
+
 addForm();
+addBuildDate();
 addTable();

@@ -33,7 +33,7 @@ fun ForwardMessagesView(
                 text = stringResource(id = CommonStrings.common_sending),
                 showCancelButton = true,
                 onDismissRequest = {
-                    state.eventSink(ForwardMessagesEvents.Cancel)
+                    state.eventSink(ForwardMessagesEvent.Cancel)
                 },
             )
         },
@@ -41,7 +41,7 @@ fun ForwardMessagesView(
             stringResource(id = CommonStrings.error_unknown)
         },
         onErrorDismiss = {
-            state.eventSink(ForwardMessagesEvents.ClearError)
+            state.eventSink(ForwardMessagesEvent.ClearError)
         },
     )
 }

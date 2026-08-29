@@ -97,7 +97,7 @@ fun LoginPasswordView(
 
         autofillManager?.commit()
 
-        state.eventSink(LoginPasswordEvents.Submit)
+        state.eventSink(LoginPasswordEvent.Submit)
     }
 
     Scaffold(
@@ -166,7 +166,7 @@ fun LoginPasswordView(
 
             if (state.loginAction is AsyncData.Failure) {
                 LoginErrorDialog(error = state.loginAction.error, onDismiss = {
-                    state.eventSink(LoginPasswordEvents.ClearError)
+                    state.eventSink(LoginPasswordEvent.ClearError)
                 })
             }
         }
@@ -202,7 +202,7 @@ private fun LoginForm(
             onValueChange = {
                 val sanitized = it.sanitize()
                 loginFieldState = sanitized
-                eventSink(LoginPasswordEvents.SetLogin(sanitized))
+                eventSink(LoginPasswordEvent.SetLogin(sanitized))
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
@@ -220,7 +220,7 @@ private fun LoginForm(
                             role = Role.Button,
                         ) {
                             loginFieldState = ""
-                            eventSink(LoginPasswordEvents.SetLogin(""))
+                            eventSink(LoginPasswordEvent.SetLogin(""))
                         }
                     ) {
                         Icon(
@@ -254,7 +254,7 @@ private fun LoginForm(
             onValueChange = {
                 val sanitized = it.sanitize()
                 passwordFieldState = sanitized
-                eventSink(LoginPasswordEvents.SetPassword(sanitized))
+                eventSink(LoginPasswordEvent.SetPassword(sanitized))
             },
             placeholder = stringResource(CommonStrings.common_password),
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),

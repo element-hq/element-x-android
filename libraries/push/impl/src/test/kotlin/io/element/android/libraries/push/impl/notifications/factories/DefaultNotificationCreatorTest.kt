@@ -18,6 +18,7 @@ import io.element.android.appconfig.NotificationConfig
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.A_COLOR_INT
@@ -33,6 +34,7 @@ import io.element.android.libraries.push.impl.notifications.DefaultNotificationB
 import io.element.android.libraries.push.impl.notifications.NotificationActionIds
 import io.element.android.libraries.push.impl.notifications.RoomEventGroupInfo
 import io.element.android.libraries.push.impl.notifications.channels.DefaultNotificationChannels
+import io.element.android.libraries.push.impl.notifications.channels.FakeNotificationChannels
 import io.element.android.libraries.push.impl.notifications.channels.NotificationChannels
 import io.element.android.libraries.push.impl.notifications.factories.action.AcceptInvitationActionFactory
 import io.element.android.libraries.push.impl.notifications.factories.action.MarkAsReadActionFactory
@@ -47,6 +49,8 @@ import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvid
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.services.toolbox.test.systemclock.A_FAKE_TIMESTAMP
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
+import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -82,7 +86,10 @@ class DefaultNotificationCreatorTest : RobolectricTest() {
 
     @Test
     fun `test createFallbackNotification`() {
-        val sut = createNotificationCreator()
+        val channelIdForMessage = lambdaRecorder<SessionId, Boolean, String> { _, _ -> A_CHANNEL_ID }
+        val sut = createNotificationCreator(
+            notificationChannels = FakeNotificationChannels(channelIdForMessage = channelIdForMessage),
+        )
         val result = sut.createFallbackNotification(
             existingNotification = null,
             notificationAccountParams = aNotificationAccountParams(),
@@ -93,6 +100,50 @@ class DefaultNotificationCreatorTest : RobolectricTest() {
         result.commonAssertions(
             expectedCategory = null,
         )
+        assertThat(result.channelId).isEqualTo(A_CHANNEL_ID)
+        // The notification must be posted on the silent channel.
+        channelIdForMessage.assertions().isCalledOnce().with(value(A_SESSION_ID), value(false))
+    }
+
+    @Test
+    fun `test createFallbackNotification noisy`() {
+        val channelIdForMessage = lambdaRecorder<SessionId, Boolean, String> { _, _ -> A_CHANNEL_ID }
+        val sut = createNotificationCreator(
+            notificationChannels = FakeNotificationChannels(channelIdForMessage = channelIdForMessage),
+        )
+        val result = sut.createFallbackNotification(
+            existingNotification = null,
+            notificationAccountParams = aNotificationAccountParams(),
+            fallbackNotifiableEvents = listOf(
+                aFallbackNotifiableEvent(noisy = true),
+            )
+        )
+        result.commonAssertions(
+            expectedCategory = null,
+        )
+        assertThat(result.channelId).isEqualTo(A_CHANNEL_ID)
+        // The notification must be posted on the noisy channel.
+        channelIdForMessage.assertions().isCalledOnce().with(value(A_SESSION_ID), value(true))
+    }
+
+    @Test
+    fun `test createFallbackNotification is noisy when at least one event is noisy`() {
+        val channelIdForMessage = lambdaRecorder<SessionId, Boolean, String> { _, _ -> A_CHANNEL_ID }
+        val sut = createNotificationCreator(
+            notificationChannels = FakeNotificationChannels(channelIdForMessage = channelIdForMessage),
+        )
+        val result = sut.createFallbackNotification(
+            existingNotification = null,
+            notificationAccountParams = aNotificationAccountParams(),
+            fallbackNotifiableEvents = listOf(
+                aFallbackNotifiableEvent(noisy = false),
+                aFallbackNotifiableEvent(eventId = AN_EVENT_ID_2, noisy = true),
+            )
+        )
+        result.commonAssertions(
+            expectedCategory = null,
+        )
+        channelIdForMessage.assertions().isCalledOnce().with(value(A_SESSION_ID), value(true))
     }
 
     @Test
@@ -388,6 +439,8 @@ class DefaultNotificationCreatorTest : RobolectricTest() {
         assertThat(category).isEqualTo(expectedCategory)
     }
 }
+
+private const val A_CHANNEL_ID = "aChannelId"
 
 const val MARK_AS_READ_ACTION_TITLE = "MarkAsReadAction"
 const val QUICK_REPLY_ACTION_TITLE = "QuickReplyAction"

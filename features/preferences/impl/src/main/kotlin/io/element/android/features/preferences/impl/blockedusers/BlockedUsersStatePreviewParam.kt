@@ -32,7 +32,7 @@ internal fun aBlockedUsersState(
     blockedUsers: List<MatrixUser> = aMatrixUserList(),
     unblockUserAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     snackbarMessage: SnackbarMessage? = null,
-    eventSink: (BlockedUsersEvents) -> Unit = {},
+    eventSink: (BlockedUsersEvent) -> Unit = {},
 ): BlockedUsersState {
     return BlockedUsersState(
         blockedUsers = blockedUsers.toImmutableList(),

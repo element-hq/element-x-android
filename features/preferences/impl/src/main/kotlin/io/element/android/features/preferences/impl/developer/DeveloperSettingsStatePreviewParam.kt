@@ -32,6 +32,9 @@ open class DeveloperSettingsStatePreviewParam : PreviewParameterProvider<Develop
                 //  at io.mhssn.colorpicker.pickers.ClassicColorPickerKt$ClassicColorPicker$1$1.invokeSuspend(ClassicColorPicker.kt:53)
                 showColorPicker = false,
             ),
+            aDeveloperSettingsState(
+                pushRulesAction = AsyncAction.Failure(Exception("A failure"))
+            ),
         )
 }
 
@@ -39,16 +42,18 @@ fun aDeveloperSettingsState(
     appDeveloperSettingsState: AppDeveloperSettingsState = anAppDeveloperSettingsState(),
     clearCacheAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     markAllRoomsAsReadAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    pushRulesAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     isEnterpriseBuild: Boolean = false,
     showColorPicker: Boolean = false,
     deviceId: DeviceId = DeviceId("ILAKNDNASDLK"),
-    eventSink: (DeveloperSettingsEvents) -> Unit = {},
+    eventSink: (DeveloperSettingsEvent) -> Unit = {},
 ) = DeveloperSettingsState(
     appDeveloperSettingsState = appDeveloperSettingsState,
     cacheSize = AsyncData.Success("1.2 MB"),
     databaseSizes = AsyncData.Success(persistentMapOf("state_store" to "1.2MB")),
     clearCacheAction = clearCacheAction,
     markAllRoomsAsReadAction = markAllRoomsAsReadAction,
+    pushRulesAction = pushRulesAction,
     isEnterpriseBuild = isEnterpriseBuild,
     showColorPicker = showColorPicker,
     deviceId = deviceId,
