@@ -53,23 +53,49 @@ class WebViewWidgetMessageInterceptor(
                 // we need to supply a logging implementation that correctly includes
                 // objects in log lines.
                 view.evaluateJavascript(
-                    """
-                        function logFn(consoleLogFn, ...args) {
-                            consoleLogFn(
-                                args.map(
-                                    a => typeof a === "string" ? a : JSON.stringify(a)
-                                ).join(' ')
-                            );
-                        };
-                        globalThis.console.debug = logFn.bind(null, console.debug);
-                        globalThis.console.log = logFn.bind(null, console.log);
-                        globalThis.console.info = logFn.bind(null, console.info);
-                        globalThis.console.warn = logFn.bind(null, console.warn);
-                        globalThis.console.error = logFn.bind(null, console.error);
-                    """.trimIndent(),
-                    null
-                )
+                """
+                    function safeStringify(value) {
+                        if (value === null || value === undefined) {
+                        return String(value);
+                    }
 
+                if (typeof value === "string") {
+                    return value;
+                }
+
+                try {
+                    const seen = new WeakSet();
+
+                    return JSON.stringify(value, function(key, val) {
+                        if (typeof val === "object" && val !== null) {
+                            if (seen.has(val)) {
+                                return "[Circular]";
+                            }
+
+                            seen.add(val);
+                        }
+
+                        return val;
+                    });
+                } catch (e) {
+                    return Object.prototype.toString.call(value);
+                }
+            }
+
+        function logFn(consoleLogFn, ...args) {
+            consoleLogFn(
+                args.map(a => safeStringify(a)).join(' ')
+            );
+        };
+
+        globalThis.console.debug = logFn.bind(null, console.debug);
+        globalThis.console.log = logFn.bind(null, console.log);
+        globalThis.console.info = logFn.bind(null, console.info);
+        globalThis.console.warn = logFn.bind(null, console.warn);
+        globalThis.console.error = logFn.bind(null, console.error);
+    """.trimIndent(),
+    null
+)
                 // We inject this JS code when the page starts loading to attach a message listener to the window.
                 // This listener will receive both messages:
                 // - EC widget API -> Element X (message.data.api == "fromWidget")
