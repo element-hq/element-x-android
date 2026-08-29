@@ -48,10 +48,10 @@ class RoomAliasResolverPresenter(
             resolveAlias(resolveState)
         }
 
-        fun handleEvent(event: RoomAliasResolverEvents) {
+        fun handleEvent(event: RoomAliasResolverEvent) {
             when (event) {
-                RoomAliasResolverEvents.Retry -> coroutineScope.resolveAlias(resolveState)
-                RoomAliasResolverEvents.DismissError -> resolveState.value = AsyncData.Uninitialized
+                RoomAliasResolverEvent.Retry -> coroutineScope.resolveAlias(resolveState)
+                RoomAliasResolverEvent.DismissError -> resolveState.value = AsyncData.Uninitialized
             }
         }
 

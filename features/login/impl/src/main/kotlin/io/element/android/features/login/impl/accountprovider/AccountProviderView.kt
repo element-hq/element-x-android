@@ -116,7 +116,7 @@ fun AccountProviderView(
 
 @PreviewsDayNight
 @Composable
-internal fun AccountProviderViewPreview(@PreviewParameter(AccountProviderProvider::class) item: AccountProvider) = ElementPreview {
+internal fun AccountProviderViewPreview(@PreviewParameter(AccountProviderPreviewParam::class) item: AccountProvider) = ElementPreview {
     AccountProviderView(
         item = item,
         onClick = { }

@@ -50,7 +50,7 @@ class QrCodeScanPresenterTest {
         )
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink(QrCodeScanEvents.QrCodeScanned(byteArrayOf()))
+            initialState.eventSink(QrCodeScanEvent.QrCodeScanned(byteArrayOf()))
             assertThat(awaitItem().isScanning).isFalse()
             assertThat(awaitItem().authenticationAction.isLoading()).isTrue()
             assertThat(awaitItem().authenticationAction.isSuccess()).isTrue()
@@ -65,14 +65,14 @@ class QrCodeScanPresenterTest {
         val presenter = createQrCodeScanPresenter(qrCodeLoginDataFactory = qrCodeLoginDataFactory)
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink(QrCodeScanEvents.QrCodeScanned(byteArrayOf()))
+            initialState.eventSink(QrCodeScanEvent.QrCodeScanned(byteArrayOf()))
             assertThat(awaitItem().isScanning).isFalse()
             assertThat(awaitItem().authenticationAction.isLoading()).isTrue()
 
             val errorState = awaitItem()
             assertThat(errorState.authenticationAction.isFailure()).isTrue()
 
-            errorState.eventSink(QrCodeScanEvents.TryAgain)
+            errorState.eventSink(QrCodeScanEvent.TryAgain)
             assertThat(awaitItem().isScanning).isTrue()
             assertThat(awaitItem().authenticationAction.isUninitialized()).isTrue()
         }

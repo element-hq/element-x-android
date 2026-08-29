@@ -267,6 +267,42 @@ class DefaultNotificationResultProcessorTest {
         assertThat(receivedFallbackEvent).isTrue()
     }
 
+    @Test
+    fun `when an event cannot be resolved, the generated fallback event is silent`() = runTest {
+        val onNotifiableEventsReceived = lambdaRecorder<List<NotifiableEvent>, Unit> {}
+        val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, Boolean, String?, Unit> { _, _, _, _, _, _, _ -> }
+        val processor = createDefaultNotificationResultProcessor(
+            mutableBatteryOptimizationStore = FakeMutableBatteryOptimizationStore(
+                showBatteryOptimizationBannerResult = lambdaRecorder<Unit> {},
+            ),
+            pushHistoryService = FakePushHistoryService(
+                onPushReceivedResult = onPushReceivedResult,
+            ),
+            onNotifiableEventsReceived = onNotifiableEventsReceived,
+        )
+
+        runningProcessor(processor) {
+            emit(mapOf(aPushRequest() to Result.failure(NotificationResolverException.UnknownError("Unable to resolve event"))))
+        }
+
+        advanceTimeBy(300.milliseconds)
+
+        onNotifiableEventsReceived.assertions()
+            .isCalledOnce()
+            .with(
+                value(
+                    listOf(
+                        aFallbackNotifiableEvent(
+                            description = "",
+                            canBeReplaced = true,
+                            noisy = false,
+                            cause = "Unable to resolve event",
+                        )
+                    )
+                )
+            )
+    }
+
     private suspend fun TestScope.runningProcessor(processor: NotificationResultProcessor, block: suspend NotificationResultProcessor.() -> Unit) {
         processor.start()
 

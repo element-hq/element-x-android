@@ -39,28 +39,28 @@ class KnockRequestsListPresenter(
 
         val coroutineScope = rememberCoroutineScope()
 
-        fun handleEvent(event: KnockRequestsListEvents) {
+        fun handleEvent(event: KnockRequestsListEvent) {
             when (event) {
-                KnockRequestsListEvents.AcceptAll -> {
+                KnockRequestsListEvent.AcceptAll -> {
                     currentAction = KnockRequestsAction.AcceptAll
                 }
-                is KnockRequestsListEvents.Accept -> {
+                is KnockRequestsListEvent.Accept -> {
                     currentAction = KnockRequestsAction.Accept(event.knockRequest)
                 }
-                is KnockRequestsListEvents.Decline -> {
+                is KnockRequestsListEvent.Decline -> {
                     currentAction = KnockRequestsAction.Decline(event.knockRequest)
                 }
-                is KnockRequestsListEvents.DeclineAndBan -> {
+                is KnockRequestsListEvent.DeclineAndBan -> {
                     currentAction = KnockRequestsAction.DeclineAndBan(event.knockRequest)
                 }
-                KnockRequestsListEvents.ResetCurrentAction -> {
+                KnockRequestsListEvent.ResetCurrentAction -> {
                     asyncAction.value = AsyncAction.Uninitialized
                     currentAction = KnockRequestsAction.None
                 }
-                KnockRequestsListEvents.RetryCurrentAction -> {
+                KnockRequestsListEvent.RetryCurrentAction -> {
                     coroutineScope.executeAction(currentAction, asyncAction, isActionConfirmed = true)
                 }
-                KnockRequestsListEvents.ConfirmCurrentAction -> {
+                KnockRequestsListEvent.ConfirmCurrentAction -> {
                     coroutineScope.executeAction(currentAction, asyncAction, isActionConfirmed = true)
                 }
             }

@@ -96,7 +96,7 @@ fun ConfigureRoomView(
                 onBackClick = onBackClick,
                 onNextClick = {
                     focusManager.clearFocus()
-                    state.eventSink(ConfigureRoomEvents.CreateRoom)
+                    state.eventSink(ConfigureRoomEvent.CreateRoom)
                 },
             )
         }
@@ -114,20 +114,20 @@ fun ConfigureRoomView(
                 avatarUri = state.config.avatarUri,
                 roomName = state.config.roomName.orEmpty(),
                 onAvatarClick = ::onAvatarClick,
-                onChangeRoomName = { state.eventSink(ConfigureRoomEvents.RoomNameChanged(it)) },
+                onChangeRoomName = { state.eventSink(ConfigureRoomEvent.RoomNameChanged(it)) },
             )
             Spacer(modifier = Modifier.height(16.dp))
             RoomTopic(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 topic = state.config.topic.orEmpty(),
-                onTopicChange = { state.eventSink(ConfigureRoomEvents.TopicChanged(it)) },
+                onTopicChange = { state.eventSink(ConfigureRoomEvent.TopicChanged(it)) },
             )
             Spacer(modifier = Modifier.height(16.dp))
             if (!state.isSpace && state.spaces.isNotEmpty()) {
                 SelectParentSpaceOptions(
                     spaces = state.spaces,
                     selectedSpace = state.config.parentSpace,
-                    onSelectSpace = { state.eventSink(ConfigureRoomEvents.SetParentSpace(it)) },
+                    onSelectSpace = { state.eventSink(ConfigureRoomEvent.SetParentSpace(it)) },
                 )
             }
             RoomJoinRuleOptions(
@@ -136,7 +136,7 @@ fun ConfigureRoomView(
                 parentSpace = state.config.parentSpace,
                 onOptionClick = {
                     focusManager.clearFocus()
-                    state.eventSink(ConfigureRoomEvents.JoinRuleChanged(it))
+                    state.eventSink(ConfigureRoomEvent.JoinRuleChanged(it))
                 },
             )
             if (state.config.visibilityState !is RoomVisibilityState.Private) {
@@ -146,7 +146,7 @@ fun ConfigureRoomView(
                     address = state.config.visibilityState.roomAddress().getOrNull().orEmpty(),
                     homeserverName = state.homeserverName,
                     addressValidity = state.roomAddressValidity,
-                    onAddressChange = { state.eventSink(ConfigureRoomEvents.RoomAddressChanged(it)) },
+                    onAddressChange = { state.eventSink(ConfigureRoomEvent.RoomAddressChanged(it)) },
                     label = null,
                     supportingText = stringResource(R.string.screen_create_room_room_address_section_footer),
                 )
@@ -158,7 +158,7 @@ fun ConfigureRoomView(
         actions = state.avatarActions,
         isVisible = isAvatarActionsSheetVisible.value,
         onDismiss = { isAvatarActionsSheetVisible.value = false },
-        onSelectAction = { state.eventSink(ConfigureRoomEvents.HandleAvatarAction(it)) }
+        onSelectAction = { state.eventSink(ConfigureRoomEvent.HandleAvatarAction(it)) }
     )
 
     AsyncActionView(
@@ -170,8 +170,8 @@ fun ConfigureRoomView(
         },
         onSuccess = { onCreateRoomSuccess(it) },
         errorMessage = { stringResource(if (isSpace) R.string.screen_create_room_error_creating_space else R.string.screen_create_room_error_creating_room) },
-        onRetry = { state.eventSink(ConfigureRoomEvents.CreateRoom) },
-        onErrorDismiss = { state.eventSink(ConfigureRoomEvents.CancelCreateRoom) },
+        onRetry = { state.eventSink(ConfigureRoomEvent.CreateRoom) },
+        onErrorDismiss = { state.eventSink(ConfigureRoomEvent.CancelCreateRoom) },
     )
 
     PermissionsView(
@@ -349,12 +349,12 @@ private fun RoomJoinRuleOptions(
 
 @PreviewWithLargeHeight
 @Composable
-internal fun ConfigureRoomViewLightPreview(@PreviewParameter(ConfigureRoomStateProvider::class) state: ConfigureRoomState) =
+internal fun ConfigureRoomViewLightPreview(@PreviewParameter(ConfigureRoomStatePreviewParam::class) state: ConfigureRoomState) =
     ElementPreviewLight { ContentToPreview(state) }
 
 @PreviewWithLargeHeight
 @Composable
-internal fun ConfigureRoomViewDarkPreview(@PreviewParameter(ConfigureRoomStateProvider::class) state: ConfigureRoomState) =
+internal fun ConfigureRoomViewDarkPreview(@PreviewParameter(ConfigureRoomStatePreviewParam::class) state: ConfigureRoomState) =
     ElementPreviewDark { ContentToPreview(state) }
 
 @ExcludeFromCoverage

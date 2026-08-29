@@ -19,7 +19,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemEventRowWithGalleryPreview(
-    @PreviewParameter(TimelineItemEventContentForGalleryViewProvider::class) content: TimelineItemEventContent,
+    @PreviewParameter(TimelineItemEventContentForGalleryViewPreviewParam::class) content: TimelineItemEventContent,
 ) = ElementPreview {
     Column {
         sequenceOf(false, true).forEach { isMine ->
