@@ -5,6 +5,8 @@
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
+import extension.testCommonDependencies
+
 plugins {
     id("io.element.android-library")
 }
@@ -27,4 +29,6 @@ dependencies {
     implementation(libs.google.tink)
 
     implementation(projects.libraries.androidutils)
+
+    testCommonDependencies(libs)
 }

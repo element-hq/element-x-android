@@ -42,12 +42,12 @@ class ChangeServerPresenter(
             onProceed = { provider -> changeServer(provider, changeServerAction) },
         )
 
-        fun handleEvent(event: ChangeServerEvents) {
+        fun handleEvent(event: ChangeServerEvent) {
             when (event) {
-                ChangeServerEvents.ClearError -> changeServerAction.value = AsyncData.Uninitialized
-                is ChangeServerEvents.ChangeServer -> gateState.submit(event.accountProvider)
-                ChangeServerEvents.DismissLocalNetworkPermission -> gateState.abort()
-                ChangeServerEvents.RequestLocalNetworkPermission -> gateState.requestPermission()
+                ChangeServerEvent.ClearError -> changeServerAction.value = AsyncData.Uninitialized
+                is ChangeServerEvent.ChangeServer -> gateState.submit(event.accountProvider)
+                ChangeServerEvent.DismissLocalNetworkPermission -> gateState.abort()
+                ChangeServerEvent.RequestLocalNetworkPermission -> gateState.requestPermission()
             }
         }
 

@@ -108,7 +108,7 @@ fun ChooseAccountProviderView(
                         item = alteredItem,
                         selected = item == state.selectedAccountProvider,
                         onClick = {
-                            state.eventSink(ChooseAccountProviderEvents.SelectAccountProvider(item))
+                            state.eventSink(ChooseAccountProviderEvent.SelectAccountProvider(item))
                         }
                     )
                 }
@@ -119,7 +119,7 @@ fun ChooseAccountProviderView(
                     text = stringResource(id = CommonStrings.action_continue),
                     showProgress = isLoading,
                     onClick = {
-                        state.eventSink(ChooseAccountProviderEvents.Continue)
+                        state.eventSink(ChooseAccountProviderEvent.Continue)
                     },
                     enabled = state.submitEnabled || isLoading,
                     modifier = Modifier
@@ -131,7 +131,7 @@ fun ChooseAccountProviderView(
             LoginModeView(
                 loginMode = state.loginModeState.loginMode,
                 onClearError = {
-                    state.eventSink(ChooseAccountProviderEvents.ClearError)
+                    state.eventSink(ChooseAccountProviderEvent.ClearError)
                 },
                 onLearnMoreClick = onLearnMoreClick,
                 onOAuthDetails = onOAuthDetails,

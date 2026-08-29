@@ -16,6 +16,7 @@ import android.provider.MediaStore
 import androidx.annotation.RequiresApi
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.libraries.androidutils.file.saveWithUniqueFileName
 import io.element.android.libraries.androidutils.system.toast
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
@@ -25,6 +26,7 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 
 interface FileSave {
     suspend fun save(
@@ -61,18 +63,18 @@ class DefaultFileSave(
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun saveOnDiskUsingMediaStore(path: String) {
         val file = File(path)
-        val contentValues = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, file.name)
-            put(MediaStore.MediaColumns.MIME_TYPE, MimeTypes.OctetStream)
-            put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
-        }
         val resolver = context.contentResolver
-        val outputUri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
-        if (outputUri != null) {
-            file.inputStream().use { input ->
-                resolver.openOutputStream(outputUri).use { output ->
-                    input.copyTo(output!!, DEFAULT_BUFFER_SIZE)
-                }
+        val outputUri = saveWithUniqueFileName(file.name) { displayName ->
+            val contentValues = ContentValues().apply {
+                put(MediaStore.MediaColumns.DISPLAY_NAME, displayName)
+                put(MediaStore.MediaColumns.MIME_TYPE, MimeTypes.OctetStream)
+                put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
+            }
+            resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
+        } ?: throw IOException("Unable to create the destination file")
+        file.inputStream().use { input ->
+            resolver.openOutputStream(outputUri).use { output ->
+                input.copyTo(output!!, DEFAULT_BUFFER_SIZE)
             }
         }
     }
