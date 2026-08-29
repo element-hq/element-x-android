@@ -86,7 +86,7 @@ private fun ReadReceiptBottomSheetContent(
     LazyColumn {
         item {
             ListItem(
-                headlineContent = {
+                content = {
                     Text(text = stringResource(id = CommonStrings.common_seen_by))
                 }
             )
@@ -117,7 +117,7 @@ private fun ReadReceiptBottomSheetContent(
 
 @PreviewsDayNight
 @Composable
-internal fun ReadReceiptBottomSheetPreview(@PreviewParameter(ReadReceiptBottomSheetStateProvider::class) state: ReadReceiptBottomSheetState) {
+internal fun ReadReceiptBottomSheetPreview(@PreviewParameter(ReadReceiptBottomSheetStatePreviewParam::class) state: ReadReceiptBottomSheetState) {
     ElementPreview(fillMaxSize = true) {
         ReadReceiptBottomSheet(
             state = state,

@@ -86,6 +86,7 @@ import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
 import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
+import io.element.android.libraries.textcomposer.model.SuggestionType
 import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.textcomposer.model.rememberMarkdownTextEditorState
 import io.element.android.services.analytics.api.AnalyticsService
@@ -103,7 +104,9 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -425,6 +428,7 @@ class MessageComposerPresenter(
             textEditorState = textEditorState,
             isFullScreen = isFullScreen.value,
             mode = messageComposerContext.composerMode,
+            isInThreadTimeline = isInThread,
             showAttachmentSourcePicker = showAttachmentSourcePicker,
             showTextFormatting = showTextFormatting,
             canShareLocation = canShareLocation.value,
@@ -457,6 +461,14 @@ class MessageComposerPresenter(
             val mentionCompletionTrigger = suggestionSearchTrigger.debounce(0.3.seconds).filter { !it?.text.isNullOrEmpty() }
 
             val mentionTriggerFlow = merge(mentionStartTrigger, mentionCompletionTrigger)
+
+            // Refresh the room members, which are only loaded on demand, when a mention starts
+            launch {
+                suggestionSearchTrigger
+                    .distinctUntilChangedBy { it?.type }
+                    .filter { it?.type == SuggestionType.Mention }
+                    .collect { room.updateMembers() }
+            }
 
             val roomAliasSuggestionsFlow = roomAliasSuggestionsDataSource
                 .getAllRoomAliasSuggestions()
@@ -858,7 +870,7 @@ class MessageComposerPresenter(
                 if (currentComposerMode is MessageComposerMode.Reply) {
                     val mediaSources = currentComposerMode.replyToDetails.content()?.mediaSources() ?: return@launch
                     val contentValidationState = contentValidationCache[currentComposerMode.replyToDetails.eventId()]
-                    contentScannerService.scan(currentComposerMode.replyToDetails.eventId(), mediaSources, contentValidationState)
+                    contentScannerService.scan(mediaSources, contentValidationState)
                 }
                 // When coming from edit, just clear the composer as it'd be weird to reset a volatile draft in this scenario.
                 if (currentComposerMode.isEditing) {

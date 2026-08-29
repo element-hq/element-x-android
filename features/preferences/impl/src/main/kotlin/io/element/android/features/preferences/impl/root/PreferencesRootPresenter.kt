@@ -74,8 +74,11 @@ class PreferencesRootPresenter(
         val showLinkNewDevice by remember {
             featureFlagService.isFeatureEnabledFlow(FeatureFlags.QrCodeLogin)
         }.collectAsState(initial = false)
-        val isUserStatusEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.UserStatus).collectAsState(initial = false)
-        val userStatusState = if (isUserStatusEnabled) userStatusPresenter.present() else null
+
+        val isUserStatusSupported by produceState(false) {
+            value = matrixClient.isUserStatusSupported().getOrDefault(false)
+        }
+        val userStatusState = if (isUserStatusSupported) userStatusPresenter.present() else null
 
         val otherSessions by remember {
             sessionStore.sessionsFlow().map { list ->
@@ -142,7 +145,6 @@ class PreferencesRootPresenter(
             myUser = matrixUser.value,
             userStatusState = userStatusState,
             version = remember { versionFormatter.get() },
-            deviceId = matrixClient.deviceId,
             isMultiAccountEnabled = isMultiAccountEnabled,
             otherSessions = otherSessions,
             showSecureBackup = !canVerifyUserSession,

@@ -34,6 +34,11 @@ forbiddenTerms = {
         # Contains "Element Classic"
         "screen_missing_key_backup_open_element_classic",
         "screen_missing_key_backup_step_1",
+        # These are notification sound names
+        "screen_notification_settings_sound_element_default",
+        "screen_notification_settings_sound_element_fade",
+        # This contains the word 'element' in some languages
+        "screen_media_upload_preview_item_count",
     ]
 }
 

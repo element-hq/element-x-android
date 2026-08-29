@@ -46,7 +46,7 @@ fun EditRoomAddressView(
                 isSaveActionEnabled = state.canBeSaved,
                 onBackClick = onBackClick,
                 onSaveClick = {
-                    state.eventSink(EditRoomAddressEvents.Save)
+                    state.eventSink(EditRoomAddressEvent.Save)
                 },
             )
         }
@@ -63,7 +63,7 @@ fun EditRoomAddressView(
                 homeserverName = state.homeserverName,
                 addressValidity = state.roomAddressValidity,
                 onAddressChange = {
-                    state.eventSink(EditRoomAddressEvents.RoomAddressChanged(it))
+                    state.eventSink(EditRoomAddressEvent.RoomAddressChanged(it))
                 },
                 label = stringResource(R.string.screen_edit_room_address_title),
                 supportingText = stringResource(R.string.screen_edit_room_address_room_address_section_footer),
@@ -81,8 +81,8 @@ fun EditRoomAddressView(
             },
             onSuccess = {},
             errorMessage = { stringResource(CommonStrings.error_unknown) },
-            onRetry = { state.eventSink(EditRoomAddressEvents.Save) },
-            onErrorDismiss = { state.eventSink(EditRoomAddressEvents.DismissError) },
+            onRetry = { state.eventSink(EditRoomAddressEvent.Save) },
+            onErrorDismiss = { state.eventSink(EditRoomAddressEvent.DismissError) },
         )
     }
 }
@@ -112,7 +112,7 @@ private fun EditRoomAddressTopBar(
 @PreviewsDayNight
 @Composable
 internal fun EditRoomAddressViewPreview(
-    @PreviewParameter(EditRoomAddressStateProvider::class) state: EditRoomAddressState
+    @PreviewParameter(EditRoomAddressStatePreviewParam::class) state: EditRoomAddressState
 ) = ElementPreview {
     EditRoomAddressView(
         state = state,

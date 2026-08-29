@@ -8,7 +8,7 @@
 
 package io.element.android.libraries.push.impl.test
 
-import io.element.android.appconfig.PushConfig
+import io.element.android.libraries.push.impl.BuildConfig
 import io.element.android.libraries.push.impl.pushgateway.PushGatewayNotifyRequest
 import io.element.android.libraries.pushproviders.test.aSessionPushConfig
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -33,7 +33,7 @@ class DefaultTestPushTest {
                 value(
                     PushGatewayNotifyRequest.Params(
                         url = aConfig.url,
-                        appId = PushConfig.PUSHER_APP_ID,
+                        appId = BuildConfig.PUSHER_APP_ID,
                         pushKey = aConfig.pushKey,
                         eventId = DefaultTestPush.TEST_EVENT_ID,
                         roomId = DefaultTestPush.TEST_ROOM_ID,

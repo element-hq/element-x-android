@@ -88,12 +88,12 @@ class PollHistoryPresenterTest {
         }.test {
             awaitItem().also { state ->
                 assertThat(state.activeFilter).isEqualTo(PollHistoryFilter.ONGOING)
-                state.eventSink(PollHistoryEvents.SelectFilter(PollHistoryFilter.PAST))
+                state.eventSink(PollHistoryEvent.SelectFilter(PollHistoryFilter.PAST))
             }
             skipItems(1)
             awaitItem().also { state ->
                 assertThat(state.activeFilter).isEqualTo(PollHistoryFilter.PAST)
-                state.eventSink(PollHistoryEvents.SelectFilter(PollHistoryFilter.ONGOING))
+                state.eventSink(PollHistoryEvent.SelectFilter(PollHistoryFilter.ONGOING))
             }
             awaitItem().also { state ->
                 assertThat(state.activeFilter).isEqualTo(PollHistoryFilter.ONGOING)
@@ -114,10 +114,10 @@ class PollHistoryPresenterTest {
             presenter.present()
         }.test {
             val state = awaitItem()
-            state.eventSink(PollHistoryEvents.EndPoll(AN_EVENT_ID))
+            state.eventSink(PollHistoryEvent.EndPoll(AN_EVENT_ID))
             runCurrent()
             endPollAction.verifyExecutionCount(1)
-            state.eventSink(PollHistoryEvents.SelectPollAnswer(AN_EVENT_ID, "answer"))
+            state.eventSink(PollHistoryEvent.SelectPollAnswer(AN_EVENT_ID, "answer"))
             runCurrent()
             sendPollResponseAction.verifyExecutionCount(1)
             cancelAndConsumeRemainingEvents()
@@ -139,7 +139,7 @@ class PollHistoryPresenterTest {
             skipItems(1)
             val loadedState = awaitItem()
             assertThat(loadedState.isLoading).isFalse()
-            loadedState.eventSink(PollHistoryEvents.LoadMore)
+            loadedState.eventSink(PollHistoryEvent.LoadMore)
             backwardPaginationStatus.getAndUpdate { it.copy(isPaginating = true) }
             awaitItem().also { state ->
                 assertThat(state.isLoading).isTrue()

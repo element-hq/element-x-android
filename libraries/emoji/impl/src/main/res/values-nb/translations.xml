@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Aktiviteter"</string>
+  <string name="emoji_picker_category_flags">"Flagg"</string>
+  <string name="emoji_picker_category_foods">"Mat og drikke"</string>
+  <string name="emoji_picker_category_nature">"Dyr og natur"</string>
+  <string name="emoji_picker_category_objects">"Gjenstander"</string>
+  <string name="emoji_picker_category_people">"Smilefjes og mennesker"</string>
+  <string name="emoji_picker_category_places">"Reising og steder"</string>
+  <string name="emoji_picker_category_recent">"Nylige emojier"</string>
+  <string name="emoji_picker_category_symbols">"Symboler"</string>
+  <string name="emoji_picker_search_placeholder">"Søk etter emojier"</string>
+</resources>

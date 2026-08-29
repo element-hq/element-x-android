@@ -970,7 +970,7 @@ internal fun TestScope.createMediaViewerPresenter(
             localMediaFactory = localMediaFactory,
             systemClock = FakeSystemClock(),
             pagerKeysHandler = PagerKeysHandler(),
-            contentScannerService = { _, _, _ -> },
+            contentScannerService = { _, _ -> },
             contentValidationCache = NoopEventContentValidationCache(),
         ),
         room = room,

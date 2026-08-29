@@ -19,6 +19,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import io.element.android.features.preferences.impl.R
+import io.element.android.libraries.emoji.api.picker.NoOpEmojiPickerRenderer
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
@@ -466,6 +467,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setView(
     setContent {
         PreferencesRootView(
             state = state,
+            emojiPickerRenderer = NoOpEmojiPickerRenderer,
             onBackClick = onBackClick,
             onAddAccountClick = onAddAccountClick,
             onSecureBackupClick = onSecureBackupClick,

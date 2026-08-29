@@ -29,10 +29,12 @@ import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
+import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.matrix.api.timeline.item.event.SendHandleProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemDebugInfoProvider
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
@@ -84,11 +86,13 @@ fun anEventTimelineItem(
 fun aProfileDetails(
     displayName: String? = A_USER_NAME,
     displayNameAmbiguous: Boolean = false,
-    avatarUrl: String? = null
+    avatarUrl: String? = null,
+    displayedStatus: DisplayedStatus? = null,
 ): ProfileDetails = ProfileDetails.Ready(
     displayName = displayName,
     displayNameAmbiguous = displayNameAmbiguous,
     avatarUrl = avatarUrl,
+    displayedStatus = displayedStatus,
 )
 
 fun aProfileChangeMessageContent(
@@ -133,6 +137,10 @@ fun aStickerContent(
     source = mediaSource,
     threadInfo = threadInfo,
 )
+
+fun aRedactedContent(
+    threadInfo: EventThreadInfo? = null,
+) = RedactedContent(threadInfo = threadInfo)
 
 fun aTimelineItemDebugInfo(
     model: String = "Rust(Model())",

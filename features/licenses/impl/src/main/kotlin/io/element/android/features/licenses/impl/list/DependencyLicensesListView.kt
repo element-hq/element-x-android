@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.plus
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -34,6 +35,8 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,10 +55,11 @@ fun DependencyLicensesListView(
                 navigationIcon = { BackButton(onClick = onBackClick) },
             )
         },
+        contentWindowInsets = scaffoldScrollableContentInsets,
     ) { contentPadding ->
         Column(
             modifier = Modifier
-                .padding(contentPadding)
+                .padding(contentPadding + lazyColumnContentPadding)
                 .padding(horizontal = 16.dp)
         ) {
             if (state.licenses.isSuccess()) {
@@ -72,7 +76,9 @@ fun DependencyLicensesListView(
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
-            LazyColumn {
+            LazyColumn(
+                contentPadding = lazyColumnContentPadding,
+            ) {
                 when (state.licenses) {
                     is AsyncData.Failure -> item {
                         Text(
@@ -94,7 +100,7 @@ fun DependencyLicensesListView(
                     }
                     is AsyncData.Success -> items(state.licenses.data) { license ->
                         ListItem(
-                            headlineContent = { Text(license.safeName) },
+                            content = { Text(license.safeName) },
                             supportingContent = {
                                 Text(
                                     buildString {
@@ -120,7 +126,7 @@ fun DependencyLicensesListView(
 @PreviewsDayNight
 @Composable
 internal fun DependencyLicensesListViewPreview(
-    @PreviewParameter(DependencyLicensesListStateProvider::class) state: DependencyLicensesListState
+    @PreviewParameter(DependencyLicensesListStatePreviewParam::class) state: DependencyLicensesListState
 ) = ElementPreview {
     DependencyLicensesListView(
         state = state,

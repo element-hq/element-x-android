@@ -8,7 +8,6 @@
 package io.element.android.features.contentscanner.impl.di
 
 import io.element.android.features.contentscanner.api.ContentScannerService
-import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
 import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationValue
@@ -19,7 +18,7 @@ import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentVal
  * This is used when the content scanner feature is not enabled or available.
  */
 class AlwaysValidContentScannerService : ContentScannerService {
-    override fun scan(eventId: EventId, mediaSources: List<MediaSource>, contentValidationState: ContentValidationState) {
+    override fun scan(mediaSources: List<MediaSource>, contentValidationState: ContentValidationState) {
         // Always return success for the noop implementation
         for (mediaSource in mediaSources) {
             val url = mediaSource.safeUrl

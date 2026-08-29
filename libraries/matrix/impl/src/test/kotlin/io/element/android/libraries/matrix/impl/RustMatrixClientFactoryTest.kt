@@ -12,7 +12,6 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.scanner.ContentScannerUrlProvider
 import io.element.android.libraries.matrix.impl.auth.FakeProxyProvider
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClient
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClientBuilder
@@ -326,5 +325,5 @@ fun TestScope.createRustMatrixClientFactory(
     clientBuilderProvider = clientBuilderProvider,
     sqliteStoreBuilderProvider = FakeSqliteStoreBuilderProvider(),
     workManagerScheduler = workManagerScheduler,
-    contentScannerUrlProvider = contentScannerUrlProvider,
+    clientBuilderEnterpriseHook = { builder, _ -> builder },
 )

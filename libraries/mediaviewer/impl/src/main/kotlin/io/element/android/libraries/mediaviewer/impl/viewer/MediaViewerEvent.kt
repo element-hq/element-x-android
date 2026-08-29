@@ -31,5 +31,5 @@ sealed interface MediaViewerEvent {
     data class OnNavigateTo(val index: Int) : MediaViewerEvent
     data class LoadMore(val direction: Timeline.PaginationDirection) : MediaViewerEvent
     data class CancelLoadingMedia(val data: MediaViewerPageData.MediaViewerData) : MediaViewerEvent
-    data class ValidateMedia(val eventId: EventId, val mediaSource: MediaSource) : MediaViewerEvent
+    data class ValidateMedia(val mediaSource: MediaSource, val thumbnailMediaSource: MediaSource?) : MediaViewerEvent
 }

@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.plus
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -73,6 +74,8 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
@@ -94,7 +97,8 @@ fun KnockRequestsListView(
                     .padding(padding)
                     .consumeWindowInsets(padding),
             )
-        }
+        },
+        contentWindowInsets = scaffoldScrollableContentInsets,
     )
 }
 
@@ -104,15 +108,15 @@ private fun KnockRequestsListContent(
     modifier: Modifier = Modifier,
 ) {
     fun onAcceptClick(knockRequest: KnockRequestPresentable) {
-        state.eventSink(KnockRequestsListEvents.Accept(knockRequest))
+        state.eventSink(KnockRequestsListEvent.Accept(knockRequest))
     }
 
     fun onDeclineClick(knockRequest: KnockRequestPresentable) {
-        state.eventSink(KnockRequestsListEvents.Decline(knockRequest))
+        state.eventSink(KnockRequestsListEvent.Decline(knockRequest))
     }
 
     fun onBanClick(knockRequest: KnockRequestPresentable) {
-        state.eventSink(KnockRequestsListEvents.DeclineAndBan(knockRequest))
+        state.eventSink(KnockRequestsListEvent.DeclineAndBan(knockRequest))
     }
 
     var bottomPaddingInPixels by remember { mutableIntStateOf(0) }
@@ -132,7 +136,7 @@ private fun KnockRequestsListContent(
                         onAcceptClick = ::onAcceptClick,
                         onDeclineClick = ::onDeclineClick,
                         onBanClick = ::onBanClick,
-                        contentPadding = PaddingValues(bottom = bottomPaddingInPixels.toDp()),
+                        contentPadding = lazyColumnContentPadding + PaddingValues(bottom = bottomPaddingInPixels.toDp()),
                     )
                 }
             }
@@ -156,19 +160,19 @@ private fun KnockRequestsListContent(
             currentAction = state.currentAction,
             asyncAction = state.asyncAction,
             onConfirm = {
-                state.eventSink(KnockRequestsListEvents.ConfirmCurrentAction)
+                state.eventSink(KnockRequestsListEvent.ConfirmCurrentAction)
             },
             onRetry = {
-                state.eventSink(KnockRequestsListEvents.RetryCurrentAction)
+                state.eventSink(KnockRequestsListEvent.RetryCurrentAction)
             },
             onDismiss = {
-                state.eventSink(KnockRequestsListEvents.ResetCurrentAction)
+                state.eventSink(KnockRequestsListEvent.ResetCurrentAction)
             },
         )
         if (state.canAcceptAll) {
             KnockRequestsAcceptAll(
                 onClick = {
-                    state.eventSink(KnockRequestsListEvents.AcceptAll)
+                    state.eventSink(KnockRequestsListEvent.AcceptAll)
                 },
                 onHeightChange = { height ->
                     bottomPaddingInPixels = height
@@ -487,7 +491,7 @@ private fun KnockRequestsListTopBar(onBackClick: () -> Unit) {
 @PreviewsDayNight
 @Composable
 internal fun KnockRequestsListViewPreview(
-    @PreviewParameter(KnockRequestsListStateProvider::class) state: KnockRequestsListState
+    @PreviewParameter(KnockRequestsListStatePreviewParam::class) state: KnockRequestsListState
 ) = ElementPreview {
     KnockRequestsListView(
         state = state,

@@ -452,7 +452,6 @@
   <string name="dialog_video_quality_selector_subtitle_file_size">"アップロードできる最大サイズは %1$s です。"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"アップロードする画質を選択してください。"</string>
   <string name="dialog_video_quality_selector_title">"動画のアップロード品質を選択"</string>
-  <string name="emoji_picker_search_placeholder">"絵文字を検索"</string>
   <string name="error_account_already_logged_in">"この端末では既に %1$s としてログインしています。"</string>
   <string name="error_account_creation_not_possible">"Matrix Authentication Service とアカウント作成に対応するため、このホームサーバーはアップグレードが必要です。"</string>
   <string name="error_failed_creating_the_permalink">"固定リンクの作成に失敗しました"</string>

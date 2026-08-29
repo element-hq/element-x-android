@@ -10,7 +10,6 @@ package io.element.android.features.messages.impl.timeline.protection
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.contentscanner.api.ContentScannerService
-import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaPreviewConfig
 import io.element.android.libraries.matrix.api.media.MediaPreviewService
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
@@ -104,7 +103,7 @@ class TimelineProtectionPresenterTest {
         val mediaPreviewConfig = MediaPreviewConfig(mediaPreviewValue = MediaPreviewValue.Private, hideInviteAvatar = false)
         val mediaPreviewService = FakeMediaPreviewService(mediaPreviewConfigFlow = MutableStateFlow(mediaPreviewConfig))
         val room = FakeBaseRoom(initialRoomInfo = aRoomInfo(joinRule = JoinRule.Invite), roomCoroutineScope = backgroundScope)
-        val contentScannerService = lambdaRecorder { _: EventId, _: List<MediaSource>, state: ContentValidationState ->
+        val contentScannerService = lambdaRecorder { _: List<MediaSource>, state: ContentValidationState ->
             state.update(url, ContentValidationValue.Valid)
         }
         val presenter = createPresenter(
@@ -119,7 +118,6 @@ class TimelineProtectionPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink(
                 TimelineProtectionEvent.ValidateContent(
-                    eventId = AN_EVENT_ID,
                     mediaSources = listOf(MediaSource(url)),
                     validationState = validationState
                 )
@@ -135,7 +133,7 @@ class TimelineProtectionPresenterTest {
     private fun createPresenter(
         room: BaseRoom = FakeBaseRoom(),
         mediaPreviewService: MediaPreviewService = FakeMediaPreviewService(),
-        contentScannerService: ContentScannerService = ContentScannerService { _: EventId, _: List<MediaSource>, _: ContentValidationState -> },
+        contentScannerService: ContentScannerService = ContentScannerService { _: List<MediaSource>, _: ContentValidationState -> },
     ) = TimelineProtectionPresenter(
         mediaPreviewService = mediaPreviewService,
         room = room,
