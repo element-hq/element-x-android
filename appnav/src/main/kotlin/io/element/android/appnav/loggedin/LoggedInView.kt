@@ -47,7 +47,7 @@ fun LoggedInView(
     ) {
         SyncStateView(
             modifier = Modifier.align(Alignment.TopCenter),
-            isVisible = state.showSyncSpinner,
+            state = state.syncIndicatorState,
         )
     }
     when (state.pusherRegistrationState) {
