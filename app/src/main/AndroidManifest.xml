@@ -139,6 +139,12 @@
                 <data android:host="user" />
                 <data android:host="room" />
             </intent-filter>
+            <!--
+              Conversation shortcuts offered in the Direct Share row of the system share sheet.
+            -->
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
             <!-- Incoming share simple -->
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />

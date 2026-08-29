@@ -30,6 +30,7 @@ fun aNotificationData(
     senderIsNameAmbiguous: Boolean = false,
     roomDisplayName: String? = A_ROOM_NAME,
     roomJoinRule: JoinRule? = null,
+    isNoisy: Boolean = false,
 ): NotificationData {
     return NotificationData(
         sessionId = A_SESSION_ID,
@@ -45,7 +46,7 @@ fun aNotificationData(
         isDm = false,
         isSpace = isSpace,
         isEncrypted = false,
-        isNoisy = false,
+        isNoisy = isNoisy,
         timestamp = timestamp,
         content = content,
         hasMention = hasMention,
