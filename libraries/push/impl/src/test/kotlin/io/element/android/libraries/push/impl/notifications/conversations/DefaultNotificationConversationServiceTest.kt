@@ -216,6 +216,7 @@ class DefaultNotificationConversationServiceTest : RobolectricTest() {
     }
 
     @Test
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun `on conversation notifications turned off, all shortcuts are cleared`() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().context
         val appPreferencesStore = InMemoryAppPreferencesStore(isConversationNotificationsEnabled = true)
