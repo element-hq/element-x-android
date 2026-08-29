@@ -21,13 +21,17 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -78,7 +82,6 @@ import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.BigIcon
-import io.element.android.libraries.designsystem.components.async.AsyncFailure
 import io.element.android.libraries.designsystem.components.async.AsyncIndicator
 import io.element.android.libraries.designsystem.components.async.AsyncLoading
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -95,6 +98,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
+import io.element.android.libraries.matrix.ui.media.contentvalidation.collectMediaState
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
@@ -204,7 +208,6 @@ fun MediaViewerView(
             when (val dataForPage = state.listData[page]) {
                 is MediaViewerPageData.Failure -> {
                     MediaViewerErrorPage(
-                        throwable = dataForPage.throwable,
                         onDismiss = onBackClick,
                     )
                 }
@@ -217,20 +220,24 @@ fun MediaViewerView(
                     )
                 }
                 is MediaViewerPageData.MediaViewerData -> {
-                    val eventId = dataForPage.eventId
-
-                    val isMediaValid = dataForPage.validationState.getCurrentMediaState(dataForPage.mediaSource.safeUrl).isValid()
+                    // We need to check the 2 validation states and can't use the overall state because these might be part of a gallery event
+                    // If that was the case, the overall state would be invalid if any of the sources for any media in the gallery was invalid, e.g.:
+                    // Media 1: mediaSource = valid, thumbnailSource = valid
+                    // Media 2: mediaSource = invalid, thumbnailSource = valid
+                    // The overall state would be invalid, so the whole gallery event and all its medias would be considered invalid.
+                    val mediaValidationState by dataForPage.validationState.collectMediaState(dataForPage.mediaSource.safeUrl)
+                    val thumbnailValidationState by dataForPage.validationState.collectMediaState(dataForPage.thumbnailSource?.safeUrl)
 
                     // Check if the media to display is valid or dangerous
-                    LaunchedEffect(eventId) {
-                        if (eventId != null) {
-                            state.eventSink(MediaViewerEvent.ValidateMedia(eventId, dataForPage.mediaSource))
-                        }
+                    LaunchedEffect(Unit) {
+                        state.eventSink(
+                            MediaViewerEvent.ValidateMedia(mediaSource = dataForPage.mediaSource, thumbnailMediaSource = dataForPage.thumbnailSource)
+                        )
                     }
 
                     var bottomPaddingInPixels by remember { mutableIntStateOf(defaultBottomPaddingInPixels) }
-                    val loadMediaOnVisibilityChangedModifier = remember(isMediaValid) {
-                        if (isMediaValid == true) {
+                    val loadMediaOnVisibilityChangedModifier = remember(mediaValidationState) {
+                        if (mediaValidationState.isValid() && thumbnailValidationState.isValid()) {
                             Modifier.onVisibilityChanged(minDurationMs = 200L) { isVisible ->
                                 if (isVisible) {
                                     state.eventSink(MediaViewerEvent.LoadMedia(dataForPage))
@@ -383,6 +390,8 @@ private fun MediaViewerPage(
     ) {
         val downloadedMedia by data.downloadedMedia
         val showProgress = rememberShowProgress(downloadedMedia)
+        val mediaValidationState by data.validationState.collectMediaState(data.mediaSource.safeUrl)
+        val thumbnailValidationState by data.validationState.collectMediaState(data.thumbnailSource?.safeUrl)
 
         Box(
             modifier = Modifier
@@ -390,7 +399,7 @@ private fun MediaViewerPage(
                 .navigationBarsPadding()
         ) {
             AnimatedVisibility(
-                visible = data.validationState.getCurrentMediaState(data.mediaSource.safeUrl).isLoading(),
+                visible = mediaValidationState.isLoading(),
                 modifier = Modifier.padding(top = containerPadding.calculateTopPadding()).align(Alignment.TopCenter),
                 enter = fadeIn(spring(stiffness = 500F)),
                 exit = fadeOut(spring(stiffness = 500F)),
@@ -403,6 +412,7 @@ private fun MediaViewerPage(
             if (showProgress) {
                 LinearProgressIndicator(
                     modifier = Modifier
+                        .padding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top).asPaddingValues())
                         .fillMaxWidth()
                         .height(2.dp)
                 )
@@ -423,20 +433,18 @@ private fun MediaViewerPage(
                     }
                 }
 
-                val isMediaValid = data.validationState.getCurrentMediaState(data.mediaSource.safeUrl).isValid()
-
-                if (isMediaValid == false) {
+                if (mediaValidationState.isInvalid() || thumbnailValidationState.isInvalid()) {
                     Column(
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.Center,
                     ) {
                         IconTitleSubtitleMolecule(
                             iconStyle = BigIcon.Style.AlertSolid,
-                            title = "The file is not safe",
-                            subTitle = "Preview and download have been disabled.",
+                            title = stringResource(CommonStrings.content_scanner_unsafe_title),
+                            subTitle = stringResource(CommonStrings.content_scanner_unsafe_message),
                         )
                     }
-                } else {
+                } else if (mediaValidationState.isValid() && thumbnailValidationState.isValid()) {
                     LocalMediaView(
                         modifier = Modifier.fillMaxSize(),
                         isDisplayed = isDisplayed,
@@ -462,6 +470,7 @@ private fun MediaViewerPage(
                         )
                     }
                 }
+
                 if (showError) {
                     ErrorView(
                         errorMessage = stringResource(id = CommonStrings.error_unknown),
@@ -496,7 +505,6 @@ private fun MediaViewerLoadingPage(
 
 @Composable
 private fun MediaViewerErrorPage(
-    throwable: Throwable,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -510,9 +518,10 @@ private fun MediaViewerErrorPage(
                 .navigationBarsPadding(),
             contentAlignment = Alignment.Center
         ) {
-            AsyncFailure(
-                throwable = throwable,
-                onRetry = null
+            IconTitleSubtitleMolecule(
+                iconStyle = BigIcon.Style.AlertSolid,
+                title = stringResource(CommonStrings.common_something_went_wrong),
+                subTitle = stringResource(CommonStrings.common_something_went_wrong_message),
             )
         }
     }
@@ -649,7 +658,8 @@ private fun MediaViewerBottomBar(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(max = if (hasCompactHeightWindowSize()) maxCaptionHeightLandscape else maxCaptionHeightPortrait),
+                    .heightIn(max = if (hasCompactHeightWindowSize()) maxCaptionHeightLandscape else maxCaptionHeightPortrait)
+                    .padding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal).asPaddingValues()),
             ) {
                 val textToRender = when {
                     formattedCaption != null -> formattedCaption
@@ -739,7 +749,7 @@ private fun ErrorView(
 // Only preview in dark, dark theme is forced on the Node.
 @Preview
 @Composable
-internal fun MediaViewerViewPreview(@PreviewParameter(MediaViewerStateProvider::class) state: MediaViewerState) = ElementPreviewDark {
+internal fun MediaViewerViewPreview(@PreviewParameter(MediaViewerStatePreviewParam::class) state: MediaViewerState) = ElementPreviewDark {
     MediaViewerView(
         state = state,
         audioFocus = null,
@@ -750,7 +760,7 @@ internal fun MediaViewerViewPreview(@PreviewParameter(MediaViewerStateProvider::
 
 @Preview(device = "${Devices.PHONE}, orientation=landscape")
 @Composable
-internal fun MediaViewerViewLandscapePreview(@PreviewParameter(MediaViewerStateProvider::class) state: MediaViewerState) = ElementPreviewDark {
+internal fun MediaViewerViewLandscapePreview(@PreviewParameter(MediaViewerStatePreviewParam::class) state: MediaViewerState) = ElementPreviewDark {
     MediaViewerView(
         state = state,
         audioFocus = null,

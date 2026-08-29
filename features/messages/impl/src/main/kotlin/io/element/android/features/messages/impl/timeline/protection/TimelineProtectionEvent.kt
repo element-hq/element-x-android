@@ -15,7 +15,6 @@ import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentVal
 sealed interface TimelineProtectionEvent {
     data class ShowContent(val eventId: EventId?) : TimelineProtectionEvent
     data class ValidateContent(
-        val eventId: EventId,
         val mediaSources: List<MediaSource>,
         val validationState: ContentValidationState,
     ) : TimelineProtectionEvent

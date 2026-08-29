@@ -45,7 +45,7 @@ fun AvatarListItem(
 ) {
     ListItem(
         modifier = modifier,
-        headlineContent = { Text(headline) },
+        content = { Text(headline) },
         supportingContent = supportingText?.let { @Composable { Text(it) } },
         leadingContent = ListItemContent.Custom { _ ->
             Avatar(

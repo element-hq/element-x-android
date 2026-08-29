@@ -84,9 +84,8 @@ class MediaGalleryPresenter(
                     if (groupedItems is AsyncData.Success) {
                         val items = groupedItems.data.getItems(mode)
                         items.forEach { item ->
-                            if (item is MediaItem.Event) {
-                                val eventId = item.eventId() ?: return@forEach
-                                coroutineScope.validateMedia(eventId, item)
+                            if (item is MediaItem.Event && item.eventId() != null) {
+                                coroutineScope.validateMedia(item)
                             }
                         }
                     }
@@ -237,7 +236,7 @@ class MediaGalleryPresenter(
             }
     }
 
-    private fun CoroutineScope.validateMedia(eventId: EventId, mediaItem: MediaItem.Event) {
+    private fun CoroutineScope.validateMedia(mediaItem: MediaItem.Event) {
         launch {
             val thumbnailSource = mediaItem.thumbnailSource()
             val mediaSource = mediaItem.mediaSource()
@@ -248,7 +247,7 @@ class MediaGalleryPresenter(
                 return@launch
             }
 
-            contentScannerService.scan(eventId, listOfNotNull(thumbnailSource, mediaSource).distinct(), contentValidationState)
+            contentScannerService.scan(listOfNotNull(thumbnailSource, mediaSource).distinct(), contentValidationState)
         }
     }
 

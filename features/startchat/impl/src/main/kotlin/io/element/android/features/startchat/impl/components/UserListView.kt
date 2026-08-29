@@ -10,21 +10,29 @@ package io.element.android.features.startchat.impl.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.plus
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.features.startchat.impl.userlist.UserListEvents
+import io.element.android.features.startchat.impl.userlist.UserListEvent
 import io.element.android.features.startchat.impl.userlist.UserListState
-import io.element.android.features.startchat.impl.userlist.UserListStateProvider
+import io.element.android.features.startchat.impl.userlist.UserListStatePreviewParam
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.ListSectionHeader
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.CheckableUserRow
 import io.element.android.libraries.matrix.ui.components.CheckableUserRowData
@@ -44,8 +52,10 @@ fun UserListView(
     Column(
         modifier = modifier,
     ) {
+        val contentPaddingValues = WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal).asPaddingValues()
         SearchUserBar(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
+                .padding(contentPaddingValues),
             queryState = state.searchQuery,
             resultState = state.searchResults,
             selectedUsers = state.selectedUsers,
@@ -53,30 +63,32 @@ fun UserListView(
             showLoader = state.showSearchLoader,
             isMultiSelectionEnable = state.isMultiSelectionEnabled,
             showBackButton = showBackButton,
-            onActiveChange = { state.eventSink(UserListEvents.OnSearchActiveChanged(it)) },
+            onActiveChange = { state.eventSink(UserListEvent.OnSearchActiveChanged(it)) },
             onUserSelect = {
-                state.eventSink(UserListEvents.AddToSelection(it))
+                state.eventSink(UserListEvent.AddToSelection(it))
                 onSelectUser(it)
             },
             onUserDeselect = {
-                state.eventSink(UserListEvents.RemoveFromSelection(it))
+                state.eventSink(UserListEvent.RemoveFromSelection(it))
                 onDeselectUser(it)
             },
         )
 
         if (state.isMultiSelectionEnabled && !state.isSearchActive && state.selectedUsers.isNotEmpty()) {
             SelectedUsersRowList(
-                contentPadding = PaddingValues(16.dp),
+                contentPadding = contentPaddingValues + PaddingValues(16.dp),
                 selectedUsers = state.selectedUsers,
                 autoScroll = true,
                 onUserRemove = {
-                    state.eventSink(UserListEvents.RemoveFromSelection(it))
+                    state.eventSink(UserListEvent.RemoveFromSelection(it))
                     onDeselectUser(it)
                 },
             )
         }
         if (!state.isSearchActive && state.recentDirectRooms.isNotEmpty()) {
-            LazyColumn {
+            LazyColumn(
+                contentPadding = lazyColumnContentPadding,
+            ) {
                 item {
                     ListSectionHeader(
                         title = stringResource(id = CommonStrings.common_suggestions),
@@ -92,10 +104,10 @@ fun UserListView(
                             checked = isSelected,
                             onCheckedChange = {
                                 if (isSelected) {
-                                    state.eventSink(UserListEvents.RemoveFromSelection(recentDirectRoom.matrixUser))
+                                    state.eventSink(UserListEvent.RemoveFromSelection(recentDirectRoom.matrixUser))
                                     onDeselectUser(recentDirectRoom.matrixUser)
                                 } else {
-                                    state.eventSink(UserListEvents.AddToSelection(recentDirectRoom.matrixUser))
+                                    state.eventSink(UserListEvent.AddToSelection(recentDirectRoom.matrixUser))
                                     onSelectUser(recentDirectRoom.matrixUser)
                                 }
                             },
@@ -117,7 +129,7 @@ fun UserListView(
 
 @PreviewsDayNight
 @Composable
-internal fun UserListViewPreview(@PreviewParameter(UserListStateProvider::class) state: UserListState) = ElementPreview {
+internal fun UserListViewPreview(@PreviewParameter(UserListStatePreviewParam::class) state: UserListState) = ElementPreview {
     UserListView(
         state = state,
         onSelectUser = {},

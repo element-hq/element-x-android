@@ -11,7 +11,7 @@
   <string name="screen_account_provider_signup_title">"您即將在 %s 建立帳號"</string>
   <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org 由 Matrix.org 基金會營運，是用於安全、去中心化通訊的公共 Matrix 網路上的大型免費伺服器。"</string>
   <string name="screen_change_account_provider_other">"其他"</string>
-  <string name="screen_change_account_provider_subtitle">"使用不同的帳戶提供者，例如您自己的伺服器或工作帳號。"</string>
+  <string name="screen_change_account_provider_subtitle">"使用不同的帳號提供者，例如您自己的伺服器或工作帳號。"</string>
   <string name="screen_change_account_provider_title">"更改帳號提供者"</string>
   <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"%1$s 需要 Element Pro 應用程式。請從商店下載。"</string>
@@ -28,7 +28,7 @@
   <string name="screen_change_server_subtitle">"您的伺服器地址？"</string>
   <string name="screen_change_server_title">"選擇您的伺服器"</string>
   <string name="screen_create_account_title">"建立帳號"</string>
-  <string name="screen_login_error_deactivated_account">"這個帳號已被停用。"</string>
+  <string name="screen_login_error_deactivated_account">"此帳號已被刪除。"</string>
   <string name="screen_login_error_invalid_credentials">"不正確的使用者名稱或密碼"</string>
   <string name="screen_login_error_invalid_user_id">"此非有效的使用者識別字串。預期的格式：‘@user:homeserver.org’"</string>
   <string name="screen_login_error_refresh_tokens">"此伺服器已設定為使用重新整理權杖。使用以密碼為基礎的登入方式時，不支援這些功能。"</string>

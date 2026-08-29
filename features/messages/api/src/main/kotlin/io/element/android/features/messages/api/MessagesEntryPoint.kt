@@ -53,7 +53,16 @@ interface MessagesEntryPoint : FeatureEntryPoint {
         callback: Callback,
     ): Node
 
+    /**
+     * Lets callers outside this feature drive an already created messages node, for navigation that has to happen after it is attached.
+     */
     interface NodeProxy {
+        /**
+         * Opens a thread on top of the messages screen, suspending until the thread node is attached.
+         *
+         * @param threadId the thread to open.
+         * @param focusedEventId the event to scroll to within the thread, or `null` to open at the latest message.
+         */
         suspend fun attachThread(threadId: ThreadId, focusedEventId: EventId?)
     }
 }

@@ -32,7 +32,9 @@ data class MessageContent(
     val type: MessageType,
 ) : EventContent
 
-data object RedactedContent : EventContent
+data class RedactedContent(
+    val threadInfo: EventThreadInfo?,
+) : EventContent
 
 data class StickerContent(
     val filename: String,
@@ -120,7 +122,10 @@ data object LegacyCallInviteContent : EventContent
 
 data class CallNotifyContent(
     val callIntent: CallIntent,
-    val declinedBy: List<UserId>
+    val declinedBy: List<UserId>,
+    val activeMembers: List<UserId>,
+    val isJoined: Boolean,
+    val callStartTsMillis: Long?,
 ) : EventContent
 
 data object UnknownContent : EventContent

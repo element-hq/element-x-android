@@ -189,7 +189,7 @@ fun ContentValidationState.collectOverallState(): State<ContentValidationValue> 
 @Composable
 fun ContentValidationState.collectMediaState(url: String?): State<ContentValidationValue> {
     if (url == null) {
-        return remember { mutableStateOf(ContentValidationValue.Unknown) }
+        return remember { mutableStateOf(ContentValidationValue.Valid) }
     }
 
     return produceState(getCurrentMediaState(url), key1 = url) {

@@ -194,7 +194,7 @@ class MediaViewerPresenter(
                 is MediaViewerEvent.LoadMore -> coroutineScope.launch {
                     dataSource.loadMore(event.direction)
                 }
-                is MediaViewerEvent.ValidateMedia -> dataSource.validateMedia(event.eventId, event.mediaSource)
+                is MediaViewerEvent.ValidateMedia -> dataSource.validateMedia(event.mediaSource, event.thumbnailMediaSource)
             }
         }
 

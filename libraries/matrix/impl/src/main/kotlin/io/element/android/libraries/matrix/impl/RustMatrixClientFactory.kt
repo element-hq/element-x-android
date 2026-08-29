@@ -9,6 +9,7 @@
 package io.element.android.libraries.matrix.impl
 
 import dev.zacsweers.metro.Inject
+import io.element.android.features.enterprise.api.ClientBuilderEnterpriseHook
 import io.element.android.libraries.androidutils.crypto.ClientSecret
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.data.ByteUnit
@@ -17,9 +18,8 @@ import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.paths.SessionPaths
-import io.element.android.libraries.matrix.api.scanner.ContentScannerUrlProvider
 import io.element.android.libraries.matrix.impl.analytics.UtdTracker
 import io.element.android.libraries.matrix.impl.paths.getSessionPaths
 import io.element.android.libraries.matrix.impl.proxy.ProxyProvider
@@ -37,7 +37,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientBuilder
-import org.matrix.rustcomponents.sdk.ContentScanner
 import org.matrix.rustcomponents.sdk.CrossProcessLockConfig
 import org.matrix.rustcomponents.sdk.RequestConfig
 import org.matrix.rustcomponents.sdk.Session
@@ -70,7 +69,7 @@ class RustMatrixClientFactory(
     private val clientBuilderProvider: ClientBuilderProvider,
     private val sqliteStoreBuilderProvider: SqliteStoreBuilderProvider,
     private val workManagerScheduler: WorkManagerScheduler,
-    private val contentScannerUrlProvider: ContentScannerUrlProvider,
+    private val clientBuilderEnterpriseHook: ClientBuilderEnterpriseHook,
 ) {
     private val sessionDelegate = RustClientSessionDelegate(
         sessionStore = sessionStore,
@@ -82,35 +81,25 @@ class RustMatrixClientFactory(
         // This secret is called 'passphrase' for historical reasons, but it can be a raw key or an actual passphrase
         val clientSecret = sessionData.passphrase?.let(ClientSecret::fromString)
         val sessionPaths = sessionData.getSessionPaths()
-        val isMessageSearchAvailable = isMessageSearchAvailable(clientSecret)
+        val isMessageSearchAvailable = featureFlagService.isFeatureEnabled(FeatureFlags.MessageSearch)
         val indexDirectory = File(sessionPaths.fileDirectory, SEARCH_INDEX_DIRECTORY)
 
         if (!isMessageSearchAvailable && indexDirectory.exists()) {
             // With search off, events reach the event cache unindexed and the index can never
             // catch up on them. Delete it so the next enable rebuilds it from a state where
             // coverage can actually be guaranteed, instead of resuming a silently stale index.
-            Timber.tag("RustMatrixClient").i("Message search is unavailable, deleting the stale search index")
+            Timber.tag("RustMatrixClient").i("Message search is disabled, deleting the stale search index")
             indexDirectory.deleteRecursively()
         }
 
-        val client = buildAndRestoreClient(sessionData, clientSecret, isMessageSearchAvailable)
-        create(client, sessionData, isMessageSearchAvailable)
-    }
-
-    private suspend fun buildAndRestoreClient(
-        sessionData: SessionData,
-        clientSecret: ClientSecret?,
-        isMessageSearchAvailable: Boolean,
-    ): Client {
-        val baseClientBuilder = getBaseClientBuilder(
-            sessionPaths = sessionData.getSessionPaths(),
+        val client = getBaseClientBuilder(
+            sessionPaths = sessionPaths,
             clientSecret = clientSecret,
             slidingSyncType = ClientBuilderSlidingSync.Restored,
             isMessageSearchAvailable = isMessageSearchAvailable,
         )
-        val client = baseClientBuilder.clientBuilder
             .homeserverUrl(sessionData.homeserverUrl)
-            .username(sessionData.userId)
+            .let { (clientBuilderEnterpriseHook(RustMatrixClientBuilder(it), SessionId(sessionData.userId)) as RustMatrixClientBuilder).inner }
             .use { it.build() }
 
         client.setMediaRetentionPolicy(
@@ -127,7 +116,8 @@ class RustMatrixClientFactory(
         )
 
         client.restoreSession(sessionData.toSession())
-        return client
+
+        create(client, sessionData, isMessageSearchAvailable)
     }
 
     suspend fun create(
@@ -144,26 +134,10 @@ class RustMatrixClientFactory(
 
         client.setUtdDelegate(UtdTracker(analyticsService))
 
-        val domainName = UserId(client.userId()).domainName
-        // If a content scanner URL is available for the homeserver, create a RustContentScanner and set it on the client.
-        // This allows the SDK to use the content scanner for automatic media scanning.
-        // If no content scanner URL is available, the contentScanner will be null.
-        val contentScanner = domainName?.let {
-            contentScannerUrlProvider.getContentScannerUrl(domainName)
-                .getOrNull()
-                ?.let { contentScannerUrl ->
-                    val contentScanner = ContentScanner(contentScannerUrl)
-                    client.setContentScanner(contentScanner)
-                    RustContentScanner(
-                        client = client,
-                        rustScanner = contentScanner,
-                    )
-                }
-        }
-
         val syncService = client.syncService()
             .withSharePos(true)
             .withOfflineMode()
+            .withProfilesExtension()
             .finish()
 
         return RustMatrixClient(
@@ -180,27 +154,20 @@ class RustMatrixClientFactory(
             featureFlagService = featureFlagService,
             analyticsService = analyticsService,
             workManagerScheduler = workManagerScheduler,
-            contentScanner = contentScanner,
+            contentScanner = client.contentScanner()?.let { RustContentScanner(client, it) },
             isMessageSearchAvailable = isMessageSearchAvailable,
         ).also {
             Timber.tag("RustMatrixClient").i("Creating Client with access token '$anonymizedAccessToken' and refresh token '$anonymizedRefreshToken'")
         }
     }
 
-    private suspend fun isMessageSearchAvailable(clientSecret: ClientSecret?): Boolean =
-        featureFlagService.isFeatureEnabled(FeatureFlags.MessageSearch) && clientSecret != null
-
     internal suspend fun getBaseClientBuilder(
         sessionPaths: SessionPaths,
         clientSecret: ClientSecret?,
         slidingSyncType: ClientBuilderSlidingSync,
-        // Null reads the live flag; the restore path passes its own snapshot instead, so a flag
-        // flipped mid-restore cannot make the coverage bookkeeping and the built client disagree
-        // about whether an index exists.
-        isMessageSearchAvailable: Boolean? = null,
-    ): BaseClientBuilder {
-        val messageSearchAvailable = isMessageSearchAvailable ?: isMessageSearchAvailable(clientSecret)
-        val clientBuilder = clientBuilderProvider.provide()
+        isMessageSearchAvailable: Boolean,
+    ): ClientBuilder {
+        return clientBuilderProvider.provide()
             .run {
                 sqliteStoreBuilderProvider.provide(sessionPaths)
                     .secret(clientSecret)
@@ -229,16 +196,12 @@ class RustMatrixClientFactory(
             .enableShareHistoryOnInvite(true)
             .threadsEnabled(featureFlagService.isFeatureEnabled(FeatureFlags.Threads), threadSubscriptions = false)
             .run {
-                // Note: every ClientBuilder call returns a NEW reference, so this must stay in
-                // expression position — using `if (flag) withSearchIndexStore(...)` as a statement
-                // would silently drop the result and leave the index disabled.
-                if (messageSearchAvailable) {
-                    // The index is encrypted at rest with the session secret, reusing the exact
-                    // string the SDK's SQLite stores already use. When there is no secret we skip
-                    // indexing entirely rather than writing message bodies to disk in plaintext.
+                if (isMessageSearchAvailable) {
+                    // The index is encrypted at rest with the same secret the SDK's SQLite stores
+                    // use, or left unencrypted for sessions without one, matching those stores.
                     withSearchIndexStore(
                         path = File(sessionPaths.fileDirectory, SEARCH_INDEX_DIRECTORY).absolutePath,
-                        password = checkNotNull(clientSecret).formattedAsString(),
+                        password = clientSecret?.formattedAsString(),
                     )
                 } else {
                     this
@@ -269,17 +232,8 @@ class RustMatrixClientFactory(
                 // Workaround for non-nullable proxy parameter in the SDK, since each call to the ClientBuilder returns a new reference we need to keep
                 proxyProvider.provides()?.let { proxy(it) } ?: this
             }
-        return BaseClientBuilder(
-            clientBuilder = clientBuilder,
-            isMessageSearchAvailable = messageSearchAvailable,
-        )
     }
 }
-
-internal data class BaseClientBuilder(
-    val clientBuilder: ClientBuilder,
-    val isMessageSearchAvailable: Boolean,
-)
 
 /**
  * Directory holding the local message search index, under the session's file directory.

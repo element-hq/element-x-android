@@ -91,10 +91,36 @@ class ShowQrCodePresenterTest {
         }
     }
 
+    @Test
+    fun `present - when handler emits QrRotating, the presenter does not emit anything when rotation is disabled`() = runTest {
+        val linkMobileHandler = FakeLinkMobileHandler(
+            startResult = {},
+        )
+        val matrixClient = FakeMatrixClient(
+            sessionCoroutineScope = backgroundScope,
+            createLinkMobileHandlerResult = { Result.success(linkMobileHandler) },
+        )
+        val linkNewMobileHandler = LinkNewMobileHandler(matrixClient)
+        linkNewMobileHandler.createAndStartNewHandler()
+        createPresenter(
+            linkNewMobileHandler = linkNewMobileHandler,
+            maxQrCodeRotation = 0,
+        ).test {
+            awaitItem()
+            linkMobileHandler.emitStep(
+                LinkMobileStep.QrRotating
+            )
+            runCurrent()
+            expectNoEvents()
+        }
+    }
+
     private fun createPresenter(
         linkNewMobileHandler: LinkNewMobileHandler = LinkNewMobileHandler(FakeMatrixClient()),
+        maxQrCodeRotation: Int = 10,
     ) = ShowQrCodePresenter(
         initialData = "DATA",
+        maxQrCodeRotation = maxQrCodeRotation,
         linkNewMobileHandler = linkNewMobileHandler,
     )
 }

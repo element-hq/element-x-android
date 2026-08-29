@@ -27,7 +27,7 @@ fun ${NAME}View(
 @PreviewsDayNight
 @Composable
 internal fun ${NAME}ViewPreview(
-    @PreviewParameter(${NAME}StateProvider::class) state: ${NAME}State
+    @PreviewParameter(${NAME}StatePreviewParam::class) state: ${NAME}State
 ) = ElementPreview {
     ${NAME}View(
         state = state,

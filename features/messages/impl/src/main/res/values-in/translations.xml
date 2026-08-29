@@ -7,15 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"Dienkripsi oleh perangkat yang tidak dikenal atau dihapus."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Dienkripsi oleh perangkat yang tidak diverifikasi oleh pemiliknya."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Dienkripsi oleh pengguna yang tidak terverifikasi."</string>
-  <string name="emoji_picker_category_activity">"Aktivitas"</string>
-  <string name="emoji_picker_category_flags">"Bendera"</string>
-  <string name="emoji_picker_category_foods">"Makanan &amp; Minuman"</string>
-  <string name="emoji_picker_category_nature">"Hewan &amp; Alam"</string>
-  <string name="emoji_picker_category_objects">"Objek"</string>
-  <string name="emoji_picker_category_people">"Senyuman &amp; Orang"</string>
-  <string name="emoji_picker_category_places">"Wisata &amp; Tempat"</string>
-  <string name="emoji_picker_category_recent">"Emojis Sebelumnya"</string>
-  <string name="emoji_picker_category_symbols">"Simbol"</string>
   <string name="screen_image_edition_a11y_rotate_to_the_left">"Putar gambar ke kiri"</string>
   <plurals name="screen_image_edition_a11y_rotation_state">
     <item quantity="other">"%1$d derajat"</item>

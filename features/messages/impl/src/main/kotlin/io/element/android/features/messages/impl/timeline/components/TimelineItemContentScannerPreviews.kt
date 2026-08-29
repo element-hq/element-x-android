@@ -149,6 +149,22 @@ internal fun TimelineItemScanningContentFailedPreview() = ElementPreview {
 
 @PreviewsDayNight
 @Composable
+internal fun TimelineItemScanningContentNotFoundPreview() = ElementPreview {
+    val cache = remember {
+        InMemoryEventContentValidationCache(initial = mapOf(
+            AN_EVENT_ID to NoopContentValidationState(ContentValidationValue.UnrecoverableError(IllegalStateException("Not found")))
+        ))
+    }
+    CompositionLocalProvider(LocalEventContentValidationState provides cache) {
+        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            ATimelineItemEventRow(event = aTimelineItemEvent(eventId = AN_EVENT_ID, content = aTimelineItemImageContent()))
+            ATimelineItemEventRow(event = aTimelineItemEvent(eventId = AN_EVENT_ID, content = aTimelineItemImageContent(caption = "A caption")))
+        }
+    }
+}
+
+@PreviewsDayNight
+@Composable
 internal fun TimelineItemScanningContentWithInvalidRepliesPreview() = ElementPreview {
     val cache = remember {
         InMemoryEventContentValidationCache(initial = mapOf(AN_EVENT_ID to NoopContentValidationState(ContentValidationValue.Invalid)))
@@ -299,7 +315,12 @@ private fun inReplyToInvalidContent(): InReplyToDetails.Ready = InReplyToDetails
         )
     ),
     textContent = "A text content",
-    senderProfile = ProfileDetails.Ready(displayName = "Sender", displayNameAmbiguous = false, avatarUrl = null)
+    senderProfile = ProfileDetails.Ready(
+        displayName = "Sender",
+        displayNameAmbiguous = false,
+        avatarUrl = null,
+        displayedStatus = null
+    )
 )
 
 private fun inReplyToTextContent(): InReplyToDetails.Ready = InReplyToDetails.Ready(
@@ -316,5 +337,10 @@ private fun inReplyToTextContent(): InReplyToDetails.Ready = InReplyToDetails.Re
         )
     ),
     textContent = "A text content",
-    senderProfile = ProfileDetails.Ready(displayName = "Sender", displayNameAmbiguous = false, avatarUrl = null)
+    senderProfile = ProfileDetails.Ready(
+        displayName = "Sender",
+        displayNameAmbiguous = false,
+        avatarUrl = null,
+        displayedStatus = null
+    )
 )

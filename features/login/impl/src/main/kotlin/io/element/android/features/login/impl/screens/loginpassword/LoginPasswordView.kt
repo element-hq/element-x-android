@@ -56,6 +56,7 @@ import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.form.textFieldState
+import io.element.android.libraries.designsystem.modifiers.bringIntoViewOnImeVisible
 import io.element.android.libraries.designsystem.modifiers.onTabOrEnterKeyFocusNext
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -96,7 +97,7 @@ fun LoginPasswordView(
 
         autofillManager?.commit()
 
-        state.eventSink(LoginPasswordEvents.Submit)
+        state.eventSink(LoginPasswordEvent.Submit)
     }
 
     Scaffold(
@@ -165,7 +166,7 @@ fun LoginPasswordView(
 
             if (state.loginAction is AsyncData.Failure) {
                 LoginErrorDialog(error = state.loginAction.error, onDismiss = {
-                    state.eventSink(LoginPasswordEvents.ClearError)
+                    state.eventSink(LoginPasswordEvent.ClearError)
                 })
             }
         }
@@ -191,6 +192,7 @@ private fun LoginForm(
             enabled = !isLoading,
             modifier = Modifier
                 .fillMaxWidth()
+                .bringIntoViewOnImeVisible()
                 .onTabOrEnterKeyFocusNext(focusManager)
                 .testTag(TestTags.loginEmailUsername)
                 .semantics {
@@ -200,7 +202,7 @@ private fun LoginForm(
             onValueChange = {
                 val sanitized = it.sanitize()
                 loginFieldState = sanitized
-                eventSink(LoginPasswordEvents.SetLogin(sanitized))
+                eventSink(LoginPasswordEvent.SetLogin(sanitized))
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
@@ -218,7 +220,7 @@ private fun LoginForm(
                             role = Role.Button,
                         ) {
                             loginFieldState = ""
-                            eventSink(LoginPasswordEvents.SetLogin(""))
+                            eventSink(LoginPasswordEvent.SetLogin(""))
                         }
                     ) {
                         Icon(
@@ -243,6 +245,7 @@ private fun LoginForm(
             enabled = !isLoading,
             modifier = Modifier
                 .fillMaxWidth()
+                .bringIntoViewOnImeVisible()
                 .onTabOrEnterKeyFocusNext(focusManager)
                 .testTag(TestTags.loginPassword)
                 .semantics {
@@ -251,7 +254,7 @@ private fun LoginForm(
             onValueChange = {
                 val sanitized = it.sanitize()
                 passwordFieldState = sanitized
-                eventSink(LoginPasswordEvents.SetPassword(sanitized))
+                eventSink(LoginPasswordEvent.SetPassword(sanitized))
             },
             placeholder = stringResource(CommonStrings.common_password),
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
@@ -274,10 +277,10 @@ private fun LoginForm(
 }
 
 /**
- * Ensure that the string does not contain any new line characters, which can happen when pasting values.
+ * Ensure that the string does not contain any line separator, which can happen when pasting values.
  */
 private fun String.sanitize(): String {
-    return replace("\n", "")
+    return filterNot { it == '\n' || it == '\r' }
 }
 
 @Composable
@@ -291,7 +294,7 @@ private fun LoginErrorDialog(error: Throwable, onDismiss: () -> Unit) {
 
 @PreviewsDayNight
 @Composable
-internal fun LoginPasswordViewPreview(@PreviewParameter(LoginPasswordStateProvider::class) state: LoginPasswordState) = ElementPreview {
+internal fun LoginPasswordViewPreview(@PreviewParameter(LoginPasswordStatePreviewParam::class) state: LoginPasswordState) = ElementPreview {
     LoginPasswordView(
         state = state,
         onBackClick = {},

@@ -51,10 +51,11 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.captionOrNull
+import io.element.android.features.messages.impl.timeline.model.event.htmlCaptionOrNull
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.voicemessages.composer.DefaultVoiceMessageComposerPresenter
 import io.element.android.features.roomcall.api.RoomCallState
-import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvent
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.architecture.AsyncData
@@ -69,6 +70,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatch
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
+import io.element.android.libraries.emoji.api.recentemojis.AddRecentEmoji
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -84,9 +86,9 @@ import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsSta
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.reply.map
+import io.element.android.libraries.matrix.ui.model.dmUserStatus
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
-import io.element.android.libraries.recentemojis.api.AddRecentEmoji
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
@@ -265,7 +267,7 @@ class MessagesPresenter(
                     }
                 }
                 is MessagesEvent.OnUserClicked -> {
-                    roomMemberModerationState.eventSink(RoomMemberModerationEvents.ShowActionsForUser(event.user))
+                    roomMemberModerationState.eventSink(RoomMemberModerationEvent.ShowActionsForUser(event.user))
                 }
                 MessagesEvent.StopLiveLocationShare -> {
                     localCoroutineScope.launch {
@@ -322,6 +324,7 @@ class MessagesPresenter(
             appName = buildMeta.applicationName,
             pinnedMessagesBannerState = pinnedMessagesBannerState,
             dmUserVerificationState = dmUserVerificationState,
+            dmUserStatus = roomInfo.dmUserStatus(),
             roomMemberModerationState = roomMemberModerationState,
             topBarSharedHistoryIcon = topBarSharedHistoryIcon,
             successorRoom = roomInfo.successorRoom,
@@ -379,7 +382,7 @@ class MessagesPresenter(
             TimelineItemAction.Edit,
             TimelineItemAction.EditPoll -> handleActionEdit(targetEvent, composerState, enableTextFormatting)
             TimelineItemAction.AddCaption -> handleActionAddCaption(targetEvent, composerState)
-            TimelineItemAction.EditCaption -> handleActionEditCaption(targetEvent, composerState)
+            TimelineItemAction.EditCaption -> handleActionEditCaption(targetEvent, composerState, enableTextFormatting)
             TimelineItemAction.RemoveCaption -> handleRemoveCaption(targetEvent)
             TimelineItemAction.Reply -> handleActionReply(targetEvent, composerState, timelineProtectionState)
             TimelineItemAction.ReplyInThread -> {
@@ -402,7 +405,21 @@ class MessagesPresenter(
             TimelineItemAction.Pin -> handlePinAction(targetEvent)
             TimelineItemAction.Unpin -> handleUnpinAction(targetEvent)
             TimelineItemAction.ViewInTimeline -> Unit
+            TimelineItemAction.RetrySending -> handleRetrySending(targetEvent)
         }
+    }
+
+    private suspend fun handleRetrySending(targetEvent: TimelineItem.Event) {
+        val sendHandle = targetEvent.sendhandle ?: return Unit.also {
+            Timber.w("No send handle for event ${targetEvent.eventOrTransactionId}")
+        }
+        sendHandle.retry()
+            .onSuccess {
+                Timber.d("Succeed to add the message back to the send queue")
+            }
+            .onFailure {
+                Timber.e(it, "Failed to add the message back to the send queue")
+            }
     }
 
     private suspend fun handleRemoveCaption(targetEvent: TimelineItem.Event) {
@@ -534,10 +551,15 @@ class MessagesPresenter(
     private suspend fun handleActionEditCaption(
         targetEvent: TimelineItem.Event,
         composerState: MessageComposerState,
+        enableTextFormatting: Boolean,
     ) {
         val composerMode = MessageComposerMode.EditCaption(
             eventOrTransactionId = targetEvent.eventOrTransactionId,
-            content = targetEvent.content.captionOrNull().orEmpty(),
+            content = if (enableTextFormatting) {
+                targetEvent.content.htmlCaptionOrNull() ?: targetEvent.content.captionOrNull()
+            } else {
+                targetEvent.content.captionOrNull()
+            }.orEmpty(),
         )
         composerState.eventSink(
             MessageComposerEvent.SetMode(composerMode)

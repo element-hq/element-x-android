@@ -9,7 +9,7 @@ package io.element.android.features.contentscanner.impl
 
 import io.element.android.features.contentscanner.api.ContentScannerService
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.scanner.ContentScanner
 import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
@@ -28,7 +28,7 @@ class DefaultContentScannerService(
 ) : ContentScannerService {
     private val dispatcher = coroutineDispatchers.io.limitedParallelism(4)
 
-    override fun scan(eventId: EventId, mediaSources: List<MediaSource>, contentValidationState: ContentValidationState) {
+    override fun scan(mediaSources: List<MediaSource>, contentValidationState: ContentValidationState) {
         for (mediaSource in mediaSources) {
             val url = mediaSource.safeUrl
             val currentState = contentValidationState.getCurrentMediaState(url)
@@ -42,12 +42,19 @@ class DefaultContentScannerService(
                         contentValidationState.update(url, contentValidationValue)
                     }
                     .onFailure { exception ->
-                        if (exception is IOException) {
-                            // If it's an IO-related exception, we can retry later, so we don't store the error
-                            contentValidationState.update(url, ContentValidationValue.Unknown)
-                        } else {
-                            // For other exceptions, we cache the failure
-                            contentValidationState.update(url, ContentValidationValue.UnrecoverableError(exception))
+                        when (exception) {
+                            is IOException -> {
+                                // If it's an IO-related exception, we can retry later, so we don't store the error
+                                contentValidationState.update(url, ContentValidationValue.Unknown)
+                            }
+                            is ClientException.ContentScanner if exception.reason.isDangerous() -> {
+                                // It's a dangerous content (banned mime-type?), we mark it as invalid
+                                contentValidationState.update(url, ContentValidationValue.Invalid)
+                            }
+                            else -> {
+                                // For other exceptions, we cache the failure
+                                contentValidationState.update(url, ContentValidationValue.UnrecoverableError(exception))
+                            }
                         }
                     }
             }

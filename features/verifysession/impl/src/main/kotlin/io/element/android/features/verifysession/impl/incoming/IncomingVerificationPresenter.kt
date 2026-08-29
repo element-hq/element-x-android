@@ -108,18 +108,18 @@ class IncomingVerificationPresenter(
             }
         }
 
-        fun handleEvent(event: IncomingVerificationViewEvents) {
+        fun handleEvent(event: IncomingVerificationViewEvent) {
             Timber.d("Verification user action: ${event::class.simpleName}")
             when (event) {
-                IncomingVerificationViewEvents.StartVerification ->
+                IncomingVerificationViewEvent.StartVerification ->
                     stateAndDispatch.dispatchAction(StateMachineEvent.AcceptIncomingRequest)
-                IncomingVerificationViewEvents.IgnoreVerification ->
+                IncomingVerificationViewEvent.IgnoreVerification ->
                     navigator.onFinish()
-                IncomingVerificationViewEvents.ConfirmVerification ->
+                IncomingVerificationViewEvent.ConfirmVerification ->
                     stateAndDispatch.dispatchAction(StateMachineEvent.AcceptChallenge)
-                IncomingVerificationViewEvents.DeclineVerification ->
+                IncomingVerificationViewEvent.DeclineVerification ->
                     stateAndDispatch.dispatchAction(StateMachineEvent.DeclineChallenge)
-                IncomingVerificationViewEvents.GoBack -> {
+                IncomingVerificationViewEvent.GoBack -> {
                     when (val verificationStep = step) {
                         is Step.Initial -> if (verificationStep.isWaiting) {
                             stateAndDispatch.dispatchAction(StateMachineEvent.Cancel)

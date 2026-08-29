@@ -191,6 +191,38 @@ class RoomMemberListPresenterTest {
             awaitItem().eventSink(RoomMemberListEvent.RoomMemberSelected(anInvitedVictor()))
         }
     }
+
+    @Test
+    fun `call participants are shown first in joined members`() = runTest {
+        val room = createFakeJoinedRoom().apply {
+            givenRoomInfo(
+                aRoomInfo(
+                    joinedMembersCount = 5,
+                    activeRoomCallParticipants = listOf(
+                        aCarol().userId
+                    ),
+                )
+            )
+            givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
+        }
+
+        val presenter = createPresenter(joinedRoom = room)
+
+        presenter.test {
+            skipItems(1)
+
+            val loadedState = awaitItem()
+            val joined = loadedState.filteredRoomMembers.dataOrNull()!!.joined
+
+            assertThat(joined.first().roomMember.userId)
+                .isEqualTo(aCarol().userId)
+
+            assertThat(joined.first().isInCall).isTrue()
+
+            assertThat(joined.count { it.isInCall }).isEqualTo(1)
+            assertThat(joined.drop(1).all { !it.isInCall }).isTrue()
+        }
+    }
 }
 
 private fun createFakeJoinedRoom(

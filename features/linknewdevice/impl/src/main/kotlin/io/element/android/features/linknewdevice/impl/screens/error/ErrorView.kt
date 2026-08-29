@@ -165,7 +165,7 @@ private fun ColumnScope.Buttons(
 
 @PreviewsDayNight
 @Composable
-internal fun ErrorViewPreview(@PreviewParameter(ErrorScreenTypeProvider::class) errorScreenType: ErrorScreenType) {
+internal fun ErrorViewPreview(@PreviewParameter(ErrorScreenTypePreviewParam::class) errorScreenType: ErrorScreenType) {
     ElementPreview {
         ErrorView(
             errorScreenType = errorScreenType,

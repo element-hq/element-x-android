@@ -303,6 +303,8 @@ Follow these steps to install and configure the plugin and templates:
    - Click on OK
 4. Configure generate-module-from-template plugin :
    - Navigate to AS/Settings/Tools/Module Template Settings
+   - If a `FeatureModule` template is already listed, select it and remove it, since the plugin keeps its own copy of the
+     imported template and will not pick up changes made to `FeatureModule.json` on its own
    - Click on + / Import From File
    - Pick the `tools/templates/FeatureModule.json`
 
@@ -320,9 +322,11 @@ Example for a new feature called RoomDetails:
 4. Verify that the structure looks ok and click on Finish
 5. The modules api/impl should be created under `features/roomdetails` directory.
 6. Sync project with Gradle so the modules are recognized (no need to add them to settings.gradle).
-7. You can now add more Presentation classes (Events, State, StateProvider, View, Presenter) in the impl module with the `Template Presentation Classes`.
-   To use it, just right click on the package where you want to generate classes, and click on `Template Presentation Classes`.
-   Fill the text field with the base name of the classes, ie `RootRoomDetails` in the `root` package.
+7. You can now add more Presentation classes (Event, State, StatePreviewParam, View, Presenter) in the impl module with the `Template Presentation Classes`.
+   To use it, just right click on the package where you want to generate classes, and click on `New` / `Template Presentation Classes`.
+   Fill the text field with the base name of the classes: the generated files are `<BaseName>Event.kt`, `<BaseName>State.kt`,
+   `<BaseName>StatePreviewParam.kt`, `<BaseName>Presenter.kt`, `<BaseName>Node.kt` and `<BaseName>View.kt`. For instance
+   `PreferencesRoot` in the `features/preferences/impl/root` package.
 
 
 Note that naming of files and classes is important, since those names are used to set up code coverage rules. For instance, presenters MUST have a
@@ -356,9 +360,9 @@ We have 3 tests frameworks in place, and this should be sufficient to guarantee 
 - Maestro to test the global usage of the application. See the related [documentation](../.maestro/README.md).
 - Combination of [Showkase](https://github.com/airbnb/Showkase) and [Paparazzi](https://github.com/cashapp/paparazzi), to test UI pixel perfect. To add test,
   just add `@Preview` for the composable you are adding. See the related [documentation](screenshot_testing.md) and see in the template the
-  file [TemplateView.kt](../features/template/src/main/kotlin/io/element/android/features/template/TemplateView.kt). We create PreviewProvider to provide
+  file [TemplateView.kt](../features/template/src/main/kotlin/io/element/android/features/template/TemplateView.kt). We create PreviewParam classes to provide
   different states. See for instance the
-  file [TemplateStateProvider.kt](../features/template/src/main/kotlin/io/element/android/features/template/TemplateStateProvider.kt)
+  file [TemplateStatePreviewParam.kt](../features/template/src/main/kotlin/io/element/android/features/template/TemplateStatePreviewParam.kt)
 - Tests on presenter with [Molecule](https://github.com/cashapp/molecule) and [Turbine](https://github.com/cashapp/turbine). See in the template the class [TemplatePresenterTests](../features/template/src/test/kotlin/io/element/android/features/template/TemplatePresenterTests.kt).
 
 **Note** For now we want to avoid using class mocking (with library such as *mockk*), because this should be not necessary. We prefer to create Fake

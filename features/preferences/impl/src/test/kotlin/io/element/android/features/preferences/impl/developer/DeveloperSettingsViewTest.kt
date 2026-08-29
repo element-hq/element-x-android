@@ -15,6 +15,7 @@ import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import io.element.android.features.preferences.impl.R
 import io.element.android.tests.testutils.EnsureNeverCalled
@@ -29,7 +30,7 @@ import org.robolectric.annotation.Config
 class DeveloperSettingsViewTest : RobolectricTest() {
     @Test
     fun `clicking on back invokes the expected callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<DeveloperSettingsEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<DeveloperSettingsEvent>(expectEvents = false)
         ensureCalledOnce {
             setDeveloperSettingsView(
                 state = aDeveloperSettingsState(
@@ -41,10 +42,10 @@ class DeveloperSettingsViewTest : RobolectricTest() {
         }
     }
 
-    @Config(qualifiers = "h2000dp")
+    @Config(qualifiers = "h2400dp")
     @Test
     fun `clicking on push history notification invokes the expected callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<DeveloperSettingsEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<DeveloperSettingsEvent>(expectEvents = false)
         ensureCalledOnce {
             setDeveloperSettingsView(
                 state = aDeveloperSettingsState(
@@ -56,10 +57,23 @@ class DeveloperSettingsViewTest : RobolectricTest() {
         }
     }
 
+    @Config(qualifiers = "h2400dp")
+    @Test
+    fun `clicking on push rules emits the expected event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<DeveloperSettingsEvent>()
+        setDeveloperSettingsView(
+            state = aDeveloperSettingsState(
+                eventSink = eventsRecorder
+            ),
+        )
+        onNodeWithText("Push rules").performScrollTo().performClick()
+        eventsRecorder.assertSingle(DeveloperSettingsEvent.OpenPushRules)
+    }
+
     @Config(qualifiers = "h2000dp")
     @Test
     fun `clicking on open showkase invokes the expected callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<DeveloperSettingsEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<DeveloperSettingsEvent>(expectEvents = false)
         ensureCalledOnce {
             setDeveloperSettingsView(
                 state = aDeveloperSettingsState(
@@ -74,14 +88,14 @@ class DeveloperSettingsViewTest : RobolectricTest() {
     @Config(qualifiers = "h2400dp")
     @Test
     fun `clicking on clear cache emits the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<DeveloperSettingsEvents>()
+        val eventsRecorder = EventsRecorder<DeveloperSettingsEvent>()
         setDeveloperSettingsView(
             state = aDeveloperSettingsState(
                 eventSink = eventsRecorder
             ),
         )
-        onNodeWithText("Clear cache").performClick()
-        eventsRecorder.assertSingle(DeveloperSettingsEvents.ClearCache)
+        onNodeWithText("Clear cache").performScrollTo().performClick()
+        eventsRecorder.assertSingle(DeveloperSettingsEvent.ClearCache)
     }
 }
 

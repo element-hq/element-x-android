@@ -423,7 +423,6 @@ Naozaj chcete pokračovať?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Maximálna povolená veľkosť súboru je: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Vyberte kvalitu videa, ktoré chcete nahrať."</string>
   <string name="dialog_video_quality_selector_title">"Vyberte kvalitu nahrávania videa"</string>
-  <string name="emoji_picker_search_placeholder">"Hľadať emotikony"</string>
   <string name="error_account_already_logged_in">"Už ste prihlásený/á na tomto zariadení ako %1$s ."</string>
   <string name="error_account_creation_not_possible">"Váš domovský server musí byť aktualizovaný tak, aby podporoval Matrix Authentication Service a vytvorenie účtu."</string>
   <string name="error_failed_creating_the_permalink">"Nepodarilo sa vytvoriť trvalý odkaz"</string>

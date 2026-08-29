@@ -62,7 +62,7 @@ fun RolesAndPermissionsView(
             stringResource(R.string.screen_room_roles_and_permissions_admins)
         }
         ListItem(
-            headlineContent = { Text(adminsTitle) },
+            content = { Text(adminsTitle) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Admin())),
             trailingContent = state.adminCount?.let { adminCount ->
                 ListItemContent.Text("$adminCount")
@@ -70,7 +70,7 @@ fun RolesAndPermissionsView(
             onClick = { rolesAndPermissionsNavigator.openAdminList() },
         )
         ListItem(
-            headlineContent = { Text(stringResource(R.string.screen_room_roles_and_permissions_moderators)) },
+            content = { Text(stringResource(R.string.screen_room_roles_and_permissions_moderators)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ChatProblem())),
             trailingContent = state.moderatorCount?.let { moderationCount ->
                 ListItemContent.Text("$moderationCount")
@@ -79,22 +79,22 @@ fun RolesAndPermissionsView(
         )
         if (state.canSelfDemote) {
             ListItem(
-                headlineContent = { Text(stringResource(R.string.screen_room_roles_and_permissions_change_my_role)) },
-                onClick = { state.eventSink(RolesAndPermissionsEvents.ChangeOwnRole) },
+                content = { Text(stringResource(R.string.screen_room_roles_and_permissions_change_my_role)) },
+                onClick = { state.eventSink(RolesAndPermissionsEvent.ChangeOwnRole) },
                 leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Edit()))
             )
         }
         HorizontalDivider()
         ListItem(
-            headlineContent = { Text(stringResource(R.string.screen_room_roles_and_permissions_permissions_header)) },
+            content = { Text(stringResource(R.string.screen_room_roles_and_permissions_permissions_header)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Settings())),
             onClick = { rolesAndPermissionsNavigator.openEditPermissions() },
         )
         HorizontalDivider()
         ListItem(
-            headlineContent = { Text(stringResource(R.string.screen_room_roles_and_permissions_reset)) },
+            content = { Text(stringResource(R.string.screen_room_roles_and_permissions_reset)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Delete())),
-            onClick = { state.eventSink(RolesAndPermissionsEvents.ResetPermissions) },
+            onClick = { state.eventSink(RolesAndPermissionsEvent.ResetPermissions) },
             style = ListItemStyle.Destructive,
         )
     }
@@ -107,12 +107,12 @@ fun RolesAndPermissionsView(
                 content = stringResource(R.string.screen_room_roles_and_permissions_reset_confirm_description),
                 submitText = stringResource(CommonStrings.action_reset),
                 destructiveSubmit = true,
-                onSubmitClick = { state.eventSink(RolesAndPermissionsEvents.ResetPermissions) },
-                onDismiss = { state.eventSink(RolesAndPermissionsEvents.CancelPendingAction) },
+                onSubmitClick = { state.eventSink(RolesAndPermissionsEvent.ResetPermissions) },
+                onDismiss = { state.eventSink(RolesAndPermissionsEvent.CancelPendingAction) },
             )
         },
-        onSuccess = { state.eventSink(RolesAndPermissionsEvents.CancelPendingAction) },
-        onErrorDismiss = { state.eventSink(RolesAndPermissionsEvents.CancelPendingAction) }
+        onSuccess = { state.eventSink(RolesAndPermissionsEvent.CancelPendingAction) },
+        onErrorDismiss = { state.eventSink(RolesAndPermissionsEvent.CancelPendingAction) }
     )
 
     when (state.changeOwnRoleAction) {
@@ -128,7 +128,7 @@ fun RolesAndPermissionsView(
         is AsyncAction.Failure -> {
             ErrorDialog(
                 content = stringResource(CommonStrings.error_unknown),
-                onSubmit = { state.eventSink(RolesAndPermissionsEvents.CancelPendingAction) }
+                onSubmit = { state.eventSink(RolesAndPermissionsEvent.CancelPendingAction) }
             )
         }
         else -> Unit
@@ -139,7 +139,7 @@ fun RolesAndPermissionsView(
 @Composable
 private fun ChangeOwnRoleBottomSheet(
     availableDemoteActions: ImmutableList<SelfDemoteAction>,
-    eventSink: (RolesAndPermissionsEvents) -> Unit,
+    eventSink: (RolesAndPermissionsEvent) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val sheetState = rememberBottomSheetState(
@@ -148,7 +148,7 @@ private fun ChangeOwnRoleBottomSheet(
     )
     fun dismiss() {
         sheetState.hide(coroutineScope) {
-            eventSink(RolesAndPermissionsEvents.CancelPendingAction)
+            eventSink(RolesAndPermissionsEvent.CancelPendingAction)
         }
     }
     ModalBottomSheet(
@@ -173,17 +173,17 @@ private fun ChangeOwnRoleBottomSheet(
         )
         for (demoteAction in availableDemoteActions) {
             ListItem(
-                headlineContent = { Text(stringResource(demoteAction.titleRes)) },
+                content = { Text(stringResource(demoteAction.titleRes)) },
                 onClick = {
                     sheetState.hide(coroutineScope) {
-                        eventSink(RolesAndPermissionsEvents.DemoteSelfTo(demoteAction.role))
+                        eventSink(RolesAndPermissionsEvent.DemoteSelfTo(demoteAction.role))
                     }
                 },
                 style = ListItemStyle.Destructive,
             )
         }
         ListItem(
-            headlineContent = { Text(stringResource(CommonStrings.action_cancel)) },
+            content = { Text(stringResource(CommonStrings.action_cancel)) },
             onClick = ::dismiss,
         )
     }
@@ -191,7 +191,7 @@ private fun ChangeOwnRoleBottomSheet(
 
 @PreviewsDayNight
 @Composable
-internal fun RolesAndPermissionsViewPreview(@PreviewParameter(RolesAndPermissionsStateProvider::class) state: RolesAndPermissionsState) {
+internal fun RolesAndPermissionsViewPreview(@PreviewParameter(RolesAndPermissionsStatePreviewParam::class) state: RolesAndPermissionsState) {
     ElementPreview {
         RolesAndPermissionsView(
             state = state,

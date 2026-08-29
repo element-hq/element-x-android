@@ -35,7 +35,7 @@ def checkThatModulesExist(dependencies):
             line = line.split(" ")
             for elem in line:
                 if ":" in elem:
-                    modules.add(elem)
+                    modules.add(elem.replace("'", ""))
     for module in modules:
         path = "." + module.replace(":", "/") + "/build.gradle.kts"
         if not os.path.exists(path):
@@ -51,12 +51,12 @@ def checkThatThereIsNoTestDependency(dependencies):
     currentProject = ""
     for line in dependencies:
         if line.startswith("+--- project "):
-            currentProject = line.split(" ")[2]
+            currentProject = line.split(" ")[2].replace("'", "")
         else:
             if ":test" in currentProject:
                 continue
             else:
-                subProject = line.split(" ")[-1]
+                subProject = line.split(" ")[-1].replace("'", "")
                 if subProject.endswith(":test") or ":tests:" in subProject and "detekt-rules" not in subProject:
                     error = "Error: '" + currentProject + "' depends on the test project '" + subProject + "'\n"
                     error += "    Please replace occurrence(s) of 'implementation(projects" + subProject.replace(":", ".") + ")'"
