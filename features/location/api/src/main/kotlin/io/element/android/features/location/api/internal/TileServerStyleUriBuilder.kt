@@ -11,7 +11,7 @@ package io.element.android.features.location.api.internal
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.libraries.wellknown.api.MapTilerConfig
+import io.element.android.features.enterprise.api.remoteconfig.MapTilerConfig
 
 /**
  * Builds a style URI for a MapLibre compatible tile server.

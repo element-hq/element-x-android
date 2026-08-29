@@ -22,8 +22,9 @@ class DefaultDeclineAndBlockEntryPoint : DeclineInviteAndBlockEntryPoint {
         parentNode: Node,
         buildContext: BuildContext,
         inviteData: InviteData,
+        callback: DeclineInviteAndBlockEntryPoint.Callback,
     ): Node {
         val inputs = DeclineAndBlockNode.Inputs(inviteData)
-        return parentNode.createNode<DeclineAndBlockNode>(buildContext, plugins = listOf(inputs))
+        return parentNode.createNode<DeclineAndBlockNode>(buildContext, plugins = listOf(inputs, callback))
     }
 }

@@ -10,5 +10,5 @@ package io.element.android.libraries.push.api.battery
 
 data class BatteryOptimizationState(
     val shouldDisplayBanner: Boolean,
-    val eventSink: (BatteryOptimizationEvents) -> Unit,
+    val eventSink: (BatteryOptimizationEvent) -> Unit,
 )

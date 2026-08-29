@@ -90,7 +90,7 @@ fun LabsView(
                         supportingText = feature.description,
                         value = feature.isEnabled,
                         onChange = {
-                            state.eventSink(LabsEvents.ToggleFeature(feature))
+                            state.eventSink(LabsEvent.ToggleFeature(feature))
                         }
                     )
                 }
@@ -101,7 +101,7 @@ fun LabsView(
 
 @PreviewsDayNight
 @Composable
-internal fun LabsViewPreview(@PreviewParameter(LabsStateProvider::class) state: LabsState) {
+internal fun LabsViewPreview(@PreviewParameter(LabsStatePreviewParam::class) state: LabsState) {
     ElementPreview {
         LabsView(state = state, onBack = {})
     }

@@ -20,6 +20,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
+import io.element.android.features.login.impl.accountprovider.SaveAccountProviderToHistory
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
@@ -33,6 +34,7 @@ class LoginPasswordPresenter(
     private val initialLogin: String,
     private val authenticationService: MatrixAuthenticationService,
     private val accountProviderDataSource: AccountProviderDataSource,
+    private val saveAccountProviderToHistory: SaveAccountProviderToHistory,
 ) : Presenter<LoginPasswordState> {
     @AssistedFactory
     interface Factory {
@@ -56,18 +58,18 @@ class LoginPasswordPresenter(
         }
         val accountProvider by accountProviderDataSource.flow.collectAsState()
 
-        fun handleEvent(event: LoginPasswordEvents) {
+        fun handleEvent(event: LoginPasswordEvent) {
             when (event) {
-                is LoginPasswordEvents.SetLogin -> updateFormState(formState) {
+                is LoginPasswordEvent.SetLogin -> updateFormState(formState) {
                     copy(login = event.login)
                 }
-                is LoginPasswordEvents.SetPassword -> updateFormState(formState) {
+                is LoginPasswordEvent.SetPassword -> updateFormState(formState) {
                     copy(password = event.password)
                 }
-                LoginPasswordEvents.Submit -> {
+                LoginPasswordEvent.Submit -> {
                     localCoroutineScope.submit(formState.value, loginAction)
                 }
-                LoginPasswordEvents.ClearError -> loginAction.value = AsyncData.Uninitialized
+                LoginPasswordEvent.ClearError -> loginAction.value = AsyncData.Uninitialized
             }
         }
 
@@ -83,6 +85,7 @@ class LoginPasswordPresenter(
         loggedInState.value = AsyncData.Loading()
         authenticationService.login(formState.login.trim(), formState.password)
             .onSuccess { sessionId ->
+                saveAccountProviderToHistory()
                 loggedInState.value = AsyncData.Success(sessionId)
             }
             .onFailure { failure ->

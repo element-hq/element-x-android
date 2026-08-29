@@ -23,8 +23,10 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.preferences.impl.R
 import io.element.android.features.preferences.impl.developer.appsettings.AppDeveloperSettingsView
 import io.element.android.libraries.androidutils.system.copyToClipboard
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
+import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
@@ -56,8 +58,14 @@ fun DeveloperSettingsView(
             title = "Are you sure you want to mark all the rooms as read?",
             content = "",
             submitText = stringResource(CommonStrings.action_yes),
-            onSubmitClick = { state.eventSink(DeveloperSettingsEvents.MarkAllRoomsAsRead(needsConfirmation = false)) },
-            onDismiss = { state.eventSink(DeveloperSettingsEvents.DismissMarkAllRoomsAsReadConfirmation) },
+            onSubmitClick = { state.eventSink(DeveloperSettingsEvent.MarkAllRoomsAsRead(needsConfirmation = false)) },
+            onDismiss = { state.eventSink(DeveloperSettingsEvent.DismissMarkAllRoomsAsReadConfirmation) },
+        )
+    }
+    (state.pushRulesAction as? AsyncAction.Failure)?.let { failure ->
+        ErrorDialog(
+            content = failure.error.message ?: stringResource(CommonStrings.error_unknown),
+            onSubmit = { state.eventSink(DeveloperSettingsEvent.DismissPushRulesError) },
         )
     }
     BackHandler(
@@ -79,7 +87,10 @@ fun DeveloperSettingsView(
             onOpenShowkase = onOpenShowkase,
         )
         SessionCategory(deviceId = state.deviceId)
-        NotificationCategory(onPushHistoryClick)
+        NotificationCategory(
+            onPushRulesClick = { state.eventSink(DeveloperSettingsEvent.OpenPushRules) },
+            onPushHistoryClick = onPushHistoryClick,
+        )
         MarkAllRoomsAsReadCategory(state)
 
         if (state.isEnterpriseBuild) {
@@ -89,7 +100,7 @@ fun DeveloperSettingsView(
                         Text("Change brand color")
                     },
                     onClick = {
-                        state.eventSink(DeveloperSettingsEvents.SetShowColorPicker(true))
+                        state.eventSink(DeveloperSettingsEvent.SetShowColorPicker(true))
                     }
                 )
                 ListItem(
@@ -97,7 +108,7 @@ fun DeveloperSettingsView(
                         Text("Reset brand color")
                     },
                     onClick = {
-                        state.eventSink(DeveloperSettingsEvents.ChangeBrandColor(null))
+                        state.eventSink(DeveloperSettingsEvent.ChangeBrandColor(null))
                     }
                 )
             }
@@ -131,7 +142,7 @@ fun DeveloperSettingsView(
                     Text("Vacuum stores")
                 },
                 onClick = {
-                    state.eventSink(DeveloperSettingsEvents.VacuumStores)
+                    state.eventSink(DeveloperSettingsEvent.VacuumStores)
                 }
             )
             ListItem(
@@ -152,7 +163,7 @@ fun DeveloperSettingsView(
                 },
                 onClick = {
                     if (state.clearCacheAction.isLoading().not()) {
-                        state.eventSink(DeveloperSettingsEvents.ClearCache)
+                        state.eventSink(DeveloperSettingsEvent.ClearCache)
                     }
                 }
             )
@@ -164,10 +175,10 @@ fun DeveloperSettingsView(
             showAlphaBar = false,
         ),
         onDismissRequest = {
-            state.eventSink(DeveloperSettingsEvents.SetShowColorPicker(false))
+            state.eventSink(DeveloperSettingsEvent.SetShowColorPicker(false))
         },
         onPickedColor = {
-            state.eventSink(DeveloperSettingsEvents.ChangeBrandColor(it))
+            state.eventSink(DeveloperSettingsEvent.ChangeBrandColor(it))
         },
     )
 }
@@ -210,15 +221,24 @@ private fun MarkAllRoomsAsReadCategory(state: DeveloperSettingsState) {
             },
             enabled = !state.showLoader,
             onClick = {
-                state.eventSink(DeveloperSettingsEvents.MarkAllRoomsAsRead(needsConfirmation = true))
+                state.eventSink(DeveloperSettingsEvent.MarkAllRoomsAsRead(needsConfirmation = true))
             },
         )
     }
 }
 
 @Composable
-private fun NotificationCategory(onPushHistoryClick: () -> Unit) {
+private fun NotificationCategory(
+    onPushRulesClick: () -> Unit,
+    onPushHistoryClick: () -> Unit,
+) {
     PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_title)) {
+        ListItem(
+            content = {
+                Text("Push rules")
+            },
+            onClick = onPushRulesClick,
+        )
         ListItem(
             content = {
                 Text(stringResource(R.string.troubleshoot_notifications_entry_point_push_history_title))
@@ -231,7 +251,7 @@ private fun NotificationCategory(onPushHistoryClick: () -> Unit) {
 @PreviewsDayNight
 @Composable
 internal fun DeveloperSettingsViewPreview(
-    @PreviewParameter(DeveloperSettingsStateProvider::class) state: DeveloperSettingsState
+    @PreviewParameter(DeveloperSettingsStatePreviewParam::class) state: DeveloperSettingsState
 ) = ElementPreview {
     DeveloperSettingsView(
         state = state,

@@ -39,7 +39,7 @@ class HomeSpacesPresenter(
             seenInvitesStore.seenRoomIds().map { it.toImmutableSet() }
         }.collectAsState(persistentSetOf())
 
-        fun handleEvent(event: HomeSpacesEvents) {
+        fun handleEvent(event: HomeSpacesEvent) {
             // when (event) { }
         }
 
