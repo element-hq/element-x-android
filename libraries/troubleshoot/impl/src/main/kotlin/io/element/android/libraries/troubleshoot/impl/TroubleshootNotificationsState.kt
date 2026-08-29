@@ -10,7 +10,7 @@ package io.element.android.libraries.troubleshoot.impl
 
 data class TroubleshootNotificationsState(
     val testSuiteState: TroubleshootTestSuiteState,
-    val eventSink: (TroubleshootNotificationsEvents) -> Unit,
+    val eventSink: (TroubleshootNotificationsEvent) -> Unit,
 ) {
     val hasFailedTests: Boolean = testSuiteState.mainState.isFailure()
 }

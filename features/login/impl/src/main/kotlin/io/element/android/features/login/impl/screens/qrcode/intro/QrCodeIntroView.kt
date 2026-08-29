@@ -91,7 +91,7 @@ private fun ColumnScope.Buttons(
         text = stringResource(id = R.string.screen_qr_code_login_initial_state_button_title),
         modifier = Modifier.fillMaxWidth(),
         onClick = {
-            state.eventSink.invoke(QrCodeIntroEvents.Continue)
+            state.eventSink.invoke(QrCodeIntroEvent.Continue)
         }
     )
 }

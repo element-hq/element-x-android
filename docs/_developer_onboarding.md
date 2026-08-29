@@ -322,7 +322,7 @@ Example for a new feature called RoomDetails:
 4. Verify that the structure looks ok and click on Finish
 5. The modules api/impl should be created under `features/roomdetails` directory.
 6. Sync project with Gradle so the modules are recognized (no need to add them to settings.gradle).
-7. You can now add more Presentation classes (Events, State, StatePreviewParam, View, Presenter) in the impl module with the `Template Presentation Classes`.
+7. You can now add more Presentation classes (Event, State, StatePreviewParam, View, Presenter) in the impl module with the `Template Presentation Classes`.
    To use it, just right click on the package where you want to generate classes, and click on `New` / `Template Presentation Classes`.
    Fill the text field with the base name of the classes: the generated files are `<BaseName>Event.kt`, `<BaseName>State.kt`,
    `<BaseName>StatePreviewParam.kt`, `<BaseName>Presenter.kt`, `<BaseName>Node.kt` and `<BaseName>View.kt`. For instance

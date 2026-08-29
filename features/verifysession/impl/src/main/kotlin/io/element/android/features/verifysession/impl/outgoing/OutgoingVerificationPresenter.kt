@@ -93,16 +93,16 @@ class OutgoingVerificationPresenter(
             observeVerificationService()
         }
 
-        fun handleEvent(event: OutgoingVerificationViewEvents) {
+        fun handleEvent(event: OutgoingVerificationViewEvent) {
             Timber.d("Verification user action: ${event::class.simpleName}")
             when (event) {
                 // Just relay the event to the state machine
-                OutgoingVerificationViewEvents.RequestVerification -> StateMachineEvent.RequestVerification(verificationRequest)
-                OutgoingVerificationViewEvents.StartSasVerification -> StateMachineEvent.StartSasVerification
-                OutgoingVerificationViewEvents.ConfirmVerification -> StateMachineEvent.AcceptChallenge
-                OutgoingVerificationViewEvents.DeclineVerification -> StateMachineEvent.DeclineChallenge
-                OutgoingVerificationViewEvents.Cancel -> StateMachineEvent.Cancel
-                OutgoingVerificationViewEvents.Reset -> StateMachineEvent.Reset
+                OutgoingVerificationViewEvent.RequestVerification -> StateMachineEvent.RequestVerification(verificationRequest)
+                OutgoingVerificationViewEvent.StartSasVerification -> StateMachineEvent.StartSasVerification
+                OutgoingVerificationViewEvent.ConfirmVerification -> StateMachineEvent.AcceptChallenge
+                OutgoingVerificationViewEvent.DeclineVerification -> StateMachineEvent.DeclineChallenge
+                OutgoingVerificationViewEvent.Cancel -> StateMachineEvent.Cancel
+                OutgoingVerificationViewEvent.Reset -> StateMachineEvent.Reset
             }.let { stateMachineEvent ->
                 stateAndDispatch.dispatchAction(stateMachineEvent)
             }

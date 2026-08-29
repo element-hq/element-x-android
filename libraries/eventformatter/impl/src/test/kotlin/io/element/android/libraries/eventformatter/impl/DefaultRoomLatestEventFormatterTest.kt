@@ -85,7 +85,7 @@ class DefaultRoomLatestEventFormatterTest : RobolectricTest() {
         val expected = "Message removed"
         val senderName = "Someone"
         sequenceOf(false, true).forEach { isDm ->
-            val message = createLatestEvent(false, senderName, RedactedContent)
+            val message = createLatestEvent(false, senderName, RedactedContent(threadInfo = null))
             val result = formatter.format(message, isDm)
             if (isDm) {
                 assertThat(result).isEqualTo(expected)

@@ -50,7 +50,7 @@ fun aLogoutState(
     backupUploadState: BackupUploadState = BackupUploadState.Unknown,
     waitingForALongTime: Boolean = false,
     logoutAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
-    eventSink: (LogoutEvents) -> Unit = {},
+    eventSink: (LogoutEvent) -> Unit = {},
 ) = LogoutState(
     isLastDevice = isLastDevice,
     backupState = backupState,

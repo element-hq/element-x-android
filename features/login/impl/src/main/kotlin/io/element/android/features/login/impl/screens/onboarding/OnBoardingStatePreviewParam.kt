@@ -50,7 +50,7 @@ fun anOnBoardingState(
     @DrawableRes
     customLogoResId: Int? = null,
     loginModeState: LoginModeState = aLoginModeState(),
-    eventSink: (OnBoardingEvents) -> Unit = {},
+    eventSink: (OnBoardingEvent) -> Unit = {},
 ) = OnBoardingState(
     isAddingAccount = isAddingAccount,
     showBackButton = showBackButton,

@@ -55,7 +55,7 @@ fun SecureBackupDisableView(
         async = state.disableAction,
         progressDialog = {},
         errorMessage = { it.message ?: it.toString() },
-        onErrorDismiss = { state.eventSink.invoke(SecureBackupDisableEvents.DismissDialogs) },
+        onErrorDismiss = { state.eventSink.invoke(SecureBackupDisableEvent.DismissDialogs) },
         onSuccess = { onSuccess() },
     )
 }
@@ -69,7 +69,7 @@ private fun ColumnScope.Buttons(
         showProgress = state.disableAction.isLoading(),
         destructive = true,
         modifier = Modifier.fillMaxWidth(),
-        onClick = { state.eventSink.invoke(SecureBackupDisableEvents.DisableBackup) }
+        onClick = { state.eventSink.invoke(SecureBackupDisableEvent.DisableBackup) }
     )
 }
 
