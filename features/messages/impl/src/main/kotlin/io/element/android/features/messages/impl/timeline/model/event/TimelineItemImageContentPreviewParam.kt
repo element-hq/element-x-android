@@ -28,6 +28,7 @@ fun aTimelineItemImageContent(
     blurhash: String? = A_BLUR_HASH,
     filename: String = "A picture.jpg",
     caption: String? = null,
+    htmlCaption: String? = null,
     width: Int? = null,
     height: Int? = 300,
 ) = TimelineItemImageContent(
@@ -35,6 +36,7 @@ fun aTimelineItemImageContent(
     fileSize = 4 * 1024 * 1024L,
     caption = caption,
     formattedCaption = null,
+    htmlCaption = htmlCaption,
     isEdited = false,
     mediaSource = MediaSource(""),
     thumbnailSource = null,

@@ -712,6 +712,41 @@ class DefaultNotifiableEventResolverTest : RobolectricTest() {
                 canBeReplaced = true,
                 isRedacted = false,
                 isUpdated = false,
+                noisy = false,
+                timestamp = A_FAKE_TIMESTAMP,
+                cause = "Unable to decrypt event content",
+            )
+        )
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
+    }
+
+    @Test
+    fun `resolve RoomEncrypted noisy`() = runTest {
+        val sut = createDefaultNotifiableEventResolver(
+            notificationResult = Result.success(
+                mapOf(
+                    AN_EVENT_ID to Result.success(
+                        aNotificationData(
+                            content = NotificationContent.MessageLike.RoomEncrypted,
+                            isNoisy = true,
+                        )
+                    )
+                )
+            )
+        )
+        val request = aPushRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
+        val expectedResult = ResolvedPushEvent.Event(
+            FallbackNotifiableEvent(
+                sessionId = A_SESSION_ID,
+                roomId = A_ROOM_ID,
+                eventId = AN_EVENT_ID,
+                editedEventId = null,
+                description = "",
+                canBeReplaced = true,
+                isRedacted = false,
+                isUpdated = false,
+                noisy = true,
                 timestamp = A_FAKE_TIMESTAMP,
                 cause = "Unable to decrypt event content",
             )

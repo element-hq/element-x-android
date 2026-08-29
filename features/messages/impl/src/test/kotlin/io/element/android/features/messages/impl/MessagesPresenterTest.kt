@@ -990,6 +990,33 @@ class MessagesPresenterTest {
     }
 
     @Test
+    fun `present - handle action edit caption starts from the formatted caption`() = runTest {
+        val messageEvent = aMessageEvent(
+            content = aTimelineItemImageContent(
+                caption = "Hello world",
+                htmlCaption = "<b>Hello</b> world",
+            )
+        )
+        val composerRecorder = EventsRecorder<MessageComposerEvent>()
+        val presenter = createMessagesPresenter(
+            messageComposerPresenter = { aMessageComposerState(eventSink = composerRecorder, showTextFormatting = true) },
+        )
+        presenter.testWithLifecycleOwner {
+            val initialState = awaitItem()
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.EditCaption, messageEvent))
+            awaitItem()
+            composerRecorder.assertSingle(
+                MessageComposerEvent.SetMode(
+                    composerMode = MessageComposerMode.EditCaption(
+                        eventOrTransactionId = AN_EVENT_ID.toEventOrTransactionId(),
+                        content = "<b>Hello</b> world",
+                    )
+                )
+            )
+        }
+    }
+
+    @Test
     fun `present - handle action add caption`() = runTest {
         val composerRecorder = EventsRecorder<MessageComposerEvent>()
         val presenter = createMessagesPresenter(
