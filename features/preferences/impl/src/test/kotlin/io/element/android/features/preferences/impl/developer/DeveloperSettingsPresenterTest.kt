@@ -28,10 +28,13 @@ import io.element.android.libraries.matrix.api.analytics.GetDatabaseSizesUseCase
 import io.element.android.libraries.matrix.api.analytics.SdkStoreSizes
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.core.aBuildMeta
+import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
@@ -40,6 +43,19 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+
+private const val A_PUSH_RULES_CONTENT = """{"global":{"override":[{"rule_id":".m.rule.master","enabled":false}]}}"""
+private const val A_PUSH_RULES_CONTENT_PRETTY_PRINTED = """{
+  "global": {
+    "override": [
+      {
+        "rule_id": ".m.rule.master",
+        "enabled": false
+      }
+    ]
+  }
+}"""
+private val AN_EXCEPTION = Exception("A failure")
 
 class DeveloperSettingsPresenterTest {
     @get:Rule
@@ -170,7 +186,72 @@ class DeveloperSettingsPresenterTest {
         }
     }
 
+    @Test
+    fun `present - OpenPushRules event navigates to the push rules content`() = runTest {
+        val openPushRulesLambda = lambdaRecorder<String, String, Unit> { _, _ -> }
+        val presenter = createDeveloperSettingsPresenter(
+            navigator = DeveloperSettingsNavigator(openPushRulesLambda),
+            notificationSettingsService = FakeNotificationSettingsService(
+                getRawPushRulesResult = { Result.success(A_PUSH_RULES_CONTENT) },
+            ),
+        )
+        presenter.test {
+            val state = awaitItem()
+            assertThat(state.pushRulesAction).isEqualTo(AsyncAction.Uninitialized)
+            state.eventSink(DeveloperSettingsEvent.OpenPushRules)
+            skipItems(1)
+            awaitItem().also {
+                assertThat(it.pushRulesAction).isEqualTo(AsyncAction.Uninitialized)
+            }
+            openPushRulesLambda.assertions().isCalledOnce().with(
+                value("push_rules@alice_server.org.json"),
+                value(A_PUSH_RULES_CONTENT_PRETTY_PRINTED),
+            )
+        }
+    }
+
+    @Test
+    fun `present - OpenPushRules event keeps the content as is when it is not valid json`() = runTest {
+        val openPushRulesLambda = lambdaRecorder<String, String, Unit> { _, _ -> }
+        val presenter = createDeveloperSettingsPresenter(
+            navigator = DeveloperSettingsNavigator(openPushRulesLambda),
+            notificationSettingsService = FakeNotificationSettingsService(
+                getRawPushRulesResult = { Result.success("not json") },
+            ),
+        )
+        presenter.test {
+            awaitItem().eventSink(DeveloperSettingsEvent.OpenPushRules)
+            skipItems(2)
+            openPushRulesLambda.assertions().isCalledOnce().with(
+                value("push_rules@alice_server.org.json"),
+                value("not json"),
+            )
+        }
+    }
+
+    @Test
+    fun `present - OpenPushRules event failure can be dismissed`() = runTest {
+        val presenter = createDeveloperSettingsPresenter(
+            notificationSettingsService = FakeNotificationSettingsService(
+                getRawPushRulesResult = { Result.failure(AN_EXCEPTION) },
+            ),
+        )
+        presenter.test {
+            val state = awaitItem()
+            state.eventSink(DeveloperSettingsEvent.OpenPushRules)
+            skipItems(1)
+            awaitItem().also {
+                assertThat(it.pushRulesAction).isEqualTo(AsyncAction.Failure(AN_EXCEPTION))
+                it.eventSink(DeveloperSettingsEvent.DismissPushRulesError)
+            }
+            awaitItem().also {
+                assertThat(it.pushRulesAction).isEqualTo(AsyncAction.Uninitialized)
+            }
+        }
+    }
+
     private fun createDeveloperSettingsPresenter(
+        navigator: DeveloperSettingsNavigator = DeveloperSettingsNavigator { _, _ -> lambdaError() },
         sessionId: SessionId = A_SESSION_ID,
         deviceId: DeviceId = A_DEVICE_ID,
         cacheSizeUseCase: FakeComputeCacheSizeUseCase = FakeComputeCacheSizeUseCase(),
@@ -180,8 +261,10 @@ class DeveloperSettingsPresenterTest {
         databaseSizesUseCase: GetDatabaseSizesUseCase = GetDatabaseSizesUseCase { Result.success(SdkStoreSizes(null, null, null, null)) },
         markAllRoomsAsRead: FakeMarkAllRoomsAsRead = FakeMarkAllRoomsAsRead(),
         buildMeta: BuildMeta = aBuildMeta(),
+        notificationSettingsService: NotificationSettingsService = FakeNotificationSettingsService(),
     ): DeveloperSettingsPresenter {
         return DeveloperSettingsPresenter(
+            navigator = navigator,
             appDeveloperSettingsPresenter = { anAppDeveloperSettingsState() },
             sessionId = sessionId,
             deviceId = deviceId,
@@ -193,6 +276,7 @@ class DeveloperSettingsPresenterTest {
             fileSizeFormatter = FakeFileSizeFormatter(),
             markAllRoomsAsRead = markAllRoomsAsRead,
             buildMeta = buildMeta,
+            notificationSettingsService = notificationSettingsService,
         )
     }
 }
