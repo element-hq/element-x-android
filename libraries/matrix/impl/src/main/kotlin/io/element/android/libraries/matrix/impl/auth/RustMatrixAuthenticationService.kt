@@ -11,6 +11,7 @@ package io.element.android.libraries.matrix.impl.auth
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
+import io.element.android.features.enterprise.api.ClientEnterpriseHook
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.libraries.androidutils.crypto.ClientSecret
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -35,6 +36,7 @@ import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.impl.ClientBuilderSlidingSync
 import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
+import io.element.android.libraries.matrix.impl.RustTemporaryMatrixClient
 import io.element.android.libraries.matrix.impl.auth.qrlogin.QrErrorMapper
 import io.element.android.libraries.matrix.impl.auth.qrlogin.SdkQrCodeLoginData
 import io.element.android.libraries.matrix.impl.auth.qrlogin.toStep
@@ -72,6 +74,7 @@ class RustMatrixAuthenticationService(
     private val oAuthConfigurationProvider: OAuthConfigurationProvider,
     private val enterpriseService: EnterpriseService,
     private val featureFlagService: FeatureFlagService,
+    private val clientEnterpriseHook: ClientEnterpriseHook,
 ) : MatrixAuthenticationService {
     // Any existing Element Classic session that we want to try to import secrets from during login.
     private var elementClassicSession: ElementClassicSession? = null
@@ -133,9 +136,10 @@ class RustMatrixAuthenticationService(
                 }
 
                 currentClient = client
+
                 client.homeserverLoginDetails().map()
             }.onFailure {
-                clear()
+                clear(destroyClient = true)
             }.mapFailure { failure ->
                 Timber.e(failure, "Failed to set homeserver to $homeserver")
                 failure.mapAuthenticationException()
@@ -164,11 +168,15 @@ class RustMatrixAuthenticationService(
                         sessionPaths = currentSessionPaths,
                     )
                 val matrixClient = rustMatrixClientFactory.create(client, sessionData, isMessageSearchAvailable())
+
+                // Apply enterprise hooks to the newly created client as soon as possible
+                clientEnterpriseHook(matrixClient)
+
                 newMatrixClientObservers.forEach { it.invoke(matrixClient) }
                 sessionStore.addSession(sessionData)
 
                 // Clean up the strong reference held here since it's no longer necessary
-                currentClient = null
+                clear(destroyClient = false)
 
                 SessionId(sessionData.userId)
             }.mapFailure { failure ->
@@ -240,6 +248,9 @@ class RustMatrixAuthenticationService(
                 client.restoreSession(sessionData.toSession())
                 val matrixClient = rustMatrixClientFactory.create(client, sessionData, isMessageSearchAvailable())
 
+                // Apply enterprise hooks to the newly created client as soon as possible
+                clientEnterpriseHook(matrixClient)
+
                 // We wait for the verification state to be known
                 matrixClient.waitForKnownVerificationState()
 
@@ -248,7 +259,7 @@ class RustMatrixAuthenticationService(
                 sessionStore.addSession(sessionData)
 
                 // Clean up the strong reference held here since it's no longer necessary
-                currentClient = null
+                clear(destroyClient = false)
 
                 SessionId(sessionData.userId)
             }
@@ -271,11 +282,12 @@ class RustMatrixAuthenticationService(
                     deviceId = null,
                     additionalScopes = emptyList(),
                 )
+                val getUrlResolver = RustTemporaryMatrixClient(client, sessionPaths)
                 val url = oAuthAuthorizationData.loginUrl()
                     .let {
                         enterpriseService.tweakMasUrl(
                             url = it,
-                            homeserver = client.server() ?: client.homeserver(),
+                            urlContentFetcher = getUrlResolver,
                         )
                     }
                 pendingOAuthAuthorizationData = oAuthAuthorizationData
@@ -329,13 +341,17 @@ class RustMatrixAuthenticationService(
                     sessionPaths = currentSessionPaths,
                 )
                 val matrixClient = rustMatrixClientFactory.create(client, sessionData, isMessageSearchAvailable())
+
+                // Apply enterprise hooks to the newly created client as soon as possible
+                clientEnterpriseHook(matrixClient)
+
                 matrixClient.waitForKnownVerificationState()
 
                 newMatrixClientObservers.forEach { it.invoke(matrixClient) }
                 sessionStore.addSession(sessionData)
 
                 // Clean up the strong reference held here since it's no longer necessary
-                currentClient = null
+                clear(destroyClient = false)
 
                 SessionId(sessionData.userId)
             }.mapFailure { failure ->
@@ -394,11 +410,15 @@ class RustMatrixAuthenticationService(
                         sessionPaths = emptySessionPaths,
                     )
                 val matrixClient = rustMatrixClientFactory.create(client, sessionData, isMessageSearchAvailable())
+
+                // Apply enterprise hooks to the newly created client as soon as possible
+                clientEnterpriseHook(matrixClient)
+
                 newMatrixClientObservers.forEach { it.invoke(matrixClient) }
                 sessionStore.addSession(sessionData)
 
                 // Clean up the strong reference held here since it's no longer necessary
-                currentClient = null
+                clear(destroyClient = false)
 
                 SessionId(sessionData.userId)
             }.mapFailure {
@@ -464,8 +484,10 @@ class RustMatrixAuthenticationService(
             .build()
     }
 
-    private fun clear() {
-        currentClient?.close()
+    private fun clear(destroyClient: Boolean) {
+        if (destroyClient) {
+            currentClient?.close()
+        }
         currentClient = null
     }
 

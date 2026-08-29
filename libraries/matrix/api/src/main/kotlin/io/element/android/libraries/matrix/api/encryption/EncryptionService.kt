@@ -14,13 +14,32 @@ import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
+/**
+ * Gives access to the end-to-end encryption state of the session: key backup, recovery, and the trust of other users' identities.
+ */
 interface EncryptionService {
+    /**
+     * The state of the room key backup on the server.
+     * Reports [BackupState.WAITING_FOR_SYNC] for as long as the session is not actively syncing, since the real state is unknown until then.
+     */
     val backupStateStateFlow: StateFlow<BackupState>
+
+    /**
+     * The state of recovery, i.e. whether the secrets needed to restore the keys on a new device are available.
+     * As with [backupStateStateFlow], it reports a waiting-for-sync state until the session is syncing.
+     */
     val recoveryStateStateFlow: StateFlow<RecoveryState>
+
+    /** Progress of the [enableRecovery] call currently in flight, to be observed while that call is running. */
     val enableRecoveryProgressStateFlow: StateFlow<EnableRecoveryProgress>
+
+    /** Whether this is the only device of the account, which matters because logging out of it can make the room keys unrecoverable. */
     val isLastDevice: StateFlow<Boolean>
+
+    /** Whether the account has another device this one could be verified against; it stays loading until the first answer arrives. */
     val hasDevicesToVerifyAgainst: StateFlow<AsyncData<Boolean>>
 
+    /** Enables the room key backup on the server, so that the keys survive losing every device. */
     suspend fun enableBackups(): Result<Unit>
 
     /**
@@ -39,12 +58,16 @@ interface EncryptionService {
      */
     suspend fun resetRecoveryKey(): Result<String>
 
+    /** Disables recovery, which deletes the secrets from server-side storage; the key backup itself is left in place. */
     suspend fun disableRecovery(): Result<Unit>
 
+    /** Whether a room key backup currently exists on the server, whether or not this device is the one using it. */
     suspend fun doesBackupExistOnServer(): Result<Boolean>
 
     /**
-     * Note: accept both recoveryKey and passphrase.
+     * Restores the secrets from server-side storage, which unlocks the room key backup for this device.
+     *
+     * @param recoveryKey the recovery key, or the passphrase it was derived from; both are accepted.
      */
     suspend fun recover(recoveryKey: String): Result<Unit>
 
@@ -72,6 +95,8 @@ interface EncryptionService {
 
     /**
      * Remember this identity, ensuring it does not result in a pin violation.
+     *
+     * @param userId the user whose current identity should be pinned.
      */
     suspend fun pinUserIdentity(userId: UserId): Result<Unit>
 
@@ -81,6 +106,8 @@ interface EncryptionService {
      * Useful when a user that was verified is not anymore, but it is not
      * possible to re-verify immediately. This allows to restore communication by reverting the
      * user trust from verified to TOFU verified.
+     *
+     * @param userId the user whose verification should be withdrawn.
      */
     suspend fun withdrawVerification(userId: UserId): Result<Unit>
 

@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
-import io.element.android.features.messages.impl.timeline.model.bubble.BubbleStateProvider
+import io.element.android.features.messages.impl.timeline.model.bubble.BubbleStatePreviewParam
 import io.element.android.libraries.core.extensions.to01
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
@@ -192,7 +192,7 @@ object MessageEventBubbleDefaults {
 
 @PreviewsDayNight
 @Composable
-internal fun MessageEventBubblePreview(@PreviewParameter(BubbleStateProvider::class) state: BubbleState) = ElementPreview {
+internal fun MessageEventBubblePreview(@PreviewParameter(BubbleStatePreviewParam::class) state: BubbleState) = ElementPreview {
     // Due to position offset, surround with a Box
     Box(
         modifier = Modifier

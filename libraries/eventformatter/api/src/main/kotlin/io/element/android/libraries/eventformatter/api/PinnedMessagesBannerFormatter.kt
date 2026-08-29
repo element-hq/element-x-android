@@ -10,6 +10,12 @@ package io.element.android.libraries.eventformatter.api
 
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 
+/**
+ * Formats the short summary of a pinned event shown in the banner at the top of a room.
+ */
 interface PinnedMessagesBannerFormatter {
+    /**
+     * @param event the pinned event to describe.
+     */
     fun format(event: EventTimelineItem): CharSequence
 }

@@ -10,32 +10,22 @@ package io.element.android.x.info
 
 import android.content.Context
 import io.element.android.libraries.androidutils.system.getVersionCodeFromManifest
+import io.element.android.libraries.core.log.logger.wrapInBox
 import io.element.android.x.BuildConfig
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-fun logApplicationInfo(context: Context) {
-    val appVersion = buildString {
-        append(BuildConfig.VERSION_NAME)
-        append(" (")
-        append(context.getVersionCodeFromManifest())
-        append(") - ")
-        append(BuildConfig.BUILD_TYPE)
-        append(" / ")
-        append(BuildConfig.FLAVOR)
-    }
-    // TODO Get SDK version somehow
-    val sdkVersion = "SDK VERSION (TODO)"
+fun logApplicationInfo(context: Context, sdkGitSha: String) {
+    val appVersion = "${BuildConfig.VERSION_NAME} (${context.getVersionCodeFromManifest()}) - ${BuildConfig.BUILD_TYPE} / ${BuildConfig.FLAVOR}"
     val date = SimpleDateFormat("MM-dd HH:mm:ss.SSSZ", Locale.US).format(Date())
-
-    Timber.d("----------------------------------------------------------------")
-    Timber.d("----------------------------------------------------------------")
-    Timber.d(" Application version: $appVersion")
-    Timber.d(" Git SHA: ${BuildConfig.GIT_REVISION}")
-    Timber.d(" SDK version: $sdkVersion")
-    Timber.d(" Local time: $date")
-    Timber.d("----------------------------------------------------------------")
-    Timber.d("----------------------------------------------------------------\n\n\n\n")
+    listOf(
+        " Application version: $appVersion",
+        " Element X: https://github.com/element-hq/element-x-android/commit/${BuildConfig.GIT_REVISION}",
+        " SDK      : https://github.com/matrix-org/matrix-rust-sdk/commit/$sdkGitSha",
+        " Local time: $date",
+    )
+        .wrapInBox(minBoxInsideWidth = 80)
+        .forEach { Timber.d(it) }
 }

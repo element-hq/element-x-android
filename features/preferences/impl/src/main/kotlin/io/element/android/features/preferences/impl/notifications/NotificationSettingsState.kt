@@ -30,7 +30,7 @@ data class NotificationSettingsState(
     val showCallRingtoneDialog: Boolean,
     /**
      * One-shot trigger for launching the system ringtone picker. Each
-     * [NotificationSettingsEvents.LaunchMessageSoundPicker] increments the value;
+     * [NotificationSettingsEvent.LaunchMessageSoundPicker] increments the value;
      * the view watches this in `LaunchedEffect` and calls the launcher whenever it goes above 0.
      * **Always start at 0** in initial state, providers, and previews — a non-zero seed will
      * auto-open the picker on screen entry.
@@ -42,7 +42,7 @@ data class NotificationSettingsState(
      * auto-opens on screen entry.
      */
     val pendingCallRingtonePickerLaunch: Int,
-    val eventSink: (NotificationSettingsEvents) -> Unit,
+    val eventSink: (NotificationSettingsEvent) -> Unit,
 ) {
     sealed interface MatrixSettings {
         data object Uninitialized : MatrixSettings

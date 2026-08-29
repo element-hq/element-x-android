@@ -37,8 +37,9 @@ PRs must meet these rules.
 
 - Create previews for **all main states** of a Composable.
 - Use `@PreviewsDayNight` for consistency.
-- Use `PreviewParameterProvider` (e.g., `FooStateProvider`) to provide states.
+- Use `PreviewParameterProvider` (e.g., `FooStatePreviewParam`) to provide states.
 - Wrap previews in `ElementPreview { ... }`.
+- When writing tests, never try to record the screenshots, the CI will do it.
 
 ---
 
@@ -49,9 +50,10 @@ PRs must meet these rules.
 - Title = changelog entry — descriptive, no "Fixes #…".
 - Leave description template for the developer. Redirect them to the [contributing etiquette](CONTRIBUTING.md#etiquette).
 - Screenshots/videos for visual changes.
-- 500 additions max — split large changes.
+- 500 additions max into production code. Test code can be larger — split large changes.
 - Commits need a title and description; no tiny or massive commits.
 - No history rewrites.
+- When creating a pull request and if changes contain new or update(s) of the Composable Previews, add the label "Record-Screenshots" to the PR so that the CI will record the screenshots.
 
 ---
 
@@ -88,7 +90,7 @@ We use [Appyx](https://bumble-tech.github.io/appyx/) for navigation and [Molecul
 | `FooView.kt` | Stateless Composable rendering the UI from `FooState`. |
 | `FooState.kt` | Data class representing the immutable UI state. |
 | `FooEvent.kt` | Sealed interface for UI actions sent to the Presenter. |
-| `FooStateProvider.kt` | Provides sample states for Previews and Screenshot tests. |
+| `FooStatePreviewParam.kt` | Provides sample states for Previews and Screenshot tests. |
 | `FooPresenterTest.kt` | Unit tests for the Presenter logic using Turbine. |
 
 ---

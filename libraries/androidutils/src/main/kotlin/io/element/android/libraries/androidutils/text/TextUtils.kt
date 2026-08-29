@@ -13,3 +13,5 @@ import java.nio.charset.Charset
 
 fun String.urlEncoded(charset: Charset = Charsets.UTF_8): String = URLEncoder.encode(this, charset.name())
 fun String.urlDecoded(charset: Charset = Charsets.UTF_8): String = URLDecoder.decode(this, charset.name())
+
+fun String.takeIfNotBlank(): String? = ifBlank { null }

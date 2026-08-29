@@ -8,10 +8,11 @@
 
 package io.element.android.appnav
 
-import io.element.android.appnav.di.SyncOrchestrator
+import io.element.android.appnav.session.SyncOrchestrator
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.matrix.api.sync.SyncState
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.appnavstate.test.FakeAppForegroundStateService
@@ -40,7 +41,7 @@ class SyncOrchestratorTest {
         }
         val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Disconnected)
         val syncOrchestrator = createSyncOrchestrator(
-            syncService = syncService,
+            matrixClient = FakeMatrixClient(syncService = syncService),
             networkMonitor = networkMonitor,
         )
 
@@ -60,7 +61,7 @@ class SyncOrchestratorTest {
         }
         val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Connected)
         val syncOrchestrator = createSyncOrchestrator(
-            syncService = syncService,
+            matrixClient = FakeMatrixClient(syncService = syncService),
             networkMonitor = networkMonitor,
         )
 
@@ -85,7 +86,7 @@ class SyncOrchestratorTest {
         val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Connected)
         val appForegroundStateService = FakeAppForegroundStateService(initialForegroundValue = true)
         val syncOrchestrator = createSyncOrchestrator(
-            syncService = syncService,
+            matrixClient = FakeMatrixClient(syncService = syncService),
             networkMonitor = networkMonitor,
             appForegroundStateService = appForegroundStateService,
         )
@@ -117,7 +118,7 @@ class SyncOrchestratorTest {
         val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Connected)
         val appForegroundStateService = FakeAppForegroundStateService(initialForegroundValue = true)
         val syncOrchestrator = createSyncOrchestrator(
-            syncService = syncService,
+            matrixClient = FakeMatrixClient(syncService = syncService),
             networkMonitor = networkMonitor,
             appForegroundStateService = appForegroundStateService,
         )
@@ -165,7 +166,7 @@ class SyncOrchestratorTest {
             initialIsSyncingNotificationEventValue = false,
         )
         val syncOrchestrator = createSyncOrchestrator(
-            syncService = syncService,
+            matrixClient = FakeMatrixClient(syncService = syncService),
             networkMonitor = networkMonitor,
             appForegroundStateService = appForegroundStateService,
         )
@@ -208,7 +209,7 @@ class SyncOrchestratorTest {
             initialIsSyncingNotificationEventValue = false,
         )
         val syncOrchestrator = createSyncOrchestrator(
-            syncService = syncService,
+            matrixClient = FakeMatrixClient(syncService = syncService),
             networkMonitor = networkMonitor,
             appForegroundStateService = appForegroundStateService,
         )
@@ -252,7 +253,7 @@ class SyncOrchestratorTest {
             initialHasRingingCall = false,
         )
         val syncOrchestrator = createSyncOrchestrator(
-            syncService = syncService,
+            matrixClient = FakeMatrixClient(syncService = syncService),
             networkMonitor = networkMonitor,
             appForegroundStateService = appForegroundStateService,
         )
@@ -296,7 +297,7 @@ class SyncOrchestratorTest {
             initialIsInCallValue = true,
         )
         val syncOrchestrator = createSyncOrchestrator(
-            syncService = syncService,
+            matrixClient = FakeMatrixClient(syncService = syncService),
             networkMonitor = networkMonitor,
             appForegroundStateService = appForegroundStateService,
         )
@@ -339,7 +340,7 @@ class SyncOrchestratorTest {
             initialIsInCallValue = false,
         )
         val syncOrchestrator = createSyncOrchestrator(
-            syncService = syncService,
+            matrixClient = FakeMatrixClient(syncService = syncService),
             networkMonitor = networkMonitor,
             appForegroundStateService = appForegroundStateService,
         )
@@ -369,7 +370,7 @@ class SyncOrchestratorTest {
         }
         val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Disconnected)
         val syncOrchestrator = createSyncOrchestrator(
-            syncService = syncService,
+            matrixClient = FakeMatrixClient(syncService = syncService),
             networkMonitor = networkMonitor,
         )
 
@@ -381,12 +382,44 @@ class SyncOrchestratorTest {
         startSyncRecorder.assertions().isNeverCalled()
     }
 
+    @Test
+    fun `when the client is shutting down, the orchestrator does nothing`() = runTest {
+        val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Disconnected)
+        val appForegroundStateService = FakeAppForegroundStateService(
+            initialForegroundValue = false,
+            initialIsSyncingNotificationEventValue = false,
+            initialIsInCallValue = false,
+        )
+
+        val startSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val syncService = FakeSyncService(initialSyncState = SyncState.Idle).apply {
+            startSyncLambda = startSyncRecorder
+        }
+        val syncOrchestrator = createSyncOrchestrator(
+            matrixClient = FakeMatrixClient(syncService = syncService, isShuttingDownResult = { true }),
+            networkMonitor = networkMonitor,
+            appForegroundStateService = appForegroundStateService,
+        )
+
+        // We start observing
+        syncOrchestrator.observeStates()
+
+        // These should still not trigger a sync, sync the client is shutting down
+        networkMonitor.givenNetworkBlocked(false)
+        appForegroundStateService.updateIsInCallState(true)
+        appForegroundStateService.isInForeground.value = true
+
+        advanceTimeBy(10.seconds)
+
+        startSyncRecorder.assertions().isNeverCalled()
+    }
+
     private fun TestScope.createSyncOrchestrator(
-        syncService: FakeSyncService = FakeSyncService(),
+        matrixClient: FakeMatrixClient = FakeMatrixClient(),
         networkMonitor: FakeNetworkMonitor = FakeNetworkMonitor(),
         appForegroundStateService: FakeAppForegroundStateService = FakeAppForegroundStateService(),
     ) = SyncOrchestrator(
-        syncService = syncService,
+        matrixClient = matrixClient,
         sessionCoroutineScope = backgroundScope,
         networkMonitor = networkMonitor,
         appForegroundStateService = appForegroundStateService,

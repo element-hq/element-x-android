@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"ستتم إزالة هذا الملف من الغرفة ولن يتمكن الأعضاء من الوصول إليه."</string>
+  <string name="screen_media_browser_delete_confirmation_title">"إزالة الملف؟"</string>
+  <string name="screen_media_browser_download_error_message">"تحقّق من اتصالك بالإنترنت وحاول مرة أخرى."</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"ستظهر هنا المستندات والملفات الصوتية والرسائل الصوتية التي يتم رفعها إلى هذه الغرفة."</string>
+  <string name="screen_media_browser_files_empty_state_title">"لم يتم رفع أي ملفات بعد"</string>
+  <string name="screen_media_browser_list_loading_files">"جارٍ تحميل الملفات…"</string>
+  <string name="screen_media_browser_list_loading_media">"جارٍ تحميل الوسائط…"</string>
+  <string name="screen_media_browser_list_mode_files">"الملفات"</string>
+  <string name="screen_media_browser_list_mode_media">"الوسائط"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"ستظهر هنا الصور ومقاطع الفيديو التي يتم رفعها إلى هذه الغرفة."</string>
+  <string name="screen_media_browser_media_empty_state_title">"لم يتم رفع أي وسائط بعد"</string>
+  <string name="screen_media_browser_title">"الوسائط والملفات"</string>
+  <string name="screen_media_details_file_format">"التنسيق"</string>
+  <string name="screen_media_details_filename">"الاسم"</string>
+  <string name="screen_media_details_no_more_files_to_show">"لا توجد ملفات أخرى لعرضها"</string>
+  <string name="screen_media_details_no_more_media_to_show">"لا توجد وسائط أخرى لعرضها"</string>
+  <string name="screen_media_details_title">"معلومات الملف"</string>
+  <string name="screen_media_details_uploaded_by">"تم الرفع بواسطة"</string>
+  <string name="screen_media_details_uploaded_on">"تم الرفع في"</string>
+</resources>

@@ -10,6 +10,9 @@ package io.element.android.features.rageshake.api.logs
 
 import java.io.File
 
+/**
+ * Deletes the log files the app writes, used to keep them from growing without bound and to clear them on request.
+ */
 interface LogFilesRemover {
     /**
      * Perform the log files removal.

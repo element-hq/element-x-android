@@ -61,32 +61,32 @@ class ContributesNodeProcessor(
             if (config.enableLogging) {
                 logger.warn("Processing ${ksClass.qualifiedName?.asString()}")
             }
-            generateModule(ksClass)
+            generateBindingContainer(ksClass)
             generateFactory(ksClass)
         }
 
         return invalidSymbols
     }
 
-    private fun generateModule(ksClass: KSClassDeclaration) {
+    private fun generateBindingContainer(ksClass: KSClassDeclaration) {
         val annotation = ksClass.annotations.find { it.shortName.asString() == "ContributesNode" }!!
         val scope = annotation.arguments.find { it.name?.asString() == "scope" }!!.value as KSType
-        val modulePackage = ksClass.packageName.asString()
-        val moduleClassName = "${ksClass.simpleName.asString()}_Module"
+        val bindingContainerPackage = ksClass.packageName.asString()
+        val bindingContainerClassName = "${ksClass.simpleName.asString()}BindingContainer"
         val nodeClassName = ClassName.bestGuess(ksClass.qualifiedName!!.asString())
         val content = FileSpec.builder(
-            packageName = modulePackage,
-            fileName = moduleClassName,
+            packageName = bindingContainerPackage,
+            fileName = bindingContainerClassName,
         )
             .addType(
-                TypeSpec.interfaceBuilder(moduleClassName)
+                TypeSpec.interfaceBuilder(bindingContainerClassName)
                     .addAnnotation(AnnotationSpec.builder(Origin::class).addMember(CLASS_PLACEHOLDER, nodeClassName).build())
                     .addAnnotation(BindingContainer::class)
                     .addAnnotation(AnnotationSpec.builder(ContributesTo::class).addMember(CLASS_PLACEHOLDER, scope.toTypeName()).build())
                     .addFunction(
-                        FunSpec.builder("bind${ksClass.simpleName.asString()}Factory")
+                        FunSpec.builder("bind${ksClass.simpleName.asString()}AssistedFactory")
                             .addModifiers(KModifier.ABSTRACT)
-                            .addParameter("factory", ClassName(modulePackage, "${ksClass.simpleName.asString()}_AssistedFactory"))
+                            .addParameter("factory", ClassName(bindingContainerPackage, "${ksClass.simpleName.asString()}AssistedFactory"))
                             .returns(ClassName.bestGuess(assistedNodeFactoryFqName.asString()).parameterizedBy(STAR))
                             .addAnnotation(Binds::class)
                             .addAnnotation(IntoMap::class)
@@ -114,7 +114,7 @@ class ContributesNodeProcessor(
     @OptIn(KspExperimental::class)
     private fun generateFactory(ksClass: KSClassDeclaration) {
         val generatedPackage = ksClass.packageName.asString()
-        val assistedFactoryClassName = "${ksClass.simpleName.asString()}_AssistedFactory"
+        val assistedFactoryClassName = "${ksClass.simpleName.asString()}AssistedFactory"
         val constructor = ksClass.getConstructors().first { it.parameters.isNotEmpty() }
         val assistedParameters = constructor.parameters.filter { it.isAnnotationPresent(Assisted::class) }
         if (assistedParameters.size != 2) {

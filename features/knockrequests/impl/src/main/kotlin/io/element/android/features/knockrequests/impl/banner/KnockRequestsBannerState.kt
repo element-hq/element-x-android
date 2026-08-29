@@ -20,7 +20,7 @@ data class KnockRequestsBannerState(
     val knockRequests: ImmutableList<KnockRequestPresentable>,
     val displayAcceptError: Boolean,
     val canAccept: Boolean,
-    val eventSink: (KnockRequestsBannerEvents) -> Unit,
+    val eventSink: (KnockRequestsBannerEvent) -> Unit,
 ) {
     val subtitle = knockRequests.singleOrNull()?.userId?.value
     val reason = knockRequests.singleOrNull()?.reason
