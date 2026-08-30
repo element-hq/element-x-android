@@ -16,7 +16,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.DeviceId
 import kotlinx.collections.immutable.persistentMapOf
 
-open class DeveloperSettingsStatePreviewParam : PreviewParameterProvider<DeveloperSettingsState> {
+open class DeveloperSettingsStateProvider : PreviewParameterProvider<DeveloperSettingsState> {
     override val values: Sequence<DeveloperSettingsState>
         get() = sequenceOf(
             aDeveloperSettingsState(),
@@ -33,7 +33,7 @@ open class DeveloperSettingsStatePreviewParam : PreviewParameterProvider<Develop
                 showColorPicker = false,
             ),
             aDeveloperSettingsState(
-                pushRulesAction = AsyncAction.Failure(Exception("A failure"))
+                pushRulesAction = AsyncAction.Failure(Exception("A failure")),
                 messageSearchIndexStatus = MessageSearchIndexStatus.Idle,
             ),
             aDeveloperSettingsState(
