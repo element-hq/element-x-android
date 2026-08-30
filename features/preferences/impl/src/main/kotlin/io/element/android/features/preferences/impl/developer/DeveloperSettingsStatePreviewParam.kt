@@ -16,7 +16,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.DeviceId
 import kotlinx.collections.immutable.persistentMapOf
 
-open class DeveloperSettingsStateProvider : PreviewParameterProvider<DeveloperSettingsState> {
+open class DeveloperSettingsStatePreviewParam : PreviewParameterProvider<DeveloperSettingsState> {
     override val values: Sequence<DeveloperSettingsState>
         get() = sequenceOf(
             aDeveloperSettingsState(),
