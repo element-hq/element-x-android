@@ -54,7 +54,7 @@ sealed interface TimelineEvent {
 
     data class SelectPollAnswer(
         val pollStartId: EventId,
-        val answerId: String
+        val answerIds: List<String>
     ) : TimelineItemPollEvent
 
     data class EndPoll(
