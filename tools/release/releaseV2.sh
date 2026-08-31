@@ -88,6 +88,15 @@ if [[ ! -d ${buildToolsPath} ]]; then
     exit 1
 fi
 
+# Check that there is no unmerged PR with the label "Z-NextRelease", else exit
+unmergedPrs=$(gh pr list --repo element-hq/element-x-android --label "Z-NextRelease" --state open --json title,url -q '.[] | "\(.url): \(.title)"')
+if [[ ${unmergedPrs} != "" ]]; then
+    printf "Fatal: There are unmerged PRs with the label Z-NextRelease:\n%s" "${unmergedPrs}"
+    printf "\n"
+    exit 1
+fi
+
+
 # Check if git flow is enabled
 gitFlowDevelop=$(git config gitflow.branch.develop)
 if [[ ${gitFlowDevelop} != "" ]]
