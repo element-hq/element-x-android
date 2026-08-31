@@ -34,6 +34,7 @@ fun Project.setupSonar() {
             // exclude source code from analyses separated by a colon (:)
             // Exclude Java source and image resources
             property("sonar.exclusions", "**/BugReporterMultipartBody.java:**.png:**.webp")
+            property("sonar.projectBaseDir", project.rootDir.absolutePath)
         }
     }
 }
