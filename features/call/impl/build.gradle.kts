@@ -1,4 +1,5 @@
 import extension.buildConfigFieldStr
+import extension.readLocalProperty
 import extension.setupDependencyInjection
 import extension.testCommonDependencies
 
@@ -31,31 +32,31 @@ android {
         buildConfigFieldStr(
             name = "SENTRY_DSN",
             value = System.getenv("ELEMENT_CALL_SENTRY_DSN")
-                ?: providers.gradleProperty("features.call.sentry.dsn").orNull
+                ?: readLocalProperty("features.call.sentry.dsn")
                 ?: ""
         )
         buildConfigFieldStr(
             name = "POSTHOG_USER_ID",
             value = System.getenv("ELEMENT_CALL_POSTHOG_USER_ID")
-                ?: providers.gradleProperty("features.call.posthog.userid").orNull
+                ?: readLocalProperty("features.call.posthog.userid")
                 ?: ""
         )
         buildConfigFieldStr(
             name = "POSTHOG_API_HOST",
             value = System.getenv("ELEMENT_CALL_POSTHOG_API_HOST")
-                ?: providers.gradleProperty("features.call.posthog.api.host").orNull
+                ?: readLocalProperty("features.call.posthog.api.host")
                 ?: ""
         )
         buildConfigFieldStr(
             name = "POSTHOG_API_KEY",
             value = System.getenv("ELEMENT_CALL_POSTHOG_API_KEY")
-                ?: providers.gradleProperty("features.call.posthog.api.key").orNull
+                ?: readLocalProperty("features.call.posthog.api.key")
                 ?: ""
         )
         buildConfigFieldStr(
             name = "RAGESHAKE_URL",
             value = System.getenv("ELEMENT_CALL_RAGESHAKE_URL")
-                ?: providers.gradleProperty("features.call.regeshake.url").orNull
+                ?: readLocalProperty("features.call.regeshake.url")
                 ?: ""
         )
     }

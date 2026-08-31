@@ -13,6 +13,7 @@ import org.gradle.api.provider.ValueSource
 import org.gradle.api.provider.ValueSourceParameters
 import org.gradle.process.ExecOperations
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.IOException
 import java.util.Properties
 import javax.inject.Inject
@@ -35,6 +36,10 @@ abstract class GitBranchNameValueSource : ValueSource<String, ValueSourceParamet
     }
 }
 
+/**
+ * Runs a command using the ExecOperations and returns the output as a string.
+ * Throws an [IOException] if the command writes to the error stream.
+ */
 private fun ExecOperations.runCommand(cmd: String): String {
     val outputStream = ByteArrayOutputStream()
     val errorStream = ByteArrayOutputStream()
@@ -50,9 +55,14 @@ private fun ExecOperations.runCommand(cmd: String): String {
     return String(outputStream.toByteArray()).trim()
 }
 
+/**
+ * Reads a property from the local.properties file in the root directory of the project.
+ * Returns null if the property is not found or if the file does not exist.
+ */
 fun Project.readLocalProperty(name: String): String? = Properties().apply {
     try {
-        load(file("local.properties").reader())
+        load(File(rootDir, "local.properties").reader())
     } catch (ignored: IOException) {
+        logger.warn("Could not read local.properties file: ${ignored.message}")
     }
 }.getProperty(name)
