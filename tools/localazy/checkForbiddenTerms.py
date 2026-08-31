@@ -42,6 +42,31 @@ forbiddenTerms = {
     ]
 }
 
+# A complete, VALID placeholder, anchored to consume the whole token:
+#   %%              -> literal percent (allowed)
+#   %s %d %f ...    -> simple conversion
+#   %1$s %2$d ...   -> positional
+#   %.2f %1$.2f     -> optional precision
+_VALID_PLACEHOLDER = re.compile(
+    r'%(?:\d+\$)?(?:\.\d+)?[a-zA-Z]'
+)
+
+# Grab each candidate token: a '%' plus the run of chars that could belong to a
+# specifier (digits, '$', '.', and letters). This makes '%sd' and '%1d' surface
+# as single tokens instead of being partially swallowed.
+_PLACEHOLDER_MATCHES = re.compile(r'%%|%[0-9$.A-Za-z]*')
+
+def find_invalid_placeholders(value):
+    """Return the list of malformed placeholder tokens found in `value`."""
+    invalid = []
+    for token in _PLACEHOLDER_MATCHES.findall(value):
+        if token == '%%':
+            continue  # escaped percent is fine
+        if not _VALID_PLACEHOLDER.fullmatch(token):
+            invalid.append(token)
+    return invalid
+
+
 content = minidom.parse(file)
 
 errors = []
@@ -60,6 +85,9 @@ for elem in content.getElementsByTagName('string'):
         matches = re.search(term, value)
         if matches and name not in exceptions:
             errors.append('Forbidden term "' + term + '" in string: "' + name + '": ' + value)
+        invalid_placeholders = find_invalid_placeholders(value)
+        for placeholder in invalid_placeholders:
+            errors.append('Invalid placeholder "' + placeholder + '" in string: "' + name + '": ' + value)
 
 ### Plurals
 for elem in content.getElementsByTagName('plurals'):
@@ -78,6 +106,9 @@ for elem in content.getElementsByTagName('plurals'):
             matches = re.search(term, value)
             if matches and name not in exceptions:
                 errors.append('Forbidden term "' + term + '" in plural: "' + name + '": ' + value)
+            invalid_placeholders = find_invalid_placeholders(value)
+            for placeholder in invalid_placeholders:
+                errors.append('Invalid placeholder "' + placeholder + '" in plural: "' + name + '": ' + value)
 
 # If errors is not empty print the report
 if errors:
