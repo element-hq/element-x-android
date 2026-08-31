@@ -32,8 +32,8 @@ fun Project.setupSonar() {
             property("sonar.login", if (project.hasProperty("SONAR_LOGIN")) project.property("SONAR_LOGIN")!! else "invalid")
 
             // exclude source code from analyses separated by a colon (:)
-            // Exclude Java source
-            property("sonar.exclusions", "**/BugReporterMultipartBody.java")
+            // Exclude Java source and image resources
+            property("sonar.exclusions", "**/BugReporterMultipartBody.java:**.png:**.webp")
         }
     }
 }
