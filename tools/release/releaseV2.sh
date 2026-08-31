@@ -88,6 +88,15 @@ if [[ ! -d ${buildToolsPath} ]]; then
     exit 1
 fi
 
+# Check that there is no unmerged PR with the label "Z-NextRelease", else exit
+unmergedPrs=$(gh pr list --repo element-hq/element-x-android --label "Z-NextRelease" --state open --json title,url -q '.[] | "\(.url): \(.title)"')
+if [[ ${unmergedPrs} != "" ]]; then
+    printf "Fatal: There are unmerged PRs with the label Z-NextRelease:\n%s" "${unmergedPrs}"
+    printf "\n"
+    exit 1
+fi
+
+
 # Check if git flow is enabled
 gitFlowDevelop=$(git config gitflow.branch.develop)
 if [[ ${gitFlowDevelop} != "" ]]
@@ -188,7 +197,10 @@ git commit -a -m "Adding fastlane file for version ${version}"
 
 printf "\n================================================================================\n"
 printf "OK, finishing the release...\n"
-git flow release finish "${version}"
+# GIT_MERGE_AUTOEDIT avoids opening the editor for the 2 merge commits, whose default message is
+# always used, and -m provides the message of the annotated tag. git flow appends the tag name to
+# it, so the tag message ends up being "Release v${version}".
+GIT_MERGE_AUTOEDIT=no git flow release finish -m "Release" "${version}"
 
 printf "\n================================================================================\n"
 read -r -p "Done, push the branch 'main' and the new tag (yes/no) default to yes? " doPush
