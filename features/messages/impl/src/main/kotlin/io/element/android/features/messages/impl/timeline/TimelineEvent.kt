@@ -52,7 +52,7 @@ sealed interface TimelineEvent {
      */
     sealed interface TimelineItemPollEvent : TimelineItemEvent
 
-    data class SelectPollAnswer(
+    data class SendPollResponse(
         val pollStartId: EventId,
         val answerIds: List<String>
     ) : TimelineItemPollEvent

@@ -40,7 +40,7 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 fun PollContentView(
     state: PollContentState,
-    onSelectAnswer: (pollStartId: EventId, answerIds: List<String>) -> Unit,
+    onSendPollResponse: (pollStartId: EventId, answerIds: List<String>) -> Unit,
     onEditPoll: (pollStartId: EventId) -> Unit,
     onEndPoll: (pollStartId: EventId) -> Unit,
     modifier: Modifier = Modifier,
@@ -56,7 +56,7 @@ fun PollContentView(
         isPollEnded = state.isPollEnded,
         isMine = state.isMine,
         onEditPoll = onEditPoll,
-        onSelectAnswer = onSelectAnswer,
+        onSendPollResponse = onSendPollResponse,
         onEndPoll = onEndPoll,
         modifier = modifier,
     )
@@ -73,7 +73,7 @@ fun PollContentView(
     isPollEditable: Boolean,
     isPollEnded: Boolean,
     isMine: Boolean,
-    onSelectAnswer: (pollStartId: EventId, answerIds: List<String>) -> Unit,
+    onSendPollResponse: (pollStartId: EventId, answerIds: List<String>) -> Unit,
     onEditPoll: (pollStartId: EventId) -> Unit,
     onEndPoll: (pollStartId: EventId) -> Unit,
     modifier: Modifier = Modifier,
@@ -92,10 +92,10 @@ fun PollContentView(
                 }.filter { it.isSelected }.map { it.answer.id }
                 // Only send the response if the selection count is within the limit
                 if (newSelections.size <= maxSelections.toInt()) {
-                    onSelectAnswer(it, newSelections)
+                    onSendPollResponse(it, newSelections)
                 }
             } else {
-                onSelectAnswer(it, listOf(pollAnswer.id))
+                onSendPollResponse(it, listOf(pollAnswer.id))
             }
         }
     }
@@ -238,7 +238,7 @@ internal fun PollContentViewUndisclosedPreview() = ElementPreview {
         isPollEnded = false,
         isPollEditable = false,
         isMine = false,
-        onSelectAnswer = { _, _ -> },
+        onSendPollResponse = { _, _ -> },
         onEditPoll = {},
         onEndPoll = {},
     )
@@ -257,7 +257,7 @@ internal fun PollContentViewDisclosedPreview() = ElementPreview {
         isPollEnded = false,
         isPollEditable = false,
         isMine = false,
-        onSelectAnswer = { _, _ -> },
+        onSendPollResponse = { _, _ -> },
         onEditPoll = {},
         onEndPoll = {},
     )
@@ -276,7 +276,7 @@ internal fun PollContentViewMultipleSelectionPreview() = ElementPreview {
         isPollEnded = false,
         isPollEditable = false,
         isMine = false,
-        onSelectAnswer = { _, _ -> },
+        onSendPollResponse = { _, _ -> },
         onEditPoll = {},
         onEndPoll = {},
     )
@@ -295,7 +295,7 @@ internal fun PollContentViewEndedPreview() = ElementPreview {
         isPollEnded = true,
         isPollEditable = false,
         isMine = false,
-        onSelectAnswer = { _, _ -> },
+        onSendPollResponse = { _, _ -> },
         onEditPoll = {},
         onEndPoll = {},
     )
@@ -314,7 +314,7 @@ internal fun PollContentViewCreatorEditablePreview() = ElementPreview {
         isPollEnded = false,
         isPollEditable = true,
         isMine = true,
-        onSelectAnswer = { _, _ -> },
+        onSendPollResponse = { _, _ -> },
         onEditPoll = {},
         onEndPoll = {},
     )
@@ -333,7 +333,7 @@ internal fun PollContentViewCreatorPreview() = ElementPreview {
         isPollEnded = false,
         isPollEditable = false,
         isMine = true,
-        onSelectAnswer = { _, _ -> },
+        onSendPollResponse = { _, _ -> },
         onEditPoll = {},
         onEndPoll = {},
     )
@@ -352,7 +352,7 @@ internal fun PollContentViewCreatorEndedPreview() = ElementPreview {
         isPollEnded = true,
         isPollEditable = false,
         isMine = true,
-        onSelectAnswer = { _, _ -> },
+        onSendPollResponse = { _, _ -> },
         onEditPoll = {},
         onEndPoll = {},
     )

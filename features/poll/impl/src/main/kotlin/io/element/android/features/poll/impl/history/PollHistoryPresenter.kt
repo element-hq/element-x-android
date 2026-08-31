@@ -69,7 +69,7 @@ class PollHistoryPresenter(
                 is PollHistoryEvent.LoadMore -> {
                     coroutineScope.loadMore(timeline)
                 }
-                is PollHistoryEvent.SelectPollAnswer -> sessionCoroutineScope.launch {
+                is PollHistoryEvent.SendPollResponse -> sessionCoroutineScope.launch {
                     sendPollResponseAction.execute(
                         timeline = timeline,
                         pollStartId = event.pollStartId,

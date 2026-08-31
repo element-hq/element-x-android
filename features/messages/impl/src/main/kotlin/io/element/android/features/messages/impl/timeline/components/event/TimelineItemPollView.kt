@@ -26,8 +26,8 @@ fun TimelineItemPollView(
     eventSink: (TimelineEvent.TimelineItemPollEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    fun onSelectAnswer(pollStartId: EventId, answerIds: List<String>) {
-        eventSink(TimelineEvent.SelectPollAnswer(pollStartId, answerIds))
+    fun onSendPollResponse(pollStartId: EventId, answerIds: List<String>) {
+        eventSink(TimelineEvent.SendPollResponse(pollStartId, answerIds))
     }
 
     fun onEndPoll(pollStartId: EventId) {
@@ -48,7 +48,7 @@ fun TimelineItemPollView(
         isPollEnded = content.isEnded,
         isPollEditable = content.isEditable,
         isMine = content.isMine,
-        onSelectAnswer = ::onSelectAnswer,
+        onSendPollResponse = ::onSendPollResponse,
         onEditPoll = ::onEditPoll,
         onEndPoll = ::onEndPoll,
         modifier = modifier,
