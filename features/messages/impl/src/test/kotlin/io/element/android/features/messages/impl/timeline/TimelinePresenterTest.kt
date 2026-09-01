@@ -951,14 +951,14 @@ class TimelinePresenterTest {
     }
 
     @Test
-    fun `present - PollAnswerSelected event`() = runTest {
+    fun `present - SendPollResponse event`() = runTest {
         val sendPollResponseAction = FakeSendPollResponseAction()
         val presenter = createTimelinePresenter(
             sendPollResponseAction = sendPollResponseAction,
         )
         presenter.test {
             val initialState = awaitFirstItem()
-            initialState.eventSink.invoke(TimelineEvent.SelectPollAnswer(AN_EVENT_ID, "anAnswerId"))
+            initialState.eventSink.invoke(TimelineEvent.SendPollResponse(AN_EVENT_ID, listOf("anAnswerId")))
         }
         delay(1)
         sendPollResponseAction.verifyExecutionCount(1)
