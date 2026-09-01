@@ -9,6 +9,7 @@
 package io.element.android.libraries.voicerecorder.impl
 
 import android.Manifest
+import android.content.Context
 import androidx.annotation.RequiresPermission
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
@@ -16,6 +17,7 @@ import io.element.android.appconfig.VoiceMessageConfig
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.voicerecorder.api.VoiceRecorder
 import io.element.android.libraries.voicerecorder.api.VoiceRecorderState
@@ -44,6 +46,7 @@ import kotlin.time.TimeSource
 @SingleIn(RoomScope::class)
 @ContributesBinding(RoomScope::class)
 class DefaultVoiceRecorder(
+    @ApplicationContext private val context: Context,
     private val dispatchers: CoroutineDispatchers,
     private val timeSource: TimeSource,
     private val audioReaderFactory: AudioReader.Factory,
@@ -71,19 +74,16 @@ class DefaultVoiceRecorder(
     override val state: StateFlow<VoiceRecorderState> = _state
 
     @RequiresPermission(Manifest.permission.RECORD_AUDIO)
-    override suspend fun startRecord() = lock.withLock {
-        if (recordingJob != null) {
-            Timber.w("Voice recorder is already recording, ignoring this start")
-            return@withLock
-        }
-
+    override suspend fun startRecord() {
         Timber.i("Voice recorder started recording")
         outputFile = fileManager.createFile()
             .also(encoder::init)
 
-        levels.clear()
+        lock.withLock {
+            levels.clear()
+        }
 
-        val audioRecorder = audioReaderFactory.create(config, dispatchers).also { audioReader = it }
+        val audioRecorder = audioReaderFactory.create(context, config, dispatchers).also { audioReader = it }
 
         recordingJob = voiceCoroutineScope.launch {
             val startedAt = timeSource.markNow()
