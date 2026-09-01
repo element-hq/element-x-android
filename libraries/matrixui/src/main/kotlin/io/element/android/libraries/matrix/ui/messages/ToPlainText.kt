@@ -8,6 +8,12 @@
 
 package io.element.android.libraries.matrix.ui.messages
 
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
@@ -57,28 +63,51 @@ fun FormattedBody.toPlainText(
 }
 
 /**
+ * Converts the HTML string in [TextMessageType.formatted] to a text representation keeping the inline formatting, such as bold or strikethrough.
+ * If the message is not formatted or the format is not [MessageFormat.HTML], the [TextMessageType.body] is returned instead.
+ */
+fun TextMessageType.toAnnotatedText(
+    permalinkParser: PermalinkParser,
+): CharSequence = formatted?.toHtmlDocument(permalinkParser = permalinkParser)?.toAnnotatedText() ?: body
+
+/**
  * Converts the HTML [Document] to a plain text representation by parsing it and removing all formatting.
  */
-fun Document.toPlainText(): String {
-    val visitor = PlainTextNodeVisitor()
+fun Document.toPlainText(): String = toAnnotatedText().text
+
+/**
+ * Converts the HTML [Document] to a text representation which keeps the inline formatting as spans.
+ */
+fun Document.toAnnotatedText(): AnnotatedString {
+    val visitor = AnnotatedTextNodeVisitor()
     traverse(visitor)
     return visitor.build()
 }
 
 private const val FALLBACK_REPLY_NODE_TAG = "mx-reply"
 
-private class PlainTextNodeVisitor : NodeVisitor {
-    private val builder = StringBuilder()
+private fun Element.spanStyle(): SpanStyle? = when (tagName().lowercase()) {
+    "del", "s", "strike" -> SpanStyle(textDecoration = TextDecoration.LineThrough)
+    "u" -> SpanStyle(textDecoration = TextDecoration.Underline)
+    "b", "strong" -> SpanStyle(fontWeight = FontWeight.Bold)
+    "i", "em" -> SpanStyle(fontStyle = FontStyle.Italic)
+    "code" -> SpanStyle(fontFamily = FontFamily.Monospace)
+    else -> null
+}
+
+private class AnnotatedTextNodeVisitor : NodeVisitor {
+    private val builder = AnnotatedString.Builder()
+    private var lastChar: Char? = null
 
     override fun head(node: Node, depth: Int) {
         if (node is TextNode) {
             // If the text node is blank, only add a single whitespace char if there wasn't already one
             if (node.text().isBlank()) {
-                if (builder.lastOrNull()?.isWhitespace() == false) {
-                    builder.append(" ")
+                if (lastChar?.isWhitespace() == false) {
+                    append(" ")
                 }
             } else {
-                builder.append(node.text())
+                append(node.text())
             }
         } else if (node is Element && node.tagName() == "li") {
             val index = node.elementSiblingIndex() + 1
@@ -90,27 +119,41 @@ private class PlainTextNodeVisitor : NodeVisitor {
                 } else {
                     index
                 }
-                builder.append("$actualIndex. ")
+                append("$actualIndex. ")
             } else {
-                builder.append("• ")
+                append("• ")
             }
         } else if (node is Element && node.tagName() == FALLBACK_REPLY_NODE_TAG) {
             // Remove the fallback reply node and its contents so they aren't added to the plain text message
             node.remove()
-        } else if (node is Element && node.isBlock && builder.lastOrNull() != '\n') {
-            builder.append("\n")
+        } else if (node is Element && node.isBlock && lastChar != '\n') {
+            append("\n")
         }
+        (node as? Element)?.spanStyle()?.let { builder.pushStyle(it) }
     }
 
     override fun tail(node: Node, depth: Int) {
         fun nodeIsBlockButNotLastOne(node: Node) = node is Element && node.isBlock && node.lastElementSibling() !== node
         fun nodeIsLineBreak(node: Node) = node.nodeName().lowercase() == "br"
+        if ((node as? Element)?.spanStyle() != null) {
+            builder.pop()
+        }
         if (nodeIsBlockButNotLastOne(node) || nodeIsLineBreak(node)) {
-            builder.append("\n")
+            append("\n")
         }
     }
 
-    fun build(): String {
-        return builder.toString().trim()
+    private fun append(text: String) {
+        if (text.isEmpty()) return
+        builder.append(text)
+        lastChar = text.last()
+    }
+
+    fun build(): AnnotatedString {
+        val annotatedString = builder.toAnnotatedString()
+        val start = annotatedString.text.indexOfFirst { !it.isWhitespace() }
+        if (start == -1) return AnnotatedString("")
+        val end = annotatedString.text.indexOfLast { !it.isWhitespace() } + 1
+        return annotatedString.subSequence(start, end)
     }
 }

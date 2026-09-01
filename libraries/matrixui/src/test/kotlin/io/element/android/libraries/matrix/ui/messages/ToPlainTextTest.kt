@@ -8,6 +8,9 @@
 
 package io.element.android.libraries.matrix.ui.messages
 
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
@@ -148,5 +151,35 @@ class ToPlainTextTest : RobolectricTest() {
             )
         )
         assertThat(messageType.toPlainText(permalinkParser = FakePermalinkParser())).isEqualTo("This is the message content.")
+    }
+
+    @Test
+    fun `TextMessageType toAnnotatedText - keeps the inline formatting`() {
+        val messageType = TextMessageType(
+            body = "Hello striked bold world",
+            formatted = FormattedBody(
+                format = MessageFormat.HTML,
+                body = "Hello <del>striked</del> <strong>bold</strong> world",
+            )
+        )
+
+        val result = messageType.toAnnotatedText(permalinkParser = FakePermalinkParser()) as AnnotatedString
+
+        // The text itself is the same as the plain text version
+        assertThat(result.text).isEqualTo(messageType.toPlainText(permalinkParser = FakePermalinkParser()))
+        val struckThrough = result.spanStyles.single { it.item.textDecoration == TextDecoration.LineThrough }
+        assertThat(result.text.substring(struckThrough.start, struckThrough.end)).isEqualTo("striked")
+        val bold = result.spanStyles.single { it.item.fontWeight == FontWeight.Bold }
+        assertThat(result.text.substring(bold.start, bold.end)).isEqualTo("bold")
+    }
+
+    @Test
+    fun `TextMessageType toAnnotatedText - returns the body when there is no formatted body`() {
+        val messageType = TextMessageType(
+            body = "Hello world",
+            formatted = null,
+        )
+
+        assertThat(messageType.toAnnotatedText(permalinkParser = FakePermalinkParser())).isEqualTo("Hello world")
     }
 }

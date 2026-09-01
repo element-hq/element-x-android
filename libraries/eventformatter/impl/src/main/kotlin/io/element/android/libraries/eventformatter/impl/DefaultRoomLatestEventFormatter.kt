@@ -45,6 +45,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.UnknownConten
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
+import io.element.android.libraries.matrix.ui.messages.toAnnotatedText
 import io.element.android.libraries.matrix.ui.messages.toPlainText
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
@@ -138,7 +139,7 @@ class DefaultRoomLatestEventFormatter(
                 return "* ${senderDisambiguatedDisplayName.bidiIsolate()} ${messageType.body}"
             }
             is TextMessageType -> {
-                messageType.toPlainText(permalinkParser)
+                messageType.toAnnotatedText(permalinkParser)
             }
             is VideoMessageType -> {
                 messageType.toPlainText(permalinkParser).prefixWith(sp.getString(CommonStrings.common_video))
