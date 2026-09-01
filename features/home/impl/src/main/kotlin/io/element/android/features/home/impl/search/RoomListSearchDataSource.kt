@@ -14,6 +14,7 @@ import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.home.impl.datasource.RoomListRoomSummaryFactory
 import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
@@ -31,7 +32,7 @@ private const val PAGE_SIZE = 30
 @AssistedInject
 class RoomListSearchDataSource(
     @Assisted coroutineScope: CoroutineScope,
-    roomListService: RoomListService,
+    private val roomListService: RoomListService,
     coroutineDispatchers: CoroutineDispatchers,
     private val roomSummaryFactory: RoomListRoomSummaryFactory,
 ) {
@@ -64,8 +65,26 @@ class RoomListSearchDataSource(
         val filter = if (searchQuery.isBlank()) {
             RoomListFilter.None
         } else {
-            RoomListFilter.NormalizedMatchRoomName(searchQuery)
+            val roomIdsMatchingAlias = roomIdsMatchingAlias(searchQuery)
+            if (roomIdsMatchingAlias.isEmpty()) {
+                RoomListFilter.NormalizedMatchRoomName(searchQuery)
+            } else {
+                RoomListFilter.any(
+                    RoomListFilter.NormalizedMatchRoomName(searchQuery),
+                    RoomListFilter.Identifiers(roomIdsMatchingAlias),
+                )
+            }
         }
         roomList.updateFilter(filter)
+    }
+
+    private fun roomIdsMatchingAlias(searchQuery: String): List<RoomId> {
+        return roomListService.allRooms.summaries.replayCache
+            .lastOrNull()
+            .orEmpty()
+            .filter { summary ->
+                summary.info.aliases.any { alias -> alias.value.contains(searchQuery, ignoreCase = true) }
+            }
+            .map { summary -> summary.roomId }
     }
 }
