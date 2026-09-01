@@ -36,7 +36,6 @@ import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
-import io.element.android.libraries.core.coroutine.withPreviousValue
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
@@ -44,7 +43,6 @@ import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.ThreadId
-import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.ui.room.LoadingRoomState
@@ -52,13 +50,9 @@ import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.NotificationToMessage
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.OpenRoom
 import io.element.android.services.analytics.api.AnalyticsService
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
@@ -152,43 +146,30 @@ class RoomFlowNode(
         val roomInfoFlow = joinedRoom?.roomInfoFlow?.map { Optional.of(it) }
             ?: client.getRoomInfoFlow(roomId)
 
-        // This observes the local membership changes for the room
-        val membershipUpdateFlow = membershipObserver.updates
-            .filter { it.roomId == roomId }
-            .distinctUntilChanged()
-            // We add a replay so we can check the last local membership update
-            .shareIn(lifecycleScope, started = SharingStarted.Eagerly, replay = 1)
-
-        val currentMembershipFlow = roomInfoFlow
-            .map { it.getOrNull()?.currentUserMembership }
-            .distinctUntilChanged()
-            .withPreviousValue()
-        currentMembershipFlow.onEach { (previousMembership, membership) ->
-            Timber.d("Room membership: $membership")
-            if (membership == CurrentUserMembership.JOINED) {
-                val currentNavTarget = backstack.active?.key?.navTarget
-                if (currentNavTarget is NavTarget.JoinedRoom && currentNavTarget.roomId == roomId) {
-                    Timber.d("Already in JoinedRoom $roomId, do nothing")
-                    return@onEach
+        roomMembershipNavigation(
+            roomId = roomId,
+            roomInfoFlow = roomInfoFlow,
+            membershipUpdates = membershipObserver.updates,
+            scope = lifecycleScope,
+        ).onEach { navigation ->
+            Timber.d("Room membership navigation: $navigation")
+            when (navigation) {
+                RoomMembershipNavigation.EnterRoom -> {
+                    val currentNavTarget = backstack.active?.key?.navTarget
+                    if (currentNavTarget is NavTarget.JoinedRoom && currentNavTarget.roomId == roomId) {
+                        Timber.d("Already in JoinedRoom $roomId, do nothing")
+                        return@onEach
+                    }
+                    backstack.newRoot(NavTarget.JoinedRoom(roomId))
                 }
-                backstack.newRoot(NavTarget.JoinedRoom(roomId))
-            } else {
-                val leavingFromCurrentDevice =
-                    membership == CurrentUserMembership.LEFT &&
-                        previousMembership == CurrentUserMembership.JOINED &&
-                        membershipUpdateFlow.replayCache.lastOrNull()?.isUserInRoom == false
-
-                if (leavingFromCurrentDevice) {
-                    navigateUp()
-                } else {
-                    backstack.newRoot(
-                        NavTarget.JoinRoom(
-                            roomId = roomId,
-                            serverNames = serverNames,
-                            trigger = inputs.trigger.getOrNull() ?: JoinedRoomAnalyticsEvent.Trigger.Invite,
-                        )
+                RoomMembershipNavigation.Dismiss -> navigateUp()
+                RoomMembershipNavigation.ShowJoinRoom -> backstack.newRoot(
+                    NavTarget.JoinRoom(
+                        roomId = roomId,
+                        serverNames = serverNames,
+                        trigger = inputs.trigger.getOrNull() ?: JoinedRoomAnalyticsEvent.Trigger.Invite,
                     )
-                }
+                )
             }
         }.launchIn(lifecycleScope)
     }
