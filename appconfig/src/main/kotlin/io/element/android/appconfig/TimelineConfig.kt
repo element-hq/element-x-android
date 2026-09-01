@@ -13,11 +13,14 @@ import io.element.android.libraries.matrix.api.room.StateEventType
 object TimelineConfig {
     const val MAX_READ_RECEIPT_TO_DISPLAY = 3
 
+    private const val JITSI_CALL_MEMBER_EVENT_TYPE = "io.element.video.member"
+
     /**
      * Event types that will be filtered out from the timeline (i.e. not displayed).
      */
     val excludedEvents = listOf(
         StateEventType.CallMember,
+        StateEventType.Custom(JITSI_CALL_MEMBER_EVENT_TYPE),
         StateEventType.RoomCanonicalAlias,
         StateEventType.RoomGuestAccess,
         StateEventType.RoomHistoryVisibility,
