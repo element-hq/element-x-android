@@ -228,7 +228,7 @@ class DefaultActiveCallManager(
             val notificationData = currentActiveCall.callState.notificationData
             matrixClientProvider.getOrRestore(notificationData.sessionId).getOrNull()
                 ?.getRoom(notificationData.roomId)
-                ?.declineCall(notificationData.eventId)
+                ?.use { it.declineCall(notificationData.eventId) }
                 ?.onFailure {
                     Timber.e(it, "Failed to decline incoming call")
                 }

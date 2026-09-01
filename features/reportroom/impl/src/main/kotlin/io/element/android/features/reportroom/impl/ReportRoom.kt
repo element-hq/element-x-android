@@ -41,19 +41,21 @@ class DefaultReportRoom(
         val room = client.getRoom(roomId)
             ?: return Result.failure(ReportRoom.Exception.RoomNotFound)
 
-        if (shouldReport) {
-            room
-                .reportRoom(reason.takeIf { it.isNotBlank() })
-                .onFailure {
-                    return Result.failure(ReportRoom.Exception.ReportRoomFailed)
-                }
-        }
-        if (shouldLeave) {
-            room
-                .leave()
-                .onFailure {
-                    return Result.failure(ReportRoom.Exception.LeftRoomFailed)
-                }
+        room.use {
+            if (shouldReport) {
+                room
+                    .reportRoom(reason.takeIf { it.isNotBlank() })
+                    .onFailure {
+                        return Result.failure(ReportRoom.Exception.ReportRoomFailed)
+                    }
+            }
+            if (shouldLeave) {
+                room
+                    .leave()
+                    .onFailure {
+                        return Result.failure(ReportRoom.Exception.LeftRoomFailed)
+                    }
+            }
         }
         return Result.success(Unit)
     }
