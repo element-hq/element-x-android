@@ -45,6 +45,7 @@ import io.element.android.libraries.push.impl.notifications.fixtures.aSimpleNoti
 import io.element.android.libraries.push.impl.notifications.fixtures.anInviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
+import io.element.android.libraries.push.test.notifications.conversations.FakeNotificationConversationService
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
@@ -668,6 +669,7 @@ fun TestScope.createDefaultNotificationDrawerManager(
             enterpriseService = enterpriseService,
             sessionStore = sessionStore,
             analyticsService = analyticsService,
+            notificationConversationService = FakeNotificationConversationService(),
         ),
         appNavigationStateService = appNavigationStateService,
         coroutineScope = backgroundScope,
