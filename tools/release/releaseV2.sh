@@ -452,19 +452,22 @@ releaseAssets=(
   "${fdroidTargetPath}/app-fdroid-x86_64-release-signed.apk"
 )
 
-missingAsset=0
+# Set this variable to something other than 0 to enter the loop, and reset it to 0 when all files are found.
+missingAsset=-1
 
-for releaseAsset in "${releaseAssets[@]}"; do
-  if [[ ! -f "${releaseAsset}" ]]; then
-    printf "Error: the file %s does not exist.\n" "${releaseAsset}"
-    missingAsset=1
+while [[ ${missingAsset} -ne 0 ]]; do
+  missingAsset=0
+  for releaseAsset in "${releaseAssets[@]}"; do
+    if [[ ! -f "${releaseAsset}" ]]; then
+      printf "Error: the file %s does not exist.\n" "${releaseAsset}"
+      missingAsset=1
+    fi
+  done
+
+  if [[ ${missingAsset} -ne 0 ]]; then
+    read -r -p "Some files are missing, please fix the issue and press enter to retry. Press Ctrl+C to exit. "
   fi
 done
-
-if [[ ${missingAsset} -ne 0 ]]; then
-  printf "Fatal: some files are missing, cannot create the GitHub release.\n"
-  exit 1
-fi
 
 printf "Creating the pre-release v%s and uploading the %d files, this can take a while...\n" "${version}" "${#releaseAssets[@]}"
 gh release create "v${version}" \
