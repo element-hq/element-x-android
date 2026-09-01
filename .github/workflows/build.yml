@@ -5,9 +5,8 @@ on:
   pull_request:
   merge_group:
   push:
-    branches: [ develop ]
-
-permissions: {}
+    branches: [ develop 
+    
 
 # Enrich gradle.properties for CI/CD
 env:
