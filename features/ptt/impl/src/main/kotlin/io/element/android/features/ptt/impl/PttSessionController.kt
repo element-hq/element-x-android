@@ -16,6 +16,7 @@ import io.element.android.features.ptt.api.PttTransmitResult
 import io.element.android.features.ptt.api.PttTransport
 import io.element.android.features.ptt.api.PttTransportFactory
 import io.element.android.libraries.di.annotations.AppCoroutineScope
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,6 +25,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import timber.log.Timber
 
 /**
  * Session-host core: owns the single active [PttTransport] session, created from the injected
@@ -76,9 +78,17 @@ class PttSessionController(
                 stateJob = coroutineScope.launch {
                     newTransport.state.collect { _sessionState.value = it }
                 }
-                newTransport.join(config)
-                // Joins silent; apply the current listen preference (still off unless the user opted in).
-                newTransport.setAudioOutputEnabled(effectiveAudioOutput())
+                try {
+                    newTransport.join(config)
+                    // Joins silent; apply the current listen preference (still off unless the user opted in).
+                    newTransport.setAudioOutputEnabled(effectiveAudioOutput())
+                } catch (cancellation: CancellationException) {
+                    throw cancellation
+                } catch (error: Exception) {
+                    // A transport that fails to join must not crash the app-scoped session host; the
+                    // failure is reflected in the transport's own state flow.
+                    Timber.w(error, "PTT session join failed")
+                }
             }
         }
     }
