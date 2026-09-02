@@ -52,6 +52,10 @@
   <string name="screen_edit_profile_error_title">"Unable to update profile"</string>
   <string name="screen_edit_profile_title">"Edit profile"</string>
   <string name="screen_edit_profile_updating_details">"Updating profile…"</string>
+  <string name="screen_labs_enable_gallery">"Gallery messages"</string>
+  <string name="screen_labs_enable_gallery_description">"Send multiple images or videos in one go. Stable on mobile, but not yet supported by web."</string>
+  <string name="screen_labs_enable_knocking">"Ask to join"</string>
+  <string name="screen_labs_enable_knocking_description">"Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental."</string>
   <string name="screen_labs_enable_threads">"Enable thread replies"</string>
   <string name="screen_labs_enable_threads_description">"The app will restart to apply this change."</string>
   <string name="screen_labs_header_description">"Try out our latest ideas in development. These features are not finalised; they may be unstable, may change."</string>
