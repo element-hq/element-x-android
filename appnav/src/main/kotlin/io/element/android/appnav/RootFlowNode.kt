@@ -52,11 +52,11 @@ import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.appyx.rememberDelegateTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.waitForChildAttached
-import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.deeplink.api.DeeplinkData
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
@@ -410,7 +410,8 @@ class RootFlowNode(
     }
 
     private suspend fun onLoginLink(params: LoginParams) {
-        if (accountProviderAccessControl.isAllowedToConnectToAccountProvider(params.accountProvider.ensureProtocol())) {
+        val accountProvider = AccountProvider.Generic(params.accountProvider)
+        if (accountProviderAccessControl.isAllowedToConnectToAccountProvider(accountProvider)) {
             // Is there a session already?
             val sessions = sessionStore.getAllSessions()
             if (sessions.isNotEmpty()) {

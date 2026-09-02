@@ -11,10 +11,10 @@ package io.element.android.features.login.impl.accountprovider
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
-import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.features.enterprise.api.EnterpriseService
-import io.element.android.features.enterprise.api.canConnectToAnyHomeserver
 import io.element.android.libraries.di.annotations.AppCoroutineScope
+import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
+import io.element.android.libraries.matrix.api.accountprovider.matrixOrgAccountProvider
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,11 +33,9 @@ class AccountProviderDataSource(
 ) {
     // The provider used when the user has not selected one: an enterprise/MDM-configured provider,
     // else matrix.org. The most recently used provider (from history) can override it, see init.
-    private val configuredAccountProvider = createAccountProvider(
-        url = enterpriseService.homeserverAllowList()
-            .firstOrNull { it != EnterpriseService.ANY_ACCOUNT_PROVIDER }
-            ?: AuthenticationConfig.MATRIX_ORG_URL
-    )
+    private val configuredAccountProvider = enterpriseService.accountProviderAllowList()
+        .firstOrNull()
+        ?: matrixOrgAccountProvider
 
     private val accountProvider: MutableStateFlow<AccountProvider> = MutableStateFlow(configuredAccountProvider)
 
@@ -46,7 +44,7 @@ class AccountProviderDataSource(
     // The account provider the user last explicitly selected (via [setAccountProvider] / [setUrl]).
     // Unlike [flow], this is not recomputed by [reset], so it survives to be persisted to history on a
     // successful sign-in even when the login flow is torn down in between (e.g. across an OAuth round-trip).
-    var lastSelectedAccountProviderUrl: String? = null
+    var lastSelectedAccountProvider: AccountProvider? = null
         private set
 
     init {
@@ -66,28 +64,19 @@ class AccountProviderDataSource(
      * connect to any provider, otherwise the enterprise/MDM-configured provider.
      */
     private suspend fun defaultAccountProvider(): AccountProvider {
-        if (!enterpriseService.canConnectToAnyHomeserver()) {
+        if (!enterpriseService.canConnectToAnyAccountProvider()) {
             return configuredAccountProvider
         }
         val lastUsedProvider = appPreferencesStore.getHomeserverHistoryFlow().first().firstOrNull()
-        return lastUsedProvider?.let { createAccountProvider(it) } ?: configuredAccountProvider
+        return lastUsedProvider?.let { AccountProvider.Generic(it) } ?: configuredAccountProvider
     }
 
     suspend fun setUrl(url: String) {
-        setAccountProvider(createAccountProvider(url))
+        setAccountProvider(AccountProvider.Generic(url))
     }
 
     suspend fun setAccountProvider(data: AccountProvider) {
-        lastSelectedAccountProviderUrl = data.url
+        lastSelectedAccountProvider = data
         accountProvider.emit(data)
-    }
-
-    private fun createAccountProvider(url: String): AccountProvider {
-        return AccountProvider(
-            url = url,
-            subtitle = null,
-            isPublic = url == AuthenticationConfig.MATRIX_ORG_URL,
-            isMatrixOrg = url == AuthenticationConfig.MATRIX_ORG_URL,
-        )
     }
 }
