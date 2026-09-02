@@ -79,7 +79,7 @@ If you proceed, some of your settings may change."</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"The configuration has not been corrected, please try again."</string>
   <string name="screen_notification_settings_group_chats">"Group chats"</string>
   <string name="screen_notification_settings_invite_for_me_label">"Invitations"</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Your homeserver does not support this option in encrypted rooms, you may not get notified in some rooms."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Your account provider does not support this option in encrypted chats, you may not get notified in some chats."</string>
   <string name="screen_notification_settings_mentions_section_title">"Mentions"</string>
   <string name="screen_notification_settings_message_sound_dialog_choose_other">"Choose another sound…"</string>
   <string name="screen_notification_settings_message_sound_dialog_current_subtitle">"Currently using %1$s"</string>
@@ -88,7 +88,7 @@ If you proceed, some of your settings may change."</string>
   <string name="screen_notification_settings_mode_all">"All"</string>
   <string name="screen_notification_settings_mode_mentions">"Mentions"</string>
   <string name="screen_notification_settings_notification_section_title">"Notify me for"</string>
-  <string name="screen_notification_settings_room_mention_label">"Notify me on @room"</string>
+  <string name="screen_notification_settings_room_mention_label">"Mentions of @room"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"Custom"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"Custom sound…"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"Error deleting file"</string>
