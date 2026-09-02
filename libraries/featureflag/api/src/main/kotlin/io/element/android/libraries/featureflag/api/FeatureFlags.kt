@@ -51,6 +51,7 @@ enum class FeatureFlags(
         description = "Allow creating rooms which users can request access to.",
         defaultValue = { false },
         isFinished = false,
+        isInLabs = true,
     ),
     PrintLogsToLogcat(
         key = "feature.print_logs_to_logcat",
@@ -151,6 +152,7 @@ enum class FeatureFlags(
         description = "Allow sending multiple media items in a single message.",
         defaultValue = { false },
         isFinished = false,
+        isInLabs = true,
     ),
     MessageSearch(
         key = "feature.message_search",
