@@ -6,6 +6,9 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+    <!-- Warm connection (connected/listening, not transmitting) runs as a special-use FGS so it does
+         not require RECORD_AUDIO; it is elevated to the microphone type only while transmitting. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
     <!-- Floating on-screen PTT button drawn over other apps. -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <!-- Full-screen "join push-to-talk" alert over the lock screen. -->
@@ -19,7 +22,11 @@
             android:name=".services.PttSessionHostService"
             android:enabled="true"
             android:exported="false"
-            android:foregroundServiceType="microphone" />
+            android:foregroundServiceType="microphone|specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Maintains the real-time push-to-talk voice channel connection while the app is backgrounded" />
+        </service>
 
         <!-- Over-the-lock-screen "join push-to-talk" alert (launched via full-screen intent). -->
         <activity

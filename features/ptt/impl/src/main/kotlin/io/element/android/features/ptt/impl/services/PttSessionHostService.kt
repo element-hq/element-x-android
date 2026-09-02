@@ -7,10 +7,12 @@
 
 package io.element.android.features.ptt.impl.services
 
+import android.Manifest
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
@@ -41,7 +43,8 @@ private const val NOTIFICATION_ID = 90_210
  * Foreground service that keeps a native PTT session alive across backgrounding and lock-screen.
  *
  * Unlike the Element Call host (which needs a live WebView window), the native transport is plain
- * audio, so this service just holds the process in the foreground (FOREGROUND_SERVICE_TYPE_MICROPHONE)
+ * audio, so this service just holds the process in the foreground (as a special-use FGS while warm,
+ * elevated to the microphone type once RECORD_AUDIO is granted — see [desiredServiceType])
  * while the app-scoped [PttSessionController] owns the actual transport session. Start/stop drive the
  * controller; the microphone/floor are controlled elsewhere (talk button, hardware keys).
  */
@@ -76,6 +79,9 @@ class PttSessionHostService : Service() {
     private val foregroundObserver = LifecycleEventObserver { _, event ->
         if (event == Lifecycle.Event.ON_RESUME) {
             overlayButton?.show()
+            // The user may have just granted RECORD_AUDIO (e.g. from the transmit prompt or settings);
+            // re-apply the foreground type so a warm special-use session is elevated to microphone.
+            startAsForeground()
         }
     }
 
@@ -132,15 +138,29 @@ class PttSessionHostService : Service() {
             .setOngoing(true)
             .addAction(0, "Leave", hangupIntent)
             .build()
-        val serviceType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE
-        } else {
-            0
-        }
         runCatchingExceptions {
-            ServiceCompat.startForeground(this, NOTIFICATION_ID, notification, serviceType)
+            ServiceCompat.startForeground(this, NOTIFICATION_ID, notification, desiredServiceType())
         }.onFailure {
             Timber.tag(loggerTag.value).e(it, "Failed to start PTT session host foreground service")
+        }
+    }
+
+    /**
+     * The foreground-service type for the current state. A warm connection (connected/listening, not
+     * transmitting) does not use the mic, so on Android 14+ it runs as `specialUse` — which, unlike the
+     * `microphone` type, does not require RECORD_AUDIO to start. Once RECORD_AUDIO is granted the service
+     * uses the `microphone` type so transmitting works while backgrounded. Re-evaluated on ON_RESUME.
+     */
+    private fun desiredServiceType(): Int {
+        val micGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) ==
+            PackageManager.PERMISSION_GRANTED
+        return when {
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.R -> 0
+            micGranted -> ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE -> ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
+            // Android 11–13: the microphone type can be declared without RECORD_AUDIO granted (the
+            // mic access itself is still gated at capture time), so no special-use fallback is needed.
+            else -> ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE
         }
     }
 
