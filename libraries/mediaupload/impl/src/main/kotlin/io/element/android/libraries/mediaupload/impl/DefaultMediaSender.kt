@@ -278,6 +278,12 @@ class DefaultMediaSender(
         }
     }
 
+    override fun cancelOngoingUploads() {
+        Timber.d("Cancelling ${ongoingUploadJobs.size} ongoing upload(s)")
+        ongoingUploadJobs.values.forEach { it.cancel() }
+        ongoingUploadJobs.clear()
+    }
+
     /**
      * Clean up any temporary files or resources used during the media processing.
      */

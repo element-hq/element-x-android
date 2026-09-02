@@ -75,7 +75,9 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -437,16 +439,17 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
 
     @Test
     fun `present - dismissing the progress dialog stops media upload`() = runTest {
-        val onDoneListenerResult = lambdaRecorder<Unit> {}
+        val uploadHandler = FakeMediaUploadHandler()
         val presenter = createAttachmentsPreviewPresenter(
             room = FakeJoinedRoom(
                 liveTimeline = FakeTimeline().apply {
                     sendFileLambda = { _, _, _, _, _ ->
-                        Result.success(FakeMediaUploadHandler())
+                        Result.success(uploadHandler)
                     }
                 }
             ),
-            onDoneListener = onDoneListenerResult,
+            // The upload must never complete, so the done listener must never be called
+            onDoneListener = OnDoneListener { lambdaError() },
         )
         presenter.test {
             skipItems(1)
@@ -456,8 +459,14 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(listOf(mediaUploadInfo)))
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(listOf(mediaUploadInfo)))
+            // Let the upload start before cancelling it: FakeTimeline.sendFile only returns the handler after a delay
+            advanceTimeBy(1)
+            runCurrent()
             initialState.eventSink(AttachmentsPreviewEvent.CancelAndClearSendState)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(listOf(mediaUploadInfo)))
+            // The upload itself is aborted, not only the coroutine awaiting it
+            uploadHandler.assertCancelled()
+            advanceUntilIdle()
             // The sending is cancelled and the state is kept at ReadyToUpload
             ensureAllEventsConsumed()
         }

@@ -112,6 +112,7 @@ class AttachmentsPreviewPresenter(
         )
 
         val ongoingSendAttachmentJob = remember { mutableStateOf<Job?>(null) }
+        val ongoingUploadJob = remember { mutableStateOf<Job?>(null) }
 
         var currentIndex by remember { mutableIntStateOf(0) }
 
@@ -264,7 +265,7 @@ class AttachmentsPreviewPresenter(
                         editedTempFiles = emptyMap()
 
                         // Send the media using the session coroutine scope so it doesn't matter if this screen or the chat one are closed
-                        sessionCoroutineScope.launch(dispatchers.io) {
+                        ongoingUploadJob.value = sessionCoroutineScope.launch(dispatchers.io) {
                             sendMedia(
                                 mediaUploadInfos = allMediaUploadInfos,
                                 caption = caption,
@@ -298,10 +299,16 @@ class AttachmentsPreviewPresenter(
                     )
                 }
                 AttachmentsPreviewEvent.CancelAndClearSendState -> {
-                    // Cancel media sending
+                    // Cancel media sending. The upload is aborted first: cancelling the coroutine that awaits it
+                    // would only detach from it and leave the upload running.
+                    mediaSender.cancelOngoingUploads()
                     ongoingSendAttachmentJob.value?.let {
                         it.cancel()
                         ongoingSendAttachmentJob.value = null
+                    }
+                    ongoingUploadJob.value?.let {
+                        it.cancel()
+                        ongoingUploadJob.value = null
                     }
 
                     val mediaUploadInfoList = sendActionState.value.mediaUploadInfoList()

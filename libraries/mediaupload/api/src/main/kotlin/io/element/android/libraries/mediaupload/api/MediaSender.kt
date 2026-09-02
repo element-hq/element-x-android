@@ -125,6 +125,14 @@ interface MediaSender {
         inReplyToEventId: EventId?,
     ): Result<Unit>
 
+    /**
+     * Aborts the uploads started by this sender that are still in flight.
+     *
+     * Only cancelling the coroutine that awaits an upload leaves it running, so that closing a screen does not abort a send in progress.
+     * This is the explicit counterpart, for when the user asks for the send to stop.
+     */
+    fun cancelOngoingUploads()
+
     /** Deletes the temporary files produced by pre-processing; must be called even when nothing was ultimately sent. */
     fun cleanUp()
 }
