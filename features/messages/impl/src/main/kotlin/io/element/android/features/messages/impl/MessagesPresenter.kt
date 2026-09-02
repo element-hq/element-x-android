@@ -300,6 +300,7 @@ class MessagesPresenter(
         return MessagesState(
             roomId = room.roomId,
             roomName = roomInfo.name,
+            memberCount = roomInfo.joinedMembersCount.takeIf { !roomInfo.isDm && !roomInfo.isSpace },
             roomAvatar = roomAvatar,
             heroes = heroes,
             userEventPermissions = userEventPermissions,

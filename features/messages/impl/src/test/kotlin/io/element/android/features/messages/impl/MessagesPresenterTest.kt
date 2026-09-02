@@ -64,6 +64,7 @@ import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.MessageEventType
+import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.StateEventType
@@ -145,6 +146,26 @@ class MessagesPresenterTest {
             assertThat(initialState.inviteProgress).isEqualTo(AsyncData.Uninitialized)
             assertThat(initialState.showReinvitePrompt).isFalse()
             assertThat(initialState.showLiveLocationShareBanner).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - a group room reports how many members it has`() = runTest {
+        val presenter = createMessagesPresenter(
+            joinedRoom = aJoinedRoomWithInfo(aRoomInfo(id = A_ROOM_ID, name = "", isDm = false, joinedMembersCount = 12)),
+        )
+        presenter.testWithLifecycleOwner {
+            assertThat(consumeItemsUntilTimeout().last().memberCount).isEqualTo(12)
+        }
+    }
+
+    @Test
+    fun `present - a direct message does not report a member count`() = runTest {
+        val presenter = createMessagesPresenter(
+            joinedRoom = aJoinedRoomWithInfo(aRoomInfo(id = A_ROOM_ID, name = "", isDm = true, joinedMembersCount = 2)),
+        )
+        presenter.testWithLifecycleOwner {
+            assertThat(consumeItemsUntilTimeout().last().memberCount).isNull()
         }
     }
 
@@ -1423,6 +1444,23 @@ class MessagesPresenterTest {
         canRedactOwn = canRedactOwn,
         canPinUnpin = canPinUnpin,
     )
+
+    private fun aJoinedRoomWithInfo(roomInfo: RoomInfo): FakeJoinedRoom {
+        return FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
+                roomPermissions = FakeRoomPermissions(
+                    canSendState = { true },
+                    canSendMessage = { true },
+                    canRedactOther = true,
+                    canRedactOwn = true,
+                    canPinUnpin = true,
+                ),
+            ).apply {
+                givenRoomInfo(roomInfo)
+            },
+            typingNoticeResult = { Result.success(Unit) },
+        )
+    }
 
     private fun TestScope.createMessagesPresenter(
         coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),

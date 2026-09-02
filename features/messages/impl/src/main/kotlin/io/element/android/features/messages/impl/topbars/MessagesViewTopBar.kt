@@ -27,10 +27,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -50,12 +52,14 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.ROOM_NAME
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.ui.components.DisplayNameWithStatus
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.matrix.ui.model.getAvatarData
+import io.element.android.libraries.ui.strings.CommonPlurals
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -65,6 +69,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 internal fun MessagesViewTopBar(
     roomName: String?,
+    memberCount: Long?,
     roomAvatar: AvatarData,
     isTombstoned: Boolean,
     heroes: ImmutableList<AvatarData>,
@@ -95,6 +100,7 @@ internal fun MessagesViewTopBar(
                 val titleModifier = Modifier.weight(1f, fill = false)
                 RoomAvatarAndNameRow(
                     roomName = roomName,
+                    memberCount = memberCount,
                     roomAvatar = roomAvatar,
                     isTombstoned = isTombstoned,
                     heroes = heroes,
@@ -149,6 +155,7 @@ internal fun MessagesViewTopBar(
 @Composable
 private fun RoomAvatarAndNameRow(
     roomName: String?,
+    memberCount: Long?,
     roomAvatar: AvatarData,
     heroes: ImmutableList<AvatarData>,
     isTombstoned: Boolean,
@@ -166,14 +173,24 @@ private fun RoomAvatarAndNameRow(
                 isTombstoned = isTombstoned,
             ),
         )
-        DisplayNameWithStatus(
-            name = roomName ?: stringResource(CommonStrings.common_no_room_name),
-            status = dmUserStatus,
-            modifier = Modifier.padding(start = 8.dp),
-            style = ElementTheme.typography.fontBodyLgMedium,
-            nameColor = ElementTheme.colors.textPrimary,
-            nameFontStyle = FontStyle.Italic.takeIf { roomName == null },
-        )
+        Column(modifier = Modifier.padding(start = 8.dp)) {
+            DisplayNameWithStatus(
+                name = roomName ?: stringResource(CommonStrings.common_no_room_name),
+                status = dmUserStatus,
+                style = ElementTheme.typography.fontBodyLgMedium,
+                nameColor = ElementTheme.colors.textPrimary,
+                nameFontStyle = FontStyle.Italic.takeIf { roomName == null },
+            )
+            if (memberCount != null) {
+                Text(
+                    text = pluralStringResource(CommonPlurals.common_member_count, memberCount.toInt(), memberCount.toInt()),
+                    style = ElementTheme.typography.fontBodyXsRegular,
+                    color = ElementTheme.colors.textSecondary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+        }
     }
 }
 
@@ -183,6 +200,7 @@ internal fun MessagesViewTopBarPreview() = ElementPreview {
     @Composable
     fun AMessagesViewTopBar(
         roomName: String? = ROOM_NAME,
+        memberCount: Long? = 42,
         roomAvatar: AvatarData = anAvatarData(
             name = ROOM_NAME,
             size = AvatarSize.TimelineRoom,
@@ -196,6 +214,7 @@ internal fun MessagesViewTopBarPreview() = ElementPreview {
         displayThreads: Boolean = false,
     ) = MessagesViewTopBar(
         roomName = roomName,
+        memberCount = memberCount,
         roomAvatar = roomAvatar,
         isTombstoned = isTombstoned,
         heroes = heroes,
