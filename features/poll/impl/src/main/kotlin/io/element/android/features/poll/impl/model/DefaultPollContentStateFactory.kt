@@ -43,15 +43,21 @@ class DefaultPollContentStateFactory(
                 ?.value
                 .orEmpty()
         }
+        val currentSelectionCount = myVotes.size
+        val maxSelections = content.maxSelections.toInt()
+        val isSelectionLimitReached = currentSelectionCount >= maxSelections
+
         val answerItems = content.answers.map { answer ->
             val answerVoteCount = content.votes[answer.id]?.size ?: 0
             val isSelected = answer.id in myVotes
             val isWinner = answer.id in winnerIds
             val percentage = if (totalVoteCount > 0) answerVoteCount.toFloat() / totalVoteCount.toFloat() else 0f
+            // An answer is enabled if the poll hasn't ended and either the user can still select more answers or this answer is already selected
+            val isEnabled = !isPollEnded && (!isSelectionLimitReached || isSelected)
             PollAnswerItem(
                 answer = answer,
                 isSelected = isSelected,
-                isEnabled = !isPollEnded,
+                isEnabled = isEnabled,
                 isWinner = isWinner,
                 showVotes = content.kind.isDisclosed || isPollEnded,
                 votesCount = answerVoteCount,
@@ -64,6 +70,7 @@ class DefaultPollContentStateFactory(
             question = content.question,
             answerItems = answerItems.toImmutableList(),
             pollKind = content.kind,
+            maxSelections = content.maxSelections,
             isPollEditable = isEditable,
             isPollEnded = isPollEnded,
             isMine = isOwn,
