@@ -76,7 +76,7 @@ Niektóre ustawienia mogą ulec zmianie, jeśli kontynuujesz."</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"Konfiguracja nie została poprawiona, spróbuj ponownie."</string>
   <string name="screen_notification_settings_group_chats">"Czaty grupowe"</string>
   <string name="screen_notification_settings_invite_for_me_label">"Zaproszenia"</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Twój serwer domowy nie wspiera tej opcji w pokojach szyfrowanych, możesz nie otrzymać powiadomień z niektórych pokoi."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Twój dostawca konta nie wspiera tej opcji w pokojach szyfrowanych, możesz nie otrzymać powiadomień z niektórych pokoi."</string>
   <string name="screen_notification_settings_mentions_section_title">"Wzmianki"</string>
   <string name="screen_notification_settings_message_sound_dialog_choose_other">"Wybierz inny dźwięk…"</string>
   <string name="screen_notification_settings_message_sound_dialog_current_subtitle">"Aktualnie używany %1$s"</string>
@@ -85,7 +85,7 @@ Niektóre ustawienia mogą ulec zmianie, jeśli kontynuujesz."</string>
   <string name="screen_notification_settings_mode_all">"Wszystkie"</string>
   <string name="screen_notification_settings_mode_mentions">"Wzmianki"</string>
   <string name="screen_notification_settings_notification_section_title">"Powiadamiaj mnie przez"</string>
-  <string name="screen_notification_settings_room_mention_label">"Powiadom mnie na @pokój"</string>
+  <string name="screen_notification_settings_room_mention_label">"Wzmianki @room"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"Własny"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"Własny dźwięk…"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"Błąd usuwania pliku"</string>

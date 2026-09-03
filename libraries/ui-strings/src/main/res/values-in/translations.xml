@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_avatar">"Tambahkan avatar"</string>
   <string name="a11y_add_reaction">"Tambahkan reaksi: %1$s"</string>
   <string name="a11y_address">"Alamat"</string>
   <string name="a11y_avatar">"Avatar"</string>
@@ -13,6 +14,13 @@
   <string name="a11y_edit_room_address_hint">"Alamat lengkapnya adalah%1$s"</string>
   <string name="a11y_encryption_details">"Detail enkripsi"</string>
   <string name="a11y_expand_message_text_field">"Perluas kolom teks pesan"</string>
+  <string name="a11y_gallery_attachment">"Galeri, lampiran %1$d"</string>
+  <string name="a11y_gallery_image">"Galeri, gambar %1$d"</string>
+  <plurals name="a11y_gallery_more_media">
+    <item quantity="other">"Galeri, %1$d media lainnya"</item>
+  </plurals>
+  <string name="a11y_gallery_scanning">"Galeri, memindai %1$d"</string>
+  <string name="a11y_gallery_video">"Galeri, video %1$d"</string>
   <string name="a11y_hide_password">"Sembunyikan kata sandi"</string>
   <string name="a11y_info">"Informasi"</string>
   <string name="a11y_join_call">"Bergabung dalam panggilan"</string>
@@ -96,6 +104,7 @@
   <string name="action_decline_and_block">"Tolak dan blokir"</string>
   <string name="action_delete">"Hapus"</string>
   <string name="action_delete_account">"Hapus akun"</string>
+  <string name="action_delete_file">"Hapus file"</string>
   <string name="action_delete_poll">"Hapus jajak pendapat"</string>
   <string name="action_deselect_all">"Batalkan semua pilihan"</string>
   <string name="action_disable">"Nonaktifkan"</string>
@@ -299,6 +308,7 @@ Alasan: %1$s."</string>
   <string name="common_please_wait">"Mohon tunggu…"</string>
   <string name="common_poll_end_confirmation">"Apakah Anda yakin ingin mengakhiri jajak pendapat ini?"</string>
   <string name="common_poll_summary">"Jajak pendapat: %1$s"</string>
+  <string name="common_poll_summary_prefix">"Polling"</string>
   <string name="common_poll_total_votes">"Total suara: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Hasil akan terlihat setelah jajak pendapat berakhir."</string>
   <plurals name="common_poll_votes_count">
@@ -530,4 +540,6 @@ Apakah Anda yakin ingin melanjutkan?"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Anda tidak memiliki akses ke pesan ini"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Tidak dapat mendekripsi pesan"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Pesan ini diblokir karena Anda tidak memverifikasi perangkat Anda atau karena pengirim perlu memverifikasi identitas Anda."</string>
+  <string name="vulkan_not_supported_dialog_content_android">"Perangkat Anda terlalu lama, diperlukan perangkat dengan Android 8 atau yang lebih baru."</string>
+  <string name="vulkan_not_supported_dialog_title_android">"Rendering peta tidak didukung."</string>
 </resources>
