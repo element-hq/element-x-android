@@ -20,6 +20,16 @@
   <string name="a11y_edit_room_address_hint">"Повна адреса буде %1$s"</string>
   <string name="a11y_encryption_details">"Подробиці шифрування"</string>
   <string name="a11y_expand_message_text_field">"Розгорнути текстове поле повідомлення"</string>
+  <string name="a11y_gallery_attachment">"Галерея, вкладення %1$d"</string>
+  <string name="a11y_gallery_failed_scan">"Галерея, невдалося сканувати %1$d"</string>
+  <string name="a11y_gallery_image">"Галерея, зображення %1$d"</string>
+  <plurals name="a11y_gallery_more_media">
+    <item quantity="one">"Галерея, ще %1$d медіа"</item>
+    <item quantity="few">"Галерея, ще %1$d медіа"</item>
+    <item quantity="many">"Галерея, ще %1$d медіа"</item>
+  </plurals>
+  <string name="a11y_gallery_scanning">"Галерея, сканування %1$d"</string>
+  <string name="a11y_gallery_video">"Галерея, відео %1$d"</string>
   <string name="a11y_hide_password">"Cховати пароль"</string>
   <string name="a11y_info">"Інформація"</string>
   <string name="a11y_join_call">"Приєднатися до виклику"</string>
@@ -493,7 +503,7 @@
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Виберіть якість відео, яке ви хочете вивантажити."</string>
   <string name="dialog_video_quality_selector_title">"Виберіть якість вивантажуваного відео"</string>
   <string name="error_account_already_logged_in">"Ви вже ввійшли на цьому пристрої як %1$s."</string>
-  <string name="error_account_creation_not_possible">"Ваш домашній сервер потрібно оновити, щоб він підтримував службу автентифікації Matrix і створення облікових записів."</string>
+  <string name="error_account_creation_not_possible">"Постачальника послуг облікового запису потрібно оновити для підтримки Matrix Authentication Service та створення облікових записів."</string>
   <string name="error_failed_creating_the_permalink">"Не вдалося створити постійне посилання"</string>
   <string name="error_failed_loading_map">"%1$s не може завантажити мапу. Повторіть спробу пізніше."</string>
   <string name="error_failed_loading_messages">"Не вдалося завантажити повідомлення"</string>

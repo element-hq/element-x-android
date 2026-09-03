@@ -11,7 +11,7 @@ package io.element.android.features.roomdetails.impl.members.details
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.roomdetails.impl.aJoinedRoom
 import io.element.android.features.roomdetails.impl.members.aRoomMember
-import io.element.android.features.userprofile.api.UserProfileEvents
+import io.element.android.features.userprofile.api.UserProfileEvent
 import io.element.android.features.userprofile.api.UserProfilePresenterFactory
 import io.element.android.features.userprofile.api.UserProfileVerificationState
 import io.element.android.features.userprofile.shared.aUserProfileState
@@ -348,7 +348,7 @@ class RoomMemberDetailsPresenterTest {
 
             consumeItemsUntilPredicate { it.verificationState == UserProfileVerificationState.VERIFICATION_VIOLATION }
 
-            initialState.eventSink(UserProfileEvents.WithdrawVerification)
+            initialState.eventSink(UserProfileEvent.WithdrawVerification)
             withdrawVerificationResult.assertions().isCalledOnce()
         }
     }

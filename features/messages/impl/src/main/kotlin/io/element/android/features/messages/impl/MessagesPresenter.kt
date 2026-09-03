@@ -51,10 +51,11 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.captionOrNull
+import io.element.android.features.messages.impl.timeline.model.event.htmlCaptionOrNull
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.voicemessages.composer.DefaultVoiceMessageComposerPresenter
 import io.element.android.features.roomcall.api.RoomCallState
-import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvent
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.architecture.AsyncData
@@ -263,7 +264,7 @@ class MessagesPresenter(
                     }
                 }
                 is MessagesEvent.OnUserClicked -> {
-                    roomMemberModerationState.eventSink(RoomMemberModerationEvents.ShowActionsForUser(event.user))
+                    roomMemberModerationState.eventSink(RoomMemberModerationEvent.ShowActionsForUser(event.user))
                 }
                 MessagesEvent.StopLiveLocationShare -> {
                     localCoroutineScope.launch {
@@ -377,7 +378,7 @@ class MessagesPresenter(
             TimelineItemAction.Edit,
             TimelineItemAction.EditPoll -> handleActionEdit(targetEvent, composerState, enableTextFormatting)
             TimelineItemAction.AddCaption -> handleActionAddCaption(targetEvent, composerState)
-            TimelineItemAction.EditCaption -> handleActionEditCaption(targetEvent, composerState)
+            TimelineItemAction.EditCaption -> handleActionEditCaption(targetEvent, composerState, enableTextFormatting)
             TimelineItemAction.RemoveCaption -> handleRemoveCaption(targetEvent)
             TimelineItemAction.Reply -> handleActionReply(targetEvent, composerState, timelineProtectionState)
             TimelineItemAction.ReplyInThread -> {
@@ -400,7 +401,21 @@ class MessagesPresenter(
             TimelineItemAction.Pin -> handlePinAction(targetEvent)
             TimelineItemAction.Unpin -> handleUnpinAction(targetEvent)
             TimelineItemAction.ViewInTimeline -> Unit
+            TimelineItemAction.RetrySending -> handleRetrySending(targetEvent)
         }
+    }
+
+    private suspend fun handleRetrySending(targetEvent: TimelineItem.Event) {
+        val sendHandle = targetEvent.sendhandle ?: return Unit.also {
+            Timber.w("No send handle for event ${targetEvent.eventOrTransactionId}")
+        }
+        sendHandle.retry()
+            .onSuccess {
+                Timber.d("Succeed to add the message back to the send queue")
+            }
+            .onFailure {
+                Timber.e(it, "Failed to add the message back to the send queue")
+            }
     }
 
     private suspend fun handleRemoveCaption(targetEvent: TimelineItem.Event) {
@@ -532,10 +547,15 @@ class MessagesPresenter(
     private suspend fun handleActionEditCaption(
         targetEvent: TimelineItem.Event,
         composerState: MessageComposerState,
+        enableTextFormatting: Boolean,
     ) {
         val composerMode = MessageComposerMode.EditCaption(
             eventOrTransactionId = targetEvent.eventOrTransactionId,
-            content = targetEvent.content.captionOrNull().orEmpty(),
+            content = if (enableTextFormatting) {
+                targetEvent.content.htmlCaptionOrNull() ?: targetEvent.content.captionOrNull()
+            } else {
+                targetEvent.content.captionOrNull()
+            }.orEmpty(),
         )
         composerState.eventSink(
             MessageComposerEvent.SetMode(composerMode)

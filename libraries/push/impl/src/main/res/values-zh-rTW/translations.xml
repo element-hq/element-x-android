@@ -16,6 +16,9 @@
   <plurals name="notification_fallback_n_content">
     <item quantity="other">"您有 %d 則新訊息。"</item>
   </plurals>
+  <plurals name="notification_gallery_body">
+    <item quantity="other">"已分享 %1$d 個附件"</item>
+  </plurals>
   <string name="notification_incoming_audio_call">"📞 來電"</string>
   <string name="notification_incoming_call">"📹 來電"</string>
   <string name="notification_inline_reply_failed">"** 無法傳送，請開啟聊天室"</string>
@@ -26,6 +29,8 @@
   </plurals>
   <string name="notification_invite_body">"邀請您聊天"</string>
   <string name="notification_invite_body_with_sender">"%1$s 邀請您加入聊天"</string>
+  <string name="notification_knock_request_body">"已要求加入"</string>
+  <string name="notification_live_location_started_body">"已開始分享他們的即時位置"</string>
   <string name="notification_mentioned_you_body">"提及您：%1$s"</string>
   <string name="notification_new_messages">"新訊息"</string>
   <plurals name="notification_new_messages_for_room">
@@ -88,6 +93,7 @@
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"錯誤：%1$s。"</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"錯誤，無法測試推播。"</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"錯誤，等待推播逾時。"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_rate_limit">"錯誤：推播閘道已限速此裝置，因此通知可能不穩定。請設定其他推播閘道。"</string>
   <string name="troubleshoot_notifications_test_push_loop_back_success">"推播返回需要 %1$d 毫秒。"</string>
   <string name="troubleshoot_notifications_test_push_loop_back_title">"測試推播返回"</string>
 </resources>

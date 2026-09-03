@@ -35,20 +35,19 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 /**
  * A List Item component to be used in lists and menus with simple layouts, matching the Material 3 guidelines.
- * @param headlineContent The main content of the list item, usually a text.
  * @param modifier The modifier to be applied to the list item.
- * @param supportingContent The content to be displayed below the headline content.
- * @param leadingContent The content to be displayed before the headline content.
- * @param trailingContent The content to be displayed after the headline content.
+ * @param supportingContent The content to be displayed below the content.
+ * @param leadingContent The content to be displayed before the content.
+ * @param trailingContent The content to be displayed after the content.
  * @param style The style to use for the list item. This may change the color and text styles of the contents. [ListItemStyle.Default] is used by default.
- * @param enabled Whether the list item is enabled. When disabled, will change the color of the headline content and the leading content to use disabled tokens.
+ * @param enabled Whether the list item is enabled. When disabled, will change the color of the content and the leading content to use disabled tokens.
  * @param alwaysClickable Whether the list item should always be clickable, even when disabled.
  * @param onClick The callback to be called when the list item is clicked.
+ * @param content The main content of the list item, usually a text.
  */
 @Suppress("LongParameterList")
 @Composable
 fun ListItem(
-    headlineContent: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     supportingContent: @Composable (() -> Unit)? = null,
     leadingContent: ListItemContent? = null,
@@ -57,19 +56,19 @@ fun ListItem(
     enabled: Boolean = true,
     alwaysClickable: Boolean = false,
     onClick: (() -> Unit)? = null,
+    content: @Composable () -> Unit,
 ) {
     val colors = ListItemDefaults.colors(
         containerColor = Color.Transparent,
-        headlineColor = style.headlineColor(),
+        headlineColor = style.contentColor(),
         leadingIconColor = style.leadingIconColor(),
         trailingIconColor = style.trailingIconColor(),
         supportingColor = style.supportingTextColor(),
-        disabledHeadlineColor = ListItemDefaultColors.headlineDisabled,
+        disabledHeadlineColor = ListItemDefaultColors.contentDisabled,
         disabledLeadingIconColor = ListItemDefaultColors.iconDisabled,
         disabledTrailingIconColor = ListItemDefaultColors.iconDisabled,
     )
     ListItem(
-        headlineContent = headlineContent,
         modifier = modifier,
         supportingContent = supportingContent,
         leadingContent = leadingContent,
@@ -78,25 +77,25 @@ fun ListItem(
         enabled = enabled,
         alwaysClickable = alwaysClickable,
         onClick = onClick,
+        content = content,
     )
 }
 
 /**
  * A List Item component to be used in lists and menus with simple layouts, matching the Material 3 guidelines.
- * @param headlineContent The main content of the list item, usually a text.
  * @param colors The colors to use for the list item. You can use [ListItemDefaults.colors] to create this.
  * @param modifier The modifier to be applied to the list item.
- * @param supportingContent The content to be displayed below the headline content.
- * @param leadingContent The content to be displayed before the headline content.
- * @param trailingContent The content to be displayed after the headline content.
- * @param enabled Whether the list item is enabled. When disabled, will change the color of the headline content and the leading content to use disabled tokens.
+ * @param supportingContent The content to be displayed below the content.
+ * @param leadingContent The content to be displayed before the content.
+ * @param trailingContent The content to be displayed after the content.
+ * @param enabled Whether the list item is enabled. When disabled, will change the color of the content and the leading content to use disabled tokens.
  * @param alwaysClickable Whether the list item should always be clickable, even when disabled.
  * @param onClick The callback to be called when the list item is clicked.
+ * @param content The main content of the list item, usually a text.
  */
 @Suppress("LongParameterList")
 @Composable
 fun ListItem(
-    headlineContent: @Composable () -> Unit,
     colors: ListItemColors,
     modifier: Modifier = Modifier,
     supportingContent: @Composable (() -> Unit)? = null,
@@ -105,53 +104,53 @@ fun ListItem(
     enabled: Boolean = true,
     alwaysClickable: Boolean = false,
     onClick: (() -> Unit)? = null,
+    content: @Composable () -> Unit,
 ) {
     // We cannot just pass the disabled colors, they must be set manually: https://issuetracker.google.com/issues/280480132
-    val headlineColor = if (enabled) colors.contentColor else colors.disabledContentColor
+    val contentColor = if (enabled) colors.contentColor else colors.disabledContentColor
     val supportingColor = if (enabled) colors.supportingContentColor else colors.disabledContentColor.copy(alpha = 0.80f)
     val leadingContentColor = if (enabled) colors.leadingContentColor else colors.disabledLeadingContentColor
     val trailingContentColor = if (enabled) colors.trailingContentColor else colors.disabledTrailingContentColor
 
-    val decoratedHeadlineContent: @Composable () -> Unit = {
+    val decoratedContent: @Composable () -> Unit = {
         CompositionLocalProvider(
             LocalTextStyle provides ElementTheme.typography.fontBodyLgRegular,
-            LocalContentColor provides headlineColor,
+            LocalContentColor provides contentColor,
         ) {
-            headlineContent()
+            content()
         }
     }
-    val decoratedSupportingContent: (@Composable () -> Unit)? = supportingContent?.let { content ->
+    val decoratedSupportingContent: (@Composable () -> Unit)? = supportingContent?.let { safeContent ->
         {
             CompositionLocalProvider(
                 LocalTextStyle provides ElementTheme.typography.fontBodyMdRegular,
                 LocalContentColor provides supportingColor,
             ) {
-                content()
+                safeContent()
             }
         }
     }
-    val decoratedLeadingContent: (@Composable () -> Unit)? = leadingContent?.let { content ->
+    val decoratedLeadingContent: (@Composable () -> Unit)? = leadingContent?.let { safeContent ->
         {
             CompositionLocalProvider(
                 LocalContentColor provides leadingContentColor,
             ) {
-                content.View(isItemEnabled = enabled)
+                safeContent.View(isItemEnabled = enabled)
             }
         }
     }
-    val decoratedTrailingContent: (@Composable () -> Unit)? = trailingContent?.let { content ->
+    val decoratedTrailingContent: (@Composable () -> Unit)? = trailingContent?.let { safeContent ->
         {
             CompositionLocalProvider(
                 LocalTextStyle provides ElementTheme.typography.fontBodyMdRegular,
                 LocalContentColor provides trailingContentColor,
             ) {
-                content.View(isItemEnabled = enabled)
+                safeContent.View(isItemEnabled = enabled)
             }
         }
     }
 
     androidx.compose.material3.ListItem(
-        headlineContent = decoratedHeadlineContent,
         modifier = if (onClick != null) {
             Modifier
                 .clickable(enabled = enabled || alwaysClickable, onClick = onClick)
@@ -169,8 +168,8 @@ fun ListItem(
         leadingContent = decoratedLeadingContent,
         trailingContent = decoratedTrailingContent,
         colors = colors,
-        tonalElevation = 0.dp,
-        shadowElevation = 0.dp,
+        elevation = ListItemDefaults.elevation(elevation = 0.dp),
+        content = decoratedContent,
     )
 }
 
@@ -223,8 +222,8 @@ sealed interface ListItemStyle {
     data object Destructive : ListItemStyle
 
     @Composable
-    fun headlineColor() = when (this) {
-        Default, Primary -> ListItemDefaultColors.headline
+    fun contentColor() = when (this) {
+        Default, Primary -> ListItemDefaultColors.content
         Destructive -> ElementTheme.colors.textCriticalPrimary
     }
 
@@ -251,8 +250,8 @@ sealed interface ListItemStyle {
 }
 
 object ListItemDefaultColors {
-    val headline: Color @Composable get() = ElementTheme.colors.textPrimary
-    val headlineDisabled: Color @Composable get() = ElementTheme.colors.textDisabled
+    val content: Color @Composable get() = ElementTheme.colors.textPrimary
+    val contentDisabled: Color @Composable get() = ElementTheme.colors.textDisabled
     val supportingText: Color @Composable get() = ElementTheme.materialColors.onSurfaceVariant
     val leadingIcon: Color @Composable get() = ElementTheme.colors.iconSecondary
     val trailingIcon: Color @Composable get() = ElementTheme.colors.iconPrimary
@@ -260,11 +259,11 @@ object ListItemDefaultColors {
 
     val colors: ListItemColors
         @Composable get() = ListItemDefaults.colors(
-            headlineColor = headline,
+            headlineColor = content,
             supportingColor = supportingText,
             leadingIconColor = leadingIcon,
             trailingIconColor = trailingIcon,
-            disabledHeadlineColor = headlineDisabled,
+            disabledHeadlineColor = contentDisabled,
             disabledLeadingIconColor = iconDisabled,
             disabledTrailingIconColor = iconDisabled,
         )
@@ -523,7 +522,7 @@ private object PreviewItems {
     ) {
         EnabledDisabledElementThemedPreview {
             ListItem(
-                headlineContent = headline(),
+                content = content(),
                 supportingContent = text(),
                 leadingContent = leadingContent,
                 trailingContent = trailingContent,
@@ -543,7 +542,7 @@ private object PreviewItems {
     ) {
         EnabledDisabledElementThemedPreview {
             ListItem(
-                headlineContent = headline(),
+                content = content(),
                 supportingContent = textSingleLine(),
                 leadingContent = leadingContent,
                 trailingContent = trailingContent,
@@ -563,7 +562,7 @@ private object PreviewItems {
     ) {
         EnabledDisabledElementThemedPreview {
             ListItem(
-                headlineContent = headline(),
+                content = content(),
                 leadingContent = leadingContent,
                 trailingContent = trailingContent,
                 enabled = it,
@@ -574,7 +573,7 @@ private object PreviewItems {
     }
 
     @Composable
-    fun headline() = @Composable {
+    fun content() = @Composable {
         Text("List item")
     }
 

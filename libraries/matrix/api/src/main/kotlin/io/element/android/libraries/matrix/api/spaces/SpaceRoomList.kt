@@ -16,22 +16,36 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.util.Optional
 
+/**
+ * The paginated list of the children of a single space, kept up to date by the SDK.
+ *
+ * Obtain an instance from [SpaceService.spaceRoomList]; the caller owns it and must call [destroy] when done.
+ */
 interface SpaceRoomList {
     sealed interface PaginationStatus {
         data object Loading : PaginationStatus
         data class Idle(val hasMoreToLoad: Boolean) : PaginationStatus
     }
 
+    /** The space whose children this list holds. */
     val spaceId: RoomId
 
+    /** What is known about the space itself, starting empty until the SDK provides it. */
     val currentSpaceFlow: StateFlow<Optional<SpaceRoom>>
 
+    /** The children loaded so far, re-emitted in full on every update; the latest value is replayed to new collectors. */
     val spaceRoomsFlow: Flow<List<SpaceRoom>>
+
+    /** Whether a page is being loaded and whether more children remain; see [loadAllIncrementally] to drain the list. */
     val paginationStatusFlow: StateFlow<PaginationStatus>
 
+    /** Loads the next page of children, which will be reflected in [spaceRoomsFlow]. */
     suspend fun paginate(): Result<Unit>
+
+    /** Discards the loaded children and starts the list again from the beginning. */
     suspend fun reset(): Result<Unit>
 
+    /** Releases the SDK resources and cancels the internal scope; the list is unusable afterwards. */
     fun destroy()
 }
 

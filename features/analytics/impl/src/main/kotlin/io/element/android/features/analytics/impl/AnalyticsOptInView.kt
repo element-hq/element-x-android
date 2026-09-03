@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.appconfig.AnalyticsConfig
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.analytics.api.AnalyticsOptInEvents
+import io.element.android.features.analytics.api.AnalyticsOptInEvent
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
@@ -55,11 +55,11 @@ fun AnalyticsOptInView(
     val eventSink = state.eventSink
 
     fun onAcceptTerms() {
-        eventSink(AnalyticsOptInEvents.EnableAnalytics(true))
+        eventSink(AnalyticsOptInEvent.EnableAnalytics(true))
     }
 
     fun onDeclineTerms() {
-        eventSink(AnalyticsOptInEvents.EnableAnalytics(false))
+        eventSink(AnalyticsOptInEvent.EnableAnalytics(false))
     }
 
     BackHandler(onBack = ::onDeclineTerms)
@@ -171,7 +171,7 @@ private fun AnalyticsOptInFooter(
 
 @PreviewsDayNight
 @Composable
-internal fun AnalyticsOptInViewPreview(@PreviewParameter(AnalyticsOptInStateProvider::class) state: AnalyticsOptInState) = ElementPreview {
+internal fun AnalyticsOptInViewPreview(@PreviewParameter(AnalyticsOptInStatePreviewParam::class) state: AnalyticsOptInState) = ElementPreview {
     AnalyticsOptInView(
         state = state,
         onClickTerms = {},

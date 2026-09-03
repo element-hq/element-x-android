@@ -97,7 +97,6 @@
   <string name="screen_room_notification_settings_error_setting_mode">"Ayarlanamadı, lütfen tekrar deneyin."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Ana sunucunuz şifreli odalarda bu seçeneği desteklemiyor, bu odada bildirim almayacaksınız."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Tüm mesajlar"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Yalnızca Bahsetmeler ve Anahtar Kelimeler"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Bu odada, bana bildir"</string>
   <string name="screen_room_roles_and_permissions_admins">"Yöneticiler"</string>
   <string name="screen_room_roles_and_permissions_change_my_role">"Rolümü değiştir"</string>

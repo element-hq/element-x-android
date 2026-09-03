@@ -196,38 +196,38 @@ class NotificationSettingsPresenter(
                 )
         }
 
-        fun handleEvent(event: NotificationSettingsEvents) {
+        fun handleEvent(event: NotificationSettingsEvent) {
             when (event) {
-                is NotificationSettingsEvents.SetAtRoomNotificationsEnabled -> {
+                is NotificationSettingsEvent.SetAtRoomNotificationsEnabled -> {
                     localCoroutineScope.setAtRoomNotificationsEnabled(event.enabled, changeNotificationSettingAction)
                 }
-                is NotificationSettingsEvents.SetCallNotificationsEnabled -> {
+                is NotificationSettingsEvent.SetCallNotificationsEnabled -> {
                     localCoroutineScope.setCallNotificationsEnabled(event.enabled, changeNotificationSettingAction)
                 }
-                is NotificationSettingsEvents.SetInviteForMeNotificationsEnabled -> {
+                is NotificationSettingsEvent.SetInviteForMeNotificationsEnabled -> {
                     localCoroutineScope.setInviteForMeNotificationsEnabled(event.enabled, changeNotificationSettingAction)
                 }
-                is NotificationSettingsEvents.SetNotificationsEnabled -> sessionCoroutineScope.setNotificationsEnabled(userPushStore, event.enabled)
-                NotificationSettingsEvents.ClearConfigurationMismatchError -> {
+                is NotificationSettingsEvent.SetNotificationsEnabled -> sessionCoroutineScope.setNotificationsEnabled(userPushStore, event.enabled)
+                NotificationSettingsEvent.ClearConfigurationMismatchError -> {
                     matrixSettings.value = NotificationSettingsState.MatrixSettings.Invalid(fixFailed = false)
                 }
-                NotificationSettingsEvents.FixConfigurationMismatch -> localCoroutineScope.fixConfigurationMismatch(matrixSettings)
-                NotificationSettingsEvents.RefreshSystemNotificationsEnabled -> {
+                NotificationSettingsEvent.FixConfigurationMismatch -> localCoroutineScope.fixConfigurationMismatch(matrixSettings)
+                NotificationSettingsEvent.RefreshSystemNotificationsEnabled -> {
                     systemNotificationsEnabled.value = systemNotificationsEnabledProvider.notificationsEnabled()
                     refreshFullScreenIntentSettings++
                 }
-                NotificationSettingsEvents.ClearNotificationChangeError -> changeNotificationSettingAction.value = AsyncAction.Uninitialized
-                NotificationSettingsEvents.ChangePushProvider -> showChangePushProviderDialog = true
-                NotificationSettingsEvents.CancelChangePushProvider -> showChangePushProviderDialog = false
-                is NotificationSettingsEvents.SetPushProvider -> localCoroutineScope.changePushProvider(distributors.getOrNull(event.index))
-                is NotificationSettingsEvents.SetMessageSound -> applyMessageSound(
+                NotificationSettingsEvent.ClearNotificationChangeError -> changeNotificationSettingAction.value = AsyncAction.Uninitialized
+                NotificationSettingsEvent.ChangePushProvider -> showChangePushProviderDialog = true
+                NotificationSettingsEvent.CancelChangePushProvider -> showChangePushProviderDialog = false
+                is NotificationSettingsEvent.SetPushProvider -> localCoroutineScope.changePushProvider(distributors.getOrNull(event.index))
+                is NotificationSettingsEvent.SetMessageSound -> applyMessageSound(
                     sound = event.sound,
                     sessionCoroutineScope = sessionCoroutineScope,
                     onCopyError = { messageSoundCopyError = true },
                     onCopySuccess = { messageSoundCopyError = false },
                     onChannelFailure = { failure -> changeNotificationSettingAction.value = AsyncAction.Failure(failure) },
                 )
-                is NotificationSettingsEvents.SelectMessageSoundPreset -> {
+                is NotificationSettingsEvent.SelectMessageSoundPreset -> {
                     showMessageSoundDialog = false
                     applyMessageSound(
                         sound = event.sound,
@@ -237,13 +237,13 @@ class NotificationSettingsPresenter(
                         onChannelFailure = { failure -> changeNotificationSettingAction.value = AsyncAction.Failure(failure) },
                     )
                 }
-                NotificationSettingsEvents.ShowMessageSoundDialog -> showMessageSoundDialog = true
-                NotificationSettingsEvents.DismissMessageSoundDialog -> showMessageSoundDialog = false
-                NotificationSettingsEvents.LaunchMessageSoundPicker -> {
+                NotificationSettingsEvent.ShowMessageSoundDialog -> showMessageSoundDialog = true
+                NotificationSettingsEvent.DismissMessageSoundDialog -> showMessageSoundDialog = false
+                NotificationSettingsEvent.LaunchMessageSoundPicker -> {
                     showMessageSoundDialog = false
                     pendingMessageSoundPickerLaunch++
                 }
-                is NotificationSettingsEvents.SetCallRingtone -> {
+                is NotificationSettingsEvent.SetCallRingtone -> {
                     legacyCallRingtone = null
                     applyCallRingtone(
                         sound = event.sound,
@@ -253,7 +253,7 @@ class NotificationSettingsPresenter(
                         onChannelFailure = { failure -> changeNotificationSettingAction.value = AsyncAction.Failure(failure) },
                     )
                 }
-                is NotificationSettingsEvents.SelectCallRingtonePreset -> {
+                is NotificationSettingsEvent.SelectCallRingtonePreset -> {
                     showCallRingtoneDialog = false
                     legacyCallRingtone = null
                     applyCallRingtone(
@@ -264,16 +264,16 @@ class NotificationSettingsPresenter(
                         onChannelFailure = { failure -> changeNotificationSettingAction.value = AsyncAction.Failure(failure) },
                     )
                 }
-                NotificationSettingsEvents.ShowCallRingtoneDialog -> showCallRingtoneDialog = true
-                NotificationSettingsEvents.DismissCallRingtoneDialog -> showCallRingtoneDialog = false
-                NotificationSettingsEvents.LaunchCallRingtonePicker -> {
+                NotificationSettingsEvent.ShowCallRingtoneDialog -> showCallRingtoneDialog = true
+                NotificationSettingsEvent.DismissCallRingtoneDialog -> showCallRingtoneDialog = false
+                NotificationSettingsEvent.LaunchCallRingtonePicker -> {
                     showCallRingtoneDialog = false
                     pendingCallRingtonePickerLaunch++
                 }
-                NotificationSettingsEvents.DismissMessageSoundCopyError -> {
+                NotificationSettingsEvent.DismissMessageSoundCopyError -> {
                     messageSoundCopyError = false
                 }
-                NotificationSettingsEvents.DismissCallRingtoneCopyError -> {
+                NotificationSettingsEvent.DismissCallRingtoneCopyError -> {
                     callRingtoneCopyError = false
                 }
             }

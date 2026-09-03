@@ -19,6 +19,15 @@
   <string name="a11y_edit_room_address_hint">"The full address will be %1$s"</string>
   <string name="a11y_encryption_details">"Encryption details"</string>
   <string name="a11y_expand_message_text_field">"Expand message text field"</string>
+  <string name="a11y_gallery_attachment">"Gallery, attachment %1$d"</string>
+  <string name="a11y_gallery_failed_scan">"Gallery, failed scan %1$d"</string>
+  <string name="a11y_gallery_image">"Gallery, image %1$d"</string>
+  <plurals name="a11y_gallery_more_media">
+    <item quantity="one">"Gallery, %1$d more media"</item>
+    <item quantity="other">"Gallery, %1$d more medias"</item>
+  </plurals>
+  <string name="a11y_gallery_scanning">"Gallery, scanning %1$d"</string>
+  <string name="a11y_gallery_video">"Gallery, video %1$d"</string>
   <string name="a11y_hide_password">"Hide password"</string>
   <string name="a11y_info">"Info"</string>
   <string name="a11y_join_call">"Join call"</string>
@@ -482,7 +491,7 @@ Are you sure you want to continue?"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Select the quality of the video you want to upload."</string>
   <string name="dialog_video_quality_selector_title">"Select video upload quality"</string>
   <string name="error_account_already_logged_in">"You\'re already logged in on this device as %1$s."</string>
-  <string name="error_account_creation_not_possible">"Your homeserver needs to be upgraded to support Matrix Authentication Service and account creation."</string>
+  <string name="error_account_creation_not_possible">"Your account provider needs to be upgraded to support Matrix Authentication Service and account creation."</string>
   <string name="error_failed_creating_the_permalink">"Failed creating the permalink"</string>
   <string name="error_failed_loading_map">"%1$s could not load the map. Please try again later."</string>
   <string name="error_failed_loading_messages">"Failed loading messages"</string>

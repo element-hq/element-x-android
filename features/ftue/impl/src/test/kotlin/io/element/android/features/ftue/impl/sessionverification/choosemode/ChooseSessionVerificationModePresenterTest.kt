@@ -9,7 +9,7 @@
 package io.element.android.features.ftue.impl.sessionverification.choosemode
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.logout.api.direct.DirectLogoutEvents
+import io.element.android.features.logout.api.direct.DirectLogoutEvent
 import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.libraries.architecture.AsyncData
@@ -112,7 +112,7 @@ class ChooseSessionVerificationModePresenterTest {
 
     @Test
     fun `sing out action triggers a direct logout`() = runTest {
-        val logoutEventRecorder = lambdaRecorder<DirectLogoutEvents, Unit> {}
+        val logoutEventRecorder = lambdaRecorder<DirectLogoutEvent, Unit> {}
         val logoutPresenter = Presenter<DirectLogoutState> {
             aDirectLogoutState(eventSink = logoutEventRecorder)
         }
@@ -121,7 +121,7 @@ class ChooseSessionVerificationModePresenterTest {
             val initial = awaitItem()
             initial.eventSink(ChooseSelfVerificationModeEvent.SignOut)
             logoutEventRecorder.assertions().isCalledOnce()
-                .with(value(DirectLogoutEvents.Logout(ignoreSdkError = false)))
+                .with(value(DirectLogoutEvent.Logout(ignoreSdkError = false)))
         }
     }
 

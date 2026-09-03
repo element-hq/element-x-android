@@ -83,7 +83,9 @@ class TimelineMediaGalleryDataSource(
                 },
                 {
                     Timber.e(it, "Failed to get media timeline for room ${room.roomId}")
-                    groupedMediaItemsFlow.emit(AsyncData.Failure(it))
+                    if (cache == null) {
+                        groupedMediaItemsFlow.emit(AsyncData.Failure(it))
+                    }
                 },
             )
         }.flatMapLatest { timeline ->

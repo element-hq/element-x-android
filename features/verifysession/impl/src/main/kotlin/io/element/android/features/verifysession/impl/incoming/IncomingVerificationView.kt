@@ -62,7 +62,7 @@ fun IncomingVerificationView(
     val step = state.step
 
     BackHandler {
-        state.eventSink(IncomingVerificationViewEvents.GoBack)
+        state.eventSink(IncomingVerificationViewEvent.GoBack)
     }
     HeaderFooterPage(
         modifier = modifier,
@@ -70,7 +70,7 @@ fun IncomingVerificationView(
             TopAppBar(
                 title = {},
                 navigationIcon = {
-                    BackButton(onClick = { state.eventSink(IncomingVerificationViewEvents.GoBack) })
+                    BackButton(onClick = { state.eventSink(IncomingVerificationViewEvent.GoBack) })
                 },
                 colors = topAppBarColors(containerColor = Color.Transparent),
             )
@@ -95,7 +95,8 @@ fun IncomingVerificationView(
 @Composable
 private fun IncomingVerificationHeader(step: Step, request: VerificationRequest.Incoming) {
     val iconStyle = when (step) {
-        Step.Canceled -> BigIcon.Style.AlertSolid
+        Step.Canceled,
+        Step.Unavailable -> BigIcon.Style.AlertSolid
         is Step.Initial -> when (request) {
             is VerificationRequest.Incoming.OtherSession -> BigIcon.Style.Default(CompoundIcons.Devices())
             is VerificationRequest.Incoming.User -> BigIcon.Style.Default(CompoundIcons.UserProfileSolid())
@@ -106,6 +107,7 @@ private fun IncomingVerificationHeader(step: Step, request: VerificationRequest.
     }
     val titleTextId = when (step) {
         Step.Canceled -> CommonStrings.common_verification_failed
+        Step.Unavailable -> R.string.screen_session_verification_unavailable_title
         is Step.Initial -> R.string.screen_session_verification_request_title
         is Step.Verifying -> when (step.data) {
             is SessionVerificationData.Decimals -> R.string.screen_session_verification_compare_numbers_title
@@ -116,6 +118,7 @@ private fun IncomingVerificationHeader(step: Step, request: VerificationRequest.
     }
     val subtitleTextId = when (step) {
         Step.Canceled -> R.string.screen_session_verification_request_failure_subtitle
+        Step.Unavailable -> R.string.screen_session_verification_unavailable_subtitle
         is Step.Initial -> when (request) {
             is VerificationRequest.Incoming.OtherSession -> R.string.screen_session_verification_request_subtitle
             is VerificationRequest.Incoming.User -> R.string.screen_session_verification_user_responder_subtitle
@@ -217,13 +220,13 @@ private fun IncomingVerificationBottomMenu(
                     text = stringResource(CommonStrings.action_start_verification),
                     enabled = !step.isWaiting,
                     showProgress = step.isWaiting,
-                    onClick = { eventSink(IncomingVerificationViewEvents.StartVerification) },
+                    onClick = { eventSink(IncomingVerificationViewEvent.StartVerification) },
                 )
                 TextButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(CommonStrings.action_ignore),
                     enabled = !step.isWaiting,
-                    onClick = { eventSink(IncomingVerificationViewEvents.IgnoreVerification) },
+                    onClick = { eventSink(IncomingVerificationViewEvent.IgnoreVerification) },
                 )
             }
         }
@@ -235,14 +238,23 @@ private fun IncomingVerificationBottomMenu(
                     enabled = !step.isWaiting,
                     showProgress = step.isWaiting,
                     onClick = {
-                        eventSink(IncomingVerificationViewEvents.ConfirmVerification)
+                        eventSink(IncomingVerificationViewEvent.ConfirmVerification)
                     },
                 )
                 TextButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.screen_session_verification_they_dont_match),
                     enabled = !step.isWaiting,
-                    onClick = { eventSink(IncomingVerificationViewEvents.DeclineVerification) },
+                    onClick = { eventSink(IncomingVerificationViewEvent.DeclineVerification) },
+                )
+            }
+        }
+        Step.Unavailable -> {
+            VerificationBottomMenu {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(CommonStrings.action_ignore),
+                    onClick = { eventSink(IncomingVerificationViewEvent.IgnoreVerification) },
                 )
             }
         }
@@ -254,7 +266,7 @@ private fun IncomingVerificationBottomMenu(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(CommonStrings.action_done),
                     onClick = {
-                        eventSink(IncomingVerificationViewEvents.GoBack)
+                        eventSink(IncomingVerificationViewEvent.GoBack)
                     },
                 )
             }
@@ -264,7 +276,9 @@ private fun IncomingVerificationBottomMenu(
 
 @PreviewsDayNight
 @Composable
-internal fun IncomingVerificationViewPreview(@PreviewParameter(IncomingVerificationStateProvider::class) state: IncomingVerificationState) = ElementPreview {
+internal fun IncomingVerificationViewPreview(@PreviewParameter(
+    IncomingVerificationStatePreviewParam::class
+) state: IncomingVerificationState) = ElementPreview {
     IncomingVerificationView(
         state = state,
     )

@@ -100,7 +100,7 @@ fun DependencyLicensesListView(
                     }
                     is AsyncData.Success -> items(state.licenses.data) { license ->
                         ListItem(
-                            headlineContent = { Text(license.safeName) },
+                            content = { Text(license.safeName) },
                             supportingContent = {
                                 Text(
                                     buildString {
@@ -126,7 +126,7 @@ fun DependencyLicensesListView(
 @PreviewsDayNight
 @Composable
 internal fun DependencyLicensesListViewPreview(
-    @PreviewParameter(DependencyLicensesListStateProvider::class) state: DependencyLicensesListState
+    @PreviewParameter(DependencyLicensesListStatePreviewParam::class) state: DependencyLicensesListState
 ) = ElementPreview {
     DependencyLicensesListView(
         state = state,

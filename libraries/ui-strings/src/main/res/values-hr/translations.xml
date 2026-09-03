@@ -8,6 +8,7 @@
   <string name="a11y_collapse_message_text_field">"Minimiziraj tekstno polje poruke"</string>
   <string name="a11y_create_poll_votes_allowed_decrease">"Smanjenje dopuštenih glasova po osobi"</string>
   <string name="a11y_create_poll_votes_allowed_increase">"Povećanje broja dopuštenih glasova po osobi"</string>
+  <string name="a11y_custom_emoji">"Prilagođeni Emoji"</string>
   <string name="a11y_delete">"Izbriši"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d unesena znamenka"</item>
@@ -19,6 +20,15 @@
   <string name="a11y_edit_room_address_hint">"Potpuna adresa bit će %1$s"</string>
   <string name="a11y_encryption_details">"Pojedinosti o šifriranju"</string>
   <string name="a11y_expand_message_text_field">"Proširi tekstno polje poruke"</string>
+  <string name="a11y_gallery_attachment">"Galerija, prilog %1$d"</string>
+  <string name="a11y_gallery_failed_scan">"Galerija, neuspješno skeniranje %1$d"</string>
+  <string name="a11y_gallery_image">"Galerija, slika %1$d"</string>
+  <plurals name="a11y_gallery_more_media">
+    <item quantity="one">"Galerija, %1$d više medija"</item>
+    <item quantity="other">"Galerija, %1$d više medija"</item>
+  </plurals>
+  <string name="a11y_gallery_scanning">"Galerija, skeniranje %1$d"</string>
+  <string name="a11y_gallery_video">"Galerija, video %1$d"</string>
   <string name="a11y_hide_password">"Sakrij zaporku"</string>
   <string name="a11y_info">"Informacije"</string>
   <string name="a11y_join_call">"Pridruži se pozivu"</string>
@@ -65,6 +75,7 @@
   <string name="a11y_start_call">"Započni poziv"</string>
   <string name="a11y_start_video_call">"Započni videopoziv"</string>
   <string name="a11y_start_voice_call">"Započni glasovni poziv"</string>
+  <string name="a11y_status">"Stanje"</string>
   <string name="a11y_thread_in_room">"Nit u %1$s"</string>
   <string name="a11y_threads_in_room">"Teme u %1$s"</string>
   <string name="a11y_tombstoned_room">"Soba označena za uklanjanje"</string>

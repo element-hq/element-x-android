@@ -45,13 +45,6 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
-    Knock(
-        key = "feature.knock",
-        title = "Ask to join",
-        description = "Allow creating rooms which users can request access to.",
-        defaultValue = { false },
-        isFinished = false,
-    ),
     PrintLogsToLogcat(
         key = "feature.print_logs_to_logcat",
         title = "Print logs to logcat",
@@ -151,13 +144,15 @@ enum class FeatureFlags(
         description = "Allow sending multiple media items in a single message.",
         defaultValue = { false },
         isFinished = false,
+        isInLabs = true,
     ),
-    UserStatus(
-        key = "feature.user_status",
-        title = "User status",
-        description = "Allow users to set a status (e.g. In a meeting, Away) visible to their contacts.",
+    Knock(
+        key = "feature.knock",
+        title = "Ask to join",
+        description = "Allow creating rooms which users can request access to.",
         defaultValue = { false },
         isFinished = false,
+        isInLabs = true,
     ),
     MessageSearch(
         key = "feature.message_search",

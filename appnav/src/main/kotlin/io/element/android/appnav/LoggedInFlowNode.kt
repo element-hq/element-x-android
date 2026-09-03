@@ -11,8 +11,10 @@ package io.element.android.appnav
 import android.os.Parcelable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
@@ -49,11 +51,13 @@ import io.element.android.compound.colors.SemanticColorsLightDark
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.api.SessionEnterpriseService
+import io.element.android.features.enterprise.api.remoteconfig.CustomMapTilerConfigProvider
 import io.element.android.features.ftue.api.FtueEntryPoint
 import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.home.api.HomeEntryPoint
 import io.element.android.features.linknewdevice.api.LinkNewDeviceEntryPoint
+import io.element.android.features.location.api.LocalMapTilerConfig
 import io.element.android.features.location.api.live.ActiveLiveLocationShareManager
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
@@ -153,6 +157,7 @@ class LoggedInFlowNode(
     private val analyticsRoomListStateWatcher: AnalyticsRoomListStateWatcher,
     private val createRoomEntryPoint: CreateRoomEntryPoint,
     private val activeLiveLocationShareManager: ActiveLiveLocationShareManager,
+    private val customMapTilerConfigProvider: CustomMapTilerConfigProvider,
 ) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Placeholder,
@@ -330,11 +335,11 @@ class LoggedInFlowNode(
             }
             NavTarget.Home -> {
                 val callback = object : HomeEntryPoint.Callback {
-                    override fun navigateToRoom(roomId: RoomId, joinedRoom: JoinedRoom?) {
+                    override fun navigateToRoom(roomId: RoomId, eventId: EventId?, joinedRoom: JoinedRoom?) {
                         lifecycleScope.launch {
                             attachRoom(
                                 roomIdOrAlias = roomId.toRoomIdOrAlias(),
-                                initialElement = RoomNavigationTarget.Root(joinedRoom = joinedRoom),
+                                initialElement = RoomNavigationTarget.Root(joinedRoom = joinedRoom, eventId = eventId),
                                 clearBackstack = false,
                             )
                         }
@@ -677,6 +682,12 @@ class LoggedInFlowNode(
         val colors by remember {
             enterpriseService.semanticColorsFlow(sessionId = matrixClient.sessionId)
         }.collectAsState(SemanticColorsLightDark.default)
+
+        val currentMapTilerConfig = LocalMapTilerConfig.current
+        val updatedMapTilerConfig by produceState(currentMapTilerConfig) {
+            value = customMapTilerConfigProvider.get().getOrNull() ?: currentMapTilerConfig
+        }
+
         ElementThemeApp(
             appPreferencesStore = appPreferencesStore,
             featureFlagService = featureFlagService,
@@ -684,16 +695,18 @@ class LoggedInFlowNode(
             compoundDark = colors.dark,
             buildMeta = buildMeta,
         ) {
-            val isOnline by syncService.isOnline.collectAsState()
-            ConnectivityIndicatorContainer(
-                isOnline = isOnline,
-                modifier = modifier,
-            ) { contentModifier ->
-                Box(modifier = contentModifier) {
-                    val ftueState by ftueService.state.collectAsState()
-                    BackstackView(transitionHandler = rememberLoggedInFlowTransitionHandler(backstack))
-                    if (ftueState is FtueState.Complete) {
-                        PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)
+            CompositionLocalProvider(LocalMapTilerConfig provides updatedMapTilerConfig) {
+                val isOnline by syncService.isOnline.collectAsState()
+                ConnectivityIndicatorContainer(
+                    isOnline = isOnline,
+                    modifier = modifier,
+                ) { contentModifier ->
+                    Box(modifier = contentModifier) {
+                        val ftueState by ftueService.state.collectAsState()
+                        BackstackView(transitionHandler = rememberLoggedInFlowTransitionHandler(backstack))
+                        if (ftueState is FtueState.Complete) {
+                            PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)
+                        }
                     }
                 }
             }

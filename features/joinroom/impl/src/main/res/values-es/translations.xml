@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_join_room_ban_by_message">"Has sido baneado por %1$s."</string>
-  <string name="screen_join_room_ban_message">"Has sido baneado."</string>
+  <string name="screen_join_room_ban_by_message">"Has sido vetado por %1$s."</string>
+  <string name="screen_join_room_ban_message">"Has sido vetado"</string>
   <string name="screen_join_room_ban_reason">"Motivo: %1$s."</string>
   <string name="screen_join_room_cancel_knock_action">"Cancelar solicitud"</string>
   <string name="screen_join_room_cancel_knock_alert_confirmation">"Sí, cancelar"</string>
@@ -15,9 +15,11 @@
   <string name="screen_join_room_fail_reason">"O es necesario estar invitado para unirse o puede haber restricciones de acceso."</string>
   <string name="screen_join_room_forget_action">"Olvidar"</string>
   <string name="screen_join_room_invite_required_message">"Necesitas una invitación para unirte"</string>
+  <string name="screen_join_room_invited_by">"Te invitó"</string>
   <string name="screen_join_room_join_action">"Unirse"</string>
   <string name="screen_join_room_join_restricted_message">"Es posible que necesites ser invitado o ser miembro de un espacio para poder unirte."</string>
   <string name="screen_join_room_knock_action">"Enviar solicitud de unión"</string>
+  <string name="screen_join_room_knock_message_characters_count">"%1$d de %2$d caracteres permitidos"</string>
   <string name="screen_join_room_knock_message_description">"Mensaje (opcional)"</string>
   <string name="screen_join_room_knock_sent_description">"Recibirás una invitación para unirte a la sala si se acepta tu solicitud."</string>
   <string name="screen_join_room_knock_sent_title">"Solicitud de unión enviada"</string>

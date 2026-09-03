@@ -28,9 +28,10 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.location.api.LocalMapTilerConfig
 import io.element.android.features.location.api.StaticMapView
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContentProvider
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContentPreviewParam
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
@@ -50,6 +51,7 @@ fun TimelineItemLocationView(
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(max = 188.dp),
+            mapTilerConfig = LocalMapTilerConfig.current,
             pinVariant = content.pinVariant,
             location = content.location,
             zoom = 15.0,
@@ -160,7 +162,7 @@ private fun LiveLocationOverlay(
 
 @PreviewsDayNight
 @Composable
-internal fun TimelineItemLocationViewPreview(@PreviewParameter(TimelineItemLocationContentProvider::class) content: TimelineItemLocationContent) =
+internal fun TimelineItemLocationViewPreview(@PreviewParameter(TimelineItemLocationContentPreviewParam::class) content: TimelineItemLocationContent) =
     ElementPreview {
         TimelineItemLocationView(
             content = content,
