@@ -474,8 +474,8 @@ private fun RoomHeaderSection(
     heroes: ImmutableList<MatrixUser>,
     isTombstoned: Boolean,
     openAvatarPreview: (url: String) -> Unit,
-    onTitleClick: (() -> Unit)? = null,
-    onSubtitleClick: ((String) -> Unit)? = null,
+    onTitleClick: () -> Unit,
+    onSubtitleClick: (String) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -504,11 +504,7 @@ private fun RoomHeaderSection(
         )
         Spacer(modifier = Modifier.height(24.dp))
         Text(
-            modifier = if (onTitleClick != null) {
-                Modifier.niceClickable { onTitleClick() }
-            } else {
-                Modifier
-            },
+            modifier = Modifier.niceClickable { onTitleClick() },
             text = roomName,
             style = ElementTheme.typography.fontHeadingLgBold,
             textAlign = TextAlign.Center,
@@ -516,11 +512,7 @@ private fun RoomHeaderSection(
         if (roomAlias != null) {
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                modifier = if (onSubtitleClick != null) {
-                    Modifier.niceClickable { onSubtitleClick(roomAlias.value) }
-                } else {
-                    Modifier
-                },
+                modifier = Modifier.niceClickable { onSubtitleClick(roomAlias.value) },
                 text = roomAlias.value,
                 style = ElementTheme.typography.fontBodyLgRegular,
                 color = ElementTheme.colors.textSecondary,
@@ -537,8 +529,8 @@ private fun DmHeaderSection(
     roomName: String,
     isTombstoned: Boolean,
     openAvatarPreview: (name: String, url: String) -> Unit,
-    onTitleClick: (() -> Unit)? = null,
-    onSubtitleClick: ((String) -> Unit)? = null,
+    onTitleClick: () -> Unit,
+    onSubtitleClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -568,11 +560,7 @@ private fun DmHeaderSection(
         )
         Spacer(modifier = Modifier.height(24.dp))
         Text(
-            modifier = if (onTitleClick != null) {
-                Modifier.niceClickable { onTitleClick() }
-            } else {
-                Modifier
-            },
+            modifier = Modifier.niceClickable { onTitleClick() },
             text = roomName,
             style = ElementTheme.typography.fontHeadingLgBold,
             textAlign = TextAlign.Center,
@@ -592,11 +580,7 @@ private fun DmHeaderSection(
         }
         Spacer(modifier = Modifier.height(12.dp))
         Text(
-            modifier = if (onSubtitleClick != null) {
-                Modifier.niceClickable { onSubtitleClick(otherMember.userId.value) }
-            } else {
-                Modifier
-            },
+            modifier = Modifier.niceClickable { onSubtitleClick(otherMember.userId.value) },
             text = otherMember.userId.value,
             style = ElementTheme.typography.fontBodyLgRegular,
             color = ElementTheme.colors.textSecondary,
