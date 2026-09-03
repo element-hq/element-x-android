@@ -206,10 +206,10 @@
   <string name="action_start_chat">"Rozpocznij chat"</string>
   <string name="action_start_over">"Zacznij od nowa"</string>
   <string name="action_start_verification">"Rozpocznij weryfikację"</string>
-  <string name="action_static_map_load">"Stuknij, aby załadować mapę"</string>
+  <string name="action_static_map_load">"Dotknij, aby załadować mapę"</string>
   <string name="action_stop">"Zatrzymaj"</string>
   <string name="action_take_photo">"Zrób zdjęcie"</string>
-  <string name="action_tap_for_options">"Stuknij, by wyświetlić opcje"</string>
+  <string name="action_tap_for_options">"Dotknij, by wyświetlić opcje"</string>
   <string name="action_translate">"Przetłumacz"</string>
   <string name="action_try_again">"Spróbuj ponownie"</string>
   <string name="action_unpin">"Odepnij"</string>
@@ -503,7 +503,7 @@ Czy na pewno chcesz kontynuować?"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Wybierz jakość filmu, który chcesz przesłać."</string>
   <string name="dialog_video_quality_selector_title">"Wybierz jakość przesyłania wideo"</string>
   <string name="error_account_already_logged_in">"Jesteś już zalogowany na tym urządzeniu jako %1$s."</string>
-  <string name="error_account_creation_not_possible">"Twój serwer domowy wymaga aktualizacji, aby uzyskać wsparcie usługi Matrix Authentication Service i tworzenia kont."</string>
+  <string name="error_account_creation_not_possible">"Twój dostawca konta wymaga aktualizacji, aby uzyskać wsparcie usługi Matrix Authentication Service i tworzenia kont."</string>
   <string name="error_failed_creating_the_permalink">"Nie udało się utworzyć linku bezpośredniego"</string>
   <string name="error_failed_loading_map">"%1$s nie mogło wczytać mapy. Spróbuj ponownie później."</string>
   <string name="error_failed_loading_messages">"Nie udało się załadować wiadomości"</string>

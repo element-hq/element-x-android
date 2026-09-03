@@ -6,7 +6,7 @@
   <string name="screen_edit_room_address_room_address_section_footer">"Aby pokój był widoczny w katalogu pokoi publicznych, potrzebny jest adres pokoju."</string>
   <string name="screen_edit_room_address_title">"Edytuj adres"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Wystąpił błąd podczas aktualizacji ustawienia powiadomień."</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Twój serwer domowy nie wspiera tej opcji w pokojach szyfrowanych, możesz nie otrzymać powiadomień z niektórych pokoi."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Twój dostawca konta nie wspiera tej opcji w pokojach szyfrowanych, możesz nie otrzymać powiadomień z niektórych pokoi."</string>
   <string name="screen_polls_history_title">"Ankiety"</string>
   <string name="screen_room_change_permissions_administrators">"Administrator"</string>
   <string name="screen_room_change_permissions_ban_people">"Banowanie osób"</string>
@@ -115,7 +115,7 @@
   <string name="screen_room_notification_settings_error_loading_settings">"Wystąpił błąd podczas ładowania ustawień powiadomień."</string>
   <string name="screen_room_notification_settings_error_restoring_default">"Nie udało się przywrócić trybu domyślnego, spróbuj ponownie."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Nie udało się ustawić trybu, spróbuj ponownie."</string>
-  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Twój serwer domowy nie wspiera tej opcji w pokojach szyfrowanych, możesz nie otrzymać powiadomień z tego pokoju."</string>
+  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Twój dostawca konta nie wspiera tej opcji w pokojach szyfrowanych, możesz nie otrzymać powiadomień z tego pokoju."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Wszystkie wiadomości"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Tylko wzmianki i słowa kluczowe"</string>
   <string name="screen_room_notification_settings_mode_mute">"Wycisz"</string>

@@ -114,6 +114,7 @@
   <string name="screen_room_notification_settings_error_setting_mode">"Αποτυχία ρύθμισης της λειτουργίας, δοκίμασε ξανά."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Ο αρχικός διακομιστής σας δεν υποστηρίζει αυτή την επιλογή σε κρυπτογραφημένες αίθουσες, δεν θα λάβετε ειδοποιήσεις σε αυτή την αίθουσα."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Όλα τα μηνύματα"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Μόνο για αναφορές και απαντήσεις"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Σε αυτήν την αίθουσα, ειδοποιήστε με για"</string>
   <string name="screen_room_roles_and_permissions_admins">"Διαχειριστές"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"Διαχειριστές και κάτοχοι"</string>

@@ -491,7 +491,7 @@ Are you sure you want to continue?"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Select the quality of the video you want to upload."</string>
   <string name="dialog_video_quality_selector_title">"Select video upload quality"</string>
   <string name="error_account_already_logged_in">"You\'re already logged in on this device as %1$s."</string>
-  <string name="error_account_creation_not_possible">"Your homeserver needs to be upgraded to support Matrix Authentication Service and account creation."</string>
+  <string name="error_account_creation_not_possible">"Your account provider needs to be upgraded to support Matrix Authentication Service and account creation."</string>
   <string name="error_failed_creating_the_permalink">"Failed creating the permalink"</string>
   <string name="error_failed_loading_map">"%1$s could not load the map. Please try again later."</string>
   <string name="error_failed_loading_messages">"Failed loading messages"</string>

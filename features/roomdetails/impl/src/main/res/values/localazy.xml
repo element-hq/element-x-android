@@ -6,7 +6,7 @@
   <string name="screen_edit_room_address_room_address_section_footer">"You’ll need an address in order to make it visible in the public directory."</string>
   <string name="screen_edit_room_address_title">"Edit address"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"An error occurred while updating the notification setting."</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Your homeserver does not support this option in encrypted rooms, you may not get notified in some rooms."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Your account provider does not support this option in encrypted chats, you may not get notified in some chats."</string>
   <string name="screen_polls_history_title">"Polls"</string>
   <string name="screen_room_change_permissions_administrators">"Admin"</string>
   <string name="screen_room_change_permissions_ban_people">"Ban people"</string>
@@ -112,7 +112,7 @@
   <string name="screen_room_notification_settings_error_loading_settings">"An error occurred while loading notification settings."</string>
   <string name="screen_room_notification_settings_error_restoring_default">"Failed restoring the default mode, please try again."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Failed setting the mode, please try again."</string>
-  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Your homeserver does not support this option in encrypted rooms, you won\'t get notified in this room."</string>
+  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Your account provider does not support this option in encrypted chats, you won\'t get notified in this chat."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"All messages"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Mentions and replies only"</string>
   <string name="screen_room_notification_settings_mode_mute">"Mute"</string>
