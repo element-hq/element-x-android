@@ -50,10 +50,18 @@ import kotlin.time.Instant
 class FetchPendingNotificationWorkerTest : RobolectricTest() {
     @Test
     fun `test - success`() = runTest {
+        val callOrder = mutableListOf<String>()
         var synced = false
-        val syncOnNotifiableEventLambda = SyncOnNotifiableEvent { synced = true }
-        val emitResultLambda = lambdaRecorder<Map<PushRequest, Result<ResolvedPushEvent>>, Unit> {}
+        val syncOnNotifiableEventLambda = SyncOnNotifiableEvent {
+            synced = true
+            callOrder += "sync"
+        }
+        val emitResultLambda = lambdaRecorder<Map<PushRequest, Result<ResolvedPushEvent>>, Unit> { callOrder += "emit" }
         val processor = FakeNotificationResultProcessor(emit = emitResultLambda)
+        val stopForegroundServiceLambda = lambdaRecorder<Boolean> {
+            callOrder += "stop"
+            true
+        }
 
         val getPendingResultsLambda = lambdaRecorder<SessionId, Instant?, Result<List<PushRequest>>> { _, _ -> Result.success(listOf(aPushRequest())) }
         val replacePushRequestsLambda = lambdaRecorder<List<PushRequest>, Result<Unit>> { Result.success(Unit) }
@@ -69,6 +77,7 @@ class FetchPendingNotificationWorkerTest : RobolectricTest() {
             pushHistoryService = pushHistoryService,
             resultProcessor = processor,
             syncOnNotifiableEvent = syncOnNotifiableEventLambda,
+            pushHandlingWakeLock = FakeFetchPushForegroundServiceManager(unlock = stopForegroundServiceLambda),
         )
 
         val result = worker.doWork()
@@ -86,16 +95,27 @@ class FetchPendingNotificationWorkerTest : RobolectricTest() {
 
         // An opportunistic sync was triggered
         assertThat(synced).isTrue()
+
+        // The foreground service is stopped once, and only after the results were emitted and the opportunistic sync ran
+        stopForegroundServiceLambda.assertions().isCalledOnce()
+        assertThat(callOrder).containsExactly("emit", "sync", "stop").inOrder()
     }
 
     @Test
     fun `test - invalid input fails the work`() = runTest {
-        val worker = createWorker(input = "!alice:matrix.org")
+        val stopForegroundServiceLambda = lambdaRecorder<Boolean> { true }
+        val worker = createWorker(
+            input = "!alice:matrix.org",
+            pushHandlingWakeLock = FakeFetchPushForegroundServiceManager(unlock = stopForegroundServiceLambda),
+        )
 
         val result = worker.doWork()
 
         // The process failed
         assertThat(result).isEqualTo(ListenableWorker.Result.failure())
+
+        // The foreground service is still stopped
+        stopForegroundServiceLambda.assertions().isCalledOnce()
     }
 
     @Test
@@ -108,11 +128,13 @@ class FetchPendingNotificationWorkerTest : RobolectricTest() {
             replacePushRequests = { Result.success(Unit) },
             removeOldPushRequests = { Result.success(Unit) },
         )
+        val stopForegroundServiceLambda = lambdaRecorder<Boolean> { true }
         val worker = createWorker(
             input = "@alice:matrix.org",
             networkMonitor = networkMonitor,
             resultProcessor = processor,
             pushHistoryService = pushHistoryService,
+            pushHandlingWakeLock = FakeFetchPushForegroundServiceManager(unlock = stopForegroundServiceLambda),
         )
 
         val result = worker.doWork()
@@ -121,6 +143,9 @@ class FetchPendingNotificationWorkerTest : RobolectricTest() {
 
         // The process failed due to a timeout in getting the network connectivity, a retry is scheduled
         assertThat(result).isEqualTo(ListenableWorker.Result.retry())
+
+        // The foreground service is still stopped
+        stopForegroundServiceLambda.assertions().isCalledOnce()
     }
 
     @Test

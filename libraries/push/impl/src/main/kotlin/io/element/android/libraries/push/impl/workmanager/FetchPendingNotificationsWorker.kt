@@ -40,7 +40,9 @@ import io.element.android.services.analytics.api.finishLongRunningTransaction
 import io.element.android.services.analytics.api.recordTransaction
 import io.element.android.services.analyticsproviders.api.AnalyticsTransaction
 import io.element.android.services.toolbox.api.systemclock.SystemClock
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import timber.log.Timber
 import kotlin.time.Duration.Companion.days
@@ -62,13 +64,25 @@ class FetchPendingNotificationsWorker(
 ) : CoroutineWorker(context, params) {
     override suspend fun doWork(): Result {
         Timber.d("FetchNotificationsWorker started")
+        return try {
+            doWorkInternal()
+        } finally {
+            // Keep the foreground service, and the wakelock it holds, for the whole duration of the work rather than releasing it as soon as
+            // the worker starts. Resolving the events needs several network round trips (sliding sync, room key retrieval, decryption) and, for
+            // ringing calls, waiting for the room state to be synced. While the service is running the process is in the foreground service
+            // state, so the expedited job quota and Doze restrictions don't cut this work short. Ringing calls acquire their own wakelock once
+            // the results have been processed. NonCancellable so that the service is also stopped when the system cancels the worker.
+            withContext(NonCancellable) {
+                fetchPushForegroundServiceManager.stop()
+            }
+        }
+    }
+
+    private suspend fun doWorkInternal(): Result {
         // RunCatching for test in debug mode
         val sessionId = runCatchingExceptions {
             inputData.getString(SyncPendingNotificationsRequestBuilder.SESSION_ID)?.let(::SessionId)
         }.getOrNull() ?: return Result.failure()
-
-        // We can stop the foreground service and unlock the wakelock, since the work is now running and the device should be kept awake
-        fetchPushForegroundServiceManager.stop()
 
         // Fetch pending requests in the last 24 hours
         val fetchSince = Instant.fromEpochMilliseconds(systemClock.epochMillis()).minus(1.days)

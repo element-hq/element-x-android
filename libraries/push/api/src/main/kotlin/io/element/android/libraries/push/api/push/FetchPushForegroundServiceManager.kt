@@ -8,7 +8,8 @@
 package io.element.android.libraries.push.api.push
 
 /**
- * A helper to manage the foreground service used to keep the device awake while we schedule and wait for the work to fetch the notification content to run.
+ * A helper to manage the foreground service used to keep the device awake, and the process out of background execution limits, from the moment
+ * a push is received until the work fetching the notification content has finished.
  */
 interface FetchPushForegroundServiceManager {
     /**
