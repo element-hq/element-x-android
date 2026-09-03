@@ -31,6 +31,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @Inject
 class PollHistoryPresenter(
@@ -68,12 +69,14 @@ class PollHistoryPresenter(
                 is PollHistoryEvent.LoadMore -> {
                     coroutineScope.loadMore(timeline)
                 }
-                is PollHistoryEvent.SelectPollAnswer -> sessionCoroutineScope.launch {
+                is PollHistoryEvent.SendPollResponse -> sessionCoroutineScope.launch {
                     sendPollResponseAction.execute(
                         timeline = timeline,
                         pollStartId = event.pollStartId,
-                        answerId = event.answerId
-                    )
+                        answerIds = event.answerIds
+                    ).onFailure { error ->
+                        Timber.e(error, "Failed to send poll response")
+                    }
                 }
                 is PollHistoryEvent.EndPoll -> sessionCoroutineScope.launch {
                     endPollAction.execute(timeline = timeline, pollStartId = event.pollStartId)
