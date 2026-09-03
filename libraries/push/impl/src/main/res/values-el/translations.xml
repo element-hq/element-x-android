@@ -45,7 +45,7 @@
   <string name="notification_sender_mention_reply">"Ο χρήστης %1$s αναφέρθηκε ή απάντησε"</string>
   <string name="notification_space_invite_body">"Σας προσκάλεσε να συμμετάσχετε στον χώρο"</string>
   <string name="notification_space_invite_body_with_sender">"%1$s σας προσκάλεσε να συμμετάσχετε στον χώρο"</string>
-  <string name="notification_test_push_notification_content">"Βλέπεις την ειδοποίηση! Κάνε μου κλικ!"</string>
+  <string name="notification_test_push_notification_content">"Προβάλλετε την ειδοποίηση! Πατήστε εδώ!"</string>
   <string name="notification_thread_in_room">"Νήμα στο %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>

@@ -4,9 +4,11 @@
   <string name="a11y_add_reaction">"リアクションを追加: %1$s"</string>
   <string name="a11y_address">"アドレス"</string>
   <string name="a11y_avatar">"アバター"</string>
+  <string name="a11y_clear_search_field">"検索欄をクリア"</string>
   <string name="a11y_collapse_message_text_field">"入力欄を縮小"</string>
   <string name="a11y_create_poll_votes_allowed_decrease">"一人あたりの投票権を減らす"</string>
   <string name="a11y_create_poll_votes_allowed_increase">"一人あたりの投票権を増やす"</string>
+  <string name="a11y_custom_emoji">"任意の絵文字"</string>
   <string name="a11y_delete">"削除"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="other">"%1$d 桁入力済"</item>
@@ -16,11 +18,20 @@
   <string name="a11y_edit_room_address_hint">"完全なアドレスは %1$s になります。"</string>
   <string name="a11y_encryption_details">"暗号化の詳細"</string>
   <string name="a11y_expand_message_text_field">"入力欄を拡大"</string>
+  <string name="a11y_gallery_attachment">"ギャラリー 添付ファイル %1$d"</string>
+  <string name="a11y_gallery_failed_scan">"ギャラリーで読み込み失敗 %1$d"</string>
+  <string name="a11y_gallery_image">"ギャラリー 画像 %1$d"</string>
+  <plurals name="a11y_gallery_more_media">
+    <item quantity="other">"ギャラリー その他メディア %1$d"</item>
+  </plurals>
+  <string name="a11y_gallery_scanning">"ギャラリー 読込中 %1$d"</string>
+  <string name="a11y_gallery_video">"ギャラリー 動画 %1$d"</string>
   <string name="a11y_hide_password">"パスワードを非表示"</string>
   <string name="a11y_info">"情報"</string>
   <string name="a11y_join_call">"通話に参加"</string>
   <string name="a11y_jump_to_bottom">"一番下へ"</string>
   <string name="a11y_jump_to_unread">"未読に移動"</string>
+  <string name="a11y_jump_to_unread_messages">"最初の未読のメッセージに移動"</string>
   <string name="a11y_move_the_map_to_my_location">"現在地に移動"</string>
   <string name="a11y_notifications_mentions_only">"メンションのみ"</string>
   <string name="a11y_notifications_muted">"ミュート有効"</string>
@@ -47,6 +58,7 @@
     <item quantity="other">"既読: %1$s ほか %2$d 人"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"%1$s 既読"</string>
+  <string name="a11y_read_receipts_tap_to_show_all_android">"既読のユーザーを全て表示"</string>
   <string name="a11y_remove_reaction">"%1$s リアクションを削除"</string>
   <string name="a11y_remove_reaction_with">"%1$s リアクションを削除"</string>
   <string name="a11y_room_avatar">"ルームのアバター"</string>
@@ -59,6 +71,7 @@
   <string name="a11y_start_call">"通話を開始"</string>
   <string name="a11y_start_video_call">"ビデオ通話を開始"</string>
   <string name="a11y_start_voice_call">"音声通話を開始"</string>
+  <string name="a11y_status">"ステータス"</string>
   <string name="a11y_thread_in_room">"%1$s のスレッド"</string>
   <string name="a11y_threads_in_room">"%1$s のスレッド"</string>
   <string name="a11y_tombstoned_room">"埋没したルーム"</string>
@@ -139,6 +152,7 @@
   <string name="action_manage_account_and_devices">"アカウントと端末を管理"</string>
   <string name="action_manage_devices">"端末を管理"</string>
   <string name="action_manage_rooms">"ルームを管理"</string>
+  <string name="action_mark_as_read">"既読にする"</string>
   <string name="action_message">"メッセージ"</string>
   <string name="action_minimize">"最小化"</string>
   <string name="action_next">"次へ"</string>
@@ -263,6 +277,12 @@
   <string name="common_forward_message">"メッセージを転送"</string>
   <string name="common_frequently_used">"頻繁に使用"</string>
   <string name="common_gallery">"ギャラリー"</string>
+  <plurals name="common_gallery_reply_attachments">
+    <item quantity="other">"%1$dの添付ファイル…"</item>
+  </plurals>
+  <plurals name="common_gallery_reply_media_items">
+    <item quantity="other">"%1$dのメディアアイテム…"</item>
+  </plurals>
   <string name="common_gif">"GIF"</string>
   <string name="common_group_call_in_progress">"グループ通話が進行中"</string>
   <string name="common_image">"画像"</string>
@@ -298,6 +318,7 @@
   <string name="common_no_space_name">"スペース名なし"</string>
   <string name="common_not_encrypted">"暗号化されていません"</string>
   <string name="common_offline">"オフライン"</string>
+  <string name="common_on_a_call">"通話中"</string>
   <string name="common_open_source_licenses">"オープンソースライセンス"</string>
   <string name="common_or">"または"</string>
   <string name="common_other_options">"他のオプション"</string>
@@ -422,6 +443,11 @@
   <string name="common_waiting_live_location">"ライブ位置情報を待機中…"</string>
   <string name="common_world_readable_history">"誰でも履歴を閲覧できます"</string>
   <string name="common_you">"あなた"</string>
+  <string name="content_scanner_not_found">"ダウンロードは使用できません。"</string>
+  <string name="content_scanner_not_found_title">"問題が発生しました"</string>
+  <string name="content_scanner_scanning">"スキャン中…"</string>
+  <string name="content_scanner_unsafe_message">"プレビューとダウンロードは無効に設定されています。"</string>
+  <string name="content_scanner_unsafe_title">"このファイルは安全ではありません"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"あなたが参加する以前に送信されたメッセージを、%1$s (%2$s) が共有しました。"</string>
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"あなたが参加する以前に送信されたメッセージを、%1$s が共有しました。"</string>
   <string name="crypto_history_visible">"このルームは新しいメンバーが過去の内容を確認できるように設定されています。%1$s"</string>
@@ -489,6 +515,8 @@
     <item quantity="other">"%1$d 人"</item>
   </plurals>
   <string name="screen_live_location_sheet_title">"地図上"</string>
+  <string name="screen_local_network_opt_in_subtitle">"ホームサーバーがローカルネットワーク上に存在しています。接続するには %1$s はこのネットワークへアクセスする権限が必要です。"</string>
+  <string name="screen_local_network_opt_in_title">"ローカルネットワークへのアクセスを許可"</string>
   <string name="screen_media_picker_error_failed_selection">"ファイルの選択に失敗しました。再試行してください。"</string>
   <string name="screen_pinned_timeline_empty_state_description">"メッセージを長押しし \"%1$s\" を選択してください"</string>
   <string name="screen_pinned_timeline_empty_state_headline">"重要なメッセージをピン留めして容易に見つけられるようにします"</string>
@@ -533,6 +561,9 @@
   <string name="screen_space_list_title">"スペース"</string>
   <string name="screen_static_location_sheet_timestamp_description">"%1$s 共有"</string>
   <string name="screen_static_location_sheet_title">"地図上"</string>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="other">"%1$d が参加"</item>
+  </plurals>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"%1$s の検証済みのデジタルIDがリセットされたため、メッセージは送信されませんでした。"</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"%1$s に未検証の端末が存在するため、メッセージは送信されませんでした。"</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"未検証の端末が存在するため、メッセージは送信されませんでした。"</string>
