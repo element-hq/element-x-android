@@ -13,6 +13,8 @@ import io.element.android.features.verifysession.impl.ui.aEmojisSessionVerificat
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.matrix.api.core.FlowId
+import io.element.android.libraries.matrix.api.encryption.EncryptionService
+import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationRequestDetails
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
@@ -21,6 +23,7 @@ import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_TIMESTAMP
 import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaError
@@ -294,6 +297,47 @@ class IncomingVerificationPresenterTest {
             navigatorLambda.assertions().isCalledOnce()
         }
     }
+
+    @Test
+    fun `present - a session missing its secrets cannot be used to verify and offers no verification action`() = runTest {
+        val acknowledgeVerificationRequestLambda = lambdaRecorder<VerificationRequest.Incoming, Unit> { _ -> }
+        val resetLambda = lambdaRecorder<Boolean, Unit> { }
+        val acceptVerificationRequestLambda = lambdaRecorder<Unit> { lambdaError() }
+        val encryptionService = FakeEncryptionService().apply {
+            recoveryStateStateFlow.value = RecoveryState.INCOMPLETE
+        }
+        createPresenter(
+            service = FakeSessionVerificationService(
+                acknowledgeVerificationRequestLambda = acknowledgeVerificationRequestLambda,
+                acceptVerificationRequestLambda = acceptVerificationRequestLambda,
+                resetLambda = resetLambda,
+            ),
+            encryptionService = encryptionService,
+        ).test {
+            advanceUntilIdle()
+            assertThat(awaitItem().step).isEqualTo(IncomingVerificationState.Step.Unavailable)
+            acceptVerificationRequestLambda.assertions().isNeverCalled()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - a session that holds its secrets is offered the verification action`() = runTest {
+        val encryptionService = FakeEncryptionService().apply {
+            recoveryStateStateFlow.value = RecoveryState.ENABLED
+        }
+        createPresenter(
+            service = FakeSessionVerificationService(
+                acknowledgeVerificationRequestLambda = { },
+                resetLambda = { },
+            ),
+            encryptionService = encryptionService,
+        ).test {
+            advanceUntilIdle()
+            assertThat(awaitItem().step).isInstanceOf(IncomingVerificationState.Step.Initial::class.java)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
 }
 
 private val anIncomingSessionVerificationRequest = VerificationRequest.Incoming.OtherSession(
@@ -314,11 +358,13 @@ internal fun TestScope.createPresenter(
     verificationRequest: VerificationRequest.Incoming = anIncomingSessionVerificationRequest,
     navigator: IncomingVerificationNavigator = IncomingVerificationNavigator { lambdaError() },
     service: SessionVerificationService = FakeSessionVerificationService(),
+    encryptionService: EncryptionService = FakeEncryptionService(),
     dateFormatter: DateFormatter = FakeDateFormatter(),
 ) = IncomingVerificationPresenter(
     verificationRequest = verificationRequest,
     navigator = navigator,
     sessionVerificationService = service,
+    encryptionService = encryptionService,
     stateMachine = IncomingVerificationStateMachine(service),
     dateFormatter = dateFormatter,
     sessionCoroutineScope = backgroundScope,
