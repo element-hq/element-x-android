@@ -36,6 +36,8 @@
   <string name="screen_roomlist_filter_invites_empty_state_title">"没有待处理的邀请。"</string>
   <string name="screen_roomlist_filter_low_priority">"低优先级"</string>
   <string name="screen_roomlist_filter_low_priority_empty_state_title">"你暂无任何低优先级聊天"</string>
+  <string name="screen_roomlist_filter_mention">"提及"</string>
+  <string name="screen_roomlist_filter_mention_empty_state_title">"你没有任何未读提及"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"你可以取消选择筛选器以查看其它对话"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"你暂无适用于此选项的聊天"</string>
   <string name="screen_roomlist_filter_people">"人员"</string>
