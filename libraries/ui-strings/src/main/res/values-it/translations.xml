@@ -8,6 +8,7 @@
   <string name="a11y_collapse_message_text_field">"Riduci al minimo il campo di testo del messaggio"</string>
   <string name="a11y_create_poll_votes_allowed_decrease">"Riduci il numero di voti consentiti per persona"</string>
   <string name="a11y_create_poll_votes_allowed_increase">"Aumenta il numero di voti consentiti per persona"</string>
+  <string name="a11y_custom_emoji">"Emoji personalizzata"</string>
   <string name="a11y_delete">"Elimina"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d cifra inserita"</item>
@@ -18,11 +19,21 @@
   <string name="a11y_edit_room_address_hint">"L\'indirizzo completo sarà %1$s"</string>
   <string name="a11y_encryption_details">"Dettagli sulla crittografia"</string>
   <string name="a11y_expand_message_text_field">"Allarga il campo di testo del messaggio"</string>
+  <string name="a11y_gallery_attachment">"Galleria, allegato %1$d"</string>
+  <string name="a11y_gallery_failed_scan">"Galleria, scansione non riuscita %1$d"</string>
+  <string name="a11y_gallery_image">"Galleria, immagine %1$d"</string>
+  <plurals name="a11y_gallery_more_media">
+    <item quantity="one">"Galleria, %1$d altro media"</item>
+    <item quantity="other">"Galleria, %1$d altri media"</item>
+  </plurals>
+  <string name="a11y_gallery_scanning">"Galleria, scansione %1$d"</string>
+  <string name="a11y_gallery_video">"Galleria, video %1$d"</string>
   <string name="a11y_hide_password">"Nascondi password"</string>
   <string name="a11y_info">"Info"</string>
   <string name="a11y_join_call">"Entra in chiamata"</string>
   <string name="a11y_jump_to_bottom">"Vai alla fine"</string>
   <string name="a11y_jump_to_unread">"Vai ai messaggi non letti"</string>
+  <string name="a11y_jump_to_unread_messages">"Vai al primo messaggio non letto"</string>
   <string name="a11y_move_the_map_to_my_location">"Sposta la mappa sulla mia posizione"</string>
   <string name="a11y_notifications_mentions_only">"Solo menzioni"</string>
   <string name="a11y_notifications_muted">"Silenziato"</string>
@@ -63,6 +74,7 @@
   <string name="a11y_start_call">"Avvia una chiamata"</string>
   <string name="a11y_start_video_call">"Avvia una videochiamata"</string>
   <string name="a11y_start_voice_call">"Avvia una chiamata vocale"</string>
+  <string name="a11y_status">"Stato"</string>
   <string name="a11y_thread_in_room">"Discussione in %1$s"</string>
   <string name="a11y_threads_in_room">"Discussioni in %1$s"</string>
   <string name="a11y_tombstoned_room">"Stanza obsoleta"</string>
@@ -143,6 +155,7 @@
   <string name="action_manage_account_and_devices">"Gestisci account &amp; dispositivi"</string>
   <string name="action_manage_devices">"Gestisci dispositivi"</string>
   <string name="action_manage_rooms">"Gestisci le stanze"</string>
+  <string name="action_mark_as_read">"Segna come letto"</string>
   <string name="action_message">"Invia messaggio"</string>
   <string name="action_minimize">"Riduci"</string>
   <string name="action_next">"Avanti"</string>
@@ -267,6 +280,14 @@ Motivo:. %1$s"</string>
   <string name="common_forward_message">"Inoltra messaggio"</string>
   <string name="common_frequently_used">"Usati di frequente"</string>
   <string name="common_gallery">"Galleria"</string>
+  <plurals name="common_gallery_reply_attachments">
+    <item quantity="one">"%1$d allegato…"</item>
+    <item quantity="other">"%1$d allegati…"</item>
+  </plurals>
+  <plurals name="common_gallery_reply_media_items">
+    <item quantity="one">"%1$d elemento multimediale…"</item>
+    <item quantity="other">"%1$d elementi multimediali…"</item>
+  </plurals>
   <string name="common_gif">"GIF"</string>
   <string name="common_group_call_in_progress">"Chiamata di gruppo in corso"</string>
   <string name="common_image">"Immagine"</string>
@@ -304,6 +325,7 @@ Motivo:. %1$s"</string>
   <string name="common_no_space_name">"Spazio senza nome"</string>
   <string name="common_not_encrypted">"Non cifrato"</string>
   <string name="common_offline">"Non in linea"</string>
+  <string name="common_on_a_call">"In chiamata"</string>
   <string name="common_open_source_licenses">"Licenze open source"</string>
   <string name="common_or">"o"</string>
   <string name="common_other_options">"Altre opzioni"</string>
@@ -435,6 +457,7 @@ Motivo:. %1$s"</string>
   <string name="common_you">"Tu"</string>
   <string name="content_scanner_not_found">"Download non disponibile."</string>
   <string name="content_scanner_not_found_title">"File non trovato"</string>
+  <string name="content_scanner_scanning">"Scansione…"</string>
   <string name="content_scanner_unsafe_message">"L\'anteprima e il download sono stati disabilitati."</string>
   <string name="content_scanner_unsafe_title">"Il file non è sicuro"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) ha condiviso questo messaggio poiché non eri nella stanza quando è stato inviato."</string>
@@ -468,7 +491,7 @@ Sei sicuro di voler continuare?"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Seleziona la qualità del video che vuoi caricare."</string>
   <string name="dialog_video_quality_selector_title">"Seleziona la qualità di caricamento del video"</string>
   <string name="error_account_already_logged_in">"Hai già effettuato l\'accesso su questo dispositivo come %1$s ."</string>
-  <string name="error_account_creation_not_possible">"Il tuo homeserver deve essere aggiornato per supportare il Matrix Authentication Service e la creazione di account."</string>
+  <string name="error_account_creation_not_possible">"Il tuo gestore dell\'account deve essere aggiornato per supportare il servizio di autenticazione Matrix e la creazione di account."</string>
   <string name="error_failed_creating_the_permalink">"Impossibile creare il collegamento permanente"</string>
   <string name="error_failed_loading_map">"%1$s non è riuscito a caricare la mappa. Riprova più tardi."</string>
   <string name="error_failed_loading_messages">"Caricamento dei messaggi non riuscito"</string>
@@ -505,6 +528,8 @@ Sei sicuro di voler continuare?"</string>
     <item quantity="other">"%1$d persone"</item>
   </plurals>
   <string name="screen_live_location_sheet_title">"Sulla mappa"</string>
+  <string name="screen_local_network_opt_in_subtitle">"Il tuo homeserver si trova sulla tua rete locale. Per connettersi, %1$s necessita dell\'autorizzazione per raggiungere i dispositivi su questa rete."</string>
+  <string name="screen_local_network_opt_in_title">"Consenti l\'accesso alla rete locale"</string>
   <string name="screen_media_picker_error_failed_selection">"Selezione del file multimediale fallita, riprova."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Premi su un messaggio e scegli “%1$s” per includerlo qui."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Fissa i messaggi importanti così che possano essere trovati facilmente"</string>
@@ -550,6 +575,10 @@ Sei sicuro di voler continuare?"</string>
   <string name="screen_space_list_title">"Spazi"</string>
   <string name="screen_static_location_sheet_timestamp_description">"Condivisa %1$s"</string>
   <string name="screen_static_location_sheet_title">"Sulla mappa"</string>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="one">"%1$d si è unito"</item>
+    <item quantity="other">"%1$d si sono uniti"</item>
+  </plurals>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Il messaggio non è stato inviato perché l\'identità digitale verificata di %1$sè stata reimpostata."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Messaggio non inviato perché %1$s non ha verificato tutti i dispositivi."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Messaggio non inviato perché non hai verificato uno o più dispositivi."</string>

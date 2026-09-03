@@ -14,7 +14,7 @@
   <string name="confirm_recovery_key_banner_title">"Magazyn kluczy nie jest zsynchronizowany"</string>
   <string name="full_screen_intent_banner_message">"Upewnij się, że nie pominiesz żadnego połączenia. Zmień swoje ustawienia i zezwól na powiadomienia na blokadzie ekranu."</string>
   <string name="full_screen_intent_banner_title">"Popraw jakość swoich rozmów"</string>
-  <string name="screen_home_tab_chats">"Wszystkie czaty"</string>
+  <string name="screen_home_tab_chats">"Czaty"</string>
   <string name="screen_home_tab_spaces">"Przestrzenie"</string>
   <string name="screen_invites_decline_chat_message">"Czy na pewno chcesz odrzucić zaproszenie dołączenia do %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Odrzuć zaproszenie"</string>
@@ -46,7 +46,7 @@ Na razie możesz wyczyścić filtry, aby zobaczyć pozostałe czaty"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Gratulacje!
 Nie masz żadnych nieprzeczytanych wiadomości!"</string>
   <string name="screen_roomlist_knock_event_sent_description">"Wysłano prośbę o dołączenie"</string>
-  <string name="screen_roomlist_main_space_title">"Wszystkie czaty"</string>
+  <string name="screen_roomlist_main_space_title">"Czaty"</string>
   <string name="screen_roomlist_mark_as_read">"Oznacz jako przeczytane"</string>
   <string name="screen_roomlist_mark_as_unread">"Oznacz jako nieprzeczytane"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Ten pokój został ulepszony"</string>

@@ -16,6 +16,9 @@
   <plurals name="notification_fallback_n_content">
     <item quantity="other">"Anda memiliki %d pesan baru."</item>
   </plurals>
+  <plurals name="notification_gallery_body">
+    <item quantity="other">"Lampiran %1$d yang dibagikan"</item>
+  </plurals>
   <string name="notification_incoming_audio_call">"Panggilan masuk"</string>
   <string name="notification_incoming_call">"📹 Panggilan masuk"</string>
   <string name="notification_inline_reply_failed">"** Gagal mengirim — silakan buka ruangan"</string>
@@ -26,6 +29,7 @@
   </plurals>
   <string name="notification_invite_body">"Mengundang Anda untuk mengobrol"</string>
   <string name="notification_invite_body_with_sender">"%1$s mengundang Anda untuk mengobrol"</string>
+  <string name="notification_knock_request_body">"Diminta untuk bergabung"</string>
   <string name="notification_mentioned_you_body">"Menyebutkan Anda: %1$s"</string>
   <string name="notification_new_messages">"Pesan Baru"</string>
   <plurals name="notification_new_messages_for_room">
@@ -88,6 +92,7 @@
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Kesalahan: %1$s."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Terjadi kesalahan, tidak dapat menguji notifikasi dorongan."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Terjadi kesalahan, melebihi batas waktu menunggu notifikasi dorongan."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_rate_limit">"Kesalahan: gateway push membatasi frekuensi pengiriman ke perangkat ini, sehingga notifikasi tidak akan dapat diandalkan. Silakan atur gateway push yang lain."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_success">"Ulangan notifikasi dorongan membutuhkan %1$d ms."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_title">"Uji ulangan notifikasi dorongan lagi"</string>
 </resources>
