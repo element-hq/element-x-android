@@ -230,6 +230,25 @@ class TimelineItemContentMessageFactoryTest : RobolectricTest() {
     }
 
     @Test
+    fun `test create TextMessageType with a formatted body containing only an image falls back to the body`() = runTest {
+        val sut = createTimelineItemContentMessageFactory()
+        val result = sut.create(
+            content = createMessageContent(
+                type = TextMessageType(
+                    body = "\uD83D\uDE1C",
+                    formatted = FormattedBody(MessageFormat.HTML, "<img src=\"mxc://matrix.org/anImage\" alt=\"\uD83D\uDE1C\" />")
+                )
+            ),
+            senderId = A_USER_ID,
+            senderProfile = aProfileDetails(),
+            eventId = AN_EVENT_ID,
+        )
+        assertThat((result as TimelineItemTextContent).formattedBody).isEqualTo(SpannedString("\uD83D\uDE1C"))
+        assertThat(result.htmlDocument).isNull()
+        assertThat(result.plainText).isEqualTo("\uD83D\uDE1C")
+    }
+
+    @Test
     fun `test create VideoMessageType`() = runTest {
         val sut = createTimelineItemContentMessageFactory()
         val result = sut.create(

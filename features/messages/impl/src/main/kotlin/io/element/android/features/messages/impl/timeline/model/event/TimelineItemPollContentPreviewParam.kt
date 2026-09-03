@@ -32,12 +32,14 @@ fun aTimelineItemPollContent(
     isEditable: Boolean = false,
     isEnded: Boolean = false,
     isEdited: Boolean = false,
+    maxSelections: ULong = 1u,
 ): TimelineItemPollContent {
     return TimelineItemPollContent(
         eventId = EventId("\$anEventId"),
         pollKind = PollKind.Disclosed,
         question = question,
         answerItems = answerItems,
+        maxSelections = maxSelections,
         isMine = isMine,
         isEditable = isEditable,
         isEnded = isEnded,

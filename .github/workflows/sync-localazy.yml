@@ -7,6 +7,9 @@ on:
 
 permissions: {}
 
+env:
+  GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx8g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError -XX:+UseG1GC -Dkotlin.daemon.jvm.options=-Xmx4g
+
 jobs:
   sync-localazy:
     runs-on: ubuntu-latest
