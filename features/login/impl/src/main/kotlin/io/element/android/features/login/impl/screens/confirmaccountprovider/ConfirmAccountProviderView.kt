@@ -115,6 +115,9 @@ fun ConfirmAccountProviderView(
 
     HeaderFooterPage(
         modifier = modifier,
+        // Let the header and content scroll so the supporting text is not clipped by the footer when the
+        // keyboard is visible and vertical space is reduced.
+        isScrollable = true,
         header = {
             IconTitleSubtitleMolecule(
                 modifier = Modifier.padding(top = 60.dp),
