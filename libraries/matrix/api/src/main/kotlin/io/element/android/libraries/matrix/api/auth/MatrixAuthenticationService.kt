@@ -10,7 +10,6 @@ package io.element.android.libraries.matrix.api.auth
 
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.MatrixClientProvider
-import io.element.android.libraries.matrix.api.auth.external.ExternalSession
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -46,13 +45,6 @@ interface MatrixAuthenticationService {
      * @param password the account password.
      */
     suspend fun login(username: String, password: String): Result<SessionId>
-
-    /**
-     * Import a session that was created using another client, for instance Element Web.
-     *
-     * @param externalSession the tokens and identifiers of the session to import.
-     */
-    suspend fun importCreatedSession(externalSession: ExternalSession): Result<SessionId>
 
     /*
      * OAuth part.

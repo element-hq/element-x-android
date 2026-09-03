@@ -111,7 +111,8 @@
   <string name="screen_room_notification_settings_error_setting_mode">"Gagal mengatur mode, silakan coba lagi."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Homeserver Anda tidak mendukung opsi ini dalam ruangan terenkripsi, Anda tidak akan diberi tahu dalam ruangan ini."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Semua pesan"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Sebutan dan Kata Kunci saja"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Disebut dan balasan saja"</string>
+  <string name="screen_room_notification_settings_mode_mute">"Bisukan"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Di ruangan ini, beri tahu saya tentang"</string>
   <string name="screen_room_roles_and_permissions_admins">"Admin"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"Administrator dan pemilik"</string>

@@ -491,7 +491,7 @@ Raison : %1$s."</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Sélectionnez la qualité des vidéos que vous souhaitez envoyer."</string>
   <string name="dialog_video_quality_selector_title">"Sélectionnez la qualité d’envoi des vidéos"</string>
   <string name="error_account_already_logged_in">"Vous êtes déjà connecté sur cet appareil en tant que %1$s."</string>
-  <string name="error_account_creation_not_possible">"Votre serveur d’accueil doit être mis à jour pour prendre en charge le protocole MAS (Matrix Authentication Service) et la création de compte."</string>
+  <string name="error_account_creation_not_possible">"Votre fournisseur de compte doit être mis à jour pour prendre en charge le protocole MAS (Matrix Authentication Service) et la création de compte."</string>
   <string name="error_failed_creating_the_permalink">"Échec de la création du permalien"</string>
   <string name="error_failed_loading_map">"%1$s n’a pas pu charger la carte. Veuillez réessayer ultérieurement."</string>
   <string name="error_failed_loading_messages">"Échec du chargement des messages"</string>
