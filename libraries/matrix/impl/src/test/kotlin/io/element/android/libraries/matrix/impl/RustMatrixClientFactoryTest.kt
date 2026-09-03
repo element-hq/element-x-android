@@ -309,7 +309,6 @@ fun TestScope.createRustMatrixClientFactory(
     ),
     clientBuilderProvider: ClientBuilderProvider = FakeClientBuilderProvider(),
     workManagerScheduler: FakeWorkManagerScheduler = FakeWorkManagerScheduler(),
-    contentScannerUrlProvider: ContentScannerUrlProvider = { Result.success(null) },
     featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
 ) = RustMatrixClientFactory(
     cacheDirectory = cacheDirectory,
