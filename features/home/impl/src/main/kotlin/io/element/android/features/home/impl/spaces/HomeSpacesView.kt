@@ -143,7 +143,7 @@ private fun EmptySpaceHomeView(
                 )
                 Text(
                     text = stringResource(CommonStrings.screen_space_list_empty_state_title),
-                    style = ElementTheme.typography.fontHeadingLgBold,
+                    style = ElementTheme.typography.fontHeadingMdBold,
                     color = ElementTheme.colors.textPrimary,
                     textAlign = TextAlign.Center,
                 )

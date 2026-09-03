@@ -95,7 +95,8 @@ fun IncomingVerificationView(
 @Composable
 private fun IncomingVerificationHeader(step: Step, request: VerificationRequest.Incoming) {
     val iconStyle = when (step) {
-        Step.Canceled -> BigIcon.Style.AlertSolid
+        Step.Canceled,
+        Step.Unavailable -> BigIcon.Style.AlertSolid
         is Step.Initial -> when (request) {
             is VerificationRequest.Incoming.OtherSession -> BigIcon.Style.Default(CompoundIcons.Devices())
             is VerificationRequest.Incoming.User -> BigIcon.Style.Default(CompoundIcons.UserProfileSolid())
@@ -106,6 +107,7 @@ private fun IncomingVerificationHeader(step: Step, request: VerificationRequest.
     }
     val titleTextId = when (step) {
         Step.Canceled -> CommonStrings.common_verification_failed
+        Step.Unavailable -> R.string.screen_session_verification_unavailable_title
         is Step.Initial -> R.string.screen_session_verification_request_title
         is Step.Verifying -> when (step.data) {
             is SessionVerificationData.Decimals -> R.string.screen_session_verification_compare_numbers_title
@@ -116,6 +118,7 @@ private fun IncomingVerificationHeader(step: Step, request: VerificationRequest.
     }
     val subtitleTextId = when (step) {
         Step.Canceled -> R.string.screen_session_verification_request_failure_subtitle
+        Step.Unavailable -> R.string.screen_session_verification_unavailable_subtitle
         is Step.Initial -> when (request) {
             is VerificationRequest.Incoming.OtherSession -> R.string.screen_session_verification_request_subtitle
             is VerificationRequest.Incoming.User -> R.string.screen_session_verification_user_responder_subtitle
@@ -243,6 +246,15 @@ private fun IncomingVerificationBottomMenu(
                     text = stringResource(R.string.screen_session_verification_they_dont_match),
                     enabled = !step.isWaiting,
                     onClick = { eventSink(IncomingVerificationViewEvent.DeclineVerification) },
+                )
+            }
+        }
+        Step.Unavailable -> {
+            VerificationBottomMenu {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(CommonStrings.action_ignore),
+                    onClick = { eventSink(IncomingVerificationViewEvent.IgnoreVerification) },
                 )
             }
         }

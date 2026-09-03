@@ -35,12 +35,12 @@
   <string name="a11y_qr_code">"Κωδικός QR"</string>
   <string name="a11y_react_with">"Αντέδρασε με %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Αντέδρασε με άλλα emoji"</string>
-  <string name="a11y_read_receipts_multiple">"Διαβάστηκε από%1$s και %2$s"</string>
+  <string name="a11y_read_receipts_multiple">"Προηγούμενο μήνυμα που διαβάστηκε από τους %1$s και %2$s"</string>
   <plurals name="a11y_read_receipts_multiple_with_others">
     <item quantity="one">"Διαβάστηκε από %1$s και %2$d ακόμη"</item>
     <item quantity="other">"Διαβάστηκε από %1$s και %2$d ακόμη"</item>
   </plurals>
-  <string name="a11y_read_receipts_single">"Διαβάστηκε από %1$s"</string>
+  <string name="a11y_read_receipts_single">"Το προηγούμενο μήνυμα διαβάστηκε από %1$s"</string>
   <string name="a11y_remove_reaction">"Αφαίρεση αντίδρασης με %1$s"</string>
   <string name="a11y_remove_reaction_with">"Αφαιρέστε την αντίδραση με %1$s"</string>
   <string name="a11y_room_avatar">"Άβαταρ αίθουσας"</string>

@@ -13,6 +13,7 @@ package io.element.android.features.verifysession.impl.incoming
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -26,6 +27,8 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
+import io.element.android.libraries.matrix.api.encryption.EncryptionService
+import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.verification.SessionVerificationRequestDetails
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
@@ -45,6 +48,7 @@ class IncomingVerificationPresenter(
     @Assisted private val navigator: IncomingVerificationNavigator,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
     private val sessionVerificationService: SessionVerificationService,
+    private val encryptionService: EncryptionService,
     private val stateMachine: IncomingVerificationStateMachine,
     private val dateFormatter: DateFormatter,
 ) : Presenter<IncomingVerificationState> {
@@ -92,12 +96,15 @@ class IncomingVerificationPresenter(
                 mode = DateFormatterMode.TimeOrDate,
             )
         }
-        val step by remember {
+        val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
+        val isMissingSecrets = recoveryState == RecoveryState.INCOMPLETE
+        val step by remember(isMissingSecrets) {
             derivedStateOf {
-                stateAndDispatch.state.value.toVerificationStep(
+                val currentStep = stateAndDispatch.state.value.toVerificationStep(
                     sessionVerificationRequestDetails = verificationRequest.details,
                     formattedSignInTime = formattedSignInTime,
                 )
+                if (isMissingSecrets && currentStep is Step.Initial) Step.Unavailable else currentStep
             }
         }
 
@@ -131,6 +138,7 @@ class IncomingVerificationPresenter(
                         } else {
                             stateAndDispatch.dispatchAction(StateMachineEvent.DeclineChallenge)
                         }
+                        Step.Unavailable,
                         Step.Canceled,
                         Step.Completed,
                         Step.Failure -> navigator.onFinish()

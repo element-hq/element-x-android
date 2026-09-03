@@ -18,7 +18,7 @@
   <string name="screen_space_add_rooms_room_access_description">"Dodanie pokoju nie wpłynie na dostęp do niego. Aby zmienić ustawienia dostępu, przejdź do Ustawienia pokoju &gt; Bezpieczeństwo i prywatność."</string>
   <string name="screen_space_empty_state_title">"Dodaj swój pierwszy pokój"</string>
   <string name="screen_space_menu_action_members">"Zobacz członków"</string>
-  <string name="screen_space_remove_rooms_confirmation_content">"Usunięcie pokoju nie wpłynie na dostęp do niego. Aby zmienić ustawienia dostępu, przejdź do Ustawienia pokoju &gt; Bezpieczeństwo i prywatność."</string>
+  <string name="screen_space_remove_rooms_confirmation_content">"Usunięcie pokoju nie wpłynie na dostęp do niego. Aby zmienić ustawienia dostępu, przejdź do Informacje pokoju &gt; Bezpieczeństwo i prywatność."</string>
   <plurals name="screen_space_remove_rooms_confirmation_title">
     <item quantity="one">"Usuń %1$d pokój z %2$s"</item>
     <item quantity="few">"Usuń %1$d pokoje z %2$s"</item>

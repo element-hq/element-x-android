@@ -16,7 +16,7 @@
   <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"%1$s 要求 Element Pro。请从应用商店下载。"</string>
   <string name="screen_change_server_error_element_pro_required_title">"需要 Element Pro"</string>
-  <string name="screen_change_server_error_invalid_homeserver">"我们无法访问此服务器。请检查输入的服务器 URL 是否正确。如果 URL 正确，请联系服务器管理员寻求进一步帮助。"</string>
+  <string name="screen_change_server_error_invalid_homeserver">"我们无法访问此账户提供者。请检查输入的账户提供者 URL 是否正确。如果 URL 正确，请联系账户提供者管理员寻求进一步帮助。"</string>
   <string name="screen_change_server_error_invalid_well_known">"由于 .well-known 文件存在问题，服务器不可用：
 %1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"所选账户提供者不支持滑动同步。需要升级服务器才能使用 %1$s。"</string>
@@ -40,7 +40,7 @@
   <string name="screen_login_error_invalid_credentials">"用户名与（或）密码不正确"</string>
   <string name="screen_login_error_invalid_user_id">"这不是合法的用户 ID。预期格式：“@user:homeserver.org”。"</string>
   <string name="screen_login_error_refresh_tokens">"此服务器使用刷新令牌。使用密码登录时不支持这些功能。"</string>
-  <string name="screen_login_error_unsupported_authentication">"该服务器不支持密码登录与 OAuth 登录。请联系服务器管理员或选择另一服务器。"</string>
+  <string name="screen_login_error_unsupported_authentication">"所选账户提供者不支持密码或 OAuth 登录。请联系账户提供者或选择另一账户提供者。"</string>
   <string name="screen_login_form_header">"输入详细信息"</string>
   <string name="screen_login_subtitle">"Matrix 是一个用于安全、去中心化通信的开放网络。"</string>
   <string name="screen_login_title">"欢迎回来！"</string>
