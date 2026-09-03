@@ -16,7 +16,7 @@
   <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"Η εφαρμογή Element Pro απαιτείται στο %1$s. Παρακαλώ κατεβάστε την από το κατάστημα."</string>
   <string name="screen_change_server_error_element_pro_required_title">"Απαιτείται το Element Pro"</string>
-  <string name="screen_change_server_error_invalid_homeserver">"Δεν μπορούσαμε να επικοινωνήσουμε με αυτόν τον οικιακό διακομιστή. Βεβαιώσου ότι έχεις εισαγάγει σωστά τη διεύθυνση URL του αρχικού διακομιστή. Εάν η διεύθυνση URL είναι σωστή, επικοινώνησε με τον διαχειριστή του κεντρικού διακομιστή για περαιτέρω βοήθεια."</string>
+  <string name="screen_change_server_error_invalid_homeserver">"Δεν ήταν δυνατή η επικοινωνία με αυτόν τον πάροχο λογαριασμού. Ελέγξτε ότι έχετε εισαγάγει σωστά τη διεύθυνση URL του παρόχου λογαριασμού. Εάν η διεύθυνση URL είναι σωστή, επικοινωνήστε με τον διαχειριστή του παρόχου λογαριασμού σας για περαιτέρω βοήθεια."</string>
   <string name="screen_change_server_error_invalid_well_known">"Ο διακομιστής δεν είναι διαθέσιμος λόγω προβλήματος στο αρχείο .well-known:
 %1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"Ο επιλεγμένος πάροχος λογαριασμού δεν υποστηρίζει sliding sync. Απαιτείται αναβάθμιση στο διακομιστή για χρήση του %1$s."</string>
@@ -32,7 +32,7 @@
   <string name="screen_login_error_invalid_credentials">"Λανθασμένο όνομα χρήστη ή κωδικός πρόσβασης"</string>
   <string name="screen_login_error_invalid_user_id">"Αυτό δεν είναι έγκυρο αναγνωριστικό χρήστη. Αναμενόμενη μορφή: \'@χρήστης:homeserver.org\'"</string>
   <string name="screen_login_error_refresh_tokens">"Αυτός ο διακομιστής έχει ρυθμιστεί ώστε να χρησιμοποιεί διακριτικά ανανέωσης. Αυτά δεν υποστηρίζονται όταν χρησιμοποιείς σύνδεση μέσω κωδικού πρόσβασης."</string>
-  <string name="screen_login_error_unsupported_authentication">"Ο επιλεγμένος οικιακός διακομιστής δεν υποστηρίζει κωδικό πρόσβασης ή σύνδεση OAuth. Επικοινωνήστε με τον διαχειριστή σου ή επέλεξε άλλο οικιακό διακομιστή."</string>
+  <string name="screen_login_error_unsupported_authentication">"Ο επιλεγμένος πάροχος λογαριασμού δεν υποστηρίζει σύνδεση με κωδικό πρόσβασης ή OAuth. Παρακαλούμε επικοινωνήστε με τον πάροχο του λογαριασμού σας ή επιλέξτε διαφορετικό."</string>
   <string name="screen_login_form_header">"Εισήγαγε τα στοιχεία σου"</string>
   <string name="screen_login_subtitle">"Το Matrix είναι ένα ανοιχτό δίκτυο για ασφαλή, αποκεντρωμένη επικοινωνία."</string>
   <string name="screen_login_title">"Καλωσόρισες ξανά!"</string>

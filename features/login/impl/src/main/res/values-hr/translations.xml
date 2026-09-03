@@ -25,8 +25,16 @@
   <string name="screen_change_server_error_unauthorized_homeserver_title">"Davatelj usluga računa %1$s nije dopušten."</string>
   <string name="screen_change_server_form_header">"URL matičnog poslužitelja"</string>
   <string name="screen_change_server_form_notice">"Unesite adresu domene."</string>
+  <string name="screen_change_server_navigation_title_login">"Prijava"</string>
+  <string name="screen_change_server_navigation_title_register">"Izradi račun"</string>
   <string name="screen_change_server_subtitle">"Koja je adresa vašeg poslužitelja?"</string>
+  <string name="screen_change_server_textfield_footer_login">"Ako vam je račun omogućila vaša tvrtka ili zajednica, promijenite pružatelja računa (primjer: nazivtvrtke.com)."</string>
+  <string name="screen_change_server_textfield_footer_register">"Besplatno kreirajte račun na matrix.org. Ako želite kreirati račun kod drugog pružatelja usluga, promijenite ga u skladu s tim (primjer: communityname.org)."</string>
+  <string name="screen_change_server_textfield_header">"Pružatelj usluga računa"</string>
+  <string name="screen_change_server_textfield_placeholder">"primjer.com"</string>
   <string name="screen_change_server_title">"Odaberite svoj poslužitelj"</string>
+  <string name="screen_change_server_title_login">"Unesite davatelja usluge računa"</string>
+  <string name="screen_change_server_title_register">"Odaberite pružatelja usluga računa"</string>
   <string name="screen_create_account_title">"Izradi račun"</string>
   <string name="screen_login_error_deactivated_account">"Ovaj je račun deaktiviran."</string>
   <string name="screen_login_error_invalid_credentials">"Netočno korisničko ime i/ili zaporka"</string>
