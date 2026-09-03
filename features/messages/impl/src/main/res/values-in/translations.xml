@@ -7,6 +7,17 @@
   <string name="crypto_event_authenticity_unknown_device">"Dienkripsi oleh perangkat yang tidak dikenal atau dihapus."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Dienkripsi oleh perangkat yang tidak diverifikasi oleh pemiliknya."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Dienkripsi oleh pengguna yang tidak terverifikasi."</string>
+  <string name="error_sending_failure_invalid_mime_type">"Tipe MIME tidak valid: %s"</string>
+  <string name="error_sending_failure_missing_media_content">"Konten media tidak ditemukan"</string>
+  <string name="error_sending_failure_other">"Detail kesalahan: %s"</string>
+  <string name="error_sending_failure_sending_from_unverified_device">"Mengirim dari perangkat yang belum terverifikasi"</string>
+  <string name="error_sending_failure_unknown">"Kesalahan tidak diketahui"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally">"Balikkan gambar secara horizontal"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Dibalik secara horizontal"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Asli"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically">"Balikkan gambar secara vertikal"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_flipped">"Dibalik secara vertikal"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_original">"Asli"</string>
   <string name="screen_image_edition_a11y_rotate_to_the_left">"Putar gambar ke kiri"</string>
   <plurals name="screen_image_edition_a11y_rotation_state">
     <item quantity="other">"%1$d derajat"</item>

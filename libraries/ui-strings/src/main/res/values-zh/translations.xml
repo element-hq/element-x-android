@@ -55,7 +55,7 @@
   <string name="a11y_react_with_other_emojis">"使用其它 Emoji 做出反应"</string>
   <string name="a11y_read_receipts_multiple">"上一个消息已被 %1$s 与 %2$s 阅读"</string>
   <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="other">"上一个消息已被 %1$s 与 %2$d 及其他人阅读"</item>
+    <item quantity="other">"上一个消息已被 %1$s 与其余 %2$d 人阅读"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"上一个消息已被 %1$s 阅读"</string>
   <string name="a11y_read_receipts_tap_to_show_all_android">"显示所有已读回执"</string>
@@ -479,7 +479,7 @@
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"选择你要上传的视频的质量。"</string>
   <string name="dialog_video_quality_selector_title">"选择视频上传质量"</string>
   <string name="error_account_already_logged_in">"你已在此设备以 %1$s 的身份登录。"</string>
-  <string name="error_account_creation_not_possible">"你的主服务器需要升级，以支持 Matrix 认证服务和账户创建。"</string>
+  <string name="error_account_creation_not_possible">"你的账户提供者需要升级以支持 Matrix 认证服务和账户创建。"</string>
   <string name="error_failed_creating_the_permalink">"永久链接创建失败"</string>
   <string name="error_failed_loading_map">"%1$s 无法加载地图，请稍后再试。"</string>
   <string name="error_failed_loading_messages">"消息加载失败"</string>
