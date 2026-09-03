@@ -16,7 +16,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
-open class MessageSearchStateProvider : PreviewParameterProvider<MessageSearchState> {
+open class MessageSearchStatePreviewParam : PreviewParameterProvider<MessageSearchState> {
     override val values: Sequence<MessageSearchState>
         get() = sequenceOf(
             // Nothing typed yet.

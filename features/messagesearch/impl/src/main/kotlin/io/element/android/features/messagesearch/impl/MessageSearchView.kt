@@ -368,7 +368,7 @@ private fun MessageSearchResultRow(
 
 @PreviewsDayNight
 @Composable
-internal fun MessageSearchViewPreview(@PreviewParameter(MessageSearchStateProvider::class) state: MessageSearchState) = ElementPreview {
+internal fun MessageSearchViewPreview(@PreviewParameter(MessageSearchStatePreviewParam::class) state: MessageSearchState) = ElementPreview {
     MessageSearchView(
         state = state,
         onResultClick = {},
