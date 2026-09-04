@@ -43,6 +43,9 @@ class ReadReceiptViewStatePreviewParam : PreviewParameterProvider<ReadReceiptVie
                 sendState = LocalEventSendState.Sent(EventId("\$eventId")),
                 receipts = List(5) { aReadReceiptData(it) },
             ),
+            aReadReceiptViewState(
+                sendState = LocalEventSendState.Sending.MediaWithProgress(index = 0, progress = 45, total = 100),
+            ),
         )
 }
 
