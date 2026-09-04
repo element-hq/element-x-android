@@ -12,6 +12,7 @@ package io.element.android.libraries.textcomposer.impl.components.markdown
 
 import android.view.KeyCharacterMap
 import android.view.KeyEvent
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.AndroidComposeUiTest
@@ -41,6 +42,13 @@ import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
 
 class MarkdownTextInputTest : RobolectricTest() {
+    @Test
+    fun `the composer never hands over to the keyboard's fullscreen editor`() = runAndroidComposeUiTest {
+        setMarkdownTextInput(state = aMarkdownTextEditorState(initialText = "Hello", initialFocus = true))
+        val editor = activity!!.findEditor()
+        assertThat(editor.imeOptions and EditorInfo.IME_FLAG_NO_EXTRACT_UI).isNotEqualTo(0)
+    }
+
     @Test
     fun `pressing enter on a physical keyboard sends the message`() = runAndroidComposeUiTest {
         val state = aMarkdownTextEditorState(initialText = "Hello", initialFocus = true)
