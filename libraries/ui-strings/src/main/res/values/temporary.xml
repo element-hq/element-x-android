@@ -10,4 +10,6 @@
     <string name="a11y_state_collapsed">"Collapsed"</string>
     <string name="a11y_active">Active</string>
     <string name="a11y_inactive">Inactive</string>
+    <string name="screen_message_search_title">Search messages</string>
+    <string name="screen_message_search_error">Something went wrong while searching. Please try again.</string>
 </resources>

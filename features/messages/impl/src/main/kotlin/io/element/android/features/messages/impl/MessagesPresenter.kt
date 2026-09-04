@@ -73,6 +73,7 @@ import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.emoji.api.recentemojis.AddRecentEmoji
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.toThreadId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
@@ -128,6 +129,7 @@ class MessagesPresenter(
     private val analyticsService: AnalyticsService,
     private val encryptionService: EncryptionService,
     private val featureFlagService: FeatureFlagService,
+    private val matrixClient: MatrixClient,
     private val addRecentEmoji: AddRecentEmoji,
     private val markAsFullyRead: MarkAsFullyRead,
     private val liveLocationShareManager: ActiveLiveLocationShareManager,
@@ -177,6 +179,7 @@ class MessagesPresenter(
         }
 
         val canOpenThreadList by featureFlagService.isFeatureEnabledFlow(FeatureFlags.RoomThreadList).collectAsState(initial = false)
+        val canSearch = matrixClient.isMessageSearchAvailable
         val isCurrentlySharingLiveLocationInRoom by remember { liveLocationShareManager.isCurrentlySharing(room.roomId) }.collectAsState()
 
         val userEventPermissions by room.permissionsAsState(UserEventPermissions.DEFAULT) { perms ->
@@ -331,6 +334,7 @@ class MessagesPresenter(
                 hasUnreadThreads = false,
             ),
             showLiveLocationShareBanner = isCurrentlySharingLiveLocationInRoom && timelineState.timelineMode !is Timeline.Mode.Thread,
+            canSearch = canSearch,
             eventSink = ::handleEvent,
         )
     }
