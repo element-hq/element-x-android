@@ -31,6 +31,7 @@ import io.element.android.libraries.push.test.push.FakeFetchPushForegroundServic
 import io.element.android.libraries.workmanager.api.WorkManagerRequestBuilder
 import io.element.android.libraries.workmanager.api.di.MetroWorkerFactory
 import io.element.android.services.analytics.test.FakeAnalyticsService
+import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.robolectric.RobolectricTest
@@ -96,9 +97,43 @@ class FetchPendingNotificationWorkerTest : RobolectricTest() {
         // An opportunistic sync was triggered
         assertThat(synced).isTrue()
 
-        // The foreground service is stopped once, and only after the results were emitted and the opportunistic sync ran
+        // The foreground service is released once, after the results were handed over and before the opportunistic sync
         stopForegroundServiceLambda.assertions().isCalledOnce()
-        assertThat(callOrder).containsExactly("emit", "sync", "stop").inOrder()
+        assertThat(callOrder).containsExactly("emit", "stop", "sync").inOrder()
+    }
+
+    @Test
+    fun `test - before Android 12 the foreground service is released as soon as the work runs`() = runTest {
+        val callOrder = mutableListOf<String>()
+        val syncOnNotifiableEventLambda = SyncOnNotifiableEvent { callOrder += "sync" }
+        val emitResultLambda = lambdaRecorder<Map<PushRequest, Result<ResolvedPushEvent>>, Unit> { callOrder += "emit" }
+        val processor = FakeNotificationResultProcessor(emit = emitResultLambda)
+        val stopForegroundServiceLambda = lambdaRecorder<Boolean> {
+            callOrder += "stop"
+            true
+        }
+        val pushHistoryService = FakePushHistoryService(
+            getPendingPushRequests = { _, _ -> Result.success(listOf(aPushRequest())) },
+            replacePushRequests = { Result.success(Unit) },
+            removeOldPushRequests = { Result.success(Unit) },
+        )
+
+        val worker = createWorker(
+            input = "@alice:matrix.org",
+            pushHistoryService = pushHistoryService,
+            resultProcessor = processor,
+            syncOnNotifiableEvent = syncOnNotifiableEventLambda,
+            pushHandlingWakeLock = FakeFetchPushForegroundServiceManager(unlock = stopForegroundServiceLambda),
+            buildVersionSdkIntProvider = FakeBuildVersionSdkIntProvider(30),
+        )
+
+        val result = worker.doWork()
+
+        assertThat(result).isEqualTo(ListenableWorker.Result.success())
+
+        // The foreground service is released once, before the events are resolved, since its notification would be displayed immediately
+        stopForegroundServiceLambda.assertions().isCalledOnce()
+        assertThat(callOrder).containsExactly("stop", "emit", "sync").inOrder()
     }
 
     @Test
@@ -263,6 +298,7 @@ class FetchPendingNotificationWorkerTest : RobolectricTest() {
         resultProcessor: FakeNotificationResultProcessor = FakeNotificationResultProcessor(),
         systemClock: FakeSystemClock = FakeSystemClock(),
         pushHandlingWakeLock: FakeFetchPushForegroundServiceManager = FakeFetchPushForegroundServiceManager(),
+        buildVersionSdkIntProvider: FakeBuildVersionSdkIntProvider = FakeBuildVersionSdkIntProvider(33),
     ) = FetchPendingNotificationsWorker(
         params = createWorkerParams(workDataOf("session_id" to input)),
         context = InstrumentationRegistry.getInstrumentation().context,
@@ -274,6 +310,7 @@ class FetchPendingNotificationWorkerTest : RobolectricTest() {
         resultProcessor = resultProcessor,
         systemClock = systemClock,
         fetchPushForegroundServiceManager = pushHandlingWakeLock,
+        buildVersionSdkIntProvider = buildVersionSdkIntProvider,
     )
 
     private fun TestScope.createWorkerParams(
