@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.InlineTextContent
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.State
@@ -93,7 +94,9 @@ fun HtmlMessageContent(
             onMentionClick = onMentionClick,
         )
     }
-    BlockNodes(nodes = node.children, context = context, modifier = modifier)
+    SelectionContainer {
+        BlockNodes(nodes = node.children, context = context, modifier = modifier)
+    }
 }
 
 /** Interaction callbacks and state threaded through the render tree. */
