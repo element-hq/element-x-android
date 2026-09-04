@@ -29,5 +29,12 @@ interface HtmlMessageParser {
          * [ParagraphNode.text]. The annotation value is the link target URL.
          */
         const val LINK_ANNOTATION_TAG = "url"
+
+        /**
+         * Tag used for the string annotation attached to inline code (`<code>`) text ranges in a
+         * [ParagraphNode.text]. The annotation value is empty; only the range matters. A `<code>`
+         * nested inside a `<pre>` is part of the [CodeBlockNode] and is never annotated this way.
+         */
+        const val INLINE_CODE_ANNOTATION_TAG = "inline_code"
     }
 }

@@ -20,6 +20,7 @@ import io.element.android.libraries.htmlrenderer.api.BlockNode
 import io.element.android.libraries.htmlrenderer.api.CodeBlockNode
 import io.element.android.libraries.htmlrenderer.api.DocumentNode
 import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser
+import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser.Companion.INLINE_CODE_ANNOTATION_TAG
 import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser.Companion.LINK_ANNOTATION_TAG
 import io.element.android.libraries.htmlrenderer.api.ListItemNode
 import io.element.android.libraries.htmlrenderer.api.ListNode
@@ -131,6 +132,7 @@ class DefaultHtmlMessageParser(
                 TAG_U -> withStyle(SpanStyle(textDecoration = TextDecoration.Underline), element)
                 TAG_DEL -> withStyle(SpanStyle(textDecoration = TextDecoration.LineThrough), element)
                 TAG_CODE -> withStyle(SpanStyle(fontFamily = FontFamily.Monospace), element)
+                TAG_CODE -> appendInlineCode(element)
                 TAG_A -> appendLink(element)
                 TAG_MX_REPLY -> Unit
                 // Unknown inline wrapper: keep its text so nothing is dropped.
@@ -146,6 +148,20 @@ class DefaultHtmlMessageParser(
             val start = builder.length
             appendChildren(element)
             builder.addStyle(style, start, builder.length)
+        }
+
+        /**
+         * Renders an inline `<code>` as monospaced text and annotates the range so the renderer can
+         * apply a code background. A `<code>` inside a `<pre>` never reaches here: the `<pre>` is
+         * turned into a [CodeBlockNode] from its raw text.
+         */
+        private fun appendInlineCode(element: Element) {
+            val start = builder.length
+            appendChildren(element)
+            if (builder.length > start) {
+                builder.addStyle(SpanStyle(fontFamily = FontFamily.Monospace), start, builder.length)
+                builder.addStringAnnotation(INLINE_CODE_ANNOTATION_TAG, "", start, builder.length)
+            }
         }
 
         private fun appendLink(element: Element) {
