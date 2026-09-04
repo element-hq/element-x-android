@@ -76,7 +76,7 @@
   <string name="screen_notification_settings_failed_fixing_configuration">"Конфігурацію не виправлено, спробуйте ще раз."</string>
   <string name="screen_notification_settings_group_chats">"Групові бесіди"</string>
   <string name="screen_notification_settings_invite_for_me_label">"Запрошення"</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Ваш домашній сервер не підтримує цю опцію в зашифрованих кімнатах, ви можете не отримати сповіщення в деяких кімнатах."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Постачальник вашого облікового запису не підтримує цю опцію в зашифрованих бесідах, тому ви можете не отримувати сповіщення в деяких бесідах."</string>
   <string name="screen_notification_settings_mentions_section_title">"Згадки"</string>
   <string name="screen_notification_settings_message_sound_dialog_choose_other">"Обрати інший звук…"</string>
   <string name="screen_notification_settings_message_sound_dialog_current_subtitle">"Наразі використовується %1$s"</string>
@@ -85,7 +85,7 @@
   <string name="screen_notification_settings_mode_all">"Усі"</string>
   <string name="screen_notification_settings_mode_mentions">"Згадки"</string>
   <string name="screen_notification_settings_notification_section_title">"Сповіщати мене про"</string>
-  <string name="screen_notification_settings_room_mention_label">"Сповіщати про @room"</string>
+  <string name="screen_notification_settings_room_mention_label">"Згадки @room"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"Власний"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"Користувацький звук…"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"Помилка видалення файлу"</string>
