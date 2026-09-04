@@ -91,14 +91,14 @@ fun HtmlMessageContent(
     onMentionClick: (MentionNodeContent) -> Unit = {},
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit = {},
 ) {
-    val measuredParagraph = remember(node) { node.lastMeasurableParagraph() }
+    val measuredParagraph = remember(node) { node.lastBlockNode() }
     val context = remember(currentUserId, onLinkClick, onLinkLongClick, onMentionClick, measuredParagraph, onContentLayoutChange) {
         RenderContext(
             currentUserId = currentUserId,
             onLinkClick = onLinkClick,
             onLinkLongClick = onLinkLongClick,
             onMentionClick = onMentionClick,
-            measuredParagraph = measuredParagraph,
+            lastBlockNode = measuredParagraph,
             onContentLayoutChange = onContentLayoutChange,
         )
     }
@@ -114,23 +114,17 @@ private data class RenderContext(
     val onLinkClick: (String) -> Unit,
     val onLinkLongClick: (String) -> Unit,
     val onMentionClick: (MentionNodeContent) -> Unit,
-    // The single paragraph whose last text line should be measured (by identity), or null if the
-    // last rendered node is inside a code block / quote and must not be measured.
-    val measuredParagraph: ParagraphNode?,
+    // The latest descendant BlockNode of the root DocumentNode
+    val lastBlockNode: BlockNode?,
     val onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
 )
 
-/**
- * Returns the [ParagraphNode] whose last text line should feed [ContentAvoidingLayout], by walking
- * to the last rendered leaf. Returns null when that leaf is a [CodeBlockNode] or lives inside a
- * [QuoteNode], since those must not be measured.
- */
-internal fun BlockNode.lastMeasurableParagraph(): ParagraphNode? = when (this) {
+internal fun BlockNode.lastBlockNode(): BlockNode? = when (this) {
     is ParagraphNode -> this
-    is DocumentNode -> children.lastOrNull()?.lastMeasurableParagraph()
-    is ListNode -> items.lastOrNull()?.children?.lastOrNull()?.lastMeasurableParagraph()
-    is QuoteNode -> null
-    is CodeBlockNode -> null
+    is DocumentNode -> children.lastOrNull()?.lastBlockNode()
+    is ListNode -> items.lastOrNull()?.children?.lastOrNull()?.lastBlockNode()
+    is QuoteNode -> this
+    is CodeBlockNode -> this
 }
 
 @Composable
@@ -153,9 +147,15 @@ private fun BlockNodeView(
     context: RenderContext,
     modifier: Modifier = Modifier,
 ) {
+    if (node === context.lastBlockNode && node !is ParagraphNode) {
+        context.onContentLayoutChange(ContentAvoidingLayoutData.NotOverlapping)
+    }
+
     when (node) {
         is DocumentNode -> BlockNodes(nodes = node.children, context = context, modifier = modifier)
-        is ParagraphNode -> ParagraphView(node = node, context = context, modifier = modifier)
+        is ParagraphNode -> {
+            ParagraphView(node = node, context = context, modifier = modifier)
+        }
         is CodeBlockNode -> CodeBlockView(node = node, modifier = modifier)
         is QuoteNode -> QuoteView(node = node, context = context, modifier = modifier)
         is ListNode -> ListView(node = node, context = context, modifier = modifier)
@@ -177,7 +177,7 @@ private fun ParagraphView(
     val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
     // Only the last rendered paragraph (and only when not inside a code block / quote) reports its
     // measured last line to the timeline.
-    val measureLastLine = if (node === context.measuredParagraph) {
+    val measureLastLine = if (node === context.lastBlockNode) {
         ContentAvoidingLayout.measureLastTextLine(onContentLayoutChange = context.onContentLayoutChange)
     } else {
         null

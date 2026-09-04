@@ -11,6 +11,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.AnnotatedString
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.persistentMapOf
 
 /**
  * A node in the parsed representation of a formatted (HTML) message body.
@@ -50,7 +51,7 @@ data class DocumentNode(
 @Immutable
 data class ParagraphNode(
     val text: AnnotatedString,
-    val inlineContent: ImmutableMap<String, MentionNodeContent>,
+    val inlineContent: ImmutableMap<String, MentionNodeContent> = persistentMapOf(),
 ) : BlockNode
 
 /**
