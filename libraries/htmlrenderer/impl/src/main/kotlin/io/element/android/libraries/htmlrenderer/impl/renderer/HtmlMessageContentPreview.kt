@@ -53,6 +53,44 @@ internal fun HtmlMessageContentPreview(
     )
 }
 
+@PreviewsDayNight
+@Composable
+internal fun HtmlMessageContentHiddenImagesPreview() = ElementPreview {
+    HtmlMessageContent(
+        node = DocumentNode(
+            persistentListOf(
+                ParagraphNode(
+                    text = buildAnnotatedString {
+                        append("Sensitive image ")
+                        appendInlineContent("image_0", "image")
+                        append(" and emoji ")
+                        appendInlineContent("emoji_0", "image")
+                        append(" hidden until tapped")
+                    },
+                    inlineContent = persistentMapOf(
+                        "image_0" to ImageNodeContent(
+                            url = "https://example.org/cat.png",
+                            alt = "a cat",
+                            width = 48,
+                            height = 48,
+                            isEmoticon = false,
+                        ),
+                        "emoji_0" to ImageNodeContent(
+                            url = "https://example.org/emoji.png",
+                            alt = "a cat",
+                            width = null,
+                            height = null,
+                            isEmoticon = true,
+                        ),
+                    ),
+                ),
+            )
+        ),
+        modifier = Modifier.padding(16.dp),
+        hideImages = true,
+    )
+}
+
 internal class HtmlMessageContentProvider : PreviewParameterProvider<DocumentNode> {
     override val values: Sequence<DocumentNode>
         get() = sequenceOf(

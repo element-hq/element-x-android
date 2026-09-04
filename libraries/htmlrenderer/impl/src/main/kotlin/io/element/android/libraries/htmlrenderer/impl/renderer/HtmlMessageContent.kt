@@ -28,6 +28,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -52,6 +53,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.htmlrenderer.api.BlockNode
 import io.element.android.libraries.htmlrenderer.api.CodeBlockNode
@@ -82,6 +85,8 @@ import kotlinx.collections.immutable.toImmutableMap
  * @param onMentionClick invoked when a mention pill is tapped.
  * @param imageModel maps an [ImageNodeContent] to the model passed to [AsyncImage]. Defaults to the
  * raw image URL; the timeline can supply a mapper that turns `mxc://` URLs into a media request.
+ * @param hideImages when true, inline images are replaced by a tappable grey placeholder until the
+ * viewer reveals them individually; a revealed image's URL is added to [LocalAllowedImages].
  * @param onContentLayoutChange invoked with the measured layout of the very last rendered
  * [ParagraphNode], so the timeline can lay out the timestamp around it. It is only wired to that
  * last paragraph, and only when it is not nested inside a [CodeBlockNode] or [QuoteNode] — in which
@@ -96,22 +101,28 @@ fun HtmlMessageContent(
     onLinkLongClick: (String) -> Unit = {},
     onMentionClick: (MentionNodeContent) -> Unit = {},
     imageModel: (ImageNodeContent) -> Any = { it.url },
+    hideImages: Boolean = false,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit = {},
 ) {
     val measuredParagraph = remember(node) { node.lastBlockNode() }
-    val context = remember(currentUserId, onLinkClick, onLinkLongClick, onMentionClick, imageModel, measuredParagraph, onContentLayoutChange) {
+    val context = remember(currentUserId, onLinkClick, onLinkLongClick, onMentionClick, imageModel, hideImages, measuredParagraph, onContentLayoutChange) {
         RenderContext(
             currentUserId = currentUserId,
             onLinkClick = onLinkClick,
             onLinkLongClick = onLinkLongClick,
             onMentionClick = onMentionClick,
             imageModel = imageModel,
+            hideImages = hideImages,
             lastBlockNode = measuredParagraph,
             onContentLayoutChange = onContentLayoutChange,
         )
     }
-    SelectionContainer {
-        BlockNodes(nodes = node.children, context = context, modifier = modifier)
+    // Each message keeps its own reveal state, unless a host provides a shared [LocalAllowedImages].
+    val allowedImages = remember { AllowedImages() }
+    CompositionLocalProvider(LocalAllowedImages provides allowedImages) {
+        SelectionContainer {
+            BlockNodes(nodes = node.children, context = context, modifier = modifier)
+        }
     }
 }
 
@@ -123,6 +134,7 @@ private data class RenderContext(
     val onLinkLongClick: (String) -> Unit,
     val onMentionClick: (MentionNodeContent) -> Unit,
     val imageModel: (ImageNodeContent) -> Any,
+    val hideImages: Boolean,
     // The latest descendant BlockNode of the root DocumentNode
     val lastBlockNode: BlockNode?,
     val onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
@@ -299,14 +311,31 @@ private fun MentionPill(
 private fun InlineImage(
     content: ImageNodeContent,
     model: Any,
+    hideImages: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    AsyncImage(
-        model = model,
-        contentDescription = content.alt,
-        contentScale = ContentScale.Fit,
-        modifier = modifier.fillMaxSize(),
-    )
+    val allowedImages = LocalAllowedImages.current
+    val isRevealed = !hideImages || content.url in allowedImages
+    if (isRevealed) {
+        AsyncImage(
+            model = model,
+            contentDescription = content.alt,
+            contentScale = ContentScale.Fit,
+            modifier = modifier.fillMaxSize(),
+        )
+    } else {
+        // Hidden by default: a tappable grey placeholder that reveals the image when clicked.
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .clip(RoundedCornerShape(4.dp))
+                .background(ElementTheme.colors.bgSubtleSecondary)
+                .clickable { allowedImages.allow(content.url) },
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(CompoundIcons.VisibilityOff(), contentDescription = "Show image")
+        }
+    }
 }
 
 /**
@@ -352,7 +381,11 @@ private fun rememberInlineContent(
                         placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
                     ),
                 ) {
-                    InlineImage(content = item, model = context.imageModel(item))
+                    InlineImage(
+                        content = item,
+                        model = context.imageModel(item),
+                        hideImages = context.hideImages,
+                    )
                 }
             }
         }
