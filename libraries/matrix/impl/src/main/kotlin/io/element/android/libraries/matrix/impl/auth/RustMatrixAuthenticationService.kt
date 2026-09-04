@@ -248,13 +248,15 @@ class RustMatrixAuthenticationService(
                     additionalScopes = emptyList(),
                 )
                 val getUrlResolver = RustTemporaryMatrixClient(client, sessionPaths)
-                val url = oAuthAuthorizationData.loginUrl()
-                    .let {
-                        enterpriseService.tweakMasUrl(
-                            url = it,
-                            urlContentFetcher = getUrlResolver,
-                        )
-                    }
+                val url = getUrlResolver.use { resolver ->
+                    oAuthAuthorizationData.loginUrl()
+                        .let { url ->
+                            enterpriseService.tweakMasUrl(
+                                url = url,
+                                urlContentFetcher = resolver,
+                            )
+                        }
+                }
                 pendingOAuthAuthorizationData = oAuthAuthorizationData
                 OAuthDetails(url)
             }.mapFailure { failure ->
