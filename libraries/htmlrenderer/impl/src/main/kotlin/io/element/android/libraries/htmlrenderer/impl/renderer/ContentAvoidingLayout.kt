@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2026 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
@@ -7,17 +8,115 @@
 
 package io.element.android.libraries.htmlrenderer.impl.renderer
 
+import android.text.Layout
+import androidx.compose.foundation.layout.Column
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.style.ResolvedTextDirection
+import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.dp
+import io.element.android.libraries.designsystem.text.roundToPx
+import io.element.android.libraries.designsystem.utils.LocalUiTestMode
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.roundToInt
 
 /**
- * Data describing the measured layout of rendered content, used by the timeline to place the
- * message timestamp so it avoids (or overlaps) the content.
+ * A layout with 2 children: the [content] and the [overlay].
  *
- * NOTE: this intentionally mirrors `ContentAvoidingLayoutData` in `features/messages/impl`. It is
- * duplicated here so this library does not depend on the feature module; the two should be
- * consolidated (e.g. moved to a shared module) when the renderer is wired into the timeline.
+ * It will try to place the [overlay] on top of the [content] if possible, avoiding the area of it that is non-overlapping.
+ * If the [overlay] can't be placed on top of the [content], it will be placed to the right of it, if it fits, otherwise, to its bottom in a new row.
+ *
+ * @param overlay The 'overlay' component of the layout, which will be positioned relative to the [content].
+ * @param modifier The modifier for the layout.
+ * @param spacing The spacing between the [content] and the [overlay]. Defaults to `0.dp`.
+ * @param overlayOffset The offset of the [overlay] from the bottom right corner of the [content].
+ * @param shrinkContent Whether the content should be shrunk to fit the available width or not. Defaults to `false`.
+ * @param content The 'content' component of the layout.
+ */
+@Suppress("ContentSlotReused") // Since we added an exception for `LocalUiTestMode`, detekt thinks the layout can change in runtime: it won't
+@Composable
+fun ContentAvoidingLayout(
+    overlay: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+    spacing: Dp = 0.dp,
+    overlayOffset: DpOffset = DpOffset.Zero,
+    shrinkContent: Boolean = false,
+    content: @Composable ContentAvoidingLayoutScope.() -> Unit,
+) {
+    val scope = remember { ContentAvoidingLayoutScopeInstance() }
+
+    // Custom layouts don't seem to work well with Compose UI tests (they crash), so we use a Column instead when running in test mode.
+    if (LocalUiTestMode.current) {
+        Column {
+            scope.content()
+            overlay()
+        }
+        return
+    }
+
+    Layout(
+        modifier = modifier,
+        content = {
+            scope.content()
+            overlay()
+        }
+    ) { measurables, constraints ->
+
+        // Measure the `overlay` view first, in case we need to shrink the `content`
+        val overlayPlaceable = measurables.last().measure(Constraints(minWidth = 0, maxWidth = constraints.maxWidth))
+        val contentConstraints = if (shrinkContent) {
+            Constraints(minWidth = 0, maxWidth = constraints.maxWidth - overlayPlaceable.width)
+        } else {
+            Constraints(minWidth = 0, maxWidth = constraints.maxWidth)
+        }
+        val contentPlaceable = measurables.first().measure(contentConstraints)
+
+        var layoutWidth = contentPlaceable.width
+        var layoutHeight = contentPlaceable.height
+
+        val data = scope.data.value
+
+        // Free space = width of the whole component - width of its non overlapping contents
+        val freeSpace = max(contentPlaceable.width - data.nonOverlappingContentWidth, 0)
+
+        when {
+            // When the content + the overlay don't fit in the available max width, we need to move the overlay to a new row
+            !data.canOverlay() || (!shrinkContent && data.nonOverlappingContentWidth + overlayPlaceable.width > constraints.maxWidth) -> {
+                layoutHeight += overlayPlaceable.height + overlayOffset.y.roundToPx()
+            }
+            // If the content is smaller than the available max width, we can move the overlay to the right of the content
+            contentPlaceable.width < constraints.maxWidth -> {
+                // If both the content and the overlay plus the padding can fit inside the current layoutWidth, there is no need to increase it
+                if (freeSpace < overlayPlaceable.width + spacing.roundToPx()) {
+                    // Otherwise, we need to increase it by the width of the overlay + some padding adjustments
+                    val calculatedWidth = max(data.nonOverlappingContentWidth + overlayPlaceable.width + spacing.roundToPx(), contentPlaceable.width)
+                    layoutWidth = min(calculatedWidth, constraints.maxWidth)
+                }
+            }
+            else -> Unit
+        }
+
+        layoutWidth = max(layoutWidth, constraints.minWidth)
+        layoutHeight = max(layoutHeight, constraints.minHeight)
+
+        layout(layoutWidth, layoutHeight) {
+            contentPlaceable.placeRelative(0, 0)
+            overlayPlaceable.placeRelative(layoutWidth - overlayPlaceable.width, layoutHeight - overlayPlaceable.height + overlayOffset.y.roundToPx())
+        }
+    }
+}
+
+/**
+ * Data class to hold the content layout data.
+ * This is used to pass the data from the content to the [ContentAvoidingLayout].
  *
  * @param contentWidth The full width of the content in pixels.
  * @param contentHeight The full height of the content in pixels.
@@ -29,31 +128,86 @@ data class ContentAvoidingLayoutData(
     val contentHeight: Int = 0,
     val nonOverlappingContentWidth: Int = contentWidth,
     val nonOverlappingContentHeight: Int = contentHeight,
-)
+) {
+    fun canOverlay(): Boolean = contentWidth != Int.MAX_VALUE
 
-internal object ContentAvoidingLayout {
+    companion object {
+        val NotOverlapping = ContentAvoidingLayoutData(contentWidth = Int.MAX_VALUE, contentHeight = Int.MAX_VALUE)
+    }
+}
+
+/**
+ * A scope for the [ContentAvoidingLayout].
+ */
+interface ContentAvoidingLayoutScope {
     /**
-     * Builds an `onTextLayout` callback that measures the last line of a [TextLayoutResult] and
-     * reports it through [onContentLayoutChange]. Mirrors `ContentAvoidingLayout.measureLastTextLine`
-     * in `features/messages/impl`.
+     * It should be called when the content layout changes, so it can update the [ContentAvoidingLayoutData] and measure and layout the content properly.
      */
-    fun measureLastTextLine(
+    fun onContentLayoutChange(data: ContentAvoidingLayoutData)
+}
+
+private class ContentAvoidingLayoutScopeInstance(
+    val data: MutableState<ContentAvoidingLayoutData> = mutableStateOf(ContentAvoidingLayoutData()),
+) : ContentAvoidingLayoutScope {
+    override fun onContentLayoutChange(data: ContentAvoidingLayoutData) {
+        this.data.value = data
+    }
+}
+
+object ContentAvoidingLayout {
+    /**
+     * Measures the last line of a [TextLayoutResult] and calls [onContentLayoutChange] with the [ContentAvoidingLayoutData].
+     *
+     * This is supposed to be used in the `onTextLayout` parameter of a Text based component.
+     */
+    @Composable
+    internal fun measureLastTextLine(
         onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
-    ): (TextLayoutResult) -> Unit = { textLayout ->
-        val textDirection = runCatching { textLayout.getParagraphDirection(0) }.getOrNull()
-        val lastLine = textLayout.lineCount - 1
-        val lastLineWidth = when (textDirection) {
-            ResolvedTextDirection.Rtl -> textLayout.getLineLeft(lastLine).roundToInt()
-            else -> textLayout.getLineRight(lastLine).roundToInt()
-        }
-        val lastLineHeight = textLayout.getLineBottom(lastLine).roundToInt()
-        onContentLayoutChange(
-            ContentAvoidingLayoutData(
-                contentWidth = textLayout.size.width,
-                contentHeight = textLayout.size.height,
-                nonOverlappingContentWidth = lastLineWidth,
-                nonOverlappingContentHeight = lastLineHeight,
+        extraWidth: Dp = 0.dp,
+    ): ((TextLayoutResult) -> Unit) {
+        val extraWidthPx = extraWidth.roundToPx()
+        return { textLayout: TextLayoutResult ->
+            // We need to add the external extra width so it's not taken into account as 'free space'
+            val textDirection = runCatching { textLayout.getParagraphDirection(0) }.getOrNull()
+            val lastLineWidth = when (textDirection) {
+                ResolvedTextDirection.Rtl -> textLayout.getLineLeft(textLayout.lineCount - 1).roundToInt()
+                else -> textLayout.getLineRight(textLayout.lineCount - 1).roundToInt()
+            }
+            val lastLineHeight = textLayout.getLineBottom(textLayout.lineCount - 1).roundToInt()
+            onContentLayoutChange(
+                ContentAvoidingLayoutData(
+                    contentWidth = textLayout.size.width + extraWidthPx,
+                    contentHeight = textLayout.size.height,
+                    nonOverlappingContentWidth = lastLineWidth + extraWidthPx,
+                    nonOverlappingContentHeight = lastLineHeight,
+                )
             )
-        )
+        }
+    }
+
+    /**
+     * Measures the last line of a [Layout] and calls [onContentLayoutChange] with the [ContentAvoidingLayoutData].
+     *
+     * This is supposed to be used in the `onTextLayout` parameter of an [EditorStyledText] component.
+     */
+    @Composable
+    internal fun measureLegacyLastTextLine(
+        onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
+        extraWidth: Dp = 0.dp,
+    ): ((Layout) -> Unit) {
+        val extraWidthPx = extraWidth.roundToPx()
+        return { textLayout: Layout ->
+            // We need to add the external extra width so it's not taken into account as 'free space'
+            val lastLineWidth = textLayout.getLineWidth(textLayout.lineCount - 1).roundToInt()
+            val lastLineHeight = textLayout.getLineBottom(textLayout.lineCount - 1)
+            onContentLayoutChange(
+                ContentAvoidingLayoutData(
+                    contentWidth = textLayout.width + extraWidthPx,
+                    contentHeight = textLayout.height,
+                    nonOverlappingContentWidth = lastLineWidth + extraWidthPx,
+                    nonOverlappingContentHeight = lastLineHeight,
+                )
+            )
+        }
     }
 }
