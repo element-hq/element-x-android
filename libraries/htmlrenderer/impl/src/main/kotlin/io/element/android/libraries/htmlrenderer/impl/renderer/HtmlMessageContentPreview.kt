@@ -59,6 +59,7 @@ internal class HtmlMessageContentProvider : PreviewParameterProvider<DocumentNod
             multilineInlineCode(),
             orderedList(),
             quote(),
+            nestedQuotes(),
             codeBlock(),
             mention(),
             nestedList(),
@@ -120,6 +121,17 @@ internal class HtmlMessageContentProvider : PreviewParameterProvider<DocumentNod
     private fun quote() = document(
         paragraph(AnnotatedString("Someone said:")),
         QuoteNode(persistentListOf(paragraph(AnnotatedString("This is a quoted message.")))),
+    )
+
+    private fun nestedQuotes() = document(
+        paragraph(AnnotatedString("Someone said:")),
+        QuoteNode(persistentListOf(
+            paragraph(AnnotatedString("This is a quoted message.")),
+            QuoteNode(persistentListOf(
+                paragraph(AnnotatedString("This is a nested quote.")),
+                codeBlock(),
+            )),
+        )),
     )
 
     private fun codeBlock() = document(
