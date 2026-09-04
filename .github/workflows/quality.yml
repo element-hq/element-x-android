@@ -342,28 +342,166 @@ jobs:
     name: Project Check Suite
     runs-on: ubuntu-latest
     needs: [konsist, lint, ktlint, detekt]
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
+    # Run even if a previous job failed: that is precisely when there are issues to report.
+    if: ${{ !cancelled() }}
+    permissions:
+      # Required to list the files modified by the pull request.
+      pull-requests: read
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          # Ensure we are building the branch and not the branch after being merged on develop
-          # https://github.com/actions/checkout/issues/881
-          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
-          persist-credentials: false
       - name: Download reports from previous jobs
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-      - name: Prepare Danger
-        if: always()
-        run: |
-          npm install --save-dev @babel/core
-          npm install --save-dev @babel/plugin-transform-flow-strip-types
-          yarn add danger-plugin-lint-report --dev
-      - name: Danger lint
-        if: always()
-        uses: danger/danger-js@a236e3b8c41f0babbf133568db851a20a34f9a7b # 14.0.5
+      - name: Annotate the lint, ktlint and detekt issues
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
-          args: "--dangerfile ./tools/danger/dangerfile-lint.js"
-        env:
-          DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
-          # Fallback for forks
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // GitHub only surfaces a handful of annotations per level and per step, so cap what we emit
+            // and let the job summary carry the full list.
+            const MAX_ANNOTATIONS = 20;
+            const MAX_SUMMARY_ROWS = 200;
+
+            function unescapeXml(value) {
+              return value
+                .replace(/&lt;/g, "<")
+                .replace(/&gt;/g, ">")
+                .replace(/&quot;/g, "\"")
+                .replace(/&apos;/g, "'")
+                .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(Number(code)))
+                .replace(/&amp;/g, "&");
+            }
+
+            function attribute(tag, name) {
+              const match = new RegExp(`\\b${name}="([^"]*)"`).exec(tag);
+              return match ? unescapeXml(match[1]) : undefined;
+            }
+
+            // Paths in the reports are absolute paths on the runner which generated them, i.e.
+            // /home/runner/work/<repo>/<repo>/<path>.
+            const workspace = `/work/${context.repo.repo}/${context.repo.repo}/`;
+            function repoRelative(path) {
+              const index = path.indexOf(workspace);
+              return index === -1 ? path : path.slice(index + workspace.length);
+            }
+
+            // Checkstyle XML, as produced by ktlint and detekt:
+            //   <file name="…"><error line=".." column=".." severity=".." message=".." source=".."/></file>
+            function parseCheckstyle(content) {
+              const issues = [];
+              const fileRegex = /<file\s+([^>]*?)(\/>|>([\s\S]*?)<\/file>)/g;
+              let file;
+              while ((file = fileRegex.exec(content)) !== null) {
+                const path = attribute(file[1], "name");
+                if (!path) continue;
+                const errorRegex = /<error\s+([^>]*?)\/?>/g;
+                let error;
+                while ((error = errorRegex.exec(file[3] ?? "")) !== null) {
+                  issues.push({
+                    file: repoRelative(path),
+                    line: Number(attribute(error[1], "line")) || 1,
+                    column: Number(attribute(error[1], "column")) || undefined,
+                    severity: (attribute(error[1], "severity") ?? "warning").toLowerCase(),
+                    rule: attribute(error[1], "source"),
+                    message: attribute(error[1], "message") ?? "",
+                  });
+                }
+              }
+              return issues;
+            }
+
+            // Android lint XML, which is not Checkstyle:
+            //   <issue id=".." severity=".." message=".."><location file=".." line=".." column=".."/></issue>
+            function parseAndroidLint(content) {
+              const issues = [];
+              const issueRegex = /<issue\s+([^>]*?)(\/>|>([\s\S]*?)<\/issue>)/g;
+              let issue;
+              while ((issue = issueRegex.exec(content)) !== null) {
+                const location = /<location\s+([^>]*?)\/?>/.exec(issue[3] ?? "");
+                if (!location) continue;
+                const path = attribute(location[1], "file");
+                if (!path) continue;
+                issues.push({
+                  file: repoRelative(path),
+                  line: Number(attribute(location[1], "line")) || 1,
+                  column: Number(attribute(location[1], "column")) || undefined,
+                  severity: (attribute(issue[1], "severity") ?? "warning").toLowerCase(),
+                  rule: attribute(issue[1], "id"),
+                  message: attribute(issue[1], "message") ?? "",
+                });
+              }
+              return issues;
+            }
+
+            const reports = await (await glob.create("**/reports/**/*.xml")).glob();
+            core.info(`Found ${reports.length} XML report(s).`);
+
+            const fs = require("fs");
+            let issues = [];
+            for (const report of reports) {
+              const content = fs.readFileSync(report, "utf8");
+              if (content.includes("<checkstyle")) {
+                issues.push(...parseCheckstyle(content));
+              } else if (content.includes("<issues")) {
+                issues.push(...parseAndroidLint(content));
+              }
+            }
+
+            // Only report on the files touched by the pull request.
+            const pr = context.payload.pull_request;
+            if (pr) {
+              const files = await github.paginate(github.rest.pulls.listFiles, {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: pr.number
+              });
+              const changed = new Set(files.map(file => file.filename));
+              issues = issues.filter(issue => changed.has(issue.file));
+            }
+
+            const seen = new Set();
+            issues = issues.filter(issue => {
+              const key = `${issue.file}:${issue.line}:${issue.rule}:${issue.message}`;
+              if (seen.has(key)) return false;
+              seen.add(key);
+              return true;
+            });
+
+            if (issues.length === 0) {
+              core.info("No issue found in the files modified by this pull request.");
+              return;
+            }
+
+            const level = severity => {
+              if (severity === "error" || severity === "fatal") return "error";
+              if (severity === "warning") return "warning";
+              return "notice";
+            };
+            const rank = { error: 0, warning: 1, notice: 2 };
+            issues.sort((a, b) =>
+              rank[level(a.severity)] - rank[level(b.severity)] ||
+              a.file.localeCompare(b.file) ||
+              a.line - b.line
+            );
+
+            issues.slice(0, MAX_ANNOTATIONS).forEach(issue => {
+              const annotation = {
+                title: issue.rule,
+                file: issue.file,
+                startLine: issue.line,
+                startColumn: issue.column,
+              };
+              core[level(issue.severity)](issue.message, annotation);
+            });
+
+            core.summary.addHeading(`${issues.length} code quality issue(s)`, 3);
+            core.summary.addTable([
+              [{ data: "Severity", header: true }, { data: "File", header: true }, { data: "Rule", header: true }, { data: "Message", header: true }],
+              ...issues.slice(0, MAX_SUMMARY_ROWS).map(issue => [
+                level(issue.severity),
+                `${issue.file}:${issue.line}`,
+                issue.rule ?? "",
+                issue.message,
+              ]),
+            ]);
+            if (issues.length > MAX_SUMMARY_ROWS) {
+              core.summary.addRaw(`…and ${issues.length - MAX_SUMMARY_ROWS} more, see the uploaded reports.`, true);
+            }
+            await core.summary.write();
