@@ -11,6 +11,7 @@ package io.element.android.features.forward.impl
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -26,6 +27,15 @@ fun ForwardMessagesView(
         async = state.forwardAction,
         onSuccess = {
             onForwardSuccess(it)
+        },
+        progressDialog = {
+            ProgressDialog(
+                text = stringResource(id = CommonStrings.common_sending),
+                showCancelButton = true,
+                onDismissRequest = {
+                    state.eventSink(ForwardMessagesEvent.Cancel)
+                },
+            )
         },
         errorMessage = {
             stringResource(id = CommonStrings.error_unknown)

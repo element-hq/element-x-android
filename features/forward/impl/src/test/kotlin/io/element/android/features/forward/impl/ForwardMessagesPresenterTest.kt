@@ -15,6 +15,8 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomSummary
@@ -22,7 +24,9 @@ import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.LiveTimelineProvider
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -91,13 +95,42 @@ class ForwardMessagesPresenterTest {
             forwardEventLambda.assertions().isCalledOnce()
         }
     }
+
+    @Test
+    fun `present - a forward that never completes can be cancelled`() = runTest {
+        val forwardEventLambda = lambdaRecorder { _: EventId, _: List<RoomId> ->
+            Result.success(Unit)
+        }
+        val timeline = FakeTimeline().apply {
+            this.forwardEventLambda = forwardEventLambda
+        }
+        // No timeline is active yet, so the forward suspends until one is
+        val activeTimeline = MutableStateFlow<Timeline?>(null)
+        val presenter = createForwardMessagesPresenter(timelineProvider = { activeTimeline })
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            presenter.onRoomSelected(listOf(aRoomSummary().roomId))
+            val forwardingState = awaitItem()
+            assertThat(forwardingState.forwardAction.isLoading()).isTrue()
+            forwardingState.eventSink(ForwardMessagesEvent.Cancel)
+            assertThat(awaitItem().forwardAction.isUninitialized()).isTrue()
+            // A timeline becoming available must not resurrect the cancelled forward
+            activeTimeline.value = timeline
+            advanceUntilIdle()
+            forwardEventLambda.assertions().isNeverCalled()
+            ensureAllEventsConsumed()
+        }
+    }
 }
 
 fun TestScope.createForwardMessagesPresenter(
     eventId: EventId = AN_EVENT_ID,
     fakeRoom: FakeJoinedRoom = FakeJoinedRoom(),
+    timelineProvider: TimelineProvider = LiveTimelineProvider(fakeRoom),
 ) = ForwardMessagesPresenter(
     eventId = eventId.value,
-    timelineProvider = LiveTimelineProvider(fakeRoom),
+    timelineProvider = timelineProvider,
     sessionCoroutineScope = this,
 )
