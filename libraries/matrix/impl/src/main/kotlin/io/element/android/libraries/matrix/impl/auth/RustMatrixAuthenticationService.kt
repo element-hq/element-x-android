@@ -337,6 +337,7 @@ class RustMatrixAuthenticationService(
                     sessionPaths = emptySessionPaths,
                     qrCodeData = sdkQrCodeLoginData,
                 )
+                currentClient = client
                 client.newLoginWithQrCodeHandler(
                     oauthConfiguration = oAuthConfiguration,
                 ).use {
@@ -362,6 +363,8 @@ class RustMatrixAuthenticationService(
                     else -> it
                 }
             }.onFailure { throwable ->
+                // A QR code login always builds its own client, so it can be disposed of on failure.
+                clear()
                 if (throwable is CancellationException) {
                     throw throwable
                 }
@@ -370,6 +373,10 @@ class RustMatrixAuthenticationService(
         }
 
     private suspend fun finalizeClientCreation(sessionData: SessionData): SessionId {
+        // Close the client which was used to perform the login before creating the final client.
+        // Both use the same session paths, so their SQLite stores must never be opened at the same time.
+        clear()
+
         val matrixClient = restoreSession(sessionData)
         // Apply enterprise hooks to the newly created client as soon as possible
         clientEnterpriseHook(matrixClient)
@@ -378,9 +385,6 @@ class RustMatrixAuthenticationService(
 
         newMatrixClientObservers.forEach { it.invoke(matrixClient) }
         sessionStore.addSession(sessionData)
-
-        // Clean up the strong reference held here since it's no longer necessary
-        clear()
 
         return SessionId(sessionData.userId)
     }

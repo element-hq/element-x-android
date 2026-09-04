@@ -14,20 +14,29 @@ import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.impl.ClientBuilderProvider
 import io.element.android.libraries.matrix.impl.FakeClientBuilderProvider
+import io.element.android.libraries.matrix.impl.auth.qrlogin.SdkQrCodeLoginData
 import io.element.android.libraries.matrix.impl.createRustMatrixClientFactory
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClient
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClientBuilder
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiHomeserverLoginDetails
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiLoginWithQrCodeHandler
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiQrCodeData
 import io.element.android.libraries.matrix.impl.paths.SessionPathsFactory
+import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
+import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.auth.FakeOAuthRedirectUrlProvider
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
+import io.element.android.libraries.workmanager.test.FakeWorkManagerScheduler
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import org.matrix.rustcomponents.sdk.Client
+import org.matrix.rustcomponents.sdk.ClientBuilder
+import org.matrix.rustcomponents.sdk.HumanQrLoginException
 import java.io.File
 
 class RustMatrixAuthenticationServiceTest {
@@ -74,8 +83,102 @@ class RustMatrixAuthenticationServiceTest {
         closeResult.assertions().isCalledOnce()
     }
 
+    @Test
+    fun `login closes the client used to log in before building the client of the session`() = runTest {
+        val events = mutableListOf<String>()
+        val sut = createRustMatrixAuthenticationService(
+            clientBuilderProvider = FakeSequentialClientBuilderProvider(
+                {
+                    events.add("build login client")
+                    FakeFfiClient(
+                        homeserverLoginDetailsResult = { FakeFfiHomeserverLoginDetails() },
+                        loginResult = { _, _ -> },
+                        closeResult = { events.add("close login client") },
+                    )
+                },
+                {
+                    events.add("build session client")
+                    FakeFfiClient(withUtdHook = {})
+                },
+            ),
+        )
+
+        assertThat(sut.setHomeserver("matrix.org").isSuccess).isTrue()
+        assertThat(sut.login("alice", "password").getOrNull()).isEqualTo(A_USER_ID)
+
+        // The two clients share the same session paths, so the login one must be closed first.
+        assertThat(events).containsExactly("build login client", "close login client", "build session client").inOrder()
+    }
+
+    @Test
+    fun `loginWithQrCode closes the client used to log in before building the client of the session`() = runTest {
+        val events = mutableListOf<String>()
+        val sut = createRustMatrixAuthenticationService(
+            clientBuilderProvider = FakeSequentialClientBuilderProvider(
+                {
+                    events.add("build login client")
+                    FakeFfiClient(
+                        newLoginWithQrCodeHandlerResult = { FakeFfiLoginWithQrCodeHandler() },
+                        closeResult = { events.add("close login client") },
+                    )
+                },
+                {
+                    events.add("build session client")
+                    FakeFfiClient(withUtdHook = {})
+                },
+            ),
+        )
+
+        val result = sut.loginWithQrCode(aSdkQrCodeLoginData()) {}
+
+        assertThat(result.getOrNull()).isEqualTo(A_USER_ID)
+        assertThat(events).containsExactly("build login client", "close login client", "build session client").inOrder()
+    }
+
+    @Test
+    fun `loginWithQrCode closes the client it created when the login fails`() = runTest {
+        val closeResult = lambdaRecorder<Unit> {}
+        val sut = createRustMatrixAuthenticationService(
+            clientBuilderProvider = FakeClientBuilderProvider(
+                provideResult = {
+                    FakeFfiClientBuilder(
+                        buildResult = {
+                            FakeFfiClient(
+                                newLoginWithQrCodeHandlerResult = {
+                                    FakeFfiLoginWithQrCodeHandler(
+                                        scanResult = { throw HumanQrLoginException.Unknown() },
+                                    )
+                                },
+                                closeResult = closeResult,
+                            )
+                        },
+                    )
+                },
+            ),
+        )
+
+        assertThat(sut.loginWithQrCode(aSdkQrCodeLoginData()) {}.isFailure).isTrue()
+        closeResult.assertions().isCalledOnce()
+    }
+
+    private fun aSdkQrCodeLoginData() = SdkQrCodeLoginData(
+        FakeFfiQrCodeData(
+            baseUrlResult = { A_HOMESERVER_URL },
+        )
+    )
+
+    /**
+     * A [ClientBuilderProvider] handing out one [Client] per call, in order.
+     */
+    private class FakeSequentialClientBuilderProvider(
+        private vararg val clients: () -> Client,
+    ) : ClientBuilderProvider {
+        private var index = 0
+        override fun provide(): ClientBuilder = FakeFfiClientBuilder(buildResult = clients[index++])
+    }
+
     private fun TestScope.createRustMatrixAuthenticationService(
-        sessionStore: SessionStore = InMemorySessionStore(),
+        sessionStore: SessionStore = InMemorySessionStore(updateUserProfileResult = { _, _, _ -> }),
         clientBuilderProvider: ClientBuilderProvider = FakeClientBuilderProvider(),
         enterpriseService: EnterpriseService = FakeEnterpriseService(),
     ): RustMatrixAuthenticationService {
@@ -85,6 +188,7 @@ class RustMatrixAuthenticationServiceTest {
             cacheDirectory = cacheDirectory,
             sessionStore = sessionStore,
             clientBuilderProvider = clientBuilderProvider,
+            workManagerScheduler = FakeWorkManagerScheduler(submitLambda = {}),
         )
         return RustMatrixAuthenticationService(
             sessionPathsFactory = SessionPathsFactory(baseDirectory, cacheDirectory),
