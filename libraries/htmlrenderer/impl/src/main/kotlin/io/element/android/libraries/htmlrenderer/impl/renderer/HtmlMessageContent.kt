@@ -53,6 +53,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.htmlrenderer.api.BlockNode
 import io.element.android.libraries.htmlrenderer.api.CodeBlockNode
 import io.element.android.libraries.htmlrenderer.api.DocumentNode
+import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser.Companion.INLINE_CODE_ANNOTATION_TAG
 import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser.Companion.LINK_ANNOTATION_TAG
 import io.element.android.libraries.htmlrenderer.api.ListNode
 import io.element.android.libraries.htmlrenderer.api.MentionNodeContent
@@ -140,8 +141,9 @@ private fun ParagraphView(
     modifier: Modifier = Modifier,
 ) {
     val linkColor = ElementTheme.colors.textLinkExternal
-    val styledText = remember(node.text, linkColor) {
-        node.text.withLinkColor(linkColor)
+    val codeBackgroundColor = ElementTheme.colors.bgSubtleSecondary
+    val styledText = remember(node.text, linkColor, codeBackgroundColor) {
+        node.text.applyInlineStyles(linkColor = linkColor, codeBackgroundColor = codeBackgroundColor)
     }
     val inlineContent = rememberMentionInlineContent(node.inlineContent, context)
     val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
@@ -279,14 +281,18 @@ private fun rememberMentionInlineContent(
     }.toImmutableMap()
 }
 
-private fun AnnotatedString.withLinkColor(linkColor: Color): AnnotatedString {
+/** Overlays theme-dependent styling (link color, inline-code background) onto the annotated ranges. */
+private fun AnnotatedString.applyInlineStyles(
+    linkColor: Color,
+    codeBackgroundColor: Color,
+): AnnotatedString {
     val linkRanges = getStringAnnotations(LINK_ANNOTATION_TAG, 0, length)
-    if (linkRanges.isEmpty()) return this
+    val codeRanges = getStringAnnotations(INLINE_CODE_ANNOTATION_TAG, 0, length)
+    if (linkRanges.isEmpty() && codeRanges.isEmpty()) return this
     return buildAnnotatedString {
-        append(this@withLinkColor)
-        linkRanges.forEach { range ->
-            addStyle(SpanStyle(color = linkColor), range.start, range.end)
-        }
+        append(this@applyInlineStyles)
+        linkRanges.forEach { addStyle(SpanStyle(color = linkColor), it.start, it.end) }
+        codeRanges.forEach { addStyle(SpanStyle(background = codeBackgroundColor), it.start, it.end) }
     }
 }
 

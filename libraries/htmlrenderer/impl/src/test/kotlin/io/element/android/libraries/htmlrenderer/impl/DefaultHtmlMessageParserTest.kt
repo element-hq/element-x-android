@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.htmlrenderer.impl
 
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import com.google.common.truth.Truth.assertThat
@@ -103,7 +104,23 @@ class DefaultHtmlMessageParserTest : RobolectricTest() {
     }
 
     @Test
-    fun `pre becomes a code block with raw text`() {
+    fun `inline code is monospaced and annotated`() {
+        val document = parse("Run <code>git status</code> now")
+        val paragraph = document.children.single() as ParagraphNode
+        assertThat(paragraph.text.text).isEqualTo("Run git status now")
+
+        val start = paragraph.text.text.indexOf("git status")
+        val end = start + "git status".length
+        val monospace = paragraph.text.spanStyles.single { it.item.fontFamily == FontFamily.Monospace }
+        assertThat(monospace.start).isEqualTo(start)
+        assertThat(monospace.end).isEqualTo(end)
+
+        val codeAnnotations = paragraph.text.getStringAnnotations(HtmlMessageParser.INLINE_CODE_ANNOTATION_TAG, start, end)
+        assertThat(codeAnnotations).hasSize(1)
+    }
+
+    @Test
+    fun `pre becomes a code block with raw text, and its inner code is not treated as inline code`() {
         val document = parse("<pre><code>val x = 1\nval y = 2</code></pre>")
         val codeBlock = document.children.single() as CodeBlockNode
         assertThat(codeBlock.code).isEqualTo("val x = 1\nval y = 2")
