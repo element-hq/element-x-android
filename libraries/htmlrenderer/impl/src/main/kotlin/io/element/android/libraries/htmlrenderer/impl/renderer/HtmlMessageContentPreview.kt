@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
@@ -25,6 +26,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.htmlrenderer.api.BlockNode
 import io.element.android.libraries.htmlrenderer.api.CodeBlockNode
 import io.element.android.libraries.htmlrenderer.api.DocumentNode
+import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser.Companion.INLINE_CODE_ANNOTATION_TAG
 import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser.Companion.LINK_ANNOTATION_TAG
 import io.element.android.libraries.htmlrenderer.api.ListItemNode
 import io.element.android.libraries.htmlrenderer.api.ListNode
@@ -53,6 +55,8 @@ internal class HtmlMessageContentProvider : PreviewParameterProvider<DocumentNod
     override val values: Sequence<DocumentNode>
         get() = sequenceOf(
             richParagraph(),
+            inlineCode(),
+            multilineInlineCode(),
             orderedList(),
             quote(),
             codeBlock(),
@@ -74,6 +78,32 @@ internal class HtmlMessageContentProvider : PreviewParameterProvider<DocumentNod
                 addStringAnnotation(LINK_ANNOTATION_TAG, "https://element.io", start, length)
             }
         ),
+    )
+
+    private fun inlineCode() = document(
+        paragraph(
+            buildAnnotatedString {
+                append("Run ")
+                val start = length
+                withStyle(SpanStyle(fontFamily = FontFamily.Monospace)) { append("git status") }
+                addStringAnnotation(INLINE_CODE_ANNOTATION_TAG, "", start, length)
+                append(" to see changes")
+            }
+        ),
+    )
+
+    private fun multilineInlineCode() = document(
+        QuoteNode(persistentListOf(
+            paragraph(
+                buildAnnotatedString {
+                    append("Trying ")
+                    val start = length
+                    withStyle(SpanStyle(fontFamily = FontFamily.Monospace)) { append("inline code when it needs to be wrapped in several lines, just to check what it looks like") }
+                    addStringAnnotation(INLINE_CODE_ANNOTATION_TAG, "", start, length)
+                    append(", is it good?")
+                }
+            ),
+        ))
     )
 
     private fun orderedList() = document(
