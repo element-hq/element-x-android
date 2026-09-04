@@ -22,6 +22,8 @@ import io.element.android.libraries.htmlrenderer.api.DocumentNode
 import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser
 import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser.Companion.INLINE_CODE_ANNOTATION_TAG
 import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser.Companion.LINK_ANNOTATION_TAG
+import io.element.android.libraries.htmlrenderer.api.ImageNodeContent
+import io.element.android.libraries.htmlrenderer.api.InlineContent
 import io.element.android.libraries.htmlrenderer.api.ListItemNode
 import io.element.android.libraries.htmlrenderer.api.ListNode
 import io.element.android.libraries.htmlrenderer.api.MentionNodeContent
@@ -113,8 +115,8 @@ class DefaultHtmlMessageParser(
      */
     private inner class InlineContentBuilder {
         private val builder = AnnotatedString.Builder()
-        private val mentions = mutableMapOf<String, MentionNodeContent>()
-        private var mentionCount = 0
+        private val inlineContents = mutableMapOf<String, InlineContent>()
+        private var inlineContentCount = 0
 
         fun append(node: Node) {
             when (node) {
@@ -133,6 +135,7 @@ class DefaultHtmlMessageParser(
                 TAG_DEL, TAG_STRIKE_SHORT, TAG_STRIKE -> withStyle(SpanStyle(textDecoration = TextDecoration.LineThrough), element)
                 TAG_CODE -> appendInlineCode(element)
                 TAG_A -> appendLink(element)
+                TAG_IMG -> appendImage(element)
                 TAG_MX_REPLY -> Unit
                 // Unknown inline wrapper: keep its text so nothing is dropped.
                 else -> appendChildren(element)
@@ -167,8 +170,8 @@ class DefaultHtmlMessageParser(
             val href = element.attr("href")
             val mention = href.takeIf { it.isNotEmpty() }?.let { resolveMention(element, it) }
             if (mention != null) {
-                val id = "$MENTION_ID_PREFIX${mentionCount++}"
-                mentions[id] = mention
+                val id = "$MENTION_ID_PREFIX${inlineContentCount++}"
+                inlineContents[id] = mention
                 builder.appendInlineContent(id, mention.displayText)
                 return
             }
@@ -178,6 +181,27 @@ class DefaultHtmlMessageParser(
             if (href.isNotEmpty() && builder.length > start) {
                 builder.addStringAnnotation(LINK_ANNOTATION_TAG, href, start, builder.length)
             }
+        }
+
+        /**
+         * Renders an inline `<img>` as an inline-content placeholder. Its size comes from the
+         * `width`/`height` attributes when present, otherwise the renderer falls back to an
+         * emoji-sized square. An `<img>` inside a `<pre>` never reaches here (the `<pre>` becomes a
+         * [CodeBlockNode] from its raw text).
+         */
+        private fun appendImage(element: Element) {
+            val src = element.attr("src")
+            if (src.isEmpty()) return
+            val alt = element.attr("alt").takeIf { it.isNotEmpty() }
+            val id = "$IMAGE_ID_PREFIX${inlineContentCount++}"
+            inlineContents[id] = ImageNodeContent(
+                url = src,
+                alt = alt,
+                width = element.attr("width").toIntOrNull(),
+                height = element.attr("height").toIntOrNull(),
+                isEmoticon = element.hasAttr(ATTR_MX_EMOTICON),
+            )
+            builder.appendInlineContent(id, alt ?: PLACEHOLDER_CHAR)
         }
 
         private fun resolveMention(element: Element, href: String): MentionNodeContent? {
@@ -201,10 +225,10 @@ class DefaultHtmlMessageParser(
 
         fun build(): ParagraphNode? {
             val text = builder.toAnnotatedString()
-            if (text.isBlank() && mentions.isEmpty()) return null
+            if (text.isBlank() && inlineContents.isEmpty()) return null
             return ParagraphNode(
                 text = text,
-                inlineContent = mentions.toImmutableMap(),
+                inlineContent = inlineContents.toImmutableMap(),
             )
         }
     }
@@ -232,6 +256,13 @@ private const val TAG_STRIKE_SHORT = "s"
 private const val TAG_STRIKE = "strike"
 private const val TAG_CODE = "code"
 private const val TAG_A = "a"
+private const val TAG_IMG = "img"
 private const val TAG_MX_REPLY = "mx-reply"
 
+private const val ATTR_MX_EMOTICON = "data-mx-emoticon"
+
 private const val MENTION_ID_PREFIX = "mention_"
+private const val IMAGE_ID_PREFIX = "image_"
+
+/** Unicode replacement character, used as the placeholder text for an image with no alt text. */
+private const val PLACEHOLDER_CHAR = "�"

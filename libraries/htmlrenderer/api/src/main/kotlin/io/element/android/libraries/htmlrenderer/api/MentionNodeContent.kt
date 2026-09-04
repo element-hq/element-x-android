@@ -19,7 +19,7 @@ import io.element.android.libraries.matrix.api.core.UserId
  * and draws the corresponding pill.
  */
 @Immutable
-sealed interface MentionNodeContent {
+sealed interface MentionNodeContent : InlineContent {
     /** The text shown inside the pill (e.g. a display name, prefixed with `@` for users). */
     val displayText: String
 

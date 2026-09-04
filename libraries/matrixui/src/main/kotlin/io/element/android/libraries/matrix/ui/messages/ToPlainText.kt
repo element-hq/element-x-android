@@ -97,6 +97,9 @@ private class PlainTextNodeVisitor : NodeVisitor {
         } else if (node is Element && node.tagName() == FALLBACK_REPLY_NODE_TAG) {
             // Remove the fallback reply node and its contents so they aren't added to the plain text message
             node.remove()
+        } else if (node is Element && node.tagName() == "img") {
+            // Represent an inline image by its alt text, if any.
+            node.attr("alt").takeIf { it.isNotEmpty() }?.let { builder.append(it) }
         } else if (node is Element && node.isBlock && builder.lastOrNull() != '\n') {
             builder.append("\n")
         }

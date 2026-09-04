@@ -28,6 +28,8 @@ import io.element.android.libraries.htmlrenderer.api.CodeBlockNode
 import io.element.android.libraries.htmlrenderer.api.DocumentNode
 import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser.Companion.INLINE_CODE_ANNOTATION_TAG
 import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser.Companion.LINK_ANNOTATION_TAG
+import io.element.android.libraries.htmlrenderer.api.ImageNodeContent
+import io.element.android.libraries.htmlrenderer.api.InlineContent
 import io.element.android.libraries.htmlrenderer.api.ListItemNode
 import io.element.android.libraries.htmlrenderer.api.ListNode
 import io.element.android.libraries.htmlrenderer.api.MentionNodeContent
@@ -56,6 +58,7 @@ internal class HtmlMessageContentProvider : PreviewParameterProvider<DocumentNod
         get() = sequenceOf(
             richParagraph(),
             inlineCode(),
+            inlineImage(),
             multilineInlineCode(),
             orderedList(),
             quote(),
@@ -197,14 +200,43 @@ internal class HtmlMessageContentProvider : PreviewParameterProvider<DocumentNod
         ),
     )
 
+    private fun inlineImage() = document(
+        paragraph(
+            text = buildAnnotatedString {
+                append("A picture ")
+                appendInlineContent(IMAGE_ID, "image")
+                append(" inline, and a custom emoji ")
+                appendInlineContent(EMOJI_ID, ":smile:")
+            },
+            inlineContent = persistentMapOf(
+                IMAGE_ID to ImageNodeContent(
+                    url = "https://example.org/cat.png",
+                    alt = "a cat",
+                    width = 64,
+                    height = 48,
+                    isEmoticon = false,
+                ),
+                EMOJI_ID to ImageNodeContent(
+                    url = "https://example.org/smile.png",
+                    alt = ":smile:",
+                    width = null,
+                    height = null,
+                    isEmoticon = true,
+                ),
+            ),
+        ),
+    )
+
     private fun document(vararg blocks: BlockNode) = DocumentNode(blocks.toList().toImmutableList())
 
     private fun paragraph(
         text: AnnotatedString,
-        inlineContent: ImmutableMap<String, MentionNodeContent> = persistentMapOf(),
+        inlineContent: ImmutableMap<String, InlineContent> = persistentMapOf(),
     ) = ParagraphNode(text = text, inlineContent = inlineContent)
 
     private companion object {
         const val MENTION_ID = "mention_0"
+        const val IMAGE_ID = "image_0"
+        const val EMOJI_ID = "image_1"
     }
 }
