@@ -130,8 +130,7 @@ class DefaultHtmlMessageParser(
                 TAG_B, TAG_STRONG -> withStyle(SpanStyle(fontWeight = FontWeight.Bold), element)
                 TAG_I, TAG_EM -> withStyle(SpanStyle(fontStyle = FontStyle.Italic), element)
                 TAG_U -> withStyle(SpanStyle(textDecoration = TextDecoration.Underline), element)
-                TAG_DEL -> withStyle(SpanStyle(textDecoration = TextDecoration.LineThrough), element)
-                TAG_CODE -> withStyle(SpanStyle(fontFamily = FontFamily.Monospace), element)
+                TAG_DEL, TAG_STRIKE_SHORT, TAG_STRIKE -> withStyle(SpanStyle(textDecoration = TextDecoration.LineThrough), element)
                 TAG_CODE -> appendInlineCode(element)
                 TAG_A -> appendLink(element)
                 TAG_MX_REPLY -> Unit
@@ -229,6 +228,8 @@ private const val TAG_I = "i"
 private const val TAG_EM = "em"
 private const val TAG_U = "u"
 private const val TAG_DEL = "del"
+private const val TAG_STRIKE_SHORT = "s"
+private const val TAG_STRIKE = "strike"
 private const val TAG_CODE = "code"
 private const val TAG_A = "a"
 private const val TAG_MX_REPLY = "mx-reply"
