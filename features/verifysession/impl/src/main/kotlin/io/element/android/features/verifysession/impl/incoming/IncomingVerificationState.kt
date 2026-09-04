@@ -32,8 +32,6 @@ data class IncomingVerificationState(
             val isWaiting: Boolean,
         ) : Step
 
-        data object Unavailable : Step
-
         data object Canceled : Step
         data object Completed : Step
         data object Failure : Step

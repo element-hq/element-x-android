@@ -43,7 +43,6 @@ open class IncomingVerificationStatePreviewParam : PreviewParameterProvider<Inco
             anIncomingVerificationState(step = Step.Completed, verificationRequest = anIncomingUserVerificationRequest()),
             anIncomingVerificationState(step = Step.Failure),
             anIncomingVerificationState(step = Step.Canceled),
-            anIncomingVerificationState(step = Step.Unavailable),
             // Add other state here
         )
 }
