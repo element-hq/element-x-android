@@ -25,10 +25,12 @@ import org.matrix.rustcomponents.sdk.Encryption
 import org.matrix.rustcomponents.sdk.HomeserverCapabilities
 import org.matrix.rustcomponents.sdk.HomeserverLoginDetails
 import org.matrix.rustcomponents.sdk.IgnoredUsersListener
+import org.matrix.rustcomponents.sdk.LoginWithQrCodeHandler
 import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.NotificationClient
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.NotificationSettings
+import org.matrix.rustcomponents.sdk.OAuthConfiguration
 import org.matrix.rustcomponents.sdk.ProfileListener
 import org.matrix.rustcomponents.sdk.PusherIdentifiers
 import org.matrix.rustcomponents.sdk.PusherKind
@@ -57,6 +59,8 @@ class FakeFfiClient(
     private val withUtdHook: (UnableToDecryptDelegate) -> Unit = { lambdaError() },
     private val getProfileResult: (String) -> UserProfile = { aRustUserProfile() },
     private val homeserverLoginDetailsResult: () -> HomeserverLoginDetails = { lambdaError() },
+    private val loginResult: (String, String) -> Unit = { _, _ -> lambdaError() },
+    private val newLoginWithQrCodeHandlerResult: () -> LoginWithQrCodeHandler = { lambdaError() },
     private val getStoreSizesResult: () -> StoreSizes = { lambdaError() },
     private val createRoomResult: (CreateRoomParameters) -> String = { lambdaError() },
     private val homeserverCapabilities: HomeserverCapabilities = FakeFfiHomeserverCapabilities(),
@@ -120,6 +124,14 @@ class FakeFfiClient(
 
     override suspend fun homeserverLoginDetails(): HomeserverLoginDetails {
         return homeserverLoginDetailsResult()
+    }
+
+    override suspend fun login(username: String, password: String, initialDeviceName: String?, deviceId: String?) {
+        loginResult(username, password)
+    }
+
+    override fun newLoginWithQrCodeHandler(oauthConfiguration: OAuthConfiguration): LoginWithQrCodeHandler {
+        return newLoginWithQrCodeHandlerResult()
     }
 
     override suspend fun setMediaRetentionPolicy(policy: MediaRetentionPolicy) {}
