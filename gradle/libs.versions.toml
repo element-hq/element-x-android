@@ -49,6 +49,7 @@ sqldelight = "2.3.2"
 wysiwyg = "2.42.1"
 telephoto = "0.19.0"
 haze = "1.7.2"
+maplibre-compose = "0.15.0"
 
 # Dependency analysis
 dependencyAnalysis = "3.19.1"
@@ -215,10 +216,8 @@ vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil3", version.ref = "telephoto" }
 telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "telephoto" }
 statemachine = "com.freeletics.flowredux:compose:1.2.2"
-maplibre = "org.maplibre.gl:android-sdk:13.5.0"
-maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:3.0.2"
-maplibre_compose = "org.maplibre.compose:maplibre-compose:0.14.0"
-maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:3.0.2"
+maplibre_compose = { module = "org.maplibre.compose:maplibre-compose", version.ref = "maplibre-compose" }
+maplibre_compose_runtime_vulkan = { module = "org.maplibre.compose:maplibre-compose-runtime-vulkan-android", version.ref = "maplibre-compose" }
 opusencoder = "io.element.android:opusencoder:1.2.0"
 zxing_cpp = "io.github.zxing-cpp:android:3.1.1"
 google_zxing = "com.google.zxing:core:3.5.4"
