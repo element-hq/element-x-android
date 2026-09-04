@@ -248,7 +248,7 @@ class TimelineViewTest : RobolectricTest() {
         eventsRecorder.clear()
 
         onAllNodesWithText("Replied message").onFirst().performClick()
-        eventsRecorder.assertSingle(TimelineEvent.FocusOnEvent(AN_EVENT_ID))
+        eventsRecorder.assertSingle(TimelineEvent.FocusOnEvent(AN_EVENT_ID, fromReply = true))
     }
 
     @Test

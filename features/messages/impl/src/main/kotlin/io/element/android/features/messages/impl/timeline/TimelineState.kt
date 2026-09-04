@@ -37,6 +37,7 @@ data class TimelineState(
     val displayThreadSummaries: Boolean,
     val displayJumpToUnread: Boolean,
     val jumpToUnread: JumpToUnreadState,
+    val canJumpBack: Boolean,
     val eventSink: (TimelineEvent) -> Unit,
 ) {
     private val lastTimelineEvent = timelineItems.firstOrNull { it is TimelineItem.Event } as? TimelineItem.Event
