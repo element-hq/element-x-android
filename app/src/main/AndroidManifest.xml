@@ -45,6 +45,18 @@
                 tools:node="remove" />
         </provider>
 
+        <activity
+            android:name=".permissions.PermissionRationaleActivity"
+            android:exported="true"
+            android:permission="android.permission.START_VIEW_PERMISSION_USAGE"
+            android:theme="@style/Theme.ElementX"
+            tools:targetApi="31">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW_PERMISSION_USAGE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <!--
         Using launchMode singleTask to avoid multiple instances of the Activity
         when the app is already open. This is important for incoming share (see
