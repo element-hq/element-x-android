@@ -76,6 +76,10 @@ import kotlinx.collections.immutable.toImmutableMap
  * @param onLinkClick invoked with the target URL when a link is tapped.
  * @param onLinkLongClick invoked with the target URL when a link is long-pressed.
  * @param onMentionClick invoked when a mention pill is tapped.
+ * @param onContentLayoutChange invoked with the measured layout of the very last rendered
+ * [ParagraphNode], so the timeline can lay out the timestamp around it. It is only wired to that
+ * last paragraph, and only when it is not nested inside a [CodeBlockNode] or [QuoteNode] — in which
+ * case no measurement is reported.
  */
 @Composable
 fun HtmlMessageContent(
@@ -85,13 +89,17 @@ fun HtmlMessageContent(
     onLinkClick: (String) -> Unit = {},
     onLinkLongClick: (String) -> Unit = {},
     onMentionClick: (MentionNodeContent) -> Unit = {},
+    onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit = {},
 ) {
-    val context = remember(currentUserId, onLinkClick, onLinkLongClick, onMentionClick) {
+    val measuredParagraph = remember(node) { node.lastMeasurableParagraph() }
+    val context = remember(currentUserId, onLinkClick, onLinkLongClick, onMentionClick, measuredParagraph, onContentLayoutChange) {
         RenderContext(
             currentUserId = currentUserId,
             onLinkClick = onLinkClick,
             onLinkLongClick = onLinkLongClick,
             onMentionClick = onMentionClick,
+            measuredParagraph = measuredParagraph,
+            onContentLayoutChange = onContentLayoutChange,
         )
     }
     SelectionContainer {
@@ -106,7 +114,24 @@ private data class RenderContext(
     val onLinkClick: (String) -> Unit,
     val onLinkLongClick: (String) -> Unit,
     val onMentionClick: (MentionNodeContent) -> Unit,
+    // The single paragraph whose last text line should be measured (by identity), or null if the
+    // last rendered node is inside a code block / quote and must not be measured.
+    val measuredParagraph: ParagraphNode?,
+    val onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
 )
+
+/**
+ * Returns the [ParagraphNode] whose last text line should feed [ContentAvoidingLayout], by walking
+ * to the last rendered leaf. Returns null when that leaf is a [CodeBlockNode] or lives inside a
+ * [QuoteNode], since those must not be measured.
+ */
+internal fun BlockNode.lastMeasurableParagraph(): ParagraphNode? = when (this) {
+    is ParagraphNode -> this
+    is DocumentNode -> children.lastOrNull()?.lastMeasurableParagraph()
+    is ListNode -> items.lastOrNull()?.children?.lastOrNull()?.lastMeasurableParagraph()
+    is QuoteNode -> null
+    is CodeBlockNode -> null
+}
 
 @Composable
 private fun BlockNodes(
@@ -150,13 +175,23 @@ private fun ParagraphView(
     }
     val inlineContent = rememberMentionInlineContent(node.inlineContent, context)
     val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
+    // Only the last rendered paragraph (and only when not inside a code block / quote) reports its
+    // measured last line to the timeline.
+    val measureLastLine = if (node === context.measuredParagraph) {
+        ContentAvoidingLayout.measureLastTextLine(onContentLayoutChange = context.onContentLayoutChange)
+    } else {
+        null
+    }
     Text(
         text = styledText,
         modifier = modifier.linkTapHandler(styledText, layoutResult, context),
         style = ElementTheme.typography.fontBodyMdRegular,
         color = ElementTheme.colors.textPrimary,
         inlineContent = inlineContent,
-        onTextLayout = { layoutResult.value = it },
+        onTextLayout = { result ->
+            layoutResult.value = result
+            measureLastLine?.invoke(result)
+        },
     )
 }
 
