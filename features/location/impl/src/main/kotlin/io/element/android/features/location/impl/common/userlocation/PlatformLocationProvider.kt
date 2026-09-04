@@ -9,83 +9,126 @@ package io.element.android.features.location.impl.common.userlocation
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.location.Location
 import android.location.LocationManager
 import android.os.Handler
 import android.os.HandlerThread
-import androidx.annotation.RequiresPermission
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
 import androidx.core.location.LocationListenerCompat
 import androidx.core.location.LocationManagerCompat
 import androidx.core.location.LocationRequestCompat
 import androidx.core.os.ExecutorCompat
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.stateIn
-import org.maplibre.compose.location.DesiredAccuracy
-import org.maplibre.compose.location.Location
+import org.maplibre.compose.location.LocationAccuracy
+import org.maplibre.compose.location.LocationEvent
 import org.maplibre.compose.location.LocationProvider
-import org.maplibre.compose.location.PermissionException
+import org.maplibre.compose.location.LocationRequest
+import org.maplibre.compose.location.LocationUnavailableReason
 import org.maplibre.compose.location.asMapLibreLocation
-import org.maplibre.spatialk.units.Length
 import org.maplibre.spatialk.units.extensions.inMeters
-import kotlin.time.Duration
 
-@SuppressLint("InlinedApi")
 class PlatformLocationProvider(
-    context: Context,
-    private val updateInterval: Duration,
-    private val minDistance: Length,
-    private val desiredAccuracy: DesiredAccuracy = DesiredAccuracy.High,
-    coroutineScope: CoroutineScope,
-    sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(stopTimeoutMillis = 1000),
+    private val context: Context,
 ) : LocationProvider {
-    override val location: StateFlow<Location?>
 
-    init {
-        if (!handlerThread.isAlive) handlerThread.start()
-        if (
-            context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-            context.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-        ) {
-            throw PermissionException()
+    @SuppressLint("MissingPermission")
+    override fun updates(request: LocationRequest): Flow<LocationEvent> = callbackFlow {
+        if (!context.hasLocationPermission()) {
+            trySend(LocationEvent.Unavailable(LocationUnavailableReason.PermissionDenied))
+            close()
+            return@callbackFlow
         }
         val locationManager = context.getSystemService(LocationManager::class.java)
-        val provider = PROVIDERS_BY_PRIORITY.firstOrNull { LocationManagerCompat.hasProvider(locationManager, it) }
-        val locationFlow = if (provider != null) {
-            createProviderFlow(locationManager, provider)
-        } else {
-            emptyFlow()
-        }
-        location = locationFlow.stateIn(coroutineScope, sharingStarted, null)
-    }
+        val listener = object : LocationListenerCompat {
+            override fun onLocationChanged(location: Location) {
+                trySend(LocationEvent.Fix(location.asMapLibreLocation()))
+            }
 
-    @RequiresPermission(
-        anyOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION]
-    )
-    private fun createProviderFlow(locationManager: LocationManager, provider: String) = callbackFlow {
-        send(locationManager.getLastKnownLocation(provider)?.asMapLibreLocation())
-        val listener = LocationListenerCompat { trySend(it.asMapLibreLocation()) }
-        val request = LocationRequestCompat.Builder(updateInterval.inWholeMilliseconds)
-            .setQuality(desiredAccuracy.toLocationRequestQuality())
-            .setMinUpdateDistanceMeters(minDistance.inMeters.toFloat())
-            .build()
-        LocationManagerCompat.requestLocationUpdates(
-            locationManager,
-            provider,
-            request,
-            ExecutorCompat.create(Handler(handlerThread.looper)),
-            listener,
-        )
-        awaitClose { LocationManagerCompat.removeUpdates(locationManager, listener) }
+            override fun onProviderDisabled(provider: String) {
+                trySend(LocationEvent.Unavailable(LocationUnavailableReason.ServicesDisabled))
+            }
+        }
+        var registered = false
+
+        fun refreshRegistration() {
+            if (registered) {
+                LocationManagerCompat.removeUpdates(locationManager, listener)
+                registered = false
+            }
+            if (!LocationManagerCompat.isLocationEnabled(locationManager)) {
+                trySend(LocationEvent.Unavailable(LocationUnavailableReason.ServicesDisabled))
+                return
+            }
+            val provider = PROVIDERS_BY_PRIORITY.firstOrNull { LocationManagerCompat.hasProvider(locationManager, it) }
+            if (provider == null) {
+                trySend(LocationEvent.Unavailable(LocationUnavailableReason.Unsupported))
+                return
+            }
+            locationManager.getLastKnownLocation(provider)?.let { location ->
+                trySend(LocationEvent.Fix(location.asMapLibreLocation()))
+            }
+            val locationRequestCompat = LocationRequestCompat.Builder(request.minimumInterval.inWholeMilliseconds)
+                .setQuality(request.accuracy.toLocationRequestQuality())
+                .setMinUpdateDistanceMeters(request.minimumDistance.inMeters.toFloat())
+                .build()
+            LocationManagerCompat.requestLocationUpdates(
+                locationManager,
+                provider,
+                locationRequestCompat,
+                ExecutorCompat.create(Handler(handlerThread.looper)),
+                listener,
+            )
+            registered = true
+        }
+
+        // Re-select and re-register when the user toggles location settings, so updates resume
+        // automatically once a usable provider comes back.
+        val settingsReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                try {
+                    refreshRegistration()
+                } catch (error: SecurityException) {
+                    trySend(LocationEvent.Unavailable(LocationUnavailableReason.PermissionDenied, error))
+                    close()
+                } catch (error: IllegalArgumentException) {
+                    trySend(LocationEvent.Unavailable(LocationUnavailableReason.UnexpectedFailure, error))
+                    close()
+                }
+            }
+        }
+
+        try {
+            ContextCompat.registerReceiver(
+                context,
+                settingsReceiver,
+                IntentFilter().apply {
+                    addAction(LocationManager.MODE_CHANGED_ACTION)
+                    addAction(LocationManager.PROVIDERS_CHANGED_ACTION)
+                },
+                ContextCompat.RECEIVER_NOT_EXPORTED,
+            )
+            refreshRegistration()
+        } catch (error: SecurityException) {
+            trySend(LocationEvent.Unavailable(LocationUnavailableReason.PermissionDenied, error))
+            close()
+        } catch (error: IllegalArgumentException) {
+            trySend(LocationEvent.Unavailable(LocationUnavailableReason.UnexpectedFailure, error))
+            close()
+        }
+        awaitClose {
+            runCatching { context.unregisterReceiver(settingsReceiver) }
+            LocationManagerCompat.removeUpdates(locationManager, listener)
+        }
     }
 
     private companion object {
@@ -94,36 +137,27 @@ class PlatformLocationProvider(
             LocationManager.GPS_PROVIDER,
             LocationManager.NETWORK_PROVIDER,
         )
-        private val handlerThread by lazy { HandlerThread("PlatformLocationProvider") }
+        private val handlerThread by lazy {
+            HandlerThread("PlatformLocationProvider").apply { start() }
+        }
     }
 }
 
-private fun DesiredAccuracy.toLocationRequestQuality(): Int = when (this) {
-    DesiredAccuracy.Highest, DesiredAccuracy.High -> LocationRequestCompat.QUALITY_HIGH_ACCURACY
-    DesiredAccuracy.Balanced -> LocationRequestCompat.QUALITY_BALANCED_POWER_ACCURACY
-    DesiredAccuracy.Low, DesiredAccuracy.Lowest -> LocationRequestCompat.QUALITY_LOW_POWER
+private fun Context.hasLocationPermission(): Boolean =
+    checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) ==
+        PackageManager.PERMISSION_GRANTED ||
+        checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) ==
+        PackageManager.PERMISSION_GRANTED
+
+private fun LocationAccuracy.toLocationRequestQuality(): Int = when (this) {
+    LocationAccuracy.BestForNavigation, LocationAccuracy.High -> LocationRequestCompat.QUALITY_HIGH_ACCURACY
+    LocationAccuracy.Balanced -> LocationRequestCompat.QUALITY_BALANCED_POWER_ACCURACY
+    LocationAccuracy.Low, LocationAccuracy.Lowest -> LocationRequestCompat.QUALITY_LOW_POWER
 }
 
 @Composable
-@RequiresPermission(
-    anyOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION]
-)
-fun rememberPlatformLocationProvider(
-    updateInterval: Duration,
-    minDistance: Length,
-    desiredAccuracy: DesiredAccuracy = DesiredAccuracy.High,
-    context: Context = LocalContext.current,
-    coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    sharingStarted: SharingStarted = SharingStarted.WhileSubscribed(stopTimeoutMillis = 1000),
-): PlatformLocationProvider {
-    return remember(context, updateInterval, minDistance, desiredAccuracy, coroutineScope, sharingStarted) {
-        PlatformLocationProvider(
-            context = context,
-            updateInterval = updateInterval,
-            minDistance = minDistance,
-            desiredAccuracy = desiredAccuracy,
-            coroutineScope = coroutineScope,
-            sharingStarted = sharingStarted,
-        )
+fun rememberPlatformLocationProvider(context: Context = LocalContext.current): PlatformLocationProvider {
+    return remember(context) {
+        PlatformLocationProvider(context = context)
     }
 }

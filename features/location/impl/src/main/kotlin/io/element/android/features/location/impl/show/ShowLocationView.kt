@@ -154,7 +154,6 @@ fun ShowLocationView(
                             modifier = Modifier.clickable {
                                 state.eventSink(ShowLocationEvent.TrackMyLocation(false))
                                 val position = CameraPosition(
-                                    padding = sheetPaddings,
                                     target = Position(locationShare.location.lon, locationShare.location.lat),
                                     // Force pointing to NORTH
                                     bearing = 0.0,
