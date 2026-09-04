@@ -42,6 +42,7 @@ class DefaultSessionPreferencesStore(
     private val sharePresenceKey = booleanPreferencesKey("sharePresence")
     private val sendPublicReadReceiptsKey = booleanPreferencesKey("sendPublicReadReceipts")
     private val renderReadReceiptsKey = booleanPreferencesKey("renderReadReceipts")
+    private val renderRedactedMessagesKey = booleanPreferencesKey("renderRedactedMessages")
     private val sendTypingNotificationsKey = booleanPreferencesKey("sendTypingNotifications")
     private val renderTypingNotificationsKey = booleanPreferencesKey("renderTypingNotifications")
     private val skipSessionVerification = booleanPreferencesKey("skipSessionVerification")
@@ -83,6 +84,9 @@ class DefaultSessionPreferencesStore(
 
     override suspend fun setRenderTypingNotifications(enabled: Boolean) = update(renderTypingNotificationsKey, enabled)
     override fun isRenderTypingNotificationsEnabled(): Flow<Boolean> = get(renderTypingNotificationsKey) { true }
+
+    override suspend fun setRenderRedactedMessages(enabled: Boolean) = update(renderRedactedMessagesKey, enabled)
+    override fun isRenderRedactedMessagesEnabled(): Flow<Boolean> = get(renderRedactedMessagesKey) { true }
 
     override suspend fun setSkipSessionVerification(skip: Boolean) = update(skipSessionVerification, skip)
     override fun isSessionVerificationSkipped(): Flow<Boolean> = get(skipSessionVerification) { false }
