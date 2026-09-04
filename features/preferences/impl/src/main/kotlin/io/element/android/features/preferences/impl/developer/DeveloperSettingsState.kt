@@ -15,6 +15,7 @@ import io.element.android.libraries.matrix.api.core.DeviceId
 import kotlinx.collections.immutable.ImmutableMap
 
 data class DeveloperSettingsState(
+    val showDeveloperSettings: Boolean,
     val appDeveloperSettingsState: AppDeveloperSettingsState,
     val cacheSize: AsyncData<String>,
     val databaseSizes: AsyncData<ImmutableMap<String, String>>,
