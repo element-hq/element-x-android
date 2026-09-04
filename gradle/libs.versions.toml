@@ -10,6 +10,8 @@ kotlinpoet = "2.3.0"
 ksp = "2.3.11"
 firebaseAppDistribution = "5.3.0"
 
+sonarqube = "7.4.0.8496"
+
 # AndroidX
 core = "1.18.0"
 datastore = "1.2.1"
@@ -75,6 +77,8 @@ compose_compiler_plugin = { module = "org.jetbrains.kotlin:compose-compiler-grad
 # https://developer.android.com/studio/write/java8-support#library-desugaring-versions
 android_desugar = "com.android.tools:desugar_jdk_libs:2.1.5"
 # Used in build.gradle.kts
+detekt_gradle_plugin = { module = "io.gitlab.arturbosch.detekt:io.gitlab.arturbosch.detekt.gradle.plugin", version.ref = "detekt" }
+ktlint_gradle_plugin = "org.jlleitschuh.gradle.ktlint:org.jlleitschuh.gradle.ktlint.gradle.plugin:14.2.0"
 detekt_compose_rules = { module = "io.nlopez.compose.rules:detekt", version.ref = "detekt_compose_rules" }
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 metro_gradle_plugin = { module = "dev.zacsweers.metro:gradle-plugin", version.ref = "metro" }
@@ -83,6 +87,7 @@ kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
 kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlinpoet" }
 kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 ksp_gradle_plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+sonar_gradle_plugin = { module = "org.sonarqube:org.sonarqube.gradle.plugin", version.ref = "sonarqube" }
 # https://firebase.google.com/docs/android/setup#available-libraries
 google_firebase_bom = "com.google.firebase:firebase-bom:34.18.0"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
@@ -276,7 +281,7 @@ paparazzi = "app.cash.paparazzi:2.0.0-alpha05"
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 firebaseAppDistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebaseAppDistribution" }
-sonarqube = "org.sonarqube:7.4.0.8496"
+sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
 licensee = "app.cash.licensee:1.14.1"
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 gms_google_services = { id = "com.google.gms.google-services", version = "4.5.0" }

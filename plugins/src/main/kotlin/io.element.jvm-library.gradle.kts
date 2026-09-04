@@ -9,7 +9,11 @@
 /**
  * This will generate the plugin "io.element.jvm-library", used in pure JVM libraries.
  */
+import extension.setupCompileOptions
 import extension.setupKover
+import extension.setupLintTasks
+import extension.setupSonar
+import extension.setupTests
 import org.gradle.accessors.dm.LibrariesForLibs
 
 val libs = the<LibrariesForLibs>()
@@ -25,4 +29,8 @@ kotlin {
     }
 }
 
+setupCompileOptions()
+setupTests()
 setupKover()
+setupSonar()
+setupLintTasks()
