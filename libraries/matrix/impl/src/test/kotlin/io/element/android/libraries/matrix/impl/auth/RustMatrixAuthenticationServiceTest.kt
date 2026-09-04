@@ -12,6 +12,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.matrix.impl.ClientBuilderProvider
 import io.element.android.libraries.matrix.impl.FakeClientBuilderProvider
 import io.element.android.libraries.matrix.impl.auth.qrlogin.SdkQrCodeLoginData
@@ -22,6 +23,10 @@ import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiHomeserver
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiLoginWithQrCodeHandler
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiQrCodeData
 import io.element.android.libraries.matrix.impl.paths.SessionPathsFactory
+import io.element.android.libraries.matrix.impl.storage.FakeSqliteStoreBuilder
+import io.element.android.libraries.matrix.impl.storage.FakeSqliteStoreBuilderProvider
+import io.element.android.libraries.matrix.impl.storage.SqliteStoreBuilder
+import io.element.android.libraries.matrix.impl.storage.SqliteStoreBuilderProvider
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.auth.FakeOAuthRedirectUrlProvider
@@ -33,13 +38,18 @@ import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TemporaryFolder
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.HumanQrLoginException
 import java.io.File
 
 class RustMatrixAuthenticationServiceTest {
+    @get:Rule
+    val temporaryFolder = TemporaryFolder()
+
     @Test
     fun `setHomeserver is successful`() = runTest {
         val sut = createRustMatrixAuthenticationService(
@@ -177,21 +187,89 @@ class RustMatrixAuthenticationServiceTest {
         override fun provide(): ClientBuilder = FakeFfiClientBuilder(buildResult = clients[index++])
     }
 
+    @Test
+    fun `a new login does not delete the session data of the account which has just been logged in`() = runTest {
+        val storeBuilderProvider = SessionDirectoryCreatingSqliteStoreBuilderProvider()
+        val sut = createRustMatrixAuthenticationService(
+            clientBuilderProvider = FakeSequentialClientBuilderProvider(
+                { aLoginFakeFfiClient() },
+                { FakeFfiClient(withUtdHook = {}) },
+                { aLoginFakeFfiClient() },
+            ),
+            sessionPathsFactory = SessionPathsFactory(temporaryFolder.newFolder("base"), temporaryFolder.newFolder("cache")),
+            sqliteStoreBuilderProvider = storeBuilderProvider,
+        )
+
+        assertThat(sut.setHomeserver("matrix.org").isSuccess).isTrue()
+        assertThat(sut.login("alice", "password").getOrNull()).isEqualTo(A_USER_ID)
+        val loggedInSessionPaths = storeBuilderProvider.providedSessionPaths.first()
+
+        // Adding another account rotates the session paths, which must not touch the previous account.
+        assertThat(sut.setHomeserver("matrix.org").isSuccess).isTrue()
+
+        assertThat(loggedInSessionPaths.fileDirectory.exists()).isTrue()
+        assertThat(loggedInSessionPaths.cacheDirectory.exists()).isTrue()
+    }
+
+    @Test
+    fun `a new login deletes the session data of a previous failed login attempt`() = runTest {
+        val storeBuilderProvider = SessionDirectoryCreatingSqliteStoreBuilderProvider()
+        val sut = createRustMatrixAuthenticationService(
+            clientBuilderProvider = FakeSequentialClientBuilderProvider(
+                { aLoginFakeFfiClient() },
+                { throw IllegalStateException("Failed to build the client of the session") },
+                { aLoginFakeFfiClient() },
+            ),
+            sessionPathsFactory = SessionPathsFactory(temporaryFolder.newFolder("base"), temporaryFolder.newFolder("cache")),
+            sqliteStoreBuilderProvider = storeBuilderProvider,
+        )
+
+        assertThat(sut.setHomeserver("matrix.org").isSuccess).isTrue()
+        assertThat(sut.login("alice", "password").isFailure).isTrue()
+        val abandonedSessionPaths = storeBuilderProvider.providedSessionPaths.first()
+
+        assertThat(sut.setHomeserver("matrix.org").isSuccess).isTrue()
+
+        assertThat(abandonedSessionPaths.fileDirectory.exists()).isFalse()
+        assertThat(abandonedSessionPaths.cacheDirectory.exists()).isFalse()
+    }
+
+    private fun aLoginFakeFfiClient() = FakeFfiClient(
+        homeserverLoginDetailsResult = { FakeFfiHomeserverLoginDetails() },
+        loginResult = { _, _ -> },
+    )
+
+    /**
+     * A [SqliteStoreBuilderProvider] which creates the session directories, like the SDK does when it
+     * opens its stores, and records them so that a test can assert on their lifecycle.
+     */
+    private class SessionDirectoryCreatingSqliteStoreBuilderProvider : SqliteStoreBuilderProvider {
+        val providedSessionPaths = mutableListOf<SessionPaths>()
+
+        override fun provide(sessionPaths: SessionPaths): SqliteStoreBuilder {
+            sessionPaths.fileDirectory.mkdirs()
+            sessionPaths.cacheDirectory.mkdirs()
+            providedSessionPaths.add(sessionPaths)
+            return FakeSqliteStoreBuilder()
+        }
+    }
+
     private fun TestScope.createRustMatrixAuthenticationService(
         sessionStore: SessionStore = InMemorySessionStore(updateUserProfileResult = { _, _, _ -> }),
         clientBuilderProvider: ClientBuilderProvider = FakeClientBuilderProvider(),
         enterpriseService: EnterpriseService = FakeEnterpriseService(),
+        sessionPathsFactory: SessionPathsFactory = SessionPathsFactory(File("/base"), File("/cache")),
+        sqliteStoreBuilderProvider: SqliteStoreBuilderProvider = FakeSqliteStoreBuilderProvider(),
     ): RustMatrixAuthenticationService {
-        val baseDirectory = File("/base")
-        val cacheDirectory = File("/cache")
         val rustMatrixClientFactory = createRustMatrixClientFactory(
-            cacheDirectory = cacheDirectory,
+            cacheDirectory = File("/cache"),
             sessionStore = sessionStore,
             clientBuilderProvider = clientBuilderProvider,
             workManagerScheduler = FakeWorkManagerScheduler(submitLambda = {}),
+            sqliteStoreBuilderProvider = sqliteStoreBuilderProvider,
         )
         return RustMatrixAuthenticationService(
-            sessionPathsFactory = SessionPathsFactory(baseDirectory, cacheDirectory),
+            sessionPathsFactory = sessionPathsFactory,
             coroutineDispatchers = testCoroutineDispatchers(),
             sessionStore = sessionStore,
             rustMatrixClientFactory = rustMatrixClientFactory,

@@ -386,6 +386,10 @@ class RustMatrixAuthenticationService(
         newMatrixClientObservers.forEach { it.invoke(matrixClient) }
         sessionStore.addSession(sessionData)
 
+        // The session paths now hold the data of the account which has just been logged in, so forget
+        // them: they must not be deleted by the rotateSessionPath() of the next login attempt.
+        sessionPaths = null
+
         return SessionId(sessionData.userId)
     }
 
