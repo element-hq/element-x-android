@@ -29,7 +29,6 @@ import io.element.android.libraries.htmlrenderer.api.QuoteNode
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
 import org.jsoup.nodes.Document
@@ -158,10 +157,10 @@ class DefaultHtmlMessageParser(
                 builder.appendInlineContent(id, mention.displayText)
                 return
             }
+            // Only the link range is annotated; the visual style (color, ...) is applied by the renderer.
             val start = builder.length
             appendChildren(element)
             if (href.isNotEmpty() && builder.length > start) {
-                builder.addStyle(SpanStyle(textDecoration = TextDecoration.Underline), start, builder.length)
                 builder.addStringAnnotation(LINK_ANNOTATION_TAG, href, start, builder.length)
             }
         }
