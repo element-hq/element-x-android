@@ -38,6 +38,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
@@ -49,6 +50,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.htmlrenderer.api.BlockNode
@@ -56,6 +58,8 @@ import io.element.android.libraries.htmlrenderer.api.CodeBlockNode
 import io.element.android.libraries.htmlrenderer.api.DocumentNode
 import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser.Companion.INLINE_CODE_ANNOTATION_TAG
 import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser.Companion.LINK_ANNOTATION_TAG
+import io.element.android.libraries.htmlrenderer.api.ImageNodeContent
+import io.element.android.libraries.htmlrenderer.api.InlineContent
 import io.element.android.libraries.htmlrenderer.api.ListNode
 import io.element.android.libraries.htmlrenderer.api.MentionNodeContent
 import io.element.android.libraries.htmlrenderer.api.ParagraphNode
@@ -76,6 +80,8 @@ import kotlinx.collections.immutable.toImmutableMap
  * @param onLinkClick invoked with the target URL when a link is tapped.
  * @param onLinkLongClick invoked with the target URL when a link is long-pressed.
  * @param onMentionClick invoked when a mention pill is tapped.
+ * @param imageModel maps an [ImageNodeContent] to the model passed to [AsyncImage]. Defaults to the
+ * raw image URL; the timeline can supply a mapper that turns `mxc://` URLs into a media request.
  * @param onContentLayoutChange invoked with the measured layout of the very last rendered
  * [ParagraphNode], so the timeline can lay out the timestamp around it. It is only wired to that
  * last paragraph, and only when it is not nested inside a [CodeBlockNode] or [QuoteNode] — in which
@@ -89,15 +95,17 @@ fun HtmlMessageContent(
     onLinkClick: (String) -> Unit = {},
     onLinkLongClick: (String) -> Unit = {},
     onMentionClick: (MentionNodeContent) -> Unit = {},
+    imageModel: (ImageNodeContent) -> Any = { it.url },
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit = {},
 ) {
     val measuredParagraph = remember(node) { node.lastBlockNode() }
-    val context = remember(currentUserId, onLinkClick, onLinkLongClick, onMentionClick, measuredParagraph, onContentLayoutChange) {
+    val context = remember(currentUserId, onLinkClick, onLinkLongClick, onMentionClick, imageModel, measuredParagraph, onContentLayoutChange) {
         RenderContext(
             currentUserId = currentUserId,
             onLinkClick = onLinkClick,
             onLinkLongClick = onLinkLongClick,
             onMentionClick = onMentionClick,
+            imageModel = imageModel,
             lastBlockNode = measuredParagraph,
             onContentLayoutChange = onContentLayoutChange,
         )
@@ -114,6 +122,7 @@ private data class RenderContext(
     val onLinkClick: (String) -> Unit,
     val onLinkLongClick: (String) -> Unit,
     val onMentionClick: (MentionNodeContent) -> Unit,
+    val imageModel: (ImageNodeContent) -> Any,
     // The latest descendant BlockNode of the root DocumentNode
     val lastBlockNode: BlockNode?,
     val onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
@@ -173,7 +182,7 @@ private fun ParagraphView(
     val styledText = remember(node.text, linkColor, codeBackgroundColor) {
         node.text.applyInlineStyles(linkColor = linkColor, codeBackgroundColor = codeBackgroundColor)
     }
-    val inlineContent = rememberMentionInlineContent(node.inlineContent, context)
+    val inlineContent = rememberInlineContent(node.inlineContent, context)
     val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
     // Only the last rendered paragraph (and only when not inside a code block / quote) reports its
     // measured last line to the timeline.
@@ -286,37 +295,88 @@ private fun MentionPill(
     }
 }
 
+@Composable
+private fun InlineImage(
+    content: ImageNodeContent,
+    model: Any,
+    modifier: Modifier = Modifier,
+) {
+    AsyncImage(
+        model = model,
+        contentDescription = content.alt,
+        contentScale = ContentScale.Fit,
+        modifier = modifier.fillMaxSize(),
+    )
+}
+
 /**
- * Builds an [InlineTextContent] entry for each mention placeholder. Each pill is measured so
- * the placeholder reserves exactly the space the pill needs.
+ * Builds an [InlineTextContent] entry for each inline-content placeholder. A mention pill is measured
+ * so its placeholder fits the text; an image placeholder uses the `<img>` dimensions (capped at
+ * [MaxInlineImageWidth]) or an emoji-sized square when they are missing.
  */
 @Composable
-private fun rememberMentionInlineContent(
-    mentions: ImmutableMap<String, MentionNodeContent>,
+private fun rememberInlineContent(
+    inlineContent: ImmutableMap<String, InlineContent>,
     context: RenderContext,
 ): ImmutableMap<String, InlineTextContent> {
-    if (mentions.isEmpty()) return persistentMapOf()
+    if (inlineContent.isEmpty()) return persistentMapOf()
     val textMeasurer = rememberTextMeasurer()
     val pillTextStyle = ElementTheme.typography.fontBodyLgMedium
     val density = LocalDensity.current
-    return mentions.mapValues { (_, mention) ->
-        val measured = textMeasurer.measure(mention.displayText, pillTextStyle)
-        val width = with(density) { measured.size.width.toDp() + PillPaddingHorizontal * 2 }
-        val height = with(density) { measured.size.height.toDp() + PillPaddingVertical * 2 }
-        InlineTextContent(
-            placeholder = Placeholder(
-                width = with(density) { width.toSp() },
-                height = with(density) { height.toSp() },
-                placeholderVerticalAlign = PlaceholderVerticalAlign.Center,
-            ),
-        ) {
-            MentionPill(
-                mention = mention,
-                isCurrentUser = mention is MentionNodeContent.User && mention.userId == context.currentUserId,
-                onClick = { context.onMentionClick(mention) },
-            )
+    return inlineContent.mapValues { (_, item) ->
+        when (item) {
+            is MentionNodeContent -> {
+                val measured = textMeasurer.measure(item.displayText, pillTextStyle)
+                val width = with(density) { measured.size.width.toDp() + PillPaddingHorizontal * 2 }
+                val height = with(density) { measured.size.height.toDp() + PillPaddingVertical * 2 }
+                InlineTextContent(
+                    placeholder = Placeholder(
+                        width = with(density) { width.toSp() },
+                        height = with(density) { height.toSp() },
+                        placeholderVerticalAlign = PlaceholderVerticalAlign.Center,
+                    ),
+                ) {
+                    MentionPill(
+                        mention = item,
+                        isCurrentUser = item is MentionNodeContent.User && item.userId == context.currentUserId,
+                        onClick = { context.onMentionClick(item) },
+                    )
+                }
+            }
+            is ImageNodeContent -> {
+                val (imageWidth, imageHeight) = item.inlineImageSize()
+                InlineTextContent(
+                    placeholder = Placeholder(
+                        width = with(density) { imageWidth.toSp() },
+                        height = with(density) { imageHeight.toSp() },
+                        placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
+                    ),
+                ) {
+                    InlineImage(content = item, model = context.imageModel(item))
+                }
+            }
         }
     }.toImmutableMap()
+}
+
+/**
+ * The placeholder size for an inline image: the `<img>` dimensions (treated as dp, scaled down to
+ * [MaxInlineImageWidth] preserving the aspect ratio), or an emoji-sized square when the dimensions
+ * are missing or the image is a custom emoji.
+ */
+private fun ImageNodeContent.inlineImageSize(): Pair<Dp, Dp> {
+    val width = width
+    val height = height
+    if (isEmoticon || width == null || height == null || width <= 0 || height <= 0) {
+        return EmojiImageSize to EmojiImageSize
+    }
+    val widthDp = width.dp
+    val heightDp = height.dp
+    return if (widthDp <= MaxInlineImageWidth) {
+        widthDp to heightDp
+    } else {
+        MaxInlineImageWidth to MaxInlineImageWidth * (height.toFloat() / width.toFloat())
+    }
 }
 
 /** Overlays theme-dependent styling (link color, inline-code background) onto the annotated ranges. */
@@ -355,3 +415,9 @@ private val ListItemSpacing: Dp = 4.dp
 private val ListMarkerWidth: Dp = 24.dp
 private val PillPaddingHorizontal: Dp = 6.dp
 private val PillPaddingVertical: Dp = 2.dp
+
+/** Size of an inline image that has no dimensions (or is a custom emoji): roughly a line's height. */
+private val EmojiImageSize: Dp = 20.dp
+
+/** Inline images are scaled down to at most this width, preserving their aspect ratio. */
+private val MaxInlineImageWidth: Dp = 120.dp

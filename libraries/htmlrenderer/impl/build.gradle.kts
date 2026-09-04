@@ -28,6 +28,7 @@ dependencies {
     api(projects.libraries.htmlrenderer.api)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.matrix.api)
+    implementation(libs.coil.compose)
     implementation(libs.jsoup)
 
     testCommonDependencies(libs)

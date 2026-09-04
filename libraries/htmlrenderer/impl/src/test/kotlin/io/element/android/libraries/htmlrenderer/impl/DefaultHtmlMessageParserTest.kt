@@ -13,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.htmlrenderer.api.CodeBlockNode
 import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser
+import io.element.android.libraries.htmlrenderer.api.ImageNodeContent
 import io.element.android.libraries.htmlrenderer.api.ListNode
 import io.element.android.libraries.htmlrenderer.api.MentionNodeContent
 import io.element.android.libraries.htmlrenderer.api.ParagraphNode
@@ -182,6 +183,40 @@ class DefaultHtmlMessageParserTest : RobolectricTest() {
         val document = parse("""Look <a href="https://matrix.to/#/!room:example.org/event">here</a>""", permalinkParser)
         val paragraph = document.children.single() as ParagraphNode
         assertThat(paragraph.inlineContent).isEmpty()
+    }
+
+    @Test
+    fun `inline image produces image content and a placeholder`() {
+        val document = parse("""Look <img src="https://example.org/cat.png" alt="a cat" width="64" height="48"> here""")
+        val paragraph = document.children.single() as ParagraphNode
+
+        val image = paragraph.inlineContent.values.single()
+        assertThat(image).isEqualTo(
+            ImageNodeContent(url = "https://example.org/cat.png", alt = "a cat", width = 64, height = 48, isEmoticon = false)
+        )
+        // The placeholder id in the text matches the map key.
+        val placeholderId = paragraph.inlineContent.keys.single()
+        val annotations = paragraph.text.getStringAnnotations(0, paragraph.text.length)
+        assertThat(annotations.any { it.item == placeholderId }).isTrue()
+    }
+
+    @Test
+    fun `a custom emoji image is flagged as an emoticon and keeps its mxc url`() {
+        val document = parse("""<img src="mxc://server/abc" alt=":smile:" data-mx-emoticon>""")
+        val paragraph = document.children.single() as ParagraphNode
+        val image = paragraph.inlineContent.values.single() as ImageNodeContent
+        assertThat(image.isEmoticon).isTrue()
+        assertThat(image.url).isEqualTo("mxc://server/abc")
+        assertThat(image.width).isNull()
+        assertThat(image.height).isNull()
+    }
+
+    @Test
+    fun `an image without a src is ignored`() {
+        val document = parse("Just text <img alt=\"broken\"> here")
+        val paragraph = document.children.single() as ParagraphNode
+        assertThat(paragraph.inlineContent).isEmpty()
+        assertThat(paragraph.text.text).isEqualTo("Just text  here")
     }
 
     @Test

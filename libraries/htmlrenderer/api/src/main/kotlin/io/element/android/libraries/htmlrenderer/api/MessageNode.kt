@@ -44,14 +44,14 @@ data class DocumentNode(
  * [androidx.compose.ui.text.SpanStyle] ranges, and links (`<a>`) as string annotations
  * tagged [HtmlMessageParser.LINK_ANNOTATION_TAG].
  *
- * Mentions (pills) are encoded as inline-content placeholders inside [text] (see
- * [androidx.compose.foundation.text.appendInlineContent]); [inlineContent] maps each
- * placeholder id to the [MentionNodeContent] the renderer needs to draw the pill.
+ * Mentions and inline images are encoded as inline-content placeholders inside [text] (see
+ * [androidx.compose.foundation.text.appendInlineContent]); [inlineContent] maps each placeholder id
+ * to the [InlineContent] (a [MentionNodeContent] pill or an [ImageNodeContent] image) the renderer draws.
  */
 @Immutable
 data class ParagraphNode(
     val text: AnnotatedString,
-    val inlineContent: ImmutableMap<String, MentionNodeContent> = persistentMapOf(),
+    val inlineContent: ImmutableMap<String, InlineContent> = persistentMapOf(),
 ) : BlockNode
 
 /**
