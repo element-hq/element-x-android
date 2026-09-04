@@ -29,6 +29,7 @@ dependencies {
     implementation(projects.features.enterprise.api)
     implementation(projects.features.messages.api)
     implementation(libs.maplibre.compose)
+    runtimeOnly(libs.maplibre.compose.runtime.vulkan)
     implementation(libs.coil)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
