@@ -36,6 +36,7 @@ class PttInputCoordinator(
 ) {
     private val activeSources = mutableListOf<PttInputSource>()
     private val transmitting = AtomicBoolean(false)
+    private var started = false
 
     private fun onPressToTalk() {
         // First press wins; ignore duplicate downs (key repeat, or the same key via another source).
@@ -50,11 +51,27 @@ class PttInputCoordinator(
         }
     }
 
-    /** Start every available source. Idempotent — a no-op if already started. */
+    /** Start every currently-available source. Idempotent — a no-op if already started. */
     fun start() {
-        if (activeSources.isNotEmpty()) return
+        if (started) return
+        started = true
+        startAvailableSources()
+    }
+
+    /**
+     * Start any source that has become available since [start] but isn't running yet (e.g. after the
+     * user grants Bluetooth permission for the BLE button). No-op if the session isn't started, or if
+     * nothing new is available. Safe to call repeatedly (e.g. on app resume).
+     */
+    fun refresh() {
+        if (!started) return
+        startAvailableSources()
+    }
+
+    private fun startAvailableSources() {
+        val activeIds = activeSources.mapTo(mutableSetOf()) { it.id }
         factories.values
-            .filter { it.isAvailable(context) }
+            .filter { it.id !in activeIds && it.isAvailable(context) }
             .forEach { factory ->
                 val source = factory.create(context)
                 source.start(onPressToTalk = ::onPressToTalk, onReleaseToTalk = ::onReleaseToTalk)
@@ -67,5 +84,6 @@ class PttInputCoordinator(
         activeSources.forEach { it.stop() }
         activeSources.clear()
         transmitting.set(false)
+        started = false
     }
 }

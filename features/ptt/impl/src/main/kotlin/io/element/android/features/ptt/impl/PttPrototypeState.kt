@@ -34,5 +34,7 @@ data class PttPrototypeState(
     val canUseFullScreenIntent: Boolean = true,
     /** Whether the app is exempt from battery optimization (user-opt-in; improves background reliability). */
     val isIgnoringBatteryOptimizations: Boolean = false,
+    /** Whether to prompt for Bluetooth permission (a BLE PTT button is in this build but not yet granted). */
+    val showBluetoothPermissionPrompt: Boolean = false,
     val eventSink: (PttPrototypeEvent) -> Unit,
 )

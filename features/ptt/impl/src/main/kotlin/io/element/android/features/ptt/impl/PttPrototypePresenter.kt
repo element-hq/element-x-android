@@ -11,9 +11,12 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings
+import androidx.core.content.ContextCompat
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -30,6 +33,8 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import dev.zacsweers.metro.Inject
 import io.element.android.features.ptt.api.PttConnectionState
 import io.element.android.features.ptt.api.PttFloorState
+import io.element.android.features.ptt.api.PttInputSourceFactory
+import io.element.android.features.ptt.api.PttInputSourceId
 import io.element.android.features.ptt.api.PttRoomService
 import io.element.android.features.ptt.api.PttSessionManager
 import io.element.android.features.ptt.impl.lockscreen.PttLockScreenAlert
@@ -46,6 +51,18 @@ import kotlinx.coroutines.launch
 private const val LOCK_SCREEN_ALERT_DELAY_MS = 6_000L
 
 /**
+ * Runtime Bluetooth permissions the BLE PTT button needs: on Android 12+ the explicit connect + scan
+ * permissions; on older versions, fine location (required for BLE scanning then). Shared with the View
+ * so the prompt requests exactly what the [io.element.android.features.ptt.api.PttInputSource] gates on.
+ */
+internal fun requiredBluetoothPermissions(): List<String> =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        listOf(Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN)
+    } else {
+        listOf(Manifest.permission.ACCESS_FINE_LOCATION)
+    }
+
+/**
  * Stage 1 PTT prototype presenter.
  *
  * Drives the [PttSessionManager] (the transport-agnostic session facade) rather than a specific
@@ -59,6 +76,7 @@ class PttPrototypePresenter(
     private val room: JoinedRoom,
     private val pttRoomService: PttRoomService,
     private val pttSessionManager: PttSessionManager,
+    private val inputSourceFactories: @JvmSuppressWildcards Map<PttInputSourceId, PttInputSourceFactory>,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
 ) : Presenter<PttPrototypeState> {
     private val recordAudioPermissionPresenter =
@@ -78,12 +96,16 @@ class PttPrototypePresenter(
             mutableStateOf(NotificationManagerCompat.from(context).canUseFullScreenIntent())
         }
         var isIgnoringBatteryOptimizations by remember { mutableStateOf(isIgnoringBatteryOptimizations()) }
+        // Only relevant when a BLE PTT button source is contributed in this build (enterprise).
+        val bleSupported = remember { PttInputSourceId.BleButton in inputSourceFactories }
+        var isBluetoothGranted by remember { mutableStateOf(hasBluetoothPermissions()) }
         DisposableEffect(lifecycleOwner) {
             val observer = LifecycleEventObserver { _, event ->
                 if (event == Lifecycle.Event.ON_RESUME) {
                     canDrawOverlays = Settings.canDrawOverlays(context)
                     canUseFullScreenIntent = NotificationManagerCompat.from(context).canUseFullScreenIntent()
                     isIgnoringBatteryOptimizations = isIgnoringBatteryOptimizations()
+                    isBluetoothGranted = hasBluetoothPermissions()
                 }
             }
             lifecycleOwner.lifecycle.addObserver(observer)
@@ -172,8 +194,13 @@ class PttPrototypePresenter(
             canDrawOverlays = canDrawOverlays,
             canUseFullScreenIntent = canUseFullScreenIntent,
             isIgnoringBatteryOptimizations = isIgnoringBatteryOptimizations,
+            showBluetoothPermissionPrompt = bleSupported && !isBluetoothGranted,
             eventSink = ::handleEvent,
         )
+    }
+
+    private fun hasBluetoothPermissions(): Boolean = requiredBluetoothPermissions().all {
+        ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun isIgnoringBatteryOptimizations(): Boolean {

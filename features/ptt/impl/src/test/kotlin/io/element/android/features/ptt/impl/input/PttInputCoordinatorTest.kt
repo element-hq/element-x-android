@@ -100,6 +100,33 @@ class PttInputCoordinatorTest {
         releaseRecorder.assertions().isCalledOnce()
     }
 
+    @Test
+    fun `refresh starts a source that became available after start`() {
+        val source = FakeInputSource()
+        val factory = FakeInputSourceFactory(available = false, source = source)
+        val coordinator = createCoordinator(mapOf(factory.id to factory))
+
+        coordinator.start() // unavailable → not created yet
+        assertThat(source.started).isFalse()
+
+        factory.available = true // e.g. the user granted Bluetooth permission
+        coordinator.refresh()
+
+        assertThat(source.started).isTrue()
+        assertThat(factory.createCount).isEqualTo(1)
+    }
+
+    @Test
+    fun `refresh is a no-op when the session has not started`() {
+        val source = FakeInputSource()
+        val factory = FakeInputSourceFactory(available = true, source = source)
+        val coordinator = createCoordinator(mapOf(factory.id to factory))
+
+        coordinator.refresh()
+
+        assertThat(source.started).isFalse()
+    }
+
     private fun createCoordinator(
         factories: Map<PttInputSourceId, PttInputSourceFactory>,
         sessionManager: FakePttSessionManager = FakePttSessionManager(),
@@ -133,7 +160,7 @@ private class FakeInputSource(
 }
 
 private class FakeInputSourceFactory(
-    private val available: Boolean,
+    var available: Boolean,
     private val source: FakeInputSource,
     override val id: PttInputSourceId = PttInputSourceId.MediaButton,
 ) : PttInputSourceFactory {

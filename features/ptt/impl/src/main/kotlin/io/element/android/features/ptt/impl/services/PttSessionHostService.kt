@@ -82,6 +82,8 @@ class PttSessionHostService : Service() {
             // The user may have just granted RECORD_AUDIO (e.g. from the transmit prompt or settings);
             // re-apply the foreground type so a warm special-use session is elevated to microphone.
             startAsForeground()
+            // …or just granted Bluetooth — start any input source that has become available since join.
+            inputCoordinator.refresh()
         }
     }
 

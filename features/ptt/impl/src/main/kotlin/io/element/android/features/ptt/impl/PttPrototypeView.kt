@@ -7,6 +7,8 @@
 
 package io.element.android.features.ptt.impl
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -44,6 +46,12 @@ fun PttPrototypeView(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    // The BLE PTT button needs runtime Bluetooth permission; requesting connect + scan together shows a
+    // single system dialog. The result is picked up implicitly: the presenter re-checks the grant on
+    // resume (hiding the prompt) and the session host starts the BLE input source once it's available.
+    val bluetoothPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) {}
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -120,6 +128,17 @@ fun PttPrototypeView(
                         Text("Show the join screen over the lock screen when a session goes live.")
                     },
                     onClick = { state.eventSink(PttPrototypeEvent.GrantFullScreenIntent) },
+                )
+            }
+            if (state.showBluetoothPermissionPrompt) {
+                ListItem(
+                    content = { Text("Allow Bluetooth for PTT buttons") },
+                    supportingContent = {
+                        Text("Connect to a Bluetooth push-to-talk button (e.g. Pryme) to transmit.")
+                    },
+                    onClick = {
+                        bluetoothPermissionLauncher.launch(requiredBluetoothPermissions().toTypedArray())
+                    },
                 )
             }
             PttChannelStatus(state = state)
