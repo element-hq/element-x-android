@@ -26,10 +26,10 @@ android {
 
     buildTypes {
         getByName("release") {
-            consumerProguardFiles("consumer-proguard-rules.pro")
+            consumerProguardFiles("consumer-rules.keep")
         }
         register("nightly") {
-            consumerProguardFiles("consumer-proguard-rules.pro")
+            consumerProguardFiles("consumer-rules.keep")
             matchingFallbacks += listOf("release")
         }
     }

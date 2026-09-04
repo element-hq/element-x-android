@@ -1,0 +1,5 @@
+# Showkase generates this class, and Showkase's ShowkaseBrowserActivity loads it reflectively with
+# Class.forName(...).getDeclaredConstructor().newInstance(), so its constructor must be kept too.
+-keep class io.element.android.libraries.designsystem.showkase.DesignSystemShowkaseRootModuleCodegen {
+    <init>();
+}

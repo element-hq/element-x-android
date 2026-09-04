@@ -23,7 +23,7 @@ android {
 
     buildTypes {
         getByName("release") {
-            consumerProguardFiles("consumer-rules.pro")
+            consumerProguardFiles("consumer-rules.keep")
         }
     }
 }
