@@ -67,10 +67,10 @@ class DefaultHtmlMessageParser(
         }
 
         for (node in parent.childNodes()) {
-            when {
+            when (node) {
                 // The fallback reply content is never rendered.
-                node is Element && node.tagName() == TAG_MX_REPLY -> Unit
-                node is Element && node.isBlockLevel() -> {
+                is Element if node.tagName() == TAG_MX_REPLY -> Unit
+                is Element if node.isBlockLevel() -> {
                     flushInline()
                     parseBlock(node)?.let(blocks::add)
                 }
