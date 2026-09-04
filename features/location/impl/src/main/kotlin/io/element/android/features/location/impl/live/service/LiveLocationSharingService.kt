@@ -30,15 +30,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.maplibre.compose.location.DesiredAccuracy
-import org.maplibre.compose.location.PermissionException
+import org.maplibre.compose.location.LocationAccuracy
+import org.maplibre.compose.location.LocationEvent
+import org.maplibre.compose.location.LocationRequest
+import org.maplibre.compose.location.LocationUnavailableReason
 import org.maplibre.spatialk.units.extensions.inMeters
 import org.maplibre.spatialk.units.extensions.meters
 import timber.log.Timber
@@ -91,31 +90,38 @@ class LiveLocationSharingService : Service() {
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun startLocationUpdatesListener() {
         Timber.d("LiveLocationSharingService listening to location updates")
+        val locationProvider = PlatformLocationProvider(context = applicationContext)
         appPreferencesStore.getLiveLocationMinimumDistanceInMetersUpdateFlow()
             .flatMapLatest { minDistanceMeters ->
-                try {
-                    PlatformLocationProvider(
-                        context = applicationContext,
-                        updateInterval = UPDATE_INTERVAL_IN_SECOND.seconds,
-                        minDistance = minDistanceMeters.meters,
-                        desiredAccuracy = DesiredAccuracy.Balanced,
-                        coroutineScope = coroutineScope
-                    ).location
-                } catch (exception: PermissionException) {
-                    Timber.e(exception, "Failed to create PlatformLocationProvider")
-                    coordinator.dispatchUnrecoverableError()
-                    emptyFlow()
+                val locationRequest = LocationRequest(
+                    accuracy = LocationAccuracy.Balanced,
+                    minimumInterval = UPDATE_INTERVAL_IN_SECOND.seconds,
+                    minimumDistance = minDistanceMeters.meters
+                )
+                locationProvider.updates(locationRequest)
+            }
+            .onEach { locationEvent ->
+                when (locationEvent) {
+                    is LocationEvent.Fix -> {
+                        val location = ApiLocation(
+                            lat = locationEvent.location.position.value.latitude,
+                            lon = locationEvent.location.position.value.longitude,
+                            accuracy = locationEvent.location.position.accuracy?.inMeters?.toFloat(),
+                        )
+                        coordinator.dispatch(location)
+                    }
+                    is LocationEvent.Unavailable -> {
+                        when (locationEvent.reason) {
+                            LocationUnavailableReason.ServicesDisabled,
+                            LocationUnavailableReason.TemporarilyUnavailable -> Unit
+                            LocationUnavailableReason.Unsupported,
+                            LocationUnavailableReason.Misconfigured,
+                            LocationUnavailableReason.PermissionDenied,
+                            LocationUnavailableReason.UnexpectedFailure -> coordinator.dispatchUnrecoverableError()
+                        }
+                    }
                 }
             }
-            .filterNotNull()
-            .map { location ->
-                ApiLocation(
-                    lat = location.position.value.latitude,
-                    lon = location.position.value.longitude,
-                    accuracy = location.position.accuracy?.inMeters?.toFloat(),
-                )
-            }
-            .onEach(coordinator::dispatch)
             .launchIn(coroutineScope)
     }
 
