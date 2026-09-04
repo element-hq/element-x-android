@@ -77,6 +77,11 @@ class RustMatrixClientFactory(
         analyticsService = analyticsService,
     )
 
+    /**
+     * Build a Rust-side [Client] and wrap it into an application-side [RustMatrixClient].
+     *
+     * Used when restoring a previous session after a restart.
+     */
     suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
         // This secret is called 'passphrase' for historical reasons, but it can be a raw key or an actual passphrase
         val clientSecret = sessionData.passphrase?.let(ClientSecret::fromString)
@@ -97,9 +102,9 @@ class RustMatrixClientFactory(
             clientSecret = clientSecret,
             slidingSyncType = ClientBuilderSlidingSync.Restored,
             isMessageSearchAvailable = isMessageSearchAvailable,
+            sessionId = SessionId(sessionData.userId),
         )
             .homeserverUrl(sessionData.homeserverUrl)
-            .let { (clientBuilderEnterpriseHook(RustMatrixClientBuilder(it), SessionId(sessionData.userId)) as RustMatrixClientBuilder).inner }
             .use { it.build() }
 
         client.setMediaRetentionPolicy(
@@ -120,6 +125,15 @@ class RustMatrixClientFactory(
         create(client, sessionData, isMessageSearchAvailable)
     }
 
+    /**
+     * Given a Rust-side [Client], wrap it into an application-side [RustMatrixClient].
+     *
+     * This is a helper for the other `create` method, as well as being called directly from
+     * [io.element.android.libraries.matrix.impl.auth.RustMatrixAuthenticationService] after successful
+     * authentication.
+     *
+     * TODO: feels like this could do with a better name, since it doesn't actually create a client.
+     */
     suspend fun create(
         client: Client,
         sessionData: SessionData,
@@ -161,11 +175,17 @@ class RustMatrixClientFactory(
         }
     }
 
+    /**
+     * Create a Rust-side [ClientBuilder] which can then be used to build a client.
+     *
+     * TODO: write some better documentation. What are the prarameters? What does the caller still have to do after calling this?
+     */
     internal suspend fun getBaseClientBuilder(
         sessionPaths: SessionPaths,
         clientSecret: ClientSecret?,
         slidingSyncType: ClientBuilderSlidingSync,
         isMessageSearchAvailable: Boolean,
+        sessionId: SessionId?,
     ): ClientBuilder {
         return clientBuilderProvider.provide()
             .run {
@@ -232,6 +252,8 @@ class RustMatrixClientFactory(
                 // Workaround for non-nullable proxy parameter in the SDK, since each call to the ClientBuilder returns a new reference we need to keep
                 proxyProvider.provides()?.let { proxy(it) } ?: this
             }
+            .let { (clientBuilderEnterpriseHook(RustMatrixClientBuilder(it), sessionId) as RustMatrixClientBuilder).inner }
+
     }
 }
 

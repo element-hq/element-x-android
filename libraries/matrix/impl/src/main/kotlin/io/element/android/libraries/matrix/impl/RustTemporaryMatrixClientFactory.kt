@@ -35,6 +35,7 @@ class RustTemporaryMatrixClientFactory(
                 clientSecret = null,
                 slidingSyncType = ClientBuilderSlidingSync.Native,
                 isMessageSearchAvailable = false,
+                sessionId = null,
             )
                 .serverName(formattedServerName)
                 .build()

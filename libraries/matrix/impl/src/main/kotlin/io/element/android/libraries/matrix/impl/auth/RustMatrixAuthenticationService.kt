@@ -411,6 +411,7 @@ class RustMatrixAuthenticationService(
                 clientSecret = pendingKey,
                 slidingSyncType = ClientBuilderSlidingSync.Discovered,
                 isMessageSearchAvailable = isMessageSearchAvailable(),
+                sessionId = null,
             )
             .config()
             .build()
@@ -444,6 +445,7 @@ class RustMatrixAuthenticationService(
                 clientSecret = pendingKey,
                 slidingSyncType = ClientBuilderSlidingSync.Discovered,
                 isMessageSearchAvailable = isMessageSearchAvailable(),
+                sessionId = null,
             )
             .serverNameOrHomeserverUrl(baseUrlOrServerName)
             .build()
