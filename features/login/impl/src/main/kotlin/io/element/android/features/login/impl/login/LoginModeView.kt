@@ -41,9 +41,9 @@ fun LoginModeView(
             when (val error = loginMode.error) {
                 is ChangeServerError -> {
                     when (error) {
-                        ChangeServerError.InvalidServer ->
+                        is ChangeServerError.InvalidServer ->
                             ErrorDialog(
-                                content = stringResource(R.string.screen_change_server_error_invalid_homeserver),
+                                content = invalidHomeserverMessage(error.supportContact),
                                 onSubmit = onClearError,
                             )
                         is ChangeServerError.UnsupportedServer -> {
@@ -138,5 +138,15 @@ internal fun LoginModeViewPreview(@PreviewParameter(LoginModeViewErrorPreviewPar
             onOAuthDetails = {},
             onNeedLoginPassword = {},
         )
+    }
+}
+
+@Composable
+private fun invalidHomeserverMessage(supportContact: String?): String {
+    val message = stringResource(R.string.screen_change_server_error_invalid_homeserver)
+    return if (supportContact == null) {
+        message
+    } else {
+        message + "\n\n" + stringResource(R.string.screen_change_server_error_contact_admin, supportContact)
     }
 }
