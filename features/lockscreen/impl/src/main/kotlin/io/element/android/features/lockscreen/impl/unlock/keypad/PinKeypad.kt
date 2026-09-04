@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,6 +49,8 @@ import io.element.android.libraries.ui.utils.time.digit
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
+private val orderedDigits = ('1'..'9') + '0'
+
 private val spaceBetweenPinKey = 16.dp
 private val minSizePinKey = 16.dp
 private val maxSizePinKey = 80.dp
@@ -58,9 +61,13 @@ fun PinKeypad(
     maxWidth: Dp,
     maxHeight: Dp,
     modifier: Modifier = Modifier,
+    isShuffled: Boolean = false,
     verticalAlignment: Alignment.Vertical = Alignment.Top,
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
 ) {
+    val digits = remember(isShuffled) {
+        if (isShuffled) orderedDigits.shuffled() else orderedDigits
+    }
     val pinKeyMaxWidth = ((maxWidth - 2 * spaceBetweenPinKey) / 3).coerceIn(minSizePinKey, maxSizePinKey)
     val pinKeyMaxHeight = ((maxHeight - 3 * spaceBetweenPinKey) / 4).coerceIn(minSizePinKey, maxSizePinKey)
     val pinKeySize = if (pinKeyMaxWidth < pinKeyMaxHeight) pinKeyMaxWidth else pinKeyMaxHeight
@@ -91,28 +98,28 @@ fun PinKeypad(
             pinKeySize = pinKeySize,
             verticalAlignment = verticalAlignment,
             horizontalArrangement = horizontalArrangement,
-            models = persistentListOf(PinKeypadModel.Number('1'), PinKeypadModel.Number('2'), PinKeypadModel.Number('3')),
+            models = persistentListOf(PinKeypadModel.Number(digits[0]), PinKeypadModel.Number(digits[1]), PinKeypadModel.Number(digits[2])),
             onClick = onClick,
         )
         PinKeypadRow(
             pinKeySize = pinKeySize,
             verticalAlignment = verticalAlignment,
             horizontalArrangement = horizontalArrangement,
-            models = persistentListOf(PinKeypadModel.Number('4'), PinKeypadModel.Number('5'), PinKeypadModel.Number('6')),
+            models = persistentListOf(PinKeypadModel.Number(digits[3]), PinKeypadModel.Number(digits[4]), PinKeypadModel.Number(digits[5])),
             onClick = onClick,
         )
         PinKeypadRow(
             pinKeySize = pinKeySize,
             verticalAlignment = verticalAlignment,
             horizontalArrangement = horizontalArrangement,
-            models = persistentListOf(PinKeypadModel.Number('7'), PinKeypadModel.Number('8'), PinKeypadModel.Number('9')),
+            models = persistentListOf(PinKeypadModel.Number(digits[6]), PinKeypadModel.Number(digits[7]), PinKeypadModel.Number(digits[8])),
             onClick = onClick,
         )
         PinKeypadRow(
             pinKeySize = pinKeySize,
             verticalAlignment = verticalAlignment,
             horizontalArrangement = horizontalArrangement,
-            models = persistentListOf(PinKeypadModel.Empty, PinKeypadModel.Number('0'), PinKeypadModel.Back),
+            models = persistentListOf(PinKeypadModel.Empty, PinKeypadModel.Number(digits[9]), PinKeypadModel.Back),
             onClick = onClick,
         )
     }
