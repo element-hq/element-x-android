@@ -28,7 +28,7 @@ class RoomSyncSubscriber(
             withContext(dispatchers.io) {
                 try {
                     Timber.d("Subscribing to room $roomId}")
-                    roomListService.subscribeToRooms(listOf(roomId.value))
+                    roomListService.setRoomSubscriptions(listOf(roomId.value))
                 } catch (exception: Exception) {
                     Timber.e(exception, "Failed to subscribe to room $roomId")
                 }
@@ -40,7 +40,7 @@ class RoomSyncSubscriber(
         withContext(dispatchers.io) {
             try {
                 Timber.d("Subscribing to rooms: $roomIds")
-                roomListService.subscribeToRooms(roomIds.map { it.value })
+                roomListService.setRoomSubscriptions(roomIds.map { it.value })
             } catch (cancellationException: CancellationException) {
                 throw cancellationException
             } catch (exception: Exception) {
