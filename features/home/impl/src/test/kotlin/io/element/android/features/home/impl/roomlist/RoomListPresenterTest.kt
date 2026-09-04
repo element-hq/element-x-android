@@ -210,6 +210,68 @@ class RoomListPresenterTest {
     }
 
     @Test
+    fun `present - the recovery banner stays dismissed when the presenter is recreated`() = runTest {
+        val sessionPreferencesStore = InMemorySessionPreferencesStore()
+        val encryptionService = FakeEncryptionService().apply {
+            recoveryStateStateFlow.emit(RecoveryState.DISABLED)
+        }
+        val roomListService = FakeRoomListService(
+            createRoomListLambda = { FakeDynamicRoomList(loadingState = MutableStateFlow(RoomList.LoadingState.Loaded(1))) }
+        )
+        val client = FakeMatrixClient(
+            roomListService = roomListService,
+            encryptionService = encryptionService,
+            syncService = FakeSyncService(initialSyncState = SyncState.Running),
+        )
+        createRoomListPresenter(client = client, sessionPreferencesStore = sessionPreferencesStore).test {
+            val initialState = consumeItemsUntilPredicate {
+                it.contentState is RoomListContentState.Rooms && it.contentAsRooms().securityBannerState == SecurityBannerState.SetUpRecovery
+            }.last()
+            initialState.eventSink(RoomListEvent.DismissBanner)
+            consumeItemsUntilPredicate {
+                it.contentAsRooms().securityBannerState == SecurityBannerState.None
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+        // A new presenter, as after a cold start, must not show the banner again
+        createRoomListPresenter(client = client, sessionPreferencesStore = sessionPreferencesStore).test {
+            val state = consumeItemsUntilPredicate {
+                it.contentState is RoomListContentState.Rooms
+            }.last()
+            assertThat(state.contentAsRooms().securityBannerState).isEqualTo(SecurityBannerState.None)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - setting up recovery makes a dismissed banner relevant again`() = runTest {
+        val sessionPreferencesStore = InMemorySessionPreferencesStore(isRecoveryBannerDismissed = true)
+        val encryptionService = FakeEncryptionService().apply {
+            recoveryStateStateFlow.emit(RecoveryState.DISABLED)
+        }
+        val roomListService = FakeRoomListService(
+            createRoomListLambda = { FakeDynamicRoomList(loadingState = MutableStateFlow(RoomList.LoadingState.Loaded(1))) }
+        )
+        val client = FakeMatrixClient(
+            roomListService = roomListService,
+            encryptionService = encryptionService,
+            syncService = FakeSyncService(initialSyncState = SyncState.Running),
+        )
+        createRoomListPresenter(client = client, sessionPreferencesStore = sessionPreferencesStore).test {
+            val initialState = consumeItemsUntilPredicate {
+                it.contentState is RoomListContentState.Rooms
+            }.last()
+            assertThat(initialState.contentAsRooms().securityBannerState).isEqualTo(SecurityBannerState.None)
+            encryptionService.emitRecoveryState(RecoveryState.ENABLED)
+            encryptionService.emitRecoveryState(RecoveryState.DISABLED)
+            consumeItemsUntilPredicate {
+                it.contentAsRooms().securityBannerState == SecurityBannerState.SetUpRecovery
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
     fun `present - show context menu`() = runTest {
         val room = FakeBaseRoom()
         val client = FakeMatrixClient().apply {
@@ -697,5 +759,6 @@ class RoomListPresenterTest {
         announcementService = announcementService,
         coldStartWatcher = FakeAnalyticsColdStartWatcher(),
         featureFlagService = featureFlagService,
+        sessionPreferencesStore = sessionPreferencesStore,
     )
 }

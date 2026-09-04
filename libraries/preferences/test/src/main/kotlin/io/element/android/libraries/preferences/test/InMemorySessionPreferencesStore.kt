@@ -20,6 +20,7 @@ class InMemorySessionPreferencesStore(
     isSendTypingNotificationsEnabled: Boolean = true,
     isRenderTypingNotificationsEnabled: Boolean = true,
     isSessionVerificationSkipped: Boolean = false,
+    isRecoveryBannerDismissed: Boolean = false,
     doesCompressMedia: Boolean = true,
     videoCompressionPreset: VideoCompressionPreset = VideoCompressionPreset.STANDARD,
 ) : SessionPreferencesStore {
@@ -29,6 +30,7 @@ class InMemorySessionPreferencesStore(
     private val isSendTypingNotificationsEnabled = MutableStateFlow(isSendTypingNotificationsEnabled)
     private val isRenderTypingNotificationsEnabled = MutableStateFlow(isRenderTypingNotificationsEnabled)
     private val isSessionVerificationSkipped = MutableStateFlow(isSessionVerificationSkipped)
+    private val isRecoveryBannerDismissed = MutableStateFlow(isRecoveryBannerDismissed)
     private val doesCompressMedia = MutableStateFlow(doesCompressMedia)
     private val videoCompressionPreset = MutableStateFlow(videoCompressionPreset)
     var clearCallCount = 0
@@ -71,6 +73,12 @@ class InMemorySessionPreferencesStore(
     override fun isSessionVerificationSkipped(): Flow<Boolean> {
         return isSessionVerificationSkipped
     }
+
+    override suspend fun setRecoveryBannerDismissed(dismissed: Boolean) {
+        isRecoveryBannerDismissed.tryEmit(dismissed)
+    }
+
+    override fun isRecoveryBannerDismissed(): Flow<Boolean> = isRecoveryBannerDismissed
 
     override suspend fun setOptimizeImages(compress: Boolean) = doesCompressMedia.emit(compress)
 

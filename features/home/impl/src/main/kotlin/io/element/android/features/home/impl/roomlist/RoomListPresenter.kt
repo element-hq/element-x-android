@@ -20,7 +20,6 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import dev.zacsweers.metro.Inject
@@ -54,6 +53,7 @@ import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.ui.safety.rememberHideInvitesAvatar
+import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.push.api.battery.BatteryOptimizationState
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.api.watchers.AnalyticsColdStartWatcher
@@ -64,6 +64,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -88,6 +89,7 @@ class RoomListPresenter(
     private val spaceFiltersPresenter: Presenter<SpaceFiltersState>,
     private val globalSearchPresenter: Presenter<GlobalSearchState>,
     private val featureFlagService: FeatureFlagService,
+    private val sessionPreferencesStore: SessionPreferencesStore,
 ) : Presenter<RoomListState> {
     private val encryptionService = client.encryptionService
 
@@ -105,7 +107,12 @@ class RoomListPresenter(
             roomListDataSource.launchIn(this)
         }
 
-        var securityBannerDismissed by rememberSaveable { mutableStateOf(false) }
+        val securityBannerDismissed by sessionPreferencesStore.isRecoveryBannerDismissed().collectAsState(initial = false)
+        LaunchedEffect(Unit) {
+            encryptionService.recoveryStateStateFlow
+                .filter { it == RecoveryState.ENABLED }
+                .collect { sessionPreferencesStore.setRecoveryBannerDismissed(false) }
+        }
         val showNewNotificationSoundBanner by remember {
             announcementService.announcementsToShowFlow().map { announcements ->
                 announcements.contains(Announcement.NewNotificationSound)
@@ -123,8 +130,10 @@ class RoomListPresenter(
                 is RoomListEvent.UpdateVisibleRange -> coroutineScope.launch {
                     roomListDataSource.updateVisibleRange(event.range)
                 }
-                RoomListEvent.DismissRequestVerificationPrompt -> securityBannerDismissed = true
-                RoomListEvent.DismissBanner -> securityBannerDismissed = true
+                RoomListEvent.DismissRequestVerificationPrompt,
+                RoomListEvent.DismissBanner -> coroutineScope.launch {
+                    sessionPreferencesStore.setRecoveryBannerDismissed(true)
+                }
                 RoomListEvent.DismissNewNotificationSoundBanner -> coroutineScope.launch {
                     announcementService.onAnnouncementDismissed(Announcement.NewNotificationSound)
                 }
