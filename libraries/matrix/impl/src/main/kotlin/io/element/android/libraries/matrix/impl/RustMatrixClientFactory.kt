@@ -98,7 +98,9 @@ class RustMatrixClientFactory(
             isMessageSearchAvailable = isMessageSearchAvailable,
         )
             .homeserverUrl(sessionData.homeserverUrl)
-            .let { (clientBuilderEnterpriseHook(RustMatrixClientBuilder(it), SessionId(sessionData.userId)) as RustMatrixClientBuilder).inner }
+            .let {
+                (clientBuilderEnterpriseHook.tweakClientBuilder(RustMatrixClientBuilder(it), SessionId(sessionData.userId)) as RustMatrixClientBuilder).inner
+            }
             .use { it.build() }
 
         client.setMediaRetentionPolicy(
@@ -222,6 +224,9 @@ class RustMatrixClientFactory(
             .run {
                 // Workaround for non-nullable proxy parameter in the SDK, since each call to the ClientBuilder returns a new reference we need to keep
                 proxyProvider.provides()?.let { proxy(it) } ?: this
+            }
+            .let {
+                (clientBuilderEnterpriseHook.tweakClientBuilder(RustMatrixClientBuilder(it)) as RustMatrixClientBuilder).inner
             }
     }
 }
