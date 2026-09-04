@@ -160,6 +160,9 @@ fun RoomDetailsView(
                         openAvatarPreview = { avatarUrl ->
                             openAvatarPreview(state.roomName, avatarUrl)
                         },
+                        onTitleClick = {
+                            state.eventSink(RoomDetailsEvent.CopyToClipboard(state.roomName))
+                        },
                         onSubtitleClick = { subtitle ->
                             state.eventSink(RoomDetailsEvent.CopyToClipboard(subtitle))
                         }
@@ -172,6 +175,9 @@ fun RoomDetailsView(
                         isTombstoned = state.isTombstoned,
                         openAvatarPreview = { name, avatarUrl ->
                             openAvatarPreview(name, avatarUrl)
+                        },
+                        onTitleClick = {
+                            state.eventSink(RoomDetailsEvent.CopyToClipboard(state.roomName))
                         },
                         onSubtitleClick = { subtitle ->
                             state.eventSink(RoomDetailsEvent.CopyToClipboard(subtitle))
@@ -468,6 +474,7 @@ private fun RoomHeaderSection(
     heroes: ImmutableList<MatrixUser>,
     isTombstoned: Boolean,
     openAvatarPreview: (url: String) -> Unit,
+    onTitleClick: () -> Unit,
     onSubtitleClick: (String) -> Unit,
 ) {
     Column(
@@ -497,6 +504,7 @@ private fun RoomHeaderSection(
         )
         Spacer(modifier = Modifier.height(24.dp))
         Text(
+            modifier = Modifier.niceClickable { onTitleClick() },
             text = roomName,
             style = ElementTheme.typography.fontHeadingLgBold,
             textAlign = TextAlign.Center,
@@ -521,6 +529,7 @@ private fun DmHeaderSection(
     roomName: String,
     isTombstoned: Boolean,
     openAvatarPreview: (name: String, url: String) -> Unit,
+    onTitleClick: () -> Unit,
     onSubtitleClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -551,6 +560,7 @@ private fun DmHeaderSection(
         )
         Spacer(modifier = Modifier.height(24.dp))
         Text(
+            modifier = Modifier.niceClickable { onTitleClick() },
             text = roomName,
             style = ElementTheme.typography.fontHeadingLgBold,
             textAlign = TextAlign.Center,

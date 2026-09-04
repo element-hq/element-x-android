@@ -85,6 +85,9 @@ fun UserProfileView(
                 onUserIdClick = {
                     state.eventSink(UserProfileEvent.CopyToClipboard(state.userId.value))
                 },
+                onUserNameClick = state.userName?.let {
+                    { state.eventSink(UserProfileEvent.CopyToClipboard(it)) }
+                },
                 withdrawVerificationClick = { state.eventSink(UserProfileEvent.WithdrawVerification) },
             )
             UserProfileMainActionsSection(
