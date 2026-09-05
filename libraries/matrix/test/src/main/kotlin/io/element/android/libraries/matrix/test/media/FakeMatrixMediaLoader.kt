@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.matrix.test.media
 
+import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaFile
 import io.element.android.libraries.matrix.api.media.MediaSource
@@ -16,6 +17,7 @@ import io.element.android.tests.testutils.simulateLongTask
 class FakeMatrixMediaLoader : MatrixMediaLoader {
     var shouldFail = false
     var path: String = ""
+    var progressValues: List<Pair<Long, Long>> = emptyList()
 
     override suspend fun loadMediaContent(source: MediaSource): Result<ByteArray> = simulateLongTask {
         if (shouldFail) {
@@ -38,7 +40,9 @@ class FakeMatrixMediaLoader : MatrixMediaLoader {
         mimeType: String?,
         filename: String?,
         useCache: Boolean,
+        progressCallback: ProgressCallback?,
     ): Result<MediaFile> = simulateLongTask {
+        progressValues.forEach { progressCallback?.onProgress(it.first, it.second) }
         if (shouldFail) {
             Result.failure(RuntimeException())
         } else {
