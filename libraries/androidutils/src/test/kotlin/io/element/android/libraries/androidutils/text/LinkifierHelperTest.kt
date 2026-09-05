@@ -181,6 +181,52 @@ class LinkifierHelperTest : RobolectricTest() {
     }
 
     @Test
+    @Config(sdk = [30])
+    fun `linkification ignores digits preceded by letters`() {
+        val telephonyManager = shadowOf(newInstanceOf(TelephonyManager::class.java))
+        telephonyManager.setSimCountryIso("DE")
+
+        val text = "See MSC4108 for details"
+        val result = LinkifyHelper.linkify(text)
+        val urlSpans = result.toSpannable().getSpans<URLSpan>()
+        assertThat(urlSpans.map { it.url }).isEmpty()
+    }
+
+    @Test
+    @Config(sdk = [30])
+    fun `linkification ignores digits followed by letters`() {
+        val telephonyManager = shadowOf(newInstanceOf(TelephonyManager::class.java))
+        telephonyManager.setSimCountryIso("DE")
+
+        val text = "The resolution is 1080p"
+        val result = LinkifyHelper.linkify(text)
+        val urlSpans = result.toSpannable().getSpans<URLSpan>()
+        assertThat(urlSpans.map { it.url }).isEmpty()
+    }
+
+    @Test
+    @Config(sdk = [30])
+    fun `linkification ignores digits surrounded by letters`() {
+        val telephonyManager = shadowOf(newInstanceOf(TelephonyManager::class.java))
+        telephonyManager.setSimCountryIso("DE")
+
+        val text = "A 1920x1080 screenshot"
+        val result = LinkifyHelper.linkify(text)
+        val urlSpans = result.toSpannable().getSpans<URLSpan>()
+        assertThat(urlSpans.map { it.url }).isEmpty()
+    }
+
+    @Test
+    @Config(sdk = [30])
+    fun `linkification finds phone after punctuation`() {
+        val text = "Tel:+34950123456"
+        val result = LinkifyHelper.linkify(text)
+        val urlSpans = result.toSpannable().getSpans<URLSpan>()
+        assertThat(urlSpans.size).isEqualTo(1)
+        assertThat(urlSpans.first().url).isEqualTo("tel:+34950123456")
+    }
+
+    @Test
     fun `linkification handles trailing dot`() {
         val text = "A url https://matrix.org."
         val result = LinkifyHelper.linkify(text)
