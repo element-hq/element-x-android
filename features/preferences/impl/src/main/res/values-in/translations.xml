@@ -102,6 +102,14 @@ Jika Anda melanjutkan, beberapa pengaturan Anda dapat berubah."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"pengaturan sistem"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Pemberitahuan sistem dimatikan"</string>
   <string name="screen_notification_settings_title">"Notifikasi"</string>
+  <string name="screen_settings_user_status_away">"Pergi"</string>
+  <string name="screen_settings_user_status_be_right_back">"Sebentar lagi kembali"</string>
+  <string name="screen_settings_user_status_custom">"Kustom"</string>
+  <string name="screen_settings_user_status_custom_hint">"Status kustom…"</string>
+  <string name="screen_settings_user_status_focus_time">"Waktu fokus"</string>
+  <string name="screen_settings_user_status_in_a_meeting">"Sedang rapat"</string>
+  <string name="screen_settings_user_status_on_the_road">"Di jalan"</string>
+  <string name="screen_settings_user_status_placeholder">"Apa status Anda?"</string>
   <string name="theme_black">"Hitam"</string>
   <string name="theme_dark">"Gelap"</string>
   <string name="theme_light">"Terang"</string>

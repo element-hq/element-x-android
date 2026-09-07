@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_avatar">"Дадаць аватар"</string>
   <string name="a11y_add_reaction">"Дадаць рэакцыю: %1$s"</string>
   <string name="a11y_address">"Адрас"</string>
   <string name="a11y_avatar">"Аватар"</string>
@@ -9,6 +10,7 @@
     <item quantity="few">"Уведзена %1$d лічбы"</item>
     <item quantity="many">"Уведзена %1$d лічб"</item>
   </plurals>
+  <string name="a11y_duration">"Працягласць: %1$s"</string>
   <string name="a11y_edit_avatar">"Змяніць аватар"</string>
   <string name="a11y_edit_room_address_hint">"Поўны адрас будзе %1$s"</string>
   <string name="a11y_encryption_details">"Дэталі шыфравання"</string>
@@ -16,6 +18,7 @@
   <string name="a11y_info">"Інфармацыя"</string>
   <string name="a11y_join_call">"Далучыцца да выкліку"</string>
   <string name="a11y_jump_to_bottom">"Перайсці ўніз"</string>
+  <string name="a11y_jump_to_unread">"Перайсці да непрачытаных"</string>
   <string name="a11y_notifications_mentions_only">"Толькі згадкі"</string>
   <string name="a11y_notifications_muted">"Гук адключаны"</string>
   <string name="a11y_notifications_new_mentions">"Новыя згадкі"</string>
@@ -27,6 +30,7 @@
   <string name="a11y_playback_speed">"Хуткасць прайгравання"</string>
   <string name="a11y_poll">"Апытанне"</string>
   <string name="a11y_poll_end">"Апытанне скончана"</string>
+  <string name="a11y_position">"Пазіцыя: %1$s"</string>
   <string name="a11y_qr_code">"QR-код"</string>
   <string name="a11y_react_with">"Рэагаваць з %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Рэагаваць з іншымі эмодзі"</string>
@@ -41,6 +45,7 @@
   <string name="a11y_send_files">"Адправіць файлы"</string>
   <string name="a11y_show_password">"Паказаць пароль"</string>
   <string name="a11y_start_call">"Пазваніць"</string>
+  <string name="a11y_status">"Статус"</string>
   <string name="a11y_user_avatar">"Аватар карыстальніка"</string>
   <string name="a11y_user_menu">"Меню карыстальніка"</string>
   <string name="a11y_view_details">"Паглядзець падрабязнасці"</string>
@@ -54,6 +59,7 @@
   <string name="action_call">"Званок"</string>
   <string name="action_cancel">"Скасаваць"</string>
   <string name="action_cancel_for_now">"Адмяніць пакуль"</string>
+  <string name="action_choose_file">"Выбраць файл"</string>
   <string name="action_choose_photo">"Выбраць фота"</string>
   <string name="action_clear">"Ачысціць"</string>
   <string name="action_close">"Закрыць"</string>
@@ -68,6 +74,7 @@
   <string name="action_copy_text">"Скапіяваць тэкст"</string>
   <string name="action_create">"Стварыць"</string>
   <string name="action_create_room">"Стварыце пакой"</string>
+  <string name="action_create_space">"Стварыць прастору"</string>
   <string name="action_deactivate">"Дэактываваць"</string>
   <string name="action_deactivate_account">"Дэактываваць уліковы запіс"</string>
   <string name="action_decline">"Адхіліць"</string>
@@ -110,11 +117,13 @@
   <string name="action_load_more">"Загрузіць больш"</string>
   <string name="action_manage_account">"Кіраванне ўліковым запісам"</string>
   <string name="action_manage_devices">"Кіраванне прыладамі"</string>
+  <string name="action_mark_as_read">"Пазначыць як прачытанае"</string>
   <string name="action_message">"Паведамленне"</string>
   <string name="action_next">"Далей"</string>
   <string name="action_no">"Не"</string>
   <string name="action_not_now">"Не зараз"</string>
   <string name="action_ok">"Добра"</string>
+  <string name="action_open_context_menu">"Адкрыць кантэкстнае меню"</string>
   <string name="action_open_settings">"Налады"</string>
   <string name="action_open_with">"Адкрыць з дапамогай"</string>
   <string name="action_pin">"Замацаваць"</string>
@@ -162,6 +171,7 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"Даступна абнаўленне"</string>
   <string name="common_about">"Аб праграме"</string>
   <string name="common_acceptable_use_policy">"Палітыка дапушчальнага выкарыстання"</string>
+  <string name="common_add_account">"Дадаць уліковы запіс"</string>
   <string name="common_advanced_settings">"Пашыраныя налады"</string>
   <string name="common_analytics">"Аналітыка"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Вы выйшлі з пакоя"</string>
@@ -174,14 +184,17 @@
   <string name="common_copied_to_clipboard">"Скапіравана ў буфер абмену"</string>
   <string name="common_copyright">"Аўтарскае права"</string>
   <string name="common_creating_room">"Стварэнне пакоя…"</string>
+  <string name="common_creating_space">"Стварэнне прасторы…"</string>
   <string name="common_current_user_left_room">"Выйшаў з пакоя"</string>
   <string name="common_decryption_error">"Памылка расшыфроўкі"</string>
+  <string name="common_description">"Апісанне"</string>
   <string name="common_developer_options">"Параметры распрацоўшчыка"</string>
   <string name="common_direct_chat">"Прамы чат"</string>
   <string name="common_do_not_show_this_again">"Не паказваць гэта зноў"</string>
   <string name="common_edited_suffix">"(Адрэдагавана)"</string>
   <string name="common_editing">"Рэдагаванне"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
+  <string name="common_empty_file">"Пусты файл"</string>
   <string name="common_encryption_enabled">"Шыфраванне ўключана"</string>
   <string name="common_enter_your_pin">"Увядзіце свой PIN-код"</string>
   <string name="common_error">"Памылка"</string>
@@ -193,8 +206,11 @@
   <string name="common_favourite">"Абраць"</string>
   <string name="common_favourited">"Абранае"</string>
   <string name="common_file">"Файл"</string>
+  <string name="common_file_deleted">"Файл выдалены"</string>
+  <string name="common_file_saved">"Файл захаваны"</string>
   <string name="common_file_saved_on_disk_android">"Файл захаваны ў папку Спампоўкі"</string>
   <string name="common_forward_message">"Перасылка паведамлення"</string>
+  <string name="common_gallery">"Галерэя"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"Відарыс"</string>
   <string name="common_in_reply_to">"У адказ на %1$s"</string>
@@ -220,6 +236,7 @@
   <string name="common_modern">"Сучасны"</string>
   <string name="common_mute">"Адкл. гук"</string>
   <string name="common_name">"Імя"</string>
+  <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Вынікаў няма"</string>
   <string name="common_no_room_name">"Няма назвы пакоя"</string>
   <string name="common_not_encrypted">"Не зашыфравана"</string>
@@ -254,6 +271,7 @@
   <string name="common_report_a_problem">"Паведаміць аб праблеме"</string>
   <string name="common_report_submitted">"Скарга прынята"</string>
   <string name="common_rich_text_editor">"Рэдактар фарматаванага тэксту"</string>
+  <string name="common_role">"Роля"</string>
   <string name="common_room">"Пакой"</string>
   <string name="common_room_name">"Назва пакоя"</string>
   <string name="common_room_name_placeholder">"напрыклад, назва вашага праекта"</string>
@@ -268,6 +286,7 @@
   <string name="common_sending">"Адпраўка…"</string>
   <string name="common_sending_failed">"Памылка адпраўкі"</string>
   <string name="common_sent">"Адпраўлена"</string>
+  <string name="common_sentence_delimiter">". "</string>
   <string name="common_server_not_supported">"Сервер не падтрымліваецца"</string>
   <string name="common_server_url">"URL-адрас сервера"</string>
   <string name="common_settings">"Налады"</string>
@@ -297,11 +316,15 @@
   <string name="common_verification_complete">"Праверка завершана"</string>
   <string name="common_verify_device">"Праверце прыладу"</string>
   <string name="common_video">"Відэа"</string>
+  <string name="common_video_quality_high">"Высокая якасць"</string>
+  <string name="common_video_quality_low">"Нізкая якасць"</string>
+  <string name="common_video_quality_standard">"Стандартная якасць"</string>
   <string name="common_voice_message">"Галасавое паведамленне"</string>
   <string name="common_waiting">"Чакаем…"</string>
   <string name="common_waiting_for_decryption_key">"Чакаю гэта паведамленне"</string>
   <string name="common_you">"Вы"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="dialog_allow_access">"Дазволіць доступ"</string>
   <string name="dialog_title_confirmation">"Пацвярджэнне"</string>
   <string name="dialog_title_error">"Памылка"</string>
   <string name="dialog_title_success">"Поспех"</string>

@@ -36,6 +36,8 @@ Na razie możesz wyczyścić filtry, aby zobaczyć pozostałe czaty"</string>
   <string name="screen_roomlist_filter_invites_empty_state_title">"Nie masz żadnych oczekujących zaproszeń."</string>
   <string name="screen_roomlist_filter_low_priority">"Niski priorytet"</string>
   <string name="screen_roomlist_filter_low_priority_empty_state_title">"Nie masz jeszcze żadnych czatów o niskim priorytecie"</string>
+  <string name="screen_roomlist_filter_mention">"Wzmianka"</string>
+  <string name="screen_roomlist_filter_mention_empty_state_title">"Nie masz żadnych nieprzeczytanych wzmianek"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Wyczyść filtry, aby zobaczyć pozostałe czaty"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Brak czatów dla podanych kryteriów"</string>
   <string name="screen_roomlist_filter_people">"Osoby"</string>
