@@ -145,7 +145,7 @@
   <string name="screen_security_and_privacy_encryption_section_footer">"加密一旦启用，就无法禁用。"</string>
   <string name="screen_security_and_privacy_encryption_section_header">"加密"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"启用端到端加密"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_description">"任何人都可以加入。"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"任何人都可以加入，包括你的组织之外的人员。"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"任何人"</string>
   <string name="screen_security_and_privacy_room_access_footer">"选择哪些无需邀请即可加入此房间的空间成员。%1$s"</string>
   <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"管理空间"</string>

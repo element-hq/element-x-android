@@ -53,6 +53,10 @@
   <string name="screen_edit_profile_error_title">"Nie można zaktualizować profilu"</string>
   <string name="screen_edit_profile_title">"Edytuj profil"</string>
   <string name="screen_edit_profile_updating_details">"Aktualizuję profil…"</string>
+  <string name="screen_labs_enable_gallery">"Wiadomości z galerii"</string>
+  <string name="screen_labs_enable_gallery_description">"Wysyłaj wiele obrazów lub filmów jednocześnie. Funkcja jest stabilna na urządzeniach mobilnych, lecz nie jest dostępna w przeglądarce."</string>
+  <string name="screen_labs_enable_knocking">"Poproś o dołączenie"</string>
+  <string name="screen_labs_enable_knocking_description">"Użytkownicy mogą poprosić o dostęp do pokoju, który jest zamknięty dla wszystkich. Funkcja działa stabilnie na urządzeniach mobilnych, wersja internetowa istnieje, lecz jest eksperymentalna."</string>
   <string name="screen_labs_enable_threads">"Włącz odpowiedzi w wątkach"</string>
   <string name="screen_labs_enable_threads_description">"Aplikacja uruchomi się ponownie, aby zastosować tę zmianę."</string>
   <string name="screen_labs_header_description">"Wypróbuj nasze najnowsze pomysły w fazie rozwoju. Funkcje te nie są jeszcze sfinalizowane; mogą być niestabilne i ulec zmianie."</string>

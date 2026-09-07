@@ -25,8 +25,16 @@
   <string name="screen_change_server_error_unauthorized_homeserver_title">"موفّر الحساب %1$s غير مسموح به."</string>
   <string name="screen_change_server_form_header">"عنوان الـ URL للسيرفر"</string>
   <string name="screen_change_server_form_notice">"أدخل عنوان نطاق."</string>
+  <string name="screen_change_server_navigation_title_login">"تسجيل الدخول"</string>
+  <string name="screen_change_server_navigation_title_register">"إنشاء حساب"</string>
   <string name="screen_change_server_subtitle">"ما عنوان السيرفر خاصتك؟"</string>
+  <string name="screen_change_server_textfield_footer_login">"إذا كان حسابك مقدمًا من شركتك أو مجتمع ما، فقم بتغيير مزود الحساب (مثال: companyname.com)."</string>
+  <string name="screen_change_server_textfield_footer_register">"أنشئ حسابًا على موقع matrix.org مجانًا. إذا كنت ترغب في إنشاء حساب مع مزود خدمة مختلف، فقم بتغييره وفقًا لذلك (مثال: communityname.org)."</string>
+  <string name="screen_change_server_textfield_header">"مزود الحساب"</string>
+  <string name="screen_change_server_textfield_placeholder">"example.com"</string>
   <string name="screen_change_server_title">"اختر خادمك"</string>
+  <string name="screen_change_server_title_login">"أدخل مزود حسابك"</string>
+  <string name="screen_change_server_title_register">"اختر مزود خدمة الحساب"</string>
   <string name="screen_create_account_title">"إنشاء حساب"</string>
   <string name="screen_login_error_deactivated_account">"هذا الحساب محذوف."</string>
   <string name="screen_login_error_invalid_credentials">"اسم المستخدم و/أو كلمة المرور غير صحيحة"</string>

@@ -8,6 +8,7 @@
   <string name="a11y_collapse_message_text_field">"Свернуть поле ввода"</string>
   <string name="a11y_create_poll_votes_allowed_decrease">"Уменьшить количество голосов, разрешенных на одного человека"</string>
   <string name="a11y_create_poll_votes_allowed_increase">"Увеличь количество голосов, разрешенных на одного человека"</string>
+  <string name="a11y_custom_emoji">"Пользовательские эмодзи"</string>
   <string name="a11y_delete">"Удалить"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"Введена %1$d цифра"</item>
@@ -19,11 +20,22 @@
   <string name="a11y_edit_room_address_hint">"Полный адрес %1$s"</string>
   <string name="a11y_encryption_details">"Сведения о шифровании"</string>
   <string name="a11y_expand_message_text_field">"Развернуть поле ввода"</string>
+  <string name="a11y_gallery_attachment">"Галерея, вложение %1$d"</string>
+  <string name="a11y_gallery_failed_scan">"Галерея, не удалось отсканировать %1$d"</string>
+  <string name="a11y_gallery_image">"Галерея, изображение %1$d"</string>
+  <plurals name="a11y_gallery_more_media">
+    <item quantity="one">"Галерея, ещё %1$d медиа"</item>
+    <item quantity="few">"Галерея, ещё %1$d медиа"</item>
+    <item quantity="many">"Галерея, ещё %1$d медиа"</item>
+  </plurals>
+  <string name="a11y_gallery_scanning">"Галерея, сканирования %1$d"</string>
+  <string name="a11y_gallery_video">"Галерея, видео %1$d"</string>
   <string name="a11y_hide_password">"Скрыть пароль"</string>
   <string name="a11y_info">"Информация"</string>
   <string name="a11y_join_call">"Присоединиться к звонку"</string>
   <string name="a11y_jump_to_bottom">"Перейти вниз"</string>
   <string name="a11y_jump_to_unread">"Перейти к непрочитанным"</string>
+  <string name="a11y_jump_to_unread_messages">"Перейти к первому непрочитанному сообщению"</string>
   <string name="a11y_move_the_map_to_my_location">"Переместить карту к моему местоположению"</string>
   <string name="a11y_notifications_mentions_only">"Только упоминания"</string>
   <string name="a11y_notifications_muted">"Без звука"</string>
@@ -65,6 +77,7 @@
   <string name="a11y_start_call">"Начать звонок"</string>
   <string name="a11y_start_video_call">"Начать видеозвонок"</string>
   <string name="a11y_start_voice_call">"Начать голосовой вызов"</string>
+  <string name="a11y_status">"Статус"</string>
   <string name="a11y_thread_in_room">"Обсуждение в %1$s"</string>
   <string name="a11y_threads_in_room">"Обсуждения в %1$s"</string>
   <string name="a11y_tombstoned_room">"Брошенная комната"</string>
@@ -145,6 +158,7 @@
   <string name="action_manage_account_and_devices">"Управление учетной записью и устройствами"</string>
   <string name="action_manage_devices">"Управление устройствами"</string>
   <string name="action_manage_rooms">"Управление комнатами"</string>
+  <string name="action_mark_as_read">"Отметить как прочитанное"</string>
   <string name="action_message">"Написать"</string>
   <string name="action_minimize">"Свернуть"</string>
   <string name="action_next">"Далее"</string>
@@ -175,6 +189,7 @@
   <string name="action_retry_decryption">"Повторите расшифровку"</string>
   <string name="action_save">"Сохранить"</string>
   <string name="action_search">"Поиск"</string>
+  <string name="action_select">"Выбрать"</string>
   <string name="action_select_all">"Выбрать все"</string>
   <string name="action_send">"Отправить"</string>
   <string name="action_send_edited_message">"Отправить отредактированное сообщение"</string>
@@ -269,6 +284,16 @@
   <string name="common_forward_message">"Переслать сообщение"</string>
   <string name="common_frequently_used">"Часто используемые"</string>
   <string name="common_gallery">"Галерея"</string>
+  <plurals name="common_gallery_reply_attachments">
+    <item quantity="one">"%1$d вложение…"</item>
+    <item quantity="few">"%1$d вложения…"</item>
+    <item quantity="many">"%1$d вложений…"</item>
+  </plurals>
+  <plurals name="common_gallery_reply_media_items">
+    <item quantity="one">"%1$d медиа…"</item>
+    <item quantity="few">"%1$d медиа…"</item>
+    <item quantity="many">"%1$d медиа…"</item>
+  </plurals>
   <string name="common_gif">"GIF"</string>
   <string name="common_group_call_in_progress">"Выполняется групповой звонок"</string>
   <string name="common_image">"Изображение"</string>
@@ -308,6 +333,7 @@
   <string name="common_no_space_name">"Нет имени пространства"</string>
   <string name="common_not_encrypted">"Не зашифровано"</string>
   <string name="common_offline">"Не в сети"</string>
+  <string name="common_on_a_call">"В звонке"</string>
   <string name="common_open_source_licenses">"Лицензии с открытым исходным кодом"</string>
   <string name="common_or">"или"</string>
   <string name="common_other_options">"Другие опции"</string>
@@ -444,6 +470,7 @@
   <string name="common_you">"Вы"</string>
   <string name="content_scanner_not_found">"Загрузка недоступна."</string>
   <string name="content_scanner_not_found_title">"Файл не найден"</string>
+  <string name="content_scanner_scanning">"Сканирование…"</string>
   <string name="content_scanner_unsafe_message">"Пред. просмотр и загрузка отключены."</string>
   <string name="content_scanner_unsafe_title">"Файл небезопасен"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) поделился(ась) этим сообщением, поскольку Вас не было в комнате, когда оно было отправлено."</string>
@@ -477,7 +504,7 @@
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Выберите качество видео, которое Вы хотите загрузить."</string>
   <string name="dialog_video_quality_selector_title">"Выберите качество загружаемого видео"</string>
   <string name="error_account_already_logged_in">"Вы уже вошли на данном устройстве как %1$s."</string>
-  <string name="error_account_creation_not_possible">"Домашний сервер необходимо обновить, чтобы он поддерживал Matrix Authentication Service и создание учётных записей."</string>
+  <string name="error_account_creation_not_possible">"Ваш сервер необходимо обновить, чтобы он поддерживал Matrix Authentication Service и создание учётных записей."</string>
   <string name="error_failed_creating_the_permalink">"Не удалось создать постоянную ссылку"</string>
   <string name="error_failed_loading_map">"Не удалось загрузить карту %1$s. Пожалуйста, повторите попытку позже."</string>
   <string name="error_failed_loading_messages">"Не удалось загрузить сообщения"</string>
@@ -515,6 +542,8 @@
     <item quantity="many">"%1$d людей"</item>
   </plurals>
   <string name="screen_live_location_sheet_title">"На карте"</string>
+  <string name="screen_local_network_opt_in_subtitle">"Ваш сервер находится в Вашей локальной сети. Для подключения, для %1$s необходимо разрешение на подключение к устройствам в этой сети."</string>
+  <string name="screen_local_network_opt_in_title">"Разрешить доступ к локальной сети"</string>
   <string name="screen_media_picker_error_failed_selection">"Не удалось выбрать медиа, попробуйте ещё раз."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Нажмите на сообщение и выберите «%1$s», чтобы добавить его сюда."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Закрепите важные сообщения, чтобы их можно было легко найти"</string>
@@ -535,17 +564,27 @@
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Одно или несколько ваших устройств не подтверждены. Вы можете отправить сообщение в любом случае или отменить его пока и повторить попытку позже, подтвердив все свои устройства."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Ваше сообщение не было отправлено, поскольку вы не подтвердили одно или несколько своих устройств."</string>
   <string name="screen_room_change_role_administrators_or_owners_title">"Редактировать владельцев и администраторов"</string>
+  <string name="screen_room_confirm_removal_message">"Вы уверены, что хотите удалить это сообщение?"</string>
+  <string name="screen_room_confirm_removal_reason_label">"Причина (необязательно)"</string>
+  <string name="screen_room_confirm_removal_reason_placeholder">"Введите…"</string>
+  <string name="screen_room_confirm_removal_title">"Подтвердите удаление"</string>
   <string name="screen_room_error_failed_processing_media">"Не удалось обработать медиафайл для загрузки, попробуйте ещё раз."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не удалось получить данные о пользователе"</string>
   <string name="screen_room_event_pill">"Сообщение в %1$s"</string>
   <string name="screen_room_grouped_state_events_expand">"Развернуть"</string>
   <string name="screen_room_grouped_state_events_reduce">"Уменьшить"</string>
   <string name="screen_room_live_location_banner">"Поделиться текущим местоположением…"</string>
+  <string name="screen_room_maximum_messages_selected">"Выбрано максимальное количество сообщений"</string>
   <string name="screen_room_permalink_same_room_android">"Эта комната уже просматривается!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s из %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Закреплённые сообщения"</string>
   <string name="screen_room_pinned_banner_loading_description">"Загрузка сообщения…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Посмотреть Все"</string>
+  <plurals name="screen_room_selection_count">
+    <item quantity="one">"Выбрано %1$d сообщение"</item>
+    <item quantity="few">"Выбрано %1$d сообщения"</item>
+    <item quantity="many">"Выбрано %1$d сообщений"</item>
+  </plurals>
   <string name="screen_room_title">"Чат"</string>
   <string name="screen_share_location_title">"Поделиться местоположением"</string>
   <string name="screen_share_my_location_action">"Поделиться моим местоположением"</string>
@@ -561,6 +600,11 @@
   <string name="screen_space_list_title">"Пространства"</string>
   <string name="screen_static_location_sheet_timestamp_description">"Поделился %1$s"</string>
   <string name="screen_static_location_sheet_title">"На карте"</string>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="one">"%1$d присоединился"</item>
+    <item quantity="few">"%1$d присоединились"</item>
+    <item quantity="many">"%1$d присоединилось"</item>
+  </plurals>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Сообщение не отправлено, так как подтвержденная цифровая идентичность %1$s была сброшена."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Сообщение не отправлено, потому что %1$s не подтвердил(а) все свои устройства."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Сообщение не отправлено, поскольку вы не подтвердили одно или несколько своих устройств."</string>

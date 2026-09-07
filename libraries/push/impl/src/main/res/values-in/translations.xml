@@ -30,6 +30,7 @@
   <string name="notification_invite_body">"Mengundang Anda untuk mengobrol"</string>
   <string name="notification_invite_body_with_sender">"%1$s mengundang Anda untuk mengobrol"</string>
   <string name="notification_knock_request_body">"Diminta untuk bergabung"</string>
+  <string name="notification_live_location_started_body">"Mulai membagikan lokasi langsung mereka"</string>
   <string name="notification_mentioned_you_body">"Menyebutkan Anda: %1$s"</string>
   <string name="notification_new_messages">"Pesan Baru"</string>
   <plurals name="notification_new_messages_for_room">

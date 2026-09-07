@@ -31,6 +31,14 @@
     <item quantity="many">"لديك %d رسالة جديدة."</item>
     <item quantity="other">"لديك %d رسالة جديدة."</item>
   </plurals>
+  <plurals name="notification_gallery_body">
+    <item quantity="zero">"شارك %1$d مرفق"</item>
+    <item quantity="one">"شارك %1$d مرفق"</item>
+    <item quantity="two">"شارك %1$d مرفق"</item>
+    <item quantity="few">"شارك %1$d مرفق"</item>
+    <item quantity="many">"شارك %1$d مرفق"</item>
+    <item quantity="other">"شارك %1$d مرفق"</item>
+  </plurals>
   <string name="notification_incoming_audio_call">"📞 مكالمة واردة"</string>
   <string name="notification_incoming_call">"📹 مكالمة واردة"</string>
   <string name="notification_inline_reply_failed">"** فشل الإرسال - يرجى فتح الغرفة"</string>
@@ -47,6 +55,7 @@
   <string name="notification_invite_body">"دعاك للتحدث"</string>
   <string name="notification_invite_body_with_sender">"دعاك %1$s إلى الدردشة"</string>
   <string name="notification_knock_request_body">"طلبت الإنضمام"</string>
+  <string name="notification_live_location_started_body">"بدأوا بمشاركة موقعهم المباشر"</string>
   <string name="notification_mentioned_you_body">"ذكرك: %1$s"</string>
   <string name="notification_new_messages">"رسائل جديدة"</string>
   <plurals name="notification_new_messages_for_room">

@@ -5,6 +5,7 @@
   <string name="screen_link_new_device_desktop_step3">"Отсканируйте QR-код с помощью этого устройства"</string>
   <string name="screen_link_new_device_desktop_submit">"Готово к сканированию"</string>
   <string name="screen_link_new_device_desktop_title">"Откройте %1$s на компьютере, чтобы получить QR-код"</string>
+  <string name="screen_link_new_device_desktop_warning">"Сканируйте QR-код только после выполнения описанных выше шагов на собственном устройстве. Никогда не сканируйте код, отправленный другим человеком."</string>
   <string name="screen_link_new_device_enter_number_error_numbers_do_not_match">"Цифры не совпадают"</string>
   <string name="screen_link_new_device_enter_number_notice">"Введите 2-значный код"</string>
   <string name="screen_link_new_device_enter_number_subtitle">"Это позволит убедиться в безопасности соединения с другим вашим устройством."</string>

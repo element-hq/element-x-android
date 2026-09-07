@@ -72,6 +72,9 @@
   <string name="screen_room_timeline_reactions_show_more">"Tampilkan lebih banyak"</string>
   <string name="screen_room_timeline_reactions_show_reactions_summary">"Tampilkan ringkasan reaksi"</string>
   <string name="screen_room_timeline_read_marker_title">"Baru"</string>
+  <plurals name="screen_room_timeline_redacted_messages">
+    <item quantity="other">"%1$d pesan yang dihapus"</item>
+  </plurals>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="other">"%1$d perubahan ruangan"</item>
   </plurals>
