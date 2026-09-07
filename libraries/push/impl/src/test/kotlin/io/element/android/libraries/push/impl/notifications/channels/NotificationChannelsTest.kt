@@ -34,15 +34,46 @@ import org.robolectric.annotation.Config
 class NotificationChannelsTest : RobolectricTest() {
     @Test
     @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
-    fun `init - creates notification channels and migrates old ones`() {
+    fun `first use - creates notification channels and migrates old ones`() {
         val notificationManager = mockk<NotificationManagerCompat>(relaxed = true) {
             every { notificationChannels } returns emptyList()
         }
 
-        createNotificationChannels(notificationManager = notificationManager)
+        createNotificationChannels(notificationManager = notificationManager).getChannelIdForTest()
 
         verify { notificationManager.createNotificationChannel(any<NotificationChannelCompat>()) }
         verify { notificationManager.deleteNotificationChannel(any<String>()) }
+    }
+
+    @Test
+    @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
+    fun `construction - does not create any channel`() {
+        val notificationManager = mockk<NotificationManagerCompat>(relaxed = true) {
+            every { notificationChannels } returns emptyList()
+        }
+
+        // Channel creation blocks with `runBlocking`, which steals work from the calling thread's
+        // event loop. Doing that while the DI graph is still publishing this singleton re-enters
+        // the graph and crashes, so the constructor must stay free of it.
+        createNotificationChannels(notificationManager = notificationManager)
+
+        verify(exactly = 0) { notificationManager.createNotificationChannel(any<NotificationChannelCompat>()) }
+    }
+
+    @Test
+    @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
+    fun `first use - creates the channels only once`() {
+        val notificationManager = mockk<NotificationManagerCompat>(relaxed = true) {
+            every { notificationChannels } returns emptyList()
+        }
+        val notificationChannels = createNotificationChannels(notificationManager = notificationManager)
+
+        notificationChannels.getChannelIdForTest()
+        notificationChannels.getChannelIdForTest()
+        notificationChannels.getChannelForIncomingCall(ring = true)
+
+        // 4 channels: noisy, silent, call and ringing call.
+        verify(exactly = 4) { notificationManager.createNotificationChannel(any<NotificationChannelCompat>()) }
     }
 
     @Test
@@ -91,7 +122,7 @@ class NotificationChannelsTest : RobolectricTest() {
 
     @Test
     @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
-    fun `init - reads persisted message version and seeds versioned channel id`() {
+    fun `first use - reads persisted message version and seeds versioned channel id`() {
         val notificationChannels = createNotificationChannels(
             appPreferencesStore = InMemoryAppPreferencesStore(messageSoundChannelVersion = 3),
             enterpriseService = FakeEnterpriseService(getNoisyNotificationChannelIdResult = { null }),
@@ -103,7 +134,7 @@ class NotificationChannelsTest : RobolectricTest() {
 
     @Test
     @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
-    fun `init - reads persisted call ringtone version and seeds versioned channel id`() {
+    fun `first use - reads persisted call ringtone version and seeds versioned channel id`() {
         val notificationChannels = createNotificationChannels(
             appPreferencesStore = InMemoryAppPreferencesStore(callRingtoneChannelVersion = 2),
         )
@@ -335,7 +366,7 @@ class NotificationChannelsTest : RobolectricTest() {
 
     @Test
     @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
-    fun `init - migrates legacy SystemDefault message sound to ElementDefault when version is 0`() = runTest {
+    fun `first use - migrates legacy SystemDefault message sound to ElementDefault when version is 0`() = runTest {
         val notificationManager = mockk<NotificationManagerCompat>(relaxed = true) {
             every { notificationChannels } returns emptyList()
         }
@@ -347,7 +378,7 @@ class NotificationChannelsTest : RobolectricTest() {
         createNotificationChannels(
             notificationManager = notificationManager,
             appPreferencesStore = appPreferencesStore,
-        )
+        ).getChannelIdForTest()
 
         val config = appPreferencesStore.getNotificationSoundChannelConfig()
         assertThat(config.messageSound).isEqualTo(NotificationSound.ElementDefault)
@@ -356,7 +387,7 @@ class NotificationChannelsTest : RobolectricTest() {
 
     @Test
     @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
-    fun `init - migration is idempotent across multiple instantiations`() = runTest {
+    fun `first use - migration is idempotent across multiple instantiations`() = runTest {
         val notificationManager = mockk<NotificationManagerCompat>(relaxed = true) {
             every { notificationChannels } returns emptyList()
         }
@@ -366,13 +397,13 @@ class NotificationChannelsTest : RobolectricTest() {
         )
 
         // First boot: migrate.
-        createNotificationChannels(notificationManager = notificationManager, appPreferencesStore = appPreferencesStore)
+        createNotificationChannels(notificationManager = notificationManager, appPreferencesStore = appPreferencesStore).getChannelIdForTest()
         val afterFirst = appPreferencesStore.getNotificationSoundChannelConfig()
         assertThat(afterFirst.messageSound).isEqualTo(NotificationSound.ElementDefault)
         assertThat(afterFirst.messageSoundVersion).isEqualTo(1)
 
         // Second boot: gate (version == 0) no longer matches, so the version must not bump again.
-        createNotificationChannels(notificationManager = notificationManager, appPreferencesStore = appPreferencesStore)
+        createNotificationChannels(notificationManager = notificationManager, appPreferencesStore = appPreferencesStore).getChannelIdForTest()
         val afterSecond = appPreferencesStore.getNotificationSoundChannelConfig()
         assertThat(afterSecond.messageSound).isEqualTo(NotificationSound.ElementDefault)
         assertThat(afterSecond.messageSoundVersion).isEqualTo(1)
@@ -380,7 +411,7 @@ class NotificationChannelsTest : RobolectricTest() {
 
     @Test
     @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
-    fun `init - does not re-migrate when message version is non-zero`() = runTest {
+    fun `first use - does not re-migrate when message version is non-zero`() = runTest {
         val notificationManager = mockk<NotificationManagerCompat>(relaxed = true) {
             every { notificationChannels } returns emptyList()
         }
@@ -392,7 +423,7 @@ class NotificationChannelsTest : RobolectricTest() {
         createNotificationChannels(
             notificationManager = notificationManager,
             appPreferencesStore = appPreferencesStore,
-        )
+        ).getChannelIdForTest()
 
         val config = appPreferencesStore.getNotificationSoundChannelConfig()
         assertThat(config.messageSound).isEqualTo(NotificationSound.SystemDefault)
@@ -401,7 +432,7 @@ class NotificationChannelsTest : RobolectricTest() {
 
     @Test
     @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
-    fun `init - does not migrate when persisted message sound is not SystemDefault`() = runTest {
+    fun `first use - does not migrate when persisted message sound is not SystemDefault`() = runTest {
         val notificationManager = mockk<NotificationManagerCompat>(relaxed = true) {
             every { notificationChannels } returns emptyList()
         }

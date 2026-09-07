@@ -105,8 +105,25 @@ class DefaultNotificationChannels(
     // Serializes concurrent recreate* calls; readers stay lock-free via @Volatile on the id fields.
     private val recreateLock = Any()
 
-    init {
-        createNotificationChannels()
+    @Volatile private var channelsCreated = false
+
+    /**
+     * Creates the channels on first use, exactly once.
+     *
+     * This must not happen in `init`: [createNotificationChannels] blocks with `runBlocking`, which
+     * steals pending work from the calling thread's coroutine event loop. Running it while Metro is
+     * still publishing this `@SingleIn` provider lets that stolen work re-enter the graph and build
+     * a second instance, which Metro rejects with "Scoped provider was invoked recursively".
+     */
+    private fun ensureChannelsCreated() {
+        if (channelsCreated) return
+        synchronized(recreateLock) {
+            if (channelsCreated) return
+            // Published before creating, not after: the `runBlocking` below can still re-enter this
+            // method, and channel creation is idempotent, so a no-op is better than recursing.
+            channelsCreated = true
+            createNotificationChannels()
+        }
     }
 
     /**
@@ -317,10 +334,12 @@ class DefaultNotificationChannels(
     }
 
     override fun getChannelForIncomingCall(ring: Boolean): String {
+        ensureChannelsCreated()
         return if (ring) currentRingingCallChannelId else CALL_NOTIFICATION_CHANNEL_ID
     }
 
     override fun getChannelIdForMessage(sessionId: SessionId, noisy: Boolean): String {
+        ensureChannelsCreated()
         return if (noisy) {
             enterpriseService.getNoisyNotificationChannelId(sessionId)
                 ?: currentNoisyChannelId
@@ -329,10 +348,19 @@ class DefaultNotificationChannels(
         }
     }
 
-    override fun getChannelIdForTest(): String = currentNoisyChannelId
+    override fun getChannelIdForTest(): String {
+        ensureChannelsCreated()
+        return currentNoisyChannelId
+    }
+
+    override fun getSilentChannelId(): String {
+        ensureChannelsCreated()
+        return SILENT_NOTIFICATION_CHANNEL_ID
+    }
 
     override fun recreateNoisyChannel(sound: NotificationSound, version: Int) {
         if (!supportNotificationChannels()) return
+        ensureChannelsCreated()
         synchronized(recreateLock) {
             val accentColor = NotificationConfig.NOTIFICATION_ACCENT_COLOR
             val newChannelId = noisyNotificationChannelId(version)
@@ -350,6 +378,7 @@ class DefaultNotificationChannels(
 
     override fun recreateRingingCallChannel(sound: NotificationSound, version: Int) {
         if (!supportNotificationChannels()) return
+        ensureChannelsCreated()
         synchronized(recreateLock) {
             val accentColor = NotificationConfig.NOTIFICATION_ACCENT_COLOR
             val newChannelId = ringingCallNotificationChannelId(version)
@@ -365,6 +394,7 @@ class DefaultNotificationChannels(
     }
 
     override suspend fun readNoisyChannelSound(): NotificationSound? {
+        ensureChannelsCreated()
         return readChannelSound(
             channelId = currentNoisyChannelId,
             bundledUri = bundledMessageSoundUri(),
@@ -374,6 +404,7 @@ class DefaultNotificationChannels(
     }
 
     override suspend fun readRingingCallChannelSound(): NotificationSound? {
+        ensureChannelsCreated()
         return readChannelSound(
             channelId = currentRingingCallChannelId,
             bundledUri = null,
