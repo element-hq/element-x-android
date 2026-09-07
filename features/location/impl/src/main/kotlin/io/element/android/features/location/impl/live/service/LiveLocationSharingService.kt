@@ -14,7 +14,7 @@ import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
 import android.os.IBinder
 import androidx.core.app.ServiceCompat
 import dev.zacsweers.metro.Inject
-import io.element.android.features.location.impl.common.userlocation.PlatformLocationProvider
+import io.element.android.features.location.impl.common.userlocation.createLocationProvider
 import io.element.android.features.location.impl.di.LocationBindings
 import io.element.android.features.location.impl.live.notification.LiveLocationSharingNotificationCreator
 import io.element.android.libraries.architecture.bindings
@@ -90,7 +90,7 @@ class LiveLocationSharingService : Service() {
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun startLocationUpdatesListener() {
         Timber.d("LiveLocationSharingService listening to location updates")
-        val locationProvider = PlatformLocationProvider(context = applicationContext)
+        val locationProvider = createLocationProvider(context = applicationContext)
         appPreferencesStore.getLiveLocationMinimumDistanceInMetersUpdateFlow()
             .flatMapLatest { minDistanceMeters ->
                 val locationRequest = LocationRequest(

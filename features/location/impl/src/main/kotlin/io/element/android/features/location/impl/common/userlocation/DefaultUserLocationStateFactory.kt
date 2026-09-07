@@ -25,7 +25,7 @@ class DefaultUserLocationStateFactory : UserLocationState.Factory {
     @Composable
     override fun create(hasLocationPermission: Boolean): UserLocationState {
         val locationProvider = if (hasLocationPermission) {
-            rememberPlatformLocationProvider()
+            rememberLocationProvider()
         } else {
             rememberNotGrantedLocationProvider()
         }

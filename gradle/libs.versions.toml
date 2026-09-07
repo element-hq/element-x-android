@@ -218,6 +218,7 @@ telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "
 statemachine = "com.freeletics.flowredux:compose:1.2.2"
 maplibre_compose = { module = "org.maplibre.compose:maplibre-compose", version.ref = "maplibre-compose" }
 maplibre_compose_runtime_vulkan = { module = "org.maplibre.compose:maplibre-compose-runtime-vulkan-android", version.ref = "maplibre-compose" }
+maplibre_compose_location_runtime_gms = { module = "org.maplibre.compose:location-runtime-gms", version.ref = "maplibre-compose" }
 opusencoder = "io.element.android:opusencoder:1.2.0"
 zxing_cpp = "io.github.zxing-cpp:android:3.1.1"
 google_zxing = "com.google.zxing:core:3.5.4"

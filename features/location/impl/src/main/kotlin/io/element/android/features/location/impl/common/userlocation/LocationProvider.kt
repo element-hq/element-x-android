@@ -26,9 +26,12 @@ import androidx.core.location.LocationListenerCompat
 import androidx.core.location.LocationManagerCompat
 import androidx.core.location.LocationRequestCompat
 import androidx.core.os.ExecutorCompat
+import io.element.android.libraries.core.data.tryOrNull
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flowOf
+import org.maplibre.compose.location.AndroidLocationBackend
 import org.maplibre.compose.location.LocationAccuracy
 import org.maplibre.compose.location.LocationEvent
 import org.maplibre.compose.location.LocationProvider
@@ -36,11 +39,33 @@ import org.maplibre.compose.location.LocationRequest
 import org.maplibre.compose.location.LocationUnavailableReason
 import org.maplibre.compose.location.asMapLibreLocation
 import org.maplibre.spatialk.units.extensions.inMeters
+import java.util.ServiceLoader
+
+/**
+ * Creates the location provider to use.
+ *
+ * Mostly mirrors `createDefaultLocationProvider` from maplibre compose: any [AndroidLocationBackend]
+ * registered through [ServiceLoader] takes precedence, highest [priority]
+ * first. When no backend is available it falls back to [PlatformLocationProvider].
+ */
+fun createLocationProvider(context: Context): LocationProvider {
+    val backend = tryOrNull {
+        ServiceLoader.load(AndroidLocationBackend::class.java)
+            .filter { it.isAvailable(context) }
+            .minWithOrNull(compareByDescending<AndroidLocationBackend> { it.priority }.thenBy { it.id })
+    }
+    return backend?.createLocationProvider(context) ?: PlatformLocationProvider(context)
+}
+
+@Composable
+fun rememberLocationProvider(context: Context = LocalContext.current): LocationProvider {
+    return remember(context) { createLocationProvider(context) }
+}
+
 
 class PlatformLocationProvider(
     private val context: Context,
 ) : LocationProvider {
-
     @SuppressLint("MissingPermission")
     override fun updates(request: LocationRequest): Flow<LocationEvent> = callbackFlow {
         if (!context.hasLocationPermission()) {
@@ -58,6 +83,7 @@ class PlatformLocationProvider(
                 trySend(LocationEvent.Unavailable(LocationUnavailableReason.ServicesDisabled))
             }
         }
+
         var registered = false
 
         fun refreshRegistration() {
@@ -126,7 +152,7 @@ class PlatformLocationProvider(
             close()
         }
         awaitClose {
-            runCatching { context.unregisterReceiver(settingsReceiver) }
+            tryOrNull { context.unregisterReceiver(settingsReceiver) }
             LocationManagerCompat.removeUpdates(locationManager, listener)
         }
     }
@@ -155,9 +181,13 @@ private fun LocationAccuracy.toLocationRequestQuality(): Int = when (this) {
     LocationAccuracy.Low, LocationAccuracy.Lowest -> LocationRequestCompat.QUALITY_LOW_POWER
 }
 
-@Composable
-fun rememberPlatformLocationProvider(context: Context = LocalContext.current): PlatformLocationProvider {
-    return remember(context) {
-        PlatformLocationProvider(context = context)
+class NotGrantedLocationProvider : LocationProvider {
+    override fun updates(request: LocationRequest): Flow<LocationEvent> {
+        return flowOf(LocationEvent.Unavailable(LocationUnavailableReason.PermissionDenied))
     }
+}
+@Composable
+
+fun rememberNotGrantedLocationProvider(): NotGrantedLocationProvider {
+    return remember { NotGrantedLocationProvider() }
 }

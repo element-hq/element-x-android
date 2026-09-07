@@ -288,6 +288,10 @@ dependencies {
         implementation(projects.libraries.pushproviders.unifiedpush)
     }
 
+    // Google Play Services fused location backend. Discovered at runtime via ServiceLoader by the
+    // location feature.
+    "gplayImplementation"(libs.maplibre.compose.location.runtime.gms)
+
     implementation(libs.appyx.core)
     implementation(libs.androidx.splash)
     implementation(libs.androidx.core)
