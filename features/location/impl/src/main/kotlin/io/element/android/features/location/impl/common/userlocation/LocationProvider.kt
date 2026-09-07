@@ -62,7 +62,6 @@ fun rememberLocationProvider(context: Context = LocalContext.current): LocationP
     return remember(context) { createLocationProvider(context) }
 }
 
-
 class PlatformLocationProvider(
     private val context: Context,
 ) : LocationProvider {
@@ -187,7 +186,6 @@ class NotGrantedLocationProvider : LocationProvider {
     }
 }
 @Composable
-
 fun rememberNotGrantedLocationProvider(): NotGrantedLocationProvider {
     return remember { NotGrantedLocationProvider() }
 }
