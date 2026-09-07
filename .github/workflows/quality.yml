@@ -360,7 +360,7 @@ jobs:
           yarn add danger-plugin-lint-report --dev
       - name: Danger lint
         if: always()
-        uses: danger/danger-js@a236e3b8c41f0babbf133568db851a20a34f9a7b # 14.0.5
+        uses: danger/danger-js@279443b7b3fdf4488d79546b3d40dbd76c51d83a # 14.0.6
         with:
           args: "--dangerfile ./tools/danger/dangerfile-lint.js"
         env:
