@@ -82,7 +82,10 @@ interface NotificationChannels : NotificationSoundUpdater {
      */
     fun getChannelIdForTest(): String
 
-    fun getSilentChannelId(): String = SILENT_NOTIFICATION_CHANNEL_ID
+    /**
+     * Get the channel for silent notifications.
+     */
+    fun getSilentChannelId(): String
 }
 
 @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)

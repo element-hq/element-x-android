@@ -15,6 +15,7 @@ import io.element.android.tests.testutils.lambda.lambdaError
 class FakeNotificationChannels(
     var channelForIncomingCall: (ring: Boolean) -> String = { _ -> "" },
     var channelIdForMessage: (sessionId: SessionId, noisy: Boolean) -> String = { _, _ -> "" },
+    var channelIdForSilent: () -> String = { "" },
     var channelIdForTest: () -> String = { "" },
     // Side-effecting recreates default to lambdaError (matching FakeNotificationSoundUpdater) so a
     // test that doesn't expect a channel rebuild loudly fails instead of silently swallowing the call.
@@ -29,6 +30,10 @@ class FakeNotificationChannels(
 
     override fun getChannelIdForMessage(sessionId: SessionId, noisy: Boolean): String {
         return channelIdForMessage(sessionId, noisy)
+    }
+
+    override fun getSilentChannelId(): String {
+        return channelIdForSilent()
     }
 
     override fun getChannelIdForTest(): String {
