@@ -11,5 +11,14 @@ package io.element.android.libraries.designsystem.showkase
 import com.airbnb.android.showkase.annotation.ShowkaseRoot
 import com.airbnb.android.showkase.annotation.ShowkaseRootModule
 
+/**
+ * The single Showkase root for the app. It aggregates the previews of this module plus the
+ * `@ShowkaseTypography` tokens of `:libraries:compound`.
+ *
+ * That typography category is load-bearing, not decorative: when Showkase 1.0.5 finds only one
+ * non-empty category it builds a nav graph without the `SHOWKASE_CATEGORIES` destination, yet the
+ * groups screen still navigates to it on back press, which crashes the app. Keeping a second
+ * category populated keeps that destination in the graph. See [DesignSystemShowkaseRootModuleTest].
+ */
 @ShowkaseRoot
 class DesignSystemShowkaseRootModule : ShowkaseRootModule

@@ -10,6 +10,7 @@ import extension.testCommonDependencies
 
 plugins {
     id("io.element.android-compose-library")
+    alias(libs.plugins.ksp)
     alias(libs.plugins.roborazzi)
 }
 
@@ -22,6 +23,9 @@ android {
 }
 
 dependencies {
+    // Processes this module's @ShowkaseTypography annotations so the Showkase root in
+    // :libraries:designsystem can aggregate them. Without it those annotations are inert.
+    ksp(libs.showkase.processor)
     implementation(libs.showkase)
     testCommonDependencies(libs)
     testImplementation(libs.test.roborazzi)
