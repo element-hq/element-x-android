@@ -100,7 +100,7 @@ class RustMatrixClientFactory(
             .homeserverUrl(sessionData.homeserverUrl)
             .enableAutomaticBackPagination(featureFlagService.isFeatureEnabled(FeatureFlags.AutomaticBackPagination))
             .let {
-                (clientBuilderEnterpriseHook.tweakClientBuilder(RustMatrixClientBuilder(it), SessionId(sessionData.userId)) as RustMatrixClientBuilder).inner
+                (clientBuilderEnterpriseHook.beforeClientCreationWithSession(RustMatrixClientBuilder(it), SessionId(sessionData.userId)) as RustMatrixClientBuilder).inner
             }
             .use { it.build() }
 
@@ -222,7 +222,7 @@ class RustMatrixClientFactory(
                 proxyProvider.provides()?.let { proxy(it) } ?: this
             }
             .let {
-                (clientBuilderEnterpriseHook.tweakClientBuilder(RustMatrixClientBuilder(it)) as RustMatrixClientBuilder).inner
+                (clientBuilderEnterpriseHook.beforeClientCreation(RustMatrixClientBuilder(it)) as RustMatrixClientBuilder).inner
             }
     }
 }

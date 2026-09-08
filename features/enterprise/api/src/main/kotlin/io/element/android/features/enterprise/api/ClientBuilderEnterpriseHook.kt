@@ -21,15 +21,15 @@ interface ClientBuilderEnterpriseHook {
      * @param clientBuilder The [MatrixClientBuilder] to customize.
      * @return The customized [MatrixClientBuilder].
      */
-    suspend fun tweakClientBuilder(clientBuilder: MatrixClientBuilder): MatrixClientBuilder
+    suspend fun beforeClientCreation(clientBuilder: MatrixClientBuilder): MatrixClientBuilder
 
     /**
      * Customize the [MatrixClientBuilder] for enterprise features.
-     * This method is invoked when a new [MatrixClientBuilder] is created to build a client for a specific session.
+     * This method is invoked as well as the other method when a new [MatrixClientBuilder] is created to build a client for a specific session.
      *
      * @param clientBuilder The [MatrixClientBuilder] to customize.
      * @param sessionId The [SessionId] for which the [MatrixClientBuilder] is being created.
      * @return The customized [MatrixClientBuilder].
      */
-    suspend fun tweakClientBuilder(clientBuilder: MatrixClientBuilder, sessionId: SessionId): MatrixClientBuilder
+    suspend fun beforeClientCreationWithSession(clientBuilder: MatrixClientBuilder, sessionId: SessionId): MatrixClientBuilder
 }

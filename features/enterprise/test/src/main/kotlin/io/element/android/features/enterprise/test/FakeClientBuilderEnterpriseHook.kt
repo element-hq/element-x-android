@@ -12,14 +12,14 @@ import io.element.android.libraries.matrix.api.MatrixClientBuilder
 import io.element.android.libraries.matrix.api.core.SessionId
 
 class FakeClientBuilderEnterpriseHook(
-    private val tweakClientBuilderResult: (MatrixClientBuilder) -> MatrixClientBuilder = { it },
-    private val tweakClientBuilderWithSessionIdResult: (MatrixClientBuilder, SessionId) -> MatrixClientBuilder = { clientBuilder, _ -> clientBuilder },
+    private val beforeClientCreationResult: (MatrixClientBuilder) -> MatrixClientBuilder = { it },
+    private val beforeClientCreationWithSessionResult: (MatrixClientBuilder, SessionId) -> MatrixClientBuilder = { clientBuilder, _ -> clientBuilder },
 ) : ClientBuilderEnterpriseHook {
-    override suspend fun tweakClientBuilder(clientBuilder: MatrixClientBuilder): MatrixClientBuilder {
-        return tweakClientBuilderResult(clientBuilder)
+    override suspend fun beforeClientCreation(clientBuilder: MatrixClientBuilder): MatrixClientBuilder {
+        return beforeClientCreationResult(clientBuilder)
     }
 
-    override suspend fun tweakClientBuilder(clientBuilder: MatrixClientBuilder, sessionId: SessionId): MatrixClientBuilder {
-        return tweakClientBuilderWithSessionIdResult(clientBuilder, sessionId)
+    override suspend fun beforeClientCreationWithSession(clientBuilder: MatrixClientBuilder, sessionId: SessionId): MatrixClientBuilder {
+        return beforeClientCreationWithSessionResult(clientBuilder, sessionId)
     }
 }

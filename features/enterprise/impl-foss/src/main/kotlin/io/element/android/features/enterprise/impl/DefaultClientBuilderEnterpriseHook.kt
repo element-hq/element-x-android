@@ -18,12 +18,12 @@ import io.element.android.libraries.matrix.api.core.SessionId
  */
 @ContributesBinding(AppScope::class)
 class DefaultClientBuilderEnterpriseHook : ClientBuilderEnterpriseHook {
-    override suspend fun tweakClientBuilder(clientBuilder: MatrixClientBuilder): MatrixClientBuilder {
+    override suspend fun beforeClientCreation(clientBuilder: MatrixClientBuilder): MatrixClientBuilder {
         // No modification
         return clientBuilder
     }
 
-    override suspend fun tweakClientBuilder(clientBuilder: MatrixClientBuilder, sessionId: SessionId): MatrixClientBuilder {
+    override suspend fun beforeClientCreationWithSession(clientBuilder: MatrixClientBuilder, sessionId: SessionId): MatrixClientBuilder {
         // No modification
         return clientBuilder
     }
