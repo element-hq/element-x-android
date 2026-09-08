@@ -120,7 +120,28 @@ class DefaultAppPreferencesStoreTest {
         assertThat(history.last()).isEqualTo("https://server5.org")
     }
 
-    private fun createStore() = DefaultAppPreferencesStore(
+    @Test
+    fun `show developer settings defaults to true on non release builds`() = runTest {
+        assertThat(createStore().showDeveloperSettingsFlow().first()).isTrue()
+    }
+
+    @Test
+    fun `show developer settings defaults to false on release builds`() = runTest {
+        val store = createStore(buildMeta.copy(buildType = BuildType.RELEASE))
+
+        assertThat(store.showDeveloperSettingsFlow().first()).isFalse()
+    }
+
+    @Test
+    fun `show developer settings persists updates`() = runTest {
+        val store = createStore()
+
+        store.setShowDeveloperSettings(false)
+
+        assertThat(store.showDeveloperSettingsFlow().first()).isFalse()
+    }
+
+    private fun createStore(buildMeta: BuildMeta = this.buildMeta) = DefaultAppPreferencesStore(
         buildMeta = buildMeta,
         preferenceDataStoreFactory = FakePreferenceDataStoreFactory(),
     )
