@@ -10,6 +10,13 @@
     "gradle",
   ],
   "minimumReleaseAge": "7 days",
+  "hostRules": [
+    {
+      "matchHost": "https://repo1.maven.org/maven2/",
+      "concurrentRequestLimit": 4,
+      "maxRequestsPerSecond": 4,
+    }
+  ],
   "packageRules": [
     {
       "matchPackageNames": [
