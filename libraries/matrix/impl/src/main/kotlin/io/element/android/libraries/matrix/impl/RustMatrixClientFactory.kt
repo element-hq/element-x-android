@@ -100,7 +100,10 @@ class RustMatrixClientFactory(
             .homeserverUrl(sessionData.homeserverUrl)
             .enableAutomaticBackPagination(featureFlagService.isFeatureEnabled(FeatureFlags.AutomaticBackPagination))
             .let {
-                (clientBuilderEnterpriseHook.beforeClientCreationWithSession(RustMatrixClientBuilder(it), SessionId(sessionData.userId)) as RustMatrixClientBuilder).inner
+                (clientBuilderEnterpriseHook.beforeClientCreationWithSession(
+                    clientBuilder = RustMatrixClientBuilder(it),
+                    sessionId = SessionId(sessionData.userId),
+                ) as RustMatrixClientBuilder).inner
             }
             .use { it.build() }
 
