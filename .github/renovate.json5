@@ -20,6 +20,13 @@
   "packageRules": [
     {
       "matchPackageNames": [
+          "/^androidx.\.*/"
+      ],
+      "groupName": "androidx",
+      "registryUrls": [ "https://dl.google.com/android/maven2/" ],
+    },
+    {
+      "matchPackageNames": [
         "org.matrix.rustcomponents:sdk-android",
         "/^io.element.android/",
       ],
