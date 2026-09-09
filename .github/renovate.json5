@@ -27,6 +27,7 @@
       "minimumReleaseAge": null,
       // Max default value is 6, with this we give absolute priority to our own dependencies
       "prPriority": 7,
+      "registryUrls": [ "https://repo1.maven.org/maven2/" ],
     },
     {
       "groupName": "kotlin",
