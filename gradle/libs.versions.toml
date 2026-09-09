@@ -40,8 +40,6 @@ serialization_json = "1.11.0"
 
 #other
 coil = "3.6.1"
-# Rollback to 1.0.4, 1.0.5 has this issue: https://github.com/airbnb/Showkase/issues/420
-showkase = "1.0.5"
 # There is some custom logic in `RootFlowNode` that may break because it reuses some Appyx internal APIs.
 # When upgrading this version, check state restoration still works fine.
 appyx = "1.7.1"
@@ -198,8 +196,6 @@ coil_test = { module = "io.coil-kt.coil3:coil-test", version.ref = "coil" }
 datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
 serialization_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization_json" }
 kotlinx_collections_immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.5.2"
-showkase = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
-showkase_processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }
 jsoup = "org.jsoup:jsoup:1.23.2"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:2.2.0"
