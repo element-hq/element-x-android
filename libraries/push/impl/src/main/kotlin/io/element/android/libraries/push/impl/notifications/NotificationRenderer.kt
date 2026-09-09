@@ -16,6 +16,7 @@ import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
+import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
 import io.element.android.libraries.push.impl.notifications.factories.NotificationAccountParams
 import io.element.android.libraries.push.impl.notifications.factories.NotificationCreator
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
@@ -40,6 +41,7 @@ class NotificationRenderer(
     private val enterpriseService: EnterpriseService,
     private val sessionStore: SessionStore,
     private val analyticsService: AnalyticsService,
+    private val notificationConversationService: NotificationConversationService,
 ) {
     suspend fun render(
         currentUser: MatrixUser,
@@ -73,6 +75,18 @@ class NotificationRenderer(
             notificationDisplayer.cancelNotification(
                 tag = null,
                 id = NotificationIdProvider.getSummaryNotificationId(currentUser.userId)
+            )
+        }
+
+        // The notifications point at a conversation shortcut, which only exists for rooms the user has already sent a message to. Publish it here too, so
+        // that rooms the user has only ever received messages in also get the system's conversation treatment.
+        groupedEvents.roomEvents.distinctBy { it.roomId }.forEach { event ->
+            notificationConversationService.onMessageInRoom(
+                sessionId = event.sessionId,
+                roomId = event.roomId,
+                roomName = event.roomName,
+                roomIsDirect = event.roomIsDm,
+                roomAvatarUrl = event.roomAvatarPath,
             )
         }
 
