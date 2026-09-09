@@ -30,6 +30,15 @@
       "registryUrls": [ "https://repo1.maven.org/maven2/" ],
     },
     {
+      // Fetch Android dependencies from Google's Maven repo instead of Maven Central.
+      "matchPackageNames": [
+        "/^androidx\\./",
+        "/^android\\./",
+        "/^com\\.android\\.tools/",
+      ],
+      "registryUrls": [ "https://dl.google.com/android/maven2/" ],
+    },
+    {
       "groupName": "kotlin",
       "matchPackageNames": [
         "/^org.jetbrains.kotlin/",
