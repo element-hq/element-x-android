@@ -58,6 +58,7 @@ import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvent
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -84,6 +85,7 @@ import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibilit
 import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
+import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.matrix.ui.model.dmUserStatus
 import io.element.android.libraries.matrix.ui.model.getAvatarData
@@ -241,6 +243,8 @@ class MessagesPresenter(
             onPauseOrDispose {}
         }
 
+        val redactEventAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
+
         fun handleEvent(event: MessagesEvent) {
             when (event) {
                 is MessagesEvent.HandleAction -> {
@@ -251,7 +255,20 @@ class MessagesPresenter(
                         enableTextFormatting = composerState.showTextFormatting,
                         timelineState = timelineState,
                         timelineProtectionState = timelineProtectionState,
+                        redactEventAction = redactEventAction,
                     )
+                }
+                is MessagesEvent.ConfirmRedact -> {
+                    val confirming = redactEventAction.value as? MessagesState.ConfirmingRedaction
+                    redactEventAction.value = AsyncAction.Uninitialized
+                    if (confirming != null) {
+                        localCoroutineScope.launch {
+                            redact(confirming.eventId.toEventOrTransactionId(), event.reason?.takeIf { it.isNotBlank() })
+                        }
+                    }
+                }
+                MessagesEvent.CancelRedact -> {
+                    redactEventAction.value = AsyncAction.Uninitialized
                 }
                 is MessagesEvent.ToggleReaction -> {
                     localCoroutineScope.toggleReaction(event.emoji, event.eventOrTransactionId)
@@ -331,6 +348,7 @@ class MessagesPresenter(
                 hasUnreadThreads = false,
             ),
             showLiveLocationShareBanner = isCurrentlySharingLiveLocationInRoom && timelineState.timelineMode !is Timeline.Mode.Thread,
+            redactEventAction = redactEventAction.value,
             eventSink = ::handleEvent,
         )
     }
@@ -369,12 +387,13 @@ class MessagesPresenter(
         timelineProtectionState: TimelineProtectionState,
         enableTextFormatting: Boolean,
         timelineState: TimelineState,
+        redactEventAction: MutableState<AsyncAction<Unit>>,
     ) = launch {
         when (action) {
             TimelineItemAction.CopyText -> handleCopyContents(targetEvent)
             TimelineItemAction.CopyCaption -> handleCopyCaption(targetEvent)
             TimelineItemAction.CopyLink -> handleCopyLink(targetEvent)
-            TimelineItemAction.Redact -> handleActionRedact(targetEvent)
+            TimelineItemAction.Redact -> handleActionRedact(targetEvent, redactEventAction)
             TimelineItemAction.Edit,
             TimelineItemAction.EditPoll -> handleActionEdit(targetEvent, composerState, enableTextFormatting)
             TimelineItemAction.AddCaption -> handleActionAddCaption(targetEvent, composerState)
@@ -496,9 +515,19 @@ class MessagesPresenter(
         )
     }
 
-    private suspend fun handleActionRedact(event: TimelineItem.Event) {
+    private suspend fun handleActionRedact(event: TimelineItem.Event, redactEventAction: MutableState<AsyncAction<Unit>>) {
+        val eventId = event.eventId
+        if (eventId == null) {
+            // The message was never sent, so there is nobody to give a reason to.
+            redact(event.eventOrTransactionId, reason = null)
+        } else {
+            redactEventAction.value = MessagesState.ConfirmingRedaction(eventId)
+        }
+    }
+
+    private suspend fun redact(eventOrTransactionId: EventOrTransactionId, reason: String?) {
         timelineController.invokeOnCurrentTimeline {
-            redactEvent(eventOrTransactionId = event.eventOrTransactionId, reason = null)
+            redactEvent(eventOrTransactionId = eventOrTransactionId, reason = reason)
                 .onFailure { Timber.e(it) }
         }
     }

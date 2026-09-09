@@ -10,4 +10,7 @@
     <string name="a11y_state_collapsed">"Collapsed"</string>
     <string name="a11y_active">Active</string>
     <string name="a11y_inactive">Inactive</string>
+    <string name="common_optional">"(Optional)"</string>
+    <string name="screen_room_confirm_removal_title">"Confirm removal"</string>
+    <string name="screen_room_confirm_removal_message">"Are you sure you wish to remove this message?"</string>
 </resources>

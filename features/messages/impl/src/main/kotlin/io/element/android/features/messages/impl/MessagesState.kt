@@ -21,9 +21,11 @@ import io.element.android.features.messages.impl.timeline.components.receipt.bot
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
@@ -61,6 +63,7 @@ data class MessagesState(
     val successorRoom: SuccessorRoom?,
     val threads: Threads,
     val showLiveLocationShareBanner: Boolean,
+    val redactEventAction: AsyncAction<Unit>,
     val eventSink: (MessagesEvent) -> Unit
 ) {
     val isTombstoned = successorRoom != null
@@ -69,6 +72,11 @@ data class MessagesState(
         val hasThreads: Boolean,
         val hasUnreadThreads: Boolean,
     )
+
+    /** The user asked to remove [eventId] and has to confirm, optionally giving a reason. */
+    data class ConfirmingRedaction(
+        val eventId: EventId,
+    ) : AsyncAction.Confirming
 }
 
 /** Type of "shared history" icon to show in the top bar. */
