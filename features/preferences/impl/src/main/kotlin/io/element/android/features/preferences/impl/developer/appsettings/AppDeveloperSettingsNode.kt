@@ -7,10 +7,8 @@
 
 package io.element.android.features.preferences.impl.developer.appsettings
 
-import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.airbnb.android.showkase.models.Showkase
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -21,7 +19,6 @@ import io.element.android.annotations.ContributesNode
 import io.element.android.features.preferences.api.ExtraDeveloperOptionsRenderer
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.libraries.architecture.callback
-import io.element.android.libraries.designsystem.showkase.getBrowserIntent
 
 @ContributesNode(AppScope::class)
 @AssistedInject
@@ -35,17 +32,10 @@ class AppDeveloperSettingsNode(
 
     @Composable
     override fun View(modifier: Modifier) {
-        val activity = requireNotNull(LocalActivity.current)
-        fun openShowkase() {
-            val intent = Showkase.getBrowserIntent(activity)
-            activity.startActivity(intent)
-        }
-
         val state = presenter.present()
         AppDeveloperSettingsPage(
             state = state,
             modifier = modifier,
-            onOpenShowkase = ::openShowkase,
             onBackClick = callback::onDone,
             extraOptions = { extraDeveloperOptionsRenderer.Render(Modifier) },
         )
