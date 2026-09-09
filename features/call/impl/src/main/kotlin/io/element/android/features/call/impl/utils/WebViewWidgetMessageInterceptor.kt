@@ -54,10 +54,32 @@ class WebViewWidgetMessageInterceptor(
                 // objects in log lines.
                 view.evaluateJavascript(
                     """
+                        // Removing any parts that result in a circular structure. Circular structures crash JSON.stringify.
+                        function safeStringify(object) {
+                          const simpleObject = {};
+                          for (const prop in object) {
+                              if (!object.hasOwnProperty(prop)) {
+                                  continue;
+                              }
+                              if (typeof(object[prop]) == 'object') {
+                                  continue;
+                              }
+                              if (typeof(object[prop]) == 'function') {
+                                  continue;
+                              }
+                              simpleObject[prop] = object[prop];
+                          }
+                          try {
+                            return JSON.stringify(simpleObject);
+                          } catch {
+                            return "{Failed to stringify object}";
+                          }
+                        }
+
                         function logFn(consoleLogFn, ...args) {
                             consoleLogFn(
                                 args.map(
-                                    a => typeof a === "string" ? a : JSON.stringify(a)
+                                    a => typeof a === "string" ? a : safeStringify(a)
                                 ).join(' ')
                             );
                         };

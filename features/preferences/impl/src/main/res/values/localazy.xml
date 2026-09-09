@@ -52,6 +52,10 @@
   <string name="screen_edit_profile_error_title">"Unable to update profile"</string>
   <string name="screen_edit_profile_title">"Edit profile"</string>
   <string name="screen_edit_profile_updating_details">"Updating profile…"</string>
+  <string name="screen_labs_enable_gallery">"Gallery messages"</string>
+  <string name="screen_labs_enable_gallery_description">"Send multiple images or videos in one go. Stable on mobile, but not yet supported by web."</string>
+  <string name="screen_labs_enable_knocking">"Ask to join"</string>
+  <string name="screen_labs_enable_knocking_description">"Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental."</string>
   <string name="screen_labs_enable_threads">"Enable thread replies"</string>
   <string name="screen_labs_enable_threads_description">"The app will restart to apply this change."</string>
   <string name="screen_labs_header_description">"Try out our latest ideas in development. These features are not finalised; they may be unstable, may change."</string>
@@ -75,7 +79,7 @@ If you proceed, some of your settings may change."</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"The configuration has not been corrected, please try again."</string>
   <string name="screen_notification_settings_group_chats">"Group chats"</string>
   <string name="screen_notification_settings_invite_for_me_label">"Invitations"</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Your homeserver does not support this option in encrypted rooms, you may not get notified in some rooms."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Your account provider does not support this option in encrypted chats, you may not get notified in some chats."</string>
   <string name="screen_notification_settings_mentions_section_title">"Mentions"</string>
   <string name="screen_notification_settings_message_sound_dialog_choose_other">"Choose another sound…"</string>
   <string name="screen_notification_settings_message_sound_dialog_current_subtitle">"Currently using %1$s"</string>
@@ -84,7 +88,7 @@ If you proceed, some of your settings may change."</string>
   <string name="screen_notification_settings_mode_all">"All"</string>
   <string name="screen_notification_settings_mode_mentions">"Mentions"</string>
   <string name="screen_notification_settings_notification_section_title">"Notify me for"</string>
-  <string name="screen_notification_settings_room_mention_label">"Notify me on @room"</string>
+  <string name="screen_notification_settings_room_mention_label">"Mentions of @room"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"Custom"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"Custom sound…"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"Error deleting file"</string>

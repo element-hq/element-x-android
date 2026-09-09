@@ -9,7 +9,9 @@
 package io.element.android.libraries.matrix.impl.room
 
 import io.element.android.libraries.matrix.api.room.StateEventType
+import uniffi.ruma_events.TimelineEventType
 import uniffi.ruma_events.stateEventTypeFromString
+import uniffi.ruma_events.timelineEventTypeFromString
 import uniffi.ruma_events.StateEventType as RustStateEventType
 
 fun StateEventType.map(): RustStateEventType = when (this) {
@@ -72,4 +74,35 @@ fun RustStateEventType.map(): StateEventType = when (this) {
     RustStateEventType.RoomPolicy -> StateEventType.RoomPolicy
     RustStateEventType.RoomRetention -> StateEventType.RoomRetention
     is RustStateEventType.Custom -> StateEventType.Custom(this.toString())
+}
+
+fun TimelineEventType.Companion.fromState(stateEventType: StateEventType): TimelineEventType = when (stateEventType) {
+    StateEventType.PolicyRuleRoom -> TimelineEventType.PolicyRuleRoom
+    StateEventType.PolicyRuleServer -> TimelineEventType.PolicyRuleServer
+    StateEventType.PolicyRuleUser -> TimelineEventType.PolicyRuleUser
+    StateEventType.CallMember -> TimelineEventType.CallMember
+    StateEventType.RoomAvatar -> TimelineEventType.RoomAvatar
+    StateEventType.RoomCanonicalAlias -> TimelineEventType.RoomCanonicalAlias
+    StateEventType.RoomCreate -> TimelineEventType.RoomCreate
+    StateEventType.RoomEncryption -> TimelineEventType.RoomEncryption
+    StateEventType.RoomGuestAccess -> TimelineEventType.RoomGuestAccess
+    StateEventType.RoomHistoryVisibility -> TimelineEventType.RoomHistoryVisibility
+    StateEventType.RoomJoinRules -> TimelineEventType.RoomJoinRules
+    StateEventType.RoomMemberEvent -> TimelineEventType.RoomMember
+    StateEventType.RoomName -> TimelineEventType.RoomName
+    StateEventType.RoomPinnedEvents -> TimelineEventType.RoomPinnedEvents
+    StateEventType.RoomPowerLevels -> TimelineEventType.RoomPowerLevels
+    StateEventType.RoomServerAcl -> TimelineEventType.RoomServerAcl
+    StateEventType.RoomThirdPartyInvite -> TimelineEventType.RoomThirdPartyInvite
+    StateEventType.RoomTombstone -> TimelineEventType.RoomTombstone
+    StateEventType.RoomTopic -> TimelineEventType.RoomTopic
+    StateEventType.SpaceChild -> TimelineEventType.SpaceChild
+    StateEventType.SpaceParent -> TimelineEventType.SpaceParent
+    StateEventType.BeaconInfo -> TimelineEventType.BeaconInfo
+    StateEventType.MemberHints -> TimelineEventType.MemberHints
+    StateEventType.RoomImagePack -> TimelineEventType.RoomImagePack
+    StateEventType.RoomLanguage -> TimelineEventType.RoomLanguage
+    StateEventType.RoomPolicy -> TimelineEventType.RoomPolicy
+    StateEventType.RoomRetention -> TimelineEventType.RoomRetention
+    is StateEventType.Custom -> timelineEventTypeFromString(stateEventType.type)
 }

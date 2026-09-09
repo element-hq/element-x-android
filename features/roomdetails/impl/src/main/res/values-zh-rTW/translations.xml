@@ -111,7 +111,8 @@
   <string name="screen_room_notification_settings_error_setting_mode">"無法設定模式，請再試一次。"</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"您的家伺服器在加密聊天室中不支援此選項，您將不會收到此聊天室的通知。"</string>
   <string name="screen_room_notification_settings_mode_all_messages">"所有訊息"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"僅限提及與關鍵字"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"僅提及與回覆"</string>
+  <string name="screen_room_notification_settings_mode_mute">"靜音"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"在此聊天適中，通知我"</string>
   <string name="screen_room_roles_and_permissions_admins">"管理員"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"管理員與擁有者"</string>

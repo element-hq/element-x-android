@@ -20,9 +20,10 @@ import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind.NonLeft
 import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind.NonSpace
 import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind.None
 import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind.NormalizedMatchRoomName
+import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind.ReadReceipts
 import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind.Space
-import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind.Unread
-import org.matrix.rustcomponents.sdk.RoomListFilterCategory
+import uniffi.matrix_sdk_ui.RoomListFilterCategory
+import uniffi.matrix_sdk_ui.RoomListFilterReadReceipts
 
 /**
  * Mapper for converting RoomListFilter to Rust SDK filter kinds.
@@ -67,7 +68,8 @@ internal object RoomListFilterMapper {
             RoomListFilter.Category.People -> Category(RoomListFilterCategory.PEOPLE)
             RoomListFilter.Category.Space -> Space
             RoomListFilter.Favorite -> Favourite
-            RoomListFilter.Unread -> Unread
+            RoomListFilter.Unread -> ReadReceipts(RoomListFilterReadReceipts.NOTIFICATIONS)
+            RoomListFilter.Mentions -> ReadReceipts(RoomListFilterReadReceipts.MENTIONS)
             is RoomListFilter.NormalizedMatchRoomName -> NormalizedMatchRoomName(
                 pattern = filter.pattern
             )

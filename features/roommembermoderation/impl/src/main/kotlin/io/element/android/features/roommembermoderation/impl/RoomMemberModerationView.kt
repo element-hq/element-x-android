@@ -66,7 +66,7 @@ import timber.log.Timber
 fun RoomMemberModerationView(
     state: InternalRoomMemberModerationState,
     onSelectAction: (ModerationAction, MatrixUser) -> Unit,
-    onAvatarClick: ((MatrixUser) -> Unit)?,
+    onAvatarClick: (MatrixUser) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier) {
@@ -218,7 +218,7 @@ private fun RoomMemberActionsBottomSheet(
     user: MatrixUser,
     actions: ImmutableList<ModerationActionState>,
     onSelectAction: (ModerationAction, MatrixUser) -> Unit,
-    onAvatarClick: ((MatrixUser) -> Unit)? = null,
+    onAvatarClick: (MatrixUser) -> Unit,
     onDismiss: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -248,10 +248,10 @@ private fun RoomMemberActionsBottomSheet(
                 modifier = Modifier
                     .padding(bottom = 24.dp)
                     .align(Alignment.CenterHorizontally)
-                    .clickable(enabled = user.avatarUrl != null && onAvatarClick != null) {
+                    .clickable(enabled = user.avatarUrl != null) {
                         coroutineScope.launch {
                             bottomSheetState.hide()
-                            onAvatarClick?.invoke(user)
+                            onAvatarClick(user)
                             onDismiss()
                         }
                     }

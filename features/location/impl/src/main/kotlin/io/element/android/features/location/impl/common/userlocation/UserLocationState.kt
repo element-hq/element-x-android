@@ -8,8 +8,10 @@
 package io.element.android.features.location.impl.common.userlocation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import org.maplibre.compose.location.Location
 
+@Immutable
 data class UserLocationState(val location: Location?) {
     fun interface Factory {
         @Composable

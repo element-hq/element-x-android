@@ -13,12 +13,6 @@ plugins {
 
 android {
     namespace = "io.element.android.libraries.network"
-
-    buildTypes {
-        release {
-            consumerProguardFiles("consumer-rules.pro")
-        }
-    }
 }
 
 setupDependencyInjection()

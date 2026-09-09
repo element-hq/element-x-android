@@ -1,3 +1,44 @@
+Changes in Element X v26.09.1
+=============================
+
+## What's Changed
+### ✨ Features
+* Support creating polls with multiple answers and send response with multiple answers by @bmarty in https://github.com/element-hq/element-x-android/pull/7613
+### 🙌 Improvements
+* Only track read receipts on message-like events by @hayaksi1 in https://github.com/element-hq/element-x-android/pull/7361
+* Stop rescanning message bodies for emoji only on every recomposition by @hayaksi1 in https://github.com/element-hq/element-x-android/pull/7531
+### 🐛 Bugfixes
+* Ensure that noisy notifications are still noisy when the app has a PIN code. by @bmarty in https://github.com/element-hq/element-x-android/pull/7584
+* Ensure that sessionVerifiedStatus is updated when the crypto is ready. by @bmarty in https://github.com/element-hq/element-x-android/pull/7604
+* Fix invalid placeholders in translations by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7612
+### 🧱 Build
+* Do not open the editor when finishing the release by @bmarty in https://github.com/element-hq/element-x-android/pull/7583
+* [release] Check that there is no unmerged PR with the label "Z-NextRelease", else exit by @bmarty in https://github.com/element-hq/element-x-android/pull/7606
+### Dependency upgrades
+* Update dependency net.zetetic:sqlcipher-android to v4.18.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7552
+* Update dependency com.google.firebase:firebase-bom to v34.18.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7581
+* Update dependency io.github.sergio-sastre.ComposablePreviewScanner:android to v0.9.3 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7535
+* Update dependency com.google.guava:guava to v33.7.1-android by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7534
+* Update dependency org.unifiedpush.android:connector to v3.3.4 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7586
+* Update dependency org.unifiedpush.android:connector to v3.3.5 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7595
+* Update roborazzi to v1.73.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7618
+### 💼 Element Pro
+* Implement a hook allowing enterprise modules to perform actions on startup by @richvdh in https://github.com/element-hq/element-x-android/pull/7585
+### Others
+* Don't hide the thread of a deleted message inside the removed messages group by @hayaksi1 in https://github.com/element-hq/element-x-android/pull/7571
+* Name a sender the timeline has no profile for from the room member list by @hayaksi1 in https://github.com/element-hq/element-x-android/pull/7539
+* Offer conversations in the system share sheet by @hayaksi1 in https://github.com/element-hq/element-x-android/pull/7574
+* Rank the mention suggestions by how well they match what was typed by @hayaksi1 in https://github.com/element-hq/element-x-android/pull/7536
+* Log the SDK git Sha at application startup by @bmarty in https://github.com/element-hq/element-x-android/pull/7589
+* Limit usage of nullable callback. by @bmarty in https://github.com/element-hq/element-x-android/pull/7588
+* Fix crash due to JSON.stringify on a cirular structure in injectes js. by @toger5 in https://github.com/element-hq/element-x-android/pull/7600
+* Support multi-select polls by @bxdxnn in https://github.com/element-hq/element-x-android/pull/6477
+* Remove ExternalSession, fallback login with Element Web is gone. by @bmarty in https://github.com/element-hq/element-x-android/pull/7608
+* Fall back to the message body when the formatted body has nothing to render by @hayaksi1 in https://github.com/element-hq/element-x-android/pull/7523
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v26.08.4...v26.09.1
+
 Changes in Element X v26.08.4
 =============================
 

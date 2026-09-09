@@ -125,6 +125,7 @@ class KonsistPreviewTest {
         "PollContentViewCreatorPreview",
         "PollContentViewDisclosedPreview",
         "PollContentViewEndedPreview",
+        "PollContentViewMultipleSelectionPreview",
         "PollContentViewUndisclosedPreview",
         "ProgressDialogWithContentPreview",
         "ProgressDialogWithTextAndContentPreview",

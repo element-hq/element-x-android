@@ -1,16 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_avatar">"اوتار شامل کریں"</string>
   <string name="a11y_add_reaction">"ایک رد عمل کا اضافہ کریں: %1$s"</string>
+  <string name="a11y_address">"پتہ"</string>
   <string name="a11y_avatar">"اوتار"</string>
+  <string name="a11y_clear_search_field">"تلاش حال خالی کریں"</string>
+  <string name="a11y_collapse_message_text_field">"پیغام متن حقل گھٹائیں"</string>
+  <string name="a11y_create_poll_votes_allowed_decrease">"فی شخص آراء کم کریں"</string>
+  <string name="a11y_create_poll_votes_allowed_increase">"فی شخص آراء زیادہ کریں"</string>
   <string name="a11y_delete">"حذف کریں"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d ہندسہ درج"</item>
     <item quantity="other">"%1$d ہندسے درج"</item>
   </plurals>
+  <string name="a11y_duration">"دورانیہ: %1$s"</string>
   <string name="a11y_edit_avatar">"اووتار میں ترمیم کریں"</string>
   <string name="a11y_edit_room_address_hint">"مکمل پتہ ہو گا %1$s"</string>
+  <string name="a11y_encryption_details">"تشفیری تفصیلات"</string>
+  <string name="a11y_expand_message_text_field">"پیغام متن حقل پھیلائیں"</string>
   <string name="a11y_hide_password">"لفظ عبور چھپائیں"</string>
+  <string name="a11y_info">"معلومات"</string>
   <string name="a11y_jump_to_bottom">"نیچے چھلانگ لگائیں"</string>
+  <string name="a11y_jump_to_unread">"غیر مقروءہ تک چھلانگیں"</string>
   <string name="a11y_notifications_mentions_only">"صرف تذکرے"</string>
   <string name="a11y_notifications_muted">"خاموش"</string>
   <string name="a11y_page_n">"صفحہ %1$d"</string>
@@ -51,7 +62,7 @@
   <string name="action_copy_link">"ربط نقل کریں"</string>
   <string name="action_copy_link_to_message">"پیغام کا ربط نقل کریں"</string>
   <string name="action_create">"تخلیق کریں"</string>
-  <string name="action_create_room">"ایک کمرہ بنائیں"</string>
+  <string name="action_create_room">"کمرہ تخلیق کریں"</string>
   <string name="action_deactivate">"غیر فعال کریں"</string>
   <string name="action_deactivate_account">"اکاؤنٹ کو غیر فعال کریں"</string>
   <string name="action_decline">"مسترد کریں"</string>
@@ -236,7 +247,7 @@
   <string name="common_sticker">"برچسب"</string>
   <string name="common_success">"کامیابی"</string>
   <string name="common_suggestions">"تجاویز"</string>
-  <string name="common_syncing">"ہمسات سازی"</string>
+  <string name="common_syncing">"ہموقت سازی کر رہا ہے"</string>
   <string name="common_text">"متن"</string>
   <string name="common_third_party_notices">"فریق ثالث کے اشعارات"</string>
   <string name="common_thread">"دھاگہ"</string>

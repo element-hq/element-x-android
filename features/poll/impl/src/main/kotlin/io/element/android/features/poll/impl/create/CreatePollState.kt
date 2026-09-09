@@ -18,6 +18,8 @@ data class CreatePollState(
     val question: String,
     val answers: ImmutableList<Answer>,
     val pollKind: PollKind,
+    val maxSelections: Int,
+    val maxAllowedSelections: Int,
     val showBackConfirmation: Boolean,
     val showDeleteConfirmation: Boolean,
     val eventSink: (CreatePollEvent) -> Unit,

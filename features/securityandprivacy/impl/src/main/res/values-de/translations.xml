@@ -10,7 +10,7 @@
   <string name="screen_security_and_privacy_add_room_address_action">"Chat-Adresse hinzufügen"</string>
   <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Jedes Mitglied eines autorisierten Space kann beitreten, aber alle anderen müssen einen Beitritt anfragen."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Zugang nur auf Anfrage."</string>
-  <string name="screen_security_and_privacy_ask_to_join_option_title">"Bitte um Beitritt"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Beitritt anfragen"</string>
   <string name="screen_security_and_privacy_ask_to_join_single_space_members_option_description">"Jeder in %1$s kann beitreten, aber alle anderen müssen den Beitritt anfragen."</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Ja, Verschlüsselung aktivieren"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Einmal angeschaltet kann die Verschlüsselung für einen Chat nicht mehr deaktiviert werden. Der Nachrichtenverlauf ist für Mitglieder nur sichtbar, seit sie eingeladen wurden oder dem Chat beigetreten sind.
@@ -20,17 +20,17 @@ Wir empfehlen keine Verschlüsselung für Chats zu aktivieren, die jeder finden 
   <string name="screen_security_and_privacy_encryption_section_footer">"Einmal angeschaltet kann die Verschlüsselung nicht mehr deaktiviert werden."</string>
   <string name="screen_security_and_privacy_encryption_section_header">"Verschlüsselung"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Ende-zu-Ende-Verschlüsselung aktivieren"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Jeder kann beitreten."</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Alle können beitreten."</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Jeder"</string>
   <string name="screen_security_and_privacy_room_access_footer">"Wähle aus, welche Spaces ihren Mitgliedern ermöglichen sollen, dieser Gruppe ohne Einladung beitreten zu können. %1$s"</string>
   <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Spaces verwalten"</string>
-  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Nur eingeladene Personen können beitreten"</string>
-  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Nur auf Einladung"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Nur eingeladene Personen können beitreten."</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Nur mit Einladung"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Zugang"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_multiple_parents_description">"Jeder in autorisierten Spaces kann beitreten."</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_single_parent_description">"Jeder in %1$s kann beitreten."</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Space Mitglieder"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Spaces werden zur Zeit nicht unterstützt."</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Spaces werden zur Zeit nicht unterstützt"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Du benötigst eine Chat-Adresse, um den Chat im öffentlichen Verzeichnis sichtbar zu machen."</string>
   <string name="screen_security_and_privacy_room_address_section_header">"Adresse"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Erlaube das Auffinden dieses Chats durch Suche im öffentlichen Verzeichnis von %1$s"</string>
@@ -44,7 +44,7 @@ Wir empfehlen keine Verschlüsselung für Chats zu aktivieren, die jeder finden 
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Chat-Adressen machen es möglich, Chats zu finden und ihnen beizutreten. Dies erleichtert es, Chats mit anderen zu teilen.
 Auf Wunsch kannst du deinen Chat im öffentlichen Verzeichnis deines Homeservers veröffentlichen."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Veröffentlichung von Chats"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"Adressen ermöglichen es, Gruppen und Spaces zu finden und zu betreten. Dadurch wird auch sichergestellt, dass diese problemlos mit anderen geteilt werden können."</string>
+  <string name="screen_security_and_privacy_room_visibility_section_footer">"Adressen ermöglichen es, Chats und Spaces zu finden und ihnen beizutreten. Dadurch wird auch sichergestellt, dass diese problemlos mit anderen geteilt werden können."</string>
   <string name="screen_security_and_privacy_room_visibility_section_header">"Sichtbarkeit"</string>
   <string name="screen_security_and_privacy_title">"Sicherheit &amp; Datenschutz"</string>
 </resources>

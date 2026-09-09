@@ -65,8 +65,8 @@ fun PollHistoryView(
         state.eventSink(PollHistoryEvent.LoadMore)
     }
 
-    fun onSelectAnswer(pollStartId: EventId, answerId: String) {
-        state.eventSink(PollHistoryEvent.SelectPollAnswer(pollStartId, answerId))
+    fun onSendPollResponse(pollStartId: EventId, answerIds: List<String>) {
+        state.eventSink(PollHistoryEvent.SendPollResponse(pollStartId, answerIds))
     }
 
     fun onEndPoll(pollStartId: EventId) {
@@ -114,7 +114,7 @@ fun PollHistoryView(
                     pollHistoryItems = pollHistoryItems,
                     hasMoreToLoad = state.hasMoreToLoad,
                     isLoading = state.isLoading,
-                    onSelectAnswer = ::onSelectAnswer,
+                    onSendPollResponse = ::onSendPollResponse,
                     onEditPoll = onEditPoll,
                     onEndPoll = ::onEndPoll,
                     onLoadMore = ::onLoadMore,
@@ -151,7 +151,7 @@ private fun PollHistoryList(
     pollHistoryItems: ImmutableList<PollHistoryItem>,
     hasMoreToLoad: Boolean,
     isLoading: Boolean,
-    onSelectAnswer: (pollStartId: EventId, answerId: String) -> Unit,
+    onSendPollResponse: (pollStartId: EventId, answerIds: List<String>) -> Unit,
     onEditPoll: (pollStartId: EventId) -> Unit,
     onEndPoll: (pollStartId: EventId) -> Unit,
     onLoadMore: () -> Unit,
@@ -166,7 +166,7 @@ private fun PollHistoryList(
         items(pollHistoryItems) { pollHistoryItem ->
             PollHistoryItemRow(
                 pollHistoryItem = pollHistoryItem,
-                onSelectAnswer = onSelectAnswer,
+                onSendPollResponse = onSendPollResponse,
                 onEditPoll = onEditPoll,
                 onEndPoll = onEndPoll,
                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
@@ -222,7 +222,7 @@ private fun LoadMoreButton(isLoading: Boolean, onClick: () -> Unit) {
 @Composable
 private fun PollHistoryItemRow(
     pollHistoryItem: PollHistoryItem,
-    onSelectAnswer: (pollStartId: EventId, answerId: String) -> Unit,
+    onSendPollResponse: (pollStartId: EventId, answerIds: List<String>) -> Unit,
     onEditPoll: (pollStartId: EventId) -> Unit,
     onEndPoll: (pollStartId: EventId) -> Unit,
     modifier: Modifier = Modifier,
@@ -244,7 +244,7 @@ private fun PollHistoryItemRow(
             Spacer(modifier = Modifier.height(4.dp))
             PollContentView(
                 state = pollHistoryItem.state,
-                onSelectAnswer = onSelectAnswer,
+                onSendPollResponse = onSendPollResponse,
                 onEditPoll = onEditPoll,
                 onEndPoll = onEndPoll,
             )

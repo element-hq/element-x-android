@@ -53,7 +53,7 @@
   <string name="screen_onboarding_welcome_back">"다시 오신 것을 환영합니다"</string>
   <string name="screen_onboarding_welcome_message">"%1$s 에 오신 것을 환영합니다. 속도와 단순성을 극대화한 가장 빠른 버전입니다."</string>
   <string name="screen_onboarding_welcome_subtitle">"%1$s 에 오신 것을 환영합니다. 속도와 단순성을 위해 최적화된 앱입니다."</string>
-  <string name="screen_onboarding_welcome_title">"당신의 엘리먼트에 있어"</string>
+  <string name="screen_onboarding_welcome_title">"가장 나다운 공간, Element에서"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"안전한 연결 설정"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"새 장치에 안전하게 연결할 수 없습니다. 기존 장치는 여전히 안전하므로 걱정할 필요가 없습니다."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_header">"이제 어떻게 해야 할까?"</string>

@@ -36,6 +36,8 @@ Zasad možete poništiti odabir filtara kako biste vidjeli ostale razgovore."</s
   <string name="screen_roomlist_filter_invites_empty_state_title">"Nemate pozivnica na čekanju."</string>
   <string name="screen_roomlist_filter_low_priority">"Nizak prioritet"</string>
   <string name="screen_roomlist_filter_low_priority_empty_state_title">"Još nemate razgovora niskog prioriteta"</string>
+  <string name="screen_roomlist_filter_mention">"Spomeni"</string>
+  <string name="screen_roomlist_filter_mention_empty_state_title">"Nemate nepročitanih spominjanja"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Možete poništiti odabir filtara kako biste vidjeli ostale razgovore"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Nemate razgovora za ovaj odabir"</string>
   <string name="screen_roomlist_filter_people">"Osobe"</string>

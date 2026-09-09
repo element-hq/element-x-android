@@ -36,13 +36,15 @@
   <string name="screen_roomlist_filter_invites_empty_state_title">"У Вас нет приглашений."</string>
   <string name="screen_roomlist_filter_low_priority">"Низкий приоритет"</string>
   <string name="screen_roomlist_filter_low_priority_empty_state_title">"У Вас пока нет чатов с низким приоритетом."</string>
+  <string name="screen_roomlist_filter_mention">"Упоминания"</string>
+  <string name="screen_roomlist_filter_mention_empty_state_title">"У Вас нет непрочитанных упоминаний"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Вы можете убрать фильтры, чтобы увидеть другие ваши чаты."</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"У Вас нет чатов, соответствующих фильтрам"</string>
   <string name="screen_roomlist_filter_people">"Пользователи"</string>
   <string name="screen_roomlist_filter_people_empty_state_title">"У Вас пока нет личных сообщений"</string>
   <string name="screen_roomlist_filter_rooms">"Комнаты"</string>
   <string name="screen_roomlist_filter_rooms_empty_state_title">"Вас пока нет ни в одной комнате"</string>
-  <string name="screen_roomlist_filter_unreads">"Новые"</string>
+  <string name="screen_roomlist_filter_unreads">"Непрочитанные"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Поздравляем!
 У Вас нет непрочитанных сообщений!"</string>
   <string name="screen_roomlist_knock_event_sent_description">"Запрос на присоединение отправлен"</string>

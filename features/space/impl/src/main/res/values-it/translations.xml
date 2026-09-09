@@ -17,7 +17,7 @@
   <string name="screen_space_add_rooms_room_access_description">"L\'aggiunta di una stanza non influirà sull\'accesso alla stessa. Per modificare l\'accesso, vai su Impostazioni stanza &gt; Sicurezza &amp; privacy."</string>
   <string name="screen_space_empty_state_title">"Aggiungi la tua prima stanza"</string>
   <string name="screen_space_menu_action_members">"Visualizza membri"</string>
-  <string name="screen_space_remove_rooms_confirmation_content">"La rimozione di una stanza non influirà sull\'accesso alla stessa. Per modificare l\'accesso, vai su Informazioni sulla stanza &gt; Sicurezza &amp; privacy"</string>
+  <string name="screen_space_remove_rooms_confirmation_content">"La rimozione di una stanza non influirà sull\'accesso alla stessa. Per modificare l\'accesso, vai su Informazioni sulla stanza &gt; Sicurezza e privacy."</string>
   <plurals name="screen_space_remove_rooms_confirmation_title">
     <item quantity="one">"Rimuovi %1$d stanza da %2$s"</item>
     <item quantity="other">"Rimuovi %1$d stanze da %2$s"</item>

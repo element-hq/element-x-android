@@ -218,7 +218,7 @@ class RoomMemberModerationViewTest : RobolectricTest() {
 private fun AndroidComposeUiTest<ComponentActivity>.setRoomMemberModerationView(
     state: InternalRoomMemberModerationState,
     onSelectAction: (ModerationAction, MatrixUser) -> Unit = EnsureNeverCalledWithTwoParams(),
-    onAvatarClick: ((MatrixUser) -> Unit)? = EnsureNeverCalledWithParam(),
+    onAvatarClick: (MatrixUser) -> Unit = EnsureNeverCalledWithParam(),
 ) {
     setSafeContent {
         RoomMemberModerationView(
