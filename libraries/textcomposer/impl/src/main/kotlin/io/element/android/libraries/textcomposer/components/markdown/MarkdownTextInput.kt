@@ -16,6 +16,7 @@ import android.text.Editable
 import android.text.InputType
 import android.text.Selection
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -99,6 +100,7 @@ fun MarkdownTextInput(
                     InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or
                     InputType.TYPE_TEXT_FLAG_MULTI_LINE or
                     InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
+                imeOptions = imeOptions or EditorInfo.IME_FLAG_NO_EXTRACT_UI
                 val textRange = 0..text.length
                 setSelection(state.selection.first.coerceIn(textRange), state.selection.last.coerceIn(textRange))
                 setOnFocusChangeListener { _, hasFocus ->
