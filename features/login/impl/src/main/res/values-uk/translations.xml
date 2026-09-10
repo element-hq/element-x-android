@@ -16,10 +16,10 @@
   <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"Необхідно встановити застосунок Element Pro на %1$s. Завантажте його з магазину."</string>
   <string name="screen_change_server_error_element_pro_required_title">"Потрібен Element Pro"</string>
-  <string name="screen_change_server_error_invalid_homeserver">"Не вдалося під\'єднатися до цього домашнього сервера. Перевірте правильність введеної URL-адреси домашнього сервера. Якщо URL-адреса правильна, зверніться по додаткову допомогу до адміністратора домашнього сервера."</string>
+  <string name="screen_change_server_error_invalid_homeserver">"Нам не вдалося зв’язатися з цим постачальником облікового запису. Перевірте, чи правильно ви ввели URL-адресу постачальника облікового запису. Якщо URL-адреса правильна, зверніться до адміністратора постачальника вашого облікового запису по додаткову допомогу."</string>
   <string name="screen_change_server_error_invalid_well_known">"Сервер недоступний через помилку у файлі well-known:
 %1$s"</string>
-  <string name="screen_change_server_error_no_sliding_sync_message">"Вибраний постачальник облікових записів не підтримує sliding sync. Щоб користуватися %1$s необхідно оновити сервер."</string>
+  <string name="screen_change_server_error_no_sliding_sync_message">"Вибраний постачальник облікового запису не підтримує Sliding sync. Для використання функції %1$s потрібно оновити сервер."</string>
   <string name="screen_change_server_error_unauthorized_homeserver">"%1$s не дозволено під\'єднуватися до %2$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_content">"Цей застосунок налаштовано так, щоб дозволити: %1$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_title">"Постачальник облікового запису %1$s не дозволений."</string>
@@ -40,7 +40,7 @@
   <string name="screen_login_error_invalid_credentials">"Неправильне ім\'я користувача та/або пароль"</string>
   <string name="screen_login_error_invalid_user_id">"Це недійсний ідентифікатор користувача. Очікуваний формат: \'@user:homeserver.org\'"</string>
   <string name="screen_login_error_refresh_tokens">"Цей сервер налаштований на використання оновлюваних токенів. Вони не підтримуються, якщо використовується вхід за допомогою основі пароля."</string>
-  <string name="screen_login_error_unsupported_authentication">"Обраний домашній сервер не підтримує вхід за допомогою пароля або OAuth. Зверніться до адміністратора або виберіть інший домашній сервер."</string>
+  <string name="screen_login_error_unsupported_authentication">"Вибраний постачальник облікового запису не підтримує пароль або вхід через OAuth. Зверніться до постачальника облікового запису або виберіть іншого."</string>
   <string name="screen_login_form_header">"Введіть свої дані"</string>
   <string name="screen_login_subtitle">"Matrix — це відкрита мережа для безпечної, децентралізованої комунікації."</string>
   <string name="screen_login_title">"З поверненням!"</string>
@@ -89,7 +89,7 @@
   <string name="screen_qr_code_login_error_sliding_sync_not_supported_title">"%1$s не підтримується"</string>
   <string name="screen_qr_code_login_initial_state_button_title">"Готовий до сканування"</string>
   <string name="screen_qr_code_login_initial_state_item_1">"Відкрийте %1$s на комп\'ютері"</string>
-  <string name="screen_qr_code_login_initial_state_item_2">"Натисніть на свою аватарку"</string>
+  <string name="screen_qr_code_login_initial_state_item_2">"Натисніть на свій аватар"</string>
   <string name="screen_qr_code_login_initial_state_item_3">"Виберіть %1$s"</string>
   <string name="screen_qr_code_login_initial_state_item_3_action">"“Під\'єднати новий пристрій”"</string>
   <string name="screen_qr_code_login_initial_state_item_4">"Зіскануйте QR-код цим пристроєм"</string>

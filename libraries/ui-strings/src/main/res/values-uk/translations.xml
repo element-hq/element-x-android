@@ -503,7 +503,7 @@
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Виберіть якість відео, яке ви хочете вивантажити."</string>
   <string name="dialog_video_quality_selector_title">"Виберіть якість вивантажуваного відео"</string>
   <string name="error_account_already_logged_in">"Ви вже ввійшли на цьому пристрої як %1$s."</string>
-  <string name="error_account_creation_not_possible">"Ваш домашній сервер потрібно оновити, щоб він підтримував службу автентифікації Matrix і створення облікових записів."</string>
+  <string name="error_account_creation_not_possible">"Постачальника послуг облікового запису потрібно оновити для підтримки Matrix Authentication Service та створення облікових записів."</string>
   <string name="error_failed_creating_the_permalink">"Не вдалося створити постійне посилання"</string>
   <string name="error_failed_loading_map">"%1$s не може завантажити мапу. Повторіть спробу пізніше."</string>
   <string name="error_failed_loading_messages">"Не вдалося завантажити повідомлення"</string>

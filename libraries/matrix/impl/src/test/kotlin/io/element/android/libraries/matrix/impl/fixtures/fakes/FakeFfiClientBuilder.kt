@@ -27,6 +27,7 @@ class FakeFfiClientBuilder(
     override fun addRootCertificates(certificates: List<ByteArray>) = this
     override fun autoEnableBackups(autoEnableBackups: Boolean) = this
     override fun autoEnableCrossSigning(autoEnableCrossSigning: Boolean) = this
+    override fun enableAutomaticBackPagination(enableAutomaticBackPagination: Boolean): ClientBuilder = this
     override fun backupDownloadStrategy(backupDownloadStrategy: BackupDownloadStrategy) = this
     override fun disableAutomaticTokenRefresh() = this
     override fun disableBuiltInRootCertificates() = this

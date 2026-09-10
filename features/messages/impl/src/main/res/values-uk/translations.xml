@@ -7,6 +7,11 @@
   <string name="crypto_event_authenticity_unknown_device">"Зашифровано невідомим або видаленим пристроєм."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Зашифровано пристроєм, який не звірено його власником."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Зашифровано не звіреним користувачем."</string>
+  <string name="error_sending_failure_invalid_mime_type">"Недійсний тип MIME: %s"</string>
+  <string name="error_sending_failure_missing_media_content">"Відсутній медіавміст"</string>
+  <string name="error_sending_failure_other">"Подробиці помилки: %s"</string>
+  <string name="error_sending_failure_sending_from_unverified_device">"Надсилання з незвіреного пристрою"</string>
+  <string name="error_sending_failure_unknown">"Невідома помилка"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"Повернути зображення по горизонталі"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Перевернуто по горизонталі"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Оригінал"</string>
@@ -33,7 +38,7 @@
   <string name="screen_media_upload_preview_title">"Додати медіа"</string>
   <string name="screen_report_content_block_user">"Заблокувати користувача"</string>
   <string name="screen_report_content_block_user_hint">"Перевірте, чи хочете ви приховати всі поточні та майбутні повідомлення від цього користувача"</string>
-  <string name="screen_report_content_explanation">"Це повідомлення буде надіслано адміністраторам вашого домашнього сервера. Вони не зможуть прочитати зашифровані повідомлення."</string>
+  <string name="screen_report_content_explanation">"Це повідомлення буде передано постачальнику вашого облікового запису. Він не зможе прочитати зашифрованих повідомлень."</string>
   <string name="screen_report_content_hint">"Причина скарги на цей вміст"</string>
   <string name="screen_room_attachment_source_camera">"Камера"</string>
   <string name="screen_room_attachment_source_camera_photo">"Зробити фото"</string>

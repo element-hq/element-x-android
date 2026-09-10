@@ -1,0 +1,126 @@
+name: PR Checks
+
+on:
+  # Privilege escalation necessary to comment on pull requests from forks.
+  # 🚨 We must not check out or execute any code here, and be careful around use of user-controlled inputs.
+  pull_request_target: # zizmor: ignore[dangerous-triggers]
+    types: [ opened, reopened, edited, synchronize, labeled, unlabeled ]
+
+permissions: {}
+
+jobs:
+  pr-checks:
+    name: PR Checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    concurrency:
+      # Only allow a single run of this workflow on each branch, automatically cancelling older runs.
+      group: ${{ format('pr-checks-{0}', github.ref) }}
+      cancel-in-progress: true
+
+    permissions:
+      # Required to comment on the pull request.
+      pull-requests: write
+
+    steps:
+      - name: Check the pull request
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          script: |
+            // Classes that must not be modified anymore. Add the file name suffix here to freeze a class.
+            const FROZEN_CLASSES = [
+            ];
+
+            // Only this user is allowed to edit the translation files, since they come from Localazy.
+            const TRANSLATION_ALLOW_LIST = ["ElementBot"];
+
+            const pr = context.payload.pull_request;
+            const body = pr.body ?? "";
+
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number
+            });
+            // Deleted files are not interesting for any of the checks below.
+            const paths = files.filter(file => file.status !== "removed").map(file => file.filename);
+
+            const warnings = [];
+            const failures = [];
+
+            if (!body) {
+              warnings.push("Please provide a description for this PR.");
+            }
+
+            if (paths.length > 50) {
+              warnings.push("This pull request seems relatively large. Please consider splitting it into multiple smaller ones.");
+            }
+
+            if (pr.title.endsWith("…")) {
+              failures.push("Please provide a complete title that can be used as a changelog entry.");
+            }
+
+            if (pr.labels.filter(label => label.name.startsWith("PR-")).length !== 1) {
+              failures.push("Please add a single `PR-` label to categorise the changelog entry.");
+            }
+
+            for (const frozen of FROZEN_CLASSES) {
+              if (paths.some(path => path.endsWith(frozen))) {
+                failures.push(`Frozen class \`${frozen}\` has been modified. Please do not modify frozen class.`);
+              }
+            }
+
+            // Exclude the recorded screenshots, which are legitimately pngs.
+            if (paths.some(path => path.toLowerCase().endsWith(".png") && !path.includes("snapshots/images/"))) {
+              warnings.push("You seem to have made changes to some images. Please consider using a vector drawable.");
+            }
+
+            if (!TRANSLATION_ALLOW_LIST.includes(pr.user.login) && paths.some(path => path.endsWith("translations.xml"))) {
+              failures.push("Some translation files have been edited. Only user `ElementBot` (i.e. translations coming from Localazy) is allowed to do that. " +
+                "Please read more about translations management [in the doc](https://github.com/element-hq/element-x-android/blob/develop/CONTRIBUTING.md#strings).");
+            }
+
+            warnings.forEach(warning => core.warning(warning));
+            failures.forEach(failure => core.error(failure));
+
+            // Keep a single comment up to date rather than adding a new one on every run.
+            const marker = "<!-- pr-checks -->";
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number
+            });
+            const existing = comments.find(comment => comment.body.includes(marker));
+
+            if (warnings.length || failures.length) {
+              const lines = [...failures.map(failure => `- ❌ ${failure}`),
+                             ...warnings.map(warning => `- ⚠️ ${warning}`)];
+              const commentBody = `${marker}\n### PR Checks\n\n${lines.join("\n")}`;
+
+              if (existing) {
+                await github.rest.issues.updateComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: existing.id,
+                  body: commentBody
+                });
+              } else {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: pr.number,
+                  body: commentBody
+                });
+              }
+            } else if (existing) {
+              await github.rest.issues.deleteComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id
+              });
+            }
+
+            if (failures.length) {
+              core.setFailed(`${failures.length} check(s) failed, see the comment on the pull request.`);
+            }

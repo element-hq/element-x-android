@@ -94,6 +94,7 @@ fun ShowLocationView(
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberBottomSheetState(
             initialValue = SheetValue.Expanded,
+            enabledValues = setOf(SheetValue.PartiallyExpanded, SheetValue.Expanded),
         )
     )
     LaunchedEffect(state.isSheetDraggable) {
@@ -154,7 +155,6 @@ fun ShowLocationView(
                             modifier = Modifier.clickable {
                                 state.eventSink(ShowLocationEvent.TrackMyLocation(false))
                                 val position = CameraPosition(
-                                    padding = sheetPaddings,
                                     target = Position(locationShare.location.lon, locationShare.location.lat),
                                     // Force pointing to NORTH
                                     bearing = 0.0,

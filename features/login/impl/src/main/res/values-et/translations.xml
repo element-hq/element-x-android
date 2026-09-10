@@ -89,7 +89,7 @@ Proovi käsitsi sisselogimist või skaneeri QR-koodi mõne muu seadmega."</strin
   <string name="screen_qr_code_login_error_sliding_sync_not_supported_title">"%1$s pole toetatud"</string>
   <string name="screen_qr_code_login_initial_state_button_title">"Skaneerimiseks valmis"</string>
   <string name="screen_qr_code_login_initial_state_item_1">"Ava %1$s töölauarakenduses"</string>
-  <string name="screen_qr_code_login_initial_state_item_2">"Klõpsi oma tunnuspilti"</string>
+  <string name="screen_qr_code_login_initial_state_item_2">"Klõpsa oma tunnuspilti"</string>
   <string name="screen_qr_code_login_initial_state_item_3">"Vali %1$s"</string>
   <string name="screen_qr_code_login_initial_state_item_3_action">"„Seo uus seade“"</string>
   <string name="screen_qr_code_login_initial_state_item_4">"Skaneeri QR-koodi selle seadmega"</string>

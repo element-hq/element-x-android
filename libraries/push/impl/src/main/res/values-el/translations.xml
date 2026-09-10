@@ -45,7 +45,7 @@
   <string name="notification_sender_mention_reply">"Ο χρήστης %1$s αναφέρθηκε ή απάντησε"</string>
   <string name="notification_space_invite_body">"Σας προσκάλεσε να συμμετάσχετε στον χώρο"</string>
   <string name="notification_space_invite_body_with_sender">"%1$s σας προσκάλεσε να συμμετάσχετε στον χώρο"</string>
-  <string name="notification_test_push_notification_content">"Βλέπεις την ειδοποίηση! Κάνε μου κλικ!"</string>
+  <string name="notification_test_push_notification_content">"Προβάλλετε την ειδοποίηση! Πατήστε εδώ!"</string>
   <string name="notification_thread_in_room">"Νήμα στο %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
@@ -91,7 +91,7 @@
   <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Δεν είναι δυνατή η εμφάνιση της ειδοποίησης."</string>
   <string name="troubleshoot_notifications_test_display_notification_success">"Έγινε κλικ στην ειδοποίηση!"</string>
   <string name="troubleshoot_notifications_test_display_notification_title">"Εμφάνιση ειδοποίησης"</string>
-  <string name="troubleshoot_notifications_test_display_notification_waiting">"Κάνε κλικ στην ειδοποίηση για να συνεχίσεις τη δοκιμή."</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Παρακαλώ πατήστε την ειδοποίηση για να συνεχίσετε τη δοκιμή."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_description">"Βεβαιώσου ότι η εφαρμογή λαμβάνει push."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Σφάλμα: ο pusher απέρριψε το αίτημα."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Σφάλμα: %1$s."</string>

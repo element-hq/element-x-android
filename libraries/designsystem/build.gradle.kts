@@ -10,7 +10,6 @@ import extension.testCommonDependencies
 
 plugins {
     id("io.element.android-compose-library")
-    alias(libs.plugins.ksp)
     id("kotlin-parcelize")
 }
 
@@ -19,12 +18,6 @@ android {
 
     buildFeatures {
         buildConfig = true
-    }
-
-    buildTypes {
-        getByName("release") {
-            consumerProguardFiles("consumer-rules.pro")
-        }
     }
 }
 
@@ -42,9 +35,6 @@ dependencies {
     implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)
-
-    ksp(libs.showkase.processor)
-    implementation(libs.showkase)
 
     testCommonDependencies(libs)
 }

@@ -116,6 +116,9 @@
   <string name="screen_room_notification_settings_error_restoring_default">"Vraćanje zadanog načina rada nije uspjelo, pokušajte ponovno."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Postavljanje načina rada nije uspjelo, pokušajte ponovno."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Vaš matični poslužitelj ne podržava ovu mogućnost u šifriranim sobama; nećete dobiti obavijest u ovoj sobi."</string>
+  <string name="screen_room_notification_settings_mode_all_messages">"Sve poruke"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Samo spominjanja i ključne riječi"</string>
+  <string name="screen_room_notification_settings_mode_mute">"Isključi zvuk"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"U ovoj sobi obavijesti me za"</string>
   <string name="screen_room_roles_and_permissions_admins">"Administratori"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"Administratori i vlasnici"</string>

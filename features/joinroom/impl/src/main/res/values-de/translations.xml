@@ -22,12 +22,12 @@
   <string name="screen_join_room_knock_message_characters_count">"%1$d von %2$d erlaubte Zeichen"</string>
   <string name="screen_join_room_knock_message_description">"Nachricht (optional)"</string>
   <string name="screen_join_room_knock_sent_description">"Sollte deine Anfrage akzeptiert werden, erhältst du eine Einladung, dem Chat beizutreten."</string>
-  <string name="screen_join_room_knock_sent_title">"Beitrittsanfrage geschickt"</string>
+  <string name="screen_join_room_knock_sent_title">"Beitrittsanfrage gestellt"</string>
   <string name="screen_join_room_loading_alert_message">"Wir konnten die Chat Vorschau nicht anzeigen. Dies kann an Netzwerk- oder Serverproblemen liegen."</string>
   <string name="screen_join_room_loading_alert_title">"Wir konnten diese Chat-Vorschau nicht anzeigen"</string>
   <string name="screen_join_room_space_not_supported_description">"%1$s unterstützt noch keine Spaces. Du kannst auf Spaces im Web zugreifen."</string>
   <string name="screen_join_room_space_not_supported_title">"Spaces werden noch nicht unterstützt"</string>
-  <string name="screen_join_room_subtitle_knock">"Klopfe an um einen Admin zu benachrichtigen. Nach der Freigabe kannst du dich an der Unterhaltung beteiligen."</string>
+  <string name="screen_join_room_subtitle_knock">"Wähle die Schaltfläche unten – eine Chat-Administration wird benachrichtigt. Nach der Freigabe kannst du dich an der Unterhaltung beteiligen."</string>
   <string name="screen_join_room_subtitle_no_preview">"Du musst Mitglied in diesem Chat sein, um den Nachrichtenverlauf zu sehen."</string>
   <string name="screen_join_room_title_knock">"Willst du diesem Chat beitreten?"</string>
   <string name="screen_join_room_title_no_preview">"Vorschau nicht verfügbar"</string>

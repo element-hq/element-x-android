@@ -49,7 +49,9 @@ import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.platform.ViewConfiguration
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
@@ -217,13 +219,23 @@ fun TimelineItemEventRow(
         inReplyToClick(inReplyToEventId)
     }
 
-    Column(modifier = modifier.fillMaxWidth()) {
+    val canReply = timelineRoomInfo.userHasPermissionToSendMessage && event.canBeRepliedTo
+    val accessibilityActions = rememberTimelineItemAccessibilityActions(
+        canReply = canReply,
+        onLongClick = onLongClick,
+        onSwipeToReply = onSwipeToReply,
+    )
+
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .semantics { customActions = accessibilityActions }
+    ) {
         if (event.groupPosition.isNew()) {
             Spacer(modifier = Modifier.height(16.dp))
         } else {
             Spacer(modifier = Modifier.height(2.dp))
         }
-        val canReply = timelineRoomInfo.userHasPermissionToSendMessage && event.canBeRepliedTo
         if (canReply) {
             val state: SwipeableActionsState = rememberSwipeableActionsState()
             val offset = state.offset.floatValue
@@ -316,6 +328,40 @@ fun TimelineItemEventRow(
             onReadReceiptsClick = { onReadReceiptClick(event) },
             modifier = Modifier.padding(top = 4.dp)
         )
+    }
+}
+
+/**
+ * Exposes the gestures of a timeline item — long press for the action list, swipe for a reply — as TalkBack actions, since neither gesture is reachable
+ * with a screen reader enabled.
+ */
+@Composable
+private fun rememberTimelineItemAccessibilityActions(
+    canReply: Boolean,
+    onLongClick: () -> Unit,
+    onSwipeToReply: () -> Unit,
+): List<CustomAccessibilityAction> {
+    val messageActionsLabel = stringResource(CommonStrings.common_message_actions)
+    val replyLabel = stringResource(CommonStrings.action_reply)
+    val latestOnLongClick by rememberUpdatedState(onLongClick)
+    val latestOnSwipeToReply by rememberUpdatedState(onSwipeToReply)
+    return remember(canReply, messageActionsLabel, replyLabel) {
+        buildList {
+            add(
+                CustomAccessibilityAction(messageActionsLabel) {
+                    latestOnLongClick()
+                    true
+                }
+            )
+            if (canReply) {
+                add(
+                    CustomAccessibilityAction(replyLabel) {
+                        latestOnSwipeToReply()
+                        true
+                    }
+                )
+            }
+        }
     }
 }
 

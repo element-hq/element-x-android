@@ -126,6 +126,8 @@
   <string name="screen_room_notification_settings_error_setting_mode">"تعذّر تطبيق الوضع، يرجى المحاولة مجدداً."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"لا يدعم خادمك المنزلي هذا الخيار في الغرف المشفّرة، ولن تتلقى إشعارات في هذه الغرفة."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"كل الرسائل"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"الإشارات والكلمات المفتاحية فقط"</string>
+  <string name="screen_room_notification_settings_mode_mute">"كتم الصوت"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"في هذه الغرفة، أرسل لي إشعارات لـ"</string>
   <string name="screen_room_roles_and_permissions_admins">"المسؤولون"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"المسؤولون والمالكون"</string>

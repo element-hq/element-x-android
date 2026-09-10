@@ -14,6 +14,7 @@
   <string name="a11y_encryption_details">"Λεπτομέρειες κρυπτογράφησης"</string>
   <string name="a11y_expand_message_text_field">"Επεκτείνετε το πεδίο κειμένου του μηνύματος"</string>
   <string name="a11y_hide_password">"Απόκρυψη κωδικού πρόσβασης"</string>
+  <string name="a11y_info">"Πληροφορίες"</string>
   <string name="a11y_join_call">"Συμμετοχή στην κλήση"</string>
   <string name="a11y_jump_to_bottom">"Άλμα προς τα κάτω"</string>
   <string name="a11y_move_the_map_to_my_location">"Μετακινήστε τον χάρτη στην τοποθεσία μου"</string>
@@ -35,18 +36,19 @@
   <string name="a11y_qr_code">"Κωδικός QR"</string>
   <string name="a11y_react_with">"Αντέδρασε με %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Αντέδρασε με άλλα emoji"</string>
-  <string name="a11y_read_receipts_multiple">"Διαβάστηκε από%1$s και %2$s"</string>
+  <string name="a11y_read_receipts_multiple">"Προηγούμενο μήνυμα που διαβάστηκε από τους %1$s και %2$s"</string>
   <plurals name="a11y_read_receipts_multiple_with_others">
     <item quantity="one">"Διαβάστηκε από %1$s και %2$d ακόμη"</item>
     <item quantity="other">"Διαβάστηκε από %1$s και %2$d ακόμη"</item>
   </plurals>
-  <string name="a11y_read_receipts_single">"Διαβάστηκε από %1$s"</string>
+  <string name="a11y_read_receipts_single">"Το προηγούμενο μήνυμα διαβάστηκε από %1$s"</string>
   <string name="a11y_remove_reaction">"Αφαίρεση αντίδρασης με %1$s"</string>
   <string name="a11y_remove_reaction_with">"Αφαιρέστε την αντίδραση με %1$s"</string>
   <string name="a11y_room_avatar">"Άβαταρ αίθουσας"</string>
   <string name="a11y_send_files">"Αποστολή αρχείων"</string>
   <string name="a11y_sender_location">"Τοποθεσία αποστολέα"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Απαιτείται ενέργεια περιορισμένης χρονικής διάρκειας, έχετε ένα λεπτό για επαλήθευση."</string>
+  <string name="a11y_settings_with_required_action">"Ρυθμίσεις, απαιτείται ενέργεια"</string>
   <string name="a11y_show_password">"Εμφάνιση κωδικού πρόσβασης"</string>
   <string name="a11y_start_call">"Ξεκίνησε μια κλήση"</string>
   <string name="a11y_start_video_call">"Ξεκινήστε μια βιντεοκλήση"</string>
@@ -68,6 +70,7 @@
   <string name="action_call">"Κάλεσε"</string>
   <string name="action_cancel">"Άκυρο"</string>
   <string name="action_cancel_for_now">"Ακύρωση προς το παρόν"</string>
+  <string name="action_choose_file">"Επιλέξτε αρχείο"</string>
   <string name="action_choose_photo">"Επιλογή φωτογραφίας"</string>
   <string name="action_clear">"Εκκαθάριση"</string>
   <string name="action_close">"Κλείσιμο"</string>
@@ -87,12 +90,15 @@
   <string name="action_deactivate_account">"Απενεργοποίηση λογαριασμού"</string>
   <string name="action_decline">"Απόρριψη"</string>
   <string name="action_decline_and_block">"Απόρριψη και αποκλεισμός"</string>
+  <string name="action_delete">"Διαγραφή"</string>
+  <string name="action_delete_account">"Διαγραφή λογαριασμού"</string>
   <string name="action_delete_poll">"Διαγραφή Δημοσκόπησης"</string>
   <string name="action_deselect_all">"Αποεπιλογή όλων"</string>
   <string name="action_disable">"Απενεργοποίηση"</string>
   <string name="action_discard">"Απόρριψη"</string>
   <string name="action_dismiss">"Παράβλεψη"</string>
   <string name="action_done">"Έγινε"</string>
+  <string name="action_download">"Λήψη"</string>
   <string name="action_edit">"Επεξεργασία"</string>
   <string name="action_edit_caption">"Επεξεργασία λεζάντας"</string>
   <string name="action_edit_poll">"Επεξεργασία δημοσκόπησης"</string>
@@ -199,7 +205,9 @@
   <string name="common_beta">"Δοκιμαστική"</string>
   <string name="common_blocked_users">"Αποκλεισμένοι χρήστες"</string>
   <string name="common_bubbles">"Φυσαλίδες"</string>
+  <string name="common_call_declined">"Η κλήση απορρίφθηκε"</string>
   <string name="common_call_started">"Η κλήση ξεκίνησε"</string>
+  <string name="common_call_you_declined">"Απορρίψατε μια κλήση"</string>
   <string name="common_chat_backup">"Αντίγραφο ασφαλείας συνομιλίας"</string>
   <string name="common_copied_to_clipboard">"Αντιγράφηκε στο πρόχειρο"</string>
   <string name="common_copyright">"Πνευματικά δικαιώματα"</string>
@@ -435,7 +443,7 @@
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Επιλέξτε την ποιότητα του βίντεο που θέλετε να ανεβάσετε."</string>
   <string name="dialog_video_quality_selector_title">"Επιλέξτε την ποιότητα μεταφόρτωσης βίντεο"</string>
   <string name="error_account_already_logged_in">"Έχετε ήδη συνδεθεί σε αυτή τη συσκευή ως %1$s."</string>
-  <string name="error_account_creation_not_possible">"Ο οικιακός διακομιστής σου πρέπει να αναβαθμιστεί για να υποστηρίζει το Matrix Authentication Service και τη δημιουργία λογαριασμού."</string>
+  <string name="error_account_creation_not_possible">"Ο πάροχος του λογαριασμού σας πρέπει να πραγματοποιήσει αναβάθμιση ώστε να υποστηρίζει την υπηρεσία Matrix Authentication Service και τη δημιουργία λογαριασμού."</string>
   <string name="error_failed_creating_the_permalink">"Αποτυχία δημιουργίας του μόνιμου συνδέσμου"</string>
   <string name="error_failed_loading_map">"%1$s δεν ήταν δυνατή η φόρτωση του χάρτη. Παρακαλώ δοκίμασε ξανά αργότερα."</string>
   <string name="error_failed_loading_messages">"Αποτυχία φόρτωσης μηνυμάτων"</string>

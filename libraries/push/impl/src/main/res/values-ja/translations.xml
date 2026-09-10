@@ -16,6 +16,9 @@
   <plurals name="notification_fallback_n_content">
     <item quantity="other">"新着のメッセージが%d 件あります。"</item>
   </plurals>
+  <plurals name="notification_gallery_body">
+    <item quantity="other">"%1$d 個の共有された添付ファイル"</item>
+  </plurals>
   <string name="notification_incoming_audio_call">"📞 着信"</string>
   <string name="notification_incoming_call">"📹 通話着信"</string>
   <string name="notification_inline_reply_failed">"** 送信失敗 - ルームを開いてください"</string>
@@ -26,6 +29,8 @@
   </plurals>
   <string name="notification_invite_body">"チャットにあなたを招待しました"</string>
   <string name="notification_invite_body_with_sender">"%1$sがあなたをチャットに招待しました"</string>
+  <string name="notification_knock_request_body">"参加をリクエスト"</string>
+  <string name="notification_live_location_started_body">"ライブ位置情報の共有を開始"</string>
   <string name="notification_mentioned_you_body">"%1$s があなたをメンションしました"</string>
   <string name="notification_new_messages">"新着メッセージ"</string>
   <plurals name="notification_new_messages_for_room">
@@ -88,6 +93,7 @@
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"エラー: %1$s"</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"エラー: プッシュ通知をテストできません。"</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"エラー: 通知の待機がタイムアウトしました。"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_rate_limit">"エラー: 現在のプッシュゲートウェイは、この端末に通信制限を設けているため、確実に通知を受け取ることができません。異なるプッシュゲートウェイを設定してください。"</string>
   <string name="troubleshoot_notifications_test_push_loop_back_success">"プッシュ通知のループバックに %1$d ms 要しました。"</string>
   <string name="troubleshoot_notifications_test_push_loop_back_title">"プッシュ通知のループバックをテスト"</string>
 </resources>

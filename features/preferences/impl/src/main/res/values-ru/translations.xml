@@ -53,6 +53,10 @@
   <string name="screen_edit_profile_error_title">"Невозможно обновить профиль"</string>
   <string name="screen_edit_profile_title">"Редактировать профиль"</string>
   <string name="screen_edit_profile_updating_details">"Обновление профиля…"</string>
+  <string name="screen_labs_enable_gallery">"Галереи"</string>
+  <string name="screen_labs_enable_gallery_description">"Отправляйте несколько изображений или видео одновременно. Стабильная работа на мобильных устройствах, но пока не поддерживается в веб-версии."</string>
+  <string name="screen_labs_enable_knocking">"Запрос на вступление"</string>
+  <string name="screen_labs_enable_knocking_description">"Пользователи могут запросить доступ к комнате, которая не открыта для всех на вступление. Стабильно работает на мобильных устройствах, веб-версия существует, но находится в экспериментальной стадии."</string>
   <string name="screen_labs_enable_threads">"Включить ответы в обсуждениях"</string>
   <string name="screen_labs_enable_threads_description">"Приложение перезапустится, чтобы применить это изменение."</string>
   <string name="screen_labs_header_description">"Попробуйте функции в разработке. Эти функции ещё не завершены, они нестабильны и могут измениться."</string>
@@ -76,7 +80,7 @@
   <string name="screen_notification_settings_failed_fixing_configuration">"Конфигурация не была исправлена, попробуйте ещё раз."</string>
   <string name="screen_notification_settings_group_chats">"В групповых чатах"</string>
   <string name="screen_notification_settings_invite_for_me_label">"Приглашения"</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Ваш сервер не поддерживает эту опцию для зашифрованных комнат, Вы можете не получать некоторые уведомления."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Ваш сервер не поддерживает эту опцию для зашифрованных чатах, в некоторых чатах Вы можете не получать уведомления."</string>
   <string name="screen_notification_settings_mentions_section_title">"Упоминания"</string>
   <string name="screen_notification_settings_message_sound_dialog_choose_other">"Выбрать другой звук…"</string>
   <string name="screen_notification_settings_message_sound_dialog_current_subtitle">"Сейчас используется %1$s"</string>
@@ -85,7 +89,7 @@
   <string name="screen_notification_settings_mode_all">"Все"</string>
   <string name="screen_notification_settings_mode_mentions">"Упоминания"</string>
   <string name="screen_notification_settings_notification_section_title">"Уведомлять меня"</string>
-  <string name="screen_notification_settings_room_mention_label">"Уведомлять меня при упоминании @room"</string>
+  <string name="screen_notification_settings_room_mention_label">"Упоминания @room"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"Пользовательский"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"Пользовательский звук…"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"Ошибка при удалении файла"</string>
@@ -102,6 +106,14 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"системные настройки"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Системные уведомления выключены"</string>
   <string name="screen_notification_settings_title">"Уведомления"</string>
+  <string name="screen_settings_user_status_away">"Отошёл(ла)"</string>
+  <string name="screen_settings_user_status_be_right_back">"Скоро вернусь"</string>
+  <string name="screen_settings_user_status_custom">"Пользовательский…"</string>
+  <string name="screen_settings_user_status_custom_hint">"Пользовательский статус…"</string>
+  <string name="screen_settings_user_status_focus_time">"Сфокусировка"</string>
+  <string name="screen_settings_user_status_in_a_meeting">"На встрече"</string>
+  <string name="screen_settings_user_status_on_the_road">"На дороге"</string>
+  <string name="screen_settings_user_status_placeholder">"Как у Вас дела?"</string>
   <string name="theme_black">"Черный"</string>
   <string name="theme_dark">"Темная"</string>
   <string name="theme_light">"Светлое"</string>

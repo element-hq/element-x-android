@@ -6,7 +6,7 @@
   <string name="screen_edit_room_address_room_address_section_footer">"Вам знадобиться адреса кімнати, щоб зробити її видимою в каталозі."</string>
   <string name="screen_edit_room_address_title">"Змінити адресу"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Під час оновлення налаштувань сповіщень сталася помилка."</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Ваш домашній сервер не підтримує цю опцію в зашифрованих кімнатах, ви можете не отримати сповіщення в деяких кімнатах."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Постачальник вашого облікового запису не підтримує цю опцію в зашифрованих бесідах, тому ви можете не отримувати сповіщення в деяких бесідах."</string>
   <string name="screen_polls_history_title">"Опитування"</string>
   <string name="screen_room_change_permissions_administrators">"Адміністратор"</string>
   <string name="screen_room_change_permissions_ban_people">"Заблоковувати людей"</string>
@@ -115,9 +115,9 @@
   <string name="screen_room_notification_settings_error_loading_settings">"Під час завантаження налаштувань сповіщень сталася помилка."</string>
   <string name="screen_room_notification_settings_error_restoring_default">"Не вдалося відновити типовий режим, спробуйте ще раз."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Не вдалося встановити режим, спробуйте ще раз."</string>
-  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Ваш домашній сервер не підтримує цю опцію в зашифрованих кімнатах, ви не отримаєте сповіщення в цій кімнаті."</string>
+  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Постачальник вашого облікового запису не підтримує цю опцію в зашифрованих бесідах, ви не отримуватимете сповіщення в цій бесіді."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Всі повідомлення"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Лише згадки та ключові слова"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Лише згадки та відповіді"</string>
   <string name="screen_room_notification_settings_mode_mute">"Вимкнути звук"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"У цій кімнаті сповіщати мене про"</string>
   <string name="screen_room_roles_and_permissions_admins">"Адміністратори"</string>

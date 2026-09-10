@@ -20,6 +20,15 @@
   <string name="a11y_edit_room_address_hint">"Potpuna adresa bit će %1$s"</string>
   <string name="a11y_encryption_details">"Pojedinosti o šifriranju"</string>
   <string name="a11y_expand_message_text_field">"Proširi tekstno polje poruke"</string>
+  <string name="a11y_gallery_attachment">"Galerija, prilog %1$d"</string>
+  <string name="a11y_gallery_failed_scan">"Galerija, neuspješno skeniranje %1$d"</string>
+  <string name="a11y_gallery_image">"Galerija, slika %1$d"</string>
+  <plurals name="a11y_gallery_more_media">
+    <item quantity="one">"Galerija, %1$d više medija"</item>
+    <item quantity="other">"Galerija, %1$d više medija"</item>
+  </plurals>
+  <string name="a11y_gallery_scanning">"Galerija, skeniranje %1$d"</string>
+  <string name="a11y_gallery_video">"Galerija, video %1$d"</string>
   <string name="a11y_hide_password">"Sakrij zaporku"</string>
   <string name="a11y_info">"Informacije"</string>
   <string name="a11y_join_call">"Pridruži se pozivu"</string>

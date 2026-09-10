@@ -7,6 +7,11 @@
   <string name="crypto_event_authenticity_unknown_device">"Cifrato da un dispositivo sconosciuto o eliminato."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Cifrato da un dispositivo non verificato dal proprietario."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Cifrato da un utente non verificato."</string>
+  <string name="error_sending_failure_invalid_mime_type">"Tipo MIME non valido: %s"</string>
+  <string name="error_sending_failure_missing_media_content">"Contenuto multimediale mancante"</string>
+  <string name="error_sending_failure_other">"Dettagli dell\'errore: %s"</string>
+  <string name="error_sending_failure_sending_from_unverified_device">"Invio da dispositivo non verificato"</string>
+  <string name="error_sending_failure_unknown">"Errore sconosciuto"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"Capovolgi l\'immagine orizzontalmente"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Capovolto orizzontalmente"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Originale"</string>
@@ -32,7 +37,7 @@
   <string name="screen_media_upload_preview_title">"Aggiungi contenuti multimediali"</string>
   <string name="screen_report_content_block_user">"Blocca utente"</string>
   <string name="screen_report_content_block_user_hint">"Seleziona se vuoi nascondere tutti i messaggi attuali e futuri di questo utente"</string>
-  <string name="screen_report_content_explanation">"Questo messaggio verrà segnalato all\'amministratore dell\'homeserver. Questi non sarà in grado di leggere i messaggi cifrati."</string>
+  <string name="screen_report_content_explanation">"Questo messaggio verrà segnalato al gestore del tuo account. Quest’ultimo non potrà leggere alcun messaggio cifrato."</string>
   <string name="screen_report_content_hint">"Motivo della segnalazione di questo contenuto"</string>
   <string name="screen_room_attachment_source_camera">"Fotocamera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Scatta foto"</string>
@@ -70,6 +75,10 @@
   <string name="screen_room_timeline_reactions_show_more">"Mostra di più"</string>
   <string name="screen_room_timeline_reactions_show_reactions_summary">"Mostra il riepilogo delle reazioni"</string>
   <string name="screen_room_timeline_read_marker_title">"Nuovo"</string>
+  <plurals name="screen_room_timeline_redacted_messages">
+    <item quantity="one">"%1$d messaggio rimosso"</item>
+    <item quantity="other">"%1$d messaggi rimossi"</item>
+  </plurals>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d modifica alla stanza"</item>
     <item quantity="other">"%1$d modifiche alla stanza"</item>

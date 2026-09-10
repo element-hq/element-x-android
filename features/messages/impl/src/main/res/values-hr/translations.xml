@@ -7,6 +7,11 @@
   <string name="crypto_event_authenticity_unknown_device">"Šifrirano nepoznatim ili izbrisanim uređajem."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Šifrirano uređajem koji vlasnik nije potvrdio."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Šifrirao neprovjereni korisnik."</string>
+  <string name="error_sending_failure_invalid_mime_type">"Nevažeći MIME tip: %s"</string>
+  <string name="error_sending_failure_missing_media_content">"Nedostaje medijski sadržaj"</string>
+  <string name="error_sending_failure_other">"Detalji pogreške: %s"</string>
+  <string name="error_sending_failure_sending_from_unverified_device">"Slanje s neprovjerenog uređaja"</string>
+  <string name="error_sending_failure_unknown">"Nepoznata pogreška"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"Okreni sliku vodoravno"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Okrenuto vodoravno"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Izvornik"</string>

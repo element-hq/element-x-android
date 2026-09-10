@@ -358,7 +358,8 @@ Some dependency, mainly because they are not shared can be declared in `build.gr
 We have 3 tests frameworks in place, and this should be sufficient to guarantee a good code coverage and limit regressions hopefully:
 
 - Maestro to test the global usage of the application. See the related [documentation](../.maestro/README.md).
-- Combination of [Showkase](https://github.com/airbnb/Showkase) and [Paparazzi](https://github.com/cashapp/paparazzi), to test UI pixel perfect. To add test,
+- Combination of [Paparazzi](https://github.com/cashapp/paparazzi) and
+  [ComposablePreviewScanner](https://github.com/sergio-sastre/ComposablePreviewScanner), to test UI pixel perfect. To add test,
   just add `@Preview` for the composable you are adding. See the related [documentation](screenshot_testing.md) and see in the template the
   file [TemplateView.kt](../features/template/src/main/kotlin/io/element/android/features/template/TemplateView.kt). We create PreviewParam classes to provide
   different states. See for instance the
@@ -449,9 +450,8 @@ number at the bottom 7 times. After tapping, a new "Developer options" entry wil
 at the bottom of the list.
 
 The developer options include feature flags, notification/push history, Element call
-customization, Rust SDK log levels, per-feature tracing toggles, Showkase to debug UI
-components, rageshake controls, app crash controls, cache details/controls, persistent
-storage maintenance tasks.
+customization, Rust SDK log levels, per-feature tracing toggles, rageshake controls, app
+crash controls, cache details/controls, persistent storage maintenance tasks.
 
 Keywords: Developer settings, developer mode
 

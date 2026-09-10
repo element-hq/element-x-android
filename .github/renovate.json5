@@ -10,6 +10,14 @@
     "gradle",
   ],
   "minimumReleaseAge": "7 days",
+  "hostRules": [
+    {
+      "matchHost": "https://repo1.maven.org/maven2/",
+      "concurrentRequestLimit": 10,
+      "maxRequestsPerSecond": 10,
+      "timeout": 10000,
+    }
+  ],
   "packageRules": [
     {
       "matchPackageNames": [
@@ -17,6 +25,20 @@
         "/^io.element.android/",
       ],
       "minimumReleaseAge": null,
+      // Max default value is 6, with this we give absolute priority to our own dependencies
+      "prPriority": 7,
+      "registryUrls": [ "https://repo1.maven.org/maven2/" ],
+    },
+    {
+      // Fetch Android dependencies from Google's Maven repo instead of Maven Central.
+      "matchPackageNames": [
+        "/^androidx\\./",
+        "/^android\\./",
+        "/^com\\.android\\.tools/",
+        "/^com\\.google\\.firebase/",
+        "/^com\\.google\\.android/",
+      ],
+      "registryUrls": [ "https://dl.google.com/android/maven2/" ],
     },
     {
       "groupName": "kotlin",

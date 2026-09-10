@@ -5,6 +5,7 @@
   <string name="screen_link_new_device_desktop_step3">"Pindai kode QR dengan perangkat ini"</string>
   <string name="screen_link_new_device_desktop_submit">"Siap untuk memindai"</string>
   <string name="screen_link_new_device_desktop_title">"Buka %1$s di komputer desktop untuk mendapatkan kode QR."</string>
+  <string name="screen_link_new_device_desktop_warning">"Hanya pindai kode QR setelah mengikuti langkah-langkah di atas di perangkat Anda sendiri. Jangan pernah memindai kode yang dikirim oleh orang lain."</string>
   <string name="screen_link_new_device_enter_number_error_numbers_do_not_match">"Angkanya tidak cocok"</string>
   <string name="screen_link_new_device_enter_number_notice">"Masukkan kode 2 digit"</string>
   <string name="screen_link_new_device_enter_number_subtitle">"Ini akan memverifikasi bahwa koneksi ke perangkat Anda yang lain aman."</string>

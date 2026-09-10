@@ -110,6 +110,9 @@
   <string name="screen_room_notification_settings_error_restoring_default">"デフォルトの復元に失敗しました。再試行してください。"</string>
   <string name="screen_room_notification_settings_error_setting_mode">"設定に失敗しました。再試行してください。"</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"暗号化されたルームでは、この機能にホームサーバーが対応しないため、このルームからの通知を受信できません。"</string>
+  <string name="screen_room_notification_settings_mode_all_messages">"すべてのメッセージ"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"メンションと返信のみ"</string>
+  <string name="screen_room_notification_settings_mode_mute">"ミュート"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"このルームでは以下の通知を受け取る"</string>
   <string name="screen_room_roles_and_permissions_admins">"管理者"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"管理者と所有者"</string>

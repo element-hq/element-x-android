@@ -28,10 +28,10 @@ import org.robolectric.annotation.Config
 @Config(sdk = [33])
 class DefaultSyncPendingNotificationsRequestBuilderTest : RobolectricTest() {
     @Test
-    fun `build - success API 33`() = runTest {
+    fun `build - success API 31`() = runTest {
         val request = createSyncPendingNotificationsRequestBuilder(
             sessionId = A_SESSION_ID,
-            sdkVersion = 33,
+            sdkVersion = 31,
         )
 
         val results = request.build()
@@ -42,7 +42,7 @@ class DefaultSyncPendingNotificationsRequestBuilderTest : RobolectricTest() {
                 assertThat(this).isInstanceOf(OneTimeWorkRequest::class.java)
                 assertThat(workSpec.input.hasKeyWithValueOfType<String>(SyncPendingNotificationsRequestBuilder.SESSION_ID)).isTrue()
                 assertThat(workSpec.hasConstraints()).isTrue()
-                // True in API 33+
+                // True in API 31+
                 assertThat(workSpec.expedited).isTrue()
                 assertThat(workSpec.traceTag).isEqualTo(workManagerTag(A_SESSION_ID, WorkManagerRequestType.NOTIFICATION_SYNC))
             }
@@ -50,10 +50,10 @@ class DefaultSyncPendingNotificationsRequestBuilderTest : RobolectricTest() {
     }
 
     @Test
-    fun `build - success API 32 and lower`() = runTest {
+    fun `build - success API 30 and lower`() = runTest {
         val request = createSyncPendingNotificationsRequestBuilder(
             sessionId = A_SESSION_ID,
-            sdkVersion = 32,
+            sdkVersion = 30,
         )
 
         val results = request.build()
@@ -65,7 +65,7 @@ class DefaultSyncPendingNotificationsRequestBuilderTest : RobolectricTest() {
                 assertThat(this).isInstanceOf(OneTimeWorkRequest::class.java)
                 assertThat(workSpec.input.hasKeyWithValueOfType<String>(SyncPendingNotificationsRequestBuilder.SESSION_ID)).isTrue()
                 assertThat(workSpec.hasConstraints()).isTrue()
-                // False before API 33
+                // False before API 31
                 assertThat(workSpec.expedited).isFalse()
                 assertThat(workSpec.traceTag).isEqualTo(workManagerTag(A_SESSION_ID, WorkManagerRequestType.NOTIFICATION_SYNC))
             }

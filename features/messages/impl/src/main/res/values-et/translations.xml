@@ -7,6 +7,10 @@
   <string name="crypto_event_authenticity_unknown_device">"Krüptitud tundmatu või kustutatud seadme poolt."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Krüptitud seadme poolt, mida tema omanik pole verifitseerinud."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Krüptitud verifitseerimata kasutaja poolt."</string>
+  <string name="error_sending_failure_invalid_mime_type">"Vigane MIME-tüüp: %s"</string>
+  <string name="error_sending_failure_other">"Vea üksikasjad: %s"</string>
+  <string name="error_sending_failure_sending_from_unverified_device">"Saadetakse verifitseerimata seadmest"</string>
+  <string name="error_sending_failure_unknown">"Tundmatu viga"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"Pööra pilti ümber rõhttelje"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Pilt on pööratud ümber rõhttelje"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Pildi algne variant"</string>

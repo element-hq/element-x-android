@@ -288,6 +288,10 @@ dependencies {
         implementation(projects.libraries.pushproviders.unifiedpush)
     }
 
+    // Google Play Services fused location backend. Discovered at runtime via ServiceLoader by the
+    // location feature.
+    "gplayImplementation"(libs.maplibre.compose.location.runtime.gms)
+
     implementation(libs.appyx.core)
     implementation(libs.androidx.splash)
     implementation(libs.androidx.core)
@@ -325,6 +329,7 @@ licensee {
     allow("BSD-3-Clause")
     allow("EPL-1.0")
     allowUrl("https://opensource.org/license/bsd-3-clause")
+    allowUrl("https://opensource.org/license/bsd-2-clause")
     allowUrl("https://opensource.org/licenses/MIT")
     allowUrl("https://developer.android.com/studio/terms.html")
     allowUrl("https://www.zetetic.net/sqlcipher/license/")

@@ -38,6 +38,8 @@
   <string name="screen_session_verification_request_title">"Zażądano weryfikacji"</string>
   <string name="screen_session_verification_they_dont_match">"Nie pasują do siebie"</string>
   <string name="screen_session_verification_they_match">"Pasują do siebie"</string>
+  <string name="screen_session_verification_unavailable_subtitle">"Użyj innego urządzenia lub klucza przywracania."</string>
+  <string name="screen_session_verification_unavailable_title">"Weryfikacja za pomocą tego urządzenia jest obecnie niedostępna"</string>
   <string name="screen_session_verification_use_another_device_subtitle">"Upewnij się, że aplikacja jest otwarta na drugim urządzeniu przed rozpoczęciem weryfikacji."</string>
   <string name="screen_session_verification_use_another_device_title">"Otwórz aplikację na drugim zweryfikowanym urządzeniu"</string>
   <string name="screen_session_verification_user_initiator_subtitle">"Dla dodatkowej ochrony, zweryfikuj tego użytkownika, porównując zestaw emoji na obu urządzeniach. Zrób to, korzystając z zaufanej metody komunikacji."</string>

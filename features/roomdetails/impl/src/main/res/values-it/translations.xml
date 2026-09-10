@@ -6,7 +6,7 @@
   <string name="screen_edit_room_address_room_address_section_footer">"Per renderlo visibile nell\'elenco pubblico, avrai bisogno di un indirizzo."</string>
   <string name="screen_edit_room_address_title">"Modifica indirizzo"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Si è verificato un errore durante l\'aggiornamento delle impostazioni di notifica."</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Il tuo homeserver non supporta questa opzione nelle stanze crifrate, quindi potresti non ricevere notifiche in alcune stanze."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Il tuo gestore dell\'account non supporta questa opzione nelle conversazioni cifrate, pertanto potresti non ricevere notifiche in alcune conversazioni."</string>
   <string name="screen_polls_history_title">"Sondaggi"</string>
   <string name="screen_room_change_permissions_administrators">"Amministratore"</string>
   <string name="screen_room_change_permissions_ban_people">"Escludi membri"</string>
@@ -112,8 +112,10 @@
   <string name="screen_room_notification_settings_error_loading_settings">"Si è verificato un errore durante il caricamento delle impostazioni di notifica."</string>
   <string name="screen_room_notification_settings_error_restoring_default">"Ripristino della modalità predefinita fallito, riprova."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Impossibile impostare la modalità, riprova."</string>
-  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Il tuo homeserver non supporta questa opzione nelle stanze cifrate, quindi non riceverai notifiche in questa stanza."</string>
+  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Il tuo gestore dell\'account non supporta questa opzione nelle conversazioni cifrate, pertanto non riceverai alcuna notifica in questa conversazione."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Tutti i messaggi"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Solo menzioni e risposte"</string>
+  <string name="screen_room_notification_settings_mode_mute">"Silenzioso"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"In questa stanza, avvisami per"</string>
   <string name="screen_room_roles_and_permissions_admins">"Amministratori"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"Amministratori e proprietari"</string>
