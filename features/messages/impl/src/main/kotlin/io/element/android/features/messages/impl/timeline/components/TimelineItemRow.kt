@@ -8,17 +8,29 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.movableContentOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.isTraversalGroup
@@ -45,6 +57,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
@@ -102,8 +115,98 @@ internal fun TimelineItemRow(
     } else {
         Modifier
     }
-    Box(modifier = modifier.then(backgroundModifier)) {
-        when (timelineItem) {
+    val content = @Composable {
+        Box(modifier = modifier.then(backgroundModifier)) {
+            RowContent(
+                timelineItem = timelineItem,
+                timelineMode = timelineMode,
+                timelineRoomInfo = timelineRoomInfo,
+                isLastOutgoingMessage = isLastOutgoingMessage,
+                timelineProtectionState = timelineProtectionState,
+                focusedEventId = focusedEventId,
+                displayThreadSummaries = displayThreadSummaries,
+                onUserDataClick = onUserDataClick,
+                onLinkClick = onLinkClick,
+                onLinkLongClick = onLinkLongClick,
+                onContentClick = onContentClick,
+                onGalleryItemClick = onGalleryItemClick,
+                onLongClick = onLongClick,
+                inReplyToClick = inReplyToClick,
+                onReactionClick = onReactionClick,
+                onReactionLongClick = onReactionLongClick,
+                onMoreReactionsClick = onMoreReactionsClick,
+                onReadReceiptClick = onReadReceiptClick,
+                onJoinCallClick = onJoinCallClick,
+                onSwipeToReply = onSwipeToReply,
+                eventSink = eventSink,
+                eventContentView = eventContentView,
+            )
+        }
+    }
+
+    WithEnterAnimation(
+        timelineItem = timelineItem,
+        content = content,
+    )
+}
+
+@Composable
+private fun WithEnterAnimation(
+    timelineItem: TimelineItem,
+    content: @Composable () -> Unit,
+) {
+    val movableContent = remember { movableContentOf(content) }
+    // Only events with SYNC or LOCAL origin should have an enter animation, to avoid animating events that are already in the timeline
+    // when the user opens the room.
+    val needsEnterAnimation = remember {
+        timelineItem is TimelineItem.Event &&
+        (timelineItem.origin == TimelineItemEventOrigin.SYNC || timelineItem.origin == TimelineItemEventOrigin.LOCAL)
+    }
+    if (needsEnterAnimation && !LocalInspectionMode.current) {
+        // Animate the  item in the first time it is displayed, e.g. when a new message arrives.
+        // We also remember the animation state so it doesn't re-animate when the timeline recomposes or we come back to the screen it's in.
+        var isDisplayed by rememberSaveable { mutableStateOf(false) }
+        val visibleState = remember { MutableTransitionState(initialState = isDisplayed).apply { targetState = true } }
+        LaunchedEffect(visibleState.currentState) {
+            isDisplayed = visibleState.currentState
+        }
+        AnimatedVisibility(
+            visibleState = visibleState,
+            enter = fadeIn() + slideInVertically { fullHeight -> fullHeight / 2 },
+        ) {
+            movableContent()
+        }
+    } else {
+        movableContent()
+    }
+}
+
+@Composable
+private fun RowContent(
+    timelineItem: TimelineItem,
+    timelineMode: Timeline.Mode,
+    timelineRoomInfo: TimelineRoomInfo,
+    isLastOutgoingMessage: Boolean,
+    timelineProtectionState: TimelineProtectionState,
+    focusedEventId: EventId?,
+    displayThreadSummaries: Boolean,
+    onUserDataClick: (MatrixUser) -> Unit,
+    onLinkClick: (Link) -> Unit,
+    onLinkLongClick: (Link) -> Unit,
+    onContentClick: (TimelineItem.Event) -> Unit,
+    onGalleryItemClick: (TimelineItem.Event, Int) -> Unit,
+    onLongClick: (TimelineItem.Event) -> Unit,
+    inReplyToClick: (EventId) -> Unit,
+    onReactionClick: (key: String, TimelineItem.Event) -> Unit,
+    onReactionLongClick: (key: String, TimelineItem.Event) -> Unit,
+    onMoreReactionsClick: (TimelineItem.Event) -> Unit,
+    onReadReceiptClick: (TimelineItem.Event) -> Unit,
+    onJoinCallClick: (isAudioCall: Boolean) -> Unit,
+    onSwipeToReply: (TimelineItem.Event) -> Unit,
+    eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
+    eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit,
+) {
+    when (timelineItem) {
             is TimelineItem.Virtual -> {
                 TimelineItemVirtualRow(
                     virtual = timelineItem,
@@ -226,7 +329,6 @@ internal fun TimelineItemRow(
                     eventSink = eventSink,
                 )
             }
-        }
     }
 }
 
