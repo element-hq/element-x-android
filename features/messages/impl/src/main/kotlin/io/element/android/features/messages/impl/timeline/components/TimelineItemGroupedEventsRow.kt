@@ -11,11 +11,16 @@ package io.element.android.features.messages.impl.timeline.components
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import io.element.android.features.messages.impl.R
+import io.element.android.features.messages.impl.timeline.LocalTimelinePlacementAnimationCoordinator
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.aGroupedEvents
@@ -76,14 +81,32 @@ fun TimelineItemGroupedEventsRow(
         },
 ) {
     val isExpanded = rememberSaveable { mutableStateOf(false) }
+    val placementAnimationCoordinator = LocalTimelinePlacementAnimationCoordinator.current
+    var contentSizeAnimationInProgress by remember { mutableStateOf(false) }
+
+    fun finishContentSizeAnimationIfNeeded() {
+        if (contentSizeAnimationInProgress) {
+            contentSizeAnimationInProgress = false
+            placementAnimationCoordinator?.onContentSizeAnimationFinished()
+        }
+    }
 
     fun onExpandGroupClick() {
+        if (!contentSizeAnimationInProgress) {
+            contentSizeAnimationInProgress = true
+            placementAnimationCoordinator?.onContentSizeAnimationStarted()
+        }
         isExpanded.value = !isExpanded.value
+    }
+
+    DisposableEffect(Unit) {
+        onDispose { finishContentSizeAnimationIfNeeded() }
     }
 
     TimelineItemGroupedEventsRowContent(
         isExpanded = isExpanded.value,
         onExpandGroupClick = ::onExpandGroupClick,
+        onContentSizeAnimationFinished = ::finishContentSizeAnimationIfNeeded,
         timelineItem = timelineItem,
         timelineMode = timelineMode,
         timelineRoomInfo = timelineRoomInfo,
@@ -130,6 +153,7 @@ private fun TimelineItemGroupedEventsRowContent(
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
+    onContentSizeAnimationFinished: () -> Unit = {},
     eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit =
         { event, contentModifier, onContentLayoutChange ->
             TimelineItemEventContentView(
@@ -147,7 +171,11 @@ private fun TimelineItemGroupedEventsRowContent(
             )
         },
 ) {
-    Column(modifier = modifier.animateContentSize()) {
+    Column(
+        modifier = modifier.animateContentSize(
+            finishedListener = { _, _ -> onContentSizeAnimationFinished() },
+        )
+    ) {
         val count = timelineItem.events.size
         // A group made entirely of redacted events is a collapsed run of deleted messages
         // (element-web style); anything else is the regular run of room state changes. For the

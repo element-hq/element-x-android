@@ -79,7 +79,8 @@ internal fun ActiveCallTimelineItemView(
     onLongClick: (TimelineItem.Event) -> Unit,
     onReadReceiptsClick: (TimelineItem.Event) -> Unit,
     onJoinCallClick: (isAudioCall: Boolean) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    displayReadReceipts: Boolean = true,
 ) {
     Column(modifier = modifier) {
         Row(
@@ -141,15 +142,17 @@ internal fun ActiveCallTimelineItemView(
             }
         }
 
-        TimelineItemReadReceiptView(
-            state = ReadReceiptViewState(
-                sendState = event.localSendState,
-                isLastOutgoingMessage = isLastOutgoingMessage,
-                receipts = event.readReceiptState.receipts,
-            ),
-            onReadReceiptsClick = { onReadReceiptsClick(event) },
-            modifier = Modifier.padding(top = 4.dp),
-        )
+        if (displayReadReceipts) {
+            TimelineItemReadReceiptView(
+                state = ReadReceiptViewState(
+                    sendState = event.localSendState,
+                    isLastOutgoingMessage = isLastOutgoingMessage,
+                    receipts = event.readReceiptState.receipts,
+                ),
+                onReadReceiptsClick = { onReadReceiptsClick(event) },
+                topPadding = 4.dp,
+            )
+        }
     }
 }
 

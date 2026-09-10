@@ -83,6 +83,8 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureView
 import io.element.android.features.messages.impl.timeline.components.FloatingDateBadgeOverlay
 import io.element.android.features.messages.impl.timeline.components.TimelineItemRow
+import io.element.android.features.messages.impl.timeline.components.receipt.ReadReceiptViewState
+import io.element.android.features.messages.impl.timeline.components.receipt.TimelineItemReadReceiptView
 import io.element.android.features.messages.impl.timeline.components.toText
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.aFakeTimelineItemPresenterFactories
@@ -148,8 +150,8 @@ fun TimelineView(
         state.eventSink(TimelineEvent.ClearFocusRequestState)
     }
 
-    fun onScrollFinishAt(firstVisibleIndex: Int) {
-        state.eventSink(TimelineEvent.OnScrollFinished(firstVisibleIndex))
+    fun onScrollFinishAt(timelineIndex: Int) {
+        state.eventSink(TimelineEvent.OnScrollFinished(timelineIndex))
     }
 
     fun onFocusEventRender() {
@@ -191,80 +193,123 @@ fun TimelineView(
 
     // Animate alpha when timeline is first displayed, to avoid flashes or glitching when viewing rooms
     AnimatedVisibility(visible = true, enter = fadeIn()) {
-        Box(modifier) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .nestedScroll(nestedScrollConnection)
-                    .testTag(TestTags.timeline),
-                state = lazyListState,
-                reverseLayout = true,
-                contentPadding = WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal).asPaddingValues() + PaddingValues(top = 64.dp, bottom = 8.dp),
-            ) {
-                items(
-                    items = state.timelineItems,
-                    contentType = { timelineItem -> timelineItem.contentType() },
-                    key = { timelineItem -> timelineItem.identifier() },
-                ) { timelineItem ->
-                    TimelineItemRow(
-                        timelineItem = timelineItem,
-                        timelineMode = state.timelineMode,
-                        timelineRoomInfo = state.timelineRoomInfo,
-                        timelineProtectionState = timelineProtectionState,
-                        isLastOutgoingMessage = state.isLastOutgoingMessage(timelineItem.identifier()),
-                        focusedEventId = state.focusedEventId,
-                        displayThreadSummaries = state.displayThreadSummaries,
-                        onUserDataClick = onUserDataClick,
-                        onLinkClick = onLinkClick,
-                        onLinkLongClick = ::onLinkLongClick,
-                        onContentClick = onContentClick,
-                        onGalleryItemClick = onGalleryItemClick,
-                        onLongClick = onMessageLongClick,
-                        inReplyToClick = ::inReplyToClick,
-                        onReactionClick = onReactionClick,
-                        onReactionLongClick = onReactionLongClick,
-                        onMoreReactionsClick = onMoreReactionsClick,
-                        onReadReceiptClick = onReadReceiptClick,
-                        onSwipeToReply = onSwipeToReply,
-                        onJoinCallClick = onJoinCallClick,
-                        eventSink = state.eventSink,
-                    )
+        val lastOutgoingEventId = remember(state.timelineItems, state.isLive) {
+            val lastEvent = state.timelineItems.firstOrNull { it is TimelineItem.Event } as? TimelineItem.Event
+            lastEvent?.id?.takeIf { state.isLive && lastEvent.isMine }
+        }
+        val lazyRowsHolder = remember { TimelineLazyRowsHolder() }
+        val lazyRows = lazyRowsHolder.getOrUpdate(
+            timelineItems = state.timelineItems,
+            lastOutgoingEventId = lastOutgoingEventId,
+        )
+        val placementAnimationCoordinator = remember { TimelinePlacementAnimationCoordinator() }
+        CompositionLocalProvider(
+            LocalTimelinePlacementAnimationCoordinator provides placementAnimationCoordinator,
+        ) {
+            Box(modifier) {
+                val placementAnimationEnabled = timelineItemPlacementSpecEnabled()
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .nestedScroll(nestedScrollConnection)
+                        .testTag(TestTags.timeline),
+                    state = lazyListState,
+                    reverseLayout = true,
+                    contentPadding = WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal).asPaddingValues() + PaddingValues(top = 64.dp, bottom = 8.dp),
+                ) {
+                    items(
+                        count = lazyRows.size,
+                        contentType = { index -> lazyRows[index].contentType },
+                        key = { index -> lazyRows[index].key },
+                    ) { index ->
+                        when (val row = lazyRows[index]) {
+                            is TimelineLazyRow.Item -> {
+                                TimelineItemRow(
+                                    modifier = if (placementAnimationEnabled) {
+                                        Modifier.animateItem()
+                                    } else {
+                                        Modifier.animateItem(placementSpec = null)
+                                    },
+                                    timelineItem = row.timelineItem,
+                                    timelineMode = state.timelineMode,
+                                    timelineRoomInfo = state.timelineRoomInfo,
+                                    timelineProtectionState = timelineProtectionState,
+                                    isLastOutgoingMessage = state.isLastOutgoingMessage(row.timelineItem.identifier()),
+                                    focusedEventId = state.focusedEventId,
+                                    displayThreadSummaries = state.displayThreadSummaries,
+                                    displayReadReceipts = false,
+                                    onUserDataClick = onUserDataClick,
+                                    onLinkClick = onLinkClick,
+                                    onLinkLongClick = ::onLinkLongClick,
+                                    onContentClick = onContentClick,
+                                    onGalleryItemClick = onGalleryItemClick,
+                                    onLongClick = onMessageLongClick,
+                                    inReplyToClick = ::inReplyToClick,
+                                    onReactionClick = onReactionClick,
+                                    onReactionLongClick = onReactionLongClick,
+                                    onMoreReactionsClick = onMoreReactionsClick,
+                                    onReadReceiptClick = onReadReceiptClick,
+                                    onSwipeToReply = onSwipeToReply,
+                                    onJoinCallClick = onJoinCallClick,
+                                    eventSink = state.eventSink,
+                                )
+                            }
+                            is TimelineLazyRow.ReadReceipt -> {
+                                TimelineItemReadReceiptView(
+                                    modifier = if (placementAnimationEnabled) {
+                                        Modifier.animateItem()
+                                    } else {
+                                        Modifier.animateItem(placementSpec = null)
+                                    },
+                                    state = ReadReceiptViewState(
+                                        sendState = row.event.localSendState,
+                                        isLastOutgoingMessage = row.isLastOutgoingMessage,
+                                        receipts = row.event.readReceiptState.receipts,
+                                    ),
+                                    onReadReceiptsClick = { onReadReceiptClick(row.event) },
+                                    topPadding = 4.dp,
+                                )
+                            }
+                        }
+                    }
                 }
+
+                FocusRequestStateView(
+                    focusRequestState = state.focusRequestState,
+                    onClearFocusRequestState = ::clearFocusRequestState
+                )
+
+                TimelinePrefetchingHelper(
+                    lazyListState = lazyListState,
+                    prefetch = ::prefetchMoreItems
+                )
+
+                TimelineScrollHelper(
+                    hasAnyEvent = state.hasAnyEvent,
+                    lazyListState = lazyListState,
+                    forceJumpToBottomVisibility = forceJumpToBottomVisibility,
+                    forceJumpToReadMarkerVisibility = forceJumpToReadMarkerVisibility,
+                    newEventState = state.newEventState,
+                    isLive = state.isLive,
+                    focusRequestState = state.focusRequestState,
+                    displayJumpToUnread = state.displayJumpToUnread,
+                    jumpToUnread = state.jumpToUnread,
+                    lazyRows = lazyRows,
+                    onScrollFinishAt = ::onScrollFinishAt,
+                    onJumpToLive = ::onJumpToLive,
+                    onFocusEventRender = ::onFocusEventRender,
+                    onMarkAllAsRead = ::onMarkAllAsRead,
+                    onFocusOnEvent = ::onFocusOnEvent,
+                )
+
+                FloatingDateBadgeOverlay(
+                    lazyListState = lazyListState,
+                    timelineItems = state.timelineItems,
+                    lazyRows = lazyRows,
+                    isLive = state.isLive,
+                    topOffset = floatingDateTopOffset,
+                )
             }
-
-            FocusRequestStateView(
-                focusRequestState = state.focusRequestState,
-                onClearFocusRequestState = ::clearFocusRequestState
-            )
-
-            TimelinePrefetchingHelper(
-                lazyListState = lazyListState,
-                prefetch = ::prefetchMoreItems
-            )
-
-            TimelineScrollHelper(
-                hasAnyEvent = state.hasAnyEvent,
-                lazyListState = lazyListState,
-                forceJumpToBottomVisibility = forceJumpToBottomVisibility,
-                forceJumpToReadMarkerVisibility = forceJumpToReadMarkerVisibility,
-                newEventState = state.newEventState,
-                isLive = state.isLive,
-                focusRequestState = state.focusRequestState,
-                displayJumpToUnread = state.displayJumpToUnread,
-                jumpToUnread = state.jumpToUnread,
-                onScrollFinishAt = ::onScrollFinishAt,
-                onJumpToLive = ::onJumpToLive,
-                onFocusEventRender = ::onFocusEventRender,
-                onMarkAllAsRead = ::onMarkAllAsRead,
-                onFocusOnEvent = ::onFocusOnEvent,
-            )
-
-            FloatingDateBadgeOverlay(
-                lazyListState = lazyListState,
-                timelineItems = state.timelineItems,
-                isLive = state.isLive,
-                topOffset = floatingDateTopOffset,
-            )
         }
     }
 
@@ -337,7 +382,8 @@ private fun BoxScope.TimelineScrollHelper(
     focusRequestState: FocusRequestState,
     displayJumpToUnread: Boolean,
     jumpToUnread: JumpToUnreadState,
-    onScrollFinishAt: (Int) -> Unit,
+    lazyRows: TimelineLazyRows,
+    onScrollFinishAt: (timelineIndex: Int) -> Unit,
     onJumpToLive: () -> Unit,
     onFocusEventRender: () -> Unit,
     onMarkAllAsRead: () -> Unit,
@@ -347,10 +393,10 @@ private fun BoxScope.TimelineScrollHelper(
     val isScrollFinished by remember { derivedStateOf { !lazyListState.isScrollInProgress } }
     val canAutoScroll by remember {
         derivedStateOf {
-            lazyListState.firstVisibleItemIndex < 3 && isLive
+            lazyListState.firstVisibleItemIndex < 5 && isLive
         }
     }
-    val isJumpToUnreadVisible by remember(jumpToUnread, forceJumpToReadMarkerVisibility) {
+    val isJumpToUnreadVisible by remember(jumpToUnread, forceJumpToReadMarkerVisibility, lazyRows) {
         derivedStateOf {
             if (forceJumpToReadMarkerVisibility) return@derivedStateOf true
             when (val jtu = jumpToUnread) {
@@ -359,26 +405,42 @@ private fun BoxScope.TimelineScrollHelper(
                 is JumpToUnreadState.OutOfWindow -> true
                 // Marker is in the loaded window — hide once it's scrolled into the visible range.
                 is JumpToUnreadState.InWindow -> {
-                    val lastVisibleIndex = lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: return@derivedStateOf false
-                    jtu.index > lastVisibleIndex
+                    val lastVisibleLazyIndex = lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
+                        ?: return@derivedStateOf false
+                    jtu.index > lazyRows.timelineIndexAt(lastVisibleLazyIndex)
                 }
             }
         }
     }
     val isJumpToBottomVisible = !canAutoScroll || forceJumpToBottomVisibility || !isLive
     var jumpToLiveHandled by remember { mutableStateOf(true) }
+    val latestOnScrollFinishAt by rememberUpdatedState(onScrollFinishAt)
+    // Do not key effects on lazyRows identity: a timeline update rebuilds the flattened rows,
+    // which would re-fire OnScrollFinished (and mark-as-read) while the user is idle.
+    val latestLazyRows by rememberUpdatedState(lazyRows)
 
     /**
-     * @param force If true, scroll to the bottom even if the user is already seeing the most recent item.
+     * @param force If true, ensure we settle at the bottom even if the user is already seeing the most recent item.
      * This fixes the issue where the user is seeing typing notification and so the read receipt is not sent
      * when a new message comes in.
+     *
+     * When already at index 0, do **not** call [LazyListState.animateScrollToItem]: that API sets
+     * `skipItemPlacementAnimation`, and with Compose Foundation's skip-placement fix the item animator
+     * skips `onMeasured` for the whole seek — which interrupts `Modifier.animateItem()` for the newly
+     * inserted message. Read receipts are still delivered by invoking [onScrollFinishAt] directly.
      */
     fun scrollToBottom(force: Boolean) {
         coroutineScope.launch {
-            if (lazyListState.firstVisibleItemIndex > 10) {
-                lazyListState.scrollToItem(0)
-            } else if (force || lazyListState.firstVisibleItemIndex != 0) {
-                lazyListState.animateScrollToItem(0)
+            val firstVisibleIndex = lazyListState.firstVisibleItemIndex
+            when {
+                firstVisibleIndex > 10 -> lazyListState.scrollToItem(0)
+                firstVisibleIndex != 0 -> lazyListState.animateScrollToItem(0)
+                force && lazyListState.firstVisibleItemScrollOffset != 0 -> {
+                    lazyListState.scrollToItem(0)
+                }
+                force -> {
+                    latestOnScrollFinishAt(0)
+                }
             }
         }
     }
@@ -396,7 +458,7 @@ private fun BoxScope.TimelineScrollHelper(
         when (val jtu = jumpToUnread) {
             JumpToUnreadState.Hidden -> Unit
             is JumpToUnreadState.InWindow -> coroutineScope.launch {
-                lazyListState.animateScrollToItemCenter(jtu.index)
+                lazyListState.animateScrollToItemCenter(lazyRows.lazyIndexForTimelineIndex(jtu.index))
             }
             is JumpToUnreadState.OutOfWindow -> onFocusOnEvent(jtu.eventId)
         }
@@ -410,9 +472,9 @@ private fun BoxScope.TimelineScrollHelper(
     }
 
     val latestOnFocusEventRender by rememberUpdatedState(onFocusEventRender)
-    LaunchedEffect(focusRequestState) {
+    LaunchedEffect(focusRequestState, lazyRows) {
         if (focusRequestState is FocusRequestState.Success && focusRequestState.isIndexed && !focusRequestState.rendered) {
-            lazyListState.animateScrollToItemCenter(focusRequestState.index)
+            lazyListState.animateScrollToItemCenter(lazyRows.lazyIndexForTimelineIndex(focusRequestState.index))
             latestOnFocusEventRender()
         }
     }
@@ -428,11 +490,9 @@ private fun BoxScope.TimelineScrollHelper(
         }
     }
 
-    val latestOnScrollFinishAt by rememberUpdatedState(onScrollFinishAt)
     LaunchedEffect(isScrollFinished, hasAnyEvent) {
         if (isScrollFinished && hasAnyEvent) {
-            // Notify the parent composable about the first visible item index when scrolling finishes
-            latestOnScrollFinishAt(lazyListState.firstVisibleItemIndex)
+            latestOnScrollFinishAt(latestLazyRows.timelineIndexAt(lazyListState.firstVisibleItemIndex))
         }
     }
 
