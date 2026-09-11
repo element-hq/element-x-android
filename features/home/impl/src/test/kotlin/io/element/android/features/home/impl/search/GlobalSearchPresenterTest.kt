@@ -23,6 +23,9 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
+import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
+import io.element.android.libraries.matrix.api.roomlist.RoomListFilter.Joined
+import io.element.android.libraries.matrix.api.roomlist.RoomListFilter.NormalizedMatchRoomName
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.search.MessageSearchService
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -141,6 +144,9 @@ class GlobalSearchPresenterTest {
             // Let the query be propagated to the data source before emitting results
             testScheduler.advanceUntilIdle()
             roomList.summaries.emit(listOf(aRoomSummary()))
+
+            // The filter is updated to include the search query and only search joined rooms
+            assertThat(roomList.currentFilter.value).isEqualTo(RoomListFilter.all(Joined, NormalizedMatchRoomName("A query")))
 
             // Wait for the presenter to emit a loading state before the success state
             consumeItemsUntilPredicate { it.results is AsyncData.Loading }
