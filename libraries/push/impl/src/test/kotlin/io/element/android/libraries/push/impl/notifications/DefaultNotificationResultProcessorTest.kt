@@ -303,6 +303,48 @@ class DefaultNotificationResultProcessorTest {
             )
     }
 
+    @Test
+    fun `emit starts the processing if needed and only returns once the results have been processed`() = runTest {
+        val onNotifiableEventsReceived = lambdaRecorder<List<NotifiableEvent>, Unit> {}
+        val processor = createDefaultNotificationResultProcessor(
+            pushHistoryService = FakePushHistoryService(onPushReceivedResult = { _, _, _, _, _, _, _ -> }),
+            onNotifiableEventsReceived = onNotifiableEventsReceived,
+        )
+
+        // No call to start(): the worker may run in a process where no push has been received yet
+        processor.emit(mapOf(aPushRequest() to Result.success(ResolvedPushEvent.Event(aNotifiableMessageEvent()))))
+
+        // No runCurrent(): the results must already have been processed when emit returns
+        onNotifiableEventsReceived.assertions().isCalledOnce()
+
+        processor.stop()
+    }
+
+    @Test
+    fun `a failing batch does not prevent later batches from being processed`() = runTest {
+        var pushHistoryCalls = 0
+        val pushHistoryService = FakePushHistoryService(
+            onPushReceivedResult = { _, _, _, _, _, _, _ ->
+                pushHistoryCalls++
+                if (pushHistoryCalls == 1) error("boom")
+            },
+        )
+        val onNotifiableEventsReceived = lambdaRecorder<List<NotifiableEvent>, Unit> {}
+        val processor = createDefaultNotificationResultProcessor(
+            pushHistoryService = pushHistoryService,
+            onNotifiableEventsReceived = onNotifiableEventsReceived,
+        )
+
+        runningProcessor(processor) {
+            // Processing the first batch throws, but emit must still return and the collector must survive
+            emit(mapOf(aPushRequest() to Result.success(ResolvedPushEvent.Event(aNotifiableMessageEvent()))))
+            emit(mapOf(aPushRequest() to Result.success(ResolvedPushEvent.Event(aNotifiableMessageEvent()))))
+        }
+
+        // Only the second batch made it to the notification drawer
+        onNotifiableEventsReceived.assertions().isCalledOnce()
+    }
+
     private suspend fun TestScope.runningProcessor(processor: NotificationResultProcessor, block: suspend NotificationResultProcessor.() -> Unit) {
         processor.start()
 
