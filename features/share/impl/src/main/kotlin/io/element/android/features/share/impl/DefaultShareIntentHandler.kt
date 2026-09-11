@@ -40,8 +40,9 @@ class DefaultShareIntentHandler(
     ): ShareIntentData? {
         val type = intent.resolveType(context) ?: return null
         val uris = getIncomingUris(intent, type)
+        val shortcutId = intent.getStringExtra(Intent.EXTRA_SHORTCUT_ID)
         return when {
-            uris.isEmpty() && type == MimeTypes.PlainText -> handlePlainText(intent)
+            uris.isEmpty() && type == MimeTypes.PlainText -> handlePlainText(intent, shortcutId)
             uris.isNotEmpty() ||
                 type.isMimeTypeImage() ||
                 type.isMimeTypeVideo() ||
@@ -53,16 +54,20 @@ class DefaultShareIntentHandler(
                 ShareIntentData.Uris(
                     text = intent.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString()?.takeIf { it.isNotEmpty() },
                     uris = uris,
+                    shortcutId = shortcutId,
                 )
             }
             else -> null
         }
     }
 
-    private fun handlePlainText(intent: Intent): ShareIntentData.PlainText? {
+    private fun handlePlainText(intent: Intent, shortcutId: String?): ShareIntentData.PlainText? {
         val content = intent.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString()
         return if (content?.isNotEmpty() == true) {
-            ShareIntentData.PlainText(content)
+            ShareIntentData.PlainText(
+                content = content,
+                shortcutId = shortcutId,
+            )
         } else {
             null
         }
