@@ -197,10 +197,9 @@ internal fun shouldShowReadReceiptRow(
     isLastOutgoingMessage: Boolean,
 ): Boolean {
     if (event.readReceiptState.receipts.isNotEmpty()) return true
-    return when (val sendState = event.localSendState) {
+    return when (event.localSendState) {
         is LocalEventSendState.Sending -> true
         is LocalEventSendState.Failed -> false
         null, is LocalEventSendState.Sent -> isLastOutgoingMessage
-        else -> false
     }
 }

@@ -20,8 +20,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import io.element.android.features.messages.impl.R
-import io.element.android.features.messages.impl.timeline.LocalTimelinePlacementAnimationCoordinator
 import io.element.android.features.messages.impl.timeline.TimelineEvent
+import io.element.android.features.messages.impl.timeline.TimelinePlacementAnimationCoordinator
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.aGroupedEvents
 import io.element.android.features.messages.impl.timeline.aRedactedMessagesGroupedEvents
@@ -43,7 +43,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.wysiwyg.link.Link
 
 @Composable
-fun TimelineItemGroupedEventsRow(
+internal fun TimelineItemGroupedEventsRow(
     timelineItem: TimelineItem.GroupedEvents,
     timelineMode: Timeline.Mode,
     timelineRoomInfo: TimelineRoomInfo,
@@ -63,6 +63,7 @@ fun TimelineItemGroupedEventsRow(
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
+    placementAnimationCoordinator: TimelinePlacementAnimationCoordinator? = null,
     eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit =
         { event, contentModifier, onContentLayoutChange ->
             TimelineItemEventContentView(
@@ -81,20 +82,19 @@ fun TimelineItemGroupedEventsRow(
         },
 ) {
     val isExpanded = rememberSaveable { mutableStateOf(false) }
-    val placementAnimationCoordinator = LocalTimelinePlacementAnimationCoordinator.current
     var contentSizeAnimationInProgress by remember { mutableStateOf(false) }
 
     fun finishContentSizeAnimationIfNeeded() {
         if (contentSizeAnimationInProgress) {
             contentSizeAnimationInProgress = false
-            placementAnimationCoordinator?.onContentSizeAnimationFinished()
+            placementAnimationCoordinator?.onContentSizeAnimationFinish()
         }
     }
 
     fun onExpandGroupClick() {
         if (!contentSizeAnimationInProgress) {
             contentSizeAnimationInProgress = true
-            placementAnimationCoordinator?.onContentSizeAnimationStarted()
+            placementAnimationCoordinator?.onContentSizeAnimationStart()
         }
         isExpanded.value = !isExpanded.value
     }
@@ -106,7 +106,7 @@ fun TimelineItemGroupedEventsRow(
     TimelineItemGroupedEventsRowContent(
         isExpanded = isExpanded.value,
         onExpandGroupClick = ::onExpandGroupClick,
-        onContentSizeAnimationFinished = ::finishContentSizeAnimationIfNeeded,
+        onContentSizeAnimationFinish = ::finishContentSizeAnimationIfNeeded,
         timelineItem = timelineItem,
         timelineMode = timelineMode,
         timelineRoomInfo = timelineRoomInfo,
@@ -153,7 +153,7 @@ private fun TimelineItemGroupedEventsRowContent(
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
-    onContentSizeAnimationFinished: () -> Unit = {},
+    onContentSizeAnimationFinish: () -> Unit = {},
     eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit =
         { event, contentModifier, onContentLayoutChange ->
             TimelineItemEventContentView(
@@ -173,7 +173,7 @@ private fun TimelineItemGroupedEventsRowContent(
 ) {
     Column(
         modifier = modifier.animateContentSize(
-            finishedListener = { _, _ -> onContentSizeAnimationFinished() },
+            finishedListener = { _, _ -> onContentSizeAnimationFinish() },
         )
     ) {
         val count = timelineItem.events.size

@@ -203,12 +203,9 @@ fun TimelineView(
             lastOutgoingEventId = lastOutgoingEventId,
         )
         val placementAnimationCoordinator = remember { TimelinePlacementAnimationCoordinator() }
-        CompositionLocalProvider(
-            LocalTimelinePlacementAnimationCoordinator provides placementAnimationCoordinator,
-        ) {
-            Box(modifier) {
-                val placementAnimationEnabled = timelineItemPlacementSpecEnabled()
-                LazyColumn(
+        Box(modifier) {
+            val placementAnimationEnabled = placementAnimationCoordinator.isPlacementAnimationEnabled
+            LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
                         .nestedScroll(nestedScrollConnection)
@@ -230,6 +227,7 @@ fun TimelineView(
                                     } else {
                                         Modifier.animateItem(placementSpec = null)
                                     },
+                                    placementAnimationCoordinator = placementAnimationCoordinator,
                                     timelineItem = row.timelineItem,
                                     timelineMode = state.timelineMode,
                                     timelineRoomInfo = state.timelineRoomInfo,
@@ -311,7 +309,6 @@ fun TimelineView(
                 )
             }
         }
-    }
 
     ResolveVerifiedUserSendFailureView(state = state.resolveVerifiedUserSendFailureState)
 

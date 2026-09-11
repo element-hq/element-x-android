@@ -7,12 +7,10 @@
 
 package io.element.android.features.messages.impl.timeline
 
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.staticCompositionLocalOf
 
 /**
  * Coordinates LazyColumn [androidx.compose.foundation.lazy.LazyItemScope.animateItem] placement
@@ -29,20 +27,13 @@ internal class TimelinePlacementAnimationCoordinator {
     val isPlacementAnimationEnabled: Boolean
         get() = suppressPlacementAnimation == 0
 
-    fun onContentSizeAnimationStarted() {
+    fun onContentSizeAnimationStart() {
         suppressPlacementAnimation++
     }
 
-    fun onContentSizeAnimationFinished() {
+    fun onContentSizeAnimationFinish() {
         if (suppressPlacementAnimation > 0) {
             suppressPlacementAnimation--
         }
     }
 }
-
-internal val LocalTimelinePlacementAnimationCoordinator =
-    staticCompositionLocalOf<TimelinePlacementAnimationCoordinator?> { null }
-
-@Composable
-internal fun timelineItemPlacementSpecEnabled(): Boolean =
-    LocalTimelinePlacementAnimationCoordinator.current?.isPlacementAnimationEnabled != false
