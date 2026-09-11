@@ -28,10 +28,14 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicInteger
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
@@ -59,6 +63,12 @@ class SyncOrchestrator(
     private val coroutineScope = sessionCoroutineScope.childScope(dispatchers.io, tag)
 
     private val started = AtomicBoolean(false)
+
+    /**
+     * Number of consecutive attempts at restarting a sync service which stopped on its own.
+     * Reset once the sync service has been running for [RESTART_BACKOFF_RESET_DELAY].
+     */
+    private val restartAttempt = AtomicInteger(0)
 
     /**
      * Starting observing the app state and network state to start/stop the sync service.
@@ -91,6 +101,17 @@ class SyncOrchestrator(
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     internal fun observeStates() = coroutineScope.launch {
         Timber.tag(tag).d("start observing the app and network state")
+        // Reset the restart backoff once the sync service has been steadily running for a while. Note that
+        // SyncService.startSync() moves the state to Running right away, so resetting on any Running value
+        // would defeat the backoff when the sync service dies again immediately after each restart.
+        syncService.syncState
+            .debounce(RESTART_BACKOFF_RESET_DELAY)
+            .onEach { syncState ->
+                if (syncState == SyncState.Running) {
+                    restartAttempt.set(0)
+                }
+            }
+            .launchIn(this)
         val isAppActiveFlows = listOf(
             appForegroundStateService.isInForeground,
             appForegroundStateService.isInCall,
@@ -117,14 +138,26 @@ class SyncOrchestrator(
                 SyncStateAction.StopSync
             } else if (syncState == SyncState.Idle && isAppActive && isNetworkAvailable) {
                 SyncStateAction.StartSync
+            } else if (syncState.isDead() && isAppActive && isNetworkAvailable) {
+                // The sync service has given up, for instance because the homeserver has expired our sliding sync
+                // session and answered 400 M_UNKNOWN_POS. Nothing else will ever restart it, so do it from here,
+                // else the application is stuck until its data is cleared.
+                SyncStateAction.RestartSync
             } else {
                 SyncStateAction.NoOp
             }
         }
             .distinctUntilChanged()
             .debounce { action ->
-                // Don't stop the sync immediately, wait a bit to avoid starting/stopping the sync too often
-                if (action == SyncStateAction.StopSync) 3.seconds else 0.seconds
+                when (action) {
+                    // Don't stop the sync immediately, wait a bit to avoid starting/stopping the sync too often
+                    SyncStateAction.StopSync -> 3.seconds
+                    // Back off before restarting a dead sync service, to avoid hammering a failing homeserver.
+                    // A state change in the meantime cancels the pending restart.
+                    SyncStateAction.RestartSync -> restartDelay(restartAttempt.get())
+                    SyncStateAction.StartSync,
+                    SyncStateAction.NoOp -> 0.seconds
+                }
             }
             .onCompletion {
                 Timber.tag(tag).d("has been stopped")
@@ -132,6 +165,11 @@ class SyncOrchestrator(
             .collect { action ->
                 when (action) {
                     SyncStateAction.StartSync -> {
+                        syncService.startSync()
+                    }
+                    SyncStateAction.RestartSync -> {
+                        val attempt = restartAttempt.incrementAndGet()
+                        Timber.tag(tag).w("sync service is dead, restarting it (attempt $attempt)")
                         syncService.startSync()
                     }
                     SyncStateAction.StopSync -> {
@@ -143,8 +181,34 @@ class SyncOrchestrator(
     }
 }
 
+@VisibleForTesting
+internal val FIRST_RESTART_DELAY = 1.seconds
+
+@VisibleForTesting
+internal val MAX_RESTART_DELAY = 30.seconds
+
+/**
+ * Duration during which the sync service has to stay running before the restart backoff is reset.
+ */
+@VisibleForTesting
+internal val RESTART_BACKOFF_RESET_DELAY = 30.seconds
+
+/**
+ * Return true if the sync service has stopped and will not restart by itself.
+ */
+private fun SyncState.isDead() = this == SyncState.Error || this == SyncState.Terminated
+
+/**
+ * Exponential backoff, from [FIRST_RESTART_DELAY], doubling on every attempt, up to [MAX_RESTART_DELAY].
+ */
+private fun restartDelay(attempt: Int): Duration {
+    val exponent = attempt.coerceIn(0, 5)
+    return (FIRST_RESTART_DELAY * (1 shl exponent)).coerceAtMost(MAX_RESTART_DELAY)
+}
+
 private enum class SyncStateAction {
     StartSync,
+    RestartSync,
     StopSync,
     NoOp,
 }

@@ -113,6 +113,7 @@ import java.time.Duration
 import java.time.Instant
 import java.util.Optional
 import java.util.UUID
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toKotlinDuration
@@ -324,7 +325,9 @@ class LoggedInFlowNode(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.Placeholder -> emptyNode(buildContext)
+            // Rendered while the FtueState is Unknown. Render a loading state rather than nothing at all,
+            // since there is no guarantee that this state will be left.
+            NavTarget.Placeholder -> emptyNode(buildContext, delayBeforeShowingContent = 500.milliseconds)
             NavTarget.LoggedInPermanent -> {
                 val callback = object : LoggedInNode.Callback {
                     override fun navigateToNotificationTroubleshoot() {

@@ -37,6 +37,7 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
+import kotlin.time.Duration.Companion.milliseconds
 
 @ContributesNode(SessionScope::class)
 @AssistedInject
@@ -84,7 +85,10 @@ class FtueFlowNode(
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.Placeholder -> {
-                emptyNode(buildContext)
+                // Rendered while waiting for the initial state (see FtueStep.WaitingForInitialState).
+                // This can last for a while, or forever if the sync service never manages to run, so
+                // render a loading state rather than nothing at all.
+                emptyNode(buildContext, delayBeforeShowingContent = 500.milliseconds)
             }
             is NavTarget.SessionVerification -> {
                 val callback = object : FtueSessionVerificationFlowNode.Callback {
