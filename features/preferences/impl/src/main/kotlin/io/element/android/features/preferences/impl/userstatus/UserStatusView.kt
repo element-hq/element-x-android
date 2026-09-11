@@ -136,6 +136,7 @@ private fun EmptyStatusRow(
                 modifier = Modifier.padding(vertical = 16.dp),
             )
         },
+        verticalAlignment = Alignment.CenterVertically,
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Reaction())),
         modifier = modifier.clickable(onClick = onClick),
     )
@@ -154,6 +155,7 @@ private fun CurrentStatusRow(
     }
     ListItem(
         content = { Text(text = text, modifier = Modifier.padding(vertical = 16.dp)) },
+        verticalAlignment = Alignment.CenterVertically,
         leadingContent = ListItemContent.Custom { EmojiText(emoji) },
         trailingContent = ListItemContent.Custom({
             IconButton(
@@ -320,6 +322,7 @@ private fun CustomStatusInputRow(
                 }
             }
         }),
+        verticalAlignment = Alignment.CenterVertically,
         modifier = modifier,
     )
 }
