@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.TimelineEvent
+import io.element.android.features.messages.impl.timeline.TimelinePlacementAnimationCoordinator
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
@@ -75,6 +76,8 @@ internal fun TimelineItemRow(
     onSwipeToReply: (TimelineItem.Event) -> Unit,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
+    displayReadReceipts: Boolean = true,
+    placementAnimationCoordinator: TimelinePlacementAnimationCoordinator? = null,
     eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit =
         { event, contentModifier, onContentLayoutChange ->
             TimelineItemEventContentView(
@@ -122,6 +125,7 @@ internal fun TimelineItemRow(
                             onLongClick = { onLongClick(timelineItem) },
                             timelineProtectionState = timelineProtectionState,
                             eventSink = eventSink,
+                            displayReadReceipts = displayReadReceipts,
                         )
                     }
                     is TimelineItemRtcNotificationContent -> {
@@ -134,6 +138,7 @@ internal fun TimelineItemRow(
                                 onLongClick = onLongClick,
                                 onReadReceiptsClick = onReadReceiptClick,
                                 onJoinCallClick = onJoinCallClick,
+                                displayReadReceipts = displayReadReceipts,
                             )
                             is RtcNotificationState.Started, is RtcNotificationState.Declined ->
                                 TimelineItemCallNotifyView(
@@ -144,6 +149,7 @@ internal fun TimelineItemRow(
                                     isLastOutgoingMessage = isLastOutgoingMessage,
                                     onLongClick = onLongClick,
                                     onReadReceiptsClick = onReadReceiptClick,
+                                    displayReadReceipts = displayReadReceipts,
                                 )
                         }
                     }
@@ -197,6 +203,7 @@ internal fun TimelineItemRow(
                             onSwipeToReply = { onSwipeToReply(timelineItem) },
                             onGalleryItemClick = { index -> onGalleryItemClick(timelineItem, index) },
                             eventSink = eventSink,
+                            displayReadReceipts = displayReadReceipts,
                             eventContentView = { contentModifier, onContentLayoutChange ->
                                 eventContentView(timelineItem, contentModifier, onContentLayoutChange)
                             },
@@ -213,6 +220,7 @@ internal fun TimelineItemRow(
                     isLastOutgoingMessage = isLastOutgoingMessage,
                     focusedEventId = focusedEventId,
                     displayThreadSummaries = displayThreadSummaries,
+                    placementAnimationCoordinator = placementAnimationCoordinator,
                     onClick = onContentClick,
                     onLongClick = onLongClick,
                     inReplyToClick = inReplyToClick,

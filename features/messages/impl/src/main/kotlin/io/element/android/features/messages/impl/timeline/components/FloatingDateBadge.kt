@@ -32,6 +32,7 @@ import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.messages.impl.timeline.TimelineLazyRows
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemDaySeparatorModel
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -48,18 +49,21 @@ import kotlin.time.Duration.Companion.milliseconds
 internal fun BoxScope.FloatingDateBadgeOverlay(
     lazyListState: LazyListState,
     timelineItems: ImmutableList<TimelineItem>,
+    lazyRows: TimelineLazyRows,
     isLive: Boolean,
     topOffset: Dp = 0.dp,
 ) {
     // This needs to be a state to trigger a `derivedState` recalculation
     val updatedTimelineItems by rememberUpdatedState(timelineItems)
+    val updatedLazyRows by rememberUpdatedState(lazyRows)
 
     // Look for the last visible item with a timestamp, starting from the last visible item and going backwards until we find one or reach the start of the list
     val lastVisibleItemWithTimestamp by remember {
         derivedStateOf {
             var index = lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: return@derivedStateOf null
             while (index >= 0) {
-                when (val item = updatedTimelineItems.getOrNull(index)) {
+                val timelineIndex = updatedLazyRows.timelineIndexAt(index)
+                when (val item = updatedTimelineItems.getOrNull(timelineIndex)) {
                     is TimelineItem.Event -> return@derivedStateOf item
                     is TimelineItem.Virtual -> if (item.model is TimelineItemDaySeparatorModel) return@derivedStateOf item
                     is TimelineItem.GroupedEvents -> return@derivedStateOf item.events.firstOrNull()
