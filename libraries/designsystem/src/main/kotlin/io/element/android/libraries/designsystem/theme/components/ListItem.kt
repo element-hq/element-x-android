@@ -19,6 +19,7 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
@@ -53,6 +54,7 @@ fun ListItem(
     leadingContent: ListItemContent? = null,
     trailingContent: ListItemContent? = null,
     style: ListItemStyle = ListItemStyle.Default,
+    verticalAlignment: Alignment.Vertical = ListItemDefaults.verticalAlignment(),
     enabled: Boolean = true,
     alwaysClickable: Boolean = false,
     onClick: (() -> Unit)? = null,
@@ -76,6 +78,7 @@ fun ListItem(
         colors = colors,
         enabled = enabled,
         alwaysClickable = alwaysClickable,
+        verticalAlignment = verticalAlignment,
         onClick = onClick,
         content = content,
     )
@@ -98,6 +101,7 @@ fun ListItem(
 fun ListItem(
     colors: ListItemColors,
     modifier: Modifier = Modifier,
+    verticalAlignment: Alignment.Vertical = ListItemDefaults.verticalAlignment(),
     supportingContent: @Composable (() -> Unit)? = null,
     leadingContent: ListItemContent? = null,
     trailingContent: ListItemContent? = null,
@@ -168,6 +172,7 @@ fun ListItem(
         leadingContent = decoratedLeadingContent,
         trailingContent = decoratedTrailingContent,
         colors = colors,
+        verticalAlignment = verticalAlignment,
         elevation = ListItemDefaults.elevation(elevation = 0.dp),
         content = decoratedContent,
     )
