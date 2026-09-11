@@ -87,6 +87,7 @@ class PttPrototypePresenter(
         val coroutineScope = rememberCoroutineScope()
         val permissionsState = recordAudioPermissionPresenter.present()
         var pendingJoin by remember { mutableStateOf(false) }
+        var pendingEnable by remember { mutableStateOf(false) }
 
         // "Draw over other apps" is a special permission granted via a settings screen — re-check on
         // resume so the UI updates after the user returns from it.
@@ -122,11 +123,17 @@ class PttPrototypePresenter(
         val isTransmitting = sessionState?.floor is PttFloorState.HeldByMe
         val participantCount = sessionState?.participantCount ?: 0
 
-        // Once the microphone permission is granted, honour a pending join.
+        // Once the microphone permission is granted, honour a pending join or enable.
         LaunchedEffect(permissionsState.permissionGranted) {
-            if (permissionsState.permissionGranted && pendingJoin) {
-                pendingJoin = false
-                pttSessionManager.start(room.sessionId, room.roomId)
+            if (permissionsState.permissionGranted) {
+                if (pendingJoin) {
+                    pendingJoin = false
+                    pttSessionManager.start(room.sessionId, room.roomId)
+                }
+                if (pendingEnable) {
+                    pendingEnable = false
+                    pttRoomService.setPttEnabled(true)
+                }
             }
         }
 
@@ -143,8 +150,16 @@ class PttPrototypePresenter(
                 PttPrototypeEvent.LeavePttChannel -> pttSessionManager.stop()
                 PttPrototypeEvent.StartTransmitting -> pttSessionManager.pressToTalk()
                 PttPrototypeEvent.StopTransmitting -> pttSessionManager.releaseToTalk()
-                is PttPrototypeEvent.SetPttEnabled -> coroutineScope.launch {
-                    pttRoomService.setPttEnabled(event.enabled)
+                is PttPrototypeEvent.SetPttEnabled -> {
+                    if (event.enabled && !permissionsState.permissionGranted) {
+                        // Enabling PTT starts a warm session that needs the mic to transmit. Secure
+                        // RECORD_AUDIO up-front so later transmit surfaces — including hardware buttons,
+                        // which can't prompt on their own — aren't denied. Enable once granted.
+                        pendingEnable = true
+                        permissionsState.eventSink(PermissionsEvent.RequestPermissions)
+                    } else {
+                        coroutineScope.launch { pttRoomService.setPttEnabled(event.enabled) }
+                    }
                 }
                 is PttPrototypeEvent.SetHearingEnabled -> pttSessionManager.setHearingEnabled(event.enabled)
                 is PttPrototypeEvent.SetCovertMode -> pttSessionManager.setCovert(event.enabled)
