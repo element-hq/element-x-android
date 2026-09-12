@@ -213,7 +213,6 @@ fun Context.openSystemOverlaySettings() {
     }
 }
 
-
 // Not in KTX anymore
 fun Context.toast(resId: Int) {
     Toast.makeText(this, resId, Toast.LENGTH_SHORT).show()
