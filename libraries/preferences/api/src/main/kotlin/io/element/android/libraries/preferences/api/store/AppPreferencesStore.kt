@@ -29,6 +29,14 @@ interface AppPreferencesStore {
     fun isDeveloperModeEnabledFlow(): Flow<Boolean>
 
     /**
+     * @param hide true to leave the rooms which belong to a space out of the room list.
+     */
+    suspend fun setHideSpaceRooms(hide: Boolean)
+
+    /** Whether the rooms which belong to a space are left out of the room list; defaults to `false`. */
+    fun hideSpaceRoomsFlow(): Flow<Boolean>
+
+    /**
      * @param string the Element Call deployment to use, or `null` to go back to the one from the homeserver.
      */
     suspend fun setCustomElementCallBaseUrl(string: String?)
