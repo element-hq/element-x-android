@@ -143,6 +143,7 @@ fun TimelineItemEventContentView(
                     content = content,
                     onLinkClick = onLinkClick,
                     onLinkLongClick = onLinkLongClick,
+                    onLongClick = onLongClick,
                     onContentLayoutChange = calculatedOnContentLayoutChange,
                 )
                 is TimelineItemUnknownContent -> TimelineItemUnknownView(
