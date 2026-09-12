@@ -16,6 +16,7 @@ sealed interface NotificationSettingsEvent {
     data class SetAtRoomNotificationsEnabled(val enabled: Boolean) : NotificationSettingsEvent
     data class SetCallNotificationsEnabled(val enabled: Boolean) : NotificationSettingsEvent
     data class SetInviteForMeNotificationsEnabled(val enabled: Boolean) : NotificationSettingsEvent
+    data class SetConversationNotificationsEnabled(val enabled: Boolean) : NotificationSettingsEvent
     data object FixConfigurationMismatch : NotificationSettingsEvent
     data object ClearConfigurationMismatchError : NotificationSettingsEvent
     data object ClearNotificationChangeError : NotificationSettingsEvent

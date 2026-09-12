@@ -29,6 +29,15 @@ interface AppPreferencesStore {
     fun isDeveloperModeEnabledFlow(): Flow<Boolean>
 
     /**
+     * @param enabled true to publish room notifications as Android conversations, which lets the system show them as such and
+     * lets Do Not Disturb treat them as conversations.
+     */
+    suspend fun setConversationNotificationsEnabled(enabled: Boolean)
+
+    /** Whether room notifications are published as Android conversations; defaults to `true`. */
+    fun isConversationNotificationsEnabledFlow(): Flow<Boolean>
+
+    /**
      * @param string the Element Call deployment to use, or `null` to go back to the one from the homeserver.
      */
     suspend fun setCustomElementCallBaseUrl(string: String?)

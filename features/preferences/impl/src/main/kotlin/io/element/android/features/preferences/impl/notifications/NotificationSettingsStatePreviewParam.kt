@@ -67,6 +67,7 @@ open class NotificationSettingsStatePreviewParam : PreviewParameterProvider<Noti
                 messageSound = NotificationSound.ElementDefault,
                 messageSoundDisplayName = "Element default",
             ),
+            aValidNotificationSettingsState(conversationNotificationsEnabled = false),
             aValidNotificationSettingsState(showMessageSoundDialog = true),
             aValidNotificationSettingsState(showCallRingtoneDialog = true),
             aValidNotificationSettingsState(
@@ -84,6 +85,7 @@ fun aValidNotificationSettingsState(
     inviteForMeNotificationsEnabled: Boolean = true,
     systemNotificationsEnabled: Boolean = true,
     appNotificationEnabled: Boolean = true,
+    conversationNotificationsEnabled: Boolean = true,
     currentPushDistributor: AsyncData<Distributor> = AsyncData.Success(aDistributor("Firebase")),
     availablePushDistributors: List<Distributor> = listOf(
         aDistributor("Firebase"),
@@ -113,6 +115,7 @@ fun aValidNotificationSettingsState(
     appSettings = NotificationSettingsState.AppSettings(
         systemNotificationsEnabled = systemNotificationsEnabled,
         appNotificationsEnabled = appNotificationEnabled,
+        conversationNotificationsEnabled = conversationNotificationsEnabled,
     ),
     changeNotificationSettingAction = changeNotificationSettingAction,
     currentPushDistributor = currentPushDistributor,
@@ -146,6 +149,7 @@ fun aInvalidNotificationSettingsState(
     appSettings = NotificationSettingsState.AppSettings(
         systemNotificationsEnabled = false,
         appNotificationsEnabled = true,
+        conversationNotificationsEnabled = true,
     ),
     changeNotificationSettingAction = AsyncAction.Uninitialized,
     currentPushDistributor = AsyncData.Uninitialized,
