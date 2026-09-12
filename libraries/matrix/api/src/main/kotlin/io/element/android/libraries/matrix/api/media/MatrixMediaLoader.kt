@@ -8,6 +8,8 @@
 
 package io.element.android.libraries.matrix.api.media
 
+import io.element.android.libraries.matrix.api.core.ProgressCallback
+
 /**
  * Fetches media content from the homeserver, decrypting it on the way when the room is encrypted.
  */
@@ -38,5 +40,6 @@ interface MatrixMediaLoader {
         mimeType: String?,
         filename: String?,
         useCache: Boolean = true,
+        progressCallback: ProgressCallback? = null,
     ): Result<MediaFile>
 }
