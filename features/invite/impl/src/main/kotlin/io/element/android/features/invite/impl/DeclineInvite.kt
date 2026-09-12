@@ -13,6 +13,8 @@ import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.exception.ClientException
+import io.element.android.libraries.matrix.api.exception.ErrorKind
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
 
 interface DeclineInvite {
@@ -26,6 +28,7 @@ interface DeclineInvite {
     sealed class Exception : kotlin.Exception() {
         data object RoomNotFound : Exception()
         data object DeclineInviteFailed : Exception()
+        data object InvalidInvite : Exception()
         data object ReportRoomFailed : Exception()
         data object BlockUserFailed : Exception()
     }
@@ -46,7 +49,16 @@ class DefaultDeclineInvite(
         val room = client.getRoom(roomId) ?: return Result.failure(DeclineInvite.Exception.RoomNotFound)
         room.use {
             room.leave()
-                .onFailure { return Result.failure(DeclineInvite.Exception.DeclineInviteFailed) }
+                .recoverCatching { error ->
+                    if (error.isInvalidInvite()) {
+                        room.forget().getOrElse { throw DeclineInvite.Exception.InvalidInvite }
+                    } else {
+                        throw error
+                    }
+                }
+                .onFailure { error ->
+                    return Result.failure(error as? DeclineInvite.Exception ?: DeclineInvite.Exception.DeclineInviteFailed)
+                }
                 .onSuccess {
                     notificationCleaner.clearMembershipNotificationForRoom(
                         sessionId = client.sessionId,
@@ -71,4 +83,8 @@ class DefaultDeclineInvite(
         }
         return Result.success(roomId)
     }
+}
+
+private fun Throwable.isInvalidInvite(): Boolean {
+    return this is ClientException.MatrixApi && kind == ErrorKind.Unknown
 }
