@@ -60,6 +60,7 @@ fun aPinUnlockState(
     biometricUnlockResult: BiometricAuthenticator.AuthenticationResult? = null,
     isUnlocked: Boolean = false,
     signOutAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    isPinKeypadShuffled: Boolean = false,
 ) = PinUnlockState(
     canNavigateBack = canNavigateBack,
     pinEntry = pinEntry,
@@ -70,5 +71,6 @@ fun aPinUnlockState(
     signOutAction = signOutAction,
     biometricUnlockResult = biometricUnlockResult,
     isUnlocked = isUnlocked,
+    isPinKeypadShuffled = isPinKeypadShuffled,
     eventSink = {}
 )

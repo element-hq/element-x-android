@@ -11,6 +11,7 @@ package io.element.android.features.lockscreen.impl.unlock
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,6 +24,7 @@ import io.element.android.features.lockscreen.impl.biometric.BiometricAuthentica
 import io.element.android.features.lockscreen.impl.biometric.BiometricAuthenticatorManager
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
+import io.element.android.features.lockscreen.impl.storage.LockScreenStore
 import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypadModel
 import io.element.android.features.logout.api.LogoutUseCase
 import io.element.android.libraries.architecture.AsyncAction
@@ -43,6 +45,7 @@ class PinUnlockPresenter(
     @AppCoroutineScope
     private val coroutineScope: CoroutineScope,
     private val pinUnlockHelper: PinUnlockHelper,
+    private val lockScreenStore: LockScreenStore,
 ) : Presenter<PinUnlockState> {
     @AssistedFactory
     interface Factory {
@@ -73,6 +76,9 @@ class PinUnlockPresenter(
         val isUnlocked = remember {
             mutableStateOf(false)
         }
+        val isPinKeypadShuffled by remember {
+            lockScreenStore.isPinKeypadShuffled()
+        }.collectAsState(initial = false)
         val biometricUnlock = biometricAuthenticatorManager.rememberUnlockBiometricAuthenticator()
         LaunchedEffect(Unit) {
             suspend {
@@ -145,6 +151,7 @@ class PinUnlockPresenter(
             showBiometricUnlock = biometricUnlock.isActive,
             biometricUnlockResult = biometricUnlockResult,
             isUnlocked = isUnlocked.value,
+            isPinKeypadShuffled = isPinKeypadShuffled,
             eventSink = ::handleEvent,
         )
     }

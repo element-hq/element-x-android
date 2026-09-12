@@ -35,4 +35,14 @@ interface LockScreenStore : EncryptedPinCodeStorage {
      * Sets whether the biometric unlock is allowed or not.
      */
     suspend fun setIsBiometricUnlockAllowed(isAllowed: Boolean)
+
+    /**
+     * Returns whether the digits of the PIN keypad are shuffled or not.
+     */
+    fun isPinKeypadShuffled(): Flow<Boolean>
+
+    /**
+     * Sets whether the digits of the PIN keypad are shuffled or not.
+     */
+    suspend fun setIsPinKeypadShuffled(isShuffled: Boolean)
 }

@@ -194,6 +194,7 @@ class PinUnlockPresenterTest {
             logoutUseCase = logoutUseCase,
             coroutineScope = this,
             pinUnlockHelper = PinUnlockHelper(biometricAuthenticatorManager, pinCodeManager),
+            lockScreenStore = InMemoryLockScreenStore(),
         )
     }
 }
