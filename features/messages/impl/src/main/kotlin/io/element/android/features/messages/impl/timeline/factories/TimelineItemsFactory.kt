@@ -16,6 +16,7 @@ import io.element.android.features.messages.impl.timeline.factories.event.Timeli
 import io.element.android.features.messages.impl.timeline.factories.virtual.TimelineItemVirtualFactory
 import io.element.android.features.messages.impl.timeline.groups.TimelineItemGrouper
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.libraries.androidutils.diff.DiffCacheUpdater
 import io.element.android.libraries.androidutils.diff.MutableListDiffCache
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -68,10 +69,11 @@ class TimelineItemsFactory(
         timelineItems: List<MatrixTimelineItem>,
         roomMembers: List<RoomMember>,
         renderReadReceipts: Boolean,
+        renderRedactedMessages: Boolean = true,
     ) = withContext(dispatchers.computation) {
         lock.withLock {
             diffCacheUpdater.updateWith(timelineItems)
-            buildAndEmitTimelineItemStates(timelineItems, roomMembers, renderReadReceipts)
+            buildAndEmitTimelineItemStates(timelineItems, roomMembers, renderReadReceipts, renderRedactedMessages)
         }
     }
 
@@ -79,6 +81,7 @@ class TimelineItemsFactory(
         timelineItems: List<MatrixTimelineItem>,
         roomMembers: List<RoomMember>,
         renderReadReceipts: Boolean,
+        renderRedactedMessages: Boolean,
     ) {
         val newTimelineItemStates = ArrayList<TimelineItem>()
         for (index in diffCache.indices().reversed()) {
@@ -101,7 +104,12 @@ class TimelineItemsFactory(
                 newTimelineItemStates.add(updatedItem)
             }
         }
-        val result = timelineItemGrouper.group(newTimelineItemStates).toImmutableList()
+        val renderableItems = if (renderRedactedMessages) {
+            newTimelineItemStates
+        } else {
+            newTimelineItemStates.filterNot { it.isRedactedEvent() }
+        }
+        val result = timelineItemGrouper.group(renderableItems).toImmutableList()
         this._timelineItems.emit(result)
     }
 
@@ -124,6 +132,10 @@ class TimelineItemsFactory(
         diffCache[index] = timelineItem
         return timelineItem
     }
+}
+
+private fun TimelineItem.isRedactedEvent(): Boolean {
+    return (this as? TimelineItem.Event)?.content is TimelineItemRedactedContent
 }
 
 private fun EventTimelineItem.isKeyVerificationRequest(): Boolean {
