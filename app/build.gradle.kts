@@ -38,6 +38,12 @@ plugins {
     // alias(libs.plugins.gms.google.services)
 }
 
+fun signingValue(envName: String, propertyName: String): String? =
+    providers.environmentVariable(envName)
+        .orElse(providers.gradleProperty(propertyName))
+        .orNull
+        ?.takeIf { it.isNotBlank() }
+
 android {
     namespace = "io.element.android.x"
 
@@ -88,13 +94,22 @@ android {
             storePassword = "android"
         }
         register("nightly") {
-            keyAlias = System.getenv("ELEMENT_ANDROID_NIGHTLY_KEYID")
-                ?: project.property("signing.element.nightly.keyId") as? String?
-            keyPassword = System.getenv("ELEMENT_ANDROID_NIGHTLY_KEYPASSWORD")
-                ?: project.property("signing.element.nightly.keyPassword") as? String?
-            storeFile = file("./signature/nightly.keystore")
-            storePassword = System.getenv("ELEMENT_ANDROID_NIGHTLY_STOREPASSWORD")
-                ?: project.property("signing.element.nightly.storePassword") as? String?
+            keyAlias = signingValue("ELEMENT_ANDROID_NIGHTLY_KEYID", "signing.element.nightly.keyId")
+            keyPassword = signingValue("ELEMENT_ANDROID_NIGHTLY_KEYPASSWORD", "signing.element.nightly.keyPassword")
+            storeFile = file(
+                signingValue("ELEMENT_ANDROID_NIGHTLY_STOREFILE", "signing.element.nightly.storeFile")
+                    ?: "./signature/nightly.keystore"
+            )
+            storePassword = signingValue("ELEMENT_ANDROID_NIGHTLY_STOREPASSWORD", "signing.element.nightly.storePassword")
+        }
+        val releaseStoreFile = signingValue("ELEMENT_ANDROID_RELEASE_STOREFILE", "signing.element.release.storeFile")
+        if (releaseStoreFile != null) {
+            register("release") {
+                keyAlias = signingValue("ELEMENT_ANDROID_RELEASE_KEYID", "signing.element.release.keyId")
+                keyPassword = signingValue("ELEMENT_ANDROID_RELEASE_KEYPASSWORD", "signing.element.release.keyPassword")
+                storeFile = file(releaseStoreFile)
+                storePassword = signingValue("ELEMENT_ANDROID_RELEASE_STOREPASSWORD", "signing.element.release.storePassword")
+            }
         }
     }
 
@@ -122,7 +137,7 @@ android {
                 "login_redirect_scheme",
                 oAuthRedirectSchemeBase,
             )
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.findByName("release") ?: signingConfigs.getByName("debug")
 
             optimization {
                 enable = true

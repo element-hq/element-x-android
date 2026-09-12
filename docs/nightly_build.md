@@ -27,6 +27,7 @@ Click on this link and follow the instruction: [https://appdistribution.firebase
 Nightly build can be built manually from your computer. You will need to retrieved some secrets from Passbolt and add them to your file `~/.gradle/gradle.properties`:
 
 ```
+signing.element.nightly.storeFile=VALUE_FROM_PASSBOLT
 signing.element.nightly.storePassword=VALUE_FROM_PASSBOLT
 signing.element.nightly.keyId=VALUE_FROM_PASSBOLT
 signing.element.nightly.keyPassword=VALUE_FROM_PASSBOLT
