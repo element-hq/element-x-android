@@ -98,6 +98,7 @@ fun MediaViewerView(
     onBackClick: () -> Unit,
     audioFocus: AudioFocus?,
     modifier: Modifier = Modifier,
+    setMinimize: (Boolean) -> Unit = {},
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
     var showOverlay by remember { mutableStateOf(true) }
@@ -207,7 +208,8 @@ fun MediaViewerView(
                             onInfoClick = {
                                 state.eventSink(MediaViewerEvents.OpenInfo(currentData))
                             },
-                            eventSink = state.eventSink
+                            eventSink = state.eventSink,
+                            setMinimize = setMinimize,
                         )
                     }
                     else -> {
@@ -449,6 +451,7 @@ private fun MediaViewerTopBar(
     onBackClick: () -> Unit,
     onInfoClick: () -> Unit,
     eventSink: (MediaViewerEvents) -> Unit,
+    setMinimize: (Boolean) -> Unit,
 ) {
     val downloadedMedia by data.downloadedMedia
     val actionsEnabled = downloadedMedia.isSuccess()
@@ -487,6 +490,20 @@ private fun MediaViewerTopBar(
         ),
         navigationIcon = { BackButton(onClick = onBackClick) },
         actions = {
+            if (mimeType.isMimeTypeVideo()) {
+                IconButton(
+                    enabled = actionsEnabled,
+                    onClick = {
+                        setMinimize(true)
+                        onBackClick()
+                    },
+                ) {
+                    Icon(
+                        imageVector = CompoundIcons.Collapse(),
+                        contentDescription = stringResource(id = CommonStrings.action_minimize),
+                    )
+                }
+            }
             IconButton(
                 enabled = actionsEnabled,
                 onClick = {

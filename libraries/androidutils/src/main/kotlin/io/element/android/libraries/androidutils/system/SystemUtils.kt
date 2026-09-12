@@ -196,6 +196,24 @@ fun Context.openGooglePlay(
     }
 }
 
+/**
+ * Opens the system settings for the current app to allow drawing over other apps.
+ */
+fun Context.openSystemOverlaySettings() {
+    val intent = Intent(
+        Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+        "package:$packageName".toUri()
+    ).apply {
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    }
+    try {
+        startActivity(intent)
+    } catch (e: ActivityNotFoundException) {
+        toast(getString(R.string.error_no_compatible_app_found))
+    }
+}
+
+
 // Not in KTX anymore
 fun Context.toast(resId: Int) {
     Toast.makeText(this, resId, Toast.LENGTH_SHORT).show()
