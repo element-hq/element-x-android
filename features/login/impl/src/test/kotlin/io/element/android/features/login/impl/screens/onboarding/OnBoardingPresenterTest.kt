@@ -18,10 +18,14 @@ import io.element.android.features.login.impl.accesscontrol.DefaultAccountProvid
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.accountprovider.SaveAccountProviderToHistory
 import io.element.android.features.login.impl.accountprovider.anAccountProviderDataSource
+import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.features.login.impl.localnetwork.LocalNetworkPermissionGate
 import io.element.android.features.login.impl.login.LoginModePresenter
+import io.element.android.features.login.impl.support.FakeHomeserverSupportContactProvider
+import io.element.android.features.login.impl.support.HomeserverSupportContactProvider
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.matrix.api.auth.AuthenticationException
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.test.AN_ACCOUNT_PROVIDER
 import io.element.android.libraries.matrix.test.AN_ACCOUNT_PROVIDER_2
@@ -287,6 +291,69 @@ class OnBoardingPresenterTest {
             }
         }
     }
+    @Test
+    fun `present - an unreachable homeserver reports the administrator it advertises`() = runTest {
+        val authenticationService = FakeMatrixAuthenticationService(
+            setHomeserverResult = {
+                Result.failure(AuthenticationException.ServerUnreachable("Unreachable"))
+            },
+        )
+        val presenter = createPresenter(
+            params = OnBoardingNode.Params(
+                accountProvider = A_HOMESERVER_URL,
+                loginHint = null,
+                showBackButton = false,
+            ),
+            enterpriseService = FakeEnterpriseService(
+                isAllowedToConnectToHomeserverResult = { true },
+                isElementProEnforcedResult = { false },
+            ),
+            loginModePresenter = createLoginModePresenter(
+                authenticationService = authenticationService,
+                homeserverSupportContactProvider = FakeHomeserverSupportContactProvider(contact = "admin@example.org"),
+            ),
+        )
+        presenter.test {
+            skipItems(3)
+            awaitItem().eventSink(OnBoardingEvent.OnSignIn(A_HOMESERVER_URL_2))
+            skipItems(1)
+            val error = (awaitItem().loginModeState.loginMode as AsyncData.Failure).error
+            assertThat(error).isEqualTo(ChangeServerError.InvalidServer(supportContact = "admin@example.org"))
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - an unreachable homeserver that advertises no administrator reports none`() = runTest {
+        val authenticationService = FakeMatrixAuthenticationService(
+            setHomeserverResult = {
+                Result.failure(AuthenticationException.ServerUnreachable("Unreachable"))
+            },
+        )
+        val presenter = createPresenter(
+            params = OnBoardingNode.Params(
+                accountProvider = A_HOMESERVER_URL,
+                loginHint = null,
+                showBackButton = false,
+            ),
+            enterpriseService = FakeEnterpriseService(
+                isAllowedToConnectToHomeserverResult = { true },
+                isElementProEnforcedResult = { false },
+            ),
+            loginModePresenter = createLoginModePresenter(
+                authenticationService = authenticationService,
+                homeserverSupportContactProvider = FakeHomeserverSupportContactProvider(contact = null),
+            ),
+        )
+        presenter.test {
+            skipItems(3)
+            awaitItem().eventSink(OnBoardingEvent.OnSignIn(A_HOMESERVER_URL_2))
+            skipItems(1)
+            val error = (awaitItem().loginModeState.loginMode as AsyncData.Failure).error
+            assertThat(error).isEqualTo(ChangeServerError.InvalidServer())
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
 }
 
 private fun createPresenter(
@@ -327,6 +394,7 @@ fun createLoginModePresenter(
         FakePermissionsPresenterFactory(),
     saveAccountProviderToHistory: SaveAccountProviderToHistory =
         SaveAccountProviderToHistory(anAccountProviderDataSource(), InMemoryAppPreferencesStore()),
+    homeserverSupportContactProvider: HomeserverSupportContactProvider = FakeHomeserverSupportContactProvider(),
 ): LoginModePresenter = LoginModePresenter(
     oAuthActionFlow = oAuthActionFlow,
     authenticationService = authenticationService,
@@ -335,4 +403,5 @@ fun createLoginModePresenter(
         permissionsPresenterFactory = permissionsPresenterFactory,
     ),
     saveAccountProviderToHistory = saveAccountProviderToHistory,
+    homeserverSupportContactProvider = homeserverSupportContactProvider,
 )

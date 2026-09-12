@@ -42,7 +42,7 @@ fun ChangeServerView(
     when (state.changeServerAction) {
         is AsyncData.Failure -> {
             when (val error = state.changeServerAction.error as? ChangeServerError) {
-                ChangeServerError.InvalidServer ->
+                is ChangeServerError.InvalidServer ->
                     ErrorDialog(
                         modifier = modifier,
                         content = stringResource(R.string.screen_change_server_error_invalid_homeserver),

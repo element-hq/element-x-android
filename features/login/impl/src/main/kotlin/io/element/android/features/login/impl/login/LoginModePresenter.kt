@@ -21,6 +21,7 @@ import io.element.android.features.login.impl.screens.classic.loginwithclassic.L
 import io.element.android.features.login.impl.screens.confirmaccountprovider.ConfirmAccountProviderPresenter
 import io.element.android.features.login.impl.screens.createaccount.AccountCreationNotSupported
 import io.element.android.features.login.impl.screens.onboarding.OnBoardingPresenter
+import io.element.android.features.login.impl.support.HomeserverSupportContactProvider
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
@@ -41,6 +42,7 @@ class LoginModePresenter(
     private val authenticationService: MatrixAuthenticationService,
     private val localNetworkPermissionGate: LocalNetworkPermissionGate,
     private val saveAccountProviderToHistory: SaveAccountProviderToHistory,
+    private val homeserverSupportContactProvider: HomeserverSupportContactProvider,
 ) : Presenter<LoginModeState> {
     @Composable
     override fun present(): LoginModeState {
@@ -102,10 +104,18 @@ class LoginModePresenter(
             errorTransform = {
                 when (it) {
                     is AccountCreationNotSupported -> it
-                    else -> ChangeServerError.from(it)
+                    else -> ChangeServerError.from(it).withSupportContact(request.homeserverUrl)
                 }
             }
         )
+    }
+
+    private suspend fun ChangeServerError.withSupportContact(homeserverUrl: String): ChangeServerError {
+        return if (this is ChangeServerError.InvalidServer) {
+            copy(supportContact = homeserverSupportContactProvider.getContact(homeserverUrl))
+        } else {
+            this
+        }
     }
 
     private suspend fun handleOAuthAction(action: OAuthAction, loginMode: MutableState<AsyncData<LoginMode>>) {
