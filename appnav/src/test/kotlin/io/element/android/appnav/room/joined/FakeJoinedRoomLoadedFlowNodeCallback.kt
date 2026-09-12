@@ -18,4 +18,5 @@ class FakeJoinedRoomLoadedFlowNodeCallback : JoinedRoomLoadedFlowNode.Callback {
     override fun handlePermalinkClick(data: PermalinkData, pushToBackstack: Boolean) = lambdaError()
     override fun navigateToGlobalNotificationSettings() = lambdaError()
     override fun navigateToDeveloperSettings() = lambdaError()
+    override fun navigateToMessageSearch(roomId: RoomId) = lambdaError()
 }

@@ -87,6 +87,7 @@ class JoinedRoomLoadedFlowNode(
         fun handlePermalinkClick(data: PermalinkData, pushToBackstack: Boolean)
         fun navigateToGlobalNotificationSettings()
         fun navigateToDeveloperSettings()
+        fun navigateToMessageSearch(roomId: RoomId)
     }
 
     data class Inputs(
@@ -265,6 +266,12 @@ class JoinedRoomLoadedFlowNode(
 
             override fun navigateToDeveloperSettings() {
                 callback.navigateToDeveloperSettings()
+            }
+
+            override fun navigateToMessageSearch() {
+                // Pushed on the session backstack rather than this room's, so that tapping a
+                // result can re-attach the room focused on the matching event.
+                callback.navigateToMessageSearch(inputs.room.roomId)
             }
         }
         val params = MessagesEntryPoint.Params(
