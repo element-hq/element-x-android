@@ -25,6 +25,7 @@ import io.element.android.features.knockrequests.api.KnockRequestPermissions
 import io.element.android.features.knockrequests.api.knockRequestPermissions
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
+import io.element.android.features.messages.api.pinned.PinnedEventsTimelineProvider
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.features.roomdetailsedit.api.RoomDetailsEditPermissions
@@ -77,6 +78,7 @@ class RoomDetailsPresenter(
     private val appPreferencesStore: AppPreferencesStore,
     private val sessionPreferencesStore: SessionPreferencesStore,
     private val notificationCleaner: NotificationCleaner,
+    private val pinnedEventsTimelineProvider: PinnedEventsTimelineProvider,
 ) : Presenter<RoomDetailsState> {
     @AssistedFactory
     interface Factory {
@@ -105,7 +107,12 @@ class RoomDetailsPresenter(
             }
         }
 
-        val pinnedMessagesCount by remember { derivedStateOf { roomInfo.pinnedEventIds.size } }
+        val displayablePinnedMessagesCount by remember {
+            pinnedEventsTimelineProvider.displayablePinnedEventsCount()
+        }.collectAsState(initial = null)
+        val pinnedMessagesCount by remember {
+            derivedStateOf { displayablePinnedMessagesCount ?: roomInfo.pinnedEventIds.size }
+        }
 
         LaunchedEffect(Unit) {
             room.updateRoomNotificationSettings()
