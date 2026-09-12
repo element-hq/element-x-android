@@ -70,11 +70,12 @@ class DefaultCallNotificationEventResolver(
                 val client = clientProvider.getOrRestore(
                     sessionId
                 ).getOrNull() ?: throw NotificationResolverException.UnknownError("Session $sessionId not found")
-                val room = client.getRoom(
+                val isActive = client.getRoom(
                     notificationData.roomId
-                ) ?: throw NotificationResolverException.UnknownError("Room ${notificationData.roomId} not found")
-                // Give a few seconds for the room info flow to catch up with the sync, if needed - this is usually instant
-                val isActive = withTimeoutOrNull(3.seconds) { room.roomInfoFlow.firstOrNull { it.hasRoomCall } }?.hasRoomCall ?: false
+                )?.use { room ->
+                    // Give a few seconds for the room info flow to catch up with the sync, if needed - this is usually instant
+                    withTimeoutOrNull(3.seconds) { room.roomInfoFlow.firstOrNull { it.hasRoomCall } }?.hasRoomCall ?: false
+                } ?: throw NotificationResolverException.UnknownError("Room ${notificationData.roomId} not found")
 
                 // We no longer need the sync service to be active because of a call notification.
                 appForegroundStateService.updateHasRingingCall(previousRingingCallStatus)

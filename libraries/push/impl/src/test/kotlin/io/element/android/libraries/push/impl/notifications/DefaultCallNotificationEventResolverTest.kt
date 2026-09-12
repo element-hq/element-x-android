@@ -73,6 +73,7 @@ class DefaultCallNotificationEventResolverTest {
         )
         val result = resolver.resolveEvent(A_SESSION_ID, notificationData)
         assertThat(result.getOrNull()).isEqualTo(expectedResult)
+        room.baseRoom.assertDestroyed()
     }
 
     @Test
@@ -161,6 +162,7 @@ class DefaultCallNotificationEventResolverTest {
         )
         val result = resolver.resolveEvent(A_SESSION_ID, notificationData)
         assertThat(result.getOrNull()).isEqualTo(expectedResult)
+        room.baseRoom.assertDestroyed()
     }
 
     private fun createDefaultNotifiableEventResolver(
