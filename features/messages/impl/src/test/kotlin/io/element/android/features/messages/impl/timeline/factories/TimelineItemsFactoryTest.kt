@@ -31,6 +31,9 @@ import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRoomMembershipContent
+import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
+import io.element.android.libraries.matrix.test.timeline.item.event.aRoomMembershipContent
 
 class TimelineItemsFactoryTest {
     @Test
@@ -274,6 +277,53 @@ class TimelineItemsFactoryTest {
             )
             val event = awaitItem().filterIsInstance<TimelineItem.Event>().single()
             assertThat(event.senderProfile).isEqualTo(ProfileDetails.Unavailable)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+
+    @Test
+    fun `a membership event that changed nothing is not rendered`() = runTest {
+        val factory = aTimelineItemsFactory(
+            config = TimelineItemsFactoryConfig(
+                computeReadReceipts = false,
+                computeReactions = false,
+            )
+        )
+        val items = listOf(
+            MatrixTimelineItem.Event(
+                uniqueId = UniqueId("event-0"),
+                event = anEventTimelineItem(
+                    sender = A_USER_ID,
+                    content = aRoomMembershipContent(change = MembershipChange.NONE),
+                ),
+            ),
+            MatrixTimelineItem.Event(
+                uniqueId = UniqueId("event-1"),
+                event = anEventTimelineItem(
+                    sender = A_USER_ID,
+                    content = aRoomMembershipContent(change = MembershipChange.JOINED),
+                ),
+            ),
+            MatrixTimelineItem.Event(
+                uniqueId = UniqueId("event-2"),
+                event = anEventTimelineItem(
+                    sender = A_USER_ID,
+                    content = aMessageContent(body = "A regular message"),
+                ),
+            ),
+        )
+        factory.timelineItems.test {
+            factory.replaceWith(
+                timelineItems = items,
+                roomMembers = emptyList(),
+                renderReadReceipts = false,
+            )
+            val contents = awaitItem()
+                .filterIsInstance<TimelineItem.Event>()
+                .map { it.content }
+            assertThat(contents.filterIsInstance<TimelineItemRoomMembershipContent>()).hasSize(1)
+            assertThat(contents).hasSize(2)
             cancelAndIgnoreRemainingEvents()
         }
     }

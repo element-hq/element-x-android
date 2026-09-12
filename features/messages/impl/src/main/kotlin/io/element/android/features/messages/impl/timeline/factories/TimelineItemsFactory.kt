@@ -22,8 +22,10 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
+import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
@@ -113,7 +115,10 @@ class TimelineItemsFactory(
     ): TimelineItem? {
         val timelineItem =
             when (val currentTimelineItem = timelineItems[index]) {
-                is MatrixTimelineItem.Event -> if (currentTimelineItem.event.isKeyVerificationRequest()) {
+                is MatrixTimelineItem.Event -> if (
+                    currentTimelineItem.event.isKeyVerificationRequest() ||
+                    currentTimelineItem.event.isMembershipChangeWithoutEffect()
+                ) {
                     null
                 } else {
                     eventItemFactory.create(currentTimelineItem, index, timelineItems, roomMembers, renderReadReceipts)
@@ -129,4 +134,8 @@ class TimelineItemsFactory(
 private fun EventTimelineItem.isKeyVerificationRequest(): Boolean {
     val messageType = (content as? MessageContent)?.type
     return messageType is OtherMessageType && messageType.isKeyVerificationRequest
+}
+
+private fun EventTimelineItem.isMembershipChangeWithoutEffect(): Boolean {
+    return (content as? RoomMembershipContent)?.change == MembershipChange.NONE
 }
