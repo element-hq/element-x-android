@@ -23,6 +23,7 @@ import io.element.android.libraries.mediaplayer.test.FakeAudioFocus
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.impl.datasource.createTimelineMediaGalleryDataSource
+import io.element.android.libraries.mediaviewer.impl.floatingvideo.VideoDataRepository
 import io.element.android.libraries.mediaviewer.impl.viewer.MediaViewerNode
 import io.element.android.libraries.mediaviewer.impl.viewer.PagerKeysHandler
 import io.element.android.libraries.mediaviewer.impl.viewer.createMediaViewerEntryPointParams
@@ -64,6 +65,7 @@ class DefaultMediaViewerEntryPointTest {
                 coroutineDispatchers = testCoroutineDispatchers(),
                 systemClock = FakeSystemClock(),
                 pagerKeysHandler = PagerKeysHandler(),
+                videoDataRepository = VideoDataRepository(),
                 textFileViewer = { _, _ -> lambdaError() },
                 audioFocus = FakeAudioFocus(),
                 sessionId = A_SESSION_ID,
@@ -110,6 +112,7 @@ class DefaultMediaViewerEntryPointTest {
                 coroutineDispatchers = testCoroutineDispatchers(),
                 systemClock = FakeSystemClock(),
                 pagerKeysHandler = PagerKeysHandler(),
+                videoDataRepository = VideoDataRepository(),
                 textFileViewer = { _, _ -> lambdaError() },
                 audioFocus = FakeAudioFocus(),
                 sessionId = A_SESSION_ID,
