@@ -46,6 +46,7 @@ class AttachmentsPreviewNode(
         val attachments: ImmutableList<Attachment>,
         val timelineMode: Timeline.Mode,
         val inReplyToEventId: EventId?,
+        val caption: String?,
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
@@ -59,6 +60,7 @@ class AttachmentsPreviewNode(
         timelineMode = inputs.timelineMode,
         onDoneListener = onDoneListener,
         inReplyToEventId = inputs.inReplyToEventId,
+        caption = inputs.caption,
     )
 
     @Composable
