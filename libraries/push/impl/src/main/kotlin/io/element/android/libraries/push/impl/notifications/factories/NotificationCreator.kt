@@ -15,6 +15,7 @@ import android.os.Bundle
 import androidx.annotation.ColorInt
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.MessagingStyle
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.Person
 import coil3.ImageLoader
 import dev.zacsweers.metro.AppScope
@@ -179,6 +180,16 @@ class DefaultNotificationCreator(
                 .apply {
                     if (threadId == null) {
                         setShortcutId(createShortcutId(roomInfo.sessionId, roomInfo.roomId))
+                    } else {
+                        // Thread notifications don't set a shortcut ID so the MessagingStyle
+                        // conversationTitle ("Thread in <room>") is displayed. Instead, look
+                        // up the room's conversation-derived channel and post the thread
+                        // notification there, so it inherits any custom sound the user set.
+                        val roomConversationChannel = NotificationManagerCompat.from(context)
+                            .getNotificationChannel(channelId, createShortcutId(roomInfo.sessionId, roomInfo.roomId))
+                        if (roomConversationChannel != null) {
+                            setChannelId(roomConversationChannel.id)
+                        }
                     }
                 }
                 .setGroupSummary(false)
