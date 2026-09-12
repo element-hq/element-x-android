@@ -1242,6 +1242,50 @@ class MessageComposerPresenterTest : RobolectricTest() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
+    fun `present - a plain message is sent as plain text when markdown is disabled`() = runTest {
+        val sendMessageResult = lambdaRecorder { _: String, _: String?, _: List<IntentionalMention>, _: MsgType, _: Boolean ->
+            Result.success(Unit)
+        }
+        val timeline = FakeTimeline().apply { sendMessageLambda = sendMessageResult }
+        val presenter = createPresenter(
+            room = FakeJoinedRoom(liveTimeline = timeline, typingNoticeResult = { Result.success(Unit) }),
+            isRichTextEditorEnabled = false,
+            sessionPreferencesStore = InMemorySessionPreferencesStore(isMarkdownEnabled = false),
+            slashCommandService = FakeSlashCommandService(parseResult = { _, _, _ -> SlashCommand.NotACommand }),
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.textEditorState.setMarkdown(A_MESSAGE)
+            initialState.eventSink(MessageComposerEvent.SendMessage)
+            advanceUntilIdle()
+            sendMessageResult.assertions().isCalledOnce()
+                .with(value(A_MESSAGE), value(null), any(), value(MsgType.MSG_TYPE_TEXT), value(true))
+        }
+    }
+
+    @Test
+    fun `present - a plain message keeps its markdown when the setting is on`() = runTest {
+        val sendMessageResult = lambdaRecorder { _: String, _: String?, _: List<IntentionalMention>, _: MsgType, _: Boolean ->
+            Result.success(Unit)
+        }
+        val timeline = FakeTimeline().apply { sendMessageLambda = sendMessageResult }
+        val presenter = createPresenter(
+            room = FakeJoinedRoom(liveTimeline = timeline, typingNoticeResult = { Result.success(Unit) }),
+            isRichTextEditorEnabled = false,
+            sessionPreferencesStore = InMemorySessionPreferencesStore(isMarkdownEnabled = true),
+            slashCommandService = FakeSlashCommandService(parseResult = { _, _, _ -> SlashCommand.NotACommand }),
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.textEditorState.setMarkdown(A_MESSAGE)
+            initialState.eventSink(MessageComposerEvent.SendMessage)
+            advanceUntilIdle()
+            sendMessageResult.assertions().isCalledOnce()
+                .with(value(A_MESSAGE), value(null), any(), value(MsgType.MSG_TYPE_TEXT), value(false))
+        }
+    }
+
+    @Test
     fun `present - send messages with intentional mentions`() = runTest {
         val replyMessageLambda = lambdaRecorder { _: EventId?, _: String, _: String?, _: List<IntentionalMention>, _: Boolean, _: MsgType ->
             Result.success(Unit)
