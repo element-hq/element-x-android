@@ -20,7 +20,16 @@ import kotlin.time.Duration
 
 sealed interface TimelineEvent {
     data class OnScrollFinished(val firstIndex: Int) : TimelineEvent
-    data class FocusOnEvent(val eventId: EventId, val debounce: Duration = Duration.ZERO) : TimelineEvent
+
+    /**
+     * @param eventId the event to scroll to and highlight.
+     * @param debounce how long to wait before starting, so a burst of requests only runs the last one.
+     * @param fromReply true when the jump was started by tapping a reply, which is the only case the timeline
+     * remembers so that it can offer to come back.
+     */
+    data class FocusOnEvent(val eventId: EventId, val debounce: Duration = Duration.ZERO, val fromReply: Boolean = false) : TimelineEvent
+
+    data object JumpBack : TimelineEvent
     data object ClearFocusRequestState : TimelineEvent
     data object OnFocusEventRender : TimelineEvent
     data object JumpToLive : TimelineEvent
