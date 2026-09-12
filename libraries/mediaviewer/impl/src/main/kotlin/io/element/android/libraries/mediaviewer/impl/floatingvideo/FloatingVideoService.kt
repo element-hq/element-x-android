@@ -111,7 +111,7 @@ class FloatingVideoService : Service(), LifecycleOwner, SavedStateRegistryOwner 
                     onToggleFullScreen = { aspectRatio ->
                         if (isMinimized) maximizeWindow(aspectRatio) else minimizeWindow(aspectRatio)
                     },
-                    onCompleted = { dismissFloatingPlayer() },
+                    onComplete = { dismissFloatingPlayer() },
                     updateAspectRatio = { aspectRatio ->
                         updateWindowSize(aspectRatio, isMinimized, windowManager, windowLayoutParams, floatingView)
                     },
@@ -194,7 +194,7 @@ class FloatingVideoService : Service(), LifecycleOwner, SavedStateRegistryOwner 
         @SuppressLint("ObsoleteSdkInt")
         fun startFloating(context: Context, videoId: String, position: Long = 0L) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(context)) {
-                // TODO: move this copy to CommonStrings / Localazy once the string is approved.
+                // Permission copy should move to CommonStrings / Localazy once approved.
                 Toast.makeText(
                     context,
                     "To show the floating video, please allow 'Display over other apps' permission.",

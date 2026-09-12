@@ -27,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,7 +49,7 @@ fun FloatingVideoOverlay(
     startPositionMs: Long,
     onClose: () -> Unit,
     onToggleFullScreen: (Float) -> Unit,
-    onCompleted: () -> Unit,
+    onComplete: () -> Unit,
     updateAspectRatio: (Float) -> Unit,
     movePosition: (Int, Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -57,9 +58,10 @@ fun FloatingVideoOverlay(
     val videoViewRef = remember { mutableStateOf<VideoView?>(null) }
     var isPlaying by remember { mutableStateOf(true) }
     var showPlayPauseAffordance by remember { mutableStateOf(false) }
+    val updatedUpdateAspectRatio by rememberUpdatedState(updateAspectRatio)
 
     LaunchedEffect(Unit) {
-        updateAspectRatio(16f / 9f)
+        updatedUpdateAspectRatio(16f / 9f)
     }
 
     LaunchedEffect(isPlaying, showPlayPauseAffordance) {
@@ -109,7 +111,7 @@ fun FloatingVideoOverlay(
                     }
                     setOnCompletionListener {
                         isPlaying = false
-                        onCompleted()
+                        onComplete()
                     }
                 }
             },
