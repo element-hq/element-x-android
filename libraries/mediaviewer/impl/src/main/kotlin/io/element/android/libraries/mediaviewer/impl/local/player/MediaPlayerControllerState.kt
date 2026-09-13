@@ -19,6 +19,7 @@ data class MediaPlayerControllerState(
     val canMute: Boolean,
     val isMuted: Boolean,
     val seekingToMillis: Long?,
+    val playbackSpeed: Float = 1f,
 ) {
     /**
      * The progress in milliseconds to display. When [seekingToMillis] is non-null (during a seek operation),

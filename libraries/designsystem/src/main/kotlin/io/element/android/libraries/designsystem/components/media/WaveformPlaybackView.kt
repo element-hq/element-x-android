@@ -9,16 +9,21 @@
 package io.element.android.libraries.designsystem.components.media
 
 import android.view.MotionEvent
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
@@ -41,6 +46,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 private const val DEFAULT_GRAPHICS_LAYER_ALPHA: Float = 0.99F
@@ -53,6 +59,9 @@ private const val DEFAULT_GRAPHICS_LAYER_ALPHA: Float = 0.99F
  * @param waveform The waveform to display.
  * @param onSeek Callback when the user seeks the waveform. Called with a value between 0 and 1.
  * @param modifier The modifier to be applied to the view.
+ * @param isPlaying Whether playback is currently in progress. Used to drive a linear progress animation.
+ * @param durationMs The total duration of the media in milliseconds. Used to time the linear animation.
+ * @param playbackSpeed The current playback speed. Used to time the linear animation.
  * @param seekEnabled Whether the user can seek the waveform or not.
  * @param brush The brush to use to draw the waveform.
  * @param progressBrush The brush to use to draw the progress.
@@ -67,6 +76,9 @@ fun WaveformPlaybackView(
     waveform: ImmutableList<Float>,
     onSeek: (progress: Float) -> Unit,
     modifier: Modifier = Modifier,
+    isPlaying: Boolean = false,
+    durationMs: Long = 0L,
+    playbackSpeed: Float = 1f,
     seekEnabled: Boolean = true,
     brush: Brush = SolidColor(ElementTheme.colors.iconQuaternary),
     progressBrush: Brush = SolidColor(ElementTheme.colors.iconSecondary),
@@ -75,14 +87,56 @@ fun WaveformPlaybackView(
     linePadding: Dp = 2.dp,
 ) {
     val seekProgress = remember { mutableStateOf<Float?>(null) }
+    var pendingSeek by remember { mutableStateOf<Float?>(null) }
     var canvasSize by remember { mutableStateOf(DpSize(0.dp, 0.dp)) }
     var canvasSizePx by remember { mutableStateOf(Size(0f, 0f)) }
-    val progress by remember(playbackProgress, seekProgress.value) {
-        derivedStateOf {
-            seekProgress.value ?: playbackProgress
+    val progressAnimated = remember { Animatable(playbackProgress) }
+    var seekGeneration by remember { mutableIntStateOf(0) }
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(playbackProgress, isPlaying, durationMs, playbackSpeed, pendingSeek) {
+        if (seekProgress.value != null) return@LaunchedEffect
+        if (!shouldApplyPlayerProgress(
+                playbackProgress = playbackProgress,
+                pendingSeek = pendingSeek,
+                durationMs = durationMs,
+                playbackSpeed = playbackSpeed,
+            )
+        ) {
+            return@LaunchedEffect
+        }
+        pendingSeek = null
+        if (shouldSnapToPlayer(
+                playbackProgress = playbackProgress,
+                animatedProgress = progressAnimated.value,
+                isPlaying = isPlaying,
+                durationMs = durationMs,
+                playbackSpeed = playbackSpeed,
+            )
+        ) {
+            progressAnimated.snapTo(playbackProgress)
+            seekGeneration++
         }
     }
-    val progressAnimated = animateFloatAsState(targetValue = progress, label = "progressAnimation")
+
+    LaunchedEffect(isPlaying, durationMs, playbackSpeed, seekGeneration) {
+        if (isPlaying && durationMs > 0L) {
+            val remainingProgress = (1f - progressAnimated.value).coerceAtLeast(0f)
+            val remainingMs = (remainingProgress * durationMs / playbackSpeed.coerceAtLeast(0.01f))
+                .roundToInt()
+                .coerceAtLeast(0)
+            if (remainingMs == 0) {
+                progressAnimated.snapTo(1f)
+            } else {
+                progressAnimated.animateTo(
+                    targetValue = 1f,
+                    animationSpec = tween(durationMillis = remainingMs, easing = LinearEasing),
+                )
+            }
+        }
+    }
+
+    val progress = seekProgress.value ?: progressAnimated.value
     val amplitudeDisplayCount by remember(canvasSize, lineWidth, linePadding) {
         derivedStateOf {
             (canvasSize.width.value / (lineWidth.value + linePadding.value)).toInt()
@@ -125,7 +179,19 @@ fun WaveformPlaybackView(
                         }
                         MotionEvent.ACTION_UP -> {
                             requestDisallowInterceptTouchEvent.invoke(false)
-                            seekProgress.value?.let(onSeek)
+                            seekProgress.value?.let { seek ->
+                                pendingSeek = seek
+                                onSeek(seek)
+                                coroutineScope.launch {
+                                    progressAnimated.snapTo(seek)
+                                    seekGeneration++
+                                }
+                            }
+                            seekProgress.value = null
+                            true
+                        }
+                        MotionEvent.ACTION_CANCEL -> {
+                            requestDisallowInterceptTouchEvent.invoke(false)
                             seekProgress.value = null
                             true
                         }
@@ -149,7 +215,7 @@ fun WaveformPlaybackView(
         drawRect(
             brush = progressBrush,
             size = Size(
-                width = progressAnimated.value * waveformWidthPx,
+                width = progress * waveformWidthPx,
                 height = canvasSizePx.height
             ),
             blendMode = BlendMode.SrcAtop
@@ -158,7 +224,7 @@ fun WaveformPlaybackView(
             drawRoundRect(
                 brush = cursorBrush,
                 topLeft = Offset(
-                    x = progressAnimated.value * waveformWidthPx,
+                    x = progress * waveformWidthPx,
                     y = 1f
                 ),
                 size = Size(
