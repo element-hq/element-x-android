@@ -11,7 +11,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 
 /**
  * Whether formatted message bodies should be rendered with the native Compose renderer
- * (see [io.element.android.libraries.htmlrenderer.impl.renderer.HtmlMessageContent]) instead of the
+ * (see [io.element.android.libraries.htmlrenderer.api.ui.HtmlMessageContent]) instead of the
  * legacy rich text editor view. Provided by [TimelineView] from the timeline feature flag; defaults
  * to false so any surface that doesn't provide it keeps the previous behaviour.
  */
