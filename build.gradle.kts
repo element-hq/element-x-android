@@ -153,6 +153,7 @@ allprojects {
         maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
 
         val isScreenshotTest = project.gradle.startParameter.taskNames.any { it.contains("paparazzi", ignoreCase = true) }
+        val isRoborazziTest = project.gradle.startParameter.taskNames.any { it.contains("roborazzi", ignoreCase = true) }
         if (isScreenshotTest) {
             // Paparazzi tests benefit from parallelisation, so we can use half the available cores to run them in parallel.
             maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
@@ -177,6 +178,12 @@ allprojects {
             // Disable screenshot tests by default
             exclude("ui/*.class")
             exclude("translations/*.class")
+            if (isRoborazziTest.not()) {
+                // Roborazzi screenshot tests (:libraries:compound) live in a `screenshot` package, which
+                // the two patterns above do not match, so they used to run on every plain unit test run.
+                // They are verified by the dedicated `verifyRoborazziDebug` task instead.
+                exclude("**/screenshot/**")
+            }
         }
     }
 }
