@@ -9,6 +9,7 @@
 package io.element.android.features.messages.impl.timeline.model.event
 
 import androidx.compose.runtime.Immutable
+import io.element.android.libraries.htmlrenderer.api.DocumentNode
 import org.jsoup.nodes.Document
 
 /**
@@ -23,6 +24,12 @@ sealed interface TimelineItemTextBasedContent :
 
     /** The parsed HTML DOM of the formatted event body. */
     val htmlDocument: Document?
+
+    /**
+     * The formatted body parsed into a tree of [DocumentNode] for the native Compose renderer.
+     * Null when there is no formatted body. Only used when the new timeline event renderer is enabled.
+     */
+    val messageTree: DocumentNode?
 
     /** The formatted body of the event, already parsed and with the DOM translated to Android spans.
      * This can also includes mention spans from permalink parsing */

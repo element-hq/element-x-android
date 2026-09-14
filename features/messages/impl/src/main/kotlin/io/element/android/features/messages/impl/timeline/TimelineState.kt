@@ -37,6 +37,8 @@ data class TimelineState(
     val displayThreadSummaries: Boolean,
     val displayJumpToUnread: Boolean,
     val jumpToUnread: JumpToUnreadState,
+    // When true, formatted message bodies are rendered with the native Compose renderer.
+    val useNewTimelineEventRenderer: Boolean = false,
     val eventSink: (TimelineEvent) -> Unit,
 ) {
     private val lastTimelineEvent = timelineItems.firstOrNull { it is TimelineItem.Event } as? TimelineItem.Event

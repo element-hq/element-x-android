@@ -191,6 +191,7 @@ fun TimelineView(
 
     // Animate alpha when timeline is first displayed, to avoid flashes or glitching when viewing rooms
     AnimatedVisibility(visible = true, enter = fadeIn()) {
+        CompositionLocalProvider(LocalUseNewTimelineEventRenderer provides state.useNewTimelineEventRenderer) {
         Box(modifier) {
             LazyColumn(
                 modifier = Modifier
@@ -265,6 +266,7 @@ fun TimelineView(
                 isLive = state.isLive,
                 topOffset = floatingDateTopOffset,
             )
+        }
         }
     }
 
