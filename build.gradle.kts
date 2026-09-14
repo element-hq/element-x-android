@@ -154,6 +154,8 @@ allprojects {
 
         val isScreenshotTest = project.gradle.startParameter.taskNames.any { it.contains("paparazzi", ignoreCase = true) }
         if (isScreenshotTest) {
+            // Paparazzi tests benefit from parallelisation, so we can use half the available cores to run them in parallel.
+            maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
             // Increase heap size for screenshot tests
             maxHeapSize = "2g"
             // Record all the languages?
@@ -165,6 +167,13 @@ allprojects {
                 exclude("translations/*.class")
             }
         } else {
+            // Robolectric and Compose pay a 5 to 30 seconds bootstrap cost per test JVM (instrumenting
+            // android-all, then warming up the Compose runtime). That cost is paid once per JVM and then
+            // amortised over every test class the JVM runs, so splitting a module across several forks
+            // re-pays it for each fork instead of saving time. Keep a single fork per module and let
+            // Gradle parallelise by running many modules' test tasks concurrently instead.
+            maxParallelForks = 1
+
             // Disable screenshot tests by default
             exclude("ui/*.class")
             exclude("translations/*.class")
