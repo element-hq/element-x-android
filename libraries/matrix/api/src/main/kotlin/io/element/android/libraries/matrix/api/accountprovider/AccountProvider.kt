@@ -31,6 +31,9 @@ sealed interface AccountProvider {
         }.sanitized()
     }
 
+    /**
+     * Return the server name, to be used in the UI.
+     */
     fun friendlyServerName(): String {
         return when (this) {
             is Generic -> serverName

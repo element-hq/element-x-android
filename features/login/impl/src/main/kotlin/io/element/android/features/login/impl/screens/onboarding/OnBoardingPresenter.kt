@@ -34,6 +34,7 @@ import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.ui.utils.MultipleTapToUnlock
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AssistedInject
 class OnBoardingPresenter(
@@ -83,7 +84,8 @@ class OnBoardingPresenter(
                     try {
                         defaultAccountProviderAccessControl.assertIsAllowedToConnectToAccountProvider(it)
                         true
-                    } catch (_: Exception) {
+                    } catch (e: Exception) {
+                        Timber.e(e, "Failed to check account provider from link, assuming not allowed")
                         false
                     }
                 }
