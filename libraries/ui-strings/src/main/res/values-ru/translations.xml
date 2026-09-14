@@ -564,10 +564,6 @@
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Одно или несколько ваших устройств не подтверждены. Вы можете отправить сообщение в любом случае или отменить его пока и повторить попытку позже, подтвердив все свои устройства."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Ваше сообщение не было отправлено, поскольку вы не подтвердили одно или несколько своих устройств."</string>
   <string name="screen_room_change_role_administrators_or_owners_title">"Редактировать владельцев и администраторов"</string>
-  <string name="screen_room_confirm_removal_message">"Вы уверены, что хотите удалить это сообщение?"</string>
-  <string name="screen_room_confirm_removal_reason_label">"Причина (необязательно)"</string>
-  <string name="screen_room_confirm_removal_reason_placeholder">"Введите…"</string>
-  <string name="screen_room_confirm_removal_title">"Подтвердите удаление"</string>
   <string name="screen_room_error_failed_processing_media">"Не удалось обработать медиафайл для загрузки, попробуйте ещё раз."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не удалось получить данные о пользователе"</string>
   <string name="screen_room_event_pill">"Сообщение в %1$s"</string>
