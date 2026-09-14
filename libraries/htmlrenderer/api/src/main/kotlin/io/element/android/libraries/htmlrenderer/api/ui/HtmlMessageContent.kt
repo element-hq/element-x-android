@@ -108,15 +108,24 @@ fun HtmlMessageContent(
     node: DocumentNode,
     modifier: Modifier = Modifier,
     currentUserId: UserId? = null,
-    onLinkClick: (String) -> Unit = {},
-    onLinkLongClick: (String) -> Unit = {},
+    onLinkClick: (url: String, text: String) -> Unit = { _, _ -> },
+    onLinkLongClick: (url: String, text: String) -> Unit = { _, _ -> },
     onMentionClick: (MentionNodeContent) -> Unit = {},
     imageModel: (ImageNodeContent) -> Any = { it.url },
     hideImages: Boolean = false,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit = {},
 ) {
     val measuredParagraph = remember(node) { node.lastBlockNode() }
-    val context = remember(currentUserId, onLinkClick, onLinkLongClick, onMentionClick, imageModel, hideImages, measuredParagraph, onContentLayoutChange) {
+    val context = remember(
+        currentUserId,
+        onLinkClick,
+        onLinkLongClick,
+        onMentionClick,
+        imageModel,
+        hideImages,
+        measuredParagraph,
+        onContentLayoutChange
+    ) {
         RenderContext(
             currentUserId = currentUserId,
             onLinkClick = onLinkClick,
@@ -141,8 +150,8 @@ fun HtmlMessageContent(
 @Immutable
 private data class RenderContext(
     val currentUserId: UserId?,
-    val onLinkClick: (String) -> Unit,
-    val onLinkLongClick: (String) -> Unit,
+    val onLinkClick: (url: String, text: String) -> Unit,
+    val onLinkLongClick: (url: String, text: String) -> Unit,
     val onMentionClick: (MentionNodeContent) -> Unit,
     val imageModel: (ImageNodeContent) -> Any,
     val hideImages: Boolean,
@@ -496,8 +505,14 @@ private fun Modifier.linkTapHandler(
     context: RenderContext,
 ): Modifier = pointerInput(text) {
     detectTapGestures(
-        onTap = { offset -> layoutResult.value?.urlAt(offset, text)?.let(context.onLinkClick) },
-        onLongPress = { offset -> layoutResult.value?.urlAt(offset, text)?.let(context.onLinkLongClick) },
+        onTap = { offset ->
+            val url = layoutResult.value?.urlAt(offset, text) ?: return@detectTapGestures
+            context.onLinkClick(url, text.text)
+        },
+        onLongPress = { offset ->
+            val url = layoutResult.value?.urlAt(offset, text) ?: return@detectTapGestures
+            context.onLinkLongClick(url, text.text)
+        },
     )
 }
 
