@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="floating_video_a11y_expand">Expand</string>
+    <string name="floating_video_overlay_permission_needed">To show the floating video, please allow \'Display over other apps\' permission.</string>
+</resources>

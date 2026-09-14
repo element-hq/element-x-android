@@ -42,6 +42,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
@@ -79,6 +80,7 @@ import io.element.android.libraries.mediaviewer.impl.R
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.details.MediaDeleteConfirmationBottomSheet
 import io.element.android.libraries.mediaviewer.impl.details.MediaDetailsBottomSheet
+import io.element.android.libraries.mediaviewer.impl.floatingvideo.FloatingVideoService
 import io.element.android.libraries.mediaviewer.impl.local.LocalMediaView
 import io.element.android.libraries.mediaviewer.impl.local.PlayableState
 import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaViewState
@@ -98,7 +100,6 @@ fun MediaViewerView(
     onBackClick: () -> Unit,
     audioFocus: AudioFocus?,
     modifier: Modifier = Modifier,
-    setMinimize: (Boolean) -> Unit = {},
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
     var showOverlay by remember { mutableStateOf(true) }
@@ -209,7 +210,6 @@ fun MediaViewerView(
                                 state.eventSink(MediaViewerEvents.OpenInfo(currentData))
                             },
                             eventSink = state.eventSink,
-                            setMinimize = setMinimize,
                         )
                     }
                     else -> {
@@ -451,8 +451,8 @@ private fun MediaViewerTopBar(
     onBackClick: () -> Unit,
     onInfoClick: () -> Unit,
     eventSink: (MediaViewerEvents) -> Unit,
-    setMinimize: (Boolean) -> Unit,
 ) {
+    val context = LocalContext.current
     val downloadedMedia by data.downloadedMedia
     val actionsEnabled = downloadedMedia.isSuccess()
     val mimeType = data.mediaInfo.mimeType
@@ -494,7 +494,10 @@ private fun MediaViewerTopBar(
                 IconButton(
                     enabled = actionsEnabled,
                     onClick = {
-                        setMinimize(true)
+                        val media = downloadedMedia
+                        if (media is AsyncData.Success) {
+                            FloatingVideoService.startFloating(context, media.data.uri)
+                        }
                         onBackClick()
                     },
                 ) {

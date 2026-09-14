@@ -13,6 +13,7 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.graphics.PixelFormat
+import android.net.Uri
 import android.os.Build
 import android.os.IBinder
 import android.provider.Settings
@@ -20,6 +21,10 @@ import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -29,34 +34,27 @@ import androidx.savedstate.SavedStateRegistry
 import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.androidutils.system.openSystemOverlaySettings
-import io.element.android.libraries.architecture.bindings
+import io.element.android.libraries.mediaviewer.impl.R
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.ui.FloatingVideoOverlay
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.MINIMIZED_EDGE_INSET_DP
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.dpToPx
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.getScreenHeight
-import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.getUri
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.maximizeWindowHelper
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.minimizeWindowHelper
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.movePosition
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.updateWindowSize
-import io.element.android.libraries.mediaviewer.impl.viewer.MediaViewerPageData
 import timber.log.Timber
 
 class FloatingVideoService : Service(), LifecycleOwner, SavedStateRegistryOwner {
     private var windowManager: WindowManager? = null
     private var floatingView: View? = null
-    private var currentVideoData: MediaViewerPageData.MediaViewerData? = null
+    private var currentVideoUri: Uri? = null
     private var currentPositionMs: Long = 0L
-    private var isMinimized = true
-    private var currentVideoId: String? = null
-    private lateinit var windowLayoutParams: WindowManager.LayoutParams
+    private val windowLayoutParams: WindowManager.LayoutParams = createLayoutParams()
 
     private val lifecycleRegistry = LifecycleRegistry(this)
     private val savedStateRegistryController = SavedStateRegistryController.create(this)
-
-    @Inject lateinit var videoDataRepository: VideoDataRepository
 
     override val lifecycle: Lifecycle get() = lifecycleRegistry
     override val savedStateRegistry: SavedStateRegistry get() = savedStateRegistryController.savedStateRegistry
@@ -65,7 +63,6 @@ class FloatingVideoService : Service(), LifecycleOwner, SavedStateRegistryOwner 
 
     override fun onCreate() {
         super.onCreate()
-        bindings<FloatingVideoServiceBindings>().inject(this)
         windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
         savedStateRegistryController.performAttach()
         savedStateRegistryController.performRestore(null)
@@ -75,16 +72,13 @@ class FloatingVideoService : Service(), LifecycleOwner, SavedStateRegistryOwner 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
             ACTION_START_FLOATING -> {
-                val videoId = intent.getStringExtra(EXTRA_VIDEO_ID) ?: return START_NOT_STICKY
-                val position = intent.getLongExtra(EXTRA_POSITION, 0L)
-                val videoData = videoDataRepository.getVideoData(videoId)
-                if (videoData == null) {
-                    Timber.tag(TAG).w("No video data for id=%s", videoId)
+                val uri = intent.data
+                if (uri == null) {
+                    Timber.tag(TAG).w("No video URI provided")
                     stopSelf()
                 } else {
-                    currentVideoData = videoData
-                    currentVideoId = videoId
-                    currentPositionMs = position
+                    currentVideoUri = uri
+                    currentPositionMs = intent.getLongExtra(EXTRA_POSITION, 0L)
                     createFloatingView()
                 }
             }
@@ -93,10 +87,13 @@ class FloatingVideoService : Service(), LifecycleOwner, SavedStateRegistryOwner 
     }
 
     private fun createFloatingView() {
+        val uri = currentVideoUri ?: return
         removeFloatingView()
         val edgeInsetPx = dpToPx(MINIMIZED_EDGE_INSET_DP)
-        windowLayoutParams = createLayoutParams().apply {
+        windowLayoutParams.apply {
             gravity = Gravity.TOP or Gravity.START
+            width = WindowManager.LayoutParams.WRAP_CONTENT
+            height = WindowManager.LayoutParams.WRAP_CONTENT
             x = edgeInsetPx
             y = windowManager.getScreenHeight() - dpToPx(INITIAL_FLOATING_WINDOW_OFFSET_Y_DP)
         }
@@ -104,12 +101,26 @@ class FloatingVideoService : Service(), LifecycleOwner, SavedStateRegistryOwner 
             setViewTreeLifecycleOwner(this@FloatingVideoService)
             setViewTreeSavedStateRegistryOwner(this@FloatingVideoService)
             setContent {
+                var isMinimized by remember { mutableStateOf(true) }
                 FloatingVideoOverlay(
-                    uri = currentVideoData.getUri(),
+                    uri = uri,
                     startPositionMs = currentPositionMs,
+                    isMinimized = isMinimized,
                     onClose = { dismissFloatingPlayer() },
                     onToggleFullScreen = { aspectRatio ->
-                        if (isMinimized) maximizeWindow(aspectRatio) else minimizeWindow(aspectRatio)
+                        if (isMinimized) {
+                            isMinimized = false
+                            maximizeWindowHelper(aspectRatio, windowManager, windowLayoutParams, floatingView)
+                        } else {
+                            isMinimized = true
+                            minimizeWindowHelper(
+                                aspectRatio,
+                                windowManager,
+                                windowLayoutParams,
+                                floatingView,
+                                dpToPx(MINIMIZED_EDGE_INSET_DP),
+                            )
+                        }
                     },
                     onComplete = { dismissFloatingPlayer() },
                     updateAspectRatio = { aspectRatio ->
@@ -149,20 +160,8 @@ class FloatingVideoService : Service(), LifecycleOwner, SavedStateRegistryOwner 
         )
     }
 
-    private fun minimizeWindow(aspectRatio: Float) {
-        isMinimized = true
-        minimizeWindowHelper(aspectRatio, windowManager, windowLayoutParams, floatingView, dpToPx(MINIMIZED_EDGE_INSET_DP))
-    }
-
-    private fun maximizeWindow(aspectRatio: Float) {
-        isMinimized = false
-        maximizeWindowHelper(aspectRatio, windowManager, windowLayoutParams, floatingView)
-    }
-
     private fun dismissFloatingPlayer() {
-        currentVideoId?.let { videoDataRepository.removeVideoData(it) }
-        currentVideoId = null
-        currentVideoData = null
+        currentVideoUri = null
         removeFloatingView()
         stopSelf()
     }
@@ -187,17 +186,15 @@ class FloatingVideoService : Service(), LifecycleOwner, SavedStateRegistryOwner 
     companion object {
         private const val TAG = "FloatingVideoService"
         const val ACTION_START_FLOATING = "START_FLOATING"
-        const val EXTRA_VIDEO_ID = "video_id"
         const val EXTRA_POSITION = "position"
         private const val INITIAL_FLOATING_WINDOW_OFFSET_Y_DP = 300
 
         @SuppressLint("ObsoleteSdkInt")
-        fun startFloating(context: Context, videoId: String, position: Long = 0L) {
+        fun startFloating(context: Context, videoUri: Uri, position: Long = 0L) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(context)) {
-                // Permission copy should move to CommonStrings / Localazy once approved.
                 Toast.makeText(
                     context,
-                    "To show the floating video, please allow 'Display over other apps' permission.",
+                    context.getString(R.string.floating_video_overlay_permission_needed),
                     Toast.LENGTH_LONG,
                 ).show()
                 context.openSystemOverlaySettings()
@@ -206,7 +203,7 @@ class FloatingVideoService : Service(), LifecycleOwner, SavedStateRegistryOwner 
             context.startService(
                 Intent(context, FloatingVideoService::class.java).apply {
                     action = ACTION_START_FLOATING
-                    putExtra(EXTRA_VIDEO_ID, videoId)
+                    data = videoUri
                     putExtra(EXTRA_POSITION, position)
                 }
             )
