@@ -54,6 +54,7 @@ import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.inputs
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.emoji.api.picker.EmojiPickerRenderer
@@ -95,6 +96,7 @@ class ThreadedMessagesNode(
     private val appNavigationStateService: AppNavigationStateService,
     private val roomMemberModerationRenderer: RoomMemberModerationRenderer,
     private val emojiPickerRenderer: EmojiPickerRenderer,
+    private val dispatchers: CoroutineDispatchers,
 ) : Node(buildContext, plugins = plugins), MessagesNavigator {
     data class Inputs(
         val threadRootEventId: ThreadId,
@@ -113,7 +115,12 @@ class ThreadedMessagesNode(
      */
     private suspend fun createPresenter(): Presenter<MessagesState> {
         val threadedTimeline = room.createTimeline(CreateTimelineParams.Threaded(threadRootEventId = inputs.threadRootEventId)).getOrThrow()
-        val timelineController = TimelineController(room, threadedTimeline)
+        val timelineController = TimelineController(
+            room,
+            liveTimeline = threadedTimeline,
+            roomCoroutineScope = room.roomCoroutineScope,
+            dispatchers = dispatchers,
+        )
         this.timelineController = timelineController
         return presenterFactory.create(
             navigator = this,

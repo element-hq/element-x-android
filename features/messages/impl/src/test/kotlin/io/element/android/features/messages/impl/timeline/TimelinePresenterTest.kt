@@ -1079,7 +1079,11 @@ class TimelinePresenterTest {
             val focusedState = consumeItemsUntilPredicate { it.focusRequestState == FocusRequestState.Success(AN_EVENT_ID) }.last()
             assertThat(focusedState.isLive).isFalse()
             initialState.eventSink.invoke(TimelineEvent.LoadMore(Timeline.PaginationDirection.FORWARDS))
-            advanceUntilIdle()
+
+            // Give some time for any potential pagination to be called, but it should not be called because the focused event is not rendered yet.
+            // Also, given enough time, a new state should be emitted with isLive = false, because we switched to a focused event timeline.
+            runCurrent()
+
             assert(paginateLambda).isNeverCalled()
             assertThat(expectMostRecentItem().isLive).isFalse()
         }
@@ -1906,7 +1910,12 @@ class TimelinePresenterTest {
             sendPollResponseAction = sendPollResponseAction,
             sessionPreferencesStore = sessionPreferencesStore,
             timelineItemIndexer = timelineItemIndexer,
-            timelineController = TimelineController(room, timeline),
+            timelineController = TimelineController(
+                room = room,
+                liveTimeline = timeline,
+                roomCoroutineScope = backgroundScope,
+                dispatchers = testCoroutineDispatchers(),
+            ),
             resolveVerifiedUserSendFailurePresenter = resolveVerifiedUserSendFailurePresenter,
             typingNotificationPresenter = { aTypingNotificationState() },
             roomCallStatePresenter = { aStandByCallState() },

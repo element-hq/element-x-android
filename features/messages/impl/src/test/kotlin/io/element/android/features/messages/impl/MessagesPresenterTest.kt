@@ -1484,7 +1484,12 @@ class MessagesPresenterTest {
             clipboardHelper = clipboardHelper,
             htmlConverterProvider = FakeHtmlConverterProvider(),
             buildMeta = aBuildMeta(),
-            timelineController = TimelineController(joinedRoom, timeline),
+            timelineController = TimelineController(
+                room = joinedRoom,
+                liveTimeline = timeline,
+                roomCoroutineScope = backgroundScope,
+                dispatchers = coroutineDispatchers,
+            ),
             permalinkParser = permalinkParser,
             analyticsService = analyticsService,
             encryptionService = encryptionService,
