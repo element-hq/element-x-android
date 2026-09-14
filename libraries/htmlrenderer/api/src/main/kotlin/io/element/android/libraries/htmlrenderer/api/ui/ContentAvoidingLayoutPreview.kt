@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.htmlrenderer.impl.renderer
+package io.element.android.libraries.htmlrenderer.api.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -26,6 +26,8 @@ import io.element.android.libraries.htmlrenderer.api.ListItemNode
 import io.element.android.libraries.htmlrenderer.api.ListNode
 import io.element.android.libraries.htmlrenderer.api.ParagraphNode
 import io.element.android.libraries.htmlrenderer.api.QuoteNode
+import io.element.android.libraries.htmlrenderer.impl.renderer.HtmlMessageContent
+import io.element.android.libraries.ui.common.contentavoidinglayout.ContentAvoidingLayout
 import kotlinx.collections.immutable.persistentListOf
 
 private val documentNode = DocumentNode(

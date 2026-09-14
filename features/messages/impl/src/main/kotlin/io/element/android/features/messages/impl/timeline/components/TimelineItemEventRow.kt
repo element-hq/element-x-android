@@ -72,8 +72,6 @@ import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
-import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayout
-import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.components.receipt.ReadReceiptViewState
 import io.element.android.features.messages.impl.timeline.components.receipt.TimelineItemReadReceiptView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -139,6 +137,8 @@ import io.element.android.libraries.matrix.ui.messages.sender.SenderName
 import io.element.android.libraries.matrix.ui.messages.sender.SenderNameMode
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
+import io.element.android.libraries.ui.common.contentavoidinglayout.ContentAvoidingLayout
+import io.element.android.libraries.ui.common.contentavoidinglayout.ContentAvoidingLayoutData
 import io.element.android.libraries.ui.strings.CommonPlurals
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.a11y.isTalkbackActive

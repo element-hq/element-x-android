@@ -24,8 +24,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.LocalUseNewTimelineEventRenderer
-import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayout
-import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.AN_EMOJI_ONLY_TEXT
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContentPreviewParam
@@ -40,6 +38,8 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanUpdater
+import io.element.android.libraries.ui.common.contentavoidinglayout.ContentAvoidingLayout
+import io.element.android.libraries.ui.common.contentavoidinglayout.ContentAvoidingLayoutData
 import io.element.android.wysiwyg.compose.EditorStyledText
 import io.element.android.wysiwyg.link.Link
 

@@ -1,12 +1,11 @@
 /*
  * Copyright (c) 2026 Element Creations Ltd.
- * Copyright 2023-2025 New Vector Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.htmlrenderer.impl.renderer
+package io.element.android.libraries.ui.common.contentavoidinglayout
 
 import android.text.Layout
 import androidx.compose.foundation.layout.Column
@@ -161,7 +160,7 @@ object ContentAvoidingLayout {
      * This is supposed to be used in the `onTextLayout` parameter of a Text based component.
      */
     @Composable
-    internal fun measureLastTextLine(
+    fun measureLastTextLine(
         onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
         extraWidth: Dp = 0.dp,
     ): ((TextLayoutResult) -> Unit) {
@@ -191,7 +190,7 @@ object ContentAvoidingLayout {
      * This is supposed to be used in the `onTextLayout` parameter of an [EditorStyledText] component.
      */
     @Composable
-    internal fun measureLegacyLastTextLine(
+    fun measureLegacyLastTextLine(
         onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
         extraWidth: Dp = 0.dp,
     ): ((Layout) -> Unit) {
