@@ -5,9 +5,10 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.htmlrenderer.impl.renderer
+package io.element.android.libraries.htmlrenderer.api.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.horizontalScroll
@@ -36,8 +37,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawOutline
+import androidx.compose.ui.graphics.drawscope.Fill
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
@@ -49,6 +56,8 @@ import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -193,8 +202,9 @@ private fun ParagraphView(
 ) {
     val linkColor = ElementTheme.colors.textLinkExternal
     val codeBackgroundColor = ElementTheme.colors.bgSubtleSecondary
-    val styledText = remember(node.text, linkColor, codeBackgroundColor) {
-        node.text.applyInlineStyles(linkColor = linkColor, codeBackgroundColor = codeBackgroundColor)
+    val codeBorderColor = ElementTheme.colors.borderInteractiveSecondary
+    val styledText = remember(node.text, linkColor) {
+        node.text.applyLinkStyles(linkColor = linkColor)
     }
     val inlineContent = rememberInlineContent(node.inlineContent, context)
     val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
@@ -207,7 +217,9 @@ private fun ParagraphView(
     }
     Text(
         text = styledText,
-        modifier = modifier.linkTapHandler(styledText, layoutResult, context),
+        modifier = modifier
+            .drawInlineCodeBackgrounds(styledText, layoutResult, codeBackgroundColor, codeBorderColor, LocalDensity.current)
+            .linkTapHandler(styledText, layoutResult, context),
         style = ElementTheme.typography.fontBodyMdRegular,
         color = ElementTheme.colors.textPrimary,
         inlineContent = inlineContent,
@@ -226,13 +238,14 @@ private fun CodeBlockView(
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
+            .border(width = 1.dp, color = ElementTheme.colors.borderInteractiveSecondary, shape = RoundedCornerShape(8.dp))
             .background(ElementTheme.colors.bgSubtleSecondary)
             .horizontalScroll(rememberScrollState())
             .padding(horizontal = 12.dp, vertical = 8.dp),
     ) {
         Text(
             text = node.code,
-            style = ElementTheme.typography.fontBodyMdRegular.copy(fontFamily = FontFamily.Monospace),
+            style = ElementTheme.typography.fontBodySmRegular.copy(fontFamily = FontFamily.Monospace),
             color = ElementTheme.colors.textPrimary,
             softWrap = false,
         )
@@ -275,6 +288,7 @@ private fun ListView(
                     style = ElementTheme.typography.fontBodyMdRegular,
                     color = ElementTheme.colors.textPrimary,
                     modifier = Modifier.widthIn(min = ListMarkerWidth),
+                    textAlign = if (node.ordered) TextAlign.End else TextAlign.Center,
                 )
                 BlockNodes(nodes = item.children, context = context)
             }
@@ -414,18 +428,65 @@ private fun ImageNodeContent.inlineImageSize(): Pair<Dp, Dp> {
     }
 }
 
-/** Overlays theme-dependent styling (link color, inline-code background) onto the annotated ranges. */
-private fun AnnotatedString.applyInlineStyles(
-    linkColor: Color,
-    codeBackgroundColor: Color,
-): AnnotatedString {
+/** Overlays the theme-dependent link color onto the link-annotated ranges. */
+private fun AnnotatedString.applyLinkStyles(linkColor: Color): AnnotatedString {
     val linkRanges = getStringAnnotations(LINK_ANNOTATION_TAG, 0, length)
-    val codeRanges = getStringAnnotations(INLINE_CODE_ANNOTATION_TAG, 0, length)
-    if (linkRanges.isEmpty() && codeRanges.isEmpty()) return this
+    if (linkRanges.isEmpty()) return this
     return buildAnnotatedString {
-        append(this@applyInlineStyles)
+        append(this@applyLinkStyles)
         linkRanges.forEach { addStyle(SpanStyle(color = linkColor), it.start, it.end) }
-        codeRanges.forEach { addStyle(SpanStyle(background = codeBackgroundColor), it.start, it.end) }
+    }
+}
+
+/**
+ * Draws a rounded, bordered box behind each inline code ([INLINE_CODE_ANNOTATION_TAG]) range, so
+ * inline code matches the look of [CodeBlockView] but only covers the annotated text. A range that
+ * wraps across several lines gets one box per line.
+ */
+private fun Modifier.drawInlineCodeBackgrounds(
+    text: AnnotatedString,
+    layoutResult: State<TextLayoutResult?>,
+    backgroundColor: Color,
+    borderColor: Color,
+    density: Density,
+): Modifier = drawBehind {
+    val layout = layoutResult.value ?: return@drawBehind
+    val codeRanges = text.getStringAnnotations(INLINE_CODE_ANNOTATION_TAG, 0, text.length)
+    if (codeRanges.isEmpty()) return@drawBehind
+    val strokeWidth = InlineCodeBorderWidth.toPx()
+    val horizontalPadding = InlineCodeHorizontalPadding.toPx()
+    codeRanges.forEach { range ->
+        val firstLine = layout.getLineForOffset(range.start)
+        val lastLine = layout.getLineForOffset(range.end)
+        for (line in firstLine..lastLine) {
+            val lineStart = maxOf(range.start, layout.getLineStart(line))
+            val lineEnd = minOf(range.end, layout.getLineEnd(line, visibleEnd = true))
+            if (lineEnd <= lineStart) continue
+            val startX = layout.getHorizontalPosition(lineStart, usePrimaryDirection = true)
+            val endX = layout.getHorizontalPosition(lineEnd, usePrimaryDirection = true)
+            val left = minOf(startX, endX) - horizontalPadding
+            val right = maxOf(startX, endX) + horizontalPadding
+            val topLeft = Offset(left, layout.getLineTop(line))
+            val size = Size(right - left, layout.getLineBottom(line) - layout.getLineTop(line))
+
+            val shape = RoundedCornerShape(
+                topStart = if (line == firstLine) InlineCodeCornerRadius else 0.dp,
+                topEnd = if (line == lastLine) InlineCodeCornerRadius else 0.dp,
+                bottomStart = if (line == firstLine) InlineCodeCornerRadius else 0.dp,
+                bottomEnd = if (line == lastLine) InlineCodeCornerRadius else 0.dp,
+            )
+
+            val outline = shape.createOutline(
+                size = size,
+                layoutDirection = layoutDirection,
+                density = density,
+            )
+
+            translate(topLeft.x, topLeft.y) {
+                drawOutline(outline = outline, color = backgroundColor, style = Fill)
+                drawOutline(outline = outline, color = borderColor, style = Stroke(width = strokeWidth))
+            }
+        }
     }
 }
 
@@ -450,6 +511,11 @@ private val ListItemSpacing: Dp = 4.dp
 private val ListMarkerWidth: Dp = 24.dp
 private val PillPaddingHorizontal: Dp = 6.dp
 private val PillPaddingVertical: Dp = 2.dp
+
+/** Rounded, bordered box drawn behind inline code. */
+private val InlineCodeCornerRadius: Dp = 6.dp
+private val InlineCodeBorderWidth: Dp = 1.dp
+private val InlineCodeHorizontalPadding: Dp = 2.dp
 
 /** Size of an inline image that has no dimensions (or is a custom emoji): roughly a line's height. */
 private val EmojiImageSize: Dp = 20.dp

@@ -8,6 +8,7 @@
 package io.element.android.libraries.htmlrenderer.impl.renderer
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.htmlrenderer.api.ui.AllowedImages
 import org.junit.Test
 
 class AllowedImagesTest {

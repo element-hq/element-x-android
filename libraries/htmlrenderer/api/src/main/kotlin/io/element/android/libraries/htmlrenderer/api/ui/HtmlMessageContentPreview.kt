@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
@@ -35,7 +34,7 @@ import io.element.android.libraries.htmlrenderer.api.ListNode
 import io.element.android.libraries.htmlrenderer.api.MentionNodeContent
 import io.element.android.libraries.htmlrenderer.api.ParagraphNode
 import io.element.android.libraries.htmlrenderer.api.QuoteNode
-import io.element.android.libraries.htmlrenderer.impl.renderer.HtmlMessageContent
+import io.element.android.libraries.htmlrenderer.api.spans.InlineCodeSpanStyle
 import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentListOf
@@ -128,7 +127,7 @@ internal class HtmlMessageContentProvider : PreviewParameterProvider<DocumentNod
             buildAnnotatedString {
                 append("Run ")
                 val start = length
-                withStyle(SpanStyle(fontFamily = FontFamily.Monospace)) { append("git status") }
+                withStyle(InlineCodeSpanStyle) { append("git status") }
                 addStringAnnotation(INLINE_CODE_ANNOTATION_TAG, "", start, length)
                 append(" to see changes")
             }
@@ -141,7 +140,7 @@ internal class HtmlMessageContentProvider : PreviewParameterProvider<DocumentNod
                 buildAnnotatedString {
                     append("Trying ")
                     val start = length
-                    withStyle(SpanStyle(fontFamily = FontFamily.Monospace)) { append("inline code when it needs to be wrapped in several lines, just to check what it looks like") }
+                    withStyle(InlineCodeSpanStyle) { append("inline code when it needs to be wrapped in several lines, just to check what it looks like") }
                     addStringAnnotation(INLINE_CODE_ANNOTATION_TAG, "", start, length)
                     append(", is it good?")
                 }
