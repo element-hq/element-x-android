@@ -15,5 +15,9 @@ android {
 
 dependencies {
     api(projects.libraries.matrix.api)
+    implementation(projects.libraries.designsystem)
+    implementation(projects.libraries.uiCommon)
+
     api(libs.jsoup)
+    implementation(libs.coil.compose)
 }
