@@ -90,8 +90,9 @@ fun ContentAvoidingLayout(
         val freeSpace = max(contentPlaceable.width - data.nonOverlappingContentWidth, 0)
 
         when {
-            // When the content + the overlay don't fit in the available max width, we need to move the overlay to a new row
-            !shrinkContent && data.nonOverlappingContentWidth + overlayPlaceable.width > constraints.maxWidth -> {
+            // When the content can't overlap the overlay at all, or the content + the overlay don't fit in the
+            // available max width, we need to move the overlay to a new row
+            !data.canOverlay() || (!shrinkContent && data.nonOverlappingContentWidth + overlayPlaceable.width > constraints.maxWidth) -> {
                 layoutHeight += overlayPlaceable.height + overlayOffset.y.roundToPx()
             }
             // If the content is smaller than the available max width, we can move the overlay to the right of the content
@@ -130,7 +131,13 @@ data class ContentAvoidingLayoutData(
     val contentHeight: Int = 0,
     val nonOverlappingContentWidth: Int = contentWidth,
     val nonOverlappingContentHeight: Int = contentHeight,
-)
+) {
+    fun canOverlay(): Boolean = contentWidth != Int.MAX_VALUE
+
+    companion object {
+        val NotOverlapping = ContentAvoidingLayoutData(contentWidth = Int.MAX_VALUE, contentHeight = Int.MAX_VALUE)
+    }
+}
 
 /**
  * A scope for the [ContentAvoidingLayout].
