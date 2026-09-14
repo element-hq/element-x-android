@@ -100,9 +100,9 @@ class DefaultMediaSender(
         inReplyToEventId: EventId?,
     ): Result<Unit> {
         val mediaLogId = mediaId(mediaUploadInfo.file)
-        return getTimeline().flatMap {
-            Timber.d("Started sending media $mediaLogId using timeline: ${it.mode}")
-            it.sendMedia(
+        return withTimeline { timeline ->
+            Timber.d("Started sending media $mediaLogId using timeline: ${timeline.mode}")
+            timeline.sendMedia(
                 uploadInfo = mediaUploadInfo,
                 caption = caption,
                 formattedCaption = formattedCaption,
@@ -128,12 +128,14 @@ class DefaultMediaSender(
                 mediaOptimizationConfig = mediaOptimizationConfig,
             )
             .flatMapCatching { info ->
-                getTimeline().getOrThrow().sendMedia(
-                    uploadInfo = info,
-                    caption = caption,
-                    formattedCaption = formattedCaption,
-                    inReplyToEventId = inReplyToEventId,
-                )
+                withTimeline { timeline ->
+                    timeline.sendMedia(
+                        uploadInfo = info,
+                        caption = caption,
+                        formattedCaption = formattedCaption,
+                        inReplyToEventId = inReplyToEventId,
+                    )
+                }
             }
             .handleSendResult(mediaId(uri))
     }
@@ -158,12 +160,14 @@ class DefaultMediaSender(
                     audioInfo = audioInfo,
                     waveform = waveForm,
                 )
-                getTimeline().getOrThrow().sendMedia(
-                    uploadInfo = newInfo,
-                    caption = null,
-                    formattedCaption = null,
-                    inReplyToEventId = inReplyToEventId,
-                )
+                withTimeline { timeline ->
+                    timeline.sendMedia(
+                        uploadInfo = newInfo,
+                        caption = null,
+                        formattedCaption = null,
+                        inReplyToEventId = inReplyToEventId,
+                    )
+                }
             }
             .handleSendResult(mediaId(uri))
     }
@@ -176,7 +180,7 @@ class DefaultMediaSender(
     ): Result<Unit> {
         val galleryLogId = "gallery[${mediaUploadInfos.size} items]"
         Timber.d("Sending $galleryLogId")
-        return getTimeline().flatMap { timeline ->
+        return withTimeline { timeline ->
             val galleryItems = mediaUploadInfos.map { it.toGalleryItemInfo() }
             timeline.sendGallery(
                 items = galleryItems,
@@ -184,10 +188,10 @@ class DefaultMediaSender(
                 formattedCaption = formattedCaption,
                 inReplyToEventId = inReplyToEventId,
             )
+                .flatMapCatching { uploadHandler ->
+                    uploadHandler.await()
+                }
         }
-            .flatMapCatching { uploadHandler ->
-                uploadHandler.await()
-            }
             .handleSendResult(galleryLogId)
     }
 
@@ -269,12 +273,23 @@ class DefaultMediaSender(
             }
     }
 
-    private suspend fun getTimeline(): Result<Timeline> {
+    /**
+     * Invokes [block] with the [Timeline] matching [timelineMode].
+     *
+     * For a thread, a dedicated timeline is created and closed once [block] returns, since such a
+     * timeline owns SDK resources. [block] must then perform the whole sending, including waiting
+     * for the media upload to complete. For the other modes, the live timeline is used, and is not
+     * closed here since it is owned by its room.
+     */
+    private suspend fun <T> withTimeline(block: suspend (Timeline) -> Result<T>): Result<T> {
         return when (timelineMode) {
             is Timeline.Mode.Thread -> {
                 room.createTimeline(CreateTimelineParams.Threaded(threadRootEventId = timelineMode.threadRootId))
+                    .flatMap { threadedTimeline ->
+                        threadedTimeline.use { block(it) }
+                    }
             }
-            else -> Result.success(room.liveTimeline)
+            else -> block(room.liveTimeline)
         }
     }
 
