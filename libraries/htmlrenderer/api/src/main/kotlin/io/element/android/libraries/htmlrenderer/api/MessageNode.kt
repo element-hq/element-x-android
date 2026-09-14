@@ -55,6 +55,18 @@ data class ParagraphNode(
 ) : BlockNode
 
 /**
+ * A heading (`<h1>`–`<h6>`). Like a [ParagraphNode] it carries inline content ([text] and
+ * [inlineContent]), plus the heading [level] from 1 (largest) to 6 (smallest), used by the renderer
+ * to pick the typography.
+ */
+@Immutable
+data class HeaderNode(
+    val level: Int,
+    val text: AnnotatedString,
+    val inlineContent: ImmutableMap<String, InlineContent> = persistentMapOf(),
+) : BlockNode
+
+/**
  * A preformatted code block (`<pre>`). Rendered in a monospaced, horizontally
  * scrollable container. The text is kept raw: no inline styling is applied inside it.
  */

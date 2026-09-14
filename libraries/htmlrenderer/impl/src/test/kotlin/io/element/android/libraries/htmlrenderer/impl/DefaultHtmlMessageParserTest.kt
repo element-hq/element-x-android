@@ -12,6 +12,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.htmlrenderer.api.CodeBlockNode
+import io.element.android.libraries.htmlrenderer.api.HeaderNode
 import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser
 import io.element.android.libraries.htmlrenderer.api.ImageNodeContent
 import io.element.android.libraries.htmlrenderer.api.ListNode
@@ -224,6 +225,24 @@ class DefaultHtmlMessageParserTest : RobolectricTest() {
         val document = parse("<mx-reply>In reply to something</mx-reply>Actual message")
         val paragraph = document.children.single() as ParagraphNode
         assertThat(paragraph.text.text).isEqualTo("Actual message")
+    }
+
+    @Test
+    fun `headers become HeaderNodes with their level and inline content`() {
+        val document = parse("<h1>Title</h1><h3>Subtitle with <strong>bold</strong></h3><h6>Small</h6>")
+        assertThat(document.children).hasSize(3)
+
+        val h1 = document.children[0] as HeaderNode
+        assertThat(h1.level).isEqualTo(1)
+        assertThat(h1.text.text).isEqualTo("Title")
+
+        val h3 = document.children[1] as HeaderNode
+        assertThat(h3.level).isEqualTo(3)
+        assertThat(h3.text.text).isEqualTo("Subtitle with bold")
+
+        val h6 = document.children[2] as HeaderNode
+        assertThat(h6.level).isEqualTo(6)
+        assertThat(h6.text.text).isEqualTo("Small")
     }
 
     @Test
