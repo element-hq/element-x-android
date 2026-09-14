@@ -277,6 +277,7 @@ internal fun aRedactedMessagesGroupedEvents(
 }
 
 internal fun aTimelineRoomInfo(
+    currentUserId: UserId = UserId("@user:domain"),
     name: String = ROOM_NAME,
     isDm: Boolean = false,
     userHasPermissionToSendMessage: Boolean = true,
@@ -284,6 +285,7 @@ internal fun aTimelineRoomInfo(
     typingNotificationState: TypingNotificationState = aTypingNotificationState(),
     predecessorRoom: PredecessorRoom? = null,
 ) = TimelineRoomInfo(
+    currentUserId = currentUserId,
     isDm = isDm,
     name = name,
     userHasPermissionToSendMessage = userHasPermissionToSendMessage,
