@@ -97,7 +97,7 @@ import kotlinx.collections.immutable.toImmutableMap
  * @param imageModel maps an [ImageNodeContent] to the model passed to [AsyncImage]. Defaults to the
  * raw image URL; the timeline can supply a mapper that turns `mxc://` URLs into a media request.
  * @param hideImages when true, inline images are replaced by a tappable grey placeholder until the
- * viewer reveals them individually; a revealed image's URL is added to [LocalAllowedImages].
+ * viewer reveals them individually; a revealed image's URL is added to [LocalAllowedInlineImages].
  * @param onContentLayoutChange invoked with the measured layout of the very last rendered
  * [ParagraphNode], so the timeline can lay out the timestamp around it. It is only wired to that
  * last paragraph, and only when it is not nested inside a [CodeBlockNode] or [QuoteNode] — in which
@@ -139,10 +139,10 @@ fun HtmlMessageContent(
     }
     // Each message keeps its own reveal state, unless a host provides a shared [LocalAllowedImages].
     val allowedImages = remember { AllowedImages() }
-    CompositionLocalProvider(LocalAllowedImages provides allowedImages) {
         SelectionContainer {
             BlockNodes(nodes = node.children, context = context, modifier = modifier)
         }
+    CompositionLocalProvider(LocalAllowedInlineImages provides allowedImages) {
     }
 }
 
@@ -339,7 +339,7 @@ private fun InlineImage(
     hideImages: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    val allowedImages = LocalAllowedImages.current
+    val allowedImages = LocalAllowedInlineImages.current
     val isRevealed = !hideImages || content.url in allowedImages
     if (isRevealed) {
         AsyncImage(
