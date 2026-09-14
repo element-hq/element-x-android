@@ -36,4 +36,4 @@ class AllowedImages(initial: Set<String> = emptySet()) {
  * default. [HtmlMessageContent] provides a per-message instance; a host may provide its own above it
  * to share or persist the revealed set.
  */
-val LocalAllowedImages = staticCompositionLocalOf { AllowedImages() }
+val LocalAllowedInlineImages = staticCompositionLocalOf { AllowedImages() }
