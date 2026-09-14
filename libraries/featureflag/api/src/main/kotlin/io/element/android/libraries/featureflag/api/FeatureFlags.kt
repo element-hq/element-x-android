@@ -161,4 +161,12 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
+    NewTimelineEventRenderer(
+        key = "feature.new_timeline_event_renderer",
+        title = "New timeline event renderer",
+        description = "Render formatted message bodies natively with Jetpack Compose instead of the rich text editor view.",
+        defaultValue = { false },
+        isFinished = false,
+        isInLabs = true,
+    ),
 }
