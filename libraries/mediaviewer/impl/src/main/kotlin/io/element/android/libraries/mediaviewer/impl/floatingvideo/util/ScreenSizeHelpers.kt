@@ -15,7 +15,7 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.view.WindowManager
 
-/** Edge inset applied when the floating window is minimized (bmarty review). */
+/** Edge inset applied when the floating window is minimized. */
 const val MINIMIZED_EDGE_INSET_DP = 16
 
 fun WindowManager?.getScreenWidth(): Int {
@@ -64,9 +64,20 @@ fun movePosition(
     floatingView: View?,
     windowManager: WindowManager?,
 ) {
-    windowLayoutParams.x += x
-    windowLayoutParams.y += y
-    windowManager?.updateViewLayout(floatingView, windowLayoutParams)
+    val wm = windowManager ?: return
+    if (floatingView?.parent == null) return
+    windowLayoutParams.x = coerceInScreenBounds(windowLayoutParams.x, x, wm.getScreenWidth(), windowLayoutParams.width)
+    windowLayoutParams.y = coerceInScreenBounds(windowLayoutParams.y, y, wm.getScreenHeight(), windowLayoutParams.height)
+    wm.updateViewLayout(floatingView, windowLayoutParams)
+}
+
+/**
+ * Applies [delta] to [currentPosition] and clamps the result so the window (of size [windowSize])
+ * stays fully within [screenSize].
+ */
+internal fun coerceInScreenBounds(currentPosition: Int, delta: Int, screenSize: Int, windowSize: Int): Int {
+    val maxPosition = (screenSize - windowSize).coerceAtLeast(0)
+    return (currentPosition + delta).coerceIn(0, maxPosition)
 }
 
 fun minimizeWindowHelper(
@@ -101,12 +112,13 @@ fun maximizeWindowHelper(
     updateWindowSize(aspectRatio, false, wm, windowLayoutParams, floatingView)
 }
 
-private fun calculateDimensions(aspectRatio: Float, isMinimized: Boolean, screenWidth: Int): Point {
+internal fun calculateDimensions(aspectRatio: Float, isMinimized: Boolean, screenWidth: Int): Point {
+    val safeAspectRatio = if (aspectRatio.isFinite() && aspectRatio > 0f) aspectRatio else (16f / 9f)
     val width = if (isMinimized) {
-        val widthFraction = if (aspectRatio > 1f) 0.6f else 0.35f
+        val widthFraction = if (safeAspectRatio > 1f) 0.6f else 0.35f
         (screenWidth * widthFraction).toInt()
     } else {
         (screenWidth * 0.9f).toInt()
     }
-    return Point(width, (width / aspectRatio).toInt())
+    return Point(width, (width / safeAspectRatio).toInt())
 }
