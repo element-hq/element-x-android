@@ -38,8 +38,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
+import io.element.android.libraries.mediaviewer.impl.R
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.delay
 
@@ -47,6 +50,7 @@ import kotlinx.coroutines.delay
 fun FloatingVideoOverlay(
     uri: Uri,
     startPositionMs: Long,
+    isMinimized: Boolean,
     onClose: () -> Unit,
     onToggleFullScreen: (Float) -> Unit,
     onComplete: () -> Unit,
@@ -113,7 +117,15 @@ fun FloatingVideoOverlay(
                         isPlaying = false
                         onComplete()
                     }
+                    setOnErrorListener { _, _, _ ->
+                        isPlaying = false
+                        onClose()
+                        true
+                    }
                 }
+            },
+            onRelease = { videoView ->
+                videoView.stopPlayback()
             },
             modifier = Modifier.fillMaxSize(),
         )
@@ -149,8 +161,10 @@ fun FloatingVideoOverlay(
         ) {
             IconButton(onClick = { onToggleFullScreen(currentAspectRatio) }, modifier = Modifier.size(28.dp)) {
                 Icon(
-                    imageVector = CompoundIcons.Expand(),
-                    contentDescription = stringResource(CommonStrings.a11y_expand_message_text_field),
+                    imageVector = if (isMinimized) CompoundIcons.Expand() else CompoundIcons.Collapse(),
+                    contentDescription = stringResource(
+                        if (isMinimized) R.string.floating_video_a11y_expand else CommonStrings.action_minimize
+                    ),
                     tint = Color.White,
                     modifier = Modifier.padding(4.dp),
                 )
@@ -164,4 +178,19 @@ fun FloatingVideoOverlay(
             }
         }
     }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun FloatingVideoOverlayPreview() = ElementPreview {
+    FloatingVideoOverlay(
+        uri = Uri.EMPTY,
+        startPositionMs = 0L,
+        isMinimized = true,
+        onClose = {},
+        onToggleFullScreen = {},
+        onComplete = {},
+        updateAspectRatio = {},
+        movePosition = { _, _ -> },
+    )
 }
