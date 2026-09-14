@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.htmlrenderer.impl.renderer
+package io.element.android.libraries.htmlrenderer.api.ui
 
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateSetOf
