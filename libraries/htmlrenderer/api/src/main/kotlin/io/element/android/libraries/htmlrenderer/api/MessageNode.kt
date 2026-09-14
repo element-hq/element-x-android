@@ -84,6 +84,22 @@ data class QuoteNode(
 ) : BlockNode
 
 /**
+ * A disclosure / spoiler (`<details>` with an optional `<summary>`). The renderer shows [summary]
+ * as always-visible inline text and reveals [children] only while expanded (toggled by tapping the
+ * summary).
+ *
+ * @param summary the inline content of the `<summary>` (defaults provided by the parser when absent).
+ * @param summaryInlineContent the mention/image placeholders referenced by [summary].
+ * @param children the hidden block content revealed when the spoiler is expanded.
+ */
+@Immutable
+data class DetailsNode(
+    val summary: AnnotatedString,
+    val summaryInlineContent: ImmutableMap<String, InlineContent> = persistentMapOf(),
+    val children: ImmutableList<BlockNode>,
+) : BlockNode
+
+/**
  * An ordered (`<ol>`) or unordered (`<ul>`) list.
  *
  * @param ordered whether the list is numbered (`<ol>`) or bulleted (`<ul>`).

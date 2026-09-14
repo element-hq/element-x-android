@@ -17,6 +17,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.htmlrenderer.api.BlockNode
 import io.element.android.libraries.htmlrenderer.api.CodeBlockNode
+import io.element.android.libraries.htmlrenderer.api.DetailsNode
 import io.element.android.libraries.htmlrenderer.api.DocumentNode
 import io.element.android.libraries.htmlrenderer.api.HeaderNode
 import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser
@@ -34,6 +35,7 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
 import org.jsoup.nodes.Document
@@ -55,11 +57,13 @@ class DefaultHtmlMessageParser(
         return DocumentNode(children = parseBlocks(document.body()))
     }
 
+    private fun parseBlocks(parent: Element): ImmutableList<BlockNode> = parseBlockNodes(parent.childNodes())
+
     /**
-     * Walks the children of [parent], emitting a block node for each block-level element and
-     * buffering runs of inline content into [ParagraphNode]s in between.
+     * Walks [nodes], emitting a block node for each block-level element and buffering runs of inline
+     * content into [ParagraphNode]s in between.
      */
-    private fun parseBlocks(parent: Element): ImmutableList<BlockNode> {
+    private fun parseBlockNodes(nodes: List<Node>): ImmutableList<BlockNode> {
         val blocks = mutableListOf<BlockNode>()
         val inlineBuffer = mutableListOf<Node>()
 
@@ -70,7 +74,7 @@ class DefaultHtmlMessageParser(
             }
         }
 
-        for (node in parent.childNodes()) {
+        for (node in nodes) {
             when (node) {
                 // The fallback reply content is never rendered.
                 is Element if node.tagName() == TAG_MX_REPLY -> Unit
@@ -91,8 +95,29 @@ class DefaultHtmlMessageParser(
         TAG_BLOCKQUOTE -> QuoteNode(children = parseBlocks(element))
         TAG_UL -> buildList(element, ordered = false)
         TAG_OL -> buildList(element, ordered = true)
+        TAG_DETAILS -> buildDetails(element)
         in HEADER_TAGS -> buildHeader(element, level = tag.removePrefix("h").toInt())
         else -> null
+    }
+
+    /**
+     * Builds a [DetailsNode] (spoiler) from a `<details>` element: its `<summary>` child becomes the
+     * always-visible summary, and the remaining children become the hidden body. A missing summary
+     * falls back to [DEFAULT_SUMMARY]. Returns `null` if the element holds no content at all.
+     */
+    private fun buildDetails(element: Element): DetailsNode? {
+        val summaryElement = element.childNodes()
+            .filterIsInstance<Element>()
+            .firstOrNull { it.tagName() == TAG_SUMMARY }
+        val summary = summaryElement?.let { buildInlineContent(it.childNodes()) }
+        val bodyNodes = element.childNodes().filterNot { it === summaryElement }
+        val children = parseBlockNodes(bodyNodes)
+        if (summaryElement == null && children.isEmpty()) return null
+        return DetailsNode(
+            summary = summary?.text ?: AnnotatedString(DEFAULT_SUMMARY),
+            summaryInlineContent = summary?.inlineContent ?: persistentMapOf(),
+            children = children,
+        )
     }
 
     private fun buildList(element: Element, ordered: Boolean): ListNode {
@@ -259,7 +284,7 @@ private fun Element.isBlockLevel(): Boolean = tagName() in BLOCK_TAGS
 
 private val HEADER_TAGS = setOf("h1", "h2", "h3", "h4", "h5", "h6")
 
-private val BLOCK_TAGS = setOf(TAG_P, TAG_PRE, TAG_BLOCKQUOTE, TAG_UL, TAG_OL) + HEADER_TAGS
+private val BLOCK_TAGS = setOf(TAG_P, TAG_PRE, TAG_BLOCKQUOTE, TAG_UL, TAG_OL, TAG_DETAILS) + HEADER_TAGS
 
 private const val TAG_P = "p"
 private const val TAG_PRE = "pre"
@@ -267,6 +292,8 @@ private const val TAG_BLOCKQUOTE = "blockquote"
 private const val TAG_UL = "ul"
 private const val TAG_OL = "ol"
 private const val TAG_LI = "li"
+private const val TAG_DETAILS = "details"
+private const val TAG_SUMMARY = "summary"
 private const val TAG_BR = "br"
 private const val TAG_B = "b"
 private const val TAG_STRONG = "strong"
@@ -288,3 +315,6 @@ private const val IMAGE_ID_PREFIX = "image_"
 
 /** Unicode replacement character, used as the placeholder text for an image with no alt text. */
 private const val PLACEHOLDER_CHAR = "�"
+
+/** Fallback summary shown for a `<details>` with no `<summary>`, matching the HTML default. */
+private const val DEFAULT_SUMMARY = "Details"

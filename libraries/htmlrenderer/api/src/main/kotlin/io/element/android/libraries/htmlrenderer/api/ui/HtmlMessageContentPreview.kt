@@ -24,6 +24,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.htmlrenderer.api.BlockNode
 import io.element.android.libraries.htmlrenderer.api.CodeBlockNode
+import io.element.android.libraries.htmlrenderer.api.DetailsNode
 import io.element.android.libraries.htmlrenderer.api.DocumentNode
 import io.element.android.libraries.htmlrenderer.api.HeaderNode
 import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser.Companion.INLINE_CODE_ANNOTATION_TAG
@@ -96,6 +97,7 @@ internal class HtmlMessageContentProvider : PreviewParameterProvider<DocumentNod
     override val values: Sequence<DocumentNode>
         get() = sequenceOf(
             headers(),
+            spoiler(),
             richParagraph(),
             inlineCode(),
             inlineImage(),
@@ -289,6 +291,15 @@ internal class HtmlMessageContentProvider : PreviewParameterProvider<DocumentNod
         HeaderNode(level = 5, text = AnnotatedString("Heading 5")),
         HeaderNode(level = 6, text = AnnotatedString("Heading 6")),
         paragraph(AnnotatedString("Body text under the headings.")),
+    )
+
+    private fun spoiler() = document(
+        DetailsNode(
+            summary = AnnotatedString("Spoiler: tap to reveal"),
+            children = persistentListOf(
+                paragraph(AnnotatedString("Hidden content, shown only once expanded.")),
+            ),
+        ),
     )
 
     private fun document(vararg blocks: BlockNode) = DocumentNode(blocks.toList().toImmutableList())

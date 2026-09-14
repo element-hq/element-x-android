@@ -12,6 +12,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.htmlrenderer.api.CodeBlockNode
+import io.element.android.libraries.htmlrenderer.api.DetailsNode
 import io.element.android.libraries.htmlrenderer.api.HeaderNode
 import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser
 import io.element.android.libraries.htmlrenderer.api.ImageNodeContent
@@ -243,6 +244,24 @@ class DefaultHtmlMessageParserTest : RobolectricTest() {
         val h6 = document.children[2] as HeaderNode
         assertThat(h6.level).isEqualTo(6)
         assertThat(h6.text.text).isEqualTo("Small")
+    }
+
+    @Test
+    fun `details becomes a DetailsNode with its summary and hidden body`() {
+        val document = parse("<details><summary>Spoiler title</summary><p>Hidden content</p></details>")
+        val details = document.children.single() as DetailsNode
+        assertThat(details.summary.text).isEqualTo("Spoiler title")
+        val body = details.children.single() as ParagraphNode
+        assertThat(body.text.text).isEqualTo("Hidden content")
+    }
+
+    @Test
+    fun `details without a summary falls back to a default summary`() {
+        val document = parse("<details><p>Hidden</p></details>")
+        val details = document.children.single() as DetailsNode
+        assertThat(details.summary.text).isEqualTo("Details")
+        val body = details.children.single() as ParagraphNode
+        assertThat(body.text.text).isEqualTo("Hidden")
     }
 
     @Test

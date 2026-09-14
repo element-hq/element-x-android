@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
@@ -67,6 +68,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.htmlrenderer.api.BlockNode
 import io.element.android.libraries.htmlrenderer.api.CodeBlockNode
+import io.element.android.libraries.htmlrenderer.api.DetailsNode
 import io.element.android.libraries.htmlrenderer.api.DocumentNode
 import io.element.android.libraries.htmlrenderer.api.HeaderNode
 import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser.Companion.INLINE_CODE_ANNOTATION_TAG
@@ -166,6 +168,7 @@ internal fun BlockNode.lastBlockNode(): BlockNode? = when (this) {
     is QuoteNode -> this
     is CodeBlockNode -> this
     is HeaderNode -> this
+    is DetailsNode -> this
 }
 
 @Composable
@@ -201,6 +204,7 @@ private fun BlockNodeView(
         is CodeBlockNode -> CodeBlockView(node = node, modifier = modifier)
         is QuoteNode -> QuoteView(node = node, context = context, modifier = modifier)
         is ListNode -> ListView(node = node, context = context, modifier = modifier)
+        is DetailsNode -> DetailsView(node = node, context = context, modifier = modifier)
     }
 }
 
@@ -295,6 +299,42 @@ private fun headerTextStyle(level: Int): TextStyle = when (level) {
     4 -> ElementTheme.typography.fontHeadingSmMedium
     5 -> ElementTheme.typography.fontBodyLgMedium
     else -> ElementTheme.typography.fontBodyMdMedium
+}
+
+@Composable
+private fun DetailsView(
+    node: DetailsNode,
+    context: RenderContext,
+    modifier: Modifier = Modifier,
+) {
+    val expanded = remember { mutableStateOf(false) }
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(BlockSpacing),
+    ) {
+        // The always-visible summary; tapping it toggles the hidden body.
+        Row(
+            modifier = Modifier.clickable { expanded.value = !expanded.value },
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                imageVector = if (expanded.value) CompoundIcons.ChevronDown() else CompoundIcons.ChevronRight(),
+                contentDescription = null,
+                tint = ElementTheme.colors.iconSecondary,
+                modifier = Modifier.size(SpoilerChevronSize),
+            )
+            Spacer(modifier = Modifier.width(SpoilerChevronSpacing))
+            TextBlock(
+                text = node.summary,
+                inlineContent = node.summaryInlineContent,
+                textStyle = ElementTheme.typography.fontBodyMdMedium,
+                context = context,
+            )
+        }
+        if (expanded.value) {
+            BlockNodes(nodes = node.children, context = context)
+        }
+    }
 }
 
 @Composable
@@ -595,3 +635,7 @@ private val EmojiImageSize: Dp = 20.dp
 
 /** Inline images are scaled down to at most this width, preserving their aspect ratio. */
 private val MaxInlineImageWidth: Dp = 120.dp
+
+/** The disclosure chevron shown before a spoiler ([DetailsNode]) summary, and its trailing gap. */
+private val SpoilerChevronSize: Dp = 20.dp
+private val SpoilerChevronSpacing: Dp = 4.dp
