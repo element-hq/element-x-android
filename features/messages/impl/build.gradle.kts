@@ -46,7 +46,6 @@ dependencies {
     implementation(projects.libraries.dateformatter.api)
     implementation(projects.libraries.eventformatter.api)
     implementation(projects.libraries.htmlrenderer.api)
-    implementation(projects.libraries.htmlrenderer.impl)
     implementation(projects.libraries.mediapickers.api)
     implementation(projects.libraries.mediaviewer.api)
     implementation(projects.libraries.featureflag.api)
