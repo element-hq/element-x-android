@@ -63,6 +63,8 @@ fun TimelineItemTextView(
                 node = messageTree,
                 onLinkClick = { onLinkClick(Link(url = it, text = it)) },
                 onLinkLongClick = { onLinkLongClick(Link(url = it, text = it)) },
+                onLinkClick = { url, text -> onLinkClick(Link(url = url, text = text)) },
+                onLinkLongClick = { url, text -> onLinkLongClick(Link(url = url, text = text)) },
                 imageModel = { image -> MediaRequestData(MediaSource(image.url), MediaRequestData.Kind.Content) },
                 onContentLayoutChange = { data ->
                     onContentLayoutChange(
