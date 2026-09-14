@@ -36,6 +36,8 @@
   <string name="screen_roomlist_filter_invites_empty_state_title">"承認待ちの招待はありません"</string>
   <string name="screen_roomlist_filter_low_priority">"低い優先度"</string>
   <string name="screen_roomlist_filter_low_priority_empty_state_title">"低い優先度のチャットはまだありません"</string>
+  <string name="screen_roomlist_filter_mention">"メンション"</string>
+  <string name="screen_roomlist_filter_mention_empty_state_title">"未読のメンションはありません"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"フィルターを解除して他のチャットを表示できます"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"この選択中にチャットがありません"</string>
   <string name="screen_roomlist_filter_people">"ユーザー"</string>

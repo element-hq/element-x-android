@@ -553,6 +553,8 @@ Are you sure you want to continue?"</string>
   <string name="screen_room_confirm_removal_message">"Are you sure you wish to remove this message?"</string>
   <string name="screen_room_confirm_removal_reason_label">"Reason (optional)"</string>
   <string name="screen_room_confirm_removal_reason_placeholder">"Enter…"</string>
+  <string name="screen_room_confirm_removal_reason_placeholder_android">"Reason…"</string>
+  <string name="screen_room_confirm_removal_reason_supporting_text">"(Optional)"</string>
   <string name="screen_room_confirm_removal_title">"Confirm removal"</string>
   <string name="screen_room_error_failed_processing_media">"Failed processing media to upload, please try again."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Could not retrieve user details"</string>
