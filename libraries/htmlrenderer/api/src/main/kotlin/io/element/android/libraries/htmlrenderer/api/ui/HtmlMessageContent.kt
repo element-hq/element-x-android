@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.htmlrenderer.api.ui
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -32,6 +33,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -40,6 +43,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.drawscope.Fill
@@ -64,6 +68,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.htmlrenderer.api.BlockNode
@@ -342,19 +347,52 @@ private fun CodeBlockView(
     node: CodeBlockNode,
     modifier: Modifier = Modifier,
 ) {
+    val scrollState = rememberScrollState()
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
             .border(width = 1.dp, color = ElementTheme.colors.borderInteractiveSecondary, shape = RoundedCornerShape(8.dp))
             .background(ElementTheme.colors.bgSubtleSecondary)
-            .horizontalScroll(rememberScrollState())
-            .padding(horizontal = 12.dp, vertical = 8.dp),
+            .height(IntrinsicSize.Min),
     ) {
         Text(
+            modifier = Modifier.horizontalScroll(scrollState).padding(horizontal = 12.dp, vertical = 8.dp),
             text = node.code,
             style = ElementTheme.typography.fontBodySmRegular.copy(fontFamily = FontFamily.Monospace),
             color = ElementTheme.colors.textPrimary,
             softWrap = false,
+        )
+
+        val progress by remember {
+            derivedStateOf {
+                scrollState.value.toFloat() / scrollState.maxValue
+            }
+        }
+
+        val alpha by animateFloatAsState(targetValue = progress, label = "CodeBlockViewScrollAlpha")
+
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .background(
+                    brush = Brush.horizontalGradient(
+                        colors = listOf(ElementTheme.colors.bgSubtleTertiary.copy(alpha = alpha), Color.Transparent),
+                        startX = 0f,
+                        endX = CodeBlockFadingEdgeWidth.toPx(),
+                    )
+                )
+        )
+
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .background(
+                    brush = Brush.horizontalGradient(
+                        colors = listOf(Color.Transparent, ElementTheme.colors.bgSubtleTertiary.copy(alpha = 1f - alpha)),
+                        startX = scrollState.viewportSize - CodeBlockFadingEdgeWidth.toPx(),
+                        endX = scrollState.viewportSize.toFloat(),
+                    )
+                )
         )
     }
 }
@@ -639,3 +677,6 @@ private val MaxInlineImageWidth: Dp = 120.dp
 /** The disclosure chevron shown before a spoiler ([DetailsNode]) summary, and its trailing gap. */
 private val SpoilerChevronSize: Dp = 20.dp
 private val SpoilerChevronSpacing: Dp = 4.dp
+
+/** The width of the fading edge gradient drawn at the left and right of a [CodeBlockView]. */
+private val CodeBlockFadingEdgeWidth: Dp = 32.dp
