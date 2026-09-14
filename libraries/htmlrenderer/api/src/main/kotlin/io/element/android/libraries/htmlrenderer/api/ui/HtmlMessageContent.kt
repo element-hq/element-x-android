@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.InlineTextContent
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
@@ -139,10 +138,8 @@ fun HtmlMessageContent(
     }
     // Each message keeps its own reveal state, unless a host provides a shared [LocalAllowedImages].
     val allowedImages = remember { AllowedImages() }
-        SelectionContainer {
-            BlockNodes(nodes = node.children, context = context, modifier = modifier)
-        }
     CompositionLocalProvider(LocalAllowedInlineImages provides allowedImages) {
+        BlockNodes(nodes = node.children, context = context, modifier = modifier)
     }
 }
 
