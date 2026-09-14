@@ -105,6 +105,7 @@ class KonsistClassNameTest {
                 "FakeListenableFuture",
                 "FakeMediaStoreContentProvider",
                 "FakeParentNode",
+                "FakeSequentialClientBuilderProvider",
             )
             .assertTrue {
                 val interfaceName = it.name

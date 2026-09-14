@@ -42,7 +42,6 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun AppDeveloperSettingsView(
     state: AppDeveloperSettingsState,
-    onOpenShowkase: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -81,14 +80,6 @@ fun AppDeveloperSettingsView(
                     onCheckedChange = { isChecked -> state.eventSink(AppDeveloperSettingsEvent.ToggleTracingLogPack(logPack, isChecked)) }
                 )
             }
-        }
-        PreferenceCategory(title = "Showkase") {
-            ListItem(
-                content = {
-                    Text("Open Showkase browser")
-                },
-                onClick = onOpenShowkase
-            )
         }
         RageshakePreferencesView(
             state = state.rageshakeState,
@@ -186,6 +177,5 @@ internal fun AppDeveloperSettingsViewPreview(
 ) = ElementPreview {
     AppDeveloperSettingsView(
         state = state,
-        onOpenShowkase = {},
     )
 }

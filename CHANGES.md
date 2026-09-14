@@ -1,3 +1,63 @@
+Changes in Element X v26.09.2
+=============================
+
+<!-- Release notes generated using configuration in .github/release.yml at v26.09.2 -->
+
+## What's Changed
+### 🙌 Improvements
+* Keep the push foreground service alive while notifications are fetched by @Johennes in https://github.com/element-hq/element-x-android/pull/7639
+* Stop clearing the remote config when clearing the cache by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7662
+### 🐛 Bugfixes
+* Fix fetched remote config being cached with the wrong key by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7626
+* Make sure `enforce_element_pro` is taken into account in FOSS by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7631
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/7628
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/7657
+### 🧱 Build
+* Allow retrying finding the release assets in release script by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7619
+* Improve detection of invalid placeholders in localazy strings by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7624
+* Add `GRADLE_OPTS` for `sync-localazy.yml` flow by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7629
+* Clean up ProGuard keep rules files by @bmarty in https://github.com/element-hq/element-x-android/pull/7647
+* Replace Danger with actions/github-script by @bmarty in https://github.com/element-hq/element-x-android/pull/7649
+* Remove Showkase and its in-app component browser by @bmarty in https://github.com/element-hq/element-x-android/pull/7678
+* Improve Renovate configuration to fix issues with Maven Central by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7677
+### Dependency upgrades
+* Update dependency com.posthog:posthog-android to v3.60.7 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7616
+* Update dependency org.jsoup:jsoup to v1.23.2 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7620
+* Update dependency io.element.android:element-call-embedded to v0.25.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7622
+* Update dependencyAnalysis to v3.19.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7623
+* Update wysiwyg to v2.42.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7627
+* Update android.gradle.plugin to v9.3.2 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7603
+* Update actions/setup-java action to v6 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7614
+* Update danger/danger-js action to v14 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7602
+* Update camera to v1.6.2 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7632
+* Update coil to v3.6.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7630
+* Update dependency io.sentry:sentry-android to v8.54.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7636
+* Update dependency org.jetbrains.kotlinx:kotlinx-collections-immutable to v0.5.2 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7650
+* Bump SDK bindings to `v26.09.3` by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7637
+* Update zizmorcore/zizmor-action action to v0.6.3 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7658
+* Update coil to v3.6.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7664
+* Update dependency org.matrix.rustcomponents:sdk-android to v26.09.08 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7668
+* Update dependency org.matrix.rustcomponents:sdk-android to v26.09.9 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7683
+### 💼 Element Pro
+* Fix remote config getting refreshed with `Origin.Cache` by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7666
+### Others
+* Move knock and gallery to labs by @bmarty in https://github.com/element-hq/element-x-android/pull/7625
+* Say so when this session has no secrets to verify another one with by @hayaksi1 in https://github.com/element-hq/element-x-android/pull/7551
+* Expose the timeline item long press and swipe to reply as TalkBack actions by @hayaksi1 in https://github.com/element-hq/element-x-android/pull/7458
+* Bump PR priority for our dependencies in Renovate by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7642
+* Import string from Localazy and remove temporary file. by @bmarty in https://github.com/element-hq/element-x-android/pull/7645
+* Revert "Say so when this session has no secrets to verify another one with" by @bmarty in https://github.com/element-hq/element-x-android/pull/7644
+* Maestro (local): queue pending runs in the maestro-test concurrency group instead of cancelling them by @andreBurnt in https://github.com/element-hq/element-x-android/pull/7656
+* Maestro (local): skip the lane on pull requests from forks by @andreBurnt in https://github.com/element-hq/element-x-android/pull/7655
+* Update maplibre compose to 0.15 by @ganfra in https://github.com/element-hq/element-x-android/pull/7663
+* Try improving renovate issues with Maven Central rate limiting by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7667
+
+## New Contributors
+* @andreBurnt made their first contribution in https://github.com/element-hq/element-x-android/pull/7656
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v26.09.1...v26.09.2
+
 Changes in Element X v26.09.1
 =============================
 

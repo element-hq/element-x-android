@@ -72,7 +72,7 @@ allprojects {
         verbose = true
         reporters {
             reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.PLAIN)
-            // To have XML report for Danger
+            // To have XML report for the CI to annotate the PR, see .github/workflows/quality.yml
             reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE)
         }
         val generatedPath = "${layout.buildDirectory.asFile.get()}/generated/"
