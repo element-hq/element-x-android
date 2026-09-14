@@ -48,8 +48,8 @@ internal fun HtmlMessageContentPreview(
 ) = ElementPreview {
     HtmlMessageContent(
         node = node,
-        modifier = Modifier.padding(16.dp),
         currentUserId = UserId("@me:example.org"),
+        modifier = Modifier.padding(16.dp),
     )
 }
 
@@ -103,6 +103,7 @@ internal class HtmlMessageContentProvider : PreviewParameterProvider<DocumentNod
             nestedQuotes(),
             codeBlock(),
             mention(),
+            mentionOwn(),
             nestedList(),
             nestedListWithComplexContents(),
         )
@@ -188,6 +189,19 @@ internal class HtmlMessageContentProvider : PreviewParameterProvider<DocumentNod
             },
             inlineContent = persistentMapOf(
                 MENTION_ID to MentionNodeContent.User(displayText = "@alice", userId = UserId("@alice:example.org")),
+            ),
+        ),
+    )
+
+    private fun mentionOwn() = document(
+        paragraph(
+            text = buildAnnotatedString {
+                append("Hey ")
+                appendInlineContent(MENTION_ID, "@me")
+                append(", welcome!")
+            },
+            inlineContent = persistentMapOf(
+                MENTION_ID to MentionNodeContent.User(displayText = "@me", userId = UserId("@me:example.org")),
             ),
         ),
     )

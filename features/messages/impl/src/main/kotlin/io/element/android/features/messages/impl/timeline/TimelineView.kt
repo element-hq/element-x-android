@@ -98,7 +98,6 @@ import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAto
 import io.element.android.libraries.designsystem.components.dialogs.AlertDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.text.roundToPx
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.animateScrollToItemCenter
@@ -191,7 +190,11 @@ fun TimelineView(
 
     // Animate alpha when timeline is first displayed, to avoid flashes or glitching when viewing rooms
     AnimatedVisibility(visible = true, enter = fadeIn()) {
-        CompositionLocalProvider(LocalUseNewTimelineEventRenderer provides state.useNewTimelineEventRenderer) {
+        val composeLocalTimelineEventRendererData = ComposeLocalTimelineEventRendererData(
+            isEnabled = state.useNewTimelineEventRenderer,
+            currentUserId = state.timelineRoomInfo.currentUserId,
+        )
+        CompositionLocalProvider(LocalComposeTimelineEventRenderer provides composeLocalTimelineEventRendererData) {
         Box(modifier) {
             LazyColumn(
                 modifier = Modifier
