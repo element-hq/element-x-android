@@ -16,15 +16,21 @@ import io.element.android.features.call.impl.DefaultElementCallEntryPoint
 import io.element.android.features.call.impl.notifications.CallNotificationData
 import io.element.android.features.call.impl.ui.ElementCallActivity
 import io.element.android.features.call.utils.FakeActiveCallManager
+import io.element.android.features.call.utils.FakeNativeCallEntryPoint
+import io.element.android.features.callnative.api.NativeCallEntryPoint
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.robolectric.RuntimeEnvironment
@@ -32,15 +38,36 @@ import org.robolectric.Shadows.shadowOf
 import kotlin.time.Duration.Companion.seconds
 
 class DefaultElementCallEntryPointTest : RobolectricTest() {
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `startCall - starts ElementCallActivity setup with the needed extras`() = runTest {
         val entryPoint = createEntryPoint()
         entryPoint.startCall(CallData(A_SESSION_ID, A_ROOM_ID, isAudioCall = false))
+        // The flag is read asynchronously before routing.
+        advanceUntilIdle()
 
         val expectedIntent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, ElementCallActivity::class.java)
         val intent = shadowOf(RuntimeEnvironment.getApplication()).nextStartedActivity
         assertThat(intent.component).isEqualTo(expectedIntent.component)
         assertThat(intent.extras?.containsKey("EXTRA_CALL_TYPE")).isTrue()
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `startCall - routes to the native call stack when the feature flag is on`() = runTest {
+        val startNativeCallLambda = lambdaRecorder<CallData, Unit> {}
+        val entryPoint = createEntryPoint(
+            nativeCallEntryPoint = FakeNativeCallEntryPoint(startNativeCallLambda),
+            isNativeCallEnabled = true,
+        )
+        val callData = CallData(A_SESSION_ID, A_ROOM_ID, isAudioCall = true)
+
+        entryPoint.startCall(callData)
+        advanceUntilIdle()
+
+        startNativeCallLambda.assertions().isCalledOnce().with(value(callData))
+        // The WebView Activity must not also be launched.
+        assertThat(shadowOf(RuntimeEnvironment.getApplication()).nextStartedActivity).isNull()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -70,8 +97,15 @@ class DefaultElementCallEntryPointTest : RobolectricTest() {
 
     private fun TestScope.createEntryPoint(
         activeCallManager: FakeActiveCallManager = FakeActiveCallManager(),
+        nativeCallEntryPoint: NativeCallEntryPoint = FakeNativeCallEntryPoint(),
+        isNativeCallEnabled: Boolean = false,
     ) = DefaultElementCallEntryPoint(
         context = InstrumentationRegistry.getInstrumentation().targetContext,
         activeCallManager = activeCallManager,
+        nativeCallEntryPoint = nativeCallEntryPoint,
+        featureFlagService = FakeFeatureFlagService(
+            initialState = mapOf(FeatureFlags.NativeCall.key to isNativeCallEnabled),
+        ),
+        appCoroutineScope = this,
     )
 }
