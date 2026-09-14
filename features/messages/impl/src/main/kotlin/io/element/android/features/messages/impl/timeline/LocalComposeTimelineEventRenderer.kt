@@ -8,6 +8,7 @@
 package io.element.android.features.messages.impl.timeline
 
 import androidx.compose.runtime.staticCompositionLocalOf
+import io.element.android.libraries.matrix.api.core.UserId
 
 /**
  * Whether formatted message bodies should be rendered with the native Compose renderer
@@ -15,4 +16,14 @@ import androidx.compose.runtime.staticCompositionLocalOf
  * legacy rich text editor view. Provided by [TimelineView] from the timeline feature flag; defaults
  * to false so any surface that doesn't provide it keeps the previous behaviour.
  */
-val LocalUseNewTimelineEventRenderer = staticCompositionLocalOf { false }
+val LocalComposeTimelineEventRenderer = staticCompositionLocalOf {
+    ComposeLocalTimelineEventRendererData(
+        isEnabled = false,
+        currentUserId = null,
+    )
+}
+
+data class ComposeLocalTimelineEventRendererData(
+    val isEnabled: Boolean,
+    val currentUserId: UserId?,
+)

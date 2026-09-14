@@ -437,6 +437,7 @@ class TimelinePresenter(
         val timelineRoomInfo by remember(typingNotificationState, roomCallState, roomInfo) {
             derivedStateOf {
                 TimelineRoomInfo(
+                    currentUserId = room.sessionId,
                     name = roomInfo.name,
                     isDm = roomInfo.isDm,
                     userHasPermissionToSendMessage = userEventPermissions.canSendMessage,

@@ -23,7 +23,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.features.messages.impl.timeline.LocalUseNewTimelineEventRenderer
+import io.element.android.features.messages.impl.timeline.LocalComposeTimelineEventRenderer
 import io.element.android.features.messages.impl.timeline.model.event.AN_EMOJI_ONLY_TEXT
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContentPreviewParam
@@ -57,12 +57,11 @@ fun TimelineItemTextView(
     // When the new timeline event renderer is enabled and the message has a parsed tree, render it
     // natively with Compose. Otherwise fall back to the legacy rich text editor view below.
     val messageTree = content.messageTree
-    if (LocalUseNewTimelineEventRenderer.current && messageTree != null) {
+    if (LocalComposeTimelineEventRenderer.current.isEnabled && messageTree != null) {
         Box(modifier.semantics { contentDescription = content.plainText }) {
             HtmlMessageContent(
                 node = messageTree,
-                onLinkClick = { onLinkClick(Link(url = it, text = it)) },
-                onLinkLongClick = { onLinkLongClick(Link(url = it, text = it)) },
+                currentUserId = LocalComposeTimelineEventRenderer.current.currentUserId,
                 onLinkClick = { url, text -> onLinkClick(Link(url = url, text = text)) },
                 onLinkLongClick = { url, text -> onLinkLongClick(Link(url = url, text = text)) },
                 imageModel = { image -> MediaRequestData(MediaSource(image.url), MediaRequestData.Kind.Content) },
