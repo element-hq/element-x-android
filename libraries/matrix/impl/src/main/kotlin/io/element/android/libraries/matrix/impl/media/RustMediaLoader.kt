@@ -12,9 +12,11 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.mimetype.MimeTypes.ensureDefaultSubtype
+import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaFile
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.exception.mapClientException
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
@@ -64,17 +66,19 @@ class RustMediaLoader(
         mimeType: String?,
         filename: String?,
         useCache: Boolean,
+        progressCallback: ProgressCallback?,
     ): Result<MediaFile> =
         withContext(mediaDispatcher) {
             runCatchingExceptions {
                 source.toRustMediaSource().use { mediaSource ->
-                    val mediaFile = innerClient.getMediaFile(
+                    val mediaFile = innerClient.getMediaFileWithProgress(
                         mediaSource = mediaSource,
                         filename = filename,
                         // Fallback to a default mime type based on the main type, so that the SDK can create a file with the correct extension.
                         mimeType = mimeType.ensureDefaultSubtype(),
                         useCache = useCache,
                         tempDir = cacheDirectory.path,
+                        progressWatcher = progressCallback?.toProgressWatcher(),
                     )
                     RustMediaFile(mediaFile)
                 }

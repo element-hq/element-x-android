@@ -44,6 +44,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -71,6 +72,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.core.text.toSpannable
 import coil3.compose.AsyncImage
 import io.element.android.compound.theme.ElementTheme
@@ -389,6 +391,7 @@ private fun MediaViewerPage(
         modifier = modifier,
     ) {
         val downloadedMedia by data.downloadedMedia
+        val downloadProgress by data.downloadProgress.collectAsState()
         val showProgress = rememberShowProgress(downloadedMedia)
         val mediaValidationState by data.validationState.collectMediaState(data.mediaSource.safeUrl)
         val thumbnailValidationState by data.validationState.collectMediaState(data.thumbnailSource?.safeUrl)
@@ -410,12 +413,22 @@ private fun MediaViewerPage(
             }
 
             if (showProgress) {
-                LinearProgressIndicator(
-                    modifier = Modifier
-                        .padding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top).asPaddingValues())
-                        .fillMaxWidth()
-                        .height(2.dp)
-                )
+                val downloadingDescription = stringResource(CommonStrings.common_downloading)
+                val progressModifier = Modifier
+                    .padding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top).asPaddingValues())
+                    .fillMaxWidth()
+                    .height(2.dp)
+                    .zIndex(1f)
+                    .semantics { contentDescription = downloadingDescription }
+                val progress = downloadProgress
+                if (progress == null) {
+                    LinearProgressIndicator(modifier = progressModifier)
+                } else {
+                    LinearProgressIndicator(
+                        progress = { progress / 100f },
+                        modifier = progressModifier,
+                    )
+                }
             }
 
             Box(contentAlignment = Alignment.Center) {
@@ -536,7 +549,6 @@ private fun rememberShowProgress(downloadedMedia: AsyncData<LocalMedia>): Boolea
         showProgress = downloadedMedia.isLoading()
     } else {
         // Trick to avoid showing progress indicator if the media is already on disk.
-        // When sdk will expose download progress we'll be able to remove this.
         LaunchedEffect(downloadedMedia) {
             showProgress = false
             delay(100)
