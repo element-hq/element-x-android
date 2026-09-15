@@ -684,7 +684,7 @@ private val InlineCodeBorderWidth: Dp = 1.dp
 private val InlineCodeHorizontalPadding: Dp = 2.dp
 
 /** Size of an inline image that has no dimensions (or is a custom emoji): roughly a line's height. */
-private val EmojiImageSize: Dp = 20.dp
+private val EmojiImageSize: Dp = 24.dp
 
 /** Inline images are scaled down to at most this width, preserving their aspect ratio. */
 private val MaxInlineImageWidth: Dp = 120.dp
