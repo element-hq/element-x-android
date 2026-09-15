@@ -9,7 +9,7 @@
 package io.element.android.appnav
 
 import io.element.android.appnav.session.FIRST_RESTART_DELAY
-import io.element.android.appnav.session.MAX_RESTART_DELAY
+import io.element.android.appnav.session.RESTART_BACKOFF_DELAYS
 import io.element.android.appnav.session.RESTART_BACKOFF_RESET_DELAY
 import io.element.android.appnav.session.SyncOrchestrator
 import io.element.android.features.networkmonitor.api.NetworkStatus
@@ -442,25 +442,6 @@ class SyncOrchestratorTest {
     }
 
     @Test
-    fun `when the sync service is terminated, it will be restarted after a delay`() = runTest {
-        val startSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
-        val syncService = FakeSyncService(initialSyncState = SyncState.Terminated).apply {
-            startSyncLambda = startSyncRecorder
-        }
-        val syncOrchestrator = createSyncOrchestrator(
-            matrixClient = FakeMatrixClient(syncService = syncService),
-            networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Connected),
-            appForegroundStateService = FakeAppForegroundStateService(initialForegroundValue = true),
-        )
-
-        // We start observing
-        syncOrchestrator.observeStates()
-
-        advanceTimeBy(FIRST_RESTART_DELAY * 2)
-        startSyncRecorder.assertions().isCalledOnce()
-    }
-
-    @Test
     fun `when the sync service keeps dying, the delay between the restarts increases`() = runTest {
         val startSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
         val syncService = FakeSyncService(initialSyncState = SyncState.Error).apply {
@@ -538,7 +519,7 @@ class SyncOrchestratorTest {
         // We start observing
         syncOrchestrator.observeStates()
 
-        advanceTimeBy(MAX_RESTART_DELAY * 2)
+        advanceTimeBy(RESTART_BACKOFF_DELAYS.last() * 2)
         startSyncRecorder.assertions().isNeverCalled()
     }
 
@@ -557,7 +538,7 @@ class SyncOrchestratorTest {
         // We start observing
         syncOrchestrator.observeStates()
 
-        advanceTimeBy(MAX_RESTART_DELAY * 2)
+        advanceTimeBy(RESTART_BACKOFF_DELAYS.last() * 2)
         startSyncRecorder.assertions().isNeverCalled()
     }
 

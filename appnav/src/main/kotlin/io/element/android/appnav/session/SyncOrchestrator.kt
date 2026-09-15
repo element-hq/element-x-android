@@ -138,7 +138,7 @@ class SyncOrchestrator(
                 SyncStateAction.StopSync
             } else if (syncState == SyncState.Idle && isAppActive && isNetworkAvailable) {
                 SyncStateAction.StartSync
-            } else if (syncState.isDead() && isAppActive && isNetworkAvailable) {
+            } else if (syncState == SyncState.Error && isAppActive && isNetworkAvailable) {
                 // The sync service has given up, for instance because the homeserver has expired our sliding sync
                 // session and answered 400 M_UNKNOWN_POS. Nothing else will ever restart it, so do it from here,
                 // else the application is stuck until its data is cleared.
@@ -184,8 +184,18 @@ class SyncOrchestrator(
 @VisibleForTesting
 internal val FIRST_RESTART_DELAY = 1.seconds
 
+/**
+ * Exponential backoff, from [FIRST_RESTART_DELAY], doubling on every attempt, up to [FIRST_RESTART_DELAY * 32].
+ */
 @VisibleForTesting
-internal val MAX_RESTART_DELAY = 30.seconds
+internal val RESTART_BACKOFF_DELAYS = listOf(
+    FIRST_RESTART_DELAY,
+    FIRST_RESTART_DELAY * 2,
+    FIRST_RESTART_DELAY * 4,
+    FIRST_RESTART_DELAY * 8,
+    FIRST_RESTART_DELAY * 16,
+    FIRST_RESTART_DELAY * 32,
+)
 
 /**
  * Duration during which the sync service has to stay running before the restart backoff is reset.
@@ -193,17 +203,8 @@ internal val MAX_RESTART_DELAY = 30.seconds
 @VisibleForTesting
 internal val RESTART_BACKOFF_RESET_DELAY = 30.seconds
 
-/**
- * Return true if the sync service has stopped and will not restart by itself.
- */
-private fun SyncState.isDead() = this == SyncState.Error || this == SyncState.Terminated
-
-/**
- * Exponential backoff, from [FIRST_RESTART_DELAY], doubling on every attempt, up to [MAX_RESTART_DELAY].
- */
 private fun restartDelay(attempt: Int): Duration {
-    val exponent = attempt.coerceIn(0, 5)
-    return (FIRST_RESTART_DELAY * (1 shl exponent)).coerceAtMost(MAX_RESTART_DELAY)
+    return RESTART_BACKOFF_DELAYS[attempt.coerceIn(0, RESTART_BACKOFF_DELAYS.lastIndex)]
 }
 
 private enum class SyncStateAction {
