@@ -31,6 +31,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import io.element.android.appconfig.TimelineConfig
@@ -51,44 +52,56 @@ import io.element.android.libraries.ui.strings.CommonPlurals
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
+/**
+ * Displays the read receipts of an event, or its send state when it has no read receipt yet.
+ *
+ * @param state the read receipts and send state of the event.
+ * @param onReadReceiptsClick called when the read receipts are clicked.
+ * @param modifier the modifier to apply to the view. It is always applied, even when no row is displayed.
+ * @param topPadding the space between the event content and the row. It is only applied when a row is displayed, so it must not be
+ * part of [modifier].
+ */
 @Composable
 fun TimelineItemReadReceiptView(
     state: ReadReceiptViewState,
     onReadReceiptsClick: () -> Unit,
     modifier: Modifier = Modifier,
+    topPadding: Dp = 0.dp,
 ) {
-    if (state.receipts.isNotEmpty()) {
-        ReadReceiptsRow(modifier = modifier) {
-            ReadReceiptsAvatars(
-                receipts = state.receipts,
-                onClick = onReadReceiptsClick,
-            )
-        }
-    } else {
-        when (state.sendState) {
-            is LocalEventSendState.Sending -> {
-                ReadReceiptsRow(modifier) {
-                    Icon(
-                        modifier = Modifier.padding(2.dp),
-                        imageVector = CompoundIcons.Circle(),
-                        contentDescription = stringResource(id = CommonStrings.common_sending),
-                        tint = ElementTheme.colors.iconSecondary
-                    )
-                }
+    Box(modifier = modifier) {
+        if (state.receipts.isNotEmpty()) {
+            ReadReceiptsRow(topPadding = topPadding) {
+                ReadReceiptsAvatars(
+                    receipts = state.receipts,
+                    onClick = onReadReceiptsClick,
+                )
             }
-            is LocalEventSendState.Failed -> {
-                // Error? The timestamp is already displayed in red
-            }
-            null,
-            is LocalEventSendState.Sent -> {
-                if (state.isLastOutgoingMessage) {
-                    ReadReceiptsRow(modifier = modifier) {
+        } else {
+            when (state.sendState) {
+                is LocalEventSendState.Sending -> {
+                    ReadReceiptsRow(topPadding = topPadding) {
                         Icon(
                             modifier = Modifier.padding(2.dp),
-                            imageVector = CompoundIcons.CheckCircle(),
-                            contentDescription = stringResource(id = CommonStrings.common_sent),
+                            imageVector = CompoundIcons.Circle(),
+                            contentDescription = stringResource(id = CommonStrings.common_sending),
                             tint = ElementTheme.colors.iconSecondary
                         )
+                    }
+                }
+                is LocalEventSendState.Failed -> {
+                    // Error? The timestamp is already displayed in red
+                }
+                null,
+                is LocalEventSendState.Sent -> {
+                    if (state.isLastOutgoingMessage) {
+                        ReadReceiptsRow(topPadding = topPadding) {
+                            Icon(
+                                modifier = Modifier.padding(2.dp),
+                                imageVector = CompoundIcons.CheckCircle(),
+                                contentDescription = stringResource(id = CommonStrings.common_sent),
+                                tint = ElementTheme.colors.iconSecondary
+                            )
+                        }
                     }
                 }
             }
@@ -98,11 +111,13 @@ fun TimelineItemReadReceiptView(
 
 @Composable
 private fun ReadReceiptsRow(
+    topPadding: Dp,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit = {},
 ) {
     Row(
         modifier = modifier
+            .padding(top = topPadding)
             .fillMaxWidth()
             .height(AvatarSize.TimelineReadReceipt.dp + 8.dp)
             .padding(horizontal = 18.dp),

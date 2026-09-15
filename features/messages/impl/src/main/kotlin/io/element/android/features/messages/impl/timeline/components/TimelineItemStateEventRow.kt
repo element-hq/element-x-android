@@ -47,7 +47,8 @@ fun TimelineItemStateEventRow(
     onReadReceiptsClick: (event: TimelineItem.Event) -> Unit,
     timelineProtectionState: TimelineProtectionState,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    displayReadReceipts: Boolean = true,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     Column(
@@ -83,14 +84,16 @@ fun TimelineItemStateEventRow(
                 )
             }
         }
-        TimelineItemReadReceiptView(
-            state = ReadReceiptViewState(
-                sendState = event.localSendState,
-                isLastOutgoingMessage = isLastOutgoingMessage,
-                receipts = event.readReceiptState.receipts,
-            ),
-            onReadReceiptsClick = { onReadReceiptsClick(event) },
-        )
+        if (displayReadReceipts) {
+            TimelineItemReadReceiptView(
+                state = ReadReceiptViewState(
+                    sendState = event.localSendState,
+                    isLastOutgoingMessage = isLastOutgoingMessage,
+                    receipts = event.readReceiptState.receipts,
+                ),
+                onReadReceiptsClick = { onReadReceiptsClick(event) },
+            )
+        }
     }
 }
 

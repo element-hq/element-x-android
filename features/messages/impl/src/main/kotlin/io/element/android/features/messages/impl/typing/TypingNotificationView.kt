@@ -9,10 +9,8 @@
 package io.element.android.features.messages.impl.typing
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -44,7 +42,6 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
 import kotlinx.collections.immutable.ImmutableList
 
-@Suppress("MultipleEmitters") // False positive
 @Composable
 fun TypingNotificationView(
     state: TypingNotificationState,
@@ -65,17 +62,18 @@ fun TypingNotificationView(
         )
     }
 
-    // Display the typing notification space when either a typing notification needs to be displayed or a previous one already was
-    AnimatedVisibility(
+    Box(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 2.dp),
-        visible = displayNotifications || state.reserveSpace,
-        enter = fadeIn() + expandVertically(),
-        exit = fadeOut() + shrinkVertically(),
+        contentAlignment = Alignment.BottomStart,
     ) {
-        val typingNotificationText = computeTypingNotificationText(state.typingMembers)
-        Box(contentAlignment = Alignment.BottomStart) {
+        // Display the typing notification space when either a typing notification needs to be displayed or a previous one already was.
+        // The height change is intentionally not animated here: this view is the bottom-most timeline item, and the timeline animates the
+        // placement of the other items with `Modifier.animateItem()`. Changing the height in a single step gives the placement animation
+        // a single target instead of a moving one.
+        if (displayNotifications || state.reserveSpace) {
+            val typingNotificationText = computeTypingNotificationText(state.typingMembers)
             // Reserve the space for the typing notification by adding an invisible text
             TypingText(
                 text = typingNotificationText,
