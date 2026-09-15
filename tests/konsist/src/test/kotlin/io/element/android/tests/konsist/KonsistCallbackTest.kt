@@ -15,8 +15,7 @@ import org.junit.Test
 class KonsistCallbackTest {
     @Test
     fun `we should not invoke Callback Input directly, we should use forEach`() {
-        Konsist
-            .scopeFromProduction()
+        Konsist.scopeFromProduction()
             .files
             .assertFalse {
                 it.text.contains("callback?.")

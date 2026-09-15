@@ -23,8 +23,7 @@ import org.junit.Test
 class KonsistDiTest {
     @Test
     fun `class annotated with @Inject should not have constructors with @Assisted parameter`() {
-        Konsist
-            .scopeFromProject()
+        Konsist.scopeFromProject()
             .classes()
             .withAnnotationOf(Inject::class)
             .assertTrue(

@@ -15,8 +15,7 @@ import org.junit.Test
 class KonsistImportTest {
     @Test
     fun `Functions with '@VisibleForTesting' annotation should use 'androidx' version`() {
-        Konsist
-            .scopeFromProject()
+        Konsist.scopeFromProject()
             .imports
             .assertFalse(
                 additionalMessage = "Please use 'androidx.annotation.VisibleForTesting' instead of " +
@@ -28,8 +27,7 @@ class KonsistImportTest {
 
     @Test
     fun `OutlinedTextField should not be used`() {
-        Konsist
-            .scopeFromProject()
+        Konsist.scopeFromProject()
             .imports
             .assertFalse(
                 additionalMessage = "Please use 'io.element.android.libraries.designsystem.theme.components.TextField' instead of " +
@@ -41,8 +39,7 @@ class KonsistImportTest {
 
     @Test
     fun `material3 TopAppBar should not be used`() {
-        Konsist
-            .scopeFromProject()
+        Konsist.scopeFromProject()
             .imports
             .assertFalse(
                 additionalMessage = "Please use 'io.element.android.libraries.designsystem.theme.components.TopAppBar' instead of " +

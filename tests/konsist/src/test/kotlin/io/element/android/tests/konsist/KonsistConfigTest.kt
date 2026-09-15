@@ -16,8 +16,7 @@ class KonsistConfigTest {
     @Test
     fun `assert that Konsist detect all the project classes`() {
         assertThat(
-            Konsist
-                .scopeFromProject()
+            Konsist.scopeFromProject()
                 .classes()
                 .size
         )
@@ -27,8 +26,7 @@ class KonsistConfigTest {
     @Test
     fun `assert that Konsist detect all the test classes`() {
         assertThat(
-            Konsist
-                .scopeFromTest()
+            Konsist.scopeFromTest()
                 .classes()
                 .size
         )

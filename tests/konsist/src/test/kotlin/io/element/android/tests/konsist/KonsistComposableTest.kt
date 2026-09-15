@@ -23,8 +23,7 @@ import org.junit.Test
 class KonsistComposableTest {
     @Test
     fun `Top level function with '@Composable' annotation starting with a upper case should be placed in a file with the same name`() {
-        Konsist
-            .scopeFromProject()
+        Konsist.scopeFromProject()
             .functions()
             .withTopLevel()
             .withoutModifier(KoModifier.PRIVATE)

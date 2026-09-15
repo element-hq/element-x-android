@@ -24,8 +24,7 @@ import org.junit.Test
 class KonsistPreviewTest {
     @Test
     fun `Functions with '@PreviewsDayNight' annotation should have 'Preview' suffix`() {
-        Konsist
-            .scopeFromProject()
+        Konsist.scopeFromProject()
             .functions()
             .withAllAnnotationsOf(PreviewsDayNight::class)
             .assertTrue {
@@ -38,8 +37,7 @@ class KonsistPreviewTest {
 
     @Test
     fun `Check functions with 'A11yPreview'`() {
-        Konsist
-            .scopeFromProject()
+        Konsist.scopeFromProject()
             .functions()
             .withNameEndingWith("A11yPreview")
             .assertTrue(
@@ -58,8 +56,7 @@ class KonsistPreviewTest {
 
     @Test
     fun `Functions with '@PreviewsDayNight' annotation should contain 'ElementPreview' composable`() {
-        Konsist
-            .scopeFromProject()
+        Konsist.scopeFromProject()
             .functions()
             .withAllAnnotationsOf(PreviewsDayNight::class)
             // We can't check Enterprise previews because they are in a different repo, and they aren't present for FOSS
@@ -72,8 +69,7 @@ class KonsistPreviewTest {
 
     @Test
     fun `Functions with '@PreviewsDayNight' are internal`() {
-        Konsist
-            .scopeFromProject()
+        Konsist.scopeFromProject()
             .functions()
             .withAllAnnotationsOf(PreviewsDayNight::class)
             .assertTrue {
@@ -195,8 +191,7 @@ class KonsistPreviewTest {
     fun `previewNameExceptions only contains existing functions`() {
         val names = previewNameExceptions
             .toMutableSet()
-        Konsist
-            .scopeFromProject()
+        Konsist.scopeFromProject()
             .functions()
             .withAllAnnotationsOf(PreviewsDayNight::class)
             .withName(previewNameExceptions)
@@ -210,8 +205,7 @@ class KonsistPreviewTest {
 
     @Test
     fun `Functions with '@PreviewsDayNight' have correct name`() {
-        Konsist
-            .scopeFromProject()
+        Konsist.scopeFromProject()
             .functions()
             .withAllAnnotationsOf(PreviewsDayNight::class)
             .withoutName(previewNameExceptions)
@@ -235,8 +229,7 @@ class KonsistPreviewTest {
 
     @Test
     fun `Ensure that '@PreviewLightDark' is not used`() {
-        Konsist
-            .scopeFromProject()
+        Konsist.scopeFromProject()
             .functions()
             .withAllAnnotationsOf(PreviewLightDark::class)
             .assertEmpty(

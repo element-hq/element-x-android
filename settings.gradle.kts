@@ -23,6 +23,8 @@ dependencyResolutionManagement {
                 includeModule("com.github.matrix-org", "matrix-analytics-events")
                 // Required transitively by androidx.media3:media3-exoplayer-midi for MIDI playback.
                 includeModule("com.github.philburk", "jsyn")
+
+                includeModule("com.github.jmartinesp", "konsist")
             }
         }
         // Check for official Android-related packages only in Google's maven repo

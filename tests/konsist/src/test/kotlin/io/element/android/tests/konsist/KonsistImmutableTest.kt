@@ -25,8 +25,7 @@ class KonsistImmutableTest {
      */
     @Test
     fun `toPersistentList() should not be used instead of toImmutableList()`() {
-        Konsist
-            .scopeFromProject()
+        Konsist.scopeFromProject()
             .functions()
             .withoutName("toPersistentList() should not be used instead of toImmutableList()")
             .assertFalse(additionalMessage = "Please use toImmutableList() instead of toPersistentList()") {

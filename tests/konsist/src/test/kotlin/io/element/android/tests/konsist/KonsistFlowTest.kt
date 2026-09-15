@@ -24,8 +24,7 @@ class KonsistFlowTest {
         //     .collectAsState```
         val regex = "(.*)\\)(\n\\s*)*\\.collectAsState".toRegex()
 
-        Konsist
-            .scopeFromProject()
+        Konsist.scopeFromProject()
             .functions()
             .withAnnotationOf(Composable::class)
             .assertFalse(

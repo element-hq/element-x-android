@@ -25,8 +25,7 @@ class KonsistLicenseTest {
 
     @Test
     fun `assert that FOSS files have the correct license header`() {
-        Konsist
-            .scopeFromProject()
+        Konsist.scopeFromProject()
             .files
             .filter {
                 it.moduleName.startsWith("enterprise").not() &&
@@ -44,8 +43,7 @@ class KonsistLicenseTest {
 
     @Test
     fun `assert that files do not have double license header`() {
-        Konsist
-            .scopeFromProject()
+        Konsist.scopeFromProject()
             .files
             .filter {
                 it.moduleName.endsWith("rustls-tls").not() &&
