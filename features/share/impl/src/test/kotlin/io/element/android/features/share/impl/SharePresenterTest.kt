@@ -21,6 +21,8 @@ import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
@@ -28,6 +30,7 @@ import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvi
 import io.element.android.libraries.mediaupload.api.MediaSenderRoomFactory
 import io.element.android.libraries.mediaupload.test.FakeMediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.test.FakeMediaSender
+import io.element.android.libraries.push.api.notifications.conversations.createConversationShortcutId
 import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.appnavstate.impl.DefaultActiveRoomsHolder
 import io.element.android.tests.testutils.WarmUpRule
@@ -94,6 +97,58 @@ class SharePresenterTest : RobolectricTest() {
             val success = awaitItem()
             assertThat(success.shareAction.isSuccess()).isTrue()
             assertThat(success.shareAction).isEqualTo(AsyncAction.Success(listOf(A_ROOM_ID)))
+        }
+    }
+
+    @Test
+    fun `present - a room picked in the share sheet is shared to without selecting one`() = runTest {
+        val joinedRoom = FakeJoinedRoom(
+            liveTimeline = FakeTimeline().apply {
+                sendMessageLambda = { _, _, _, _, _ -> Result.success(Unit) }
+            },
+        )
+        val matrixClient = FakeMatrixClient().apply {
+            givenGetRoomResult(A_ROOM_ID, joinedRoom)
+        }
+        val presenter = createSharePresenter(
+            matrixClient = matrixClient,
+            shareIntentData = ShareIntentData.PlainText(
+                content = A_MESSAGE,
+                shortcutId = createConversationShortcutId(A_SESSION_ID, A_ROOM_ID),
+            ),
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            assertThat(awaitItem().shareAction.isUninitialized()).isTrue()
+            assertThat(awaitItem().shareAction.isLoading()).isTrue()
+            assertThat(awaitItem().shareAction).isEqualTo(AsyncAction.Success(listOf(A_ROOM_ID)))
+        }
+    }
+
+    @Test
+    fun `present - a room picked for a session that is no longer attached is not shared to`() = runTest {
+        val joinedRoom = FakeJoinedRoom(
+            liveTimeline = FakeTimeline().apply {
+                sendMessageLambda = { _, _, _, _, _ -> Result.success(Unit) }
+            },
+        )
+        val matrixClient = FakeMatrixClient(sessionId = A_SESSION_ID_2).apply {
+            givenGetRoomResult(A_ROOM_ID, joinedRoom)
+        }
+        val presenter = createSharePresenter(
+            matrixClient = matrixClient,
+            shareIntentData = ShareIntentData.PlainText(
+                content = A_MESSAGE,
+                // Picked for A_SESSION_ID, but A_SESSION_ID_2 is handling the share.
+                shortcutId = createConversationShortcutId(A_SESSION_ID, A_ROOM_ID),
+            ),
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            assertThat(awaitItem().shareAction.isUninitialized()).isTrue()
+            expectNoEvents()
         }
     }
 
