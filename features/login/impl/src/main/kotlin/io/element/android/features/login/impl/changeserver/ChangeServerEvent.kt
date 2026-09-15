@@ -8,7 +8,7 @@
 
 package io.element.android.features.login.impl.changeserver
 
-import io.element.android.features.login.impl.accountprovider.AccountProvider
+import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
 
 sealed interface ChangeServerEvent {
     data class ChangeServer(val accountProvider: AccountProvider) : ChangeServerEvent

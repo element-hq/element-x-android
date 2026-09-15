@@ -23,6 +23,7 @@ import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.login.LoginMode
 import io.element.android.features.login.impl.login.aLoginModeState
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
 import io.element.android.libraries.matrix.api.auth.OAuthDetails
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -134,13 +135,13 @@ class OnboardingViewTest : RobolectricTestParameter() {
         val eventSink = EventsRecorder<OnBoardingEvent>()
         setOnboardingView(
             state = anOnBoardingState(
-                defaultAccountProvider = "element.io",
+                defaultAccountProvider = AccountProvider.Generic("element.io"),
                 eventSink = eventSink,
             ),
         )
         val buttonText = activity!!.getString(R.string.screen_onboarding_sign_in_to, "element.io")
         onNodeWithText(buttonText).performClick()
-        eventSink.assertSingle(OnBoardingEvent.OnSignIn("element.io"))
+        eventSink.assertSingle(OnBoardingEvent.OnSignIn(AccountProvider.Generic("element.io")))
     }
 
     @Test
@@ -148,7 +149,7 @@ class OnboardingViewTest : RobolectricTestParameter() {
         val eventSink = EventsRecorder<OnBoardingEvent>()
         setOnboardingView(
             state = anOnBoardingState(
-                defaultAccountProvider = "element.io",
+                defaultAccountProvider = AccountProvider.Generic("element.io"),
                 loginModeState = aLoginModeState(loginMode = AsyncData.Failure(AN_EXCEPTION)),
                 eventSink = eventSink,
             ),
