@@ -8,6 +8,11 @@
 
 package io.element.android.features.messages.impl.timeline.components.receipt
 
+import androidx.compose.animation.core.InfiniteRepeatableSpec
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.TweenSpec
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,12 +22,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.progressSemantics
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -66,6 +73,11 @@ fun TimelineItemReadReceiptView(
         }
     } else {
         when (state.sendState) {
+            is LocalEventSendState.Sending.MediaWithProgress -> {
+                ReadReceiptsRow(modifier) {
+                    SendingMediaSpinner()
+                }
+            }
             is LocalEventSendState.Sending -> {
                 ReadReceiptsRow(modifier) {
                     Icon(
@@ -94,6 +106,28 @@ fun TimelineItemReadReceiptView(
             }
         }
     }
+}
+
+@Composable
+private fun SendingMediaSpinner() {
+    val transition = rememberInfiniteTransition("SendingMediaSpinner")
+    val rotation = transition.animateFloat(
+        initialValue = 0f,
+        targetValue = 360f,
+        animationSpec = InfiniteRepeatableSpec(
+            animation = TweenSpec(durationMillis = 1_000, easing = LinearEasing),
+        ),
+        label = "SendingMediaSpinnerRotation",
+    )
+    Icon(
+        modifier = Modifier
+            .padding(2.dp)
+            .progressSemantics()
+            .graphicsLayer { rotationZ = rotation.value },
+        imageVector = CompoundIcons.Spinner(),
+        contentDescription = stringResource(id = CommonStrings.common_sending),
+        tint = ElementTheme.colors.iconSecondary,
+    )
 }
 
 @Composable
