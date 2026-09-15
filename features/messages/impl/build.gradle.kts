@@ -112,4 +112,5 @@ dependencies {
     testImplementation(projects.libraries.emoji.impl)
     testImplementation(projects.libraries.emoji.test)
     testImplementation(projects.libraries.slashcommands.test)
+    testImplementation(projects.libraries.htmlrenderer.test)
 }

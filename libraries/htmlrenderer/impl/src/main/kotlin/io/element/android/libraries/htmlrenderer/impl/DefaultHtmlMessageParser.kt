@@ -272,7 +272,7 @@ class DefaultHtmlMessageParser(
         }
 
         /** The flattened inline content of a block: styled text plus its inline-content placeholders. */
-        class Result(
+        inner class Result(
             val text: AnnotatedString,
             val inlineContent: ImmutableMap<String, InlineContent>,
         )
