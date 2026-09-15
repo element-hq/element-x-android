@@ -16,6 +16,7 @@ import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
@@ -156,14 +157,52 @@ class DefaultMediaSenderTest : RobolectricTest() {
         sendFileResult.assertions().isCalledOnce()
     }
 
+    @Test
+    fun `given a thread, the created timeline is closed once the media is sent`() = runTest {
+        val threadedTimeline = FakeTimeline(mode = Timeline.Mode.Thread(A_THREAD_ID)).apply {
+            sendFileLambda = { _, _, _, _, _ -> Result.success(FakeMediaUploadHandler()) }
+        }
+        val liveTimeline = FakeTimeline()
+        val room = FakeJoinedRoom(
+            liveTimeline = liveTimeline,
+            createTimelineResult = { Result.success(threadedTimeline) },
+        )
+        val sender = createDefaultMediaSender(
+            room = room,
+            timelineMode = Timeline.Mode.Thread(A_THREAD_ID),
+        )
+
+        val uri = Uri.parse("content://image.jpg")
+        val result = sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg, mediaOptimizationConfig = mediaOptimizationConfig)
+
+        assertThat(result.isSuccess).isTrue()
+        assertThat(threadedTimeline.closeCounter).isEqualTo(1)
+        assertThat(liveTimeline.closeCounter).isEqualTo(0)
+    }
+
+    @Test
+    fun `given a live timeline, the timeline is not closed once the media is sent`() = runTest {
+        val liveTimeline = FakeTimeline().apply {
+            sendFileLambda = { _, _, _, _, _ -> Result.success(FakeMediaUploadHandler()) }
+        }
+        val sender = createDefaultMediaSender(room = FakeJoinedRoom(liveTimeline = liveTimeline))
+
+        val uri = Uri.parse("content://image.jpg")
+        val result = sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg, mediaOptimizationConfig = mediaOptimizationConfig)
+
+        assertThat(result.isSuccess).isTrue()
+        assertThat(liveTimeline.closeCounter).isEqualTo(0)
+    }
+
     private fun createDefaultMediaSender(
         preProcessor: MediaPreProcessor = FakeMediaPreProcessor(),
         room: JoinedRoom = FakeJoinedRoom(),
+        timelineMode: Timeline.Mode = Timeline.Mode.Live,
         mediaOptimizationConfigProvider: MediaOptimizationConfigProvider = MediaOptimizationConfigProvider { mediaOptimizationConfig },
     ) = DefaultMediaSender(
         preProcessor = preProcessor,
         room = room,
-        timelineMode = Timeline.Mode.Live,
+        timelineMode = timelineMode,
         mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
     )
 }
