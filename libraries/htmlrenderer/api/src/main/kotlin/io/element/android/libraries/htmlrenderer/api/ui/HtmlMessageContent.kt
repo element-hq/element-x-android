@@ -7,10 +7,14 @@
 
 package io.element.android.libraries.htmlrenderer.api.ui
 
+import android.content.ClipData
+import android.content.ClipData.newPlainText
+import android.content.ClipboardManager
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -51,6 +55,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
@@ -348,12 +353,21 @@ private fun CodeBlockView(
     modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScrollState()
+    val context = LocalContext.current
+    val clipboardManager = remember { context.getSystemService(ClipboardManager::class.java) }
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
             .border(width = 1.dp, color = ElementTheme.colors.borderInteractiveSecondary, shape = RoundedCornerShape(8.dp))
             .background(ElementTheme.colors.bgSubtleSecondary)
-            .height(IntrinsicSize.Min),
+            .height(IntrinsicSize.Min)
+            .combinedClickable(
+                onClick = {},
+                onLongClick = {
+                    clipboardManager.setPrimaryClip(ClipData(newPlainText("Code", node.code)))
+                },
+                onLongClickLabel = "Copy code to clipboard",
+            ),
     ) {
         Text(
             modifier = Modifier.horizontalScroll(scrollState).padding(horizontal = 12.dp, vertical = 8.dp),
@@ -371,6 +385,7 @@ private fun CodeBlockView(
 
         val alpha by animateFloatAsState(targetValue = progress, label = "CodeBlockViewScrollAlpha")
 
+        // Draw a fading edge gradient at the left and right of the code block, to hint that it is horizontally scrollable.
         Box(
             modifier = Modifier
                 .matchParentSize()
