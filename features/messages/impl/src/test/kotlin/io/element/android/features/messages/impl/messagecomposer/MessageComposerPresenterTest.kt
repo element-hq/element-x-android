@@ -126,7 +126,6 @@ import org.junit.Test
 import uniffi.wysiwyg_composer.MentionsState
 import java.io.File
 
-@Suppress("LargeClass")
 class MessageComposerPresenterTest : RobolectricTest() {
     @get:Rule
     val warmUpRule = WarmUpRule()

@@ -103,7 +103,6 @@ import java.util.Date
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
-@Suppress("LargeClass")
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class TimelinePresenterTest {
     @get:Rule
