@@ -96,6 +96,7 @@ import io.element.android.libraries.matrix.api.verification.SessionVerificationS
 import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
+import io.element.android.libraries.ui.common.nodes.EmptyState
 import io.element.android.libraries.ui.common.nodes.emptyNode
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
 import io.element.android.services.analytics.api.AnalyticsService
@@ -327,7 +328,7 @@ class LoggedInFlowNode(
         return when (navTarget) {
             // Rendered while the FtueState is Unknown. Render a loading state rather than nothing at all,
             // since there is no guarantee that this state will be left.
-            NavTarget.Placeholder -> emptyNode(buildContext, delayBeforeShowingContent = 500.milliseconds)
+            NavTarget.Placeholder -> emptyNode(buildContext, state = EmptyState(delayBeforeShowingContent = 500.milliseconds))
             NavTarget.LoggedInPermanent -> {
                 val callback = object : LoggedInNode.Callback {
                     override fun navigateToNotificationTroubleshoot() {

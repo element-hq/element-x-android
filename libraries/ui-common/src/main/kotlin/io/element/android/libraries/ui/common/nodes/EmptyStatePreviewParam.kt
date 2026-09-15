@@ -11,10 +11,10 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
-open class DurationPreviewParam : PreviewParameterProvider<Duration> {
-    override val values: Sequence<Duration>
+open class EmptyStatePreviewParam : PreviewParameterProvider<EmptyState> {
+    override val values: Sequence<EmptyState>
         get() = sequenceOf(
-            Duration.INFINITE,
-            1.seconds,
+            EmptyState(Duration.INFINITE),
+            EmptyState(1.seconds),
         )
 }

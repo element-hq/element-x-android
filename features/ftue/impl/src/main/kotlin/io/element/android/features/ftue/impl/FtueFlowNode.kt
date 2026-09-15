@@ -32,6 +32,7 @@ import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.ui.common.nodes.EmptyState
 import io.element.android.libraries.ui.common.nodes.emptyNode
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
@@ -88,7 +89,7 @@ class FtueFlowNode(
                 // Rendered while waiting for the initial state (see FtueStep.WaitingForInitialState).
                 // This can last for a while, or forever if the sync service never manages to run, so
                 // render a loading state rather than nothing at all.
-                emptyNode(buildContext, delayBeforeShowingContent = 500.milliseconds)
+                emptyNode(buildContext, EmptyState(delayBeforeShowingContent = 500.milliseconds))
             }
             is NavTarget.SessionVerification -> {
                 val callback = object : FtueSessionVerificationFlowNode.Callback {

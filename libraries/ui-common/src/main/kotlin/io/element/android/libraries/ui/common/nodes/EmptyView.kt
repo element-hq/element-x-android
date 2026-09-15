@@ -26,11 +26,10 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.DelayedVisibility
 import io.element.android.libraries.ui.strings.CommonStrings
-import kotlin.time.Duration
 
 @Composable
 fun EmptyView(
-    delayBeforeShowingContent: Duration,
+    state: EmptyState,
     modifier: Modifier = Modifier,
 ) = Box(
     modifier = modifier
@@ -38,8 +37,8 @@ fun EmptyView(
         .background(ElementTheme.colors.bgCanvasDefault),
     contentAlignment = Alignment.Center,
 ) {
-    if (delayBeforeShowingContent.isFinite()) {
-        DelayedVisibility(duration = delayBeforeShowingContent) {
+    if (state.delayBeforeShowingContent.isFinite()) {
+        DelayedVisibility(duration = state.delayBeforeShowingContent) {
             LoadingContent()
         }
     }
@@ -62,7 +61,7 @@ private fun LoadingContent() = Column(
 @PreviewsDayNight
 @Composable
 internal fun EmptyViewPreview(
-    @PreviewParameter(DurationPreviewParam::class) duration: Duration
+    @PreviewParameter(EmptyStatePreviewParam::class) state: EmptyState
 ) = ElementPreview {
-    EmptyView(delayBeforeShowingContent = duration)
+    EmptyView(state = state)
 }

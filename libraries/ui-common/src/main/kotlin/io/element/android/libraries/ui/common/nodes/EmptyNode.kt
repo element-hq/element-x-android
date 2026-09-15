@@ -17,16 +17,14 @@ import kotlin.time.Duration
  * Ref: https://www.figma.com/design/0MMNu7cTOzLOlWb7ctTkv3/Element-X?node-id=1518-85323
  *
  * @param buildContext the [BuildContext] of the Node.
- * @param delayBeforeShowingContent when finite, a loading indicator fades in after this delay. Use it for
- * placeholders which can stay on screen for a long time, or forever, else the application looks frozen.
- * Defaults to [Duration.INFINITE], i.e. the Node stays empty.
+ * @param state the [EmptyState] of the Node. Default value will render an empty node forever.
  */
 fun emptyNode(
     buildContext: BuildContext,
-    delayBeforeShowingContent: Duration = Duration.INFINITE,
+    state: EmptyState = EmptyState(Duration.INFINITE),
 ): Node = node(buildContext) { modifier ->
     EmptyView(
-        delayBeforeShowingContent = delayBeforeShowingContent,
+        state = state,
         modifier = modifier,
     )
 }
