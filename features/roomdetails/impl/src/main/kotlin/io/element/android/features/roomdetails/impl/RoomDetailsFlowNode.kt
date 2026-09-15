@@ -413,6 +413,9 @@ class RoomDetailsFlowNode(
                     override fun navigateToDeveloperSettings() {
                         callback.navigateToDeveloperSettings()
                     }
+
+                    // The pinned messages list has no search entry point.
+                    override fun navigateToMessageSearch() = Unit
                 }
                 return messagesEntryPoint.createNode(
                     parentNode = this,

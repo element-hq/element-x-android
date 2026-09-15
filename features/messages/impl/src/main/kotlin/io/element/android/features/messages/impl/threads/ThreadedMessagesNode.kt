@@ -343,6 +343,7 @@ class ThreadedMessagesNode(
                         )
                     },
                     onThreadsListClick = {},
+                    onSearchClick = {},
                 )
 
                 roomMemberModerationRenderer.Render(
