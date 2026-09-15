@@ -327,7 +327,7 @@ private fun ListView(
                     style = ElementTheme.typography.fontBodyMdRegular,
                     color = ElementTheme.colors.textPrimary,
                     modifier = Modifier.widthIn(min = ListMarkerWidth),
-                    textAlign = if (node.ordered) TextAlign.End else TextAlign.Center,
+                    textAlign = if (node.ordered) TextAlign.Start else TextAlign.Center,
                 )
                 BlockNodes(nodes = item.children, context = context)
             }
