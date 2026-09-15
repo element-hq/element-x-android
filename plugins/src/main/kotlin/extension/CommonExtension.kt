@@ -117,3 +117,12 @@ fun Project.defaultLintOptions(lint: Lint) = lint.apply {
     ignoreTestFixturesSources = true
     checkGeneratedSources = false
 }
+
+fun Project.environmentOrGradleValue(
+    environmentVariableName: String,
+    gradlePropertyName: String,
+    defaultValue: String? = null,
+): String? = providers.environmentVariable(environmentVariableName)
+    .orElse(providers.gradleProperty(gradlePropertyName))
+    .orNull
+    ?: defaultValue
