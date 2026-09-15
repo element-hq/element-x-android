@@ -38,6 +38,8 @@
   <string name="screen_session_verification_request_title">"Запит на звіряння"</string>
   <string name="screen_session_verification_they_dont_match">"Вони не збігаються"</string>
   <string name="screen_session_verification_they_match">"Вони збігаються"</string>
+  <string name="screen_session_verification_unavailable_subtitle">"Скористайтеся іншим пристроєм або ключем відновлення."</string>
+  <string name="screen_session_verification_unavailable_title">"Звірення за допомогою цього пристрою наразі недоступне"</string>
   <string name="screen_session_verification_use_another_device_subtitle">"Перш ніж розпочати звіряння звідси, переконайтеся, що ви відкрили застосунок на іншому пристрої."</string>
   <string name="screen_session_verification_use_another_device_title">"Відкрийте застосунок на іншому звіреному пристрої"</string>
   <string name="screen_session_verification_user_initiator_subtitle">"Для додаткової безпеки звірте цього користувача, порівнявши набір емоджі на ваших пристроях. Зробіть це, використовуючи надійний спосіб спілкування."</string>

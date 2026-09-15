@@ -539,6 +539,8 @@
   <string name="screen_room_confirm_removal_message">"确定要移除此消息？"</string>
   <string name="screen_room_confirm_removal_reason_label">"理由（可选）"</string>
   <string name="screen_room_confirm_removal_reason_placeholder">"输入…"</string>
+  <string name="screen_room_confirm_removal_reason_placeholder_android">"理由…"</string>
+  <string name="screen_room_confirm_removal_reason_supporting_text">"（可选）"</string>
   <string name="screen_room_confirm_removal_title">"确认移除"</string>
   <string name="screen_room_error_failed_processing_media">"处理要上传的媒体失败，请重试。"</string>
   <string name="screen_room_error_failed_retrieving_user_details">"无法获取用户信息"</string>
