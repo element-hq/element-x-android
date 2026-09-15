@@ -82,14 +82,9 @@ class StateContentFormatter(
                     formatRoomPinnedEvents(content, senderIsYou, senderDisambiguatedDisplayName)
                 }
             }
-            is OtherState.Custom -> when (renderingMode) {
-                RenderingMode.RoomList -> {
-                    Timber.v("Filtering timeline item for room state change: $content")
-                    null
-                }
-                RenderingMode.Timeline -> {
-                    "Custom event ${content.eventType}"
-                }
+            is OtherState.Custom -> {
+                Timber.v("Filtering timeline item for room state change: $content")
+                null
             }
             OtherState.PolicyRuleRoom -> when (renderingMode) {
                 RenderingMode.RoomList -> {
