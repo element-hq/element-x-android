@@ -7,6 +7,9 @@
 
 package io.element.android.libraries.matrix.api.accountprovider
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 sealed interface AccountProvider {
     /**
      * An account provider that was input by the user.
