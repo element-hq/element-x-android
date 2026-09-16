@@ -84,13 +84,14 @@ fun ReactionSummaryView(
     modifier: Modifier = Modifier,
 ) {
     fun onDismiss() {
-        state.eventSink(ReactionSummaryEvents.Clear)
+        state.eventSink(ReactionSummaryEvent.Clear)
     }
 
     if (state.target != null) {
         ModalBottomSheet(
             onDismissRequest = ::onDismiss,
-            modifier = modifier
+            modifier = modifier,
+            scrollable = false,
         ) {
             ReactionSummaryViewContent(summary = state.target)
         }
@@ -114,8 +115,10 @@ private fun ReactionSummaryViewContent(
     LaunchedEffect(pagerState.currentPage) {
         selectedReactionKey = summary.reactions[pagerState.currentPage].key
         val visibleInfo = reactionListState.layoutInfo.visibleItemsInfo
-        if (selectedReactionIndex <= visibleInfo.first().index || selectedReactionIndex >= visibleInfo.last().index) {
-            reactionListState.animateScrollToItem(selectedReactionIndex)
+        if (visibleInfo.isNotEmpty()) {
+            if (selectedReactionIndex <= visibleInfo.first().index || selectedReactionIndex >= visibleInfo.last().index) {
+                reactionListState.animateScrollToItem(selectedReactionIndex)
+            }
         }
     }
 
@@ -290,7 +293,7 @@ private fun SenderRow(
 @PreviewsDayNight
 @Composable
 internal fun ReactionSummaryViewContentPreview(
-    @PreviewParameter(ReactionSummaryStateProvider::class) state: ReactionSummaryState
+    @PreviewParameter(ReactionSummaryStatePreviewParam::class) state: ReactionSummaryState
 ) = ElementPreview {
     ReactionSummaryViewContent(summary = state.target as ReactionSummaryState.Summary)
 }

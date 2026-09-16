@@ -8,20 +8,42 @@
 
 package io.element.android.libraries.push.impl.notifications.channels
 
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.preferences.api.store.NotificationSound
+import io.element.android.tests.testutils.lambda.lambdaError
+
 class FakeNotificationChannels(
     var channelForIncomingCall: (ring: Boolean) -> String = { _ -> "" },
-    var channelIdForMessage: (noisy: Boolean) -> String = { _ -> "" },
-    var channelIdForTest: () -> String = { "" }
+    var channelIdForMessage: (sessionId: SessionId, noisy: Boolean) -> String = { _, _ -> "" },
+    var channelIdForTest: () -> String = { "" },
+    // Side-effecting recreates default to lambdaError (matching FakeNotificationSoundUpdater) so a
+    // test that doesn't expect a channel rebuild loudly fails instead of silently swallowing the call.
+    var recreateNoisyChannelLambda: (sound: NotificationSound, version: Int) -> Unit = { _, _ -> lambdaError() },
+    var recreateRingingCallChannelLambda: (sound: NotificationSound, version: Int) -> Unit = { _, _ -> lambdaError() },
+    var readNoisyChannelSoundLambda: () -> NotificationSound? = { null },
+    var readRingingCallChannelSoundLambda: () -> NotificationSound? = { null },
 ) : NotificationChannels {
     override fun getChannelForIncomingCall(ring: Boolean): String {
         return channelForIncomingCall(ring)
     }
 
-    override fun getChannelIdForMessage(noisy: Boolean): String {
-        return channelIdForMessage(noisy)
+    override fun getChannelIdForMessage(sessionId: SessionId, noisy: Boolean): String {
+        return channelIdForMessage(sessionId, noisy)
     }
 
     override fun getChannelIdForTest(): String {
         return channelIdForTest()
     }
+
+    override fun recreateNoisyChannel(sound: NotificationSound, version: Int) {
+        recreateNoisyChannelLambda(sound, version)
+    }
+
+    override fun recreateRingingCallChannel(sound: NotificationSound, version: Int) {
+        recreateRingingCallChannelLambda(sound, version)
+    }
+
+    override suspend fun readNoisyChannelSound(): NotificationSound? = readNoisyChannelSoundLambda()
+
+    override suspend fun readRingingCallChannelSound(): NotificationSound? = readRingingCallChannelSoundLambda()
 }

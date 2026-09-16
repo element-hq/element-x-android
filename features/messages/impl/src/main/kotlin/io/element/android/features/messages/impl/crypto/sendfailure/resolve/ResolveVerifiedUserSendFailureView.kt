@@ -14,7 +14,8 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -43,19 +44,22 @@ fun ResolveVerifiedUserSendFailureView(
     state: ResolveVerifiedUserSendFailureState,
     modifier: Modifier = Modifier,
 ) {
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val sheetState = rememberBottomSheetState(
+        initialValue = SheetValue.Hidden,
+        enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+    )
     var showSheet by remember { mutableStateOf(false) }
 
     fun dismiss() {
-        state.eventSink(ResolveVerifiedUserSendFailureEvents.Dismiss)
+        state.eventSink(ResolveVerifiedUserSendFailureEvent.Dismiss)
     }
 
     fun onRetryClick() {
-        state.eventSink(ResolveVerifiedUserSendFailureEvents.Retry)
+        state.eventSink(ResolveVerifiedUserSendFailureEvent.Retry)
     }
 
     fun onResolveAndResendClick() {
-        state.eventSink(ResolveVerifiedUserSendFailureEvents.ResolveAndResend)
+        state.eventSink(ResolveVerifiedUserSendFailureEvent.ResolveAndResend)
     }
 
     LaunchedEffect(state.verifiedUserSendFailure) {
@@ -75,6 +79,7 @@ fun ResolveVerifiedUserSendFailureView(
                     .navigationBarsPadding(),
                 sheetState = sheetState,
                 onDismissRequest = ::dismiss,
+                scrollable = true,
             ) {
                 IconTitleSubtitleMolecule(
                     modifier = Modifier.padding(24.dp),
@@ -153,7 +158,7 @@ private fun VerifiedUserSendFailure.resolveAction(): String {
 @PreviewsDayNight
 @Composable
 internal fun ResolveVerifiedUserSendFailureViewPreview(
-    @PreviewParameter(ResolveVerifiedUserSendFailureStateProvider::class) state: ResolveVerifiedUserSendFailureState
+    @PreviewParameter(ResolveVerifiedUserSendFailureStatePreviewParam::class) state: ResolveVerifiedUserSendFailureState
 ) = ElementPreview {
     ResolveVerifiedUserSendFailureView(state)
 }

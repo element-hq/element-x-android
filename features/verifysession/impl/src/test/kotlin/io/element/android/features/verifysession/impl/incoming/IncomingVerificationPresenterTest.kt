@@ -72,7 +72,7 @@ class IncomingVerificationPresenterTest {
             acknowledgeVerificationRequestLambda.assertions().isCalledOnce().with(value(anIncomingSessionVerificationRequest))
             acceptVerificationRequestLambda.assertions().isNeverCalled()
             // User accept the incoming verification
-            initialState.eventSink(IncomingVerificationViewEvents.StartVerification)
+            initialState.eventSink(IncomingVerificationViewEvent.StartVerification)
             skipItems(1)
             val initialWaitingState = awaitItem()
             assertThat((initialWaitingState.step as IncomingVerificationState.Step.Initial).isWaiting).isTrue()
@@ -96,9 +96,10 @@ class IncomingVerificationPresenterTest {
                 )
             )
             // User claims that the emoji matches
-            emojiState.eventSink(IncomingVerificationViewEvents.ConfirmVerification)
+            emojiState.eventSink(IncomingVerificationViewEvent.ConfirmVerification)
             val emojiWaitingItem = awaitItem()
             assertThat((emojiWaitingItem.step as IncomingVerificationState.Step.Verifying).isWaiting).isTrue()
+            advanceUntilIdle()
             approveVerificationLambda.assertions().isCalledOnce()
             // Remote confirm that the emojis match
             fakeSessionVerificationService.emitVerificationFlowState(
@@ -140,7 +141,7 @@ class IncomingVerificationPresenterTest {
             acknowledgeVerificationRequestLambda.assertions().isCalledOnce().with(value(anIncomingSessionVerificationRequest))
             acceptVerificationRequestLambda.assertions().isNeverCalled()
             // User accept the incoming verification
-            initialState.eventSink(IncomingVerificationViewEvents.StartVerification)
+            initialState.eventSink(IncomingVerificationViewEvent.StartVerification)
             skipItems(1)
             val initialWaitingState = awaitItem()
             assertThat((initialWaitingState.step as IncomingVerificationState.Step.Initial).isWaiting).isTrue()
@@ -158,9 +159,10 @@ class IncomingVerificationPresenterTest {
             )
             val emojiState = awaitItem()
             // User claims that the emojis do not match
-            emojiState.eventSink(IncomingVerificationViewEvents.DeclineVerification)
+            emojiState.eventSink(IncomingVerificationViewEvent.DeclineVerification)
             val emojiWaitingItem = awaitItem()
             assertThat((emojiWaitingItem.step as IncomingVerificationState.Step.Verifying).isWaiting).isTrue()
+            advanceUntilIdle()
             declineVerificationLambda.assertions().isCalledOnce()
             // Remote confirm that there is a failure
             fakeSessionVerificationService.emitVerificationFlowState(
@@ -239,7 +241,7 @@ class IncomingVerificationPresenterTest {
             acknowledgeVerificationRequestLambda.assertions().isCalledOnce().with(value(anIncomingSessionVerificationRequest))
             acceptVerificationRequestLambda.assertions().isNeverCalled()
             // User accept the incoming verification
-            initialState.eventSink(IncomingVerificationViewEvents.StartVerification)
+            initialState.eventSink(IncomingVerificationViewEvent.StartVerification)
             skipItems(1)
             val initialWaitingState = awaitItem()
             assertThat((initialWaitingState.step as IncomingVerificationState.Step.Initial).isWaiting).isTrue()
@@ -257,9 +259,10 @@ class IncomingVerificationPresenterTest {
             )
             val emojiState = awaitItem()
             // User goes back
-            emojiState.eventSink(IncomingVerificationViewEvents.GoBack)
+            emojiState.eventSink(IncomingVerificationViewEvent.GoBack)
             val emojiWaitingItem = awaitItem()
             assertThat((emojiWaitingItem.step as IncomingVerificationState.Step.Verifying).isWaiting).isTrue()
+            advanceUntilIdle()
             declineVerificationLambda.assertions().isCalledOnce()
             // Remote confirm that there is a failure
             fakeSessionVerificationService.emitVerificationFlowState(
@@ -286,7 +289,7 @@ class IncomingVerificationPresenterTest {
             navigator = IncomingVerificationNavigator(navigatorLambda),
         ).test {
             val initialState = awaitItem()
-            initialState.eventSink(IncomingVerificationViewEvents.IgnoreVerification)
+            initialState.eventSink(IncomingVerificationViewEvent.IgnoreVerification)
             skipItems(1)
             navigatorLambda.assertions().isCalledOnce()
         }

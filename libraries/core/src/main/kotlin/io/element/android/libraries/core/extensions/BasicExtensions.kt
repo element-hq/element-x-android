@@ -86,11 +86,6 @@ fun String.safeCapitalize(): String {
     }
 }
 
-fun String.withoutAccents(): String {
-    return Normalizer.normalize(this, Normalizer.Form.NFD)
-        .replace("\\p{Mn}+".toRegex(), "")
-}
-
 private const val RTL_OVERRIDE_CHAR = '\u202E'
 private const val LTR_OVERRIDE_CHAR = '\u202D'
 
@@ -100,6 +95,8 @@ fun String.containsRtLOverride() = contains(RTL_OVERRIDE_CHAR)
 
 fun String.filterDirectionOverrides() = filterNot { it == RTL_OVERRIDE_CHAR || it == LTR_OVERRIDE_CHAR }
 
+const val DEFAULT_SAFE_LENGTH = 500
+
 /**
  * This works around https://github.com/element-hq/element-x-android/issues/2105.
  * @param maxLength Max characters to retrieve. Defaults to `500`.
@@ -107,7 +104,7 @@ fun String.filterDirectionOverrides() = filterNot { it == RTL_OVERRIDE_CHAR || i
  * @return The string truncated to [maxLength] characters, with an optional ellipsis if larger.
  */
 fun String.toSafeLength(
-    maxLength: Int = 500,
+    maxLength: Int = DEFAULT_SAFE_LENGTH,
     ellipsize: Boolean = false,
 ): String {
     return if (ellipsize) {
@@ -117,4 +114,15 @@ fun String.toSafeLength(
     } else {
         this
     }
+}
+
+/**
+ * Remove accents and replace special characters by ASCII from the string.
+ * For instance, "é" will be replaced by "e", "ç" by "c", etc.
+ */
+fun String.normalized(): String {
+    // Normalize the string.
+    return Normalizer.normalize(this, Normalizer.Form.NFD)
+        // then keep only ASCII characters and replace non-ASCII characters with an empty string.
+        .replace("[^\\p{ASCII}]".toRegex(), "")
 }

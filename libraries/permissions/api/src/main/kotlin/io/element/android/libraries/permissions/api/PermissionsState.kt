@@ -17,5 +17,5 @@ data class PermissionsState(
     val permissionAlreadyAsked: Boolean,
     // If true, there is no need to ask again, the system dialog will not be displayed
     val permissionAlreadyDenied: Boolean,
-    val eventSink: (PermissionsEvents) -> Unit
+    val eventSink: (PermissionsEvent) -> Unit
 )

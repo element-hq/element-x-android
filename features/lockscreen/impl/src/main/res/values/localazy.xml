@@ -23,7 +23,7 @@ Choose something memorable. If you forget this PIN, you will be logged out of th
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Please enter the same PIN twice"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PINs don\'t match"</string>
   <string name="screen_app_lock_signout_alert_message">"You’ll need to re-login and create a new PIN to proceed"</string>
-  <string name="screen_app_lock_signout_alert_title">"You are being signed out"</string>
+  <string name="screen_app_lock_signout_alert_title">"This device is being removed"</string>
   <plurals name="screen_app_lock_subtitle">
     <item quantity="one">"You have %1$d attempt to unlock"</item>
     <item quantity="other">"You have %1$d attempts to unlock"</item>
@@ -34,5 +34,5 @@ Choose something memorable. If you forget this PIN, you will be logged out of th
   </plurals>
   <string name="screen_app_lock_use_biometric_android">"Use biometric"</string>
   <string name="screen_app_lock_use_pin_android">"Use PIN"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Signing out…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Removing device…"</string>
 </resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_share_location_live_location_disclaimer_title">"Istoricul locațiilor dumneavoastră va fi stocat în cameră și va fi vizibil pentru membri după încheierea sesiunii."</string>
+  <string name="screen_share_location_live_location_duration_picker_title">"Alegeți cât timp doriți să vă partajați locația în timp real."</string>
+  <string name="screen_share_location_live_location_missing_permissions">"Nu aveți permisiunea de a vă partaja locația în această cameră."</string>
+</resources>

@@ -9,6 +9,10 @@
 package io.element.android.libraries.deeplink.impl
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -19,15 +23,36 @@ class DefaultDeepLinkCreatorTest {
     @Test
     fun create() {
         val sut = DefaultDeepLinkCreator()
-        assertThat(sut.create(A_SESSION_ID, null, null, null))
-            .isEqualTo("elementx://open/@alice:server.org")
-        assertThat(sut.create(A_SESSION_ID, A_ROOM_ID, null, null))
-            .isEqualTo("elementx://open/@alice:server.org/!aRoomId:domain")
-        assertThat(sut.create(A_SESSION_ID, A_ROOM_ID, A_THREAD_ID, null))
-            .isEqualTo("elementx://open/@alice:server.org/!aRoomId:domain/\$aThreadId")
-        assertThat(sut.create(A_SESSION_ID, A_ROOM_ID, A_THREAD_ID, AN_EVENT_ID))
-            .isEqualTo("elementx://open/@alice:server.org/!aRoomId:domain/\$aThreadId/\$anEventId")
-        assertThat(sut.create(A_SESSION_ID, A_ROOM_ID, null, AN_EVENT_ID))
-            .isEqualTo("elementx://open/@alice:server.org/!aRoomId:domain//\$anEventId")
+        val sessionId = A_SESSION_ID
+        val roomId = A_ROOM_ID
+        val threadId = A_THREAD_ID
+        val eventId = AN_EVENT_ID
+        assertThat(sut.create(sessionId, null, null, null))
+            .isEqualTo("elementx://open/%40alice%3Aserver.org")
+        assertThat(sut.create(sessionId, roomId, null, null))
+            .isEqualTo("elementx://open/%40alice%3Aserver.org/%21aRoomId%3Adomain")
+        assertThat(sut.create(sessionId, roomId, threadId, null))
+            .isEqualTo("elementx://open/%40alice%3Aserver.org/%21aRoomId%3Adomain/%24aThreadId")
+        assertThat(sut.create(sessionId, roomId, threadId, eventId))
+            .isEqualTo("elementx://open/%40alice%3Aserver.org/%21aRoomId%3Adomain/%24aThreadId/%24anEventId")
+        assertThat(sut.create(sessionId, roomId, null, eventId))
+            .isEqualTo("elementx://open/%40alice%3Aserver.org/%21aRoomId%3Adomain//%24anEventId")
+    }
+
+    @Test
+    fun `create - with escaped invalid characters`() {
+        val sut = DefaultDeepLinkCreator()
+        val sessionId = SessionId("@a/:domain")
+        val roomId = RoomId("!a/RoomId:domain")
+        val threadId = ThreadId("\$a/ThreadId")
+        val eventId = EventId("\$an/EventId")
+        assertThat(sut.create(sessionId, roomId, null, null))
+            .isEqualTo("elementx://open/%40a%2F%3Adomain/%21a%2FRoomId%3Adomain")
+        assertThat(sut.create(sessionId, roomId, threadId, null))
+            .isEqualTo("elementx://open/%40a%2F%3Adomain/%21a%2FRoomId%3Adomain/%24a%2FThreadId")
+        assertThat(sut.create(sessionId, roomId, threadId, eventId))
+            .isEqualTo("elementx://open/%40a%2F%3Adomain/%21a%2FRoomId%3Adomain/%24a%2FThreadId/%24an%2FEventId")
+        assertThat(sut.create(sessionId, roomId, null, eventId))
+            .isEqualTo("elementx://open/%40a%2F%3Adomain/%21a%2FRoomId%3Adomain//%24an%2FEventId")
     }
 }

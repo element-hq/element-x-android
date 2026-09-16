@@ -1,16 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_avatar">"اوتار شامل کریں"</string>
   <string name="a11y_add_reaction">"ایک رد عمل کا اضافہ کریں: %1$s"</string>
+  <string name="a11y_address">"پتہ"</string>
   <string name="a11y_avatar">"اوتار"</string>
+  <string name="a11y_clear_search_field">"تلاش حال خالی کریں"</string>
+  <string name="a11y_collapse_message_text_field">"پیغام متن حقل گھٹائیں"</string>
+  <string name="a11y_create_poll_votes_allowed_decrease">"فی شخص آراء کم کریں"</string>
+  <string name="a11y_create_poll_votes_allowed_increase">"فی شخص آراء زیادہ کریں"</string>
   <string name="a11y_delete">"حذف کریں"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d ہندسہ درج"</item>
     <item quantity="other">"%1$d ہندسے درج"</item>
   </plurals>
+  <string name="a11y_duration">"دورانیہ: %1$s"</string>
   <string name="a11y_edit_avatar">"اووتار میں ترمیم کریں"</string>
   <string name="a11y_edit_room_address_hint">"مکمل پتہ ہو گا %1$s"</string>
+  <string name="a11y_encryption_details">"تشفیری تفصیلات"</string>
+  <string name="a11y_expand_message_text_field">"پیغام متن حقل پھیلائیں"</string>
   <string name="a11y_hide_password">"لفظ عبور چھپائیں"</string>
+  <string name="a11y_info">"معلومات"</string>
   <string name="a11y_jump_to_bottom">"نیچے چھلانگ لگائیں"</string>
+  <string name="a11y_jump_to_unread">"غیر مقروءہ تک چھلانگیں"</string>
   <string name="a11y_notifications_mentions_only">"صرف تذکرے"</string>
   <string name="a11y_notifications_muted">"خاموش"</string>
   <string name="a11y_page_n">"صفحہ %1$d"</string>
@@ -27,7 +38,6 @@
     <item quantity="other">"%1$s اور %2$d دیگر نے لڑھا"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"%1$s نے پڑھا"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"سب دکھانے کے لیے تھپتھپائیں"</string>
   <string name="a11y_remove_reaction">"%1$s کے ساتھ رد عمل ہٹائیں"</string>
   <string name="a11y_send_files">"مسلیں بھیجیں"</string>
   <string name="a11y_show_password">"لفظ عبور دکھائیں"</string>
@@ -52,7 +62,7 @@
   <string name="action_copy_link">"ربط نقل کریں"</string>
   <string name="action_copy_link_to_message">"پیغام کا ربط نقل کریں"</string>
   <string name="action_create">"تخلیق کریں"</string>
-  <string name="action_create_a_room">"ایک کمرہ بنائیں"</string>
+  <string name="action_create_room">"کمرہ تخلیق کریں"</string>
   <string name="action_deactivate">"غیر فعال کریں"</string>
   <string name="action_deactivate_account">"اکاؤنٹ کو غیر فعال کریں"</string>
   <string name="action_decline">"مسترد کریں"</string>
@@ -114,6 +124,7 @@
   <string name="action_skip">"چھوڑیں"</string>
   <string name="action_start">"شروع کریں"</string>
   <string name="action_start_chat">"گفتگو شروع کریں"</string>
+  <string name="action_start_over">"از سر نو شروع کریں"</string>
   <string name="action_start_verification">"توثیق شروع کریں"</string>
   <string name="action_static_map_load">"نقشہ لادنے کیلئے تھپتھپائیں"</string>
   <string name="action_take_photo">"تصویر لیں"</string>
@@ -129,6 +140,7 @@
   <string name="common_acceptable_use_policy">"قابل قبول استعمال کی سیاست"</string>
   <string name="common_advanced_settings">"اعلیٰ ترتیبات"</string>
   <string name="common_analytics">"تجزیات"</string>
+  <string name="common_android_shortcuts_remove_reason_left_room">"آپ کمرے سے رخصت ہوگئے"</string>
   <string name="common_appearance">"ظہور"</string>
   <string name="common_audio">"صوت"</string>
   <string name="common_blocked_users">"مسدود صارفین"</string>
@@ -139,7 +151,6 @@
   <string name="common_copyright">"حقوقِ طبع و نشر"</string>
   <string name="common_creating_room">"کمرہ تخلیق کررہاہے…"</string>
   <string name="common_current_user_left_room">"کمرہ چھوڑ لیا"</string>
-  <string name="common_dark">"اندھیرا"</string>
   <string name="common_decryption_error">"رمزکشائی کی خرابی"</string>
   <string name="common_developer_options">"مطور اختیارات"</string>
   <string name="common_direct_chat">"براہ راست گفتگو"</string>
@@ -166,7 +177,6 @@
   <string name="common_install_apk_android">"APK تنصیب کریں"</string>
   <string name="common_invite_unknown_profile">"یہ میٹرکس شناخت نہیں مل سکتی، تو ہو سکتا ہے کہ دعوت نامہ موصول نہ ہو۔"</string>
   <string name="common_leaving_room">"کمرہ چھوڑنا"</string>
-  <string name="common_light">"روشنی"</string>
   <string name="common_link_copied_to_clipboard">"ربط تختہ تراشہ پر نقل کردا گیا"</string>
   <string name="common_loading">"لاد رہا ہے…"</string>
   <plurals name="common_many_members">
@@ -210,7 +220,6 @@
   <string name="common_recovery_key">"بازیابی کی کلید"</string>
   <string name="common_refreshing">"تاکہ کر رہا ہے…"</string>
   <string name="common_replying_to">"%1$s کا جواب دے رہے ہیں"</string>
-  <string name="common_report_a_bug">"ایک خطاء کی اطلاع دیں"</string>
   <string name="common_report_a_problem">"کسی مسئلے کی اطلاع دیں"</string>
   <string name="common_report_submitted">"گزارش جمع ہوگئی"</string>
   <string name="common_rich_text_editor">"امیر مدیرِ متن"</string>
@@ -238,8 +247,7 @@
   <string name="common_sticker">"برچسب"</string>
   <string name="common_success">"کامیابی"</string>
   <string name="common_suggestions">"تجاویز"</string>
-  <string name="common_syncing">"ہمسات سازی"</string>
-  <string name="common_system">"نظام"</string>
+  <string name="common_syncing">"ہموقت سازی کر رہا ہے"</string>
   <string name="common_text">"متن"</string>
   <string name="common_third_party_notices">"فریق ثالث کے اشعارات"</string>
   <string name="common_thread">"دھاگہ"</string>
@@ -265,6 +273,7 @@
   <string name="dialog_title_error">"خرابی"</string>
   <string name="dialog_title_success">"کامیابی"</string>
   <string name="dialog_title_warning">"انتباہ"</string>
+  <string name="dialog_unsaved_changes_description">"آپکے پاس غیر محفوظ تبدیلیاں ہیں"</string>
   <string name="dialog_unsaved_changes_description_android">"آپ کی تبدیلیاں محفوظ نہیں کی گئیں۔ کیا آپ کو یقین ہے کہ آپ واپس جانا چاہتے ہیں؟"</string>
   <string name="dialog_unsaved_changes_title">"تبدیلیاں محفوظ کریں؟"</string>
   <string name="error_account_creation_not_possible">"‏Matrix Authentication Service اور اکاؤنٹ بنانے میں معاونت کے لیے آپ کے ہوم سرور کو اپ گریڈ کرنے کی ضرورت ہے۔"</string>
@@ -279,12 +288,6 @@
   <string name="error_missing_microphone_voice_rationale_android">"%1$s کو آپ کے صوتگر تک رسائی حاصل کرنے کی اجازت نہیں ہے۔ صوتی پیغام ثبت کرنے کیلئے رسائی فعال کریں۔"</string>
   <string name="error_some_messages_have_not_been_sent">"کچھ پیغامات ارسال نہیں ہوئے"</string>
   <string name="error_unknown">"معذرت، ایک خرابی واقع ہوگئی"</string>
-  <string name="event_shield_reason_authenticity_not_guaranteed">"اس آلہ پر اس مرموز کردہ پیغام کی صداقت کی ضمانت نہیں دی جا سکتی۔"</string>
-  <string name="event_shield_reason_previously_verified">"پہلے سے تصدیق شدہ صارف کے ذریعہ خفیہ کردہ۔"</string>
-  <string name="event_shield_reason_sent_in_clear">"مرموز کردہ نہیں۔"</string>
-  <string name="event_shield_reason_unknown_device">"کسی نامعلوم یا حذف شدہ آلے کے ذریعے مرموز کردہ۔"</string>
-  <string name="event_shield_reason_unsigned_device">"کسی ایسے آلے کے ذریعے مرموز کردہ جس کی توثیق اسکے مالک سے نہیں ہوئی۔"</string>
-  <string name="event_shield_reason_unverified_identity">"ایک غیر توثیق شدہ صارف کے ذریعے مرموز کردہ۔"</string>
   <string name="invite_friends_rich_title">"🔐️ %1$s پر میرے ساتھ شامل ہوں"</string>
   <string name="invite_friends_text">"ارے، مجھ سے %1$s پر بات کریں: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>

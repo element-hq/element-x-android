@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_migrate_to_native_sliding_sync_action">"تسجيل الخروج والترقية"</string>
+  <string name="banner_migrate_to_native_sliding_sync_app_force_logout_title">"لم يعد %1$s يدعم البروتوكول القديم. يرجى تسجيل الخروج ثم تسجيل الدخول مرة أخرى لمتابعة استخدام التطبيق."</string>
+  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"لم يعد خادمك المنزلي يدعم البروتوكول القديم. يرجى تسجيل الخروج ثم تسجيل الدخول مرة أخرى لمتابعة استخدام التطبيق."</string>
+</resources>

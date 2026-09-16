@@ -13,6 +13,8 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.google.common.truth.Truth.assertThat
 import io.element.android.appconfig.NotificationConfig
+import io.element.android.features.enterprise.api.EnterpriseService
+import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_TIMESTAMP
@@ -29,18 +31,16 @@ import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiable
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
 private const val A_ROOM_AVATAR = "mxc://roomAvatar"
 private const val A_USER_AVATAR_1 = "mxc://userAvatar1"
 private const val A_USER_AVATAR_2 = "mxc://userAvatar2"
 
-@RunWith(RobolectricTestRunner::class)
-class DefaultBaseRoomGroupMessageCreatorTest {
+class DefaultBaseRoomGroupMessageCreatorTest : RobolectricTest() {
     @Test
     fun `test createRoomMessage with one Event`() = runTest {
         val sut = createRoomGroupMessageCreator()
@@ -66,7 +66,11 @@ class DefaultBaseRoomGroupMessageCreatorTest {
 
     @Test
     fun `test createRoomMessage with one noisy Event`() = runTest {
-        val sut = createRoomGroupMessageCreator()
+        val sut = createRoomGroupMessageCreator(
+            enterpriseService = FakeEnterpriseService(
+                getNoisyNotificationChannelIdResult = { null }
+            )
+        )
         val fakeImageLoader = FakeImageLoader()
         val result = sut.createRoomMessage(
             notificationAccountParams = aNotificationAccountParams(),
@@ -228,6 +232,7 @@ class DefaultBaseRoomGroupMessageCreatorTest {
 
 fun createRoomGroupMessageCreator(
     sdkIntProvider: BuildVersionSdkIntProvider = FakeBuildVersionSdkIntProvider(Build.VERSION_CODES.O),
+    enterpriseService: EnterpriseService = FakeEnterpriseService(),
 ): RoomGroupMessageCreator {
     val context = RuntimeEnvironment.getApplication() as Context
     val bitmapLoader = DefaultNotificationBitmapLoader(
@@ -236,7 +241,10 @@ fun createRoomGroupMessageCreator(
         initialsAvatarBitmapGenerator = FakeInitialsAvatarBitmapGenerator(),
     )
     return DefaultRoomGroupMessageCreator(
-        notificationCreator = createNotificationCreator(bitmapLoader = bitmapLoader),
+        notificationCreator = createNotificationCreator(
+            bitmapLoader = bitmapLoader,
+            enterpriseService = enterpriseService,
+        ),
         bitmapLoader = bitmapLoader,
         stringProvider = AndroidStringProvider(context.resources)
     )

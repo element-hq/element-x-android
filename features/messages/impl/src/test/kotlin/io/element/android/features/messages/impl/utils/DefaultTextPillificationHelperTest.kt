@@ -9,7 +9,9 @@
 package io.element.android.features.messages.impl.utils
 
 import android.net.Uri
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import android.text.Spanned
+import android.text.style.URLSpan
+import androidx.core.text.getSpans
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -27,11 +29,79 @@ import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
 import io.element.android.libraries.textcomposer.mentions.MentionType
 import io.element.android.libraries.textcomposer.mentions.getMentionSpans
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class DefaultTextPillificationHelperTest {
+class DefaultTextPillificationHelperTest : RobolectricTest() {
+    @Test
+    fun `pillify - adds pills for matrix uri user links`() {
+        val text = "Hello matrix:u/someone:example.com"
+        val userId = UserId("@someone:example.com")
+        val helper = aTextPillificationHelper(
+            permalinkParser = FakePermalinkParser(result = { PermalinkData.UserLink(userId) }),
+            permalinkBuilder = FakePermalinkBuilder(permalinkForUserLambda = {
+                Result.success("https://matrix.to/#/@someone:example.com")
+            }),
+        )
+        val pillified = helper.pillify(text)
+        val mentionSpans = pillified.getMentionSpans()
+        assertThat(mentionSpans).hasSize(1)
+        assertThat(mentionSpans.first().type).isInstanceOf(MentionType.User::class.java)
+        val spanned = pillified as Spanned
+        assertThat(spanned.getSpanStart(mentionSpans.first())).isEqualTo(text.indexOf("matrix:"))
+        assertThat(spanned.getSpanEnd(mentionSpans.first())).isEqualTo(text.length)
+        val urlSpans = spanned.getSpans<URLSpan>(0, spanned.length)
+        assertThat(urlSpans).hasLength(1)
+        assertThat(urlSpans.first().url).isEqualTo("matrix:u/someone:example.com")
+    }
+
+    @Test
+    fun `pillify - adds pills for matrix uri room links`() {
+        val text = "Join matrix:r/room:example.com now"
+        val roomAlias = RoomAlias("#room:example.com")
+        val helper = aTextPillificationHelper(
+            permalinkParser = FakePermalinkParser(result = {
+                PermalinkData.RoomLink(roomIdOrAlias = roomAlias.toRoomIdOrAlias())
+            }),
+            permalinkBuilder = FakePermalinkBuilder(permalinkForRoomAliasLambda = {
+                Result.success("https://matrix.to/#/#room:example.com")
+            }),
+        )
+        val mentionSpans = helper.pillify(text).getMentionSpans()
+        assertThat(mentionSpans).hasSize(1)
+        assertThat(mentionSpans.first().type).isInstanceOf(MentionType.Room::class.java)
+    }
+
+    @Test
+    fun `pillify - a matrix uri does not swallow trailing punctuation`() {
+        val text = "See matrix:u/someone:example.com."
+        val userId = UserId("@someone:example.com")
+        val helper = aTextPillificationHelper(
+            permalinkParser = FakePermalinkParser(result = { PermalinkData.UserLink(userId) }),
+            permalinkBuilder = FakePermalinkBuilder(permalinkForUserLambda = {
+                Result.success("https://matrix.to/#/@someone:example.com")
+            }),
+        )
+        val pillified = helper.pillify(text)
+        val mentionSpans = pillified.getMentionSpans()
+        assertThat(mentionSpans).hasSize(1)
+        assertThat((pillified as Spanned).getSpanEnd(mentionSpans.first())).isEqualTo(text.length - 1)
+    }
+
+    @Test
+    fun `pillify - does not pillify matrix uris when permalinks are disabled`() {
+        val text = "Hello matrix:u/someone:example.com"
+        val userId = UserId("@someone:example.com")
+        val helper = aTextPillificationHelper(
+            permalinkParser = FakePermalinkParser(result = { PermalinkData.UserLink(userId) }),
+            permalinkBuilder = FakePermalinkBuilder(permalinkForUserLambda = {
+                Result.success("https://matrix.to/#/@someone:example.com")
+            }),
+        )
+        val pillified = helper.pillify(text, pillifyPermalinks = false)
+        assertThat(pillified.getMentionSpans()).isEmpty()
+    }
+
     @Test
     fun `pillify - adds pills for user ids`() {
         val text = "A @user:server.com"

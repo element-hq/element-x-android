@@ -19,7 +19,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
+import io.element.android.features.enterprise.api.SessionEnterpriseService
 import io.element.android.features.logout.api.direct.DirectLogoutState
+import io.element.android.features.preferences.impl.userstatus.UserStatusState
 import io.element.android.features.preferences.impl.utils.ShowDeveloperSettingsProvider
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.libraries.architecture.Presenter
@@ -30,7 +32,6 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -56,6 +57,8 @@ class PreferencesRootPresenter(
     private val rageshakeFeatureAvailability: RageshakeFeatureAvailability,
     private val featureFlagService: FeatureFlagService,
     private val sessionStore: SessionStore,
+    private val sessionEnterpriseService: SessionEnterpriseService,
+    private val userStatusPresenter: Presenter<UserStatusState>,
 ) : Presenter<PreferencesRootState> {
     @Composable
     override fun present(): PreferencesRootState {
@@ -65,10 +68,17 @@ class PreferencesRootPresenter(
             // Force a refresh of the profile
             matrixClient.getUserProfile()
         }
-
         val isMultiAccountEnabled by remember {
             featureFlagService.isFeatureEnabledFlow(FeatureFlags.MultiAccount)
         }.collectAsState(initial = false)
+        val showLinkNewDevice by remember {
+            featureFlagService.isFeatureEnabledFlow(FeatureFlags.QrCodeLogin)
+        }.collectAsState(initial = false)
+
+        val isUserStatusSupported by produceState(false) {
+            value = matrixClient.isUserStatusSupported().getOrDefault(false)
+        }
+        val userStatusState = if (isUserStatusSupported) userStatusPresenter.present() else null
 
         val otherSessions by remember {
             sessionStore.sessionsFlow().map { list ->
@@ -96,9 +106,6 @@ class PreferencesRootPresenter(
         val accountManagementUrl: MutableState<String?> = remember {
             mutableStateOf(null)
         }
-        val devicesManagementUrl: MutableState<String?> = remember {
-            mutableStateOf(null)
-        }
         var canDeactivateAccount by remember {
             mutableStateOf(false)
         }
@@ -107,9 +114,9 @@ class PreferencesRootPresenter(
             canDeactivateAccount = matrixClient.canDeactivateAccount()
         }
 
-        val showBlockedUsersItem by produceState(initialValue = false) {
+        val nbOfBlockedUsers by produceState(initialValue = 0) {
             matrixClient.ignoredUsersFlow
-                .onEach { value = it.isNotEmpty() }
+                .onEach { value = it.size }
                 .launchIn(this)
         }
 
@@ -118,17 +125,17 @@ class PreferencesRootPresenter(
         val directLogoutState = directLogoutPresenter.present()
 
         LaunchedEffect(Unit) {
-            initAccountManagementUrl(accountManagementUrl, devicesManagementUrl)
+            initAccountManagementUrl(accountManagementUrl)
         }
 
         val showDeveloperSettings by showDeveloperSettingsProvider.showDeveloperSettings.collectAsState()
 
-        fun handleEvent(event: PreferencesRootEvents) {
+        fun handleEvent(event: PreferencesRootEvent) {
             when (event) {
-                is PreferencesRootEvents.OnVersionInfoClick -> {
+                is PreferencesRootEvent.OnVersionInfoClick -> {
                     showDeveloperSettingsProvider.unlockDeveloperSettings(coroutineScope)
                 }
-                is PreferencesRootEvents.SwitchToSession -> coroutineScope.launch {
+                is PreferencesRootEvent.SwitchToSession -> coroutineScope.launch {
                     sessionStore.setLatestSession(event.sessionId.value)
                 }
             }
@@ -136,19 +143,19 @@ class PreferencesRootPresenter(
 
         return PreferencesRootState(
             myUser = matrixUser.value,
-            version = versionFormatter.get(),
-            deviceId = matrixClient.deviceId,
+            userStatusState = userStatusState,
+            version = remember { versionFormatter.get() },
             isMultiAccountEnabled = isMultiAccountEnabled,
             otherSessions = otherSessions,
             showSecureBackup = !canVerifyUserSession,
             showSecureBackupBadge = showSecureBackupIndicator,
             accountManagementUrl = accountManagementUrl.value,
-            devicesManagementUrl = devicesManagementUrl.value,
             showAnalyticsSettings = hasAnalyticsProviders,
             canReportBug = canReportBug,
+            showLinkNewDevice = showLinkNewDevice,
             showDeveloperSettings = showDeveloperSettings,
             canDeactivateAccount = canDeactivateAccount,
-            showBlockedUsersItem = showBlockedUsersItem,
+            nbOfBlockedUsers = nbOfBlockedUsers,
             showLabsItem = showLabsItem,
             directLogoutState = directLogoutState,
             snackbarMessage = snackbarMessage,
@@ -158,9 +165,11 @@ class PreferencesRootPresenter(
 
     private fun CoroutineScope.initAccountManagementUrl(
         accountManagementUrl: MutableState<String?>,
-        devicesManagementUrl: MutableState<String?>,
     ) = launch {
-        accountManagementUrl.value = matrixClient.getAccountManagementUrl(AccountManagementAction.Profile).getOrNull()
-        devicesManagementUrl.value = matrixClient.getAccountManagementUrl(AccountManagementAction.SessionsList).getOrNull()
+        accountManagementUrl.value = matrixClient.getAccountManagementUrl(null)
+            .getOrNull()
+            ?.let {
+                sessionEnterpriseService.tweakMasUrl(it)
+            }
     }
 }

@@ -6,14 +6,16 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.features.logout.impl
 
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performTextInput
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import io.element.android.features.deactivation.impl.R
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
@@ -26,33 +28,28 @@ import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBack
 import io.element.android.tests.testutils.pressTag
-import org.junit.Rule
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.rules.TestRule
-import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
-@RunWith(AndroidJUnit4::class)
-class AccountDeactivationViewTest {
-    @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
-
+class AccountDeactivationViewTest : RobolectricTest() {
     @Test
-    fun `clicking on back invokes the expected callback`() {
-        val eventsRecorder = EventsRecorder<AccountDeactivationEvents>(expectEvents = false)
+    fun `clicking on back invokes the expected callback`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<AccountDeactivationEvent>(expectEvents = false)
         ensureCalledOnce {
-            rule.setAccountDeactivationView(
+            setAccountDeactivationView(
                 state = anAccountDeactivationState(eventSink = eventsRecorder),
                 onBackClick = it,
             )
-            rule.pressBack()
+            pressBack()
         }
     }
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `clicking on Deactivate emits the expected Event`() {
-        val eventsRecorder = EventsRecorder<AccountDeactivationEvents>()
-        rule.setAccountDeactivationView(
+    fun `clicking on Deactivate emits the expected Event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<AccountDeactivationEvent>()
+        setAccountDeactivationView(
             state = anAccountDeactivationState(
                 deactivateFormState = aDeactivateFormState(
                     password = A_PASSWORD,
@@ -60,14 +57,14 @@ class AccountDeactivationViewTest {
                 eventSink = eventsRecorder,
             ),
         )
-        rule.clickOn(CommonStrings.action_deactivate)
-        eventsRecorder.assertSingle(AccountDeactivationEvents.DeactivateAccount(false))
+        clickOn(CommonStrings.action_delete)
+        eventsRecorder.assertSingle(AccountDeactivationEvent.DeactivateAccount(false))
     }
 
     @Test
-    fun `clicking on Deactivate on the confirmation dialog emits the expected Event`() {
-        val eventsRecorder = EventsRecorder<AccountDeactivationEvents>()
-        rule.setAccountDeactivationView(
+    fun `clicking on Deactivate on the confirmation dialog emits the expected Event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<AccountDeactivationEvent>()
+        setAccountDeactivationView(
             state = anAccountDeactivationState(
                 deactivateFormState = aDeactivateFormState(
                     password = A_PASSWORD,
@@ -76,14 +73,14 @@ class AccountDeactivationViewTest {
                 eventSink = eventsRecorder,
             ),
         )
-        rule.pressTag(TestTags.dialogPositive.value)
-        eventsRecorder.assertSingle(AccountDeactivationEvents.DeactivateAccount(false))
+        pressTag(TestTags.dialogPositive.value)
+        eventsRecorder.assertSingle(AccountDeactivationEvent.DeactivateAccount(false))
     }
 
     @Test
-    fun `clicking on retry on the confirmation dialog emits the expected Event`() {
-        val eventsRecorder = EventsRecorder<AccountDeactivationEvents>()
-        rule.setAccountDeactivationView(
+    fun `clicking on retry on the confirmation dialog emits the expected Event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<AccountDeactivationEvent>()
+        setAccountDeactivationView(
             state = anAccountDeactivationState(
                 deactivateFormState = aDeactivateFormState(
                     password = A_PASSWORD,
@@ -92,26 +89,26 @@ class AccountDeactivationViewTest {
                 eventSink = eventsRecorder,
             ),
         )
-        rule.clickOn(CommonStrings.action_retry)
-        eventsRecorder.assertSingle(AccountDeactivationEvents.DeactivateAccount(true))
+        clickOn(CommonStrings.action_retry)
+        eventsRecorder.assertSingle(AccountDeactivationEvent.DeactivateAccount(true))
     }
 
     @Test
-    fun `switching on the erase all switch emits the expected Event`() {
-        val eventsRecorder = EventsRecorder<AccountDeactivationEvents>()
-        rule.setAccountDeactivationView(
+    fun `switching on the erase all switch emits the expected Event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<AccountDeactivationEvent>()
+        setAccountDeactivationView(
             state = anAccountDeactivationState(
                 eventSink = eventsRecorder,
             ),
         )
-        rule.clickOn(R.string.screen_deactivate_account_delete_all_messages)
-        eventsRecorder.assertSingle(AccountDeactivationEvents.SetEraseData(true))
+        clickOn(R.string.screen_deactivate_account_delete_all_messages)
+        eventsRecorder.assertSingle(AccountDeactivationEvent.SetEraseData(true))
     }
 
     @Test
-    fun `switching off the erase all switch emits the expected Event`() {
-        val eventsRecorder = EventsRecorder<AccountDeactivationEvents>()
-        rule.setAccountDeactivationView(
+    fun `switching off the erase all switch emits the expected Event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<AccountDeactivationEvent>()
+        setAccountDeactivationView(
             state = anAccountDeactivationState(
                 deactivateFormState = aDeactivateFormState(
                     eraseData = true,
@@ -119,15 +116,15 @@ class AccountDeactivationViewTest {
                 eventSink = eventsRecorder,
             ),
         )
-        rule.clickOn(R.string.screen_deactivate_account_delete_all_messages)
-        eventsRecorder.assertSingle(AccountDeactivationEvents.SetEraseData(false))
+        clickOn(R.string.screen_deactivate_account_delete_all_messages)
+        eventsRecorder.assertSingle(AccountDeactivationEvent.SetEraseData(false))
     }
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `typing text in the password field emits the expected Event`() {
-        val eventsRecorder = EventsRecorder<AccountDeactivationEvents>()
-        rule.setAccountDeactivationView(
+    fun `typing text in the password field emits the expected Event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<AccountDeactivationEvent>()
+        setAccountDeactivationView(
             state = anAccountDeactivationState(
                 deactivateFormState = aDeactivateFormState(
                     password = A_PASSWORD,
@@ -135,12 +132,12 @@ class AccountDeactivationViewTest {
                 eventSink = eventsRecorder,
             ),
         )
-        rule.onNodeWithTag(TestTags.loginPassword.value).performTextInput("A")
-        eventsRecorder.assertSingle(AccountDeactivationEvents.SetPassword("A$A_PASSWORD"))
+        onNodeWithTag(TestTags.loginPassword.value).performTextInput("A")
+        eventsRecorder.assertSingle(AccountDeactivationEvent.SetPassword("A$A_PASSWORD"))
     }
 }
 
-private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setAccountDeactivationView(
+private fun AndroidComposeUiTest<ComponentActivity>.setAccountDeactivationView(
     state: AccountDeactivationState,
     onBackClick: () -> Unit = EnsureNeverCalled(),
 ) {

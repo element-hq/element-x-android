@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_join_room_ban_by_message">"Você foi banido desta sala por %1$s."</string>
-  <string name="screen_join_room_ban_message">"Você foi banido desta sala"</string>
+  <string name="screen_join_room_ban_by_message">"Você foi banido por %1$s."</string>
+  <string name="screen_join_room_ban_message">"Você foi banido"</string>
   <string name="screen_join_room_ban_reason">"Motivo: %1$s."</string>
   <string name="screen_join_room_cancel_knock_action">"Cancelar pedido"</string>
   <string name="screen_join_room_cancel_knock_alert_confirmation">"Sim, cancelar"</string>
@@ -11,10 +11,11 @@
   <string name="screen_join_room_decline_and_block_alert_message">"Tem certeza de que quer recusar o convite para entrar nesta sala? Isso também impedirá que %1$s entre em contato com você ou o convide para salas."</string>
   <string name="screen_join_room_decline_and_block_alert_title">"Recusar convite e bloquear"</string>
   <string name="screen_join_room_decline_and_block_button_title">"Recusar e bloquear"</string>
-  <string name="screen_join_room_fail_message">"A entrada na sala falhou."</string>
-  <string name="screen_join_room_fail_reason">"Esta sala é apenas para convidados ou pode haver restrições de acesso a nível do espaço."</string>
-  <string name="screen_join_room_forget_action">"Esquecer esta sala"</string>
-  <string name="screen_join_room_invite_required_message">"Você precisa de um convite para entrar nesta sala"</string>
+  <string name="screen_join_room_fail_message">"Falha ao entrar"</string>
+  <string name="screen_join_room_fail_reason">"Você precisa ser convidado ou pode haver restrições ao acesso."</string>
+  <string name="screen_join_room_forget_action">"Esquecer"</string>
+  <string name="screen_join_room_invite_required_message">"Você precisa de um convite para entrar"</string>
+  <string name="screen_join_room_invited_by">"Convidado por"</string>
   <string name="screen_join_room_join_action">"Entrar"</string>
   <string name="screen_join_room_join_restricted_message">"Talvez você precise ser convidado ou ser membro de um espaço para participar."</string>
   <string name="screen_join_room_knock_action">"Enviar solicitação para entrar"</string>

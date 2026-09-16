@@ -19,6 +19,8 @@
   <string name="state_event_room_avatar_removed_by_you">"Siz xonani avatarini o\'chirib tashladingiz"</string>
   <string name="state_event_room_ban">"%1$staqiqlangan%2$s"</string>
   <string name="state_event_room_ban_by_you">"Siz taqiqlangansiz%1$s"</string>
+  <string name="state_event_room_ban_by_you_with_reason">"Siz %1$s: %2$sni blokladingiz"</string>
+  <string name="state_event_room_ban_with_reason">"%1$s %2$s:%3$sni blokladi"</string>
   <string name="state_event_room_created">"%1$sxonani yaratdi"</string>
   <string name="state_event_room_created_by_you">"Siz xonani yaratdingiz"</string>
   <string name="state_event_room_invite">"%1$staklif qilingan%2$s"</string>
@@ -55,6 +57,8 @@
   <string name="state_event_room_reject_by_you">"Siz taklifni rad etdingiz"</string>
   <string name="state_event_room_remove">"%1$s o\'chirildi %2$s"</string>
   <string name="state_event_room_remove_by_you">"Siz o\'chirildingiz %1$s"</string>
+  <string name="state_event_room_remove_by_you_with_reason">"Siz olib tashladingiz %1$s :%2$s"</string>
+  <string name="state_event_room_remove_with_reason">"%1$s %2$s:%3$sni olib tashladi"</string>
   <string name="state_event_room_third_party_invite">"%1$s taklifnoma yubordi %2$sga xonaga qo\'shilish uchun"</string>
   <string name="state_event_room_third_party_invite_by_you">"Siz taklifnoma yubordingiz %1$s ga xonaga qo\'shilishi uchun"</string>
   <string name="state_event_room_third_party_revoked_invite">"%1$s taklifni %2$s ga xonaga qo\'shilish uchun bekor qildi"</string>

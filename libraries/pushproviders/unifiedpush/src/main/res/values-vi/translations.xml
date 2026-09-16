@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <plurals name="troubleshoot_notifications_test_unified_push_success">
+    <item quantity="other">"%1$d nhà phân phối đã tìm thấy: %2$s ."</item>
+  </plurals>
+</resources>

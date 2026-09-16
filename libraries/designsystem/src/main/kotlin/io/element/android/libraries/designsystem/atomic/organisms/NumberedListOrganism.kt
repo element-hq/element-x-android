@@ -9,8 +9,7 @@
 package io.element.android.libraries.designsystem.atomic.organisms
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
@@ -23,11 +22,11 @@ fun NumberedListOrganism(
     items: ImmutableList<AnnotatedString>,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(
+    Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
-        itemsIndexed(items) { index, item ->
+        for ((index, item) in items.withIndex()) {
             NumberedListMolecule(index = index + 1, text = item)
         }
     }

@@ -11,6 +11,7 @@ package io.element.android.libraries.push.impl.notifications
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
+import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.EventId
@@ -22,12 +23,22 @@ import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import io.element.android.libraries.push.impl.notifications.factories.NotificationCreator
+import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
+import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
-import io.element.android.libraries.push.impl.notifications.model.shouldIgnoreEventInRoom
+import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
+import io.element.android.libraries.push.impl.notifications.model.NotifiableRingingCallEvent
+import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
+import io.element.android.libraries.sessionstorage.api.observer.SessionListener
+import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
+import io.element.android.services.appnavstate.api.AppNavigationState
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import io.element.android.services.appnavstate.api.NavigationState
+import io.element.android.services.appnavstate.api.currentRoomId
 import io.element.android.services.appnavstate.api.currentSessionId
+import io.element.android.services.appnavstate.api.currentThreadId
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 /**
@@ -46,9 +57,18 @@ class DefaultNotificationDrawerManager(
     private val matrixClientProvider: MatrixClientProvider,
     private val imageLoaderHolder: ImageLoaderHolder,
     private val activeNotificationsProvider: ActiveNotificationsProvider,
+    private val lockScreenService: LockScreenService,
+    sessionObserver: SessionObserver,
 ) : NotificationCleaner {
     // TODO EAx add a setting per user for this
     private var useCompleteNotificationFormat = true
+
+    private val sessionListener = object : SessionListener {
+        override suspend fun onSessionDeleted(userId: String, wasLastSession: Boolean) {
+            // User signed out, clear all notifications related to the session.
+            clearAllEvents(SessionId(userId))
+        }
+    }
 
     init {
         // Observe application state
@@ -56,36 +76,31 @@ class DefaultNotificationDrawerManager(
             appNavigationStateService.appNavigationState
                 .collect { onAppNavigationStateChange(it.navigationState) }
         }
+        sessionObserver.addListener(sessionListener)
     }
-
-    private var currentAppNavigationState: NavigationState? = null
 
     private fun onAppNavigationStateChange(navigationState: NavigationState) {
         when (navigationState) {
-            NavigationState.Root -> {
-                currentAppNavigationState?.currentSessionId()?.let { sessionId ->
-                    // User signed out, clear all notifications related to the session.
-                    clearAllEvents(sessionId)
-                }
+            NavigationState.Root -> {}
+            is NavigationState.Session -> {
+                // Cleanup the fallback notification
+                clearFallbackForSession(navigationState.sessionId)
             }
-            is NavigationState.Session -> {}
-            is NavigationState.Space -> {}
             is NavigationState.Room -> {
                 // Cleanup notification for current room
                 clearMessagesForRoom(
-                    sessionId = navigationState.parentSpace.parentSession.sessionId,
+                    sessionId = navigationState.parentSession.sessionId,
                     roomId = navigationState.roomId,
                 )
             }
             is NavigationState.Thread -> {
                 clearMessagesForThread(
-                    sessionId = navigationState.parentRoom.parentSpace.parentSession.sessionId,
+                    sessionId = navigationState.parentRoom.parentSession.sessionId,
                     roomId = navigationState.parentRoom.roomId,
                     threadId = navigationState.threadId,
                 )
             }
         }
-        currentAppNavigationState = navigationState
     }
 
     /**
@@ -93,14 +108,11 @@ class DefaultNotificationDrawerManager(
      * Events might be grouped and there might not be one notification per event!
      */
     suspend fun onNotifiableEventReceived(notifiableEvent: NotifiableEvent) {
-        if (notifiableEvent.shouldIgnoreEventInRoom(appNavigationStateService.appNavigationState.value)) {
-            return
-        }
-        renderEvents(listOf(notifiableEvent))
+        onNotifiableEventsReceived(listOf(notifiableEvent))
     }
 
     suspend fun onNotifiableEventsReceived(notifiableEvents: List<NotifiableEvent>) {
-        val eventsToNotify = notifiableEvents.filter { !it.shouldIgnoreEventInRoom(appNavigationStateService.appNavigationState.value) }
+        val eventsToNotify = notifiableEvents.filter { !appNavigationStateService.appNavigationState.value.shouldIgnoreEvent(it) }
         renderEvents(eventsToNotify)
     }
 
@@ -118,6 +130,17 @@ class DefaultNotificationDrawerManager(
     fun clearAllEvents(sessionId: SessionId) {
         activeNotificationsProvider.getNotificationsForSession(sessionId)
             .forEach { notificationDisplayer.cancelNotification(it.tag, it.id) }
+    }
+
+    /**
+     * Remove the fallback notification for the session.
+     */
+    fun clearFallbackForSession(sessionId: SessionId) {
+        notificationDisplayer.cancelNotification(
+            DefaultNotificationDataFactory.FALLBACK_NOTIFICATION_TAG,
+            NotificationIdProvider.getFallbackNotificationId(sessionId),
+        )
+        clearSummaryNotificationIfNeeded(sessionId)
     }
 
     /**
@@ -177,6 +200,8 @@ class DefaultNotificationDrawerManager(
             it.sessionId
         }
 
+        val isAppLocked = lockScreenService.isPinSetup().first()
+
         for ((sessionId, notifiableEvents) in eventsForSessions) {
             val client = matrixClientProvider.getOrRestore(sessionId).getOrThrow()
             val imageLoader = imageLoaderHolder.get(client)
@@ -187,7 +212,85 @@ class DefaultNotificationDrawerManager(
             } else {
                 client.getUserProfile().getOrNull() ?: MatrixUser(sessionId)
             }
-            notificationRenderer.render(currentUser, useCompleteNotificationFormat, notifiableEvents, imageLoader)
+            if (isAppLocked) {
+                // When the app is locked, show a single fallback notification with event count
+                // instead of per-room notifications with message content/sender info.
+                clearAllMessagesEvents(sessionId)
+                val fallbackEvents = notifiableEvents.mapNotNull { it.toFallbackNotifiableEvent() }
+                notificationRenderer.render(
+                    currentUser = currentUser,
+                    useCompleteNotificationFormat = false,
+                    eventsToProcess = fallbackEvents,
+                    imageLoader = imageLoader,
+                )
+            } else {
+                notificationRenderer.render(
+                    currentUser = currentUser,
+                    useCompleteNotificationFormat = useCompleteNotificationFormat,
+                    eventsToProcess = notifiableEvents,
+                    imageLoader = imageLoader,
+                )
+            }
         }
     }
+}
+
+/**
+ * Used to check if a notifiableEvent should be ignored based on the current application navigation state.
+ */
+private fun AppNavigationState.shouldIgnoreEvent(event: NotifiableEvent): Boolean {
+    if (!isInForeground) return false
+    return navigationState.currentSessionId() == event.sessionId &&
+        when (event) {
+            is NotifiableRingingCallEvent -> {
+                // Never ignore ringing call notifications
+                // Note that NotifiableRingingCallEvent are not handled by DefaultNotificationDrawerManager
+                false
+            }
+            is FallbackNotifiableEvent -> {
+                // Ignore if the room list is currently displayed
+                navigationState is NavigationState.Session
+            }
+            is InviteNotifiableEvent,
+            is SimpleNotifiableEvent -> {
+                event.roomId == navigationState.currentRoomId()
+            }
+            is NotifiableMessageEvent -> {
+                event.roomId == navigationState.currentRoomId() &&
+                    event.threadId == navigationState.currentThreadId()
+            }
+        }
+}
+
+/**
+ * Convert a [NotifiableEvent] into a [FallbackNotifiableEvent], stripping all content and sender info.
+ * Used when notification content should be hidden (app locked with PIN).
+ */
+private fun NotifiableEvent.toFallbackNotifiableEvent(): FallbackNotifiableEvent? {
+    val timestamp = when (this) {
+        is NotifiableMessageEvent -> timestamp
+        is InviteNotifiableEvent -> timestamp
+        is SimpleNotifiableEvent -> timestamp
+        is FallbackNotifiableEvent -> timestamp
+        is NotifiableRingingCallEvent -> return null
+    }
+    val noisy = when (this) {
+        is NotifiableMessageEvent -> noisy
+        is InviteNotifiableEvent -> noisy
+        is SimpleNotifiableEvent -> noisy
+        is FallbackNotifiableEvent -> noisy
+    }
+    return FallbackNotifiableEvent(
+        sessionId = sessionId,
+        roomId = roomId,
+        eventId = eventId,
+        editedEventId = null,
+        description = null,
+        canBeReplaced = false,
+        isRedacted = false,
+        isUpdated = false,
+        noisy = noisy,
+        timestamp = timestamp,
+        cause = null,
+    )
 }

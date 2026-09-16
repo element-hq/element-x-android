@@ -11,14 +11,12 @@ package io.element.android.features.rageshake.impl.crash
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.preferences.test.FakePreferenceDataStoreFactory
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class VectorUncaughtExceptionHandlerTest {
+class VectorUncaughtExceptionHandlerTest : RobolectricTest() {
     @Test
     fun `activate should change the default handler`() {
         val sut = VectorUncaughtExceptionHandler(PreferencesCrashDataStore(FakePreferenceDataStoreFactory()))

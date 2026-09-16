@@ -9,6 +9,7 @@
 package io.element.android.libraries.eventformatter.impl
 
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.libraries.core.extensions.DEFAULT_SAFE_LENGTH
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.eventformatter.api.RoomLatestEventFormatter
 import io.element.android.libraries.eventformatter.impl.mode.RenderingMode
@@ -22,8 +23,10 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.GalleryMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.LegacyCallInviteContent
+import io.element.android.libraries.matrix.api.timeline.item.event.LiveLocationContent
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
@@ -52,32 +55,30 @@ class DefaultRoomLatestEventFormatter(
     private val roomMembershipContentFormatter: RoomMembershipContentFormatter,
     private val profileChangeContentFormatter: ProfileChangeContentFormatter,
     private val stateContentFormatter: StateContentFormatter,
+    private val rtcNotificationContentFormatter: RtcNotificationContentFormatter,
     private val permalinkParser: PermalinkParser,
 ) : RoomLatestEventFormatter {
-    companion object {
-        // Max characters to display in the last message. This works around https://github.com/element-hq/element-x-android/issues/2105
-        private const val MAX_SAFE_LENGTH = 500
-    }
+    override fun format(
+        latestEvent: LatestEventValue.Local,
+        isDmRoom: Boolean,
+    ): CharSequence? = formatContent(
+        content = latestEvent.content,
+        isDmRoom = isDmRoom,
+        isOutgoing = true,
+        senderId = latestEvent.senderId,
+        senderDisambiguatedDisplayName = latestEvent.senderProfile.getDisambiguatedDisplayName(latestEvent.senderId)
+    )
 
-    override fun format(latestEvent: LatestEventValue, isDmRoom: Boolean): CharSequence? {
-        return when (latestEvent) {
-            LatestEventValue.None -> null
-            is LatestEventValue.Local -> formatContent(
-                content = latestEvent.content,
-                isDmRoom = isDmRoom,
-                isOutgoing = true,
-                senderId = latestEvent.senderId,
-                senderDisambiguatedDisplayName = latestEvent.senderProfile.getDisambiguatedDisplayName(latestEvent.senderId)
-            )
-            is LatestEventValue.Remote -> formatContent(
-                content = latestEvent.content,
-                isDmRoom = isDmRoom,
-                isOutgoing = latestEvent.isOwn,
-                senderId = latestEvent.senderId,
-                senderDisambiguatedDisplayName = latestEvent.senderProfile.getDisambiguatedDisplayName(latestEvent.senderId)
-            )
-        }
-    }
+    override fun format(
+        latestEvent: LatestEventValue.Remote,
+        isDmRoom: Boolean,
+    ): CharSequence? = formatContent(
+        content = latestEvent.content,
+        isDmRoom = isDmRoom,
+        isOutgoing = latestEvent.isOwn,
+        senderId = latestEvent.senderId,
+        senderDisambiguatedDisplayName = latestEvent.senderProfile.getDisambiguatedDisplayName(latestEvent.senderId)
+    )
 
     private fun formatContent(
         content: EventContent,
@@ -88,13 +89,13 @@ class DefaultRoomLatestEventFormatter(
     ): CharSequence? {
         return when (content) {
             is MessageContent -> content.process(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
-            RedactedContent -> {
+            is RedactedContent -> {
                 val message = sp.getString(CommonStrings.common_message_removed)
                 message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is StickerContent -> {
-                val message = sp.getString(CommonStrings.common_sticker) + " (" + content.bestDescription + ")"
-                message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
+                content.bestDescription.prefixWith(sp.getString(CommonStrings.common_sticker))
+                    .prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is UnableToDecryptContent -> {
                 val message = sp.getString(CommonStrings.common_waiting_for_decryption_key)
@@ -110,16 +111,20 @@ class DefaultRoomLatestEventFormatter(
                 stateContentFormatter.format(content, senderDisambiguatedDisplayName, isOutgoing, RenderingMode.RoomList)
             }
             is PollContent -> {
-                val message = sp.getString(CommonStrings.common_poll_summary, content.question)
-                message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
+                content.question.prefixWith(sp.getString(CommonStrings.common_poll_summary_prefix))
+                    .prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is FailedToParseMessageLikeContent, is FailedToParseStateContent, is UnknownContent -> {
                 val message = sp.getString(CommonStrings.common_unsupported_event)
                 message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
+            is LiveLocationContent -> {
+                val message = sp.getString(CommonStrings.common_shared_live_location)
+                message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
+            }
             is LegacyCallInviteContent -> sp.getString(CommonStrings.common_unsupported_call)
-            is CallNotifyContent -> sp.getString(CommonStrings.common_call_started)
-        }?.take(MAX_SAFE_LENGTH)
+            is CallNotifyContent -> rtcNotificationContentFormatter.format(content, isDmRoom)
+        }?.take(DEFAULT_SAFE_LENGTH)
     }
 
     private fun MessageContent.process(
@@ -130,36 +135,41 @@ class DefaultRoomLatestEventFormatter(
         val message = when (val messageType: MessageType = type) {
             // Doesn't need a prefix
             is EmoteMessageType -> {
-                return "* $senderDisambiguatedDisplayName ${messageType.body}"
+                return "* ${senderDisambiguatedDisplayName.bidiIsolate()} ${messageType.body}"
             }
             is TextMessageType -> {
                 messageType.toPlainText(permalinkParser)
             }
             is VideoMessageType -> {
-                messageType.bestDescription.prefixWith(sp.getString(CommonStrings.common_video))
+                messageType.toPlainText(permalinkParser).prefixWith(sp.getString(CommonStrings.common_video))
             }
             is ImageMessageType -> {
-                messageType.bestDescription.prefixWith(sp.getString(CommonStrings.common_image))
+                messageType.toPlainText(permalinkParser).prefixWith(sp.getString(CommonStrings.common_image))
             }
             is StickerMessageType -> {
-                messageType.bestDescription.prefixWith(sp.getString(CommonStrings.common_sticker))
+                messageType.toPlainText(permalinkParser).prefixWith(sp.getString(CommonStrings.common_sticker))
             }
             is LocationMessageType -> {
                 sp.getString(CommonStrings.common_shared_location)
             }
             is FileMessageType -> {
-                messageType.bestDescription.prefixWith(sp.getString(CommonStrings.common_file))
+                messageType.toPlainText(permalinkParser).prefixWith(sp.getString(CommonStrings.common_file))
             }
             is AudioMessageType -> {
-                messageType.bestDescription.prefixWith(sp.getString(CommonStrings.common_audio))
+                messageType.toPlainText(permalinkParser).prefixWith(sp.getString(CommonStrings.common_audio))
             }
             is VoiceMessageType -> {
-                // In this case, do not use bestDescription, because the filename is useless, only use the caption if available.
-                messageType.caption?.prefixWith(sp.getString(CommonStrings.common_voice_message))
+                messageType
+                    .toPlainText(permalinkParser, "")
+                    .takeIf { it.isNotEmpty() }
+                    ?.prefixWith(sp.getString(CommonStrings.common_voice_message))
                     ?: sp.getString(CommonStrings.common_voice_message)
             }
             is OtherMessageType -> {
                 messageType.body
+            }
+            is GalleryMessageType -> {
+                messageType.body.prefixWith(sp.getString(CommonStrings.common_gallery))
             }
             is NoticeMessageType -> {
                 messageType.body
@@ -179,7 +189,7 @@ class DefaultRoomLatestEventFormatter(
             if (isOutgoing) {
                 sp.getString(CommonStrings.common_you)
             } else {
-                senderDisambiguatedDisplayName
+                senderDisambiguatedDisplayName.bidiIsolate()
             }
         )
     }

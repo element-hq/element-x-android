@@ -9,6 +9,7 @@
 package io.element.android.features.messages.impl.pinned.list
 
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 
 class FakePinnedMessagesListNavigator : PinnedMessagesListNavigator {
@@ -25,5 +26,10 @@ class FakePinnedMessagesListNavigator : PinnedMessagesListNavigator {
     var onForwardEventClickLambda: ((EventId) -> Unit)? = null
     override fun forwardEvent(eventId: EventId) {
         onForwardEventClickLambda?.invoke(eventId)
+    }
+
+    var onOpenThreadLambda: ((ThreadId) -> Unit)? = null
+    override fun navigateToThread(threadRootId: ThreadId) {
+        onOpenThreadLambda?.invoke(threadRootId)
     }
 }

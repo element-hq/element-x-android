@@ -18,7 +18,7 @@ import io.element.android.libraries.voicerecorder.api.VoiceRecorderState
 import io.element.android.libraries.voicerecorder.impl.audio.Audio
 import io.element.android.libraries.voicerecorder.impl.audio.AudioConfig
 import io.element.android.libraries.voicerecorder.impl.audio.SampleRate
-import io.element.android.libraries.voicerecorder.impl.di.VoiceRecorderModule
+import io.element.android.libraries.voicerecorder.impl.di.VoiceRecorderBindingContainer
 import io.element.android.libraries.voicerecorder.test.FakeAudioLevelCalculator
 import io.element.android.libraries.voicerecorder.test.FakeAudioReaderFactory
 import io.element.android.libraries.voicerecorder.test.FakeEncoder
@@ -39,6 +39,7 @@ import kotlin.time.TestTimeSource
 class DefaultVoiceRecorderTest {
     private val fakeFileSystem = FakeFileSystem()
     private val timeSource = TestTimeSource()
+    private val audioReaderFactory = FakeAudioReaderFactory(audio = AUDIO)
 
     @Test
     fun `it emits the initial state`() = runTest {
@@ -110,6 +111,32 @@ class DefaultVoiceRecorderTest {
     }
 
     @Test
+    fun `when startRecord is called twice, the second call is ignored`() = runTest {
+        val voiceRecorder = createDefaultVoiceRecorder()
+        voiceRecorder.state.test {
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Idle)
+
+            voiceRecorder.startRecord()
+            voiceRecorder.startRecord()
+            assertThat(audioReaderFactory.createdCount).isEqualTo(1)
+
+            skipItems(1)
+            timeSource += 5.seconds
+            skipItems(2)
+            voiceRecorder.stopRecord()
+            assertThat(awaitItem()).isEqualTo(
+                VoiceRecorderState.Finished(
+                    file = File(FILE_PATH),
+                    mimeType = MimeTypes.Ogg,
+                    waveform = List(100) { 1f },
+                    duration = 5.seconds,
+                )
+            )
+            expectNoEvents()
+        }
+    }
+
+    @Test
     fun `when cancelled, it deletes the file`() = runTest {
         val voiceRecorder = createDefaultVoiceRecorder()
         voiceRecorder.state.test {
@@ -124,13 +151,11 @@ class DefaultVoiceRecorderTest {
     }
 
     private fun TestScope.createDefaultVoiceRecorder(): DefaultVoiceRecorder {
-        val fileConfig = VoiceRecorderModule.provideVoiceFileConfig()
+        val fileConfig = VoiceRecorderBindingContainer.providesVoiceFileConfig()
         return DefaultVoiceRecorder(
             dispatchers = testCoroutineDispatchers(),
             timeSource = timeSource,
-            audioReaderFactory = FakeAudioReaderFactory(
-                audio = AUDIO,
-            ),
+            audioReaderFactory = audioReaderFactory,
             encoder = FakeEncoder(fakeFileSystem),
             config = AudioConfig(
                 format = audioFormat,

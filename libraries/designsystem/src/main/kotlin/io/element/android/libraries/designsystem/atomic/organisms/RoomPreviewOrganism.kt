@@ -9,6 +9,7 @@
 package io.element.android.libraries.designsystem.atomic.organisms
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,12 +20,12 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun RoomPreviewOrganism(
-    avatar: @Composable () -> Unit,
-    title: @Composable () -> Unit,
-    subtitle: @Composable () -> Unit,
+    avatar: @Composable ColumnScope.() -> Unit,
+    title: @Composable ColumnScope.() -> Unit,
+    subtitle: @Composable ColumnScope.() -> Unit,
     modifier: Modifier = Modifier,
-    description: @Composable (() -> Unit)? = null,
-    memberCount: @Composable (() -> Unit)? = null,
+    description: @Composable (ColumnScope.() -> Unit)? = null,
+    memberCount: @Composable (ColumnScope.() -> Unit)? = null,
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),

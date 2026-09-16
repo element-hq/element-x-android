@@ -11,19 +11,16 @@ package io.element.android.libraries.troubleshoot.impl.history
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,12 +41,14 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
+import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.push.api.history.PushHistoryItem
 import io.element.android.libraries.troubleshoot.impl.R
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -68,7 +67,7 @@ fun PushHistoryView(
             .fillMaxSize()
             .systemBarsPadding()
             .imePadding(),
-        contentWindowInsets = WindowInsets.statusBars,
+        contentWindowInsets = scaffoldScrollableContentInsets,
         topBar = {
             TopAppBar(
                 navigationIcon = {
@@ -101,14 +100,14 @@ fun PushHistoryView(
                             },
                             onClick = {
                                 showMenu = false
-                                state.eventSink(PushHistoryEvents.SetShowOnlyErrors(state.showOnlyErrors.not()))
+                                state.eventSink(PushHistoryEvent.SetShowOnlyErrors(state.showOnlyErrors.not()))
                             },
                         )
                         DropdownMenuItem(
                             text = { Text(stringResource(id = CommonStrings.action_reset)) },
                             onClick = {
                                 showMenu = false
-                                state.eventSink(PushHistoryEvents.Reset(requiresConfirmation = true))
+                                state.eventSink(PushHistoryEvent.Reset(requiresConfirmation = true))
                             },
                         )
                     }
@@ -133,8 +132,8 @@ fun PushHistoryView(
                 title = stringResource(CommonStrings.dialog_title_confirmation),
                 submitText = stringResource(CommonStrings.action_reset),
                 cancelText = stringResource(CommonStrings.action_cancel),
-                onSubmitClick = { state.eventSink(PushHistoryEvents.Reset(requiresConfirmation = false)) },
-                onDismiss = { state.eventSink(PushHistoryEvents.ClearDialog) },
+                onSubmitClick = { state.eventSink(PushHistoryEvent.Reset(requiresConfirmation = false)) },
+                onDismiss = { state.eventSink(PushHistoryEvent.ClearDialog) },
             )
         },
         onErrorDismiss = {},
@@ -143,7 +142,7 @@ fun PushHistoryView(
     if (state.showNotSameAccountError) {
         ErrorDialog(
             content = "Please switch account first to navigate to the event.",
-            onSubmit = { state.eventSink(PushHistoryEvents.ClearDialog) }
+            onSubmit = { state.eventSink(PushHistoryEvent.ClearDialog) }
         )
     }
 }
@@ -157,7 +156,7 @@ private fun PushHistoryContent(
         modifier = modifier.fillMaxWidth()
     ) {
         ListItem(
-            headlineContent = { Text("Total number of received push") },
+            content = { Text("Total number of received push") },
             trailingContent = ListItemContent.Text(state.pushCounter.toString()),
         )
         LazyColumn(
@@ -176,7 +175,7 @@ private fun PushHistoryContent(
                         val roomId = pushHistory.roomId
                         val eventId = pushHistory.eventId
                         if (sessionId != null && roomId != null && eventId != null) {
-                            state.eventSink(PushHistoryEvents.NavigateTo(sessionId, roomId, eventId))
+                            state.eventSink(PushHistoryEvent.NavigateTo(sessionId, roomId, eventId))
                         }
                     }
                 )
@@ -269,7 +268,7 @@ private fun PushHistoryItem(
 @PreviewsDayNight
 @Composable
 internal fun PushHistoryViewPreview(
-    @PreviewParameter(PushHistoryStateProvider::class) state: PushHistoryState,
+    @PreviewParameter(PushHistoryStatePreviewParam::class) state: PushHistoryState,
 ) = ElementPreview {
     PushHistoryView(
         state = state,

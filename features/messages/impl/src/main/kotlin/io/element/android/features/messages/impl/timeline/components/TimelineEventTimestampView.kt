@@ -15,15 +15,18 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.messages.impl.timeline.TimelineEvents
+import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.isEdited
 import io.element.android.features.messages.impl.timeline.model.event.isRedacted
@@ -33,14 +36,14 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
-import io.element.android.libraries.matrix.api.timeline.item.event.isCritical
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun TimelineEventTimestampView(
     event: TimelineItem.Event,
-    eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
+    eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
+    isLayoutDirectionMismatched: Boolean = false,
 ) {
     val formattedTime = event.sentTime
     val hasError = event.failedToSend
@@ -48,9 +51,46 @@ fun TimelineEventTimestampView(
     val isMessageEdited = event.content.isEdited()
     val isMessageRedacted = event.content.isRedacted()
     val tint = if (hasError || hasEncryptionCritical && !isMessageRedacted) ElementTheme.colors.textCriticalPrimary else ElementTheme.colors.textSecondary
+
+    val shield = event.messageShield
+    val isVerifiedUserSendFailure = event.localSendState is LocalEventSendState.Failed.VerifiedUser
+    val onClickLabel = when {
+        shield != null -> stringResource(CommonStrings.a11y_view_details)
+        isVerifiedUserSendFailure -> stringResource(CommonStrings.action_open_context_menu)
+        hasError -> stringResource(CommonStrings.a11y_view_details)
+        else -> null
+    }
+    val clickableModifier = remember(event) {
+        when {
+            shield != null -> {
+                Modifier.clickable(
+                    onClickLabel = onClickLabel,
+                ) {
+                    eventSink(TimelineEvent.ShowShieldDialog(shield))
+                }
+            }
+            hasError -> Modifier
+                .clickable(
+                    onClickLabel = onClickLabel,
+                ) {
+                    eventSink(TimelineEvent.ShowSendFailureDialog(event))
+                }
+            else -> Modifier
+        }
+    }
+
+    val padding = if (!isLayoutDirectionMismatched) {
+        PaddingValues(start = TimelineEventTimestampViewDefaults.spacing)
+    } else {
+        PaddingValues(end = TimelineEventTimestampViewDefaults.spacing)
+    }
+
     Row(
         modifier = Modifier
-            .padding(PaddingValues(start = TimelineEventTimestampViewDefaults.spacing))
+            .padding(padding)
+            // For a better click target, make the corners rounded
+            .clip(RoundedCornerShape(8.dp))
+            .then(clickableModifier)
             .then(modifier),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -68,36 +108,22 @@ fun TimelineEventTimestampView(
             color = tint,
         )
         if (hasError) {
-            val isVerifiedUserSendFailure = event.localSendState is LocalEventSendState.Failed.VerifiedUser
             Spacer(modifier = Modifier.width(2.dp))
             Icon(
                 imageVector = CompoundIcons.ErrorSolid(),
                 contentDescription = stringResource(id = CommonStrings.common_sending_failed),
                 tint = tint,
-                modifier = Modifier
-                    .size(15.dp, 18.dp)
-                    .clickable(
-                        enabled = isVerifiedUserSendFailure,
-                        onClickLabel = stringResource(CommonStrings.action_open_context_menu),
-                    ) {
-                        eventSink(TimelineEvents.ComputeVerifiedUserSendFailure(event))
-                    }
+                modifier = Modifier.size(15.dp, 18.dp),
             )
         }
 
         if (!isMessageRedacted) {
-            event.messageShield?.let { shield ->
+            shield?.let { shield ->
                 Spacer(modifier = Modifier.width(2.dp))
                 Icon(
                     imageVector = shield.toIcon(),
                     contentDescription = stringResource(id = CommonStrings.a11y_encryption_details),
-                    modifier = Modifier
-                        .size(15.dp)
-                        .clickable(
-                            onClickLabel = stringResource(CommonStrings.a11y_view_details),
-                        ) {
-                            eventSink(TimelineEvents.ShowShieldDialog(shield))
-                        },
+                    modifier = Modifier.size(15.dp),
                     tint = shield.toIconColor(),
                 )
                 Spacer(modifier = Modifier.width(4.dp))
@@ -108,7 +134,9 @@ fun TimelineEventTimestampView(
 
 @PreviewsDayNight
 @Composable
-internal fun TimelineEventTimestampViewPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) = ElementPreview {
+internal fun TimelineEventTimestampViewPreview(@PreviewParameter(
+    TimelineItemEventForTimestampViewPreviewParam::class
+) event: TimelineItem.Event) = ElementPreview {
     TimelineEventTimestampView(
         event = event,
         eventSink = {},

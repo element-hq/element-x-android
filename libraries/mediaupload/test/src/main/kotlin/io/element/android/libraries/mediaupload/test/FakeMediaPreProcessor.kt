@@ -31,6 +31,10 @@ class FakeMediaPreProcessor(
     var cleanUpCallCount = 0
         private set
 
+    /** The [MediaOptimizationConfig] passed to the most recent [process] call, or `null` if it was never called. */
+    var lastMediaOptimizationConfig: MediaOptimizationConfig? = null
+        private set
+
     private var result: Result<MediaUploadInfo> = Result.success(
         MediaUploadInfo.AnyFile(
             File("test"),
@@ -51,6 +55,7 @@ class FakeMediaPreProcessor(
     ): Result<MediaUploadInfo> = simulateLongTask {
         processLatch?.await()
         processCallCount++
+        lastMediaOptimizationConfig = mediaOptimizationConfig
         result
     }
 

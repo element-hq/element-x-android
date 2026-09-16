@@ -3,4 +3,10 @@
   <string name="screen_create_room_action_create_room">"Yangi xona"</string>
   <string name="screen_room_directory_search_title">"Xona katalogi"</string>
   <string name="screen_start_chat_error_starting_chat">"Suhbatni boshlashda xatolik yuz berdi"</string>
+  <string name="screen_start_chat_join_room_by_address_action">"Xonaga manzil orqali kirish"</string>
+  <string name="screen_start_chat_join_room_by_address_invalid_address">"Yaroqli manzil emas"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Kirish…"</string>
+  <string name="screen_start_chat_join_room_by_address_room_found">"Mos xona topildi"</string>
+  <string name="screen_start_chat_join_room_by_address_room_not_found">"Xona topilmadi"</string>
+  <string name="screen_start_chat_join_room_by_address_supporting_text">"masalan #xona-nomi:matrix.org"</string>
 </resources>

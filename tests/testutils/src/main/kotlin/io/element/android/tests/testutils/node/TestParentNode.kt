@@ -27,7 +27,7 @@ class TestParentNode<Child : Node>(
     private val childNodeFactory: (buildContext: BuildContext, plugins: List<Plugin>) -> Child,
 ) : DependencyInjectionGraphOwner,
     Node(
-        buildContext = BuildContext.Companion.root(savedStateMap = null),
+        buildContext = BuildContext.root(savedStateMap = null),
         plugins = emptyList(),
         view = EmptyNodeView,
     ) {

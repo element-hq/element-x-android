@@ -57,14 +57,14 @@ fun ErrorDialogWithDoNotShowAgain(
             Column {
                 Text(
                     text = content,
-                    style = ElementTheme.materialTypography.bodyMedium,
+                    style = ElementTheme.typography.fontBodyMdRegular,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Checkbox(checked = doNotShowAgain, onCheckedChange = { doNotShowAgain = it })
                     Text(
                         text = stringResource(id = CommonStrings.common_do_not_show_this_again),
-                        style = ElementTheme.materialTypography.bodyMedium,
+                        style = ElementTheme.typography.fontBodyMdRegular,
                     )
                 }
             }

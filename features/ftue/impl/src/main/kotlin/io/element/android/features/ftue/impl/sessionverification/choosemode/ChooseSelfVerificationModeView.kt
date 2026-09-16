@@ -19,12 +19,16 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.ftue.impl.R
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.designsystem.atomic.atoms.LoadingButtonAtom
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
@@ -89,7 +93,11 @@ fun ChooseSelfVerificationModeView(
             Text(
                 modifier = Modifier
                     .clickable(onClick = onLearnMore)
-                    .padding(vertical = 4.dp, horizontal = 16.dp),
+                    .padding(vertical = 4.dp, horizontal = 16.dp)
+                    .semantics {
+                        // Note: there is no Role.Link, so we use Role.Button for better accessibility support
+                        role = Role.Button
+                    },
                 text = stringResource(CommonStrings.action_learn_more),
                 style = ElementTheme.typography.fontBodyLgMedium
             )
@@ -111,13 +119,7 @@ private fun ChooseSelfVerificationModeButtons(
             AsyncData.Uninitialized,
             is AsyncData.Failure,
             is AsyncData.Loading -> {
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = false,
-                    showProgress = true,
-                    text = stringResource(CommonStrings.common_loading),
-                    onClick = {},
-                )
+                LoadingButtonAtom()
             }
             is AsyncData.Success -> {
                 if (state.buttonsState.data.canUseAnotherDevice) {
@@ -127,10 +129,10 @@ private fun ChooseSelfVerificationModeButtons(
                         onClick = onUseAnotherDevice,
                     )
                 }
-                if (state.buttonsState.data.canEnterRecoveryKey) {
+                if (state.buttonsState.data.canUseRecoveryKey) {
                     Button(
                         modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(R.string.screen_session_verification_enter_recovery_key),
+                        text = stringResource(R.string.screen_identity_confirmation_use_recovery_key),
                         onClick = onUseRecoveryKey,
                     )
                 }
@@ -147,7 +149,7 @@ private fun ChooseSelfVerificationModeButtons(
 @PreviewsDayNight
 @Composable
 internal fun ChooseSelfVerificationModeViewPreview(
-    @PreviewParameter(ChooseSelfVerificationModeStateProvider::class) state: ChooseSelfVerificationModeState
+    @PreviewParameter(ChooseSelfVerificationModeStatePreviewParam::class) state: ChooseSelfVerificationModeState
 ) = ElementPreview {
     ChooseSelfVerificationModeView(
         state = state,

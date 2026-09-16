@@ -14,9 +14,12 @@ import io.element.android.features.lockscreen.impl.biometric.BiometricAuthentica
 import io.element.android.features.lockscreen.impl.biometric.FakeBiometricAuthenticatorManager
 import io.element.android.features.lockscreen.impl.fixtures.aLockScreenConfig
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
+import io.element.android.features.lockscreen.impl.pin.SECRET_KEY_ALIAS
 import io.element.android.features.lockscreen.impl.pin.createDefaultPinCodeManager
 import io.element.android.features.lockscreen.impl.pin.storage.InMemoryLockScreenStore
 import io.element.android.features.lockscreen.impl.storage.LockScreenStore
+import io.element.android.libraries.cryptography.api.SecretKeyRepository
+import io.element.android.libraries.cryptography.test.SimpleSecretKeyRepository
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
 import io.element.android.libraries.sessionstorage.test.observer.FakeSessionObserver
 import io.element.android.services.appnavstate.api.AppForegroundStateService
@@ -38,18 +41,18 @@ class DefaultLockScreenServiceTest {
 
     @Test
     fun `when the pin is mandatory, isSetupRequired emits true`() = runTest {
-        val lockScreenStore = InMemoryLockScreenStore()
+        val secretKeyRepository = SimpleSecretKeyRepository()
         val sut = createDefaultLockScreenService(
             lockScreenConfig = aLockScreenConfig(isPinMandatory = true),
-            lockScreenStore = lockScreenStore,
+            secretKeyRepository = secretKeyRepository,
         )
         sut.isSetupRequired().test {
             assertThat(awaitItem()).isTrue()
             // When the user configures the pin code, the setup is not required anymore
-            lockScreenStore.saveEncryptedPinCode("encryptedCode")
+            secretKeyRepository.getOrCreateKey(SECRET_KEY_ALIAS, true)
             assertThat(awaitItem()).isFalse()
             // Users deletes the pin code
-            lockScreenStore.deleteEncryptedPinCode()
+            secretKeyRepository.deleteKey("elementx.SECRET_KEY_ALIAS_PIN_CODE")
             assertThat(awaitItem()).isTrue()
         }
     }
@@ -57,16 +60,16 @@ class DefaultLockScreenServiceTest {
     @Test
     fun `when the last session is deleted, the pin code is removed`() = runTest {
         val sessionObserver = FakeSessionObserver()
-        val lockScreenStore = InMemoryLockScreenStore()
+        val secretKeyRepository = SimpleSecretKeyRepository()
         val sut = createDefaultLockScreenService(
             lockScreenConfig = aLockScreenConfig(isPinMandatory = true),
-            lockScreenStore = lockScreenStore,
+            secretKeyRepository = secretKeyRepository,
             sessionObserver = sessionObserver,
         )
         sut.isPinSetup().test {
             assertThat(awaitItem()).isFalse()
             // When the user configure the pin code, the setup is not required anymore
-            lockScreenStore.saveEncryptedPinCode("encryptedCode")
+            secretKeyRepository.getOrCreateKey(SECRET_KEY_ALIAS, true)
             assertThat(awaitItem()).isTrue()
             sessionObserver.onSessionDeleted("userId", wasLastSession = false)
             expectNoEvents()
@@ -79,8 +82,10 @@ class DefaultLockScreenServiceTest {
 private fun TestScope.createDefaultLockScreenService(
     lockScreenConfig: LockScreenConfig = aLockScreenConfig(),
     lockScreenStore: LockScreenStore = InMemoryLockScreenStore(),
+    secretKeyRepository: SecretKeyRepository = SimpleSecretKeyRepository(),
     pinCodeManager: PinCodeManager = createDefaultPinCodeManager(
         lockScreenStore = lockScreenStore,
+        secretKeyRepository = secretKeyRepository,
     ),
     sessionObserver: SessionObserver = FakeSessionObserver(),
     appForegroundStateService: AppForegroundStateService = FakeAppForegroundStateService(),

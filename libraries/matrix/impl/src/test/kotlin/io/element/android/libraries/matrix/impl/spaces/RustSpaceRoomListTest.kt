@@ -18,19 +18,18 @@ import io.element.android.libraries.matrix.impl.fixtures.factories.aRustSpaceRoo
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiSpaceRoomList
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
+import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import org.junit.Ignore
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.SpaceListUpdate
 import uniffi.matrix_sdk_ui.SpaceRoomListPaginationState
 import org.matrix.rustcomponents.sdk.SpaceRoomList as InnerSpaceRoomList
 
 class RustSpaceRoomListTest {
-    @Ignore("JNA direct mapping has broken unit tests with FFI fakes")
     @Test
     fun `paginationStatusFlow emits values`() = runTest {
         val innerSpaceRoomList = FakeFfiSpaceRoomList(
@@ -53,7 +52,6 @@ class RustSpaceRoomListTest {
         }
     }
 
-    @Ignore("JNA direct mapping has broken unit tests with FFI fakes")
     @Test
     fun `spaceRoomsFlow emits values`() = runTest {
         val innerSpaceRoomList = FakeFfiSpaceRoomList(
@@ -76,7 +74,6 @@ class RustSpaceRoomListTest {
         }
     }
 
-    @Ignore("JNA direct mapping has broken unit tests with FFI fakes")
     @Test
     fun `paginate invokes paginate on the inner class`() = runTest {
         val paginateResult = lambdaRecorder<Unit> { }
@@ -97,10 +94,11 @@ class RustSpaceRoomListTest {
         spaceRoomMapper: SpaceRoomMapper = SpaceRoomMapper(),
     ): RustSpaceRoomList {
         return RustSpaceRoomList(
-            roomId = roomId,
+            spaceId = roomId,
             innerProvider = innerProvider,
             coroutineScope = backgroundScope,
             spaceRoomMapper = spaceRoomMapper,
+            analyticsService = FakeAnalyticsService(),
         )
     }
 }

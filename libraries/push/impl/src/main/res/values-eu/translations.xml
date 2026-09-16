@@ -53,6 +53,7 @@
   <string name="push_distributor_background_sync_android">"Atzeko planoko sinkronizazioa"</string>
   <string name="push_distributor_firebase_android">"Google Services"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Ez da baliozko Google Play Servicerik aurkitu. Litekeena da jakinarazpenak behar bezala ez ibiltzea."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_title">"Blokeatutako erabiltzaileak"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Lortu uneko hornitzailearen izena."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Ez da push hornitzailerik hautatu."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Uneko push hornitzailea: %1$s."</string>

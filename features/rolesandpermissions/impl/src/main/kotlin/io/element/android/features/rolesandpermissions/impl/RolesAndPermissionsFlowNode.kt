@@ -14,7 +14,10 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -25,17 +28,24 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.rolesandpermissions.api.ChangeRoomMemberRolesListType
+import io.element.android.features.rolesandpermissions.api.RolesAndPermissionsEntryPoint
 import io.element.android.features.rolesandpermissions.impl.permissions.ChangeRoomPermissionsNode
 import io.element.android.features.rolesandpermissions.impl.roles.ChangeRolesNode
 import io.element.android.features.rolesandpermissions.impl.root.RolesAndPermissionsNode
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
+import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.designsystem.components.async.AsyncIndicator
 import io.element.android.libraries.designsystem.components.async.AsyncIndicatorHost
 import io.element.android.libraries.designsystem.components.async.AsyncIndicatorState
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.room.powerlevels.canEditRolesAndPermissions
+import io.element.android.libraries.matrix.api.room.powerlevels.permissionsFlow
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
@@ -44,6 +54,7 @@ import kotlinx.parcelize.Parcelize
 class RolesAndPermissionsFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    private val room: JoinedRoom,
 ) : BaseFlowNode<RolesAndPermissionsFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
@@ -66,6 +77,7 @@ class RolesAndPermissionsFlowNode(
         data object ChangeRoomPermissions : NavTarget
     }
 
+    private val callback: RolesAndPermissionsEntryPoint.Callback = callback()
     private val asyncIndicatorState = AsyncIndicatorState()
 
     override fun onBuilt() {
@@ -74,6 +86,15 @@ class RolesAndPermissionsFlowNode(
             lifecycle.coroutineScope.launch {
                 val changesSaved = node.waitForCompletion()
                 onChangeComplete(changesSaved)
+            }
+        }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.CREATED) {
+                room.permissionsFlow(false) { perms -> perms.canEditRolesAndPermissions() }
+                    .filter { canEdit -> !canEdit }
+                    .first()
+                // If the user can no longer edit roles and permissions, exit the flow
+                callback.onDone()
             }
         }
     }

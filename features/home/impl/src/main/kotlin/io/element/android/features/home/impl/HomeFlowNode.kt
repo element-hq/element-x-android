@@ -14,7 +14,10 @@ import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
 import com.bumble.appyx.core.lifecycle.subscribe
@@ -32,7 +35,7 @@ import io.element.android.annotations.ContributesNode
 import io.element.android.features.home.api.HomeEntryPoint
 import io.element.android.features.home.impl.components.RoomListMenuAction
 import io.element.android.features.home.impl.model.RoomListRoomSummary
-import io.element.android.features.home.impl.roomlist.RoomListEvents
+import io.element.android.features.home.impl.roomlist.RoomListEvent
 import io.element.android.features.invite.api.InviteData
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteView
 import io.element.android.features.invite.api.declineandblock.DeclineInviteAndBlockEntryPoint
@@ -41,20 +44,34 @@ import io.element.android.features.logout.api.direct.DirectLogoutView
 import io.element.android.features.reportroom.api.ReportRoomEntryPoint
 import io.element.android.features.rolesandpermissions.api.ChangeRoomMemberRolesEntryPoint
 import io.element.android.features.rolesandpermissions.api.ChangeRoomMemberRolesListType
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.appyx.launchMolecule
 import io.element.android.libraries.architecture.callback
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.deeplink.api.usecase.InviteFriendsUseCase
+import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.utils.DelayedVisibility
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.services.analytics.api.AnalyticsService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
+import kotlin.coroutines.cancellation.CancellationException
+import kotlin.time.Duration.Companion.milliseconds
 
 @ContributesNode(SessionScope::class)
 @AssistedInject
@@ -71,6 +88,7 @@ class HomeFlowNode(
     private val declineInviteAndBlockUserEntryPoint: DeclineInviteAndBlockEntryPoint,
     private val changeRoomMemberRolesEntryPoint: ChangeRoomMemberRolesEntryPoint,
     private val leaveRoomRenderer: LeaveRoomRenderer,
+    @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
 ) : BaseFlowNode<HomeFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
@@ -143,18 +161,70 @@ class HomeFlowNode(
     }
 
     private fun onNewOwnersSelected(roomId: RoomId) {
-        stateFlow.value.roomListState.eventSink(RoomListEvents.LeaveRoom(roomId, needsConfirmation = false))
+        stateFlow.value.roomListState.eventSink(RoomListEvent.LeaveRoom(roomId, needsConfirmation = false))
     }
 
     private fun rootNode(buildContext: BuildContext): Node {
         return node(buildContext) { modifier ->
             val state by stateFlow.collectAsState()
             val activity = requireNotNull(LocalActivity.current)
+
+            val loadingJoinedRoomJob = remember { mutableStateOf<AsyncData<Job>>(AsyncData.Uninitialized) }
+            if (loadingJoinedRoomJob.value.isLoading()) {
+                DelayedVisibility(duration = 400.milliseconds) {
+                    ProgressDialog(
+                        properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true),
+                        onDismissRequest = {
+                            loadingJoinedRoomJob.value.dataOrNull()?.cancel()
+                            loadingJoinedRoomJob.value = AsyncData.Uninitialized
+                        }
+                    )
+                }
+            }
+
+            fun navigateToRoom(
+                roomId: RoomId,
+                eventId: EventId?,
+            ) {
+                if (!loadingJoinedRoomJob.value.isUninitialized()) {
+                    Timber.w("Already loading a room, ignoring navigateToRoom for $roomId")
+                    return
+                }
+
+                val job = sessionCoroutineScope.launch {
+                    runCatchingExceptions {
+                        matrixClient.getJoinedRoom(roomId)
+                    }.fold(
+                        onSuccess = { joinedRoom ->
+                            if (isActive) {
+                                callback.navigateToRoom(roomId = roomId, eventId = eventId, joinedRoom = joinedRoom)
+                                loadingJoinedRoomJob.value = AsyncData.Success(coroutineContext.job)
+                                // Wait a bit before resetting the state to avoid allowing to open several rooms
+                                delay(200.milliseconds)
+                                loadingJoinedRoomJob.value = AsyncData.Uninitialized
+                            }
+                        },
+                        onFailure = {
+                            // If the operation wasn't cancelled, navigate without the room, using the room id
+                            if (it !is CancellationException) {
+                                callback.navigateToRoom(roomId = roomId, eventId = null, joinedRoom = null)
+                            }
+                            loadingJoinedRoomJob.value = AsyncData.Failure(error = it, prevData = coroutineContext.job)
+                            // Wait a bit before resetting the state to avoid allowing to open several rooms
+                            delay(200.milliseconds)
+                            loadingJoinedRoomJob.value = AsyncData.Uninitialized
+                        }
+                    )
+                }
+                loadingJoinedRoomJob.value = AsyncData.Loading(job)
+            }
+
             HomeView(
                 homeState = state,
-                onRoomClick = callback::navigateToRoom,
+                onRoomClick = ::navigateToRoom,
                 onSettingsClick = callback::navigateToSettings,
                 onStartChatClick = callback::navigateToCreateRoom,
+                onCreateSpaceClick = callback::navigateToCreateSpace,
                 onSetUpRecoveryClick = callback::navigateToSetUpRecovery,
                 onConfirmRecoveryKeyClick = callback::navigateToEnterRecoveryKey,
                 onRoomSettingsClick = callback::navigateToRoomSettings,
@@ -165,7 +235,7 @@ class HomeFlowNode(
                 acceptDeclineInviteView = {
                     acceptDeclineInviteView.Render(
                         state = state.roomListState.acceptDeclineInviteState,
-                        onAcceptInviteSuccess = callback::navigateToRoom,
+                        onAcceptInviteSuccess = { navigateToRoom(roomId = it, eventId = null) },
                         onDeclineInviteSuccess = { },
                         modifier = Modifier
                     )
@@ -201,6 +271,11 @@ class HomeFlowNode(
                     parentNode = this,
                     buildContext = buildContext,
                     inviteData = navTarget.inviteData,
+                    callback = object : DeclineInviteAndBlockEntryPoint.Callback {
+                        override fun onDeclineSuccess() {
+                            backstack.pop()
+                        }
+                    },
                 )
             }
             is NavTarget.SelectNewOwnersWhenLeavingRoom -> {

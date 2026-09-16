@@ -8,9 +8,11 @@
 
 package io.element.android.libraries.permissions.impl.action
 
+import android.Manifest
 import android.content.Context
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.libraries.androidutils.system.openAppSettingsPage
 import io.element.android.libraries.androidutils.system.startNotificationSettingsIntent
 import io.element.android.libraries.di.annotations.ApplicationContext
 
@@ -18,7 +20,10 @@ import io.element.android.libraries.di.annotations.ApplicationContext
 class AndroidPermissionActions(
     @ApplicationContext private val context: Context
 ) : PermissionActions {
-    override fun openSettings() {
-        context.startNotificationSettingsIntent()
+    override fun openSettings(permission: String) {
+        when (permission) {
+            Manifest.permission.POST_NOTIFICATIONS -> context.startNotificationSettingsIntent()
+            else -> context.openAppSettingsPage()
+        }
     }
 }

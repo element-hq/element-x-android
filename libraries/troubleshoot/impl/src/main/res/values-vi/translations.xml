@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_screen_action">"Chạy thử nghiệm"</string>
+  <string name="troubleshoot_notifications_screen_notice">"Chạy các bài kiểm tra để phát hiện vấn đề trong cấu hình có thể khiến thông báo không hoạt động như mong đợi."</string>
+  <string name="troubleshoot_notifications_screen_title">"Khắc phục sự cố thông báo"</string>
+</resources>

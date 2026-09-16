@@ -3,9 +3,11 @@
   <string name="banner_battery_optimization_content_android">"이 앱의 배터리 최적화를 비활성화하여 모든 알림이 정상적으로 수신되도록 합니다."</string>
   <string name="banner_battery_optimization_submit_android">"최적화 비활성화"</string>
   <string name="banner_battery_optimization_title_android">"알림이 도착하지 않나요?"</string>
-  <string name="banner_set_up_recovery_content">"기존의 모든 기기를 분실한 경우 복구 키를 사용하여 암호화된 ID 및 메시지 기록을 복구할 수 있습니다."</string>
-  <string name="banner_set_up_recovery_submit">"복구 설정"</string>
-  <string name="banner_set_up_recovery_title">"계정을 보호하기 위해 복구를 설정하세요"</string>
+  <string name="banner_new_sound_message">"알림음이 업데이트되었습니다. 더욱 명확하고 빠르면서도, 방해는 최소화하도록 개선되었습니다."</string>
+  <string name="banner_new_sound_title">"앱 알림음이 새롭게 바뀌었습니다."</string>
+  <string name="banner_set_up_recovery_content">"대화 내용은 종단간 암호화 기술로 자동 백업됩니다. 모든 기기를 사용할 수 없는 상황에서 백업을 복구하고 디지털 신원을 유지하려면 복구 키가 반드시 필요합니다."</string>
+  <string name="banner_set_up_recovery_submit">"복구 키 가져오기"</string>
+  <string name="banner_set_up_recovery_title">"대화 백업하기"</string>
   <string name="confirm_recovery_key_banner_message">"키 저장소 및 메시지 기록에 대한 액세스를 유지하려면 복구 키를 확인하세요."</string>
   <string name="confirm_recovery_key_banner_primary_button_title">"복구 키를 입력하세요"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"복구 키를 잊으셨나요?"</string>
@@ -48,6 +50,7 @@
   <string name="screen_roomlist_mark_as_read">"읽음으로 표시"</string>
   <string name="screen_roomlist_mark_as_unread">"읽지 않음으로 표시"</string>
   <string name="screen_roomlist_tombstoned_room_description">"이 방이 업그레이드되었습니다"</string>
+  <string name="screen_roomlist_your_spaces">"내 스페이스"</string>
   <string name="session_verification_banner_message">"새 장치를 사용 중인 것 같습니다. 다른 디바이스로 인증하여 암호화된 메시지에 액세스하세요."</string>
   <string name="session_verification_banner_title">"본인인지 확인하세요"</string>
 </resources>

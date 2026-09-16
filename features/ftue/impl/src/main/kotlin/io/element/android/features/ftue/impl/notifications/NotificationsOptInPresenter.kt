@@ -19,7 +19,7 @@ import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.permissions.api.PermissionStateProvider
-import io.element.android.libraries.permissions.api.PermissionsEvents
+import io.element.android.libraries.permissions.api.PermissionsEvent
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.noop.NoopPermissionsPresenter
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
@@ -52,16 +52,16 @@ class NotificationsOptInPresenter(
     override fun present(): NotificationsOptInState {
         val notificationsPermissionsState = postNotificationPermissionsPresenter.present()
 
-        fun handleEvent(event: NotificationsOptInEvents) {
+        fun handleEvent(event: NotificationsOptInEvent) {
             when (event) {
-                NotificationsOptInEvents.ContinueClicked -> {
+                NotificationsOptInEvent.ContinueClicked -> {
                     if (notificationsPermissionsState.permissionGranted) {
                         callback.onNotificationsOptInFinished()
                     } else {
-                        notificationsPermissionsState.eventSink(PermissionsEvents.RequestPermissions)
+                        notificationsPermissionsState.eventSink(PermissionsEvent.RequestPermissions)
                     }
                 }
-                NotificationsOptInEvents.NotNowClicked -> {
+                NotificationsOptInEvent.NotNowClicked -> {
                     if (buildVersionSdkIntProvider.isAtLeast(Build.VERSION_CODES.TIRAMISU)) {
                         appCoroutineScope.setPermissionDenied()
                     }

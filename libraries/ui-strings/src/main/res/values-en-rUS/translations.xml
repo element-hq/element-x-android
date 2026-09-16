@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_collapse_message_text_field">"Minimize message text field"</string>
   <string name="action_minimize">"Minimize"</string>
   <string name="common_favourite">"Favorite"</string>
   <string name="common_favourited">"Favorited"</string>
+  <string name="crypto_history_visible">"This room has been configured so that new members can read history. %1$s"</string>
 </resources>

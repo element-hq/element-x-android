@@ -15,8 +15,12 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.common.truth.Truth.assertThat
 import io.element.android.appconfig.NotificationConfig
+import io.element.android.features.enterprise.api.EnterpriseService
+import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.A_COLOR_INT
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -30,27 +34,29 @@ import io.element.android.libraries.push.impl.notifications.DefaultNotificationB
 import io.element.android.libraries.push.impl.notifications.NotificationActionIds
 import io.element.android.libraries.push.impl.notifications.RoomEventGroupInfo
 import io.element.android.libraries.push.impl.notifications.channels.DefaultNotificationChannels
+import io.element.android.libraries.push.impl.notifications.channels.FakeNotificationChannels
 import io.element.android.libraries.push.impl.notifications.channels.NotificationChannels
 import io.element.android.libraries.push.impl.notifications.factories.action.AcceptInvitationActionFactory
 import io.element.android.libraries.push.impl.notifications.factories.action.MarkAsReadActionFactory
 import io.element.android.libraries.push.impl.notifications.factories.action.QuickReplyActionFactory
 import io.element.android.libraries.push.impl.notifications.factories.action.RejectInvitationActionFactory
+import io.element.android.libraries.push.impl.notifications.fixtures.aFallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
-import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
+import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.services.toolbox.test.systemclock.A_FAKE_TIMESTAMP
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
+import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
-@RunWith(RobolectricTestRunner::class)
-class DefaultNotificationCreatorTest {
+class DefaultNotificationCreatorTest : RobolectricTest() {
     @Test
     fun `test createDiagnosticNotification`() {
         val sut = createNotificationCreator()
@@ -80,25 +86,64 @@ class DefaultNotificationCreatorTest {
 
     @Test
     fun `test createFallbackNotification`() {
-        val sut = createNotificationCreator()
+        val channelIdForMessage = lambdaRecorder<SessionId, Boolean, String> { _, _ -> A_CHANNEL_ID }
+        val sut = createNotificationCreator(
+            notificationChannels = FakeNotificationChannels(channelIdForMessage = channelIdForMessage),
+        )
         val result = sut.createFallbackNotification(
+            existingNotification = null,
             notificationAccountParams = aNotificationAccountParams(),
-            FallbackNotifiableEvent(
-                sessionId = A_SESSION_ID,
-                roomId = A_ROOM_ID,
-                eventId = AN_EVENT_ID,
-                editedEventId = null,
-                description = "description",
-                canBeReplaced = false,
-                isRedacted = false,
-                isUpdated = false,
-                timestamp = A_FAKE_TIMESTAMP,
-                cause = null,
-            ),
+            fallbackNotifiableEvents = listOf(
+                aFallbackNotifiableEvent(),
+            )
         )
         result.commonAssertions(
             expectedCategory = null,
         )
+        assertThat(result.channelId).isEqualTo(A_CHANNEL_ID)
+        // The notification must be posted on the silent channel.
+        channelIdForMessage.assertions().isCalledOnce().with(value(A_SESSION_ID), value(false))
+    }
+
+    @Test
+    fun `test createFallbackNotification noisy`() {
+        val channelIdForMessage = lambdaRecorder<SessionId, Boolean, String> { _, _ -> A_CHANNEL_ID }
+        val sut = createNotificationCreator(
+            notificationChannels = FakeNotificationChannels(channelIdForMessage = channelIdForMessage),
+        )
+        val result = sut.createFallbackNotification(
+            existingNotification = null,
+            notificationAccountParams = aNotificationAccountParams(),
+            fallbackNotifiableEvents = listOf(
+                aFallbackNotifiableEvent(noisy = true),
+            )
+        )
+        result.commonAssertions(
+            expectedCategory = null,
+        )
+        assertThat(result.channelId).isEqualTo(A_CHANNEL_ID)
+        // The notification must be posted on the noisy channel.
+        channelIdForMessage.assertions().isCalledOnce().with(value(A_SESSION_ID), value(true))
+    }
+
+    @Test
+    fun `test createFallbackNotification is noisy when at least one event is noisy`() {
+        val channelIdForMessage = lambdaRecorder<SessionId, Boolean, String> { _, _ -> A_CHANNEL_ID }
+        val sut = createNotificationCreator(
+            notificationChannels = FakeNotificationChannels(channelIdForMessage = channelIdForMessage),
+        )
+        val result = sut.createFallbackNotification(
+            existingNotification = null,
+            notificationAccountParams = aNotificationAccountParams(),
+            fallbackNotifiableEvents = listOf(
+                aFallbackNotifiableEvent(noisy = false),
+                aFallbackNotifiableEvent(eventId = AN_EVENT_ID_2, noisy = true),
+            )
+        )
+        result.commonAssertions(
+            expectedCategory = null,
+        )
+        channelIdForMessage.assertions().isCalledOnce().with(value(A_SESSION_ID), value(true))
     }
 
     @Test
@@ -129,7 +174,11 @@ class DefaultNotificationCreatorTest {
 
     @Test
     fun `test createSimpleEventNotification noisy`() {
-        val sut = createNotificationCreator()
+        val sut = createNotificationCreator(
+            enterpriseService = FakeEnterpriseService(
+                getNoisyNotificationChannelIdResult = { null },
+            ),
+        )
         val result = sut.createSimpleEventNotification(
             notificationAccountParams = aNotificationAccountParams(),
             SimpleNotifiableEvent(
@@ -189,7 +238,11 @@ class DefaultNotificationCreatorTest {
 
     @Test
     fun `test createRoomInvitationNotification noisy`() {
-        val sut = createNotificationCreator()
+        val sut = createNotificationCreator(
+            enterpriseService = FakeEnterpriseService(
+                getNoisyNotificationChannelIdResult = { null },
+            ),
+        )
         val result = sut.createRoomInvitationNotification(
             notificationAccountParams = aNotificationAccountParams(),
             InviteNotifiableEvent(
@@ -231,7 +284,11 @@ class DefaultNotificationCreatorTest {
 
     @Test
     fun `test createSummaryListNotification noisy`() {
-        val sut = createNotificationCreator()
+        val sut = createNotificationCreator(
+            enterpriseService = FakeEnterpriseService(
+                getNoisyNotificationChannelIdResult = { null },
+            ),
+        )
         val matrixUser = aMatrixUser()
         val result = sut.createSummaryListNotification(
             notificationAccountParams = aNotificationAccountParams(user = matrixUser),
@@ -271,7 +328,11 @@ class DefaultNotificationCreatorTest {
 
     @Test
     fun `test createMessagesListNotification should bing and thread`() = runTest {
-        val sut = createNotificationCreator()
+        val sut = createNotificationCreator(
+            enterpriseService = FakeEnterpriseService(
+                getNoisyNotificationChannelIdResult = { null },
+            ),
+        )
         val result = sut.createMessagesListNotification(
             notificationAccountParams = aNotificationAccountParams(),
             roomInfo = RoomEventGroupInfo(
@@ -294,6 +355,81 @@ class DefaultNotificationCreatorTest {
         result.commonAssertions()
     }
 
+    @Test
+    fun `test createMessagesListNotification does not add an event which is already displayed`() = runTest {
+        val sut = createNotificationCreator()
+        val event = aNotifiableMessageEvent(body = "A message")
+        val existingNotification = sut.createRoomNotification(events = listOf(event))
+        assertThat(existingNotification.flags and Notification.FLAG_ONLY_ALERT_ONCE).isEqualTo(0)
+        val result = sut.createRoomNotification(events = listOf(event), existingNotification = existingNotification)
+        assertThat(result.messageTexts()).containsExactly("A message")
+        assertThat(result.flags and Notification.FLAG_ONLY_ALERT_ONCE).isNotEqualTo(0)
+    }
+
+    @Test
+    fun `test createMessagesListNotification adds a new event to the already displayed ones`() = runTest {
+        val sut = createNotificationCreator()
+        val existingNotification = sut.createRoomNotification(events = listOf(aNotifiableMessageEvent(body = "A message")))
+        val result = sut.createRoomNotification(
+            events = listOf(aNotifiableMessageEvent(eventId = AN_EVENT_ID_2, body = "Another message")),
+            existingNotification = existingNotification,
+        )
+        assertThat(result.messageTexts()).containsExactly("A message", "Another message").inOrder()
+    }
+
+    @Test
+    fun `test createMessagesListNotification adds the smart reply error of an already displayed event`() = runTest {
+        val sut = createNotificationCreator()
+        val event = aNotifiableMessageEvent(body = "A message").copy(outGoingMessage = true)
+        val existingNotification = sut.createRoomNotification(events = listOf(event))
+        val result = sut.createRoomNotification(
+            events = listOf(event.copy(outGoingMessageFailed = true)),
+            existingNotification = existingNotification,
+        )
+        assertThat(result.messageTexts()).containsExactly("A message", "test").inOrder()
+    }
+
+    @Test
+    fun `test createMessagesListNotification does not add an image and its caption twice`() = runTest {
+        val sut = createNotificationCreator()
+        val event = aNotifiableMessageEvent(body = "A caption").copy(
+            imageUriString = "aUri",
+            imageMimeType = "image/jpeg",
+        )
+        val existingNotification = sut.createRoomNotification(events = listOf(event))
+        assertThat(existingNotification.messageTexts()).containsExactly("test", "A caption").inOrder()
+        val result = sut.createRoomNotification(events = listOf(event), existingNotification = existingNotification)
+        assertThat(result.messageTexts()).containsExactly("test", "A caption").inOrder()
+    }
+
+    private suspend fun NotificationCreator.createRoomNotification(
+        events: List<NotifiableMessageEvent>,
+        existingNotification: Notification? = null,
+    ) = createMessagesListNotification(
+        notificationAccountParams = aNotificationAccountParams(),
+        roomInfo = RoomEventGroupInfo(
+            sessionId = A_SESSION_ID,
+            roomId = A_ROOM_ID,
+            roomDisplayName = "roomDisplayName",
+            hasSmartReplyError = false,
+            shouldBing = false,
+            customSound = null,
+            isUpdated = false,
+        ),
+        threadId = null,
+        largeIcon = null,
+        lastMessageTimestamp = 123_456L,
+        tickerText = "tickerText",
+        existingNotification = existingNotification,
+        imageLoader = FakeImageLoader(),
+        events = events,
+    )
+
+    private fun Notification.messageTexts(): List<String?> {
+        val messagingStyle = checkNotNull(NotificationCompat.MessagingStyle.extractMessagingStyleFromNotification(this))
+        return messagingStyle.messages.map { it.text?.toString() }
+    }
+
     private fun Notification.commonAssertions(
         expectedGroup: String? = aMatrixUser().userId.value,
         expectedCategory: String? = NotificationCompat.CATEGORY_MESSAGE,
@@ -304,6 +440,8 @@ class DefaultNotificationCreatorTest {
     }
 }
 
+private const val A_CHANNEL_ID = "aChannelId"
+
 const val MARK_AS_READ_ACTION_TITLE = "MarkAsReadAction"
 const val QUICK_REPLY_ACTION_TITLE = "QuickReplyAction"
 const val ACCEPT_INVITATION_ACTION_TITLE = "AcceptInvitationAction"
@@ -312,7 +450,8 @@ const val REJECT_INVITATION_ACTION_TITLE = "RejectInvitationAction"
 fun createNotificationCreator(
     context: Context = RuntimeEnvironment.getApplication(),
     buildMeta: BuildMeta = aBuildMeta(),
-    notificationChannels: NotificationChannels = createNotificationChannels(),
+    enterpriseService: EnterpriseService = FakeEnterpriseService(),
+    notificationChannels: NotificationChannels = createNotificationChannels(enterpriseService),
     bitmapLoader: NotificationBitmapLoader = DefaultNotificationBitmapLoader(
         context = context,
         sdkIntProvider = FakeBuildVersionSdkIntProvider(Build.VERSION_CODES.R),
@@ -358,11 +497,16 @@ fun createNotificationCreator(
     )
 }
 
-fun createNotificationChannels(): NotificationChannels {
+fun createNotificationChannels(
+    enterpriseService: EnterpriseService = FakeEnterpriseService(),
+): NotificationChannels {
     val context = RuntimeEnvironment.getApplication()
+    val notificationManagerCompat = NotificationManagerCompat.from(context)
     return DefaultNotificationChannels(
-        notificationManager = NotificationManagerCompat.from(context),
+        notificationManager = notificationManagerCompat,
         stringProvider = FakeStringProvider(""),
         context = context,
+        enterpriseService = enterpriseService,
+        appPreferencesStore = io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore(),
     )
 }

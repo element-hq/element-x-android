@@ -13,7 +13,17 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import kotlin.time.Duration
 
+/**
+ * Creates the presenter of a single voice message player, one per voice message shown in a timeline.
+ */
 interface VoiceMessagePresenterFactory {
+    /**
+     * @param eventId the event carrying the voice message, or `null` while it is still a local echo.
+     * @param mediaSource where the audio is fetched from.
+     * @param mimeType the MIME type of the audio, or `null` when the event did not state it.
+     * @param filename the file name to display, or `null` when the event did not state it.
+     * @param duration the length of the recording, used to render the waveform before the audio is downloaded.
+     */
     fun createVoiceMessagePresenter(
         eventId: EventId?,
         mediaSource: MediaSource,

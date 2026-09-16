@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Activiteiten"</string>
+  <string name="emoji_picker_category_flags">"Vlaggen"</string>
+  <string name="emoji_picker_category_foods">"Eten &amp; Drinken"</string>
+  <string name="emoji_picker_category_nature">"Dieren &amp; Natuur"</string>
+  <string name="emoji_picker_category_objects">"Voorwerpen"</string>
+  <string name="emoji_picker_category_people">"Smileys &amp; Mensen"</string>
+  <string name="emoji_picker_category_places">"Reizen &amp; Locaties"</string>
+  <string name="emoji_picker_category_symbols">"Symbolen"</string>
+</resources>

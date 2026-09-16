@@ -8,17 +8,15 @@
 
 package io.element.android.features.rageshake.impl.crash.ui
 
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.rageshake.api.crash.CrashDetectionEvents
+import io.element.android.features.rageshake.api.crash.CrashDetectionEvent
 import io.element.android.features.rageshake.impl.crash.A_CRASH_DATA
 import io.element.android.features.rageshake.impl.crash.DefaultCrashDetectionPresenter
 import io.element.android.features.rageshake.impl.crash.FakeCrashDataStore
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.test
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
@@ -33,9 +31,7 @@ class CrashDetectionPresenterTest {
     @Test
     fun `present - initial state no crash`() = runTest {
         val presenter = createPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.crashDetected).isFalse()
         }
@@ -46,9 +42,7 @@ class CrashDetectionPresenterTest {
         val presenter = createPresenter(
             FakeCrashDataStore(appHasCrashed = true)
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.crashDetected).isTrue()
@@ -61,9 +55,7 @@ class CrashDetectionPresenterTest {
             FakeCrashDataStore(appHasCrashed = true),
             isFeatureAvailableFlow = flowOf(false),
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.crashDetected).isFalse()
         }
@@ -74,13 +66,11 @@ class CrashDetectionPresenterTest {
         val presenter = createPresenter(
             FakeCrashDataStore(appHasCrashed = true)
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.crashDetected).isTrue()
-            initialState.eventSink.invoke(CrashDetectionEvents.ResetAppHasCrashed)
+            initialState.eventSink.invoke(CrashDetectionEvent.ResetAppHasCrashed)
             assertThat(awaitItem().crashDetected).isFalse()
         }
     }
@@ -90,13 +80,11 @@ class CrashDetectionPresenterTest {
         val presenter = createPresenter(
             FakeCrashDataStore(appHasCrashed = true, crashData = A_CRASH_DATA)
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.crashDetected).isTrue()
-            initialState.eventSink.invoke(CrashDetectionEvents.ResetAllCrashData)
+            initialState.eventSink.invoke(CrashDetectionEvent.ResetAllCrashData)
             assertThat(awaitItem().crashDetected).isFalse()
         }
     }
@@ -109,9 +97,7 @@ class CrashDetectionPresenterTest {
             crashDataStore = crashDataStore,
             isFeatureAvailableFlow = isFeatureAvailableFlow,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.crashDetected).isFalse()
             crashDataStore.setCrashData("Some crash data")

@@ -9,7 +9,7 @@
   <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"Denne kommer kunna gå med i rummet igen om denne bjuds in"</string>
   <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"Är du säker på att du vill ta bort den här medlemmen?"</string>
   <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Visa profil"</string>
-  <string name="screen_bottom_sheet_manage_room_member_remove">"Ta bort från rummet"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Ta bort användare"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Ta bort medlem och banna från att gå med i framtiden?"</string>
   <string name="screen_bottom_sheet_manage_room_member_removing_user">"Tar bort %1$s …"</string>
   <string name="screen_bottom_sheet_manage_room_member_unban">"Avbanna från rummet"</string>

@@ -11,7 +11,13 @@ package io.element.android.libraries.permissions.api
 import io.element.android.libraries.architecture.Presenter
 
 interface PermissionsPresenter : Presenter<PermissionsState> {
+    /**
+     * Creates a presenter dedicated to one permission.
+     */
     interface Factory {
+        /**
+         * @param permission the Android permission name this presenter will request.
+         */
         fun create(permission: String): PermissionsPresenter
     }
 }

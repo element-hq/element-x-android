@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.matrix.impl.room
 
+import io.element.android.appconfig.TimelineConfig
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.core.extensions.mapFailure
@@ -26,12 +27,15 @@ import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettingsState
+import io.element.android.libraries.matrix.api.room.SendQueueUpdate
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.knock.KnockRequest
+import io.element.android.libraries.matrix.api.room.location.LiveLocationShare
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsValues
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
+import io.element.android.libraries.matrix.api.room.threads.ThreadsListService
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
@@ -41,9 +45,15 @@ import io.element.android.libraries.matrix.impl.mapper.map
 import io.element.android.libraries.matrix.impl.room.history.map
 import io.element.android.libraries.matrix.impl.room.join.map
 import io.element.android.libraries.matrix.impl.room.knock.RustKnockRequest
+import io.element.android.libraries.matrix.impl.room.location.liveLocationSharesFlow
+import io.element.android.libraries.matrix.impl.room.location.map
+import io.element.android.libraries.matrix.impl.room.location.timedByExpiry
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher
+import io.element.android.libraries.matrix.impl.room.threads.RustThreadsListService
 import io.element.android.libraries.matrix.impl.roomdirectory.map
 import io.element.android.libraries.matrix.impl.timeline.RustTimeline
+import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
+import io.element.android.libraries.matrix.impl.user.map
 import io.element.android.libraries.matrix.impl.util.MessageEventContent
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.widget.RustWidgetDriver
@@ -65,7 +75,10 @@ import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.DateDividerMode
 import org.matrix.rustcomponents.sdk.IdentityStatusChangeListener
 import org.matrix.rustcomponents.sdk.KnockRequestsListener
+import org.matrix.rustcomponents.sdk.LiveLocationException
 import org.matrix.rustcomponents.sdk.RoomMessageEventMessageType
+import org.matrix.rustcomponents.sdk.RoomSendQueueUpdate
+import org.matrix.rustcomponents.sdk.SendQueueListener
 import org.matrix.rustcomponents.sdk.TimelineConfiguration
 import org.matrix.rustcomponents.sdk.TimelineFilter
 import org.matrix.rustcomponents.sdk.TimelineFocus
@@ -77,6 +90,8 @@ import org.matrix.rustcomponents.sdk.getElementCallRequiredPermissions
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import uniffi.matrix_sdk.RoomPowerLevelChanges
+import uniffi.matrix_sdk_ui.TimelineEventFocusThreadMode
+import uniffi.matrix_sdk_ui.TimelineReadReceiptTracking
 import kotlin.coroutines.cancellation.CancellationException
 import org.matrix.rustcomponents.sdk.IdentityStatusChange as RustIdentityStateChange
 import org.matrix.rustcomponents.sdk.KnockRequest as InnerKnockRequest
@@ -139,6 +154,12 @@ class JoinedRustRoom(
 
     override val liveTimeline = liveInnerTimeline.map(mode = Timeline.Mode.Live)
 
+    override val threadsListService: ThreadsListService = RustThreadsListService(
+        inner = innerRoom.threadListService(),
+        contentMapper = TimelineEventContentMapper(),
+        roomCoroutineScope = roomCoroutineScope,
+    )
+
     override val syncUpdateFlow = flow {
         var counter = 0L
         liveTimeline.onSyncedEventReceived.collect {
@@ -173,21 +194,18 @@ class JoinedRustRoom(
     ): Result<Timeline> = withContext(roomDispatcher) {
         val hideThreadedEvents = featureFlagService.isFeatureEnabled(FeatureFlags.Threads)
         val focus = when (createTimelineParams) {
-            is CreateTimelineParams.PinnedOnly -> TimelineFocus.PinnedEvents(
-                maxEventsToLoad = 100u,
-                maxConcurrentRequests = 10u,
-            )
+            is CreateTimelineParams.PinnedOnly -> TimelineFocus.PinnedEvents
             is CreateTimelineParams.MediaOnly -> TimelineFocus.Live(hideThreadedEvents = hideThreadedEvents)
             is CreateTimelineParams.Focused -> TimelineFocus.Event(
                 eventId = createTimelineParams.focusedEventId.value,
                 numContextEvents = 50u,
-                hideThreadedEvents = hideThreadedEvents,
+                threadMode = TimelineEventFocusThreadMode.Automatic(hideThreadedEvents),
             )
             is CreateTimelineParams.MediaOnlyFocused -> TimelineFocus.Event(
                 eventId = createTimelineParams.focusedEventId.value,
                 numContextEvents = 50u,
                 // Never hide threaded events in media focused timeline
-                hideThreadedEvents = false,
+                threadMode = TimelineEventFocusThreadMode.Automatic(false),
             )
             is CreateTimelineParams.Threaded -> TimelineFocus.Thread(
                 rootEventId = createTimelineParams.threadRootEventId.value,
@@ -202,11 +220,18 @@ class JoinedRustRoom(
                     RoomMessageEventMessageType.IMAGE,
                     RoomMessageEventMessageType.VIDEO,
                     RoomMessageEventMessageType.AUDIO,
+                    RoomMessageEventMessageType.GALLERY,
                 )
             )
             is CreateTimelineParams.Focused,
             CreateTimelineParams.PinnedOnly,
-            is CreateTimelineParams.Threaded -> TimelineFilter.All
+            is CreateTimelineParams.Threaded -> {
+                RustTimelineEventFilterFactory().create(
+                    joinRule = roomInfoFlow.value.joinRule,
+                    isEncrypted = roomInfoFlow.value.isEncrypted,
+                    excludedStateTypes = TimelineConfig.excludedEvents,
+                )?.let(TimelineFilter::EventFilter) ?: TimelineFilter.All
+            }
         }
 
         val internalIdPrefix = when (createTimelineParams) {
@@ -227,8 +252,11 @@ class JoinedRustRoom(
             is CreateTimelineParams.Threaded -> DateDividerMode.DAILY
         }
 
-        // Track read receipts only for focused timeline for performance optimization
-        val trackReadReceipts = createTimelineParams is CreateTimelineParams.Focused
+        // Track read receipts only for focused and threaded timelines for performance optimization
+        val trackReadReceipts = when (createTimelineParams) {
+            is CreateTimelineParams.Focused, is CreateTimelineParams.Threaded -> true
+            is CreateTimelineParams.MediaOnly, is CreateTimelineParams.MediaOnlyFocused, CreateTimelineParams.PinnedOnly -> false
+        }
 
         runCatchingExceptions {
             innerRoom.timelineWithConfiguration(
@@ -237,7 +265,7 @@ class JoinedRustRoom(
                     filter = filter,
                     internalIdPrefix = internalIdPrefix,
                     dateDividerMode = dateDividerMode,
-                    trackReadReceipts = trackReadReceipts,
+                    trackReadReceipts = if (trackReadReceipts) TimelineReadReceiptTracking.MESSAGE_LIKE_EVENTS else TimelineReadReceiptTracking.DISABLED,
                     reportUtds = true,
                 )
             ).let { innerTimeline ->
@@ -316,7 +344,7 @@ class JoinedRustRoom(
 
     override suspend fun reportContent(eventId: EventId, reason: String, blockUserId: UserId?): Result<Unit> = withContext(roomDispatcher) {
         runCatchingExceptions {
-            innerRoom.reportContent(eventId = eventId.value, score = null, reason = reason)
+            innerRoom.reportContent(eventId = eventId.value, reason = reason)
             if (blockUserId != null) {
                 innerRoom.ignoreUser(blockUserId.value)
             }
@@ -329,7 +357,7 @@ class JoinedRustRoom(
         roomNotificationSettingsStateFlow.value = RoomNotificationSettingsState.Pending(prevRoomNotificationSettings = currentRoomNotificationSettings)
         runCatchingExceptions {
             val isEncrypted = roomInfoFlow.value.isEncrypted ?: getUpdatedIsEncrypted().getOrThrow()
-            notificationSettingsService.getRoomNotificationSettings(roomId, isEncrypted, isOneToOne).getOrThrow()
+            notificationSettingsService.getRoomNotificationSettings(roomId = roomId, isEncrypted = isEncrypted, isOneToOne = isDm()).getOrThrow()
         }.map {
             roomNotificationSettingsStateFlow.value = RoomNotificationSettingsState.Ready(it)
         }.onFailure {
@@ -396,10 +424,14 @@ class JoinedRustRoom(
                 invite = roomPowerLevelsValues.invite,
                 kick = roomPowerLevelsValues.kick,
                 redact = roomPowerLevelsValues.redactEvents,
-                eventsDefault = roomPowerLevelsValues.sendEvents,
+                stateDefault = roomPowerLevelsValues.stateDefault,
+                eventsDefault = roomPowerLevelsValues.eventsDefault,
                 roomName = roomPowerLevelsValues.roomName,
                 roomAvatar = roomPowerLevelsValues.roomAvatar,
                 roomTopic = roomPowerLevelsValues.roomTopic,
+                spaceChild = roomPowerLevelsValues.spaceChild,
+                beacon = roomPowerLevelsValues.beacon,
+                beaconInfo = roomPowerLevelsValues.beaconInfo,
             )
             innerRoom.applyPowerLevelChanges(changes)
         }
@@ -483,11 +515,60 @@ class JoinedRustRoom(
         }
     }
 
+    override fun subscribeToSendQueueUpdates(): Flow<SendQueueUpdate> {
+        return mxCallbackFlow {
+            innerRoom.subscribeToSendQueueUpdates(object : SendQueueListener {
+                override fun onUpdate(update: RoomSendQueueUpdate) {
+                    trySend(update.map())
+                }
+            })
+        }
+    }
+
+    override fun subscribeToLiveLocationShares(): Flow<List<LiveLocationShare>> {
+        return innerRoom.liveLocationSharesFlow().timedByExpiry(systemClock::epochMillis)
+    }
+
+    override suspend fun startLiveLocationShare(durationMillis: Long): Result<EventId> = withContext(roomDispatcher) {
+        runCatchingExceptions {
+            innerRoom.startLiveLocationShare(durationMillis.toULong())
+        }.map(::EventId)
+    }
+
+    override suspend fun stopLiveLocationShare(): Result<Unit> = withContext(roomDispatcher) {
+        runCatchingExceptions {
+            innerRoom.stopLiveLocationShare()
+        }.mapFailure { throwable ->
+            when (throwable) {
+                is LiveLocationException -> throwable.map()
+                else -> throwable
+            }
+        }
+    }
+
+    override suspend fun sendLiveLocation(geoUri: String): Result<Unit> = withContext(roomDispatcher) {
+        runCatchingExceptions {
+            innerRoom.sendLiveLocation(geoUri)
+        }.mapFailure { throwable ->
+            when (throwable) {
+                is LiveLocationException -> throwable.map()
+                else -> throwable
+            }
+        }
+    }
+
+    override suspend fun setOwnMemberDisplayName(displayName: String): Result<Unit> = withContext(roomDispatcher) {
+        runCatchingExceptions {
+            innerRoom.setOwnMemberDisplayName(displayName)
+        }
+    }
+
     override fun close() = destroy()
 
     override fun destroy() {
         baseRoom.destroy()
-        liveInnerTimeline.destroy()
+        liveTimeline.close()
+        threadsListService.destroy()
         Timber.d("Room $roomId destroyed")
     }
 

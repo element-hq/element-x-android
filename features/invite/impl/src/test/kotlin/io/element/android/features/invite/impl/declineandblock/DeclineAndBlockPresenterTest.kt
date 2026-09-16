@@ -53,21 +53,21 @@ class DeclineAndBlockPresenterTest {
                 assertThat(state.blockUser).isTrue()
                 assertThat(state.reportReason).isEmpty()
                 assertThat(state.canDecline).isTrue()
-                state.eventSink(DeclineAndBlockEvents.ToggleBlockUser)
+                state.eventSink(DeclineAndBlockEvent.ToggleBlockUser)
             }
             awaitItem().also { state ->
                 assertThat(state.reportRoom).isFalse()
                 assertThat(state.blockUser).isFalse()
                 assertThat(state.reportReason).isEmpty()
                 assertThat(state.canDecline).isFalse()
-                state.eventSink(DeclineAndBlockEvents.ToggleReportRoom)
+                state.eventSink(DeclineAndBlockEvent.ToggleReportRoom)
             }
             awaitItem().also { state ->
                 assertThat(state.reportRoom).isTrue()
                 assertThat(state.blockUser).isFalse()
                 assertThat(state.reportReason).isEmpty()
                 assertThat(state.canDecline).isFalse()
-                state.eventSink(DeclineAndBlockEvents.UpdateReportReason("Spam"))
+                state.eventSink(DeclineAndBlockEvent.UpdateReportReason("Spam"))
             }
             awaitItem().also { state ->
                 assertThat(state.reportRoom).isTrue()
@@ -87,7 +87,7 @@ class DeclineAndBlockPresenterTest {
         )
         presenter.test {
             awaitItem().also { state ->
-                state.eventSink(DeclineAndBlockEvents.Decline)
+                state.eventSink(DeclineAndBlockEvent.Decline)
             }
             assertThat(awaitItem().declineAction.isLoading()).isTrue()
             awaitItem().also { state ->
@@ -110,12 +110,12 @@ class DeclineAndBlockPresenterTest {
         )
         presenter.test {
             awaitItem().also { state ->
-                state.eventSink(DeclineAndBlockEvents.Decline)
+                state.eventSink(DeclineAndBlockEvent.Decline)
             }
             assertThat(awaitItem().declineAction.isLoading()).isTrue()
             awaitItem().also { state ->
                 assertThat(state.declineAction).isInstanceOf(AsyncAction.Failure::class.java)
-                state.eventSink(DeclineAndBlockEvents.ClearDeclineAction)
+                state.eventSink(DeclineAndBlockEvent.ClearDeclineAction)
             }
             awaitItem().also { state ->
                 assertThat(state.declineAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
@@ -137,7 +137,7 @@ class DeclineAndBlockPresenterTest {
         )
         presenter.test {
             awaitItem().also { state ->
-                state.eventSink(DeclineAndBlockEvents.Decline)
+                state.eventSink(DeclineAndBlockEvent.Decline)
             }
             assertThat(awaitItem().declineAction.isLoading()).isTrue()
             awaitItem().also { state ->

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"If you encounter the same problem, try a different Wi-Fi network or use your mobile data instead of Wi-Fi"</string>
+</resources>

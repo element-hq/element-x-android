@@ -21,8 +21,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Backspace
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -40,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.times
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toSp
@@ -206,7 +205,8 @@ private fun PinKeypadBackButton(
         onClick = onClick,
     ) {
         Icon(
-            imageVector = Icons.AutoMirrored.Filled.Backspace,
+            modifier = Modifier.size(28.dp),
+            imageVector = CompoundIcons.BackspaceSolid(),
             contentDescription = stringResource(CommonStrings.a11y_delete),
         )
     }

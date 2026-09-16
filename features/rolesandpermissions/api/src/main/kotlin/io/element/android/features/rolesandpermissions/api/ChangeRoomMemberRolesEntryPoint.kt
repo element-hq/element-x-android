@@ -22,8 +22,18 @@ fun interface ChangeRoomMemberRolesEntryPoint : FeatureEntryPoint {
         listType: ChangeRoomMemberRolesListType,
     ): Node
 
+    /**
+     * Lets a caller outside this feature wait for the role change to finish, which is needed when leaving a room depends on it.
+     */
     interface NodeProxy {
+        /** The room whose member roles are being changed. */
         val roomId: RoomId
+
+        /**
+         * Suspends until the user finishes or abandons the flow.
+         *
+         * @return true when roles were actually changed, false when the user backed out.
+         */
         suspend fun waitForCompletion(): Boolean
     }
 }

@@ -45,7 +45,6 @@
     <item quantity="other">"Wedi\'i ddarllen gan %1$s a %2$d arall"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Wedi\'i ddarllen gan %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Tapio i ddangos y cyfan"</string>
   <string name="a11y_remove_reaction">"Wedi dileu adwaith gyda %1$s"</string>
   <string name="a11y_remove_reaction_with">"Wedi dileu adwaith gyda %1$s"</string>
   <string name="a11y_room_avatar">"Afatar ystafell"</string>
@@ -82,7 +81,7 @@
   <string name="action_copy_link_to_message">"Copïo dolen i\'r neges"</string>
   <string name="action_copy_text">"Copïo testun"</string>
   <string name="action_create">"Creu"</string>
-  <string name="action_create_a_room">"Creu ystafell"</string>
+  <string name="action_create_room">"Creu ystafell"</string>
   <string name="action_deactivate">"Dadweithredu"</string>
   <string name="action_deactivate_account">"Cau cyfrif"</string>
   <string name="action_decline">"Gwrthod"</string>
@@ -161,6 +160,7 @@
   <string name="action_skip">"Hepgor"</string>
   <string name="action_start">"Cychwyn"</string>
   <string name="action_start_chat">"Dechrau sgwrs"</string>
+  <string name="action_start_over">"Cychwyn eto"</string>
   <string name="action_start_verification">"Dechrau dilysu"</string>
   <string name="action_static_map_load">"Tapio i lwytho map"</string>
   <string name="action_take_photo">"Cymryd llun"</string>
@@ -197,7 +197,6 @@
   <string name="common_current_user_left_room">"Wedi gadael yr ystafell"</string>
   <string name="common_current_user_left_space">"Gofod chwith"</string>
   <string name="common_current_user_rejected_invite">"Wedi gwrthod y gwahoddiad"</string>
-  <string name="common_dark">"Tywyll"</string>
   <string name="common_decryption_error">"Gwall dadgryptio"</string>
   <string name="common_description">"Disgrifiad"</string>
   <string name="common_developer_options">"Dewisiadau datblygwr"</string>
@@ -234,7 +233,6 @@ Rheswm: %1$s."</string>
   <string name="common_install_apk_android">"Gosod APK"</string>
   <string name="common_invite_unknown_profile">"Nid oes modd dod o hyd i\'r ID Matrics hwn, felly mae\'n bosibl na fydd y gwahoddiad yn cael ei dderbyn."</string>
   <string name="common_leaving_room">"Gadael ystafell"</string>
-  <string name="common_light">"Golau"</string>
   <string name="common_line_copied_to_clipboard">"Llinell wedi\'i chopïo i\'r clipfwrdd"</string>
   <string name="common_link_copied_to_clipboard">"Dolen wedi\'i chopïo i\'r clipfwrdd"</string>
   <string name="common_loading">"Yn Llwytho…"</string>
@@ -308,7 +306,6 @@ Rheswm: %1$s."</string>
     <item quantity="other">"%1$d ateb"</item>
   </plurals>
   <string name="common_replying_to">"Yn ymateb i %1$s"</string>
-  <string name="common_report_a_bug">"Adrodd ar wall"</string>
   <string name="common_report_a_problem">"Adrodd am broblem"</string>
   <string name="common_report_submitted">"Adroddiad wedi ei gyflwyno"</string>
   <string name="common_rich_text_editor">"Golygydd testun cyfoethog"</string>
@@ -359,7 +356,6 @@ Rheswm: %1$s."</string>
   <string name="common_success">"Llwyddiant"</string>
   <string name="common_suggestions">"Awgrymiadau"</string>
   <string name="common_syncing">"Cydweddu"</string>
-  <string name="common_system">"System"</string>
   <string name="common_text">"Testun"</string>
   <string name="common_third_party_notices">"Hysbysiadau trydydd parti"</string>
   <string name="common_thread">"Edefyn"</string>
@@ -414,12 +410,12 @@ Ydych chi\'n siŵr eich bod am barhau?"</string>
   <string name="dialog_title_error">"Gwall"</string>
   <string name="dialog_title_success">"Llwyddiant"</string>
   <string name="dialog_title_warning">"Rhybudd"</string>
+  <string name="dialog_unsaved_changes_description">"Mae gennych newidiadau heb eu cadw."</string>
   <string name="dialog_unsaved_changes_description_android">"Dyw eich newidiadau heb gael eu cadw. Ydych chi\'n siŵr eich bod am fynd nôl?"</string>
   <string name="dialog_unsaved_changes_title">"Cadw\'r newidiadau?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Y maint ffeil mwyaf sy\'n cael ei ganiatáu yw: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Dewiswch ansawdd y fideo rydych chi am ei llwytho."</string>
   <string name="dialog_video_quality_selector_title">"Dewiswch ansawdd llwytho fideo"</string>
-  <string name="emoji_picker_search_placeholder">"Chwilio emojis"</string>
   <string name="error_account_already_logged_in">"Rydych chi eisoes wedi mewngofnodi ar y ddyfais hon fel %1$s ."</string>
   <string name="error_account_creation_not_possible">"Mae angen uwchraddio eich gweinydd cartref i gefnogi Gwasanaeth Dilysu Matrix a chreu cyfrif."</string>
   <string name="error_failed_creating_the_permalink">"Wedi methu creu\'r ddolen barhaol"</string>
@@ -437,13 +433,6 @@ Ydych chi\'n siŵr eich bod am barhau?"</string>
   <string name="error_room_address_invalid_symbols">"Dyw rhai nodau ddim yn cael eu caniatáu. Dim ond llythrennau, digidau a\'r symbolau canlynol sy\'n cael eu cefnogi ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Nid yw rhai negeseuon wedi\'u hanfon"</string>
   <string name="error_unknown">"Ymddiheuriadau, mae gwall wedi digwydd"</string>
-  <string name="event_shield_mismatched_sender">"Nid yw anfonwr y digwyddiad yn cyfateb i berchennog y ddyfais a\'i hanfonodd."</string>
-  <string name="event_shield_reason_authenticity_not_guaranteed">"Nid oes modd gwarantu dilysrwydd y neges hon sydd wedi\'i hamgryptio ar y ddyfais hon."</string>
-  <string name="event_shield_reason_previously_verified">"Wedi\'i amgryptio gan ddefnyddiwr a wiriwyd gynt."</string>
-  <string name="event_shield_reason_sent_in_clear">"Heb ei amgryptio."</string>
-  <string name="event_shield_reason_unknown_device">"Wedi\'i amgryptio gan ddyfais anhysbys neu wedi\'i dileu."</string>
-  <string name="event_shield_reason_unsigned_device">"Wedi\'i amgryptio gan ddyfais nad yw wedi\'i wirio gan ei pherchennog."</string>
-  <string name="event_shield_reason_unverified_identity">"Wedi\'i amgryptio gan ddefnyddiwr heb ei wirio."</string>
   <string name="invite_friends_rich_title">"🔐️ Ymunwch â mi ar %1$s"</string>
   <string name="invite_friends_text">"Hei, siaradwch â mi ar %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"Android %1$s"</string>

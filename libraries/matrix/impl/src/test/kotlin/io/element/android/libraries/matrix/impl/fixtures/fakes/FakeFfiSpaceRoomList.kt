@@ -21,6 +21,7 @@ import uniffi.matrix_sdk_ui.SpaceRoomListPaginationState
 
 class FakeFfiSpaceRoomList(
     private val paginateResult: () -> Unit = { lambdaError() },
+    private val resetResult: () -> Unit = { lambdaError() },
     private val paginationStateResult: () -> SpaceRoomListPaginationState = { lambdaError() },
     private val roomsResult: () -> List<SpaceRoom> = { lambdaError() },
 ) : SpaceRoomList(NoHandle) {
@@ -31,11 +32,15 @@ class FakeFfiSpaceRoomList(
         paginateResult()
     }
 
+    override suspend fun reset() = simulateLongTask {
+        resetResult()
+    }
+
     override fun paginationState(): SpaceRoomListPaginationState {
         return paginationStateResult()
     }
 
-    override fun rooms(): List<SpaceRoom> {
+    override suspend fun rooms(): List<SpaceRoom> {
         return roomsResult()
     }
 
@@ -48,7 +53,7 @@ class FakeFfiSpaceRoomList(
         spaceRoomListPaginationStateListener?.onUpdate(state)
     }
 
-    override fun subscribeToRoomUpdate(listener: SpaceRoomListEntriesListener): TaskHandle {
+    override suspend fun subscribeToRoomUpdate(listener: SpaceRoomListEntriesListener): TaskHandle {
         spaceRoomListEntriesListener = listener
         return FakeFfiTaskHandle()
     }

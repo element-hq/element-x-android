@@ -12,6 +12,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
@@ -22,6 +23,7 @@ data class SelectRoomInfo(
     val canonicalAlias: RoomAlias?,
     val avatarUrl: String?,
     val heroes: ImmutableList<MatrixUser>,
+    val isDm: Boolean,
     val isTombstoned: Boolean,
 ) {
     fun getAvatarData(size: AvatarSize) = AvatarData(
@@ -32,11 +34,14 @@ data class SelectRoomInfo(
     )
 }
 
-fun RoomSummary.toSelectRoomInfo() = SelectRoomInfo(
-    roomId = roomId,
-    name = info.name,
-    avatarUrl = info.avatarUrl,
-    heroes = info.heroes,
-    canonicalAlias = info.canonicalAlias,
-    isTombstoned = info.successorRoom != null,
+fun RoomSummary.toSelectRoomInfo() = info.toSelectRoomInfo()
+
+fun RoomInfo.toSelectRoomInfo() = SelectRoomInfo(
+    roomId = id,
+    name = name,
+    avatarUrl = avatarUrl,
+    heroes = heroes,
+    canonicalAlias = canonicalAlias,
+    isDm = isDm,
+    isTombstoned = successorRoom != null,
 )

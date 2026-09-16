@@ -2,4 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_invite_users_already_a_member">"Deja membru"</string>
   <string name="screen_invite_users_already_invited">"Deja invitat"</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_multiple_users">"În prezent, nu aveți nicio conversație cu aceste contacte. Confirmați invitarea lor în această cameră înainte de a continua."</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_one_user">"În prezent, nu aveți nicio conversație cu acest contact. Confirmați invitarea acestuia în cameră înainte de a continua."</string>
+  <string name="screen_invite_users_confirm_dialog_title_mutiple_users">"Invitați contactele noi în această cameră?"</string>
+  <string name="screen_invite_users_confirm_dialog_title_one_user">"Invitați contactul nou în această cameră?"</string>
 </resources>

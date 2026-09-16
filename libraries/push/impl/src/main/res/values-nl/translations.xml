@@ -37,6 +37,7 @@
   <string name="notification_sender_me">"Mij"</string>
   <string name="notification_sender_mention_reply">"%1$s heeft vermeld of beantwoord"</string>
   <string name="notification_test_push_notification_content">"Je bekijkt de melding! Klik hier!"</string>
+  <string name="notification_thread_in_room">"Gesprek in %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
@@ -53,6 +54,7 @@
   <string name="push_distributor_background_sync_android">"Achtergrondsynchronisatie"</string>
   <string name="push_distributor_firebase_android">"Google-services"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Geen geldige Google Play-services gevonden. Meldingen werken mogelijk niet goed."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_title">"Geblokkeerde gebruikers"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Naam van de huidige provider aan het ophalen."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Er zijn geen push-providers geselecteerd."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Huidige push-provider: %1$s."</string>

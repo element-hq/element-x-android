@@ -24,16 +24,10 @@ class DefaultVersionFormatter(
     private val buildMeta: BuildMeta,
 ) : VersionFormatter {
     override fun get(): String {
-        val base = stringProvider.getString(
+        return stringProvider.getString(
             CommonStrings.settings_version_number,
             buildMeta.versionName,
             buildMeta.versionCode.toString()
         )
-        return if (buildMeta.gitBranchName == "main") {
-            base
-        } else {
-            // In case of a build not from main, we display the branch name and the revision
-            "$base\n${buildMeta.gitBranchName} (${buildMeta.gitRevision})"
-        }
     }
 }

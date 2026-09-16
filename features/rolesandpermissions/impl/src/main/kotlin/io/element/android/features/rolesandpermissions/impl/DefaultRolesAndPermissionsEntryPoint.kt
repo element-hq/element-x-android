@@ -17,7 +17,11 @@ import io.element.android.libraries.di.RoomScope
 
 @ContributesBinding(RoomScope::class)
 class DefaultRolesAndPermissionsEntryPoint : RolesAndPermissionsEntryPoint {
-    override fun createNode(parentNode: Node, buildContext: BuildContext): Node {
-        return parentNode.createNode<RolesAndPermissionsFlowNode>(buildContext)
+    override fun createNode(
+        parentNode: Node,
+        buildContext: BuildContext,
+        callback: RolesAndPermissionsEntryPoint.Callback,
+    ): Node {
+        return parentNode.createNode<RolesAndPermissionsFlowNode>(buildContext, listOf(callback))
     }
 }

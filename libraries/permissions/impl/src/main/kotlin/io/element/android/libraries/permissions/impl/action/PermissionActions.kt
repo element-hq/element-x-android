@@ -9,5 +9,5 @@
 package io.element.android.libraries.permissions.impl.action
 
 interface PermissionActions {
-    fun openSettings()
+    fun openSettings(permission: String)
 }

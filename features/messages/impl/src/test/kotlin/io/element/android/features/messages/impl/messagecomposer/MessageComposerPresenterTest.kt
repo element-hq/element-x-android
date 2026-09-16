@@ -31,8 +31,11 @@ import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.utils.FakeMentionSpanFormatter
 import io.element.android.features.messages.impl.utils.FakeTextPillificationHelper
 import io.element.android.features.messages.impl.utils.TextPillificationHelper
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.ThreadId
@@ -46,6 +49,7 @@ import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
+import io.element.android.libraries.matrix.api.timeline.MsgType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
@@ -57,6 +61,7 @@ import io.element.android.libraries.matrix.test.A_CAPTION
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_REPLY
 import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.libraries.matrix.test.A_TRANSACTION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
@@ -69,7 +74,9 @@ import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
+import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
+import io.element.android.libraries.matrix.ui.media.contentvalidation.InMemoryEventContentValidationCache
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
@@ -88,6 +95,9 @@ import io.element.android.libraries.preferences.api.store.SessionPreferencesStor
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.push.test.notifications.conversations.FakeNotificationConversationService
+import io.element.android.libraries.slashcommands.api.SlashCommand
+import io.element.android.libraries.slashcommands.api.SlashCommandService
+import io.element.android.libraries.slashcommands.test.FakeSlashCommandService
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
@@ -101,7 +111,9 @@ import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.test
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.element.android.tests.testutils.waitForPredicate
 import io.mockk.mockk
 import kotlinx.collections.immutable.ImmutableList
@@ -112,14 +124,10 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import uniffi.wysiwyg_composer.MentionsState
 import java.io.File
 
-@Suppress("LargeClass")
-@RunWith(RobolectricTestRunner::class)
-class MessageComposerPresenterTest {
+class MessageComposerPresenterTest : RobolectricTest() {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -136,24 +144,34 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val presenter = createPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.isFullScreen).isFalse()
             assertThat(initialState.textEditorState.messageHtml()).isEqualTo("")
             assertThat(initialState.mode).isEqualTo(MessageComposerMode.Normal)
+            assertThat(initialState.isInThreadTimeline).isFalse()
             assertThat(initialState.showAttachmentSourcePicker).isFalse()
             assertThat(initialState.canShareLocation).isTrue()
+            assertThat(initialState.slashCommandAction).isEqualTo(AsyncAction.Uninitialized)
+        }
+    }
+
+    @Test
+    fun `present - when a threadRoot is provided, isInThreadTimeline is true`() = runTest {
+        val presenter = createPresenter(
+            threadRoot = A_THREAD_ID,
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            assertThat(initialState.mode).isEqualTo(MessageComposerMode.Normal)
+            assertThat(initialState.isInThreadTimeline).isTrue()
         }
     }
 
     @Test
     fun `present - toggle fullscreen`() = runTest {
         val presenter = createPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink.invoke(MessageComposerEvent.ToggleFullScreenState)
             val fullscreenState = awaitItem()
@@ -167,9 +185,7 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - change message`() = runTest {
         val presenter = createPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.textEditorState.setHtml(A_MESSAGE)
             assertThat(initialState.textEditorState.messageHtml()).isEqualTo(A_MESSAGE)
@@ -346,9 +362,7 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - change mode to reply`() = runTest {
         val presenter = createPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             var state = awaitFirstItem()
             val mode = aReplyMode()
             state.eventSink.invoke(MessageComposerEvent.SetMode(mode))
@@ -362,9 +376,7 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - cancel reply`() = runTest {
         val presenter = createPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             var state = awaitFirstItem()
             val mode = aReplyMode()
             state.eventSink.invoke(MessageComposerEvent.SetMode(mode))
@@ -383,9 +395,12 @@ class MessageComposerPresenterTest {
         val presenter = createPresenter(
             room = FakeJoinedRoom(
                 liveTimeline = FakeTimeline().apply {
-                    sendMessageLambda = { _, _, _ -> Result.success(Unit) }
+                    sendMessageLambda = { _, _, _, _, _ -> Result.success(Unit) }
                 },
                 typingNoticeResult = { Result.success(Unit) }
+            ),
+            slashCommandService = FakeSlashCommandService(
+                parseResult = { _, _, _ -> SlashCommand.NotACommand }
             ),
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -418,9 +433,12 @@ class MessageComposerPresenterTest {
             isRichTextEditorEnabled = false,
             room = FakeJoinedRoom(
                 liveTimeline = FakeTimeline().apply {
-                    sendMessageLambda = { _, _, _ -> Result.success(Unit) }
+                    sendMessageLambda = { _, _, _, _, _ -> Result.success(Unit) }
                 },
                 typingNoticeResult = { Result.success(Unit) }
+            ),
+            slashCommandService = FakeSlashCommandService(
+                parseResult = { _, _, _ -> SlashCommand.NotACommand }
             ),
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -611,7 +629,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - reply message`() = runTest {
-        val replyMessageLambda = lambdaRecorder { _: EventId?, _: String, _: String?, _: List<IntentionalMention>, _: Boolean ->
+        val replyMessageLambda = lambdaRecorder { _: EventId?, _: String, _: String?, _: List<IntentionalMention>, _: Boolean, _: MsgType ->
             Result.success(Unit)
         }
         val timeline = FakeTimeline().apply {
@@ -624,9 +642,7 @@ class MessageComposerPresenterTest {
         val presenter = createPresenter(
             joinedRoom,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.textEditorState.messageHtml()).isEqualTo("")
             val mode = aReplyMode()
@@ -644,7 +660,7 @@ class MessageComposerPresenterTest {
 
             assert(replyMessageLambda)
                 .isCalledOnce()
-                .with(any(), value(A_REPLY), value(A_REPLY), any(), value(false))
+                .with(any(), value(A_REPLY), value(A_REPLY), any(), value(false), value(MsgType.MSG_TYPE_TEXT))
 
             assertThat(analyticsService.capturedEvents).containsExactly(
                 Composer(
@@ -660,9 +676,7 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - Open attachments menu`() = runTest {
         val presenter = createPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.showAttachmentSourcePicker).isFalse()
             initialState.eventSink(MessageComposerEvent.AddAttachment)
@@ -673,9 +687,7 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - Dismiss attachments menu`() = runTest {
         val presenter = createPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(MessageComposerEvent.AddAttachment)
             skipItems(1)
@@ -716,9 +728,7 @@ class MessageComposerPresenterTest {
                 )
             )
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(MessageComposerEvent.PickAttachmentSource.FromGallery)
             onPreviewAttachmentLambda.assertions().isCalledOnce()
@@ -757,12 +767,83 @@ class MessageComposerPresenterTest {
                 )
             )
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(MessageComposerEvent.PickAttachmentSource.FromGallery)
             onPreviewAttachmentLambda.assertions().isCalledOnce()
+        }
+    }
+
+    @Test
+    fun `present - Pick media from gallery while editing keeps the edit pending`() = runTest {
+        val onPreviewAttachmentLambda = lambdaRecorder { _: ImmutableList<Attachment>, _: EventId? -> }
+        val navigator = FakeMessagesNavigator(
+            onPreviewAttachmentLambda = onPreviewAttachmentLambda
+        )
+        val presenter = createPresenter(navigator = navigator)
+        pickerProvider.givenMimeType(MimeTypes.Images)
+        presenter.test {
+            var state = awaitFirstItem()
+            val editMode = anEditMode()
+            state.eventSink(MessageComposerEvent.SetMode(editMode))
+            state = awaitItem()
+            assertThat(state.mode).isEqualTo(editMode)
+            // The media is sent as a new message while the edit stays active. If the mode reset,
+            // a Normal-mode state would be emitted and expectNoEvents() below would fail.
+            state.eventSink(MessageComposerEvent.PickAttachmentSource.FromGallery)
+            onPreviewAttachmentLambda.assertions().isCalledOnce()
+            expectNoEvents()
+            assertThat(state.mode).isEqualTo(editMode)
+        }
+    }
+
+    @Test
+    fun `present - Pick media from gallery while replying clears the reply mode`() = runTest {
+        val onPreviewAttachmentLambda = lambdaRecorder { _: ImmutableList<Attachment>, _: EventId? -> }
+        val navigator = FakeMessagesNavigator(
+            onPreviewAttachmentLambda = onPreviewAttachmentLambda
+        )
+        val presenter = createPresenter(navigator = navigator)
+        pickerProvider.givenMimeType(MimeTypes.Images)
+        presenter.test {
+            var state = awaitFirstItem()
+            state.eventSink(MessageComposerEvent.SetMode(aReplyMode()))
+            state = awaitItem()
+            assertThat(state.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
+            // The media becomes the reply, so the reply intent is consumed and the composer resets.
+            state.eventSink(MessageComposerEvent.PickAttachmentSource.FromGallery)
+            onPreviewAttachmentLambda.assertions().isCalledOnce()
+            state = awaitItem()
+            assertThat(state.mode).isEqualTo(MessageComposerMode.Normal)
+        }
+    }
+
+    @Test
+    fun `present - Pick multiple media from gallery while editing keeps the edit pending`() = runTest {
+        val onPreviewAttachmentLambda = lambdaRecorder { _: ImmutableList<Attachment>, _: EventId? -> }
+        val navigator = FakeMessagesNavigator(
+            onPreviewAttachmentLambda = onPreviewAttachmentLambda
+        )
+        val presenter = createPresenter(
+            navigator = navigator,
+            featureFlagService = FakeFeatureFlagService(
+                initialState = mapOf(FeatureFlags.SendGalleryMessages.key to true)
+            ),
+        )
+        pickerProvider.givenMimeType(MimeTypes.Images)
+        // Two Uris take the multi-item branch (handlePickedMediaList) instead of delegating to the
+        // single-item path, so the edit is preserved for gallery messages too.
+        pickerProvider.givenMultipleResults(listOf(mockk(), mockk()))
+        presenter.test {
+            var state = awaitFirstItem()
+            val editMode = anEditMode()
+            state.eventSink(MessageComposerEvent.SetMode(editMode))
+            state = awaitItem()
+            assertThat(state.mode).isEqualTo(editMode)
+            state.eventSink(MessageComposerEvent.PickAttachmentSource.FromGallery)
+            onPreviewAttachmentLambda.assertions().isCalledOnce()
+            expectNoEvents()
+            assertThat(state.mode).isEqualTo(editMode)
         }
     }
 
@@ -773,9 +854,7 @@ class MessageComposerPresenterTest {
             givenResult(null) // Simulate a user canceling the flow
             givenMimeType(MimeTypes.Images)
         }
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(MessageComposerEvent.PickAttachmentSource.FromGallery)
             // No crashes here, otherwise it fails
@@ -795,9 +874,7 @@ class MessageComposerPresenterTest {
             room = room,
             navigator = navigator,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(MessageComposerEvent.PickAttachmentSource.FromFiles)
             onPreviewAttachmentLambda.assertions().isCalledOnce()
@@ -810,9 +887,7 @@ class MessageComposerPresenterTest {
             typingNoticeResult = { Result.success(Unit) }
         )
         val presenter = createPresenter(room = room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(MessageComposerEvent.AddAttachment)
             val attachmentOpenState = awaitItem()
@@ -829,9 +904,7 @@ class MessageComposerPresenterTest {
             typingNoticeResult = { Result.success(Unit) }
         )
         val presenter = createPresenter(room = room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(MessageComposerEvent.AddAttachment)
             val attachmentOpenState = awaitItem()
@@ -857,9 +930,7 @@ class MessageComposerPresenterTest {
             permissionPresenter = permissionPresenter,
             navigator = navigator,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(MessageComposerEvent.PickAttachmentSource.PhotoFromCamera)
             onPreviewAttachmentLambda.assertions().isCalledOnce()
@@ -881,9 +952,7 @@ class MessageComposerPresenterTest {
             permissionPresenter = permissionPresenter,
             navigator = navigator,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(MessageComposerEvent.PickAttachmentSource.PhotoFromCamera)
             permissionPresenter.setPermissionGranted()
@@ -907,9 +976,7 @@ class MessageComposerPresenterTest {
             permissionPresenter = permissionPresenter,
             navigator = navigator,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(MessageComposerEvent.PickAttachmentSource.VideoFromCamera)
             onPreviewAttachmentLambda.assertions().isCalledOnce()
@@ -931,9 +998,7 @@ class MessageComposerPresenterTest {
             permissionPresenter = permissionPresenter,
             navigator = navigator,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(MessageComposerEvent.PickAttachmentSource.VideoFromCamera)
             val permissionState = awaitItem()
@@ -948,9 +1013,7 @@ class MessageComposerPresenterTest {
     fun `present - errors are tracked`() = runTest {
         val testException = Exception("Test error")
         val presenter = createPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(MessageComposerEvent.Error(testException))
             assertThat(analyticsService.trackedErrors).containsExactly(testException)
@@ -960,9 +1023,7 @@ class MessageComposerPresenterTest {
     @Test
     fun `present - ToggleTextFormatting toggles text formatting`() = runTest {
         val presenter = createPresenter(isRichTextEditorEnabled = false)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.showTextFormatting).isFalse()
             initialState.eventSink(MessageComposerEvent.AddAttachment)
@@ -991,9 +1052,13 @@ class MessageComposerPresenterTest {
         val invitedUser = aRoomMember(userId = A_USER_ID_3, membership = RoomMembershipState.INVITE)
         val bob = aRoomMember(userId = A_USER_ID_2, membership = RoomMembershipState.JOIN)
         val david = aRoomMember(userId = A_USER_ID_4, displayName = "Dave", membership = RoomMembershipState.JOIN)
-        var canUserTriggerRoomNotificationResult = true
         val room = FakeJoinedRoom(
-            baseRoom = FakeBaseRoom(canUserTriggerRoomNotificationResult = { Result.success(canUserTriggerRoomNotificationResult) }),
+            baseRoom = FakeBaseRoom(
+                roomPermissions = FakeRoomPermissions(
+                    canTriggerRoomNotification = true,
+                ),
+                updateMembersResult = {},
+            ),
             typingNoticeResult = { Result.success(Unit) }
         ).apply {
             givenRoomMembersState(
@@ -1003,10 +1068,13 @@ class MessageComposerPresenterTest {
             )
             givenRoomInfo(aRoomInfo(isDirect = false))
         }
-        val presenter = createPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        val presenter = createPresenter(
+            room = room,
+            slashCommandService = FakeSlashCommandService(
+                getSuggestionsResult = { _, _ -> emptyList() },
+            ),
+        )
+        presenter.test {
             val initialState = awaitItem()
 
             // A null suggestion (no suggestion was received) returns nothing
@@ -1033,10 +1101,86 @@ class MessageComposerPresenterTest {
             // If the suggestion isn't a mention, no suggestions are returned
             initialState.eventSink(MessageComposerEvent.SuggestionReceived(Suggestion(0, 0, SuggestionType.Command, "")))
             assertThat(awaitItem().suggestions).isEmpty()
+        }
+    }
 
-            // If user has no permission to send `@room` mentions, `RoomMemberSuggestion.Room` is not returned
-            canUserTriggerRoomNotificationResult = false
+    @Test
+    fun `present - mention suggestions refresh the room members`() = runTest {
+        val currentUser = aRoomMember(userId = A_USER_ID, membership = RoomMembershipState.JOIN)
+        val bob = aRoomMember(userId = A_USER_ID_2, membership = RoomMembershipState.JOIN)
+        val updateMembersResult = lambdaRecorder<Unit> { }
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
+                roomPermissions = FakeRoomPermissions(
+                    canTriggerRoomNotification = true,
+                ),
+                updateMembersResult = updateMembersResult,
+            ),
+            typingNoticeResult = { Result.success(Unit) }
+        ).apply {
+            givenRoomMembersState(
+                RoomMembersState.Ready(
+                    persistentListOf(currentUser, bob),
+                )
+            )
+            givenRoomInfo(aRoomInfo(isDirect = false))
+        }
+        val presenter = createPresenter(
+            room = room,
+            slashCommandService = FakeSlashCommandService(
+                getSuggestionsResult = { _, _ -> emptyList() },
+            ),
+        )
+        presenter.test {
+            val initialState = awaitItem()
             initialState.eventSink(MessageComposerEvent.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "")))
+            skipItems(1)
+            assertThat(awaitItem().suggestions).containsExactly(ResolvedSuggestion.AtRoom, ResolvedSuggestion.Member(bob))
+            updateMembersResult.assertions().isCalledOnce()
+
+            // Typing after the `@` must not refresh the members again
+            initialState.eventSink(MessageComposerEvent.SuggestionReceived(Suggestion(0, 1, SuggestionType.Mention, "b")))
+            initialState.eventSink(MessageComposerEvent.SuggestionReceived(Suggestion(0, 2, SuggestionType.Mention, "bo")))
+            advanceUntilIdle()
+            updateMembersResult.assertions().isCalledOnce()
+
+            // Starting a new mention refreshes them again
+            initialState.eventSink(MessageComposerEvent.SuggestionReceived(null))
+            initialState.eventSink(MessageComposerEvent.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "")))
+            advanceUntilIdle()
+            updateMembersResult.assertions().isCalledExactly(2)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - room mention suggestions no permission`() = runTest {
+        val currentUser = aRoomMember(userId = A_USER_ID, membership = RoomMembershipState.JOIN)
+        val invitedUser = aRoomMember(userId = A_USER_ID_3, membership = RoomMembershipState.INVITE)
+        val bob = aRoomMember(userId = A_USER_ID_2, membership = RoomMembershipState.JOIN)
+        val david = aRoomMember(userId = A_USER_ID_4, displayName = "Dave", membership = RoomMembershipState.JOIN)
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
+                roomPermissions = FakeRoomPermissions(
+                    canTriggerRoomNotification = false,
+                ),
+                updateMembersResult = {},
+            ),
+            typingNoticeResult = { Result.success(Unit) }
+        ).apply {
+            givenRoomMembersState(
+                RoomMembersState.Ready(
+                    persistentListOf(currentUser, invitedUser, bob, david),
+                )
+            )
+            givenRoomInfo(aRoomInfo(isDirect = false))
+        }
+        val presenter = createPresenter(room)
+        presenter.test {
+            val initialState = awaitItem()
+            // An empty suggestion returns the joined members that are not the current user, but not the room
+            initialState.eventSink(MessageComposerEvent.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "")))
+            skipItems(1)
             assertThat(awaitItem().suggestions)
                 .containsExactly(ResolvedSuggestion.Member(bob), ResolvedSuggestion.Member(david))
         }
@@ -1049,7 +1193,10 @@ class MessageComposerPresenterTest {
         val bob = aRoomMember(userId = A_USER_ID_2, membership = RoomMembershipState.JOIN)
         val david = aRoomMember(userId = A_USER_ID_4, displayName = "Dave", membership = RoomMembershipState.JOIN)
         val room = FakeJoinedRoom(
-            baseRoom = FakeBaseRoom(canUserTriggerRoomNotificationResult = { Result.success(true) }),
+            baseRoom = FakeBaseRoom(
+                roomPermissions = FakeRoomPermissions(canTriggerRoomNotification = true),
+                updateMembersResult = {},
+            ),
             typingNoticeResult = { Result.success(Unit) }
         ).apply {
             givenRoomMembersState(
@@ -1059,17 +1206,14 @@ class MessageComposerPresenterTest {
             )
             givenRoomInfo(
                 aRoomInfo(
-                    isDirect = true,
+                    isDm = true,
                     activeMembersCount = 2,
                 )
             )
         }
         val presenter = createPresenter(room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
-
             // An empty suggestion returns the joined members that are not the current user, but not the room
             initialState.eventSink(MessageComposerEvent.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "")))
             skipItems(1)
@@ -1086,9 +1230,7 @@ class MessageComposerPresenterTest {
                 }
             )
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.textEditorState.setHtml("Hey @bo")
             initialState.eventSink(MessageComposerEvent.InsertSuggestion(ResolvedSuggestion.Member(aRoomMember(userId = A_USER_ID_2))))
@@ -1101,13 +1243,13 @@ class MessageComposerPresenterTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `present - send messages with intentional mentions`() = runTest {
-        val replyMessageLambda = lambdaRecorder { _: EventId?, _: String, _: String?, _: List<IntentionalMention>, _: Boolean ->
+        val replyMessageLambda = lambdaRecorder { _: EventId?, _: String, _: String?, _: List<IntentionalMention>, _: Boolean, _: MsgType ->
             Result.success(Unit)
         }
         val editMessageLambda = lambdaRecorder { _: EventOrTransactionId, _: String, _: String?, _: List<IntentionalMention> ->
             Result.success(Unit)
         }
-        val sendMessageResult = lambdaRecorder { _: String, _: String?, _: List<IntentionalMention> ->
+        val sendMessageResult = lambdaRecorder { _: String, _: String?, _: List<IntentionalMention>, _: MsgType, _: Boolean ->
             Result.success(Unit)
         }
         val timeline = FakeTimeline().apply {
@@ -1119,10 +1261,13 @@ class MessageComposerPresenterTest {
             liveTimeline = timeline,
             typingNoticeResult = { Result.success(Unit) }
         )
-        val presenter = createPresenter(room = room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        val presenter = createPresenter(
+            room = room,
+            slashCommandService = FakeSlashCommandService(
+                parseResult = { _, _, _ -> SlashCommand.NotACommand }
+            ),
+        )
+        presenter.test {
             val initialState = awaitFirstItem()
 
             // Check intentional mentions on message sent
@@ -1139,7 +1284,7 @@ class MessageComposerPresenterTest {
             advanceUntilIdle()
 
             sendMessageResult.assertions().isCalledOnce()
-                .with(value(A_MESSAGE), any(), value(listOf(IntentionalMention.User(A_USER_ID))))
+                .with(value(A_MESSAGE), any(), value(listOf(IntentionalMention.User(A_USER_ID))), value(MsgType.MSG_TYPE_TEXT), value(false))
 
             // Check intentional mentions on reply sent
             initialState.eventSink(MessageComposerEvent.SetMode(aReplyMode()))
@@ -1156,7 +1301,7 @@ class MessageComposerPresenterTest {
 
             assert(replyMessageLambda)
                 .isCalledOnce()
-                .with(any(), any(), any(), value(listOf(IntentionalMention.User(A_USER_ID_2))), value(false))
+                .with(any(), any(), any(), value(listOf(IntentionalMention.User(A_USER_ID_2))), value(false), value(MsgType.MSG_TYPE_TEXT))
 
             // Check intentional mentions on edit message
             skipItems(1)
@@ -1209,9 +1354,7 @@ class MessageComposerPresenterTest {
             typingNoticeResult = typingNoticeResult,
         )
         val presenter = createPresenter(room = room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             typingNoticeResult.assertions().isNeverCalled()
             initialState.eventSink.invoke(MessageComposerEvent.TypingNotice(true))
@@ -1235,9 +1378,7 @@ class MessageComposerPresenterTest {
             isSendTypingNotificationsEnabled = false
         )
         val presenter = createPresenter(room = room, sessionPreferencesStore = store)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             typingNoticeResult.assertions().isNeverCalled()
             initialState.eventSink.invoke(MessageComposerEvent.TypingNotice(true))
@@ -1253,9 +1394,7 @@ class MessageComposerPresenterTest {
             this.loadDraftLambda = loadDraftLambda
         }
         val presenter = createPresenter(draftService = composerDraftService)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             awaitFirstItem()
             assert(loadDraftLambda)
                 .isCalledOnce()
@@ -1278,9 +1417,7 @@ class MessageComposerPresenterTest {
             draftService = composerDraftService,
             permalinkBuilder = permalinkBuilder,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(2)
             awaitItem().also { state ->
                 assertThat(state.textEditorState.messageMarkdown(permalinkBuilder)).isEqualTo(A_MESSAGE)
@@ -1311,9 +1448,7 @@ class MessageComposerPresenterTest {
             draftService = composerDraftService,
             permalinkBuilder = permalinkBuilder,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(1)
             awaitItem().also { state ->
                 assertThat(state.showTextFormatting).isTrue()
@@ -1344,9 +1479,7 @@ class MessageComposerPresenterTest {
             draftService = composerDraftService,
             permalinkBuilder = permalinkBuilder,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(2)
             awaitItem().also { state ->
                 assertThat(state.showTextFormatting).isFalse()
@@ -1390,9 +1523,7 @@ class MessageComposerPresenterTest {
             draftService = composerDraftService,
             permalinkBuilder = permalinkBuilder,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(2)
             awaitItem().also { state ->
                 assertThat(state.showTextFormatting).isFalse()
@@ -1419,9 +1550,7 @@ class MessageComposerPresenterTest {
             this.saveDraftLambda = saveDraftLambda
         }
         val presenter = createPresenter(draftService = composerDraftService)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink.invoke(MessageComposerEvent.SaveDraft)
             advanceUntilIdle()
@@ -1545,9 +1674,13 @@ class MessageComposerPresenterTest {
         isRichTextEditorEnabled: Boolean = true,
         draftService: ComposerDraftService = FakeComposerDraftService(),
         mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
+        threadRoot: ThreadId? = null,
+        slashCommandService: SlashCommandService = FakeSlashCommandService(),
+        featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
     ) = MessageComposerPresenter(
         navigator = navigator,
         sessionCoroutineScope = this,
+        threadRoot = threadRoot,
         room = room,
         mediaPickerProvider = pickerProvider,
         sessionPreferencesStore = sessionPreferencesStore,
@@ -1574,13 +1707,22 @@ class MessageComposerPresenterTest {
         permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionPresenter),
         permalinkParser = permalinkParser,
         permalinkBuilder = permalinkBuilder,
-        timelineController = TimelineController(room, timeline),
+        timelineController = TimelineController(
+            room = room,
+            liveTimeline = timeline,
+            roomCoroutineScope = backgroundScope,
+            dispatchers = testCoroutineDispatchers(),
+        ),
         draftService = draftService,
         mentionSpanProvider = mentionSpanProvider,
         pillificationHelper = textPillificationHelper,
-        suggestionsProcessor = SuggestionsProcessor(),
+        suggestionsProcessor = SuggestionsProcessor(slashCommandService = slashCommandService),
         mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
         notificationConversationService = notificationConversationService,
+        slashCommandService = slashCommandService,
+        featureFlagService = featureFlagService,
+        contentScannerService = { _, _ -> },
+        contentValidationCache = InMemoryEventContentValidationCache(),
     ).apply {
         isTesting = true
         showTextFormatting = isRichTextEditorEnabled

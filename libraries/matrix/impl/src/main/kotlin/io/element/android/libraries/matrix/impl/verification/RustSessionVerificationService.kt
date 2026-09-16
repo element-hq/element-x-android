@@ -44,6 +44,7 @@ import org.matrix.rustcomponents.sdk.VerificationState
 import org.matrix.rustcomponents.sdk.VerificationStateListener
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.time.Duration.Companion.seconds
 import org.matrix.rustcomponents.sdk.SessionVerificationData as RustSessionVerificationData
 import org.matrix.rustcomponents.sdk.SessionVerificationRequestDetails as RustSessionVerificationRequestDetails
@@ -66,9 +67,17 @@ class RustSessionVerificationService(
 
     private val recoveryState = MutableStateFlow(RecoveryState.UNKNOWN)
 
+    private val isInitialized = AtomicBoolean(false)
+
     // Listen for changes in verification status and update accordingly
     private val verificationStateListenerTaskHandle = encryptionService.verificationStateListener(object : VerificationStateListener {
         override fun onUpdate(status: VerificationState) {
+            // If the status is verified, just use it. It can't be a false positive like unknown or unverified
+            if (!isInitialized.get() && status != VerificationState.VERIFIED) {
+                Timber.d("Discarding new verifications state: $status. E2EE is not initialised yet")
+                return
+            }
+
             Timber.d("New verification state: $status")
             _sessionVerifiedStatus.value = status.map()
         }
@@ -77,6 +86,11 @@ class RustSessionVerificationService(
     // In case we enter the recovery key instead we check changes in the recovery state, since the listener above won't be triggered
     private val recoveryStateListenerTaskHandle = encryptionService.recoveryStateListener(object : RecoveryStateListener {
         override fun onUpdate(status: RecoveryState) {
+            if (!isInitialized.get()) {
+                Timber.d("Discarding new recovery state: $status. E2EE is not initialised yet")
+                return
+            }
+
             Timber.d("New recovery state: $status")
             // We could check the `RecoveryState`, but it's easier to just use the verification state directly
             recoveryState.value = status
@@ -87,7 +101,7 @@ class RustSessionVerificationService(
      * The internal service that checks verification can only run after the initial sync.
      * This [StateFlow] will notify consumers when the service is ready to be used.
      */
-    private val isReady = isSyncServiceReady.stateIn(sessionCoroutineScope, SharingStarted.Eagerly, false)
+    private val canVerify = isSyncServiceReady.stateIn(sessionCoroutineScope, SharingStarted.Eagerly, false)
 
     override val needsSessionVerification = sessionVerifiedStatus.map { verificationStatus ->
         verificationStatus == SessionVerifiedStatus.NotVerified
@@ -99,28 +113,25 @@ class RustSessionVerificationService(
 
     private var listener: SessionVerificationServiceListener? = null
 
+    private val initializationMutex = Mutex()
+
     init {
         // Instantiate the verification controller when possible, this is needed to get incoming verification requests
-        sessionCoroutineScope.launch {
-            tryOrNull {
-                encryptionService.waitForE2eeInitializationTasks()
-                initVerificationControllerIfNeeded()
-            }
-        }
+        sessionCoroutineScope.launch { ensureEncryptionIsInitialized() }
     }
 
     override fun setListener(listener: SessionVerificationServiceListener?) {
         this.listener = listener
     }
 
-    override suspend fun requestCurrentSessionVerification() = tryOrFail {
-        initVerificationControllerIfNeeded()
+    override suspend fun requestDeviceVerification() = tryOrFail {
+        ensureEncryptionIsInitialized()
         verificationController.requestDeviceVerification()
         currentVerificationRequest = VerificationRequest.Outgoing.CurrentSession
     }
 
     override suspend fun requestUserVerification(userId: UserId) = tryOrFail {
-        initVerificationControllerIfNeeded()
+        ensureEncryptionIsInitialized()
         verificationController.requestUserVerification(userId.value)
         currentVerificationRequest = VerificationRequest.Outgoing.User(userId)
     }
@@ -135,12 +146,12 @@ class RustSessionVerificationService(
 
     override suspend fun declineVerification() = tryOrFail { verificationController.declineVerification() }
 
-    override suspend fun startVerification() = tryOrFail {
+    override suspend fun startSasVerification() = tryOrFail {
         verificationController.startSasVerification()
     }
 
     override suspend fun acknowledgeVerificationRequest(verificationRequest: VerificationRequest.Incoming) = tryOrFail {
-        initVerificationControllerIfNeeded()
+        ensureEncryptionIsInitialized()
         verificationController.acknowledgeVerificationRequest(
             senderId = verificationRequest.details.senderProfile.userId.value,
             flowId = verificationRequest.details.flowId.value,
@@ -225,7 +236,7 @@ class RustSessionVerificationService(
 
     override suspend fun reset(cancelAnyPendingVerificationAttempt: Boolean) {
         currentVerificationRequest = null
-        if (isReady.value && cancelAnyPendingVerificationAttempt) {
+        if (canVerify.value && cancelAnyPendingVerificationAttempt) {
             // Cancel any pending verification attempt
             tryOrNull { verificationController.cancelVerification() }
         }
@@ -241,21 +252,29 @@ class RustSessionVerificationService(
         }
     }
 
-    private var initControllerMutex = Mutex()
-
-    private suspend fun initVerificationControllerIfNeeded() = initControllerMutex.withLock {
-        if (!this::verificationController.isInitialized) {
-            tryOrFail {
-                verificationController = client.getSessionVerificationController()
-                verificationController.setDelegate(this)
-            }
-        }
-    }
-
     private fun updateVerificationStatus() {
         runCatchingExceptions {
             _sessionVerifiedStatus.value = encryptionService.verificationState().map()
             Timber.d("New verification status: ${_sessionVerifiedStatus.value}")
+        }
+    }
+
+    private suspend fun ensureEncryptionIsInitialized() = initializationMutex.withLock {
+        // We're keeping the separate checks instead of unconditionally calling the suspend methods
+        // so we can skip crossing the FFI layer when it's not needed
+        tryOrFail {
+            if (!isInitialized.get()) {
+                encryptionService.waitForE2eeInitializationTasks()
+                isInitialized.set(true)
+                // Also update the state, because update may have been ignored by VerificationStateListener.onUpdate
+                // If we do not do that the FTUE is stuck on blank screen.
+                updateVerificationStatus()
+            }
+
+            if (!this::verificationController.isInitialized) {
+                verificationController = client.getSessionVerificationController()
+                verificationController.setDelegate(this)
+            }
         }
     }
 }

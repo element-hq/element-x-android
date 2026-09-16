@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_attach_screenshot">"Đính kèm ảnh chụp màn hình"</string>
+  <string name="screen_bug_report_contact_me">"Bạn có thể liên hệ với tôi nếu có bất kỳ câu hỏi nào khác."</string>
+  <string name="screen_bug_report_contact_me_title">"Liên hệ với tôi"</string>
+  <string name="screen_bug_report_edit_screenshot">"Chỉnh sửa ảnh chụp màn hình"</string>
+  <string name="screen_bug_report_editor_description">"Hãy mô tả vấn đề. Bạn đã làm gì? Bạn mong đợi/dự đoán điều gì sẽ xảy ra? Điều gì thực sự đã xảy ra? Hãy trình bày càng chi tiết càng tốt."</string>
+  <string name="screen_bug_report_editor_placeholder">"Hãy mô tả vấn đề…"</string>
+  <string name="screen_bug_report_editor_supporting">"Nếu có thể, vui lòng viết mô tả bằng tiếng Anh."</string>
+  <string name="screen_bug_report_error_description_too_short">"Phần mô tả quá ngắn, vui lòng cung cấp thêm chi tiết về những gì đã xảy ra. Cảm ơn!"</string>
+  <string name="screen_bug_report_include_crash_logs">"Gửi nhật ký sự cố"</string>
+  <string name="screen_bug_report_include_logs">"Cho phép ghi nhật ký"</string>
+  <string name="screen_bug_report_include_logs_error">"Tệp nhật ký của bạn quá lớn nên không thể đưa vào báo cáo này, vui lòng gửi chúng cho chúng tôi bằng cách khác."</string>
+  <string name="screen_bug_report_include_screenshot">"Gửi ảnh chụp màn hình"</string>
+  <string name="screen_bug_report_logs_description">"Nhật ký lỗi sẽ được đính kèm với tin nhắn của bạn để đảm bảo mọi thứ hoạt động bình thường. Để gửi tin nhắn mà không có nhật ký lỗi, hãy tắt cài đặt này."</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"%1$s đã bị lỗi ở lần sử dụng gần nhất. Bạn có muốn chia sẻ báo cáo lỗi với chúng tôi không?"</string>
+  <string name="screen_bug_report_send_notification_settings_description">"Nếu bạn gặp sự cố với thông báo, việc tải lên các quy tắc thông báo có thể giúp chúng tôi xác định nguyên nhân chính. Xin lưu ý rằng các quy tắc này có thể chứa thông tin riêng tư, chẳng hạn như tên hiển thị hoặc từ khóa mà bạn muốn nhận thông báo."</string>
+  <string name="screen_bug_report_send_notification_settings_title">"Cài đặt thông báo"</string>
+  <string name="screen_bug_report_view_logs">"Xem nhật ký"</string>
+</resources>

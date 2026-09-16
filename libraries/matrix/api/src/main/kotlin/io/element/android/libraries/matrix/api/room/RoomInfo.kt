@@ -29,6 +29,7 @@ data class RoomInfo(
     val avatarUrl: String?,
     val isPublic: Boolean?,
     val isDirect: Boolean,
+    val isDm: Boolean,
     val isEncrypted: Boolean?,
     val joinRule: JoinRule?,
     val isSpace: Boolean,
@@ -76,18 +77,10 @@ data class RoomInfo(
     val successorRoom: SuccessorRoom?,
     val roomVersion: String?,
     val privilegedCreatorRole: Boolean,
+    val isLowPriority: Boolean,
+    val activeCallIntentConsensus: CallIntentConsensus,
+    val fullyReadEventId: EventId?,
 ) {
     val aliases: List<RoomAlias>
         get() = listOfNotNull(canonicalAlias) + alternativeAliases
-
-    /**
-     * Returns the list of users with the given [role] in this room.
-     */
-    fun usersWithRole(role: RoomMember.Role): List<UserId> {
-        return if (role is RoomMember.Role.Owner && role.isCreator) {
-            this.creators
-        } else {
-            this.roomPowerLevels?.usersWithRole(role).orEmpty().toList()
-        }
-    }
 }

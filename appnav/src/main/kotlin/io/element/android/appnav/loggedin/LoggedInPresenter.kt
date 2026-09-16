@@ -8,6 +8,7 @@
 
 package io.element.android.appnav.loggedin
 
+import android.Manifest
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -15,12 +16,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.CryptoSessionStateChange
 import im.vector.app.features.analytics.plan.UserProperties
+import io.element.android.features.networkmonitor.api.NetworkMonitor
+import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.extensions.runCatchingExceptions
@@ -29,12 +33,15 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
-import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
+import io.element.android.libraries.permissions.api.PermissionsEvent
+import io.element.android.libraries.permissions.api.PermissionsPresenter
+import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionAdvisor
+import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialog
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.push.api.PusherRegistrationFailure
 import io.element.android.services.analytics.api.AnalyticsService
@@ -56,7 +63,13 @@ class LoggedInPresenter(
     private val analyticsService: AnalyticsService,
     private val encryptionService: EncryptionService,
     private val buildMeta: BuildMeta,
+    private val networkMonitor: NetworkMonitor,
+    private val localNetworkPermissionAdvisor: LocalNetworkPermissionAdvisor,
+    permissionsPresenterFactory: PermissionsPresenter.Factory,
 ) : Presenter<LoggedInState> {
+    private val localNetworkPermissionsPresenter: PermissionsPresenter =
+        permissionsPresenterFactory.create(Manifest.permission.ACCESS_LOCAL_NETWORK)
+
     @Composable
     override fun present(): LoggedInState {
         val coroutineScope = rememberCoroutineScope()
@@ -92,9 +105,18 @@ class LoggedInPresenter(
         }
         val syncIndicator by matrixClient.roomListService.syncIndicator.collectAsState()
         val isOnline by syncService.isOnline.collectAsState()
-        val showSyncSpinner by remember {
+        val hasNetwork by networkMonitor.connectivity.collectAsState()
+        val syncIndicatorState by remember {
             derivedStateOf {
-                isOnline && syncIndicator == RoomListService.SyncIndicator.Show
+                when {
+                    isOnline -> if (syncIndicator == RoomListService.SyncIndicator.Show) {
+                        SyncIndicatorState.Syncing
+                    } else {
+                        SyncIndicatorState.Hidden
+                    }
+                    hasNetwork == NetworkStatus.Connected -> SyncIndicatorState.ServerUnreachable
+                    else -> SyncIndicatorState.Hidden
+                }
             }
         }
         var forceNativeSlidingSyncMigration by remember { mutableStateOf(false) }
@@ -107,9 +129,38 @@ class LoggedInPresenter(
             }.launchIn(this)
         }
 
-        fun handleEvent(event: LoggedInEvents) {
+        LaunchedEffect(Unit) {
+            // Keep automatic call status (m.call) in sync with homeserver support.
+            val enabled = matrixClient.isUserStatusSupported().getOrDefault(false)
+            matrixClient.enableAutomaticCallStatus(enabled)
+        }
+
+        val networkConnectivity by networkMonitor.connectivity.collectAsState()
+        LaunchedEffect(networkConnectivity) {
+            if (networkConnectivity == NetworkStatus.Connected) {
+                // Refresh homeserver capabilities when the network is back
+                matrixClient.homeserverCapabilities().refresh()
+            }
+        }
+
+        val localNetworkPermissionState = localNetworkPermissionsPresenter.present()
+        var localNetworkPromptDismissedThisSession by remember { mutableStateOf(false) }
+        val advisorRequestsPrompt by produceState(initialValue = false, localNetworkPermissionState.permissionGranted) {
+            value = localNetworkPermissionAdvisor.shouldRequestPermissionFor(matrixClient.homeserverUrl)
+        }
+        LaunchedEffect(localNetworkPermissionState.permissionGranted) {
+            if (localNetworkPermissionState.permissionGranted) localNetworkPromptDismissedThisSession = false
+        }
+        val localNetworkPermissionDialog = when {
+            !advisorRequestsPrompt -> LocalNetworkPermissionDialog.None
+            localNetworkPromptDismissedThisSession -> LocalNetworkPermissionDialog.None
+            localNetworkPermissionState.shouldShowRationale -> LocalNetworkPermissionDialog.Rationale
+            else -> LocalNetworkPermissionDialog.Settings
+        }
+
+        fun handleEvent(event: LoggedInEvent) {
             when (event) {
-                is LoggedInEvents.CloseErrorDialog -> {
+                is LoggedInEvent.CloseErrorDialog -> {
                     pusherRegistrationState.value = AsyncData.Uninitialized
                     if (event.doNotShowAgain) {
                         coroutineScope.launch {
@@ -117,22 +168,34 @@ class LoggedInPresenter(
                         }
                     }
                 }
-                LoggedInEvents.CheckSlidingSyncProxyAvailability -> coroutineScope.launch {
+                LoggedInEvent.CheckSlidingSyncProxyAvailability -> coroutineScope.launch {
                     forceNativeSlidingSyncMigration = matrixClient.needsForcedNativeSlidingSyncMigration().getOrDefault(false)
                 }
-                LoggedInEvents.LogoutAndMigrateToNativeSlidingSync -> coroutineScope.launch {
+                LoggedInEvent.LogoutAndMigrateToNativeSlidingSync -> coroutineScope.launch {
                     // Force the logout since Native Sliding Sync is already enforced by the SDK
                     matrixClient.logout(userInitiated = true, ignoreSdkError = true)
+                }
+                LoggedInEvent.DismissLocalNetworkPermissionPrompt -> {
+                    localNetworkPromptDismissedThisSession = true
+                }
+                LoggedInEvent.RequestLocationNetworkPermission -> {
+                    if (localNetworkPermissionDialog == LocalNetworkPermissionDialog.Settings) {
+                        localNetworkPermissionState.eventSink(PermissionsEvent.OpenSystemSettingAndCloseDialog)
+                    } else {
+                        localNetworkPermissionState.eventSink(PermissionsEvent.RequestPermissions)
+                    }
+                    localNetworkPromptDismissedThisSession = true
                 }
             }
         }
 
         return LoggedInState(
-            showSyncSpinner = showSyncSpinner,
+            syncIndicatorState = syncIndicatorState,
             pusherRegistrationState = pusherRegistrationState.value,
             ignoreRegistrationError = ignoreRegistrationError,
             forceNativeSlidingSyncMigration = forceNativeSlidingSyncMigration,
             appName = buildMeta.applicationName,
+            localNetworkPermissionDialog = localNetworkPermissionDialog,
             eventSink = ::handleEvent,
         )
     }
@@ -166,7 +229,6 @@ class LoggedInPresenter(
     }
 
     private fun CoroutineScope.preloadAccountManagementUrl() = launch {
-        matrixClient.getAccountManagementUrl(AccountManagementAction.Profile)
-        matrixClient.getAccountManagementUrl(AccountManagementAction.SessionsList)
+        matrixClient.getAccountManagementUrl(null)
     }
 }

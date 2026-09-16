@@ -42,4 +42,19 @@ class TimelineProtectionStateTest {
         assertThat(sut.hideMediaContent(AN_EVENT_ID)).isFalse()
         assertThat(sut.hideMediaContent(AN_EVENT_ID_2)).isTrue()
     }
+
+    @Test
+    fun `when isMine is true, hideMediaContent always returns false regardless of state`() {
+        val sutRenderAll = aTimelineProtectionState(
+            protectionState = ProtectionState.RenderAll
+        )
+        assertThat(sutRenderAll.hideMediaContent(null, isMine = true)).isFalse()
+        assertThat(sutRenderAll.hideMediaContent(AN_EVENT_ID, isMine = true)).isFalse()
+
+        val sutRenderOnly = aTimelineProtectionState(
+            protectionState = ProtectionState.RenderOnly(persistentSetOf())
+        )
+        assertThat(sutRenderOnly.hideMediaContent(null, isMine = true)).isFalse()
+        assertThat(sutRenderOnly.hideMediaContent(AN_EVENT_ID, isMine = true)).isFalse()
+    }
 }

@@ -8,7 +8,9 @@
 
 package io.element.android.libraries.matrix.test
 
+import io.element.android.libraries.matrix.api.HomeserverCapabilitiesProvider
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.analytics.SdkStoreSizes
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -18,11 +20,14 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
+import io.element.android.libraries.matrix.api.linknewdevice.LinkDesktopHandler
+import io.element.android.libraries.matrix.api.linknewdevice.LinkMobileHandler
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaPreviewService
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
-import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
+import io.element.android.libraries.matrix.api.oauth.AccountManagementAction
+import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -30,13 +35,18 @@ import io.element.android.libraries.matrix.api.room.NotJoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
+import io.element.android.libraries.matrix.api.room.location.BeaconInfoUpdate
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.scanner.ContentScanner
+import io.element.android.libraries.matrix.api.search.MessageSearchService
 import io.element.android.libraries.matrix.api.spaces.SpaceService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.api.user.UserStatus
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.media.FakeMatrixMediaLoader
@@ -46,6 +56,7 @@ import io.element.android.libraries.matrix.test.notificationsettings.FakeNotific
 import io.element.android.libraries.matrix.test.pushers.FakePushersService
 import io.element.android.libraries.matrix.test.roomdirectory.FakeRoomDirectoryService
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
+import io.element.android.libraries.matrix.test.search.FakeMessageSearchService
 import io.element.android.libraries.matrix.test.spaces.FakeSpaceService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
@@ -61,11 +72,15 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
+import java.io.File
 import java.util.Optional
 
 class FakeMatrixClient(
     override val sessionId: SessionId = A_SESSION_ID,
+    override val sessionPaths: SessionPaths = SessionPaths(fileDirectory = File("files"), cacheDirectory = File("cache")),
     override val deviceId: DeviceId = A_DEVICE_ID,
+    override val server: String = A_SERVER_NAME,
+    override val homeserverUrl: String = A_HOMESERVER_URL,
     override val sessionCoroutineScope: CoroutineScope = TestScope(),
     private val userDisplayName: String? = A_USER_NAME,
     private val userAvatarUrl: String? = AN_AVATAR_URL,
@@ -79,10 +94,13 @@ class FakeMatrixClient(
     override val syncService: SyncService = FakeSyncService(),
     override val encryptionService: EncryptionService = FakeEncryptionService(),
     override val roomDirectoryService: RoomDirectoryService = FakeRoomDirectoryService(),
+    override val isMessageSearchAvailable: Boolean = false,
+    override val messageSearchService: MessageSearchService = FakeMessageSearchService(),
     override val mediaPreviewService: MediaPreviewService = FakeMediaPreviewService(),
     override val roomMembershipObserver: RoomMembershipObserver = RoomMembershipObserver(),
+    private val homeserverCapabilitiesProvider: FakeHomeserverCapabilitiesProvider = FakeHomeserverCapabilitiesProvider(),
     private val accountManagementUrlResult: (AccountManagementAction?) -> Result<String?> = { lambdaError() },
-    private val resolveRoomAliasResult: (RoomAlias) -> Result<Optional<ResolvedRoomAlias>> = {
+    private val resolveRoomAliasResult: suspend (RoomAlias) -> Result<Optional<ResolvedRoomAlias>> = {
         Result.success(
             Optional.of(ResolvedRoomAlias(A_ROOM_ID, emptyList()))
         )
@@ -95,15 +113,28 @@ class FakeMatrixClient(
     private val deactivateAccountResult: (String, Boolean) -> Result<Unit> = { _, _ -> lambdaError() },
     private val currentSlidingSyncVersionLambda: () -> Result<SlidingSyncVersion> = { lambdaError() },
     private val ignoreUserResult: (UserId) -> Result<Unit> = { lambdaError() },
+    private val canLinkNewDeviceResult: () -> Result<Boolean> = { lambdaError() },
+    private val createLinkMobileHandlerResult: () -> Result<LinkMobileHandler> = { lambdaError() },
+    private val createLinkDesktopHandlerResult: () -> Result<LinkDesktopHandler> = { lambdaError() },
     private var unIgnoreUserResult: (UserId) -> Result<Unit> = { Result.success(Unit) },
     private val canReportRoomLambda: () -> Boolean = { false },
     private val isLivekitRtcSupportedLambda: () -> Boolean = { false },
     override val ignoredUsersFlow: StateFlow<ImmutableList<UserId>> = MutableStateFlow(persistentListOf()),
+    override val ownBeaconInfoUpdates: Flow<BeaconInfoUpdate> = emptyFlow(),
     private val getMaxUploadSizeResult: () -> Result<Long> = { lambdaError() },
     private val getJoinedRoomIdsResult: () -> Result<Set<RoomId>> = { Result.success(emptySet()) },
     private val getRecentEmojisLambda: () -> Result<List<String>> = { Result.success(emptyList()) },
     private val addRecentEmojiLambda: (String) -> Result<Unit> = { Result.success(Unit) },
+    private val getAccountDataLambda: (String) -> Result<String?> = { lambdaError() },
+    private val setAccountDataLambda: (String, String) -> Result<Unit> = { _, _ -> lambdaError() },
     private val markRoomAsFullyReadResult: (RoomId, EventId) -> Result<Unit> = { _, _ -> lambdaError() },
+    private val markAllRoomsAsReadResult: () -> Result<Unit> = { Result.success(Unit) },
+    private val performDatabaseVacuumLambda: () -> Result<Unit> = { lambdaError() },
+    private val getDatabaseSizesLambda: () -> Result<SdkStoreSizes> = { lambdaError() },
+    private val resetWellKnownConfigLambda: () -> Result<Unit> = { lambdaError() },
+    private val enableAutomaticCallStatusLambda: (Boolean) -> Unit = { },
+    override val contentScanner: ContentScanner? = null,
+    private val isShuttingDownResult: () -> Boolean = { false },
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
         private set
@@ -111,12 +142,20 @@ class FakeMatrixClient(
         private set
     var removeAvatarCalled: Boolean = false
         private set
+    var setUserStatusCalled: Boolean = false
+        private set
+    var clearUserStatusCalled: Boolean = false
+        private set
+    var setUserStatusResult: Result<Unit> = Result.success(Unit)
+    var clearUserStatusResult: Result<Unit> = Result.success(Unit)
+    var isUserStatusSupportedResult: Result<Boolean> = Result.success(true)
+    var isProfilesSlidingSyncExtensionSupportedResult: Result<Boolean> = Result.success(true)
 
     private val _userProfile: MutableStateFlow<MatrixUser> = MutableStateFlow(MatrixUser(sessionId, userDisplayName, userAvatarUrl))
     override val userProfile: StateFlow<MatrixUser> = _userProfile
 
-    private var createRoomResult: Result<RoomId> = Result.success(A_ROOM_ID)
-    private var createDmResult: Result<RoomId> = Result.success(A_ROOM_ID)
+    var createRoomResult: (CreateRoomParameters) -> Result<RoomId> = { Result.success(A_ROOM_ID) }
+    var createDmResult: (UserId, Boolean) -> Result<RoomId> = { _, _ -> Result.success(A_ROOM_ID) }
     private var findDmResult: Result<RoomId?> = Result.success(A_ROOM_ID)
     private val getRoomResults = mutableMapOf<RoomId, BaseRoom>()
     private val searchUserResults = mutableMapOf<String, Result<MatrixSearchUserResults>>()
@@ -164,11 +203,11 @@ class FakeMatrixClient(
     }
 
     override suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId> = simulateLongTask {
-        return createRoomResult
+        return createRoomResult(createRoomParams)
     }
 
-    override suspend fun createDM(userId: UserId): Result<RoomId> = simulateLongTask {
-        return createDmResult
+    override suspend fun createDM(userId: UserId, isEncrypted: Boolean): Result<RoomId> = simulateLongTask {
+        return createDmResult(userId, isEncrypted)
     }
 
     override suspend fun getProfile(userId: UserId): Result<MatrixUser> {
@@ -181,6 +220,10 @@ class FakeMatrixClient(
 
     override suspend fun getCacheSize(): Long {
         return 0
+    }
+
+    override suspend fun getDatabaseSizes(): Result<SdkStoreSizes> {
+        return getDatabaseSizesLambda()
     }
 
     override suspend fun clearCache() = simulateLongTask {
@@ -229,6 +272,34 @@ class FakeMatrixClient(
         return removeAvatarResult
     }
 
+    override suspend fun setUserStatus(status: UserStatus): Result<Unit> {
+        setUserStatusCalled = true
+        if (setUserStatusResult.isSuccess) {
+            _userProfile.emit(_userProfile.value.copy(
+                rawStatus = status,
+                displayedStatus = DisplayedStatus.UserSet(status),
+            ))
+        }
+        return setUserStatusResult
+    }
+
+    override suspend fun clearUserStatus(): Result<Unit> {
+        clearUserStatusCalled = true
+        if (clearUserStatusResult.isSuccess) {
+            _userProfile.emit(_userProfile.value.copy(
+                rawStatus = null,
+                displayedStatus = null,
+            ))
+        }
+        return clearUserStatusResult
+    }
+
+    override suspend fun isUserStatusSupported(): Result<Boolean> = isUserStatusSupportedResult
+
+    override suspend fun isProfilesSlidingSyncExtensionSupported(): Result<Boolean> = isProfilesSlidingSyncExtensionSupportedResult
+
+    override fun enableAutomaticCallStatus(enabled: Boolean) = enableAutomaticCallStatusLambda(enabled)
+
     override suspend fun joinRoom(roomId: RoomId): Result<RoomInfo?> = joinRoomLambda(roomId)
 
     override suspend fun joinRoomByIdOrAlias(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomInfo?> {
@@ -239,14 +310,17 @@ class FakeMatrixClient(
         return knockRoomLambda(roomIdOrAlias, message, serverNames)
     }
 
+    override val isShuttingDown: Boolean
+        get() = isShuttingDownResult()
+
     // Mocks
 
     fun givenCreateRoomResult(result: Result<RoomId>) {
-        createRoomResult = result
+        createRoomResult = { result }
     }
 
     fun givenCreateDmResult(result: Result<RoomId>) {
-        createDmResult = result
+        createDmResult = { _, _ -> result }
     }
 
     fun givenFindDmResult(result: Result<RoomId?>) {
@@ -348,7 +422,43 @@ class FakeMatrixClient(
         return getRecentEmojisLambda()
     }
 
+    override suspend fun getAccountData(eventType: String): Result<String?> {
+        return getAccountDataLambda(eventType)
+    }
+
+    override suspend fun setAccountData(eventType: String, content: String): Result<Unit> {
+        return setAccountDataLambda(eventType, content)
+    }
+
     override suspend fun markRoomAsFullyRead(roomId: RoomId, eventId: EventId): Result<Unit> {
         return markRoomAsFullyReadResult(roomId, eventId)
+    }
+
+    override suspend fun markAllRoomsAsRead(): Result<Unit> {
+        return markAllRoomsAsReadResult()
+    }
+
+    override suspend fun performDatabaseVacuum(): Result<Unit> {
+        return performDatabaseVacuumLambda()
+    }
+
+    override suspend fun canLinkNewDevice(): Result<Boolean> = simulateLongTask {
+        return canLinkNewDeviceResult()
+    }
+
+    override fun createLinkDesktopHandler(): Result<LinkDesktopHandler> {
+        return createLinkDesktopHandlerResult()
+    }
+
+    override fun createLinkMobileHandler(): Result<LinkMobileHandler> {
+        return createLinkMobileHandlerResult()
+    }
+
+    override suspend fun resetWellKnownConfig(): Result<Unit> {
+        return resetWellKnownConfigLambda()
+    }
+
+    override fun homeserverCapabilities(): HomeserverCapabilitiesProvider {
+        return homeserverCapabilitiesProvider
     }
 }

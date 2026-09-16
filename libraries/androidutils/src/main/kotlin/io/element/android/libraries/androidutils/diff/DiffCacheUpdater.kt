@@ -28,7 +28,7 @@ class DiffCacheUpdater<ListItem, CachedItem>(
     private val cacheInvalidator: DiffCacheInvalidator<CachedItem> = DefaultDiffCacheInvalidator(),
     private val areItemsTheSame: (oldItem: ListItem?, newItem: ListItem?) -> Boolean,
 ) {
-    private val lock = Object()
+    private val lock = Any()
     private var prevOriginalList: List<ListItem> = emptyList()
 
     private val listUpdateCallback = object : ListUpdateCallback {

@@ -18,7 +18,10 @@ package io.element.android.libraries.matrix.api.permalink
 interface PermalinkParser {
     /**
      * Turns a uri string to a [PermalinkData].
+     * A uri that is not a Matrix permalink is reported as a fallback link rather than as an error, so this never throws.
      * https://github.com/matrix-org/matrix-doc/blob/master/proposals/1704-matrix.to-permalinks.md
+     *
+     * @param uriString the uri to parse.
      */
     fun parse(uriString: String): PermalinkData
 }

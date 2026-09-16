@@ -28,6 +28,9 @@ interface PreferencesEntryPoint : FeatureEntryPoint {
 
         @Parcelize
         data object NotificationTroubleshoot : InitialTarget
+
+        @Parcelize
+        data object DeveloperSettings : InitialTarget
     }
 
     data class Params(val initialElement: InitialTarget) : NodeInputs
@@ -41,9 +44,20 @@ interface PreferencesEntryPoint : FeatureEntryPoint {
 
     interface Callback : Plugin {
         fun navigateToAddAccount()
+        fun navigateToLinkNewDevice()
         fun navigateToBugReport()
         fun navigateToSecureBackup()
         fun navigateToRoomNotificationSettings(roomId: RoomId)
         fun navigateToEvent(roomId: RoomId, eventId: EventId)
+    }
+
+    fun createAppDeveloperSettingsNode(
+        parentNode: Node,
+        buildContext: BuildContext,
+        callback: DeveloperSettingsCallback,
+    ): Node
+
+    interface DeveloperSettingsCallback : Plugin {
+        fun onDone()
     }
 }

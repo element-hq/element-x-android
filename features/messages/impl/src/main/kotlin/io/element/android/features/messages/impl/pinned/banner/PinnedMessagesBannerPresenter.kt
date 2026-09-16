@@ -58,9 +58,9 @@ class PinnedMessagesBannerPresenter(
             },
         )
 
-        fun handleEvent(event: PinnedMessagesBannerEvents) {
+        fun handleEvent(event: PinnedMessagesBannerEvent) {
             when (event) {
-                is PinnedMessagesBannerEvents.MoveToNextPinned -> {
+                is PinnedMessagesBannerEvent.MoveToNextPinned -> {
                     val loadedCount = pinnedItems.value.dataOrNull().orEmpty().size
                     currentPinnedMessageIndex = (currentPinnedMessageIndex - 1).mod(loadedCount)
                 }
@@ -80,7 +80,7 @@ class PinnedMessagesBannerPresenter(
         expectedPinnedMessagesCount: Int,
         pinnedItems: AsyncData<ImmutableList<PinnedMessagesBannerItem>>,
         currentPinnedMessageIndex: Int,
-        eventSink: (PinnedMessagesBannerEvents) -> Unit
+        eventSink: (PinnedMessagesBannerEvent) -> Unit
     ): PinnedMessagesBannerState {
         return when (pinnedItems) {
             is AsyncData.Failure, is AsyncData.Uninitialized -> PinnedMessagesBannerState.Hidden

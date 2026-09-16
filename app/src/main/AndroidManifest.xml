@@ -8,9 +8,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- To be able to install APK from the application -->
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-
     <application
         android:name=".ElementXApplication"
         android:allowBackup="false"
@@ -75,7 +72,7 @@
                     android:scheme="elementx" />
             </intent-filter>
             <!--
-              Oidc redirection
+              OAuth redirection
             -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -119,20 +116,6 @@
                 <data android:path="/element/" />
             </intent-filter>
             <!--
-              matrix.to links
-              Note: On Android 12 and higher clicking a web link (that is not an Android App Link) always shows content in a web browser
-              https://developer.android.com/training/app-links#web-links
-            -->
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="https" />
-                <data android:host="matrix.to" />
-            </intent-filter>
-            <!--
               matrix: links
             -->
             <intent-filter>
@@ -156,6 +139,12 @@
                 <data android:host="user" />
                 <data android:host="room" />
             </intent-filter>
+            <!--
+              Conversation shortcuts offered in the Direct Share row of the system share sheet.
+            -->
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
             <!-- Incoming share simple -->
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />

@@ -15,7 +15,7 @@ import org.junit.Test
 class AssetTypeKtTest {
     @Test
     fun toInner() {
-        assertThat(AssetType.SENDER.toInner()).isEqualTo(org.matrix.rustcomponents.sdk.AssetType.SENDER)
-        assertThat(AssetType.PIN.toInner()).isEqualTo(org.matrix.rustcomponents.sdk.AssetType.PIN)
+        assertThat(AssetType.SENDER.into()).isEqualTo(org.matrix.rustcomponents.sdk.AssetType.SENDER)
+        assertThat(AssetType.PIN.into()).isEqualTo(org.matrix.rustcomponents.sdk.AssetType.PIN)
     }
 }

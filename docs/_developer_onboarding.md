@@ -11,6 +11,7 @@
   * [Rust SDK](#rust-sdk)
     * [Matrix Rust Component Kotlin](#matrix-rust-component-kotlin)
     * [Building the SDK locally](#building-the-sdk-locally)
+    * [rustls and platform verifier](#rustls-and-platform-verifier)
   * [The Android project](#the-android-project)
   * [Application](#application)
     * [Jetpack Compose](#jetpack-compose)
@@ -24,6 +25,7 @@
     * [Logging](#logging)
     * [Translations](#translations)
     * [Rageshake](#rageshake)
+    * [Developer options](#developer-options)
   * [Tips](#tips)
 * [Happy coding!](#happy-coding)
 
@@ -142,9 +144,14 @@ Prerequisites:
   export ANDROID_HOME=$HOME/android/sdk
   ```
 
+* On macos ensure gnu-getopt is installed
+  ```
+  brew install gnu-getopt
+  ```
+
 You can then build the Rust SDK by running the script
-[`tools/sdk/build_rust_sdk.sh`](../tools/sdk/build_rust_sdk.sh) and just answering
-the questions.
+[`tools/sdk/build-rust-sdk`](../tools/sdk/build-rust-sdk). Type
+`./tools/sdk/build-rust-sdk --help` for help.
 
 This will prompt you for the path to the Rust SDK, then build it and
 `matrix-rust-components-kotlin`, eventually producing an aar file at
@@ -158,6 +165,19 @@ Troubleshooting:
    `JAVA_HOME` and, if building via Android Studio, "File | Settings | Build, Execution, Deployment | Build Tools | Gradle | Gradle JDK".
 
 You can switch back to using the published version of the SDK by deleting `libraries/rustsdk/matrix-rust-sdk.aar`.
+
+#### rustls and platform verifier
+
+The SDK uses [rustls](https://github.com/rustls/rustls) for TLS, which is a pure Rust implementation of TLS. In turn, this means we have to add the
+`rustls-platform-verifier` library to our project, which provides platform-specific TLS certificate verification for rustls. This library uses the Android NDK's
+`TrustManager` to verify TLS certificates on Android.
+
+Though it's meant to be used through convoluted way of downloading the dependency, locating it in the
+cargo folder and using that path as a local maven repo as described [here](https://github.com/rustls/rustls-platform-verifier#android), we have
+added a script (`tools/sdk/update-rustls`) to download, unpack and add this AAR file locally to the `:libraries:matrix:impl` module instead.
+
+When should we run this script? Whenever we update the `rustls` dependency in the Rust SDK, we should check if the version of `rustls-platform-verifier`
+has changed as well, and if so, run this script to update the AAR file in our project. The SDK team should ping us when this happens.
 
 ### The Android project
 
@@ -283,6 +303,8 @@ Follow these steps to install and configure the plugin and templates:
    - Click on OK
 4. Configure generate-module-from-template plugin :
    - Navigate to AS/Settings/Tools/Module Template Settings
+   - If a `FeatureModule` template is already listed, select it and remove it, since the plugin keeps its own copy of the
+     imported template and will not pick up changes made to `FeatureModule.json` on its own
    - Click on + / Import From File
    - Pick the `tools/templates/FeatureModule.json`
 
@@ -300,9 +322,11 @@ Example for a new feature called RoomDetails:
 4. Verify that the structure looks ok and click on Finish
 5. The modules api/impl should be created under `features/roomdetails` directory.
 6. Sync project with Gradle so the modules are recognized (no need to add them to settings.gradle).
-7. You can now add more Presentation classes (Events, State, StateProvider, View, Presenter) in the impl module with the `Template Presentation Classes`.
-   To use it, just right click on the package where you want to generate classes, and click on `Template Presentation Classes`.
-   Fill the text field with the base name of the classes, ie `RootRoomDetails` in the `root` package.
+7. You can now add more Presentation classes (Event, State, StatePreviewParam, View, Presenter) in the impl module with the `Template Presentation Classes`.
+   To use it, just right click on the package where you want to generate classes, and click on `New` / `Template Presentation Classes`.
+   Fill the text field with the base name of the classes: the generated files are `<BaseName>Event.kt`, `<BaseName>State.kt`,
+   `<BaseName>StatePreviewParam.kt`, `<BaseName>Presenter.kt`, `<BaseName>Node.kt` and `<BaseName>View.kt`. For instance
+   `PreferencesRoot` in the `features/preferences/impl/root` package.
 
 
 Note that naming of files and classes is important, since those names are used to set up code coverage rules. For instance, presenters MUST have a
@@ -334,11 +358,12 @@ Some dependency, mainly because they are not shared can be declared in `build.gr
 We have 3 tests frameworks in place, and this should be sufficient to guarantee a good code coverage and limit regressions hopefully:
 
 - Maestro to test the global usage of the application. See the related [documentation](../.maestro/README.md).
-- Combination of [Showkase](https://github.com/airbnb/Showkase) and [Paparazzi](https://github.com/cashapp/paparazzi), to test UI pixel perfect. To add test,
+- Combination of [Paparazzi](https://github.com/cashapp/paparazzi) and
+  [ComposablePreviewScanner](https://github.com/sergio-sastre/ComposablePreviewScanner), to test UI pixel perfect. To add test,
   just add `@Preview` for the composable you are adding. See the related [documentation](screenshot_testing.md) and see in the template the
-  file [TemplateView.kt](../features/template/src/main/kotlin/io/element/android/features/template/TemplateView.kt). We create PreviewProvider to provide
+  file [TemplateView.kt](../features/template/src/main/kotlin/io/element/android/features/template/TemplateView.kt). We create PreviewParam classes to provide
   different states. See for instance the
-  file [TemplateStateProvider.kt](../features/template/src/main/kotlin/io/element/android/features/template/TemplateStateProvider.kt)
+  file [TemplateStatePreviewParam.kt](../features/template/src/main/kotlin/io/element/android/features/template/TemplateStatePreviewParam.kt)
 - Tests on presenter with [Molecule](https://github.com/cashapp/molecule) and [Turbine](https://github.com/cashapp/turbine). See in the template the class [TemplatePresenterTests](../features/template/src/test/kotlin/io/element/android/features/template/TemplatePresenterTests.kt).
 
 **Note** For now we want to avoid using class mocking (with library such as *mockk*), because this should be not necessary. We prefer to create Fake
@@ -409,14 +434,30 @@ The data will be sent to an internal server, which is not publicly accessible. A
 
 Rageshake can be very useful to get logs from a release version of the application.
 
+
+#### Developer options
+
+> [!WARNING]
+> Developer options can result in unexpected application behavior or destructive
+> actions. Use with caution and only if you are instructed by someone at Element or are
+> already familiar.
+
+These options provide advanced controls for testing and debugging. They are visible by
+default in debug and nightly builds but are hidden in release versions.
+
+**Enabling in release builds:** Navigate to application settings and tap the version
+number at the bottom 7 times. After tapping, a new "Developer options" entry will appear
+at the bottom of the list.
+
+The developer options include feature flags, notification/push history, Element call
+customization, Rust SDK log levels, per-feature tracing toggles, rageshake controls, app
+crash controls, cache details/controls, persistent storage maintenance tasks.
+
+Keywords: Developer settings, developer mode
+
+
 ### Tips
 
-- Element Android has a `developer mode` in the `Settings/Advanced settings`. Other useful options are available here; (TODO Not supported yet!)
-- Show hidden Events can also help to debug feature. When developer mode is enabled, it is possible to view the source (= the Json content) of any Events; (TODO
-  Not supported yet!)
-- Type `/devtools` in a Room composer to access a developer menu. There are some other entry points. Developer mode has to be enabled; (TODO Not supported yet!)
-- Hidden debug menu: when developer mode is enabled and on debug build, there are some extra screens that can be accessible using the green wheel. In those
-  screens, it will be possible to toggle some feature flags; (TODO Not supported yet!)
 - Using logcat, filtering with `Compositions` can help you to understand what screen are currently displayed on your device. Searching for string displayed on
   the screen can also help to find the running code in the codebase.
 - When this is possible, prefer using `sealed interface` instead of `sealed class`;

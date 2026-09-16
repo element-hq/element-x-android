@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="leave_conversation_alert_subtitle">"Jeste li sigurni da želite napustiti ovaj razgovor? Ovaj razgovor nije javan i nećete se moći ponovno pridružiti bez pozivnice."</string>
+  <string name="leave_room_alert_empty_subtitle">"Jeste li sigurni da želite napustiti ovu sobu? Ovdje ste jedino vi. Ako odete, nitko se ubuduće neće moći pridružiti, pa ni vi."</string>
+  <string name="leave_room_alert_private_subtitle">"Jeste li sigurni da želite napustiti ovu sobu? Ova soba nije javna i nećete joj se moći ponovno pridružiti bez pozivnice."</string>
+  <string name="leave_room_alert_select_new_owner_action">"Odaberi vlasnike"</string>
+  <string name="leave_room_alert_select_new_owner_subtitle">"Vi ste jedini vlasnik ove sobe. Morate prenijeti vlasništvo na nekog drugog prije nego što napustite sobu."</string>
+  <string name="leave_room_alert_select_new_owner_title">"Prenesi vlasništvo"</string>
+  <string name="leave_room_alert_subtitle">"Jeste li sigurni da želite napustiti sobu?"</string>
+</resources>

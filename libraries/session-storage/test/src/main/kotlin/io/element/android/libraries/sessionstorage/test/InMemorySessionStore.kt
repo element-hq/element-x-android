@@ -81,8 +81,6 @@ class InMemorySessionStore(
     }
 
     override suspend fun removeSession(sessionId: String) {
-        val currentList = sessionDataListFlow.value.toMutableList()
-        currentList.removeAll { it.userId == sessionId }
-        sessionDataListFlow.value = currentList
+        sessionDataListFlow.value = sessionDataListFlow.value.filter { it.userId != sessionId }
     }
 }

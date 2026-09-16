@@ -1,29 +1,34 @@
 name: Generate GitHub Pages
 on:
   workflow_dispatch:
-  schedule:
-    # At 00:00 on every Tuesday UTC
-    - cron: '0 0 * * 2'
+# Disabled for now, as we don't want to generate GitHub Pages on every push to main anymore
+#  schedule:
+#    # At 00:00 on every Tuesday UTC
+#    - cron: '0 0 * * 2'
+
+permissions: {}
 
 jobs:
   generate-github-pages:
     runs-on: ubuntu-latest
     # Skip in forks
     if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
+    permissions:
+      contents: write
     steps:
       - name: ⏬ Checkout with LFS
-        uses: nschloe/action-cached-lfs-checkout@f46300cd8952454b9f0a21a3d133d4bd5684cfc2 # v1.2.3
+        uses: nschloe/action-cached-lfs-checkout@385a8ecc719e50b8c71af6ab01a624b486b7c3bc # v1.2.5
       - name: Use JDK 21
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@dd06d9cba3e5552c54d9f8ea23572deb30010f7c # v6.0.0
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '21'
       - name: Configure gradle
-        uses: gradle/actions/setup-gradle@v5
+        uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Set up Python 3.12
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: 3.14
       - name: Run World screenshots generation script
@@ -32,7 +37,7 @@ jobs:
           mkdir -p screenshots/en
           cp tests/uitests/src/test/snapshots/images/* screenshots/en
       - name: Deploy GitHub Pages
-        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4.0.0
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./screenshots

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"このファイルはルームから削除され、他のユーザーは確認することができなくなります。"</string>
+  <string name="screen_media_browser_delete_confirmation_title">"ファイルを削除しますか？"</string>
+  <string name="screen_media_browser_download_error_message">"インターネット接続を確認した上、再度お試しください。"</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"このルームに投稿された文書ファイルや音声ファイル・メッセージはここに表示されます。"</string>
+  <string name="screen_media_browser_files_empty_state_title">"アップロードされたファイルはありません"</string>
+  <string name="screen_media_browser_list_loading_files">"ファイルを読み込み中…"</string>
+  <string name="screen_media_browser_list_loading_media">"メディアを読み込み中…"</string>
+  <string name="screen_media_browser_list_mode_files">"ファイル"</string>
+  <string name="screen_media_browser_list_mode_media">"メディア"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"このルームに投稿された画像と動画はここに表示されます。"</string>
+  <string name="screen_media_browser_media_empty_state_title">"アップロードされたメディアはありません"</string>
+  <string name="screen_media_browser_title">"ファイルとメディア"</string>
+  <string name="screen_media_details_file_format">"ファイル形式"</string>
+  <string name="screen_media_details_filename">"ファイル名"</string>
+  <string name="screen_media_details_no_more_files_to_show">"これ以上ファイルはありません"</string>
+  <string name="screen_media_details_no_more_media_to_show">"これ以上メディアはありません"</string>
+  <string name="screen_media_details_title">"ファイル情報"</string>
+  <string name="screen_media_details_uploaded_by">"アップロード元"</string>
+  <string name="screen_media_details_uploaded_on">"アップロード先"</string>
+</resources>

@@ -67,7 +67,7 @@ class DefaultRoomGroupMessageCreator(
         val roomIsDm = !roomIsGroup
         return notificationCreator.createMessagesListNotification(
             notificationAccountParams = notificationAccountParams,
-            RoomEventGroupInfo(
+            roomInfo = RoomEventGroupInfo(
                 sessionId = notificationAccountParams.user.userId,
                 roomId = roomId,
                 roomDisplayName = roomName,
@@ -75,7 +75,7 @@ class DefaultRoomGroupMessageCreator(
                 hasSmartReplyError = smartReplyErrors.isNotEmpty(),
                 shouldBing = events.any { it.noisy },
                 customSound = events.last().soundName,
-                isUpdated = events.last().isUpdated,
+                isUpdated = events.last().let { it.isUpdated || it.outGoingMessage },
             ),
             threadId = threadId,
             largeIcon = largeBitmap,

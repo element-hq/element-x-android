@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Актыўнасці"</string>
+  <string name="emoji_picker_category_flags">"Сцягі"</string>
+  <string name="emoji_picker_category_foods">"Ежа &amp; Напоі"</string>
+  <string name="emoji_picker_category_nature">"Жывёлы &amp; Прырода"</string>
+  <string name="emoji_picker_category_objects">"Аб\'екты"</string>
+  <string name="emoji_picker_category_people">"Усмешкі &amp; Удзельнікі"</string>
+  <string name="emoji_picker_category_places">"Падарожжы &amp; Месцы"</string>
+  <string name="emoji_picker_category_symbols">"Сімвалы"</string>
+</resources>

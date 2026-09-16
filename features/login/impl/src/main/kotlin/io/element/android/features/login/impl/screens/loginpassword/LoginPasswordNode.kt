@@ -17,14 +17,23 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
+import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.architecture.inputs
 
 @ContributesNode(AppScope::class)
 @AssistedInject
 class LoginPasswordNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: LoginPasswordPresenter,
+    presenterFactory: LoginPasswordPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
+    data class Inputs(
+        val initialLogin: String,
+    ) : NodeInputs
+
+    private val inputs: Inputs = inputs()
+    private val presenter = presenterFactory.create(inputs.initialLogin)
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()

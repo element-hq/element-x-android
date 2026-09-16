@@ -2,4 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_invite_users_already_a_member">"Jest już członkiem"</string>
   <string name="screen_invite_users_already_invited">"Już zaproszony"</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_multiple_users">"Obecnie nie prowadzisz żadnych czatów z tymi kontaktami. Potwierdź zaproszenie, zanim przejdziesz dalej."</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_one_user">"Obecnie nie posiadasz żadnych czatów z tym kontaktem. Potwierdź zaproszenie, zanim przejdziesz dalej."</string>
+  <string name="screen_invite_users_confirm_dialog_title_mutiple_users">"Zaprosić nowe kontakty do tego pokoju?"</string>
+  <string name="screen_invite_users_confirm_dialog_title_one_user">"Zaprosić nowy kontakt do tego pokoju?"</string>
 </resources>

@@ -32,7 +32,7 @@ fun Context.getApplicationLabel(packageName: String): String {
     return try {
         val ai = packageManager.getApplicationInfoCompat(packageName, 0)
         packageManager.getApplicationLabel(ai).toString()
-    } catch (e: PackageManager.NameNotFoundException) {
+    } catch (_: PackageManager.NameNotFoundException) {
         packageName
     }
 }
@@ -96,7 +96,7 @@ fun Context.startNotificationSettingsIntent(
         } else {
             startActivity(intent)
         }
-    } catch (activityNotFoundException: ActivityNotFoundException) {
+    } catch (_: ActivityNotFoundException) {
         toast(noActivityFoundMessage)
     }
 }
@@ -112,7 +112,7 @@ fun Context.openAppSettingsPage(
                 data = Uri.fromParts("package", packageName, null)
             }
         )
-    } catch (activityNotFoundException: ActivityNotFoundException) {
+    } catch (_: ActivityNotFoundException) {
         toast(noActivityFoundMessage)
     }
 }
@@ -126,7 +126,7 @@ fun Context.startInstallFromSourceIntent(
         .setData("package:$packageName".toUri())
     try {
         activityResultLauncher.launch(intent)
-    } catch (activityNotFoundException: ActivityNotFoundException) {
+    } catch (_: ActivityNotFoundException) {
         toast(noActivityFoundMessage)
     }
 }
@@ -157,7 +157,7 @@ fun Context.startSharePlainTextIntent(
         } else {
             startActivity(intent)
         }
-    } catch (activityNotFoundException: ActivityNotFoundException) {
+    } catch (_: ActivityNotFoundException) {
         toast(noActivityFoundMessage)
     }
 }

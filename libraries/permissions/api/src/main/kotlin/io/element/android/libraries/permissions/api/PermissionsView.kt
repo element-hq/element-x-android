@@ -35,9 +35,9 @@ fun PermissionsView(
         content = content ?: state.permission.toDialogContent(),
         submitText = stringResource(id = CommonStrings.action_open_settings),
         onSubmitClick = {
-            state.eventSink.invoke(PermissionsEvents.OpenSystemSettingAndCloseDialog)
+            state.eventSink.invoke(PermissionsEvent.OpenSystemSettingAndCloseDialog)
         },
-        onDismiss = { state.eventSink.invoke(PermissionsEvents.CloseDialog) },
+        onDismiss = { state.eventSink.invoke(PermissionsEvent.CloseDialog) },
         icon = icon,
     )
 }
@@ -55,7 +55,7 @@ private fun String.toDialogContent(): String {
 
 @PreviewsDayNight
 @Composable
-internal fun PermissionsViewPreview(@PreviewParameter(PermissionsStateProvider::class) state: PermissionsState) = ElementPreview {
+internal fun PermissionsViewPreview(@PreviewParameter(PermissionsStatePreviewParam::class) state: PermissionsState) = ElementPreview {
     PermissionsView(
         state = state,
     )

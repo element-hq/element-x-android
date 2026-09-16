@@ -1,0 +1,2 @@
+Main changes in this version: improvements in Element Call, room knocking and room directory are now available, improvements on DMs.
+Full changelog: https://github.com/element-hq/element-x-android/releases

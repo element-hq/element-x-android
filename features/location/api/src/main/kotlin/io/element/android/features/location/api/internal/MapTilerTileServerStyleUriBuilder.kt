@@ -10,6 +10,7 @@
 
 package io.element.android.features.location.api.internal
 
+import io.element.android.features.enterprise.api.remoteconfig.MapTilerConfig
 import io.element.android.features.location.api.BuildConfig
 
 internal class MapTilerTileServerStyleUriBuilder(
@@ -25,8 +26,18 @@ internal class MapTilerTileServerStyleUriBuilder(
         darkMapId = BuildConfig.MAPTILER_DARK_MAP_ID,
     )
 
-    override fun build(darkMode: Boolean): String {
-        val mapId = if (darkMode) darkMapId else lightMapId
+    override fun build(
+        customMapTilerConfig: MapTilerConfig?,
+        darkMode: Boolean,
+    ): String {
+        val baseUrl = customMapTilerConfig?.baseUrl.takeIf { !it.isNullOrBlank() } ?: baseUrl
+        val apiKey = customMapTilerConfig?.apiKey ?: apiKey
+        val mapId = if (darkMode) {
+            customMapTilerConfig?.darkStyleId ?: darkMapId
+        } else {
+            customMapTilerConfig?.lightStyleId ?: lightMapId
+        }
+
         return "$baseUrl/$mapId/style.json?key=$apiKey"
     }
 }

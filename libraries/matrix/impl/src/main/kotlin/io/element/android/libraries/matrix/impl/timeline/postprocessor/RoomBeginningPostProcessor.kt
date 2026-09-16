@@ -18,7 +18,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
 
 /**
  * This timeline post-processor removes the room creation event and the self-join event from the timeline for DMs
- * or add the RoomBeginning item.
+ * or add the RoomBeginning item. For rooms that aren't invite-only and aren't encrypted, it also removes join/leave and profile change events.
  */
 class RoomBeginningPostProcessor(private val mode: Timeline.Mode) {
     fun process(

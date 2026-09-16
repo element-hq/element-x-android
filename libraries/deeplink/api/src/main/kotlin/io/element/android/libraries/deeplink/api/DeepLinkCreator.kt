@@ -13,6 +13,17 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 
+/**
+ * Builds the app's internal deep links, used to point a notification or a shortcut at a precise place in the app.
+ */
 fun interface DeepLinkCreator {
+    /**
+     * Builds a link to the most precise target the arguments allow, ignoring the deeper ones once an outer one is `null`.
+     *
+     * @param sessionId the session to open.
+     * @param roomId the room to open, or `null` to stop at the room list.
+     * @param threadId the thread to open within that room, or `null` for the main timeline.
+     * @param eventId the event to focus on, or `null` to open at the latest message.
+     */
     fun create(sessionId: SessionId, roomId: RoomId?, threadId: ThreadId?, eventId: EventId?): String
 }

@@ -36,19 +36,6 @@ data class RoomPowerLevels(
     }
 
     /**
-     * Returns the set of [UserId]s that have the given role in the room.
-     *
-     * **WARNING**: This method must not be used with a creator role. It'll result in a runtime error.
-     */
-    fun usersWithRole(role: RoomMember.Role): Set<UserId> {
-        return if (role is RoomMember.Role.Owner && role.isCreator) {
-            error("RoomPowerLevels.usersWithRole should not be used with a creator role, use roomInfo.creators instead")
-        } else {
-            users.filterValues { RoomMember.Role.forPowerLevel(it) == role }.keys
-        }
-    }
-
-    /**
      * Returns the role of the user in the room based on their power level.
      * If the user is not found, returns null.
      *

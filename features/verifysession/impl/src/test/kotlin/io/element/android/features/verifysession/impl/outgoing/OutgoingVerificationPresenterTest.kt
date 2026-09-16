@@ -6,6 +6,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:Suppress("UnusedImports")
+
 package io.element.android.features.verifysession.impl.outgoing
 
 import app.cash.turbine.ReceiveTurbine
@@ -14,6 +16,7 @@ import io.element.android.features.verifysession.impl.outgoing.OutgoingVerificat
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
+import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.verification.SessionVerificationData
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
@@ -27,9 +30,13 @@ import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import kotlin.time.Duration.Companion.minutes
 
 @ExperimentalCoroutinesApi
 class OutgoingVerificationPresenterTest {
@@ -50,11 +57,11 @@ class OutgoingVerificationPresenterTest {
 
     @Test
     fun `present - Handles requestVerification for session verification`() = runTest {
-        val requestSessionVerificationRecorder = lambdaRecorder<Unit> {}
-        val startVerificationRecorder = lambdaRecorder<Unit> {}
+        val requestDeviceVerificationRecorder = lambdaRecorder<Unit> {}
+        val startSasVerificationRecorder = lambdaRecorder<Unit> {}
         val service = unverifiedSessionService(
-            requestSessionVerificationLambda = requestSessionVerificationRecorder,
-            startVerificationLambda = startVerificationRecorder,
+            requestDeviceVerificationLambda = requestDeviceVerificationRecorder,
+            startSasVerificationLambda = startSasVerificationRecorder,
         )
         val presenter = createOutgoingVerificationPresenter(
             service = service,
@@ -63,18 +70,18 @@ class OutgoingVerificationPresenterTest {
         presenter.test {
             requestVerificationAndAwaitVerifyingState(service)
 
-            requestSessionVerificationRecorder.assertions().isCalledOnce()
-            startVerificationRecorder.assertions().isCalledOnce()
+            requestDeviceVerificationRecorder.assertions().isCalledOnce()
+            startSasVerificationRecorder.assertions().isCalledOnce()
         }
     }
 
     @Test
     fun `present - Handles requestVerification for user verification`() = runTest {
         val requestUserVerificationRecorder = lambdaRecorder<UserId, Unit> {}
-        val startVerificationRecorder = lambdaRecorder<Unit> {}
+        val startSasVerificationRecorder = lambdaRecorder<Unit> {}
         val service = unverifiedSessionService(
             requestUserVerificationLambda = requestUserVerificationRecorder,
-            startVerificationLambda = startVerificationRecorder,
+            startSasVerificationLambda = startSasVerificationRecorder,
         )
         val presenter = createOutgoingVerificationPresenter(
             service = service,
@@ -84,7 +91,7 @@ class OutgoingVerificationPresenterTest {
             requestVerificationAndAwaitVerifyingState(service)
 
             requestUserVerificationRecorder.assertions().isCalledOnce()
-            startVerificationRecorder.assertions().isCalledOnce()
+            startSasVerificationRecorder.assertions().isCalledOnce()
         }
     }
 
@@ -97,7 +104,7 @@ class OutgoingVerificationPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.step).isEqualTo(Step.Initial)
             val eventSink = initialState.eventSink
-            eventSink(OutgoingVerificationViewEvents.Cancel)
+            eventSink(OutgoingVerificationViewEvent.Cancel)
 
             assertThat(awaitItem().step).isEqualTo(Step.Exit)
         }
@@ -106,14 +113,14 @@ class OutgoingVerificationPresenterTest {
     @Test
     fun `present - A failure when verifying cancels it`() = runTest {
         val service = unverifiedSessionService(
-            requestSessionVerificationLambda = { },
-            startVerificationLambda = { },
+            requestDeviceVerificationLambda = { },
+            startSasVerificationLambda = { },
             approveVerificationLambda = { },
         )
         val presenter = createOutgoingVerificationPresenter(service)
         presenter.test {
             val state = requestVerificationAndAwaitVerifyingState(service)
-            state.eventSink(OutgoingVerificationViewEvents.ConfirmVerification)
+            state.eventSink(OutgoingVerificationViewEvent.ConfirmVerification)
             // Cancelling
             assertThat(awaitItem().step).isInstanceOf(Step.Verifying::class.java)
             service.emitVerificationFlowState(VerificationFlowState.DidFail)
@@ -125,11 +132,11 @@ class OutgoingVerificationPresenterTest {
     @Test
     fun `present - A fail when requesting verification resets the state to the canceled one`() = runTest {
         val service = unverifiedSessionService(
-            requestSessionVerificationLambda = { },
+            requestDeviceVerificationLambda = { },
         )
         val presenter = createOutgoingVerificationPresenter(service)
         presenter.test {
-            awaitItem().eventSink(OutgoingVerificationViewEvents.RequestVerification)
+            awaitItem().eventSink(OutgoingVerificationViewEvent.RequestVerification)
             service.emitVerificationFlowState(VerificationFlowState.DidFail)
             assertThat(awaitItem().step).isInstanceOf(Step.AwaitingOtherDeviceResponse::class.java)
             assertThat(awaitItem().step).isEqualTo(Step.Canceled)
@@ -137,16 +144,36 @@ class OutgoingVerificationPresenterTest {
     }
 
     @Test
+    fun `present - A verification request the other session never accepts is canceled`() = runTest {
+        val cancelVerificationRecorder = lambdaRecorder<Unit> {}
+        val service = unverifiedSessionService(
+            requestDeviceVerificationLambda = { },
+            cancelVerificationLambda = cancelVerificationRecorder,
+        )
+        val presenter = createOutgoingVerificationPresenter(service)
+        presenter.test {
+            awaitItem().eventSink(OutgoingVerificationViewEvent.RequestVerification)
+            advanceTimeBy(1.minutes)
+            assertThat(awaitItem().step).isEqualTo(Step.AwaitingOtherDeviceResponse)
+            advanceTimeBy(9.minutes)
+            expectNoEvents()
+            advanceTimeBy(2.minutes)
+            assertThat(awaitItem().step).isEqualTo(Step.Canceled)
+            cancelVerificationRecorder.assertions().isCalledOnce()
+        }
+    }
+
+    @Test
     fun `present - Canceling the flow once it's verifying cancels it`() = runTest {
         val service = unverifiedSessionService(
-            requestSessionVerificationLambda = { },
-            startVerificationLambda = { },
+            requestDeviceVerificationLambda = { },
+            startSasVerificationLambda = { },
             cancelVerificationLambda = { },
         )
         val presenter = createOutgoingVerificationPresenter(service)
         presenter.test {
             val state = requestVerificationAndAwaitVerifyingState(service)
-            state.eventSink(OutgoingVerificationViewEvents.Cancel)
+            state.eventSink(OutgoingVerificationViewEvent.Cancel)
             assertThat(awaitItem().step).isEqualTo(Step.Canceled)
         }
     }
@@ -154,8 +181,8 @@ class OutgoingVerificationPresenterTest {
     @Test
     fun `present - When verifying, if we receive another challenge we ignore it`() = runTest {
         val service = unverifiedSessionService(
-            requestSessionVerificationLambda = { },
-            startVerificationLambda = { },
+            requestDeviceVerificationLambda = { },
+            startSasVerificationLambda = { },
         )
         val presenter = createOutgoingVerificationPresenter(service)
         presenter.test {
@@ -168,15 +195,15 @@ class OutgoingVerificationPresenterTest {
     @Test
     fun `present - Go back after cancellation returns to initial state`() = runTest {
         val service = unverifiedSessionService(
-            requestSessionVerificationLambda = { },
-            startVerificationLambda = { },
+            requestDeviceVerificationLambda = { },
+            startSasVerificationLambda = { },
         )
         val presenter = createOutgoingVerificationPresenter(service)
         presenter.test {
             val state = requestVerificationAndAwaitVerifyingState(service)
             service.emitVerificationFlowState(VerificationFlowState.DidCancel)
             assertThat(awaitItem().step).isEqualTo(Step.Canceled)
-            state.eventSink(OutgoingVerificationViewEvents.Reset)
+            state.eventSink(OutgoingVerificationViewEvent.Reset)
             // Went back to initial state
             assertThat(awaitItem().step).isEqualTo(Step.Initial)
             cancelAndIgnoreRemainingEvents()
@@ -189,8 +216,8 @@ class OutgoingVerificationPresenterTest {
             VerificationEmoji(number = 30)
         )
         val service = unverifiedSessionService(
-            requestSessionVerificationLambda = { },
-            startVerificationLambda = { },
+            requestDeviceVerificationLambda = { },
+            startSasVerificationLambda = { },
             approveVerificationLambda = { },
         )
         val presenter = createOutgoingVerificationPresenter(service)
@@ -199,7 +226,7 @@ class OutgoingVerificationPresenterTest {
                 service,
                 SessionVerificationData.Emojis(emojis)
             )
-            state.eventSink(OutgoingVerificationViewEvents.ConfirmVerification)
+            state.eventSink(OutgoingVerificationViewEvent.ConfirmVerification)
             assertThat(awaitItem().step).isEqualTo(
                 Step.Verifying(
                     SessionVerificationData.Emojis(emojis),
@@ -213,16 +240,95 @@ class OutgoingVerificationPresenterTest {
     }
 
     @Test
+    fun `present - When verification is approved and a backup exists but recovery is disabled, the flow completes`() = runTest {
+        val service = unverifiedSessionService(
+            requestUserVerificationLambda = { },
+            startSasVerificationLambda = { },
+            approveVerificationLambda = { },
+        )
+        val encryptionService = FakeEncryptionService().apply {
+            givenDoesBackupExistOnServerResult(Result.success(true))
+            recoveryStateStateFlow.value = RecoveryState.DISABLED
+        }
+        val presenter = createOutgoingVerificationPresenter(
+            service = service,
+            verificationRequest = anOutgoingUserVerificationRequest(),
+            encryptionService = encryptionService,
+        )
+        presenter.test {
+            val state = requestVerificationAndAwaitVerifyingState(service)
+            state.eventSink(OutgoingVerificationViewEvent.ConfirmVerification)
+            assertThat(awaitItem().step).isInstanceOf(Step.Verifying::class.java)
+            service.emitVerificationFlowState(VerificationFlowState.DidFinish)
+            assertThat(awaitItem().step).isEqualTo(Step.Completed)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - When verification is approved and a backup exists but recovery is incomplete, the flow completes`() = runTest {
+        val service = unverifiedSessionService(
+            requestUserVerificationLambda = { },
+            startSasVerificationLambda = { },
+            approveVerificationLambda = { },
+        )
+        val encryptionService = FakeEncryptionService().apply {
+            givenDoesBackupExistOnServerResult(Result.success(true))
+            recoveryStateStateFlow.value = RecoveryState.INCOMPLETE
+        }
+        val presenter = createOutgoingVerificationPresenter(
+            service = service,
+            verificationRequest = anOutgoingUserVerificationRequest(),
+            encryptionService = encryptionService,
+        )
+        presenter.test {
+            val state = requestVerificationAndAwaitVerifyingState(service)
+            state.eventSink(OutgoingVerificationViewEvent.ConfirmVerification)
+            assertThat(awaitItem().step).isInstanceOf(Step.Verifying::class.java)
+            service.emitVerificationFlowState(VerificationFlowState.DidFinish)
+            assertThat(awaitItem().step).isEqualTo(Step.Completed)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - When verification is approved but the recovery state is not determined, the flow completes after the timeout`() = runTest {
+        val service = unverifiedSessionService(
+            requestUserVerificationLambda = { },
+            startSasVerificationLambda = { },
+            approveVerificationLambda = { },
+        )
+        val encryptionService = FakeEncryptionService().apply {
+            givenDoesBackupExistOnServerResult(Result.success(true))
+        }
+        val presenter = createOutgoingVerificationPresenter(
+            service = service,
+            verificationRequest = anOutgoingUserVerificationRequest(),
+            encryptionService = encryptionService,
+        )
+        presenter.test {
+            val state = requestVerificationAndAwaitVerifyingState(service)
+            state.eventSink(OutgoingVerificationViewEvent.ConfirmVerification)
+            assertThat(awaitItem().step).isInstanceOf(Step.Verifying::class.java)
+            service.emitVerificationFlowState(VerificationFlowState.DidFinish)
+            // The recovery state never leaves UNKNOWN, so the 10 seconds timeout fires and the flow completes anyway
+            this@runTest.advanceUntilIdle()
+            assertThat(awaitItem().step).isEqualTo(Step.Completed)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
     fun `present - When verification is declined, the flow is canceled`() = runTest {
         val service = unverifiedSessionService(
-            requestSessionVerificationLambda = { },
-            startVerificationLambda = { },
+            requestDeviceVerificationLambda = { },
+            startSasVerificationLambda = { },
             declineVerificationLambda = { },
         )
         val presenter = createOutgoingVerificationPresenter(service)
         presenter.test {
             val state = requestVerificationAndAwaitVerifyingState(service)
-            state.eventSink(OutgoingVerificationViewEvents.DeclineVerification)
+            state.eventSink(OutgoingVerificationViewEvent.DeclineVerification)
             assertThat(awaitItem().step).isEqualTo(
                 Step.Verifying(
                     SessionVerificationData.Emojis(emptyList()),
@@ -271,13 +377,15 @@ class OutgoingVerificationPresenterTest {
         }
     }
 
+    context(testScope: TestScope)
     private suspend fun ReceiveTurbine<OutgoingVerificationState>.requestVerificationAndAwaitVerifyingState(
         fakeService: FakeSessionVerificationService,
         sessionVerificationData: SessionVerificationData = SessionVerificationData.Emojis(emptyList()),
     ): OutgoingVerificationState {
         var state = awaitItem()
         assertThat(state.step).isEqualTo(Step.Initial)
-        state.eventSink(OutgoingVerificationViewEvents.RequestVerification)
+        state.eventSink(OutgoingVerificationViewEvent.RequestVerification)
+        testScope.advanceTimeBy(1.minutes)
         // Await for other device response:
         fakeService.emitVerificationFlowState(VerificationFlowState.DidAcceptVerificationRequest)
         state = awaitItem()
@@ -285,7 +393,8 @@ class OutgoingVerificationPresenterTest {
         // Await for the state to be Ready
         state = awaitItem()
         assertThat(state.step).isEqualTo(Step.Ready)
-        state.eventSink(OutgoingVerificationViewEvents.StartSasVerification)
+        state.eventSink(OutgoingVerificationViewEvent.StartSasVerification)
+        testScope.advanceUntilIdle()
         // Await for other device response (again):
         fakeService.emitVerificationFlowState(VerificationFlowState.DidStartSasVerification)
         state = awaitItem()
@@ -297,30 +406,29 @@ class OutgoingVerificationPresenterTest {
         return state
     }
 
-    private suspend fun unverifiedSessionService(
-        requestSessionVerificationLambda: () -> Unit = { lambdaError() },
+    private fun unverifiedSessionService(
+        requestDeviceVerificationLambda: () -> Unit = { lambdaError() },
         requestUserVerificationLambda: (UserId) -> Unit = { lambdaError() },
         cancelVerificationLambda: () -> Unit = { lambdaError() },
         approveVerificationLambda: () -> Unit = { lambdaError() },
         declineVerificationLambda: () -> Unit = { lambdaError() },
-        startVerificationLambda: () -> Unit = { lambdaError() },
+        startSasVerificationLambda: () -> Unit = { lambdaError() },
         resetLambda: (Boolean) -> Unit = { },
         acknowledgeVerificationRequestLambda: (VerificationRequest.Incoming) -> Unit = { lambdaError() },
         acceptVerificationRequestLambda: () -> Unit = { lambdaError() },
     ): FakeSessionVerificationService {
         return FakeSessionVerificationService(
-            requestCurrentSessionVerificationLambda = requestSessionVerificationLambda,
+            initialSessionVerifiedStatus = SessionVerifiedStatus.NotVerified,
+            requestDeviceVerificationLambda = requestDeviceVerificationLambda,
             requestUserVerificationLambda = requestUserVerificationLambda,
             cancelVerificationLambda = cancelVerificationLambda,
             approveVerificationLambda = approveVerificationLambda,
             declineVerificationLambda = declineVerificationLambda,
-            startVerificationLambda = startVerificationLambda,
+            startSasVerificationLambda = startSasVerificationLambda,
             resetLambda = resetLambda,
             acknowledgeVerificationRequestLambda = acknowledgeVerificationRequestLambda,
             acceptVerificationRequestLambda = acceptVerificationRequestLambda,
-        ).apply {
-            emitVerifiedStatus(SessionVerifiedStatus.NotVerified)
-        }
+        )
     }
 }
 

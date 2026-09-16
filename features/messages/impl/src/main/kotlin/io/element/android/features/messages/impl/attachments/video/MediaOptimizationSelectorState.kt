@@ -13,6 +13,8 @@ import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import kotlinx.collections.immutable.ImmutableList
 
 data class MediaOptimizationSelectorState(
+    // Adding an index helps to fix a Compose issue where the state of the wrong item is updated
+    val index: Int,
     val maxUploadSize: AsyncData<Long>,
     val videoSizeEstimations: AsyncData<ImmutableList<VideoUploadEstimation>>,
     val isImageOptimizationEnabled: Boolean?,

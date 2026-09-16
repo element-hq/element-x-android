@@ -13,6 +13,7 @@ import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustSearchUsersResults
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustUserProfile
+import io.element.android.libraries.matrix.impl.user.UserSearchResultMapper
 import io.element.android.libraries.matrix.test.A_USER_ID
 import kotlinx.collections.immutable.toImmutableList
 import org.junit.Test

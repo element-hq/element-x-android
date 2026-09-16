@@ -9,7 +9,13 @@
 package io.element.android.features.messages.impl.timeline.protection
 
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
 
 sealed interface TimelineProtectionEvent {
     data class ShowContent(val eventId: EventId?) : TimelineProtectionEvent
+    data class ValidateContent(
+        val mediaSources: List<MediaSource>,
+        val validationState: ContentValidationState,
+    ) : TimelineProtectionEvent
 }

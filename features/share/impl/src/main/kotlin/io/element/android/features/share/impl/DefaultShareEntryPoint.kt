@@ -26,7 +26,7 @@ class DefaultShareEntryPoint : ShareEntryPoint {
         return parentNode.createNode<ShareNode>(
             buildContext = buildContext,
             plugins = listOf(
-                ShareNode.Inputs(intent = params.intent),
+                ShareNode.Inputs(shareIntentData = params.shareIntentData),
                 callback,
             )
         )

@@ -16,7 +16,6 @@ sealed interface OtherState {
     data object PolicyRuleRoom : OtherState
     data object PolicyRuleServer : OtherState
     data object PolicyRuleUser : OtherState
-    data object RoomAliases : OtherState
     data class RoomAvatar(val url: String?) : OtherState
     data object RoomCanonicalAlias : OtherState
     data object RoomCreate : OtherState

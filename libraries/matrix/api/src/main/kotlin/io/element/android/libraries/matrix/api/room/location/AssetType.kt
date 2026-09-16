@@ -10,5 +10,6 @@ package io.element.android.libraries.matrix.api.room.location
 
 enum class AssetType {
     SENDER,
-    PIN
+    PIN,
+    UNKNOWN
 }

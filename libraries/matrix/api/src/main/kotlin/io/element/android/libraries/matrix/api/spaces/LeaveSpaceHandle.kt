@@ -10,6 +10,11 @@ package io.element.android.libraries.matrix.api.spaces
 
 import io.element.android.libraries.matrix.api.core.RoomId
 
+/**
+ * Handles leaving a space, letting the user also choose which of its rooms to leave in the same operation.
+ *
+ * Obtain an instance from [SpaceService.getLeaveSpaceHandle]; the caller owns it and must [close] it.
+ */
 interface LeaveSpaceHandle {
     /**
      * The id of the space to leave.

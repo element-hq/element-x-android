@@ -18,41 +18,63 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsValues
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.persistentListOf
 
 data class ChangeRoomPermissionsState(
+    private val ownPowerLevel: Long,
     val currentPermissions: RoomPowerLevelsValues?,
     val itemsBySection: ImmutableMap<RoomPermissionsSection, ImmutableList<RoomPermissionType>>,
     val hasChanges: Boolean,
-    val saveAction: AsyncAction<Unit>,
-    val confirmExitAction: AsyncAction<Unit>,
+    val saveAction: AsyncAction<Boolean>,
     val eventSink: (ChangeRoomPermissionsEvent) -> Unit,
 ) {
+    private val ownRole = RoomMember.Role.forPowerLevel(ownPowerLevel)
+
+    // Roles that the user can select based on their own role
+    val selectableRoles: ImmutableList<SelectableRole> = when (ownRole) {
+        is RoomMember.Role.Owner,
+        RoomMember.Role.Admin -> persistentListOf(SelectableRole.Admin, SelectableRole.Moderator, SelectableRole.Everyone)
+        RoomMember.Role.Moderator -> persistentListOf(SelectableRole.Moderator, SelectableRole.Everyone)
+        RoomMember.Role.User -> persistentListOf(SelectableRole.Everyone)
+    }
+
     fun selectedRoleForType(type: RoomPermissionType): SelectableRole? {
-        if (currentPermissions == null) return null
-        val role = when (type) {
-            RoomPermissionType.BAN -> RoomMember.Role.forPowerLevel(currentPermissions.ban)
-            RoomPermissionType.INVITE -> RoomMember.Role.forPowerLevel(currentPermissions.invite)
-            RoomPermissionType.KICK -> RoomMember.Role.forPowerLevel(currentPermissions.kick)
-            RoomPermissionType.SEND_EVENTS -> RoomMember.Role.forPowerLevel(currentPermissions.sendEvents)
-            RoomPermissionType.REDACT_EVENTS -> RoomMember.Role.forPowerLevel(currentPermissions.redactEvents)
-            RoomPermissionType.ROOM_NAME -> RoomMember.Role.forPowerLevel(currentPermissions.roomName)
-            RoomPermissionType.ROOM_AVATAR -> RoomMember.Role.forPowerLevel(currentPermissions.roomAvatar)
-            RoomPermissionType.ROOM_TOPIC -> RoomMember.Role.forPowerLevel(currentPermissions.roomTopic)
-        }
-        return when (role) {
+        val powerLevel = currentPowerLevelForType(type = type) ?: return null
+        return when (RoomMember.Role.forPowerLevel(powerLevel)) {
             is RoomMember.Role.Owner,
             RoomMember.Role.Admin -> SelectableRole.Admin
             RoomMember.Role.Moderator -> SelectableRole.Moderator
             RoomMember.Role.User -> SelectableRole.Everyone
         }
     }
+
+    fun canChangePermission(type: RoomPermissionType): Boolean {
+        val currentPowerLevel = currentPowerLevelForType(type) ?: return false
+        return ownPowerLevel >= currentPowerLevel
+    }
+
+    private fun currentPowerLevelForType(type: RoomPermissionType): Long? {
+        if (currentPermissions == null) return null
+        return when (type) {
+            RoomPermissionType.BAN -> currentPermissions.ban
+            RoomPermissionType.INVITE -> currentPermissions.invite
+            RoomPermissionType.KICK -> currentPermissions.kick
+            RoomPermissionType.SEND_EVENTS -> currentPermissions.eventsDefault
+            RoomPermissionType.REDACT_EVENTS -> currentPermissions.redactEvents
+            RoomPermissionType.ROOM_NAME -> currentPermissions.roomName
+            RoomPermissionType.ROOM_AVATAR -> currentPermissions.roomAvatar
+            RoomPermissionType.ROOM_TOPIC -> currentPermissions.roomTopic
+            RoomPermissionType.SPACE_MANAGE_ROOMS -> currentPermissions.spaceChild
+            RoomPermissionType.SHARE_LIVE_LOCATION -> maxOf(currentPermissions.beacon, currentPermissions.beaconInfo)
+        }
+    }
 }
 
 enum class RoomPermissionsSection {
-    SpaceDetails,
-    RoomDetails,
+    ManageMembers,
+    EditDetails,
     MessagesAndContent,
-    MembershipModeration,
+    ManageSpace
 }
 
 enum class SelectableRole : DropdownOption {
@@ -81,5 +103,7 @@ enum class RoomPermissionType {
     REDACT_EVENTS,
     ROOM_NAME,
     ROOM_AVATAR,
-    ROOM_TOPIC
+    ROOM_TOPIC,
+    SPACE_MANAGE_ROOMS,
+    SHARE_LIVE_LOCATION,
 }

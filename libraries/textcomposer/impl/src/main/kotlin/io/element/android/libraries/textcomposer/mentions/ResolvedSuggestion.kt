@@ -14,6 +14,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.slashcommands.api.SlashCommandSuggestion
 
 @Immutable
 sealed interface ResolvedSuggestion {
@@ -32,4 +33,8 @@ sealed interface ResolvedSuggestion {
             size = size,
         )
     }
+
+    data class Command(
+        val command: SlashCommandSuggestion,
+    ) : ResolvedSuggestion
 }

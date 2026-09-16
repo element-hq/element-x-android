@@ -9,6 +9,8 @@
 package io.element.android.features.rageshake.impl.crash
 
 import android.os.Build
+import android.os.TransactionTooLargeException
+import io.element.android.libraries.architecture.appyx.lastCapturedNavState
 import io.element.android.libraries.core.data.tryOrNull
 import timber.log.Timber
 import java.io.PrintWriter
@@ -61,6 +63,13 @@ class VectorUncaughtExceptionHandler(
             val sw = StringWriter()
             val pw = PrintWriter(sw, true)
             throwable.printStackTrace(pw)
+
+            if (throwable is RuntimeException && throwable.cause is TransactionTooLargeException) {
+                pw.append('\n')
+                pw.append(lastCapturedNavState)
+                Timber.v(lastCapturedNavState)
+            }
+
             append(sw.buffer.toString())
         }
         Timber.e("FATAL EXCEPTION $bugDescription")

@@ -8,6 +8,10 @@
 
 package io.element.android.libraries.troubleshoot.api.test
 
+/**
+ * Lets a troubleshooting test's quick fix send the user to another screen, without the test itself knowing about navigation.
+ */
 interface NotificationTroubleshootNavigator {
+    /** Opens the blocked users screen, so the user can unblock someone whose messages were being filtered out. */
     fun navigateToBlockedUsers()
 }

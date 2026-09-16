@@ -9,7 +9,6 @@
 package io.element.android.libraries.push.impl.troubleshoot
 
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.PushService
@@ -31,7 +30,6 @@ import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 
 @ContributesIntoSet(SessionScope::class)
-@Inject
 class PushLoopbackTest(
     private val sessionId: SessionId,
     private val pushService: PushService,
@@ -56,11 +54,18 @@ class PushLoopbackTest(
         }
         val testPushResult = try {
             pushService.testPush(sessionId)
-        } catch (pusherRejected: PushGatewayFailure.PusherRejected) {
+        } catch (_: PushGatewayFailure.PusherRejected) {
             val hasQuickFix = pushService.getCurrentPushProvider(sessionId)?.canRotateToken() == true
             delegate.updateState(
                 description = stringProvider.getString(R.string.troubleshoot_notifications_test_push_loop_back_failure_1),
                 status = NotificationTroubleshootTestState.Status.Failure(hasQuickFix = hasQuickFix)
+            )
+            job.cancel()
+            return
+        } catch (_: PushGatewayFailure.RateLimited) {
+            delegate.updateState(
+                description = stringProvider.getString(R.string.troubleshoot_notifications_test_push_loop_back_failure_rate_limit),
+                status = NotificationTroubleshootTestState.Status.Failure()
             )
             job.cancel()
             return

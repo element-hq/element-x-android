@@ -49,19 +49,19 @@ class KnockRequestsBannerPresenter(
 
         val shouldShowBanner by remember {
             derivedStateOf {
-                permissions.canHandle && knockRequests.isNotEmpty()
+                permissions.hasAny && knockRequests.isNotEmpty()
             }
         }
 
-        fun handleEvent(event: KnockRequestsBannerEvents) {
+        fun handleEvent(event: KnockRequestsBannerEvent) {
             when (event) {
-                is KnockRequestsBannerEvents.AcceptSingleRequest -> {
+                is KnockRequestsBannerEvent.AcceptSingleRequest -> {
                     sessionCoroutineScope.acceptSingleKnockRequest(
                         knockRequests = knockRequests,
                         displayAcceptError = showAcceptError,
                     )
                 }
-                is KnockRequestsBannerEvents.Dismiss -> {
+                is KnockRequestsBannerEvent.Dismiss -> {
                     sessionCoroutineScope.launch {
                         knockRequestsService.markAllKnockRequestsAsSeen()
                     }

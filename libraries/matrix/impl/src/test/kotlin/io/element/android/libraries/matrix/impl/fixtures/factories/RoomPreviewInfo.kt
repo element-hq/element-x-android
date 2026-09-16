@@ -19,20 +19,18 @@ internal fun aRustRoomPreviewInfo(
     canonicalAlias: String? = A_ROOM_ALIAS.value,
     membership: Membership? = Membership.JOINED,
     joinRule: JoinRule = JoinRule.Public,
-): RoomPreviewInfo {
-    return RoomPreviewInfo(
-        roomId = A_ROOM_ID.value,
-        canonicalAlias = canonicalAlias,
-        name = "name",
-        topic = "topic",
-        avatarUrl = "avatarUrl",
-        numJoinedMembers = 1u,
-        numActiveMembers = 1u,
-        isDirect = false,
-        roomType = RoomType.Room,
-        isHistoryWorldReadable = true,
-        membership = membership,
-        joinRule = joinRule,
-        heroes = null,
-    )
-}
+) = RoomPreviewInfo(
+    roomId = A_ROOM_ID.value,
+    canonicalAlias = canonicalAlias,
+    name = "name",
+    topic = "topic",
+    avatarUrl = "avatarUrl",
+    numJoinedMembers = 1u,
+    numActiveMembers = 1u,
+    isDirect = false,
+    roomType = RoomType.Room,
+    isHistoryWorldReadable = true,
+    membership = membership,
+    joinRule = joinRule,
+    heroes = null,
+)

@@ -56,7 +56,7 @@ fun SecureBackupSetupView(
             title = stringResource(id = CommonStrings.common_something_went_wrong),
             content = stringResource(id = CommonStrings.common_something_went_wrong_message),
             onSubmit = {
-                state.eventSink.invoke(SecureBackupSetupEvents.DismissDialog)
+                state.eventSink.invoke(SecureBackupSetupEvent.DismissDialog)
             },
         )
     }
@@ -68,7 +68,7 @@ fun SecureBackupSetupView(
             submitText = stringResource(id = CommonStrings.action_continue),
             onSubmitClick = onSuccess,
             onDismiss = {
-                state.eventSink.invoke(SecureBackupSetupEvents.DismissDialog)
+                state.eventSink.invoke(SecureBackupSetupEvent.DismissDialog)
             }
         )
     }
@@ -116,18 +116,19 @@ private fun Content(
 ) {
     val context = LocalContext.current
     val formattedRecoveryKey = state.recoveryKeyViewState.formattedRecoveryKey
+    val toastMessage = stringResource(R.string.screen_recovery_key_copied_to_clipboard)
     val clickLambda = if (formattedRecoveryKey != null) {
         {
             context.copyToClipboard(
-                formattedRecoveryKey,
-                context.getString(R.string.screen_recovery_key_copied_to_clipboard)
+                text = formattedRecoveryKey,
+                toastMessage = toastMessage,
             )
-            state.eventSink.invoke(SecureBackupSetupEvents.RecoveryKeyHasBeenSaved)
+            state.eventSink.invoke(SecureBackupSetupEvent.RecoveryKeyHasBeenSaved)
         }
     } else {
         if (!state.recoveryKeyViewState.inProgress) {
             {
-                state.eventSink.invoke(SecureBackupSetupEvents.CreateRecoveryKey)
+                state.eventSink.invoke(SecureBackupSetupEvent.CreateRecoveryKey)
             }
         } else {
             null
@@ -173,7 +174,7 @@ private fun ColumnScope.Buttons(
                         chooserTitle = chooserTitle,
                         text = state.setupState.recoveryKey()!!,
                     )
-                    state.eventSink.invoke(SecureBackupSetupEvents.RecoveryKeyHasBeenSaved)
+                    state.eventSink.invoke(SecureBackupSetupEvent.RecoveryKeyHasBeenSaved)
                 },
             )
             Button(
@@ -183,7 +184,7 @@ private fun ColumnScope.Buttons(
                     if (state.setupState is SetupState.CreatedAndSaved) {
                         onFinish()
                     } else {
-                        state.eventSink.invoke(SecureBackupSetupEvents.Done)
+                        state.eventSink.invoke(SecureBackupSetupEvent.Done)
                     }
                 },
             )
@@ -194,7 +195,7 @@ private fun ColumnScope.Buttons(
 @PreviewsDayNight
 @Composable
 internal fun SecureBackupSetupViewPreview(
-    @PreviewParameter(SecureBackupSetupStateProvider::class) state: SecureBackupSetupState
+    @PreviewParameter(SecureBackupSetupStatePreviewParam::class) state: SecureBackupSetupState
 ) = ElementPreview {
     SecureBackupSetupView(
         state = state,

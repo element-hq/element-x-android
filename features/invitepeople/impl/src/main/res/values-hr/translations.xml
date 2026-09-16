@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_invite_users_already_a_member">"Već je član"</string>
+  <string name="screen_invite_users_already_invited">"Već je pozvan/a"</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_multiple_users">"Trenutno nemate razgovora s ovim kontaktima. Potvrdite da ih želite pozvati u ovu sobu prije nego što nastavite."</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_one_user">"Trenutno nemate razgovora s ovim kontaktom. Potvrdite da ste ga pozvali u ovu sobu prije nego što nastavite."</string>
+  <string name="screen_invite_users_confirm_dialog_title_mutiple_users">"Pozvati nove kontakte u ovu sobu?"</string>
+  <string name="screen_invite_users_confirm_dialog_title_one_user">"Pozvati novi kontakt u ovu sobu?"</string>
+</resources>

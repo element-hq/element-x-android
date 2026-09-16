@@ -8,11 +8,11 @@
 
 package io.element.android.features.roomdetails.impl.members
 
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
+import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -42,7 +43,7 @@ class RoomMemberListPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.filteredRoomMembers.isLoading()).isTrue()
-            assertThat(initialState.searchQuery).isEmpty()
+            assertThat(initialState.searchQuery.text.toString()).isEmpty()
             assertThat(initialState.selectedSection).isEqualTo(SelectedSection.MEMBERS)
         }
     }
@@ -65,7 +66,7 @@ class RoomMemberListPresenterTest {
             skipItems(1)
             val loadedState = awaitItem()
             assertThat(loadedState.showBannedSection).isTrue()
-            loadedState.eventSink(RoomMemberListEvents.ChangeSelectedSection(SelectedSection.BANNED))
+            loadedState.eventSink(RoomMemberListEvent.ChangeSelectedSection(SelectedSection.BANNED))
             val bannedSectionState = awaitItem()
             assertThat(bannedSectionState.selectedSection).isEqualTo(SelectedSection.BANNED)
             // Now update the room members to have no banned users
@@ -87,7 +88,7 @@ class RoomMemberListPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.filteredRoomMembers.isLoading()).isTrue()
-            assertThat(initialState.searchQuery).isEmpty()
+            assertThat(initialState.searchQuery.text.toString()).isEmpty()
             room.givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
             // Skip items while the new members state is processed
             skipItems(2)
@@ -116,9 +117,9 @@ class RoomMemberListPresenterTest {
             assertThat(loadedRoomMembers.invited).isNotEmpty()
             assertThat(loadedRoomMembers.isEmpty(SelectedSection.MEMBERS)).isFalse()
             assertThat(loadedRoomMembers.isEmpty(SelectedSection.BANNED)).isFalse()
-            loadedState.eventSink(RoomMemberListEvents.UpdateSearchQuery("something"))
+            loadedState.searchQuery.setTextAndPlaceCursorAtEnd("something")
             val searchQueryUpdatedState = awaitItem()
-            assertThat(searchQueryUpdatedState.searchQuery).isEqualTo("something")
+            assertThat(searchQueryUpdatedState.searchQuery.text).isEqualTo("something")
             val searchSearchResultDelivered = awaitItem()
             val emptyRoomMembers = searchSearchResultDelivered.filteredRoomMembers.dataOrNull()!!
             assertThat(emptyRoomMembers.joined).isEmpty()
@@ -144,9 +145,9 @@ class RoomMemberListPresenterTest {
             assertThat(loadedRoomMembers.invited).isNotEmpty()
             assertThat(loadedRoomMembers.isEmpty(SelectedSection.MEMBERS)).isFalse()
             assertThat(loadedRoomMembers.isEmpty(SelectedSection.BANNED)).isFalse()
-            loadedState.eventSink(RoomMemberListEvents.UpdateSearchQuery("alice"))
+            loadedState.searchQuery.setTextAndPlaceCursorAtEnd("alice")
             val searchQueryUpdatedState = awaitItem()
-            assertThat(searchQueryUpdatedState.searchQuery).isEqualTo("alice")
+            assertThat(searchQueryUpdatedState.searchQuery.text).isEqualTo("alice")
             val searchSearchResultDelivered = awaitItem()
             val emptyRoomMembers = searchSearchResultDelivered.filteredRoomMembers.dataOrNull()!!
             assertThat(emptyRoomMembers.joined).isNotEmpty()
@@ -171,20 +172,7 @@ class RoomMemberListPresenterTest {
     fun `present - asynchronously sets canInvite when user does not have correct power level`() = runTest {
         val presenter = createPresenter(
             joinedRoom = createFakeJoinedRoom(
-                canInviteResult = { Result.success(false) },
-            )
-        )
-        presenter.test {
-            val loadedState = awaitItem()
-            assertThat(loadedState.canInvite).isFalse()
-        }
-    }
-
-    @Test
-    fun `present - asynchronously sets canInvite when power level check fails`() = runTest {
-        val presenter = createPresenter(
-            joinedRoom = createFakeJoinedRoom(
-                canInviteResult = { Result.failure(RuntimeException("Eek")) },
+                canInvite = false,
             )
         )
         presenter.test {
@@ -200,19 +188,53 @@ class RoomMemberListPresenterTest {
         )
         presenter.test {
             skipItems(1)
-            awaitItem().eventSink(RoomMemberListEvents.RoomMemberSelected(anInvitedVictor()))
+            awaitItem().eventSink(RoomMemberListEvent.RoomMemberSelected(anInvitedVictor()))
+        }
+    }
+
+    @Test
+    fun `call participants are shown first in joined members`() = runTest {
+        val room = createFakeJoinedRoom().apply {
+            givenRoomInfo(
+                aRoomInfo(
+                    joinedMembersCount = 5,
+                    activeRoomCallParticipants = listOf(
+                        aCarol().userId
+                    ),
+                )
+            )
+            givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
+        }
+
+        val presenter = createPresenter(joinedRoom = room)
+
+        presenter.test {
+            skipItems(1)
+
+            val loadedState = awaitItem()
+            val joined = loadedState.filteredRoomMembers.dataOrNull()!!.joined
+
+            assertThat(joined.first().roomMember.userId)
+                .isEqualTo(aCarol().userId)
+
+            assertThat(joined.first().isInCall).isTrue()
+
+            assertThat(joined.count { it.isInCall }).isEqualTo(1)
+            assertThat(joined.drop(1).all { !it.isInCall }).isTrue()
         }
     }
 }
 
 private fun createFakeJoinedRoom(
     updateMembersResult: () -> Unit = { },
-    canInviteResult: (UserId) -> Result<Boolean> = { Result.success(true) },
+    canInvite: Boolean = true,
 ): FakeJoinedRoom {
     return FakeJoinedRoom(
         baseRoom = FakeBaseRoom(
             updateMembersResult = updateMembersResult,
-            canInviteResult = canInviteResult,
+            roomPermissions = FakeRoomPermissions(
+                canInvite = canInvite,
+            ),
         ).apply {
             // Needed to avoid discarding the loaded members as a partial and invalid result
             givenRoomInfo(aRoomInfo(joinedMembersCount = 2))

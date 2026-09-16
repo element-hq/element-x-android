@@ -13,6 +13,9 @@
         <intent>
             <action android:name="android.support.customtabs.action.CustomTabsService" />
         </intent>
+
+        <!-- To be able to start the service exported by Element Classic -->
+        <package android:name="${elementClassicPackage}" />
     </queries>
 
 </manifest>

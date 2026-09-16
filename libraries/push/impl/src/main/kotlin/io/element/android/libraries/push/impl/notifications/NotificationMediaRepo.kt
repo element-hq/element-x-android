@@ -101,7 +101,7 @@ class DefaultNotificationMediaRepo(
         }
     }
 
-    private fun MediaSource.cachedFile(): File? = mxcTools.mxcUri2FilePath(url)?.let {
+    private fun MediaSource.cachedFile(): File? = mxcTools.mxcUri2FilePath(safeUrl)?.let {
         File("${cacheDir.path}/$CACHE_NOTIFICATION_SUBDIR/$it")
     }
 }

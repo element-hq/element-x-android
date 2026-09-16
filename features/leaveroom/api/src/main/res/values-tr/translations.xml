@@ -3,5 +3,8 @@
   <string name="leave_conversation_alert_subtitle">"Bu sohbetten ayrılmak istediğinizden emin misiniz? Bu sohbet herkese açık değil ve davet olmadan tekrar katılamayacaksınız."</string>
   <string name="leave_room_alert_empty_subtitle">"Bu odadan ayrılmak istediğinizden emin misiniz? Burada tek kişi sizsiniz. Ayrılırsanız, siz de dahil olmak üzere gelecekte kimse katılamayacak."</string>
   <string name="leave_room_alert_private_subtitle">"Bu odadan ayrılmak istediğinizden emin misiniz? Bu oda herkese açık değildir ve davet olmadan tekrar katılamazsınız."</string>
+  <string name="leave_room_alert_select_new_owner_action">"Sahipleri seçin"</string>
+  <string name="leave_room_alert_select_new_owner_subtitle">"Bu odanın tek sahibisiniz. Odadan çıkmadan önce sahipliği başka birine devretmelisiniz."</string>
+  <string name="leave_room_alert_select_new_owner_title">"Sahipliği aktar"</string>
   <string name="leave_room_alert_subtitle">"Odadan çıkmak istediğinden emin misin?"</string>
 </resources>

@@ -29,7 +29,7 @@
   <string name="state_event_room_invite_by_you">"Zaprosiłeś %1$s"</string>
   <string name="state_event_room_invite_you">"%1$s zaprosił Cię"</string>
   <string name="state_event_room_join">"%1$s dołączył do pokoju"</string>
-  <string name="state_event_room_join_by_you">"Dołączyłeś(aś) do pokoju"</string>
+  <string name="state_event_room_join_by_you">"Dołączyłeś do pokoju"</string>
   <string name="state_event_room_knock">"%1$s prosi o możliwość dołączenia"</string>
   <string name="state_event_room_knock_accepted">"%1$s zezwolił %2$s na dołączenie"</string>
   <string name="state_event_room_knock_accepted_by_you">"Zezwoliłeś %1$s na dołączenie"</string>

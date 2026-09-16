@@ -32,7 +32,7 @@
   <string name="screen_login_error_invalid_credentials">"Nesprávne používateľské meno a/alebo heslo"</string>
   <string name="screen_login_error_invalid_user_id">"Toto nie je platný identifikátor používateľa. Očakávaný formát: \'@pouzivatel:homeserver.sk\'"</string>
   <string name="screen_login_error_refresh_tokens">"Tento server je nakonfigurovaný tak, aby používal obnovovacie tokeny. Pri prihlasovaní na základe hesla nie sú podporované."</string>
-  <string name="screen_login_error_unsupported_authentication">"Vybraný domovský server nepodporuje prihlásenie pomocou hesla alebo OIDC. Obráťte sa na správcu alebo vyberte iný domovský server."</string>
+  <string name="screen_login_error_unsupported_authentication">"Vybraný domovský server nepodporuje prihlásenie pomocou hesla alebo OAuth. Obráťte sa na správcu alebo vyberte iný domovský server."</string>
   <string name="screen_login_form_header">"Zadajte svoje údaje"</string>
   <string name="screen_login_subtitle">"Matrix je otvorená sieť pre bezpečnú a decentralizovanú komunikáciu."</string>
   <string name="screen_login_title">"Vitajte späť!"</string>
@@ -60,6 +60,8 @@
   <string name="screen_qr_code_login_error_cancelled_title">"Žiadosť o prihlásenie bola zrušená"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"Prihlásenie bolo zamietnuté na druhom zariadení."</string>
   <string name="screen_qr_code_login_error_declined_title">"Prihlásenie bolo odmietnuté"</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_subtitle">"Nemusíte spraviť nič iné."</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_title">"Vaše druhé zariadenie je už prihlásené"</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"Platnosť prihlásenia vypršala. Skúste to prosím znova."</string>
   <string name="screen_qr_code_login_error_expired_title">"Prihlásenie nebolo včas dokončené"</string>
   <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"Vaše druhé zariadenie nepodporuje prihlásenie do aplikácie %s pomocou QR kódu.

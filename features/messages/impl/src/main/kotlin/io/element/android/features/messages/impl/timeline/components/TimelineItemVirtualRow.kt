@@ -15,7 +15,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
-import io.element.android.features.messages.impl.timeline.TimelineEvents
+import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineItemDaySeparatorView
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineItemReadMarkerView
@@ -35,7 +35,7 @@ import timber.log.Timber
 fun TimelineItemVirtualRow(
     virtual: TimelineItem.Virtual,
     timelineRoomInfo: TimelineRoomInfo,
-    eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
+    eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier) {
@@ -48,7 +48,7 @@ fun TimelineItemVirtualRow(
                     roomName = timelineRoomInfo.name,
                     isDm = timelineRoomInfo.isDm,
                     onPredecessorRoomClick = { roomId ->
-                        eventSink(TimelineEvents.NavigateToPredecessorOrSuccessorRoom(roomId))
+                        eventSink(TimelineEvent.NavigateToPredecessorOrSuccessorRoom(roomId))
                     },
                 )
             }
@@ -57,7 +57,7 @@ fun TimelineItemVirtualRow(
                 val latestEventSink by rememberUpdatedState(eventSink)
                 LaunchedEffect(virtual.model.timestamp) {
                     Timber.d("Pagination triggered by load more indicator")
-                    latestEventSink(TimelineEvents.LoadMore(virtual.model.direction))
+                    latestEventSink(TimelineEvent.LoadMore(virtual.model.direction))
                 }
             }
             // Empty model trick to avoid timeline jumping during forward pagination.

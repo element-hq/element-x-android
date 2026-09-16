@@ -9,7 +9,7 @@
 package io.element.android.features.knockrequests.impl.list
 
 import androidx.compose.runtime.Immutable
-import io.element.android.features.knockrequests.impl.data.KnockRequestPermissions
+import io.element.android.features.knockrequests.api.KnockRequestPermissions
 import io.element.android.features.knockrequests.impl.data.KnockRequestPresentable
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
@@ -20,7 +20,7 @@ data class KnockRequestsListState(
     val currentAction: KnockRequestsAction,
     val asyncAction: AsyncAction<Unit>,
     val permissions: KnockRequestPermissions,
-    val eventSink: (KnockRequestsListEvents) -> Unit,
+    val eventSink: (KnockRequestsListEvent) -> Unit,
 ) {
     val canAcceptAll = permissions.canAccept && knockRequests is AsyncData.Success && knockRequests.data.size > 1
 }

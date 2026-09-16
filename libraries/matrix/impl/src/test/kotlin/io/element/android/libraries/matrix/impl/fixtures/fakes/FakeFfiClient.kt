@@ -9,46 +9,74 @@
 package io.element.android.libraries.matrix.impl.fixtures.fakes
 
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustSession
+import io.element.android.libraries.matrix.impl.fixtures.factories.aRustUserProfile
+import io.element.android.libraries.matrix.impl.scanner.FakeFfiContentScanner
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
+import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
+import io.element.android.libraries.matrix.test.A_SERVER_NAME
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.simulateLongTask
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
+import org.matrix.rustcomponents.sdk.ContentScanner
+import org.matrix.rustcomponents.sdk.CreateRoomParameters
 import org.matrix.rustcomponents.sdk.Encryption
+import org.matrix.rustcomponents.sdk.HomeserverCapabilities
 import org.matrix.rustcomponents.sdk.HomeserverLoginDetails
 import org.matrix.rustcomponents.sdk.IgnoredUsersListener
+import org.matrix.rustcomponents.sdk.LoginWithQrCodeHandler
 import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.NotificationClient
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.NotificationSettings
+import org.matrix.rustcomponents.sdk.OAuthConfiguration
+import org.matrix.rustcomponents.sdk.ProfileListener
 import org.matrix.rustcomponents.sdk.PusherIdentifiers
 import org.matrix.rustcomponents.sdk.PusherKind
 import org.matrix.rustcomponents.sdk.RoomDirectorySearch
 import org.matrix.rustcomponents.sdk.Session
 import org.matrix.rustcomponents.sdk.SessionVerificationController
 import org.matrix.rustcomponents.sdk.SpaceService
+import org.matrix.rustcomponents.sdk.StoreSizes
 import org.matrix.rustcomponents.sdk.SyncService
 import org.matrix.rustcomponents.sdk.SyncServiceBuilder
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.UnableToDecryptDelegate
 import org.matrix.rustcomponents.sdk.UserProfile
+import uniffi.matrix_sdk_base.MediaRetentionPolicy
 
 class FakeFfiClient(
     private val userId: String = A_USER_ID.value,
     private val deviceId: String = A_DEVICE_ID.value,
+    private val homeserver: String = A_HOMESERVER_URL,
+    private val server: String? = A_SERVER_NAME,
     private val notificationClient: NotificationClient = FakeFfiNotificationClient(),
     private val notificationSettings: NotificationSettings = FakeFfiNotificationSettings(),
     private val encryption: Encryption = FakeFfiEncryption(),
     private val session: Session = aRustSession(),
     private val clearCachesResult: () -> Unit = { lambdaError() },
     private val withUtdHook: (UnableToDecryptDelegate) -> Unit = { lambdaError() },
-    private val getProfileResult: (String) -> UserProfile = { UserProfile(userId = userId, displayName = null, avatarUrl = null) },
+    private val getProfileResult: (String) -> UserProfile = { aRustUserProfile() },
     private val homeserverLoginDetailsResult: () -> HomeserverLoginDetails = { lambdaError() },
+    private val loginResult: (String, String) -> Unit = { _, _ -> lambdaError() },
+    private val newLoginWithQrCodeHandlerResult: () -> LoginWithQrCodeHandler = { lambdaError() },
+    private val getStoreSizesResult: () -> StoreSizes = { lambdaError() },
+    private val createRoomResult: (CreateRoomParameters) -> String = { lambdaError() },
+    private val homeserverCapabilities: HomeserverCapabilities = FakeFfiHomeserverCapabilities(),
+    private val accountDataResult: (String) -> String? = { lambdaError() },
+    private val setAccountDataResult: (String, String) -> Unit = { _, _ -> lambdaError() },
+    private val isUserStatusSupportedResult: () -> Boolean = { false },
+    private val isProfilesSlidingSyncExtensionSupportedResult: () -> Boolean = { false },
+    private val subscribeToOwnProfileResult: (ProfileListener) -> Unit = {},
+    private val getUrlResult: (String) -> ByteArray = { lambdaError() },
+    private val contentScannerResult: () -> ContentScanner = { FakeFfiContentScanner() },
     private val closeResult: () -> Unit = {},
 ) : Client(NoHandle) {
     override fun userId(): String = userId
     override fun deviceId(): String = deviceId
+    override fun homeserver(): String = homeserver
+    override fun server(): String? = server
     override suspend fun notificationClient(processSetup: NotificationProcessSetup) = notificationClient
     override suspend fun getNotificationSettings(): NotificationSettings = notificationSettings
     override fun encryption(): Encryption = encryption
@@ -57,7 +85,7 @@ class FakeFfiClient(
     override suspend fun cachedAvatarUrl(): String? = null
     override suspend fun restoreSession(session: Session) = Unit
     override fun syncService(): SyncServiceBuilder = FakeFfiSyncServiceBuilder()
-    override fun spaceService(): SpaceService = FakeFfiSpaceService()
+    override suspend fun spaceService(): SpaceService = FakeFfiSpaceService()
     override fun roomDirectorySearch(): RoomDirectorySearch = FakeFfiRoomDirectorySearch()
     override suspend fun setPusher(
         identifiers: PusherIdentifiers,
@@ -66,6 +94,7 @@ class FakeFfiClient(
         deviceDisplayName: String,
         profileTag: String?,
         lang: String,
+        append: Boolean,
     ) = Unit
 
     override suspend fun deletePusher(identifiers: PusherIdentifiers) = Unit
@@ -80,12 +109,59 @@ class FakeFfiClient(
         return FakeFfiTaskHandle()
     }
 
+    override suspend fun isUserStatusSupported(): Boolean = isUserStatusSupportedResult()
+
+    override suspend fun isProfilesSlidingSyncExtensionSupported(): Boolean = isProfilesSlidingSyncExtensionSupportedResult()
+
+    override fun subscribeToOwnProfile(listener: ProfileListener): TaskHandle {
+        subscribeToOwnProfileResult(listener)
+        return FakeFfiTaskHandle()
+    }
+
     override suspend fun getProfile(userId: String): UserProfile {
         return getProfileResult(userId)
     }
 
     override suspend fun homeserverLoginDetails(): HomeserverLoginDetails {
         return homeserverLoginDetailsResult()
+    }
+
+    override suspend fun login(username: String, password: String, initialDeviceName: String?, deviceId: String?) {
+        loginResult(username, password)
+    }
+
+    override fun newLoginWithQrCodeHandler(oauthConfiguration: OAuthConfiguration): LoginWithQrCodeHandler {
+        return newLoginWithQrCodeHandlerResult()
+    }
+
+    override suspend fun setMediaRetentionPolicy(policy: MediaRetentionPolicy) {}
+
+    override suspend fun getStoreSizes(): StoreSizes {
+        return getStoreSizesResult()
+    }
+
+    override suspend fun createRoom(request: CreateRoomParameters): String {
+        return createRoomResult(request)
+    }
+
+    override fun homeserverCapabilities(): HomeserverCapabilities {
+        return homeserverCapabilities
+    }
+
+    override suspend fun accountData(eventType: String): String? = simulateLongTask {
+        accountDataResult(eventType)
+    }
+
+    override suspend fun setAccountData(eventType: String, content: String) = simulateLongTask {
+        setAccountDataResult(eventType, content)
+    }
+
+    override suspend fun getUrl(url: String): ByteArray = simulateLongTask {
+        getUrlResult(url)
+    }
+
+    override suspend fun contentScanner(): ContentScanner = simulateLongTask {
+        contentScannerResult()
     }
 
     override fun close() = closeResult()

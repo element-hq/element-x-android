@@ -20,9 +20,9 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.RoundRect
+import androidx.compose.ui.graphics.AndroidPaint
 import androidx.compose.ui.graphics.ClipOp
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
@@ -55,10 +55,10 @@ fun Modifier.blurredShapeShadow(
                 addRoundRect(RoundRect(Rect(Offset.Zero, size), CornerRadius(cornerRadius.toPx())))
             }
 
+            val frameworkPaint = android.graphics.Paint()
             // Draw the blurred shadow, then cut out the shape from it
             clipPath(path, ClipOp.Difference) {
-                val paint = Paint()
-                val frameworkPaint = paint.asFrameworkPaint()
+                val paint = AndroidPaint(frameworkPaint)
                 if (blurRadius != 0.dp) {
                     frameworkPaint.maskFilter = BlurMaskFilter(blurRadius.toPx(), BlurMaskFilter.Blur.NORMAL)
                 }

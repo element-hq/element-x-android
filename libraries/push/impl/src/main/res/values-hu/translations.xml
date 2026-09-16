@@ -15,6 +15,11 @@
   </plurals>
   <string name="notification_error_unified_push_unregistered_android">"A UnifiedPush leküldéses értesítési terjesztő nem regisztrálható, ezért többé nem fog értesítéseket kapni. Ellenőrizze az alkalmazás értesítési beállításait és a leküldés értesítési terjesztő állapotát."</string>
   <string name="notification_fallback_content">"Értesítés"</string>
+  <plurals name="notification_fallback_n_content">
+    <item quantity="one">"Van %d új üzenete."</item>
+    <item quantity="other">"Van %d új üzenete."</item>
+  </plurals>
+  <string name="notification_incoming_audio_call">"📞 Bejövő hívás"</string>
   <string name="notification_incoming_call">"📹 Bejövő hívás"</string>
   <string name="notification_inline_reply_failed">"** Nem sikerült elküldeni – nyissa meg a szobát"</string>
   <string name="notification_invitation_action_join">"Csatlakozás"</string>
@@ -25,6 +30,7 @@
   </plurals>
   <string name="notification_invite_body">"Meghívta, hogy csevegjen"</string>
   <string name="notification_invite_body_with_sender">"%1$s meghívta egy csevegésre"</string>
+  <string name="notification_live_location_started_body">"Elkezdték megosztani az élő helyzetüket"</string>
   <string name="notification_mentioned_you_body">"Megemlítette Önt: %1$s"</string>
   <string name="notification_new_messages">"Új üzenetek"</string>
   <plurals name="notification_new_messages_for_room">
@@ -38,6 +44,8 @@
   <string name="notification_room_invite_body_with_sender">"%1$s meghívta, hogy csatlakozzon a szobához"</string>
   <string name="notification_sender_me">"Én"</string>
   <string name="notification_sender_mention_reply">"%1$s megemlítette vagy válaszolt"</string>
+  <string name="notification_space_invite_body">"Meghívták a térbe"</string>
+  <string name="notification_space_invite_body_with_sender">"%1$s meghívta ebbe a térbe"</string>
   <string name="notification_test_push_notification_content">"Az értesítést nézi! Kattintson ide!"</string>
   <string name="notification_thread_in_room">"Üzenetszál itt: %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>

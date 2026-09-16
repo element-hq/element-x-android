@@ -8,6 +8,7 @@
 
 package io.element.android.features.rolesandpermissions.impl.roles
 
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -36,6 +37,7 @@ import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.room.powerlevels.usersWithRole
 import io.element.android.libraries.matrix.api.room.toMatrixUser
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.model.powerLevelOf
 import io.element.android.libraries.matrix.ui.model.roleOf
 import io.element.android.libraries.matrix.ui.room.PowerLevelRoomMemberComparator
 import io.element.android.services.analytics.api.AnalyticsService
@@ -43,12 +45,17 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
+import kotlin.time.Duration.Companion.seconds
 
 @AssistedInject
 class ChangeRolesPresenter(
@@ -67,10 +74,10 @@ class ChangeRolesPresenter(
 
     @Composable
     override fun present(): ChangeRolesState {
-        var query by rememberSaveable { mutableStateOf<String?>(null) }
+        val queryState = rememberTextFieldState()
         var searchActive by rememberSaveable { mutableStateOf(false) }
         var searchResults by remember {
-            mutableStateOf<SearchBarResultState<MembersByRole>>(SearchBarResultState.Initial())
+            mutableStateOf<SearchBarResultState<MembersByRole>>(SearchBarResultState.Initial)
         }
         val selectedUsers = remember {
             mutableStateOf<ImmutableList<MatrixUser>>(persistentListOf())
@@ -79,18 +86,13 @@ class ChangeRolesPresenter(
         val usersWithRole = produceState<ImmutableList<MatrixUser>>(initialValue = persistentListOf()) {
             // If the role is admin, we need to include the owners as well since they implicitly have admin role
             val owners = if (role == RoomMember.Role.Admin) {
-                combine(
-                    room.usersWithRole(RoomMember.Role.Owner(isCreator = true)),
-                    room.usersWithRole(RoomMember.Role.Owner(isCreator = false)),
-                ) { creators, superAdmins ->
-                    creators + superAdmins
-                }
+                room.usersWithRole { role -> role is RoomMember.Role.Owner }
             } else {
-                emptyFlow()
+                flowOf(persistentListOf())
             }
             combine(
                 owners,
-                room.usersWithRole(role),
+                room.usersWithRole { it == role },
             ) { owners, users ->
                 owners + users
             }.map { members -> members.map { it.toMatrixUser() } }
@@ -109,13 +111,14 @@ class ChangeRolesPresenter(
         val roomMemberState by room.membersStateFlow.collectAsState()
 
         // Update search results for every query change
+        val query = queryState.text.toString()
         LaunchedEffect(query, roomMemberState) {
             val results = dataSource
-                .search(query.orEmpty())
+                .search(query)
                 .groupedByRole()
 
             searchResults = if (results.isEmpty()) {
-                SearchBarResultState.NoResultsFound()
+                SearchBarResultState.NoResultsFound
             } else {
                 SearchBarResultState.Results(results)
             }
@@ -129,18 +132,16 @@ class ChangeRolesPresenter(
 
         val roomInfo by room.roomInfoFlow.collectAsState()
         fun canChangeMemberRole(userId: UserId): Boolean {
-            val currentUserRole = roomInfo.roleOf(room.sessionId)
-            val otherUserRole = roomInfo.roleOf(userId)
-            return currentUserRole.powerLevel > otherUserRole.powerLevel
+            val currentUserPowerLevel = roomInfo.powerLevelOf(room.sessionId)
+            val otherUserPowerLevel = roomInfo.powerLevelOf(userId)
+            return currentUserPowerLevel > otherUserPowerLevel &&
+                currentUserPowerLevel >= role.powerLevel
         }
 
         fun handleEvent(event: ChangeRolesEvent) {
             when (event) {
                 is ChangeRolesEvent.ToggleSearchActive -> {
                     searchActive = !searchActive
-                }
-                is ChangeRolesEvent.QueryChanged -> {
-                    query = event.query
                 }
                 is ChangeRolesEvent.UserSelectionToggled -> {
                     val newList = selectedUsers.value.toMutableList()
@@ -191,7 +192,7 @@ class ChangeRolesPresenter(
         }
         return ChangeRolesState(
             role = role,
-            query = query,
+            searchQuery = queryState,
             isSearchActive = searchActive,
             searchResults = searchResults,
             selectedUsers = selectedUsers.value,
@@ -224,7 +225,19 @@ class ChangeRolesPresenter(
                     add(UserRoleChange(selectedUser.userId, RoomMember.Role.User))
                 }
             }
-            room.updateUsersRoles(changes).map { true }
+            room.updateUsersRoles(changes).map {
+                // Wait for the changes to take effect or a timeout
+                withTimeoutOrNull(10.seconds) {
+                    room.roomInfoFlow
+                        .map { it.roomPowerLevels }
+                        .filterNotNull()
+                        .takeWhile { powerLevels ->
+                            changes.any { powerLevels.powerLevelOf(it.userId) != it.powerLevel }
+                        }
+                        .collect()
+                }
+                true
+            }
         }
     }
 

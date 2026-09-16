@@ -159,6 +159,10 @@ class DefaultMediaPlayer(
         }
     }
 
+    override fun setPlaybackSpeed(speed: Float) {
+        player.setPlaybackSpeed(speed)
+    }
+
     override fun close() {
         player.release()
     }

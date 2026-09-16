@@ -13,5 +13,5 @@ data class LockScreenSettingsState(
     val isBiometricEnabled: Boolean,
     val showRemovePinConfirmation: Boolean,
     val showToggleBiometric: Boolean,
-    val eventSink: (LockScreenSettingsEvents) -> Unit
+    val eventSink: (LockScreenSettingsEvent) -> Unit
 )

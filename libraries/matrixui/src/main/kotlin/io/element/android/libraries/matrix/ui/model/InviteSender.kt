@@ -9,7 +9,6 @@
 package io.element.android.libraries.matrix.ui.model
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -30,7 +29,7 @@ data class InviteSender(
     @Composable
     fun annotatedString(): AnnotatedString {
         return stringResource(R.string.screen_invites_invited_you, displayName, userId.value).let { text ->
-            val senderNameStart = LocalContext.current.getString(R.string.screen_invites_invited_you).indexOf("%1\$s")
+            val senderNameStart = stringResource(R.string.screen_invites_invited_you).indexOf($$"%1$s")
             AnnotatedString(
                 text = text,
                 spanStyles = listOf(

@@ -17,7 +17,7 @@ import org.matrix.rustcomponents.sdk.ShieldState
 
 class FakeFfiLazyTimelineItemProvider(
     private val debugInfo: EventTimelineItemDebugInfo = anEventTimelineItemDebugInfo(),
-    private val shieldsState: ShieldState? = null,
+    private val shieldsState: ShieldState = ShieldState.None,
 ) : LazyTimelineItemProvider(NoHandle) {
     override fun getShields(strict: Boolean) = shieldsState
     override fun debugInfo() = debugInfo

@@ -16,6 +16,7 @@
   <string name="screen_media_details_filename">"Nume fișier"</string>
   <string name="screen_media_details_no_more_files_to_show">"Nu mai există fișiere de afișat"</string>
   <string name="screen_media_details_no_more_media_to_show">"Nu mai există conținut media de afișat"</string>
+  <string name="screen_media_details_title">"Informații despre fișier"</string>
   <string name="screen_media_details_uploaded_by">"Încărcat de"</string>
   <string name="screen_media_details_uploaded_on">"Încărcat la"</string>
 </resources>

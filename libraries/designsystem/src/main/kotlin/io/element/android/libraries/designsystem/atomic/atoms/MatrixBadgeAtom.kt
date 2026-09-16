@@ -8,14 +8,19 @@
 
 package io.element.android.libraries.designsystem.atomic.atoms
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.Badge
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 
+/**
+ * https://www.figma.com/design/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?node-id=1960-491
+ */
 object MatrixBadgeAtom {
     data class MatrixBadgeData(
         val text: String,
@@ -40,6 +45,12 @@ object MatrixBadgeAtom {
             Type.Negative -> ElementTheme.colors.bgCriticalSubtle
             Type.Info -> ElementTheme.colors.bgBadgeInfo
         }
+        val borderStroke = when (data.type) {
+            Type.Positive -> null
+            Type.Neutral -> BorderStroke(1.dp, ElementTheme.colors.borderInteractiveSecondary)
+            Type.Negative -> null
+            Type.Info -> null
+        }
         val textColor = when (data.type) {
             Type.Positive -> ElementTheme.colors.textBadgeAccent
             Type.Neutral -> ElementTheme.colors.textPrimary
@@ -58,6 +69,7 @@ object MatrixBadgeAtom {
             backgroundColor = backgroundColor,
             iconColor = iconColor,
             textColor = textColor,
+            borderStroke = borderStroke,
         )
     }
 }
@@ -94,6 +106,18 @@ internal fun MatrixBadgeAtomNegativePreview() = ElementPreview {
             text = "Not trusted",
             icon = CompoundIcons.ErrorSolid(),
             type = MatrixBadgeAtom.Type.Negative,
+        )
+    )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun MatrixBadgeAtomNeutralWrappingPreview() = ElementPreview {
+    MatrixBadgeAtom.View(
+        MatrixBadgeAtom.MatrixBadgeData(
+            text = "How much wood could a wood chuck chuck if a wood chuck could chuck wood",
+            icon = CompoundIcons.LockOff(),
+            type = MatrixBadgeAtom.Type.Info,
         )
     )
 }

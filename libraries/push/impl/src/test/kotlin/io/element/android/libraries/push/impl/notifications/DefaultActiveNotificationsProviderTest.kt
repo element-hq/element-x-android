@@ -19,14 +19,12 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class DefaultActiveNotificationsProviderTest {
+class DefaultActiveNotificationsProviderTest : RobolectricTest() {
     private val notificationIdProvider = NotificationIdProvider
 
     @Test
@@ -151,6 +149,19 @@ class DefaultActiveNotificationsProviderTest {
 
         assertThat(activeNotificationsProvider.getSummaryNotification(A_SESSION_ID)).isNotNull()
         assertThat(activeNotificationsProvider.getSummaryNotification(A_SESSION_ID_2)).isNull()
+    }
+
+    @Test
+    fun `getFallbackNotification returns only the fallback notification for that session id if it exists`() {
+        val activeNotifications = listOf(
+            aStatusBarNotification(id = notificationIdProvider.getFallbackNotificationId(A_SESSION_ID), groupId = A_SESSION_ID.value),
+            aStatusBarNotification(id = notificationIdProvider.getSummaryNotificationId(A_SESSION_ID), groupId = A_SESSION_ID.value),
+            aStatusBarNotification(id = notificationIdProvider.getRoomInvitationNotificationId(A_SESSION_ID_2), groupId = A_SESSION_ID_2.value),
+        )
+        val activeNotificationsProvider = createActiveNotificationsProvider(activeNotifications = activeNotifications)
+
+        assertThat(activeNotificationsProvider.getFallbackNotification(A_SESSION_ID)).isNotNull()
+        assertThat(activeNotificationsProvider.getFallbackNotification(A_SESSION_ID_2)).isNull()
     }
 
     private fun aStatusBarNotification(id: Int, groupId: String, tag: String? = null) = mockk<StatusBarNotification> {

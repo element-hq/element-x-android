@@ -14,19 +14,28 @@ import im.vector.app.features.analytics.plan.Interaction
 import im.vector.app.features.analytics.plan.SuperProperties
 import im.vector.app.features.analytics.plan.UserProperties
 
+/**
+ * Records analytics events; implemented by every provider and by the analytics service that fans out to them.
+ */
 interface AnalyticsTracker {
     /**
      * Capture an Event.
+     *
+     * @param event the event to record, taken from the shared analytics plan.
      */
     fun capture(event: VectorAnalyticsEvent)
 
     /**
      * Track a displayed screen.
+     *
+     * @param screen the screen that was shown.
      */
     fun screen(screen: VectorAnalyticsScreen)
 
     /**
      * Update user specific properties.
+     *
+     * @param userProperties the properties to merge into the current user's profile.
      */
     fun updateUserProperties(userProperties: UserProperties)
 
@@ -35,6 +44,18 @@ interface AnalyticsTracker {
      * Super properties are added to any tracked event automatically.
      */
     fun updateSuperProperties(updatedProperties: SuperProperties)
+
+    /**
+     * Adds extra data that will be sent with every event.
+     */
+    fun addExtraData(key: String, value: String) {}
+
+    /**
+     * Similar to [addExtraData], adds data that will be indexed in the analytics portal.
+     *
+     * **Do not add numerical values using this, use [addExtraData] instead.**
+     */
+    fun addIndexableData(key: String, value: String) {}
 }
 
 fun AnalyticsTracker.captureInteraction(name: Interaction.Name, type: Interaction.InteractionType? = null) {

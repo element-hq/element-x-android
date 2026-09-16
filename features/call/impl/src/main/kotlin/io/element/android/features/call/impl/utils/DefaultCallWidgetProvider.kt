@@ -14,7 +14,6 @@ import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.widget.CallWidgetSettingsProvider
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.services.appnavstate.api.ActiveRoomsHolder
@@ -32,6 +31,7 @@ class DefaultCallWidgetProvider(
     override suspend fun getWidget(
         sessionId: SessionId,
         roomId: RoomId,
+        isAudioCall: Boolean,
         clientId: String,
         languageTag: String?,
         theme: String?,
@@ -50,6 +50,7 @@ class DefaultCallWidgetProvider(
             baseUrl = baseUrl,
             encrypted = isEncrypted,
             direct = room.isDm(),
+            isAudioCall = isAudioCall,
             hasActiveCall = roomInfo.hasRoomCall,
         )
         val callUrl = room.generateWidgetWebViewUrl(

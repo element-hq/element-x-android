@@ -2,8 +2,11 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_room_change_permissions_administrators">"Yalnızca yöneticiler"</string>
   <string name="screen_room_change_permissions_ban_people">"İnsanları yasakla"</string>
+  <string name="screen_room_change_permissions_change_settings">"Ayarları değiştir"</string>
   <string name="screen_room_change_permissions_delete_messages">"Mesajları kaldır"</string>
   <string name="screen_room_change_permissions_invite_people">"Kişileri davet etme ve katılma isteklerini kabul etme"</string>
+  <string name="screen_room_change_permissions_manage_space">"Alanı yönet"</string>
+  <string name="screen_room_change_permissions_manage_space_rooms">"Odaları yönet"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Mesajlar ve içerik"</string>
   <string name="screen_room_change_permissions_moderators">"Yöneticiler ve moderatörler"</string>
   <string name="screen_room_change_permissions_remove_people">"Kişileri kaldırma ve katılma isteklerini reddetme"</string>
@@ -12,9 +15,11 @@
   <string name="screen_room_change_permissions_room_name">"Oda adını değiştir"</string>
   <string name="screen_room_change_permissions_room_topic">"Oda konusunu değiştir"</string>
   <string name="screen_room_change_permissions_send_messages">"Mesaj gönder"</string>
+  <string name="screen_room_change_permissions_title">"İzinler"</string>
   <string name="screen_room_change_role_administrators_title">"Yöneticileri Düzenle"</string>
   <string name="screen_room_change_role_confirm_add_admin_description">"Bu eylemi geri alamazsınız. Kullanıcıyı sizinle aynı güç seviyesine sahip olacak şekilde terfi ettiriyorsunuz."</string>
   <string name="screen_room_change_role_confirm_add_admin_title">"Yönetici Ekle?"</string>
+  <string name="screen_room_change_role_confirm_change_owners_description">"Bu işlemi geri alamazsınız. Sahipliği seçilen kullanıcılara devrediyorsunuz. Ayrıldıktan sonra bu işlem kalıcı olacaktır."</string>
   <string name="screen_room_change_role_confirm_demote_self_action">"Rütbe Düşür"</string>
   <string name="screen_room_change_role_confirm_demote_self_description">"Rütbenizi düşürdüğünüz için bu değişikliği geri alamazsınız, eğer odadaki son ayrıcalıklı kullanıcı sizseniz ayrıcalıkları yeniden kazanmanız mümkün olmayacaktır."</string>
   <string name="screen_room_change_role_confirm_demote_self_title">"Rütbeni düşür?"</string>
@@ -28,6 +33,8 @@
   <string name="screen_room_change_role_unsaved_changes_description">"Kaydedilmemiş değişiklikleriniz var."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Değişiklikleri Kaydet?"</string>
   <string name="screen_room_member_list_banned_empty">"Bu odada yasaklı kullanıcı yok."</string>
+  <string name="screen_room_member_list_empty_search_subtitle">"Metni kontrol edin ya da yeni bir arama yapmayı deneyin."</string>
+  <string name="screen_room_member_list_empty_search_title">"“%1$s” için sonuç bulunamadı"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d kişi"</item>
     <item quantity="other">"%1$d kişi"</item>
@@ -38,6 +45,11 @@
   <string name="screen_room_member_list_manage_member_unban_message">"Davet edildikleri takdirde bu odaya tekrar katılabileceklerdir."</string>
   <string name="screen_room_member_list_mode_banned">"Yasaklandı"</string>
   <string name="screen_room_member_list_mode_members">"Üyeler"</string>
+  <plurals name="screen_room_member_list_pending_header_title">
+    <item quantity="one">"%1$d Davetli"</item>
+    <item quantity="other">"%1$d Davetli"</item>
+  </plurals>
+  <string name="screen_room_member_list_pending_status">"Beklemede"</string>
   <string name="screen_room_member_list_role_administrator">"Yalnızca yöneticiler"</string>
   <string name="screen_room_member_list_role_moderator">"Yöneticiler ve moderatörler"</string>
   <string name="screen_room_member_list_room_members_header_title">"Oda üyeleri"</string>
@@ -49,10 +61,12 @@
   <string name="screen_room_roles_and_permissions_member_moderation">"Üye moderasyonu"</string>
   <string name="screen_room_roles_and_permissions_messages_and_content">"Mesajlar ve içerik"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderatörler"</string>
+  <string name="screen_room_roles_and_permissions_permissions_header">"İzinler"</string>
   <string name="screen_room_roles_and_permissions_reset">"İzinleri sıfırla"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"İzinleri sıfırladığınızda, mevcut ayarları kaybedersiniz."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"İzinleri sıfırla?"</string>
   <string name="screen_room_roles_and_permissions_roles_header">"Roller"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Oda bilgileri"</string>
+  <string name="screen_room_roles_and_permissions_space_details">"Alan ayrıntıları"</string>
   <string name="screen_room_roles_and_permissions_title">"Roller ve izinler"</string>
 </resources>

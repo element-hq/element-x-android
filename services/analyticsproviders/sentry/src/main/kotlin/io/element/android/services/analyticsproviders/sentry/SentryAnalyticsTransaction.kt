@@ -9,16 +9,38 @@ package io.element.android.services.analyticsproviders.sentry
 
 import io.element.android.services.analyticsproviders.api.AnalyticsTransaction
 import io.sentry.ISpan
+import io.sentry.ITransaction
 import io.sentry.Sentry
+import io.sentry.SentryInstantDate
+import timber.log.Timber
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.nanoseconds
 
 class SentryAnalyticsTransaction private constructor(span: ISpan) : AnalyticsTransaction {
-    constructor(name: String, operation: String?) : this(Sentry.startTransaction(name, operation.orEmpty()))
+    constructor(name: String, operation: String?, description: String? = null) : this(
+        Sentry.startTransaction(name, operation.orEmpty()).also { it.description = description }
+    )
     private val inner = span
+
+    @Suppress("UnstableApiUsage")
+    override val duration: Duration get() {
+        return (inner.finishDate ?: SentryInstantDate()).diff(inner.startDate).nanoseconds
+    }
 
     override fun startChild(operation: String, description: String?): AnalyticsTransaction = SentryAnalyticsTransaction(
         inner.startChild(operation, description)
     )
-    override fun setData(key: String, value: Any) = inner.setData(key, value)
+
+    override fun putIndexableData(key: String, value: String) = inner.setTag(key, value)
+    override fun putExtraData(key: String, value: String) = inner.setData(key, value)
+    override fun traceId(): String? = inner.toSentryTrace().value
     override fun isFinished(): Boolean = inner.isFinished
-    override fun finish() = inner.finish()
+    override fun attachError(throwable: Throwable) {
+        inner.throwable = throwable
+    }
+    override fun finish() {
+        val name = if (inner is ITransaction) inner.name else inner.operation
+        Timber.d("Finishing transaction: '$name'")
+        inner.finish()
+    }
 }

@@ -15,7 +15,6 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.viewinterop.AndroidView
 import io.element.android.libraries.androidutils.ui.awaitWindowFocus
-import io.element.android.libraries.androidutils.ui.isKeyboardVisible
 import io.element.android.libraries.androidutils.ui.showKeyboard
 
 /**
@@ -42,12 +41,15 @@ internal fun <T> SoftKeyboardEffect(
             // Await window focus in case returning from a dialog
             view.awaitWindowFocus()
 
-            if (!view.isKeyboardVisible()) {
-                // Show the keyboard, temporarily using the root view for focus
-                view.showKeyboard(andRequestFocus = true)
+            // First, focus the correct editor view
+            latestOnRequestFocus()
 
-                // Refocus to the correct view
-                latestOnRequestFocus()
+            // Show keyboard on the focused editor view rather than the root view,
+            // as some devices require showSoftInput on the actual input view.
+            // Using post to run after the current focus pass completes.
+            view.post {
+                val focusedView = view.findFocus() ?: view
+                focusedView.showKeyboard()
             }
         }
     }

@@ -3,6 +3,6 @@
   <string name="screen_signed_out_reason_1">"Вы изменили свой пароль в другой сессии"</string>
   <string name="screen_signed_out_reason_2">"Вы удалили сессию из другой сессии"</string>
   <string name="screen_signed_out_reason_3">"Администратор вашего сервера аннулировал ваш доступ"</string>
-  <string name="screen_signed_out_subtitle">"Возможно, вы вышли из системы по одной из причин, перечисленных ниже. Пожалуйста, войдите в систему еще раз, чтобы продолжить использование %s."</string>
+  <string name="screen_signed_out_subtitle">"Возможно, Вы вышли из системы по одной из причин, перечисленных ниже. Пожалуйста, войдите в систему ещё раз, чтобы продолжить использовать %s."</string>
   <string name="screen_signed_out_title">"Вы вышли из системы"</string>
 </resources>

@@ -23,7 +23,7 @@
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"請輸入相同的 PIN 碼兩次"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN 碼不一樣"</string>
   <string name="screen_app_lock_signout_alert_message">"您需要重新登入並建立新的 PIN 碼才能繼續"</string>
-  <string name="screen_app_lock_signout_alert_title">"您即將登出"</string>
+  <string name="screen_app_lock_signout_alert_title">"此裝置已被移除"</string>
   <plurals name="screen_app_lock_subtitle">
     <item quantity="other">"您有 %1$d 次解鎖的機會"</item>
   </plurals>
@@ -32,5 +32,5 @@
   </plurals>
   <string name="screen_app_lock_use_biometric_android">"使用生物辨識"</string>
   <string name="screen_app_lock_use_pin_android">"使用 PIN 碼"</string>
-  <string name="screen_signout_in_progress_dialog_content">"正在登出…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"正在移除裝置……"</string>
 </resources>

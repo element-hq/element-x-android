@@ -5,6 +5,8 @@ on:
     # At 00:00 on every Monday UTC
     - cron: '0 0 * * 1'
 
+permissions: {}
+
 jobs:
   sync-sas-strings:
     runs-on: ubuntu-latest
@@ -12,9 +14,11 @@ jobs:
     if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
     # No concurrency required, runs every time on a schedule.
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Set up Python 3.12
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: 3.14
       - name: Install Prerequisite dependencies
@@ -23,7 +27,7 @@ jobs:
       - name: Run SAS String script
         run: ./tools/sas/import_sas_strings.py
       - name: Create Pull Request for SAS Strings
-        uses: peter-evans/create-pull-request@84ae59a2cdc2258d6fa0732dd66352dddae2a412 # v7.0.9
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           commit-message: Sync SAS Strings
           title: Sync SAS Strings

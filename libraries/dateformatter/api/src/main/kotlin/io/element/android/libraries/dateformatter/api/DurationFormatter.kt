@@ -12,6 +12,24 @@ import java.util.Locale
 import kotlin.time.Duration
 
 /**
+ * Formats a duration in a localized, human-readable way.
+ * Uses the largest appropriate unit (hours, minutes, or seconds).
+ *
+ * Examples (in English):
+ * - 2 hours 30 minutes → "3 hours" (rounded)
+ * - 45 minutes → "45 minutes"
+ * - 30 seconds → "30 seconds"
+ */
+interface DurationFormatter {
+    /**
+     * Formats the duration using its largest appropriate unit, rounding rather than listing several units.
+     *
+     * @param duration the duration to describe.
+     */
+    fun format(duration: Duration): String
+}
+
+/**
  * Convert milliseconds to human readable duration.
  * Hours in 1 digit or more.
  * Minutes in 2 digits when hours are available.

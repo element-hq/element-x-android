@@ -10,7 +10,7 @@ package io.element.android.libraries.matrix.impl.fixtures.factories
 
 import org.matrix.rustcomponents.sdk.EventTimelineItemDebugInfo
 
-fun anEventTimelineItemDebugInfo(
+internal fun anEventTimelineItemDebugInfo(
     model: String = "model",
     originalJson: String? = null,
     latestEditJson: String? = null,

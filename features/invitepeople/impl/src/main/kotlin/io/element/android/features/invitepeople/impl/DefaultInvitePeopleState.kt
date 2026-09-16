@@ -8,22 +8,26 @@
 
 package io.element.android.features.invitepeople.impl
 
-import io.element.android.features.invitepeople.api.InvitePeopleEvents
+import androidx.compose.foundation.text.input.TextFieldState
+import io.element.android.features.invitepeople.api.InvitePeopleEvent
 import io.element.android.features.invitepeople.api.InvitePeopleState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 
 data class DefaultInvitePeopleState(
     val room: AsyncData<Unit>,
     override val canInvite: Boolean,
-    val searchQuery: String,
+    val searchQuery: TextFieldState,
     val showSearchLoader: Boolean,
     val searchResults: SearchBarResultState<ImmutableList<InvitableUser>>,
     val selectedUsers: ImmutableList<MatrixUser>,
     override val isSearchActive: Boolean,
     override val sendInvitesAction: AsyncAction<Unit>,
-    override val eventSink: (InvitePeopleEvents) -> Unit
+    override val createRoomFromDmAction: AsyncAction<RoomId>,
+    val suggestions: ImmutableList<InvitableUser>,
+    override val eventSink: (InvitePeopleEvent) -> Unit
 ) : InvitePeopleState

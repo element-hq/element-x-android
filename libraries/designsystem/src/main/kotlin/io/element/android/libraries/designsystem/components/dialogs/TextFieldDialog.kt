@@ -76,7 +76,7 @@ fun TextFieldDialog(
             item {
                 Text(
                     text = content,
-                    style = ElementTheme.materialTypography.bodyMedium,
+                    style = ElementTheme.typography.fontBodyMdRegular,
                 )
             }
         }

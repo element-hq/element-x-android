@@ -16,13 +16,8 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.notification.FakeNotificationService
 import io.element.android.libraries.matrix.test.notification.aNotificationData
-import io.element.android.libraries.matrix.ui.media.test.FakeImageLoaderHolder
-import io.element.android.libraries.push.impl.notifications.fake.FakeActiveNotificationsProvider
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationDataFactory
-import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationDisplayer
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
-import io.element.android.libraries.push.test.notifications.FakeCallNotificationEventResolver
-import io.element.android.services.appnavstate.test.FakeAppNavigationStateService
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runCurrent
@@ -47,16 +42,10 @@ class DefaultOnMissedCallNotificationHandlerTest {
         })
         val defaultOnMissedCallNotificationHandler = DefaultOnMissedCallNotificationHandler(
             matrixClientProvider = matrixClientProvider,
-            defaultNotificationDrawerManager = DefaultNotificationDrawerManager(
-                notificationDisplayer = FakeNotificationDisplayer(),
+            defaultNotificationDrawerManager = createDefaultNotificationDrawerManager(
                 notificationRenderer = createNotificationRenderer(
                     notificationDataFactory = dataFactory,
                 ),
-                appNavigationStateService = FakeAppNavigationStateService(),
-                coroutineScope = backgroundScope,
-                matrixClientProvider = FakeMatrixClientProvider(),
-                imageLoaderHolder = FakeImageLoaderHolder(),
-                activeNotificationsProvider = FakeActiveNotificationsProvider(),
             ),
             callNotificationEventResolver = FakeCallNotificationEventResolver(resolveEventLambda = { _, _, _ ->
                 Result.success(aNotifiableMessageEvent())

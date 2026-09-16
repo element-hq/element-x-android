@@ -24,7 +24,7 @@
   <string name="screen_login_error_invalid_credentials">"Onjuiste gebruikersnaam en/of wachtwoord"</string>
   <string name="screen_login_error_invalid_user_id">"Dit is geen geldige gebruikers-ID. Verwacht formaat: \'@user:homeserver.org\'"</string>
   <string name="screen_login_error_refresh_tokens">"Deze server is geconfigureerd om verversingstokens te gebruiken. Deze worden niet ondersteund bij inloggen met een wachtwoord."</string>
-  <string name="screen_login_error_unsupported_authentication">"De geselecteerde homeserver ondersteunt geen wachtwoord of OIDC aanmelding. Neem contact op met je beheerder of kies een andere homeserver."</string>
+  <string name="screen_login_error_unsupported_authentication">"De geselecteerde homeserver ondersteunt geen wachtwoord of OAuth aanmelding. Neem contact op met je beheerder of kies een andere homeserver."</string>
   <string name="screen_login_form_header">"Vul je gegevens in"</string>
   <string name="screen_login_subtitle">"Matrix is een open netwerk voor veilige, gedecentraliseerde communicatie."</string>
   <string name="screen_login_title">"Welkom terug!"</string>

@@ -8,50 +8,41 @@
 
 package io.element.android.features.messages.impl.timeline.components.event
 
-import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.dp
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContentProvider
-import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContentPreviewParam
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationValue
 
 @Composable
 fun TimelineItemAudioView(
     content: TimelineItemAudioContent,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
+    contentValidationValue: ContentValidationValue,
     modifier: Modifier = Modifier,
 ) {
     TimelineItemAttachmentView(
+        icon = CompoundIcons.Audio(),
+        iconContentDescription = null,
         filename = content.filename,
         fileExtensionAndSize = content.fileExtensionAndSize,
-        caption = content.caption,
         onContentLayoutChange = onContentLayoutChange,
         modifier = modifier,
-        icon = {
-            Icon(
-                imageVector = CompoundIcons.Audio(),
-                contentDescription = null,
-                tint = ElementTheme.colors.iconPrimary,
-                modifier = Modifier
-                    .size(16.dp),
-            )
-        }
+        contentValidationValue = contentValidationValue,
     )
 }
 
 @PreviewsDayNight
 @Composable
-internal fun TimelineItemAudioViewPreview(@PreviewParameter(TimelineItemAudioContentProvider::class) content: TimelineItemAudioContent) =
-    ElementPreview {
+internal fun TimelineItemAudioViewPreview(@PreviewParameter(TimelineItemAudioContentPreviewParam::class) content: TimelineItemAudioContent) =
+    ElementTimelineItemPreview {
         TimelineItemAudioView(
             content,
             onContentLayoutChange = {},
+            contentValidationValue = ContentValidationValue.Valid,
         )
     }

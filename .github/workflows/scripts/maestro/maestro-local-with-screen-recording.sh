@@ -8,10 +8,20 @@
 # Please see LICENSE in the repository root for full details.
 #
 
+# First we disable the onboarding flow on Chrome, which is a source of issues
+# (see https://stackoverflow.com/a/64629745)
+echo "Disabling Chrome onboarding flow"
+adb shell am set-debug-app --persistent com.android.chrome
+adb shell 'echo "chrome --disable-fre --no-default-browser-check --no-first-run" > /data/local/tmp/chrome-command-line'
+adb shell am start -n com.android.chrome/com.google.android.apps.chrome.Main
+
 adb install -r $1
 echo "Starting the screen recording..."
 adb push .github/workflows/scripts/maestro/local-recording.sh /data/local/tmp/
 adb shell "chmod +x /data/local/tmp/local-recording.sh"
+mkdir -p ~/.maestro/tests
+# Start logcat in the background and save the output to a file, use `org.matrix.rust.sdk` tag since the SDK handles the logging
+adb logcat 'org.matrix.rust.sdk:D *:S' > ~/.maestro/tests/logcat.txt &
 adb shell "/data/local/tmp/local-recording.sh & echo \$! > /data/local/tmp/screenrecord_pid.txt" &
 set +e
 ~/.maestro/bin/maestro test .maestro/allTests.yaml

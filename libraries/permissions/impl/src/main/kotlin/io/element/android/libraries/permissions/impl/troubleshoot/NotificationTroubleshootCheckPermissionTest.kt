@@ -10,9 +10,8 @@ package io.element.android.libraries.permissions.impl.troubleshoot
 
 import android.Manifest
 import android.os.Build
-import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
+import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.permissions.api.PermissionStateProvider
 import io.element.android.libraries.permissions.impl.R
 import io.element.android.libraries.permissions.impl.action.PermissionActions
@@ -25,8 +24,7 @@ import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
-@ContributesIntoSet(AppScope::class)
-@Inject
+@ContributesIntoSet(SessionScope::class)
 class NotificationTroubleshootCheckPermissionTest(
     private val permissionStateProvider: PermissionStateProvider,
     private val sdkVersionProvider: BuildVersionSdkIntProvider,
@@ -61,6 +59,6 @@ class NotificationTroubleshootCheckPermissionTest(
         navigator: NotificationTroubleshootNavigator,
     ) {
         // Do not bother about asking the permission inline, just lead the user to the settings
-        permissionActions.openSettings()
+        permissionActions.openSettings(Manifest.permission.POST_NOTIFICATIONS)
     }
 }

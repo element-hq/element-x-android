@@ -1,0 +1,2 @@
+Main changes in this version: bug fixes for crashes from the SDK and notifications and UI improvements.
+Full changelog: https://github.com/element-hq/element-x-android/releases

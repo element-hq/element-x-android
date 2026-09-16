@@ -1,5 +1,3 @@
-import extension.testCommonDependencies
-
 /*
  * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2023, 2024 New Vector Ltd.

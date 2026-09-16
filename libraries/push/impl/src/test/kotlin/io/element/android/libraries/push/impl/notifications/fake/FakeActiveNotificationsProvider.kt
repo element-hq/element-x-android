@@ -21,6 +21,7 @@ class FakeActiveNotificationsProvider(
     private val getMembershipNotificationForSessionResult: (SessionId) -> List<StatusBarNotification> = { emptyList() },
     private val getMembershipNotificationForRoomResult: (SessionId, RoomId) -> List<StatusBarNotification> = { _, _ -> emptyList() },
     private val getSummaryNotificationResult: (SessionId) -> StatusBarNotification? = { null },
+    private val getFallbackNotificationResult: (SessionId) -> StatusBarNotification? = { null },
     private val countResult: (SessionId) -> Int = { 0 },
 ) : ActiveNotificationsProvider {
     override fun getMessageNotificationsForRoom(sessionId: SessionId, roomId: RoomId, threadId: ThreadId?): List<StatusBarNotification> {
@@ -45,6 +46,10 @@ class FakeActiveNotificationsProvider(
 
     override fun getSummaryNotification(sessionId: SessionId): StatusBarNotification? {
         return getSummaryNotificationResult(sessionId)
+    }
+
+    override fun getFallbackNotification(sessionId: SessionId): StatusBarNotification? {
+        return getFallbackNotificationResult(sessionId)
     }
 
     override fun count(sessionId: SessionId): Int {

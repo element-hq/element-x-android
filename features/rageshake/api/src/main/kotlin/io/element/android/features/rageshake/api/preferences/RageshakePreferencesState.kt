@@ -13,5 +13,5 @@ data class RageshakePreferencesState(
     val isEnabled: Boolean,
     val isSupported: Boolean,
     val sensitivity: Float,
-    val eventSink: (RageshakePreferencesEvents) -> Unit,
+    val eventSink: (RageshakePreferencesEvent) -> Unit,
 )

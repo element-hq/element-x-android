@@ -11,6 +11,7 @@ package io.element.android.libraries.matrix.impl.notification
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.RtcNotificationType
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
@@ -18,8 +19,9 @@ import io.element.android.libraries.matrix.impl.timeline.item.event.EventMessage
 import org.matrix.rustcomponents.sdk.MessageLikeEventContent
 import org.matrix.rustcomponents.sdk.StateEventContent
 import org.matrix.rustcomponents.sdk.TimelineEvent
-import org.matrix.rustcomponents.sdk.TimelineEventType
+import org.matrix.rustcomponents.sdk.TimelineEventContent
 import org.matrix.rustcomponents.sdk.use
+import org.matrix.rustcomponents.sdk.RtcCallIntent as SdkRtcCallIntent
 import org.matrix.rustcomponents.sdk.RtcNotificationType as SdkRtcNotificationType
 
 class TimelineEventToNotificationContentMapper {
@@ -27,27 +29,26 @@ class TimelineEventToNotificationContentMapper {
         return runCatchingExceptions {
             timelineEvent.use {
                 val senderId = UserId(timelineEvent.senderId())
-                timelineEvent.eventType().use { eventType ->
-                    eventType.toContent(senderId = senderId)
+                timelineEvent.content().use { eventContent ->
+                    eventContent.toContent(senderId = senderId)
                 }
             }
         }
     }
 }
 
-private fun TimelineEventType.toContent(senderId: UserId): NotificationContent {
+private fun TimelineEventContent.toContent(senderId: UserId): NotificationContent {
     return when (this) {
-        is TimelineEventType.MessageLike -> content.toContent(senderId)
-        is TimelineEventType.State -> content.toContent()
+        is TimelineEventContent.MessageLike -> content.toContent(senderId)
+        is TimelineEventContent.State -> content.toContent(senderId)
     }
 }
 
-private fun StateEventContent.toContent(): NotificationContent.StateEvent {
+private fun StateEventContent.toContent(senderId: UserId): NotificationContent.StateEvent {
     return when (this) {
         StateEventContent.PolicyRuleRoom -> NotificationContent.StateEvent.PolicyRuleRoom
         StateEventContent.PolicyRuleServer -> NotificationContent.StateEvent.PolicyRuleServer
         StateEventContent.PolicyRuleUser -> NotificationContent.StateEvent.PolicyRuleUser
-        StateEventContent.RoomAliases -> NotificationContent.StateEvent.RoomAliases
         StateEventContent.RoomAvatar -> NotificationContent.StateEvent.RoomAvatar
         StateEventContent.RoomCanonicalAlias -> NotificationContent.StateEvent.RoomCanonicalAlias
         StateEventContent.RoomCreate -> NotificationContent.StateEvent.RoomCreate
@@ -70,6 +71,7 @@ private fun StateEventContent.toContent(): NotificationContent.StateEvent {
         is StateEventContent.RoomTopic -> NotificationContent.StateEvent.RoomTopic(topic)
         StateEventContent.SpaceChild -> NotificationContent.StateEvent.SpaceChild
         StateEventContent.SpaceParent -> NotificationContent.StateEvent.SpaceParent
+        StateEventContent.BeaconInfo -> NotificationContent.StateEvent.BeaconInfo(senderId)
     }
 }
 
@@ -83,6 +85,7 @@ private fun MessageLikeEventContent.toContent(senderId: UserId): NotificationCon
             is MessageLikeEventContent.RtcNotification -> NotificationContent.MessageLike.RtcNotification(
                 senderId = senderId,
                 type = notificationType.map(),
+                callIntent = callIntent.map(),
                 expirationTimestampMillis = expirationTs.toLong()
             )
             MessageLikeEventContent.KeyVerificationAccept -> NotificationContent.MessageLike.KeyVerificationAccept
@@ -95,7 +98,10 @@ private fun MessageLikeEventContent.toContent(senderId: UserId): NotificationCon
             is MessageLikeEventContent.ReactionContent -> NotificationContent.MessageLike.ReactionContent(relatedEventId)
             MessageLikeEventContent.RoomEncrypted -> NotificationContent.MessageLike.RoomEncrypted
             is MessageLikeEventContent.RoomMessage -> {
-                NotificationContent.MessageLike.RoomMessage(senderId, EventMessageMapper().mapMessageType(messageType))
+                NotificationContent.MessageLike.RoomMessage(
+                    senderId,
+                    EventMessageMapper().mapMessageType(messageType)
+                )
             }
             is MessageLikeEventContent.RoomRedaction -> NotificationContent.MessageLike.RoomRedaction(
                 redactedEventId = redactedEventId?.let(::EventId),
@@ -103,6 +109,7 @@ private fun MessageLikeEventContent.toContent(senderId: UserId): NotificationCon
             )
             MessageLikeEventContent.Sticker -> NotificationContent.MessageLike.Sticker
             is MessageLikeEventContent.Poll -> NotificationContent.MessageLike.Poll(senderId, question)
+            MessageLikeEventContent.Beacon -> NotificationContent.MessageLike.Beacon
         }
     }
 }
@@ -110,4 +117,9 @@ private fun MessageLikeEventContent.toContent(senderId: UserId): NotificationCon
 private fun SdkRtcNotificationType.map(): RtcNotificationType = when (this) {
     SdkRtcNotificationType.NOTIFICATION -> RtcNotificationType.NOTIFY
     SdkRtcNotificationType.RING -> RtcNotificationType.RING
+}
+
+private fun SdkRtcCallIntent?.map(): CallIntent = when (this) {
+    SdkRtcCallIntent.AUDIO -> CallIntent.AUDIO
+    else -> CallIntent.VIDEO
 }

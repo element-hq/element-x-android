@@ -8,9 +8,8 @@
 
 package io.element.android.libraries.pushproviders.firebase.troubleshoot
 
-import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
+import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.pushproviders.firebase.FirebaseConfig
 import io.element.android.libraries.pushproviders.firebase.FirebaseStore
 import io.element.android.libraries.pushproviders.firebase.FirebaseTroubleshooter
@@ -27,8 +26,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-@ContributesIntoSet(AppScope::class)
-@Inject
+@ContributesIntoSet(SessionScope::class)
 class FirebaseTokenTest(
     private val firebaseStore: FirebaseStore,
     private val firebaseTroubleshooter: FirebaseTroubleshooter,
@@ -51,7 +49,7 @@ class FirebaseTokenTest(
     override suspend fun run(coroutineScope: CoroutineScope) {
         currentJob?.cancel()
         delegate.start()
-        currentJob = firebaseStore.fcmTokenFlow()
+        currentJob = firebaseStore.fcmInstallationIdFlow()
             .onEach { token ->
                 if (token != null) {
                     delegate.updateState(

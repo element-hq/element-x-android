@@ -1,0 +1,8 @@
+-- Migrate DB from version 1
+-- Initial schema for CacheData table
+
+CREATE TABLE IF NOT EXISTS CacheData (
+    key TEXT NOT NULL PRIMARY KEY,
+    value TEXT NOT NULL,
+    updatedAt INTEGER NOT NULL
+);

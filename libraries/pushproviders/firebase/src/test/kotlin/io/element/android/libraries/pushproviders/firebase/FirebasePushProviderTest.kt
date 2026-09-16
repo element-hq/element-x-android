@@ -61,7 +61,7 @@ class FirebasePushProviderTest {
         val registerPusherResultLambda = lambdaRecorder<MatrixClient, String, String, Result<Unit>> { _, _, _ -> Result.success(Unit) }
         val firebasePushProvider = createFirebasePushProvider(
             firebaseStore = InMemoryFirebaseStore(
-                token = "aToken"
+                installationId = "aToken"
             ),
             pusherSubscriber = FakePusherSubscriber(
                 registerPusherResult = registerPusherResultLambda
@@ -78,7 +78,7 @@ class FirebasePushProviderTest {
     fun `register ko no token`() = runTest {
         val firebasePushProvider = createFirebasePushProvider(
             firebaseStore = InMemoryFirebaseStore(
-                token = null
+                installationId = null
             ),
             pusherSubscriber = FakePusherSubscriber(
                 registerPusherResult = { _, _, _ -> Result.success(Unit) }
@@ -92,7 +92,7 @@ class FirebasePushProviderTest {
     fun `register ko error`() = runTest {
         val firebasePushProvider = createFirebasePushProvider(
             firebaseStore = InMemoryFirebaseStore(
-                token = "aToken"
+                installationId = "aToken"
             ),
             pusherSubscriber = FakePusherSubscriber(
                 registerPusherResult = { _, _, _ -> Result.failure(AN_EXCEPTION) }
@@ -108,7 +108,7 @@ class FirebasePushProviderTest {
         val unregisterPusherResultLambda = lambdaRecorder<MatrixClient, String, String, Result<Unit>> { _, _, _ -> Result.success(Unit) }
         val firebasePushProvider = createFirebasePushProvider(
             firebaseStore = InMemoryFirebaseStore(
-                token = "aToken"
+                installationId = "aToken"
             ),
             pusherSubscriber = FakePusherSubscriber(
                 unregisterPusherResult = unregisterPusherResultLambda
@@ -125,7 +125,7 @@ class FirebasePushProviderTest {
     fun `unregister no token - in this case, the error is ignored`() = runTest {
         val firebasePushProvider = createFirebasePushProvider(
             firebaseStore = InMemoryFirebaseStore(
-                token = null
+                installationId = null
             ),
         )
         val result = firebasePushProvider.unregister(FakeMatrixClient())
@@ -136,7 +136,7 @@ class FirebasePushProviderTest {
     fun `unregister ko error`() = runTest {
         val firebasePushProvider = createFirebasePushProvider(
             firebaseStore = InMemoryFirebaseStore(
-                token = "aToken"
+                installationId = "aToken"
             ),
             pusherSubscriber = FakePusherSubscriber(
                 unregisterPusherResult = { _, _, _ -> Result.failure(AN_EXCEPTION) }
@@ -150,7 +150,7 @@ class FirebasePushProviderTest {
     fun `getCurrentUserPushConfig no push ket`() = runTest {
         val firebasePushProvider = createFirebasePushProvider(
             firebaseStore = InMemoryFirebaseStore(
-                token = null
+                installationId = null
             )
         )
         val result = firebasePushProvider.getPushConfig(A_SESSION_ID)
@@ -161,7 +161,7 @@ class FirebasePushProviderTest {
     fun `getCurrentUserPushConfig ok`() = runTest {
         val firebasePushProvider = createFirebasePushProvider(
             firebaseStore = InMemoryFirebaseStore(
-                token = "aToken"
+                installationId = "aToken"
             ),
         )
         val result = firebasePushProvider.getPushConfig(A_SESSION_ID)
@@ -169,10 +169,10 @@ class FirebasePushProviderTest {
     }
 
     @Test
-    fun `rotateToken invokes the FirebaseTokenRotator`() = runTest {
+    fun `rotateToken invokes the FirebaseMessagingSessionRotator`() = runTest {
         val lambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
         val firebasePushProvider = createFirebasePushProvider(
-            firebaseTokenRotator = FakeFirebaseTokenRotator(lambda),
+            rotateFirebaseSession = FakeRotateFirebaseSession(lambda),
         )
         firebasePushProvider.rotateToken()
         lambda.assertions().isCalledOnce()
@@ -194,14 +194,14 @@ class FirebasePushProviderTest {
         firebaseStore: FirebaseStore = InMemoryFirebaseStore(),
         pusherSubscriber: PusherSubscriber = FakePusherSubscriber(),
         isPlayServiceAvailable: IsPlayServiceAvailable = FakeIsPlayServiceAvailable(false),
-        firebaseTokenRotator: FirebaseTokenRotator = FakeFirebaseTokenRotator(),
+        rotateFirebaseSession: RotateFirebaseSession = FakeRotateFirebaseSession(),
         firebaseGatewayProvider: FirebaseGatewayProvider = FakeFirebaseGatewayProvider()
     ): FirebasePushProvider {
         return FirebasePushProvider(
             firebaseStore = firebaseStore,
             pusherSubscriber = pusherSubscriber,
             isPlayServiceAvailable = isPlayServiceAvailable,
-            firebaseTokenRotator = firebaseTokenRotator,
+            rotateFirebaseSession = rotateFirebaseSession,
             firebaseGatewayProvider = firebaseGatewayProvider,
         )
     }

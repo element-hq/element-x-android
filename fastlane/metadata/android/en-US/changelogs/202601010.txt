@@ -1,0 +1,2 @@
+Main changes in this version: iterated on spaces, improved the room list stability and performance, fix an issue with the cached well-known config.
+Full changelog: https://github.com/element-hq/element-x-android/releases

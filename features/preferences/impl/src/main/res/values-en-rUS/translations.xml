@@ -3,4 +3,5 @@
   <string name="screen_advanced_settings_media_compression_title">"Optimize media quality"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Automatically optimize images for faster uploads and smaller file sizes."</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Optimize image upload quality"</string>
+  <string name="screen_labs_header_description">"Try out our latest ideas in development. These features are not finalized; they may be unstable, may change."</string>
 </resources>

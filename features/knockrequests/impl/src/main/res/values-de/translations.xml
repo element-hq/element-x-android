@@ -9,7 +9,7 @@
   <string name="screen_knock_requests_list_accept_all_loading_title">"Alle Beitrittsanfragen werden angenommen"</string>
   <string name="screen_knock_requests_list_accept_failed_alert_description">"Wir konnten diese Beitrittsanfrage nicht annehmen. Möchtest du es noch mal versuchen?"</string>
   <string name="screen_knock_requests_list_accept_failed_alert_title">"Die Beitrittsanfrage konnte nicht akzeptiert werden"</string>
-  <string name="screen_knock_requests_list_accept_loading_title">"Beitrittsanfrage annehmen"</string>
+  <string name="screen_knock_requests_list_accept_loading_title">"Beitrittsanfrage wird angenommen"</string>
   <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Ja, ablehnen und sperren"</string>
   <string name="screen_knock_requests_list_ban_alert_description">"Bist du sicher, dass du %1$s ablehnen und sperren möchtest? Dieser Nutzer kann dann keinen erneuten Beitritt zu diesem Chat anfragen."</string>
   <string name="screen_knock_requests_list_ban_alert_title">"Ablehnen und Zugriff sperren"</string>
@@ -29,7 +29,7 @@
     <item quantity="one">"%1$s +%2$d weiterer möchten diesem Chat beitreten"</item>
     <item quantity="other">"%1$s +%2$d weitere möchten diesem Chat beitreten"</item>
   </plurals>
-  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Alles ansehen"</string>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Alle anzeigen"</string>
   <string name="screen_room_single_knock_request_accept_button_title">"Akzeptieren"</string>
   <string name="screen_room_single_knock_request_title">"%1$s möchte diesem Chat beitreten"</string>
   <string name="screen_room_single_knock_request_view_button_title">"Ansicht"</string>

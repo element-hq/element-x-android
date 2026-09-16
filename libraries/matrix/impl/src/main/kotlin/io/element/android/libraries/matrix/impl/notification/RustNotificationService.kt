@@ -66,6 +66,10 @@ class RustNotificationService(
                                         Timber.d("Could not retrieve event for notification with $eventId - event filtered out")
                                         put(eventId, Result.failure(NotificationResolverException.EventFilteredOut))
                                     }
+                                    NotificationStatus.EventRedacted -> {
+                                        Timber.d("Could not retrieve event for notification with $eventId - event redacted")
+                                        put(eventId, Result.failure(NotificationResolverException.EventRedacted))
+                                    }
                                 }
                             }
                             is BatchNotificationResult.Error -> {

@@ -27,7 +27,7 @@ fun RoomAddressField(
     homeserverName: String,
     addressValidity: RoomAddressValidity,
     onAddressChange: (String) -> Unit,
-    label: String,
+    label: String?,
     supportingText: String,
     modifier: Modifier = Modifier,
 ) {

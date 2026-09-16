@@ -10,6 +10,9 @@ package io.element.android.libraries.featureflag.api
 
 import io.element.android.libraries.core.meta.BuildMeta
 
+/**
+ * Describes one feature flag: how it is identified, how it is presented in the developer options, and what it defaults to.
+ */
 interface Feature {
     /**
      * Unique key to identify the feature.

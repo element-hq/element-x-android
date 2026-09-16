@@ -34,11 +34,10 @@ fun preferenceIcon(
     @DrawableRes iconResourceId: Int? = null,
     showIconBadge: Boolean = false,
     tintColor: Color? = null,
-    enabled: Boolean = true,
     showIconAreaIfNoIcon: Boolean = false,
 ): ListItemContent.Custom? {
     return if (icon != null || iconResourceId != null || showIconAreaIfNoIcon) {
-        ListItemContent.Custom {
+        ListItemContent.Custom { enabled ->
             PreferenceIcon(
                 icon = icon,
                 iconResourceId = iconResourceId,
@@ -87,7 +86,7 @@ private fun PreferenceIcon(
 
 @Preview(group = PreviewGroup.Preferences)
 @Composable
-internal fun PreferenceIconPreview(@PreviewParameter(ImageVectorProvider::class) content: ImageVector?) =
+internal fun PreferenceIconPreview(@PreviewParameter(ImageVectorPreviewParam::class) content: ImageVector?) =
     ElementThemedPreview {
         PreferenceIcon(
             icon = content,
@@ -97,7 +96,7 @@ internal fun PreferenceIconPreview(@PreviewParameter(ImageVectorProvider::class)
 
 @Preview(group = PreviewGroup.Preferences)
 @Composable
-internal fun PreferenceIconWithBadgePreview(@PreviewParameter(ImageVectorProvider::class) content: ImageVector?) =
+internal fun PreferenceIconWithBadgePreview(@PreviewParameter(ImageVectorPreviewParam::class) content: ImageVector?) =
     ElementThemedPreview {
         PreferenceIcon(
             icon = content,

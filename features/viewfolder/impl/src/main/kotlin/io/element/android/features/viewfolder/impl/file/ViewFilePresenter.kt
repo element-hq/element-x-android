@@ -25,8 +25,8 @@ import kotlinx.coroutines.launch
 
 @AssistedInject
 class ViewFilePresenter(
-    @Assisted("path") val path: String,
-    @Assisted("name") val name: String,
+    @Assisted val path: String,
+    @Assisted val name: String,
     private val fileContentReader: FileContentReader,
     private val fileShare: FileShare,
     private val fileSave: FileSave,
@@ -34,8 +34,8 @@ class ViewFilePresenter(
     @AssistedFactory
     interface Factory {
         fun create(
-            @Assisted("path") path: String,
-            @Assisted("name") name: String,
+            path: String,
+            name: String,
         ): ViewFilePresenter
     }
 
@@ -44,10 +44,10 @@ class ViewFilePresenter(
         val coroutineScope = rememberCoroutineScope()
         val colorationMode = remember { name.toColorationMode() }
 
-        fun handleEvent(event: ViewFileEvents) {
+        fun handleEvent(event: ViewFileEvent) {
             when (event) {
-                ViewFileEvents.Share -> coroutineScope.share(path)
-                ViewFileEvents.SaveOnDisk -> coroutineScope.save(path)
+                ViewFileEvent.Share -> coroutineScope.share(path)
+                ViewFileEvent.SaveOnDisk -> coroutineScope.save(path)
             }
         }
 

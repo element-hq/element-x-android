@@ -31,7 +31,7 @@ class DefaultCallWidgetProviderTest {
     @Test
     fun `getWidget - fails if the session does not exist`() = runTest {
         val provider = createProvider(matrixClientProvider = FakeMatrixClientProvider { Result.failure(Exception("Session not found")) })
-        assertThat(provider.getWidget(A_SESSION_ID, A_ROOM_ID, "clientId", "languageTag", "theme").isFailure).isTrue()
+        assertThat(provider.getWidget(A_SESSION_ID, A_ROOM_ID, false, "clientId", "languageTag", "theme").isFailure).isTrue()
     }
 
     @Test
@@ -40,7 +40,7 @@ class DefaultCallWidgetProviderTest {
             givenGetRoomResult(A_ROOM_ID, null)
         }
         val provider = createProvider(matrixClientProvider = FakeMatrixClientProvider { Result.success(client) })
-        assertThat(provider.getWidget(A_SESSION_ID, A_ROOM_ID, "clientId", "languageTag", "theme").isFailure).isTrue()
+        assertThat(provider.getWidget(A_SESSION_ID, A_ROOM_ID, true, "clientId", "languageTag", "theme").isFailure).isTrue()
     }
 
     @Test
@@ -52,7 +52,7 @@ class DefaultCallWidgetProviderTest {
             givenGetRoomResult(A_ROOM_ID, room)
         }
         val provider = createProvider(matrixClientProvider = FakeMatrixClientProvider { Result.success(client) })
-        assertThat(provider.getWidget(A_SESSION_ID, A_ROOM_ID, "clientId", "languageTag", "theme").isFailure).isTrue()
+        assertThat(provider.getWidget(A_SESSION_ID, A_ROOM_ID, false, "clientId", "languageTag", "theme").isFailure).isTrue()
     }
 
     @Test
@@ -65,7 +65,7 @@ class DefaultCallWidgetProviderTest {
             givenGetRoomResult(A_ROOM_ID, room)
         }
         val provider = createProvider(matrixClientProvider = FakeMatrixClientProvider { Result.success(client) })
-        assertThat(provider.getWidget(A_SESSION_ID, A_ROOM_ID, "clientId", "languageTag", "theme").isFailure).isTrue()
+        assertThat(provider.getWidget(A_SESSION_ID, A_ROOM_ID, false, "clientId", "languageTag", "theme").isFailure).isTrue()
     }
 
     @Test
@@ -78,7 +78,7 @@ class DefaultCallWidgetProviderTest {
             givenGetRoomResult(A_ROOM_ID, room)
         }
         val provider = createProvider(matrixClientProvider = FakeMatrixClientProvider { Result.success(client) })
-        assertThat(provider.getWidget(A_SESSION_ID, A_ROOM_ID, "clientId", "languageTag", "theme").getOrNull()).isNotNull()
+        assertThat(provider.getWidget(A_SESSION_ID, A_ROOM_ID, false, "clientId", "languageTag", "theme").getOrNull()).isNotNull()
     }
 
     @Test
@@ -101,7 +101,7 @@ class DefaultCallWidgetProviderTest {
             matrixClientProvider = FakeMatrixClientProvider { Result.success(client) },
             activeRoomsHolder = activeRoomsHolder
         )
-        assertThat(provider.getWidget(A_SESSION_ID, A_ROOM_ID, "clientId", "languageTag", "theme").isSuccess).isTrue()
+        assertThat(provider.getWidget(A_SESSION_ID, A_ROOM_ID, false, "clientId", "languageTag", "theme").isSuccess).isTrue()
     }
 
     @Test
@@ -122,7 +122,7 @@ class DefaultCallWidgetProviderTest {
             callWidgetSettingsProvider = settingsProvider,
             appPreferencesStore = preferencesStore,
         )
-        provider.getWidget(A_SESSION_ID, A_ROOM_ID, "clientId", "languageTag", "theme")
+        provider.getWidget(A_SESSION_ID, A_ROOM_ID, false, "clientId", "languageTag", "theme")
 
         assertThat(settingsProvider.providedBaseUrls).containsExactly("https://custom.element.io")
     }

@@ -10,15 +10,16 @@ package io.element.android.features.messages.impl.timeline
 
 import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureState
+import io.element.android.features.messages.impl.timeline.components.MessageShieldData
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.sendfailure.SendFailureDialogState
 import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import kotlinx.collections.immutable.ImmutableList
 import kotlin.time.Duration
 
@@ -26,15 +27,17 @@ data class TimelineState(
     val timelineItems: ImmutableList<TimelineItem>,
     val timelineRoomInfo: TimelineRoomInfo,
     val timelineMode: Timeline.Mode,
-    val renderReadReceipts: Boolean,
     val newEventState: NewEventState,
     val isLive: Boolean,
     val focusRequestState: FocusRequestState,
     // If not null, info will be rendered in a dialog
-    val messageShield: MessageShield?,
+    val messageShieldDialogData: MessageShieldData?,
     val resolveVerifiedUserSendFailureState: ResolveVerifiedUserSendFailureState,
+    val sendFailureDialogState: SendFailureDialogState,
     val displayThreadSummaries: Boolean,
-    val eventSink: (TimelineEvents) -> Unit,
+    val displayJumpToUnread: Boolean,
+    val jumpToUnread: JumpToUnreadState,
+    val eventSink: (TimelineEvent) -> Unit,
 ) {
     private val lastTimelineEvent = timelineItems.firstOrNull { it is TimelineItem.Event } as? TimelineItem.Event
     val hasAnyEvent = lastTimelineEvent != null
@@ -82,3 +85,18 @@ data class TimelineRoomInfo(
     val typingNotificationState: TypingNotificationState,
     val predecessorRoom: PredecessorRoom?,
 )
+
+/**
+ * Whether the jump-to-unread FAB should be shown, and if so, how tapping it
+ * should bring the user to the read marker.
+ */
+@Immutable
+sealed interface JumpToUnreadState {
+    data object Hidden : JumpToUnreadState
+
+    /** The read marker is materialised at [index] in the loaded timeline — smooth scroll to it. */
+    data class InWindow(val index: Int) : JumpToUnreadState
+
+    /** The read marker event is older than the loaded window — load it via focused-event navigation. */
+    data class OutOfWindow(val eventId: EventId) : JumpToUnreadState
+}

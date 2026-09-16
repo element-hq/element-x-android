@@ -12,7 +12,14 @@ import io.element.android.libraries.matrix.api.widget.CallWidgetSettingsProvider
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 
 class FakeCallWidgetSettingsProvider(
-    private val provideFn: (String, String, Boolean, Boolean, Boolean) -> MatrixWidgetSettings = { _, _, _, _, _ -> MatrixWidgetSettings("id", true, "url") }
+    private val provideFn: (
+        String,
+        String,
+        Boolean,
+        Boolean,
+        Boolean,
+        Boolean
+    ) -> MatrixWidgetSettings = { _, _, _, _, _, _ -> MatrixWidgetSettings("id", true, "url") }
 ) : CallWidgetSettingsProvider {
     val providedBaseUrls = mutableListOf<String>()
 
@@ -21,9 +28,10 @@ class FakeCallWidgetSettingsProvider(
         widgetId: String,
         encrypted: Boolean,
         direct: Boolean,
+        isAudioCall: Boolean,
         hasActiveCall: Boolean
     ): MatrixWidgetSettings {
         providedBaseUrls += baseUrl
-        return provideFn(baseUrl, widgetId, encrypted, direct, hasActiveCall)
+        return provideFn(baseUrl, widgetId, encrypted, direct, isAudioCall, hasActiveCall)
     }
 }

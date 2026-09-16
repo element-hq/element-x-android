@@ -18,6 +18,7 @@ android {
 
 dependencies {
     api(projects.libraries.mediaviewer.impl)
+    implementation(projects.libraries.architecture)
     implementation(projects.libraries.core)
     implementation(projects.tests.testutils)
     implementation(projects.libraries.matrix.api)

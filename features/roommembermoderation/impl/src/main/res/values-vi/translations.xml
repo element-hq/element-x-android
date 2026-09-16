@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Cấm người dùng"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Cấm"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Họ sẽ không thể tham gia lại ngay cả khi được mời."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Xác nhận cấm thành viên này?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"Đang cấm %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"Họ có thể tham gia lại phòng này nếu được mời."</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Xem hồ sơ"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Xóa người dùng"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Xóa thành viên và cấm tham gia trong tương lai?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"Đang xóa %1$s…"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_action">"Bỏ cấm"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unbanning_user">"Đang gỡ cấm %1$s"</string>
+</resources>

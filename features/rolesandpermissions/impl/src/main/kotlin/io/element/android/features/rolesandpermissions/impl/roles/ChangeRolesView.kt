@@ -118,8 +118,7 @@ fun ChangeRolesView(
                         .fillMaxWidth()
                         .padding(bottom = 16.dp),
                     placeHolderTitle = stringResource(CommonStrings.common_search_for_someone),
-                    query = state.query.orEmpty(),
-                    onQueryChange = { state.eventSink(ChangeRolesEvent.QueryChanged(it)) },
+                    queryState = state.searchQuery,
                     active = state.isSearchActive,
                     onActiveChange = { state.eventSink(ChangeRolesEvent.ToggleSearchActive) },
                     resultState = state.searchResults,
@@ -172,8 +171,9 @@ fun ChangeRolesView(
                 when (confirming) {
                     is AsyncAction.ConfirmingCancellation -> {
                         SaveChangesDialog(
-                            onSubmitClick = { state.eventSink(ChangeRolesEvent.Exit) },
-                            onDismiss = { state.eventSink(ChangeRolesEvent.CloseDialog) }
+                            onSaveClick = { state.eventSink(ChangeRolesEvent.Save) },
+                            onDiscardClick = { state.eventSink(ChangeRolesEvent.Exit) },
+                            onDismiss = { state.eventSink(ChangeRolesEvent.CloseDialog) },
                         )
                     }
                     is ConfirmingModifyingOwners -> {
@@ -393,7 +393,7 @@ private fun MemberRow(
 
 @PreviewsDayNight
 @Composable
-internal fun ChangeRolesViewPreview(@PreviewParameter(ChangeRolesStateProvider::class) state: ChangeRolesState) {
+internal fun ChangeRolesViewPreview(@PreviewParameter(ChangeRolesStatePreviewParam::class) state: ChangeRolesState) {
     ElementPreview {
         ChangeRolesView(
             state = state

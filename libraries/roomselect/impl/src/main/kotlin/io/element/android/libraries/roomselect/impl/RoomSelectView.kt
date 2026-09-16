@@ -15,14 +15,20 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,14 +49,17 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.Checkbox
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
-import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.OnVisibleRangeChangeEffect
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.components.SelectedRoom
 import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
@@ -69,26 +78,30 @@ fun RoomSelectView(
     onSubmit: (List<RoomId>) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    @Suppress("UNUSED_PARAMETER")
     fun onRoomRemoved(roomInfo: SelectRoomInfo) {
-        // TODO toggle selection when multi-selection is enabled
-        state.eventSink(RoomSelectEvents.RemoveSelectedRoom)
+        state.eventSink(RoomSelectEvent.ToggleSelectedRoom(roomInfo))
     }
 
     @Composable
-    fun SelectedRoomsHelper(isForwarding: Boolean, selectedRooms: ImmutableList<SelectRoomInfo>) {
-        if (isForwarding) return
-        SelectedRooms(
-            selectedRooms = selectedRooms,
-            onRemoveRoom = ::onRoomRemoved,
-            modifier = Modifier.padding(vertical = 16.dp)
-        )
+    fun SelectedRoomsHelper(
+        selectedRooms: ImmutableList<SelectRoomInfo>,
+        showVerticalSpace: Boolean,
+    ) {
+        if (selectedRooms.isNotEmpty()) {
+            SelectedRooms(
+                selectedRooms = selectedRooms,
+                onRemoveRoom = ::onRoomRemoved,
+                modifier = Modifier.padding(vertical = 16.dp)
+            )
+        } else if (showVerticalSpace) {
+            Spacer(modifier = Modifier.height(20.dp))
+        }
     }
 
     var canHandleBack by remember { mutableStateOf(true) }
     fun onBackButton(state: RoomSelectState) {
         if (state.isSearchActive) {
-            state.eventSink(RoomSelectEvents.ToggleSearchActive)
+            state.eventSink(RoomSelectEvent.ToggleSearchActive)
         } else if (canHandleBack) {
             canHandleBack = false
             onDismiss()
@@ -99,6 +112,11 @@ fun RoomSelectView(
         enabled = canHandleBack,
         onBack = { onBackButton(state) }
     )
+
+    val lazyListState = rememberLazyListState()
+    OnVisibleRangeChangeEffect(lazyListState) { visibleRange ->
+        state.eventSink(RoomSelectEvent.UpdateVisibleRange(visibleRange))
+    }
 
     Scaffold(
         modifier = modifier,
@@ -122,7 +140,8 @@ fun RoomSelectView(
                     )
                 }
             )
-        }
+        },
+        contentWindowInsets = scaffoldScrollableContentInsets,
     ) { paddingValues ->
         Column(
             Modifier
@@ -130,21 +149,28 @@ fun RoomSelectView(
                 .consumeWindowInsets(paddingValues)
         ) {
             SearchBar(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        WindowInsets.safeDrawing
+                            .only(WindowInsetsSides.Horizontal)
+                            .asPaddingValues()
+                    ),
                 placeHolderTitle = stringResource(CommonStrings.action_search),
-                query = state.query,
-                onQueryChange = { state.eventSink(RoomSelectEvents.UpdateQuery(it)) },
+                queryState = state.searchQuery,
                 active = state.isSearchActive,
-                onActiveChange = { state.eventSink(RoomSelectEvents.ToggleSearchActive) },
+                onActiveChange = { state.eventSink(RoomSelectEvent.ToggleSearchActive) },
                 resultState = state.resultState,
                 showBackButton = false,
             ) { summaries ->
-                LazyColumn {
+                LazyColumn(
+                    state = lazyListState,
+                    contentPadding = lazyColumnContentPadding,
+                ) {
                     item {
                         SelectedRoomsHelper(
-                            // TODO state.isForwarding
-                            isForwarding = false,
-                            selectedRooms = state.selectedRooms
+                            selectedRooms = state.selectedRooms,
+                            showVerticalSpace = false,
                         )
                     }
                     items(summaries, key = { it.roomId.value }) { roomSummary ->
@@ -153,8 +179,9 @@ fun RoomSelectView(
                                 roomSummary,
                                 isSelected = state.selectedRooms.any { it.roomId == roomSummary.roomId },
                                 onSelection = { roomSummary ->
-                                    state.eventSink(RoomSelectEvents.SetSelectedRoom(roomSummary))
-                                }
+                                    state.eventSink(RoomSelectEvent.ToggleSelectedRoom(roomSummary))
+                                },
+                                canBeSelected = state.canSelectMoreRooms,
                             )
                             HorizontalDivider(modifier = Modifier.fillMaxWidth())
                         }
@@ -163,23 +190,24 @@ fun RoomSelectView(
             }
 
             if (!state.isSearchActive) {
-                // TODO restore for multi-selection
-//                SelectedRoomsHelper(
-//                    isForwarding = state.isForwarding,
-//                    selectedRooms = state.selectedRooms
-//                )
-                Spacer(modifier = Modifier.height(20.dp))
-
+                SelectedRoomsHelper(
+                    selectedRooms = state.selectedRooms,
+                    showVerticalSpace = true,
+                )
                 if (state.resultState is SearchBarResultState.Results) {
-                    LazyColumn {
+                    LazyColumn(
+                        state = lazyListState,
+                        contentPadding = lazyColumnContentPadding,
+                    ) {
                         items(state.resultState.results, key = { it.roomId.value }) { roomSummary ->
                             Column {
                                 RoomSummaryView(
                                     roomSummary,
                                     isSelected = state.selectedRooms.any { it.roomId == roomSummary.roomId },
                                     onSelection = { roomSummary ->
-                                        state.eventSink(RoomSelectEvents.SetSelectedRoom(roomSummary))
-                                    }
+                                        state.eventSink(RoomSelectEvent.ToggleSelectedRoom(roomSummary))
+                                    },
+                                    canBeSelected = state.canSelectMoreRooms,
                                 )
                                 HorizontalDivider(modifier = Modifier.fillMaxWidth())
                             }
@@ -212,6 +240,7 @@ private fun SelectedRooms(
 private fun RoomSummaryView(
     roomInfo: SelectRoomInfo,
     isSelected: Boolean,
+    canBeSelected: Boolean,
     onSelection: (SelectRoomInfo) -> Unit,
 ) {
     Row(
@@ -245,10 +274,11 @@ private fun RoomSummaryView(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-            // Alias
-            roomInfo.canonicalAlias?.let { alias ->
+            val otherUserId = roomInfo.heroes.singleOrNull()?.userId?.takeIf { roomInfo.isDm }
+            val subtitle = roomInfo.canonicalAlias?.value ?: otherUserId?.value
+            if (subtitle != null) {
                 Text(
-                    text = alias.value,
+                    text = subtitle,
                     color = ElementTheme.colors.textSecondary,
                     style = ElementTheme.typography.fontBodySmRegular,
                     maxLines = 1,
@@ -256,13 +286,17 @@ private fun RoomSummaryView(
                 )
             }
         }
-        RadioButton(selected = isSelected, onClick = { onSelection(roomInfo) })
+        Checkbox(
+            checked = isSelected,
+            enabled = isSelected || canBeSelected,
+            onCheckedChange = { onSelection(roomInfo) },
+        )
     }
 }
 
 @PreviewsDayNight
 @Composable
-internal fun RoomSelectViewPreview(@PreviewParameter(RoomSelectStateProvider::class) state: RoomSelectState) = ElementPreview {
+internal fun RoomSelectViewPreview(@PreviewParameter(RoomSelectStatePreviewParam::class) state: RoomSelectState) = ElementPreview {
     RoomSelectView(
         state = state,
         onDismiss = {},

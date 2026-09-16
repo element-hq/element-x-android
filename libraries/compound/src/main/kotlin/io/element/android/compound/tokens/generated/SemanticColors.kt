@@ -1,18 +1,9 @@
 /*
- * Copyright (c) 2025 Element Creations Ltd.
- * Copyright 2025 New Vector Ltd.
+ * Copyright (c) 2026 Element Creations Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
-
-
-@file:Suppress("all")
-package io.element.android.compound.tokens.generated
-
-import androidx.compose.runtime.Immutable
-import androidx.compose.ui.graphics.Color
-
 
 /**
  * !!! WARNING !!!
@@ -21,12 +12,14 @@ import androidx.compose.ui.graphics.Color
  * DO NOT EDIT MANUALLY.
  */
 
+@file:Suppress("all")
+package io.element.android.compound.tokens.generated
 
-
+import androidx.compose.ui.graphics.Color
 
 /**
-  * This class holds all the semantic tokens of the Compound theme.
-  */
+ * This class holds all the semantic tokens of the Compound theme.
+ */
 data class SemanticColors(
     /** Background colour for accent or brand actions. State: Hover */
     val bgAccentHovered: Color,
@@ -36,6 +29,8 @@ data class SemanticColors(
     val bgAccentRest: Color,
     /** Background colour for accent or brand actions. State: Selected */
     val bgAccentSelected: Color,
+    /** Accent colour, subtle shade for Text buttons Hover/press */
+    val bgAccentSubtle: Color,
     /** Background colour for primary actions. State: Disabled. */
     val bgActionPrimaryDisabled: Color,
     /** Background colour for primary actions. State: Hover. */
@@ -50,17 +45,21 @@ data class SemanticColors(
     val bgActionSecondaryPressed: Color,
     /** Background colour for secondary actions. State: Rest. */
     val bgActionSecondaryRest: Color,
-    /** Badge accent background colour */
+    /** Background colour for tertiary actions. State: Hover */
+    val bgActionTertiaryHovered: Color,
+    /** Background colour for tertiary actions. State: Rest */
+    val bgActionTertiaryRest: Color,
+    /** Background colour for tertiary actions. State: Selected */
+    val bgActionTertiarySelected: Color,
     val bgBadgeAccent: Color,
-    /** Badge default background colour */
+    val bgBadgeCritical: Color,
     val bgBadgeDefault: Color,
-    /** Badge info background colour */
     val bgBadgeInfo: Color,
-    /** Default global background for the user interface.
-Elevation: Default (Level 0) */
+    val bgBadgePrimary: Color,
+    val bgBadgeSecondary: Color,
+    /** Default global background for the user interface. Elevation: Default (Level 0) */
     val bgCanvasDefault: Color,
-    /** Default global background for the user interface.
-Elevation: Level 1. */
+    /** Default global background for the user interface. Elevation: Level 1. */
     val bgCanvasDefaultLevel1: Color,
     /** Default background for disabled elements. There's no minimum contrast requirement. */
     val bgCanvasDisabled: Color,
@@ -86,17 +85,24 @@ Elevation: Level 1. */
     val bgDecorative6: Color,
     /** Subtle background colour for informational elements. State: Rest. */
     val bgInfoSubtle: Color,
-    /** Medium contrast surfaces.
-Elevation: Default (Level 2). */
+    /** Medium contrast surfaces. Elevation: Default (Level 3). */
     val bgSubtlePrimary: Color,
-    /** Low contrast surfaces.
-Elevation: Default (Level 1). */
+    /** Low contrast surfaces. Elevation: Default (Level 2). */
     val bgSubtleSecondary: Color,
-    /** Lower contrast surfaces.
-Elevation: Level 0. */
+    /** Lower contrast surfaces. Elevation: Level 0. */
     val bgSubtleSecondaryLevel0: Color,
+    /** Lowest contrast surfaces. Elevation: Default (Level 1). */
+    val bgSubtleTertiary: Color,
+    /** Hovered Background for success states */
+    val bgSuccessHovered: Color,
+    /** Pressed Background for success states */
+    val bgSuccessPressed: Color,
+    /** Default Background for success states */
+    val bgSuccessRest: Color,
     /** Subtle background colour for success state elements. State: Rest. */
     val bgSuccessSubtle: Color,
+    /** Accent borders for containers */
+    val borderAccentPrimary: Color,
     /** accent border intended for keylines on message highlights */
     val borderAccentSubtle: Color,
     /** High-contrast border for critical state. State: Hover. */
@@ -117,6 +123,8 @@ Elevation: Level 0. */
     val borderInteractivePrimary: Color,
     /** ⚠️ Lowest contrast for non-accessible interactive element borders, <3:1. Only use for non-essential borders. Do not rely exclusively on them. State: Rest. */
     val borderInteractiveSecondary: Color,
+    /** Border success state */
+    val borderSuccessPrimary: Color,
     /** Subtle border colour for success state elements. */
     val borderSuccessSubtle: Color,
     /** Background gradient stop for super and send buttons */
@@ -127,18 +135,14 @@ Elevation: Level 0. */
     val gradientActionStop3: Color,
     /** Background gradient stop for super and send buttons */
     val gradientActionStop4: Color,
+    /** Subtle background gradient stop for critical */
+    val gradientCriticalStop1: Color,
+    /** Subtle background gradient stop for critical */
+    val gradientCriticalStop2: Color,
     /** Subtle background gradient stop for info */
     val gradientInfoStop1: Color,
     /** Subtle background gradient stop for info */
     val gradientInfoStop2: Color,
-    /** Subtle background gradient stop for info */
-    val gradientInfoStop3: Color,
-    /** Subtle background gradient stop for info */
-    val gradientInfoStop4: Color,
-    /** Subtle background gradient stop for info */
-    val gradientInfoStop5: Color,
-    /** Subtle background gradient stop for info */
-    val gradientInfoStop6: Color,
     /** Subtle background gradient stop for message highlight and bloom */
     val gradientSubtleStop1: Color,
     /** Subtle background gradient stop for message highlight and bloom */
@@ -181,10 +185,18 @@ Elevation: Level 0. */
     val iconTertiary: Color,
     /** Translucent version of tertiary icon. Refer to it for intended use. */
     val iconTertiaryAlpha: Color,
+    /** Warning icon */
+    val iconWarningPrimary: Color,
+    /** Used to separate core sections of the UI as well as containers */
+    val separatorPrimary: Color,
+    /** Secondary shade for separating sections of components or list items */
+    val separatorSecondary: Color,
     /** Accent text colour for plain actions. */
     val textActionAccent: Color,
     /** Default text colour for plain actions. */
     val textActionPrimary: Color,
+    /** Text label success state */
+    val textActionSuccess: Color,
     /** Badge accent text colour */
     val textBadgeAccent: Color,
     /** Badge info text colour */
@@ -217,6 +229,8 @@ Elevation: Level 0. */
     val textSecondary: Color,
     /** Accent text colour for success state elements. */
     val textSuccessPrimary: Color,
+    /** Warning text */
+    val textWarningPrimary: Color,
     /** True for light theme, false for dark theme. */
     val isLight: Boolean,
 )

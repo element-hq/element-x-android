@@ -19,7 +19,7 @@ private const val GEO_URI_REGEX = """geo:(?<latitude>-?\d+(?:\.\d+)?),(?<longitu
 data class Location(
     val lat: Double,
     val lon: Double,
-    val accuracy: Float,
+    val accuracy: Float? = null,
 ) : Parcelable {
     companion object {
         fun fromGeoUri(geoUri: String): Location? {
@@ -27,12 +27,15 @@ data class Location(
             return Location(
                 lat = result.groups["latitude"]?.value?.toDoubleOrNull() ?: return null,
                 lon = result.groups["longitude"]?.value?.toDoubleOrNull() ?: return null,
-                accuracy = result.groups["uncertainty"]?.value?.toFloatOrNull() ?: 0f,
+                accuracy = result.groups["uncertainty"]?.value?.toFloatOrNull(),
             )
         }
     }
 
-    fun toGeoUri(): String {
-        return "geo:$lat,$lon;u=$accuracy"
+    fun toGeoUri(): String = buildString {
+        append("geo:$lat,$lon")
+        if (accuracy != null) {
+            append(";u=$accuracy")
+        }
     }
 }

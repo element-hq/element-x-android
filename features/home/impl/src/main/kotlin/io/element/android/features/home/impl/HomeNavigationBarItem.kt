@@ -28,7 +28,7 @@ enum class HomeNavigationBarItem(
         isSelected: Boolean,
     ) = when (this) {
         Chats -> if (isSelected) CompoundIcons.ChatSolid() else CompoundIcons.Chat()
-        Spaces -> if (isSelected) CompoundIcons.WorkspaceSolid() else CompoundIcons.Workspace()
+        Spaces -> if (isSelected) CompoundIcons.SpaceSolid() else CompoundIcons.Space()
     }
 
     companion object {

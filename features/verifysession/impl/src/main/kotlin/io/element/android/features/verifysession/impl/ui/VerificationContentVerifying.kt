@@ -35,6 +35,7 @@ import io.element.android.features.verifysession.impl.emoji.toEmojiResource
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.verification.SessionVerificationData
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
+import io.element.android.libraries.ui.strings.Strings
 
 @Composable
 internal fun VerificationContentVerifying(
@@ -49,7 +50,7 @@ internal fun VerificationContentVerifying(
     ) {
         when (data) {
             is SessionVerificationData.Decimals -> {
-                val text = data.decimals.joinToString(separator = " - ")
+                val text = data.decimals.joinToString(separator = Strings.NICE_SEPARATOR)
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()

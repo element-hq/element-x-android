@@ -15,6 +15,8 @@ import com.lemonappdev.konsist.api.verify.assertFalse
 import com.lemonappdev.konsist.api.verify.assertTrue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.Inject
 import org.junit.Test
 
@@ -42,6 +44,28 @@ class KonsistDiTest {
             .scopeFromProject()
             .classes()
             .withAnnotationOf(ContributesBinding::class)
+            .assertFalse { classDeclaration ->
+                classDeclaration.hasAnnotationOf(Inject::class)
+            }
+    }
+
+    @Test
+    fun `class annotated with @ContributesIntoSet does not need to be annotated with @Inject anymore`() {
+        Konsist
+            .scopeFromProject()
+            .classes()
+            .withAnnotationOf(ContributesIntoSet::class)
+            .assertFalse { classDeclaration ->
+                classDeclaration.hasAnnotationOf(Inject::class)
+            }
+    }
+
+    @Test
+    fun `class annotated with @ContributesIntoMap does not need to be annotated with @Inject anymore`() {
+        Konsist
+            .scopeFromProject()
+            .classes()
+            .withAnnotationOf(ContributesIntoMap::class)
             .assertFalse { classDeclaration ->
                 classDeclaration.hasAnnotationOf(Inject::class)
             }

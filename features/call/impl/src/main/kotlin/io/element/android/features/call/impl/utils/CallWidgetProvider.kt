@@ -16,6 +16,7 @@ interface CallWidgetProvider {
     suspend fun getWidget(
         sessionId: SessionId,
         roomId: RoomId,
+        isAudioCall: Boolean,
         clientId: String,
         languageTag: String?,
         theme: String?,

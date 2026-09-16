@@ -8,10 +8,16 @@
 package io.element.android.services.analytics.api
 
 import io.element.android.services.analyticsproviders.api.AnalyticsTransaction
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 object NoopAnalyticsTransaction : AnalyticsTransaction {
+    override val duration: Duration = 0.seconds
     override fun startChild(operation: String, description: String?): AnalyticsTransaction = NoopAnalyticsTransaction
-    override fun setData(key: String, value: Any) {}
+    override fun putExtraData(key: String, value: String) {}
+    override fun putIndexableData(key: String, value: String) {}
     override fun isFinished(): Boolean = true
+    override fun traceId(): String? = null
+    override fun attachError(throwable: Throwable) {}
     override fun finish() {}
 }

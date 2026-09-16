@@ -29,11 +29,11 @@ fun RageshakePreferencesView(
     modifier: Modifier = Modifier,
 ) {
     fun onSensitivityChanged(sensitivity: Float) {
-        state.eventSink(RageshakePreferencesEvents.SetSensitivity(sensitivity = sensitivity))
+        state.eventSink(RageshakePreferencesEvent.SetSensitivity(sensitivity = sensitivity))
     }
 
     fun onEnabledChanged(isEnabled: Boolean) {
-        state.eventSink(RageshakePreferencesEvents.SetIsEnabled(isEnabled = isEnabled))
+        state.eventSink(RageshakePreferencesEvent.SetIsEnabled(isEnabled = isEnabled))
     }
 
     Column(modifier = modifier) {
@@ -56,7 +56,7 @@ fun RageshakePreferencesView(
                     )
                 } else {
                     ListItem(
-                        headlineContent = {
+                        content = {
                             Text("Rageshaking is not supported by your device")
                         },
                     )
@@ -68,6 +68,8 @@ fun RageshakePreferencesView(
 
 @PreviewsDayNight
 @Composable
-internal fun RageshakePreferencesViewPreview(@PreviewParameter(RageshakePreferencesStateProvider::class) state: RageshakePreferencesState) = ElementPreview {
+internal fun RageshakePreferencesViewPreview(@PreviewParameter(
+    RageshakePreferencesStatePreviewParam::class
+) state: RageshakePreferencesState) = ElementPreview {
     RageshakePreferencesView(state)
 }

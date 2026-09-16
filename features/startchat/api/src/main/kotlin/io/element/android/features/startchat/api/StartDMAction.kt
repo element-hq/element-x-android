@@ -13,6 +13,11 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 
+/**
+ * Opens a direct message with a user, reusing the existing room when there is one.
+ *
+ * Progress is reported into the state passed in, so the caller only has to render it.
+ */
 interface StartDMAction {
     /**
      * Try to find an existing DM with the given user, or create one if none exists.

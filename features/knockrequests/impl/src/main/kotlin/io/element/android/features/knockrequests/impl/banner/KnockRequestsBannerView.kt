@@ -109,11 +109,11 @@ private fun KnockRequestsBannerContent(
     modifier: Modifier = Modifier,
 ) {
     fun onDismissClick() {
-        state.eventSink(KnockRequestsBannerEvents.Dismiss)
+        state.eventSink(KnockRequestsBannerEvent.Dismiss)
     }
 
     fun onAcceptClick() {
-        state.eventSink(KnockRequestsBannerEvents.AcceptSingleRequest)
+        state.eventSink(KnockRequestsBannerEvent.AcceptSingleRequest)
     }
 
     Column(
@@ -227,7 +227,7 @@ private fun KnockRequestAvatarListView(
 
 @Composable
 @PreviewsDayNight
-internal fun KnockRequestsBannerViewPreview(@PreviewParameter(KnockRequestsBannerStateProvider::class) state: KnockRequestsBannerState) = ElementPreview {
+internal fun KnockRequestsBannerViewPreview(@PreviewParameter(KnockRequestsBannerStatePreviewParam::class) state: KnockRequestsBannerState) = ElementPreview {
     KnockRequestsBannerView(
         state = state,
         onViewRequestsClick = {},

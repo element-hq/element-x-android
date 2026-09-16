@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.cryptography.api
 
+import kotlinx.coroutines.flow.Flow
 import javax.crypto.SecretKey
 
 /**
@@ -16,15 +17,24 @@ import javax.crypto.SecretKey
  */
 interface SecretKeyRepository {
     /**
+     * Whether a key exists for the given alias, re-emitted when it is created or deleted.
+     *
+     * @param alias the alias to watch.
+     */
+    fun hasKey(alias: String): Flow<Boolean>
+
+    /**
      * Get or create a secret key for a given alias.
+     * Note that [requiresUserAuthentication] only applies when the key is created: an existing key keeps the protection it was created with.
+     *
      * @param alias the alias to use
      * @param requiresUserAuthentication true if the key should be protected by user authentication
      */
-    fun getOrCreateKey(alias: String, requiresUserAuthentication: Boolean): SecretKey
+    suspend fun getOrCreateKey(alias: String, requiresUserAuthentication: Boolean): SecretKey
 
     /**
      * Delete the secret key for a given alias.
      * @param alias the alias to use
      */
-    fun deleteKey(alias: String)
+    suspend fun deleteKey(alias: String)
 }

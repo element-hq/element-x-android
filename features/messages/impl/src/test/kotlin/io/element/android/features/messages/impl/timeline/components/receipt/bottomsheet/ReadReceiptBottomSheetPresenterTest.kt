@@ -8,12 +8,10 @@
 
 package io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet
 
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.test
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -25,12 +23,10 @@ class ReadReceiptBottomSheetPresenterTest {
     @Test
     fun `present - handle event selected`() = runTest {
         val presenter = createPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             val selectedEvent = aTimelineItemEvent()
-            initialState.eventSink(ReadReceiptBottomSheetEvents.EventSelected(selectedEvent))
+            initialState.eventSink(ReadReceiptBottomSheetEvent.EventSelected(selectedEvent))
             assertThat(awaitItem().selectedEvent).isSameInstanceAs(selectedEvent)
         }
     }
@@ -38,14 +34,12 @@ class ReadReceiptBottomSheetPresenterTest {
     @Test
     fun `present - handle dismiss`() = runTest {
         val presenter = createPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             val selectedEvent = aTimelineItemEvent()
-            initialState.eventSink(ReadReceiptBottomSheetEvents.EventSelected(selectedEvent))
+            initialState.eventSink(ReadReceiptBottomSheetEvent.EventSelected(selectedEvent))
             skipItems(1)
-            initialState.eventSink(ReadReceiptBottomSheetEvents.Dismiss)
+            initialState.eventSink(ReadReceiptBottomSheetEvent.Dismiss)
             assertThat(awaitItem().selectedEvent).isNull()
         }
     }

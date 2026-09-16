@@ -20,6 +20,7 @@ class FakeSimplePlayer(
     private val isPlayingLambda: () -> Boolean = { lambdaError() },
     private val pauseLambda: () -> Unit = { lambdaError() },
     private val seekToLambda: (Long) -> Unit = { lambdaError() },
+    private val setPlaybackSpeedLambda: (Float) -> Unit = { lambdaError() },
     private val releaseLambda: () -> Unit = { lambdaError() },
 ) : SimplePlayer {
     private val listeners = mutableListOf<SimplePlayer.Listener>()
@@ -45,6 +46,7 @@ class FakeSimplePlayer(
     override fun isPlaying() = isPlayingLambda()
     override fun pause() = pauseLambda()
     override fun seekTo(positionMs: Long) = seekToLambda(positionMs)
+    override fun setPlaybackSpeed(speed: Float) = setPlaybackSpeedLambda(speed)
     override fun release() = releaseLambda()
 
     fun simulateIsPlayingChanged(isPlaying: Boolean) {

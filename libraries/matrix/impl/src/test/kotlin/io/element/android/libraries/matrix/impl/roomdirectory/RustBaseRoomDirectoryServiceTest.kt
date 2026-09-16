@@ -11,11 +11,9 @@ package io.element.android.libraries.matrix.impl.roomdirectory
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClient
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.Ignore
 import org.junit.Test
 
 class RustBaseRoomDirectoryServiceTest {
-    @Ignore("JNA direct mapping has broken unit tests with FFI fakes")
     @Test
     fun test() = runTest {
         val client = FakeFfiClient()

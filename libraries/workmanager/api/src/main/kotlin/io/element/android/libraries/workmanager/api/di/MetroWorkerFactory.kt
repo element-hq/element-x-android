@@ -28,7 +28,13 @@ class MetroWorkerFactory(
       return workerProviders[Class.forName(workerClassName).kotlin]?.create(workerParameters)
     }
 
+    /**
+     * Creates one worker type with its dependencies injected, since `WorkManager` instantiates workers itself and cannot use the graph.
+     */
     interface WorkerInstanceFactory<T : ListenableWorker> {
+      /**
+       * @param params the parameters `WorkManager` built the worker with.
+       */
       fun create(params: WorkerParameters): T
     }
 }

@@ -21,12 +21,13 @@ import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.roommembermoderation.api.ModerationAction
-import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvent
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationRenderer
 import io.element.android.libraries.architecture.appyx.launchMolecule
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.ui.model.getBestName
 import io.element.android.services.analytics.api.AnalyticsService
 
 @ContributesNode(RoomScope::class)
@@ -41,6 +42,7 @@ class RoomMemberListNode(
     interface Callback : Plugin {
         fun navigateToRoomMemberDetails(roomMemberId: UserId)
         fun navigateToInviteMembers()
+        fun navigateToAvatarPreview(username: String, avatarUrl: String)
     }
 
     private val callback: Callback = callback()
@@ -79,7 +81,12 @@ class RoomMemberListNode(
             onSelectAction = { action, target ->
                 when (action) {
                     is ModerationAction.DisplayProfile -> openRoomMemberDetails(target.userId)
-                    else -> state.moderationState.eventSink(RoomMemberModerationEvents.ProcessAction(action, target))
+                    else -> state.moderationState.eventSink(RoomMemberModerationEvent.ProcessAction(action, target))
+                }
+            },
+            onAvatarClick = { user ->
+                user.avatarUrl?.let { url ->
+                    callback.navigateToAvatarPreview(user.getBestName(), url)
                 }
             },
             modifier = Modifier,
@@ -88,7 +95,7 @@ class RoomMemberListNode(
 }
 
 interface RoomMemberListNavigator {
-    fun exitRoomMemberList() {}
-    fun openRoomMemberDetails(roomMemberId: UserId) {}
-    fun openInviteMembers() {}
+    fun exitRoomMemberList()
+    fun openRoomMemberDetails(roomMemberId: UserId)
+    fun openInviteMembers()
 }

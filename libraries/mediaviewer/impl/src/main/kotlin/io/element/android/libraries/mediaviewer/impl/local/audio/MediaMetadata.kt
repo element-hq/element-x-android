@@ -9,6 +9,7 @@
 package io.element.android.libraries.mediaviewer.impl.local.audio
 
 import androidx.media3.common.MediaMetadata
+import io.element.android.libraries.ui.strings.Strings
 
 fun MediaMetadata?.hasArtwork(): Boolean {
     return this?.artworkData != null || this?.artworkUri != null
@@ -22,13 +23,13 @@ fun MediaMetadata?.buildInfo(): String {
         }
         if (title != null) {
             if (isNotEmpty()) {
-                append(" - ")
+                append(Strings.NICE_SEPARATOR)
             }
             append(title)
         }
         if (recordingYear != null) {
             if (isNotEmpty()) {
-                append(" - ")
+                append(Strings.NICE_SEPARATOR)
             }
             append(recordingYear)
         }

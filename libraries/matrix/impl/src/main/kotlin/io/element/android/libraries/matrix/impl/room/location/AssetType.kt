@@ -9,8 +9,16 @@
 package io.element.android.libraries.matrix.impl.room.location
 
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import org.matrix.rustcomponents.sdk.AssetType as RustAssetType
 
-fun AssetType.toInner(): org.matrix.rustcomponents.sdk.AssetType = when (this) {
-    AssetType.SENDER -> org.matrix.rustcomponents.sdk.AssetType.SENDER
-    AssetType.PIN -> org.matrix.rustcomponents.sdk.AssetType.PIN
+fun AssetType.into(): RustAssetType = when (this) {
+    AssetType.SENDER -> RustAssetType.SENDER
+    AssetType.PIN -> RustAssetType.PIN
+    AssetType.UNKNOWN -> RustAssetType.UNKNOWN
+}
+
+fun RustAssetType.into(): AssetType = when (this) {
+    RustAssetType.SENDER -> AssetType.SENDER
+    RustAssetType.PIN -> AssetType.PIN
+    RustAssetType.UNKNOWN -> AssetType.UNKNOWN
 }

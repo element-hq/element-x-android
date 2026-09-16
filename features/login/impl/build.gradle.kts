@@ -1,3 +1,4 @@
+import extension.buildConfigFieldStr
 import extension.setupDependencyInjection
 import extension.testCommonDependencies
 
@@ -23,6 +24,30 @@ android {
             isIncludeAndroidResources = true
         }
     }
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    buildTypes {
+        val elementClassicPackageKey = "elementClassicPackage"
+        val elementClassicPackage = "im.vector.app"
+        val elementClassicPackageDebug = "$elementClassicPackage.debug"
+        val elementClassicPackageNightly = "$elementClassicPackage.nightly"
+        getByName("release") {
+            manifestPlaceholders[elementClassicPackageKey] = elementClassicPackage
+            buildConfigFieldStr(elementClassicPackageKey, elementClassicPackage)
+        }
+        getByName("debug") {
+            manifestPlaceholders[elementClassicPackageKey] = elementClassicPackageDebug
+            buildConfigFieldStr(elementClassicPackageKey, elementClassicPackageDebug)
+        }
+        register("nightly") {
+            matchingFallbacks += listOf("release")
+            manifestPlaceholders[elementClassicPackageKey] = elementClassicPackageNightly
+            buildConfigFieldStr(elementClassicPackageKey, elementClassicPackageNightly)
+        }
+    }
 }
 
 setupDependencyInjection()
@@ -30,11 +55,11 @@ setupDependencyInjection()
 dependencies {
     implementation(projects.appconfig)
     implementation(projects.features.enterprise.api)
+    implementation(projects.features.preferences.api)
     implementation(projects.features.rageshake.api)
     implementation(projects.libraries.core)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
-    implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.designsystem)
@@ -43,7 +68,8 @@ dependencies {
     implementation(projects.libraries.permissions.api)
     implementation(projects.libraries.sessionStorage.api)
     implementation(projects.libraries.qrcode)
-    implementation(projects.libraries.oidc.api)
+    implementation(projects.libraries.oauth.api)
+    implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.uiUtils)
     implementation(projects.libraries.wellknown.api)
     implementation(libs.androidx.browser)
@@ -54,10 +80,13 @@ dependencies {
     testCommonDependencies(libs, true)
     testImplementation(projects.features.login.test)
     testImplementation(projects.features.enterprise.test)
-    testImplementation(projects.libraries.featureflag.test)
+    testImplementation(projects.features.preferences.test)
+    testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.libraries.oidc.test)
+    testImplementation(projects.libraries.oauth.test)
     testImplementation(projects.libraries.permissions.test)
     testImplementation(projects.libraries.sessionStorage.test)
     testImplementation(projects.libraries.wellknown.test)
+    testImplementation(libs.androidx.camera.camera2)
+    testImplementation(libs.androidx.camera.lifecycle)
 }

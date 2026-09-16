@@ -13,7 +13,7 @@
   <string name="a11y_encryption_details">"Detalhes de cifragem"</string>
   <string name="a11y_expand_message_text_field">"Expandir campo de texto da mensagem"</string>
   <string name="a11y_hide_password">"Ocultar palavra-passe"</string>
-  <string name="a11y_join_call">"Juntar-se à chamada"</string>
+  <string name="a11y_join_call">"Entrar na chamada"</string>
   <string name="a11y_jump_to_bottom">"Saltar para o fundo"</string>
   <string name="a11y_move_the_map_to_my_location">"Mover o mapa para a minha localização"</string>
   <string name="a11y_notifications_mentions_only">"Apenas menções"</string>
@@ -37,7 +37,6 @@
     <item quantity="other">"Lida por %1$s e %2$d outros"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Lida por %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Toca para mostrar tudo"</string>
   <string name="a11y_remove_reaction">"Remover reação com %1$s"</string>
   <string name="a11y_remove_reaction_with">"Remover reação com %1$s"</string>
   <string name="a11y_room_avatar">"Ícone da sala"</string>
@@ -74,7 +73,7 @@
   <string name="action_copy_link_to_message">"Copiar ligação da mensagem"</string>
   <string name="action_copy_text">"Copiar texto"</string>
   <string name="action_create">"Criar"</string>
-  <string name="action_create_a_room">"Criar uma sala"</string>
+  <string name="action_create_room">"Criar sala"</string>
   <string name="action_deactivate">"Desativar"</string>
   <string name="action_deactivate_account">"Desativar conta"</string>
   <string name="action_decline">"Recusar"</string>
@@ -95,6 +94,8 @@
   <string name="action_forgot_password">"Esqueceu-se da palavra-passe?"</string>
   <string name="action_forward">"Reencaminhar"</string>
   <string name="action_go_back">"Voltar"</string>
+  <string name="action_go_to_roles_and_permissions">"Ir para cargos e permissões"</string>
+  <string name="action_go_to_settings">"Ir para as configurações"</string>
   <string name="action_ignore">"Ignorar"</string>
   <string name="action_invite">"Convidar"</string>
   <string name="action_invite_friends">"Convidar pessoas"</string>
@@ -110,7 +111,9 @@
   <string name="action_load_more">"Carregar mais"</string>
   <string name="action_manage_account">"Gerir conta"</string>
   <string name="action_manage_devices">"Gerir dispositivos"</string>
+  <string name="action_manage_rooms">"Gerir salas"</string>
   <string name="action_message">"Enviar mensagem"</string>
+  <string name="action_minimize">"Minimizar"</string>
   <string name="action_next">"Próximo"</string>
   <string name="action_no">"Não"</string>
   <string name="action_not_now">"Agora não"</string>
@@ -148,11 +151,12 @@
   <string name="action_share_link">"Partilhar ligação"</string>
   <string name="action_show">"Mostrar"</string>
   <string name="action_sign_in_again">"Iniciar sessão novamente"</string>
-  <string name="action_signout">"Terminar sessão"</string>
-  <string name="action_signout_anyway">"Terminar mesmo assim"</string>
+  <string name="action_signout">"Remover este dispositivo"</string>
+  <string name="action_signout_anyway">"Remover mesmo assim"</string>
   <string name="action_skip">"Saltar"</string>
   <string name="action_start">"Iniciar"</string>
   <string name="action_start_chat">"Iniciar conversa"</string>
+  <string name="action_start_over">"Começar de novo"</string>
   <string name="action_start_verification">"Iniciar verificação"</string>
   <string name="action_static_map_load">"Toca para carregar o mapa"</string>
   <string name="action_take_photo">"Tirar foto"</string>
@@ -178,6 +182,7 @@
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"A tua sessão foi terminada"</string>
   <string name="common_appearance">"Aparência"</string>
   <string name="common_audio">"Áudio"</string>
+  <string name="common_beta">"Beta"</string>
   <string name="common_blocked_users">"Utilizadores bloqueados"</string>
   <string name="common_bubbles">"Bolhas"</string>
   <string name="common_call_started">"Chamada iniciada"</string>
@@ -189,7 +194,6 @@
   <string name="common_current_user_left_room">"Saíste da sala"</string>
   <string name="common_current_user_left_space">"Saíste do espaço"</string>
   <string name="common_current_user_rejected_invite">"Convite rejeitado"</string>
-  <string name="common_dark">"Escuro"</string>
   <string name="common_decryption_error">"Erro de decifragem"</string>
   <string name="common_description">"Descrição"</string>
   <string name="common_developer_options">"Opções de programador"</string>
@@ -226,7 +230,7 @@ Razão: %1$s."</string>
   <string name="common_install_apk_android">"Instalar APK"</string>
   <string name="common_invite_unknown_profile">"Não foi possível encontrar este ID Matrix, portanto o convite pode não ser recebido."</string>
   <string name="common_leaving_room">"A sair da sala"</string>
-  <string name="common_light">"Claro"</string>
+  <string name="common_leaving_space">"A sair do espaço"</string>
   <string name="common_line_copied_to_clipboard">"Linha copiada para a área de transferência"</string>
   <string name="common_link_copied_to_clipboard">"Ligação copiada para a área de transferência"</string>
   <string name="common_loading">"A carregar…"</string>
@@ -236,8 +240,8 @@ Razão: %1$s."</string>
     <item quantity="other">"%d outros"</item>
   </plurals>
   <plurals name="common_member_count">
-    <item quantity="one">"%1$d membro"</item>
-    <item quantity="other">"%1$d membros"</item>
+    <item quantity="one">"%1$d participante"</item>
+    <item quantity="other">"%1$d participantes"</item>
   </plurals>
   <string name="common_message">"Mensagem"</string>
   <string name="common_message_actions">"Ações de mensagem"</string>
@@ -284,7 +288,6 @@ Razão: %1$s."</string>
     <item quantity="other">"%1$d respostas"</item>
   </plurals>
   <string name="common_replying_to">"Em resposta a %1$s"</string>
-  <string name="common_report_a_bug">"Comunicar falha"</string>
   <string name="common_report_a_problem">"Comunicar um problema"</string>
   <string name="common_report_submitted">"Denúncia submetida"</string>
   <string name="common_rich_text_editor">"Editor de texto rico"</string>
@@ -314,7 +317,8 @@ Razão: %1$s."</string>
   <string name="common_settings">"Configurações"</string>
   <string name="common_share_space">"Partilhar espaço"</string>
   <string name="common_shared_location">"Localização partilhada"</string>
-  <string name="common_signing_out">"A terminar sessão"</string>
+  <string name="common_shared_space">"Espaço partilhado"</string>
+  <string name="common_signing_out">"A remover dispositivo"</string>
   <string name="common_something_went_wrong">"Algo correu mal"</string>
   <string name="common_something_went_wrong_message">"Encontramos um erro. Por favor, tenta novamente."</string>
   <string name="common_space">"Espaço"</string>
@@ -327,7 +331,6 @@ Razão: %1$s."</string>
   <string name="common_success">"Sucesso"</string>
   <string name="common_suggestions">"Sugestões"</string>
   <string name="common_syncing">"A sincronizar…"</string>
-  <string name="common_system">"Sistema"</string>
   <string name="common_text">"Texto"</string>
   <string name="common_third_party_notices">"Avisos de terceiros"</string>
   <string name="common_thread">"Tópico"</string>
@@ -382,12 +385,12 @@ Tens a certeza de que queres continuar?"</string>
   <string name="dialog_title_error">"Erro"</string>
   <string name="dialog_title_success">"Sucesso"</string>
   <string name="dialog_title_warning">"Aviso"</string>
+  <string name="dialog_unsaved_changes_description">"Tens alterações por guardar."</string>
   <string name="dialog_unsaved_changes_description_android">"As tuas alterações não foram guardadas. Tens a certeza que queres voltar atrás?"</string>
   <string name="dialog_unsaved_changes_title">"Guardar alterações?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"O tamanho máximo de ficheiro permitido é: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Seleciona a qualidade do vídeo que pretendes carregar."</string>
   <string name="dialog_video_quality_selector_title">"Seleciona a qualidade de carregamento do vídeo"</string>
-  <string name="emoji_picker_search_placeholder">"Pesquisar emojis"</string>
   <string name="error_account_already_logged_in">"Já tens sessão iniciada como %1$s neste dispositivo."</string>
   <string name="error_account_creation_not_possible">"Seu homeserver precisa ser atualizado para suportar o Matrix Authentication Service e a criação de conta."</string>
   <string name="error_failed_creating_the_permalink">"Falha ao criar ligação permanente"</string>
@@ -405,13 +408,6 @@ Tens a certeza de que queres continuar?"</string>
   <string name="error_room_address_invalid_symbols">"Alguns caracteres não são permitidos. Apenas letras, dígitos e os seguintes símbolos são suportados! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Algumas mensagens não foram enviadas"</string>
   <string name="error_unknown">"Pedimos desculpa, ocorreu um erro desconhecido"</string>
-  <string name="event_shield_mismatched_sender">"O remetente deste evento não é o dono do dispositivo que o enviou."</string>
-  <string name="event_shield_reason_authenticity_not_guaranteed">"A autenticidade desta mensagem cifrada não pode ser garantida neste dispositivo."</string>
-  <string name="event_shield_reason_previously_verified">"Criptografado por um usuário verificado anteriormente."</string>
-  <string name="event_shield_reason_sent_in_clear">"Não cifrado."</string>
-  <string name="event_shield_reason_unknown_device">"Cifragem com origem num dispositivo eliminado ou desconhecido."</string>
-  <string name="event_shield_reason_unsigned_device">"Cifragem com origem num dispositivo não verificado pelo seu dono."</string>
-  <string name="event_shield_reason_unverified_identity">"Cifragem com origem num utilizador não verificado."</string>
   <string name="invite_friends_rich_title">"🔐️ Junta-te a mim na %1$s"</string>
   <string name="invite_friends_text">"Alô! Fala comigo na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
@@ -456,7 +452,7 @@ Tens a certeza de que queres continuar?"</string>
   <string name="screen_share_open_apple_maps">"Abrir no Apple Maps"</string>
   <string name="screen_share_open_google_maps">"Abrir no Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Abrir no OpenStreetMap"</string>
-  <string name="screen_share_this_location_action">"Partilhar este local"</string>
+  <string name="screen_share_this_location_action">"Partilhar local selecionado"</string>
   <string name="screen_space_list_description">"Espaços que criaste ou nos quais entraste."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_parent_space">"Espaço %1$s"</string>

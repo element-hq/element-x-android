@@ -175,6 +175,8 @@ complexity:
     active: true
   LargeClass:
     active: true
+    # Do not report large test classes.
+    excludes: [ '**/test/**', '**/androidTest/**' ]
 
 naming:
   VariableNaming:
@@ -227,8 +229,10 @@ Compose:
     # You can optionally define a list of CompositionLocals that are allowed here
     allowedCompositionLocals:
       - LocalCompoundColors
+      - LocalEventContentValidationState
       - LocalSnackbarDispatcher
       - LocalCameraPositionState
+      - LocalMapTilerConfig
       - LocalMediaItemPresenterFactories
       - LocalTimelineItemPresenterFactories
       - LocalRoomMemberProfilesCache

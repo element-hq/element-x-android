@@ -7,8 +7,7 @@
  */
 
 plugins {
-    alias(libs.plugins.kotlin.jvm)
-    id("com.android.lint")
+    id("io.element.jvm-library")
 }
 
 dependencies {

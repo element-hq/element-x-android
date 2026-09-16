@@ -32,14 +32,14 @@ class HomeSpacesPresenter(
     override fun present(): HomeSpacesState {
         val hideInvitesAvatar by client.rememberHideInvitesAvatar()
         val spaceRooms by remember {
-            client.spaceService.spaceRoomsFlow.map { it.toImmutableList() }
+            client.spaceService.topLevelSpacesFlow.map { it.toImmutableList() }
         }.collectAsState(persistentListOf())
 
         val seenSpaceInvites by remember {
             seenInvitesStore.seenRoomIds().map { it.toImmutableSet() }
         }.collectAsState(persistentSetOf())
 
-        fun handleEvent(event: HomeSpacesEvents) {
+        fun handleEvent(event: HomeSpacesEvent) {
             // when (event) { }
         }
 
@@ -48,6 +48,8 @@ class HomeSpacesPresenter(
             spaceRooms = spaceRooms,
             seenSpaceInvites = seenSpaceInvites,
             hideInvitesAvatar = hideInvitesAvatar,
+            // TODO enable once we can link to the screen to explore public spaces
+            canExploreSpaces = false,
             eventSink = ::handleEvent,
         )
     }

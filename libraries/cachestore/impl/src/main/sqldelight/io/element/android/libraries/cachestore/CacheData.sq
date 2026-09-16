@@ -1,0 +1,28 @@
+--------------------------------------------------------------------
+-- Current version of the DB is the highest value of filename
+-- in the folder `sqldelight/databases`.
+--
+-- When upgrading the schema, you have to create a file .sqm in the
+-- `sqldelight/databases` folder and run the following task to
+-- generate a .db file using the latest schema
+-- > ./gradlew generateDebugCacheDatabaseSchema
+--------------------------------------------------------------------
+
+CREATE TABLE CacheData (
+    key TEXT NOT NULL PRIMARY KEY,
+    value TEXT NOT NULL,
+    updatedAt INTEGER NOT NULL
+);
+
+
+selectData:
+SELECT * FROM CacheData WHERE key = ?;
+
+insertData:
+INSERT OR REPLACE INTO CacheData VALUES ?;
+
+deleteData:
+DELETE FROM CacheData WHERE key = ?;
+
+deleteAll:
+DELETE FROM CacheData;

@@ -14,14 +14,12 @@ import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClient
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClientBuilder
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiHomeserverLoginDetails
 import kotlinx.coroutines.test.runTest
-import org.junit.Ignore
 import org.junit.Test
 
-@Ignore("JNA direct mapping has broken unit tests with FFI fakes")
 class RustHomeserverLoginCompatibilityCheckerTest {
     @Test
-    fun `check - is valid if it supports OIDC login`() = runTest {
-        val sut = createChecker { FakeFfiHomeserverLoginDetails(supportsOidcLogin = true) }
+    fun `check - is valid if it supports OAuth login`() = runTest {
+        val sut = createChecker { FakeFfiHomeserverLoginDetails(supportsOAuthLogin = true) }
         assertThat(sut.check("https://matrix.host.org").getOrNull()).isTrue()
     }
 
@@ -51,6 +49,5 @@ class RustHomeserverLoginCompatibilityCheckerTest {
                 FakeFfiClient(homeserverLoginDetailsResult = result)
             }
         },
-        userCertificatesProvider = FakeUserCertificatesProvider(),
     )
 }

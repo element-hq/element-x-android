@@ -11,20 +11,19 @@ package io.element.android.features.login.impl.accesscontrol
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.enterprise.api.EnterpriseService
+import io.element.android.features.enterprise.api.IsEnterpriseBuild
 import io.element.android.features.login.api.accesscontrol.AccountProviderAccessControl
 import io.element.android.features.login.impl.changeserver.AccountProviderAccessException
-import io.element.android.libraries.core.uri.ensureProtocol
-import io.element.android.libraries.wellknown.api.WellknownRetriever
+import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
 
 @ContributesBinding(AppScope::class)
 class DefaultAccountProviderAccessControl(
+    private val isEnterpriseBuild: IsEnterpriseBuild,
     private val enterpriseService: EnterpriseService,
-    private val wellknownRetriever: WellknownRetriever,
 ) : AccountProviderAccessControl {
-    override suspend fun isAllowedToConnectToAccountProvider(accountProviderUrl: String) = try {
+    override suspend fun isAllowedToConnectToAccountProvider(accountProvider: AccountProvider) = try {
         assertIsAllowedToConnectToAccountProvider(
-            title = accountProviderUrl,
-            accountProviderUrl = accountProviderUrl,
+            accountProvider = accountProvider,
         )
         true
     } catch (_: AccountProviderAccessException) {
@@ -33,25 +32,22 @@ class DefaultAccountProviderAccessControl(
 
     @Throws(AccountProviderAccessException::class)
     suspend fun assertIsAllowedToConnectToAccountProvider(
-        title: String,
-        accountProviderUrl: String,
+        accountProvider: AccountProvider,
     ) {
-        if (enterpriseService.isEnterpriseBuild.not()) {
+        if (isEnterpriseBuild().not()) {
             // Ensure that Element Pro is not required for this account provider
-            val wellKnown = wellknownRetriever.getElementWellKnown(
-                baseUrl = accountProviderUrl.ensureProtocol(),
-            ).dataOrNull()
-            if (wellKnown?.enforceElementPro == true) {
+            if (enterpriseService.isElementProEnforced(accountProvider.serverNameOrBaseUrl())) {
                 throw AccountProviderAccessException.NeedElementProException(
-                    unauthorisedAccountProviderTitle = title,
+                    unauthorisedAccountProviderTitle = accountProvider.friendlyServerName(),
                     applicationId = ELEMENT_PRO_APPLICATION_ID,
                 )
             }
         }
-        if (enterpriseService.isAllowedToConnectToHomeserver(accountProviderUrl).not()) {
+        if (enterpriseService.isAllowedToConnectToAccountProvider(accountProvider).not()) {
             throw AccountProviderAccessException.UnauthorizedAccountProviderException(
-                unauthorisedAccountProviderTitle = title,
-                authorisedAccountProviderTitles = enterpriseService.defaultHomeserverList(),
+                unauthorisedAccountProviderTitle = accountProvider.friendlyServerName(),
+                authorisedAccountProviderTitles = enterpriseService.accountProviderAllowList()
+                    .map { it.friendlyServerName() },
             )
         }
     }

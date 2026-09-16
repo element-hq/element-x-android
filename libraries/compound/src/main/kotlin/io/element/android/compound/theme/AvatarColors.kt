@@ -65,7 +65,7 @@ internal fun AvatarColorsPreviewLight() {
 @Preview
 @Composable
 internal fun AvatarColorsPreviewDark() {
-    ElementTheme(darkTheme = true) {
+    ElementTheme(theme = Theme.Dark) {
         val chunks = avatarColors().chunked(4)
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             for (chunk in chunks) {

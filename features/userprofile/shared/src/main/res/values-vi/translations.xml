@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_dm_details_block_alert_action">"Chặn"</string>
+  <string name="screen_dm_details_block_alert_description">"Người dùng bị chặn sẽ không thể gửi tin nhắn cho bạn và tất cả tin nhắn của họ sẽ bị ẩn. Bạn có thể bỏ chặn họ bất cứ lúc nào."</string>
+  <string name="screen_dm_details_block_user">"Chặn người dùng"</string>
+  <string name="screen_dm_details_unblock_alert_action">"Bỏ chặn"</string>
+  <string name="screen_dm_details_unblock_alert_description">"Bạn sẽ có thể xem lại tất cả tin nhắn từ họ."</string>
+  <string name="screen_dm_details_unblock_user">"Bỏ chặn người dùng"</string>
+  <string name="screen_room_member_details_block_alert_action">"Chặn"</string>
+  <string name="screen_room_member_details_block_alert_description">"Người dùng bị chặn sẽ không thể gửi tin nhắn cho bạn và tất cả tin nhắn của họ sẽ bị ẩn. Bạn có thể bỏ chặn họ bất cứ lúc nào."</string>
+  <string name="screen_room_member_details_block_user">"Chặn người dùng"</string>
+  <string name="screen_room_member_details_unblock_alert_action">"Bỏ chặn"</string>
+  <string name="screen_room_member_details_unblock_alert_description">"Bạn sẽ có thể xem lại tất cả tin nhắn từ họ."</string>
+  <string name="screen_room_member_details_unblock_user">"Bỏ chặn người dùng"</string>
+  <string name="screen_start_chat_error_starting_chat">"Đã xảy ra lỗi khi cố gắng bắt đầu cuộc trò chuyện"</string>
+</resources>

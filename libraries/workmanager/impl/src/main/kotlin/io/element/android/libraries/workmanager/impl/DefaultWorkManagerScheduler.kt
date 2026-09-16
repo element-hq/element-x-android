@@ -8,39 +8,82 @@
 
 package io.element.android.libraries.workmanager.impl
 
-import android.content.Context
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.di.annotations.ApplicationContext
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.workmanager.api.WorkManagerRequest
+import io.element.android.libraries.sessionstorage.api.observer.SessionListener
+import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
+import io.element.android.libraries.workmanager.api.WorkManagerRequestBuilder
 import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.WorkManagerScheduler
+import io.element.android.libraries.workmanager.api.WorkManagerWorkerType
 import io.element.android.libraries.workmanager.api.workManagerTag
 import timber.log.Timber
 
 @ContributesBinding(AppScope::class)
+@SingleIn(AppScope::class)
 class DefaultWorkManagerScheduler(
-    @ApplicationContext private val context: Context,
+    lazyWorkManager: Lazy<WorkManager>,
+    sessionObserver: SessionObserver,
 ) : WorkManagerScheduler {
-    private val workManager by lazy { WorkManager.getInstance(context) }
+    private val workManager by lazyWorkManager
 
-    override fun submit(workManagerRequest: WorkManagerRequest) {
-        workManagerRequest.build().fold(
-            onSuccess = { workRequests ->
-                workManager.enqueue(workRequests)
+    init {
+        // Observe session removals to cancel associated work automatically
+        sessionObserver.addListener(object : SessionListener {
+            override suspend fun onSessionDeleted(userId: String, wasLastSession: Boolean) {
+                val sessionId = SessionId(userId)
+                Timber.d("Session deleted for userId: $userId, cancelling associated workmanager requests")
+                cancel(sessionId)
+            }
+        })
+    }
+
+    override suspend fun submit(workManagerRequestBuilder: WorkManagerRequestBuilder) {
+        workManagerRequestBuilder.build().fold(
+            onSuccess = { wrappers ->
+                for (wrapper in wrappers) {
+                    when (wrapper.type) {
+                        WorkManagerWorkerType.Default -> workManager.enqueue(wrapper.request)
+                        is WorkManagerWorkerType.Unique -> {
+                            val type = wrapper.type as WorkManagerWorkerType.Unique
+                            val requests = wrapper.request as OneTimeWorkRequest
+                            workManager.enqueueUniqueWork(type.name, type.policy, requests)
+                        }
+                    }
+                }
             },
             onFailure = {
-                Timber.e(it, "Failed to build WorkManager request $workManagerRequest")
+                Timber.e(it, "Failed to build WorkManager request $workManagerRequestBuilder")
             }
         )
     }
 
-    override fun cancel(sessionId: SessionId) {
+    override fun hasPendingWork(sessionId: SessionId, requestType: WorkManagerRequestType): Boolean {
+        val workInfos = workManager.getWorkInfosByTag(workManagerTag(sessionId, requestType)).get().orEmpty()
+        return workInfos.any { info ->
+            val isPeriodic = info.periodicityInfo != null
+            val isCancelled = info.state == WorkInfo.State.CANCELLED
+            // It has pending work if:
+            // - It's not periodic and is not finished.
+            // - It's periodic and is not cancelled - since it'll be run again in a next iteration otherwise
+            !isPeriodic && !info.state.isFinished || isPeriodic && !isCancelled
+        }
+    }
+
+    override fun cancel(sessionId: SessionId, requestType: WorkManagerRequestType?) {
         Timber.d("Cancelling work for sessionId: $sessionId")
-        for (requestType in WorkManagerRequestType.entries) {
+
+        if (requestType != null) {
             workManager.cancelAllWorkByTag(workManagerTag(sessionId, requestType))
+        } else {
+            for (requestType in WorkManagerRequestType.entries) {
+                workManager.cancelAllWorkByTag(workManagerTag(sessionId, requestType))
+            }
         }
     }
 }

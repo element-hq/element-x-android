@@ -9,10 +9,12 @@
 package io.element.android.libraries.matrix.impl.fixtures.factories
 
 import io.element.android.libraries.matrix.api.core.ThreadId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiTimelineEvent
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import org.matrix.rustcomponents.sdk.Action
+import org.matrix.rustcomponents.sdk.BatchNotificationResult
 import org.matrix.rustcomponents.sdk.JoinRule
 import org.matrix.rustcomponents.sdk.NotificationEvent
 import org.matrix.rustcomponents.sdk.NotificationItem
@@ -21,7 +23,7 @@ import org.matrix.rustcomponents.sdk.NotificationSenderInfo
 import org.matrix.rustcomponents.sdk.NotificationStatus
 import org.matrix.rustcomponents.sdk.TimelineEvent
 
-fun aRustNotificationItem(
+internal fun aRustNotificationItem(
     event: NotificationEvent = aRustNotificationEventTimeline(),
     senderInfo: NotificationSenderInfo = aRustNotificationSenderInfo(),
     roomInfo: NotificationRoomInfo = aRustNotificationRoomInfo(),
@@ -29,6 +31,7 @@ fun aRustNotificationItem(
     hasMention: Boolean? = false,
     threadId: ThreadId? = null,
     actions: List<Action>? = null,
+    rawEvent: String = "",
 ) = NotificationItem(
     event = event,
     senderInfo = senderInfo,
@@ -37,15 +40,16 @@ fun aRustNotificationItem(
     hasMention = hasMention,
     threadId = threadId?.value,
     actions = actions,
+    rawEvent = rawEvent,
 )
 
-fun aRustBatchNotificationResult(
+internal fun aRustBatchNotificationResultOk(
     notificationStatus: NotificationStatus = NotificationStatus.Event(aRustNotificationItem()),
-) = org.matrix.rustcomponents.sdk.BatchNotificationResult.Ok(
+) = BatchNotificationResult.Ok(
     status = notificationStatus,
 )
 
-fun aRustNotificationSenderInfo(
+internal fun aRustNotificationSenderInfo(
     displayName: String? = A_USER_NAME,
     avatarUrl: String? = null,
     isNameAmbiguous: Boolean = false,
@@ -55,7 +59,7 @@ fun aRustNotificationSenderInfo(
     isNameAmbiguous = isNameAmbiguous,
 )
 
-fun aRustNotificationRoomInfo(
+internal fun aRustNotificationRoomInfo(
     displayName: String = A_ROOM_NAME,
     avatarUrl: String? = null,
     canonicalAlias: String? = null,
@@ -63,7 +67,11 @@ fun aRustNotificationRoomInfo(
     joinedMembersCount: ULong = 2u,
     isEncrypted: Boolean? = true,
     isDirect: Boolean = false,
+    isDm: Boolean = false,
     joinRule: JoinRule? = null,
+    isSpace: Boolean = false,
+    serviceMembers: List<UserId> = emptyList(),
+    activeServiceMemberCount: Int = 0,
 ) = NotificationRoomInfo(
     displayName = displayName,
     avatarUrl = avatarUrl,
@@ -72,10 +80,14 @@ fun aRustNotificationRoomInfo(
     joinedMembersCount = joinedMembersCount,
     isEncrypted = isEncrypted,
     isDirect = isDirect,
+    isDm = isDm,
     joinRule = joinRule,
+    isSpace = isSpace,
+    serviceMembers = serviceMembers.map { it.value },
+    activeServiceMembersCount = activeServiceMemberCount.toULong(),
 )
 
-fun aRustNotificationEventTimeline(
+internal fun aRustNotificationEventTimeline(
     event: TimelineEvent = FakeFfiTimelineEvent(),
 ) = NotificationEvent.Timeline(
     event = event,

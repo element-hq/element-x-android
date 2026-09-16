@@ -12,6 +12,7 @@ import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import io.element.android.libraries.matrix.api.spaces.SpaceRoomList
+import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -28,10 +29,11 @@ import java.util.Optional
 import org.matrix.rustcomponents.sdk.SpaceRoomList as InnerSpaceRoomList
 
 class RustSpaceRoomList(
-    override val roomId: RoomId,
+    override val spaceId: RoomId,
     private val innerProvider: suspend () -> InnerSpaceRoomList,
     private val coroutineScope: CoroutineScope,
     spaceRoomMapper: SpaceRoomMapper,
+    private val analyticsService: AnalyticsService,
 ) : SpaceRoomList {
     private val innerCompletable = CompletableDeferred<InnerSpaceRoomList>()
 
@@ -43,7 +45,8 @@ class RustSpaceRoomList(
         MutableStateFlow(SpaceRoomList.PaginationStatus.Idle(hasMoreToLoad = false))
     private val spaceListUpdateProcessor = SpaceListUpdateProcessor(
         spaceRoomsFlow = spaceRoomsFlow,
-        mapper = spaceRoomMapper
+        mapper = spaceRoomMapper,
+        analyticsService = analyticsService,
     )
 
     init {
@@ -78,9 +81,15 @@ class RustSpaceRoomList(
         }
     }
 
+    override suspend fun reset(): Result<Unit> {
+        return runCatchingExceptions {
+            innerCompletable.await().reset()
+        }
+    }
+
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun destroy() {
-        Timber.d("Destroying SpaceRoomList $roomId")
+        Timber.d("Destroying SpaceRoomList $spaceId")
         coroutineScope.cancel()
         try {
             innerCompletable.getCompleted().destroy()

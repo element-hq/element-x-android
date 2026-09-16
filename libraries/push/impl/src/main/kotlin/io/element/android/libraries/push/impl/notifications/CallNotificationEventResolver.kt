@@ -14,6 +14,7 @@ import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.exception.NotificationResolverException
+import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.notification.RtcNotificationType
@@ -90,6 +91,7 @@ class DefaultCallNotificationEventResolver(
 
         notificationData.run {
             if (content.type == RtcNotificationType.RING && isRoomCallActive && !forceNotify) {
+                Timber.d("Ringing call notification intent ${content.callIntent} in room $roomId")
                 NotifiableRingingCallEvent(
                     sessionId = sessionId,
                     roomId = roomId,
@@ -100,10 +102,18 @@ class DefaultCallNotificationEventResolver(
                     timestamp = this.timestamp,
                     isRedacted = false,
                     isUpdated = false,
-                    description = stringProvider.getString(R.string.notification_incoming_call),
+                    description = if (content.callIntent ==
+                        CallIntent.AUDIO) {
+                            stringProvider.getString(R.string.notification_incoming_audio_call)
+                        } else {
+                            stringProvider.getString(
+                        R.string.notification_incoming_call
+                    )
+                        },
                     senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId),
                     roomAvatarUrl = roomAvatarUrl,
                     rtcNotificationType = content.type,
+                    callIntent = content.callIntent,
                     senderId = content.senderId,
                     senderAvatarUrl = senderAvatarUrl,
                     expirationTimestamp = content.expirationTimestampMillis,
@@ -119,7 +129,11 @@ class DefaultCallNotificationEventResolver(
                     noisy = true,
                     timestamp = this.timestamp,
                     senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId),
-                    body = stringProvider.getString(R.string.notification_incoming_call),
+                    body = if (content.callIntent == CallIntent.VIDEO) {
+                        stringProvider.getString(R.string.notification_incoming_call)
+                    } else {
+                        stringProvider.getString(R.string.notification_incoming_audio_call)
+                    },
                     roomName = roomDisplayName,
                     roomIsDm = isDm,
                     roomAvatarPath = roomAvatarUrl,

@@ -2,4 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_invite_users_already_a_member">"Già membro"</string>
   <string name="screen_invite_users_already_invited">"Già invitato"</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_multiple_users">"Al momento non hai conversazioni con questi contatti. Conferma di invitarli in questa stanza prima di continuare."</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_one_user">"Al momento non hai converszioni con questo contatto. Conferma di invitarlo in questa stanza prima di continuare."</string>
+  <string name="screen_invite_users_confirm_dialog_title_mutiple_users">"Invita nuovi contatti in questa stanza?"</string>
+  <string name="screen_invite_users_confirm_dialog_title_one_user">"Invitare un nuovo contatto in questa stanza?"</string>
 </resources>

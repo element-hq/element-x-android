@@ -8,6 +8,10 @@
 
 package io.element.android.libraries.mediaupload.api
 
+/**
+ * Resolves how aggressively media should be compressed, combining the user's own preferences with the app defaults.
+ */
 fun interface MediaOptimizationConfigProvider {
+    /** Returns the configuration to pass to the pre-processing and sending calls. */
     suspend fun get(): MediaOptimizationConfig
 }

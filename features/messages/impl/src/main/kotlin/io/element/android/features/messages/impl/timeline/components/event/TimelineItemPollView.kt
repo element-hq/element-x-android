@@ -11,9 +11,9 @@ package io.element.android.features.messages.impl.timeline.components.event
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import io.element.android.features.messages.impl.timeline.TimelineEvents
+import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContentProvider
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContentPreviewParam
 import io.element.android.features.poll.api.pollcontent.PollContentView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -23,19 +23,19 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun TimelineItemPollView(
     content: TimelineItemPollContent,
-    eventSink: (TimelineEvents.TimelineItemPollEvents) -> Unit,
+    eventSink: (TimelineEvent.TimelineItemPollEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    fun onSelectAnswer(pollStartId: EventId, answerId: String) {
-        eventSink(TimelineEvents.SelectPollAnswer(pollStartId, answerId))
+    fun onSendPollResponse(pollStartId: EventId, answerIds: List<String>) {
+        eventSink(TimelineEvent.SendPollResponse(pollStartId, answerIds))
     }
 
     fun onEndPoll(pollStartId: EventId) {
-        eventSink(TimelineEvents.EndPoll(pollStartId))
+        eventSink(TimelineEvent.EndPoll(pollStartId))
     }
 
     fun onEditPoll(pollStartId: EventId) {
-        eventSink(TimelineEvents.EditPoll(pollStartId))
+        eventSink(TimelineEvent.EditPoll(pollStartId))
     }
 
     PollContentView(
@@ -43,10 +43,12 @@ fun TimelineItemPollView(
         question = content.question,
         answerItems = content.answerItems.toImmutableList(),
         pollKind = content.pollKind,
+        isMultipleSelection = content.maxSelections > 1u,
+        maxSelections = content.maxSelections,
         isPollEnded = content.isEnded,
         isPollEditable = content.isEditable,
         isMine = content.isMine,
-        onSelectAnswer = ::onSelectAnswer,
+        onSendPollResponse = ::onSendPollResponse,
         onEditPoll = ::onEditPoll,
         onEndPoll = ::onEndPoll,
         modifier = modifier,
@@ -55,7 +57,7 @@ fun TimelineItemPollView(
 
 @PreviewsDayNight
 @Composable
-internal fun TimelineItemPollViewPreview(@PreviewParameter(TimelineItemPollContentProvider::class) content: TimelineItemPollContent) =
+internal fun TimelineItemPollViewPreview(@PreviewParameter(TimelineItemPollContentPreviewParam::class) content: TimelineItemPollContent) =
     ElementPreview {
         TimelineItemPollView(
             content = content,

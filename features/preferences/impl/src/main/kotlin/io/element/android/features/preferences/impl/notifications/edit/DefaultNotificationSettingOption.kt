@@ -40,7 +40,7 @@ fun DefaultNotificationSettingOption(
     }
     ListItem(
         modifier = modifier,
-        headlineContent = { Text(title) },
+        content = { Text(title) },
         supportingContent = subtitle?.let { { Text(it) } },
         trailingContent = ListItemContent.RadioButton(selected = isSelected),
         onClick = { onSelectOption(mode) },

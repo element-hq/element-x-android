@@ -15,10 +15,6 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
-import io.element.android.services.appnavstate.api.AppNavigationState
-import io.element.android.services.appnavstate.api.currentRoomId
-import io.element.android.services.appnavstate.api.currentSessionId
-import io.element.android.services.appnavstate.api.currentThreadId
 
 data class NotifiableMessageEvent(
     override val sessionId: SessionId,
@@ -55,25 +51,4 @@ data class NotifiableMessageEvent(
     // content://io.element.android.x.debug.notifications.fileprovider/downloads/temp/notif/matrix.org/XGItzSDOnSyXjYtOPfiKexDJ
     val imageUri: Uri?
         get() = imageUriString?.toUri()
-}
-
-/**
- * Used to check if a notification should be ignored based on the current app and navigation state.
- */
-fun NotifiableEvent.shouldIgnoreEventInRoom(appNavigationState: AppNavigationState): Boolean {
-    val currentSessionId = appNavigationState.navigationState.currentSessionId() ?: return false
-    return when (val currentRoomId = appNavigationState.navigationState.currentRoomId()) {
-        null -> false
-        else -> {
-            // Never ignore ringing call notifications
-            if (this is NotifiableRingingCallEvent) {
-                false
-            } else {
-                appNavigationState.isInForeground &&
-                    sessionId == currentSessionId &&
-                    roomId == currentRoomId &&
-                    (this as? NotifiableMessageEvent)?.threadId == appNavigationState.navigationState.currentThreadId()
-            }
-        }
-    }
 }

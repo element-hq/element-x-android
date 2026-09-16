@@ -13,6 +13,8 @@ updates:
     open-pull-requests-limit: 0
     reviewers:
       - "element-hq/element-x-android-reviewers"
+    cooldown:
+      default-days: 7
   # Updates for Gradle dependencies used in the app
   - package-ecosystem: "gradle"
     directory: "/"
@@ -21,3 +23,5 @@ updates:
     open-pull-requests-limit: 0
     reviewers:
       - "element-hq/element-x-android-reviewers"
+    cooldown:
+      default-days: 7

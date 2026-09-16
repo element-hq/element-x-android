@@ -16,7 +16,7 @@ class MatrixHomeServerDetailsTest {
     @Test
     fun `if homeserver supports oidc, then it is supported`() {
         val sut = aMatrixHomeServerDetails(
-            supportsOidcLogin = true,
+            supportsOAuthLogin = true,
             supportsPasswordLogin = false,
         )
         assertThat(sut.isSupported).isTrue()
@@ -25,7 +25,7 @@ class MatrixHomeServerDetailsTest {
     @Test
     fun `if homeserver supports password, then it is supported`() {
         val sut = aMatrixHomeServerDetails(
-            supportsOidcLogin = false,
+            supportsOAuthLogin = false,
             supportsPasswordLogin = true,
         )
         assertThat(sut.isSupported).isTrue()
@@ -34,7 +34,7 @@ class MatrixHomeServerDetailsTest {
     @Test
     fun `if homeserver supports both, then it is supported`() {
         val sut = aMatrixHomeServerDetails(
-            supportsOidcLogin = true,
+            supportsOAuthLogin = true,
             supportsPasswordLogin = true,
         )
         assertThat(sut.isSupported).isTrue()
@@ -43,7 +43,7 @@ class MatrixHomeServerDetailsTest {
     @Test
     fun `if homeserver supports none, then it is not supported`() {
         val sut = aMatrixHomeServerDetails(
-            supportsOidcLogin = false,
+            supportsOAuthLogin = false,
             supportsPasswordLogin = false,
         )
         assertThat(sut.isSupported).isFalse()

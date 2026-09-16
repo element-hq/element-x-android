@@ -23,7 +23,7 @@ Valitse PIN-koodi, jonka muistat. Jos unohdat sen, joudut kirjautumaan ulos."</s
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Anna sama PIN-koodi kahdesti"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN-koodit eivät täsmää"</string>
   <string name="screen_app_lock_signout_alert_message">"Sinun on kirjauduttava sisään uudelleen ja luotava uusi PIN-koodi jatkaaksesi"</string>
-  <string name="screen_app_lock_signout_alert_title">"Sinut kirjataan ulos"</string>
+  <string name="screen_app_lock_signout_alert_title">"Tämä laite poistetaan"</string>
   <plurals name="screen_app_lock_subtitle">
     <item quantity="one">"Sinulla on %1$d yritys"</item>
     <item quantity="other">"Sinulla on %1$d yritystä"</item>
@@ -34,5 +34,5 @@ Valitse PIN-koodi, jonka muistat. Jos unohdat sen, joudut kirjautumaan ulos."</s
   </plurals>
   <string name="screen_app_lock_use_biometric_android">"Käytä biometristä"</string>
   <string name="screen_app_lock_use_pin_android">"Käytä PIN-koodia"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Kirjaudutaan ulos…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Poistetaan laitetta…"</string>
 </resources>

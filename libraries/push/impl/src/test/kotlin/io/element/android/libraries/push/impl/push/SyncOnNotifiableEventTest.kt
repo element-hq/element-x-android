@@ -20,8 +20,7 @@ import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
-import io.element.android.libraries.push.api.push.SyncOnNotifiableEvent
-import io.element.android.libraries.push.impl.notifications.fixtures.aNotificationEventRequest
+import io.element.android.libraries.push.impl.notifications.fixtures.aPushRequest
 import io.element.android.services.appnavstate.test.FakeAppForegroundStateService
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -53,7 +52,7 @@ class SyncOnNotifiableEventTest {
         givenGetRoomResult(A_ROOM_ID, room)
     }
 
-    private val notificationRequest = aNotificationEventRequest()
+    private val notificationRequest = aPushRequest()
 
     @Test
     fun `when feature flag is disabled, nothing happens`() = runTest {

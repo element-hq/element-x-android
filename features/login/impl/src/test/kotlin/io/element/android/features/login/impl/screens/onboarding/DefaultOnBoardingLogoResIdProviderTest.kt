@@ -8,14 +8,12 @@
 
 package io.element.android.features.login.impl.screens.onboarding
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class DefaultOnBoardingLogoResIdProviderTest {
+class DefaultOnBoardingLogoResIdProviderTest : RobolectricTest() {
     @Test
     fun `when onboarding_logo resource does not exist, get() returns null`() {
         val context = InstrumentationRegistry.getInstrumentation().context

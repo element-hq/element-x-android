@@ -25,9 +25,9 @@ class LinkPresenter(
     override fun present(): LinkState {
         val linkClick: MutableState<AsyncAction<Link>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
-        fun handleEvent(event: LinkEvents) {
+        fun handleEvent(event: LinkEvent) {
             when (event) {
-                is LinkEvents.OnLinkClick -> {
+                is LinkEvent.OnLinkClick -> {
                     linkClick.value = AsyncAction.Loading
                     val result = linkChecker.isSafe(event.link)
                     if (result) {
@@ -37,12 +37,12 @@ class LinkPresenter(
                         linkClick.value = ConfirmingLinkClick(event.link)
                     }
                 }
-                LinkEvents.Confirm -> {
+                LinkEvent.Confirm -> {
                     linkClick.value = (linkClick.value as? ConfirmingLinkClick)
                         ?.let { AsyncAction.Success(it.link) }
                         ?: AsyncAction.Uninitialized
                 }
-                LinkEvents.Cancel -> {
+                LinkEvent.Cancel -> {
                     linkClick.value = AsyncAction.Uninitialized
                 }
             }

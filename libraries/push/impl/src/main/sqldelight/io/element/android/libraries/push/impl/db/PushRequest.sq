@@ -1,0 +1,24 @@
+CREATE TABLE PushRequest (
+    pushDate INTEGER NOT NULL,
+    providerInfo TEXT NOT NULL,
+    eventId TEXT NOT NULL,
+    roomId TEXT NOT NULL,
+    sessionId TEXT NOT NULL,
+    status INTEGER NOT NULL DEFAULT 0,
+    retries INTEGER NOT NULL DEFAULT 0,
+    PRIMARY KEY(sessionId, eventId)
+);
+
+CREATE INDEX PushRequestSessionAndStatus ON PushRequest (sessionId, status);
+
+selectAllPendingForSession:
+SELECT * FROM PushRequest WHERE status = 0 AND sessionId = ? AND pushDate > ? ORDER BY pushDate ASC;
+
+insertPushRequest:
+INSERT OR REPLACE INTO PushRequest VALUES ?;
+
+removeAll:
+DELETE FROM PushRequest;
+
+removeOldest:
+DELETE FROM PushRequest WHERE rowid NOT IN (SELECT rowid FROM PushRequest ORDER BY pushDate DESC LIMIT ?);

@@ -46,10 +46,10 @@ fun LinkView(
                     ),
                     submitText = stringResource(CommonStrings.action_continue),
                     onSubmitClick = {
-                        state.eventSink(LinkEvents.Confirm)
+                        state.eventSink(LinkEvent.Confirm)
                     },
                     onDismiss = {
-                        state.eventSink(LinkEvents.Cancel)
+                        state.eventSink(LinkEvent.Cancel)
                     },
                 )
             }
@@ -58,7 +58,7 @@ fun LinkView(
             val latestOnLinkValid by rememberUpdatedState(onLinkValid)
             LaunchedEffect(state.linkClick.data) {
                 latestOnLinkValid(state.linkClick.data)
-                state.eventSink(LinkEvents.Cancel)
+                state.eventSink(LinkEvent.Cancel)
             }
         }
     }
@@ -66,7 +66,7 @@ fun LinkView(
 
 @PreviewsDayNight
 @Composable
-internal fun LinkViewPreview(@PreviewParameter(LinkStateProvider::class) state: LinkState) = ElementPreview {
+internal fun LinkViewPreview(@PreviewParameter(LinkStatePreviewParam::class) state: LinkState) = ElementPreview {
     LinkView(
         state = state,
         onLinkValid = {},

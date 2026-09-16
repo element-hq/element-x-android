@@ -79,6 +79,13 @@ interface VoiceMessagePlayer {
      */
     fun seekTo(positionMs: Long)
 
+    /**
+     * Set the playback speed.
+     *
+     * @param speed The playback speed (e.g., 0.5f for half speed, 1.0f for normal, 2.0f for double speed)
+     */
+    fun setPlaybackSpeed(speed: Float)
+
     data class State(
         /**
          * Whether the player is ready to play.
@@ -215,6 +222,10 @@ class DefaultVoiceMessagePlayer(
                 it.copy(currentPosition = positionMs)
             }
         }
+    }
+
+    override fun setPlaybackSpeed(speed: Float) {
+        mediaPlayer.setPlaybackSpeed(speed)
     }
 
     private val MediaPlayer.State.isMyTrack: Boolean

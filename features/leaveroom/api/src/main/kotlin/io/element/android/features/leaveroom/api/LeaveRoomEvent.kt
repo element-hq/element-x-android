@@ -10,6 +10,9 @@ package io.element.android.features.leaveroom.api
 
 import io.element.android.libraries.matrix.api.core.RoomId
 
+/**
+ * Events sent to the leave room presenter through [LeaveRoomState.eventSink].
+ */
 interface LeaveRoomEvent {
     data class LeaveRoom(val roomId: RoomId, val needsConfirmation: Boolean) : LeaveRoomEvent
 }

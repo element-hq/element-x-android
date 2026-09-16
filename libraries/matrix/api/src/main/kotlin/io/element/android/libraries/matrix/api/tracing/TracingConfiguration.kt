@@ -14,4 +14,5 @@ data class TracingConfiguration(
     val traceLogPacks: Set<TraceLogPack>,
     val writesToLogcat: Boolean,
     val writesToFilesConfiguration: WriteToFilesConfiguration,
+    val sdkSentryDsn: String?,
 )

@@ -9,7 +9,6 @@
 package io.element.android.libraries.push.impl.troubleshoot
 
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.PushService
@@ -22,7 +21,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
 @ContributesIntoSet(SessionScope::class)
-@Inject
 class CurrentPushProviderTest(
     private val pushService: PushService,
     private val sessionId: SessionId,

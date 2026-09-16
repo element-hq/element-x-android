@@ -25,4 +25,21 @@ object RageshakeConfig {
      * The maximum size of the upload request. Default value is just below CloudFlare's max request size.
      */
     const val MAX_LOG_UPLOAD_SIZE = 50 * 1024 * 1024L
+
+    /**
+     * The maximum size of a single log file.
+     */
+    const val MAX_LOG_CONTENT_SIZE = 100 * 1024 * 1024L
+
+    /**
+     * The maximum number of log lines a rageshake can contain.
+     */
+    const val MAX_LOG_LINES_SIZE = 1_000_000
+
+    /**
+     * The maximum size of the description. The bug report server copies it verbatim into a GitHub issue body,
+     * which GitHub rejects above 65536 characters. The remaining budget is left to the other reported fields,
+     * mainly the list of the omitted log file names.
+     */
+    const val MAX_DESCRIPTION_SIZE = 40 * 1024
 }

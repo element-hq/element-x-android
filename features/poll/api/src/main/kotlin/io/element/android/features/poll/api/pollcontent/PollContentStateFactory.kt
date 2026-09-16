@@ -12,7 +12,16 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 
+/**
+ * Turns the poll content of a timeline event into the state the poll UI renders.
+ */
 interface PollContentStateFactory {
+    /**
+     * Convenience overload that reads the editability and ownership from the timeline item itself.
+     *
+     * @param eventTimelineItem the timeline item carrying the poll.
+     * @param content the poll content of that item.
+     */
     suspend fun create(eventTimelineItem: EventTimelineItem, content: PollContent): PollContentState {
         return create(
             eventId = eventTimelineItem.eventId,
@@ -21,5 +30,12 @@ interface PollContentStateFactory {
             content = content,
         )
     }
+
+    /**
+     * @param eventId the poll start event, or `null` while the poll is still a local echo.
+     * @param isEditable whether the current user may still edit the poll.
+     * @param isOwn whether the poll was created by the current user.
+     * @param content the poll question, answers and votes.
+     */
     suspend fun create(eventId: EventId?, isEditable: Boolean, isOwn: Boolean, content: PollContent): PollContentState
 }

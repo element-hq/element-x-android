@@ -36,13 +36,14 @@ import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvent
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.timeline.TimelineController
-import io.element.android.features.messages.impl.timeline.TimelineEvents
+import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
+import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionBottomSheet
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.roommembermoderation.api.ModerationAction
-import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvent
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationRenderer
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.androidutils.system.openUrlInExternalApp
@@ -50,10 +51,12 @@ import io.element.android.libraries.androidutils.system.toast
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.inputs
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
+import io.element.android.libraries.emoji.api.picker.EmojiPickerRenderer
 import io.element.android.libraries.matrix.api.analytics.toAnalyticsViewRoom
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -66,9 +69,16 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
+import io.element.android.libraries.matrix.ui.media.contentvalidation.EventContentValidationCache
+import io.element.android.libraries.matrix.ui.media.contentvalidation.LocalEventContentValidationState
+import io.element.android.libraries.matrix.ui.model.getBestName
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.libraries.ui.utils.a11y.hasExternalKeyboard
+import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
+import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.LoadMessagesUi
 import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.api.finishLongRunningTransaction
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -92,6 +102,9 @@ class MessagesNode(
     private val permalinkParser: PermalinkParser,
     private val knockRequestsBannerRenderer: KnockRequestsBannerRenderer,
     private val roomMemberModerationRenderer: RoomMemberModerationRenderer,
+    private val eventContentValidationCache: EventContentValidationCache,
+    private val emojiPickerRenderer: EmojiPickerRenderer,
+    private val dispatchers: CoroutineDispatchers,
 ) : Node(buildContext, plugins = plugins), MessagesNavigator {
     data class Inputs(
         val focusedEventId: EventId?,
@@ -100,10 +113,15 @@ class MessagesNode(
     private val inputs = inputs<Inputs>()
     private val callback: Callback = callback()
 
-    private val timelineController = TimelineController(room, room.liveTimeline)
+    private val timelineController = TimelineController(
+        room = room,
+        liveTimeline = room.liveTimeline,
+        roomCoroutineScope = room.roomCoroutineScope,
+        dispatchers = dispatchers,
+    )
     private val presenter = presenterFactory.create(
         navigator = this,
-        composerPresenter = messageComposerPresenterFactory.create(timelineController, this),
+        composerPresenter = messageComposerPresenterFactory.create(timelineController, this, threadRoot = null),
         timelinePresenter = timelinePresenterFactory.create(timelineController = timelineController, this),
         actionListPresenter = actionListPresenterFactory.create(
             postProcessor = TimelineItemActionPostProcessor.Default,
@@ -113,7 +131,8 @@ class MessagesNode(
     )
 
     interface Callback : Plugin {
-        fun handleEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event): Boolean
+        fun handleEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event, canUseOverlay: Boolean): Boolean
+        fun handleGalleryItemClick(timelineMode: Timeline.Mode, event: TimelineItem.Event, galleryItemIndex: Int, canUseOverlay: Boolean): Boolean
         fun navigateToPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?)
         fun navigateToRoomMemberDetails(userId: UserId)
         fun handlePermalinkClick(data: PermalinkData)
@@ -123,11 +142,17 @@ class MessagesNode(
         fun navigateToSendLocation()
         fun navigateToCreatePoll()
         fun navigateToEditPoll(eventId: EventId)
-        fun navigateToRoomCall(roomId: RoomId)
+        fun navigateToCurrentLiveLocation()
+        fun navigateToRoomCall(roomId: RoomId, isAudioCall: Boolean)
         fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?)
         fun navigateToRoomDetails()
         fun navigateToPinnedMessagesList()
         fun navigateToKnockRequestsList()
+        fun navigateToDeveloperSettings()
+
+        fun navigateToThreadsList()
+
+        fun navigateToAvatarPreview(username: String, avatarUrl: String)
     }
 
     override fun onBuilt() {
@@ -135,6 +160,9 @@ class MessagesNode(
         lifecycle.subscribe(
             onCreate = {
                 sessionCoroutineScope.launch { analyticsService.capture(room.toAnalyticsViewRoom()) }
+            },
+            onResume = {
+                analyticsService.finishLongRunningTransaction(LoadMessagesUi)
             },
             onDestroy = {
                 mediaPlayer.close()
@@ -146,7 +174,7 @@ class MessagesNode(
         activity: Activity,
         darkTheme: Boolean,
         url: String,
-        eventSink: (TimelineEvents) -> Unit,
+        eventSink: (TimelineEvent) -> Unit,
         customTab: Boolean
     ) {
         when (val permalink = permalinkParser.parse(url)) {
@@ -173,12 +201,12 @@ class MessagesNode(
 
     private fun handleRoomLinkClick(
         roomLink: PermalinkData.RoomLink,
-        eventSink: (TimelineEvents) -> Unit,
+        eventSink: (TimelineEvent) -> Unit,
     ) {
         if (room.matches(roomLink.roomIdOrAlias)) {
             val eventId = roomLink.eventId
             if (eventId != null) {
-                eventSink(TimelineEvents.FocusOnEvent(eventId))
+                eventSink(TimelineEvent.FocusOnEvent(eventId))
             } else {
                 // Click on the same room, ignore
                 displaySameRoomToast()
@@ -217,8 +245,20 @@ class MessagesNode(
         }
     }
 
+    override fun navigateToMember(userId: UserId) {
+        callback.navigateToRoomMemberDetails(userId)
+    }
+
     override fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?) {
         callback.navigateToThread(threadRootId, focusedEventId)
+    }
+
+    override fun navigateToDeveloperSettings() {
+        callback.navigateToDeveloperSettings()
+    }
+
+    override fun navigateToCurrentLiveLocation() {
+        callback.navigateToCurrentLiveLocation()
     }
 
     private fun displaySameRoomToast() {
@@ -231,13 +271,15 @@ class MessagesNode(
     override fun View(modifier: Modifier) {
         val activity = requireNotNull(LocalActivity.current)
         val isDark = ElementTheme.isLightTheme.not()
+        val canUseOverlay = !isTalkbackActive() && !hasExternalKeyboard()
         CompositionLocalProvider(
             LocalTimelineItemPresenterFactories provides timelineItemPresenterFactories,
+            LocalEventContentValidationState provides eventContentValidationCache,
         ) {
             val state = presenter.present()
 
             BackHandler {
-                state.eventSink(MessagesEvents.MarkAsFullyReadAndExit)
+                state.eventSink(MessagesEvent.MarkAsFullyReadAndExit)
             }
 
             OnLifecycleEvent { _, event ->
@@ -248,15 +290,27 @@ class MessagesNode(
             }
             MessagesView(
                 state = state,
-                onBackClick = { state.eventSink(MessagesEvents.MarkAsFullyReadAndExit) },
+                onBackClick = { state.eventSink(MessagesEvent.MarkAsFullyReadAndExit) },
                 onRoomDetailsClick = callback::navigateToRoomDetails,
                 onEventContentClick = { isLive, event ->
                     if (isLive) {
-                        callback.handleEventClick(timelineController.mainTimelineMode(), event)
+                        callback.handleEventClick(timelineController.mainTimelineMode(), event, canUseOverlay)
                     } else {
                         val detachedTimelineMode = timelineController.detachedTimelineMode()
                         if (detachedTimelineMode != null) {
-                            callback.handleEventClick(detachedTimelineMode, event)
+                            callback.handleEventClick(detachedTimelineMode, event, canUseOverlay)
+                        } else {
+                            false
+                        }
+                    }
+                },
+                onGalleryEventItemClick = { isLive, event, index ->
+                    if (isLive) {
+                        callback.handleGalleryItemClick(timelineController.mainTimelineMode(), event, index, canUseOverlay)
+                    } else {
+                        val detachedTimelineMode = timelineController.detachedTimelineMode()
+                        if (detachedTimelineMode != null) {
+                            callback.handleGalleryItemClick(detachedTimelineMode, event, index, canUseOverlay)
                         } else {
                             false
                         }
@@ -274,7 +328,9 @@ class MessagesNode(
                 },
                 onSendLocationClick = callback::navigateToSendLocation,
                 onCreatePollClick = callback::navigateToCreatePoll,
-                onJoinCallClick = { callback.navigateToRoomCall(room.roomId) },
+                onJoinCallClick = { isAudioCall ->
+                    callback.navigateToRoomCall(room.roomId, isAudioCall)
+                },
                 onViewAllPinnedMessagesClick = callback::navigateToPinnedMessagesList,
                 modifier = modifier,
                 knockRequestsBannerView = {
@@ -283,13 +339,28 @@ class MessagesNode(
                         onViewRequestsClick = callback::navigateToKnockRequestsList,
                     )
                 },
+                customReactionBottomSheet = {
+                    CustomReactionBottomSheet(
+                        state = state.customReactionState,
+                        onSelectEmoji = { uniqueId, emoji ->
+                            state.eventSink(MessagesEvent.ToggleReaction(emoji.unicode, uniqueId))
+                        },
+                        emojiPickerRenderer = emojiPickerRenderer,
+                    )
+                },
+                onThreadsListClick = callback::navigateToThreadsList,
             )
             roomMemberModerationRenderer.Render(
                 state = state.roomMemberModerationState,
                 onSelectAction = { action, target ->
                     when (action) {
                         is ModerationAction.DisplayProfile -> callback.navigateToRoomMemberDetails(target.userId)
-                        else -> state.roomMemberModerationState.eventSink(RoomMemberModerationEvents.ProcessAction(action, target))
+                        else -> state.roomMemberModerationState.eventSink(RoomMemberModerationEvent.ProcessAction(action, target))
+                    }
+                },
+                onAvatarClick = { user ->
+                    user.avatarUrl?.let { url ->
+                        callback.navigateToAvatarPreview(user.getBestName(), url)
                     }
                 },
                 modifier = Modifier,
@@ -300,7 +371,7 @@ class MessagesNode(
             }
             LaunchedEffect(focusedEventId) {
                 if (focusedEventId != null) {
-                    state.timelineState.eventSink(TimelineEvents.FocusOnEvent(focusedEventId!!))
+                    state.timelineState.eventSink(TimelineEvent.FocusOnEvent(focusedEventId!!))
                     focusedEventId = null
                 }
             }

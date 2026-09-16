@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_push_history_title">"Povijest push obavijesti"</string>
+  <string name="troubleshoot_notifications_screen_action">"Pokreni testove"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"Ponovno pokreni testove"</string>
+  <string name="troubleshoot_notifications_screen_failure">"Neki testovi nisu uspjeli. Provjerite pojedinosti."</string>
+  <string name="troubleshoot_notifications_screen_notice">"Pokrenite testove kako biste otkrili bilo kakve probleme u konfiguraciji koji bi mogli uzrokovati da se obavijesti ne ponašaju kako se očekuje."</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"Pokušaj popravka"</string>
+  <string name="troubleshoot_notifications_screen_success">"Svi testovi uspješno su izvedeni."</string>
+  <string name="troubleshoot_notifications_screen_title">"Rješavanje problema s obavijestima"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"Neki testovi zahtijevaju vašu pažnju. Provjerite pojedinosti."</string>
+</resources>

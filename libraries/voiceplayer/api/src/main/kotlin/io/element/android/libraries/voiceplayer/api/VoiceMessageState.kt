@@ -9,13 +9,14 @@
 package io.element.android.libraries.voiceplayer.api
 
 data class VoiceMessageState(
-    val button: Button,
+    val buttonType: ButtonType,
     val progress: Float,
     val time: String,
     val showCursor: Boolean,
-    val eventSink: (event: VoiceMessageEvents) -> Unit,
+    val playbackSpeed: Float,
+    val eventSink: (event: VoiceMessageEvent) -> Unit,
 ) {
-    enum class Button {
+    enum class ButtonType {
         Play,
         Pause,
         Downloading,

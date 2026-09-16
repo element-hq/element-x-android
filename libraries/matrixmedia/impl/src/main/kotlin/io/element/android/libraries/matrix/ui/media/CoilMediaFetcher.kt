@@ -13,6 +13,7 @@ import coil3.decode.ImageSource
 import coil3.fetch.FetchResult
 import coil3.fetch.Fetcher
 import coil3.fetch.SourceFetchResult
+import io.element.android.libraries.matrix.api.exception.isNetworkError
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.media.toFile
@@ -27,15 +28,26 @@ internal class CoilMediaFetcher(
     private val mediaData: MediaRequestData,
 ) : Fetcher {
     override suspend fun fetch(): FetchResult? {
-        val source = mediaData.source
-        if (source == null) {
+        val mediaSource = mediaData.source
+        if (mediaSource == null) {
             Timber.e("MediaData source is null")
             return null
         }
         return when (val kind = mediaData.kind) {
-            is MediaRequestData.Kind.Content -> fetchContent(source)
-            is MediaRequestData.Kind.Thumbnail -> fetchThumbnail(source, kind)
-            is MediaRequestData.Kind.File -> fetchFile(source, kind)
+            is MediaRequestData.Kind.Content -> fetchContent(mediaSource)
+            is MediaRequestData.Kind.Thumbnail -> {
+                fetchThumbnail(mediaSource, kind).fold(
+                    onSuccess = { it },
+                    onFailure = { error ->
+                        if (error.isNetworkError()) {
+                            throw error
+                        } else {
+                            fetchContent(mediaSource)
+                        }
+                    }
+                )
+            }
+            is MediaRequestData.Kind.File -> fetchFile(mediaSource, kind)
         }
     }
 
@@ -61,7 +73,7 @@ internal class CoilMediaFetcher(
             .onFailure {
                 Timber.e(it)
             }
-            .getOrNull()
+            .getOrThrow()
     }
 
     private suspend fun fetchContent(mediaSource: MediaSource): FetchResult? {
@@ -71,10 +83,10 @@ internal class CoilMediaFetcher(
             byteArray.asSourceResult()
         }.onFailure {
             Timber.e(it)
-        }.getOrNull()
+        }.getOrThrow()
     }
 
-    private suspend fun fetchThumbnail(mediaSource: MediaSource, kind: MediaRequestData.Kind.Thumbnail): FetchResult? {
+    private suspend fun fetchThumbnail(mediaSource: MediaSource, kind: MediaRequestData.Kind.Thumbnail): Result<FetchResult> {
         return mediaLoader.loadMediaThumbnail(
             source = mediaSource,
             width = kind.width,
@@ -83,7 +95,7 @@ internal class CoilMediaFetcher(
             byteArray.asSourceResult()
         }.onFailure {
             Timber.e(it)
-        }.getOrNull()
+        }
     }
 
     private fun ByteArray.asSourceResult(): SourceFetchResult {

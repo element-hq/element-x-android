@@ -9,19 +9,27 @@
 package io.element.android.features.messages.impl.timeline.factories.event
 
 import dev.zacsweers.metro.Inject
+import io.element.android.features.location.api.Location
+import io.element.android.features.messages.impl.timeline.model.event.RtcNotificationState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRtcNotificationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
+import io.element.android.libraries.dateformatter.api.DateFormatter
+import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.toMatrixUser
 import io.element.android.libraries.matrix.api.timeline.item.event.CallNotifyContent
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.LegacyCallInviteContent
+import io.element.android.libraries.matrix.api.timeline.item.event.LiveLocationContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
@@ -33,6 +41,9 @@ import io.element.android.libraries.matrix.api.timeline.item.event.StickerConten
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
+import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.services.toolbox.api.strings.StringProvider
 
 @Inject
 class TimelineItemContentFactory(
@@ -47,14 +58,17 @@ class TimelineItemContentFactory(
     private val failedToParseMessageFactory: TimelineItemContentFailedToParseMessageFactory,
     private val failedToParseStateFactory: TimelineItemContentFailedToParseStateFactory,
     private val sessionId: SessionId,
+    private val dateFormatter: DateFormatter,
+    private val stringProvider: StringProvider,
 ) {
-    suspend fun create(eventTimelineItem: EventTimelineItem): TimelineItemEventContent {
+    suspend fun create(eventTimelineItem: EventTimelineItem, roomMembers: List<RoomMember>): TimelineItemEventContent {
         return create(
             itemContent = eventTimelineItem.content,
             eventId = eventTimelineItem.eventId,
             isEditable = eventTimelineItem.isEditable,
             sender = eventTimelineItem.sender,
             senderProfile = eventTimelineItem.senderProfile,
+            roomMembers = roomMembers,
         )
     }
 
@@ -64,16 +78,17 @@ class TimelineItemContentFactory(
         isEditable: Boolean,
         sender: UserId,
         senderProfile: ProfileDetails,
+        roomMembers: List<RoomMember> = emptyList(),
     ): TimelineItemEventContent {
         val isOutgoing = sessionId == sender
         return when (itemContent) {
             is FailedToParseMessageLikeContent -> failedToParseMessageFactory.create(itemContent)
             is FailedToParseStateContent -> failedToParseStateFactory.create(itemContent)
             is MessageContent -> {
-                val senderDisambiguatedDisplayName = senderProfile.getDisambiguatedDisplayName(sender)
                 messageFactory.create(
+                    senderId = sender,
+                    senderProfile = senderProfile,
                     content = itemContent,
-                    senderDisambiguatedDisplayName = senderDisambiguatedDisplayName,
                     eventId = eventId,
                 )
             }
@@ -94,8 +109,55 @@ class TimelineItemContentFactory(
             is StickerContent -> stickerFactory.create(itemContent)
             is PollContent -> pollFactory.create(eventId, isEditable, isOutgoing, itemContent)
             is UnableToDecryptContent -> utdFactory.create(itemContent)
-            is CallNotifyContent -> TimelineItemRtcNotificationContent()
+            is CallNotifyContent -> TimelineItemRtcNotificationContent(
+                callIntent = itemContent.callIntent,
+                state = when {
+                    itemContent.activeMembers.isNotEmpty() -> {
+                        RtcNotificationState.Active(
+                            joinedMembers = itemContent.activeMembers.map { active ->
+                                roomMembers.find {
+                                    it.userId == active
+                                }?.toMatrixUser() ?: MatrixUser(active)
+                            },
+                            isJoined = itemContent.isJoined,
+                            callStartTsMillis = itemContent.callStartTsMillis,
+                            callIntent = itemContent.callIntent
+                        )
+                    }
+                    else -> {
+                        if (itemContent.declinedBy.isEmpty()) {
+                            RtcNotificationState.Started
+                        } else {
+                            RtcNotificationState.Declined(itemContent.declinedBy.any { it == sessionId })
+                        }
+                    }
+                }
+            )
             is UnknownContent -> TimelineItemUnknownContent
+            is LiveLocationContent -> {
+                val lastKnownLocation = itemContent.locations.mapNotNull { beacon ->
+                    Location.fromGeoUri(beacon.geoUri)
+                }.lastOrNull()
+
+                val endsAt = dateFormatter.format(
+                    timestamp = itemContent.endTimestamp,
+                    mode = DateFormatterMode.TimeOnly
+                )
+                // Always create content, location can be null for "loading/waiting" state
+                TimelineItemLocationContent(
+                    description = itemContent.description?.trimEnd(),
+                    assetType = itemContent.assetType,
+                    senderId = sender,
+                    senderProfile = senderProfile,
+                    mode = TimelineItemLocationContent.Mode.Live(
+                        lastKnownLocation = lastKnownLocation,
+                        isActive = itemContent.isLive,
+                        endsAt = stringProvider.getString(CommonStrings.common_ends_at, endsAt),
+                        endTimestamp = itemContent.endTimestamp,
+                        isOwnUser = sessionId == sender
+                    ),
+                )
+            }
         }
     }
 }

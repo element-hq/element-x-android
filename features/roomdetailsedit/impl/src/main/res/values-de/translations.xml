@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_room_details_edit_room_title">"Chat bearbeiten"</string>
+  <string name="screen_room_details_edition_error">"Es ist ein unbekannter Fehler aufgetreten und die Informationen konnten nicht geändert werden."</string>
+  <string name="screen_room_details_edition_error_title">"Chat kann nicht aktualisiert werden"</string>
+  <string name="screen_room_details_updating_room">"Chat wird aktualisiert…"</string>
+</resources>

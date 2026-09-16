@@ -25,7 +25,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
-import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewSubtitleAtom
+import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewAliasAtom
 import io.element.android.libraries.designsystem.atomic.organisms.RoomPreviewOrganism
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -54,7 +54,7 @@ fun RoomAliasResolverView(
             containerColor = Color.Transparent,
             contentPadding = PaddingValues(
                 horizontal = 16.dp,
-                vertical = 32.dp
+                vertical = 24.dp
             ),
             topBar = {
                 RoomAliasResolverTopBar(onBackClick = onBackClick)
@@ -66,9 +66,9 @@ fun RoomAliasResolverView(
         ResolvedRoomAliasView(
             resolvedRoomAlias = state.resolveState,
             onSuccess = onSuccess,
-            onRetry = { state.eventSink(RoomAliasResolverEvents.Retry) },
+            onRetry = { state.eventSink(RoomAliasResolverEvent.Retry) },
             onDismissError = {
-                state.eventSink(RoomAliasResolverEvents.DismissError)
+                state.eventSink(RoomAliasResolverEvent.DismissError)
                 onBackClick()
             }
         )
@@ -121,7 +121,7 @@ private fun RoomAliasResolverContent(
             PlaceholderAtom(width = AvatarSize.RoomPreviewHeader.dp, height = AvatarSize.RoomPreviewHeader.dp)
         },
         title = {
-            RoomPreviewSubtitleAtom(roomAlias.value)
+            RoomPreviewAliasAtom(roomAlias.value)
         },
         subtitle = {
             if (isLoading) {
@@ -147,7 +147,7 @@ private fun RoomAliasResolverTopBar(
 
 @PreviewsDayNight
 @Composable
-internal fun RoomAliasResolverViewPreview(@PreviewParameter(RoomAliasResolverStateProvider::class) state: RoomAliasResolverState) = ElementPreview {
+internal fun RoomAliasResolverViewPreview(@PreviewParameter(RoomAliasResolverStatePreviewParam::class) state: RoomAliasResolverState) = ElementPreview {
     RoomAliasResolverView(
         state = state,
         onSuccess = { },

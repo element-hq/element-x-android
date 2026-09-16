@@ -14,7 +14,6 @@ import androidx.core.net.toFile
 import androidx.core.net.toUri
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Provider
 import dev.zacsweers.metro.SingleIn
 import io.element.android.appconfig.RageshakeConfig
 import io.element.android.features.rageshake.api.logs.createWriteToFilesConfiguration
@@ -77,7 +76,7 @@ class DefaultBugReporter(
     private val screenshotHolder: ScreenshotHolder,
     private val crashDataStore: CrashDataStore,
     private val coroutineDispatchers: CoroutineDispatchers,
-    private val okHttpClient: Provider<OkHttpClient>,
+    private val okHttpClient: () -> OkHttpClient,
     private val userAgentProvider: UserAgentProvider,
     private val sessionStore: SessionStore,
     private val buildMeta: BuildMeta,
@@ -124,6 +123,7 @@ class DefaultBugReporter(
         problemDescription: String,
         canContact: Boolean,
         sendPushRules: Boolean,
+        ghIssueNumber: Int?,
         listener: BugReporterListener,
     ) {
         val url = bugReporterUrlProvider.provide().first()
@@ -135,29 +135,31 @@ class DefaultBugReporter(
         // enumerate files to delete
         val bugReportFiles: MutableList<File> = ArrayList()
         var response: Response? = null
+
+        // Start at something like 1000 lines to have some 'buffer' in case unexpected lines were added
+        var totalLogLines = 1000L
+
         try {
             var serverError: String? = null
             withContext(coroutineDispatchers.io) {
                 val crashCallStack = crashDataStore.crashInfo().first()
                 val bugDescription = buildString {
                     append(problemDescription)
+                    ghIssueNumber?.let {
+                        append("\n\nhttps://github.com/element-hq/element-x-android/issues/$it")
+                    }
                     if (crashCallStack.isNotEmpty() && withCrashLogs) {
                         append("\n\n\n\n--------------------------------- crash call stack ---------------------------------\n")
                         append(crashCallStack)
                     }
-                }
+                }.truncateDescription()
                 val gzippedFiles = mutableListOf<File>()
-                if (withDevicesLogs) {
-                    val files = getLogFiles().sortedByDescending { it.lastModified() }
-                    files.mapNotNullTo(gzippedFiles) { file ->
-                        when {
-                            file.extension == "gz" -> file
-                            else -> compressFile(file)
-                        }
-                    }
-                }
+                var filesTooBig = emptyList<String>()
+
                 if (withCrashLogs || withDevicesLogs) {
                     saveLogCat()
+                        ?.takeIf { it.length() < RageshakeConfig.MAX_LOG_CONTENT_SIZE }
+                        ?.takeIf { countLogLines(it) + totalLogLines < RageshakeConfig.MAX_LOG_LINES_SIZE }
                         ?.let { logCatFile ->
                             compressFile(logCatFile).also {
                                 logCatFile.safeDelete()
@@ -183,6 +185,7 @@ class DefaultBugReporter(
                     .addFormDataPart("device", Build.MODEL.trim())
                     .addFormDataPart("locale", Locale.getDefault().toString())
                     .addFormDataPart("sdk_sha", sdkMetadata.sdkGitSha)
+                    .addFormDataPart("sha", buildMeta.gitRevision)
                     .addFormDataPart("local_time", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME))
                     .addFormDataPart("utc_time", LocalDateTime.ofInstant(Instant.now(), ZoneOffset.UTC).format(DateTimeFormatter.ISO_DATE_TIME))
                     .addFormDataPart("app_id", buildMeta.applicationId)
@@ -191,6 +194,7 @@ class DefaultBugReporter(
                     .addFormDataPart("label", buildMeta.versionName)
                     .addFormDataPart("label", buildMeta.flavorDescription)
                     .addFormDataPart("branch_name", buildMeta.gitBranchName)
+
                 userId?.let {
                     matrixClientProvider.getOrNull(it)?.let { client ->
                         val curveKey = client.encryptionService.deviceCurve25519()
@@ -201,15 +205,57 @@ class DefaultBugReporter(
 
                         if (sendPushRules) {
                             client.notificationSettingsService.getRawPushRules().getOrNull()?.let { pushRules ->
-                                builder.addFormDataPart(
-                                    name = "file",
-                                    filename = "push_rules.json",
-                                    body = pushRules.toByteArray().toRequestBody(MimeTypes.Json.toMediaTypeOrNull())
-                                )
+                                val logLines = pushRules.lineSequence().count()
+
+                                if (totalLogLines + logLines < RageshakeConfig.MAX_LOG_LINES_SIZE) {
+                                    builder.addFormDataPart(
+                                        name = "file",
+                                        filename = "push_rules.json",
+                                        body = pushRules.toByteArray().toRequestBody(MimeTypes.Json.toMediaTypeOrNull())
+                                    )
+                                } else {
+                                    Timber.w("Could not upload push rules because it would exceed the max log lines size")
+                                }
                             }
                         }
                     }
                 }
+
+                if (withDevicesLogs) {
+                    val files = getLogFiles().sortedByDescending { it.lastModified() }
+                    val filesBySize = files.groupBy {
+                        it.length() < RageshakeConfig.MAX_LOG_CONTENT_SIZE
+                    }.toMutableMap()
+
+                    filesBySize[true].orEmpty().mapNotNullTo(gzippedFiles) { file ->
+                        val logLines = countLogLines(file)
+                        totalLogLines += logLines
+
+                        when {
+                            totalLogLines > RageshakeConfig.MAX_LOG_LINES_SIZE -> {
+                                // Add it to the list of omitted files too
+                                (filesBySize.getOrPut(false) { mutableListOf() } as MutableList<File>).add(file)
+
+                                Timber.e(
+                                    "Could not upload file ${file.name} because it would exceed the max log lines size " +
+                                        "($totalLogLines/${RageshakeConfig.MAX_LOG_LINES_SIZE}"
+                                )
+
+                                totalLogLines -= logLines
+
+                                null
+                            }
+                            file.extension == "gz" -> file
+                            else -> compressFile(file)
+                        }
+                    }
+                    filesTooBig = filesBySize[false].orEmpty().map { it.name }
+                }
+
+                if (filesTooBig.isNotEmpty()) {
+                    builder.addFormDataPart("omitted_logs", filesTooBig.toString())
+                }
+
                 if (crashCallStack.isNotEmpty() && withCrashLogs) {
                     builder.addFormDataPart("label", "crash")
                 }
@@ -390,7 +436,10 @@ class DefaultBugReporter(
         ) {
             val logDirectory = logDirectory()
             logDirectory.listFiles()
-                ?.filter { it.isFile && !it.name.endsWith(LOG_CAT_FILENAME) }
+                ?.filter {
+                    it.isFile &&
+                        !it.name.endsWith(LOG_CAT_FILENAME)
+                }
         }.orEmpty()
     }
 
@@ -439,6 +488,19 @@ class DefaultBugReporter(
                 }
         } catch (e: IOException) {
             Timber.e(e, "getLogCatContent fails")
+        }
+    }
+
+    private fun countLogLines(file: File): Int {
+        return file.reader().useLines { it.count() }
+    }
+
+    private fun String.truncateDescription(): String {
+        return if (length <= RageshakeConfig.MAX_DESCRIPTION_SIZE) {
+            this
+        } else {
+            take(RageshakeConfig.MAX_DESCRIPTION_SIZE) +
+                "\n\n--------------------------------- truncated, see the attached logs ---------------------------------"
         }
     }
 }

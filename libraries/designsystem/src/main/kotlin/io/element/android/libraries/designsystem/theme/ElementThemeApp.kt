@@ -18,11 +18,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.theme.Theme
-import io.element.android.compound.theme.isDark
 import io.element.android.compound.theme.mapToTheme
 import io.element.android.compound.tokens.generated.SemanticColors
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 
 val LocalBuildMeta = staticCompositionLocalOf {
@@ -54,21 +55,24 @@ val LocalBuildMeta = staticCompositionLocalOf {
 @Composable
 fun ElementThemeApp(
     appPreferencesStore: AppPreferencesStore,
+    featureFlagService: FeatureFlagService,
     compoundLight: SemanticColors,
     compoundDark: SemanticColors,
     buildMeta: BuildMeta,
     content: @Composable () -> Unit,
 ) {
-    val theme by remember {
-        appPreferencesStore.getThemeFlow().mapToTheme()
-    }
-        .collectAsState(initial = Theme.System)
+    val isBlackThemeAllowed by remember {
+        featureFlagService.isFeatureEnabledFlow(FeatureFlags.AllowBlackTheme)
+    }.collectAsState(initial = false)
+    val theme by remember(isBlackThemeAllowed) {
+        appPreferencesStore.getThemeFlow().mapToTheme(allowBlackTheme = isBlackThemeAllowed)
+    }.collectAsState(initial = Theme.System)
     LaunchedEffect(theme) {
         AppCompatDelegate.setDefaultNightMode(
             when (theme) {
                 Theme.System -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
                 Theme.Light -> AppCompatDelegate.MODE_NIGHT_NO
-                Theme.Dark -> AppCompatDelegate.MODE_NIGHT_YES
+                Theme.Dark, Theme.Black -> AppCompatDelegate.MODE_NIGHT_YES
             }
         )
     }
@@ -76,7 +80,7 @@ fun ElementThemeApp(
         LocalBuildMeta provides buildMeta,
     ) {
         ElementTheme(
-            darkTheme = theme.isDark(),
+            theme = theme,
             content = content,
             compoundLight = compoundLight,
             compoundDark = compoundDark,

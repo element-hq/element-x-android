@@ -70,10 +70,10 @@ class LabsPresenterTest {
             val feature = initialItem.features.first()
             assertThat(feature.isEnabled).isFalse()
             // Toggle the feature, should be true now
-            initialItem.eventSink(LabsEvents.ToggleFeature(feature))
+            initialItem.eventSink(LabsEvent.ToggleFeature(feature))
             assertThat(awaitItem().features.first().isEnabled).isTrue()
             // Toggle the feature, should be false now
-            initialItem.eventSink(LabsEvents.ToggleFeature(feature))
+            initialItem.eventSink(LabsEvent.ToggleFeature(feature))
             assertThat(awaitItem().features.first().isEnabled).isFalse()
         }
     }
@@ -99,7 +99,7 @@ class LabsPresenterTest {
             assertThat(feature.isEnabled).isFalse()
             assertThat(initialItem.isApplyingChanges).isFalse()
             // Toggle the feature
-            initialItem.eventSink(LabsEvents.ToggleFeature(feature))
+            initialItem.eventSink(LabsEvent.ToggleFeature(feature))
             assertThat(awaitItem().features.first().isEnabled).isTrue()
             // The clear cache use case should have been called
             assertThat(awaitItem().isApplyingChanges).isTrue()

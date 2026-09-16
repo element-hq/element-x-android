@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_room_change_permissions_administrators">"Kun for administratorer"</string>
+  <string name="screen_room_change_permissions_administrators">"Admin"</string>
   <string name="screen_room_change_permissions_ban_people">"Forby folk"</string>
+  <string name="screen_room_change_permissions_change_settings">"Endre innstillinger"</string>
   <string name="screen_room_change_permissions_delete_messages">"Fjern meldinger"</string>
-  <string name="screen_room_change_permissions_invite_people">"Inviter folk og godta forespørsler om å bli med"</string>
+  <string name="screen_room_change_permissions_everyone">"Medlem"</string>
+  <string name="screen_room_change_permissions_invite_people">"Inviter folk"</string>
+  <string name="screen_room_change_permissions_live_location">"Del lokasjon i sanntid"</string>
+  <string name="screen_room_change_permissions_manage_space">"Administrer området"</string>
+  <string name="screen_room_change_permissions_manage_space_rooms">"Administrer rom"</string>
+  <string name="screen_room_change_permissions_member_moderation">"Administrer medlemmer"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Meldinger og innhold"</string>
-  <string name="screen_room_change_permissions_moderators">"Administratorer og moderatorer"</string>
-  <string name="screen_room_change_permissions_remove_people">"Fjern folk og avslå forespørsler om å bli med"</string>
+  <string name="screen_room_change_permissions_moderators">"Moderator"</string>
+  <string name="screen_room_change_permissions_remove_people">"Fjern folk"</string>
   <string name="screen_room_change_permissions_room_avatar">"Endre romavatar"</string>
-  <string name="screen_room_change_permissions_room_details">"Rediger rom"</string>
+  <string name="screen_room_change_permissions_room_details">"Rediger detaljer"</string>
   <string name="screen_room_change_permissions_room_name">"Endre romnavn"</string>
   <string name="screen_room_change_permissions_room_topic">"Endre temaet til rommet"</string>
   <string name="screen_room_change_permissions_send_messages">"Send meldinger"</string>
+  <string name="screen_room_change_permissions_title">"Tillatelser"</string>
   <string name="screen_room_change_role_administrators_title">"Rediger administratorer"</string>
   <string name="screen_room_change_role_confirm_add_admin_description">"Du vil ikke kunne angre denne handlingen. Du forfremmer brukeren til å ha samme rettighetsnivå som deg."</string>
   <string name="screen_room_change_role_confirm_add_admin_title">"Legg til administrator?"</string>
@@ -31,7 +38,13 @@
   <string name="screen_room_change_role_section_users">"Medlemmer"</string>
   <string name="screen_room_change_role_unsaved_changes_description">"Du har endringer som ikke er lagret."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Lagre endringer?"</string>
-  <string name="screen_room_member_list_banned_empty">"Det er ingen utestengte brukere i dette rommet."</string>
+  <string name="screen_room_member_list_banned_empty">"Det er ingen utestengte brukere."</string>
+  <plurals name="screen_room_member_list_banned_header_title">
+    <item quantity="one">"%1$d utestengt"</item>
+    <item quantity="other">"%1$d utestengt"</item>
+  </plurals>
+  <string name="screen_room_member_list_empty_search_subtitle">"Sjekk stavemåten eller prøv et nytt søk"</string>
+  <string name="screen_room_member_list_empty_search_title">"Ingen resultater for \"%1$s\""</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d person"</item>
     <item quantity="other">"%1$d personer"</item>
@@ -43,8 +56,13 @@
   <string name="screen_room_member_list_manage_member_unban_title">"Fjern utestengelsen fra rommet"</string>
   <string name="screen_room_member_list_mode_banned">"Utestengt"</string>
   <string name="screen_room_member_list_mode_members">"Medlemmer"</string>
-  <string name="screen_room_member_list_role_administrator">"Kun for administratorer"</string>
-  <string name="screen_room_member_list_role_moderator">"Administratorer og moderatorer"</string>
+  <plurals name="screen_room_member_list_pending_header_title">
+    <item quantity="one">"%1$d invitert"</item>
+    <item quantity="other">"%1$d invitert"</item>
+  </plurals>
+  <string name="screen_room_member_list_pending_status">"Venter"</string>
+  <string name="screen_room_member_list_role_administrator">"Admin"</string>
+  <string name="screen_room_member_list_role_moderator">"Moderator"</string>
   <string name="screen_room_member_list_role_owner">"Eier"</string>
   <string name="screen_room_member_list_room_members_header_title">"Medlemmer av rommet"</string>
   <string name="screen_room_member_list_unbanning_user">"Oppheve utestengelsen av %1$s"</string>
@@ -57,10 +75,12 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"Meldinger og innhold"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderatorer"</string>
   <string name="screen_room_roles_and_permissions_owners">"Eiere"</string>
+  <string name="screen_room_roles_and_permissions_permissions_header">"Tillatelser"</string>
   <string name="screen_room_roles_and_permissions_reset">"Tilbakestill tillatelser"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Når du har tilbakestilt tillatelsene, mister du gjeldende innstillinger."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Vil du tilbakestille tillatelsene?"</string>
   <string name="screen_room_roles_and_permissions_roles_header">"Roller"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Romdetaljer"</string>
+  <string name="screen_room_roles_and_permissions_space_details">"Detaljer om området"</string>
   <string name="screen_room_roles_and_permissions_title">"Roller og tillatelser"</string>
 </resources>

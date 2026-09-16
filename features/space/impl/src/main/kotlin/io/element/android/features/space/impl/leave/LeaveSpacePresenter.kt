@@ -67,9 +67,9 @@ class LeaveSpacePresenter(
                 .orEmpty()
                 .partition { it.spaceRoom.roomId == leaveSpaceHandle.id }
             // By default select all rooms that can be left
-            val otherRoomsExcludingDm = otherRooms.filter { it.spaceRoom.isDirect != true }
+            val otherRoomsExcludingDm = otherRooms.filter { it.spaceRoom.isDm != true }
             selectedRoomIds = otherRoomsExcludingDm
-                .filter { it.isLastAdmin.not() }
+                .filter { it.isLastOwner.not() }
                 .map { it.spaceRoom.roomId }
             leaveSpaceRooms = rooms.fold(
                 onSuccess = {
@@ -91,48 +91,51 @@ class LeaveSpacePresenter(
                 it.others.map { room ->
                     SelectableSpaceRoom(
                         spaceRoom = room.spaceRoom,
-                        isLastAdmin = room.isLastAdmin,
+                        isLastOwner = room.isLastOwner,
+                        joinedMembersCount = room.spaceRoom.numJoinedMembers,
                         isSelected = selectedRoomIds.contains(room.spaceRoom.roomId),
                     )
                 }.toImmutableList()
             }
         }
 
-        fun handleEvent(event: LeaveSpaceEvents) {
+        fun handleEvent(event: LeaveSpaceEvent) {
             when (event) {
-                LeaveSpaceEvents.Retry -> {
+                LeaveSpaceEvent.Retry -> {
                     leaveSpaceRooms = AsyncData.Loading()
                     retryCount += 1
                 }
-                LeaveSpaceEvents.DeselectAllRooms -> {
+                LeaveSpaceEvent.DeselectAllRooms -> {
                     selectedRoomIds = persistentSetOf()
                 }
-                LeaveSpaceEvents.SelectAllRooms -> {
+                LeaveSpaceEvent.SelectAllRooms -> {
                     selectedRoomIds = selectableSpaceRooms.dataOrNull()
                         .orEmpty()
-                        .filter { it.isLastAdmin.not() }
+                        .filter { it.isLastOwner.not() }
                         .map { it.spaceRoom.roomId }
                 }
-                is LeaveSpaceEvents.ToggleRoomSelection -> {
+                is LeaveSpaceEvent.ToggleRoomSelection -> {
                     selectedRoomIds = if (selectedRoomIds.contains(event.roomId)) {
                         selectedRoomIds - event.roomId
                     } else {
                         selectedRoomIds + event.roomId
                     }
                 }
-                LeaveSpaceEvents.LeaveSpace -> coroutineScope.leaveSpace(
+                LeaveSpaceEvent.LeaveSpace -> coroutineScope.leaveSpace(
                     leaveSpaceAction = leaveSpaceAction,
                     selectedRoomIds = selectedRoomIds,
                 )
-                LeaveSpaceEvents.CloseError -> {
+                LeaveSpaceEvent.CloseError -> {
                     leaveSpaceAction.value = AsyncAction.Uninitialized
                 }
             }
         }
 
+        val currentSpaceToLeave = leaveSpaceRooms.dataOrNull()?.current
         return LeaveSpaceState(
-            spaceName = leaveSpaceRooms.dataOrNull()?.current?.spaceRoom?.displayName,
-            isLastAdmin = leaveSpaceRooms.dataOrNull()?.current?.isLastAdmin == true,
+            spaceName = currentSpaceToLeave?.spaceRoom?.displayName,
+            needsOwnerChange = currentSpaceToLeave?.let { it.spaceRoom.numJoinedMembers > 1 && it.isLastOwner } == true,
+            areCreatorsPrivileged = currentSpaceToLeave?.areCreatorsPrivileged == true,
             selectableSpaceRooms = selectableSpaceRooms,
             leaveSpaceAction = leaveSpaceAction.value,
             eventSink = ::handleEvent,

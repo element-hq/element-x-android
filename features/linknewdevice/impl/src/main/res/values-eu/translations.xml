@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_link_new_device_desktop_scanning_title">"Eskaneatu QR kodea"</string>
+  <string name="screen_link_new_device_desktop_step3">"Eskaneatu QR kodea gailu honekin"</string>
+  <string name="screen_link_new_device_desktop_submit">"Eskaneatzeko prest"</string>
+  <string name="screen_link_new_device_error_app_not_supported_subtitle">"Zure kontu-hornitzailea ez da %1$s-ekin bateragarria."</string>
+  <string name="screen_link_new_device_error_app_not_supported_title">"%1$s ez da bateragarria"</string>
+  <string name="screen_link_new_device_error_not_supported_title">"QR kodea ez da bateragarria"</string>
+  <string name="screen_link_new_device_error_request_cancelled_subtitle">"Saioa hasteko eskaera bertan behera utzi da beste gailuan"</string>
+  <string name="screen_link_new_device_error_request_cancelled_title">"Saioa hasteko eskaera bertan behera utzi da"</string>
+  <string name="screen_link_new_device_error_request_timeout_subtitle">"Saio-hasiera iraungi da. Saiatu berriro."</string>
+  <string name="screen_link_new_device_error_request_timeout_title">"Saio-hasiera ez da garaiz gauzatu."</string>
+  <string name="screen_link_new_device_mobile_step2">"Hautatu %1$s"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_description">"Ezin izan da konexio segururik ezarri gailu berriarekin. Lehendik dauden gailuak seguru daude oraindik ere eta ez duzu haietaz kezkatu beharrik."</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_header">"Orain zer?"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_item_1">"Saiatu berriro QR kodearekin saioa hasten sare-arazo bat izan bada"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Horrek ez badu funtzionatzen, hasi saioa eskuz"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_title">"Konexioa ez da segurua"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"Gailu honetan agertzen diren bi digituak sartzeko eskatuko zaizu."</string>
+  <string name="screen_qr_code_login_device_code_title">"Sartu beheko zenbakia beste gailuan"</string>
+  <string name="screen_qr_code_login_error_cancelled_subtitle">"Saioa hasteko eskaera bertan behera utzi da beste gailuan"</string>
+  <string name="screen_qr_code_login_error_cancelled_title">"Saioa hasteko eskaera bertan behera utzi da"</string>
+  <string name="screen_qr_code_login_error_declined_subtitle">"Saioa hasteari uko egin zaio beste dispositiboan."</string>
+  <string name="screen_qr_code_login_error_declined_title">"Saio-hasiera ukatu da"</string>
+  <string name="screen_qr_code_login_error_expired_subtitle">"Saio-hasiera iraungi da. Saiatu berriro."</string>
+  <string name="screen_qr_code_login_error_expired_title">"Saio-hasiera ez da garaiz gauzatu."</string>
+  <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"Beste gailua ez da bateragarria QR kodeak erabiliz %s(e)n saioa hastearekin.
+
+Saiatu saioa eskuz hasten, edo eskaneatu QR kodea beste gailu batean."</string>
+  <string name="screen_qr_code_login_error_linking_not_suported_title">"QR kodea ez da bateragarria"</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_subtitle">"Zure kontu-hornitzailea ez da %1$s-ekin bateragarria."</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_title">"%1$s ez da bateragarria"</string>
+  <string name="screen_qr_code_login_invalid_scan_state_description">"Erabili beste gailuan agertzen den QR kodea."</string>
+  <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Saiatu berriro"</string>
+  <string name="screen_qr_code_login_invalid_scan_state_subtitle">"QR kode okerra"</string>
+  <string name="screen_qr_code_login_no_camera_permission_state_title">"Baimendu kameraren sarbidea QR kodea eskaneatzeko"</string>
+  <string name="screen_qr_code_login_unknown_error_description">"Ustekabeko errore bat gertatu da. Saiatu berriro."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"Beste gailuaren zain"</string>
+</resources>

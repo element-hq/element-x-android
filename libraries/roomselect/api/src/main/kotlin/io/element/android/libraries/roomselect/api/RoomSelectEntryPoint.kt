@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 interface RoomSelectEntryPoint : FeatureEntryPoint {
     data class Params(
         val mode: RoomSelectMode,
+        val maxNumberOfRooms: Int,
     )
 
     fun createNode(
@@ -29,5 +30,9 @@ interface RoomSelectEntryPoint : FeatureEntryPoint {
     interface Callback : Plugin {
         fun onRoomSelected(roomIds: List<RoomId>)
         fun onCancel()
+    }
+
+    companion object {
+        const val DEFAULT_MAX_NUMBER_OF_ROOMS = 10
     }
 }

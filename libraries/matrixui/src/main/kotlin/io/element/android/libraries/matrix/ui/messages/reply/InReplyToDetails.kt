@@ -40,6 +40,12 @@ fun InReplyToDetails.eventId() = when (this) {
     is InReplyToDetails.Error -> eventId
 }
 
+fun InReplyToDetails.content() = when (this) {
+    is InReplyToDetails.Ready -> eventContent
+    is InReplyToDetails.Loading -> null
+    is InReplyToDetails.Error -> null
+}
+
 fun InReplyTo.map(
     permalinkParser: PermalinkParser,
 ) = when (this) {

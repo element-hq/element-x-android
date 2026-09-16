@@ -11,6 +11,7 @@ package io.element.android.libraries.matrix.ui.messages
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageTypeWithAttachment
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
@@ -25,6 +26,19 @@ import org.jsoup.select.NodeVisitor
 fun TextMessageType.toPlainText(
     permalinkParser: PermalinkParser,
 ) = formatted?.toPlainText(permalinkParser) ?: body
+
+/**
+ * Converts the HTML string in [MessageTypeWithAttachment.formattedCaption] to a plain text representation by parsing it and removing all formatting.
+ * If the caption is not formatted or the format is not [MessageFormat.HTML], the [MessageTypeWithAttachment.caption] is returned instead.
+ * If there is no caption, returns [default].
+ */
+fun MessageTypeWithAttachment.toPlainText(
+    permalinkParser: PermalinkParser,
+    default: String = filename,
+): String {
+    val plainTextFromFormatted = formattedCaption?.toPlainText(permalinkParser)
+    return plainTextFromFormatted ?: caption ?: default
+}
 
 /**
  * Converts the HTML string in [FormattedBody.body] to a plain text representation by parsing it and removing all formatting.
@@ -51,12 +65,21 @@ fun Document.toPlainText(): String {
     return visitor.build()
 }
 
+private const val FALLBACK_REPLY_NODE_TAG = "mx-reply"
+
 private class PlainTextNodeVisitor : NodeVisitor {
     private val builder = StringBuilder()
 
     override fun head(node: Node, depth: Int) {
-        if (node is TextNode && node.text().isNotBlank()) {
-            builder.append(node.text())
+        if (node is TextNode) {
+            // If the text node is blank, only add a single whitespace char if there wasn't already one
+            if (node.text().isBlank()) {
+                if (builder.lastOrNull()?.isWhitespace() == false) {
+                    builder.append(" ")
+                }
+            } else {
+                builder.append(node.text())
+            }
         } else if (node is Element && node.tagName() == "li") {
             val index = node.elementSiblingIndex() + 1
             val isOrdered = node.parent()?.nodeName()?.lowercase() == "ol"
@@ -71,6 +94,9 @@ private class PlainTextNodeVisitor : NodeVisitor {
             } else {
                 builder.append("• ")
             }
+        } else if (node is Element && node.tagName() == FALLBACK_REPLY_NODE_TAG) {
+            // Remove the fallback reply node and its contents so they aren't added to the plain text message
+            node.remove()
         } else if (node is Element && node.isBlock && builder.lastOrNull() != '\n') {
             builder.append("\n")
         }

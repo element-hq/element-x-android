@@ -21,10 +21,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.focused
-import androidx.compose.ui.semantics.progressBarRangeInfo
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,7 +43,6 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.InvisibleButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -65,7 +62,7 @@ fun IncomingVerificationView(
     val step = state.step
 
     BackHandler {
-        state.eventSink(IncomingVerificationViewEvents.GoBack)
+        state.eventSink(IncomingVerificationViewEvent.GoBack)
     }
     HeaderFooterPage(
         modifier = modifier,
@@ -73,11 +70,7 @@ fun IncomingVerificationView(
             TopAppBar(
                 title = {},
                 navigationIcon = {
-                    when {
-                        step is Step.Initial && !step.isWaiting -> Unit
-                        step is Step.Completed -> Unit
-                        else -> BackButton(onClick = { state.eventSink(IncomingVerificationViewEvents.GoBack) })
-                    }
+                    BackButton(onClick = { state.eventSink(IncomingVerificationViewEvent.GoBack) })
                 },
                 colors = topAppBarColors(containerColor = Color.Transparent),
             )
@@ -103,19 +96,11 @@ fun IncomingVerificationView(
 private fun IncomingVerificationHeader(step: Step, request: VerificationRequest.Incoming) {
     val iconStyle = when (step) {
         Step.Canceled -> BigIcon.Style.AlertSolid
-        is Step.Initial -> if (step.isWaiting) {
-            BigIcon.Style.Loading
-        } else {
-            when (request) {
-                is VerificationRequest.Incoming.OtherSession -> BigIcon.Style.Default(CompoundIcons.LockSolid())
-                is VerificationRequest.Incoming.User -> BigIcon.Style.Default(CompoundIcons.UserProfileSolid())
-            }
+        is Step.Initial -> when (request) {
+            is VerificationRequest.Incoming.OtherSession -> BigIcon.Style.Default(CompoundIcons.Devices())
+            is VerificationRequest.Incoming.User -> BigIcon.Style.Default(CompoundIcons.UserProfileSolid())
         }
-        is Step.Verifying -> if (step.isWaiting) {
-            BigIcon.Style.Loading
-        } else {
-            BigIcon.Style.Default(CompoundIcons.ReactionSolid())
-        }
+        is Step.Verifying -> BigIcon.Style.Default(CompoundIcons.ReactionSolid())
         Step.Completed -> BigIcon.Style.SuccessSolid
         Step.Failure -> BigIcon.Style.AlertSolid
     }
@@ -159,10 +144,6 @@ private fun IncomingVerificationHeader(step: Step, request: VerificationRequest.
             .semantics(mergeDescendants = true) {
                 contentDescription = timeLimitMessage
                 focused = true
-                if (iconStyle == BigIcon.Style.Loading) {
-                    // Same code than Modifier.progressSemantics()
-                    progressBarRangeInfo = ProgressBarRangeInfo.Indeterminate
-                }
             }
             .focusable(),
         iconStyle = iconStyle,
@@ -185,7 +166,7 @@ private fun IncomingVerificationContent(
 
 @Composable
 private fun ContentInitial(
-    initialIncoming: Step.Initial,
+    stepInitial: Step.Initial,
     request: VerificationRequest.Incoming,
 ) {
     when (request) {
@@ -195,9 +176,9 @@ private fun ContentInitial(
                 verticalArrangement = Arrangement.spacedBy(24.dp),
             ) {
                 SessionDetailsView(
-                    deviceName = initialIncoming.deviceDisplayName,
-                    deviceId = initialIncoming.deviceId,
-                    signInFormattedTimestamp = initialIncoming.formattedSignInTime,
+                    deviceName = stepInitial.deviceDisplayName,
+                    deviceId = stepInitial.deviceId,
+                    signInFormattedTimestamp = stepInitial.formattedSignInTime,
                 )
                 Text(
                     modifier = Modifier
@@ -227,48 +208,42 @@ private fun ContentInitial(
 private fun IncomingVerificationBottomMenu(
     state: IncomingVerificationState,
 ) {
-    val step = state.step
     val eventSink = state.eventSink
-
-    when (step) {
+    when (val step = state.step) {
         is Step.Initial -> {
-            if (step.isWaiting) {
-                // Show nothing
-            } else {
-                VerificationBottomMenu {
-                    Button(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(CommonStrings.action_start_verification),
-                        onClick = { eventSink(IncomingVerificationViewEvents.StartVerification) },
-                    )
-                    TextButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(CommonStrings.action_ignore),
-                        onClick = { eventSink(IncomingVerificationViewEvents.IgnoreVerification) },
-                    )
-                }
+            VerificationBottomMenu {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(CommonStrings.action_start_verification),
+                    enabled = !step.isWaiting,
+                    showProgress = step.isWaiting,
+                    onClick = { eventSink(IncomingVerificationViewEvent.StartVerification) },
+                )
+                TextButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(CommonStrings.action_ignore),
+                    enabled = !step.isWaiting,
+                    onClick = { eventSink(IncomingVerificationViewEvent.IgnoreVerification) },
+                )
             }
         }
         is Step.Verifying -> {
-            if (step.isWaiting) {
-                // Add invisible buttons to keep the same screen layout
-                VerificationBottomMenu {
-                    InvisibleButton()
-                    InvisibleButton()
-                }
-            } else {
-                VerificationBottomMenu {
-                    Button(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(R.string.screen_session_verification_they_match),
-                        onClick = { eventSink(IncomingVerificationViewEvents.ConfirmVerification) },
-                    )
-                    TextButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(R.string.screen_session_verification_they_dont_match),
-                        onClick = { eventSink(IncomingVerificationViewEvents.DeclineVerification) },
-                    )
-                }
+            VerificationBottomMenu {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.screen_session_verification_they_match),
+                    enabled = !step.isWaiting,
+                    showProgress = step.isWaiting,
+                    onClick = {
+                        eventSink(IncomingVerificationViewEvent.ConfirmVerification)
+                    },
+                )
+                TextButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.screen_session_verification_they_dont_match),
+                    enabled = !step.isWaiting,
+                    onClick = { eventSink(IncomingVerificationViewEvent.DeclineVerification) },
+                )
             }
         }
         Step.Canceled,
@@ -278,7 +253,9 @@ private fun IncomingVerificationBottomMenu(
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(CommonStrings.action_done),
-                    onClick = { eventSink(IncomingVerificationViewEvents.GoBack) },
+                    onClick = {
+                        eventSink(IncomingVerificationViewEvent.GoBack)
+                    },
                 )
             }
         }
@@ -287,7 +264,9 @@ private fun IncomingVerificationBottomMenu(
 
 @PreviewsDayNight
 @Composable
-internal fun IncomingVerificationViewPreview(@PreviewParameter(IncomingVerificationStateProvider::class) state: IncomingVerificationState) = ElementPreview {
+internal fun IncomingVerificationViewPreview(@PreviewParameter(
+    IncomingVerificationStatePreviewParam::class
+) state: IncomingVerificationState) = ElementPreview {
     IncomingVerificationView(
         state = state,
     )

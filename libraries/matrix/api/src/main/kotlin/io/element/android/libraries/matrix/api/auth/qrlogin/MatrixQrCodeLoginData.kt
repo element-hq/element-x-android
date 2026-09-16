@@ -8,6 +8,12 @@
 
 package io.element.android.libraries.matrix.api.auth.qrlogin
 
+/**
+ * The decoded content of a login QR code, as produced by [MatrixQrCodeLoginDataFactory].
+ *
+ * The underlying data is opaque to the app: it is passed back to the SDK to perform the login.
+ */
 interface MatrixQrCodeLoginData {
+    /** The homeserver advertised by the QR code, or `null` when it does not carry one. */
     fun serverName(): String?
 }

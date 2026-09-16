@@ -12,61 +12,66 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import dev.zacsweers.metro.Inject
 import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
-import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.error.ChangeServerError
+import io.element.android.features.login.impl.localnetwork.LocalNetworkPermissionGate
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
+import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 
 @Inject
 class ChangeServerPresenter(
     private val authenticationService: MatrixAuthenticationService,
     private val accountProviderDataSource: AccountProviderDataSource,
     private val defaultAccountProviderAccessControl: DefaultAccountProviderAccessControl,
+    private val localNetworkPermissionGate: LocalNetworkPermissionGate,
 ) : Presenter<ChangeServerState> {
     @Composable
     override fun present(): ChangeServerState {
-        val localCoroutineScope = rememberCoroutineScope()
-
-        val changeServerAction: MutableState<AsyncData<Unit>> = remember {
+        val changeServerAction: MutableState<AsyncData<MatrixHomeServerDetails>> = remember {
             mutableStateOf(AsyncData.Uninitialized)
         }
 
-        fun handleEvent(event: ChangeServerEvents) {
+        val gateState = localNetworkPermissionGate.present<AccountProvider>(
+            urlOf = { provider -> provider.serverNameOrBaseUrl() },
+            onProceed = { provider -> changeServer(provider, changeServerAction) },
+        )
+
+        fun handleEvent(event: ChangeServerEvent) {
             when (event) {
-                is ChangeServerEvents.ChangeServer -> localCoroutineScope.changeServer(event.accountProvider, changeServerAction)
-                ChangeServerEvents.ClearError -> changeServerAction.value = AsyncData.Uninitialized
+                ChangeServerEvent.ClearError -> changeServerAction.value = AsyncData.Uninitialized
+                is ChangeServerEvent.ChangeServer -> gateState.submit(event.accountProvider)
+                ChangeServerEvent.DismissLocalNetworkPermission -> gateState.abort()
+                ChangeServerEvent.RequestLocalNetworkPermission -> gateState.requestPermission()
             }
         }
 
         return ChangeServerState(
             changeServerAction = changeServerAction.value,
+            localNetworkPermissionDialog = gateState.dialog,
             eventSink = ::handleEvent,
         )
     }
 
-    private fun CoroutineScope.changeServer(
+    private suspend fun changeServer(
         data: AccountProvider,
-        changeServerAction: MutableState<AsyncData<Unit>>,
-    ) = launch {
+        changeServerAction: MutableState<AsyncData<MatrixHomeServerDetails>>,
+    ) {
         suspend {
-            defaultAccountProviderAccessControl.assertIsAllowedToConnectToAccountProvider(
-                title = data.title,
-                accountProviderUrl = data.url,
-            )
-            val details = authenticationService.setHomeserver(data.url).getOrThrow()
+            defaultAccountProviderAccessControl.assertIsAllowedToConnectToAccountProvider(data)
+            val details = authenticationService.setHomeserver(data.serverNameOrBaseUrl()).getOrThrow()
             if (!details.isSupported) {
                 throw ChangeServerError.UnsupportedServer
             }
             // Homeserver is valid, remember user choice
             accountProviderDataSource.setAccountProvider(data)
+            // Return the resolved details so the caller can sign in without configuring the homeserver again.
+            details
         }.runCatchingUpdatingState(changeServerAction, errorTransform = ChangeServerError::from)
     }
 }

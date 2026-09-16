@@ -12,14 +12,13 @@ package io.element.android.features.space.impl.leave
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -40,6 +39,7 @@ import io.element.android.features.space.impl.R
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
+import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.async.AsyncFailure
@@ -54,7 +54,6 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Checkbox
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconSource
-import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -71,30 +70,42 @@ fun LeaveSpaceView(
     state: LeaveSpaceState,
     onCancel: () -> Unit,
     onRolesAndPermissionsClick: () -> Unit,
+    onChooseOwnersClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Scaffold(
+    HeaderFooterPage(
         modifier = modifier,
+        contentPadding = PaddingValues(bottom = 14.dp),
         topBar = {
-            LeaveSpaceHeader(
-                state = state,
-                onBackClick = onCancel,
+            TopAppBar(
+                navigationIcon = {
+                    BackButton(onClick = onCancel)
+                },
+                title = {},
             )
         },
-        containerColor = ElementTheme.colors.bgCanvasDefault,
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .padding(padding)
-                .imePadding()
-                .consumeWindowInsets(padding)
-                .fillMaxSize()
-        ) {
-            LazyColumn(
-                modifier = Modifier
-                    .weight(1f),
-            ) {
-                if (state.isLastAdmin.not()) {
+        header = {
+            LeaveSpaceHeader(state = state)
+        },
+        footer = {
+            LeaveSpaceButtons(
+                showLeaveButton = state.showLeaveButton,
+                selectedRoomsCount = state.selectedRoomsCount,
+                onLeaveSpace = {
+                    state.eventSink(LeaveSpaceEvent.LeaveSpace)
+                },
+                onCancel = onCancel,
+                showRolesAndPermissionsButton = state.needsOwnerChange && !state.areCreatorsPrivileged,
+                showChooseOwnersButton = state.needsOwnerChange && state.areCreatorsPrivileged,
+                onChooseOwnersButtonClick = onChooseOwnersClick,
+                onRolesAndPermissionsClick = onRolesAndPermissionsClick,
+            )
+        },
+        content = {
+            if (state.needsOwnerChange.not()) {
+                LazyColumn(
+                    modifier = Modifier.padding(top = 20.dp),
+                ) {
                     when (state.selectableSpaceRooms) {
                         is AsyncData.Success -> {
                             // List rooms where the user is the only admin
@@ -104,7 +115,7 @@ fun LeaveSpaceView(
                                         selectableSpaceRoom = selectableSpaceRoom,
                                         showCheckBox = state.hasOnlyLastAdminRoom.not(),
                                         onClick = {
-                                            state.eventSink(LeaveSpaceEvents.ToggleRoomSelection(selectableSpaceRoom.spaceRoom.roomId))
+                                            state.eventSink(LeaveSpaceEvent.ToggleRoomSelection(selectableSpaceRoom.spaceRoom.roomId))
                                         }
                                     )
                                 }
@@ -114,7 +125,7 @@ fun LeaveSpaceView(
                             AsyncFailure(
                                 throwable = state.selectableSpaceRooms.error,
                                 onRetry = {
-                                    state.eventSink(LeaveSpaceEvents.Retry)
+                                    state.eventSink(LeaveSpaceEvent.Retry)
                                 },
                             )
                         }
@@ -125,50 +136,41 @@ fun LeaveSpaceView(
                     }
                 }
             }
-            LeaveSpaceButtons(
-                showLeaveButton = state.showLeaveButton,
-                selectedRoomsCount = state.selectedRoomsCount,
-                onLeaveSpace = {
-                    state.eventSink(LeaveSpaceEvents.LeaveSpace)
-                },
-                onCancel = onCancel,
-                // TODO enable when navigation is ready
-                showRolesAndPermissionsButton = false, // state.isLastAdmin,
-                onRolesAndPermissionsClick = onRolesAndPermissionsClick,
-            )
         }
-    }
+    )
 
     AsyncActionView(
         async = state.leaveSpaceAction,
         onSuccess = { /* Nothing to do, the screen will be dismissed automatically */ },
         errorMessage = { stringResource(CommonStrings.error_unknown) },
-        onErrorDismiss = { state.eventSink(LeaveSpaceEvents.CloseError) },
+        onErrorDismiss = { state.eventSink(LeaveSpaceEvent.CloseError) },
     )
 }
 
 @Composable
 private fun LeaveSpaceHeader(
     state: LeaveSpaceState,
-    onBackClick: () -> Unit,
 ) {
     Column {
-        TopAppBar(
-            navigationIcon = {
-                BackButton(onClick = onBackClick)
-            },
-            title = {},
-        )
         IconTitleSubtitleMolecule(
-            modifier = Modifier.padding(top = 0.dp, bottom = 8.dp, start = 24.dp, end = 24.dp),
+            modifier = Modifier.padding(top = 24.dp, bottom = 8.dp, start = 24.dp, end = 24.dp),
             iconStyle = BigIcon.Style.AlertSolid,
-            title = stringResource(
-                if (state.isLastAdmin) R.string.screen_leave_space_title_last_admin else R.string.screen_leave_space_title,
-                state.spaceName ?: stringResource(CommonStrings.common_space)
-            ),
+            title = if (state.needsOwnerChange) {
+                if (state.areCreatorsPrivileged) {
+                    stringResource(R.string.screen_leave_space_title_last_owner)
+                } else {
+                    stringResource(R.string.screen_leave_space_title_last_admin, state.spaceName ?: stringResource(CommonStrings.common_space))
+                }
+            } else {
+                stringResource(R.string.screen_leave_space_title, state.spaceName ?: stringResource(CommonStrings.common_space))
+            },
             subTitle =
-                if (state.isLastAdmin) {
-                    stringResource(R.string.screen_leave_space_subtitle_last_admin)
+                if (state.needsOwnerChange) {
+                    if (state.areCreatorsPrivileged) {
+                        stringResource(R.string.screen_leave_space_subtitle_last_owner, state.spaceName ?: stringResource(CommonStrings.common_space))
+                    } else {
+                        stringResource(R.string.screen_leave_space_subtitle_last_admin)
+                    }
                 } else if (state.selectableSpaceRooms is AsyncData.Success && state.selectableSpaceRooms.data.isNotEmpty()) {
                     if (state.hasOnlyLastAdminRoom) {
                         stringResource(R.string.screen_leave_space_subtitle_only_last_admin)
@@ -182,11 +184,11 @@ private fun LeaveSpaceHeader(
         if (state.showQuickAction) {
             if (state.areAllSelected) {
                 QuickActionButton(CommonStrings.action_deselect_all) {
-                    state.eventSink(LeaveSpaceEvents.DeselectAllRooms)
+                    state.eventSink(LeaveSpaceEvent.DeselectAllRooms)
                 }
             } else {
                 QuickActionButton(resId = CommonStrings.action_select_all) {
-                    state.eventSink(LeaveSpaceEvents.SelectAllRooms)
+                    state.eventSink(LeaveSpaceEvent.SelectAllRooms)
                 }
             }
         }
@@ -217,10 +219,12 @@ private fun LeaveSpaceButtons(
     onLeaveSpace: () -> Unit,
     showRolesAndPermissionsButton: Boolean,
     onRolesAndPermissionsClick: () -> Unit,
+    showChooseOwnersButton: Boolean,
+    onChooseOwnersButtonClick: () -> Unit,
     onCancel: () -> Unit,
 ) {
     ButtonColumnMolecule(
-        modifier = Modifier.padding(16.dp)
+        modifier = Modifier.padding(top = 16.dp)
     ) {
         if (showLeaveButton) {
             val text = if (selectedRoomsCount > 0) {
@@ -244,6 +248,14 @@ private fun LeaveSpaceButtons(
                 leadingIcon = IconSource.Vector(CompoundIcons.Settings()),
             )
         }
+        if (showChooseOwnersButton) {
+            Button(
+                text = stringResource(R.string.screen_leave_space_choose_owners_action),
+                onClick = onChooseOwnersButtonClick,
+                modifier = Modifier.fillMaxWidth(),
+                destructive = true,
+            )
+        }
         TextButton(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(CommonStrings.action_cancel),
@@ -263,23 +275,24 @@ private fun SpaceItem(
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(min = 66.dp)
+            .padding(horizontal = 16.dp)
             .toggleable(
                 value = selectableSpaceRoom.isSelected,
                 role = Role.Checkbox,
-                enabled = selectableSpaceRoom.isLastAdmin.not(),
+                enabled = selectableSpaceRoom.isLastOwner.not(),
                 onValueChange = { onClick() }
             )
             .clickable(
-                enabled = selectableSpaceRoom.isLastAdmin.not(),
+                enabled = selectableSpaceRoom.isLastOwner.not(),
                 // TODO
                 onClickLabel = null,
                 role = Role.Checkbox,
                 onClick = onClick,
             ),
         verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         Avatar(
-            modifier = Modifier.padding(horizontal = 16.dp),
             avatarData = room.getAvatarData(AvatarSize.LeaveSpaceRoom),
             avatarType = if (room.isSpace) AvatarType.Space() else AvatarType.Room(),
         )
@@ -298,8 +311,8 @@ private fun SpaceItem(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                if (room.joinRule == JoinRule.Private) {
-                    // Picto for private
+                if (room.joinRule == JoinRule.Invite) {
+                    // Picto for invite only
                     Icon(
                         modifier = Modifier
                             .size(16.dp)
@@ -325,7 +338,7 @@ private fun SpaceItem(
                     room.numJoinedMembers,
                     room.numJoinedMembers
                 )
-                val subTitle = if (selectableSpaceRoom.isLastAdmin) {
+                val subTitle = if (selectableSpaceRoom.isLastOwner) {
                     stringResource(R.string.screen_leave_space_last_admin_info, membersCount)
                 } else {
                     membersCount
@@ -344,7 +357,7 @@ private fun SpaceItem(
             Checkbox(
                 checked = selectableSpaceRoom.isSelected,
                 onCheckedChange = null,
-                enabled = selectableSpaceRoom.isLastAdmin.not(),
+                enabled = selectableSpaceRoom.isLastOwner.not(),
             )
         }
     }
@@ -353,11 +366,12 @@ private fun SpaceItem(
 @PreviewsDayNight
 @Composable
 internal fun LeaveSpaceViewPreview(
-    @PreviewParameter(LeaveSpaceStateProvider::class) state: LeaveSpaceState,
+    @PreviewParameter(LeaveSpaceStatePreviewParam::class) state: LeaveSpaceState,
 ) = ElementPreview {
     LeaveSpaceView(
         state = state,
         onCancel = {},
         onRolesAndPermissionsClick = {},
+        onChooseOwnersClick = {},
     )
 }

@@ -54,6 +54,7 @@ import kotlinx.collections.immutable.persistentListOf
  * To make this work, you need to:
  * 1. Call [MentionSpanTheme.updateStyles] so the colors and sizes are computed.
  * 2. Use either [MentionSpanTheme.updateMentionStyles] or [MentionSpan.updateTheme] to update the styles of the mention spans.
+ * https://www.figma.com/design/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?node-id=3236-11203
  */
 @Stable
 @SingleIn(SessionScope::class)
@@ -61,10 +62,14 @@ class MentionSpanTheme(val currentUserId: UserId) {
     @Inject
     constructor(matrixClient: MatrixClient) : this(matrixClient.sessionId)
 
-    internal var currentUserTextColor: Int = 0
+    internal var currentUserTextColor: Int = Color.BLACK
+        private set
     internal var currentUserBackgroundColor: Int = Color.WHITE
-    internal var otherTextColor: Int = 0
+        private set
+    internal var otherTextColor: Int = Color.BLACK
+        private set
     internal var otherBackgroundColor: Int = Color.WHITE
+        private set
 
     private val paddingValues = PaddingValues(start = 4.dp, end = 6.dp)
     internal val paddingValuesPx = mutableStateOf(0 to 0)
@@ -78,8 +83,8 @@ class MentionSpanTheme(val currentUserId: UserId) {
     fun updateStyles() {
         currentUserTextColor = ElementTheme.colors.textBadgeAccent.toArgb()
         currentUserBackgroundColor = ElementTheme.colors.bgBadgeAccent.toArgb()
-        otherTextColor = ElementTheme.colors.textPrimary.toArgb()
-        otherBackgroundColor = ElementTheme.colors.bgBadgeDefault.toArgb()
+        otherTextColor = ElementTheme.colors.textOnSolidPrimary.toArgb()
+        otherBackgroundColor = ElementTheme.colors.bgBadgePrimary.toArgb()
 
         typeface.value = ElementTheme.typography.fontBodyLgMedium.rememberTypeface().value
         val density = LocalDensity.current

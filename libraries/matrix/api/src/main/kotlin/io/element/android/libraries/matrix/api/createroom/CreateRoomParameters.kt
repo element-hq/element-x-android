@@ -26,4 +26,5 @@ data class CreateRoomParameters(
     val joinRuleOverride: JoinRule? = null,
     val historyVisibilityOverride: RoomHistoryVisibility? = null,
     val roomAliasName: Optional<String> = Optional.empty(),
+    val isSpace: Boolean = false,
 )

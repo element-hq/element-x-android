@@ -11,6 +11,7 @@ package io.element.android.libraries.matrix.test.notification
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
@@ -21,12 +22,15 @@ import io.element.android.libraries.matrix.test.A_USER_NAME_2
 fun aNotificationData(
     content: NotificationContent = NotificationContent.MessageLike.RoomEncrypted,
     isDirect: Boolean = false,
+    isSpace: Boolean = false,
     hasMention: Boolean = false,
     threadId: ThreadId? = null,
     timestamp: Long = A_TIMESTAMP,
     senderDisplayName: String? = A_USER_NAME_2,
     senderIsNameAmbiguous: Boolean = false,
-    roomDisplayName: String? = A_ROOM_NAME
+    roomDisplayName: String? = A_ROOM_NAME,
+    roomJoinRule: JoinRule? = null,
+    isNoisy: Boolean = false,
 ): NotificationData {
     return NotificationData(
         sessionId = A_SESSION_ID,
@@ -40,10 +44,12 @@ fun aNotificationData(
         roomDisplayName = roomDisplayName,
         isDirect = isDirect,
         isDm = false,
+        isSpace = isSpace,
         isEncrypted = false,
-        isNoisy = false,
+        isNoisy = isNoisy,
         timestamp = timestamp,
         content = content,
         hasMention = hasMention,
+        roomJoinRule = roomJoinRule,
     )
 }

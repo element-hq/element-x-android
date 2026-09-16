@@ -24,11 +24,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -80,7 +78,7 @@ fun SpaceRoomItemView(
             indication = ripple(),
             interactionSource = remember { MutableInteractionSource() }
         )
-        .onKeyboardContextMenuAction { onLongClick }
+        .onKeyboardContextMenuAction(onLongClick)
     Column(
         modifier = modifier
             .then(clickModifier)
@@ -100,22 +98,16 @@ fun SpaceRoomItemView(
                 showIndicator = showUnreadIndicator
             )
             Spacer(modifier = Modifier.height(1.dp))
-            SubtitleRow(
-                visibilityIcon = spaceRoom.visibilityIcon(),
-                subtitle = spaceRoom.subtitle()
-            )
+            VisibilityRow(visibility = spaceRoom.visibility)
             Spacer(modifier = Modifier.height(1.dp))
-            val info = spaceRoom.info()
-            if (info.isNotBlank()) {
-                Text(
-                    modifier = Modifier.weight(1f),
-                    style = ElementTheme.typography.fontBodyMdRegular,
-                    text = info,
-                    color = ElementTheme.colors.textSecondary,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
+            Text(
+                modifier = Modifier.weight(1f),
+                style = ElementTheme.typography.fontBodyMdRegular,
+                text = pluralStringResource(CommonPlurals.common_member_count, spaceRoom.numJoinedMembers, spaceRoom.numJoinedMembers),
+                color = ElementTheme.colors.textSecondary,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
         }
         if (bottomAction != null) {
             Spacer(modifier = Modifier.height(12.dp))
@@ -129,29 +121,26 @@ fun SpaceRoomItemView(
 }
 
 @Composable
-private fun SubtitleRow(
-    visibilityIcon: ImageVector?,
-    subtitle: String,
+private fun VisibilityRow(
+    visibility: SpaceRoomVisibility,
     modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        if (visibilityIcon != null) {
-            Icon(
-                modifier = Modifier
-                    .size(16.dp)
-                    .padding(end = 4.dp),
-                imageVector = visibilityIcon,
-                contentDescription = null,
-                tint = ElementTheme.colors.iconTertiary,
-            )
-        }
+        Icon(
+            modifier = Modifier
+                .size(16.dp)
+                .padding(end = 4.dp),
+            imageVector = visibility.icon,
+            contentDescription = null,
+            tint = ElementTheme.colors.iconTertiary,
+        )
         Text(
             modifier = Modifier.weight(1f),
             style = ElementTheme.typography.fontBodyMdRegular,
-            text = subtitle,
+            text = visibility.label,
             color = ElementTheme.colors.textSecondary,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
@@ -220,38 +209,8 @@ private fun SpaceRoomItemScaffold(
 }
 
 @Composable
-@ReadOnlyComposable
-private fun SpaceRoom.subtitle(): String {
-    return if (isSpace) {
-        visibility.label
-    } else {
-        pluralStringResource(CommonPlurals.common_member_count, numJoinedMembers, numJoinedMembers)
-    }
-}
-
-@Composable
-@ReadOnlyComposable
-private fun SpaceRoom.info(): String {
-    return if (isSpace) {
-        pluralStringResource(CommonPlurals.common_member_count, numJoinedMembers, numJoinedMembers)
-    } else {
-        topic.orEmpty()
-    }
-}
-
-@Composable
-private fun SpaceRoom.visibilityIcon(): ImageVector? {
-    // Don't show any icon for restricted rooms as it's the default and would add noise
-    return if (visibility == SpaceRoomVisibility.Restricted) {
-        null
-    } else {
-        visibility.icon
-    }
-}
-
-@Composable
 @PreviewsDayNight
-internal fun SpaceRoomItemViewPreview(@PreviewParameter(SpaceRoomProvider::class) spaceRoom: SpaceRoom) = ElementPreview {
+internal fun SpaceRoomItemViewPreview(@PreviewParameter(SpaceRoomPreviewParam::class) spaceRoom: SpaceRoom) = ElementPreview {
     SpaceRoomItemView(
         spaceRoom = spaceRoom,
         showUnreadIndicator = spaceRoom.state == CurrentUserMembership.INVITED,

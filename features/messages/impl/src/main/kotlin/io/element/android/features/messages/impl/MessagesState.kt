@@ -27,6 +27,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import kotlinx.collections.immutable.ImmutableList
 
 data class MessagesState(
@@ -53,9 +54,31 @@ data class MessagesState(
     val appName: String,
     val pinnedMessagesBannerState: PinnedMessagesBannerState,
     val dmUserVerificationState: IdentityState?,
+    val dmUserStatus: DisplayedStatus?,
     val roomMemberModerationState: RoomMemberModerationState,
+    /** Type of "shared history" icon to show in the top bar. */
+    val topBarSharedHistoryIcon: SharedHistoryIcon,
     val successorRoom: SuccessorRoom?,
-    val eventSink: (MessagesEvents) -> Unit
+    val threads: Threads,
+    val showLiveLocationShareBanner: Boolean,
+    val eventSink: (MessagesEvent) -> Unit
 ) {
     val isTombstoned = successorRoom != null
+
+    data class Threads(
+        val hasThreads: Boolean,
+        val hasUnreadThreads: Boolean,
+    )
+}
+
+/** Type of "shared history" icon to show in the top bar. */
+enum class SharedHistoryIcon {
+    /** Show no icon at all. */
+    NONE,
+
+    /** history_visibility: shared. */
+    SHARED,
+
+    /** history_visibility: world_readable. */
+    WORLD_READABLE
 }

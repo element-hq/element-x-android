@@ -18,7 +18,8 @@ data class HomeSpacesState(
     val spaceRooms: ImmutableList<SpaceRoom>,
     val seenSpaceInvites: ImmutableSet<RoomId>,
     val hideInvitesAvatar: Boolean,
-    val eventSink: (HomeSpacesEvents) -> Unit,
+    val canExploreSpaces: Boolean,
+    val eventSink: (HomeSpacesEvent) -> Unit,
 )
 
 sealed interface CurrentSpace {

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_share_location_live_location_disclaimer_title">"Riwayat lokasi langsung Anda akan disimpan di ruang obrolan dan dapat dilihat oleh anggota setelah sesi berakhir."</string>
+  <string name="screen_share_location_live_location_duration_picker_title">"Pilih berapa lama Anda ingin membagikan lokasi langsung Anda."</string>
+  <string name="screen_share_location_live_location_missing_permissions">"Anda tidak memiliki izin untuk membagikan lokasi real-time Anda di ruang ini"</string>
+</resources>

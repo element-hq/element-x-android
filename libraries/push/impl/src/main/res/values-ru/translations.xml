@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="notification_channel_call">"Позвонить"</string>
-  <string name="notification_channel_listening_for_events">"Прослушивание событий"</string>
-  <string name="notification_channel_noisy">"Шумные уведомления"</string>
-  <string name="notification_channel_ringing_calls">"Звонки"</string>
-  <string name="notification_channel_silent">"Бесшумные уведомления"</string>
+  <string name="notification_channel_call">"Звонки"</string>
+  <string name="notification_channel_listening_for_events">"События"</string>
+  <string name="notification_channel_noisy">"Уведомления со звуком"</string>
+  <string name="notification_channel_ringing_calls">"Звонки со звуком"</string>
+  <string name="notification_channel_silent">"Уведомления без звука"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="one">"%1$s: %2$d сообщение"</item>
     <item quantity="few">"%1$s: %2$d сообщения"</item>
@@ -15,8 +15,19 @@
     <item quantity="few">"%d уведомления"</item>
     <item quantity="many">"%d уведомлений"</item>
   </plurals>
-  <string name="notification_error_unified_push_unregistered_android">"Не удалось зарегистрировать дистрибьютора уведомлений UnifiedPush, поэтому вы больше не будете получать уведомления. Проверьте настройки уведомлений в приложении и статус дистрибьютора push-уведомлений."</string>
-  <string name="notification_fallback_content">"У вас есть новые сообщения."</string>
+  <string name="notification_error_unified_push_unregistered_android">"Не удалось зарегистрировать дистрибьютора уведомлений UnifiedPush, поэтому Вы больше не будете получать уведомления. Проверьте настройки уведомлений в приложении и статус дистрибьютора push-уведомлений."</string>
+  <string name="notification_fallback_content">"У Вас есть новые сообщения."</string>
+  <plurals name="notification_fallback_n_content">
+    <item quantity="one">"У Вас %d новое сообщение."</item>
+    <item quantity="few">"У Вас %d новых сообщения."</item>
+    <item quantity="many">"У Вас %d новых сообщений."</item>
+  </plurals>
+  <plurals name="notification_gallery_body">
+    <item quantity="one">"Поделился(ась) %1$d вложением"</item>
+    <item quantity="few">"Поделился(ась) %1$d вложениями"</item>
+    <item quantity="many">"Поделился(ась) %1$d вложениями"</item>
+  </plurals>
+  <string name="notification_incoming_audio_call">"📞 Входящий вызов"</string>
   <string name="notification_incoming_call">"📹 Входящий вызов"</string>
   <string name="notification_inline_reply_failed">"** Не удалось отправить - пожалуйста, откройте комнату"</string>
   <string name="notification_invitation_action_join">"Присоединиться"</string>
@@ -26,24 +37,28 @@
     <item quantity="few">"%d приглашения"</item>
     <item quantity="many">"%d приглашений"</item>
   </plurals>
-  <string name="notification_invite_body">"Пригласил вас в чат"</string>
-  <string name="notification_invite_body_with_sender">"%1$s пригласил вас в чат"</string>
-  <string name="notification_mentioned_you_body">"Упомянул вас: %1$s"</string>
+  <string name="notification_invite_body">"Пригласил(а) Вас в чат"</string>
+  <string name="notification_invite_body_with_sender">"%1$s пригласил(а) Вас в чат"</string>
+  <string name="notification_knock_request_body">"Хочет присоединиться"</string>
+  <string name="notification_live_location_started_body">"Начал(а) делиться своим текущим местоположением"</string>
+  <string name="notification_mentioned_you_body">"Упомянул(а) вас: %1$s"</string>
   <string name="notification_new_messages">"Новые сообщения"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d новое сообщение"</item>
     <item quantity="few">"%d новых сообщения"</item>
     <item quantity="many">"%d новых сообщений"</item>
   </plurals>
-  <string name="notification_reaction_body">"Отреагировал на %1$s"</string>
+  <string name="notification_reaction_body">"Отреагировал(а) на %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Пометить как прочитанное"</string>
   <string name="notification_room_action_quick_reply">"Быстрый ответ"</string>
-  <string name="notification_room_invite_body">"Пригласил вас в комнату"</string>
-  <string name="notification_room_invite_body_with_sender">"%1$s пригласил вас присоединиться к комнате"</string>
+  <string name="notification_room_invite_body">"Пригласил(а) Вас в комнату"</string>
+  <string name="notification_room_invite_body_with_sender">"%1$s пригласил(а) Вас в комнату"</string>
   <string name="notification_sender_me">"Я"</string>
-  <string name="notification_sender_mention_reply">"%1$s упомянул или ответил"</string>
+  <string name="notification_sender_mention_reply">"%1$s упомянул(а) или ответил(а)"</string>
+  <string name="notification_space_invite_body">"Пригласил(а) Вас в пространство"</string>
+  <string name="notification_space_invite_body_with_sender">"%1$s пригласил(а) Вас в пространство"</string>
   <string name="notification_test_push_notification_content">"Вы просматриваете уведомление! Нажмите на меня!"</string>
-  <string name="notification_thread_in_room">"Ветка обсуждения в %1$s"</string>
+  <string name="notification_thread_in_room">"Обсуждение в %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
@@ -59,7 +74,7 @@
     <item quantity="few">"%d комнаты"</item>
     <item quantity="many">"%d комнат"</item>
   </plurals>
-  <string name="push_distributor_background_sync_android">"Фоновая синхронизация"</string>
+  <string name="push_distributor_background_sync_android">"Синхронизация в фоновом режиме"</string>
   <string name="push_distributor_firebase_android">"Сервисы Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Не найдены действующие службы Google Play. Уведомления могут работать некорректно."</string>
   <string name="troubleshoot_notifications_test_blocked_users_description">"Проверка заблокированных пользователей"</string>
@@ -92,12 +107,13 @@
   <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Невозможно отобразить уведомление."</string>
   <string name="troubleshoot_notifications_test_display_notification_success">"Уведомление было нажато!"</string>
   <string name="troubleshoot_notifications_test_display_notification_title">"Отобразить уведомление"</string>
-  <string name="troubleshoot_notifications_test_display_notification_waiting">"Нажмите на уведомление, чтобы продолжить тест."</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Пожалуйста, нажмите на уведомление, чтобы продолжить тест."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_description">"Убедитесь, что приложение получает push-сообщение."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Ошибка: pusher отклонил запрос."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Ошибка: %1$s."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Ошибка, невозможно протестировать отправку."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Ошибка, тайм-аут ожидания push-уведомления."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_rate_limit">"Ошибка: шлюз push-уведомлений ограничивает количество уведомлений для этого устройства, поэтому уведомления не будут поступать стабильно. Пожалуйста, настройте другой шлюз push-уведомлений."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_success">"Обратная отправка push-уведомления, заняла %1$d мс."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_title">"Тест обратной отправки push-уведомления"</string>
 </resources>

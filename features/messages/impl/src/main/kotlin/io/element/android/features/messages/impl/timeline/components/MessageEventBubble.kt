@@ -19,24 +19,26 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.graphics.drawOutline
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.layer.CompositingStrategy
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
-import io.element.android.features.messages.impl.timeline.model.bubble.BubbleStateProvider
+import io.element.android.features.messages.impl.timeline.model.bubble.BubbleStatePreviewParam
 import io.element.android.libraries.core.extensions.to01
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
@@ -49,7 +51,8 @@ import io.element.android.libraries.designsystem.theme.messageFromMeBackground
 import io.element.android.libraries.designsystem.theme.messageFromOtherBackground
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
-import io.element.android.libraries.ui.utils.time.isTalkbackActive
+import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
+import io.element.android.libraries.ui.utils.graphics.drawInLayer
 
 private val BUBBLE_RADIUS = 12.dp
 private val avatarRadius = AvatarSize.TimelineSender.dp / 2
@@ -63,6 +66,8 @@ fun MessageEventBubble(
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     modifier: Modifier = Modifier,
+    customBackgroundColor: Color? = null,
+    borderColor: Color? = null,
     content: @Composable BoxScope.() -> Unit = {},
 ) {
     val clickableModifier = if (isTalkbackActive()) {
@@ -78,32 +83,50 @@ fun MessageEventBubble(
             .onKeyboardContextMenuAction(onLongClick)
     }
 
+    val cutTopStart = state.cutTopStart
     // Ignore state.isHighlighted for now, we need a design decision on it.
-    val backgroundBubbleColor = MessageEventBubbleDefaults.backgroundBubbleColor(state.isMine)
+    val backgroundBubbleColor by rememberUpdatedState(customBackgroundColor ?: MessageEventBubbleDefaults.backgroundBubbleColor(state.isMine))
     val bubbleShape = remember(state) { MessageEventBubbleDefaults.shape(state.cutTopStart, state.groupPosition, state.isMine) }
     val radiusPx = (avatarRadius + SENDER_AVATAR_BORDER_WIDTH).toPx()
     val yOffsetPx = -(NEGATIVE_MARGIN_FOR_BUBBLE + avatarRadius).toPx()
-    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+
+    val updatedBorderColor by rememberUpdatedState(borderColor)
     BoxWithConstraints(
         modifier = modifier
-            .graphicsLayer {
-                shape = bubbleShape
-                clip = true
-                compositingStrategy = CompositingStrategy.Offscreen
-            }
-            .drawWithContent {
-                drawRect(backgroundBubbleColor)
-                drawContent()
-                if (state.cutTopStart) {
-                    drawCircle(
-                        color = Color.Black,
-                        center = Offset(
-                            x = if (isRtl) size.width else 0f,
-                            y = yOffsetPx,
-                        ),
-                        radius = radiusPx,
-                        blendMode = BlendMode.Clear,
-                    )
+            .drawWithCache {
+                // Calculate the outline of the background and cache it
+                val outline = bubbleShape.createOutline(size, layoutDirection, this)
+
+                onDrawWithContent {
+                    // Draw the contents in a layer to be able to clip them with the same outline
+                    // For some reason, doing this clipping outside a layer messes up with the touch events
+                    drawInLayer(
+                        composingStrategy = CompositingStrategy.Offscreen,
+                        outline = outline,
+                        clip = true,
+                    ) {
+                        // Draw the background first, so that it's behind the content
+                        drawRect(backgroundBubbleColor)
+
+                        // Then draw the content on top of it
+                        drawContent()
+
+                        // Draw border color, if any
+                        updatedBorderColor?.let { drawOutline(outline, it, style = Stroke(width = 1.dp.toPx())) }
+
+                        // And then clip the top start corner if needed to make room for the avatar
+                        if (cutTopStart) {
+                            drawCircle(
+                                color = Color.Black,
+                                center = Offset(
+                                    x = if (layoutDirection == LayoutDirection.Rtl) size.width else 0f,
+                                    y = yOffsetPx,
+                                ),
+                                radius = radiusPx,
+                                blendMode = BlendMode.Clear,
+                            )
+                        }
+                    }
                 }
             },
         // Need to set the contentAlignment again (it's already set in TimelineItemEventRow), for the case
@@ -169,7 +192,7 @@ object MessageEventBubbleDefaults {
 
 @PreviewsDayNight
 @Composable
-internal fun MessageEventBubblePreview(@PreviewParameter(BubbleStateProvider::class) state: BubbleState) = ElementPreview {
+internal fun MessageEventBubblePreview(@PreviewParameter(BubbleStatePreviewParam::class) state: BubbleState) = ElementPreview {
     // Due to position offset, surround with a Box
     Box(
         modifier = Modifier

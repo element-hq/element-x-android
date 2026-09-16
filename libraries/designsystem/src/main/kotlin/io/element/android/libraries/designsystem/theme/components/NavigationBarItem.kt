@@ -50,6 +50,6 @@ object ElementNavigationBarItemDefaults {
         selectedTextColor = ElementTheme.colors.textPrimary,
         unselectedIconColor = ElementTheme.colors.iconTertiary,
         unselectedTextColor = ElementTheme.colors.textDisabled,
-        selectedIndicatorColor = Color.Companion.Transparent,
+        selectedIndicatorColor = Color.Transparent,
     )
 }

@@ -18,7 +18,16 @@ data class MediaPlayerControllerState(
     val durationInMillis: Long,
     val canMute: Boolean,
     val isMuted: Boolean,
+    val seekingToMillis: Long?,
 ) {
+    /**
+     * The progress in milliseconds to display. When [seekingToMillis] is non-null (during a seek operation),
+     * this returns the target seek position. Once the player catches up to the seek position,
+     * [seekingToMillis] is cleared (set to null) and this returns [progressInMillis] again.
+     */
+    val displayProgressInMillis: Long
+        get() = seekingToMillis ?: progressInMillis
+
     @FloatRange(from = 0.0, to = 1.0)
-    val progressAsFloat = (progressInMillis.toFloat() / durationInMillis.toFloat()).coerceIn(0f, 1f)
+    val progressAsFloat = (displayProgressInMillis.toFloat() / durationInMillis.toFloat()).coerceIn(0f, 1f)
 }

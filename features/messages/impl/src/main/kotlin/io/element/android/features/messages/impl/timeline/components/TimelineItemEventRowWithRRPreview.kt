@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.components.receipt.ReadReceiptViewState
-import io.element.android.features.messages.impl.timeline.components.receipt.ReadReceiptViewStateForTimelineItemEventRowProvider
+import io.element.android.features.messages.impl.timeline.components.receipt.ReadReceiptViewStateForTimelineItemEventRowPreviewParam
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReadReceipts
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -25,7 +25,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemEventRowWithRRPreview(
-    @PreviewParameter(ReadReceiptViewStateForTimelineItemEventRowProvider::class) state: ReadReceiptViewState,
+    @PreviewParameter(ReadReceiptViewStateForTimelineItemEventRowPreviewParam::class) state: ReadReceiptViewState,
 ) = ElementPreview {
     Column {
         // A message from someone else
@@ -37,7 +37,6 @@ internal fun TimelineItemEventRowWithRRPreview(
                 timelineItemReactions = aTimelineItemReactions(count = 0),
                 readReceiptState = TimelineItemReadReceipts(state.receipts),
             ),
-            renderReadReceipts = true,
             isLastOutgoingMessage = false,
         )
         // A message from current user
@@ -49,7 +48,6 @@ internal fun TimelineItemEventRowWithRRPreview(
                 timelineItemReactions = aTimelineItemReactions(count = 0),
                 readReceiptState = TimelineItemReadReceipts(state.receipts),
             ),
-            renderReadReceipts = true,
             isLastOutgoingMessage = false,
         )
         // Another message from current user
@@ -61,7 +59,6 @@ internal fun TimelineItemEventRowWithRRPreview(
                 timelineItemReactions = aTimelineItemReactions(count = 0),
                 readReceiptState = TimelineItemReadReceipts(state.receipts),
             ),
-            renderReadReceipts = true,
             isLastOutgoingMessage = true,
         )
     }

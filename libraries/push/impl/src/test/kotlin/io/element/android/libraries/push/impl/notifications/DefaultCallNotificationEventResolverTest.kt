@@ -9,6 +9,7 @@
 package io.element.android.libraries.push.impl.notifications
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.RtcNotificationType
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -64,10 +65,11 @@ class DefaultCallNotificationEventResolverTest {
             senderAvatarUrl = null,
             expirationTimestamp = 1567L,
             rtcNotificationType = RtcNotificationType.RING,
+            callIntent = CallIntent.VIDEO
         )
 
         val notificationData = aNotificationData(
-            content = NotificationContent.MessageLike.RtcNotification(A_USER_ID_2, RtcNotificationType.RING, 1567)
+            content = NotificationContent.MessageLike.RtcNotification(A_USER_ID_2, RtcNotificationType.RING, CallIntent.VIDEO, 1567)
         )
         val result = resolver.resolveEvent(A_SESSION_ID, notificationData)
         assertThat(result.getOrNull()).isEqualTo(expectedResult)
@@ -111,7 +113,7 @@ class DefaultCallNotificationEventResolverTest {
         )
 
         val notificationData = aNotificationData(
-            content = NotificationContent.MessageLike.RtcNotification(A_USER_ID_2, RtcNotificationType.NOTIFY, 0)
+            content = NotificationContent.MessageLike.RtcNotification(A_USER_ID_2, RtcNotificationType.NOTIFY, CallIntent.AUDIO, 0)
         )
         val result = resolver.resolveEvent(A_SESSION_ID, notificationData)
         assertThat(result.getOrNull()).isEqualTo(expectedResult)
@@ -155,7 +157,7 @@ class DefaultCallNotificationEventResolverTest {
         )
 
         val notificationData = aNotificationData(
-            content = NotificationContent.MessageLike.RtcNotification(A_USER_ID_2, RtcNotificationType.RING, 0)
+            content = NotificationContent.MessageLike.RtcNotification(A_USER_ID_2, RtcNotificationType.RING, CallIntent.VIDEO, 0)
         )
         val result = resolver.resolveEvent(A_SESSION_ID, notificationData)
         assertThat(result.getOrNull()).isEqualTo(expectedResult)

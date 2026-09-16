@@ -24,6 +24,7 @@ import io.element.android.features.messages.impl.R
 import io.element.android.libraries.designsystem.atomic.molecules.ComposerAlertMolecule
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.ROOM_NAME
 import io.element.android.libraries.designsystem.text.toAnnotatedString
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.allBooleans
@@ -86,13 +87,13 @@ internal fun TimelineItemRoomBeginningViewPreview() = ElementPreview {
             )
             TimelineItemRoomBeginningView(
                 predecessorRoom = null,
-                roomName = "Room Name",
+                roomName = ROOM_NAME,
                 isDm = isDm,
                 onPredecessorRoomClick = {},
             )
             TimelineItemRoomBeginningView(
                 predecessorRoom = PredecessorRoom(RoomId("!roomId:matrix.org")),
-                roomName = "Room Name",
+                roomName = ROOM_NAME,
                 isDm = isDm,
                 onPredecessorRoomClick = {},
             )

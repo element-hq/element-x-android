@@ -30,7 +30,7 @@ fun Throwable.mapRecoveryException(): RecoveryException {
             }
         }
         else -> RecoveryException.Client(
-            ClientException.Other("Unknown error")
+            ClientException.Other("Unknown error", this)
         )
     }
 }

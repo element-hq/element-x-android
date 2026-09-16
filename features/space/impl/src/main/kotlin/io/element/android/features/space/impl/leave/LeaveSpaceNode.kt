@@ -34,6 +34,7 @@ class LeaveSpaceNode(
     interface Callback : Plugin {
         fun closeLeaveSpaceFlow()
         fun navigateToRolesAndPermissions()
+        fun navigateToChooseOwners()
     }
 
     private val leaveSpaceHandle = matrixClient.spaceService.getLeaveSpaceHandle(room.roomId)
@@ -57,6 +58,7 @@ class LeaveSpaceNode(
             state = state,
             onCancel = callback::closeLeaveSpaceFlow,
             onRolesAndPermissionsClick = callback::navigateToRolesAndPermissions,
+            onChooseOwnersClick = callback::navigateToChooseOwners,
             modifier = modifier
         )
     }

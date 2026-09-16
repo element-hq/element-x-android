@@ -62,7 +62,7 @@ class UnifiedPushProviderTest {
     @Test
     fun `register ok`() = runTest {
         val getSecretForUserResultLambda = lambdaRecorder<SessionId, String> { A_SECRET }
-        val executeLambda = lambdaRecorder<Distributor, String, Result<Unit>> { _, _ -> Result.success(Unit) }
+        val executeLambda = lambdaRecorder<Distributor, String, SessionId, Result<Unit>> { _, _, _ -> Result.success(Unit) }
         val setDistributorValueResultLambda = lambdaRecorder<UserId, String, Unit> { _, _ -> }
         val unifiedPushProvider = createUnifiedPushProvider(
             pushClientSecret = FakePushClientSecret(
@@ -82,7 +82,7 @@ class UnifiedPushProviderTest {
             .with(value(A_SESSION_ID))
         executeLambda.assertions()
             .isCalledOnce()
-            .with(value(Distributor("value", "Name")), value(A_SECRET))
+            .with(value(Distributor("value", "Name")), value(A_SECRET), value(A_SESSION_ID))
         setDistributorValueResultLambda.assertions()
             .isCalledOnce()
             .with(value(A_SESSION_ID), value("value"))
@@ -91,7 +91,7 @@ class UnifiedPushProviderTest {
     @Test
     fun `register ko`() = runTest {
         val getSecretForUserResultLambda = lambdaRecorder<SessionId, String> { A_SECRET }
-        val executeLambda = lambdaRecorder<Distributor, String, Result<Unit>> { _, _ -> Result.failure(AN_EXCEPTION) }
+        val executeLambda = lambdaRecorder<Distributor, String, SessionId, Result<Unit>> { _, _, _ -> Result.failure(AN_EXCEPTION) }
         val setDistributorValueResultLambda = lambdaRecorder<UserId, String, Unit>(ensureNeverCalled = true) { _, _ -> }
         val unifiedPushProvider = createUnifiedPushProvider(
             pushClientSecret = FakePushClientSecret(
@@ -111,7 +111,7 @@ class UnifiedPushProviderTest {
             .with(value(A_SESSION_ID))
         executeLambda.assertions()
             .isCalledOnce()
-            .with(value(Distributor("value", "Name")), value(A_SECRET))
+            .with(value(Distributor("value", "Name")), value(A_SECRET), value(A_SESSION_ID))
     }
 
     @Test

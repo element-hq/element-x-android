@@ -18,9 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.rolesandpermissions.impl.R
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
+import io.element.android.libraries.designsystem.components.dialogs.SaveChangesDialog
 import io.element.android.libraries.designsystem.components.preferences.PreferenceDropdown
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -29,7 +30,6 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.ui.strings.CommonStrings
-import kotlinx.collections.immutable.toImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,7 +73,8 @@ fun ChangeRoomPermissionsView(
                         PreferenceDropdown(
                             title = titleForType(permissionType),
                             selectedOption = state.selectedRoleForType(permissionType),
-                            options = SelectableRole.entries.toImmutableList(),
+                            options = state.selectableRoles,
+                            enabled = state.canChangePermission(permissionType),
                             onSelectOption = { role ->
                                 state.eventSink(
                                     ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(
@@ -91,33 +92,28 @@ fun ChangeRoomPermissionsView(
 
     AsyncActionView(
         async = state.saveAction,
-        onSuccess = { onComplete(true) },
-        onErrorDismiss = { state.eventSink(ChangeRoomPermissionsEvent.ResetPendingActions) }
-    )
-
-    AsyncActionView(
-        async = state.confirmExitAction,
-        onSuccess = { onComplete(false) },
-        confirmationDialog = {
-            ConfirmationDialog(
-                title = stringResource(R.string.screen_room_change_role_unsaved_changes_title),
-                content = stringResource(R.string.screen_room_change_role_unsaved_changes_description),
-                submitText = stringResource(CommonStrings.action_save),
-                cancelText = stringResource(CommonStrings.action_discard),
-                onSubmitClick = { state.eventSink(ChangeRoomPermissionsEvent.Save) },
-                onDismiss = { state.eventSink(ChangeRoomPermissionsEvent.Exit) }
-            )
+        onSuccess = { onComplete(it) },
+        confirmationDialog = { confirming ->
+            when (confirming) {
+                is AsyncAction.ConfirmingCancellation -> {
+                    SaveChangesDialog(
+                        onSaveClick = { state.eventSink(ChangeRoomPermissionsEvent.Save) },
+                        onDiscardClick = { state.eventSink(ChangeRoomPermissionsEvent.Exit) },
+                        onDismiss = { state.eventSink(ChangeRoomPermissionsEvent.ResetPendingActions) },
+                    )
+                }
+            }
         },
-        onErrorDismiss = {},
+        onErrorDismiss = { state.eventSink(ChangeRoomPermissionsEvent.ResetPendingActions) }
     )
 }
 
 @Composable
 private fun titleForSection(section: RoomPermissionsSection): String = when (section) {
-    RoomPermissionsSection.SpaceDetails -> stringResource(R.string.screen_room_roles_and_permissions_space_details)
-    RoomPermissionsSection.RoomDetails -> stringResource(R.string.screen_room_roles_and_permissions_room_details)
-    RoomPermissionsSection.MessagesAndContent -> stringResource(R.string.screen_room_roles_and_permissions_messages_and_content)
-    RoomPermissionsSection.MembershipModeration -> stringResource(R.string.screen_room_roles_and_permissions_member_moderation)
+    RoomPermissionsSection.EditDetails -> stringResource(R.string.screen_room_change_permissions_room_details)
+    RoomPermissionsSection.MessagesAndContent -> stringResource(R.string.screen_room_change_permissions_messages_and_content)
+    RoomPermissionsSection.ManageMembers -> stringResource(R.string.screen_room_change_permissions_member_moderation)
+    RoomPermissionsSection.ManageSpace -> stringResource(R.string.screen_room_change_permissions_manage_space)
 }
 
 @Composable
@@ -130,11 +126,13 @@ private fun titleForType(type: RoomPermissionType): String = when (type) {
     RoomPermissionType.ROOM_NAME -> stringResource(R.string.screen_room_change_permissions_room_name)
     RoomPermissionType.ROOM_AVATAR -> stringResource(R.string.screen_room_change_permissions_room_avatar)
     RoomPermissionType.ROOM_TOPIC -> stringResource(R.string.screen_room_change_permissions_room_topic)
+    RoomPermissionType.SPACE_MANAGE_ROOMS -> stringResource(R.string.screen_room_change_permissions_manage_space_rooms)
+    RoomPermissionType.SHARE_LIVE_LOCATION -> stringResource(R.string.screen_room_change_permissions_live_location)
 }
 
 @PreviewsDayNight
 @Composable
-internal fun ChangeRoomPermissionsViewPreview(@PreviewParameter(ChangeRoomPermissionsStateProvider::class) state: ChangeRoomPermissionsState) {
+internal fun ChangeRoomPermissionsViewPreview(@PreviewParameter(ChangeRoomPermissionsStatePreviewParam::class) state: ChangeRoomPermissionsState) {
     ElementPreview {
         ChangeRoomPermissionsView(
             state = state,

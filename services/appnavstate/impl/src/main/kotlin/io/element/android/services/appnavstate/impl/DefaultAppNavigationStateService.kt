@@ -15,7 +15,6 @@ import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.core.SpaceId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.services.appnavstate.api.AppForegroundStateService
 import io.element.android.services.appnavstate.api.AppNavigationState
@@ -62,23 +61,9 @@ class DefaultAppNavigationStateService(
         Timber.tag(loggerTag.value).d("Navigating to session $sessionId. Current state: $currentValue")
         val newValue: NavigationState.Session = when (currentValue) {
             is NavigationState.Session,
-            is NavigationState.Space,
             is NavigationState.Room,
             is NavigationState.Thread,
             is NavigationState.Root -> NavigationState.Session(owner, sessionId)
-        }
-        state.getAndUpdate { it.copy(navigationState = newValue) }
-    }
-
-    override fun onNavigateToSpace(owner: String, spaceId: SpaceId) {
-        val currentValue = state.value.navigationState
-        Timber.tag(loggerTag.value).d("Navigating to space $spaceId. Current state: $currentValue")
-        val newValue: NavigationState.Space = when (currentValue) {
-            NavigationState.Root -> return logError("onNavigateToSession()")
-            is NavigationState.Session -> NavigationState.Space(owner, spaceId, currentValue)
-            is NavigationState.Space -> NavigationState.Space(owner, spaceId, currentValue.parentSession)
-            is NavigationState.Room -> NavigationState.Space(owner, spaceId, currentValue.parentSpace.parentSession)
-            is NavigationState.Thread -> NavigationState.Space(owner, spaceId, currentValue.parentRoom.parentSpace.parentSession)
         }
         state.getAndUpdate { it.copy(navigationState = newValue) }
     }
@@ -88,10 +73,9 @@ class DefaultAppNavigationStateService(
         Timber.tag(loggerTag.value).d("Navigating to room $roomId. Current state: $currentValue")
         val newValue: NavigationState.Room = when (currentValue) {
             NavigationState.Root -> return logError("onNavigateToSession()")
-            is NavigationState.Session -> return logError("onNavigateToSpace()")
-            is NavigationState.Space -> NavigationState.Room(owner, roomId, currentValue)
-            is NavigationState.Room -> NavigationState.Room(owner, roomId, currentValue.parentSpace)
-            is NavigationState.Thread -> NavigationState.Room(owner, roomId, currentValue.parentRoom.parentSpace)
+            is NavigationState.Session -> NavigationState.Room(owner, roomId, currentValue)
+            is NavigationState.Room -> NavigationState.Room(owner, roomId, currentValue.parentSession)
+            is NavigationState.Thread -> NavigationState.Room(owner, roomId, currentValue.parentRoom.parentSession)
         }
         state.getAndUpdate { it.copy(navigationState = newValue) }
     }
@@ -101,8 +85,7 @@ class DefaultAppNavigationStateService(
         Timber.tag(loggerTag.value).d("Navigating to thread $threadId. Current state: $currentValue")
         val newValue: NavigationState.Thread = when (currentValue) {
             NavigationState.Root -> return logError("onNavigateToSession()")
-            is NavigationState.Session -> return logError("onNavigateToSpace()")
-            is NavigationState.Space -> return logError("onNavigateToRoom()")
+            is NavigationState.Session -> return logError("onNavigateToRoom()")
             is NavigationState.Room -> NavigationState.Thread(owner, threadId, currentValue)
             is NavigationState.Thread -> NavigationState.Thread(owner, threadId, currentValue.parentRoom)
         }
@@ -115,8 +98,7 @@ class DefaultAppNavigationStateService(
         if (!currentValue.assertOwner(owner)) return
         val newValue: NavigationState.Room = when (currentValue) {
             NavigationState.Root -> return logError("onNavigateToSession()")
-            is NavigationState.Session -> return logError("onNavigateToSpace()")
-            is NavigationState.Space -> return logError("onNavigateToRoom()")
+            is NavigationState.Session -> return logError("onNavigateToRoom()")
             is NavigationState.Room -> return logError("onNavigateToThread()")
             is NavigationState.Thread -> currentValue.parentRoom
         }
@@ -127,26 +109,11 @@ class DefaultAppNavigationStateService(
         val currentValue = state.value.navigationState
         Timber.tag(loggerTag.value).d("Leaving room. Current state: $currentValue")
         if (!currentValue.assertOwner(owner)) return
-        val newValue: NavigationState.Space = when (currentValue) {
-            NavigationState.Root -> return logError("onNavigateToSession()")
-            is NavigationState.Session -> return logError("onNavigateToSpace()")
-            is NavigationState.Space -> return logError("onNavigateToRoom()")
-            is NavigationState.Room -> currentValue.parentSpace
-            is NavigationState.Thread -> currentValue.parentRoom.parentSpace
-        }
-        state.getAndUpdate { it.copy(navigationState = newValue) }
-    }
-
-    override fun onLeavingSpace(owner: String) {
-        val currentValue = state.value.navigationState
-        Timber.tag(loggerTag.value).d("Leaving space. Current state: $currentValue")
-        if (!currentValue.assertOwner(owner)) return
         val newValue: NavigationState.Session = when (currentValue) {
             NavigationState.Root -> return logError("onNavigateToSession()")
-            is NavigationState.Session -> return logError("onNavigateToSpace()")
-            is NavigationState.Space -> currentValue.parentSession
-            is NavigationState.Room -> currentValue.parentSpace.parentSession
-            is NavigationState.Thread -> currentValue.parentRoom.parentSpace.parentSession
+            is NavigationState.Session -> return logError("onNavigateToRoom()")
+            is NavigationState.Room -> currentValue.parentSession
+            is NavigationState.Thread -> currentValue.parentRoom.parentSession
         }
         state.getAndUpdate { it.copy(navigationState = newValue) }
     }

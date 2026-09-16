@@ -81,6 +81,7 @@
       "name" : ":features:verifysession:impl",
       "includeRegex" : [
         "screen_session_verification_.*",
+        "screen\\.session_verification\\..*",
         "screen_signout_in_progress_dialog_content",
         "screen_identity_.*"
       ]
@@ -156,9 +157,25 @@
       ]
     },
     {
+      "name" : ":features:linknewdevice:impl",
+      "includeRegex" : [
+        "screen\\.link_new_device\\..*",
+        "screen_qr_code_login_error_.*",
+        "screen_qr_code_login_connection_note_secure_state.*",
+        "screen_qr_code_login_unknown_error_description",
+        "screen_qr_code_login_invalid_scan_state_.*",
+        "screen_qr_code_login_no_camera_permission_state_.*",
+        "screen_qr_code_login_device_code_.*",
+        "screen_qr_code_login_verify_code_loading"
+      ]
+    },
+    {
       "name" : ":features:login:impl",
       "includeRegex" : [
         "screen_onboarding_.*",
+        "screen\\.onboarding\\..*",
+        "screen\\.change_server\\..*",
+        "screen\\.missing_key_backup\\..*",
         "screen_login_.*",
         "screen_server_confirmation_.*",
         "screen_change_server_.*",
@@ -195,6 +212,7 @@
     {
       "name" : ":features:roomdetails:impl",
       "includeRegex" : [
+        "crypto\\.history_sharing\\.room_info_.*",
         "screen_room_details_.*",
         "screen\\.room_details\\..*",
         "screen_room_member_list_.*",
@@ -205,15 +223,27 @@
         "screen_notification_settings_mentions_only_disclaimer",
         "screen_room_change_.*",
         "screen_room_roles_.*",
+        "screen_roomlist_mark_as_.*",
         "screen\\.edit_room_address\\..*",
         "screen\\.security_and_privacy\\..*"
+      ]
+    },
+    {
+      "name" : ":features:roomdetailsedit:impl",
+      "includeRegex" : [
+        "screen_room_details_edit_room_title",
+        "screen_room_details_edition_error",
+        "screen_room_details_edition_error_title",
+        "screen_room_details_updating_room"
       ]
     },
     {
       "name" : ":features:space:impl",
       "includeRegex" : [
         "screen\\.leave_space\\..*",
-        "screen\\.space_settings\\..*"
+        "screen\\.space_settings\\..*",
+        "screen\\.space\\..*",
+        "screen\\.space_add_rooms\\..*"
       ]
     },
     {
@@ -233,17 +263,20 @@
     {
       "name" : ":features:messages:impl",
       "includeRegex" : [
-        "emoji_picker_category_.*",
         "screen_report_content_.*",
         "screen_room_attachment.*",
         "screen_room_encrypted.*",
         "screen_room_invite.*",
         "screen\\.room\\.mention.*",
+        "crypto\\.event_authenticity\\..*",
         "screen_room_message.*",
         "screen_room_retry.*",
         "screen_room_timeline.*",
+        "screen\\.room\\.timeline.*",
+        "error\\.sending_failure\\..*",
         "screen\\.room_timeline.*",
         "screen_room_typing.*",
+        "screen\\.image_edition\\..*",
         "screen\\.media_upload.*"
       ]
     },
@@ -264,8 +297,7 @@
       "includeRegex" : [
         "screen_welcome_.*",
         "screen_notification_optin_.*",
-        "screen_identity_.*",
-        "screen_session_verification_enter_recovery_key"
+        "screen_identity_.*"
       ]
     },
     {
@@ -288,6 +320,7 @@
         "screen_chat_backup_.*",
         "screen_key_backup_disable_.*",
         "screen_recovery_key_.*",
+        "screen\\.custom_recovery_key\\..*",
         "screen_create_new_recovery_key_.*",
         "screen_encryption_reset.*",
         "screen_reset_encryption.*",
@@ -299,11 +332,14 @@
       "includeRegex" : [
         "screen_advanced_settings_.*",
         "screen\\.advanced_settings\\..*",
+        "screen\\.settings\\..*",
         "screen_edit_profile_.*",
         "screen_notification_settings_.*",
+        "screen\\.notification_settings\\..*",
         "screen_blocked_users_.*",
         "full_screen_intent_banner_.*",
         "troubleshoot_notifications_entry_point_.*",
+        "theme\\..*",
         "screen\\.labs\\..*"
       ]
     },
@@ -372,10 +408,32 @@
       "name" : ":features:rolesandpermissions:impl",
       "includeRegex" : [
         "screen_room_change_.*",
+        "screen\\.room_change_permissions\\..*",
         "screen_room_roles_.*",
         "screen\\.room_roles_and_permissions\\..*",
         "screen_room_member_list.*",
         "screen\\.room_member_list\\..*"
+      ]
+    },
+    {
+      "name" : ":features:securityandprivacy:impl",
+      "includeRegex" : [
+        "screen\\.edit_room_address\\..*",
+        "screen\\.security_and_privacy\\..*",
+        "screen\\.manage_authorized_spaces\\..*"
+      ]
+    },
+    {
+      "name" : ":features:location:impl",
+      "includeRegex" : [
+        "screen\\.share_location\\..*",
+        "screen\\.view_location\\..*"
+      ]
+    },
+    {
+      "name" : ":libraries:emoji:impl",
+      "includeRegex" : [
+        "emoji_picker_.*"
       ]
     }
   ]

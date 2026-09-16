@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_decline_and_block_block_user_option_description">"Nećete vidjeti nikakve poruke ili pozivnice za sobu od ovog korisnika"</string>
+  <string name="screen_decline_and_block_block_user_option_title">"Blokiraj korisnika"</string>
+  <string name="screen_decline_and_block_report_user_option_description">"Prijavite ovu sobu svom davatelju usluga računa."</string>
+  <string name="screen_decline_and_block_report_user_reason_placeholder">"Navedite razlog prijave…"</string>
+  <string name="screen_decline_and_block_title">"Odbij i blokiraj"</string>
+  <string name="screen_invites_decline_chat_message">"Jeste li sigurni da želite odbiti poziv za pridruživanje %1$s?"</string>
+  <string name="screen_invites_decline_chat_title">"Odbij poziv"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Jeste li sigurni da želite odbiti ovaj privatni razgovor s korisnikom %1$s?"</string>
+  <string name="screen_invites_decline_direct_chat_title">"Odbij razgovor"</string>
+  <string name="screen_invites_empty_list">"Nema pozivnica"</string>
+  <string name="screen_invites_invited_you">"Pozvao vas je korisnik %1$s (%2$s)"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Da, odbij i blokiraj"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Jeste li sigurni da želite odbiti poziv za pridruživanje ovoj sobi? Time ćete također spriječiti da %1$s kontaktira s vama ili vas pozove u sobe."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Odbij poziv i blokiraj"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Odbij i blokiraj"</string>
+</resources>

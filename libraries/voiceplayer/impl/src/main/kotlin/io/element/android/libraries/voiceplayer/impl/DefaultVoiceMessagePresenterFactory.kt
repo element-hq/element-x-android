@@ -26,6 +26,7 @@ class DefaultVoiceMessagePresenterFactory(
     @SessionCoroutineScope
     private val sessionCoroutineScope: CoroutineScope,
     private val voiceMessagePlayerFactory: VoiceMessagePlayer.Factory,
+    private val voicePlayerStore: VoicePlayerStore,
 ) : VoiceMessagePresenterFactory {
     override fun createVoiceMessagePresenter(
         eventId: EventId?,
@@ -44,6 +45,7 @@ class DefaultVoiceMessagePresenterFactory(
         return VoiceMessagePresenter(
             analyticsService = analyticsService,
             sessionCoroutineScope = sessionCoroutineScope,
+            voicePlayerStore = voicePlayerStore,
             player = player,
             eventId = eventId,
             duration = duration,

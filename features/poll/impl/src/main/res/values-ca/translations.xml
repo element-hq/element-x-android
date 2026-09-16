@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_poll_add_option_btn">"Afegeix opció"</string>
+  <string name="screen_create_poll_anonymous_desc">"Mostra els resultats només quan hagi finalitzat la votació"</string>
+  <string name="screen_create_poll_anonymous_headline">"Amaga vots"</string>
+  <string name="screen_create_poll_answer_hint">"Opció %1$d"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"Els canvis no s\'han desat. Segur que vols tornar enrere?"</string>
+  <string name="screen_create_poll_question_desc">"Pregunta o tema"</string>
+  <string name="screen_create_poll_question_hint">"De què tracta la votació?"</string>
+  <string name="screen_create_poll_title">"Crea votació"</string>
+  <string name="screen_edit_poll_delete_confirmation">"Segur que vols eliminar la votació?"</string>
+  <string name="screen_edit_poll_delete_confirmation_title">"Elimina votació"</string>
+  <string name="screen_edit_poll_title">"Edita votació"</string>
+  <string name="screen_polls_history_empty_ongoing">"No s\'han trobat votacions en curs."</string>
+  <string name="screen_polls_history_empty_past">"No s\'han trobat votacions passades."</string>
+  <string name="screen_polls_history_filter_ongoing">"En curs"</string>
+  <string name="screen_polls_history_filter_past">"Pasades"</string>
+  <string name="screen_polls_history_title">"Votacions"</string>
+</resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_unified_push_description">"Provjerite jesu li UnifiedPush distributeri dostupni."</string>
+  <string name="troubleshoot_notifications_test_unified_push_failure">"Nisu pronađeni distributeri push obavijesti."</string>
+  <plurals name="troubleshoot_notifications_test_unified_push_success">
+    <item quantity="one">"Pronađen je %1$d distributer: %2$s."</item>
+    <item quantity="few">"Pronađena su %1$d distributera: %2$s."</item>
+    <item quantity="other">"Pronađeno je %1$d distributera: %2$s."</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_unified_push_title">"Provjeri UnifiedPush"</string>
+</resources>

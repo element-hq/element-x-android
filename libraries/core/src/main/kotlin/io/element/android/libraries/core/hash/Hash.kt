@@ -21,7 +21,7 @@ fun String.md5() = try {
     digest.digest()
         .joinToString("") { String.format(locale, "%02X", it) }
         .lowercase(locale)
-} catch (exc: Exception) {
+} catch (_: Exception) {
     // Should not happen, but just in case
     hashCode().toString()
 }

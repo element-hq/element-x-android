@@ -17,5 +17,6 @@ import io.element.android.libraries.textcomposer.model.MessageComposerMode
  * the composer is in a thread, if it's editing a message, etc.
  */
 interface MessageComposerContext {
+    /** What the composer is currently doing: writing a new message, editing one, replying, or composing in a thread. */
     val composerMode: MessageComposerMode
 }

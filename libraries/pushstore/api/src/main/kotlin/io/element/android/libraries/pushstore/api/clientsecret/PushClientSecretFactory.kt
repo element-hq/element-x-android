@@ -8,6 +8,10 @@
 
 package io.element.android.libraries.pushstore.api.clientsecret
 
+/**
+ * Generates the client secrets used to attribute an incoming push to a session; see [PushClientSecret] for how they are used.
+ */
 interface PushClientSecretFactory {
+    /** Returns a new random secret. */
     fun create(): String
 }

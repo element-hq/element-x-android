@@ -37,6 +37,7 @@ import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.bindings
+import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.DependencyInjectionGraphOwner
@@ -64,6 +65,12 @@ class QrCodeLoginFlowNode(
     buildContext = buildContext,
     plugins = plugins,
 ), DependencyInjectionGraphOwner {
+    interface Callback : Plugin {
+        fun navigateBack()
+    }
+
+    private val callback: Callback = callback()
+
     private var authenticationJob: Job? = null
 
     override val graph = qrCodeLoginGraphFactory.create()
@@ -85,7 +92,6 @@ class QrCodeLoginFlowNode(
 
     override fun onBuilt() {
         super.onBuilt()
-
         observeLoginStep()
     }
 
@@ -113,7 +119,8 @@ class QrCodeLoginFlowNode(
                                 is QrLoginException.Cancelled -> {
                                     backstack.replace(NavTarget.Error(QrCodeErrorScreenType.Cancelled))
                                 }
-                                is QrLoginException.Expired -> {
+                                is QrLoginException.Expired,
+                                is QrLoginException.NotFound -> {
                                     backstack.replace(NavTarget.Error(QrCodeErrorScreenType.Expired))
                                 }
                                 is QrLoginException.Declined -> {
@@ -128,11 +135,16 @@ class QrCodeLoginFlowNode(
                                 is QrLoginException.SlidingSyncNotAvailable -> {
                                     backstack.replace(NavTarget.Error(QrCodeErrorScreenType.SlidingSyncNotAvailable))
                                 }
-                                is QrLoginException.OidcMetadataInvalid -> {
-                                    Timber.e(error, "OIDC metadata is invalid")
+                                is QrLoginException.OAuthMetadataInvalid -> {
+                                    Timber.e(error, "OAuth metadata is invalid")
                                     backstack.replace(NavTarget.Error(QrCodeErrorScreenType.UnknownError))
                                 }
-                                else -> {
+                                QrLoginException.CheckCodeAlreadySent,
+                                QrLoginException.CheckCodeCannotBeSent,
+                                QrLoginException.ContinuationAlreadySent,
+                                QrLoginException.ContinuationCannotBeSent,
+                                QrLoginException.UnsupportedQrCodeType,
+                                QrLoginException.Unknown -> {
                                     Timber.e(error, "Unknown error found")
                                     backstack.replace(NavTarget.Error(QrCodeErrorScreenType.UnknownError))
                                 }
@@ -178,7 +190,13 @@ class QrCodeLoginFlowNode(
             }
             is NavTarget.Error -> {
                 val callback = object : QrCodeErrorNode.Callback {
-                    override fun onRetry() = reset()
+                    override fun onRetry() {
+                        reset()
+                    }
+
+                    override fun onCancel() {
+                        callback.navigateBack()
+                    }
                 }
                 createNode<QrCodeErrorNode>(buildContext, plugins = listOf(navTarget.errorType, callback))
             }

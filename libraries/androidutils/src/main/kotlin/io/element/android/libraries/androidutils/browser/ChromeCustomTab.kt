@@ -60,7 +60,7 @@ fun Activity.openUrlInChromeCustomTab(
                 })
             }
             .launchUrl(this, url.toUri())
-    } catch (activityNotFoundException: ActivityNotFoundException) {
+    } catch (_: ActivityNotFoundException) {
         openUrlInExternalApp(url)
     }
 }

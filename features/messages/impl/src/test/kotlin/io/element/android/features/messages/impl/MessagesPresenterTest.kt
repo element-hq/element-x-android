@@ -13,7 +13,8 @@ package io.element.android.features.messages.impl
 import androidx.lifecycle.Lifecycle
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.PinUnpinAction
-import io.element.android.features.messages.impl.actionlist.ActionListEvents
+import io.element.android.features.location.test.FakeActiveLiveLocationShareManager
+import io.element.android.features.messages.impl.actionlist.ActionListEvent
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
@@ -24,10 +25,11 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.aLoadedPinnedMessagesBannerState
+import io.element.android.features.messages.impl.threads.list.aThreadListItem
 import io.element.android.features.messages.impl.timeline.FakeMarkAsFullyRead
 import io.element.android.features.messages.impl.timeline.MarkAsFullyRead
 import io.element.android.features.messages.impl.timeline.TimelineController
-import io.element.android.features.messages.impl.timeline.TimelineEvents
+import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.aTimelineState
 import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
@@ -50,6 +52,7 @@ import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
+import io.element.android.libraries.emoji.api.recentemojis.AddRecentEmoji
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
@@ -63,10 +66,13 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.room.StateEventType
+import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -78,6 +84,7 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
+import io.element.android.libraries.matrix.test.core.FakeSendHandle
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
@@ -85,10 +92,11 @@ import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
+import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
+import io.element.android.libraries.matrix.test.room.threads.FakeThreadsListService
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.aTimelineItemDebugInfo
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
-import io.element.android.libraries.recentemojis.api.AddRecentEmoji
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.textcomposer.model.aTextEditorStateMarkdown
@@ -107,6 +115,7 @@ import io.element.android.tests.testutils.testWithLifecycleOwner
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
@@ -114,8 +123,8 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
-@Suppress("LargeClass")
 class MessagesPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
@@ -134,6 +143,39 @@ class MessagesPresenterTest {
             assertThat(initialState.snackbarMessage).isNull()
             assertThat(initialState.inviteProgress).isEqualTo(AsyncData.Uninitialized)
             assertThat(initialState.showReinvitePrompt).isFalse()
+            assertThat(initialState.showLiveLocationShareBanner).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - exposes live location sharing banner visibility for current room`() = runTest {
+        val liveLocationShareManager = FakeActiveLiveLocationShareManager(
+            startShareLambda = { _, _ -> Result.success(Unit) },
+        )
+        liveLocationShareManager.startShare(A_ROOM_ID, 60.seconds)
+        val presenter = createMessagesPresenter(liveLocationShareManager = liveLocationShareManager)
+
+        presenter.testWithLifecycleOwner {
+            val state = consumeItemsUntilTimeout().last()
+            assertThat(state.showLiveLocationShareBanner).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - stop live location share delegates to manager for current room`() = runTest {
+        val stopShareLambda = lambdaRecorder<RoomId, Result<Unit>> { Result.success(Unit) }
+        val liveLocationShareManager = FakeActiveLiveLocationShareManager(
+            stopShareLambda = stopShareLambda
+        )
+        val presenter = createMessagesPresenter(liveLocationShareManager = liveLocationShareManager)
+
+        presenter.testWithLifecycleOwner {
+            val state = consumeItemsUntilTimeout().last()
+            state.eventSink(MessagesEvent.StopLiveLocationShare)
+            advanceUntilIdle()
+            assert(stopShareLambda)
+                .isCalledOnce()
+                .with(value(A_ROOM_ID))
         }
     }
 
@@ -142,11 +184,7 @@ class MessagesPresenterTest {
     fun `present - check that the room's unread flag is removed`() = runTest {
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
-                canRedactOwnResult = { Result.success(true) },
-                canRedactOtherResult = { Result.success(true) },
-                canUserJoinCallResult = { Result.success(true) },
-                canUserPinUnpinResult = { Result.success(true) },
+                roomPermissions = roomPermissions(),
                 markAsReadResult = { lambdaError() }
             ),
             typingNoticeResult = { Result.success(Unit) },
@@ -172,11 +210,7 @@ class MessagesPresenterTest {
         }
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
-                canRedactOwnResult = { Result.success(true) },
-                canRedactOtherResult = { Result.success(true) },
-                canUserJoinCallResult = { Result.success(true) },
-                canUserPinUnpinResult = { Result.success(true) },
+                roomPermissions = roomPermissions(),
             ),
             liveTimeline = timeline,
             typingNoticeResult = { Result.success(Unit) },
@@ -190,14 +224,14 @@ class MessagesPresenterTest {
         presenter.testWithLifecycleOwner {
             skipItems(1)
             val initialState = awaitItem()
-            initialState.eventSink(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID.toEventOrTransactionId()))
+            initialState.eventSink(MessagesEvent.ToggleReaction("👍", AN_EVENT_ID.toEventOrTransactionId()))
             advanceUntilIdle()
             assert(toggleReactionSuccess)
                 .isCalledOnce()
                 .with(value("👍"), value(AN_EVENT_ID.toEventOrTransactionId()))
             // No crashes when sending a reaction failed
             timeline.toggleReactionLambda = toggleReactionFailure
-            initialState.eventSink(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID.toEventOrTransactionId()))
+            initialState.eventSink(MessagesEvent.ToggleReaction("👍", AN_EVENT_ID.toEventOrTransactionId()))
             advanceUntilIdle()
             assert(toggleReactionFailure)
                 .isCalledOnce()
@@ -222,11 +256,7 @@ class MessagesPresenterTest {
         }
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
-                canRedactOwnResult = { Result.success(true) },
-                canRedactOtherResult = { Result.success(true) },
-                canUserJoinCallResult = { Result.success(true) },
-                canUserPinUnpinResult = { Result.success(true) },
+                roomPermissions = roomPermissions(),
             ),
             liveTimeline = timeline,
             typingNoticeResult = { Result.success(Unit) },
@@ -239,8 +269,8 @@ class MessagesPresenterTest {
         )
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
-            initialState.eventSink(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID.toEventOrTransactionId()))
-            initialState.eventSink(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID.toEventOrTransactionId()))
+            initialState.eventSink(MessagesEvent.ToggleReaction("👍", AN_EVENT_ID.toEventOrTransactionId()))
+            initialState.eventSink(MessagesEvent.ToggleReaction("👍", AN_EVENT_ID.toEventOrTransactionId()))
             advanceUntilIdle()
             assert(toggleReactionSuccess)
                 .isCalledExactly(2)
@@ -262,7 +292,7 @@ class MessagesPresenterTest {
         val presenter = createMessagesPresenter(navigator = navigator)
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Forward, aMessageEvent()))
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Forward, aMessageEvent()))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
             onForwardEventClickLambda.assertions().isCalledOnce().with(value(AN_EVENT_ID))
         }
@@ -275,7 +305,7 @@ class MessagesPresenterTest {
         val presenter = createMessagesPresenter(clipboardHelper = clipboardHelper)
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.CopyText, event))
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.CopyText, event))
             skipItems(2)
             assertThat(clipboardHelper.clipboardContents).isEqualTo((event.content as TimelineItemTextContent).body)
         }
@@ -287,11 +317,7 @@ class MessagesPresenterTest {
         val event = aMessageEvent()
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
-                canRedactOwnResult = { Result.success(true) },
-                canRedactOtherResult = { Result.success(true) },
-                canUserJoinCallResult = { Result.success(true) },
-                canUserPinUnpinResult = { Result.success(true) },
+                roomPermissions = roomPermissions(),
                 eventPermalinkResult = { Result.success("a link") },
             ),
             typingNoticeResult = { Result.success(Unit) },
@@ -302,7 +328,7 @@ class MessagesPresenterTest {
         )
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.CopyLink, event))
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.CopyLink, event))
             skipItems(2)
             assertThat(clipboardHelper.clipboardContents).isEqualTo("a link")
         }
@@ -316,7 +342,7 @@ class MessagesPresenterTest {
         )
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Reply, aMessageEvent()))
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Reply, aMessageEvent()))
             awaitItem()
             composerRecorder.assertSingle(
                 MessageComposerEvent.SetMode(
@@ -334,7 +360,7 @@ class MessagesPresenterTest {
         val presenter = createMessagesPresenter()
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Reply, aMessageEvent(eventId = null)))
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Reply, aMessageEvent(eventId = null)))
             skipItems(1)
         }
     }
@@ -367,7 +393,7 @@ class MessagesPresenterTest {
                     formattedFileSize = "4MB"
                 )
             )
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Reply, mediaMessage))
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Reply, mediaMessage))
             awaitItem()
             composerRecorder.assertSingle(
                 MessageComposerEvent.SetMode(
@@ -409,7 +435,7 @@ class MessagesPresenterTest {
                     formattedFileSize = "50MB"
                 )
             )
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Reply, mediaMessage))
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Reply, mediaMessage))
             awaitItem()
             composerRecorder.assertSingle(
                 MessageComposerEvent.SetMode(
@@ -444,7 +470,7 @@ class MessagesPresenterTest {
                     fileExtension = "pdf",
                 )
             )
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Reply, mediaMessage))
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Reply, mediaMessage))
             awaitItem()
             composerRecorder.assertSingle(
                 MessageComposerEvent.SetMode(
@@ -465,7 +491,7 @@ class MessagesPresenterTest {
         )
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Edit, aMessageEvent()))
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Edit, aMessageEvent()))
             awaitItem()
             composerRecorder.assertSingle(
                 MessageComposerEvent.SetMode(
@@ -487,7 +513,7 @@ class MessagesPresenterTest {
         val presenter = createMessagesPresenter(navigator = navigator)
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.EditPoll, aMessageEvent(content = aTimelineItemPollContent())))
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.EditPoll, aMessageEvent(content = aTimelineItemPollContent())))
             awaitItem()
             onEditPollClickLambda.assertions().isCalledOnce().with(value(AN_EVENT_ID))
         }
@@ -495,13 +521,13 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - handle action end poll`() = runTest {
-        val timelineEventSink = EventsRecorder<TimelineEvents>()
+        val timelineEventSink = EventsRecorder<TimelineEvent>()
         val presenter = createMessagesPresenter(timelineEventSink = timelineEventSink)
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.EndPoll, aMessageEvent(content = aTimelineItemPollContent())))
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.EndPoll, aMessageEvent(content = aTimelineItemPollContent())))
             delay(1)
-            timelineEventSink.assertSingle(TimelineEvents.EndPoll(AN_EVENT_ID))
+            timelineEventSink.assertSingle(TimelineEvent.EndPoll(AN_EVENT_ID))
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -513,11 +539,7 @@ class MessagesPresenterTest {
         val liveTimeline = FakeTimeline()
         val joinedRoom = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
-                canRedactOwnResult = { Result.success(true) },
-                canRedactOtherResult = { Result.success(true) },
-                canUserJoinCallResult = { Result.success(true) },
-                canUserPinUnpinResult = { Result.success(true) },
+                roomPermissions = roomPermissions(),
             ),
             liveTimeline = liveTimeline,
             typingNoticeResult = { Result.success(Unit) },
@@ -533,7 +555,7 @@ class MessagesPresenterTest {
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent()
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Redact, messageEvent))
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Redact, messageEvent))
             awaitItem()
             assert(redactEventLambda)
                 .isCalledOnce()
@@ -550,19 +572,9 @@ class MessagesPresenterTest {
         val presenter = createMessagesPresenter(navigator = navigator)
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.ReportContent, aMessageEvent()))
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.ReportContent, aMessageEvent()))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
             onReportContentClickLambda.assertions().isCalledOnce().with(value(AN_EVENT_ID), value(A_USER_ID))
-        }
-    }
-
-    @Test
-    fun `present - handle dismiss action`() = runTest {
-        val presenter = createMessagesPresenter()
-        presenter.testWithLifecycleOwner {
-            val initialState = awaitItem()
-            initialState.eventSink(MessagesEvents.Dismiss)
-            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
 
@@ -575,7 +587,7 @@ class MessagesPresenterTest {
         val presenter = createMessagesPresenter(navigator = navigator)
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.ViewSource, aMessageEvent()))
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.ViewSource, aMessageEvent()))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
             onShowEventDebugInfoClickLambda.assertions().isCalledOnce().with(value(AN_EVENT_ID), value(aTimelineItemDebugInfo()))
         }
@@ -585,13 +597,9 @@ class MessagesPresenterTest {
     fun `present - shows prompt to reinvite users in DM`() = runTest {
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
-                canRedactOwnResult = { Result.success(true) },
-                canRedactOtherResult = { Result.success(true) },
-                canUserJoinCallResult = { Result.success(true) },
-                canUserPinUnpinResult = { Result.success(true) },
+                roomPermissions = roomPermissions(),
             ).apply {
-                givenRoomInfo(aRoomInfo(isDirect = true, joinedMembersCount = 1, activeMembersCount = 1))
+                givenRoomInfo(aRoomInfo(isDm = true, joinedMembersCount = 1, activeMembersCount = 1))
             },
             typingNoticeResult = { Result.success(Unit) },
         )
@@ -607,7 +615,7 @@ class MessagesPresenterTest {
             val focusedState = awaitItem()
             assertThat(focusedState.showReinvitePrompt).isTrue()
             // If it's dismissed then we stop showing the alert
-            initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Cancel))
+            initialState.eventSink(MessagesEvent.InviteDialogDismissed(InviteDialogAction.Cancel))
             skipItems(1)
             val dismissedState = awaitItem()
             assertThat(dismissedState.showReinvitePrompt).isFalse()
@@ -618,11 +626,7 @@ class MessagesPresenterTest {
     fun `present - doesn't show reinvite prompt in non-direct room`() = runTest {
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
-                canRedactOwnResult = { Result.success(true) },
-                canRedactOtherResult = { Result.success(true) },
-                canUserJoinCallResult = { Result.success(true) },
-                canUserPinUnpinResult = { Result.success(true) },
+                roomPermissions = roomPermissions(),
             ).apply {
                 givenRoomInfo(aRoomInfo(isDirect = false, joinedMembersCount = 1, activeMembersCount = 1))
             },
@@ -644,11 +648,7 @@ class MessagesPresenterTest {
     fun `present - doesn't show reinvite prompt if other party is present`() = runTest {
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
-                canRedactOwnResult = { Result.success(true) },
-                canRedactOtherResult = { Result.success(true) },
-                canUserJoinCallResult = { Result.success(true) },
-                canUserPinUnpinResult = { Result.success(true) },
+                roomPermissions = roomPermissions(),
             ).apply {
                 givenRoomInfo(aRoomInfo(isDirect = true, joinedMembersCount = 2, activeMembersCount = 2))
             },
@@ -671,11 +671,7 @@ class MessagesPresenterTest {
         val inviteUserResult = lambdaRecorder { _: UserId -> Result.success(Unit) }
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
-                canRedactOwnResult = { Result.success(true) },
-                canRedactOtherResult = { Result.success(true) },
-                canUserJoinCallResult = { Result.success(true) },
-                canUserPinUnpinResult = { Result.success(true) },
+                roomPermissions = roomPermissions(),
             ),
             typingNoticeResult = { Result.success(Unit) },
             inviteUserResult = inviteUserResult,
@@ -691,7 +687,7 @@ class MessagesPresenterTest {
         val presenter = createMessagesPresenter(joinedRoom = room)
         presenter.testWithLifecycleOwner {
             val initialState = consumeItemsUntilTimeout().last()
-            initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
+            initialState.eventSink(MessagesEvent.InviteDialogDismissed(InviteDialogAction.Invite))
             skipItems(1)
             val loadingState = awaitItem()
             assertThat(loadingState.inviteProgress.isLoading()).isTrue()
@@ -706,11 +702,7 @@ class MessagesPresenterTest {
         val inviteUserResult = lambdaRecorder { _: UserId -> Result.success(Unit) }
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
-                canRedactOwnResult = { Result.success(true) },
-                canRedactOtherResult = { Result.success(true) },
-                canUserJoinCallResult = { Result.success(true) },
-                canUserPinUnpinResult = { Result.success(true) },
+                roomPermissions = roomPermissions(),
             ),
             typingNoticeResult = { Result.success(Unit) },
             inviteUserResult = inviteUserResult,
@@ -727,7 +719,7 @@ class MessagesPresenterTest {
         val presenter = createMessagesPresenter(joinedRoom = room)
         presenter.testWithLifecycleOwner {
             val initialState = consumeItemsUntilTimeout().last()
-            initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
+            initialState.eventSink(MessagesEvent.InviteDialogDismissed(InviteDialogAction.Invite))
             skipItems(1)
             val loadingState = consumeItemsUntilPredicate { state ->
                 state.inviteProgress.isLoading()
@@ -743,11 +735,7 @@ class MessagesPresenterTest {
     fun `present - handle reinviting other user when memberlist is not ready`() = runTest {
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
-                canRedactOwnResult = { Result.success(true) },
-                canRedactOtherResult = { Result.success(true) },
-                canUserJoinCallResult = { Result.success(true) },
-                canUserPinUnpinResult = { Result.success(true) },
+                roomPermissions = roomPermissions(),
             ),
             typingNoticeResult = { Result.success(Unit) },
         )
@@ -755,7 +743,7 @@ class MessagesPresenterTest {
         val presenter = createMessagesPresenter(joinedRoom = room)
         presenter.testWithLifecycleOwner {
             val initialState = consumeItemsUntilTimeout().last()
-            initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
+            initialState.eventSink(MessagesEvent.InviteDialogDismissed(InviteDialogAction.Invite))
             skipItems(1)
             val loadingState = awaitItem()
             assertThat(loadingState.inviteProgress.isLoading()).isTrue()
@@ -768,11 +756,7 @@ class MessagesPresenterTest {
     fun `present - handle reinviting other user when inviting fails`() = runTest {
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
-                canRedactOwnResult = { Result.success(true) },
-                canRedactOtherResult = { Result.success(true) },
-                canUserJoinCallResult = { Result.success(true) },
-                canUserPinUnpinResult = { Result.success(true) },
+                roomPermissions = roomPermissions(),
             ),
             typingNoticeResult = { Result.success(Unit) },
             inviteUserResult = { Result.failure(RuntimeException("Oops!")) },
@@ -788,7 +772,7 @@ class MessagesPresenterTest {
         val presenter = createMessagesPresenter(joinedRoom = room)
         presenter.testWithLifecycleOwner {
             val initialState = consumeItemsUntilTimeout().last()
-            initialState.eventSink(MessagesEvents.InviteDialogDismissed(InviteDialogAction.Invite))
+            initialState.eventSink(MessagesEvent.InviteDialogDismissed(InviteDialogAction.Invite))
 
             val loadingState = consumeItemsUntilPredicate { state ->
                 state.inviteProgress.isLoading()
@@ -806,17 +790,7 @@ class MessagesPresenterTest {
     fun `present - permission to post`() = runTest {
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canRedactOwnResult = { Result.success(true) },
-                canRedactOtherResult = { Result.success(true) },
-                canUserJoinCallResult = { Result.success(true) },
-                canUserPinUnpinResult = { Result.success(true) },
-                canUserSendMessageResult = { _, messageEventType ->
-                    when (messageEventType) {
-                        MessageEventType.RoomMessage -> Result.success(true)
-                        MessageEventType.Reaction -> Result.success(true)
-                        else -> lambdaError()
-                    }
-                },
+                roomPermissions = roomPermissions(),
             ),
             typingNoticeResult = { Result.success(Unit) },
         )
@@ -832,17 +806,9 @@ class MessagesPresenterTest {
     fun `present - no permission to post`() = runTest {
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canRedactOwnResult = { Result.success(true) },
-                canRedactOtherResult = { Result.success(true) },
-                canUserJoinCallResult = { Result.success(true) },
-                canUserPinUnpinResult = { Result.success(true) },
-                canUserSendMessageResult = { _, messageEventType ->
-                    when (messageEventType) {
-                        MessageEventType.RoomMessage -> Result.success(false)
-                        MessageEventType.Reaction -> Result.success(false)
-                        else -> lambdaError()
-                    }
-                },
+                roomPermissions = roomPermissions(
+                    canSendMessage = false
+                ),
             ),
             typingNoticeResult = { Result.success(Unit) },
         )
@@ -858,11 +824,9 @@ class MessagesPresenterTest {
     fun `present - permission to redact own`() = runTest {
         val joinedRoom = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canRedactOwnResult = { Result.success(true) },
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
-                canRedactOtherResult = { Result.success(false) },
-                canUserJoinCallResult = { Result.success(true) },
-                canUserPinUnpinResult = { Result.success(true) },
+                roomPermissions = roomPermissions(
+                    canRedactOther = false
+                ),
             ),
             typingNoticeResult = { Result.success(Unit) },
         )
@@ -879,11 +843,9 @@ class MessagesPresenterTest {
     fun `present - permission to redact other`() = runTest {
         val joinedRoom = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canRedactOtherResult = { Result.success(true) },
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
-                canRedactOwnResult = { Result.success(false) },
-                canUserJoinCallResult = { Result.success(true) },
-                canUserPinUnpinResult = { Result.success(true) },
+                roomPermissions = roomPermissions(
+                    canRedactOwn = false
+                ),
             ),
             typingNoticeResult = { Result.success(Unit) },
         )
@@ -907,7 +869,7 @@ class MessagesPresenterTest {
             val poll = aMessageEvent(
                 content = aTimelineItemPollContent()
             )
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Reply, poll))
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Reply, poll))
             skipItems(1)
             composerRecorder.assertSingle(
                 MessageComposerEvent.SetMode(
@@ -928,11 +890,7 @@ class MessagesPresenterTest {
         val timeline = FakeTimeline()
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
-                canRedactOwnResult = { Result.success(true) },
-                canRedactOtherResult = { Result.success(true) },
-                canUserJoinCallResult = { Result.success(true) },
-                canUserPinUnpinResult = { Result.success(true) },
+                roomPermissions = roomPermissions(),
             ),
             liveTimeline = timeline,
             typingNoticeResult = { Result.success(Unit) },
@@ -949,11 +907,11 @@ class MessagesPresenterTest {
             val initialState = awaitItem()
 
             timeline.pinEventLambda = successPinEventLambda
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Pin, messageEvent))
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Pin, messageEvent))
             assert(successPinEventLambda).isCalledOnce().with(value(messageEvent.eventId))
 
             timeline.pinEventLambda = failurePinEventLambda
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Pin, messageEvent))
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Pin, messageEvent))
             assert(failurePinEventLambda).isCalledOnce().with(value(messageEvent.eventId))
             skipItems(1)
             assertThat(awaitItem().snackbarMessage).isNotNull()
@@ -972,11 +930,7 @@ class MessagesPresenterTest {
         val analyticsService = FakeAnalyticsService()
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
-                canRedactOwnResult = { Result.success(true) },
-                canRedactOtherResult = { Result.success(true) },
-                canUserJoinCallResult = { Result.success(true) },
-                canUserPinUnpinResult = { Result.success(true) },
+                roomPermissions = roomPermissions(),
             ),
             liveTimeline = timeline,
             typingNoticeResult = { Result.success(Unit) },
@@ -993,11 +947,11 @@ class MessagesPresenterTest {
             val initialState = awaitItem()
 
             timeline.unpinEventLambda = successUnpinEventLambda
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Unpin, messageEvent))
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Unpin, messageEvent))
             assert(successUnpinEventLambda).isCalledOnce().with(value(messageEvent.eventId))
 
             timeline.unpinEventLambda = failureUnpinEventLambda
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Unpin, messageEvent))
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Unpin, messageEvent))
             assert(failureUnpinEventLambda).isCalledOnce().with(value(messageEvent.eventId))
             skipItems(1)
             assertThat(awaitItem().snackbarMessage).isNotNull()
@@ -1021,13 +975,40 @@ class MessagesPresenterTest {
         )
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.EditCaption, messageEvent))
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.EditCaption, messageEvent))
             awaitItem()
             composerRecorder.assertSingle(
                 MessageComposerEvent.SetMode(
                     composerMode = MessageComposerMode.EditCaption(
                         eventOrTransactionId = AN_EVENT_ID.toEventOrTransactionId(),
                         content = A_CAPTION,
+                    )
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - handle action edit caption starts from the formatted caption`() = runTest {
+        val messageEvent = aMessageEvent(
+            content = aTimelineItemImageContent(
+                caption = "Hello world",
+                htmlCaption = "<b>Hello</b> world",
+            )
+        )
+        val composerRecorder = EventsRecorder<MessageComposerEvent>()
+        val presenter = createMessagesPresenter(
+            messageComposerPresenter = { aMessageComposerState(eventSink = composerRecorder, showTextFormatting = true) },
+        )
+        presenter.testWithLifecycleOwner {
+            val initialState = awaitItem()
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.EditCaption, messageEvent))
+            awaitItem()
+            composerRecorder.assertSingle(
+                MessageComposerEvent.SetMode(
+                    composerMode = MessageComposerMode.EditCaption(
+                        eventOrTransactionId = AN_EVENT_ID.toEventOrTransactionId(),
+                        content = "<b>Hello</b> world",
                     )
                 )
             )
@@ -1047,7 +1028,7 @@ class MessagesPresenterTest {
         )
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.AddCaption, messageEvent))
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.AddCaption, messageEvent))
             awaitItem()
             composerRecorder.assertSingle(
                 MessageComposerEvent.SetMode(
@@ -1073,11 +1054,7 @@ class MessagesPresenterTest {
         }
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
-                canRedactOwnResult = { Result.success(true) },
-                canRedactOtherResult = { Result.success(true) },
-                canUserJoinCallResult = { Result.success(true) },
-                canUserPinUnpinResult = { Result.success(true) },
+                roomPermissions = roomPermissions(),
             ),
             liveTimeline = timeline,
             typingNoticeResult = { Result.success(Unit) },
@@ -1089,8 +1066,58 @@ class MessagesPresenterTest {
         presenter.testWithLifecycleOwner {
             skipItems(1)
             val initialState = awaitItem()
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.RemoveCaption, messageEvent))
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.RemoveCaption, messageEvent))
             editCaptionLambda.assertions().isCalledOnce().with(value(AN_EVENT_ID.toEventOrTransactionId()), value(null), value(null))
+        }
+    }
+
+    @Test
+    fun `present - handle action retry sending`() = runTest {
+        val retryLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val messageEvent = aMessageEvent(
+            sendState = LocalEventSendState.Failed.Unknown("Error"),
+            sendHandleProvider = { FakeSendHandle(retryLambda = retryLambda) },
+        )
+        val presenter = createMessagesPresenter()
+        presenter.testWithLifecycleOwner {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.RetrySending, messageEvent))
+            advanceUntilIdle()
+            retryLambda.assertions().isCalledOnce()
+        }
+    }
+
+    @Test
+    fun `present - handle action retry sending - failure is ignored`() = runTest {
+        val retryLambda = lambdaRecorder<Result<Unit>> { Result.failure(AN_EXCEPTION) }
+        val messageEvent = aMessageEvent(
+            sendState = LocalEventSendState.Failed.Unknown("Error"),
+            sendHandleProvider = { FakeSendHandle(retryLambda = retryLambda) },
+        )
+        val presenter = createMessagesPresenter()
+        presenter.testWithLifecycleOwner {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.RetrySending, messageEvent))
+            advanceUntilIdle()
+            retryLambda.assertions().isCalledOnce()
+        }
+    }
+
+    @Test
+    fun `present - handle action retry sending - no send handle, it should have no effect`() = runTest {
+        val messageEvent = aMessageEvent(
+            sendState = LocalEventSendState.Failed.Unknown("Error"),
+            sendHandleProvider = { null },
+        )
+        val presenter = createMessagesPresenter()
+        presenter.testWithLifecycleOwner {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.RetrySending, messageEvent))
+            advanceUntilIdle()
+            // No op!
         }
     }
 
@@ -1103,7 +1130,7 @@ class MessagesPresenterTest {
         presenter.testWithLifecycleOwner {
             skipItems(1)
             val initialState = awaitItem()
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.ViewInTimeline, messageEvent))
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.ViewInTimeline, messageEvent))
             // No op!
         }
     }
@@ -1114,11 +1141,7 @@ class MessagesPresenterTest {
         val successorReason = "This room has been moved to a new location"
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
-                canRedactOwnResult = { Result.success(true) },
-                canRedactOtherResult = { Result.success(true) },
-                canUserJoinCallResult = { Result.success(true) },
-                canUserPinUnpinResult = { Result.success(true) },
+                roomPermissions = roomPermissions(),
                 initialRoomInfo = aRoomInfo(
                     successorRoom = SuccessorRoom(
                         roomId = successorRoomId,
@@ -1142,11 +1165,7 @@ class MessagesPresenterTest {
     fun `present - room without successor room has null successor info in state`() = runTest {
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
-                canRedactOwnResult = { Result.success(true) },
-                canRedactOtherResult = { Result.success(true) },
-                canUserJoinCallResult = { Result.success(true) },
-                canUserPinUnpinResult = { Result.success(true) },
+                roomPermissions = roomPermissions(),
                 initialRoomInfo = aRoomInfo(successorRoom = null)
             ),
             typingNoticeResult = { Result.success(Unit) },
@@ -1164,12 +1183,14 @@ class MessagesPresenterTest {
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
                 sessionId = A_SESSION_ID,
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
-                canRedactOwnResult = { Result.success(true) },
-                canRedactOtherResult = { Result.success(true) },
-                canUserJoinCallResult = { Result.success(true) },
-                canUserPinUnpinResult = { Result.success(true) },
-                initialRoomInfo = aRoomInfo(isDirect = true, isEncrypted = true)
+                roomPermissions = FakeRoomPermissions(
+                    canSendState = { true },
+                    canSendMessage = { true },
+                    canRedactOther = true,
+                    canRedactOwn = true,
+                    canPinUnpin = true,
+                ),
+                initialRoomInfo = aRoomInfo(isDm = true, isEncrypted = true)
             ).apply {
                 givenRoomMembersState(RoomMembersState.Ready(persistentListOf(aRoomMember(userId = A_SESSION_ID), aRoomMember(userId = A_USER_ID_2))))
             },
@@ -1203,7 +1224,7 @@ class MessagesPresenterTest {
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             initialState.eventSink(
-                MessagesEvents.HandleAction(
+                MessagesEvent.HandleAction(
                     action = TimelineItemAction.ReplyInThread,
                     event = aMessageEvent(threadInfo = TimelineItemThreadInfo.ThreadResponse(A_THREAD_ID))
                 )
@@ -1225,7 +1246,7 @@ class MessagesPresenterTest {
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             initialState.eventSink(
-                MessagesEvents.HandleAction(
+                MessagesEvent.HandleAction(
                     action = TimelineItemAction.ReplyInThread,
                     event = aMessageEvent(
                         // The event id will be used as the thread id instead
@@ -1250,7 +1271,7 @@ class MessagesPresenterTest {
         )
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
-            initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.ReplyInThread, aMessageEvent()))
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.ReplyInThread, aMessageEvent()))
             awaitItem()
             composerRecorder.assertSingle(
                 MessageComposerEvent.SetMode(
@@ -1277,7 +1298,7 @@ class MessagesPresenterTest {
         )
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
-            initialState.eventSink(MessagesEvents.MarkAsFullyReadAndExit)
+            initialState.eventSink(MessagesEvent.MarkAsFullyReadAndExit)
 
             runCurrent()
 
@@ -1301,7 +1322,7 @@ class MessagesPresenterTest {
         )
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
-            initialState.eventSink(MessagesEvents.MarkAsFullyReadAndExit)
+            initialState.eventSink(MessagesEvent.MarkAsFullyReadAndExit)
 
             runCurrent()
 
@@ -1311,16 +1332,109 @@ class MessagesPresenterTest {
         }
     }
 
+    @Test
+    fun `present - shows a history icon if the room is encrypted and history is shared`() = runTest {
+        val presenter = createMessagesPresenter(
+            joinedRoom = FakeJoinedRoom(
+                baseRoom = FakeBaseRoom(
+                    roomPermissions = roomPermissions(),
+                    initialRoomInfo = aRoomInfo(isEncrypted = true, historyVisibility = RoomHistoryVisibility.Shared),
+                ),
+            ),
+        )
+        presenter.testWithLifecycleOwner {
+            awaitItem()
+            runCurrent()
+            val state = awaitItem()
+            assertThat(state.topBarSharedHistoryIcon).isEqualTo(SharedHistoryIcon.SHARED)
+        }
+    }
+
+    @Test
+    fun `present - shows a 'world_readable' icon if the room is encrypted and history is world_readable`() = runTest {
+        val presenter = createMessagesPresenter(
+            joinedRoom = FakeJoinedRoom(
+                baseRoom = FakeBaseRoom(
+                    roomPermissions = roomPermissions(),
+                    initialRoomInfo = aRoomInfo(isEncrypted = true, historyVisibility = RoomHistoryVisibility.WorldReadable),
+                ),
+            ),
+        )
+        presenter.testWithLifecycleOwner {
+            awaitItem()
+            runCurrent()
+            val state = awaitItem()
+            assertThat(state.topBarSharedHistoryIcon).isEqualTo(SharedHistoryIcon.WORLD_READABLE)
+        }
+    }
+
+    @Test
+    fun `present - only has threads enabled if the feature flag is on`() = runTest {
+        val itemsFlow = MutableStateFlow(listOf(aThreadListItem()))
+        val room = FakeJoinedRoom(
+            threadsListService = FakeThreadsListService(items = itemsFlow)
+        )
+        val featureFlagService = FakeFeatureFlagService(
+            initialState = mapOf(FeatureFlags.Threads.key to false)
+        )
+        val presenter = createMessagesPresenter(
+            joinedRoom = room,
+            featureFlagService = featureFlagService
+        )
+        presenter.testWithLifecycleOwner {
+            val initialState = awaitItem()
+            // The feature flag is disabled, so even if the thread list has items, it will return it doesn't have any
+            assertThat(initialState.threads.hasThreads).isFalse()
+
+            // Enable the feature flag, now it should reflect the thread list state
+            featureFlagService.setFeatureEnabled(FeatureFlags.RoomThreadList, true)
+            skipItems(1)
+            assertThat(awaitItem().threads.hasThreads).isTrue()
+
+            // And if we remove the items, it should update accordingly
+            itemsFlow.value = emptyList()
+            assertThat(awaitItem().threads.hasThreads).isFalse()
+        }
+    }
+
+    private fun roomPermissions(
+        canStartCall: Boolean = true,
+        canRedactOther: Boolean = true,
+        canRedactOwn: Boolean = true,
+        canSendMessage: Boolean = true,
+        canSendReaction: Boolean = true,
+        canPinUnpin: Boolean = true,
+    ) = FakeRoomPermissions(
+        canSendState = { type ->
+            when (type) {
+                StateEventType.CallMember -> canStartCall
+                else -> lambdaError()
+            }
+        },
+        canSendMessage = { type ->
+            when (type) {
+                MessageEventType.RoomMessage -> canSendMessage
+                MessageEventType.Reaction -> canSendReaction
+                else -> lambdaError()
+            }
+        },
+        canRedactOther = canRedactOther,
+        canRedactOwn = canRedactOwn,
+        canPinUnpin = canPinUnpin,
+    )
+
     private fun TestScope.createMessagesPresenter(
         coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         timeline: Timeline = FakeTimeline(),
         joinedRoom: FakeJoinedRoom = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
-                canRedactOwnResult = { Result.success(true) },
-                canRedactOtherResult = { Result.success(true) },
-                canUserJoinCallResult = { Result.success(true) },
-                canUserPinUnpinResult = { Result.success(true) },
+                roomPermissions = FakeRoomPermissions(
+                    canSendState = { true },
+                    canSendMessage = { true },
+                    canRedactOther = true,
+                    canRedactOwn = true,
+                    canPinUnpin = true,
+                ),
             ).apply {
                 givenRoomInfo(aRoomInfo(id = roomId, name = ""))
             },
@@ -1330,7 +1444,7 @@ class MessagesPresenterTest {
         navigator: FakeMessagesNavigator = FakeMessagesNavigator(),
         clipboardHelper: FakeClipboardHelper = FakeClipboardHelper(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
-        timelineEventSink: (TimelineEvents) -> Unit = {},
+        timelineEventSink: (TimelineEvent) -> Unit = {},
         permalinkParser: PermalinkParser = FakePermalinkParser(),
         messageComposerPresenter: Presenter<MessageComposerState> = Presenter {
             aMessageComposerState(
@@ -1343,9 +1457,10 @@ class MessagesPresenterTest {
         },
         encryptionService: FakeEncryptionService = FakeEncryptionService(),
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
-        actionListEventSink: (ActionListEvents) -> Unit = {},
+        actionListEventSink: (ActionListEvent) -> Unit = {},
         addRecentEmoji: AddRecentEmoji = AddRecentEmoji { _ -> lambdaError() },
         markAsFullyRead: MarkAsFullyRead = FakeMarkAsFullyRead(),
+        liveLocationShareManager: FakeActiveLiveLocationShareManager = FakeActiveLiveLocationShareManager(),
     ): MessagesPresenter {
         return MessagesPresenter(
             navigator = navigator,
@@ -1368,13 +1483,19 @@ class MessagesPresenterTest {
             clipboardHelper = clipboardHelper,
             htmlConverterProvider = FakeHtmlConverterProvider(),
             buildMeta = aBuildMeta(),
-            timelineController = TimelineController(joinedRoom, timeline),
+            timelineController = TimelineController(
+                room = joinedRoom,
+                liveTimeline = timeline,
+                roomCoroutineScope = backgroundScope,
+                dispatchers = coroutineDispatchers,
+            ),
             permalinkParser = permalinkParser,
             analyticsService = analyticsService,
             encryptionService = encryptionService,
             featureFlagService = featureFlagService,
             addRecentEmoji = addRecentEmoji,
             markAsFullyRead = markAsFullyRead,
+            liveLocationShareManager = liveLocationShareManager,
             sessionCoroutineScope = backgroundScope,
         )
     }

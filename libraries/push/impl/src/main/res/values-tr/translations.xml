@@ -54,6 +54,7 @@
   <string name="push_distributor_background_sync_android">"Arkaplan senkronizasyonu"</string>
   <string name="push_distributor_firebase_android">"Google Hizmetleri"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Geçerli bir Google Play Hizmeti bulunamadı. Bildirimler düzgün çalışmayabilir."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_title">"Engellenen kullanıcılar"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Geçerli sağlayıcının adını al."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Hiçbir gönderme sağlayıcısı seçilmedi."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Geçerli gönderme sağlayıcısı: %1$s."</string>

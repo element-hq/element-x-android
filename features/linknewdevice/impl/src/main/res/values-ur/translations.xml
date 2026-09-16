@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_link_new_device_desktop_scanning_title">"کیو آر رمز مسح ضوئی کریں"</string>
+  <string name="screen_link_new_device_desktop_step3">"اس آلے کے ساتھ کیو آر رمز مسح ضوئی کریں"</string>
+  <string name="screen_link_new_device_desktop_submit">"مسح ضوئی کیلئے تیار"</string>
+  <string name="screen_link_new_device_error_app_not_supported_subtitle">"آپ کا کھاتہ فراہم کنندہ %1$s کا تعاون نہیں کرتا۔"</string>
+  <string name="screen_link_new_device_error_app_not_supported_title">"%1$s تعاون یافتہ نہیں"</string>
+  <string name="screen_link_new_device_error_not_supported_title">"کر رمز غیر تعاون یافتہ"</string>
+  <string name="screen_link_new_device_error_request_cancelled_subtitle">"دوسرے آلے پر دخول منسوخ کر دیا گیا تھا۔"</string>
+  <string name="screen_link_new_device_error_request_cancelled_title">"دخول کی درخواست منسوخ"</string>
+  <string name="screen_link_new_device_error_request_timeout_subtitle">"دخول کی میعاد ختم۔ برائے مہربانی دوبارہ کوشش کریں۔"</string>
+  <string name="screen_link_new_device_error_request_timeout_title">"دخول وقت پر مکمل نہیں ہوا تھا"</string>
+  <string name="screen_link_new_device_mobile_step2">"%1$s منتخب کریں"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_description">"نئے آلے سے محفوظ اتصال نہیں بنایا جا سکا۔ آپ کے موجودہ آلات اب بھی محفوظ ہیں اور آپ کو ان کے بارے میں فکر کرنے کی ضرورت نہیں ہے۔"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_header">"اب کیا؟"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_item_1">"اگر یہ شبکہ کا مسئلہ تھا تو کیو آر رمز کے ساتھ دوبارہ داخل ہونے کی کوشش کریں۔"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"اگر آپ کو بھی یہی مسئلہ درپیش ہو، تو کوئی دوسرا وائی فائی شبکہ آزمائیں یا وائی فائی کے بجائے اپنے محمول بیانات استعمال کریں۔"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"اگر یہ کام نہ کرے، تو دستی طور پر داخل ہوں"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_title">"اتصال محفوظ نہیں"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"آپ سے اس آلے پر دکھائے گئے دو ہندسوں کو درج کرنے کو کہا جائے گا۔"</string>
+  <string name="screen_qr_code_login_device_code_title">"اپنے دوسرے آلے پر درج ذیل نمبر درج کریں"</string>
+  <string name="screen_qr_code_login_error_cancelled_subtitle">"دوسرے آلے پر دخول منسوخ کر دیا گیا تھا۔"</string>
+  <string name="screen_qr_code_login_error_cancelled_title">"دخول کی درخواست منسوخ"</string>
+  <string name="screen_qr_code_login_error_declined_subtitle">"دوسرے آلہ پر دخول کو مسترد کر دیا گیا تھا۔"</string>
+  <string name="screen_qr_code_login_error_declined_title">"دخول مسترد کیا گیا"</string>
+  <string name="screen_qr_code_login_error_expired_subtitle">"دخول کی میعاد ختم۔ برائے مہربانی دوبارہ کوشش کریں۔"</string>
+  <string name="screen_qr_code_login_error_expired_title">"دخول وقت پر مکمل نہیں ہوا تھا"</string>
+  <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"آپ کا دوسرا آلہ کیو آر رمز کے ساتھ %s میں دخول کا تعاون نہیں کرتا۔
+
+دستی طور پر داخل ہونے کی کوشش کریں ، یا کسی دوسرے آلے سے کیو آر رمز مسح ضوئی کریں۔"</string>
+  <string name="screen_qr_code_login_error_linking_not_suported_title">"کر رمز غیر تعاون یافتہ"</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_subtitle">"آپ کا کھاتہ فراہم کنندہ %1$s کا تعاون نہیں کرتا۔"</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_title">"%1$s تعاون یافتہ نہیں"</string>
+  <string name="screen_qr_code_login_invalid_scan_state_description">"دوسرے آلے پر دکھایا گیا کیو آر رمز استعمال کریں۔"</string>
+  <string name="screen_qr_code_login_invalid_scan_state_retry_button">"دوبارہ کوشش کریں"</string>
+  <string name="screen_qr_code_login_invalid_scan_state_subtitle">"غلط کیو آر رمز"</string>
+  <string name="screen_qr_code_login_no_camera_permission_state_description">"جاری رکھنے کے لیے آپ %1$s کو اپنے آلے کا تصویرگر استعمال کرنے کی اجازت دینے کی ضرورت ہے۔"</string>
+  <string name="screen_qr_code_login_no_camera_permission_state_title">"کیو آر رمز کو مسح ضوئی کرنے کے لئے تصویرگر تک رسائی کی اجازت دیں"</string>
+  <string name="screen_qr_code_login_unknown_error_description">"ایک غیر متوقع نقص واقع ہوا۔ برائے مہربانی دوبارہ کوشش کریں۔"</string>
+  <string name="screen_qr_code_login_verify_code_loading">"آپکے دوسرے آلے کا منتظر"</string>
+</resources>

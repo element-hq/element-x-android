@@ -24,8 +24,12 @@ data class RoomListFiltersEmptyStateResources(
         /**
          * Create a [RoomListFiltersEmptyStateResources] from a list of selected filters.
          */
-        fun fromSelectedFilters(selectedFilters: List<RoomListFilter>): RoomListFiltersEmptyStateResources? {
+        fun fromSelectedFilters(selectedFilters: List<RoomListFilter>, isSpaceFilterSelected: Boolean): RoomListFiltersEmptyStateResources? {
             return when {
+                isSpaceFilterSelected -> RoomListFiltersEmptyStateResources(
+                    title = R.string.screen_roomlist_filter_mixed_empty_state_title,
+                    subtitle = R.string.screen_roomlist_filter_mixed_empty_state_subtitle
+                )
                 selectedFilters.isEmpty() -> null
                 selectedFilters.size == 1 -> {
                     when (selectedFilters.first()) {

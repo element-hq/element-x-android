@@ -20,6 +20,7 @@ android {
 dependencies {
     implementation(libs.test.junit)
     implementation(libs.test.truth)
+    implementation(libs.test.robolectric)
     implementation(libs.coroutines.test)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)

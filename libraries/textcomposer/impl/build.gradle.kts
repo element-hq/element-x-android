@@ -33,6 +33,7 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiUtils)
+    implementation(projects.libraries.slashcommands.api)
 
     releaseApi(libs.matrix.richtexteditor)
     releaseApi(libs.matrix.richtexteditor.compose)

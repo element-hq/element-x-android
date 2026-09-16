@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -27,14 +28,13 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.location.api.R
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 internal fun StaticMapPlaceholder(
-    showProgress: Boolean,
+    painter: Painter,
     canReload: Boolean,
     contentDescription: String?,
     width: Dp,
@@ -46,17 +46,15 @@ internal fun StaticMapPlaceholder(
         contentAlignment = Alignment.Center,
         modifier = modifier
             .size(width = width, height = height)
-            .then(if (showProgress) Modifier else Modifier.clickable(onClick = onLoadMapClick))
+            .clickable(enabled = canReload, onClick = onLoadMapClick)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.blurred_map),
+            painter = painter,
             contentDescription = contentDescription,
             contentScale = ContentScale.FillBounds,
             modifier = Modifier.size(width = width, height = height)
         )
-        if (showProgress) {
-            CircularProgressIndicator()
-        } else if (canReload) {
+        if (canReload) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -77,13 +75,10 @@ internal fun StaticMapPlaceholderPreview() = ElementPreview {
         modifier = Modifier.padding(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        listOf(
-            true to false,
-            false to true,
-            false to false,
-        ).forEach { (showProgress, canReload) ->
+        listOf(false, true)
+        .forEach { canReload ->
             StaticMapPlaceholder(
-                showProgress = showProgress,
+                painter = painterResource(R.drawable.blurred_map),
                 canReload = canReload,
                 contentDescription = null,
                 width = 400.dp,

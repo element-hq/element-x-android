@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"აქტივობები"</string>
+  <string name="emoji_picker_category_flags">"დროშები"</string>
+  <string name="emoji_picker_category_foods">"Საჭმელ-სასმელი"</string>
+  <string name="emoji_picker_category_nature">"ცხოველები &amp; ბუნება"</string>
+  <string name="emoji_picker_category_objects">"ობიექტები"</string>
+  <string name="emoji_picker_category_people">"ღიმილები &amp; ხალხი"</string>
+  <string name="emoji_picker_category_places">"მოგზაურობა და ადგილები"</string>
+  <string name="emoji_picker_category_symbols">"სიმბოლოები"</string>
+</resources>

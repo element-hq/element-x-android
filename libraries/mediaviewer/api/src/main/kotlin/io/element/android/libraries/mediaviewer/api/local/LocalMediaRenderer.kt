@@ -10,7 +10,15 @@ package io.element.android.libraries.mediaviewer.api.local
 
 import androidx.compose.runtime.Composable
 
+/**
+ * Renders a media file held on the device, picking the right player or viewer for its type.
+ */
 interface LocalMediaRenderer {
+    /**
+     * Draws the media, filling the space it is given.
+     *
+     * @param localMedia the file to display, along with what is known about its type.
+     */
     @Composable
     fun Render(localMedia: LocalMedia)
 }

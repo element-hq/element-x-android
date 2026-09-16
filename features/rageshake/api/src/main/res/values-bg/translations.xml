@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="crash_detection_dialog_content">"%1$s се срина при последното използване. Искате ли да споделите доклад за срива с нас?"</string>
+  <string name="settings_rageshake_detection_threshold">"Праг на откриване"</string>
 </resources>

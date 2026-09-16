@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="rich_text_editor_a11y_add_attachment">"Προσθήκη συνημμένου"</string>
   <string name="rich_text_editor_bullet_list">"Διακόπτης λίστας κουκκίδων"</string>
-  <string name="rich_text_editor_close_formatting_options">"Κλείσε τις επιλογές μορφοποίησης"</string>
+  <string name="rich_text_editor_close_formatting_options">"Ακύρωση και κλείσιμο μορφοποίησης κειμένου"</string>
   <string name="rich_text_editor_code_block">"Διακόπτης μπλοκ κώδικα"</string>
   <string name="rich_text_editor_composer_caption_placeholder">"Προαιρετική λεζάντα…"</string>
   <string name="rich_text_editor_composer_encrypted_placeholder">"Κρυπτογραφημένο μήνυμα…"</string>

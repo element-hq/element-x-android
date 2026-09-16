@@ -16,8 +16,7 @@ import androidx.core.text.toSpannable
 import androidx.core.text.util.LinkifyCompat
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import timber.log.Timber
-import kotlin.collections.component1
-import kotlin.collections.component2
+import java.net.URI
 
 /**
  * Helper class to linkify text while preserving existing URL spans.
@@ -25,11 +24,14 @@ import kotlin.collections.component2
  * It also checks the linkified results to make sure URLs spans are not including trailing punctuation.
  */
 object LinkifyHelper {
+    private val BRACKETED_AUTHORITY_URL_REGEX = Regex("""(?<![a-zA-Z0-9+.-])[a-zA-Z][a-zA-Z0-9+.-]*://\[\S*""")
+
     fun linkify(
         text: CharSequence,
         @LinkifyCompat.LinkifyMask linkifyMask: Int = Linkify.WEB_URLS or Linkify.PHONE_NUMBERS or Linkify.EMAIL_ADDRESSES,
     ): CharSequence {
         // Convert the text to a Spannable to be able to add URL spans, return the original text if it's not possible (in tests, i.e.)
+        @Suppress("USELESS_ELVIS")
         val spannable = text.toSpannable() ?: return text
 
         // Get all URL spans, as they will be removed by LinkifyCompat.addLinks
@@ -48,6 +50,11 @@ object LinkifyHelper {
                 val start = spannable.getSpanStart(urlSpan)
                 val end = spannable.getSpanEnd(urlSpan)
 
+                if (urlSpan !in oldURLSpans && spannable.isEmailInsideFediverseHandle(urlSpan, start)) {
+                    spannable.removeSpan(urlSpan)
+                    continue
+                }
+
                 // Try to avoid including trailing punctuation in the link.
                 // Since this might fail in some edge cases, we catch the exception and just use the original end index.
                 val newEnd = runCatchingExceptions {
@@ -58,13 +65,32 @@ object LinkifyHelper {
 
                 // Adapt the url in the URL span to the new end index too if needed
                 if (end != newEnd) {
-                    val url = spannable.subSequence(start, newEnd).toString()
+                    val diff = end - newEnd
+                    val url = urlSpan.url.substring(0, urlSpan.url.length - diff)
                     spannable.removeSpan(urlSpan)
                     spannable.setSpan(URLSpan(url), start, newEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 } else {
                     spannable.setSpan(urlSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
             }
+        }
+
+        for (match in BRACKETED_AUTHORITY_URL_REGEX.findAll(spannable)) {
+            val start = match.range.first
+            val end = match.range.last + 1
+            val newEnd = runCatchingExceptions {
+                adjustLinkifiedUrlSpanEndIndex(spannable, start, end)
+            }.onFailure {
+                Timber.e(it, "Failed to adjust end index for link span")
+            }.getOrNull() ?: end
+
+            val url = spannable.substring(start, newEnd)
+            if (!url.hasBracketedHost()) continue
+
+            for (span in spannable.getSpans<URLSpan>(start, newEnd)) {
+                spannable.removeSpan(span)
+            }
+            spannable.setSpan(URLSpan(url), start, newEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
 
         // Restore old spans, remove new ones if there is a conflict
@@ -82,21 +108,30 @@ object LinkifyHelper {
         return spannable
     }
 
+    private fun String.hasBracketedHost(): Boolean {
+        val host = runCatchingExceptions { URI(this) }.getOrNull()?.host ?: return false
+        return host.startsWith('[') && host.endsWith(']')
+    }
+
+    private fun Spannable.isEmailInsideFediverseHandle(urlSpan: URLSpan, start: Int): Boolean {
+        return urlSpan.url.startsWith("mailto:") && start > 0 && this[start - 1] == '@'
+    }
+
     private fun adjustLinkifiedUrlSpanEndIndex(spannable: Spannable, start: Int, end: Int): Int {
         var end = end
 
         // Trailing punctuation found, adjust the end index
-        while (spannable[end - 1] in sequenceOf('.', ',', ';', ':', '!', '?', '…') && end > start) {
+        while (end > start && spannable[end - 1] in sequenceOf('.', ',', ';', ':', '!', '?', '…')) {
             end--
         }
 
         // If the last character is a closing parenthesis, check if it's part of a pair
-        if (spannable[end - 1] == ')' && end > start) {
+        if (end > start && spannable[end - 1] == ')') {
             val linkifiedTextLastPath = spannable.substring(start, end).substringAfterLast('/')
             val closingParenthesisCount = linkifiedTextLastPath.count { it == ')' }
             val openingParenthesisCount = linkifiedTextLastPath.count { it == '(' }
             // If it's not part of a pair, remove it from the link span by adjusting the end index
-            end -= closingParenthesisCount - openingParenthesisCount
+            end -= (closingParenthesisCount - openingParenthesisCount).coerceAtLeast(0)
         }
         return end
     }

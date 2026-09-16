@@ -35,22 +35,22 @@ fun RageshakeDetectionView(
     val context = LocalContext.current
     OnLifecycleEvent { _, event ->
         when (event) {
-            Lifecycle.Event.ON_RESUME -> eventSink(RageshakeDetectionEvents.StartDetection)
-            Lifecycle.Event.ON_PAUSE -> eventSink(RageshakeDetectionEvents.StopDetection)
+            Lifecycle.Event.ON_RESUME -> eventSink(RageshakeDetectionEvent.StartDetection)
+            Lifecycle.Event.ON_PAUSE -> eventSink(RageshakeDetectionEvent.StopDetection)
             else -> Unit
         }
     }
     when {
         state.takeScreenshot -> TakeScreenshot(
-            onScreenshot = { eventSink(RageshakeDetectionEvents.ProcessScreenshot(it)) }
+            onScreenshot = { eventSink(RageshakeDetectionEvent.ProcessScreenshot(it)) }
         )
         state.showDialog -> {
             LaunchedEffect(Unit) {
                 context.vibrate()
             }
             RageshakeDialogContent(
-                onNoClick = { eventSink(RageshakeDetectionEvents.Dismiss) },
-                onDisableClick = { eventSink(RageshakeDetectionEvents.Disable) },
+                onNoClick = { eventSink(RageshakeDetectionEvent.Dismiss) },
+                onDisableClick = { eventSink(RageshakeDetectionEvent.Disable) },
                 onYesClick = onOpenBugReport
             )
         }
@@ -77,7 +77,7 @@ private fun RageshakeDialogContent(
     onYesClick: () -> Unit = { },
 ) {
     ConfirmationDialog(
-        title = stringResource(id = CommonStrings.action_report_bug),
+        title = stringResource(id = CommonStrings.common_report_a_problem),
         content = stringResource(id = R.string.rageshake_detection_dialog_content),
         thirdButtonText = stringResource(id = CommonStrings.action_disable),
         submitText = stringResource(id = CommonStrings.action_yes),

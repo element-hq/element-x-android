@@ -37,14 +37,14 @@ class ReactionSummaryPresenter(
         }
         val targetWithAvatars = populateSenderAvatars(members = membersState.roomMembers().orEmpty().toImmutableList(), summary = target.value)
 
-        fun handleEvent(event: ReactionSummaryEvents) {
+        fun handleEvent(event: ReactionSummaryEvent) {
             when (event) {
-                is ReactionSummaryEvents.ShowReactionSummary -> target.value = ReactionSummaryState.Summary(
+                is ReactionSummaryEvent.ShowReactionSummary -> target.value = ReactionSummaryState.Summary(
                     reactions = event.reactions.toImmutableList(),
                     selectedKey = event.selectedKey,
                     selectedEventId = event.eventId
                 )
-                ReactionSummaryEvents.Clear -> target.value = null
+                ReactionSummaryEvent.Clear -> target.value = null
             }
         }
         return ReactionSummaryState(

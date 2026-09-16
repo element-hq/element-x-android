@@ -10,16 +10,19 @@ package io.element.android.libraries.matrix.impl.platform
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.platform.InitPlatformService
 import io.element.android.libraries.matrix.api.tracing.TracingConfiguration
 import io.element.android.libraries.matrix.impl.tracing.map
 import org.matrix.rustcomponents.sdk.initPlatform
 
 @ContributesBinding(AppScope::class)
-class RustInitPlatformService : InitPlatformService {
+class RustInitPlatformService(
+    private val buildMeta: BuildMeta,
+) : InitPlatformService {
     override fun init(tracingConfiguration: TracingConfiguration) {
         initPlatform(
-            config = tracingConfiguration.map(),
+            config = tracingConfiguration.map(buildMeta),
             useLightweightTokioRuntime = false
         )
     }

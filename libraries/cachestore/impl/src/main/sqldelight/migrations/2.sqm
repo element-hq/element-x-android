@@ -1,0 +1,2 @@
+-- Migrate DB from version 2
+-- Dummy migration to trigger a re-key

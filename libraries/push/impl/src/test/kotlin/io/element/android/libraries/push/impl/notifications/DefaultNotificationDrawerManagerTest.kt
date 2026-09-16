@@ -13,38 +13,56 @@ import androidx.compose.ui.graphics.Color
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
+import io.element.android.features.lockscreen.api.LockScreenService
+import io.element.android.features.lockscreen.test.FakeLockScreenService
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_SESSION_ID
-import io.element.android.libraries.matrix.test.A_SPACE_ID
+import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.A_THREAD_ID
+import io.element.android.libraries.matrix.test.A_THREAD_ID_2
+import io.element.android.libraries.matrix.test.A_TIMESTAMP
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.media.test.FakeImageLoaderHolder
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
+import io.element.android.libraries.push.impl.notifications.factories.NotificationAccountParams
+import io.element.android.libraries.push.impl.notifications.factories.NotificationCreator
 import io.element.android.libraries.push.impl.notifications.factories.aNotificationAccountParams
 import io.element.android.libraries.push.impl.notifications.fake.FakeActiveNotificationsProvider
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationCreator
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationDisplayer
 import io.element.android.libraries.push.impl.notifications.fake.FakeRoomGroupMessageCreator
 import io.element.android.libraries.push.impl.notifications.fake.FakeSummaryGroupMessageCreator
+import io.element.android.libraries.push.impl.notifications.fixtures.A_NOTIFICATION
+import io.element.android.libraries.push.impl.notifications.fixtures.aFallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
+import io.element.android.libraries.push.impl.notifications.fixtures.aSimpleNotifiableEvent
+import io.element.android.libraries.push.impl.notifications.fixtures.anInviteNotifiableEvent
+import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
+import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.sessionstorage.api.SessionStore
+import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
+import io.element.android.libraries.sessionstorage.test.observer.FakeSessionObserver
+import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.appnavstate.api.AppNavigationState
 import io.element.android.services.appnavstate.api.AppNavigationStateService
-import io.element.android.services.appnavstate.api.NavigationState
 import io.element.android.services.appnavstate.test.FakeAppNavigationStateService
 import io.element.android.services.appnavstate.test.aNavigationState
-import io.element.android.services.toolbox.test.strings.FakeStringProvider
+import io.element.android.services.appnavstate.test.anAppNavigationState
+import io.element.android.services.toolbox.test.systemclock.A_FAKE_TIMESTAMP
+import io.element.android.tests.testutils.lambda.LambdaThreeParamsRecorder
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
@@ -92,28 +110,25 @@ class DefaultNotificationDrawerManagerTest {
     @Test
     fun `react to applicationStateChange`() = runTest {
         // For now just call all the API. Later, add more valuable tests.
-        val appNavigationStateFlow: MutableStateFlow<AppNavigationState> = MutableStateFlow(
-            AppNavigationState(
-                navigationState = NavigationState.Root,
-                isInForeground = true,
-            )
-        )
-        val appNavigationStateService = FakeAppNavigationStateService(appNavigationState = appNavigationStateFlow)
+        val appNavigationStateService = FakeAppNavigationStateService()
         createDefaultNotificationDrawerManager(
             appNavigationStateService = appNavigationStateService
         )
-        appNavigationStateFlow.emit(AppNavigationState(aNavigationState(), isInForeground = true))
+        appNavigationStateService.emitNavigationState(AppNavigationState(aNavigationState(), isInForeground = true))
         runCurrent()
-        appNavigationStateFlow.emit(AppNavigationState(aNavigationState(A_SESSION_ID), isInForeground = true))
+        appNavigationStateService.emitNavigationState(AppNavigationState(aNavigationState(A_SESSION_ID), isInForeground = true))
         runCurrent()
-        appNavigationStateFlow.emit(AppNavigationState(aNavigationState(A_SESSION_ID, A_SPACE_ID), isInForeground = true))
+        appNavigationStateService.emitNavigationState(AppNavigationState(aNavigationState(A_SESSION_ID, A_ROOM_ID), isInForeground = true))
         runCurrent()
-        appNavigationStateFlow.emit(AppNavigationState(aNavigationState(A_SESSION_ID, A_SPACE_ID, A_ROOM_ID), isInForeground = true))
-        runCurrent()
-        appNavigationStateFlow.emit(AppNavigationState(aNavigationState(A_SESSION_ID, A_SPACE_ID, A_ROOM_ID, A_THREAD_ID), isInForeground = true))
+        appNavigationStateService.emitNavigationState(
+            AppNavigationState(
+                aNavigationState(A_SESSION_ID, A_ROOM_ID, A_THREAD_ID),
+                isInForeground = true
+            )
+        )
         runCurrent()
         // Like a user sign out
-        appNavigationStateFlow.emit(AppNavigationState(aNavigationState(), isInForeground = true))
+        appNavigationStateService.emitNavigationState(AppNavigationState(aNavigationState(), isInForeground = true))
         runCurrent()
     }
 
@@ -205,35 +220,461 @@ class DefaultNotificationDrawerManagerTest {
         )
     }
 
-    private fun TestScope.createDefaultNotificationDrawerManager(
-        notificationDisplayer: NotificationDisplayer = FakeNotificationDisplayer(),
-        appNavigationStateService: AppNavigationStateService = FakeAppNavigationStateService(),
-        roomGroupMessageCreator: RoomGroupMessageCreator = FakeRoomGroupMessageCreator(),
-        summaryGroupMessageCreator: SummaryGroupMessageCreator = FakeSummaryGroupMessageCreator(),
-        activeNotificationsProvider: FakeActiveNotificationsProvider = FakeActiveNotificationsProvider(),
-        matrixClientProvider: FakeMatrixClientProvider = FakeMatrixClientProvider(),
-        sessionStore: SessionStore = InMemorySessionStore(),
-        enterpriseService: EnterpriseService = FakeEnterpriseService(),
-    ): DefaultNotificationDrawerManager {
-        return DefaultNotificationDrawerManager(
+    @Test
+    fun `when a session is signed out, clearAllEvent is invoked`() = runTest {
+        val cancelNotificationResult = lambdaRecorder<String?, Int, Unit> { _, _ -> }
+        val notificationDisplayer = FakeNotificationDisplayer(
+            cancelNotificationResult = cancelNotificationResult,
+        )
+        val summaryId = NotificationIdProvider.getSummaryNotificationId(A_SESSION_ID)
+        val activeNotificationsProvider = FakeActiveNotificationsProvider(
+            getNotificationsForSessionResult = {
+                listOf(
+                    mockk {
+                        every { id } returns summaryId
+                        every { tag } returns null
+                    },
+                )
+            },
+            countResult = { 1 },
+        )
+        val sessionObserver = FakeSessionObserver()
+        createDefaultNotificationDrawerManager(
             notificationDisplayer = notificationDisplayer,
-            notificationRenderer = NotificationRenderer(
-                notificationDisplayer = FakeNotificationDisplayer(),
-                notificationDataFactory = DefaultNotificationDataFactory(
-                    notificationCreator = FakeNotificationCreator(),
-                    roomGroupMessageCreator = roomGroupMessageCreator,
-                    summaryGroupMessageCreator = summaryGroupMessageCreator,
-                    activeNotificationsProvider = activeNotificationsProvider,
-                    stringProvider = FakeStringProvider(),
-                ),
-                enterpriseService = enterpriseService,
-                sessionStore = sessionStore,
-            ),
-            appNavigationStateService = appNavigationStateService,
-            coroutineScope = backgroundScope,
-            matrixClientProvider = matrixClientProvider,
-            imageLoaderHolder = FakeImageLoaderHolder(),
             activeNotificationsProvider = activeNotificationsProvider,
+            sessionObserver = sessionObserver,
+        )
+        // Simulate a session sign out
+        sessionObserver.onSessionDeleted(A_SESSION_ID.value)
+        // Verify we asked to cancel the notification with summaryId
+        cancelNotificationResult.assertions().isCalledExactly(1).withSequence(
+            listOf(value(null), value(summaryId)),
         )
     }
+
+    @Test
+    fun `when the application is in background, all events trigger a notification`() = testOnNotifiableEventReceived(
+        appNavigationState = anAppNavigationState(
+            navigationState = aNavigationState(sessionId = A_SESSION_ID),
+            isInForeground = false,
+        ),
+        notifiableEvents = listOf(
+            aFallbackNotifiableEvent(sessionId = A_SESSION_ID),
+            aFallbackNotifiableEvent(sessionId = A_SESSION_ID_2),
+            anInviteNotifiableEvent(sessionId = A_SESSION_ID),
+            anInviteNotifiableEvent(sessionId = A_SESSION_ID_2),
+            aSimpleNotifiableEvent(sessionId = A_SESSION_ID),
+            aSimpleNotifiableEvent(sessionId = A_SESSION_ID_2),
+            aNotifiableMessageEvent(sessionId = A_SESSION_ID),
+            aNotifiableMessageEvent(sessionId = A_SESSION_ID_2),
+            aNotifiableMessageEvent(sessionId = A_SESSION_ID, threadId = A_THREAD_ID),
+            aNotifiableMessageEvent(sessionId = A_SESSION_ID_2, threadId = A_THREAD_ID_2),
+        ),
+        shouldEmitNotification = true,
+        extraInvocationsForNotificationSummary = 2,
+    )
+
+    @Test
+    fun `fallback event is ignored when the room list is displayed`() = testOnNotifiableEventReceived(
+        appNavigationState = anAppNavigationState(
+            navigationState = aNavigationState(sessionId = A_SESSION_ID),
+        ),
+        notifiableEvents = listOf(aFallbackNotifiableEvent(sessionId = A_SESSION_ID)),
+        shouldEmitNotification = false,
+    )
+
+    @Test
+    fun `fallback event is not ignored when a room is displayed`() = testOnNotifiableEventReceived(
+        appNavigationState = anAppNavigationState(
+            navigationState = aNavigationState(sessionId = A_SESSION_ID, roomId = A_ROOM_ID),
+        ),
+        notifiableEvents = listOf(aFallbackNotifiableEvent(sessionId = A_SESSION_ID)),
+        shouldEmitNotification = true,
+    )
+
+    @Test
+    fun `fallback event for other session is not ignored when the room list is displayed`() = testOnNotifiableEventReceived(
+        appNavigationState = anAppNavigationState(
+            navigationState = aNavigationState(sessionId = A_SESSION_ID_2),
+        ),
+        notifiableEvents = listOf(aFallbackNotifiableEvent(sessionId = A_SESSION_ID)),
+        shouldEmitNotification = true,
+    )
+
+    @Test
+    fun `invite notifiable event is emits a notification when the room list is displayed`() = testOnNotifiableEventReceived(
+        appNavigationState = anAppNavigationState(
+            navigationState = aNavigationState(sessionId = A_SESSION_ID),
+        ),
+        notifiableEvents = listOf(anInviteNotifiableEvent(sessionId = A_SESSION_ID)),
+        shouldEmitNotification = true,
+        extraInvocationsForNotificationSummary = 1,
+    )
+
+    @Test
+    fun `invite notifiable event does not emit a notification when the same room is displayed`() = testOnNotifiableEventReceived(
+        appNavigationState = anAppNavigationState(
+            navigationState = aNavigationState(sessionId = A_SESSION_ID, roomId = A_ROOM_ID),
+        ),
+        notifiableEvents = listOf(
+            anInviteNotifiableEvent(
+                sessionId = A_SESSION_ID,
+                roomId = A_ROOM_ID,
+            )
+        ),
+        shouldEmitNotification = false,
+    )
+
+    @Test
+    fun `invite notifiable event emits a notification when another room is displayed`() = testOnNotifiableEventReceived(
+        appNavigationState = anAppNavigationState(
+            navigationState = aNavigationState(sessionId = A_SESSION_ID, roomId = A_ROOM_ID_2),
+        ),
+        notifiableEvents = listOf(
+            anInviteNotifiableEvent(
+                sessionId = A_SESSION_ID,
+                roomId = A_ROOM_ID,
+            )
+        ),
+        shouldEmitNotification = true,
+        extraInvocationsForNotificationSummary = 1,
+    )
+
+    @Test
+    fun `simple notifiable event is emits a notification when the room list is displayed`() = testOnNotifiableEventReceived(
+        appNavigationState = anAppNavigationState(
+            navigationState = aNavigationState(sessionId = A_SESSION_ID),
+        ),
+        notifiableEvents = listOf(aSimpleNotifiableEvent(sessionId = A_SESSION_ID)),
+        shouldEmitNotification = true,
+        extraInvocationsForNotificationSummary = 1,
+    )
+
+    @Test
+    fun `simple notifiable event does not emit a notification when the same room is displayed`() = testOnNotifiableEventReceived(
+        appNavigationState = anAppNavigationState(
+            navigationState = aNavigationState(sessionId = A_SESSION_ID, roomId = A_ROOM_ID),
+        ),
+        notifiableEvents = listOf(
+            aSimpleNotifiableEvent(
+                sessionId = A_SESSION_ID,
+                roomId = A_ROOM_ID,
+            )
+        ),
+        shouldEmitNotification = false,
+    )
+
+    @Test
+    fun `simple notifiable event emits a notification when another room is displayed`() = testOnNotifiableEventReceived(
+        appNavigationState = anAppNavigationState(
+            navigationState = aNavigationState(sessionId = A_SESSION_ID, roomId = A_ROOM_ID_2),
+        ),
+        notifiableEvents = listOf(
+            aSimpleNotifiableEvent(
+                sessionId = A_SESSION_ID,
+                roomId = A_ROOM_ID,
+            )
+        ),
+        shouldEmitNotification = true,
+        extraInvocationsForNotificationSummary = 1,
+    )
+
+    @Test
+    fun `notifiable event is emits a notification when the room list is displayed`() = testOnNotifiableEventReceived(
+        appNavigationState = anAppNavigationState(
+            navigationState = aNavigationState(sessionId = A_SESSION_ID),
+        ),
+        notifiableEvents = listOf(aNotifiableMessageEvent(sessionId = A_SESSION_ID)),
+        shouldEmitNotification = true,
+        extraInvocationsForNotificationSummary = 1,
+    )
+
+    @Test
+    fun `notifiable event does not emit a notification when the same room is displayed`() = testOnNotifiableEventReceived(
+        appNavigationState = anAppNavigationState(
+            navigationState = aNavigationState(sessionId = A_SESSION_ID, roomId = A_ROOM_ID),
+        ),
+        notifiableEvents = listOf(
+            aNotifiableMessageEvent(
+                sessionId = A_SESSION_ID,
+                roomId = A_ROOM_ID,
+            )
+        ),
+        shouldEmitNotification = false,
+    )
+
+    @Test
+    fun `notifiable event for a thread emits a notification when the same room is displayed`() = testOnNotifiableEventReceived(
+        appNavigationState = anAppNavigationState(
+            navigationState = aNavigationState(sessionId = A_SESSION_ID, roomId = A_ROOM_ID),
+        ),
+        notifiableEvents = listOf(
+            aNotifiableMessageEvent(
+                sessionId = A_SESSION_ID,
+                roomId = A_ROOM_ID,
+                threadId = A_THREAD_ID,
+            )
+        ),
+        shouldEmitNotification = true,
+        extraInvocationsForNotificationSummary = 1,
+    )
+
+    @Test
+    fun `notifiable event for a thread does not emit a notification when the same thread is displayed`() = testOnNotifiableEventReceived(
+        appNavigationState = anAppNavigationState(
+            navigationState = aNavigationState(sessionId = A_SESSION_ID, roomId = A_ROOM_ID, threadId = A_THREAD_ID),
+        ),
+        notifiableEvents = listOf(
+            aNotifiableMessageEvent(
+                sessionId = A_SESSION_ID,
+                roomId = A_ROOM_ID,
+                threadId = A_THREAD_ID,
+            )
+        ),
+        shouldEmitNotification = false,
+    )
+
+    @Test
+    fun `notifiable event for a thread emits a notification when another thread is displayed`() = testOnNotifiableEventReceived(
+        appNavigationState = anAppNavigationState(
+            navigationState = aNavigationState(sessionId = A_SESSION_ID, roomId = A_ROOM_ID, threadId = A_THREAD_ID_2),
+        ),
+        notifiableEvents = listOf(
+            aNotifiableMessageEvent(
+                sessionId = A_SESSION_ID,
+                roomId = A_ROOM_ID,
+                threadId = A_THREAD_ID,
+            )
+        ),
+        shouldEmitNotification = true,
+        extraInvocationsForNotificationSummary = 1,
+    )
+
+    @Test
+    fun `notifiable event for a thread emits a notification when a thread of another room is displayed`() = testOnNotifiableEventReceived(
+        appNavigationState = anAppNavigationState(
+            navigationState = aNavigationState(sessionId = A_SESSION_ID, roomId = A_ROOM_ID_2, threadId = A_THREAD_ID_2),
+        ),
+        notifiableEvents = listOf(
+            aNotifiableMessageEvent(
+                sessionId = A_SESSION_ID,
+                roomId = A_ROOM_ID,
+                threadId = A_THREAD_ID,
+            )
+        ),
+        shouldEmitNotification = true,
+        extraInvocationsForNotificationSummary = 1,
+    )
+
+    @Test
+    fun `notifiable event emits a notification when another room is displayed`() = testOnNotifiableEventReceived(
+        appNavigationState = anAppNavigationState(
+            navigationState = aNavigationState(sessionId = A_SESSION_ID, roomId = A_ROOM_ID_2),
+        ),
+        notifiableEvents = listOf(
+            aNotifiableMessageEvent(
+                sessionId = A_SESSION_ID,
+                roomId = A_ROOM_ID,
+            )
+        ),
+        shouldEmitNotification = true,
+        extraInvocationsForNotificationSummary = 1,
+    )
+
+    @Test
+    fun `when the app is locked, a noisy message event produces a noisy fallback notification`() = testAppLockedNotifiableEventReceived(
+        notifiableEvent = aNotifiableMessageEvent(noisy = true),
+        expectedFallbackEvent = anExpectedFallbackNotifiableEvent(noisy = true, timestamp = A_TIMESTAMP),
+    )
+
+    @Test
+    fun `when the app is locked, a silent message event produces a silent fallback notification`() = testAppLockedNotifiableEventReceived(
+        notifiableEvent = aNotifiableMessageEvent(noisy = false),
+        expectedFallbackEvent = anExpectedFallbackNotifiableEvent(noisy = false, timestamp = A_TIMESTAMP),
+    )
+
+    @Test
+    fun `when the app is locked, a noisy invite event produces a noisy fallback notification`() = testAppLockedNotifiableEventReceived(
+        notifiableEvent = anInviteNotifiableEvent(noisy = true),
+        expectedFallbackEvent = anExpectedFallbackNotifiableEvent(noisy = true, timestamp = 0),
+    )
+
+    @Test
+    fun `when the app is locked, a silent invite event produces a silent fallback notification`() = testAppLockedNotifiableEventReceived(
+        notifiableEvent = anInviteNotifiableEvent(noisy = false),
+        expectedFallbackEvent = anExpectedFallbackNotifiableEvent(noisy = false, timestamp = 0),
+    )
+
+    @Test
+    fun `when the app is locked, a noisy simple event produces a noisy fallback notification`() = testAppLockedNotifiableEventReceived(
+        notifiableEvent = aSimpleNotifiableEvent(noisy = true),
+        expectedFallbackEvent = anExpectedFallbackNotifiableEvent(noisy = true, timestamp = 0),
+    )
+
+    @Test
+    fun `when the app is locked, a silent simple event produces a silent fallback notification`() = testAppLockedNotifiableEventReceived(
+        notifiableEvent = aSimpleNotifiableEvent(noisy = false),
+        expectedFallbackEvent = anExpectedFallbackNotifiableEvent(noisy = false, timestamp = 0),
+    )
+
+    @Test
+    fun `when the app is locked, a noisy fallback event stays noisy`() = testAppLockedNotifiableEventReceived(
+        notifiableEvent = aFallbackNotifiableEvent(noisy = true),
+        expectedFallbackEvent = anExpectedFallbackNotifiableEvent(noisy = true, timestamp = A_FAKE_TIMESTAMP),
+    )
+
+    @Test
+    fun `when the app is locked, a silent fallback event stays silent`() = testAppLockedNotifiableEventReceived(
+        notifiableEvent = aFallbackNotifiableEvent(noisy = false),
+        expectedFallbackEvent = anExpectedFallbackNotifiableEvent(noisy = false, timestamp = A_FAKE_TIMESTAMP),
+    )
+
+    @Test
+    fun `when the app is locked, all the events are grouped into a single fallback notification`() = runTest {
+        val createFallbackNotificationResult = aCreateFallbackNotificationRecorder()
+        val sut = createAppLockedNotificationDrawerManager(createFallbackNotificationResult)
+        sut.onNotifiableEventsReceived(
+            listOf(
+                aNotifiableMessageEvent(noisy = false),
+                aNotifiableMessageEvent(eventId = AN_EVENT_ID_2, noisy = true),
+            )
+        )
+        createFallbackNotificationResult.assertions()
+            .isCalledOnce()
+            .with(
+                value(null),
+                any(),
+                value(
+                    listOf(
+                        anExpectedFallbackNotifiableEvent(noisy = false, timestamp = A_TIMESTAMP),
+                        anExpectedFallbackNotifiableEvent(eventId = AN_EVENT_ID_2, noisy = true, timestamp = A_TIMESTAMP),
+                    )
+                ),
+            )
+    }
+
+    @Test
+    fun `when the app is not locked, no fallback notification is created`() = runTest {
+        val createFallbackNotificationResult = aCreateFallbackNotificationRecorder()
+        val sut = createDefaultNotificationDrawerManager(
+            appNavigationStateService = FakeAppNavigationStateService(
+                initialAppNavigationState = anAppNavigationState(isInForeground = false),
+            ),
+            notificationCreator = FakeNotificationCreator(
+                createFallbackNotificationResult = createFallbackNotificationResult,
+            ),
+            lockScreenService = FakeLockScreenService().apply { setIsPinSetup(false) },
+        )
+        sut.onNotifiableEventsReceived(listOf(aNotifiableMessageEvent(noisy = true)))
+        createFallbackNotificationResult.assertions().isNeverCalled()
+    }
+
+    /**
+     * The content of the original event must be stripped, only the noisy flag, the ids and the timestamp are kept.
+     */
+    private fun anExpectedFallbackNotifiableEvent(
+        eventId: EventId = AN_EVENT_ID,
+        noisy: Boolean,
+        timestamp: Long,
+    ) = aFallbackNotifiableEvent(
+        eventId = eventId,
+        description = null,
+        canBeReplaced = false,
+        noisy = noisy,
+        timestamp = timestamp,
+        cause = null,
+    )
+
+    private fun aCreateFallbackNotificationRecorder() =
+        lambdaRecorder<Notification?, NotificationAccountParams, List<FallbackNotifiableEvent>, Notification> { _, _, _ -> A_NOTIFICATION }
+
+    private fun TestScope.createAppLockedNotificationDrawerManager(
+        createFallbackNotificationResult: LambdaThreeParamsRecorder<Notification?, NotificationAccountParams, List<FallbackNotifiableEvent>, Notification>,
+    ) = createDefaultNotificationDrawerManager(
+        appNavigationStateService = FakeAppNavigationStateService(
+            initialAppNavigationState = anAppNavigationState(isInForeground = false),
+        ),
+        notificationCreator = FakeNotificationCreator(
+            createFallbackNotificationResult = createFallbackNotificationResult,
+        ),
+        lockScreenService = FakeLockScreenService().apply { setIsPinSetup(true) },
+    )
+
+    private fun testAppLockedNotifiableEventReceived(
+        notifiableEvent: NotifiableEvent,
+        expectedFallbackEvent: FallbackNotifiableEvent,
+    ) = runTest {
+        val createFallbackNotificationResult = aCreateFallbackNotificationRecorder()
+        val sut = createAppLockedNotificationDrawerManager(createFallbackNotificationResult)
+        sut.onNotifiableEventsReceived(listOf(notifiableEvent))
+        createFallbackNotificationResult.assertions()
+            .isCalledOnce()
+            .with(value(null), any(), value(listOf(expectedFallbackEvent)))
+    }
+
+    private fun testOnNotifiableEventReceived(
+        appNavigationState: AppNavigationState,
+        notifiableEvents: List<NotifiableEvent>,
+        shouldEmitNotification: Boolean,
+        extraInvocationsForNotificationSummary: Int = 0,
+    ) = runTest {
+        val showNotificationResult = lambdaRecorder<String?, Int, Notification, Boolean> { _, _, _ ->
+            true
+        }
+        val defaultNotificationDrawerManager = createDefaultNotificationDrawerManager(
+            appNavigationStateService = FakeAppNavigationStateService(
+                initialAppNavigationState = appNavigationState,
+            ),
+            notificationDisplayer = FakeNotificationDisplayer(
+                showNotificationResult = showNotificationResult,
+            )
+        )
+        defaultNotificationDrawerManager.onNotifiableEventsReceived(notifiableEvents)
+        showNotificationResult.assertions().isCalledExactly(
+            if (shouldEmitNotification) {
+                notifiableEvents.size + extraInvocationsForNotificationSummary
+            } else {
+                0
+            }
+        )
+    }
+}
+
+fun TestScope.createDefaultNotificationDrawerManager(
+    notificationDisplayer: NotificationDisplayer = FakeNotificationDisplayer(),
+    notificationRenderer: NotificationRenderer? = null,
+    notificationCreator: NotificationCreator = FakeNotificationCreator(),
+    appNavigationStateService: AppNavigationStateService = FakeAppNavigationStateService(),
+    roomGroupMessageCreator: RoomGroupMessageCreator = FakeRoomGroupMessageCreator(),
+    summaryGroupMessageCreator: SummaryGroupMessageCreator = FakeSummaryGroupMessageCreator(),
+    activeNotificationsProvider: FakeActiveNotificationsProvider = FakeActiveNotificationsProvider(),
+    matrixClientProvider: FakeMatrixClientProvider = FakeMatrixClientProvider(),
+    sessionStore: SessionStore = InMemorySessionStore(),
+    enterpriseService: EnterpriseService = FakeEnterpriseService(),
+    sessionObserver: SessionObserver = FakeSessionObserver(),
+    analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
+    lockScreenService: LockScreenService = FakeLockScreenService(),
+): DefaultNotificationDrawerManager {
+    return DefaultNotificationDrawerManager(
+        notificationDisplayer = notificationDisplayer,
+        notificationRenderer = notificationRenderer ?: NotificationRenderer(
+            notificationDisplayer = notificationDisplayer,
+            notificationDataFactory = DefaultNotificationDataFactory(
+                notificationCreator = notificationCreator,
+                roomGroupMessageCreator = roomGroupMessageCreator,
+                summaryGroupMessageCreator = summaryGroupMessageCreator,
+                activeNotificationsProvider = activeNotificationsProvider,
+            ),
+            enterpriseService = enterpriseService,
+            sessionStore = sessionStore,
+            analyticsService = analyticsService,
+        ),
+        appNavigationStateService = appNavigationStateService,
+        coroutineScope = backgroundScope,
+        matrixClientProvider = matrixClientProvider,
+        imageLoaderHolder = FakeImageLoaderHolder(),
+        activeNotificationsProvider = activeNotificationsProvider,
+        lockScreenService = lockScreenService,
+        sessionObserver = sessionObserver,
+    )
 }

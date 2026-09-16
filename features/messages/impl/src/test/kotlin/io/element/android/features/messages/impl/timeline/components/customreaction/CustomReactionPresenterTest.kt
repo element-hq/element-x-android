@@ -8,16 +8,14 @@
 
 package io.element.android.features.messages.impl.timeline.components.customreaction
 
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
+import io.element.android.libraries.emoji.api.recentemojis.EmptyGetRecentEmojis
+import io.element.android.libraries.emoji.test.fakeEmojiPickerPresenterFactory
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
-import io.element.android.libraries.recentemojis.test.FakeEmojibaseProvider
 import io.element.android.tests.testutils.WarmUpRule
-import kotlinx.collections.immutable.persistentListOf
+import io.element.android.tests.testutils.test
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -27,45 +25,37 @@ class CustomReactionPresenterTest {
     val warmUpRule = WarmUpRule()
 
     private val presenter = CustomReactionPresenter(
-        emojibaseProvider = FakeEmojibaseProvider(),
-        getRecentEmojis = { Result.success(persistentListOf()) },
+        emojiPickerPresenterFactory = fakeEmojiPickerPresenterFactory(),
+        getRecentEmojis = EmptyGetRecentEmojis,
     )
 
     @Test
     fun `present - handle selecting and de-selecting an event`() = runTest {
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val event = aTimelineItemEvent(eventId = AN_EVENT_ID)
             val initialState = awaitItem()
             assertThat(initialState.target).isEqualTo(CustomReactionState.Target.None)
 
-            initialState.eventSink(CustomReactionEvents.ShowCustomReactionSheet(event))
-
-            assertThat(awaitItem().target).isEqualTo(CustomReactionState.Target.Loading(event))
+            initialState.eventSink(CustomReactionEvent.ShowCustomReactionSheet(event))
 
             val eventId = (awaitItem().target as? CustomReactionState.Target.Success)?.event?.eventId
             assertThat(eventId).isEqualTo(AN_EVENT_ID)
 
-            initialState.eventSink(CustomReactionEvents.DismissCustomReactionSheet)
+            initialState.eventSink(CustomReactionEvent.DismissCustomReactionSheet)
             assertThat(awaitItem().target).isEqualTo(CustomReactionState.Target.None)
         }
     }
 
     @Test
     fun `present - handle selected emojis`() = runTest {
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val reactions = aTimelineItemReactions(count = 1, isHighlighted = true)
             val event = aTimelineItemEvent(eventId = AN_EVENT_ID, timelineItemReactions = reactions)
             val initialState = awaitItem()
             assertThat(initialState.target).isEqualTo(CustomReactionState.Target.None)
 
             val key = reactions.reactions.first().key
-            initialState.eventSink(CustomReactionEvents.ShowCustomReactionSheet(event))
-
-            assertThat(awaitItem().target).isEqualTo(CustomReactionState.Target.Loading(event))
+            initialState.eventSink(CustomReactionEvent.ShowCustomReactionSheet(event))
 
             val stateWithSelectedEmojis = awaitItem()
             val eventId = (stateWithSelectedEmojis.target as? CustomReactionState.Target.Success)?.event?.eventId

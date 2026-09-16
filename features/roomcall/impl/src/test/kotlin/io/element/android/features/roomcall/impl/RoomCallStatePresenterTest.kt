@@ -14,10 +14,15 @@ import io.element.android.features.call.api.CurrentCallService
 import io.element.android.features.call.test.FakeCurrentCallService
 import io.element.android.features.enterprise.test.FakeSessionEnterpriseService
 import io.element.android.features.roomcall.api.RoomCallState
+import io.element.android.libraries.matrix.api.notification.CallIntent
+import io.element.android.libraries.matrix.api.room.CallIntentConsensus
 import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
+import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
+import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
@@ -28,7 +33,7 @@ class RoomCallStatePresenterTest {
     fun `present - initial state`() = runTest {
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canUserJoinCallResult = { Result.success(false) },
+                roomPermissions = roomPermissions(false),
             )
         )
         val presenter = createRoomCallStatePresenter(joinedRoom = room)
@@ -38,8 +43,45 @@ class RoomCallStatePresenterTest {
             assertThat(initialState).isEqualTo(
                 RoomCallState.StandBy(
                     canStartCall = false,
+                    isDM = false
                 )
             )
+        }
+    }
+
+    @Test
+    fun `present - a DM with no other member cannot start a call`() = runTest {
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
+                initialRoomInfo = aRoomInfo(isDm = true, activeMembersCount = 1, joinedMembersCount = 1),
+                roomPermissions = roomPermissions(true),
+            )
+        )
+        val presenter = createRoomCallStatePresenter(joinedRoom = room)
+        presenter.test {
+            skipItems(1)
+            assertThat(awaitItem()).isEqualTo(
+                RoomCallState.StandBy(
+                    canStartCall = false,
+                    isDM = true
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - a DM becomes callable once the other member is active`() = runTest {
+        val baseRoom = FakeBaseRoom(
+            initialRoomInfo = aRoomInfo(isDm = true, activeMembersCount = 1, joinedMembersCount = 1),
+            roomPermissions = roomPermissions(true),
+        )
+        val room = FakeJoinedRoom(baseRoom = baseRoom)
+        val presenter = createRoomCallStatePresenter(joinedRoom = room)
+        presenter.test {
+            skipItems(1)
+            assertThat(awaitItem()).isEqualTo(RoomCallState.StandBy(canStartCall = false, isDM = true))
+            baseRoom.givenRoomInfo(aRoomInfo(isDm = true, activeMembersCount = 2, joinedMembersCount = 2))
+            assertThat(awaitItem()).isEqualTo(RoomCallState.StandBy(canStartCall = true, isDM = true))
         }
     }
 
@@ -47,7 +89,7 @@ class RoomCallStatePresenterTest {
     fun `present - element call not available`() = runTest {
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canUserJoinCallResult = { Result.success(false) },
+                roomPermissions = roomPermissions(false),
             )
         )
         val presenter = createRoomCallStatePresenter(
@@ -66,7 +108,7 @@ class RoomCallStatePresenterTest {
     fun `present - initial state - user can join call`() = runTest {
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canUserJoinCallResult = { Result.success(true) },
+                roomPermissions = roomPermissions(true),
             )
         )
         val presenter = createRoomCallStatePresenter(joinedRoom = room)
@@ -76,6 +118,28 @@ class RoomCallStatePresenterTest {
             assertThat(initialState).isEqualTo(
                 RoomCallState.StandBy(
                     canStartCall = true,
+                    isDM = false
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - initial state - when is DM room`() = runTest {
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
+                initialRoomInfo = aRoomInfo(isDm = true),
+                roomPermissions = roomPermissions(true),
+            )
+        )
+        val presenter = createRoomCallStatePresenter(joinedRoom = room)
+        presenter.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            assertThat(initialState).isEqualTo(
+                RoomCallState.StandBy(
+                    canStartCall = true,
+                    isDM = true
                 )
             )
         }
@@ -85,7 +149,7 @@ class RoomCallStatePresenterTest {
     fun `present - call is disabled if user cannot join it even if there is an ongoing call`() = runTest {
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canUserJoinCallResult = { Result.success(false) },
+                roomPermissions = roomPermissions(false),
                 initialRoomInfo = aRoomInfo(hasRoomCall = true),
             )
         )
@@ -95,6 +159,7 @@ class RoomCallStatePresenterTest {
             assertThat(awaitItem()).isEqualTo(
                 RoomCallState.OnGoing(
                     canJoinCall = false,
+                    isAudioCall = false,
                     isUserInTheCall = false,
                     isUserLocallyInTheCall = false,
                 )
@@ -106,7 +171,7 @@ class RoomCallStatePresenterTest {
     fun `present - user has joined the call on another session`() = runTest {
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canUserJoinCallResult = { Result.success(true) },
+                roomPermissions = roomPermissions(true),
             ).apply {
                 givenRoomInfo(
                     aRoomInfo(
@@ -122,6 +187,7 @@ class RoomCallStatePresenterTest {
             assertThat(awaitItem()).isEqualTo(
                 RoomCallState.OnGoing(
                     canJoinCall = true,
+                    isAudioCall = false,
                     isUserInTheCall = true,
                     isUserLocallyInTheCall = false,
                 )
@@ -133,7 +199,7 @@ class RoomCallStatePresenterTest {
     fun `present - user has joined the call locally`() = runTest {
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canUserJoinCallResult = { Result.success(true) },
+                roomPermissions = roomPermissions(true),
             ).apply {
                 givenRoomInfo(
                     aRoomInfo(
@@ -152,7 +218,102 @@ class RoomCallStatePresenterTest {
             assertThat(awaitItem()).isEqualTo(
                 RoomCallState.OnGoing(
                     canJoinCall = true,
+                    isAudioCall = false,
                     isUserInTheCall = true,
+                    isUserLocallyInTheCall = true,
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - active call with audio Intent`() = runTest {
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
+                roomPermissions = roomPermissions(true),
+            ).apply {
+                givenRoomInfo(
+                    aRoomInfo(
+                        hasRoomCall = true,
+                        activeCallIntentConsensus = CallIntentConsensus.Full(CallIntent.AUDIO),
+                        activeRoomCallParticipants = emptyList(),
+                    )
+                )
+            }
+        )
+        val presenter = createRoomCallStatePresenter(
+            joinedRoom = room,
+            currentCallService = FakeCurrentCallService(MutableStateFlow(CurrentCall.RoomCall(room.roomId))),
+        )
+        presenter.test {
+            skipItems(1)
+            assertThat(awaitItem()).isEqualTo(
+                RoomCallState.OnGoing(
+                    canJoinCall = true,
+                    isAudioCall = true,
+                    isUserInTheCall = false,
+                    isUserLocallyInTheCall = true,
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - active call with partial audio Intent`() = runTest {
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
+                roomPermissions = roomPermissions(true),
+            ).apply {
+                givenRoomInfo(
+                    aRoomInfo(
+                        hasRoomCall = true,
+                        activeCallIntentConsensus = CallIntentConsensus.Partial(CallIntent.AUDIO, 1, 4),
+                    )
+                )
+            }
+        )
+        val presenter = createRoomCallStatePresenter(
+            joinedRoom = room,
+            currentCallService = FakeCurrentCallService(MutableStateFlow(CurrentCall.RoomCall(room.roomId))),
+        )
+        presenter.test {
+            skipItems(1)
+            assertThat(awaitItem()).isEqualTo(
+                RoomCallState.OnGoing(
+                    canJoinCall = true,
+                    isAudioCall = true,
+                    isUserInTheCall = false,
+                    isUserLocallyInTheCall = true,
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - active call with no intent defaults to Audio`() = runTest {
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
+                roomPermissions = roomPermissions(true),
+            ).apply {
+                givenRoomInfo(
+                    aRoomInfo(
+                        hasRoomCall = true,
+                        activeCallIntentConsensus = CallIntentConsensus.None,
+                    )
+                )
+            }
+        )
+        val presenter = createRoomCallStatePresenter(
+            joinedRoom = room,
+            currentCallService = FakeCurrentCallService(MutableStateFlow(CurrentCall.RoomCall(room.roomId))),
+        )
+        presenter.test {
+            skipItems(1)
+            assertThat(awaitItem()).isEqualTo(
+                RoomCallState.OnGoing(
+                    canJoinCall = true,
+                    isAudioCall = false,
+                    isUserInTheCall = false,
                     isUserLocallyInTheCall = true,
                 )
             )
@@ -163,7 +324,7 @@ class RoomCallStatePresenterTest {
     fun `present - user leaves the call`() = runTest {
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canUserJoinCallResult = { Result.success(true) },
+                roomPermissions = roomPermissions(true),
             ).apply {
                 givenRoomInfo(
                     aRoomInfo(
@@ -184,6 +345,7 @@ class RoomCallStatePresenterTest {
             assertThat(awaitItem()).isEqualTo(
                 RoomCallState.OnGoing(
                     canJoinCall = true,
+                    isAudioCall = false,
                     isUserInTheCall = true,
                     isUserLocallyInTheCall = true,
                 )
@@ -192,6 +354,7 @@ class RoomCallStatePresenterTest {
             assertThat(awaitItem()).isEqualTo(
                 RoomCallState.OnGoing(
                     canJoinCall = true,
+                    isAudioCall = false,
                     isUserInTheCall = true,
                     isUserLocallyInTheCall = false,
                 )
@@ -205,6 +368,7 @@ class RoomCallStatePresenterTest {
             assertThat(awaitItem()).isEqualTo(
                 RoomCallState.OnGoing(
                     canJoinCall = true,
+                    isAudioCall = false,
                     isUserInTheCall = false,
                     isUserLocallyInTheCall = false,
                 )
@@ -218,9 +382,21 @@ class RoomCallStatePresenterTest {
             assertThat(awaitItem()).isEqualTo(
                 RoomCallState.StandBy(
                     canStartCall = true,
+                    isDM = false
                 )
             )
         }
+    }
+
+    private fun roomPermissions(canJoinCall: Boolean): FakeRoomPermissions {
+        return FakeRoomPermissions(
+            canSendState = { stateEvent ->
+                when (stateEvent) {
+                    StateEventType.CallMember -> canJoinCall
+                    else -> lambdaError()
+                }
+            }
+        )
     }
 
     private fun createRoomCallStatePresenter(

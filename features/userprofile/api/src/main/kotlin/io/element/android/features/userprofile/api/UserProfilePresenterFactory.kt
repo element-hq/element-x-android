@@ -11,6 +11,12 @@ package io.element.android.features.userprofile.api
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.UserId
 
+/**
+ * Creates the user profile presenter, so that other features can show a profile without depending on this one's implementation.
+ */
 fun interface UserProfilePresenterFactory {
+    /**
+     * @param userId the user whose profile is shown.
+     */
     fun create(userId: UserId): Presenter<UserProfileState>
 }

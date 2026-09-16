@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_share_location_live_location_disclaimer_title">"Twoja historia lokalizacji na żywo zostanie zapisana w pokoju i będzie widoczna dla członków po zakończeniu sesji."</string>
+  <string name="screen_share_location_live_location_duration_picker_title">"Wybierz, jak długo chcesz udostępniać swoją lokalizację na żywo."</string>
+  <string name="screen_share_location_live_location_missing_permissions">"Nie masz uprawnień do udostępniania swojej lokalizacji na żywo w tym pokoju"</string>
+</resources>

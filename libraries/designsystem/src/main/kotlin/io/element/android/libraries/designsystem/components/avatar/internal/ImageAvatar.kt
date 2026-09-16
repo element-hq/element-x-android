@@ -36,7 +36,7 @@ internal fun ImageAvatar(
     SubcomposeAsyncImage(
         model = avatarData,
         contentDescription = contentDescription,
-        contentScale = ContentScale.Companion.Crop,
+        contentScale = ContentScale.Crop,
         modifier = modifier
             .size(size)
             .clip(avatarShape)

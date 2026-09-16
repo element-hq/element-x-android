@@ -8,6 +8,19 @@
 
 package io.element.android.features.rolesandpermissions.api
 
-import io.element.android.libraries.architecture.SimpleFeatureEntryPoint
+import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
+import com.bumble.appyx.core.plugin.Plugin
+import io.element.android.libraries.architecture.FeatureEntryPoint
 
-fun interface RolesAndPermissionsEntryPoint : SimpleFeatureEntryPoint
+fun interface RolesAndPermissionsEntryPoint : FeatureEntryPoint {
+    interface Callback : Plugin {
+        fun onDone()
+    }
+
+    fun createNode(
+        parentNode: Node,
+        buildContext: BuildContext,
+        callback: Callback,
+    ): Node
+}

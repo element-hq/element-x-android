@@ -33,5 +33,5 @@ class FakeAnalyticsProvider(
     override fun updateUserProperties(userProperties: UserProperties) = updateUserPropertiesLambda(userProperties)
     override fun trackError(throwable: Throwable) = trackErrorLambda(throwable)
     override fun updateSuperProperties(updatedProperties: SuperProperties) = updateSuperPropertiesLambda(updatedProperties)
-    override fun startTransaction(name: String, operation: String?): AnalyticsTransaction? = null
+    override fun startTransaction(name: String, operation: String?, description: String?): AnalyticsTransaction? = null
 }

@@ -8,12 +8,9 @@
 
 package io.element.android.features.announcement.impl
 
-data class AnnouncementState(
-    val showSpaceAnnouncement: Boolean,
-)
+import io.element.android.features.announcement.api.Announcement
 
-fun anAnnouncementState(
-    showSpaceAnnouncement: Boolean = false,
-) = AnnouncementState(
-    showSpaceAnnouncement = showSpaceAnnouncement,
+data class AnnouncementState(
+    val announcement: Announcement.Fullscreen?,
+    val eventSink: (AnnouncementEvent) -> Unit,
 )

@@ -13,10 +13,8 @@ import io.element.android.libraries.matrix.api.pusher.UnsetHttpPusherData
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClient
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.runTest
-import org.junit.Ignore
 import org.junit.Test
 
-@Ignore("JNA direct mapping has broken unit tests with FFI fakes")
 class RustPushersServiceTest {
     @Test
     fun `setPusher should invoke the client method`() = runTest {
@@ -50,6 +48,7 @@ private fun aSetHttpPusherData(
     deviceDisplayName: String = "deviceDisplayName",
     profileTag: String = "profileTag",
     lang: String = "lang",
+    append: Boolean = false,
 ) = SetHttpPusherData(
     pushKey = pushKey,
     appId = appId,
@@ -58,7 +57,8 @@ private fun aSetHttpPusherData(
     appDisplayName = appDisplayName,
     deviceDisplayName = deviceDisplayName,
     profileTag = profileTag,
-    lang = lang
+    lang = lang,
+    append = append,
 )
 
 private fun aUnsetHttpPusherData(
