@@ -39,6 +39,9 @@ interface MessagesEntryPoint : FeatureEntryPoint {
         fun forwardEvent(eventId: EventId, fromPinnedEvents: Boolean)
         fun navigateToRoom(roomId: RoomId)
         fun navigateToDeveloperSettings()
+
+        /** Open message search scoped to the room currently being displayed. */
+        fun navigateToMessageSearch()
     }
 
     data class Params(val initialTarget: InitialTarget) : NodeInputs

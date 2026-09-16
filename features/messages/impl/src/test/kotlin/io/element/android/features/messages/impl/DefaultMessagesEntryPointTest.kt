@@ -97,6 +97,7 @@ class DefaultMessagesEntryPointTest {
             override fun forwardEvent(eventId: EventId, fromPinnedEvents: Boolean) = lambdaError()
             override fun navigateToRoom(roomId: RoomId) = lambdaError()
             override fun navigateToDeveloperSettings() = lambdaError()
+            override fun navigateToMessageSearch() = lambdaError()
         }
         val initialTarget = MessagesEntryPoint.InitialTarget.Messages(focusedEventId = AN_EVENT_ID)
         val params = MessagesEntryPoint.Params(initialTarget)
