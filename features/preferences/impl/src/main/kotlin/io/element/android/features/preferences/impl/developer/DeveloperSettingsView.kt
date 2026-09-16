@@ -44,7 +44,6 @@ import io.mhssn.colorpicker.ColorPickerType
 @Composable
 fun DeveloperSettingsView(
     state: DeveloperSettingsState,
-    onOpenShowkase: () -> Unit,
     onPushHistoryClick: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -84,7 +83,6 @@ fun DeveloperSettingsView(
         // Note: this is OK to hardcode strings in this debug screen.
         AppDeveloperSettingsView(
             state = state.appDeveloperSettingsState,
-            onOpenShowkase = onOpenShowkase,
         )
         SessionCategory(deviceId = state.deviceId)
         NotificationCategory(
@@ -255,7 +253,6 @@ internal fun DeveloperSettingsViewPreview(
 ) = ElementPreview {
     DeveloperSettingsView(
         state = state,
-        onOpenShowkase = {},
         onPushHistoryClick = {},
         onBackClick = {},
     )

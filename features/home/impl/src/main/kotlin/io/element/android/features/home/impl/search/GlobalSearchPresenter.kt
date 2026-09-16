@@ -31,6 +31,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.roomlist.LatestEventValue
+import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.search.MessageSearch
 import io.element.android.libraries.matrix.api.search.MessageSearchPaginationState
 import io.element.android.libraries.matrix.api.search.MessageSearchResult
@@ -94,7 +95,14 @@ class GlobalSearchPresenter(
                 AsyncData.Uninitialized
             }
 
-            launch { roomListSearchDataSource.setSearchQuery(queryState.text.toString()) }
+            // Apply the query to the room list search, looking only for joined rooms matching the query
+            launch {
+                roomListSearchDataSource.setSearchQuery(
+                    searchQuery = queryState.text.toString(),
+                    additionalFilters = RoomListFilter.Joined,
+                )
+            }
+            // Apply the query to the message search too
             launch {
                 currentMessageSearch.setQuery(queryState.text.toString())
                     .onFailure { Timber.e(it, "Could not set query for message search") }

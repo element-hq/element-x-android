@@ -16,6 +16,7 @@ import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind.Deduplicat
 import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind.Favourite
 import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind.Identifiers
 import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind.Invite
+import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind.Joined
 import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind.NonLeft
 import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind.NonSpace
 import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind.None
@@ -73,6 +74,7 @@ internal object RoomListFilterMapper {
             is RoomListFilter.NormalizedMatchRoomName -> NormalizedMatchRoomName(
                 pattern = filter.pattern
             )
+            RoomListFilter.Joined -> Joined
             RoomListFilter.Invite -> Invite
         }
     }

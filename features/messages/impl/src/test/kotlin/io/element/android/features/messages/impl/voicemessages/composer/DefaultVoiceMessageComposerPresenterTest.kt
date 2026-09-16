@@ -63,7 +63,6 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
-@Suppress("LargeClass")
 class DefaultVoiceMessageComposerPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()

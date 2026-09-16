@@ -50,7 +50,6 @@ import org.junit.Rule
 import org.junit.Test
 import java.io.File
 
-@Suppress("LargeClass")
 @ExperimentalCoroutinesApi
 class RoomDetailsEditPresenterTest {
     @get:Rule

@@ -72,7 +72,7 @@ allprojects {
         verbose = true
         reporters {
             reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.PLAIN)
-            // To have XML report for Danger
+            // To have XML report for the CI to annotate the PR, see .github/workflows/quality.yml
             reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE)
         }
         val generatedPath = "${layout.buildDirectory.asFile.get()}/generated/"
@@ -153,7 +153,10 @@ allprojects {
         maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
 
         val isScreenshotTest = project.gradle.startParameter.taskNames.any { it.contains("paparazzi", ignoreCase = true) }
+        val isRoborazziTest = project.gradle.startParameter.taskNames.any { it.contains("roborazzi", ignoreCase = true) }
         if (isScreenshotTest) {
+            // Paparazzi tests benefit from parallelisation, so we can use half the available cores to run them in parallel.
+            maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
             // Increase heap size for screenshot tests
             maxHeapSize = "2g"
             // Record all the languages?
@@ -165,9 +168,22 @@ allprojects {
                 exclude("translations/*.class")
             }
         } else {
+            // Robolectric and Compose pay a 5 to 30 seconds bootstrap cost per test JVM (instrumenting
+            // android-all, then warming up the Compose runtime). That cost is paid once per JVM and then
+            // amortised over every test class the JVM runs, so splitting a module across several forks
+            // re-pays it for each fork instead of saving time. Keep a single fork per module and let
+            // Gradle parallelise by running many modules' test tasks concurrently instead.
+            maxParallelForks = 1
+
             // Disable screenshot tests by default
             exclude("ui/*.class")
             exclude("translations/*.class")
+            if (isRoborazziTest.not()) {
+                // Roborazzi screenshot tests (:libraries:compound) live in a `screenshot` package, which
+                // the two patterns above do not match, so they used to run on every plain unit test run.
+                // They are verified by the dedicated `verifyRoborazziDebug` task instead.
+                exclude("**/screenshot/**")
+            }
         }
     }
 }
