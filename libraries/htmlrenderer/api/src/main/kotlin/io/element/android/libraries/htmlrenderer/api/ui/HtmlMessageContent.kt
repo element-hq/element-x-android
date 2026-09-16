@@ -103,7 +103,9 @@ import kotlinx.collections.immutable.toImmutableMap
  * The renderer is stateless: it is driven entirely by [node] and reports interactions
  * through the callbacks. It performs no HTML parsing itself.
  *
- * @param currentUserId used to style a mention of the current user differently; may be null.
+ * @param node the root HTML node of the parsed message tree to render.
+ * @param modifier the [Modifier] to be applied to the layout.
+ * @param currentUserId the current user ID, if known. This can be used to display UI sent by/owned by the current user differently.
  * @param onLinkClick invoked with the target URL when a link is tapped.
  * @param onLinkLongClick invoked with the target URL when a link is long-pressed.
  * @param onMentionClick invoked when a mention pill is tapped.
@@ -201,7 +203,7 @@ private fun BlockNodeView(
     context: RenderContext,
     modifier: Modifier = Modifier,
 ) {
-    if (node === context.lastBlockNode && (node !is ParagraphNode && node !is HeaderNode)) {
+    if (node === context.lastBlockNode && node !is ParagraphNode && node !is HeaderNode) {
         context.onContentLayoutChange(ContentAvoidingLayoutData.NotOverlapping)
     }
 
@@ -574,9 +576,9 @@ private fun rememberInlineContent(
  * are missing or the image is a custom emoji.
  */
 private fun ImageNodeContent.inlineImageSize(): Pair<Dp, Dp> {
-    val width = width
-    val height = height
-    if (isEmoticon || width == null || height == null || width <= 0 || height <= 0) {
+    val width = width ?: 0
+    val height = height ?: 0
+    if (isEmoticon || width <= 0 || height <= 0) {
         return EmojiImageSize to EmojiImageSize
     }
     val widthDp = width.dp

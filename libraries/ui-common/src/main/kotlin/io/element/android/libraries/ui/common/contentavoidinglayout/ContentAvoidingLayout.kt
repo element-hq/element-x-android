@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.designsystem.text.roundToPx
 import io.element.android.libraries.designsystem.utils.LocalUiTestMode
 import kotlin.math.max
@@ -88,7 +89,7 @@ fun ContentAvoidingLayout(
 
         when {
             // When the content + the overlay don't fit in the available max width, we need to move the overlay to a new row
-            !data.canOverlay() || (!shrinkContent && data.nonOverlappingContentWidth + overlayPlaceable.width > constraints.maxWidth) -> {
+            !data.canOverlay() || !shrinkContent && data.nonOverlappingContentWidth + overlayPlaceable.width > constraints.maxWidth -> {
                 layoutHeight += overlayPlaceable.height + overlayOffset.y.roundToPx()
             }
             // If the content is smaller than the available max width, we can move the overlay to the right of the content
@@ -167,7 +168,7 @@ object ContentAvoidingLayout {
         val extraWidthPx = extraWidth.roundToPx()
         return { textLayout: TextLayoutResult ->
             // We need to add the external extra width so it's not taken into account as 'free space'
-            val textDirection = runCatching { textLayout.getParagraphDirection(0) }.getOrNull()
+            val textDirection = tryOrNull { textLayout.getParagraphDirection(0) }
             val lastLineWidth = when (textDirection) {
                 ResolvedTextDirection.Rtl -> textLayout.getLineLeft(textLayout.lineCount - 1).roundToInt()
                 else -> textLayout.getLineRight(textLayout.lineCount - 1).roundToInt()

@@ -239,6 +239,8 @@ Compose:
       - LocalBuildMeta
       - LocalUiTestMode
       - LocalSdkIntVersionProvider
+      - LocalTimelineEventRendererConfig
+      - LocalAllowedInlineImages
   CompositionLocalNaming:
     active: true
   ContentEmitterReturningValues:

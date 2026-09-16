@@ -46,7 +46,7 @@ import kotlinx.collections.immutable.toImmutableList
 @PreviewsDayNight
 @Composable
 internal fun HtmlMessageContentPreview(
-    @PreviewParameter(HtmlMessageContentProvider::class) node: DocumentNode,
+    @PreviewParameter(HtmlMessageContentPreviewParam::class) node: DocumentNode,
 ) = ElementPreview {
     HtmlMessageContent(
         node = node,
@@ -93,7 +93,7 @@ internal fun HtmlMessageContentHiddenImagesPreview() = ElementPreview {
     )
 }
 
-internal class HtmlMessageContentProvider : PreviewParameterProvider<DocumentNode> {
+internal class HtmlMessageContentPreviewParam : PreviewParameterProvider<DocumentNode> {
     override val values: Sequence<DocumentNode>
         get() = sequenceOf(
             headers(),
