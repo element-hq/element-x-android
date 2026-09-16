@@ -83,7 +83,6 @@ import org.junit.Test
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 
-@Suppress("LargeClass")
 class TimelineItemContentMessageFactoryTest : RobolectricTest() {
     @Test
     fun `test create OtherMessageType`() = runTest {

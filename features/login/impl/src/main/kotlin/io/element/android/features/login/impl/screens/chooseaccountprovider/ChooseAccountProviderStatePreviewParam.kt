@@ -9,31 +9,22 @@
 package io.element.android.features.login.impl.screens.chooseaccountprovider
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.login.impl.accountprovider.AccountProvider
-import io.element.android.features.login.impl.accountprovider.anAccountProvider
+import io.element.android.features.login.impl.accountprovider.anAccountProviderManaged
 import io.element.android.features.login.impl.login.LoginModeState
 import io.element.android.features.login.impl.login.aLoginModeState
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
 import kotlinx.collections.immutable.toImmutableList
 
 open class ChooseAccountProviderStatePreviewParam : PreviewParameterProvider<ChooseAccountProviderState> {
-    private val server1 = anAccountProvider(
-        url = "https://server1.io",
-        subtitle = null,
-        isPublic = false,
-        isMatrixOrg = false,
+    private val server1 = anAccountProviderManaged(
+        baseUrl = "https://server1.io",
     )
-    private val server2 = anAccountProvider(
-        url = "https://server2.io",
-        subtitle = null,
-        isPublic = false,
-        isMatrixOrg = false,
+    private val server2 = anAccountProviderManaged(
+        baseUrl = "https://server2.io",
     )
-    private val server3 = anAccountProvider(
-        url = "https://server3.io",
-        subtitle = null,
-        isPublic = false,
-        isMatrixOrg = false,
+    private val server3 = anAccountProviderManaged(
+        baseUrl = "https://server3.io",
     )
     override val values: Sequence<ChooseAccountProviderState>
         get() = sequenceOf(
@@ -61,13 +52,12 @@ open class ChooseAccountProviderStatePreviewParam : PreviewParameterProvider<Cho
                 selectedAccountProvider = server2,
                 loginModeState = aLoginModeState(loginMode = AsyncData.Loading()),
             ),
-            // Add other state here
         )
 }
 
 fun aChooseAccountProviderState(
     accountProviders: List<AccountProvider> = listOf(
-        anAccountProvider()
+        anAccountProviderManaged()
     ),
     selectedAccountProvider: AccountProvider? = null,
     loginModeState: LoginModeState = aLoginModeState(),

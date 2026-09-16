@@ -303,7 +303,7 @@ private fun OnBoardingButtons(
             )
         } else {
             Button(
-                text = stringResource(id = R.string.screen_onboarding_sign_in_to, defaultAccountProvider),
+                text = stringResource(id = R.string.screen_onboarding_sign_in_to, defaultAccountProvider.friendlyServerName()),
                 showProgress = isLoading,
                 onClick = {
                     state.eventSink(OnBoardingEvent.OnSignIn(defaultAccountProvider))

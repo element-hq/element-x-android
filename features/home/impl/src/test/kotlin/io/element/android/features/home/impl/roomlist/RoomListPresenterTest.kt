@@ -91,7 +91,6 @@ import org.junit.Rule
 import org.junit.Test
 import kotlin.time.Duration.Companion.seconds
 
-@Suppress("LargeClass")
 class RoomListPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()

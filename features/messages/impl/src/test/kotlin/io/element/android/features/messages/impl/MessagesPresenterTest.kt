@@ -125,7 +125,6 @@ import org.junit.Test
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
-@Suppress("LargeClass")
 class MessagesPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
@@ -1484,7 +1483,12 @@ class MessagesPresenterTest {
             clipboardHelper = clipboardHelper,
             htmlConverterProvider = FakeHtmlConverterProvider(),
             buildMeta = aBuildMeta(),
-            timelineController = TimelineController(joinedRoom, timeline),
+            timelineController = TimelineController(
+                room = joinedRoom,
+                liveTimeline = timeline,
+                roomCoroutineScope = backgroundScope,
+                dispatchers = coroutineDispatchers,
+            ),
             permalinkParser = permalinkParser,
             analyticsService = analyticsService,
             encryptionService = encryptionService,
