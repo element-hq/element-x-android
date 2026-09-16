@@ -72,6 +72,7 @@ const val A_SPACE_NAME = "A space name"
 
 const val A_REDACTION_REASON = "A redaction reason"
 
+const val A_SERVER_NAME = "matrix.org"
 const val A_HOMESERVER_URL = "matrix.org"
 const val A_HOMESERVER_URL_2 = "matrix-client.org"
 

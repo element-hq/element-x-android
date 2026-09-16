@@ -51,6 +51,10 @@
   <string name="screen_edit_profile_error_title">"无法更新个人资料"</string>
   <string name="screen_edit_profile_title">"编辑个人资料"</string>
   <string name="screen_edit_profile_updating_details">"正在更新个人资料…"</string>
+  <string name="screen_labs_enable_gallery">"含有媒体组的消息"</string>
+  <string name="screen_labs_enable_gallery_description">"一次性发送多个图像或视频。此功能已在移动客户端稳定运行，但 Web 客户端尚未支持。"</string>
+  <string name="screen_labs_enable_knocking">"申请加入"</string>
+  <string name="screen_labs_enable_knocking_description">"用户可以申请加入一个不对任何人开放的房间。此功能已在移动客户端稳定运行，在 Web 客户端也已推出，但尚处于实验阶段。"</string>
   <string name="screen_labs_enable_threads">"启用消息列中的回复"</string>
   <string name="screen_labs_enable_threads_description">"App 将重启以应用此更改。"</string>
   <string name="screen_labs_header_description">"尝试我们最新的开发理念。这些功能尚未最终确定，可能不稳定，也可能会发生变化。"</string>
@@ -74,7 +78,7 @@
   <string name="screen_notification_settings_failed_fixing_configuration">"配置尚未更正，请重试。"</string>
   <string name="screen_notification_settings_group_chats">"群聊"</string>
   <string name="screen_notification_settings_invite_for_me_label">"邀请"</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"主服务器不支持在加密房间中的此选项，因此在某些房间你可能无法收到通知。"</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"你的账户提供者不支持在加密房间中的此选项，因此在某些聊天中你可能无法收到通知。"</string>
   <string name="screen_notification_settings_mentions_section_title">"提及"</string>
   <string name="screen_notification_settings_message_sound_dialog_choose_other">"选择其它提示音…"</string>
   <string name="screen_notification_settings_message_sound_dialog_current_subtitle">"当前正在使用 %1$s"</string>
@@ -83,7 +87,7 @@
   <string name="screen_notification_settings_mode_all">"全部"</string>
   <string name="screen_notification_settings_mode_mentions">"提及"</string>
   <string name="screen_notification_settings_notification_section_title">"通知我以下类型"</string>
-  <string name="screen_notification_settings_room_mention_label">"提及所有成员（@room）时通知我"</string>
+  <string name="screen_notification_settings_room_mention_label">"含有 @room 的提及"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"自定义"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"自定义提示音…"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"删除文件时出错"</string>

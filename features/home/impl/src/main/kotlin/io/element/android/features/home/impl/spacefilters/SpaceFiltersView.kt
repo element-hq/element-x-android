@@ -189,6 +189,6 @@ private fun SpaceFilterItem(
 
 @PreviewsDayNight
 @Composable
-internal fun SpaceFiltersViewPreview(@PreviewParameter(SpaceFiltersStateProvider::class) state: SpaceFiltersState) = ElementPreview(fillMaxSize = true) {
+internal fun SpaceFiltersViewPreview(@PreviewParameter(SpaceFiltersStatePreviewParam::class) state: SpaceFiltersState) = ElementPreview(fillMaxSize = true) {
     SpaceFiltersView(state = state)
 }

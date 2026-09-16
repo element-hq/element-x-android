@@ -236,7 +236,7 @@ private fun ReplyToNotFoundContent(
 
 @PreviewsDayNight
 @Composable
-internal fun InReplyToViewPreview(@PreviewParameter(provider = InReplyToDetailsProvider::class) inReplyTo: InReplyToDetails) = ElementPreview {
+internal fun InReplyToViewPreview(@PreviewParameter(provider = InReplyToDetailsPreviewParam::class) inReplyTo: InReplyToDetails) = ElementPreview {
     InReplyToView(
         inReplyTo = inReplyTo,
         hideImage = false,

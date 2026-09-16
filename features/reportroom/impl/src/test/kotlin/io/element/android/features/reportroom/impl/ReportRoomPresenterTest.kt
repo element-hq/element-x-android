@@ -43,13 +43,13 @@ class ReportRoomPresenterTest {
                 assertThat(state.reason).isEmpty()
                 assertThat(state.canReport).isFalse()
                 assertThat(state.leaveRoom).isFalse()
-                state.eventSink(ReportRoomEvents.UpdateReason("Spam"))
+                state.eventSink(ReportRoomEvent.UpdateReason("Spam"))
             }
             awaitItem().also { state ->
                 assertThat(state.reason).isEqualTo("Spam")
                 assertThat(state.canReport).isTrue()
                 assertThat(state.leaveRoom).isFalse()
-                state.eventSink(ReportRoomEvents.ToggleLeaveRoom)
+                state.eventSink(ReportRoomEvent.ToggleLeaveRoom)
             }
             awaitItem().also { state ->
                 assertThat(state.leaveRoom).isTrue()
@@ -68,8 +68,8 @@ class ReportRoomPresenterTest {
         )
         val presenter = createReportRoomPresenter(roomId = roomId, reportRoom = reportRoom)
         presenter.test {
-            awaitItem().eventSink(ReportRoomEvents.ToggleLeaveRoom)
-            awaitItem().eventSink(ReportRoomEvents.Report)
+            awaitItem().eventSink(ReportRoomEvent.ToggleLeaveRoom)
+            awaitItem().eventSink(ReportRoomEvent.Report)
             awaitItem().also { state ->
                 assertThat(state.reportAction).isInstanceOf(AsyncAction.Loading::class.java)
             }
@@ -93,7 +93,7 @@ class ReportRoomPresenterTest {
         )
         val presenter = createReportRoomPresenter(roomId = roomId, reportRoom = reportRoom)
         presenter.test {
-            awaitItem().eventSink(ReportRoomEvents.Report)
+            awaitItem().eventSink(ReportRoomEvent.Report)
             awaitItem().also { state ->
                 assertThat(state.reportAction).isInstanceOf(AsyncAction.Loading::class.java)
             }
@@ -117,14 +117,14 @@ class ReportRoomPresenterTest {
         )
         val presenter = createReportRoomPresenter(roomId = roomId, reportRoom = reportRoom)
         presenter.test {
-            awaitItem().eventSink(ReportRoomEvents.ToggleLeaveRoom)
-            awaitItem().eventSink(ReportRoomEvents.Report)
+            awaitItem().eventSink(ReportRoomEvent.ToggleLeaveRoom)
+            awaitItem().eventSink(ReportRoomEvent.Report)
             awaitItem().also { state ->
                 assertThat(state.reportAction).isInstanceOf(AsyncAction.Loading::class.java)
             }
             awaitItem().also { state ->
                 assertThat(state.reportAction).isInstanceOf(AsyncAction.Failure::class.java)
-                state.eventSink(ReportRoomEvents.Report)
+                state.eventSink(ReportRoomEvent.Report)
             }
             awaitItem().also { state ->
                 assertThat(state.reportAction).isInstanceOf(AsyncAction.Loading::class.java)

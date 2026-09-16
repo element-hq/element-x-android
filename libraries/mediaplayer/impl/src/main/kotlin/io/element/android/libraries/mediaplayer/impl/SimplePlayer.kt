@@ -8,17 +8,8 @@
 
 package io.element.android.libraries.mediaplayer.impl
 
-import android.content.Context
-import androidx.media3.common.AudioAttributes
-import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
-import androidx.media3.exoplayer.ExoPlayer
-import dev.zacsweers.metro.BindingContainer
-import dev.zacsweers.metro.ContributesTo
-import dev.zacsweers.metro.Provides
-import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.di.annotations.ApplicationContext
 
 /**
  * A subset of media3 [Player] that only exposes the few methods we need making it easier to mock.
@@ -42,27 +33,6 @@ interface SimplePlayer {
         fun onIsPlayingChanged(isPlaying: Boolean)
         fun onMediaItemTransition(mediaItem: MediaItem?)
         fun onPlaybackStateChanged(playbackState: Int)
-    }
-}
-
-@ContributesTo(RoomScope::class)
-@BindingContainer
-object SimplePlayerModule {
-    @Provides
-    fun simplePlayerProvider(
-        @ApplicationContext context: Context,
-    ): SimplePlayer {
-        val exoPlayer = ExoPlayer.Builder(context)
-            .setAudioAttributes(
-                AudioAttributes.Builder()
-                    .setUsage(C.USAGE_VOICE_COMMUNICATION)
-                    .setContentType(C.AUDIO_CONTENT_TYPE_SPEECH)
-                    .build(),
-                true, // handleAudioFocus
-            )
-            .setWakeMode(C.WAKE_MODE_LOCAL)
-            .build()
-        return DefaultSimplePlayer(exoPlayer)
     }
 }
 

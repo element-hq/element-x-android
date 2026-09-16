@@ -1,3 +1,5 @@
+import config.BuildTimeConfig
+import extension.buildConfigFieldStr
 import extension.setupDependencyInjection
 import extension.testCommonDependencies
 
@@ -16,6 +18,33 @@ plugins {
 
 android {
     namespace = "io.element.android.libraries.push.impl"
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    buildTypes {
+        val defaultPusherAppId = "im.vector.app.android"
+        getByName("release") {
+            buildConfigFieldStr(
+                name = "PUSHER_APP_ID",
+                value = BuildTimeConfig.PUSHER_APP_ID_RELEASE ?: defaultPusherAppId,
+            )
+        }
+        getByName("debug") {
+            buildConfigFieldStr(
+                name = "PUSHER_APP_ID",
+                value = BuildTimeConfig.PUSHER_APP_ID_DEBUG ?: defaultPusherAppId,
+            )
+        }
+        register("nightly") {
+            matchingFallbacks += listOf("release")
+            buildConfigFieldStr(
+                name = "PUSHER_APP_ID",
+                value = BuildTimeConfig.PUSHER_APP_ID_NIGHTLY ?: defaultPusherAppId,
+            )
+        }
+    }
 
     testOptions {
         unitTests {

@@ -4,6 +4,8 @@
   <string name="a11y_address">"Adres"</string>
   <string name="a11y_avatar">"Profil resmi"</string>
   <string name="a11y_collapse_message_text_field">"Mesaj metin alanını küçült"</string>
+  <string name="a11y_create_poll_votes_allowed_decrease">"Kişi başı oy sayısını azalt."</string>
+  <string name="a11y_create_poll_votes_allowed_increase">"Kişi başı oy sayısını artır."</string>
   <string name="a11y_delete">"Sil"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d basamak girildi"</item>
@@ -14,6 +16,7 @@
   <string name="a11y_edit_room_address_hint">"Tam adres %1$s olacaktır"</string>
   <string name="a11y_encryption_details">"Şifreleme ayrıntıları"</string>
   <string name="a11y_expand_message_text_field">"Mesaj metin alanını genişlet"</string>
+  <string name="a11y_gallery_scanning">"Galeri, taranıyor%1$d"</string>
   <string name="a11y_hide_password">"Şifreyi gizle"</string>
   <string name="a11y_info">"Bilgi"</string>
   <string name="a11y_join_call">"Aramaya katıl"</string>

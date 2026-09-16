@@ -9,7 +9,6 @@
 package io.element.android.libraries.push.impl
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.appconfig.PushConfig
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.pusher.SetHttpPusherData
 import io.element.android.libraries.matrix.api.pusher.UnsetHttpPusherData
@@ -96,7 +95,7 @@ class DefaultPusherSubscriberTest {
                 value(
                     SetHttpPusherData(
                         pushKey = "aPushKey",
-                        appId = PushConfig.PUSHER_APP_ID,
+                        appId = BuildConfig.PUSHER_APP_ID,
                         url = "aGateway",
                         appDisplayName = "MyApp",
                         deviceDisplayName = "MyDevice",
@@ -163,7 +162,7 @@ class DefaultPusherSubscriberTest {
                 value(
                     UnsetHttpPusherData(
                         pushKey = "aPushKey",
-                        appId = PushConfig.PUSHER_APP_ID,
+                        appId = BuildConfig.PUSHER_APP_ID,
                     ),
                 )
             )

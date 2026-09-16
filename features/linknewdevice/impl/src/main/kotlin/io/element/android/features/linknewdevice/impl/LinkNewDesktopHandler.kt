@@ -39,6 +39,10 @@ class LinkNewDesktopHandler(
         LinkDesktopStep.Uninitialized
     )
 
+    /**
+     * A [StateFlow] that emits the current step of the link desktop process.
+     * It starts with [LinkDesktopStep.Uninitialized] and will emit other steps as they occur.
+     */
     val stepFlow: StateFlow<LinkDesktopStep>
         get() = linkDesktopStepFlow.asStateFlow()
 
@@ -53,15 +57,31 @@ class LinkNewDesktopHandler(
         timerJob = null
     }
 
-    fun createNewHandler() {
-        resetJobs()
-        handler = matrixClient.createLinkDesktopHandler().getOrNull()
+    /**
+     * Starts (or restarts) a timer that will emit an error in [stepFlow] after 2 minutes.
+     */
+    fun startTimer() {
+        timerJob?.cancel()
         timerJob = sessionScope.launch {
             delay(2.minutes)
             linkDesktopStepFlow.emit(LinkDesktopStep.Error(ErrorType.Expired("Scanning QrCode took too long.")))
         }
     }
 
+    /**
+     * Creates a new [LinkDesktopHandler] and cancels any existing job.
+     * This should be called when the user wants to retry scanning a QR code.
+     */
+    fun createNewHandler() {
+        currentJob?.cancel()
+        currentJob = null
+        handler = matrixClient.createLinkDesktopHandler().getOrNull()
+    }
+
+    /**
+     * Resets the state of the handler and cancels any existing job.
+     * This should be called when the user wants to start over.
+     */
     fun reset() {
         resetJobs()
         sessionScope.launch {
@@ -69,6 +89,12 @@ class LinkNewDesktopHandler(
         }
     }
 
+    /**
+     * Handles the scanned QR code data.
+     * This should be called when the user scans a QR code.
+     *
+     * @param data The scanned QR code data as a byte array.
+     */
     fun onScannedCode(data: ByteArray) {
         resetJobs()
         val currentHandler = handler

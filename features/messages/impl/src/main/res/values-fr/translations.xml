@@ -7,6 +7,11 @@
   <string name="crypto_event_authenticity_unknown_device">"Chiffré par un appareil inconnu ou supprimé."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Chiffré par un appareil non vérifié par son propriétaire."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Chiffré par un utilisateur non vérifié."</string>
+  <string name="error_sending_failure_invalid_mime_type">"Type MIME invalide : %s"</string>
+  <string name="error_sending_failure_missing_media_content">"Contenu multimédia manquant"</string>
+  <string name="error_sending_failure_other">"Détails de l’erreur : %s"</string>
+  <string name="error_sending_failure_sending_from_unverified_device">"Envoi depuis un appareil non vérifié"</string>
+  <string name="error_sending_failure_unknown">"Erreur inconnue"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"Retourner l’image horizontalement"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Retournée horizontalement"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Originale"</string>
@@ -70,6 +75,10 @@
   <string name="screen_room_timeline_reactions_show_more">"Afficher plus"</string>
   <string name="screen_room_timeline_reactions_show_reactions_summary">"Afficher le résumé des réactions"</string>
   <string name="screen_room_timeline_read_marker_title">"Nouveau"</string>
+  <plurals name="screen_room_timeline_redacted_messages">
+    <item quantity="one">"%1$d message supprimé"</item>
+    <item quantity="other">"%1$d messages supprimés"</item>
+  </plurals>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d changement dans le salon"</item>
     <item quantity="other">"%1$d changements dans le salon"</item>

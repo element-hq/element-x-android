@@ -2,11 +2,26 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_leave_space_choose_owners_action">"گزینش مالکان"</string>
   <string name="screen_leave_space_last_admin_info">"‏%1$s (مدیر)"</string>
+  <plurals name="screen_leave_space_submit">
+    <item quantity="one">"اتاق و فضای %1$d را ترک کنید"</item>
+    <item quantity="other">"اتاق‌ها و فضای %1$d را ترک کنید"</item>
+  </plurals>
+  <string name="screen_leave_space_subtitle">"اتاق‌هایی را که می‌خواهید از آنها خارج شوید و تنها مدیر آنها نیستید، انتخاب کنید:"</string>
   <string name="screen_leave_space_subtitle_last_admin">"پیش از ترک باید مدیری دیگر به این فضا تخصیص دهید."</string>
+  <string name="screen_leave_space_subtitle_last_owner">"شما تنها مالک %1$s هستید. قبل از ترک محل، باید مالکیت را به شخص دیگری منتقل کنید."</string>
   <string name="screen_leave_space_subtitle_only_last_admin">"از اتاق(های) زیر برداشته نخواهید شد؛ چرا که تنها مدیر هستید:"</string>
   <string name="screen_leave_space_title">"ترک %1$s؟"</string>
   <string name="screen_leave_space_title_last_admin">"تنها مدیر %1$s هستید"</string>
+  <string name="screen_leave_space_title_last_owner">"انتقال مالکیت"</string>
+  <string name="screen_space_add_room_action">"اتاق"</string>
+  <string name="screen_space_add_rooms_room_access_description">"اضافه کردن اتاق تاثیری بر دسترسی به اتاق نخواهد داشت. برای تغییر دسترسی، به تنظیمات اتاق &gt; امنیت و حریم خصوصی بروید."</string>
+  <string name="screen_space_empty_state_title">"اولین اتاق خود را اضافه کنید"</string>
   <string name="screen_space_menu_action_members">"دیدن اعضا"</string>
+  <string name="screen_space_remove_rooms_confirmation_content">"حذف یک اتاق تاثیری بر دسترسی به آن نخواهد داشت. برای تغییر دسترسی، به اطلاعات اتاق &gt; حریم خصوصی و امنیت بروید."</string>
+  <plurals name="screen_space_remove_rooms_confirmation_title">
+    <item quantity="one">"حذف اتاق %1$d از %2$s"</item>
+    <item quantity="other">"حذف اتاق‌های %1$d از %2$s"</item>
+  </plurals>
   <string name="screen_space_settings_leave_space">"ترک فضا"</string>
   <string name="screen_space_settings_roles_and_permissions">"نقش‌ها و مجوزها"</string>
   <string name="screen_space_settings_security_and_privacy">"امنیت و محرمانگی"</string>

@@ -176,6 +176,32 @@ class LeaveBaseRoomPresenterTest {
     }
 
     @Test
+    fun `present - show error if the room to confirm leaving is not found`() = runTest {
+        val presenter = createLeaveRoomPresenter(client = FakeMatrixClient())
+        presenter.stateFlow().test {
+            val initialState = awaitItem()
+            initialState.eventSink(LeaveRoomEvent.LeaveRoom(A_ROOM_ID, needsConfirmation = true))
+            val errorState = awaitItem()
+            assertThat(errorState.leaveAction).isInstanceOf(AsyncAction.Failure::class.java)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - show error if the room to leave is not found`() = runTest {
+        val presenter = createLeaveRoomPresenter(client = FakeMatrixClient())
+        presenter.stateFlow().test {
+            val initialState = awaitItem()
+            initialState.eventSink(LeaveRoomEvent.LeaveRoom(A_ROOM_ID, needsConfirmation = false))
+            val progressState = awaitItem()
+            assertThat(progressState.leaveAction).isEqualTo(AsyncAction.Loading)
+            val errorState = awaitItem()
+            assertThat(errorState.leaveAction).isInstanceOf(AsyncAction.Failure::class.java)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
     fun `present - reset state after error`() = runTest {
         val presenter = createLeaveRoomPresenter(
             client = FakeMatrixClient().apply {

@@ -111,7 +111,6 @@
   <string name="screen_room_notification_settings_error_setting_mode">"Falha ao definir o modo, tente novamente."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Seu servidor-casa não suporta esta opção em salas criptografadas, você não será notificado nesta sala."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Todas as mensagens"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Somente menções e palavras-chave"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Nesta sala, notifique-me de"</string>
   <string name="screen_room_roles_and_permissions_admins">"Administradores"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"Administradores e proprietários"</string>

@@ -76,10 +76,7 @@ class PreferencesRootPresenter(
         }.collectAsState(initial = false)
 
         val isUserStatusSupported by produceState(false) {
-            featureFlagService.isFeatureEnabledFlow(FeatureFlags.UserStatus)
-                .collect { isUserStatusEnabled ->
-                    value = isUserStatusEnabled && matrixClient.isUserStatusSupported().getOrDefault(false)
-                }
+            value = matrixClient.isUserStatusSupported().getOrDefault(false)
         }
         val userStatusState = if (isUserStatusSupported) userStatusPresenter.present() else null
 

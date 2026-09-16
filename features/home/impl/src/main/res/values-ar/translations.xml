@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_battery_optimization_content_android">"عطّل تحسين البطارية لهذا التطبيق للتأكد من استلام جميع الإشعارات."</string>
+  <string name="banner_battery_optimization_submit_android">"تعطيل التحسين"</string>
+  <string name="banner_battery_optimization_title_android">"هل لا تصلك الإشعارات؟"</string>
+  <string name="banner_new_sound_message">"تم تحديث صوت إشعاراتك، ليصبح أوضح وأسرع وأقل إزعاجًا."</string>
+  <string name="banner_new_sound_title">"حدّثنا الأصوات لديك"</string>
+  <string name="banner_set_up_recovery_content">"يتم نسخ دردشاتك احتياطيًا تلقائيًا بتشفير من طرف إلى طرف. لاستعادة هذه النسخة الاحتياطية والاحتفاظ بهويتك الرقمية إذا فقدت الوصول إلى جميع أجهزتك، ستحتاج إلى مفتاح الاسترداد."</string>
+  <string name="banner_set_up_recovery_submit">"الحصول على مفتاح الاسترداد"</string>
+  <string name="banner_set_up_recovery_title">"احتفِظ بنسخة احتياطية من دردشاتك"</string>
+  <string name="confirm_recovery_key_banner_message">"أكّد مفتاح الاسترداد الخاص بك للحفاظ على الوصول إلى تخزين المفاتيح وسجل الرسائل."</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"أدخل مفتاح الاسترداد"</string>
+  <string name="confirm_recovery_key_banner_secondary_button_title">"هل نسيت مفتاح الاسترداد؟"</string>
+  <string name="confirm_recovery_key_banner_title">"تخزين المفاتيح لديك غير متزامن"</string>
+  <string name="full_screen_intent_banner_message">"للتأكد من عدم تفويت أي مكالمة مهمة، يُرجى تغيير إعداداتك للسماح بإشعارات ملء الشاشة عندما يكون هاتفك مقفلاً."</string>
+  <string name="full_screen_intent_banner_title">"حسّن تجربة مكالماتك"</string>
+  <string name="screen_home_tab_chats">"المحادثات"</string>
+  <string name="screen_home_tab_spaces">"المساحات"</string>
+  <string name="screen_invites_decline_chat_message">"أمتأكد من رغبتك برفض دعوة للانضمام إلى %1$s؟"</string>
+  <string name="screen_invites_decline_chat_title">"رفض الدعوة"</string>
+  <string name="screen_invites_decline_direct_chat_message">"أمتأكد من رغبتك برفض المحادثة الخاصة مع %1$s؟"</string>
+  <string name="screen_invites_decline_direct_chat_title">"رفض المحادثة"</string>
+  <string name="screen_invites_empty_list">"لا دعوات"</string>
+  <string name="screen_invites_invited_you">"دعاك %1$s (%2$s)"</string>
+  <string name="screen_migration_message">"هذه العملية تُجرى لمرة واحدة، شكراً على انتظارك."</string>
+  <string name="screen_migration_title">"إعداد حسابك"</string>
+  <string name="screen_roomlist_a11y_create_message">"إنشاء محادثة جديد أو غرفة"</string>
+  <string name="screen_roomlist_clear_filters">"مسح عوامل التصفية"</string>
+  <string name="screen_roomlist_empty_message">"ابدأ الآن بمراسلة من تشاء."</string>
+  <string name="screen_roomlist_empty_title">"لا محادثات بعد."</string>
+  <string name="screen_roomlist_filter_favourites">"المفضلة"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"يمكنك إضافة محادثة إلى المفضلة من إعدادات المحادثة.
+يمكنك الآن إلغاء تحديد عوامل التصفية لرؤية محادثاتك الأخرى"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"ليست لديك أي محادثات مفضلة بعد"</string>
+  <string name="screen_roomlist_filter_invites">"الدعوات"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"ليس لديك أي دعوات قيد الانتظار."</string>
+  <string name="screen_roomlist_filter_low_priority">"منخفضة الأولوية"</string>
+  <string name="screen_roomlist_filter_low_priority_empty_state_title">"ليست لديك أي دردشات منخفضة الأولوية بعد"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"يمكنك إلغاء تحديد عوامل التصفية لرؤية محادثاتك الأخرى"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"ليست لديك محادثات لهذا الاختيار"</string>
+  <string name="screen_roomlist_filter_people">"الأشخاص"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"ليست لديك أي رسائل مباشرة بعد"</string>
+  <string name="screen_roomlist_filter_rooms">"الغرف"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"لست في أي غرفة بعد"</string>
+  <string name="screen_roomlist_filter_unreads">"غير المقروءة"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"تهانينا!
+ليست لديك أي رسائل غير مقروءة!"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"تم إرسال طلب الانضمام"</string>
+  <string name="screen_roomlist_main_space_title">"المحادثات"</string>
+  <string name="screen_roomlist_mark_as_read">"وضع علامة كمقروء"</string>
+  <string name="screen_roomlist_mark_as_unread">"وضع علامة كغير مقروء"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"تمت ترقية هذه الغرفة"</string>
+  <string name="screen_roomlist_your_spaces">"مساحاتك"</string>
+  <string name="session_verification_banner_message">"يبدو أنك تستخدم جهازاً جديداً. تحقق باستخدام جهاز آخر ليصبح لك وصول إلى رسائلك المشفرة."</string>
+  <string name="session_verification_banner_title">"أثبت هويتك"</string>
+</resources>

@@ -46,6 +46,24 @@ class IntentResolverTest : RobolectricTest() {
     }
 
     @Test
+    fun `resolve intent replayed from the history should return null`() {
+        val sut = createIntentResolver(
+            deeplinkParserResult = DeeplinkData.Room(
+                sessionId = A_SESSION_ID,
+                roomId = A_ROOM_ID,
+                threadId = null,
+                eventId = null,
+            )
+        )
+        val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
+            action = Intent.ACTION_VIEW
+            addFlags(Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY)
+        }
+        val result = sut.resolve(intent)
+        assertThat(result).isNull()
+    }
+
+    @Test
     fun `test resolve navigation intent root`() {
         val sut = createIntentResolver(
             deeplinkParserResult = DeeplinkData.Root(A_SESSION_ID)

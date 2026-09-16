@@ -39,7 +39,7 @@ import org.robolectric.annotation.Config
 class AdvancedSettingsViewTest : RobolectricTest() {
     @Test
     fun `clicking on back invokes the expected callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<AdvancedSettingsEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<AdvancedSettingsEvent>(expectEvents = false)
         ensureCalledOnce {
             setAdvancedSettingsView(
                 state = aAdvancedSettingsState(
@@ -53,7 +53,7 @@ class AdvancedSettingsViewTest : RobolectricTest() {
 
     @Test
     fun `clicking on other theme emits the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<AdvancedSettingsEvents>()
+        val eventsRecorder = EventsRecorder<AdvancedSettingsEvent>()
         setAdvancedSettingsView(
             state = aAdvancedSettingsState(
                 eventSink = eventsRecorder,
@@ -61,7 +61,7 @@ class AdvancedSettingsViewTest : RobolectricTest() {
         )
         clickOn(CommonStrings.common_appearance)
         clickOn(R.string.theme_dark)
-        eventsRecorder.assertSingle(AdvancedSettingsEvents.SetTheme(ThemeOption.Dark))
+        eventsRecorder.assertSingle(AdvancedSettingsEvent.SetTheme(ThemeOption.Dark))
     }
 
     @Test
@@ -91,31 +91,31 @@ class AdvancedSettingsViewTest : RobolectricTest() {
 
     @Test
     fun `clicking on View source emits the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<AdvancedSettingsEvents>()
+        val eventsRecorder = EventsRecorder<AdvancedSettingsEvent>()
         setAdvancedSettingsView(
             state = aAdvancedSettingsState(
                 eventSink = eventsRecorder,
             ),
         )
         clickOn(CommonStrings.action_view_source)
-        eventsRecorder.assertSingle(AdvancedSettingsEvents.SetDeveloperModeEnabled(true))
+        eventsRecorder.assertSingle(AdvancedSettingsEvent.SetDeveloperModeEnabled(true))
     }
 
     @Test
     fun `clicking on Share presence emits the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<AdvancedSettingsEvents>()
+        val eventsRecorder = EventsRecorder<AdvancedSettingsEvent>()
         setAdvancedSettingsView(
             state = aAdvancedSettingsState(
                 eventSink = eventsRecorder,
             ),
         )
         clickOn(R.string.screen_advanced_settings_share_presence)
-        eventsRecorder.assertSingle(AdvancedSettingsEvents.SetSharePresenceEnabled(true))
+        eventsRecorder.assertSingle(AdvancedSettingsEvent.SetSharePresenceEnabled(true))
     }
 
     @Test
     fun `clicking on media to enable compression emits the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<AdvancedSettingsEvents>()
+        val eventsRecorder = EventsRecorder<AdvancedSettingsEvent>()
         val analyticsService = FakeAnalyticsService()
         setAdvancedSettingsView(
             state = aAdvancedSettingsState(
@@ -124,7 +124,7 @@ class AdvancedSettingsViewTest : RobolectricTest() {
             analyticsService = analyticsService
         )
         clickOn(R.string.screen_advanced_settings_media_compression_description)
-        eventsRecorder.assertSingle(AdvancedSettingsEvents.SetCompressMedia(true))
+        eventsRecorder.assertSingle(AdvancedSettingsEvent.SetCompressMedia(true))
         assertThat(analyticsService.capturedEvents).isEqualTo(
             listOf(
                 Interaction(
@@ -136,7 +136,7 @@ class AdvancedSettingsViewTest : RobolectricTest() {
 
     @Test
     fun `clicking on media to disable compression emits the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<AdvancedSettingsEvents>()
+        val eventsRecorder = EventsRecorder<AdvancedSettingsEvent>()
         val analyticsService = FakeAnalyticsService()
         setAdvancedSettingsView(
             state = aAdvancedSettingsState(
@@ -146,7 +146,7 @@ class AdvancedSettingsViewTest : RobolectricTest() {
             analyticsService = analyticsService
         )
         clickOn(R.string.screen_advanced_settings_media_compression_description)
-        eventsRecorder.assertSingle(AdvancedSettingsEvents.SetCompressMedia(false))
+        eventsRecorder.assertSingle(AdvancedSettingsEvent.SetCompressMedia(false))
         assertThat(analyticsService.capturedEvents).isEqualTo(
             listOf(
                 Interaction(
@@ -159,7 +159,7 @@ class AdvancedSettingsViewTest : RobolectricTest() {
     @Test
     @Config(qualifiers = "h1080dp")
     fun `clicking on hide invite avatars emits the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<AdvancedSettingsEvents>()
+        val eventsRecorder = EventsRecorder<AdvancedSettingsEvent>()
         setAdvancedSettingsView(
             state = aAdvancedSettingsState(
                 eventSink = eventsRecorder,
@@ -167,13 +167,13 @@ class AdvancedSettingsViewTest : RobolectricTest() {
             ),
         )
         clickOn(R.string.screen_advanced_settings_hide_invite_avatars_toggle_title)
-        eventsRecorder.assertSingle(AdvancedSettingsEvents.SetHideInviteAvatars(true))
+        eventsRecorder.assertSingle(AdvancedSettingsEvent.SetHideInviteAvatars(true))
     }
 
     @Test
     @Config(qualifiers = "h1080dp")
     fun `clicking on timeline media preview always hide emits the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<AdvancedSettingsEvents>()
+        val eventsRecorder = EventsRecorder<AdvancedSettingsEvent>()
         setAdvancedSettingsView(
             state = aAdvancedSettingsState(
                 eventSink = eventsRecorder,
@@ -181,13 +181,13 @@ class AdvancedSettingsViewTest : RobolectricTest() {
             ),
         )
         clickOn(R.string.screen_advanced_settings_show_media_timeline_always_hide)
-        eventsRecorder.assertSingle(AdvancedSettingsEvents.SetTimelineMediaPreviewValue(MediaPreviewValue.Off))
+        eventsRecorder.assertSingle(AdvancedSettingsEvent.SetTimelineMediaPreviewValue(MediaPreviewValue.Off))
     }
 
     @Test
     @Config(qualifiers = "h1080dp")
     fun `clicking on timeline media preview private rooms emits the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<AdvancedSettingsEvents>()
+        val eventsRecorder = EventsRecorder<AdvancedSettingsEvent>()
         setAdvancedSettingsView(
             state = aAdvancedSettingsState(
                 eventSink = eventsRecorder,
@@ -195,13 +195,13 @@ class AdvancedSettingsViewTest : RobolectricTest() {
             ),
         )
         clickOn(R.string.screen_advanced_settings_show_media_timeline_private_rooms)
-        eventsRecorder.assertSingle(AdvancedSettingsEvents.SetTimelineMediaPreviewValue(MediaPreviewValue.Private))
+        eventsRecorder.assertSingle(AdvancedSettingsEvent.SetTimelineMediaPreviewValue(MediaPreviewValue.Private))
     }
 
     @Test
     @Config(qualifiers = "h1080dp")
     fun `clicking on timeline media preview always show emits the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<AdvancedSettingsEvents>()
+        val eventsRecorder = EventsRecorder<AdvancedSettingsEvent>()
         setAdvancedSettingsView(
             state = aAdvancedSettingsState(
                 eventSink = eventsRecorder,
@@ -209,13 +209,13 @@ class AdvancedSettingsViewTest : RobolectricTest() {
             ),
         )
         clickOn(R.string.screen_advanced_settings_show_media_timeline_always_show)
-        eventsRecorder.assertSingle(AdvancedSettingsEvents.SetTimelineMediaPreviewValue(MediaPreviewValue.On))
+        eventsRecorder.assertSingle(AdvancedSettingsEvent.SetTimelineMediaPreviewValue(MediaPreviewValue.On))
     }
 
     @Test
     @Config(qualifiers = "h1080dp")
     fun `hide invite avatars toggle is disabled when action is loading`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<AdvancedSettingsEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<AdvancedSettingsEvent>(expectEvents = false)
         setAdvancedSettingsView(
             state = aAdvancedSettingsState(
                 eventSink = eventsRecorder,
@@ -230,7 +230,7 @@ class AdvancedSettingsViewTest : RobolectricTest() {
     @Test
     @Config(qualifiers = "h1080dp")
     fun `timeline media preview options are disabled when action is loading`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<AdvancedSettingsEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<AdvancedSettingsEvent>(expectEvents = false)
         setAdvancedSettingsView(
             state = aAdvancedSettingsState(
                 eventSink = eventsRecorder,

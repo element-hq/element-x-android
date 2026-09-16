@@ -9,6 +9,7 @@
 package io.element.android.libraries.push.impl.workmanager
 
 import android.content.Context
+import android.os.Build
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import dev.zacsweers.metro.AppScope
@@ -39,8 +40,11 @@ import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.api.finishLongRunningTransaction
 import io.element.android.services.analytics.api.recordTransaction
 import io.element.android.services.analyticsproviders.api.AnalyticsTransaction
+import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import timber.log.Timber
 import kotlin.time.Duration.Companion.days
@@ -59,16 +63,33 @@ class FetchPendingNotificationsWorker(
     private val analyticsService: AnalyticsService,
     private val systemClock: SystemClock,
     private val fetchPushForegroundServiceManager: FetchPushForegroundServiceManager,
+    private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
 ) : CoroutineWorker(context, params) {
+    private var foregroundServiceReleased = false
+
     override suspend fun doWork(): Result {
         Timber.d("FetchNotificationsWorker started")
+        return try {
+            doWorkInternal()
+        } finally {
+            // Make sure the foreground service is released on every exit path, including when the system cancels the worker.
+            withContext(NonCancellable) {
+                releaseForegroundService()
+            }
+        }
+    }
+
+    private suspend fun doWorkInternal(): Result {
         // RunCatching for test in debug mode
         val sessionId = runCatchingExceptions {
             inputData.getString(SyncPendingNotificationsRequestBuilder.SESSION_ID)?.let(::SessionId)
         }.getOrNull() ?: return Result.failure()
 
-        // We can stop the foreground service and unlock the wakelock, since the work is now running and the device should be kept awake
-        fetchPushForegroundServiceManager.stop()
+        if (!buildVersionSdkIntProvider.isAtLeast(Build.VERSION_CODES.S)) {
+            // Before Android 12 the foreground service notification is displayed immediately, so release the service as soon as the work is
+            // running: the wakelock was only there to make sure the scheduled work starts. See [releaseForegroundService] for newer versions.
+            releaseForegroundService()
+        }
 
         // Fetch pending requests in the last 24 hours
         val fetchSince = Instant.fromEpochMilliseconds(systemClock.epochMillis()).minus(1.days)
@@ -132,11 +153,30 @@ class FetchPendingNotificationsWorker(
 
         pushHistoryService.insertOrUpdatePushRequests(updatedRequests)
 
+        // The results have been handed over, so release the foreground service before the opportunistic sync, which deliberately takes a while
+        // in the background. This keeps the service short-lived in the common case, so its notification is normally never displayed.
+        releaseForegroundService()
+
         analyticsService.recordTransaction("Opportunistic sync", "opportunistic_sync") {
             performOpportunisticSyncIfNeeded(mapOf(sessionId to requests))
         }
 
         return if (updatedRequests.any { it.status == PushRequestStatus.PENDING.value }) Result.retry() else Result.success()
+    }
+
+    /**
+     * Release the foreground service, and the wakelock it holds, that was started when the push was received. Only the first call has an effect.
+     *
+     * From Android 12 on, the service is kept while the events are resolved: this needs several network round trips (sliding sync, room key
+     * retrieval, decryption) and, for ringing calls, waiting for the room state to be synced. While the service is running the process is in the
+     * foreground service state, so the expedited job quota and Doze restrictions don't cut this work short. The system defers the notification
+     * of a foreground service by 10 seconds on these versions, so it only becomes visible when the fetch is slow, which is exactly when the
+     * extra time is needed.
+     */
+    private suspend fun releaseForegroundService() {
+        if (foregroundServiceReleased) return
+        foregroundServiceReleased = true
+        fetchPushForegroundServiceManager.stop()
     }
 
     private suspend fun performOpportunisticSyncIfNeeded(

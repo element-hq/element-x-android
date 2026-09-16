@@ -13,7 +13,17 @@
     <item quantity="one">"%dاعلان"</item>
     <item quantity="other">"%dاعلان‌"</item>
   </plurals>
+  <string name="notification_error_unified_push_unregistered_android">"توزیع‌کننده اعلان UnifiedPush قابل ثبت نیست، بنابراین دیگر اعلانی دریافت نخواهید کرد. لطفاً تنظیمات اعلان‌های برنامه و وضعیت توزیع‌کننده اعلان را بررسی کنید."</string>
   <string name="notification_fallback_content">"پیام‌های جدیدی دارید."</string>
+  <plurals name="notification_fallback_n_content">
+    <item quantity="one">"شما یک پیام جدید %d دارید."</item>
+    <item quantity="other">"شما پیام‌های جدید %d دارید."</item>
+  </plurals>
+  <plurals name="notification_gallery_body">
+    <item quantity="one">"پیوست %1$d مشترک"</item>
+    <item quantity="other">"پیوست‌های %1$d مشترک"</item>
+  </plurals>
+  <string name="notification_incoming_audio_call">"📞 تماس ورودی"</string>
   <string name="notification_incoming_call">"📹 تماس ورودی"</string>
   <string name="notification_inline_reply_failed">"**‌شکست در فرستادن - لطفاً اتاق را بگشایید"</string>
   <string name="notification_invitation_action_join">"پیوستن"</string>
@@ -24,6 +34,7 @@
   </plurals>
   <string name="notification_invite_body">"به گپ دعوتتان کرد"</string>
   <string name="notification_invite_body_with_sender">"%1$s به گپ دعوتتان کرد"</string>
+  <string name="notification_live_location_started_body">"شروع به اشتراک گذاری موقعیت مکانی زنده خود کردند"</string>
   <string name="notification_mentioned_you_body">"به شما اشاره کرد: %1$s"</string>
   <string name="notification_new_messages">"پیام جدید"</string>
   <plurals name="notification_new_messages_for_room">
@@ -37,7 +48,10 @@
   <string name="notification_room_invite_body_with_sender">"%1$s دعوت کرد به اتاق بپیوندید"</string>
   <string name="notification_sender_me">"خودم"</string>
   <string name="notification_sender_mention_reply">"%1$s اشاره کرد یا پاسخ داد"</string>
+  <string name="notification_space_invite_body">"از شما دعوت شد تا به این فضا بپیوندید"</string>
+  <string name="notification_space_invite_body_with_sender">"%1$s از شما دعوت کرد تا به این فضا بپیوندید"</string>
   <string name="notification_test_push_notification_content">"دارید آگاهی را مشاهده می‌کنید! کلیک کنید!"</string>
+  <string name="notification_thread_in_room">"رزوه در %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
@@ -54,13 +68,28 @@
   <string name="push_distributor_background_sync_android">"همگام سازی پس‌زمینه"</string>
   <string name="push_distributor_firebase_android">"خدمات گوگل"</string>
   <string name="push_no_valid_google_play_services_apk_android">"خدمت پلی گوگل معتبری پیدا نشد. ممکن است آگاهی‌ها به درستی کار نکنند."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_description">"بررسی کاربران مسدود شده"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_quick_fix">"مشاهده کاربران مسدود شده"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_result_none">"هیچ کاربری مسدود نشده است."</string>
+  <plurals name="troubleshoot_notifications_test_blocked_users_result_some">
+    <item quantity="one">"شما کاربر %1$d را مسدود کرده‌اید. شما اعلان‌هایی برای این کاربر دریافت نخواهید کرد."</item>
+    <item quantity="other">"شما کاربران %1$d را مسدود کرده‌اید. برای این کاربران اعلان دریافت نخواهید کرد."</item>
+  </plurals>
   <string name="troubleshoot_notifications_test_blocked_users_title">"کاربران مسدود"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"گرفتن نام فراهم کنندهٔ کنونی."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"هیچ فراهم کنندهٔ ارسالی گزیده نشده."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found">"ارائه دهنده فعلی پوش: %1$s و توزیع کننده فعلی: %2$s. اما توزیع کننده %3$s پیدا نشد. شاید برنامه حذف نصب شده باشد؟"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_no_distributor">"ارائه دهنده فشار فعلی: %1$s، اما هیچ توزیع کننده ای پیکربندی نشده است."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"فراهم کنندهٔ ارسال کنونی: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success_with_distributor">"ارائه دهنده خدمات فشار فعلی: %1$s (%2$s)"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_title">"فراهم کنندهٔ ارسال کنونی"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"ازمینان از پشتیبانی برنامه از لااقل یک فراهم کنندهٔ ارسال."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"پشتیبانی از هیچ فراهم کنندهٔ ارسالی پیدا نشد."</string>
+  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
+    <item quantity="one">"ارائه دهنده فشار %1$d یافت شد: %2$s"</item>
+    <item quantity="other">"ارائه دهندگان فشار %1$d یافت شد: %2$s"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"این برنامه با پشتیبانی از موارد زیر ساخته شده است: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"پشتیبانی از فراهم‌کنندهٔ ارسال"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"بررسی توانایی برنامه در نمایش آگاهی."</string>
   <string name="troubleshoot_notifications_test_display_notification_failure">"روی آگاهی زده نشد."</string>

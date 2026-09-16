@@ -68,7 +68,6 @@
   <string name="screen_room_notification_settings_error_restoring_default">"Неуспешно възстановяване на режима по подразбиране, моля, опитайте отново."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Неуспешно задаване на режима, моля, опитайте отново."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Всички съобщения"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Само споменавания и ключови думи"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"В тази стая, да бъда известяван за"</string>
   <string name="screen_room_roles_and_permissions_admins">"Администратори"</string>
   <string name="screen_room_roles_and_permissions_change_my_role">"Промяна на моята роля"</string>

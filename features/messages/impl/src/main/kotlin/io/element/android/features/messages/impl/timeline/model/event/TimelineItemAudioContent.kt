@@ -17,6 +17,7 @@ data class TimelineItemAudioContent(
     override val fileSize: Long?,
     override val caption: String?,
     override val formattedCaption: CharSequence?,
+    override val htmlCaption: String? = null,
     override val isEdited: Boolean,
     val duration: Duration,
     override val mediaSource: MediaSource,

@@ -28,7 +28,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import coil3.compose.AsyncImage
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContentProvider
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContentPreviewParam
 import io.element.android.features.messages.impl.timeline.protection.ProtectedView
 import io.element.android.features.messages.impl.timeline.protection.coerceRatioWhenHidingContent
 import io.element.android.features.messages.impl.timeline.util.handleAsyncImageStateChange
@@ -123,7 +123,9 @@ fun TimelineItemStickerView(
 
 @PreviewsDayNight
 @Composable
-internal fun TimelineItemStickerViewPreview(@PreviewParameter(TimelineItemStickerContentProvider::class) content: TimelineItemStickerContent) = ElementPreview {
+internal fun TimelineItemStickerViewPreview(@PreviewParameter(
+    TimelineItemStickerContentPreviewParam::class
+) content: TimelineItemStickerContent) = ElementPreview {
     TimelineItemStickerView(
         content = content,
         hideMediaContent = false,

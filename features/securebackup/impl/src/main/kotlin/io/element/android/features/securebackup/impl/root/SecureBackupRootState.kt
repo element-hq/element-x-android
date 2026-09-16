@@ -22,7 +22,7 @@ data class SecureBackupRootState(
     val appName: String,
     val displayKeyStorageDisabledError: Boolean,
     val snackbarMessage: SnackbarMessage?,
-    val eventSink: (SecureBackupRootEvents) -> Unit,
+    val eventSink: (SecureBackupRootEvent) -> Unit,
 ) {
     val isKeyStorageEnabled: Boolean
         get() = when (backupState) {

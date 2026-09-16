@@ -37,7 +37,7 @@ data class JoinRoomState(
     val knockMessage: String,
     val hideInviteAvatars: Boolean,
     val canReportRoom: Boolean,
-    val eventSink: (JoinRoomEvents) -> Unit
+    val eventSink: (JoinRoomEvent) -> Unit
 ) {
     val isJoinActionUnauthorized = joinAction is AsyncAction.Failure && joinAction.error is JoinRoom.Failures.UnauthorizedJoin
     val joinAuthorisationStatus = when (contentState) {
@@ -107,6 +107,7 @@ sealed interface LoadedDetails {
     ) : LoadedDetails
 }
 
+@Immutable
 sealed interface JoinAuthorisationStatus {
     data object None : JoinAuthorisationStatus
     data class IsInvited(val inviteData: InviteData, val inviteSender: InviteSender?) : JoinAuthorisationStatus

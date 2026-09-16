@@ -130,7 +130,7 @@ private fun Content() {
 
 @PreviewsDayNight
 @Composable
-internal fun ResetIdentityRootViewPreview(@PreviewParameter(ResetIdentityRootStateProvider::class) state: ResetIdentityRootState) {
+internal fun ResetIdentityRootViewPreview(@PreviewParameter(ResetIdentityRootStatePreviewParam::class) state: ResetIdentityRootState) {
     ElementPreview {
         ResetIdentityRootView(
             state = state,

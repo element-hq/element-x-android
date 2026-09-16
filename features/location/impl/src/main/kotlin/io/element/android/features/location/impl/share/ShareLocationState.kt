@@ -8,12 +8,12 @@
 
 package io.element.android.features.location.impl.share
 
+import io.element.android.features.enterprise.api.remoteconfig.MapTilerConfig
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.features.location.impl.common.userlocation.UserLocationState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.wellknown.api.MapTilerConfig
 import kotlinx.collections.immutable.ImmutableList
 
 data class ShareLocationState(

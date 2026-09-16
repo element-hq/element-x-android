@@ -8,16 +8,16 @@
 
 package io.element.android.features.login.impl.screens.chooseaccountprovider
 
-import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.login.LoginModeState
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
 import kotlinx.collections.immutable.ImmutableList
 
 data class ChooseAccountProviderState(
     val accountProviders: ImmutableList<AccountProvider>,
     val selectedAccountProvider: AccountProvider?,
     val loginModeState: LoginModeState,
-    val eventSink: (ChooseAccountProviderEvents) -> Unit,
+    val eventSink: (ChooseAccountProviderEvent) -> Unit,
 ) {
     val submitEnabled: Boolean
         get() = selectedAccountProvider != null &&

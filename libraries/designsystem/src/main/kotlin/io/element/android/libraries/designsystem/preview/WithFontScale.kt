@@ -14,8 +14,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
 
 /**
- * Showkase does not take into account the `fontScale` parameter of the Preview annotation, so alter the
- * LocalDensity in the CompositionLocalProvider.
+ * Render the content at the given font scale, by altering the `LocalDensity` in the
+ * CompositionLocalProvider. Useful to preview a Composable at several font scales.
  */
 @Composable
 fun WithFontScale(fontScale: Float, content: @Composable () -> Unit) {

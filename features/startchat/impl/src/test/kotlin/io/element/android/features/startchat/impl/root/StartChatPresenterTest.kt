@@ -53,7 +53,7 @@ class StartChatPresenterTest {
             assertThat(initialState.userListState.isSearchActive).isFalse()
             assertThat(initialState.userListState.isMultiSelectionEnabled).isFalse()
             val matrixUser = MatrixUser(UserId("@name:domain"))
-            initialState.eventSink(StartChatEvents.StartDM(matrixUser))
+            initialState.eventSink(StartChatEvent.StartDM(matrixUser))
             awaitItem().also { state ->
                 assertThat(state.startDmAction).isEqualTo(startDMFailureResult)
                 executeResult.assertions().isCalledOnce().with(
@@ -61,7 +61,7 @@ class StartChatPresenterTest {
                     value(false),
                     any(),
                 )
-                state.eventSink(StartChatEvents.CancelStartDM)
+                state.eventSink(StartChatEvent.CancelStartDM)
             }
             awaitItem().also { state ->
                 assertThat(state.startDmAction.isUninitialized()).isTrue()
@@ -85,7 +85,7 @@ class StartChatPresenterTest {
             assertThat(initialState.userListState.isSearchActive).isFalse()
             assertThat(initialState.userListState.isMultiSelectionEnabled).isFalse()
             val matrixUser = MatrixUser(UserId("@name:domain"))
-            initialState.eventSink(StartChatEvents.StartDM(matrixUser))
+            initialState.eventSink(StartChatEvent.StartDM(matrixUser))
             awaitItem().also { state ->
                 assertThat(state.startDmAction).isEqualTo(startDMSuccessResult)
                 executeResult.assertions().isCalledOnce().with(
@@ -109,7 +109,7 @@ class StartChatPresenterTest {
         presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.startDmAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
-            initialState.eventSink(StartChatEvents.StartDM(matrixUser))
+            initialState.eventSink(StartChatEvent.StartDM(matrixUser))
             val confirmingState = awaitItem()
             assertThat(confirmingState.startDmAction).isEqualTo(startDMConfirmationResult)
             executeResult.assertions().isCalledOnce().with(
@@ -118,7 +118,7 @@ class StartChatPresenterTest {
                 any(),
             )
             // Cancelling should not create the DM
-            confirmingState.eventSink(StartChatEvents.CancelStartDM)
+            confirmingState.eventSink(StartChatEvent.CancelStartDM)
             val finalState = awaitItem()
             assertThat(finalState.startDmAction.isUninitialized()).isTrue()
             executeResult.assertions().isCalledExactly(1)
@@ -137,7 +137,7 @@ class StartChatPresenterTest {
         presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.startDmAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
-            initialState.eventSink(StartChatEvents.StartDM(matrixUser))
+            initialState.eventSink(StartChatEvent.StartDM(matrixUser))
             val confirmingState = awaitItem()
             assertThat(confirmingState.startDmAction).isEqualTo(startDMConfirmationResult)
             executeResult.assertions().isCalledOnce().with(
@@ -146,7 +146,7 @@ class StartChatPresenterTest {
                 any(),
             )
             // Start DM again should invoke the action with createIfDmDoesNotExist = true
-            confirmingState.eventSink(StartChatEvents.StartDM(matrixUser))
+            confirmingState.eventSink(StartChatEvent.StartDM(matrixUser))
             executeResult.assertions().isCalledExactly(2).withSequence(
                 listOf(value(matrixUser), value(false), any()),
                 listOf(value(matrixUser), value(true), any()),

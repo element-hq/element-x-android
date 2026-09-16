@@ -17,7 +17,9 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.invite.api.InviteData
+import io.element.android.features.invite.api.declineandblock.DeclineInviteAndBlockEntryPoint
 import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 
@@ -31,6 +33,7 @@ class DeclineAndBlockNode(
     data class Inputs(val inviteData: InviteData) : NodeInputs
 
     private val inviteData = inputs<Inputs>().inviteData
+    private val callback: DeclineInviteAndBlockEntryPoint.Callback = callback()
     private val presenter = presenterFactory.create(inviteData)
 
     @Composable
@@ -39,6 +42,7 @@ class DeclineAndBlockNode(
         DeclineAndBlockView(
             state = state,
             onBackClick = ::navigateUp,
+            onDeclineSuccess = callback::onDeclineSuccess,
             modifier = modifier
         )
     }

@@ -55,7 +55,7 @@
   <string name="a11y_react_with_other_emojis">"使用其它 Emoji 做出反应"</string>
   <string name="a11y_read_receipts_multiple">"上一个消息已被 %1$s 与 %2$s 阅读"</string>
   <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="other">"上一个消息已被 %1$s 与 %2$d 及其他人阅读"</item>
+    <item quantity="other">"上一个消息已被 %1$s 与其余 %2$d 人阅读"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"上一个消息已被 %1$s 阅读"</string>
   <string name="a11y_read_receipts_tap_to_show_all_android">"显示所有已读回执"</string>
@@ -183,6 +183,7 @@
   <string name="action_retry_decryption">"重试解密"</string>
   <string name="action_save">"保存"</string>
   <string name="action_search">"搜索"</string>
+  <string name="action_select">"选择"</string>
   <string name="action_select_all">"全选"</string>
   <string name="action_send">"发送"</string>
   <string name="action_send_edited_message">"发送编辑后的消息"</string>
@@ -479,7 +480,7 @@
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"选择你要上传的视频的质量。"</string>
   <string name="dialog_video_quality_selector_title">"选择视频上传质量"</string>
   <string name="error_account_already_logged_in">"你已在此设备以 %1$s 的身份登录。"</string>
-  <string name="error_account_creation_not_possible">"你的主服务器需要升级，以支持 Matrix 认证服务和账户创建。"</string>
+  <string name="error_account_creation_not_possible">"你的账户提供者需要升级以支持 Matrix 认证服务和账户创建。"</string>
   <string name="error_failed_creating_the_permalink">"永久链接创建失败"</string>
   <string name="error_failed_loading_map">"%1$s 无法加载地图，请稍后再试。"</string>
   <string name="error_failed_loading_messages">"消息加载失败"</string>
@@ -496,7 +497,7 @@
   <string name="error_room_address_invalid_symbols">"不允许使用某些字符。仅支持字母、数字和以下符号 $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"某些消息尚未发送"</string>
   <string name="error_unknown">"抱歉，发生了错误"</string>
-  <string name="invite_friends_rich_title">"🔐️ 在 %1$s 中与我一起"</string>
+  <string name="invite_friends_rich_title">"🔐️ 在 %1$s 中与我聊天"</string>
   <string name="invite_friends_text">"嗨！请通过 %1$s 与我联系：%2$s"</string>
   <string name="live_location_sharing_foreground_service_channel_title_android">"实时位置共享"</string>
   <string name="live_location_sharing_foreground_service_message_android">"位置共享正在进行"</string>
@@ -504,14 +505,6 @@
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"摇一摇以报告 bug"</string>
   <string name="screen_bug_report_a11y_screenshot">"屏幕截图"</string>
-  <string name="screen_change_server_navigation_title_login">"登录"</string>
-  <string name="screen_change_server_navigation_title_register">"创建账户"</string>
-  <string name="screen_change_server_textfield_footer_login">"如果你的账户由你的公司或社区提供，则应更改账户提供者（例如：companyname.com）。"</string>
-  <string name="screen_change_server_textfield_footer_register">"在 matrix.org 创建免费账户。如果你想使用其它服务提供者创建账户，请相应地更改域名（例如：communityname.org）。"</string>
-  <string name="screen_change_server_textfield_header">"账户提供者"</string>
-  <string name="screen_change_server_textfield_placeholder">"example.com"</string>
-  <string name="screen_change_server_title_login">"输入你的账户提供者"</string>
-  <string name="screen_change_server_title_register">"选择账户提供者"</string>
   <string name="screen_create_poll_option_accessibility_label">"%1$s：%2$s"</string>
   <string name="screen_create_poll_options_section_title">"选项"</string>
   <string name="screen_create_poll_remove_accessibility_label">"移除 %1$s"</string>
@@ -549,11 +542,15 @@
   <string name="screen_room_grouped_state_events_expand">"展开"</string>
   <string name="screen_room_grouped_state_events_reduce">"折叠"</string>
   <string name="screen_room_live_location_banner">"正在共享实时位置"</string>
+  <string name="screen_room_maximum_messages_selected">"选择的消息已达到最大数量"</string>
   <string name="screen_room_permalink_same_room_android">"已经位于此房间！"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s / %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s 个已置顶的消息"</string>
   <string name="screen_room_pinned_banner_loading_description">"正在加载消息…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"查看全部"</string>
+  <plurals name="screen_room_selection_count">
+    <item quantity="other">"已选择 %1$d 个消息"</item>
+  </plurals>
   <string name="screen_room_title">"聊天"</string>
   <string name="screen_share_location_title">"共享位置"</string>
   <string name="screen_share_my_location_action">"共享我的位置"</string>

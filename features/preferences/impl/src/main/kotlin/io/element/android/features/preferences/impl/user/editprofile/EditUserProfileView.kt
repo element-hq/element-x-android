@@ -178,7 +178,7 @@ fun EditUserProfileView(
 
 @PreviewsDayNight
 @Composable
-internal fun EditUserProfileViewPreview(@PreviewParameter(EditUserProfileStateProvider::class) state: EditUserProfileState) =
+internal fun EditUserProfileViewPreview(@PreviewParameter(EditUserProfileStatePreviewParam::class) state: EditUserProfileState) =
     ElementPreview {
         EditUserProfileView(
             onEditProfileSuccess = {},

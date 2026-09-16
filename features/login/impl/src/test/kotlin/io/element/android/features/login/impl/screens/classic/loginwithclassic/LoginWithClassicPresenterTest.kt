@@ -8,8 +8,8 @@
 package io.element.android.features.login.impl.screens.classic.loginwithclassic
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
+import io.element.android.features.login.impl.accountprovider.anAccountProviderDataSource
 import io.element.android.features.login.impl.classic.ElementClassicConnection
 import io.element.android.features.login.impl.classic.ElementClassicConnectionState
 import io.element.android.features.login.impl.classic.FakeElementClassicConnection
@@ -249,7 +249,7 @@ private fun createPresenter(
     navigator: LoginWithClassicNavigator = FakeLoginWithClassicNavigator(),
     loginModePresenter: LoginModePresenter = createLoginModePresenter(),
     elementClassicConnection: ElementClassicConnection = FakeElementClassicConnection(),
-    accountProviderDataSource: AccountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
+    accountProviderDataSource: AccountProviderDataSource = anAccountProviderDataSource(),
     isEnterpriseBuild: Boolean = false,
 ) = LoginWithClassicPresenter(
     userId = userId,

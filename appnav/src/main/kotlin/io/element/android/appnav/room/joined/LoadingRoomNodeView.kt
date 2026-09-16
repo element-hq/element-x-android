@@ -29,7 +29,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.DelayedVisibility
 import io.element.android.libraries.matrix.ui.room.LoadingRoomState
-import io.element.android.libraries.matrix.ui.room.LoadingRoomStateProvider
+import io.element.android.libraries.matrix.ui.room.LoadingRoomStatePreviewParam
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -84,7 +84,7 @@ private fun LoadingRoomTopBar(
 
 @PreviewsDayNight
 @Composable
-internal fun LoadingRoomNodeViewPreview(@PreviewParameter(LoadingRoomStateProvider::class) state: LoadingRoomState) = ElementPreview {
+internal fun LoadingRoomNodeViewPreview(@PreviewParameter(LoadingRoomStatePreviewParam::class) state: LoadingRoomState) = ElementPreview {
     LoadingRoomNodeView(
         state = state,
         onBackClick = {}

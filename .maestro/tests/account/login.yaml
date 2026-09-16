@@ -3,8 +3,7 @@ appId: ${MAESTRO_APP_ID}
 - tapOn: "Sign in manually"
 - runFlow: ../assertions/assertLoginDisplayed.yaml
 - takeScreenshot: build/maestro/100-SignIn
-- runFlow: changeServer.yaml
-- runFlow: ../assertions/assertLoginDisplayed.yaml
+# The account provider field defaults to matrix.org, so continue straight to the MAS login.
 - tapOn:
     id: "login-continue"
 ## MAS page

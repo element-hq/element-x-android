@@ -100,6 +100,14 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"システム設定"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"システムで通知がオフです"</string>
   <string name="screen_notification_settings_title">"通知"</string>
+  <string name="screen_settings_user_status_away">"離席中"</string>
+  <string name="screen_settings_user_status_be_right_back">"すぐに戻る"</string>
+  <string name="screen_settings_user_status_custom">"任意…"</string>
+  <string name="screen_settings_user_status_custom_hint">"任意のステータス…"</string>
+  <string name="screen_settings_user_status_focus_time">"集中タイム"</string>
+  <string name="screen_settings_user_status_in_a_meeting">"会議中"</string>
+  <string name="screen_settings_user_status_on_the_road">"移動中"</string>
+  <string name="screen_settings_user_status_placeholder">"現在のステータスは？"</string>
   <string name="theme_black">"ブラック"</string>
   <string name="theme_dark">"ダーク"</string>
   <string name="theme_light">"ライト"</string>

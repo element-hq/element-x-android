@@ -51,7 +51,7 @@ import io.element.android.compound.colors.SemanticColorsLightDark
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.api.SessionEnterpriseService
-import io.element.android.features.enterprise.api.remoteconfig.RemoteEnterpriseConfigProvider
+import io.element.android.features.enterprise.api.remoteconfig.CustomMapTilerConfigProvider
 import io.element.android.features.ftue.api.FtueEntryPoint
 import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.ftue.api.state.FtueState
@@ -157,7 +157,7 @@ class LoggedInFlowNode(
     private val analyticsRoomListStateWatcher: AnalyticsRoomListStateWatcher,
     private val createRoomEntryPoint: CreateRoomEntryPoint,
     private val activeLiveLocationShareManager: ActiveLiveLocationShareManager,
-    private val remoteEnterpriseConfigProvider: RemoteEnterpriseConfigProvider,
+    private val customMapTilerConfigProvider: CustomMapTilerConfigProvider,
 ) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Placeholder,
@@ -335,11 +335,11 @@ class LoggedInFlowNode(
             }
             NavTarget.Home -> {
                 val callback = object : HomeEntryPoint.Callback {
-                    override fun navigateToRoom(roomId: RoomId, joinedRoom: JoinedRoom?) {
+                    override fun navigateToRoom(roomId: RoomId, eventId: EventId?, joinedRoom: JoinedRoom?) {
                         lifecycleScope.launch {
                             attachRoom(
                                 roomIdOrAlias = roomId.toRoomIdOrAlias(),
-                                initialElement = RoomNavigationTarget.Root(joinedRoom = joinedRoom),
+                                initialElement = RoomNavigationTarget.Root(joinedRoom = joinedRoom, eventId = eventId),
                                 clearBackstack = false,
                             )
                         }
@@ -685,7 +685,7 @@ class LoggedInFlowNode(
 
         val currentMapTilerConfig = LocalMapTilerConfig.current
         val updatedMapTilerConfig by produceState(currentMapTilerConfig) {
-            value = remoteEnterpriseConfigProvider.get(matrixClient.sessionId).dataOrNull()?.mapTilerConfig ?: currentMapTilerConfig
+            value = customMapTilerConfigProvider.get().getOrNull() ?: currentMapTilerConfig
         }
 
         ElementThemeApp(

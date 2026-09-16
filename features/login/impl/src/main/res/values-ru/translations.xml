@@ -16,17 +16,25 @@
   <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"Требуется приложение Element Pro для %1$s. Пожалуйста, загрузите его из магазина."</string>
   <string name="screen_change_server_error_element_pro_required_title">"Требуется Element Pro"</string>
-  <string name="screen_change_server_error_invalid_homeserver">"Нам не удалось связаться с этим сервером. Убедитесь, что вы правильно указали адрес сервера. Если адрес указан правильно, обратитесь к администратору сервера за дополнительной помощью."</string>
+  <string name="screen_change_server_error_invalid_homeserver">"Нам не удалось связаться с этим сервером. Убедитесь, что вы правильно указали адрес сервера. Если адрес указан правильно, обратитесь к администратору сервера за дополнительной помощью. Также возможно, что сервер заблокирован, в таком случае Вам нужно сменить сервер."</string>
   <string name="screen_change_server_error_invalid_well_known">"Сервер недоступен из-за проблемы в файле .well-known:
 %1$s"</string>
-  <string name="screen_change_server_error_no_sliding_sync_message">"Выбранный сервер не поддерживает Sliding sync. Для использования %1$s необходимо обновление сервера."</string>
+  <string name="screen_change_server_error_no_sliding_sync_message">"Выбранный сервер не поддерживает Sliding Sync. Для использования %1$s необходимо обновление сервера."</string>
   <string name="screen_change_server_error_unauthorized_homeserver">"%1$s отказано в подключении к %2$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_content">"Это приложение настроено таким образом, чтобы разрешить: %1$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_title">"Сервер %1$s не разрешен."</string>
   <string name="screen_change_server_form_header">"Адрес сервера"</string>
   <string name="screen_change_server_form_notice">"Введите доменное имя."</string>
+  <string name="screen_change_server_navigation_title_login">"Войти"</string>
+  <string name="screen_change_server_navigation_title_register">"Создать аккаунт"</string>
   <string name="screen_change_server_subtitle">"Какой адрес у вашего сервера?"</string>
+  <string name="screen_change_server_textfield_footer_login">"Если Ваш аккаунт предоставлен Вашей компанией или сообществом, смените сервер (example: companyname.com)."</string>
+  <string name="screen_change_server_textfield_footer_register">"Создайте аккаунт бесплатно на matrix.org. Если Вы хотите создать аккаунт на другом сервере, смените сервер здесь (например: communityname.org)."</string>
+  <string name="screen_change_server_textfield_header">"Сервер"</string>
+  <string name="screen_change_server_textfield_placeholder">"example.com"</string>
   <string name="screen_change_server_title">"Выберите свой сервер"</string>
+  <string name="screen_change_server_title_login">"Введите сервер"</string>
+  <string name="screen_change_server_title_register">"Выберите сервер"</string>
   <string name="screen_create_account_title">"Создать аккаунт"</string>
   <string name="screen_login_error_deactivated_account">"Эта учетная запись была удалена."</string>
   <string name="screen_login_error_invalid_credentials">"Неверное имя пользователя и/или пароль"</string>

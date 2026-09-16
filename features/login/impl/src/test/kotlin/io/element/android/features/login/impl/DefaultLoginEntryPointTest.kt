@@ -12,12 +12,11 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.api.LoginEntryPoint
-import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
+import io.element.android.features.login.impl.accountprovider.anAccountProviderDataSource
 import io.element.android.features.login.impl.classic.FakeElementClassicConnection
 import io.element.android.features.preferences.test.FakePreferencesEntryPoint
-import io.element.android.libraries.oauth.test.customtab.FakeOAuthActionFlow
+import io.element.android.libraries.oauth.test.FakeOAuthActionFlow
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.node.TestParentNode
 import kotlinx.coroutines.test.runTest
@@ -38,7 +37,7 @@ class DefaultLoginEntryPointTest {
             LoginFlowNode(
                 buildContext = buildContext,
                 plugins = plugins,
-                accountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
+                accountProviderDataSource = anAccountProviderDataSource(),
                 oAuthActionFlow = FakeOAuthActionFlow(),
                 appCoroutineScope = backgroundScope,
                 elementClassicConnection = FakeElementClassicConnection(),

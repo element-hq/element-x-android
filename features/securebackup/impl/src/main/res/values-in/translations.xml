@@ -20,6 +20,26 @@
   <string name="screen_create_new_recovery_key_list_item_4">"Ikuti petunjuk untuk membuat kunci pemulihan baru"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"Simpan kunci pemulihan baru Anda dalam pengelola kata sandi atau catatan terenkripsi"</string>
   <string name="screen_create_new_recovery_key_title">"Atur ulang enkripsi untuk akun Anda menggunakan perangkat lain"</string>
+  <string name="screen_custom_recovery_key_confirm_error_mismatch">"Kunci pemulihan yang Anda masukkan tidak cocok"</string>
+  <string name="screen_custom_recovery_key_confirm_submit">"Selesaikan penyiapan"</string>
+  <string name="screen_custom_recovery_key_confirm_subtitle">"Masukkan kunci pemulihan Anda sekali lagi."</string>
+  <string name="screen_custom_recovery_key_confirm_title">"Konfirmasi kunci pemulihan Anda"</string>
+  <plurals name="screen_custom_recovery_key_input_notice">
+    <item quantity="other">"Jumlah karakter minimum %1$d. Jangan gunakan kata sandi akun Anda."</item>
+  </plurals>
+  <string name="screen_custom_recovery_key_input_strength">"Kekuatan"</string>
+  <string name="screen_custom_recovery_key_input_strength_a11y">"Kekuatan kata sandi: %1$s"</string>
+  <string name="screen_custom_recovery_key_input_strength_moderate">"Moderasi"</string>
+  <string name="screen_custom_recovery_key_input_strength_strong">"Kuat"</string>
+  <string name="screen_custom_recovery_key_input_strength_very_strong">"Sangat kuat"</string>
+  <string name="screen_custom_recovery_key_input_strength_very_weak">"Sangat lemah"</string>
+  <string name="screen_custom_recovery_key_input_strength_weak">"Lemah"</string>
+  <string name="screen_custom_recovery_key_input_subtitle">"Pilih kunci pemulihan yang dapat Anda hafal."</string>
+  <string name="screen_custom_recovery_key_input_title">"Masukkan kunci pemulihan"</string>
+  <string name="screen_custom_recovery_key_loading_a11y">"Memuat persyaratan kunci pemulihan"</string>
+  <string name="screen_custom_recovery_key_success_notice">"Untuk mengubah kunci pemulihan Anda, buka Pengaturan → Enkripsi → Cadangan"</string>
+  <string name="screen_custom_recovery_key_success_subtitle">"Anda dapat menggunakan kunci pemulihan Anda untuk mengkonfirmasi perangkat baru atau memulihkan obrolan terenkripsi Anda jika Anda kehilangan akses ke semua perangkat Anda."</string>
+  <string name="screen_custom_recovery_key_success_title">"Pencadangan Anda kini telah sepenuhnya disiapkan."</string>
   <string name="screen_encryption_reset_action_continue_reset">"Lanjutkan pengaturan ulang"</string>
   <string name="screen_encryption_reset_bullet_1">"Detail akun, kontak, preferensi, dan daftar obrolan Anda akan disimpan"</string>
   <string name="screen_encryption_reset_bullet_2">"Anda akan kehilangan riwayat pesan yang hanya disimpan di server"</string>

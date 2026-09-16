@@ -30,7 +30,7 @@ import org.junit.Test
 class RoomAliasHelperViewTest : RobolectricTest() {
     @Test
     fun `clicking on back invokes the expected callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<RoomAliasResolverEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<RoomAliasResolverEvent>(expectEvents = false)
         ensureCalledOnce {
             setRoomAliasResolverView(
                 aRoomAliasResolverState(
@@ -44,7 +44,7 @@ class RoomAliasHelperViewTest : RobolectricTest() {
 
     @Test
     fun `clicking on Retry emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<RoomAliasResolverEvents>()
+        val eventsRecorder = EventsRecorder<RoomAliasResolverEvent>()
         setRoomAliasResolverView(
             aRoomAliasResolverState(
                 resolveState = AsyncData.Failure(Exception("Error")),
@@ -52,13 +52,13 @@ class RoomAliasHelperViewTest : RobolectricTest() {
             ),
         )
         clickOn(CommonStrings.action_retry)
-        eventsRecorder.assertSingle(RoomAliasResolverEvents.Retry)
+        eventsRecorder.assertSingle(RoomAliasResolverEvent.Retry)
     }
 
     @Test
     fun `success state invokes the expected Callback`() = runAndroidComposeUiTest {
         val result = aResolvedRoomAlias()
-        val eventsRecorder = EventsRecorder<RoomAliasResolverEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<RoomAliasResolverEvent>(expectEvents = false)
         ensureCalledOnceWithParam(result) {
             setRoomAliasResolverView(
                 aRoomAliasResolverState(

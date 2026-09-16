@@ -29,6 +29,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
+import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.matrix.api.timeline.item.event.SendHandleProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
@@ -136,6 +137,10 @@ fun aStickerContent(
     source = mediaSource,
     threadInfo = threadInfo,
 )
+
+fun aRedactedContent(
+    threadInfo: EventThreadInfo? = null,
+) = RedactedContent(threadInfo = threadInfo)
 
 fun aTimelineItemDebugInfo(
     model: String = "Rust(Model())",

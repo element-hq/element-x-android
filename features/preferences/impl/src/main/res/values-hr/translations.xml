@@ -53,6 +53,10 @@
   <string name="screen_edit_profile_error_title">"Nije moguće ažurirati profil"</string>
   <string name="screen_edit_profile_title">"Uredi profil"</string>
   <string name="screen_edit_profile_updating_details">"Ažuriranje profila…"</string>
+  <string name="screen_labs_enable_gallery">"Poruke iz galerije"</string>
+  <string name="screen_labs_enable_gallery_description">"Pošaljite više slika ili videozapisa odjednom. Stabilno na mobilnim uređajima, ali još nije podržano na webu."</string>
+  <string name="screen_labs_enable_knocking">"Zatraži pridruživanje"</string>
+  <string name="screen_labs_enable_knocking_description">"Korisnici mogu zatražiti pristup sobi kojoj se nitko ne može pridružiti. Stabilno na mobilnim uređajima, web implementacija postoji, ali je eksperimentalna."</string>
   <string name="screen_labs_enable_threads">"Omogući odgovore u nizu"</string>
   <string name="screen_labs_enable_threads_description">"Aplikacija će se ponovno pokrenuti kako bi se primijenila ova promjena."</string>
   <string name="screen_labs_header_description">"Isprobajte naše najnovije ideje u razvoju. Ove značajke nisu finalizirane; mogu biti nestabilne i mijenjati se."</string>

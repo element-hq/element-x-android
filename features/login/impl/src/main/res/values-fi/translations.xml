@@ -25,8 +25,16 @@
   <string name="screen_change_server_error_unauthorized_homeserver_title">"Palveluntarjoaja %1$s ei ole sallittu."</string>
   <string name="screen_change_server_form_header">"Kotipalvelimen osoite"</string>
   <string name="screen_change_server_form_notice">"Anna verkkotunnuksen osoite."</string>
+  <string name="screen_change_server_navigation_title_login">"Kirjaudu sisään"</string>
+  <string name="screen_change_server_navigation_title_register">"Luo tili"</string>
   <string name="screen_change_server_subtitle">"Mikä on palvelimesi osoite?"</string>
+  <string name="screen_change_server_textfield_footer_login">"Jos tilisi on yrityksesi tai yhteisön tarjoama, vaihda palveluntarjoaja (esimerkki: companyname.com)."</string>
+  <string name="screen_change_server_textfield_footer_register">"Luo tili matrix.org -palvelimelle ilmaiseksi. Jos haluat luoda tilin eri palveluntarjoajan kautta, muuta sitä vastaavasti (esimerkiksi: communityname.org)."</string>
+  <string name="screen_change_server_textfield_header">"Palveluntarjoaja"</string>
+  <string name="screen_change_server_textfield_placeholder">"example.com"</string>
   <string name="screen_change_server_title">"Valitse palvelimesi"</string>
+  <string name="screen_change_server_title_login">"Anna palveluntarjoajasi"</string>
+  <string name="screen_change_server_title_register">"Valitse palveluntarjoaja"</string>
   <string name="screen_create_account_title">"Luo tili"</string>
   <string name="screen_login_error_deactivated_account">"Tämä tili on poistettu."</string>
   <string name="screen_login_error_invalid_credentials">"Väärä käyttäjänimi ja/tai salasana"</string>

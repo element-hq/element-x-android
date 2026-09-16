@@ -20,7 +20,7 @@ data class RolesAndPermissionsState(
     val availableSelfDemoteActions: ImmutableList<SelfDemoteAction>,
     val changeOwnRoleAction: AsyncAction<Unit>,
     val resetPermissionsAction: AsyncAction<Unit>,
-    val eventSink: (RolesAndPermissionsEvents) -> Unit,
+    val eventSink: (RolesAndPermissionsEvent) -> Unit,
 ) {
     val canSelfDemote = availableSelfDemoteActions.isNotEmpty()
 }

@@ -75,7 +75,7 @@ Si vous continuez, il est possible que certains de vos paramètres soient modifi
   <string name="screen_notification_settings_failed_fixing_configuration">"La configuration n’a pas été corrigée, veuillez réessayer."</string>
   <string name="screen_notification_settings_group_chats">"Discussions de groupe"</string>
   <string name="screen_notification_settings_invite_for_me_label">"Invitations"</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Votre serveur d’accueil ne supporte pas cette option pour les salons chiffrés, vous pourriez ne pas être notifié(e) dans certains salons."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Votre fournisseur de compte ne supporte pas cette option pour les salons chiffrés, vous pourriez ne pas être notifié(e) dans certains salons."</string>
   <string name="screen_notification_settings_mentions_section_title">"Mentions"</string>
   <string name="screen_notification_settings_message_sound_dialog_choose_other">"Choisir un autre son…"</string>
   <string name="screen_notification_settings_message_sound_dialog_current_subtitle">"Vous utilisez actuellement %1$s"</string>
@@ -84,7 +84,7 @@ Si vous continuez, il est possible que certains de vos paramètres soient modifi
   <string name="screen_notification_settings_mode_all">"Tous"</string>
   <string name="screen_notification_settings_mode_mentions">"Mentions"</string>
   <string name="screen_notification_settings_notification_section_title">"Prévenez-moi pour"</string>
-  <string name="screen_notification_settings_room_mention_label">"Prévenez-moi si un message contient \"@room\""</string>
+  <string name="screen_notification_settings_room_mention_label">"Un message qui contient @room"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"Personnalisé"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"Son personnalisé…"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"Erreur lors de la suppression du fichier"</string>
@@ -101,6 +101,14 @@ Si vous continuez, il est possible que certains de vos paramètres soient modifi
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"paramètres du système"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Les notifications du système sont désactivées"</string>
   <string name="screen_notification_settings_title">"Notifications"</string>
+  <string name="screen_settings_user_status_away">"Absent"</string>
+  <string name="screen_settings_user_status_be_right_back">"Je reviens tout de suite"</string>
+  <string name="screen_settings_user_status_custom">"Personnalisé…"</string>
+  <string name="screen_settings_user_status_custom_hint">"Statut personnalisé…"</string>
+  <string name="screen_settings_user_status_focus_time">"Concentré"</string>
+  <string name="screen_settings_user_status_in_a_meeting">"En réunion"</string>
+  <string name="screen_settings_user_status_on_the_road">"Sur la route"</string>
+  <string name="screen_settings_user_status_placeholder">"Quel est votre statut ?"</string>
   <string name="theme_black">"Noir"</string>
   <string name="theme_dark">"Sombre"</string>
   <string name="theme_light">"Clair"</string>

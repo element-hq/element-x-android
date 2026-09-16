@@ -9,7 +9,7 @@
 package io.element.android.features.location.api.internal
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.wellknown.api.MapTilerConfig
+import io.element.android.features.enterprise.api.remoteconfig.MapTilerConfig
 import org.junit.Test
 
 class MapTilerTileServerStyleUriBuilderTest {

@@ -22,7 +22,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.showkase)
     testCommonDependencies(libs)
     testImplementation(libs.test.roborazzi)
     testImplementation(libs.test.roborazzi.compose)

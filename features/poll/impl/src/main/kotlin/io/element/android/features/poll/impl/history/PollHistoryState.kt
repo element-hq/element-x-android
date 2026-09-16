@@ -18,7 +18,7 @@ data class PollHistoryState(
     val hasMoreToLoad: Boolean,
     val activeFilter: PollHistoryFilter,
     val pollHistoryItems: PollHistoryItems,
-    val eventSink: (PollHistoryEvents) -> Unit,
+    val eventSink: (PollHistoryEvent) -> Unit,
 ) {
     fun pollHistoryForFilter(filter: PollHistoryFilter): ImmutableList<PollHistoryItem> {
         return when (filter) {

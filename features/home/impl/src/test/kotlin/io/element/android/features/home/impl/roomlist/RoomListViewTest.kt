@@ -277,7 +277,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setRoomListView(
     setSafeContent {
         HomeView(
             homeState = aHomeState(roomListState = state),
-            onRoomClick = onRoomClick,
+            onRoomClick = { roomId, _ -> onRoomClick(roomId) },
             onSettingsClick = onSettingsClick,
             onSetUpRecoveryClick = onSetUpRecoveryClick,
             onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,

@@ -90,8 +90,6 @@
   <string name="screen_room_notification_settings_error_restoring_default">"Không thể khôi phục chế độ mặc định, vui lòng thử lại."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Không thể thiết lập chế độ, hãy thử lại nhé."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Máy chủ không hỗ trợ tùy chọn này trong phòng mã hóa, bạn sẽ không nhận thông báo ở đây."</string>
-  <string name="screen_room_notification_settings_mode_all_messages">"Tất cả tin nhắn."</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Chỉ đề cập và từ khóa"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Trong phòng này, thông báo cho tôi khi"</string>
   <string name="screen_room_roles_and_permissions_admins">"Quản trị viên"</string>
   <string name="screen_room_roles_and_permissions_change_my_role">"Thay đổi vai trò của tôi"</string>

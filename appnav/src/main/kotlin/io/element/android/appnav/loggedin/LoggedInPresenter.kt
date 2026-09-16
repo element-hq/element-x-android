@@ -30,8 +30,6 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
@@ -67,7 +65,6 @@ class LoggedInPresenter(
     private val buildMeta: BuildMeta,
     private val networkMonitor: NetworkMonitor,
     private val localNetworkPermissionAdvisor: LocalNetworkPermissionAdvisor,
-    private val featureFlagService: FeatureFlagService,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
 ) : Presenter<LoggedInState> {
     private val localNetworkPermissionsPresenter: PermissionsPresenter =
@@ -108,9 +105,18 @@ class LoggedInPresenter(
         }
         val syncIndicator by matrixClient.roomListService.syncIndicator.collectAsState()
         val isOnline by syncService.isOnline.collectAsState()
-        val showSyncSpinner by remember {
+        val hasNetwork by networkMonitor.connectivity.collectAsState()
+        val syncIndicatorState by remember {
             derivedStateOf {
-                isOnline && syncIndicator == RoomListService.SyncIndicator.Show
+                when {
+                    isOnline -> if (syncIndicator == RoomListService.SyncIndicator.Show) {
+                        SyncIndicatorState.Syncing
+                    } else {
+                        SyncIndicatorState.Hidden
+                    }
+                    hasNetwork == NetworkStatus.Connected -> SyncIndicatorState.ServerUnreachable
+                    else -> SyncIndicatorState.Hidden
+                }
             }
         }
         var forceNativeSlidingSyncMigration by remember { mutableStateOf(false) }
@@ -124,13 +130,9 @@ class LoggedInPresenter(
         }
 
         LaunchedEffect(Unit) {
-            // Keep automatic call status (m.call) in sync with the feature flag and homeserver support.
-            featureFlagService.isFeatureEnabledFlow(FeatureFlags.UserStatus)
-                .onEach { isUserStatusEnabled ->
-                    val enabled = isUserStatusEnabled && matrixClient.isUserStatusSupported().getOrDefault(false)
-                    matrixClient.enableAutomaticCallStatus(enabled)
-                }
-                .launchIn(this)
+            // Keep automatic call status (m.call) in sync with homeserver support.
+            val enabled = matrixClient.isUserStatusSupported().getOrDefault(false)
+            matrixClient.enableAutomaticCallStatus(enabled)
         }
 
         val networkConnectivity by networkMonitor.connectivity.collectAsState()
@@ -156,9 +158,9 @@ class LoggedInPresenter(
             else -> LocalNetworkPermissionDialog.Settings
         }
 
-        fun handleEvent(event: LoggedInEvents) {
+        fun handleEvent(event: LoggedInEvent) {
             when (event) {
-                is LoggedInEvents.CloseErrorDialog -> {
+                is LoggedInEvent.CloseErrorDialog -> {
                     pusherRegistrationState.value = AsyncData.Uninitialized
                     if (event.doNotShowAgain) {
                         coroutineScope.launch {
@@ -166,17 +168,17 @@ class LoggedInPresenter(
                         }
                     }
                 }
-                LoggedInEvents.CheckSlidingSyncProxyAvailability -> coroutineScope.launch {
+                LoggedInEvent.CheckSlidingSyncProxyAvailability -> coroutineScope.launch {
                     forceNativeSlidingSyncMigration = matrixClient.needsForcedNativeSlidingSyncMigration().getOrDefault(false)
                 }
-                LoggedInEvents.LogoutAndMigrateToNativeSlidingSync -> coroutineScope.launch {
+                LoggedInEvent.LogoutAndMigrateToNativeSlidingSync -> coroutineScope.launch {
                     // Force the logout since Native Sliding Sync is already enforced by the SDK
                     matrixClient.logout(userInitiated = true, ignoreSdkError = true)
                 }
-                LoggedInEvents.DismissLocalNetworkPermissionPrompt -> {
+                LoggedInEvent.DismissLocalNetworkPermissionPrompt -> {
                     localNetworkPromptDismissedThisSession = true
                 }
-                LoggedInEvents.RequestLocationNetworkPermission -> {
+                LoggedInEvent.RequestLocationNetworkPermission -> {
                     if (localNetworkPermissionDialog == LocalNetworkPermissionDialog.Settings) {
                         localNetworkPermissionState.eventSink(PermissionsEvent.OpenSystemSettingAndCloseDialog)
                     } else {
@@ -188,7 +190,7 @@ class LoggedInPresenter(
         }
 
         return LoggedInState(
-            showSyncSpinner = showSyncSpinner,
+            syncIndicatorState = syncIndicatorState,
             pusherRegistrationState = pusherRegistrationState.value,
             ignoreRegistrationError = ignoreRegistrationError,
             forceNativeSlidingSyncMigration = forceNativeSlidingSyncMigration,

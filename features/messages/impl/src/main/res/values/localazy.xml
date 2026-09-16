@@ -7,6 +7,11 @@
   <string name="crypto_event_authenticity_unknown_device">"Encrypted by an unknown or deleted device."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Encrypted by a device not verified by its owner."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Encrypted by an unverified user."</string>
+  <string name="error_sending_failure_invalid_mime_type">"Invalid mime type: %s"</string>
+  <string name="error_sending_failure_missing_media_content">"Missing media content"</string>
+  <string name="error_sending_failure_other">"Error details: %s"</string>
+  <string name="error_sending_failure_sending_from_unverified_device">"Sending from unverified device"</string>
+  <string name="error_sending_failure_unknown">"Unknown error"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"Flip image horizontally"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Flipped horizontally"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Original"</string>
@@ -32,7 +37,7 @@
   <string name="screen_media_upload_preview_title">"Add media"</string>
   <string name="screen_report_content_block_user">"Block user"</string>
   <string name="screen_report_content_block_user_hint">"Check if you want to hide all current and future messages from this user"</string>
-  <string name="screen_report_content_explanation">"This message will be reported to your homeserver’s administrator. They will not be able to read any encrypted messages."</string>
+  <string name="screen_report_content_explanation">"This message will be reported to your account provider. They will not be able to read any encrypted messages."</string>
   <string name="screen_report_content_hint">"Reason for reporting this content"</string>
   <string name="screen_room_attachment_source_camera">"Camera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Take photo"</string>
@@ -42,6 +47,12 @@
   <string name="screen_room_attachment_source_location">"Share location"</string>
   <string name="screen_room_attachment_source_poll">"Poll"</string>
   <string name="screen_room_attachment_text_formatting">"Text Formatting"</string>
+  <string name="screen_room_confirm_removal_message">"Are you sure you wish to remove this message?"</string>
+  <string name="screen_room_confirm_removal_reason_label">"Reason (optional)"</string>
+  <string name="screen_room_confirm_removal_reason_placeholder">"Enter…"</string>
+  <string name="screen_room_confirm_removal_reason_placeholder_android">"Reason…"</string>
+  <string name="screen_room_confirm_removal_reason_supporting_text">"(Optional)"</string>
+  <string name="screen_room_confirm_removal_title">"Confirm removal"</string>
   <string name="screen_room_encrypted_history_banner">"Message history is currently unavailable."</string>
   <string name="screen_room_encrypted_history_banner_unverified">"Message history is unavailable in this room. Verify this device to see your message history."</string>
   <string name="screen_room_invite_again_alert_message">"Would you like to invite them back?"</string>

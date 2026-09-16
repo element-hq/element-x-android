@@ -16,7 +16,7 @@ import io.element.android.features.viewfolder.impl.file.ColorationMode
 import io.element.android.features.viewfolder.impl.file.FileContentReader
 import io.element.android.features.viewfolder.impl.file.FileSave
 import io.element.android.features.viewfolder.impl.file.FileShare
-import io.element.android.features.viewfolder.impl.file.ViewFileEvents
+import io.element.android.features.viewfolder.impl.file.ViewFileEvent
 import io.element.android.features.viewfolder.impl.file.ViewFilePresenter
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
@@ -86,7 +86,7 @@ class ViewFilePresenterTest {
         }.test {
             skipItems(1)
             val initialState = awaitItem()
-            initialState.eventSink(ViewFileEvents.Share)
+            initialState.eventSink(ViewFileEvent.Share)
             assertThat(fileShare.hasBeenCalled).isTrue()
             assertThat(fileSave.hasBeenCalled).isFalse()
         }
@@ -120,7 +120,7 @@ class ViewFilePresenterTest {
         }.test {
             skipItems(1)
             val initialState = awaitItem()
-            initialState.eventSink(ViewFileEvents.SaveOnDisk)
+            initialState.eventSink(ViewFileEvent.SaveOnDisk)
             assertThat(fileShare.hasBeenCalled).isFalse()
             assertThat(fileSave.hasBeenCalled).isTrue()
         }

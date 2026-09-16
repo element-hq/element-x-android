@@ -749,7 +749,7 @@ private fun ErrorView(
 // Only preview in dark, dark theme is forced on the Node.
 @Preview
 @Composable
-internal fun MediaViewerViewPreview(@PreviewParameter(MediaViewerStateProvider::class) state: MediaViewerState) = ElementPreviewDark {
+internal fun MediaViewerViewPreview(@PreviewParameter(MediaViewerStatePreviewParam::class) state: MediaViewerState) = ElementPreviewDark {
     MediaViewerView(
         state = state,
         audioFocus = null,
@@ -760,7 +760,7 @@ internal fun MediaViewerViewPreview(@PreviewParameter(MediaViewerStateProvider::
 
 @Preview(device = "${Devices.PHONE}, orientation=landscape")
 @Composable
-internal fun MediaViewerViewLandscapePreview(@PreviewParameter(MediaViewerStateProvider::class) state: MediaViewerState) = ElementPreviewDark {
+internal fun MediaViewerViewLandscapePreview(@PreviewParameter(MediaViewerStatePreviewParam::class) state: MediaViewerState) = ElementPreviewDark {
     MediaViewerView(
         state = state,
         audioFocus = null,

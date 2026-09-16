@@ -114,7 +114,6 @@
   <string name="screen_room_notification_settings_error_setting_mode">"Innstilling av modus mislyktes, prøv igjen."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Hjemmeserveren din støtter ikke dette alternativet i krypterte rom, og du vil ikke bli varslet i dette rommet."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Alle meldinger"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Bare omtaler og nøkkelord"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"I dette rommet, varsle meg om"</string>
   <string name="screen_room_roles_and_permissions_admins">"Administratorer"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"Administratorer og eiere"</string>
