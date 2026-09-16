@@ -55,6 +55,7 @@ import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
@@ -256,38 +257,41 @@ private fun CodeBlockView(
             softWrap = false,
         )
 
-        val progress by remember {
-            derivedStateOf {
-                scrollState.value.toFloat() / scrollState.maxValue
+        // Previews and screenshots can't render the fading edge gradients properly, everything is obscured by them, so we skip them in the preview mode.
+        if (LocalInspectionMode.current.not()) {
+            val progress by remember {
+                derivedStateOf {
+                    scrollState.value.toFloat() / scrollState.maxValue
+                }
             }
+
+            val alpha by animateFloatAsState(targetValue = progress, label = "CodeBlockViewScrollAlpha")
+
+            // Draw a fading edge gradient at the left and right of the code block, to hint that it is horizontally scrollable.
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .background(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(ElementTheme.colors.bgSubtleTertiary.copy(alpha = alpha), Color.Transparent),
+                            startX = 0f,
+                            endX = CodeBlockFadingEdgeWidth.toPx(),
+                        )
+                    )
+            )
+
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .background(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(Color.Transparent, ElementTheme.colors.bgSubtleTertiary.copy(alpha = 1f - alpha)),
+                            startX = scrollState.viewportSize - CodeBlockFadingEdgeWidth.toPx(),
+                            endX = scrollState.viewportSize.toFloat(),
+                        )
+                    )
+            )
         }
-
-        val alpha by animateFloatAsState(targetValue = progress, label = "CodeBlockViewScrollAlpha")
-
-        // Draw a fading edge gradient at the left and right of the code block, to hint that it is horizontally scrollable.
-        Box(
-            modifier = Modifier
-                .matchParentSize()
-                .background(
-                    brush = Brush.horizontalGradient(
-                        colors = listOf(ElementTheme.colors.bgSubtleTertiary.copy(alpha = alpha), Color.Transparent),
-                        startX = 0f,
-                        endX = CodeBlockFadingEdgeWidth.toPx(),
-                    )
-                )
-        )
-
-        Box(
-            modifier = Modifier
-                .matchParentSize()
-                .background(
-                    brush = Brush.horizontalGradient(
-                        colors = listOf(Color.Transparent, ElementTheme.colors.bgSubtleTertiary.copy(alpha = 1f - alpha)),
-                        startX = scrollState.viewportSize - CodeBlockFadingEdgeWidth.toPx(),
-                        endX = scrollState.viewportSize.toFloat(),
-                    )
-                )
-        )
     }
 }
 
