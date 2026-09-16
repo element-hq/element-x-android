@@ -37,7 +37,8 @@ import io.element.android.features.messages.impl.utils.FakeTextPillificationHelp
 import io.element.android.features.messages.test.timeline.FakeHtmlConverterProvider
 import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
 import io.element.android.libraries.core.mimetype.MimeTypes
-import io.element.android.libraries.htmlrenderer.impl.DefaultHtmlMessageParser
+import io.element.android.libraries.htmlrenderer.api.DocumentNode
+import io.element.android.libraries.htmlrenderer.test.FakeHtmlMessageParser
 import io.element.android.libraries.matrix.api.media.AudioDetails
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
@@ -84,6 +85,7 @@ import org.junit.Test
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 
+@Suppress("LargeClass")
 class TimelineItemContentMessageFactoryTest : RobolectricTest() {
     @Test
     fun `test create OtherMessageType`() = runTest {
@@ -1242,7 +1244,7 @@ class TimelineItemContentMessageFactoryTest : RobolectricTest() {
         htmlConverterProvider = FakeHtmlConverterProvider(htmlConverterTransform, domConverterTransform),
         permalinkParser = permalinkParser,
         textPillificationHelper = FakeTextPillificationHelper(),
-        htmlMessageParser = DefaultHtmlMessageParser(permalinkParser),
+        htmlMessageParser = FakeHtmlMessageParser(parseResult = { DocumentNode(persistentListOf()) }),
     )
 
     private fun createStickerContent(

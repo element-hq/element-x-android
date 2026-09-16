@@ -94,8 +94,8 @@ import kotlinx.collections.immutable.toImmutableMap
  * through the callbacks. It performs no HTML parsing itself.
  *
  * @param node the root HTML node of the parsed message tree to render.
- * @param modifier applied to the root of the rendered content.
- * @param currentUserId used to style a mention of the current user differently; may be null.
+ * @param modifier the [Modifier] to be applied to the layout.
+ * @param currentUserId the current user ID, if known. This can be used to display UI sent by/owned by the current user differently.
  * @param onLinkClick invoked with the target URL when a link is tapped.
  * @param onLinkLongClick invoked with the target URL when a link is long-pressed.
  * @param onMentionClick invoked when a mention pill is tapped.
