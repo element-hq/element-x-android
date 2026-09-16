@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.htmlrenderer.impl.renderer
+package io.element.android.libraries.ui.common.layout
 
 import android.text.Layout
 import androidx.compose.foundation.layout.Column
@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.designsystem.text.roundToPx
 import io.element.android.libraries.designsystem.utils.LocalUiTestMode
 import kotlin.math.max
@@ -89,7 +90,7 @@ fun ContentAvoidingLayout(
 
         when {
             // When the content + the overlay don't fit in the available max width, we need to move the overlay to a new row
-            !data.canOverlay() || (!shrinkContent && data.nonOverlappingContentWidth + overlayPlaceable.width > constraints.maxWidth) -> {
+            !data.canOverlay() || !shrinkContent && data.nonOverlappingContentWidth + overlayPlaceable.width > constraints.maxWidth -> {
                 layoutHeight += overlayPlaceable.height + overlayOffset.y.roundToPx()
             }
             // If the content is smaller than the available max width, we can move the overlay to the right of the content
@@ -161,14 +162,14 @@ object ContentAvoidingLayout {
      * This is supposed to be used in the `onTextLayout` parameter of a Text based component.
      */
     @Composable
-    internal fun measureLastTextLine(
+    fun measureLastTextLine(
         onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
         extraWidth: Dp = 0.dp,
     ): ((TextLayoutResult) -> Unit) {
         val extraWidthPx = extraWidth.roundToPx()
         return { textLayout: TextLayoutResult ->
             // We need to add the external extra width so it's not taken into account as 'free space'
-            val textDirection = runCatching { textLayout.getParagraphDirection(0) }.getOrNull()
+            val textDirection = tryOrNull { textLayout.getParagraphDirection(0) }
             val lastLineWidth = when (textDirection) {
                 ResolvedTextDirection.Rtl -> textLayout.getLineLeft(textLayout.lineCount - 1).roundToInt()
                 else -> textLayout.getLineRight(textLayout.lineCount - 1).roundToInt()
@@ -191,7 +192,7 @@ object ContentAvoidingLayout {
      * This is supposed to be used in the `onTextLayout` parameter of an [EditorStyledText] component.
      */
     @Composable
-    internal fun measureLegacyLastTextLine(
+    fun measureLegacyLastTextLine(
         onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
         extraWidth: Dp = 0.dp,
     ): ((Layout) -> Unit) {

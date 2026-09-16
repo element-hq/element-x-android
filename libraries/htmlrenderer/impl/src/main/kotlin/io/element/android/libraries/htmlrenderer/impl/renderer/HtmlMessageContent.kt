@@ -61,6 +61,8 @@ import io.element.android.libraries.htmlrenderer.api.MentionNodeContent
 import io.element.android.libraries.htmlrenderer.api.ParagraphNode
 import io.element.android.libraries.htmlrenderer.api.QuoteNode
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.ui.common.layout.ContentAvoidingLayout
+import io.element.android.libraries.ui.common.layout.ContentAvoidingLayoutData
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
@@ -72,6 +74,8 @@ import kotlinx.collections.immutable.toImmutableMap
  * The renderer is stateless: it is driven entirely by [node] and reports interactions
  * through the callbacks. It performs no HTML parsing itself.
  *
+ * @param node the root HTML node of the parsed message tree to render.
+ * @param modifier applied to the root of the rendered content.
  * @param currentUserId used to style a mention of the current user differently; may be null.
  * @param onLinkClick invoked with the target URL when a link is tapped.
  * @param onLinkLongClick invoked with the target URL when a link is long-pressed.
