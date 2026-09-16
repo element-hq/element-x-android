@@ -24,7 +24,7 @@ data class AdvancedSettingsState(
     val availableThemeOptions: ImmutableList<ThemeOption>,
     val mediaPreviewConfigState: MediaPreviewConfigState,
     val liveLocationMinimumDistanceUpdate: Int?,
-    val eventSink: (AdvancedSettingsEvents) -> Unit
+    val eventSink: (AdvancedSettingsEvent) -> Unit
 )
 
 sealed interface MediaOptimizationState {

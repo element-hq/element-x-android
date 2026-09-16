@@ -114,7 +114,7 @@ fun SpaceView(
     var handledBack by remember { mutableStateOf(false) }
     BackHandler(enabled = !handledBack) {
         if (state.isManageMode) {
-            state.eventSink(SpaceEvents.ExitManageMode)
+            state.eventSink(SpaceEvent.ExitManageMode)
         } else {
             handledBack = true
             onBackClick()
@@ -133,8 +133,8 @@ fun SpaceView(
                     ManageModeTopBar(
                         selectedCount = state.selectedCount,
                         isRemoveButtonEnabled = state.isRemoveButtonEnabled,
-                        onCancelClick = { state.eventSink(SpaceEvents.ExitManageMode) },
-                        onRemoveClick = { state.eventSink(SpaceEvents.RemoveSelectedRooms) },
+                        onCancelClick = { state.eventSink(SpaceEvent.ExitManageMode) },
+                        onRemoveClick = { state.eventSink(SpaceEvent.RemoveSelectedRooms) },
                     )
                 }
                 AnimatedVisibility(
@@ -152,7 +152,7 @@ fun SpaceView(
                         onSettingsClick = onSettingsClick,
                         onShareSpace = onShareSpace,
                         onViewMembersClick = onViewMembersClick,
-                        onManageRoomsClick = { state.eventSink(SpaceEvents.EnterManageMode) },
+                        onManageRoomsClick = { state.eventSink(SpaceEvent.EnterManageMode) },
                         onAddRoomClick = onAddRoomClick,
                         onCreateRoomClick = onCreateRoomClick,
                     )
@@ -168,13 +168,13 @@ fun SpaceView(
                     state = state,
                     onRoomClick = { spaceRoom ->
                         if (state.isManageMode) {
-                            state.eventSink(SpaceEvents.ToggleRoomSelection(spaceRoom.roomId))
+                            state.eventSink(SpaceEvent.ToggleRoomSelection(spaceRoom.roomId))
                         } else {
                             onRoomClick(spaceRoom)
                         }
                     },
                     onTopicClick = { topic ->
-                        state.eventSink(SpaceEvents.ShowTopicViewer(topic))
+                        state.eventSink(SpaceEvent.ShowTopicViewer(topic))
                     },
                     onCreateRoomClick = onCreateRoomClick,
                     onAddRoomClick = onAddRoomClick,
@@ -187,8 +187,8 @@ fun SpaceView(
                     spaceDisplayName = state.spaceInfo.name ?: state.spaceInfo.id.value,
                     removeRoomsAction = state.removeRoomsAction,
                     selectedCount = state.selectedCount,
-                    onConfirm = { state.eventSink(SpaceEvents.ConfirmRoomRemoval) },
-                    onDismiss = { state.eventSink(SpaceEvents.ClearRemoveAction) },
+                    onConfirm = { state.eventSink(SpaceEvent.ConfirmRoomRemoval) },
+                    onDismiss = { state.eventSink(SpaceEvent.ClearRemoveAction) },
                 )
                 acceptDeclineInviteView()
             }
@@ -198,7 +198,7 @@ fun SpaceView(
         TopicViewerBottomSheet(
             topicViewerState = state.topicViewerState,
             onDismiss = {
-                state.eventSink(SpaceEvents.HideTopicViewer)
+                state.eventSink(SpaceEvent.HideTopicViewer)
             }
         )
     }
@@ -207,7 +207,7 @@ fun SpaceView(
 @Composable
 private fun JoinFailuresEffect(
     hasAnyFailure: Boolean,
-    eventSink: (SpaceEvents) -> Unit,
+    eventSink: (SpaceEvent) -> Unit,
 ) {
     val asyncIndicatorState = rememberAsyncIndicatorState()
     val updatedEventSink by rememberUpdatedState(eventSink)
@@ -218,7 +218,7 @@ private fun JoinFailuresEffect(
                 AsyncIndicator.Failure(text = stringResource(CommonStrings.common_something_went_wrong))
             }
             delay(AsyncIndicator.DURATION_SHORT)
-            updatedEventSink(SpaceEvents.ClearFailures)
+            updatedEventSink(SpaceEvent.ClearFailures)
         } else {
             asyncIndicatorState.clear()
         }
@@ -317,7 +317,7 @@ private fun SpaceViewContent(
                         }
                     } else {
                         spaceRoom.trailingAction(isCurrentlyJoining = isCurrentlyJoining) {
-                            state.eventSink(SpaceEvents.Join(spaceRoom))
+                            state.eventSink(SpaceEvent.Join(spaceRoom))
                         }
                     },
                     bottomAction = if (state.isManageMode) {
@@ -325,10 +325,10 @@ private fun SpaceViewContent(
                     } else {
                         spaceRoom.inviteButtons(
                             onAcceptClick = {
-                                state.eventSink(SpaceEvents.AcceptInvite(spaceRoom))
+                                state.eventSink(SpaceEvent.AcceptInvite(spaceRoom))
                             },
                             onDeclineClick = {
-                                state.eventSink(SpaceEvents.DeclineInvite(spaceRoom))
+                                state.eventSink(SpaceEvent.DeclineInvite(spaceRoom))
                             }
                         )
                     }
@@ -384,7 +384,7 @@ private fun EmptySpaceView(
 
 @Composable
 private fun LoadingMoreIndicator(
-    eventSink: (SpaceEvents) -> Unit,
+    eventSink: (SpaceEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -397,7 +397,7 @@ private fun LoadingMoreIndicator(
         )
         val latestEventSink by rememberUpdatedState(eventSink)
         LaunchedEffect(Unit) {
-            latestEventSink(SpaceEvents.LoadMore)
+            latestEventSink(SpaceEvent.LoadMore)
         }
     }
 }
@@ -680,7 +680,7 @@ private fun RemoveRoomsActionView(
 @PreviewsDayNight
 @Composable
 internal fun SpaceViewPreview(
-    @PreviewParameter(SpaceStateProvider::class) state: SpaceState
+    @PreviewParameter(SpaceStatePreviewParam::class) state: SpaceState
 ) = ElementPreview {
     SpaceView(
         state = state,

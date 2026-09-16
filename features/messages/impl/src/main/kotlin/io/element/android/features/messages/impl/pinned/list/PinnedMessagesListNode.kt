@@ -30,6 +30,7 @@ import io.element.android.libraries.androidutils.system.copyToClipboard
 import io.element.android.libraries.androidutils.system.openUrlInExternalApp
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.emoji.api.picker.EmojiPickerRenderer
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -50,6 +51,7 @@ class PinnedMessagesListNode(
     actionListPresenterFactory: ActionListPresenter.Factory,
     private val timelineItemPresenterFactories: TimelineItemPresenterFactories,
     private val permalinkParser: PermalinkParser,
+    private val emojiPickerRenderer: EmojiPickerRenderer,
 ) : Node(buildContext, plugins = plugins), PinnedMessagesListNavigator {
     interface Callback : Plugin {
         fun handleEventClick(event: TimelineItem.Event, canUseOverlay: Boolean)
@@ -134,6 +136,7 @@ class PinnedMessagesListNode(
                         toastMessage = toastMessage,
                     )
                 },
+                emojiPickerRenderer = emojiPickerRenderer,
                 modifier = modifier
             )
         }

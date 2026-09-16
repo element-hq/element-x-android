@@ -43,7 +43,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.home.impl.R
 import io.element.android.features.home.impl.model.LatestEvent
 import io.element.android.features.home.impl.model.RoomListRoomSummary
-import io.element.android.features.home.impl.model.RoomListRoomSummaryProvider
+import io.element.android.features.home.impl.model.RoomListRoomSummaryPreviewParam
 import io.element.android.features.home.impl.model.RoomSummaryDisplayType
 import io.element.android.features.home.impl.roomlist.RoomListEvent
 import io.element.android.libraries.core.extensions.orEmpty
@@ -449,7 +449,7 @@ private fun MentionIndicatorAtom() {
 
 @PreviewsDayNight
 @Composable
-internal fun RoomSummaryRowPreview(@PreviewParameter(RoomListRoomSummaryProvider::class) data: RoomListRoomSummary) = ElementPreview {
+internal fun RoomSummaryRowPreview(@PreviewParameter(RoomListRoomSummaryPreviewParam::class) data: RoomListRoomSummary) = ElementPreview {
     RoomSummaryRow(
         room = data,
         hideInviteAvatars = false,

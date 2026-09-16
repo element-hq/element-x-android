@@ -64,21 +64,6 @@ class AppDeveloperSettingsPageTest : RobolectricTest() {
         eventsRecorder.assertSingle(AppDeveloperSettingsEvent.SetCustomElementCallBaseUrl("https://call.element.dev"))
     }
 
-    @Config(qualifiers = "h2000dp")
-    @Test
-    fun `clicking on open showkase invokes the expected callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<AppDeveloperSettingsEvent>(expectEvents = false)
-        ensureCalledOnce {
-            setAppDeveloperSettingsView(
-                state = anAppDeveloperSettingsState(
-                    eventSink = eventsRecorder
-                ),
-                onOpenShowkase = it
-            )
-            onNodeWithText("Open Showkase browser").performClick()
-        }
-    }
-
     @Config(qualifiers = "h1024dp")
     @Test
     fun `clicking on log level emits the expected event`() = runAndroidComposeUiTest {
@@ -96,13 +81,11 @@ class AppDeveloperSettingsPageTest : RobolectricTest() {
 
 private fun AndroidComposeUiTest<ComponentActivity>.setAppDeveloperSettingsView(
     state: AppDeveloperSettingsState,
-    onOpenShowkase: () -> Unit = EnsureNeverCalled(),
     onBackClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         AppDeveloperSettingsPage(
             state = state,
-            onOpenShowkase = onOpenShowkase,
             onBackClick = onBackClick,
         )
     }

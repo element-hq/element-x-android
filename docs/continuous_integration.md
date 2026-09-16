@@ -44,7 +44,7 @@ The CI checks that:
 2. The tests are passing
 3. The code quality is good (detekt, ktlint, lint)
 4. The code is running and smoke tests are passing (maestro)
-5. The PullRequest itself is good (with danger)
+5. The PullRequest itself is good (see the [PR Checks workflow](../.github/workflows/pr-checks.yml))
 6. Files that must be added with git-lfs are added with git-lfs
 
 ## What is the CI reporting

@@ -17,5 +17,5 @@ data class BlockedUsersState(
     val blockedUsers: ImmutableList<MatrixUser>,
     val unblockUserAction: AsyncAction<Unit>,
     val snackbarMessage: SnackbarMessage?,
-    val eventSink: (BlockedUsersEvents) -> Unit,
+    val eventSink: (BlockedUsersEvent) -> Unit,
 )

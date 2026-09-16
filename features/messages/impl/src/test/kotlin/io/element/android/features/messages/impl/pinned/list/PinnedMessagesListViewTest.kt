@@ -24,6 +24,7 @@ import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.timeline.aTimelineItemList
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemFileContent
+import io.element.android.libraries.emoji.api.picker.NoOpEmojiPickerRenderer
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
@@ -111,6 +112,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setPinnedMessagesListView(
             onUserDataClick = onUserDataClick,
             onLinkClick = onLinkClick,
             onLinkLongClick = onLinkLongClick,
+            emojiPickerRenderer = NoOpEmojiPickerRenderer,
         )
     }
 }

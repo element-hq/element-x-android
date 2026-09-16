@@ -86,14 +86,14 @@ private fun NotificationsOptInFooter(state: NotificationsOptInState) {
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(CommonStrings.action_ok),
             onClick = {
-                state.eventSink(NotificationsOptInEvents.ContinueClicked)
+                state.eventSink(NotificationsOptInEvent.ContinueClicked)
             }
         )
         TextButton(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(CommonStrings.action_not_now),
             onClick = {
-                state.eventSink(NotificationsOptInEvents.NotNowClicked)
+                state.eventSink(NotificationsOptInEvent.NotNowClicked)
             }
         )
     }
@@ -178,7 +178,7 @@ private fun NotificationRow(
 @PreviewsDayNight
 @Composable
 internal fun NotificationsOptInViewPreview(
-    @PreviewParameter(NotificationsOptInStateProvider::class) state: NotificationsOptInState
+    @PreviewParameter(NotificationsOptInStatePreviewParam::class) state: NotificationsOptInState
 ) {
     ElementPreview {
         NotificationsOptInView(

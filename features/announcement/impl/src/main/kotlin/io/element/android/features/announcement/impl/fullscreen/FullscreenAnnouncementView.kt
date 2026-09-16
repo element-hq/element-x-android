@@ -33,7 +33,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.announcement.api.Announcement
 import io.element.android.features.announcement.impl.AnnouncementEvent
 import io.element.android.features.announcement.impl.AnnouncementState
-import io.element.android.features.announcement.impl.AnnouncementStateProvider
+import io.element.android.features.announcement.impl.AnnouncementStatePreviewParam
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
@@ -216,7 +216,7 @@ private fun Announcement.Fullscreen.notice(): String? = when (this) {
 
 @PreviewsDayNight
 @Composable
-internal fun FullscreenAnnouncementViewPreview(@PreviewParameter(AnnouncementStateProvider::class) state: AnnouncementState) = ElementPreview {
+internal fun FullscreenAnnouncementViewPreview(@PreviewParameter(AnnouncementStatePreviewParam::class) state: AnnouncementState) = ElementPreview {
     FullscreenAnnouncementView(
         state = state,
     )

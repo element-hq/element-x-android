@@ -12,10 +12,10 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.join.JoinRule
-import org.matrix.rustcomponents.sdk.FilterTimelineEventCondition
-import org.matrix.rustcomponents.sdk.FilterTimelineEventType
-import org.matrix.rustcomponents.sdk.TimelineEventFilter
 import uniffi.matrix_sdk_ui.MembershipChangeFilter
+import uniffi.matrix_sdk_ui.TimelineEventCondition
+import uniffi.matrix_sdk_ui.TimelineEventFilter
+import uniffi.ruma_events.TimelineEventType
 
 interface TimelineEventFilterFactory {
     fun create(
@@ -32,22 +32,22 @@ class RustTimelineEventFilterFactory : TimelineEventFilterFactory {
         isEncrypted: Boolean?,
         excludedStateTypes: List<StateEventType>
     ): TimelineEventFilter? {
-        val excludedEventTypes = excludedStateTypes.map {
-            FilterTimelineEventCondition.EventType(FilterTimelineEventType.State(it.map()))
+        val excludedEventTypes = excludedStateTypes.map { stateEventType ->
+            TimelineEventCondition.EventType(TimelineEventType.fromState(stateEventType))
         }
         // If the room is publicly joinable and not encrypted, we also want to exclude membership changes and profile changes,
         // as they will pollute the timelines since they're quite common and not add much value.
         val excludedMembershipChanges = if (joinRule !is JoinRule.Invite && isEncrypted == false) {
             listOf(
-                FilterTimelineEventCondition.MembershipChange(MembershipChangeFilter.JOIN),
-                FilterTimelineEventCondition.MembershipChange(MembershipChangeFilter.LEAVE),
-                FilterTimelineEventCondition.ProfileChange,
+                TimelineEventCondition.MembershipChange(MembershipChangeFilter.JOIN),
+                TimelineEventCondition.MembershipChange(MembershipChangeFilter.LEAVE),
+                TimelineEventCondition.ProfileChange,
             )
         } else {
             emptyList()
         }
         return if (excludedEventTypes.isNotEmpty() || excludedMembershipChanges.isNotEmpty()) {
-            TimelineEventFilter.exclude(excludedEventTypes + excludedMembershipChanges)
+            TimelineEventFilter.Exclude(excludedEventTypes + excludedMembershipChanges)
         } else {
             null
         }

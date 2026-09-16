@@ -115,6 +115,7 @@
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Kotipalvelimesi ei tue tätä vaihtoehtoa salatuissa huoneissa, joten et saa ilmoituksia tästä huoneesta."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Kaikista viesteistä"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Vain maininnoista ja avainsanoista"</string>
+  <string name="screen_room_notification_settings_mode_mute">"Mykistä"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Ilmoita minulle tässä huoneessa"</string>
   <string name="screen_room_roles_and_permissions_admins">"Ylläpitäjät"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"Ylläpitäjät ja omistajat"</string>

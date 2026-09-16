@@ -71,6 +71,7 @@ dependencies {
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.wellknown.api)
+    implementation(projects.features.enterprise.api)
     implementation(libs.coil.compose)
     implementation(libs.datetime)
 

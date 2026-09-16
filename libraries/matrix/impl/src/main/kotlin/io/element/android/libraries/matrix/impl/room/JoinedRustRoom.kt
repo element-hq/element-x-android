@@ -264,7 +264,7 @@ class JoinedRustRoom(
                     filter = filter,
                     internalIdPrefix = internalIdPrefix,
                     dateDividerMode = dateDividerMode,
-                    trackReadReceipts = if (trackReadReceipts) TimelineReadReceiptTracking.ALL_EVENTS else TimelineReadReceiptTracking.DISABLED,
+                    trackReadReceipts = if (trackReadReceipts) TimelineReadReceiptTracking.MESSAGE_LIKE_EVENTS else TimelineReadReceiptTracking.DISABLED,
                     reportUtds = true,
                 )
             ).let { innerTimeline ->

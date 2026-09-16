@@ -84,7 +84,7 @@ fun BugReportView(
                     supportingText = stringResource(id = R.string.screen_bug_report_editor_description),
                     onValueChange = {
                         descriptionFieldState = it
-                        eventSink(BugReportEvents.SetDescription(it))
+                        eventSink(BugReportEvent.SetDescription(it))
                     },
                     keyboardOptions = KeyboardOptions(
                         capitalization = KeyboardCapitalization.Sentences,
@@ -110,14 +110,14 @@ fun BugReportView(
             PreferenceDivider()
             PreferenceSwitch(
                 isChecked = state.formState.sendLogs,
-                onCheckedChange = { eventSink(BugReportEvents.SetSendLog(it)) },
+                onCheckedChange = { eventSink(BugReportEvent.SetSendLog(it)) },
                 enabled = isFormEnabled,
                 title = stringResource(id = R.string.screen_bug_report_include_logs),
                 subtitle = stringResource(id = R.string.screen_bug_report_logs_description),
             )
             PreferenceSwitch(
                 isChecked = state.formState.canContact,
-                onCheckedChange = { eventSink(BugReportEvents.SetCanContact(it)) },
+                onCheckedChange = { eventSink(BugReportEvent.SetCanContact(it)) },
                 enabled = isFormEnabled,
                 title = stringResource(id = R.string.screen_bug_report_contact_me_title),
                 subtitle = stringResource(id = R.string.screen_bug_report_contact_me),
@@ -125,7 +125,7 @@ fun BugReportView(
             if (state.screenshotUri != null) {
                 PreferenceSwitch(
                     isChecked = state.formState.sendScreenshot,
-                    onCheckedChange = { eventSink(BugReportEvents.SetSendScreenshot(it)) },
+                    onCheckedChange = { eventSink(BugReportEvent.SetSendScreenshot(it)) },
                     enabled = isFormEnabled,
                     title = stringResource(id = R.string.screen_bug_report_include_screenshot)
                 )
@@ -151,7 +151,7 @@ fun BugReportView(
             }
             PreferenceSwitch(
                 isChecked = state.formState.sendPushRules,
-                onCheckedChange = { eventSink(BugReportEvents.SetSendPushRules(it)) },
+                onCheckedChange = { eventSink(BugReportEvent.SetSendPushRules(it)) },
                 enabled = isFormEnabled,
                 title = stringResource(R.string.screen_bug_report_send_notification_settings_title),
                 subtitle = stringResource(R.string.screen_bug_report_send_notification_settings_description),
@@ -179,12 +179,12 @@ fun BugReportView(
                     onValueChange = {
                         if (it.isEmpty()) {
                             ghIssueNumberState = ""
-                            eventSink(BugReportEvents.SetGhIssueNumber(null))
+                            eventSink(BugReportEvent.SetGhIssueNumber(null))
                         } else {
                             val number = it.toIntOrNull()?.takeIf { ghInt -> ghInt in 1..99_999 }
                             number?.let { ghIssueNumber ->
                                 ghIssueNumberState = ghIssueNumber.toString()
-                                eventSink(BugReportEvents.SetGhIssueNumber(ghIssueNumber))
+                                eventSink(BugReportEvent.SetGhIssueNumber(ghIssueNumber))
                             }
                         }
                     },
@@ -202,7 +202,7 @@ fun BugReportView(
             PreferenceRow {
                 Button(
                     text = stringResource(id = CommonStrings.action_send),
-                    onClick = { eventSink(BugReportEvents.SendBugReport) },
+                    onClick = { eventSink(BugReportEvent.SendBugReport) },
                     enabled = state.submitEnabled,
                     showProgress = state.sending.isLoading(),
                     modifier = Modifier
@@ -216,7 +216,7 @@ fun BugReportView(
             async = state.sending,
             progressDialog = { },
             onSuccess = {
-                eventSink(BugReportEvents.ResetAll)
+                eventSink(BugReportEvent.ResetAll)
                 onSuccess()
             },
             errorMessage = { error ->
@@ -225,14 +225,14 @@ fun BugReportView(
                     else -> error.message ?: error.toString()
                 }
             },
-            onErrorDismiss = { eventSink(BugReportEvents.ClearError) },
+            onErrorDismiss = { eventSink(BugReportEvent.ClearError) },
         )
     }
 }
 
 @Preview(heightDp = 1000)
 @Composable
-internal fun BugReportViewDayPreview(@PreviewParameter(BugReportStateProvider::class) state: BugReportState) = ElementPreview {
+internal fun BugReportViewDayPreview(@PreviewParameter(BugReportStatePreviewParam::class) state: BugReportState) = ElementPreview {
     BugReportView(
         state = state,
         onSuccess = {},
@@ -243,7 +243,7 @@ internal fun BugReportViewDayPreview(@PreviewParameter(BugReportStateProvider::c
 
 @Preview(heightDp = 1000, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-internal fun BugReportViewNightPreview(@PreviewParameter(BugReportStateProvider::class) state: BugReportState) = ElementPreview {
+internal fun BugReportViewNightPreview(@PreviewParameter(BugReportStatePreviewParam::class) state: BugReportState) = ElementPreview {
     BugReportView(
         state = state,
         onSuccess = {},

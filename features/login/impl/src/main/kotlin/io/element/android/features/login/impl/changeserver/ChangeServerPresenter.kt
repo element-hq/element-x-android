@@ -14,14 +14,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import dev.zacsweers.metro.Inject
 import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
-import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.features.login.impl.localnetwork.LocalNetworkPermissionGate
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
+import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
+import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 
 @Inject
 class ChangeServerPresenter(
@@ -32,21 +33,21 @@ class ChangeServerPresenter(
 ) : Presenter<ChangeServerState> {
     @Composable
     override fun present(): ChangeServerState {
-        val changeServerAction: MutableState<AsyncData<Unit>> = remember {
+        val changeServerAction: MutableState<AsyncData<MatrixHomeServerDetails>> = remember {
             mutableStateOf(AsyncData.Uninitialized)
         }
 
         val gateState = localNetworkPermissionGate.present<AccountProvider>(
-            urlOf = { provider -> provider.url },
+            urlOf = { provider -> provider.serverNameOrBaseUrl() },
             onProceed = { provider -> changeServer(provider, changeServerAction) },
         )
 
-        fun handleEvent(event: ChangeServerEvents) {
+        fun handleEvent(event: ChangeServerEvent) {
             when (event) {
-                ChangeServerEvents.ClearError -> changeServerAction.value = AsyncData.Uninitialized
-                is ChangeServerEvents.ChangeServer -> gateState.submit(event.accountProvider)
-                ChangeServerEvents.DismissLocalNetworkPermission -> gateState.abort()
-                ChangeServerEvents.RequestLocalNetworkPermission -> gateState.requestPermission()
+                ChangeServerEvent.ClearError -> changeServerAction.value = AsyncData.Uninitialized
+                is ChangeServerEvent.ChangeServer -> gateState.submit(event.accountProvider)
+                ChangeServerEvent.DismissLocalNetworkPermission -> gateState.abort()
+                ChangeServerEvent.RequestLocalNetworkPermission -> gateState.requestPermission()
             }
         }
 
@@ -59,19 +60,18 @@ class ChangeServerPresenter(
 
     private suspend fun changeServer(
         data: AccountProvider,
-        changeServerAction: MutableState<AsyncData<Unit>>,
+        changeServerAction: MutableState<AsyncData<MatrixHomeServerDetails>>,
     ) {
         suspend {
-            defaultAccountProviderAccessControl.assertIsAllowedToConnectToAccountProvider(
-                title = data.title,
-                accountProviderUrl = data.url,
-            )
-            val details = authenticationService.setHomeserver(data.url).getOrThrow()
+            defaultAccountProviderAccessControl.assertIsAllowedToConnectToAccountProvider(data)
+            val details = authenticationService.setHomeserver(data.serverNameOrBaseUrl()).getOrThrow()
             if (!details.isSupported) {
                 throw ChangeServerError.UnsupportedServer
             }
             // Homeserver is valid, remember user choice
             accountProviderDataSource.setAccountProvider(data)
+            // Return the resolved details so the caller can sign in without configuring the homeserver again.
+            details
         }.runCatchingUpdatingState(changeServerAction, errorTransform = ChangeServerError::from)
     }
 }

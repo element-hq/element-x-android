@@ -63,12 +63,12 @@ class RoomDirectoryPresenter(
                 loadingMore = false
             }
         }
-        fun handleEvent(event: RoomDirectoryEvents) {
+        fun handleEvent(event: RoomDirectoryEvent) {
             when (event) {
-                RoomDirectoryEvents.LoadMore -> {
+                RoomDirectoryEvent.LoadMore -> {
                     loadingMore = true
                 }
-                is RoomDirectoryEvents.Search -> {
+                is RoomDirectoryEvent.Search -> {
                     searchQuery = event.query
                 }
             }

@@ -7,19 +7,37 @@
   <string name="crypto_event_authenticity_unknown_device">"Verschlüsselt von einem unbekannten oder gelöschten Gerät."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Verschlüsselt durch ein Gerät, das nicht von seinem Besitzer verifiziert wurde."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Verschlüsselt durch einen nicht verifizierten Nutzer."</string>
+  <string name="error_sending_failure_invalid_mime_type">"Ungültiger MIME-Typ: %s"</string>
+  <string name="error_sending_failure_missing_media_content">"Fehlende Medieninhalte"</string>
+  <string name="error_sending_failure_other">"Fehlerdetails: %s"</string>
+  <string name="error_sending_failure_sending_from_unverified_device">"Senden von einem nicht verifizierten Gerät"</string>
+  <string name="error_sending_failure_unknown">"Unbekannter Fehler"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally">"Bild horizontal spiegeln"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Horizontal gespiegelt"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Original"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically">"Bild vertikal spiegeln"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_flipped">"Vertikal gespiegelt"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_original">"Original"</string>
+  <string name="screen_image_edition_a11y_rotate_to_the_left">"Drehe das Bild nach links"</string>
+  <plurals name="screen_image_edition_a11y_rotation_state">
+    <item quantity="one">"%1$d Grad"</item>
+    <item quantity="other">"%1$d Grad"</item>
+  </plurals>
+  <string name="screen_image_edition_title">"Foto bearbeiten"</string>
   <string name="screen_media_upload_preview_caption_warning">"Bildunterschriften sind für Nutzer älterer Apps möglicherweise nicht sichtbar."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Tippe, um die Qualität des Video-Uploads zu ändern"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Die Datei konnte nicht hochgeladen werden."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Fehler beim Verarbeiten des hochgeladenen Mediums. Bitte versuche es erneut."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Das Hochladen der Medien ist fehlgeschlagen. Bitte versuche es erneut."</string>
   <string name="screen_media_upload_preview_error_too_large_message">"Die maximal zulässige Dateigröße beträgt %1$s."</string>
-  <string name="screen_media_upload_preview_error_too_large_title">"Die Datei ist zu groß zum Hochladen."</string>
+  <string name="screen_media_upload_preview_error_too_large_title">"Die Datei ist zu groß zum Hochladen"</string>
   <string name="screen_media_upload_preview_item_count">"%1$d von %2$d"</string>
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Optimiere die Bildqualität"</string>
   <string name="screen_media_upload_preview_processing">"Verarbeitung läuft …"</string>
+  <string name="screen_media_upload_preview_title">"Medien hinzufügen"</string>
   <string name="screen_report_content_block_user">"Nutzer blockieren"</string>
   <string name="screen_report_content_block_user_hint">"Prüfe, ob du alle aktuellen und zukünftigen Nachrichten dieses Nutzers ausblenden möchtest"</string>
-  <string name="screen_report_content_explanation">"Diese Nachricht wird dem Administrator deines Homeservers gemeldet. Dieser kann allerdings keine verschlüsselten Nachrichten lesen."</string>
+  <string name="screen_report_content_explanation">"Diese Nachricht wird an deinen Kontoanbieter gemeldet. Verschlüsselte Nachrichten kann dieser nicht lesen."</string>
   <string name="screen_report_content_hint">"Grund für die Meldung dieses Inhalts"</string>
   <string name="screen_room_attachment_source_camera">"Kamera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Foto aufnehmen"</string>
@@ -29,7 +47,7 @@
   <string name="screen_room_attachment_source_location">"Standort teilen"</string>
   <string name="screen_room_attachment_source_poll">"Umfrage"</string>
   <string name="screen_room_attachment_text_formatting">"Textformatierung"</string>
-  <string name="screen_room_encrypted_history_banner">"Der Nachrichtenverlauf ist derzeit nicht verfügbar"</string>
+  <string name="screen_room_encrypted_history_banner">"Der Nachrichtenverlauf ist derzeit nicht verfügbar."</string>
   <string name="screen_room_encrypted_history_banner_unverified">"Der Nachrichtenverlauf ist nicht verfügbar. Verifiziere dieses Gerät, um deinen Nachrichtenverlauf zu sehen."</string>
   <string name="screen_room_invite_again_alert_message">"Möchtest du sie wieder einladen?"</string>
   <string name="screen_room_invite_again_alert_title">"Du bist allein in diesem Chat"</string>
@@ -57,6 +75,10 @@
   <string name="screen_room_timeline_reactions_show_more">"Mehr anzeigen"</string>
   <string name="screen_room_timeline_reactions_show_reactions_summary">"Zusammenfassung der Reaktionen anzeigen"</string>
   <string name="screen_room_timeline_read_marker_title">"Neu"</string>
+  <plurals name="screen_room_timeline_redacted_messages">
+    <item quantity="one">"%1$d entfernte Nachricht"</item>
+    <item quantity="other">"%1$d entfernte Nachrichten"</item>
+  </plurals>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d Änderung im Chat"</item>
     <item quantity="other">"%1$d Änderungen im Chat"</item>
@@ -67,7 +89,7 @@
   <string name="screen_room_timeline_upgraded_room_message">"Dieser Chat ist eine Fortsetzung eines anderen Chats"</string>
   <plurals name="screen_room_typing_many_members">
     <item quantity="one">"%1$s, %2$s und %3$d weitere Person"</item>
-    <item quantity="other">"%1$s, %2$s und %3$d weitere Person"</item>
+    <item quantity="other">"%1$s, %2$s und %3$d weitere Personen"</item>
   </plurals>
   <plurals name="screen_room_typing_notification">
     <item quantity="one">"%1$s schreibt…"</item>

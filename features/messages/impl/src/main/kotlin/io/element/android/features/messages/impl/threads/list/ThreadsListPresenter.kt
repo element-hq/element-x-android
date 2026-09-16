@@ -21,15 +21,12 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.threads.ThreadListItem
 import io.element.android.libraries.matrix.api.room.threads.ThreadListPaginationStatus
 import io.element.android.libraries.matrix.api.room.threads.applyDiffs
 import io.element.android.libraries.matrix.ui.model.getAvatarData
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.onStart
@@ -77,9 +74,9 @@ class ThreadsListPresenter(
             derivedStateOf { roomInfo.heroes.map { it.getAvatarData(AvatarSize.CurrentUserTopBar) }.toImmutableList() }
         }
 
-        fun handleEvent(event: ThreadsListEvents) {
+        fun handleEvent(event: ThreadsListEvent) {
             when (event) {
-                ThreadsListEvents.Paginate -> if ((paginationStatus as? ThreadListPaginationStatus.Idle)?.hasMoreToLoad == true) {
+                ThreadsListEvent.Paginate -> if ((paginationStatus as? ThreadListPaginationStatus.Idle)?.hasMoreToLoad == true) {
                     coroutineScope.launch {
                         Timber.d("Paginating thread list: $paginationStatus")
                         threadsListService.paginate()
@@ -130,18 +127,4 @@ class ThreadsListPresenter(
             useRelative = true,
         ),
     )
-}
-
-data class ThreadsListState(
-    val roomId: RoomId,
-    val roomName: String,
-    val roomAvatarUrl: String?,
-    val isRoomTombstoned: Boolean,
-    val heroes: ImmutableList<AvatarData>,
-    val threads: ImmutableList<ThreadListRowItem>,
-    val eventSink: (ThreadsListEvents) -> Unit,
-)
-
-sealed interface ThreadsListEvents {
-    data object Paginate : ThreadsListEvents
 }

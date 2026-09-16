@@ -117,7 +117,7 @@ fun EnterNumberView(
 @PreviewsDayNight
 @Composable
 internal fun EnterNumberViewPreview(
-    @PreviewParameter(EnterNumberStateProvider::class) state: EnterNumberState,
+    @PreviewParameter(EnterNumberStatePreviewParam::class) state: EnterNumberState,
 ) = ElementPreview {
     EnterNumberView(
         state = state,

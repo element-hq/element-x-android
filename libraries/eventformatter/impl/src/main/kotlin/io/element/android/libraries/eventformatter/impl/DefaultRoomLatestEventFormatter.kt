@@ -89,7 +89,7 @@ class DefaultRoomLatestEventFormatter(
     ): CharSequence? {
         return when (content) {
             is MessageContent -> content.process(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
-            RedactedContent -> {
+            is RedactedContent -> {
                 val message = sp.getString(CommonStrings.common_message_removed)
                 message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }

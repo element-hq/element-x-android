@@ -13,5 +13,5 @@ import io.element.android.libraries.matrix.api.core.RoomId
 
 data class ForwardMessagesState(
     val forwardAction: AsyncAction<List<RoomId>>,
-    val eventSink: (ForwardMessagesEvents) -> Unit
+    val eventSink: (ForwardMessagesEvent) -> Unit
 )

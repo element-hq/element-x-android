@@ -7,6 +7,11 @@
   <string name="crypto_event_authenticity_unknown_device">"Zaszyfrowana przez nieznane lub usunięte urządzenie."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Zaszyfrowana przez urządzenie niezweryfikowane przez jego właściciela."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Zaszyfrowana przez niezweryfikowanego użytkownika."</string>
+  <string name="error_sending_failure_invalid_mime_type">"Nieprawidłowy typ MIME: %s"</string>
+  <string name="error_sending_failure_missing_media_content">"Brak treści multimedialnych"</string>
+  <string name="error_sending_failure_other">"Szczegóły błędu: %s"</string>
+  <string name="error_sending_failure_sending_from_unverified_device">"Wysyłanie z niezweryfikowanego urządzenia"</string>
+  <string name="error_sending_failure_unknown">"Nieznany błąd"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"Odwróć obraz w poziomie"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Odwrócono w poziomie"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Oryginalny"</string>
@@ -33,7 +38,7 @@
   <string name="screen_media_upload_preview_title">"Dodaj media"</string>
   <string name="screen_report_content_block_user">"Zablokuj użytkownika"</string>
   <string name="screen_report_content_block_user_hint">"Zaznacz, jeśli chcesz ukryć wszystkie bieżące i przyszłe wiadomości od tego użytkownika."</string>
-  <string name="screen_report_content_explanation">"Ta wiadomość zostanie zgłoszona do administratora Twojego serwera domowego. Nie będzie mógł on przeczytać żadnych zaszyfrowanych wiadomości."</string>
+  <string name="screen_report_content_explanation">"Wiadomość zostanie zgłoszona do Twojego dostawcy konta. Nie będzie mógł on przeczytać żadnych zaszyfrowanych wiadomości."</string>
   <string name="screen_report_content_hint">"Powód zgłoszenia treści"</string>
   <string name="screen_room_attachment_source_camera">"Kamera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Zrób zdjęcie"</string>

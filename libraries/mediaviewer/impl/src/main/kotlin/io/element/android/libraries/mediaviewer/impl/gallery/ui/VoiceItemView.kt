@@ -54,7 +54,7 @@ import io.element.android.libraries.mediaviewer.impl.model.aMediaItemVoice
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.voiceplayer.api.VoiceMessageEvent
 import io.element.android.libraries.voiceplayer.api.VoiceMessageState
-import io.element.android.libraries.voiceplayer.api.VoiceMessageStateProvider
+import io.element.android.libraries.voiceplayer.api.VoiceMessageStatePreviewParam
 import io.element.android.libraries.voiceplayer.api.aVoiceMessageState
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
@@ -279,7 +279,7 @@ private fun CustomIconButton(
 @PreviewsDayNight
 @Composable
 internal fun VoiceItemViewPreview(
-    @PreviewParameter(MediaItemVoiceProvider::class) voice: MediaItem.Voice,
+    @PreviewParameter(MediaItemVoicePreviewParam::class) voice: MediaItem.Voice,
 ) = ElementPreview {
     val states = remember {
         listOf(
@@ -304,7 +304,7 @@ internal fun VoiceItemViewPreview(
 @PreviewsDayNight
 @Composable
 internal fun VoiceItemViewPlayPreview(
-    @PreviewParameter(VoiceMessageStateProvider::class) state: VoiceMessageState,
+    @PreviewParameter(VoiceMessageStatePreviewParam::class) state: VoiceMessageState,
 ) = ElementPreview {
     val validationState = remember {
         listOf(

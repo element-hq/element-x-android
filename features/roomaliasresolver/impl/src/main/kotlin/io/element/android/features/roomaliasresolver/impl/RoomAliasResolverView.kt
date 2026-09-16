@@ -66,9 +66,9 @@ fun RoomAliasResolverView(
         ResolvedRoomAliasView(
             resolvedRoomAlias = state.resolveState,
             onSuccess = onSuccess,
-            onRetry = { state.eventSink(RoomAliasResolverEvents.Retry) },
+            onRetry = { state.eventSink(RoomAliasResolverEvent.Retry) },
             onDismissError = {
-                state.eventSink(RoomAliasResolverEvents.DismissError)
+                state.eventSink(RoomAliasResolverEvent.DismissError)
                 onBackClick()
             }
         )
@@ -147,7 +147,7 @@ private fun RoomAliasResolverTopBar(
 
 @PreviewsDayNight
 @Composable
-internal fun RoomAliasResolverViewPreview(@PreviewParameter(RoomAliasResolverStateProvider::class) state: RoomAliasResolverState) = ElementPreview {
+internal fun RoomAliasResolverViewPreview(@PreviewParameter(RoomAliasResolverStatePreviewParam::class) state: RoomAliasResolverState) = ElementPreview {
     RoomAliasResolverView(
         state = state,
         onSuccess = { },

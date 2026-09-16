@@ -48,7 +48,7 @@ fun ViewFileView(
                 actions = {
                     IconButton(
                         onClick = {
-                            state.eventSink(ViewFileEvents.Share)
+                            state.eventSink(ViewFileEvent.Share)
                         },
                     ) {
                         Icon(
@@ -58,7 +58,7 @@ fun ViewFileView(
                     }
                     IconButton(
                         onClick = {
-                            state.eventSink(ViewFileEvents.SaveOnDisk)
+                            state.eventSink(ViewFileEvent.SaveOnDisk)
                         },
                     ) {
                         Icon(
@@ -92,7 +92,7 @@ fun ViewFileView(
 
 @PreviewsDayNight
 @Composable
-internal fun ViewFileViewPreview(@PreviewParameter(ViewFileStateProvider::class) state: ViewFileState) = ElementPreview {
+internal fun ViewFileViewPreview(@PreviewParameter(ViewFileStatePreviewParam::class) state: ViewFileState) = ElementPreview {
     ViewFileView(
         state = state,
         onBackClick = {},

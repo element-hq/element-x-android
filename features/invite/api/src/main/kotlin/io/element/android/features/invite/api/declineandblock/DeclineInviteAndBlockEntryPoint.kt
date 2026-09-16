@@ -10,13 +10,19 @@ package io.element.android.features.invite.api.declineandblock
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
+import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.features.invite.api.InviteData
 import io.element.android.libraries.architecture.FeatureEntryPoint
 
-fun interface DeclineInviteAndBlockEntryPoint : FeatureEntryPoint {
+interface DeclineInviteAndBlockEntryPoint : FeatureEntryPoint {
     fun createNode(
         parentNode: Node,
         buildContext: BuildContext,
         inviteData: InviteData,
+        callback: Callback,
     ): Node
+
+    interface Callback : Plugin {
+        fun onDeclineSuccess()
+    }
 }

@@ -29,7 +29,7 @@ import org.junit.Test
 class KnockRequestsBannerViewTest : RobolectricTest() {
     @Test
     fun `clicking on view on single request invoke the expected callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<KnockRequestsBannerEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<KnockRequestsBannerEvent>(expectEvents = false)
         ensureCalledOnce {
             setKnockRequestsBannerView(
                 state = aKnockRequestsBannerState(
@@ -43,7 +43,7 @@ class KnockRequestsBannerViewTest : RobolectricTest() {
 
     @Test
     fun `clicking on view all when multiple requests invoke the expected callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<KnockRequestsBannerEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<KnockRequestsBannerEvent>(expectEvents = false)
         ensureCalledOnce {
             setKnockRequestsBannerView(
                 state = aKnockRequestsBannerState(
@@ -62,19 +62,19 @@ class KnockRequestsBannerViewTest : RobolectricTest() {
 
     @Test
     fun `clicking on accept on a single request emit the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<KnockRequestsBannerEvents>()
+        val eventsRecorder = EventsRecorder<KnockRequestsBannerEvent>()
         setKnockRequestsBannerView(
             state = aKnockRequestsBannerState(
                 eventSink = eventsRecorder,
             ),
         )
         clickOn(CommonStrings.action_accept)
-        eventsRecorder.assertSingle(KnockRequestsBannerEvents.AcceptSingleRequest)
+        eventsRecorder.assertSingle(KnockRequestsBannerEvent.AcceptSingleRequest)
     }
 
     @Test
     fun `clicking on dismiss emit the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<KnockRequestsBannerEvents>()
+        val eventsRecorder = EventsRecorder<KnockRequestsBannerEvent>()
         setKnockRequestsBannerView(
             state = aKnockRequestsBannerState(
                 eventSink = eventsRecorder,
@@ -82,7 +82,7 @@ class KnockRequestsBannerViewTest : RobolectricTest() {
         )
         val close = activity!!.getString(CommonStrings.action_close)
         onNodeWithContentDescription(close).performClick()
-        eventsRecorder.assertSingle(KnockRequestsBannerEvents.Dismiss)
+        eventsRecorder.assertSingle(KnockRequestsBannerEvent.Dismiss)
     }
 }
 

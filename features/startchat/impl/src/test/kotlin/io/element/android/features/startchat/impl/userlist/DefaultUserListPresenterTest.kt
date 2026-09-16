@@ -80,7 +80,7 @@ class DefaultUserListPresenterTest {
         presenter.test {
             val initialState = awaitItem()
 
-            initialState.eventSink(UserListEvents.OnSearchActiveChanged(true))
+            initialState.eventSink(UserListEvent.OnSearchActiveChanged(true))
             assertThat(awaitItem().isSearchActive).isTrue()
 
             val matrixIdQuery = "@name:matrix.org"
@@ -93,7 +93,7 @@ class DefaultUserListPresenterTest {
             assertThat(awaitItem().searchQuery.text.toString()).isEqualTo(notMatrixIdQuery)
             assertThat(userRepository.providedQuery).isEqualTo(notMatrixIdQuery)
 
-            initialState.eventSink(UserListEvents.OnSearchActiveChanged(false))
+            initialState.eventSink(UserListEvent.OnSearchActiveChanged(false))
             assertThat(awaitItem().isSearchActive).isFalse()
         }
     }
@@ -190,22 +190,22 @@ class DefaultUserListPresenterTest {
             val userABis = aMatrixUser("@userA:domain", "A")
             val userC = aMatrixUser("@userC:domain", "C")
 
-            initialState.eventSink(UserListEvents.AddToSelection(userA))
+            initialState.eventSink(UserListEvent.AddToSelection(userA))
             assertThat(awaitItem().selectedUsers).containsExactly(userA)
 
-            initialState.eventSink(UserListEvents.AddToSelection(userB))
+            initialState.eventSink(UserListEvent.AddToSelection(userB))
             assertThat(awaitItem().selectedUsers).containsExactly(userA, userB)
 
-            initialState.eventSink(UserListEvents.AddToSelection(userABis))
-            initialState.eventSink(UserListEvents.AddToSelection(userC))
+            initialState.eventSink(UserListEvent.AddToSelection(userABis))
+            initialState.eventSink(UserListEvent.AddToSelection(userC))
             // duplicated users should be ignored
             assertThat(awaitItem().selectedUsers).containsExactly(userA, userB, userC)
 
-            initialState.eventSink(UserListEvents.RemoveFromSelection(userB))
+            initialState.eventSink(UserListEvent.RemoveFromSelection(userB))
             assertThat(awaitItem().selectedUsers).containsExactly(userA, userC)
-            initialState.eventSink(UserListEvents.RemoveFromSelection(userA))
+            initialState.eventSink(UserListEvent.RemoveFromSelection(userA))
             assertThat(awaitItem().selectedUsers).containsExactly(userC)
-            initialState.eventSink(UserListEvents.RemoveFromSelection(userC))
+            initialState.eventSink(UserListEvent.RemoveFromSelection(userC))
             assertThat(awaitItem().selectedUsers).isEmpty()
         }
     }

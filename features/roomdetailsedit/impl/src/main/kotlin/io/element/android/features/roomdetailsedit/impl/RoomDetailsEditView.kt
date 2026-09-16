@@ -185,7 +185,7 @@ fun RoomDetailsEditView(
 
 @PreviewsDayNight
 @Composable
-internal fun RoomDetailsEditViewPreview(@PreviewParameter(RoomDetailsEditStateProvider::class) state: RoomDetailsEditState) = ElementPreview {
+internal fun RoomDetailsEditViewPreview(@PreviewParameter(RoomDetailsEditStatePreviewParam::class) state: RoomDetailsEditState) = ElementPreview {
     RoomDetailsEditView(
         state = state,
         onDone = {},

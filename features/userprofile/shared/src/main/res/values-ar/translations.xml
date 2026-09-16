@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_dm_details_block_alert_action">"حظر"</string>
+  <string name="screen_dm_details_block_alert_description">"المستخدمون المحظورون لن يتمكّنوا من إرسال رسائل لك وكل رسائلهم ستُحجب. يمكنك إلغاء حظرهم متى ما أردت."</string>
+  <string name="screen_dm_details_block_user">"حظر المستخدم"</string>
+  <string name="screen_dm_details_unblock_alert_action">"إلغاء الحظر"</string>
+  <string name="screen_dm_details_unblock_alert_description">"ستتمكن من رؤية كل رسائلهم مجدّداً."</string>
+  <string name="screen_dm_details_unblock_user">"إلغاء حظر المستخدم"</string>
+  <string name="screen_room_member_details_block_alert_action">"حظر"</string>
+  <string name="screen_room_member_details_block_alert_description">"المستخدمون المحظورون لن يتمكّنوا من إرسال رسائل لك وكل رسائلهم ستُحجب. يمكنك إلغاء حظرهم متى ما أردت."</string>
+  <string name="screen_room_member_details_block_user">"حظر المستخدم"</string>
+  <string name="screen_room_member_details_title">"الملف الشخصي"</string>
+  <string name="screen_room_member_details_unblock_alert_action">"إلغاء الحظر"</string>
+  <string name="screen_room_member_details_unblock_alert_description">"ستتمكن من رؤية كل رسائلهم مجدّداً."</string>
+  <string name="screen_room_member_details_unblock_user">"إلغاء حظر المستخدم"</string>
+  <string name="screen_room_member_details_verify_button_subtitle">"استخدم تطبيق الويب للتحقق من هذا المستخدم."</string>
+  <string name="screen_room_member_details_verify_button_title">"تحقّق من %1$s"</string>
+  <string name="screen_start_chat_error_starting_chat">"حدث خطأ أثناء محاولة بدء محادثة"</string>
+</resources>

@@ -48,9 +48,14 @@ sealed interface RoomListFilter {
     ) : RoomListFilter
 
     /**
-     * A filter that matches rooms that are unread.
+     * A filter that matches rooms that has unread notifications.
      */
     data object Unread : RoomListFilter
+
+    /**
+     * A filter that matches rooms that have unread mentions.
+     */
+    data object Mentions : RoomListFilter
 
     /**
      * A filter that matches rooms that are marked as favorite.
@@ -61,6 +66,11 @@ sealed interface RoomListFilter {
      * A filter that matches rooms with Invited membership.
      */
     data object Invite : RoomListFilter
+
+    /**
+     * A filter that matches rooms with Joined membership.
+     */
+    data object Joined : RoomListFilter
 
     /**
      * A filter that matches either Group,People rooms or Space.

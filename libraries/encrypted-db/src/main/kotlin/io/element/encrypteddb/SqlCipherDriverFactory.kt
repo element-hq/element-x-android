@@ -51,12 +51,28 @@ class SqlCipherDriverFactory(
             is ClientSecret.Passphrase -> secret.formattedAsString().hexToByteArray()
         }
         val factory = SupportOpenHelperFactory(key)
-        return AndroidSqliteDriver(schema = schema, context = context, name = name, factory = factory, callback = object : AndroidSqliteDriver.Callback(
-                schema
-            ) {
-            override fun onUpgrade(db: SupportSQLiteDatabase, oldVersion: Int, newVersion: Int) {
-                onUpgradeCallback?.invoke(db, oldVersion, newVersion)
-            }
-        })
+        return AndroidSqliteDriver(
+            schema = schema,
+            context = context,
+            name = name,
+            factory = factory,
+            callback = MigrationCallback(schema, onUpgradeCallback),
+        )
+    }
+}
+
+/**
+ * Runs [onUpgradeCallback] and then the schema migrations themselves.
+ *
+ * @param schema The SQLite DB schema, whose migrations are applied by [AndroidSqliteDriver.Callback.onUpgrade].
+ * @param onUpgradeCallback Called before the migrations run, so that the database key can be replaced first.
+ */
+internal class MigrationCallback(
+    schema: SqlSchema<QueryResult.Value<Unit>>,
+    private val onUpgradeCallback: ((driver: SupportSQLiteDatabase, oldVersion: Int, newVersion: Int) -> Unit)?,
+) : AndroidSqliteDriver.Callback(schema) {
+    override fun onUpgrade(db: SupportSQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        onUpgradeCallback?.invoke(db, oldVersion, newVersion)
+        super.onUpgrade(db, oldVersion, newVersion)
     }
 }

@@ -20,7 +20,7 @@ import io.element.android.libraries.textcomposer.model.aTextEditorStateMarkdown
 @PreviewsDayNight
 @Composable
 internal fun MessagesViewWithIdentityChangePreview(
-    @PreviewParameter(IdentityChangeStateProvider::class) identityChangeState: IdentityChangeState
+    @PreviewParameter(IdentityChangeStatePreviewParam::class) identityChangeState: IdentityChangeState
 ) = ElementPreview {
     MessagesView(
         state = aMessagesState(

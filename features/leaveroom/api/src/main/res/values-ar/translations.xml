@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="leave_conversation_alert_subtitle">"هل أنت متأكد من رغبتك في مغادرة هذه المحادثة؟ هذه المحادثة ليست عامة ولن تتمكن من الانضمام إليها مرة أخرى دون دعوة."</string>
+  <string name="leave_room_alert_empty_subtitle">"أأنت متأكد من رغبتك بخروج الغرفة؟ أنت الشخص الوحيد هنا. وإذا ما غادرت فلن يعود أحد قادراً على الدخول في المستقبل، بما فيهم أنت."</string>
+  <string name="leave_room_alert_private_subtitle">"أأنت متأكد من رغبتك بخروج الغرفة؟ هذه الغرفة ليست عامة ولن تعود قادراً على الدخول مجدداً بلا دعوة"</string>
+  <string name="leave_room_alert_select_new_owner_action">"اختيار المالكين"</string>
+  <string name="leave_room_alert_select_new_owner_subtitle">"أنت المالك الوحيد لهذه الغرفة. يجب أن تنقل الملكية إلى شخص آخر قبل مغادرة الغرفة."</string>
+  <string name="leave_room_alert_select_new_owner_title">"نقل الملكية"</string>
+  <string name="leave_room_alert_subtitle">"أأنت متأكد من رغبتك بخروج الغرفة؟"</string>
+</resources>

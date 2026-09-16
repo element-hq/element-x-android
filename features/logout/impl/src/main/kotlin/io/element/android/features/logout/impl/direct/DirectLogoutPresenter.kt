@@ -16,7 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import dev.zacsweers.metro.Inject
-import io.element.android.features.logout.api.direct.DirectLogoutEvents
+import io.element.android.features.logout.api.direct.DirectLogoutEvent
 import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.logout.impl.tools.isBackingUp
 import io.element.android.libraries.architecture.AsyncAction
@@ -48,16 +48,16 @@ class DirectLogoutPresenter(
 
         val isLastDevice by encryptionService.isLastDevice.collectAsState()
 
-        fun handleEvent(event: DirectLogoutEvents) {
+        fun handleEvent(event: DirectLogoutEvent) {
             when (event) {
-                is DirectLogoutEvents.Logout -> {
+                is DirectLogoutEvent.Logout -> {
                     if (logoutAction.value.isConfirming() || event.ignoreSdkError) {
                         localCoroutineScope.logout(logoutAction, event.ignoreSdkError)
                     } else {
                         logoutAction.value = AsyncAction.ConfirmingNoParams
                     }
                 }
-                DirectLogoutEvents.CloseDialogs -> {
+                DirectLogoutEvent.CloseDialogs -> {
                     logoutAction.value = AsyncAction.Uninitialized
                 }
             }

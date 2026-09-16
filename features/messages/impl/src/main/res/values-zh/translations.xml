@@ -7,6 +7,11 @@
   <string name="crypto_event_authenticity_unknown_device">"由未知或已删除的设备加密。"</string>
   <string name="crypto_event_authenticity_unsigned_device">"由未经其所有者验证的设备加密。"</string>
   <string name="crypto_event_authenticity_unverified_identity">"由未经验证的用户加密。"</string>
+  <string name="error_sending_failure_invalid_mime_type">"无效的 MIME 类型：%s"</string>
+  <string name="error_sending_failure_missing_media_content">"媒体内容丢失"</string>
+  <string name="error_sending_failure_other">"错误详细信息：%s"</string>
+  <string name="error_sending_failure_sending_from_unverified_device">"由未经验证的设备发送"</string>
+  <string name="error_sending_failure_unknown">"未知错误"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"水平翻转图像"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"水平翻转"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"原始"</string>
@@ -31,7 +36,7 @@
   <string name="screen_media_upload_preview_title">"添加媒体"</string>
   <string name="screen_report_content_block_user">"屏蔽用户"</string>
   <string name="screen_report_content_block_user_hint">"请确认是否要隐藏该用户当前和未来的所有消息"</string>
-  <string name="screen_report_content_explanation">"此消息将举报给服务器管理员。他们无法读取任何加密消息。"</string>
+  <string name="screen_report_content_explanation">"此消息将举报给账户提供者。他们无法读取任何加密消息。"</string>
   <string name="screen_report_content_hint">"举报此内容的理由"</string>
   <string name="screen_room_attachment_source_camera">"相机"</string>
   <string name="screen_room_attachment_source_camera_photo">"拍摄照片"</string>

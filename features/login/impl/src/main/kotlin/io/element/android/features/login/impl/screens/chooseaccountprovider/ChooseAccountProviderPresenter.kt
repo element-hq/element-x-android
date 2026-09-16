@@ -14,14 +14,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
-import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.features.enterprise.api.EnterpriseService
-import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.login.LoginModeEvent
 import io.element.android.features.login.impl.login.LoginModeState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.core.uri.ensureProtocol
+import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
 import kotlinx.collections.immutable.toImmutableList
 
 @Inject
@@ -34,43 +32,33 @@ class ChooseAccountProviderPresenter(
         val loginModeState = loginModePresenter.present()
         var selectedAccountProvider: AccountProvider? by remember { mutableStateOf(null) }
 
-        fun handleEvent(event: ChooseAccountProviderEvents) {
+        fun handleEvent(event: ChooseAccountProviderEvent) {
             when (event) {
-                ChooseAccountProviderEvents.Continue -> {
+                ChooseAccountProviderEvent.Continue -> {
                     selectedAccountProvider?.let { provider ->
                         loginModeState.eventSink(
                             LoginModeEvent.Submit(
                                 isAccountCreation = false,
-                                homeserverUrl = provider.url,
+                                homeserverUrl = provider.serverNameOrBaseUrl(),
                                 resolvedHomeserverUrl = null,
                                 loginHint = null,
                             )
                         )
                     }
                 }
-                is ChooseAccountProviderEvents.SelectAccountProvider -> {
+                is ChooseAccountProviderEvent.SelectAccountProvider -> {
                     // Ensure that the user does not change the server during processing.
                     if (loginModeState.loginMode is AsyncData.Uninitialized) {
                         selectedAccountProvider = event.accountProvider
                     }
                 }
-                ChooseAccountProviderEvents.ClearError -> loginModeState.eventSink(LoginModeEvent.ClearError)
+                ChooseAccountProviderEvent.ClearError -> loginModeState.eventSink(LoginModeEvent.ClearError)
             }
         }
 
         val staticAccountProviderList = remember {
-            // The list cannot contains ANY_ACCOUNT_PROVIDER ("*") and cannot be empty at this point
-            enterpriseService.defaultHomeserverList()
-                .map { it.ensureProtocol() }
-                .map { url ->
-                    AccountProvider(
-                        url = url,
-                        subtitle = null,
-                        isPublic = url == AuthenticationConfig.MATRIX_ORG_URL,
-                        isMatrixOrg = url == AuthenticationConfig.MATRIX_ORG_URL,
-                    )
-                }
-                .toImmutableList()
+            // The list cannot be empty at this point
+            enterpriseService.accountProviderAllowList().toImmutableList()
         }
 
         return ChooseAccountProviderState(

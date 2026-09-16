@@ -155,7 +155,7 @@ fun ThreadsListView(
         }
 
         ScrollHelper(lazyListState) {
-            state.eventSink(ThreadsListEvents.Paginate)
+            state.eventSink(ThreadsListEvent.Paginate)
         }
     }
 }

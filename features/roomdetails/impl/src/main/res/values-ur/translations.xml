@@ -83,8 +83,6 @@
   <string name="screen_room_notification_settings_error_restoring_default">"متعین وضع کو بحال کرنے میں ناکام، برائے مہربانی دوبارہ کوشش کریں۔"</string>
   <string name="screen_room_notification_settings_error_setting_mode">"وضع ترتیب دینے میں ناکام، برائے مہربانی دوبارہ کوشش کریں۔"</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"آپ کا منزلی خادم مرموز کردہ کمروں میں اس اختیار کی حمایت نہیں کرتا ہے، آپ کو اس کمرے میں مطلع کیا جائے گا۔"</string>
-  <string name="screen_room_notification_settings_mode_all_messages">"تمام پیغامات"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"صرف تذکرے اور کلیدی الفاظ"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"اس کمرے میں، مجھے مطلع کریں برائے"</string>
   <string name="screen_room_roles_and_permissions_admins">"منتظمین"</string>
   <string name="screen_room_roles_and_permissions_change_my_role">"میرا کردار تبدیل کریں"</string>

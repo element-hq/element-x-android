@@ -92,7 +92,7 @@ class MediaViewerNode(
         is MediaViewerEntryPoint.Params.RoomMedia -> {
             val eventId = inputs.eventId
             if (eventId == null) {
-                // Should not happen
+                // Local echo, the viewer will not be focused on the item
                 timelineMediaGalleryDataSource
             } else {
                 // Can we use a specific timeline?

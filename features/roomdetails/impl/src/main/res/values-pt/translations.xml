@@ -109,8 +109,7 @@
   <string name="screen_room_notification_settings_error_restoring_default">"Falha ao restaurar o modo predefinido, tenta novamente."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Falha ao definir o modo, tenta novamente."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"O teu servidor não suporta esta opção em salas cifradas, pelo que não serás notificado nesta sala."</string>
-  <string name="screen_room_notification_settings_mode_all_messages">"Qualquer mensagem"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Menções ou palavras-chave"</string>
+  <string name="screen_room_notification_settings_mode_all_messages">"Todas as mensagens"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Nesta sala, notifica-me se"</string>
   <string name="screen_room_roles_and_permissions_admins">"Administradores"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"Administradores e donos"</string>

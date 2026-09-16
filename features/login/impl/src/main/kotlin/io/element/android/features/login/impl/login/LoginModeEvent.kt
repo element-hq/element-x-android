@@ -7,12 +7,18 @@
 
 package io.element.android.features.login.impl.login
 
+import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
+
 sealed interface LoginModeEvent {
     data class Submit(
         val isAccountCreation: Boolean,
         val homeserverUrl: String,
         val resolvedHomeserverUrl: String?,
         val loginHint: String?,
+        // When the caller has already configured the homeserver (e.g. the account provider screen validated
+        // it first), these are its resolved details. When set, login reuses them instead of calling
+        // setHomeserver again, avoiding a redundant network round-trip.
+        val preConfiguredDetails: MatrixHomeServerDetails? = null,
     ) : LoginModeEvent
 
     data object ClearError : LoginModeEvent

@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -84,6 +85,7 @@ internal fun MessagesViewTopBar(
             val roundedCornerShape = RoundedCornerShape(8.dp)
             Row(
                 modifier = Modifier
+                    .heightIn(min = 48.dp)
                     .clip(roundedCornerShape)
                     .clickable { onRoomDetailsClick() }
                     .semantics { heading() },

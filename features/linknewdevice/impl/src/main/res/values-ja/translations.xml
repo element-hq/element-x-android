@@ -5,6 +5,7 @@
   <string name="screen_link_new_device_desktop_step3">"この端末でQRコードを読み取る"</string>
   <string name="screen_link_new_device_desktop_submit">"読み取る"</string>
   <string name="screen_link_new_device_desktop_title">"%1$s をコンピュータで開き、QRコードを表示してください"</string>
+  <string name="screen_link_new_device_desktop_warning">"あなた自身の端末においてのみ、以上の手順にならってQRコードを読み取ってください。他者から送られたコードは絶対に読み取らないでください。"</string>
   <string name="screen_link_new_device_enter_number_error_numbers_do_not_match">"数字が一致しません"</string>
   <string name="screen_link_new_device_enter_number_notice">"2桁の数字を入力してください"</string>
   <string name="screen_link_new_device_enter_number_subtitle">"他の端末との接続が安全であることを確認します。"</string>

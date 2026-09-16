@@ -76,7 +76,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MessageConten
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
-import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetailsProvider
+import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetailsPreviewParam
 import io.element.android.libraries.matrix.ui.messages.reply.aProfileDetailsReady
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
@@ -245,6 +245,20 @@ fun TextComposer(
         canSendTextMessage,
     ) {
         when {
+            composerMode.isEditing -> EndButtonParams(
+                endButtonContentDescriptionResId = CommonStrings.action_send_edited_message,
+                endButtonClick = {
+                    if (canSendTextMessage) {
+                        onSendMessage()
+                    }
+                },
+                endButtonContent = @Composable {
+                    SendButtonIcon(
+                        canSendMessage = canSendTextMessage,
+                        isEditing = true,
+                    )
+                },
+            )
             !canSendTextMessage ->
                 when (voiceMessageState) {
                     VoiceMessageState.Idle -> EndButtonParams(
@@ -296,18 +310,6 @@ fun TextComposer(
                         )
                     }
                 }
-            composerMode.isEditing -> EndButtonParams(
-                endButtonContentDescriptionResId = CommonStrings.action_send_edited_message,
-                endButtonClick = {
-                    onSendMessage()
-                },
-                endButtonContent = @Composable {
-                    SendButtonIcon(
-                        canSendMessage = true,
-                        isEditing = true,
-                    )
-                },
-            )
             else -> EndButtonParams(
                 endButtonContentDescriptionResId = CommonStrings.action_send_message,
                 endButtonClick = {
@@ -859,7 +861,7 @@ internal fun MarkdownTextComposerEditPreview() = ElementPreview {
 
 @PreviewsDayNight
 @Composable
-internal fun TextComposerReplyPreview(@PreviewParameter(InReplyToDetailsProvider::class) inReplyToDetails: InReplyToDetails) = ElementPreview {
+internal fun TextComposerReplyPreview(@PreviewParameter(InReplyToDetailsPreviewParam::class) inReplyToDetails: InReplyToDetails) = ElementPreview {
     PreviewColumn(
         items = aTextEditorStateRichList()
     ) { textEditorState ->
@@ -883,7 +885,7 @@ internal fun TextComposerReplyPreview(@PreviewParameter(InReplyToDetailsProvider
     heightDp = 800,
 )
 @Composable
-internal fun TextComposerReplyNotEncryptedPreview(@PreviewParameter(InReplyToDetailsProvider::class) inReplyToDetails: InReplyToDetails) = ElementPreview {
+internal fun TextComposerReplyNotEncryptedPreview(@PreviewParameter(InReplyToDetailsPreviewParam::class) inReplyToDetails: InReplyToDetails) = ElementPreview {
     PreviewColumn(
         items = aTextEditorStateRichList(isRoomEncrypted = false)
     ) { textEditorState ->

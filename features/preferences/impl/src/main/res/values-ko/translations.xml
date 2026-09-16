@@ -89,7 +89,7 @@
   <string name="screen_notification_settings_sound_custom_sound_button_title">"소리 사용자 지정"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"파일 삭제 오류"</string>
   <string name="screen_notification_settings_sound_element_default">"Element 기본 설정"</string>
-  <string name="screen_notification_settings_sound_element_fade">"엘리먼트 페이드"</string>
+  <string name="screen_notification_settings_sound_element_fade">"Element Fade"</string>
   <string name="screen_notification_settings_sound_import_sound_error_title">"파일 가져오기 오류"</string>
   <string name="screen_notification_settings_sound_preview_sound_error_title">"알림음 미리듣기 문제 발생"</string>
   <string name="screen_notification_settings_sound_section_title">"소리"</string>

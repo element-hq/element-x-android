@@ -28,7 +28,7 @@ data class UserProfileState(
     val canCall: Boolean,
     val snackbarMessage: SnackbarMessage?,
     val displayedStatus: DisplayedStatus?,
-    val eventSink: (UserProfileEvents) -> Unit
+    val eventSink: (UserProfileEvent) -> Unit
 ) {
     enum class ConfirmationDialog {
         Block,

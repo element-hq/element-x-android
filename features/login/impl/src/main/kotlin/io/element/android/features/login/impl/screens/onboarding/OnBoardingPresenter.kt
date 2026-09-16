@@ -22,7 +22,6 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.appconfig.OnBoardingConfig
 import io.element.android.features.enterprise.api.EnterpriseService
-import io.element.android.features.enterprise.api.canConnectToAnyHomeserver
 import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.login.LoginModeEvent
@@ -31,9 +30,11 @@ import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
+import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.ui.utils.MultipleTapToUnlock
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AssistedInject
 class OnBoardingPresenter(
@@ -59,27 +60,35 @@ class OnBoardingPresenter(
     @Composable
     override fun present(): OnBoardingState {
         val localCoroutineScope = rememberCoroutineScope()
-        val forcedAccountProvider = remember {
-            // If defaultHomeserverList() returns a singleton list, this is the default account provider.
-            // In this case, the user can sign in using this homeserver, or use QrCode login
-            enterpriseService.defaultHomeserverList().singleOrNull()
+        val canConnectToAnyAccountProvider = remember {
+            enterpriseService.canConnectToAnyAccountProvider()
         }
-        val canConnectToAnyHomeserver = remember {
-            enterpriseService.canConnectToAnyHomeserver()
+        val forcedAccountProvider = remember {
+            // If accountProviderAllowList() returns a singleton list, and the user is not free to use another
+            // account provider, this is the default account provider.
+            // In this case, the user can sign in using this homeserver, or use QrCode login
+            if (canConnectToAnyAccountProvider) {
+                null
+            } else {
+                enterpriseService.accountProviderAllowList().singleOrNull()
+            }
         }
         val mustChooseAccountProvider = remember {
-            !canConnectToAnyHomeserver && enterpriseService.defaultHomeserverList().size > 1
+            !canConnectToAnyAccountProvider && enterpriseService.accountProviderAllowList().size > 1
         }
-        val linkAccountProvider by produceState<String?>(initialValue = null) {
+        val linkAccountProvider by produceState<AccountProvider?>(initialValue = null) {
             // Account provider from the link, if allowed by the enterprise service
-            value = params.accountProvider?.takeIf {
-                try {
-                    defaultAccountProviderAccessControl.assertIsAllowedToConnectToAccountProvider(it, it)
-                    true
-                } catch (_: Exception) {
-                    false
+            value = params.accountProvider
+                ?.let { AccountProvider.Generic(it) }
+                ?.takeIf {
+                    try {
+                        defaultAccountProviderAccessControl.assertIsAllowedToConnectToAccountProvider(it)
+                        true
+                    } catch (e: Exception) {
+                        Timber.e(e, "Failed to check account provider from link, assuming not allowed")
+                        false
+                    }
                 }
-            }
         }
         val defaultAccountProvider = remember(linkAccountProvider) {
             // If there is a forced account provider, this is the default account provider
@@ -101,22 +110,22 @@ class OnBoardingPresenter(
 
         val loginModeState = loginModePresenter.present()
 
-        fun handleEvent(event: OnBoardingEvents) {
+        fun handleEvent(event: OnBoardingEvent) {
             when (event) {
-                is OnBoardingEvents.OnSignIn -> localCoroutineScope.launch {
+                is OnBoardingEvent.OnSignIn -> localCoroutineScope.launch {
                     // Ensure that the current account provider is set
-                    accountProviderDataSource.setUrl(event.defaultAccountProvider)
+                    accountProviderDataSource.setAccountProvider(event.defaultAccountProvider)
                     loginModeState.eventSink(
                         LoginModeEvent.Submit(
                             isAccountCreation = false,
-                            homeserverUrl = event.defaultAccountProvider,
+                            homeserverUrl = event.defaultAccountProvider.serverNameOrBaseUrl(),
                             resolvedHomeserverUrl = null,
                             loginHint = params.loginHint?.takeIf { forcedAccountProvider == null },
                         )
                     )
                 }
-                OnBoardingEvents.ClearError -> loginModeState.eventSink(LoginModeEvent.ClearError)
-                OnBoardingEvents.OnVersionClick -> {
+                OnBoardingEvent.ClearError -> loginModeState.eventSink(LoginModeEvent.ClearError)
+                OnBoardingEvent.OnVersionClick -> {
                     if (canReportBug) {
                         if (multipleTapToUnlock.unlock(localCoroutineScope)) {
                             showReportBug = true
@@ -134,7 +143,7 @@ class OnBoardingPresenter(
             defaultAccountProvider = defaultAccountProvider,
             mustChooseAccountProvider = mustChooseAccountProvider,
             canLoginWithQrCode = canLoginWithQrCode,
-            canCreateAccount = defaultAccountProvider == null && canConnectToAnyHomeserver && OnBoardingConfig.CAN_CREATE_ACCOUNT,
+            canCreateAccount = defaultAccountProvider == null && canConnectToAnyAccountProvider && OnBoardingConfig.CAN_CREATE_ACCOUNT,
             canReportBug = canReportBug && showReportBug,
             loginModeState = loginModeState,
             version = buildMeta.versionName,

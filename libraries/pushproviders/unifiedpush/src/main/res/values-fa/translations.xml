@@ -2,5 +2,9 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="troubleshoot_notifications_test_unified_push_description">"اطمینان از در دسترس بودن توزیعگرهای ارسال یکپارچه."</string>
   <string name="troubleshoot_notifications_test_unified_push_failure">"هیچ توزیعگر ارسال یکپارچه‌ای پیدا نشد."</string>
+  <plurals name="troubleshoot_notifications_test_unified_push_success">
+    <item quantity="one">"توزیع‌کننده‌ی %1$d پیدا شد: %2$s."</item>
+    <item quantity="other">"توزیع‌کنندگان %1$d موارد زیر را یافتند: %2$s."</item>
+  </plurals>
   <string name="troubleshoot_notifications_test_unified_push_title">"بررسی ارسال یکپارچه"</string>
 </resources>

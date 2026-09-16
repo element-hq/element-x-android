@@ -14,8 +14,14 @@
   <string name="screen_change_account_provider_subtitle">"استفاده از فراهم کنندهٔ حسابی دیگر چون کارساز خصوصی خوتان یا حسابی کاری."</string>
   <string name="screen_change_account_provider_title">"تغییر فراهم کنندهٔ حساب"</string>
   <string name="screen_change_server_error_element_pro_required_action_android">"پلی گپگل"</string>
+  <string name="screen_change_server_error_element_pro_required_message">"برنامه Element Pro برای %1$s مورد نیاز است. لطفاً آن را از فروشگاه دانلود کنید."</string>
+  <string name="screen_change_server_error_element_pro_required_title">"المنت پرو مورد نیاز است"</string>
   <string name="screen_change_server_error_invalid_homeserver">"ما نتوانستیم به این کارساز خانگی برسیم. لطفاً بررسی کنید که URL کارساز اصلی را به درستی وارد کرده اید. اگر URL صحیح است، برای کمک بیشتر با مدیر کارساز خانگی خود تماس بگیرید."</string>
   <string name="screen_change_server_error_invalid_well_known">"سرور به دلیل مشکلی در فایل .well-known در دسترس نیست: %1$s"</string>
+  <string name="screen_change_server_error_no_sliding_sync_message">"ارائه دهنده حساب انتخاب شده از همگام سازی کشویی پشتیبانی نمی کند. برای استفاده از %1$s، ارتقاء سرور لازم است."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver">"%1$s اجازه اتصال به %2$s را ندارد."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_content">"این برنامه طوری پیکربندی شده است که اجازه موارد زیر را بدهد: %1$s."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_title">"ارائه دهنده حساب %1$s مجاز نیست."</string>
   <string name="screen_change_server_form_header">"نشانی کارساز خانگی"</string>
   <string name="screen_change_server_form_notice">"ورود نشانی دامنه."</string>
   <string name="screen_change_server_subtitle">"نشانی کارسازتان چیست؟"</string>
@@ -30,11 +36,20 @@
   <string name="screen_login_subtitle">"ماتریکس شبکه‌ای بار برای ارتباطات نامتمرکز و امن است."</string>
   <string name="screen_login_title">"خوش برگشتید!"</string>
   <string name="screen_login_title_with_homeserver">"ورود به %1$s"</string>
+  <string name="screen_missing_key_backup_open_element_classic">"باز کردن Element کلاسیک"</string>
+  <string name="screen_missing_key_backup_step_1">"Element Classic را روی دستگاه خود باز کنید"</string>
+  <string name="screen_missing_key_backup_step_2_android">"به تنظیمات &gt; امنیت و حریم خصوصی بروید"</string>
+  <string name="screen_missing_key_backup_step_3_android">"در مدیریت کلیدهای رمزنگاری، بازیابی پیام‌های رمزگذاری‌شده را انتخاب کنید."</string>
+  <string name="screen_missing_key_backup_step_4">"برای فعال کردن فضای ذخیره‌سازی کلید، دستورالعمل‌ها را دنبال کنید"</string>
+  <string name="screen_missing_key_backup_step_5">"به %1$s برگردید"</string>
+  <string name="screen_missing_key_backup_title">"قبل از ادامه به %1$s، فضای ذخیره‌سازی کلید خود را فعال کنید"</string>
   <string name="screen_onboarding_app_version">"نگارش %1$s"</string>
+  <string name="screen_onboarding_checking_account">"درحال بررسی حساب…"</string>
   <string name="screen_onboarding_sign_in_manually">"ورود دستی"</string>
   <string name="screen_onboarding_sign_in_to">"ورود به %1$s"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"ورود با کد QR"</string>
   <string name="screen_onboarding_sign_up">"ایجاد حساب"</string>
+  <string name="screen_onboarding_welcome_back">"خوش برگشتید"</string>
   <string name="screen_onboarding_welcome_message">"به سریع‌ترین %1$s خوش آمدید. بازطرّاحی شده برای سرعت و سادگی."</string>
   <string name="screen_onboarding_welcome_subtitle">"به %1$s خوش آمدید. بازطرّاحی شده برای سرعت و سادگی."</string>
   <string name="screen_onboarding_welcome_title">"در المنتتان باشید"</string>
@@ -53,6 +68,8 @@
   <string name="screen_qr_code_login_error_cancelled_title">"درخواست ورد لغو شد"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"ورود به دست افزارهٔ دیگر رد شد."</string>
   <string name="screen_qr_code_login_error_declined_title">"ورود رد شد"</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_subtitle">"لازم نیست کار دیگری انجام دهید."</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_title">"دستگاه دیگر شما قبلاً وارد سیستم شده است"</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"ورود منقضی شد. لطفاً دوباره تلاش کنید."</string>
   <string name="screen_qr_code_login_error_expired_title">"ورود در زمان معیّن کامل نشد"</string>
   <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"افزارهٔ دیگرتان از ورود به %s با کد پاس پشتیبانی نمی‌کند.
@@ -67,6 +84,7 @@
   <string name="screen_qr_code_login_initial_state_item_3">"گزینش %1$s"</string>
   <string name="screen_qr_code_login_initial_state_item_3_action">"«پیوند افزارهٔ جدید»"</string>
   <string name="screen_qr_code_login_initial_state_item_4">"پویش کد پاس با این افزاره"</string>
+  <string name="screen_qr_code_login_initial_state_subtitle">"فقط در صورتی موجود است که ارائه دهنده حساب شما از آن پشتیبانی کند."</string>
   <string name="screen_qr_code_login_initial_state_title">"گشودن %1$s روی افزاره‌ای دیگر برای گرفتن کد پاس"</string>
   <string name="screen_qr_code_login_invalid_scan_state_description">"استفاده از کد پاس نشان داده روی افزارهٔ دیگر."</string>
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"تلاش دوباره"</string>
@@ -85,5 +103,6 @@
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"ماتریکس شبکه‌ای بار برای ارتباطات نامتمرکز و امن است."</string>
   <string name="screen_server_confirmation_message_register">"جایی که گفت‌وگوهایتان خواهند زیست — درست مثل استفاده‌تان از فراهم کنندهٔ رایانامه‌ای برای نگه داشتن رایانامه‌هایتان."</string>
   <string name="screen_server_confirmation_title_login">"دارید به %1$s وارد می‌شوید"</string>
+  <string name="screen_server_confirmation_title_picker_mode">"ارائه دهنده حساب را انتخاب کنید"</string>
   <string name="screen_server_confirmation_title_register">"دارید روی %1$s حساب می‌سازید"</string>
 </resources>

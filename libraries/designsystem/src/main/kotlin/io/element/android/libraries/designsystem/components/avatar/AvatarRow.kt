@@ -24,7 +24,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.components.avatar.internal.OverlapRatioProvider
+import io.element.android.libraries.designsystem.components.avatar.internal.OverlapRatioPreviewParam
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toPx
@@ -110,7 +110,7 @@ fun AvatarRow(
 
 @Composable
 @PreviewsDayNight
-internal fun AvatarRowPreview(@PreviewParameter(OverlapRatioProvider::class) overlapRatio: Float) {
+internal fun AvatarRowPreview(@PreviewParameter(OverlapRatioPreviewParam::class) overlapRatio: Float) {
     ElementPreview {
         ContentToPreview(overlapRatio)
     }
@@ -118,7 +118,7 @@ internal fun AvatarRowPreview(@PreviewParameter(OverlapRatioProvider::class) ove
 
 @Composable
 @PreviewsDayNight
-internal fun AvatarRowLastOnTopPreview(@PreviewParameter(OverlapRatioProvider::class) overlapRatio: Float) {
+internal fun AvatarRowLastOnTopPreview(@PreviewParameter(OverlapRatioPreviewParam::class) overlapRatio: Float) {
     ElementPreview {
         ContentToPreview(
             overlapRatio = overlapRatio,
@@ -129,7 +129,7 @@ internal fun AvatarRowLastOnTopPreview(@PreviewParameter(OverlapRatioProvider::c
 
 @Composable
 @PreviewsDayNight
-internal fun AvatarRowRtlPreview(@PreviewParameter(OverlapRatioProvider::class) overlapRatio: Float) {
+internal fun AvatarRowRtlPreview(@PreviewParameter(OverlapRatioPreviewParam::class) overlapRatio: Float) {
     CompositionLocalProvider(
         LocalLayoutDirection provides LayoutDirection.Rtl,
     ) {
@@ -141,7 +141,7 @@ internal fun AvatarRowRtlPreview(@PreviewParameter(OverlapRatioProvider::class) 
 
 @Composable
 @PreviewsDayNight
-internal fun AvatarRowLastOnTopRtlPreview(@PreviewParameter(OverlapRatioProvider::class) overlapRatio: Float) {
+internal fun AvatarRowLastOnTopRtlPreview(@PreviewParameter(OverlapRatioPreviewParam::class) overlapRatio: Float) {
     CompositionLocalProvider(
         LocalLayoutDirection provides LayoutDirection.Rtl,
     ) {

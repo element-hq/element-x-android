@@ -51,6 +51,7 @@ data class EventTimelineItem(
         is PollContent -> content.threadInfo
         is StickerContent -> content.threadInfo
         is UnableToDecryptContent -> content.threadInfo
+        is RedactedContent -> content.threadInfo
         else -> null
     }
 

@@ -16,7 +16,7 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import io.element.android.features.login.impl.accountprovider.anAccountProvider
+import io.element.android.features.login.impl.accountprovider.anAccountProviderManaged
 import io.element.android.features.login.impl.login.aLoginModeState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.auth.OAuthDetails
@@ -35,7 +35,7 @@ import org.robolectric.annotation.Config
 class ChooseAccountProviderViewTest : RobolectricTest() {
     @Test
     fun `clicking on back invokes the expected callback`() = runAndroidComposeUiTest {
-        val eventSink = EventsRecorder<ChooseAccountProviderEvents>(expectEvents = false)
+        val eventSink = EventsRecorder<ChooseAccountProviderEvent>(expectEvents = false)
         ensureCalledOnce {
             setChooseAccountProviderView(
                 state = aChooseAccountProviderState(
@@ -50,24 +50,24 @@ class ChooseAccountProviderViewTest : RobolectricTest() {
     @Config(qualifiers = "h1024dp")
     @Test
     fun `selecting an account provider emits the the expected event`() = runAndroidComposeUiTest {
-        val eventSink = EventsRecorder<ChooseAccountProviderEvents>()
+        val eventSink = EventsRecorder<ChooseAccountProviderEvent>()
         setChooseAccountProviderView(
             state = aChooseAccountProviderState(
                 accountProviders = listOf(
                     ChooseAccountProviderPresenterTest.accountProvider1,
                     ChooseAccountProviderPresenterTest.accountProvider2,
                 ),
-                selectedAccountProvider = anAccountProvider(),
+                selectedAccountProvider = anAccountProviderManaged(),
                 eventSink = eventSink,
             ),
         )
-        onNodeWithText(ChooseAccountProviderPresenterTest.accountProvider1.title).performClick()
-        eventSink.assertSingle(ChooseAccountProviderEvents.SelectAccountProvider(ChooseAccountProviderPresenterTest.accountProvider1))
+        onNodeWithText(ChooseAccountProviderPresenterTest.accountProvider1.friendlyServerName()).performClick()
+        eventSink.assertSingle(ChooseAccountProviderEvent.SelectAccountProvider(ChooseAccountProviderPresenterTest.accountProvider1))
     }
 
     @Test
     fun `when error is displayed - closing the dialog emits the expected event`() = runAndroidComposeUiTest {
-        val eventSink = EventsRecorder<ChooseAccountProviderEvents>()
+        val eventSink = EventsRecorder<ChooseAccountProviderEvent>()
         setChooseAccountProviderView(
             state = aChooseAccountProviderState(
                 loginModeState = aLoginModeState(loginMode = AsyncData.Failure(AN_EXCEPTION)),
@@ -75,7 +75,7 @@ class ChooseAccountProviderViewTest : RobolectricTest() {
             ),
         )
         clickOn(CommonStrings.action_ok)
-        eventSink.assertSingle(ChooseAccountProviderEvents.ClearError)
+        eventSink.assertSingle(ChooseAccountProviderEvent.ClearError)
     }
 
     private fun AndroidComposeUiTest<ComponentActivity>.setChooseAccountProviderView(

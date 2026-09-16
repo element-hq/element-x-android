@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="call_foreground_service_channel_title_android">"مكالمة جارية"</string>
+  <string name="call_foreground_service_message_android">"اضغط للعودة إلى المكالمة"</string>
+  <string name="call_foreground_service_title_android">"☎️ الاتصال يتمّ"</string>
+  <string name="call_invalid_audio_device_bluetooth_devices_disabled">"لا يدعم Element Call استخدام أجهزة الصوت عبر Bluetooth في إصدار Android هذا. يرجى اختيار جهاز صوت آخر."</string>
+  <string name="screen_incoming_call_subtitle_android">"مكالمة Element Call واردة"</string>
+</resources>

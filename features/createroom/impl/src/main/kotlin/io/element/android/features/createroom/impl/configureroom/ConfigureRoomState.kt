@@ -26,7 +26,7 @@ data class ConfigureRoomState(
     val homeserverName: String,
     val availableJoinRules: ImmutableList<JoinRuleItem>,
     val spaces: ImmutableList<SpaceRoom>,
-    val eventSink: (ConfigureRoomEvents) -> Unit
+    val eventSink: (ConfigureRoomEvent) -> Unit
 ) {
     val isValid: Boolean = config.roomName?.isNotEmpty() == true &&
         (config.visibilityState is RoomVisibilityState.Private || roomAddressValidity == RoomAddressValidity.Valid) &&

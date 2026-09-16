@@ -160,7 +160,7 @@ internal fun BigIconPreview() = ElementPreview {
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        items(BigIconStyleProvider().values.toList()) { style ->
+        items(BigIconStylePreviewParam().values.toList()) { style ->
             Box(
                 contentAlignment = Alignment.Center
             ) {
@@ -170,7 +170,7 @@ internal fun BigIconPreview() = ElementPreview {
     }
 }
 
-internal class BigIconStyleProvider : PreviewParameterProvider<BigIcon.Style> {
+internal class BigIconStylePreviewParam : PreviewParameterProvider<BigIcon.Style> {
     override val values: Sequence<BigIcon.Style>
         get() = sequenceOf(
             BigIcon.Style.Default(Icons.Filled.CatchingPokemon),

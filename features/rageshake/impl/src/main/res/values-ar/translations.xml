@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_attach_screenshot">"إرفاق لقطة شاشة"</string>
+  <string name="screen_bug_report_contact_me">"لا مانع من التواصل معي إذا كان عندكم أي أسئلة إضافية."</string>
+  <string name="screen_bug_report_contact_me_title">"تواصل معي"</string>
+  <string name="screen_bug_report_edit_screenshot">"تعديل لقطة الشاشة"</string>
+  <string name="screen_bug_report_editor_description">"صِف مشكلتك رجاءً. ما الذي قمت به؟ ما كنت تتوقع أن يحصل؟ وما الذي حصل فعلياً. زوّدنا بأكبر قدر من المعلومات رجاءً."</string>
+  <string name="screen_bug_report_editor_placeholder">"صِف المشكلة…"</string>
+  <string name="screen_bug_report_editor_supporting">"إن كان ممكناً فاكتب الوصف بالإنجليزية."</string>
+  <string name="screen_bug_report_error_description_too_short">"الوصف قصير جدًا، يُرجى تقديم مزيد من التفاصيل حول ما حدث. شكرًا!"</string>
+  <string name="screen_bug_report_github_issue_description">"يمكنك إدخال رقم مشكلة مرتبطة على GitHub، إن وجدت."</string>
+  <string name="screen_bug_report_github_issue_label">"مشكلة على GitHub"</string>
+  <string name="screen_bug_report_include_crash_logs">"أرسل الـcrash logs"</string>
+  <string name="screen_bug_report_include_logs">"السماح بالـLogs"</string>
+  <string name="screen_bug_report_include_logs_error">"سجلاتك كبيرة جدًا، لذلك لا يمكن تضمينها في هذا البلاغ. يرجى إرسالها إلينا بطريقة أخرى."</string>
+  <string name="screen_bug_report_include_screenshot">"إرسال لقطة شاشة"</string>
+  <string name="screen_bug_report_logs_description">"سيتمّ تضمين السجلّات (logs) مع رسالتك لنتأكد من أن كل شيء يشتغل كما يجب. لكي ترسل الرسالة بلا سجلّات فأطفئ هذا الخيار."</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"%1$s أُغلِق قسرياً في آخر مرة استخدمه. أتودّ مشاركة بلاغ إغلاق قسري معنا؟"</string>
+  <string name="screen_bug_report_send_notification_settings_description">"إذا كنت تواجه مشكلات في الإشعارات، يمكن أن يساعد رفع قواعد الإشعارات الفورية في تحديد السبب الجذري. لاحظ أن هذه القواعد قد تحتوي على معلومات خاصة، مثل اسم العرض الخاص بك أو الكلمات المفتاحية التي تريد تلقي إشعارات عنها."</string>
+  <string name="screen_bug_report_send_notification_settings_title">"إرسال إعدادات الإشعارات"</string>
+  <string name="screen_bug_report_view_logs">"عرض السجلات"</string>
+</resources>
