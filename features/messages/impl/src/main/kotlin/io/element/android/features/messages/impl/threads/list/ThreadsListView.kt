@@ -396,7 +396,7 @@ fun aThreadsListState(
     isRoomTombstoned: Boolean = false,
     heroes: ImmutableList<AvatarData> = persistentListOf(),
     threads: ImmutableList<ThreadListRowItem> = List(10) { aThreadListRowItem(threadId = ThreadId("\$thread-$it")) }.toImmutableList(),
-    eventSink: (ThreadsListEvents) -> Unit = {},
+    eventSink: (ThreadsListEvent) -> Unit = {},
 ) = ThreadsListState(
     roomId = roomId,
     roomName = roomName,
