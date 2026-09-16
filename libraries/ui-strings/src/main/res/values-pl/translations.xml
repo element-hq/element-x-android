@@ -564,10 +564,6 @@ Czy na pewno chcesz kontynuować?"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Jedno lub więcej z Twoich urządzeń jest niezweryfikowanych. Wyślij wiadomość mimo to lub anuluj i spróbuj ponownie po zweryfikowaniu wszystkich swoich urządzeń."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Twoja wiadomość nie została wysłana, ponieważ nie zweryfikowałeś jednego lub więcej swoich urządzeń."</string>
   <string name="screen_room_change_role_administrators_or_owners_title">"Edytuj administratorów lub właścicieli"</string>
-  <string name="screen_room_confirm_removal_message">"Czy na pewno chcesz usunąć wiadomość?"</string>
-  <string name="screen_room_confirm_removal_reason_label">"Powód (opcjonalne)"</string>
-  <string name="screen_room_confirm_removal_reason_placeholder">"Powód…"</string>
-  <string name="screen_room_confirm_removal_title">"Potwierdź usunięcie"</string>
   <string name="screen_room_error_failed_processing_media">"Przetwarzanie multimediów do przesłania nie powiodło się, spróbuj ponownie."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nie można pobrać danych użytkownika"</string>
   <string name="screen_room_event_pill">"Wiadomość w %1$s"</string>

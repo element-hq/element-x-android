@@ -550,10 +550,6 @@ Are you sure you want to continue?"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"One or more of your devices are unverified. You can send the message anyway, or you can cancel for now and try again later after you have verified all of your devices."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Your message was not sent because you have not verified one or more of your devices"</string>
   <string name="screen_room_change_role_administrators_or_owners_title">"Edit Admins or Owners"</string>
-  <string name="screen_room_confirm_removal_message">"Are you sure you wish to remove this message?"</string>
-  <string name="screen_room_confirm_removal_reason_label">"Reason (optional)"</string>
-  <string name="screen_room_confirm_removal_reason_placeholder">"Enter…"</string>
-  <string name="screen_room_confirm_removal_title">"Confirm removal"</string>
   <string name="screen_room_error_failed_processing_media">"Failed processing media to upload, please try again."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Could not retrieve user details"</string>
   <string name="screen_room_event_pill">"Message in %1$s"</string>
