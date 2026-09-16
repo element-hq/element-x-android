@@ -34,6 +34,8 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.RtcNotificationState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemProfileChangeContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRoomMembershipContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRtcNotificationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
@@ -44,6 +46,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -73,6 +76,8 @@ internal fun TimelineItemRow(
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
     onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
+    onMemberClick: (UserId) -> Unit = {},
+    onRoomStateClick: () -> Unit = {},
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
     eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit =
@@ -112,12 +117,28 @@ internal fun TimelineItemRow(
                 )
             }
             is TimelineItem.Event -> {
+                val onStateEventClick: () -> Unit = when {
+                    timelineItem.content is TimelineItemRoomMembershipContent -> {
+                        val targetUserId = timelineItem.content.targetUserId
+                        { onMemberClick(targetUserId ?: timelineItem.senderId) }
+                    }
+                    timelineItem.content is TimelineItemProfileChangeContent -> {
+                        { onMemberClick(timelineItem.senderId) }
+                    }
+                    timelineItem.content is TimelineItemStateContent ||
+                    timelineItem.content is TimelineItemLegacyCallInviteContent -> {
+                        { onRoomStateClick() }
+                    }
+                    else -> {
+                        { onContentClick(timelineItem) }
+                    }
+                }
                 when (timelineItem.content) {
                     is TimelineItemStateContent, is TimelineItemLegacyCallInviteContent -> {
                         TimelineItemStateEventRow(
                             event = timelineItem,
                             isLastOutgoingMessage = isLastOutgoingMessage,
-                            onClick = { onContentClick(timelineItem) },
+                            onClick = onStateEventClick,
                             onReadReceiptsClick = onReadReceiptClick,
                             onLongClick = { onLongClick(timelineItem) },
                             timelineProtectionState = timelineProtectionState,
@@ -223,6 +244,8 @@ internal fun TimelineItemRow(
                     onReactionLongClick = onReactionLongClick,
                     onMoreReactionsClick = onMoreReactionsClick,
                     onReadReceiptClick = onReadReceiptClick,
+                    onMemberClick = onMemberClick,
+                    onRoomStateClick = onRoomStateClick,
                     eventSink = eventSink,
                 )
             }

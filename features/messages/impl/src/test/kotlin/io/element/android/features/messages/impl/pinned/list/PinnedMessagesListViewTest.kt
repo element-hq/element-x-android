@@ -110,6 +110,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setPinnedMessagesListView(
             onEventClick = onEventClick,
             onGalleryItemClick = onGalleryItemClick,
             onUserDataClick = onUserDataClick,
+            onMemberClick = {},
             onLinkClick = onLinkClick,
             onLinkLongClick = onLinkLongClick,
             emojiPickerRenderer = NoOpEmojiPickerRenderer,

@@ -82,8 +82,11 @@ import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
+import io.element.android.libraries.matrix.api.room.roomMembers
+import io.element.android.libraries.matrix.api.room.toMatrixUser
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.matrix.ui.model.dmUserStatus
 import io.element.android.libraries.matrix.ui.model.getAvatarData
@@ -265,6 +268,12 @@ class MessagesPresenter(
                 }
                 is MessagesEvent.OnUserClicked -> {
                     roomMemberModerationState.eventSink(RoomMemberModerationEvent.ShowActionsForUser(event.user))
+                }
+                is MessagesEvent.OnMemberClicked -> {
+                    val userId = event.userId
+                    val member = membersState.roomMembers()?.firstOrNull { it.userId == userId }
+                    val matrixUser = member?.toMatrixUser() ?: MatrixUser(userId = userId)
+                    roomMemberModerationState.eventSink(RoomMemberModerationEvents.ShowActionsForUser(matrixUser))
                 }
                 MessagesEvent.StopLiveLocationShare -> {
                     localCoroutineScope.launch {

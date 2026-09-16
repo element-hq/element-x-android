@@ -33,6 +33,7 @@ import io.element.android.features.messages.impl.timeline.protection.aTimelinePr
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.wysiwyg.link.Link
@@ -56,6 +57,8 @@ fun TimelineItemGroupedEventsRow(
     onReactionLongClick: (key: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
+    onMemberClick: (UserId) -> Unit,
+    onRoomStateClick: () -> Unit,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
     eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit =
@@ -101,6 +104,8 @@ fun TimelineItemGroupedEventsRow(
         onReactionLongClick = onReactionLongClick,
         onMoreReactionsClick = onMoreReactionsClick,
         onReadReceiptClick = onReadReceiptClick,
+        onMemberClick = onMemberClick,
+        onRoomStateClick = onRoomStateClick,
         eventSink = eventSink,
         modifier = modifier,
         eventContentView = eventContentView,
@@ -128,6 +133,8 @@ private fun TimelineItemGroupedEventsRowContent(
     onReactionLongClick: (key: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
+    onMemberClick: (UserId) -> Unit,
+    onRoomStateClick: () -> Unit,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
     eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit =
@@ -188,6 +195,8 @@ private fun TimelineItemGroupedEventsRowContent(
                         onReadReceiptClick = onReadReceiptClick,
                         onJoinCallClick = {},
                         onSwipeToReply = {},
+                        onMemberClick = onMemberClick,
+                        onRoomStateClick = onRoomStateClick,
                         eventSink = eventSink,
                         eventContentView = eventContentView,
                     )
@@ -230,6 +239,8 @@ internal fun TimelineItemGroupedEventsRowContentExpandedPreview() = ElementPrevi
         onReactionLongClick = { _, _ -> },
         onMoreReactionsClick = {},
         onReadReceiptClick = {},
+        onMemberClick = {},
+        onRoomStateClick = {},
         eventSink = {},
     )
 }
@@ -257,6 +268,8 @@ internal fun TimelineItemGroupedEventsRowContentCollapsePreview() = ElementPrevi
         onReactionLongClick = { _, _ -> },
         onMoreReactionsClick = {},
         onReadReceiptClick = {},
+        onMemberClick = {},
+        onRoomStateClick = {},
         eventSink = {},
     )
 }
@@ -285,6 +298,8 @@ internal fun TimelineItemRedactedMessagesGroupPreview() = ElementPreview {
         onReactionLongClick = { _, _ -> },
         onMoreReactionsClick = {},
         onReadReceiptClick = {},
+        onMemberClick = {},
+        onRoomStateClick = {},
         eventSink = {},
     )
 }
